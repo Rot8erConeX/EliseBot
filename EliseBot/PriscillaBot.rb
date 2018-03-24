@@ -8318,7 +8318,7 @@ bot.command(:invite) do |event, user|
     end
   end
   usr.pm(txt)
-  event.respond "A PM was sent to #{user_to_name}."
+  event.respond "A PM was sent to #{user_to_name}." unless event.server.nil? && user_to_name=="you"
 end
 
 bot.command([:bugreport, :suggestion, :feedback]) do |event, *args|
