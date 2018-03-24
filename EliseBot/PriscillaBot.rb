@@ -8304,7 +8304,7 @@ end
 
 bot.command(:invite) do |event, user|
   usr=event.user
-  txt="To invite me to your server: <https://goo.gl/WcnjDd>\nTo look at my source code (two parts) : <https://pastebin.com/xXNDJDAH> <https://pastebin.com/Z6Rpt8HW>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://orig00.deviantart.net/cd2d/f/2018/047/e/0/marketing___elise_by_rot8erconex-dbxj4mq.png"
+  txt="To invite me to your server: <https://goo.gl/WcnjDd>\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://orig00.deviantart.net/cd2d/f/2018/047/e/0/marketing___elise_by_rot8erconex-dbxj4mq.png"
   user_to_name="you"
   unless user.nil?
     if /<@!?(?:\d+)>/ =~ user
