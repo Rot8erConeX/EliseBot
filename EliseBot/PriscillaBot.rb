@@ -1,25 +1,26 @@
-shardizard = ARGV.first.to_i # taking a single variable from the command prompt to get the shard value
-system("color 07") if shardizard==0
-system("color 0C") if shardizard==1
-system("color 0B") if shardizard==2
-system("color 0A") if shardizard==3
+shardizard = ARGV.first.to_i             # taking a single variable from the command prompt to get the shard value
+system("color 0#{"7CBA"[shardizard,1]}") # command prompt color and title determined by the shard
 system("title loading #{['Transparent','Scarlet','Azure','Verdant'][shardizard]} EliseBot")
 
-require 'discordrb' # Download link: https://github.com/meew0/discordrb
-require 'open-uri' # pre-installed with Ruby in Windows
-require 'net/http'
-require 'tzinfo/data'
-require 'rufus-scheduler'
-require 'active_support/core_ext/time'
+require 'discordrb'                    # Download link: https://github.com/meew0/discordrb
+require 'open-uri'                     # pre-installed with Ruby in Windows
+require 'net/http'                     # pre-installed with Ruby in Windows
+require 'tzinfo/data'                  # Downloaded with active_support below, but the require must be above active_support's require
+require 'rufus-scheduler'              # Download link: https://github.com/jmettraux/rufus-scheduler
+require 'active_support/core_ext/time' # Download link: https://rubygems.org/gems/activesupport/versions/5.0.0
 
+# this is required to get her to change her avatar on certain holidays
 ENV['TZ'] = 'America/Chicago'
 @scheduler = Rufus::Scheduler.new
+
+# All the possible command prefixes, not case sensitive so I have to fake it by including every combination of lower- and upper-case
 @prefix = ['FEH!','feh!','Feh!','FEh!','FEH?','feh?','Feh?','FEh?','f?','F?','e?','E?','h?','H?']
 
 # The bot's token is basically their password, so is censored for obvious reasons
 bot = Discordrb::Commands::CommandBot.new token: '>Token<', shard_id: shardizard, num_shards: 4, client_id: 312451658908958721, prefix: @prefix
 bot.gateway.check_heartbeat_acks = false
 
+# initialize global variables
 @data=[]
 @skills=[]
 @names=[]
@@ -417,10 +418,7 @@ end
 bot.command(:reboot, from: 167657750971547648) do |event| # reboots Elise
   return nil unless event.user.id==167657750971547648
   bot.game="loading, please wait..." if shardizard==0
-  system("color 07") if shardizard==0
-  system("color 0C") if shardizard==1
-  system("color 0B") if shardizard==2
-  system("color 0A") if shardizard==3
+  system("color 0#{"7CBA"[shardizard,1]}")
   system("title loading EliseBot #{shardizard}")
   exec "cd C:/Users/Mini-Matt/Desktop/devkit && PriscillaBot.rb #{shardizard}"
 end
@@ -4859,6 +4857,79 @@ def detect_dual_unit_alias(str1,str2,robinmode=0)
   return nil
 end
 
+def parse_function(callback,event,args,bot,healers=nil)
+  event.channel.send_temporary_message("Calculating data, please wait...",3)
+  k=find_name_in_string(event,nil,1)
+  if k.nil?
+    if !detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase).nil?
+      x=detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase)
+      k2=get_weapon(first_sub(event.message.text,x[0],''),event)
+      weapon='-'
+      weapon=k2[0] unless k2.nil?
+      xx=[]
+      xn=[]
+      for i in 0...x[1].length
+        j2=find_unit(x[1][i],event)
+        if @data[j2][1][1]!="Healer" && healers==true
+          xn.push(x[1][i])
+        elsif @data[j2][1][1]=="Healer" && healers==false
+          xn.push(x[1][i])
+        else
+          xx.push(x[1][i])
+        end
+      end
+      if healers==true
+        event.respond "#{xn[0]} is not a healer so cannot equip staves." if xn.length==1
+        event.respond "The following units are not healers so cannot equip staves:\n#{list_lift(xn,"and")}" if xn.length>1
+      elsif healers==false
+        event.respond "#{xn[0]} is a healer so cannot equip these skills." if xn.length==1
+        event.respond "The following units are healers so cannot equip these skills:\n#{list_lift(xn,"and")}" if xn.length>1
+      end
+      method(callback).call(event,xx,bot,weapon) if xx.length>0
+      return 0
+    else
+      event.respond "No unit was included"
+      return -1
+    end
+  else
+    str=k[0]
+    k2=get_weapon(first_sub(event.message.text,k[1],''),event)
+    weapon='-'
+    weapon=k2[0] unless k2.nil?
+    name=find_name_in_string(event)
+    if !detect_dual_unit_alias(name.downcase,event.message.text.downcase).nil?
+      x=detect_dual_unit_alias(name.downcase,event.message.text.downcase)
+      xx=[]
+      xn=[]
+      for i in 0...x[1].length
+        j2=find_unit(x[1][i],event)
+        if @data[j2][1][1]!="Healer" && healers==true
+          xn.push(x[1][i])
+        elsif @data[j2][1][1]=="Healer" && healers==false
+          xn.push(x[1][i])
+        else
+          xx.push(x[1][i])
+        end
+      end
+      if healers==true
+        event.respond "#{xn[0]} is not a healer so cannot equip staves." if xn.length==1
+        event.respond "The following units are not healers so cannot equip staves:\n#{list_lift(xn,"and")}" if xn.length>1
+      elsif healers==false
+        event.respond "#{xn[0]} is a healer so cannot equip these skills." if xn.length==1
+        event.respond "The following units are healers so cannot equip these skills:\n#{list_lift(xn,"and")}" if xn.length>1
+      end
+      method(callback).call(event,xx,bot,weapon) if xx.length>0
+    elsif @data[find_unit(name,event)][1][1]!="Healer" && healers==true
+      event.respond "#{name} is not a healer so cannot equip staves."
+    elsif @data[find_unit(name,event)][1][1]=="Healer" && healers==false
+      event.respond "#{name} is a healer so cannot equip these skills."
+    else
+      method(callback).call(event,name,bot,weapon)
+    end
+  end
+  return 0
+end
+
 def calculate_effective_HP(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     for i in 0...name.length
@@ -4998,38 +5069,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,'"Frostbite" is weapons like Felicia\'s Plate that target the lower of the target\'s Def and Res.',pic,x)
 end
 
-def parse_effhp(event,args,bot)
-  event.channel.send_temporary_message("Calculating data, please wait...",3)
-  k=find_name_in_string(event,nil,1)
-  if k.nil?
-    if !detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase)
-      k2=get_weapon(first_sub(event.message.text,x[0],''),event)
-      weapon='-'
-      weapon=k2[0] unless k2.nil?
-      calculate_effective_HP(event,x[1],bot,weapon)
-      return 0
-    else
-      event.respond "No unit was included"
-      return -1
-    end
-  else
-    str=k[0]
-    k2=get_weapon(first_sub(event.message.text,k[1],''),event)
-    weapon='-'
-    weapon=k2[0] unless k2.nil?
-    name=find_name_in_string(event)
-    if !detect_dual_unit_alias(name.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(name.downcase,event.message.text.downcase)
-      calculate_effective_HP(event,x[1],bot,weapon)
-    else
-      calculate_effective_HP(event,name,bot,weapon)
-    end
-  end
-  return 0
-end
-
-def unit_study(event,name,bot)
+def unit_study(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     for i in 0...name.length
       unit_study(event,name[i],bot)
@@ -5152,35 +5192,6 @@ def unit_study(event,name,bot)
   pic=pick_thumbnail(event,j,bot)
   pic="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png" if u40[0]=="Robin (Shared stats)"
   create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","**Available rarities:** #{summon_type}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,rar,2)
-end
-
-def parse_unit_study(event,args,bot)
-  event.channel.send_temporary_message("Calculating data, please wait...",5)
-  data_load()
-  k=find_name_in_string(event)
-  if k.nil?
-    if !detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase)
-      unit_study(event,x[1],bot)
-      return 0
-    else
-      event.respond "No unit was included"
-      return -1
-    end
-  else
-    str=k[0]
-    k2=get_weapon(first_sub(event.message.text,k[1],''),event)
-    weapon='-'
-    weapon=k2[0] unless k2.nil?
-    name=find_name_in_string(event)
-    if !detect_dual_unit_alias(name.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(name.downcase,event.message.text.downcase)
-      unit_study(event,x[1],bot)
-    else
-      unit_study(event,name,bot)
-    end
-  end
-  return 0
 end
 
 def heal_study(event,name,bot,weapon=nil)
@@ -5341,183 +5352,6 @@ def heal_study(event,name,bot,weapon=nil)
   else
     create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
   end
-end
-
-def parse_heal_study(event,args,bot)
-  name=find_name_in_string(event)
-  if name.nil?
-    if !detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase).nil?
-      event.channel.send_temporary_message("Calculating data, please wait...",3)
-      x=detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase)
-      k2=get_weapon(first_sub(event.message.text,x[0],''),event)
-      weapon='-'
-      weapon=k2[0] unless k2.nil?
-      xx=[]
-      xn=[]
-      for i in 0...x[1].length
-        j2=find_unit(x[1][i],event)
-        if @data[j2][1][1]!="Healer"
-          xn.push(x[1][i])
-        else
-          xx.push(x[1][i])
-        end
-      end
-      event.respond "#{xn[0]} is not a healer so cannot equip staves." if xn.length==1
-      event.respond "The following units are not healers so cannot equip staves:\n#{list_lift(xn,"and")}" if xn.length>1
-      heal_study(event,xx,bot,weapon) if xx.length>0
-      return 0
-    else
-      event.respond "No matches found."
-      return -1
-    end
-  else
-    j=find_unit(name,event)
-    if j<0
-      event.respond "No matches found."
-      return -1
-    end
-    event.channel.send_temporary_message("Calculating data, please wait...",3)
-    k=find_name_in_string(event,nil,1)
-    str=k[0]
-    k2=get_weapon(first_sub(event.message.text,k[1],''),event)
-    weapon='-'
-    weapon=k2[0] unless k2.nil?
-    if !detect_dual_unit_alias(name.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(name.downcase,event.message.text.downcase)
-      xx=[]
-      xn=[]
-      for i in 0...x[1].length
-        j2=find_unit(x[1][i],event)
-        if @data[j2][1][1]!="Healer"
-          xn.push(x[1][i])
-        else
-          xx.push(x[1][i])
-        end
-      end
-      event.respond "#{xn[0]} is not a healer so cannot equip staves." if xn.length==1
-      event.respond "The following units are not healers so cannot equip staves:\n#{list_lift(xn,"and")}" if xn.length>1
-      heal_study(event,xx,bot,weapon) if xx.length>0
-    else
-      heal_study(event,name,bot,weapon)
-    end
-  end
-  return 0
-end
-
-def weapon_clss(arr)
-  return arr[1] if arr[0]=='Colorless'
-  x="#{arr[0]} #{arr[1]}"
-  return 'Sword' if x=='Red Blade'
-  return 'Lance' if x=='Blue Blade'
-  return 'Axe' if x=='Green Blade'
-  return x
-end
-
-def prio(arr,o)
-  x=[]
-  for i in 0...o.length
-    x.push(o[i]) if arr.include?(o[i])
-  end
-  return x
-end
-
-def disp_unit_stats_and_skills(event,args,bot)
-  event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
-  k=find_name_in_string(event,nil,1)
-  w=nil
-  if k.nil?
-    if event.message.text.downcase.include?("flora") && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-      event.respond "Steel's waifu is not in the game."
-    elsif !detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase)
-      k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
-      w=k2[0] unless k2.nil?
-      disp_stats(bot,x[1],w,event,true)
-      disp_unit_skills(bot,x[1],event,true,true,true) unless x[1].is_a?(Array)
-      event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
-    else
-      event.respond "No matches found."
-    end
-    return nil
-  end
-  str=k[0]
-  k2=get_weapon(first_sub(args.join(' '),k[1],''),event)
-  w=nil
-  w=k2[0] unless k2.nil?
-  data_load()
-  if !detect_dual_unit_alias(str.downcase,event.message.text.downcase).nil?
-    x=detect_dual_unit_alias(str.downcase,event.message.text.downcase)
-    disp_stats(bot,x[1],w,event,true)
-    disp_unit_skills(bot,x[1],event,true,true,true) unless x[1].is_a?(Array)
-    event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
-  elsif find_unit(str,event)>=0
-    disp_stats(bot,str,w,event)
-    disp_unit_skills(bot,str,event,true,true)
-  else
-    event.respond "No matches found"
-  end
-  return nil
-end
-
-def parse_proc_study(event,args,bot)
-  name=find_name_in_string(event)
-  if name.nil?
-    if !detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase).nil?
-      event.channel.send_temporary_message("Calculating data, please wait...",3)
-      x=detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase)
-      k2=get_weapon(first_sub(event.message.text,x[0],''),event)
-      weapon='-'
-      weapon=k2[0] unless k2.nil?
-      xx=[]
-      xn=[]
-      for i in 0...x[1].length
-        j2=find_unit(x[1][i],event)
-        if @data[j2][1][1]=="Healer"
-          xn.push(x[1][i])
-        else
-          xx.push(x[1][i])
-        end
-      end
-      event.respond "#{xn[0]} is a healer so cannot equip proc skills." if xn.length==1
-      event.respond "The following units are healers so cannot equip proc skills:\n#{list_lift(xn,"and")}" if xn.length>1
-      proc_study(event,xx,bot,weapon) if xx.length>0
-      return 0
-    else
-      event.respond "No matches found."
-      return -1
-    end
-  else
-    j=find_unit(name,event)
-    if j<0
-      event.respond "No matches found."
-      return -1
-    end
-    event.channel.send_temporary_message("Calculating data, please wait...",3)
-    k=find_name_in_string(event,nil,1)
-    str=k[0]
-    k2=get_weapon(first_sub(event.message.text,k[1],''),event)
-    weapon='-'
-    weapon=k2[0] unless k2.nil?
-    if !detect_dual_unit_alias(name.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(name.downcase,event.message.text.downcase)
-      xx=[]
-      xn=[]
-      for i in 0...x[1].length
-        j2=find_unit(x[1][i],event)
-        if @data[j2][1][1]=="Healer"
-          xn.push(x[1][i])
-        else
-          xx.push(x[1][i])
-        end
-      end
-      event.respond "#{xn[0]} is a healer so cannot equip proc skills." if xn.length==1
-      event.respond "The following units are not healers so cannot equip proc skills:\n#{list_lift(xn,"and")}" if xn.length>1
-      proc_study(event,xx,bot,weapon) if xx.length>0
-    else
-      proc_study(event,name,bot,weapon)
-    end
-  end
-  return 0
 end
 
 def proc_study(event,name,bot,weapon=nil)
@@ -5682,9 +5516,9 @@ def proc_study(event,name,bot,weapon=nil)
   c=@skills[find_skill("Sol",event)][2]+cdwn
   staves[2].push("Sol - #{"#{wdamage}, " if wdamage>0}heals for `#{"(" if wdamage>0}dmg#{" +#{wdamage})" if wdamage>0} /2`, cooldown of #{c}")
   c=@skills[find_skill("Aether",event)][2]+cdwn
-  staves[3].push("Aether - `eDR /2#{" +#{wdamage}" if wdamage>0}`, heals for `#{"(" if wdamage>0}dmg#{" +#{wdamage})" if wdamage>0} /2 + edr /4`, cooldown of #{c}")
+  staves[3].push("Aether - `eDR /2#{" +#{wdamage}" if wdamage>0}`, heals for `#{"(" if wdamage>0}dmg#{" +#{wdamage})" if wdamage>0} /2 + eDR /4`, cooldown of #{c}")
   c=@skills[find_skill("Radiant Aether",event)][2]+cdwn
-  staves[3].push("Radiant Aether - `eDR /2#{" +#{wdamage}" if wdamage>0}`, heals for `#{"(" if wdamage>0}dmg#{" +#{wdamage})" if wdamage>0} /2 + edr /4`, cooldown of #{c}") if @skills[find_skill("Radiant Aether",event)][6].split(', ').include?(u40[0])
+  staves[3].push("Radiant Aether - `eDR /2#{" +#{wdamage}" if wdamage>0}`, heals for `#{"(" if wdamage>0}dmg#{" +#{wdamage})" if wdamage>0} /2 + eDR /4`, cooldown of #{c}") if @skills[find_skill("Radiant Aether",event)][6].split(', ').include?(u40[0])
   c=@skills[find_skill("Glowing Ember",event)][2]+cdwn
   staves[4].push("Glowing Ember - #{deff/2+wdamage}#{" (#{bldeff/2+wdamage})" unless deff/2==bldeff/2}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
   c=@skills[find_skill("Bonfire",event)][2]+cdwn
@@ -5712,49 +5546,17 @@ def proc_study(event,name,bot,weapon=nil)
   pic=pick_thumbnail(event,j,bot)
   pic="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png" if u40[0]=="Robin (Shared stats)"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all")
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\nEDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
     s=""
     for i in 0...staves.length
       s=extend_message(s,staves[i].join("\n"),event,2)
     end
     event.respond s
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,"EDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,[["Star",staves[0].join("\n")],["Moon",staves[1].join("\n")],["Sun",staves[2].join("\n")],["Eclipse",staves[3].join("\n")],["Fire",staves[4].join("\n")],["Ice",staves[5].join("\n")],["Dragon",staves[6].join("\n")],["Darkness",staves[7].join("\n")]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,[["Star",staves[0].join("\n")],["Moon",staves[1].join("\n")],["Sun",staves[2].join("\n")],["Eclipse",staves[3].join("\n")],["Fire",staves[4].join("\n")],["Ice",staves[5].join("\n")],["Dragon",staves[6].join("\n")],["Darkness",staves[7].join("\n")]])
   end
 end
-
-def parse_phase_study(event,args,bot)
-  event.channel.send_temporary_message("Calculating data, please wait...",5)
-  data_load()
-  k=find_name_in_string(event)
-  if k.nil?
-    if !detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase)
-      k2=get_weapon(first_sub(event.message.text,x[0],''),event)
-      weapon='-'
-      weapon=k2[0] unless k2.nil?
-      phase_study(event,x[1],bot,weapon)
-      return 0
-    else
-      event.respond "No unit was included"
-      return -1
-    end
-  else
-    str=k[0]
-    k2=get_weapon(first_sub(event.message.text,k[1],''),event)
-    weapon='-'
-    weapon=k2[0] unless k2.nil?
-    name=find_name_in_string(event)
-    if !detect_dual_unit_alias(name.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(name.downcase,event.message.text.downcase)
-      phase_study(event,x[1],bot,weapon)
-    else
-      phase_study(event,name,bot,weapon)
-    end
-  end
-  return 0
-end
-
+\
 def phase_study(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     for i in 0...name.length
@@ -5977,6 +5779,61 @@ def phase_study(event,name,bot,weapon=nil)
     u40=make_stat_string_list(u40,blu40)
     create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"In-combat skills: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,[["Displayed stats","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"],["Player Phase","HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\nSpeed: #{ppu40[3]}\nDefense: #{ppu40[4]}\nResistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","HP: #{epu40[1]}\n#{atk}: #{epu40[2]}\nSpeed: #{epu40[3]}\nDefense: #{epu40[4]}\nResistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
   end
+end
+
+def weapon_clss(arr)
+  return arr[1] if arr[0]=='Colorless'
+  x="#{arr[0]} #{arr[1]}"
+  return 'Sword' if x=='Red Blade'
+  return 'Lance' if x=='Blue Blade'
+  return 'Axe' if x=='Green Blade'
+  return x
+end
+
+def prio(arr,o)
+  x=[]
+  for i in 0...o.length
+    x.push(o[i]) if arr.include?(o[i])
+  end
+  return x
+end
+
+def disp_unit_stats_and_skills(event,args,bot)
+  event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
+  k=find_name_in_string(event,nil,1)
+  w=nil
+  if k.nil?
+    if event.message.text.downcase.include?("flora") && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
+      event.respond "Steel's waifu is not in the game."
+    elsif !detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase).nil?
+      x=detect_dual_unit_alias(event.message.text.downcase,event.message.text.downcase)
+      k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
+      w=k2[0] unless k2.nil?
+      disp_stats(bot,x[1],w,event,true)
+      disp_unit_skills(bot,x[1],event,true,true,true) unless x[1].is_a?(Array)
+      event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
+    else
+      event.respond "No matches found."
+    end
+    return nil
+  end
+  str=k[0]
+  k2=get_weapon(first_sub(args.join(' '),k[1],''),event)
+  w=nil
+  w=k2[0] unless k2.nil?
+  data_load()
+  if !detect_dual_unit_alias(str.downcase,event.message.text.downcase).nil?
+    x=detect_dual_unit_alias(str.downcase,event.message.text.downcase)
+    disp_stats(bot,x[1],w,event,true)
+    disp_unit_skills(bot,x[1],event,true,true,true) unless x[1].is_a?(Array)
+    event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
+  elsif find_unit(str,event)>=0
+    disp_stats(bot,str,w,event)
+    disp_unit_skills(bot,str,event,true,true)
+  else
+    event.respond "No matches found"
+  end
+  return nil
 end
 
 def skill_comparison(event,args)
@@ -6796,22 +6653,22 @@ bot.command([:effhp,:effHP,:eff_hp,:eff_HP,:bulk]) do |event, *args|
     event.respond "No unit was included"
     return nil
   end
-  parse_effhp(event,args,bot)
+  parse_function(:calculate_effective_HP,event,args,bot)
   return nil
 end
 
 bot.command([:heal_study,:healstudy,:studyheal,:study_heal]) do |event, *args|
-  parse_heal_study(event,args,bot)
+  parse_function(:heal_study,event,args,bot,true)
   return nil
 end
 
 bot.command([:proc_study,:procstudy,:studyproc,:study_proc]) do |event, *args|
-  parse_proc_study(event,args,bot)
+  parse_function(:proc_study,event,args,bot,false)
   return nil
 end
 
 bot.command([:phase_study,:phasestudy,:studyphase,:study_phase]) do |event, *args|
-  parse_phase_study(event,args,bot)
+  parse_function(:phase_study,event,args,bot)
   return nil
 end
 
@@ -6823,25 +6680,25 @@ bot.command(:study) do |event, *args|
   if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=parse_effhp(event,args,bot)
+    k=parse_function(:calculate_effective_HP,event,args,bot)
     return nil unless k<0
   elsif ['heal'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=parse_heal_study(event,args,bot)
+    k=parse_function(:heal_study,event,args,bot,true)
     return nil unless k<0
   elsif ['proc'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=parse_proc_study(event,args,bot)
+    k=parse_function(:proc_study,event,args,bot,false)
     return nil unless k<0
   elsif ['phase'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=parse_phase_study(event,args,bot)
+    k=parse_function(:phase_study,event,args,bot)
     return nil unless k<0
   end
-  parse_unit_study(event,args,bot)
+  parse_function(:unit_study,event,args,bot)
   return nil
 end
 
@@ -7209,40 +7066,40 @@ bot.command([:stats,:stat]) do |event, *args|
     if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
       args[0]=nil
       args.compact!
-      k=parse_effhp(event,args,bot)
+      k=parse_function(:calculate_effective_HP,event,args,bot)
       return nil unless k<0
     elsif ['heal'].include?(args[0].downcase)
       args[0]=nil
       args.compact!
-      k=parse_heal_study(event,args,bot)
+      k=parse_function(:heal_study,event,args,bot,true)
       return nil unless k<0
     elsif ['proc'].include?(args[0].downcase)
       args[0]=nil
       args.compact!
-      k=parse_proc_study(event,args,bot)
+      k=parse_function(:proc_study,event,args,bot,false)
       return nil unless k<0
     elsif ['phase'].include?(args[0].downcase)
       args[0]=nil
       args.compact!
-      k=parse_phase_study(event,args,bot)
+      k=parse_function(:phase_study,event,args,bot)
       return nil unless k<0
     end
-    k=parse_unit_study(event,args,bot)
+    k=parse_function(:unit_study,event,args,bot)
     return nil unless k<0
   elsif ['effhp','eff_hp','bulk'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=parse_effhp(event,args,bot)
+    k=parse_function(:calculate_effective_HP,event,args,bot)
     return nil unless k<0
   elsif ['heal_study','healstudy','studyheal','study_heal'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=parse_heal_study(event,args,bot)
+    k=parse_function(:heal_study,event,args,bot,true)
     return nil unless k<0
   elsif ['proc_study','procstudy','studyproc','study_proc'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=parse_proc_study(event,args,bot)
+    k=parse_function(:proc_studyevent,args,bot,false)
     return nil unless k<0
   elsif ['skill','skills'].include?(args[0].downcase)
     args[0]=nil
@@ -7300,40 +7157,40 @@ bot.command([:unit, :data, :statsskills, :statskills, :stats_skills, :stat_skill
     if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
       args[0]=nil
       args.compact!
-      k=parse_effhp(event,args,bot)
+      k=parse_function(:calculate_effective_HP,event,args,bot)
       return nil unless k<0
     elsif ['heal'].include?(args[0].downcase)
       args[0]=nil
       args.compact!
-      k=parse_heal_study(event,args,bot)
+      k=parse_function(:heal_study,event,args,bot,true)
       return nil unless k<0
     elsif ['proc'].include?(args[0].downcase)
       args[0]=nil
       args.compact!
-      k=parse_proc_study(event,args,bot)
+      k=parse_function(:proc_studyevent,args,bot,false)
       return nil unless k<0
     elsif ['phase'].include?(args[0].downcase)
       args[0]=nil
       args.compact!
-      k=parse_phase_study(event,args,bot)
+      k=parse_function(:phase_study,event,args,bot)
       return nil unless k<0
     end
-    k=parse_unit_study(event,args,bot)
+    k=parse_function(:unit_study,event,args,bot)
     return nil unless k<0
   elsif ['effhp','eff_hp','bulk'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=parse_effhp(event,args,bot)
+    k=parse_function(:calculate_effective_HP,event,args,bot)
     return nil unless k<0
   elsif ['heal_study','healstudy','studyheal','study_heal'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=parse_heal_study(event,args,bot)
+    k=parse_function(:heal_study,event,args,bot,true)
     return nil unless k<0
   elsif ['proc_study','procstudy','studyproc','study_proc'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=parse_proc_study(event,args,bot)
+    k=parse_function(:proc_studyevent,args,bot,false)
     return nil unless k<0
   end
   disp_unit_stats_and_skills(event,args,bot)
@@ -8529,7 +8386,7 @@ end
 
 bot.command([:locateshards, :locate, :locateshards], from: 167657750971547648) do |event|
   return nil unless event.user.id==167657750971547648
-  bot.channel(403998526545330196).send_message("Verdant Shards are used here, <@167657750971547648>")
+  bot.channel(403998870327132171).send_message("Verdant Shards are used here, <@167657750971547648>")
   event << "Transparent Shards are used in PMs and in server C-137."
   event << "Scarlet Shards are used in your testing server."
   event << "Azure Shards are used in Penumbra."
@@ -8970,10 +8827,7 @@ bot.message do |event|
 end
 
 bot.ready do |event|
-  system("color 57") if shardizard==0
-  system("color 5C") if shardizard==1
-  system("color 5B") if shardizard==2
-  system("color 5A") if shardizard==3
+  system("color 5#{"7CBA"[shardizard,1]}")
   system("title loading #{['Transparent','Scarlet','Azure','Verdant'][shardizard]} EliseBot")
   bot.game="Loading, please wait..." if shardizard==0
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
@@ -9006,10 +8860,7 @@ bot.ready do |event|
   next_holiday(bot) if shardizard==0
   metadata_load()
   devunits_load()
-  system("color e0") if shardizard==0
-  system("color e4") if shardizard==1
-  system("color e1") if shardizard==2
-  system("color e2") if shardizard==3
+  system("color e#{"0412"[shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant'][shardizard]} EliseBot")
 end
 
