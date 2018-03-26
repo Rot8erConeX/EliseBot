@@ -13,7 +13,7 @@ require 'active_support/core_ext/time' # Download link: https://rubygems.org/gem
 ENV['TZ'] = 'America/Chicago'
 @scheduler = Rufus::Scheduler.new
 
-# All the possible command prefixes, not case sensitive so I have to fake it by including every combination of lower- and upper-case
+# All the possible command prefixes, not case insensitive so I have to fake it by including every combination of lower- and upper-case
 @prefix = ['FEH!','feh!','Feh!','FEh!','FEH?','feh?','Feh?','FEh?','f?','F?','e?','E?','h?','H?']
 
 # The bot's token is basically their password, so is censored for obvious reasons
