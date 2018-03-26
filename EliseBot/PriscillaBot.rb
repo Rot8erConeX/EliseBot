@@ -82,7 +82,7 @@ bot.gateway.check_heartbeat_acks = false
           ["`\u22C1`Excitable","HP","Resistance",true]]
 
 def all_commands(include_nil=false)
-  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','fourstar','backup','restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills']
+  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','fourstar','backup','restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills','locate','locateshard','locateshards']
   k[0]=nil if include_nil
   return k
 end
@@ -376,6 +376,8 @@ bot.command(:help) do |event, command, subcommand|
     create_embed(event,"**#{command.downcase}**","Restores the the alias list or the group list, depending on the word used as `item`, from last backup.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['status'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*message__","Sets my status message to `message`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+  elsif ['locateshards','locateshard','locate'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** #{"shard#{['','s'].sample}" if command.downcase=='locate'}","Informs you of one server you and I share for each kind of shard.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['devedit'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['create'].include?(subcommand.downcase)
@@ -407,7 +409,7 @@ bot.command(:help) do |event, command, subcommand|
     create_embed(event,"Command Prefixes: #{@prefix.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit Data**__\n`data` __name__ - shows both stats and skills (*also `unit`*)\n`stats` __name__ - shows only the stats\n`skills` __name__ - shows only the skills (*also `fodder`*)\n`study` __name__ - for a study of the unit at multiple rarities and merges\n`effHP` __name__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __name__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __name__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __name__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __name__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`games` __unit__ - for a list of games the unit is in\n\n__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
     create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`fourstar`",0xD49F61)
     create_embed(event,"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
-    create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n\n`snagstats` - snags server stats for multiple servers\n`setmarker` __letter__\n\n`reboot` - reboots this shard\n\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n`status` __\\*message__ - sets my status",0x008b8b) if (event.server.nil? || command.downcase=='devcommands') && event.user.id==167657750971547648
+    create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n\n`snagstats` - snags server stats for multiple servers\n`setmarker` __letter__\n\n`reboot` - reboots this shard\n\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n`status` __\\*message__ - sets my status\n\n`locateshards` - lists one server you are in for each color of shard.",0x008b8b) if (event.server.nil? || command.downcase=='devcommands') && event.user.id==167657750971547648
     event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command."
   end
 end
@@ -1548,26 +1550,50 @@ def find_stats_in_string(event,stringx=nil,mode=0)
       x="Speed" if ["spd","speed"].include?(x.downcase)
       x="Defense" if ["defense","def","defence"].include?(x.downcase)
       x="Resistance" if ["res","resistance"].include?(x.downcase)
-      y=args[i-1]
+      y=args[i]
       y="HP" if ["hp","health"].include?(y.downcase)
       y="Attack" if ["attack","atk","att","strength","str","magic","mag"].include?(y.downcase)
       y="Speed" if ["spd","speed"].include?(y.downcase)
       y="Defense" if ["defense","def","defence"].include?(y.downcase)
       y="Resistance" if ["res","resistance"].include?(y.downcase)
-      if args[i].downcase=="star" && args[i-1].to_i.to_s==args[i-1] && rarity.nil? # the word "star", if preceeded by a number, will automatically fill the rarity variable with that number
+      if args[i].downcase=="star" && args[i-1].to_i.to_s==args[i-1] && rarity.nil?
+        # the word "star", if preceeded by a number, will automatically fill the rarity variable with that number
         rarity=args[i-1].to_i
         args[i]=nil
         args[i-1]=nil
       elsif args[i].downcase=="mode" && ["Attack","Speed","Defense","Resistance"].include?(x) && refinement.nil?
+        # the word "mode", if preceeded by a stat name other than HP, will turn that stat into the refinement of the weapon the unit is equipping
         refinement=x
         args[i]=nil
         args[i-1]=nil
       elsif args[i].downcase=="blessing" && ["Attack","Speed","Defense","Resistance"].include?(x)
+        # the word "blessing", if preceeded by a stat name other than HP, will turn that stat into a blessing to be applied to the character
         blessing.push(x)
         args[i]=nil
         args[i-1]=nil
       elsif args[i-1].downcase=="(+)" && ["Attack","Speed","Defense","Resistance"].include?(y) && refinement.nil?
+        # the character arrangement "(+)", if followed by a stat name other than HP, will turn that stat into the refinement of the weapon the unit is equipping
         refinement=y
+        args[i]=nil
+        args[i-1]=nil
+      elsif args[i-1].downcase=="plus" && ["HP","Attack","Speed","Defense","Resistance"].include?(y) && boon.nil?
+        # the word "plus", if followed by a stat name, will turn that stat into the unit's boon
+        boon=y
+        args[i]=nil
+        args[i-1]=nil
+      elsif args[i-1].downcase=="minus" && ["HP","Attack","Speed","Defense","Resistance"].include?(y) && bane.nil?
+        # the word "minus", if followed by a stat name, will turn that stat into the unit's bane
+        bane=y
+        args[i]=nil
+        args[i-1]=nil
+      elsif args[i].downcase=="boon" && ["HP","Attack","Speed","Defense","Resistance"].include?(x) && boon.nil?
+        # the word "boon", if preceeded by a stat name, will turn that stat into the unit's boon
+        boon=x
+        args[i]=nil
+        args[i-1]=nil
+      elsif args[i].downcase=="bane" && ["HP","Attack","Speed","Defense","Resistance"].include?(x) && bane.nil?
+        # the word "minus", if preceeded by a stat name, will turn that stat into the unit's bane
+        bane=x
         args[i]=nil
         args[i-1]=nil
       end
@@ -1589,7 +1615,27 @@ def find_stats_in_string(event,stringx=nil,mode=0)
         x="Speed" if ["spd","speed"].include?(x.downcase)
         x="Defense" if ["defense","def","defence"].include?(x.downcase)
         x="Resistance" if ["res","resistance"].include?(x.downcase)
-        refinement=x if ["HP","Attack","Speed","Defense","Resistance"].include?(x) && refinement.nil?
+        if ["HP","Attack","Speed","Defense","Resistance"].include?(x) && refinement.nil?
+          refinement=x
+          args[i]=nil
+        end
+      end
+      if i>0 && !args[i-1].nil? && !args[i].nil?
+        x=args[i-1]
+        x="Attack" if ["attack","atk","att","strength","str","magic","mag"].include?(x.downcase)
+        x="Speed" if ["spd","speed"].include?(x.downcase)
+        x="Defense" if ["defense","def","defence"].include?(x.downcase)
+        x="Resistance" if ["res","resistance"].include?(x.downcase)
+        y=args[i]
+        y="Attack" if ["attack","atk","att","strength","str","magic","mag"].include?(y.downcase)
+        y="Speed" if ["spd","speed"].include?(y.downcase)
+        y="Defense" if ["defense","def","defence"].include?(y.downcase)
+        y="Resistance" if ["res","resistance"].include?(y.downcase)
+        if args[i-1].downcase=="plus" && ["Attack","Speed","Defense","Resistance"].include?(y) && refinement.nil?
+          refinement=y
+          args[i]=nil
+          args[i-1]=nil
+        end
       end
     end
   end
@@ -8467,9 +8513,27 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
   return nil
 end
 
-bot.command(:shard) do |event|
+bot.command(:shard) do |event, i|
+  if i.to_i.to_s==i && i.to_i.is_a?(Bignum)
+    srv=(bot.server(i.to_i) rescue nil)
+    if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
+      event.respond "I am not in that server, but it would use #{['Transparent','Scarlet','Azure','Verdant'][(i.to_i >> 22) % 4]} Shards."
+    else
+      event.respond "#{srv.name} uses #{['Transparent','Scarlet','Azure','Verdant'][(i.to_i >> 22) % 4]} Shards."
+    end
+    return nil
+  end
   event.respond "PMs always use Colorless Shards." if event.server.nil?
   event.respond "This server uses #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards." unless event.server.nil?
+end
+
+bot.command([:locateshards, :locate, :locateshards], from: 167657750971547648) do |event|
+  return nil unless event.user.id==167657750971547648
+  bot.channel(403998526545330196).send_message("Verdant Shards are used here, <@167657750971547648>")
+  event << "Transparent Shards are used in PMs and in server C-137."
+  event << "Scarlet Shards are used in your testing server."
+  event << "Azure Shards are used in Penumbra."
+  event << "I have pinged you in a server that uses Verdant Shards."
 end
 
 bot.command(:cleanupaliases) do |event|
