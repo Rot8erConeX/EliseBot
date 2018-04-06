@@ -1,5 +1,5 @@
 shardizard = ARGV.first.to_i             # taking a single variable from the command prompt to get the shard value
-system("color 0#{"7CBA"[shardizard,1]}") # command prompt color and title determined by the shard
+system("color 0#{"7CBAE"[shardizard,1]}") # command prompt color and title determined by the shard
 system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][shardizard]} EliseBot")
 
 require 'discordrb'                    # Download link: https://github.com/meew0/discordrb
@@ -19,7 +19,7 @@ ENV['TZ'] = 'America/Chicago'
            'f?','F?','e?','E?','h?','H?']
 
 # The bot's token is basically their password, so is censored for obvious reasons
-if shardizard==5
+if shardizard==4
   bot = Discordrb::Commands::CommandBot.new token: '>Debug Token<', client_id: >Debug ID<, prefix: @prefix
 else
   bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: shardizard, num_shards: 4, client_id: 312451658908958721, prefix: @prefix
@@ -6562,8 +6562,8 @@ bot.command([:legendary,:legendaries]) do |event, *args|
       x3=weapon_clss(p2[j][0][1]) if sec=='Weapon'
       x3=p2[j][0][1][0] if sec=='Color'
       x3=p2[j][0][3] if sec=='Movement'
-      p2[j]="__*#{x3}*__\n#{p2[j].map{|q| "#{q[0]}#{" - *#{weapon_clss(q[1]) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}"}.join("\n")}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      p2[j]="*#{x3}*: #{p2[j].map{|q| "#{q[0]}#{" - *#{weapon_clss(q[1]) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}"}.join(", ")}" if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      p2[j]="__*#{x3}*__\n#{p2[j].map{|q| "#{"~~" unless q[23].nil?}#{q[0]}#{" - *#{weapon_clss(q[1]) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{"~~" unless q[23].nil?}"}.join("\n")}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      p2[j]="*#{x3}*: #{p2[j].map{|q| "#{"~~" unless q[23].nil?}#{q[0]}#{" - *#{weapon_clss(q[1]) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{"~~" unless q[23].nil?}"}.join(", ")}" if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     end
     p1[i]=[x2,p2.join("\n\n")] unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     p1[i]=[x2,p2.join("\n")] if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
@@ -7690,7 +7690,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     return nil
   end
   logchn=386658080257212417
-  logchn=431862993194582036 if shardizard==5
+  logchn=431862993194582036 if shardizard==4
   newname=newname.gsub('!','').gsub('(','').gsub(')','').gsub('_','')
   srv=0
   srv=event.server.id unless event.server.nil?
@@ -7969,7 +7969,7 @@ bot.command(:addgroup) do |event, groupname, *args|
   args.compact!
   newgroup=false
   logchn=386658080257212417
-  logchn=431862993194582036 if shardizard==5
+  logchn=431862993194582036 if shardizard==4
   k=0
   k=event.server.id unless event.server.nil?
   srvname="PM with dev"
@@ -8817,7 +8817,7 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
   @server_data[0][shardizard]=bot.servers.length
   @server_data[1][shardizard]=bot.users.size
   metadata_save()
-  unless event.user.id==167657750971547648 && !f.nil? && shardizard<5
+  unless event.user.id==167657750971547648 && !f.nil? && shardizard<4
     bot.servers.values(&:members)
     event << "I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members."
     event << "This shard is in #{longFormattedNumber(@server_data[0][shardizard])} servers, reaching #{longFormattedNumber(@server_data[1][shardizard])} unique members."
@@ -8856,7 +8856,7 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
 end
 
 bot.command(:shard) do |event, i|
-  if i.to_i.to_s==i && i.to_i.is_a?(Bignum) && shardizard != 5
+  if i.to_i.to_s==i && i.to_i.is_a?(Bignum) && shardizard != 4
     srv=(bot.server(i.to_i) rescue nil)
     if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
       event.respond "I am not in that server, but it would use #{['Transparent','Scarlet','Azure','Verdant'][(i.to_i >> 22) % 4]} Shards."
@@ -8865,14 +8865,14 @@ bot.command(:shard) do |event, i|
     end
     return nil
   end
-  event.respond "This is the debug mode, which uses Golden Shards." if shardizard==5
+  event.respond "This is the debug mode, which uses Golden Shards." if shardizard==4
   event.respond "PMs always use Colorless Shards." if event.server.nil?
   event.respond "This server uses #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards." unless event.server.nil?
 end
 
 bot.command([:locateshards, :locate, :locateshards], from: 167657750971547648) do |event|
   return nil unless event.user.id==167657750971547648
-  if shardizard==5
+  if shardizard==4
     event.respond "This command cannot be used by the debug version of me.  Please run this command in another server."
     return nil
   end
@@ -8885,7 +8885,7 @@ end
 
 bot.command(:cleanupaliases) do |event|
   event.channel.send_temporary_message("Please wait...",10)
-  if shardizard==5
+  if shardizard==4
     event.respond "This command cannot be used by the debug version of me.  Please run this command in another server."
     return nil
   end
@@ -9233,6 +9233,7 @@ end
 
 bot.message do |event|
   data_load()
+  str=event.message.text.downcase
   if event.message.text.include?('0x4') && !event.user.bot_account?
     s=event.message.text
     s=remove_format(s,'```')              # remove large code blocks
@@ -9254,11 +9255,11 @@ bot.message do |event|
       end
       event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{["","Pair it with a Breath skill to get 0x8 even faster."].sample}","Be sure to include Astra to increase damage by 150%.","Be sure to use a dancer for 0x8.","Be sure to use Sol, so you can heal for half of that.  #{["","Peck, Ephraim(Fire) heals for 80% with his Solar Brace.","Pair it with a Breath skill to get even more healing!"].sample}","#{["Be sure to use Galeforce for 0x8.","Be sure to use a dancer for 0x8."].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}" if canpost
     end
-  elsif shardizard==5 && (['fea!','fef!'].include?(str[0,4]) || ['fe13!','fe14!'].include?(str[0,5]) || ['fe!'].include?(str[0,3]))
+  elsif shardizard==4 && (['fea!','fef!'].include?(str[0,4]) || ['fe13!','fe14!'].include?(str[0,5]) || ['fe!'].include?(str[0,3]))
     str=str[4,str.length-4] if ['fea!','fef!'].include?(str[0,4])
     str=str[5,str.length-5] if ['fe13!','fe14!'].include?(str[0,5])
     str=str[3,str.length-3] if ['fe!'].include?(str[0,3])
-    args=str.split(' ')
+    a=str.split(' ')
     if a[0].downcase=='reboot'
       event.respond "Becoming Robin.  Please wait approximately five seconds..."
       exec "cd C:/Users/Mini-Matt/Desktop/devkit/FEIndex && feindex.rb 5"
@@ -9350,7 +9351,7 @@ bot.message do |event|
 end
 
 bot.ready do |event|
-  system("color 5#{"7CBA"[shardizard,1]}")
+  system("color 5#{"7CBAE"[shardizard,1]}")
   system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][shardizard]} EliseBot")
   bot.game="Loading, please wait..." if shardizard==0
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
@@ -9379,11 +9380,12 @@ bot.ready do |event|
     end
   end
   metadata_save()
-  bot.game="Fire Emblem Heroes" if shardizard==0
+  bot.game="Fire Emblem Heroes" if [0,4].include?(shardizard)
+  bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r')) if shardizard==4
   next_holiday(bot) if shardizard==0
   metadata_load()
   devunits_load()
-  system("color e#{"0412"[shardizard,1]}")
+  system("color e#{"04126"[shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][shardizard]} EliseBot")
 end
 
