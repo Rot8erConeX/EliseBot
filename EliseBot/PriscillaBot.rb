@@ -9215,20 +9215,33 @@ bot.command(:setmarker, from: 167657750971547648) do |event, letter|
 end
 
 bot.server_create do |event|
-  bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards#{"\n__***The sidekick has overshadowed the original hero***__" if bot.servers.values.length==701}")
-  metadata_load()
-  @server_data[0][((event.server.id >> 22) % 4)] += 1
-  metadata_save()
   chn=event.server.general_channel
-  chn=event.server.channels[0] if chn.nil?
-  chn.send_message("I'm here to deliver the happiest of hellos - as well as data for heroes and skills in *Fire Emblem: Heroes*!  So, here I am!")
+  if chn.nil?
+    chnn=[]
+    for i in 0...event.server.channels.length
+      chnn.push(event.server.channels[i]) if bot.user(bot.profile.id).on(event.server.id).permission?(:send_messages,event.server.channels[i])
+    end
+    chn=chnn[0] if chnn.length>0
+  end
+  if event.server.id != 285663217261477889 && shardizard==4
+    (chn.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/Hf9RNj>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/f1wSGd>") rescue nil)
+    event.server.leave
+  else
+    bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards#{"\n__***The sidekick has overshadowed the original hero***__" if bot.servers.values.length==701}")
+    metadata_load()
+    @server_data[0][((event.server.id >> 22) % 4)] += 1
+    metadata_save()
+    chn.send_message("I'm here to deliver the happiest of hellos - as well as data for heroes and skills in *Fire Emblem: Heroes*!  So, here I am!") rescue nil
+  end
 end
 
 bot.server_delete do |event|
-  bot.user(167657750971547648).pm("Left server **#{event.server.name}**")
-  metadata_load()
-  @server_data[0][((event.server.id >> 22) % 4)] -= 1
-  metadata_save()
+  unless shardizard==4
+    bot.user(167657750971547648).pm("Left server **#{event.server.name}**")
+    metadata_load()
+    @server_data[0][((event.server.id >> 22) % 4)] -= 1
+    metadata_save()
+  end
 end
 
 bot.message do |event|
@@ -9351,6 +9364,14 @@ bot.message do |event|
 end
 
 bot.ready do |event|
+  if shardizard==4
+    for i in 0...bot.servers.values.length
+      if bot.servers.values[i].id != 285663217261477889
+        bot.servers.values[i].general_channel.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/Hf9RNj>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/f1wSGd>") rescue nil
+        bot.servers.values[i].leave
+      end
+    end
+  end
   system("color 5#{"7CBAE"[shardizard,1]}")
   system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][shardizard]} EliseBot")
   bot.game="Loading, please wait..." if shardizard==0
