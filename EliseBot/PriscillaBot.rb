@@ -7834,7 +7834,7 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
           a=[]
           for j in 0...n[i][2].length
             srv=(bot.server(n[i][2][j]) rescue nil)
-            unless srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
+            unless srv.nil? || bot.user(bot.profile.id).on(srv.id).nil?
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
@@ -7859,7 +7859,7 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
             a=[]
             for j in 0...n[i][2].length
               srv=(bot.server(n[i][2][j]) rescue nil)
-              unless srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
+              unless srv.nil? || bot.user(bot.profile.id).on(srv.id).nil?
                 a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
               end
             end
@@ -8817,7 +8817,7 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
   @server_data[0][shardizard]=bot.servers.length
   @server_data[1][shardizard]=bot.users.size
   metadata_save()
-  unless event.user.id==167657750971547648 && !f.nil?
+  unless event.user.id==167657750971547648 && !f.nil? && shardizard<5
     bot.servers.values(&:members)
     event << "I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members."
     event << "This shard is in #{longFormattedNumber(@server_data[0][shardizard])} servers, reaching #{longFormattedNumber(@server_data[1][shardizard])} unique members."
@@ -8856,7 +8856,7 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
 end
 
 bot.command(:shard) do |event, i|
-  if i.to_i.to_s==i && i.to_i.is_a?(Bignum)
+  if i.to_i.to_s==i && i.to_i.is_a?(Bignum) && shardizard != 5
     srv=(bot.server(i.to_i) rescue nil)
     if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
       event.respond "I am not in that server, but it would use #{['Transparent','Scarlet','Azure','Verdant'][(i.to_i >> 22) % 4]} Shards."
@@ -8865,12 +8865,17 @@ bot.command(:shard) do |event, i|
     end
     return nil
   end
+  event.respond "This is the debug mode, which uses Golden Shards." if shardizard==5
   event.respond "PMs always use Colorless Shards." if event.server.nil?
   event.respond "This server uses #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards." unless event.server.nil?
 end
 
 bot.command([:locateshards, :locate, :locateshards], from: 167657750971547648) do |event|
   return nil unless event.user.id==167657750971547648
+  if shardizard==5
+    event.respond "This command cannot be used by the debug version of me.  Please run this command in another server."
+    return nil
+  end
   bot.channel(403998870327132171).send_message("Verdant Shards are used here, <@167657750971547648>")
   event << "Transparent Shards are used in PMs and in server C-137."
   event << "Scarlet Shards are used in your testing server."
@@ -8880,6 +8885,10 @@ end
 
 bot.command(:cleanupaliases) do |event|
   event.channel.send_temporary_message("Please wait...",10)
+  if shardizard==5
+    event.respond "This command cannot be used by the debug version of me.  Please run this command in another server."
+    return nil
+  end
   return nil unless event.user.id==167657750971547648
   nicknames_load()
   nmz=@names.map{|q| q}
@@ -8943,7 +8952,7 @@ bot.command(:backup) do |event, trigger|
 end
 
 bot.command(:restore) do |event, trigger|
-  return nil unless [167657750971547648,312451658908958721].include?(event.user.id) || event.channel.id==386658080257212417
+  return nil unless [167657750971547648,bot.profile.id].include?(event.user.id) || event.channel.id==386658080257212417
   bot.gateway.check_heartbeat_acks = false
   if trigger.nil?
     event.respond "Restore what?"
