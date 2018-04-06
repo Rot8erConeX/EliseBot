@@ -8867,7 +8867,7 @@ bot.command(:shard) do |event, i|
   end
   event.respond "This is the debug mode, which uses Golden Shards." if shardizard==4
   event.respond "PMs always use Colorless Shards." if event.server.nil?
-  event.respond "This server uses #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards." unless event.server.nil?
+  event.respond "This server uses #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards." unless event.server.nil? || shardizard==4
 end
 
 bot.command([:locateshards, :locate, :locateshards], from: 167657750971547648) do |event|
@@ -9234,35 +9234,14 @@ end
 bot.message do |event|
   data_load()
   str=event.message.text.downcase
-  if event.message.text.include?('0x4') && !event.user.bot_account?
-    s=event.message.text
-    s=remove_format(s,'```')              # remove large code blocks
-    s=remove_format(s,'`')                # remove small code blocks
-    s=remove_format(s,'~~')               # remove crossed-out text
-    if s=='0x4' || s[0,4]=='0x4 ' || s[s.length-4,4]==' 0x4' || s.include?(' 0x4 ')
-      canpost=true
-      k=0
-      k=event.server.id unless event.server.nil?
-      if k==271642342153388034
-        post=Time.now
-        if (post - @zero_by_four[0]).to_f > 3600*3
-          @zero_by_four[0]=post
-        else
-          canpost=false
-        end
-      elsif event.channel.id==330850148261298176
-        return nil
-      end
-      event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{["","Pair it with a Breath skill to get 0x8 even faster."].sample}","Be sure to include Astra to increase damage by 150%.","Be sure to use a dancer for 0x8.","Be sure to use Sol, so you can heal for half of that.  #{["","Peck, Ephraim(Fire) heals for 80% with his Solar Brace.","Pair it with a Breath skill to get even more healing!"].sample}","#{["Be sure to use Galeforce for 0x8.","Be sure to use a dancer for 0x8."].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}" if canpost
-    end
-  elsif shardizard==4 && (['fea!','fef!'].include?(str[0,4]) || ['fe13!','fe14!'].include?(str[0,5]) || ['fe!'].include?(str[0,3]))
+  if shardizard==4 && (['fea!','fef!'].include?(str[0,4]) || ['fe13!','fe14!'].include?(str[0,5]) || ['fe!'].include?(str[0,3]))
     str=str[4,str.length-4] if ['fea!','fef!'].include?(str[0,4])
     str=str[5,str.length-5] if ['fe13!','fe14!'].include?(str[0,5])
     str=str[3,str.length-3] if ['fe!'].include?(str[0,3])
     a=str.split(' ')
     if a[0].downcase=='reboot'
-      event.respond "Becoming Robin.  Please wait approximately five seconds..."
-      exec "cd C:/Users/Mini-Matt/Desktop/devkit/FEIndex && feindex.rb 5"
+      event.respond "Becoming Robin.  Please wait approximately ten seconds..."
+      exec "cd C:/Users/Mini-Matt/Desktop/devkit/FEIndex && feindex.rb 4"
     else
       event.respond "I am not Robin right now.  Please use `FE!reboot` to turn me into Robin."
     end
@@ -9347,6 +9326,27 @@ bot.message do |event|
         event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
       end
     end
+  elsif event.message.text.include?('0x4') && !event.user.bot_account?
+    s=event.message.text
+    s=remove_format(s,'```')              # remove large code blocks
+    s=remove_format(s,'`')                # remove small code blocks
+    s=remove_format(s,'~~')               # remove crossed-out text
+    if s=='0x4' || s[0,4]=='0x4 ' || s[s.length-4,4]==' 0x4' || s.include?(' 0x4 ')
+      canpost=true
+      k=0
+      k=event.server.id unless event.server.nil?
+      if k==271642342153388034
+        post=Time.now
+        if (post - @zero_by_four[0]).to_f > 3600*3
+          @zero_by_four[0]=post
+        else
+          canpost=false
+        end
+      elsif event.channel.id==330850148261298176
+        return nil
+      end
+      event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{["","Pair it with a Breath skill to get 0x8 even faster."].sample}","Be sure to include Astra to increase damage by 150%.","Be sure to use a dancer for 0x8.","Be sure to use Sol, so you can heal for half of that.  #{["","Peck, Ephraim(Fire) heals for 80% with his Solar Brace.","Pair it with a Breath skill to get even more healing!"].sample}","#{["Be sure to use Galeforce for 0x8.","Be sure to use a dancer for 0x8."].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}" if canpost
+    end
   end
 end
 
@@ -9381,6 +9381,7 @@ bot.ready do |event|
   end
   metadata_save()
   bot.game="Fire Emblem Heroes" if [0,4].include?(shardizard)
+  bot.user(bot.profile.id).on(285663217261477889).nickname="EliseBot (Debug)" if shardizard==4
   bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r')) if shardizard==4
   next_holiday(bot) if shardizard==0
   metadata_load()
