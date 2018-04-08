@@ -812,13 +812,14 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false)
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
   return -1 if name.nil?
-  name=normalize(name.gsub('!',''))
+  name=normalize(name.gsub('!','').gsub('.','').gsub('?',''))
   if name.downcase.gsub(' ','').gsub('_','')[0,2]=="<:"
     name=name.split(':')[1] if x_find_skill(name.split(':')[1],event,sklz,ignore,ignore2)>=0
   end
   return find_skill('Bladeblade',event) if name.downcase.gsub(' ','')=='laevatein'
   return find_skill('Uror',event) if name.downcase.gsub(' ','')=='urdr'
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
+  return find_skill("Tannenboom!#{"+" if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='tanenboom'
   return find_skill("Sack o' Gifts#{"+" if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='sackofgifts'
   return find_skill("Killing Edge#{"+" if name.include?('+')}",event) if ['killersword','killeredge','killingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
   return find_skill("Slaying Edge#{"+" if name.include?('+')}",event) if ['slayersword','slayeredge','slayingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
@@ -830,14 +831,14 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false)
   x2=stat_buffs(name.gsub(' ','').gsub('_',''),name)
   for i in 0...sklz.length
     unless sklz[i].nil?
-      j=i if stat_buffs(sklz[i][0],name).gsub(' ','').gsub('_','')==x2 && j<0
+      j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!',''),name).gsub('?','').gsub(' ','').gsub('_','')==x2 && j<0
     end
   end
   return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][21])
   x2=stat_buffs(name.gsub(' ','').gsub('_','').gsub("'",'').gsub('/','').gsub("-",''),name)
   for i in 0...sklz.length
     unless sklz[i].nil?
-      j=i if stat_buffs(sklz[i][0].gsub('/','').gsub("'",'').gsub("-",''),name).gsub(' ','').gsub('_','')==x2 && j<0
+      j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!','').gsub('?','').gsub('/','').gsub("'",'').gsub("-",''),name).gsub(' ','').gsub('_','')==x2 && j<0
     end
   end
   return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][21])
@@ -858,7 +859,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false)
   for i in 0...sklz.length
     unless sklz[i].nil?
       unless sklz[i][0].nil?
-        j=i if stat_buffs(sklz[i][0],name).gsub(' ','').gsub('_','')[0,name.length]==x2 && j<0
+        j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!','').gsub('?',''),name).gsub(' ','').gsub('_','')[0,name.length]==x2 && j<0
       end
     end
   end
@@ -1767,6 +1768,8 @@ def apply_stat_skills(event,skillls,stats,tempest=false,summoner='-',weapon='',r
     stats[3]+=(skillls[i].scan(/\d+?/)[0].to_i+1) if skillls[i][0,11]=="Hone Speed "
     stats[4]+=(skillls[i].scan(/\d+?/)[0].to_i+1) if skillls[i][0,16]=="Fortify Defense "
     stats[5]+=(skillls[i].scan(/\d+?/)[0].to_i+1) if skillls[i][0,19]=="Fortify Resistance "
+    stats[4]+=(skillls[i].scan(/\d+?/)[0].to_i+1) if skillls[i][0,12]=="Fortify Def "
+    stats[5]+=(skillls[i].scan(/\d+?/)[0].to_i+1) if skillls[i][0,12]=="Fortify Res "
     stats[2]+=(2*skillls[i].scan(/\d+?/)[0].to_i+1) if skillls[i][0,15]=="Defiant Attack "
     stats[3]+=(2*skillls[i].scan(/\d+?/)[0].to_i+1) if skillls[i][0,14]=="Defiant Speed "
     stats[4]+=(2*skillls[i].scan(/\d+?/)[0].to_i+1) if skillls[i][0,16]=="Defiant Defense "
@@ -2033,18 +2036,18 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
            ['HP Def 1',['hpdef1','hpdef+1','hpdefense1','hpdefense+1','hpdefence1','hpdefence+1','healthdef1','healthdef+1','healthdefense1','healthdefense+1','healthdefence1','healthdefence+1','defhp+1','defhealth+1','defensehp+1','defensehealth+1','defencehp+1','defencehealth+1','defhp1','defhealth1','defensehp1','defensehealth1','defencehp1','defencehealth1'],2],
            ['HP Res 2',['hpres2','hpres+2','hpresistance2','hpresistance+2','healthres2','healthres+2','healthresistance2','healthresistance+2','hpres','hpresistance','healthres','healthresistance','reshp+2','reshealth+2','resistancehp+2','resistancehealth+2','reshp2','reshealth2','resistancehp2','resistancehealth2','reshp','reshealth','resistancehp','resistancehealth'],2],
            ['HP Res 1',['hpres1','hpres+1','hpresistance1','hpresistance+1','healthres1','healthres+1','healthresistance1','healthresistance+1','reshp+1','reshealth+1','resistancehp+1','resistancehealth+1','reshp1','reshealth1','resistancehp1','resistancehealth1'],2],
-           ['Atk Spd 2',['attackspeed+2','attackspd+2','attspeed+2','attspd+2','atkspeed+2','atkspd+2','attackspeed2','attackspd2','attspeed2','attspd2','atkspeed2','atkspd2','attackspeed','attackspd','attspeed','attspd','atkspeed','atkspd','speedattack+2','speedatk+2','speedatt+2','spdattack+2','spdatk+2','spdatt+2','speedattack2','speedatk2','speedatt2','spdattack2','spdatk2','spdatt2','speedattack','speedatk','speedatt','spdattack','spdatk','spdatt'],2],
-           ['Atk Spd 1',['attackspeed+1','attackspd+1','attspeed+1','attspd+1','atkspeed+1','atkspd+1','attackspeed1','attackspd1','attspeed1','attspd1','atkspeed1','atkspd1','speedattack+1','speedatk+1','speedatt+1','spdattack+1','spdatk+1','spdatt+1','speedattack1','speedatk1','speedatt1','spdattack1','spdatk1','spdatt1'],2],
-           ['Atk Def 2',['defenseattack+2','defenseatk+2','defenseatt+2','defenceattack+2','defenceatk+2','defenceatt+2','defattack+2','defatk+2','defatt+2','defenseattack2','defenseatk2','defenseatt2','defenceattack2','defenceatk2','defenceatt2','defattack2','defatk2','defatt2','defenseattack','defenseatk','defenseatt','defenceattack','defenceatk','defenceatt','defattack','defatk','defatt','attackdefense+2','attackdefence+2','attackdef+2','atkdefense+2','atkdefence+2','atkdef+2','attdefense+2','attdefence+2','attdef+2','attackdefense2','attackdefence2','attackdef2','atkdefense2','atkdefence2','atkdef2','attdefense2','attdefence2','attdef2','attackdefense','attackdefence','attackdef','atkdefense','atkdefence','atkdef','attdefense','attdefence','attdef'],2],
-           ['Atk Def 1',['defenseattack+1','defenseatk+1','defenseatt+1','defenceattack+1','defenceatk+1','defenceatt+1','defattack+1','defatk+1','defatt+1','defenseattack1','defenseatk1','defenseatt1','defenceattack1','defenceatk1','defenceatt1','defattack1','defatk1','defatt1','attackdefense+1','attackdefence+1','attackdef+1','atkdefense+1','atkdefence+1','atkdef+1','attdefense+1','attdefence+1','attdef+1','attackdefense1','attackdefence1','attackdef1','atkdefense1','atkdefence1','atkdef1','attdefense1','attdefence1','attdef1'],2],
-           ['Atk Res 2',['attackresistance+2','attackres+2','atkresistance+2','atkres+2','attresistance+2','attres+2','attackresistance2','attackres2','atkresistance2','atkres2','attresistance2','attres2','attackresistance','attackres','atkresistance','atkres','attresistance','attres','resistanceattack+2','resistanceatk+2','resistanceatt+2','resattack+2','resatk+2','resatt+2','resistanceattack2','resistanceatk2','resistanceatt2','resattack2','resatk2','resatt2','resistanceattack','resistanceatk','resistanceatt','resattack','resatk','resatt'],2],
-           ['Atk Res 1',['attackresistance+1','attackres+1','atkresistance+1','atkres+1','attresistance+1','attres+1','attackresistance1','attackres1','atkresistance1','atkres1','attresistance1','attres1','resistanceattack+1','resistanceatk+1','resistanceatt+1','resattack+1','resatk+1','resatt+1','resistanceattack1','resistanceatk1','resistanceatt1','resattack1','resatk1','resatt1'],2],
-           ['Spd Def 2',['speeddefense+2','speeddefence+2','speeddef+2','spddefense+2','spddefence+2','spddef+2','speeddefense2','speeddefence2','speeddef2','spddefense2','spddefence2','spddef2','speeddefense','speeddefence','speeddef','spddefense','spddefence','spddef','defensespeed+2','defensespd+2','defencespeed+2','defencespd+2','defspeed+2','defspd+2','defensespeed2','defensespd2','defencespeed2','defencespd2','defspeed2','defspd2','defensespeed','defensespd','defencespeed','defencespd','defspeed','defspd'],2],
-           ['Spd Def 1',['speeddefense+1','speeddefence+1','speeddef+1','spddefense+1','spddefence+1','spddef+1','speeddefense1','speeddefence1','speeddef1','spddefense1','spddefence1','spddef1','defensespeed+1','defensespd+1','defencespeed+1','defencespd+1','defspeed+1','defspd+1','defensespeed1','defensespd1','defencespeed1','defencespd1','defspeed1','defspd1'],2],
-           ['Spd Res 2',['resistancespeed+2','resistancespd+2','resspeed+2','resspd+2','resistancespeed2','resistancespd2','resspeed2','resspd2','resistancespeed','resistancespd','resspeed','resspd','speedresistance+2','speedres+2','spdresistance+2','spdres+2','speedresistance2','speedres2','spdresistance2','spdres2','speedresistance','speedres','spdresistance','spdres'],2],
-           ['Spd Res 1',['resistancespeed+1','resistancespd+1','resspeed+1','resspd+1','resistancespeed1','resistancespd1','resspeed1','resspd1','speedresistance+1','speedres+1','spdresistance+1','spdres+1','speedresistance1','speedres1','spdresistance1','spdres1'],2],
-           ['Def Res 2',['defenseresistance+2','defenseres+2','defenceresistance+2','defenceres+2','defresistance+2','defres+2','defenseresistance2','defenseres2','defenceresistance2','defenceres2','defresistance2','defres2','defenseresistance','defenseres','defenceresistance','defenceres','defresistance','defres','resistancedefense+2','resistancedefence+2','resistancedef+2','resdefense+2','resdefence+2','resdef+2','resistancedefense2','resistancedefence2','resistancedef2','resdefense2','resdefence2','resdef2','resistancedefense','resistancedefence','resistancedef','resdefense','resdefence','resdef'],2],
-           ['Def Res 1',['defenseresistance+1','defenseres+1','defenceresistance+1','defenceres+1','defresistance+1','defres+1','defenseresistance1','defenseres1','defenceresistance1','defenceres1','defresistance1','defres1','defresistance','defres','resistancedefense+1','resistancedefence+1','resistancedef+1','resdefense+1','resdefence+1','resdef+1','resistancedefense1','resistancedefence1','resistancedef1','resdefense1','resdefence1','resdef1'],2]]
+           ['Atk Spd +2',['attackspeed+2','attackspd+2','attspeed+2','attspd+2','atkspeed+2','atkspd+2','attackspeed2','attackspd2','attspeed2','attspd2','atkspeed2','atkspd2','attackspeed','attackspd','attspeed','attspd','atkspeed','atkspd','speedattack+2','speedatk+2','speedatt+2','spdattack+2','spdatk+2','spdatt+2','speedattack2','speedatk2','speedatt2','spdattack2','spdatk2','spdatt2','speedattack','speedatk','speedatt','spdattack','spdatk','spdatt'],2],
+           ['Atk Spd +1',['attackspeed+1','attackspd+1','attspeed+1','attspd+1','atkspeed+1','atkspd+1','attackspeed1','attackspd1','attspeed1','attspd1','atkspeed1','atkspd1','speedattack+1','speedatk+1','speedatt+1','spdattack+1','spdatk+1','spdatt+1','speedattack1','speedatk1','speedatt1','spdattack1','spdatk1','spdatt1'],2],
+           ['Atk Def +2',['defenseattack+2','defenseatk+2','defenseatt+2','defenceattack+2','defenceatk+2','defenceatt+2','defattack+2','defatk+2','defatt+2','defenseattack2','defenseatk2','defenseatt2','defenceattack2','defenceatk2','defenceatt2','defattack2','defatk2','defatt2','defenseattack','defenseatk','defenseatt','defenceattack','defenceatk','defenceatt','defattack','defatk','defatt','attackdefense+2','attackdefence+2','attackdef+2','atkdefense+2','atkdefence+2','atkdef+2','attdefense+2','attdefence+2','attdef+2','attackdefense2','attackdefence2','attackdef2','atkdefense2','atkdefence2','atkdef2','attdefense2','attdefence2','attdef2','attackdefense','attackdefence','attackdef','atkdefense','atkdefence','atkdef','attdefense','attdefence','attdef'],2],
+           ['Atk Def +1',['defenseattack+1','defenseatk+1','defenseatt+1','defenceattack+1','defenceatk+1','defenceatt+1','defattack+1','defatk+1','defatt+1','defenseattack1','defenseatk1','defenseatt1','defenceattack1','defenceatk1','defenceatt1','defattack1','defatk1','defatt1','attackdefense+1','attackdefence+1','attackdef+1','atkdefense+1','atkdefence+1','atkdef+1','attdefense+1','attdefence+1','attdef+1','attackdefense1','attackdefence1','attackdef1','atkdefense1','atkdefence1','atkdef1','attdefense1','attdefence1','attdef1'],2],
+           ['Atk Res +2',['attackresistance+2','attackres+2','atkresistance+2','atkres+2','attresistance+2','attres+2','attackresistance2','attackres2','atkresistance2','atkres2','attresistance2','attres2','attackresistance','attackres','atkresistance','atkres','attresistance','attres','resistanceattack+2','resistanceatk+2','resistanceatt+2','resattack+2','resatk+2','resatt+2','resistanceattack2','resistanceatk2','resistanceatt2','resattack2','resatk2','resatt2','resistanceattack','resistanceatk','resistanceatt','resattack','resatk','resatt'],2],
+           ['Atk Res +1',['attackresistance+1','attackres+1','atkresistance+1','atkres+1','attresistance+1','attres+1','attackresistance1','attackres1','atkresistance1','atkres1','attresistance1','attres1','resistanceattack+1','resistanceatk+1','resistanceatt+1','resattack+1','resatk+1','resatt+1','resistanceattack1','resistanceatk1','resistanceatt1','resattack1','resatk1','resatt1'],2],
+           ['Spd Def +2',['speeddefense+2','speeddefence+2','speeddef+2','spddefense+2','spddefence+2','spddef+2','speeddefense2','speeddefence2','speeddef2','spddefense2','spddefence2','spddef2','speeddefense','speeddefence','speeddef','spddefense','spddefence','spddef','defensespeed+2','defensespd+2','defencespeed+2','defencespd+2','defspeed+2','defspd+2','defensespeed2','defensespd2','defencespeed2','defencespd2','defspeed2','defspd2','defensespeed','defensespd','defencespeed','defencespd','defspeed','defspd'],2],
+           ['Spd Def +1',['speeddefense+1','speeddefence+1','speeddef+1','spddefense+1','spddefence+1','spddef+1','speeddefense1','speeddefence1','speeddef1','spddefense1','spddefence1','spddef1','defensespeed+1','defensespd+1','defencespeed+1','defencespd+1','defspeed+1','defspd+1','defensespeed1','defensespd1','defencespeed1','defencespd1','defspeed1','defspd1'],2],
+           ['Spd Res +2',['resistancespeed+2','resistancespd+2','resspeed+2','resspd+2','resistancespeed2','resistancespd2','resspeed2','resspd2','resistancespeed','resistancespd','resspeed','resspd','speedresistance+2','speedres+2','spdresistance+2','spdres+2','speedresistance2','speedres2','spdresistance2','spdres2','speedresistance','speedres','spdresistance','spdres'],2],
+           ['Spd Res +1',['resistancespeed+1','resistancespd+1','resspeed+1','resspd+1','resistancespeed1','resistancespd1','resspeed1','resspd1','speedresistance+1','speedres+1','spdresistance+1','spdres+1','speedresistance1','speedres1','spdresistance1','spdres1'],2],
+           ['Def Res +2',['defenseresistance+2','defenseres+2','defenceresistance+2','defenceres+2','defresistance+2','defres+2','defenseresistance2','defenseres2','defenceresistance2','defenceres2','defresistance2','defres2','defenseresistance','defenseres','defenceresistance','defenceres','defresistance','defres','resistancedefense+2','resistancedefence+2','resistancedef+2','resdefense+2','resdefence+2','resdef+2','resistancedefense2','resistancedefence2','resistancedef2','resdefense2','resdefence2','resdef2','resistancedefense','resistancedefence','resistancedef','resdefense','resdefence','resdef'],2],
+           ['Def Res +1',['defenseresistance+1','defenseres+1','defenceresistance+1','defenceres+1','defresistance+1','defres+1','defenseresistance1','defenseres1','defenceresistance1','defenceres1','defresistance1','defres1','defresistance','defres','resistancedefense+1','resistancedefence+1','resistancedef+1','resdefense+1','resdefence+1','resdef+1','resistancedefense1','resistancedefence1','resistancedef1','resdefense1','resdefence1','resdef1'],2]]
   for i in 0...lookout.length
     for i2 in 0...lookout[i][2]
       stat_skills.push(lookout[i][0]) if count_in(args,lookout[i][1])>i2
@@ -2059,12 +2062,12 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
            ['Life and Death 3',['lnd3','lad3','l&d3','lifeanddeath3','life&death3','lnd','lad','l&d','lifeanddeath','life&death'],2],
            ['Life and Death 2',['lnd2','lad2','l&d2','lifeanddeath2','life&death2'],2],
            ['Life and Death 1',['lnd1','lad1','l&d1','lifeanddeath1','life&death1'],2],
-           ['Fortress Defense 3',['fortressdef3','fortressdefense3','fortressdefence3','fortdef3','fortdefense3','fortdefence3','fortressdef','fortressdefense','fortressdefence','fortdef','fortdefense','fortdefence'],2],
-           ['Fortress Defense 2',['fortressdef2','fortressdefense2','fortressdefence2','fortdef2','fortdefense2','fortdefence2'],2],
-           ['Fortress Defense 1',['fortressdef1','fortressdefense1','fortressdefence1','fortdef1','fortdefense1','fortdefence1'],2],
-           ['Fortress Resistance 3',['fortressres3','fortressresistance3','fortres3','fortresistance3','fortressres','fortressresistance','fortres','fortresistance'],2],
-           ['Fortress Resistance 2',['fortressres2','fortressresistance2','fortres2','fortresistance2'],2],
-           ['Fortress Resistance 1',['fortressres1','fortressresistance1','fortres1','fortresistance1'],2]]
+           ['Fortress Def 3',['fortressdef3','fortressdefense3','fortressdefence3','fortdef3','fortdefense3','fortdefence3','fortressdef','fortressdefense','fortressdefence','fortdef','fortdefense','fortdefence'],2],
+           ['Fortress Def 2',['fortressdef2','fortressdefense2','fortressdefence2','fortdef2','fortdefense2','fortdefence2'],2],
+           ['Fortress Def 1',['fortressdef1','fortressdefense1','fortressdefence1','fortdef1','fortdefense1','fortdefence1'],2],
+           ['Fortress Res 3',['fortressres3','fortressresistance3','fortres3','fortresistance3','fortressres','fortressresistance','fortres','fortresistance'],2],
+           ['Fortress Res 2',['fortressres2','fortressresistance2','fortres2','fortresistance2'],2],
+           ['Fortress Res 1',['fortressres1','fortressresistance1','fortres1','fortresistance1'],2]]
   for i in 0...lookout.length
     lokoout.push(lookout[i][0])
     for i2 in 0...lookout[i][2]
@@ -2881,6 +2884,7 @@ def disp_skill(name,event,ignore=false)
   str=''
   xcolor=0x02010a
   xfooter=nil
+  xpic=nil
   sklslt=['']
   if skill[4]=="Weapon"
     xcolor=0xF4728C
@@ -2941,6 +2945,7 @@ def disp_skill(name,event,ignore=false)
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
   else
     xcolor=0xFDDC7E
+    xpic="http://arcticsilverfox.com/feh_sim/skills/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','')}.png"
     sklslt=skill[4].split(', ')
     if !skill[20].nil? && skill[20]!='' && skill[4].include?("Passive(W)")
       eff=skill[20].split(', ')
@@ -3054,7 +3059,7 @@ def disp_skill(name,event,ignore=false)
     str2="**Evolution cost:** 400 SP, 375 Arena Medals, 150 Divine Dew" if skill[6]!="-"
     str="#{str}\n#{"\n" if prev>1}#{str2}"
   end
-  create_embed(event,"__**#{skill[0].gsub('Bladeblade','Laevatein')}**__",str,xcolor,xfooter) unless (" #{event.message.text.downcase} ".include?(' refined ') && !" #{event.message.text.downcase} ".include?(' default ') && !" #{event.message.text.downcase} ".include?(' base ')) && skill[4]=="Weapon"
+  create_embed(event,"__**#{skill[0].gsub('Bladeblade','Laevatein')}**__",str,xcolor,xfooter,xpic) unless (" #{event.message.text.downcase} ".include?(' refined ') && !" #{event.message.text.downcase} ".include?(' default ') && !" #{event.message.text.downcase} ".include?(' base ')) && skill[4]=="Weapon"
   if " #{event.message.text.downcase} ".include?(' refined ') && skill[23].nil? && skill[4]=="Weapon"
     event.respond "#{skill[0].gsub('Bladeblade','Laevatein')} does not have any refinements."
     return nil
@@ -9356,9 +9361,9 @@ bot.message do |event|
           canpost=false
         end
       elsif event.channel.id==330850148261298176
-        return nil
+      else
+       event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{["","Pair it with a Breath skill to get 0x8 even faster."].sample}","Be sure to include Astra to increase damage by 150%.","Be sure to use a dancer for 0x8.","Be sure to use Sol, so you can heal for half of that.  #{["","Peck, Ephraim(Fire) heals for 80% with his Solar Brace.","Pair it with a Breath skill to get even more healing!"].sample}","#{["Be sure to use Galeforce for 0x8.","Be sure to use a dancer for 0x8."].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}" if canpost
       end
-      event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{["","Pair it with a Breath skill to get 0x8 even faster."].sample}","Be sure to include Astra to increase damage by 150%.","Be sure to use a dancer for 0x8.","Be sure to use Sol, so you can heal for half of that.  #{["","Peck, Ephraim(Fire) heals for 80% with his Solar Brace.","Pair it with a Breath skill to get even more healing!"].sample}","#{["Be sure to use Galeforce for 0x8.","Be sure to use a dancer for 0x8."].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}" if canpost
     end
   end
 end
