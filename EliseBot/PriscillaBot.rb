@@ -558,13 +558,16 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='')
   return u
 end
 
-def make_stats_string(event,name,rarity,boon='',bane='')
+def make_stats_string(event,name,rarity,boon='',bane='',hm=10)
   k=""
+  hm=[hm.to_i, hm.to_i]
+  hm[0]=10 if hm[0]<0
+  hm[1]=0-hm[1] if hm[1]<0
   args=sever(event.message.text.downcase).split(" ")
-  for i in 0...11
+  for i in 0...hm[0]+1
     u=get_stats(event,name,40,rarity,i,boon,bane)
     u=["Kiran",0,0,0,0,0] if u[0]=="Kiran"
-    k="#{k}\n**#{i} merge#{'s' unless i==1}:** #{u[1]} / #{u[2]} / #{u[3]} / #{u[4]} / #{u[5]}		(BST: #{u[1]+u[2]+u[3]+u[4]+u[5]})" if i%5==0 || args.include?('full') || args.include?('merges')
+    k="#{k}\n**#{i} merge#{'s' unless i==1}:** #{u[1]} / #{u[2]} / #{u[3]} / #{u[4]} / #{u[5]}		(BST: #{u[1]+u[2]+u[3]+u[4]+u[5]})" if i%5==0 || i==hm[1] || args.include?('full') || args.include?('merges')
   end
   return k
 end
@@ -1735,18 +1738,24 @@ def apply_stat_skills(event,skillls,stats,tempest=false,summoner='-',weapon='',r
     stats[3]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,7]=="Speed +"
     stats[4]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,9]=="Defense +"
     stats[5]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,12]=="Resistance +"
-    if ["HP Atk ","HP Spd ","HP Def ","HP Res "].include?(skillls[i][0,7])
+    if ["HP Atk ","HP Spd ","HP Def ","HP Res "].include?(skillls[i].gsub('/',' ').gsub('+','')[0,7])
       stats[1]+=skillls[i].scan(/\d+?/)[0].to_i+2
       stats[2]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,7].include?("Atk")
       stats[3]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,7].include?("Spd")
       stats[4]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,7].include?("Def")
       stats[5]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,7].include?("Res")
     end
-    if ["Atk Spd +","Atk Def +","Atk Res +","Spd Def +","Spd Res +","Def Res +"].include?(skillls[i][0,9])
-      stats[2]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,9].include?("Atk")
-      stats[3]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,9].include?("Spd")
-      stats[4]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,9].include?("Def")
-      stats[5]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,9].include?("Res")
+    if ["Attack Spd ","Attack Def ","Attack Res "].include?(skillls[i].gsub('/',' ').gsub('+','')[0,11])
+      stats[2]+=skillls[i].scan(/\d+?/)[0].to_i
+      stats[3]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,11].include?("Spd")
+      stats[4]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,11].include?("Def")
+      stats[5]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,11].include?("Res")
+    end
+    if ["Atk Spd ","Atk Def ","Atk Res ","Spd Def ","Spd Res ","Def Res "].include?(skillls[i].gsub('/',' ').gsub('+','')[0,8])
+      stats[2]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,8].include?("Atk")
+      stats[3]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,8].include?("Spd")
+      stats[4]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,8].include?("Def")
+      stats[5]+=skillls[i].scan(/\d+?/)[0].to_i if skillls[i][0,8].include?("Res")
     end
     if skillls[i][0,5]=="Fury "
       stats[2]+=skillls[i].scan(/\d+?/)[0].to_i
@@ -2036,18 +2045,18 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
            ['HP Def 1',['hpdef1','hpdef+1','hpdefense1','hpdefense+1','hpdefence1','hpdefence+1','healthdef1','healthdef+1','healthdefense1','healthdefense+1','healthdefence1','healthdefence+1','defhp+1','defhealth+1','defensehp+1','defensehealth+1','defencehp+1','defencehealth+1','defhp1','defhealth1','defensehp1','defensehealth1','defencehp1','defencehealth1'],2],
            ['HP Res 2',['hpres2','hpres+2','hpresistance2','hpresistance+2','healthres2','healthres+2','healthresistance2','healthresistance+2','hpres','hpresistance','healthres','healthresistance','reshp+2','reshealth+2','resistancehp+2','resistancehealth+2','reshp2','reshealth2','resistancehp2','resistancehealth2','reshp','reshealth','resistancehp','resistancehealth'],2],
            ['HP Res 1',['hpres1','hpres+1','hpresistance1','hpresistance+1','healthres1','healthres+1','healthresistance1','healthresistance+1','reshp+1','reshealth+1','resistancehp+1','resistancehealth+1','reshp1','reshealth1','resistancehp1','resistancehealth1'],2],
-           ['Atk Spd +2',['attackspeed+2','attackspd+2','attspeed+2','attspd+2','atkspeed+2','atkspd+2','attackspeed2','attackspd2','attspeed2','attspd2','atkspeed2','atkspd2','attackspeed','attackspd','attspeed','attspd','atkspeed','atkspd','speedattack+2','speedatk+2','speedatt+2','spdattack+2','spdatk+2','spdatt+2','speedattack2','speedatk2','speedatt2','spdattack2','spdatk2','spdatt2','speedattack','speedatk','speedatt','spdattack','spdatk','spdatt'],2],
-           ['Atk Spd +1',['attackspeed+1','attackspd+1','attspeed+1','attspd+1','atkspeed+1','atkspd+1','attackspeed1','attackspd1','attspeed1','attspd1','atkspeed1','atkspd1','speedattack+1','speedatk+1','speedatt+1','spdattack+1','spdatk+1','spdatt+1','speedattack1','speedatk1','speedatt1','spdattack1','spdatk1','spdatt1'],2],
-           ['Atk Def +2',['defenseattack+2','defenseatk+2','defenseatt+2','defenceattack+2','defenceatk+2','defenceatt+2','defattack+2','defatk+2','defatt+2','defenseattack2','defenseatk2','defenseatt2','defenceattack2','defenceatk2','defenceatt2','defattack2','defatk2','defatt2','defenseattack','defenseatk','defenseatt','defenceattack','defenceatk','defenceatt','defattack','defatk','defatt','attackdefense+2','attackdefence+2','attackdef+2','atkdefense+2','atkdefence+2','atkdef+2','attdefense+2','attdefence+2','attdef+2','attackdefense2','attackdefence2','attackdef2','atkdefense2','atkdefence2','atkdef2','attdefense2','attdefence2','attdef2','attackdefense','attackdefence','attackdef','atkdefense','atkdefence','atkdef','attdefense','attdefence','attdef'],2],
-           ['Atk Def +1',['defenseattack+1','defenseatk+1','defenseatt+1','defenceattack+1','defenceatk+1','defenceatt+1','defattack+1','defatk+1','defatt+1','defenseattack1','defenseatk1','defenseatt1','defenceattack1','defenceatk1','defenceatt1','defattack1','defatk1','defatt1','attackdefense+1','attackdefence+1','attackdef+1','atkdefense+1','atkdefence+1','atkdef+1','attdefense+1','attdefence+1','attdef+1','attackdefense1','attackdefence1','attackdef1','atkdefense1','atkdefence1','atkdef1','attdefense1','attdefence1','attdef1'],2],
-           ['Atk Res +2',['attackresistance+2','attackres+2','atkresistance+2','atkres+2','attresistance+2','attres+2','attackresistance2','attackres2','atkresistance2','atkres2','attresistance2','attres2','attackresistance','attackres','atkresistance','atkres','attresistance','attres','resistanceattack+2','resistanceatk+2','resistanceatt+2','resattack+2','resatk+2','resatt+2','resistanceattack2','resistanceatk2','resistanceatt2','resattack2','resatk2','resatt2','resistanceattack','resistanceatk','resistanceatt','resattack','resatk','resatt'],2],
-           ['Atk Res +1',['attackresistance+1','attackres+1','atkresistance+1','atkres+1','attresistance+1','attres+1','attackresistance1','attackres1','atkresistance1','atkres1','attresistance1','attres1','resistanceattack+1','resistanceatk+1','resistanceatt+1','resattack+1','resatk+1','resatt+1','resistanceattack1','resistanceatk1','resistanceatt1','resattack1','resatk1','resatt1'],2],
-           ['Spd Def +2',['speeddefense+2','speeddefence+2','speeddef+2','spddefense+2','spddefence+2','spddef+2','speeddefense2','speeddefence2','speeddef2','spddefense2','spddefence2','spddef2','speeddefense','speeddefence','speeddef','spddefense','spddefence','spddef','defensespeed+2','defensespd+2','defencespeed+2','defencespd+2','defspeed+2','defspd+2','defensespeed2','defensespd2','defencespeed2','defencespd2','defspeed2','defspd2','defensespeed','defensespd','defencespeed','defencespd','defspeed','defspd'],2],
-           ['Spd Def +1',['speeddefense+1','speeddefence+1','speeddef+1','spddefense+1','spddefence+1','spddef+1','speeddefense1','speeddefence1','speeddef1','spddefense1','spddefence1','spddef1','defensespeed+1','defensespd+1','defencespeed+1','defencespd+1','defspeed+1','defspd+1','defensespeed1','defensespd1','defencespeed1','defencespd1','defspeed1','defspd1'],2],
-           ['Spd Res +2',['resistancespeed+2','resistancespd+2','resspeed+2','resspd+2','resistancespeed2','resistancespd2','resspeed2','resspd2','resistancespeed','resistancespd','resspeed','resspd','speedresistance+2','speedres+2','spdresistance+2','spdres+2','speedresistance2','speedres2','spdresistance2','spdres2','speedresistance','speedres','spdresistance','spdres'],2],
-           ['Spd Res +1',['resistancespeed+1','resistancespd+1','resspeed+1','resspd+1','resistancespeed1','resistancespd1','resspeed1','resspd1','speedresistance+1','speedres+1','spdresistance+1','spdres+1','speedresistance1','speedres1','spdresistance1','spdres1'],2],
-           ['Def Res +2',['defenseresistance+2','defenseres+2','defenceresistance+2','defenceres+2','defresistance+2','defres+2','defenseresistance2','defenseres2','defenceresistance2','defenceres2','defresistance2','defres2','defenseresistance','defenseres','defenceresistance','defenceres','defresistance','defres','resistancedefense+2','resistancedefence+2','resistancedef+2','resdefense+2','resdefence+2','resdef+2','resistancedefense2','resistancedefence2','resistancedef2','resdefense2','resdefence2','resdef2','resistancedefense','resistancedefence','resistancedef','resdefense','resdefence','resdef'],2],
-           ['Def Res +1',['defenseresistance+1','defenseres+1','defenceresistance+1','defenceres+1','defresistance+1','defres+1','defenseresistance1','defenseres1','defenceresistance1','defenceres1','defresistance1','defres1','defresistance','defres','resistancedefense+1','resistancedefence+1','resistancedef+1','resdefense+1','resdefence+1','resdef+1','resistancedefense1','resistancedefence1','resistancedef1','resdefense1','resdefence1','resdef1'],2]]
+           ['Attack/Spd +2',['attackspeed+2','attackspd+2','attspeed+2','attspd+2','atkspeed+2','atkspd+2','attackspeed2','attackspd2','attspeed2','attspd2','atkspeed2','atkspd2','attackspeed','attackspd','attspeed','attspd','atkspeed','atkspd','speedattack+2','speedatk+2','speedatt+2','spdattack+2','spdatk+2','spdatt+2','speedattack2','speedatk2','speedatt2','spdattack2','spdatk2','spdatt2','speedattack','speedatk','speedatt','spdattack','spdatk','spdatt'],2],
+           ['Attack/Spd +1',['attackspeed+1','attackspd+1','attspeed+1','attspd+1','atkspeed+1','atkspd+1','attackspeed1','attackspd1','attspeed1','attspd1','atkspeed1','atkspd1','speedattack+1','speedatk+1','speedatt+1','spdattack+1','spdatk+1','spdatt+1','speedattack1','speedatk1','speedatt1','spdattack1','spdatk1','spdatt1'],2],
+           ['Attack/Def +2',['defenseattack+2','defenseatk+2','defenseatt+2','defenceattack+2','defenceatk+2','defenceatt+2','defattack+2','defatk+2','defatt+2','defenseattack2','defenseatk2','defenseatt2','defenceattack2','defenceatk2','defenceatt2','defattack2','defatk2','defatt2','defenseattack','defenseatk','defenseatt','defenceattack','defenceatk','defenceatt','defattack','defatk','defatt','attackdefense+2','attackdefence+2','attackdef+2','atkdefense+2','atkdefence+2','atkdef+2','attdefense+2','attdefence+2','attdef+2','attackdefense2','attackdefence2','attackdef2','atkdefense2','atkdefence2','atkdef2','attdefense2','attdefence2','attdef2','attackdefense','attackdefence','attackdef','atkdefense','atkdefence','atkdef','attdefense','attdefence','attdef'],2],
+           ['Attack/Def +1',['defenseattack+1','defenseatk+1','defenseatt+1','defenceattack+1','defenceatk+1','defenceatt+1','defattack+1','defatk+1','defatt+1','defenseattack1','defenseatk1','defenseatt1','defenceattack1','defenceatk1','defenceatt1','defattack1','defatk1','defatt1','attackdefense+1','attackdefence+1','attackdef+1','atkdefense+1','atkdefence+1','atkdef+1','attdefense+1','attdefence+1','attdef+1','attackdefense1','attackdefence1','attackdef1','atkdefense1','atkdefence1','atkdef1','attdefense1','attdefence1','attdef1'],2],
+           ['Attack/Res +2',['attackresistance+2','attackres+2','atkresistance+2','atkres+2','attresistance+2','attres+2','attackresistance2','attackres2','atkresistance2','atkres2','attresistance2','attres2','attackresistance','attackres','atkresistance','atkres','attresistance','attres','resistanceattack+2','resistanceatk+2','resistanceatt+2','resattack+2','resatk+2','resatt+2','resistanceattack2','resistanceatk2','resistanceatt2','resattack2','resatk2','resatt2','resistanceattack','resistanceatk','resistanceatt','resattack','resatk','resatt'],2],
+           ['Attack/Res +1',['attackresistance+1','attackres+1','atkresistance+1','atkres+1','attresistance+1','attres+1','attackresistance1','attackres1','atkresistance1','atkres1','attresistance1','attres1','resistanceattack+1','resistanceatk+1','resistanceatt+1','resattack+1','resatk+1','resatt+1','resistanceattack1','resistanceatk1','resistanceatt1','resattack1','resatk1','resatt1'],2],
+           ['Spd/Def +2',['speeddefense+2','speeddefence+2','speeddef+2','spddefense+2','spddefence+2','spddef+2','speeddefense2','speeddefence2','speeddef2','spddefense2','spddefence2','spddef2','speeddefense','speeddefence','speeddef','spddefense','spddefence','spddef','defensespeed+2','defensespd+2','defencespeed+2','defencespd+2','defspeed+2','defspd+2','defensespeed2','defensespd2','defencespeed2','defencespd2','defspeed2','defspd2','defensespeed','defensespd','defencespeed','defencespd','defspeed','defspd'],2],
+           ['Spd/Def +1',['speeddefense+1','speeddefence+1','speeddef+1','spddefense+1','spddefence+1','spddef+1','speeddefense1','speeddefence1','speeddef1','spddefense1','spddefence1','spddef1','defensespeed+1','defensespd+1','defencespeed+1','defencespd+1','defspeed+1','defspd+1','defensespeed1','defensespd1','defencespeed1','defencespd1','defspeed1','defspd1'],2],
+           ['Spd/Res +2',['resistancespeed+2','resistancespd+2','resspeed+2','resspd+2','resistancespeed2','resistancespd2','resspeed2','resspd2','resistancespeed','resistancespd','resspeed','resspd','speedresistance+2','speedres+2','spdresistance+2','spdres+2','speedresistance2','speedres2','spdresistance2','spdres2','speedresistance','speedres','spdresistance','spdres'],2],
+           ['Spd/Res +1',['resistancespeed+1','resistancespd+1','resspeed+1','resspd+1','resistancespeed1','resistancespd1','resspeed1','resspd1','speedresistance+1','speedres+1','spdresistance+1','spdres+1','speedresistance1','speedres1','spdresistance1','spdres1'],2],
+           ['Def/Res +2',['defenseresistance+2','defenseres+2','defenceresistance+2','defenceres+2','defresistance+2','defres+2','defenseresistance2','defenseres2','defenceresistance2','defenceres2','defresistance2','defres2','defenseresistance','defenseres','defenceresistance','defenceres','defresistance','defres','resistancedefense+2','resistancedefence+2','resistancedef+2','resdefense+2','resdefence+2','resdef+2','resistancedefense2','resistancedefence2','resistancedef2','resdefense2','resdefence2','resdef2','resistancedefense','resistancedefence','resistancedef','resdefense','resdefence','resdef'],2],
+           ['Def/Res +1',['defenseresistance+1','defenseres+1','defenceresistance+1','defenceres+1','defresistance+1','defres+1','defenseresistance1','defenseres1','defenceresistance1','defenceres1','defresistance1','defres1','defresistance','defres','resistancedefense+1','resistancedefence+1','resistancedef+1','resdefense+1','resdefence+1','resdef+1','resistancedefense1','resistancedefence1','resistancedef1','resdefense1','resdefence1','resdef1'],2]]
   for i in 0...lookout.length
     for i2 in 0...lookout[i][2]
       stat_skills.push(lookout[i][0]) if count_in(args,lookout[i][1])>i2
@@ -4952,13 +4961,13 @@ def disp_unit_stats_and_skills(event,args,bot)
   w=nil
   w=k2[0] unless k2.nil?
   data_load()
-  if !detect_dual_unit_alias(str.downcase,str.downcase).nil?
-    x=detect_dual_unit_alias(str.downcase,str.downcase)
+  if !detect_dual_unit_alias(str.downcase,event.message.text.downcase).nil?
+    x=detect_dual_unit_alias(str.downcase,event.message.text.downcase)
     disp_stats(bot,x[1],w,event,true)
     disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
     event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
-  elsif !detect_dual_unit_alias(str.downcase,event.message.text.downcase).nil?
-    x=detect_dual_unit_alias(str.downcase,event.message.text.downcase)
+  elsif !detect_dual_unit_alias(str.downcase,str.downcase).nil?
+    x=detect_dual_unit_alias(str.downcase,str.downcase)
     disp_stats(bot,x[1],w,event,true)
     disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
     event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
@@ -5529,6 +5538,11 @@ def unit_study(event,name,bot,weapon=nil)
     return nil
   end
   j=find_unit(name,event)
+  u40x=@data[j]
+  if u40x[4].nil? || (u40x[4].zero? && u40x[9].zero?)
+    event.respond "#{u40x[0]} does not have official stats.  I cannot study #{'him' if u40x[20]=='M'}#{'her' if u40x[20]=='F'}#{'them' unless ['M','F'].include?(u40x[20])} at multiple rarities."
+    return nil
+  end
   args=sever(event.message.text.downcase).split(" ")
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   flurp=find_stats_in_string(event)
@@ -5548,14 +5562,22 @@ def unit_study(event,name,bot,weapon=nil)
       bane=@dev_units[dv][4].gsub(' ','')
     end
   end
-  r1=make_stats_string(event,name,1,boon,bane)
-  r2=make_stats_string(event,name,2,boon,bane)
-  r3=make_stats_string(event,name,3,boon,bane)
-  r4=make_stats_string(event,name,4,boon,bane)
-  r5=make_stats_string(event,name,5,boon,bane)
+  rardata=@data[j][19].downcase
+  highest_merge=0
+  if rardata.include?('p')
+    highest_merge=10
+  elsif rardata.include?('-')
+    highest_merge=0
+  else
+    highest_merge=[10,rardata.length/2-1].min
+  end
+  r1=make_stats_string(event,name,1,boon,bane,highest_merge)
+  r2=make_stats_string(event,name,2,boon,bane,highest_merge)
+  r3=make_stats_string(event,name,3,boon,bane,highest_merge)
+  r4=make_stats_string(event,name,4,boon,bane,highest_merge)
+  r5=make_stats_string(event,name,5,boon,bane,highest_merge)
   lowest_rarity=5
   summon_type=[[],[],[],[],[],[],[]]
-  rardata=@data[j][19].downcase
   for m in 1...6
     if rardata.include?("#{m}p")
       lowest_rarity=[m,lowest_rarity].min
@@ -5633,6 +5655,14 @@ def unit_study(event,name,bot,weapon=nil)
     xcolor=avg_color([[32,142,251],[1,173,0]])
     w="*Tome*"
     summon_type="\n*Female:* #{summon_type}\n*Male:* 3/4\\* summon"
+    unless highest_merge==10
+      r1=make_stats_string(event,name,1,boon,bane,0-highest_merge)
+      r2=make_stats_string(event,name,2,boon,bane,0-highest_merge)
+      r3=make_stats_string(event,name,3,boon,bane,0-highest_merge)
+      r4=make_stats_string(event,name,4,boon,bane,0-highest_merge)
+      r5=make_stats_string(event,name,5,boon,bane,0-highest_merge)
+      highest_merge="\n*Female: #{highest_merge}*\n*Male:* 10\n"
+    end
   end
   xcolor=0x9400D3 if u40[0]=="Kiran"
   rar=[]
@@ -5643,7 +5673,7 @@ def unit_study(event,name,bot,weapon=nil)
   rar.push(["<:star:322905655730241547>"*5,r5])
   pic=pick_thumbnail(event,j,bot)
   pic="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png" if u40[0]=="Robin (Shared stats)"
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","**Available rarities:** #{summon_type}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,rar,2)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","**Available rarities:** #{summon_type}#{"\n**Highest available merge:** #{highest_merge}" unless highest_merge==10}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,rar,2)
 end
 
 def heal_study(event,name,bot,weapon=nil)
@@ -5655,6 +5685,11 @@ def heal_study(event,name,bot,weapon=nil)
   end
   name=find_name_in_string(event) if name.nil?
   j=find_unit(name,event)
+  u40x=@data[j]
+  if u40x[4].nil? || (u40x[4].zero? && u40x[9].zero?)
+    event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[20]=='M'}#{'she does' if u40x[20]=='F'}#{'they do' unless ['M','F'].include?(u40x[20])} with each healing staff."
+    return nil
+  end
   data_load()
   weapon='-' if weapon.nil?
   s=event.message.text
@@ -5872,6 +5907,11 @@ def proc_study(event,name,bot,weapon=nil)
   end
   name=find_name_in_string(event) if name.nil?
   j=find_unit(name,event)
+  u40x=@data[j]
+  if u40x[4].nil? || (u40x[4].zero? && u40x[9].zero?)
+    event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[20]=='M'}#{'she does' if u40x[20]=='F'}#{'they do' unless ['M','F'].include?(u40x[20])} with each proc skill."
+    return nil
+  end
   data_load()
   weapon='-' if weapon.nil?
   s=event.message.text
@@ -6174,6 +6214,11 @@ def phase_study(event,name,bot,weapon=nil)
   end
   name=find_name_in_string(event) if name.nil?
   j=find_unit(name,event)
+  u40x=@data[j]
+  if u40x[4].nil? || (u40x[4].zero? && u40x[9].zero?)
+    event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[20]=='M'}#{'she does' if u40x[20]=='F'}#{'they do' unless ['M','F'].include?(u40x[20])} in each phase."
+    return nil
+  end
   data_load()
   weapon='-' if weapon.nil?
   s=event.message.text
@@ -7500,11 +7545,11 @@ bot.command([:skills,:fodder]) do |event, *args|
   str=k[0]
   data_load()
   if str.nil?
-  elsif !detect_dual_unit_alias(str.downcase,str.downcase).nil?
-    x=detect_dual_unit_alias(str.downcase,str.downcase)
-    disp_unit_skills(bot,x[1],event,true)
   elsif !detect_dual_unit_alias(str.downcase,event.message.text.downcase).nil?
     x=detect_dual_unit_alias(str.downcase,event.message.text.downcase)
+    disp_unit_skills(bot,x[1],event,true)
+  elsif !detect_dual_unit_alias(str.downcase,str.downcase).nil?
+    x=detect_dual_unit_alias(str.downcase,str.downcase)
     disp_unit_skills(bot,x[1],event,true)
   elsif find_unit(str,event)>=0
     disp_unit_skills(bot,str,event)
@@ -7596,11 +7641,11 @@ bot.command([:stats,:stat]) do |event, *args|
   w=nil
   w=k2[0] unless k2.nil?
   data_load()
-  if !detect_dual_unit_alias(str.downcase,str.downcase).nil?
-    x=detect_dual_unit_alias(str.downcase,str.downcase)
-    disp_stats(bot,x[1],w,event,true)
-  elsif !detect_dual_unit_alias(str.downcase,event.message.text.downcase).nil?
+  if !detect_dual_unit_alias(str.downcase,event.message.text.downcase).nil?
     x=detect_dual_unit_alias(str.downcase,event.message.text.downcase)
+    disp_stats(bot,x[1],w,event,true)
+  elsif !detect_dual_unit_alias(str.downcase,str.downcase).nil?
+    x=detect_dual_unit_alias(str.downcase,str.downcase)
     disp_stats(bot,x[1],w,event,true)
   elsif find_unit(str,event)>=0
     disp_stats(bot,str,w,event)
@@ -9279,8 +9324,8 @@ bot.message do |event|
       elsif str.nil?
         if find_skill(s,event)>=0
           disp_skill(s,event,true)
-        elsif !detect_dual_unit_alias(s.downcase,s.downcase).nil?
-          x=detect_dual_unit_alias(s.downcase,s.downcase)
+        elsif !detect_dual_unit_alias(s.downcase,event.message.text.downcase).nil?
+          x=detect_dual_unit_alias(s.downcase,event.message.text.downcase)
           event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
           k2=get_weapon(first_sub(s,x[0],''),event)
           w=nil
@@ -9288,8 +9333,8 @@ bot.message do |event|
           disp_stats(bot,x[1],w,event,true)
           disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
           event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
-        elsif !detect_dual_unit_alias(s.downcase,event.message.text.downcase).nil?
-          x=detect_dual_unit_alias(s.downcase,event.message.text.downcase)
+        elsif !detect_dual_unit_alias(s.downcase,s.downcase).nil?
+          x=detect_dual_unit_alias(s.downcase,s.downcase)
           event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
           k2=get_weapon(first_sub(s,x[0],''),event)
           w=nil
@@ -9300,8 +9345,8 @@ bot.message do |event|
         end
       elsif str[1].downcase=='ploy' && find_skill(stat_buffs(s,s),event)>=0
         disp_skill(stat_buffs(s,s),event,true)
-      elsif !detect_dual_unit_alias(str[0].downcase,str[0].downcase).nil?
-        x=detect_dual_unit_alias(str[0].downcase,str[0].downcase)
+      elsif !detect_dual_unit_alias(str[0].downcase,event.message.text.downcase).nil?
+        x=detect_dual_unit_alias(str[0].downcase,event.message.text.downcase)
         event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
@@ -9309,8 +9354,8 @@ bot.message do |event|
         disp_stats(bot,x[1],w,event,true)
         disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
         event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
-      elsif !detect_dual_unit_alias(str[0].downcase,event.message.text.downcase).nil?
-        x=detect_dual_unit_alias(str[0].downcase,event.message.text.downcase)
+      elsif !detect_dual_unit_alias(str[0].downcase,str[0].downcase).nil?
+        x=detect_dual_unit_alias(str[0].downcase,str[0].downcase)
         event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
