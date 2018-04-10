@@ -561,9 +561,9 @@ end
 def make_stats_string(event,name,rarity,boon='',bane='',hm=10)
   k=""
   hm=[hm.to_i, hm.to_i]
-  hm[0]=10 if hm[0]<0
-  hm[1]=0-hm[1] if hm[1]<0
   args=sever(event.message.text.downcase).split(" ")
+  hm[0]=10 if hm[0]<0 || args.include?('full') || args.include?('merges')
+  hm[1]=0-hm[1] if hm[1]<0
   for i in 0...hm[0]+1
     u=get_stats(event,name,40,rarity,i,boon,bane)
     u=["Kiran",0,0,0,0,0] if u[0]=="Kiran"
@@ -5386,6 +5386,11 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   blessing.compact!
   args.compact!
   j=find_unit(name,event)
+  u40x=@data[j]
+  if u40x[4].nil? || (u40x[4].zero? && u40x[9].zero?)
+    event.respond "#{u40x[0]} does not have official stats.  I cannot study #{'his' if u40x[20]=='M'}#{'her' if u40x[20]=='F'}#{'their' unless ['M','F'].include?(u40x[20])} effective HP."
+    return nil
+  end
   stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
   if event.message.text.downcase.include?("mathoo's")
