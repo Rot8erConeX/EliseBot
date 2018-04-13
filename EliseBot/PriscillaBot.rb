@@ -44,6 +44,8 @@ bot.gateway.check_heartbeat_acks = false
 @announcement=''
 @zero_by_four=[0,0]
 @headpats=[0,0,0]
+@summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,
+                 341729526767681549,393775173095915521,380013135576432651]
 @summon_rate=[0,0]
 @mods=[[0, 6, 7, 7, 8, 8], # this is a translation of the graphic displayed in the "growths" command.
        [0, 8, 8, 9,10,10],
@@ -59,14 +61,14 @@ bot.gateway.check_heartbeat_acks = false
        [0,24,26,29,31,33],
        [0,26,28,31,33,35],
        [0,28,30,33,35,37]]
-@natures=[["Gentle","Resistance","Defense"],
+@natures=[["Gentle","Resistance","Defense"], # this is a list of all the nature names that can be displayed, with the affected stats
           ["Bold","Defense","Attack"],
           ["Timid","Speed","Attack"],
           ["Lonely","Attack","Defense"],
           ["Mild","Attack","Defense"],
           ["Hasty","Speed","Defense"],
-          ["Impish","Defense","Attack"],
-          ["Calm","Resistance","Attack",true],
+          ["Impish","Defense","Attack"],       # entries with "true" at the end cannot be typed in by end users but can be displayed, other entries can do both
+          ["Calm","Resistance","Attack",true], # "Calm" cannot be typed in due to it meaning something different between FE and Pokemon (where the nature names come from)
           ["Careful","Resistance","Attack"],
           ["Jolly","Speed","Attack"],
           ["Naive","Speed","Resistance"],
@@ -74,7 +76,7 @@ bot.gateway.check_heartbeat_acks = false
           ["Lax","Defense","Resistance"],
           ["Rash","Attack","Resistance"],
           ["Relaxed","Defense","Speed"],
-          ["Brave","Attack","Speed",true],
+          ["Brave","Attack","Speed",true], # "Brave" cannot be typed due to it being both a unit classification and a weapon classification
           ["Quiet","Attack","Speed"],
           ["Sassy","Resistance","Speed"],
           ["`\u22C0`Strong","Attack","HP",true],
@@ -88,13 +90,14 @@ bot.gateway.check_heartbeat_acks = false
           ["`\u22C1`Fragile","HP","Defense",true],
           ["`\u22C1`Excitable","HP","Resistance",true]]
 
-def all_commands(include_nil=false)
+def all_commands(include_nil=false) # a list of all the command names.  Used by Nino Mode to ignore messages that are commands, so responses do not double up.
   k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','fourstar','backup','restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills','locate','locateshard','locateshards','links','art']
   k[0]=nil if include_nil
   return k
 end
 
-def data_load()
+def data_load() # loads the character and skill data from the files on my computer
+  # UNIT DATA
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHData.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHData.txt').each_line do |line|
@@ -108,30 +111,33 @@ def data_load()
   for i in 0...b.length
     bob4=[]
     b[i].each_line('\\'[0,1]) {|s| bob4.push(s[0,s.length-1])}
-    bob4[1]=bob4[1].split(', ')
-    if bob4[2].length>1
+    bob4[1]=bob4[1].split(', ') # weapon classification is actually a two-part entry (three-part for mages)
+    if bob4[2].length>1 # Legendary Hero type is a two-part entry
       bob4[2]=bob4[2].split(', ')
     else
       bob4[2]=[' ',' ']
     end
     if bob4.length>4
-      for j in 4...14
+      for j in 4...14 # growth rates and level 40 stats should be stored as numbers, not strings
         bob4[j]=bob4[j].to_i
       end
     end
-    if bob4[21].length>1
-      bob4[21]=bob4[21].split(', ')
-    else
-      bob4[21]=[' ']
+    if bob4.length>20 # the list of games should be spliced into an array of game abbreviations
+      if bob4[21].length>1
+        bob4[21]=bob4[21].split(', ')
+      else
+        bob4[21]=[' ']
+      end
     end
     if bob4.length>21
-      unless bob4[22].nil?
+      unless bob4[22].nil? # server-specific units' markers should be split into two pieces - the server(s) they are allowed in, and the ID of the user whose avatar to use
         bob4[23]=bob4[22].gsub(bob4[22].scan(/[[:alpha:]]+?/).join,'').to_i
         bob4[22]=bob4[22].scan(/[[:alpha:]]+?/).join
       end
     end
     @data.push(bob4)
   end
+  # SKILL DATA
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkills.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkills.txt').each_line do |line|
@@ -145,17 +151,17 @@ def data_load()
   for i in 0...b.length
     bob4=[]
     b[i].each_line('\\'[0,1]) {|s| bob4.push(s[0,s.length-1])}
-    bob4[1]=bob4[1].to_i
-    bob4[2]=bob4[2].to_i unless bob4[2]=='-'
-    bob4[20]=bob4[20].split(',').map{|q| q.to_i} if bob4[4]=="Weapon"
-    bob4[21]=nil unless bob4[21].nil? || bob4[21].length>0
-    bob4[22]=nil unless bob4[22].nil? || bob4[22].length>0
-    bob4[23]=nil unless bob4[23].nil? || bob4[23].length>0
+    bob4[1]=bob4[1].to_i # SP cost should be stored as a number...
+    bob4[2]=bob4[2].to_i unless bob4[2]=='-' # ...as should the Might or Cooldown
+    bob4[20]=bob4[20].split(',').map{|q| q.to_i} if bob4[4]=="Weapon" # stats affected by the weapon, split into a list and turned from strings into numbers
+    bob4[21]=nil unless bob4[21].nil? || bob4[21].length>0 # tag for server-specific skills
+    bob4[22]=nil unless bob4[22].nil? || bob4[22].length>0 # this entry is used by weapons to store their evolutions, and by healing staves to store their healing formula
+    bob4[23]=nil unless bob4[23].nil? || bob4[23].length>0 # this entry is used by weapons to store their refinement data
     @skills.push(bob4)
   end
 end
 
-def nicknames_load()
+def nicknames_load() # this function laods the nickname list
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt').each_line do |line|
@@ -167,7 +173,7 @@ def nicknames_load()
   @names=b.uniq
 end
 
-def groups_load()
+def groups_load() # this function loads the groups list
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt').each_line do |line|
@@ -179,7 +185,7 @@ def groups_load()
   @groups=b.uniq
 end
 
-def metadata_load()
+def metadata_load() # this function loads the metadata - users who choose to see plaintext over embeds, data regarding each shard's server count, number of headpats received, etc.
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSave.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSave.txt').each_line do |line|
@@ -201,7 +207,7 @@ def metadata_load()
   @x_markers=b[6] unless b[6].nil?
 end
 
-def metadata_save()
+def metadata_save() # this function saves the metadata
   x=[@embedless.map{|q| q}, @ignored.map{|q| q}, @summon_rate.map{|q| q}, @server_data.map{|q| q}, @headpats.map{|q| q}, @server_markers.map{|q| q}, @x_markers.map{|q| q}]
   open('C:/Users/Mini-Matt/Desktop/devkit/FEHSave.txt', 'w') { |f|
     f.puts x[0].to_s
@@ -215,7 +221,7 @@ def metadata_save()
   }
 end
 
-def devunits_load()
+def devunits_load() # this function loads information regarding the devunits
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt').each_line do |line|
@@ -250,7 +256,7 @@ def devunits_load()
   end
 end
 
-def devunits_save()
+def devunits_save() # this function is used by the devedit command to save the devunits
   s="#{@dev_waifus.join('\\'[0])}\n#{@dev_lowlifes.join('\\'[0])}"
   for i in 0...@dev_units.length
     s="#{s}\n\n#{@dev_units[i][0]}\n#{@dev_units[i][1]}\\#{@dev_units[i][2]}\\#{@dev_units[i][3]}\\#{@dev_units[i][4]}\\#{@dev_units[i][5]}\n#{@dev_units[i][6].join('\\'[0])}\n#{@dev_units[i][7].join('\\'[0])}\n#{@dev_units[i][8].join('\\'[0])}\n#{@dev_units[i][9].join('\\'[0])}\n#{@dev_units[i][10].join('\\'[0])}\n#{@dev_units[i][11].join('\\'[0])}\n#{@dev_units[i][12]}"
@@ -301,7 +307,9 @@ bot.command(:help) do |event, command, subcommand|
     create_embed(event,"**#{command.downcase}** __name__","Takes the stats of the unit `name` and uses them to determine The actual stats the unit has during combat.",0xD49F61)
   elsif ['study'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows the level 40 stats for the unit `name` for a combination of multiple rarities with 0, 5, and 10 merges.",0xD49F61)
-  elsif [330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,341729526767681549,393775173095915521].include?(k) && ['summon'].include?(command.downcase)
+  elsif ['summonpool','summon_pool','pool'].include?(command.downcase) || (['summon'].include?(command.downcase) && "#{subcommand}".downcase=='pool')
+    create_embed(event,"**#{command.downcase}#{" pool" if command.downcase=='summon'}** __*colors__","Shows the summon pool for the listed color.\n\nIn PM, all colors listed will be displayed, or all colors if none are specified.\nIn servers, only the first color listed will be displayed.",0x9E682C)
+  elsif @summon_servers.include?(k) && ['summon'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\n**This command is only available in certain servers**.",0x9E682C)
   elsif ['effhp','eff_hp'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows the effective HP data for the unit `name`.",0xD49F61)
@@ -416,8 +424,8 @@ bot.command(:help) do |event, command, subcommand|
     end
   else
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
-    create_embed(event,"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit Data**__\n`data` __name__ - shows both stats and skills (*also `unit`*)\n`stats` __name__ - shows only the stats\n`skills` __name__ - shows only the skills (*also `fodder`*)\n`study` __name__ - for a study of the unit at multiple rarities and merges\n`effHP` __name__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __name__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __name__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __name__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __name__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`games` __unit__ - for a list of games the unit is in\n`art` __unit__ __art type__ - for the character's art\n\n__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
-    create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`fourstar`",0xD49F61)
+    create_embed(event,"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit Data**__\n`data` __name__ - shows both stats and skills (*also `unit`*)\n`stats` __name__ - shows only the stats\n`skills` __name__ - shows only the skills (*also `fodder`*)\n`study` __name__ - for a study of the unit at multiple rarities and merges\n`effHP` __name__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __name__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __name__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __name__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __name__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`games` __unit__ - for a list of games the unit is in\n`art` __unit__ __art type__ - for the character's art\n\n__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
+    create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`fourstar`#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed(event,"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
     create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n\n`snagstats` - snags server stats for multiple servers\n`setmarker` __letter__\n\n`reboot` - reboots this shard\n\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n`status` __\\*message__ - sets my status\n\n`locateshards` - lists one server you are in for each color of shard.",0x008b8b) if (event.server.nil? || command.downcase=='devcommands') && event.user.id==167657750971547648
     event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command."
@@ -426,7 +434,7 @@ end
 
 bot.command(:reboot, from: 167657750971547648) do |event| # reboots Elise
   return nil unless event.user.id==167657750971547648
-  exec "cd C:/Users/Mini-Matt/Desktop/devkit && PriscillaBot.rb #{shardizard}"
+  exec "cd C:/Users/Mini-Matt/Desktop/devkit && PriscillaBot.rb #{@shardizard}"
 end
 
 def get_markers(event)
@@ -601,11 +609,19 @@ def make_banner()
   data_load()
   bnr=b.sample
   x=false
+  y=false
+  z=false
+  w=false
   unless bnr[3].nil?
+    x=true if bnr[3].include?('4')
+    y=true if bnr[3].include?('3')
+    z=true if bnr[3].include?('2')
+    w=true if bnr[3].include?('1')
     bnr[3]=nil
-    bnr.compact!
-    x=true
   end
+  bnr.compact!
+  bnr.push([])
+  bnr.push([])
   bnr.push([])
   bnr.push([])
   bnr.push([])
@@ -613,11 +629,32 @@ def make_banner()
     bnr[2].push(@data[i][0]) if @data[i][19].downcase.include?('g') && bnr[0]=='GHB Units' && @data[i][22].nil?
     bnr[2].push(@data[i][0]) if @data[i][19].downcase.include?('t') && bnr[0]=='TT Units' && @data[i][22].nil?
   end
-  bnr.push(bnr[2]) if x
+  if x
+    bnr.push(bnr[2].map{|q| q})
+  else
+    bnr.push(nil)
+  end
+  if y
+    bnr.push(bnr[2].map{|q| q})
+  else
+    bnr.push(nil)
+  end
+  if z
+    bnr.push(bnr[2].map{|q| q})
+  else
+    bnr.push(nil)
+  end
+  if w
+    bnr.push(bnr[2].map{|q| q})
+  else
+    bnr.push(nil)
+  end
   for i in 0...@data.length
     bnr[3].push(@data[i][0]) if @data[i][19].include?('5p') && !bnr[2].include?(@data[i][0]) && @data[i][22].nil?
     bnr[4].push(@data[i][0]) if @data[i][19].include?('4p') && @data[i][22].nil? && (!bnr[2].include?(@data[i][0]) || !x)
-    bnr[5].push(@data[i][0]) if @data[i][19].include?('3p') && @data[i][22].nil?
+    bnr[5].push(@data[i][0]) if @data[i][19].include?('3p') && @data[i][22].nil? && (!bnr[2].include?(@data[i][0]) || !y)
+    bnr[6].push(@data[i][0]) if @data[i][19].include?('2p') && @data[i][22].nil? && (!bnr[2].include?(@data[i][0]) || !z)
+    bnr[7].push(@data[i][0]) if @data[i][19].include?('1p') && @data[i][22].nil? && (!bnr[2].include?(@data[i][0]) || !w)
   end
   return bnr
 end
@@ -1298,6 +1335,22 @@ def find_name_in_string(event,stringx=nil,mode=0)
           name=args3[0]
         end
       end
+    elsif name=="Reinhardt(Bonds)" || name=="Reinhardt(World)"
+      if args3.length==1
+        if ['reinhardt','rainharuto'].include?(args3[0].downcase)
+          name="Reinhardt"
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=="Olwen(Bonds)" || name=="Olwen(World)"
+      if args3.length==1
+        if ['olwen','oruen'].include?(args3[0].downcase)
+          name="Olwen"
+        else
+          name=args3[0]
+        end
+      end
     end
   else
     for i in 0...args.length-1
@@ -1357,6 +1410,22 @@ def find_name_in_string(event,stringx=nil,mode=0)
       if args3.length==1
         if ['eirika','eirik','eiriku','erika'].include?(args3[0].downcase)
           name="Eirika"
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=="Reinhardt(Bonds)" || name=="Reinhardt(World)"
+      if args3.length==1
+        if ['reinhardt','rainharuto'].include?(args3[0].downcase)
+          name="Reinhardt"
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=="Olwen(Bonds)" || name=="Olwen(World)"
+      if args3.length==1
+        if ['olwen','oruen'].include?(args3[0].downcase)
+          name="Olwen"
         else
           name=args3[0]
         end
@@ -1426,6 +1495,22 @@ def find_name_in_string(event,stringx=nil,mode=0)
           name=args3[0]
         end
       end
+    elsif name=="Reinhardt(Bonds)" || name=="Reinhardt(World)"
+      if args3.length==1
+        if ['reinhardt','rainharuto'].include?(args3[0].downcase)
+          name="Reinhardt"
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=="Olwen(Bonds)" || name=="Olwen(World)"
+      if args3.length==1
+        if ['olwen','oruen'].include?(args3[0].downcase)
+          name="Olwen"
+        else
+          name=args3[0]
+        end
+      end
     end
   end
   return nil if args3.nil?
@@ -1440,7 +1525,7 @@ def find_stats_in_string(event,stringx=nil,mode=0)
   s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4])
   a=s.split(' ')
   s=stringx if all_commands().include?(a[0])
-  s=first_sub(s,find_name_in_string(event,s,1)[1],'') unless s.downcase=='laevatein' || s.downcase.include?('blucina') || s.downcase.include?('bluecina') || s.downcase.include?('blyn') || s.downcase.include?('brlyn') || s.downcase.include?('axeura') || s.downcase.include?('axura') || s.downcase.include?('axezura') || s.downcase.include?('axzura') || s.downcase.include?('axe-ura') || s.downcase.include?('ax-ura') || s.downcase.include?('axe-zura') || s.downcase.include?('ax-zura') || s.downcase.include?('corrin') || s.downcase.include?('robin') || s.downcase.include?('kamui') || s.downcase.include?('tiki') || s.downcase.include?('chiki') || s.downcase.include?('reflet') || s.downcase.include?('daraen') || s.downcase.include?('eirika') || s.downcase.include?('eirik') || s.downcase.include?('eiriku') || s.downcase.include?('erika') || s.downcase.include?('morgan') || s.downcase.include?('marc') || s.downcase.include?('linfan')
+  s=first_sub(s,find_name_in_string(event,s,1)[1],'') unless s.downcase=='laevatein' || s.downcase.include?('blucina') || s.downcase.include?('bluecina') || s.downcase.include?('blyn') || s.downcase.include?('brlyn') || s.downcase.include?('axeura') || s.downcase.include?('axura') || s.downcase.include?('axezura') || s.downcase.include?('axzura') || s.downcase.include?('axe-ura') || s.downcase.include?('ax-ura') || s.downcase.include?('axe-zura') || s.downcase.include?('ax-zura') || s.downcase.include?('corrin') || s.downcase.include?('robin') || s.downcase.include?('kamui') || s.downcase.include?('tiki') || s.downcase.include?('chiki') || s.downcase.include?('reflet') || s.downcase.include?('daraen') || s.downcase.include?('eirika') || s.downcase.include?('eirik') || s.downcase.include?('eiriku') || s.downcase.include?('erika') || s.downcase.include?('morgan') || s.downcase.include?('marc') || s.downcase.include?('linfan') || s.downcase.include?('grima')
   args=sever(s,true).split(" ")
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   merges=nil
@@ -2397,7 +2482,7 @@ def pick_thumbnail(event,j,bot)
   return bot.user(d[23]).avatar_url if d.length>23 && !d[23].nil? && d[23].is_a?(Bignum)
   return "https://cdn.discordapp.com/emojis/418140222530912256.png" if d[0]=="Nino" && (event.message.text.downcase.include?('face') || rand(100)==0)
   return "https://cdn.discordapp.com/emojis/420339780421812227.png" if d[0]=="Amelia" && (event.message.text.downcase.include?('face') || rand(1000)==0)
-  return "https://cdn.discordapp.com/emojis/420339781524783114.png" if d[0]=="Reinhardt" && (event.message.text.downcase.include?('grin') || rand(100)==0)
+  return "https://cdn.discordapp.com/emojis/420339781524783114.png" if d[0]=="Reinhardt(Bonds)" && (event.message.text.downcase.include?('grin') || rand(100)==0)
   return "https://cdn.discordapp.com/emojis/420360385862828052.png" if d[0]=="Sakura" && event.message.text.downcase.include?("mathoo's")
   return "http://arcticsilverfox.com/feh_sim/heroes/#{url_name(j)}.png"
 end
@@ -2431,7 +2516,7 @@ def unit_clss(event,j,name=nil)
   w='Axe' if @data[j][1][0]=='Green' && w=='Blade'
   if @data[j][1][1]!=w
     w="*#{w}* (#{@data[j][1][0]} #{@data[j][1][1].gsub('Blade','Physical')})"
-  elsif ['Tome','Dragon'].include?(w)
+  elsif ['Tome','Dragon','Bow','Dagger'].include?(w)
     w="*#{@data[j][1][0]} #{@data[j][1][1]}*"
   elsif @data[j][1][0]=='Gold'
     w="*#{w}*"
@@ -2993,7 +3078,7 @@ def disp_skill(name,event,ignore=false)
     end
     p=list_lift(p.map{|q| "*#{q}*"},"or")
   end
-  str="#{str}\n#{"**Restrictions on inheritance:** #{skill[5]}" if skill[6]=='-'}#{"**Exclusive to:** #{skill[6].gsub('Lavatain','Laevatein')}" unless skill[6]=='-'}#{"\n**Promotes from:** #{skill[8]}" unless skill[8]=='-'}#{"\n**Promotes into:** #{p}" unless p.nil?}"
+  str="#{str}\n#{"**Restrictions on inheritance:** #{skill[5]}" if skill[6]=='-'}#{"**Exclusive to:** #{skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[6]=='-'}#{"\n**Promotes from:** #{skill[8]}" unless skill[8]=='-'}#{"\n**Promotes into:** #{p}" unless p.nil?}"
   if !skill[22].nil? && skill[22].length>0 && skill[4]=="Weapon"
     prm=skill[22].split(', ')
     for i in 0...prm.length
@@ -3016,6 +3101,7 @@ def disp_skill(name,event,ignore=false)
     str="#{str}\n**Falchion(Awakening) evolves into:** #{sk3[22]}" if !sk3[22].nil? && sk3[22].length>0 && sk3[4]=="Weapon"
   end
   x=false
+  can_also=true
   str2="**Heroes who know it out of the box:**"
   str2="#{str2}\n*1-star:* #{skill[9]}" unless skill[9]=='-' || skill[9]==''
   str2="#{str2}\n*2-star:* #{skill[10]}" unless skill[10]=='-' || skill[10]==''
@@ -3031,7 +3117,7 @@ def disp_skill(name,event,ignore=false)
   str2="#{str2}\n*4-star:* #{skill[17]}" unless skill[17]=='-' || skill[17]==''
   str2="#{str2}\n*5-star:* #{skill[18]}" unless skill[18]=='-' || skill[18]==''
   str="#{str}#{"\n" unless x}\n#{str2}" unless str2=="**Heroes who can learn without inheritance:**"
-  x=true unless str2=="**Heroes who know it out of the box:**"
+  x=true unless str2=="**Heroes who can learn without inheritance:**"
   if !skill[20].nil? && skill[20]!='' && skill[4].include?("Passive(W)")
     eff=skill[20].split(', ')
     for i in 0...eff.length
@@ -3051,14 +3137,14 @@ def disp_skill(name,event,ignore=false)
         untz=untz.sort {|a,b| a.downcase <=> b.downcase}
         skill2[i2]=untz.join(', ')
       end
-      str2="**It also evolves from #{skill2[0]}, #{find_prevolutions(f,event)[i][1]} the following heroes:**"
+      str2="**It#{" also" if x} evolves from #{skill2[0]}, #{find_prevolutions(f,event)[i][1]} the following heroes:**"
       str2="#{str2}\n*1-star:* #{skill2[14]}" unless skill2[14]=='-' || skill2[14]==''
       str2="#{str2}\n*2-star:* #{skill2[15]}" unless skill2[15]=='-' || skill2[15]==''
       str2="#{str2}\n*3-star:* #{skill2[16]}" unless skill2[16]=='-' || skill2[16]==''
       str2="#{str2}\n*4-star:* #{skill2[17]}" unless skill2[17]=='-' || skill2[17]==''
       str2="#{str2}\n*5-star:* #{skill2[18]}" unless skill2[18]=='-' || skill2[18]==''
-      if str2=="**It also evolves from #{skill2[0]}, #{find_prevolutions(f,event)[i][1]} the following heroes:**"
-        str="#{str}\n\n**It also evolves from #{skill2[0]}**"
+      if str2=="**It#{" also" if x} evolves from #{skill2[0]}, #{find_prevolutions(f,event)[i][1]} the following heroes:**"
+        str="#{str}\n\n**It#{" also" if x} evolves from #{skill2[0]}**"
       else
         str="#{str}\n\n#{str2}"
       end
@@ -3066,6 +3152,7 @@ def disp_skill(name,event,ignore=false)
     str2="**Evolution cost:** 300 SP (450 if inherited), 200 Arena Medals, 20 Refining Stones"
     str2="**Evolution cost:** 300 SP (450 if inherited), 100 Arena Medals, 10 Refining Stones" if skill[0]=="Candlelight+"
     str2="**Evolution cost:** 400 SP, 375 Arena Medals, 150 Divine Dew" if skill[6]!="-"
+    str2="**Evolution cost:** 1 story-gift Gunnthra" if skill[0]=="Chill Breidablik"
     str="#{str}\n#{"\n" if prev>1}#{str2}"
   end
   create_embed(event,"__**#{skill[0].gsub('Bladeblade','Laevatein')}**__",str,xcolor,xfooter,xpic) unless (" #{event.message.text.downcase} ".include?(' refined ') && !" #{event.message.text.downcase} ".include?(' default ') && !" #{event.message.text.downcase} ".include?(' base ')) && skill[4]=="Weapon"
@@ -3220,7 +3307,7 @@ def unit_skills(name,event,justdefault=false,r=0)
   sklz=[[],[],[],[],[],[]]
   box=[[],[],[],[],[],[]]
   clss="#{char[1][0]} #{char[1][1]}"
-  clss="#{char[1][1]}" if char[1][0]=='Colorless'
+  clss="#{char[1][1]}" if char[1][0]=='Colorless' || char[1][1]=='Bow' || char[1][1]=='Dagger'
   clss="#{char[1][2]} Tome" if clss=='Red Tome' || clss=='Blue Tome' || clss=='Green Tome'
   clss='Staff' if clss=='Healer'
   if char[1][1]=='Blade'
@@ -3397,7 +3484,7 @@ def disp_unit_skills(bot,name,event,ignore=false,chain=false,doubleunit=false)
   end
   n=find_name_in_string(event)
   if n=="Kiran"
-    sklz2=[["**Breidablik**"],["~~none~~"],["~~none~~"],["~~none~~"],["~~none~~"],["~~none~~"]]
+    sklz2=[["**Breidablik**","~~Chill Breidablik~~"],["~~none~~"],["~~none~~"],["~~none~~"],["~~none~~"],["~~none~~"]]
   else
     sklz2=unit_skills(name,event)
   end
@@ -3637,6 +3724,19 @@ def get_group(name,event)
       end
     end
     return ["Dancer/Singer",b]
+  elsif ["legendary","legendaries","legends"].include?(name.downcase)
+    l=@data.reject{|q| q[2][0]==' ' || !has_any?(g, q[22])}
+    return ["Legendaries",l.map{|q| q[0]}]
+  elsif ["retro-prfs"].include?(name.downcase)
+    r=@skills.reject{|q| !(q[8]=='-' && q[4]=='Weapon' && q[6]!='-')}
+    b=[]
+    for i in 0...r.length
+      u=r[i][6].split(', ')
+      for j in 0...u.length
+        b.push(u[j].gsub('Lavatain','Laevatein')) unless b.include?(u[j]) || !has_any?(g, @data[find_unit(u[j],event)][22])
+      end
+    end
+    return ["Retro-Prfs",b.uniq]
   elsif ["falchionusers"].include?(name.downcase)
     k=@skills[find_skill("Falchion",event)]
     b=[]
@@ -3646,8 +3746,9 @@ def get_group(name,event)
         b.push(u[j].gsub('Lavatain','Laevatein')) unless b.include?(u[j]) || u[j].include?("-") || !has_any?(g, @data[find_unit(u[j],event)][22])
       end
     end
-    return ["FalchionUsers",b]
+    return ["FalchionUsers",b.uniq]
   elsif name.downcase=="mathoo'swaifus"
+    metadata_load()
     metadata_load()
     return ["Mathoo'sWaifus",@dev_waifus]
   elsif name.downcase=="ghb"
@@ -3723,7 +3824,7 @@ def split_list(event,list,headers,mode=0,x=true)
   return list
 end
 
-def find_in_units(event, mode=0, paired=false)
+def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   data_load()
   groups_load()
   srv=0
@@ -3795,9 +3896,14 @@ def find_in_units(event, mode=0, paired=false)
     group.push(@groups[find_group(args[i].downcase,event)]) if find_group(args[i].downcase,event)>=0 && args[i].length>=3
     unless ['red','reds','blue','blues','green','greens','sword','swords','katana','lance','lances','spear','spears','naginata','axe','axes','ax','club','clubs','axe','axes','ax','club','clubs','colorless','colourless','clear','clears','physical','blade','blades','tome','mage','magic','spell','tomes','mages','spells','dragon','dragons','manakete','manaketes','breath','bow','arrow','bows','arrows','archer','archers','dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves','healer','staff','cleric','healers','clerics','staves','flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi','cavalry','horse','pony','horsie','horses','horsies','ponies','infantry','foot','feet','armor','armour','armors','armours','armored','armoured','male','man','boy','female','woman','girl'].include?(args[i].downcase)
       units.push(@data[find_unit(args[i].downcase,event)][0]) if find_unit(args[i].downcase,event)>=0 && args[i].length>=3
+      units.push("Tiki(Young)") if args[i].downcase=="tiki"
       units.push("Tiki(Adult)") if args[i].downcase=="tiki"
       units.push("Eirika(Bonds)") if args[i].downcase=="eirika"
       units.push("Eirika(Memories)") if args[i].downcase=="eirika"
+      units.push("Reinhardt(Bonds)") if args[i].downcase=="reinhardt"
+      units.push("Reinhardt(World)") if args[i].downcase=="reinhardt"
+      units.push("Olwen(Bonds)") if args[i].downcase=="olwen"
+      units.push("Olwen(World)") if args[i].downcase=="olwen"
       units.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(F)") if ['robin','corrin','morgan'].include?(args[i].downcase)
     end
   end
@@ -3888,18 +3994,24 @@ def find_in_units(event, mode=0, paired=false)
     elsif weapons==['Dragon'] && colors.length<=0 && color_weapons.length<=0
       # Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Red','Blue','Green','Colorless'],-2)
+    elsif weapons==['Bow'] && colors.length<=0 && color_weapons.length<=0
+      # Tomes are the only type requested but no other restrictions are given
+      matches5=split_list(event,matches5,['Red','Blue','Green','Colorless'],-2)
+    elsif weapons==['Dagger'] && colors.length<=0 && color_weapons.length<=0
+      # Tomes are the only type requested but no other restrictions are given
+      matches5=split_list(event,matches5,['Red','Blue','Green','Colorless'],-2)
     elsif colors==['Red'] && weapons.length<=0 && color_weapons.length<=0
       # Tomes are the only type requested but no other restrictions are given
-      matches5=split_list(event,matches5,['Blade','Tome','Dragon'],-3)
+      matches5=split_list(event,matches5,['Blade','Tome','Dragon','Bow','Dagger'],-3)
     elsif colors==['Blue'] && weapons.length<=0 && color_weapons.length<=0
       # Tomes are the only type requested but no other restrictions are given
-      matches5=split_list(event,matches5,['Blade','Tome','Dragon'],-3)
+      matches5=split_list(event,matches5,['Blade','Tome','Dragon','Bow','Dagger'],-3)
     elsif colors==['Green'] && weapons.length<=0 && color_weapons.length<=0
       # Tomes are the only type requested but no other restrictions are given
-      matches5=split_list(event,matches5,['Blade','Tome','Dragon','Dragon'],-3)
+      matches5=split_list(event,matches5,['Blade','Tome','Dragon','Bow','Dagger'],-3)
     elsif colors==['Colorless'] && weapons.length<=0 && color_weapons.length<=0
       # Tomes are the only type requested but no other restrictions are given
-      matches5=split_list(event,matches5,['Healer','Bow','Dagger'],-3)
+      matches5=split_list(event,matches5,['Healer','Dragon','Bow','Dagger'],-3)
     elsif weapons==['Tome'] && colors==['Red'] && color_weapons.length<=0
       # Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Fire','Dark'],-4)
@@ -3908,7 +4020,7 @@ def find_in_units(event, mode=0, paired=false)
       matches5=split_list(event,matches5,['Thunder','Light'],-4)
     end
   end
-  if matches5.length==@data.reject{|q| find_unit(q[0],event)<0}.compact.length && !(args.nil? || args.length.zero?) && !event.server.nil? && event.channel.id != 283821884800499714 && mode != 3
+  if matches5.length==@data.reject{|q| find_unit(q[0],event)<0}.compact.length && !(args.nil? || args.length.zero?) && @shardizard != 4 && !event.server.nil? && event.channel.id != 283821884800499714 && mode != 3
     event.respond "Your request is gibberish." if ['unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
     return -1
   elsif mode==3
@@ -3916,7 +4028,7 @@ def find_in_units(event, mode=0, paired=false)
   elsif matches5.length.zero?
     event.respond "There were no units that matched your request." unless paired
     return -2
-  elsif matches5.map{|k| k[0]}.join("\n").length>=1900 && !event.server.nil?
+  elsif matches5.map{|k| k[0]}.join("\n").length>=1900 && !event.server.nil? && !ignore_limit
     event.respond "There were so many unit matches that I would prefer you use the command in PM." unless paired
     return -2
   elsif mode==2
@@ -4231,16 +4343,16 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     matches4=split_list(event,matches4,['Red Tome','Blue Tome','Green Tome'],5)
   elsif colors==['Red'] && weapons.length<=0 && color_weapons.length<=0
     # Tomes are the only type requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Sword','Red Tome','Dragon'],5)
+    matches4=split_list(event,matches4,['Sword','Red Tome','Dragon','Bow','Dagger'],5)
   elsif colors==['Blue'] && weapons.length<=0 && color_weapons.length<=0
     # Tomes are the only type requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Lance','Blue Tome','Dragon'],5)
+    matches4=split_list(event,matches4,['Lance','Blue Tome','Dragon','Bow','Dagger'],5)
   elsif colors==['Green'] && weapons.length<=0 && color_weapons.length<=0
     # Tomes are the only type requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Axe','Green Tome','Dragon'],5)
+    matches4=split_list(event,matches4,['Axe','Green Tome','Dragon','Bow','Dagger'],5)
   elsif colors==['Colorless'] && weapons.length<=0 && color_weapons.length<=0
     # Tomes are the only type requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Staff','Bow','Dagger','Dragon'],5)
+    matches4=split_list(event,matches4,['Staff','Dragon','Bow','Dagger'],5)
   elsif weapons==['Tome'] && colors==['Red'] && color_weapons.length<=0
     # Tomes are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Fire',"Rau\u00F0r",'Flux'],-1)
@@ -4314,6 +4426,7 @@ end
 
 def display_units(event, mode)
   k=find_in_units(event,mode)
+  k=k.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@data[find_unit(q,event,false,true)][22].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@data[find_unit(q,event,false,true)][22].nil?}"}
   if mode==1 && k.is_a?(Array)
     if k.include?("- - -")
       p1=[[]]
@@ -4344,11 +4457,19 @@ def display_units(event, mode)
         h="Red Dragons" if p1[i].include?("Tiki(Young)") || @data[find_unit(p1[i][0],event,false,true)][1]==["Red", "Dragon"]
         h="Blue Dragons" if p1[i].include?("Nowi") || @data[find_unit(p1[i][0],event,false,true)][1]==["Blue", "Dragon"]
         h="Green Dragons" if p1[i].include?("Fae") || @data[find_unit(p1[i][0],event,false,true)][1]==["Green", "Dragon"]
-        h="Colorless Dragons" if @data[find_unit(p1[i][0],event,false,true)][1]==["Colorless", "Dragon"]
+        h="Colorless Dragons" if p1[i].include?("Robin(F)(Fallen)") || @data[find_unit(p1[i][0],event,false,true)][1]==["Colorless", "Dragon"]
+        # archer colors
+        h="Red Archers" if @data[find_unit(p1[i][0],event,false,true)][1]==["Red", "Bow"]
+        h="Blue Archers" if @data[find_unit(p1[i][0],event,false,true)][1]==["Blue", "Bow"]
+        h="Green Archers" if @data[find_unit(p1[i][0],event,false,true)][1]==["Green", "Bow"]
+        h="Colorless Archers" if p1[i].include?("Takumi") || @data[find_unit(p1[i][0],event,false,true)][1]==["Colorless", "Bow"]
+        # dagger colors
+        h="Red Thieves" if @data[find_unit(p1[i][0],event,false,true)][1]==["Red", "Dagger"]
+        h="Blue Thieves" if @data[find_unit(p1[i][0],event,false,true)][1]==["Blue", "Dagger"]
+        h="Green Thieves" if @data[find_unit(p1[i][0],event,false,true)][1]==["Green", "Dagger"]
+        h="Colorless Thieves" if p1[i].include?("Matthew") || @data[find_unit(p1[i][0],event,false,true)][1]==["Colorless", "Dagger"]
         # Colorless unit types
         h="Healers" if p1[i].include?("Sakura") || @data[find_unit(p1[i][0],event,false,true)][1][1]=="Healer"
-        h="Archers" if p1[i].include?("Takumi") || @data[find_unit(p1[i][0],event,false,true)][1][1]=="Bow"
-        h="Thieves" if p1[i].include?("Matthew") || @data[find_unit(p1[i][0],event,false,true)][1][1]=="Dagger"
         if h=="." && @data[find_unit(p1[i][0],event,false,true)][1][1]=="Tome"
           h=@data[find_unit(p1[i][0],event,false,true)][1][2]
           for l in 0...p1[i].length
@@ -4397,6 +4518,7 @@ end
 
 def display_skills(event, mode)
   k=find_in_skills(event,mode)
+  k=k.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9',''),event,false,true)][21].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9',''),event,false,true)][21].nil?}"}
   if mode==1 && k.is_a?(Array)
     if k.include?("- - -")
       p1=[[]]
@@ -4433,11 +4555,12 @@ def display_skills(event, mode)
         h="Gronn Magic" if p1[i].include?("Gronnblade(+)")
         h="Green Tomes" if p1[i].include?("Wind") && p1[i].include?("Gronnblade(+)")
         # colorless weapon type
-        h="Staves" if p1[i].include?("Assault") && p1[i+1].include?("Iron Bow")
-        h="Bows" if p1[i].include?("Iron Bow")
+        h="Staves" if p1[i].include?("Assault") && p1[i+1].include?("Fire Breath(+)")
         h="Daggers" if p1[i].include?("Iron Dagger")
         # Breaths
         h="Dragon Breaths" if p1[i].include?("Fire Breath(+)")
+        # Bows
+        h="Bows" if p1[i].include?("Iron Bow")
         p1[i]=[h,p1[i].join("\n")]
       end
       create_embed(event,"Results",'',0x9400D3,nil,nil,p1)
@@ -4820,13 +4943,37 @@ def detect_dual_unit_alias(str1,str2,robinmode=0)
     str="erika" if str2.include?("erika")
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
-    if str2.include?("bonds") || str2.include?("#{str}b") || str2.include?("b#{str}") || str2.include?("sb")
+    if str2.include?("bonds") || str2.include?("#{str}b") || str2.include?("b#{str}") || str2.include?("fb")
       return [str,['Eirika(Bonds)']]
     elsif str2.include?("memories") || str2.include?("#{str}m") || str2.include?("m#{str}") || str2.include?("sm") || str2.include?("mage#{str}") || str2.include?("#{str}mage")
       return [str,['Eirika(Memories)']]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Eirika(Bonds)','Eirika(Memories)']]
+  elsif /(reinhardt|rainharuto)/ =~ str1
+    str="reinhardt"
+    str="rainharuto" if str2.include?("rainharuto")
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?("bonds") || str2.include?("#{str}b") || str2.include?("b#{str}") || str2.include?("sb") || str2.include?("mage#{str}") || str2.include?("#{str}mage")
+      return [str,['Reinhardt(Bonds)']]
+    elsif str2.include?("world") || str2.include?("warudo") || str2.include?("#{str}w") || str2.include?("w#{str}") || str2.include?("wot") || str2.include?("wt")
+      return [str,['Reinhardt(World)']]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Reinhardt(Bonds)','Reinhardt(World)']]
+  elsif /(olwen|oruen)/ =~ str1
+    str="olwen"
+    str="oruen" if str2.include?("oruen")
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?("bonds") || str2.include?("#{str}b") || str2.include?("b#{str}") || str2.include?("sb") || str2.include?("mage#{str}") || str2.include?("#{str}mage")
+      return [str,['Olwen(Bonds)']]
+    elsif str2.include?("world") || str2.include?("warudo") || str2.include?("wind") || str2.include?("#{str}w") || str2.include?("w#{str}") || str2.include?("wot") || str2.include?("wt")
+      return [str,['Olwen(World)']]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Olwen(Bonds)','Olwen(World)']]
   elsif /(corrin|kamui)/ =~ str1
     str="corrin"
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
@@ -4863,7 +5010,9 @@ def detect_dual_unit_alias(str1,str2,robinmode=0)
     str="reflet" if str2.include?("reflet")
     str="daraen" if str2.include?("daraen")
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
-    if str2.include?("summer") || str2.include?("beach") || str2.include?("swimsuit") || str2.include?("ys")
+    if str=="robin" && (str2.include?("gaiden") || str2.include?("sov"))
+      return [str,['Tobin']]
+    elsif str2.include?("summer") || str2.include?("beach") || str2.include?("swimsuit") || str2.include?("ys")
       return [str,['Robin(F)(Summer)']]
     elsif str2.include?("winter") || str2.include?("christmas") || str2.include?("holiday") || str2.include?("we")
       return [str,['Robin(M)(Winter)']]
@@ -4894,6 +5043,7 @@ def detect_dual_unit_alias(str1,str2,robinmode=0)
     return [str,['Robin']] if robinmode==0
     return [str,['Robin(M)','Robin(F)']] if robinmode==1
   elsif /grima/ =~ str1
+    str="grima"
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("#{str}f") || str2.include?("f#{str}") || str2.include?("legendary")
@@ -4920,12 +5070,14 @@ def detect_dual_unit_alias(str1,str2,robinmode=0)
   return nil
 end
 
-def weapon_clss(arr)
-  return arr[1] if arr[0]=='Colorless'
+def weapon_clss(arr,mode=0)
   x="#{arr[0]} #{arr[1]}"
+  return 'Healer' if x=='Colorless Healer'
   return 'Sword' if x=='Red Blade'
   return 'Lance' if x=='Blue Blade'
   return 'Axe' if x=='Green Blade'
+  return x if arr[1]=='Tome'
+  return arr[1] if mode==1
   return x
 end
 
@@ -5095,6 +5247,8 @@ def weapon_legality(event,name,weapon,refinement,recursion=false)
   w2="#{weapon} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
   return "~~#{w2}~~" if w[6]!='-' && !w[6].split(', ').include?(u[0]) # prf weapons are illegal on anyone but their holders
   u2=weapon_clss(u[1])
+  u2='Bow' if u2.include?('Bow')
+  u2='Dagger' if u2.include?('Dagger')
   u2="#{u2.gsub('Healer','Staff')} Users Only"
   u2="Dragons Only" if u[1][1]=='Dragon'
   return w2 if u2==w[5]
@@ -5258,6 +5412,98 @@ def add_number_to_string(a,b)
   return "~~#{x[0]}~~ #{x[1]}"
 end
 
+def create_summon_list(clr)
+  p=[["1\\* exclusive",[]],["1-2\\*",[]],["2\\* exclusive",[]],["2-3\\*",[]],["3\\* exclusive",[]],["3-4\\*",[]],["4\\* exclusive",[]],["4-5\\*",[]],["5\\* exclusive",[]],["Other",[]]]
+  for i in 0...clr.length
+    if clr[i][19].include?('1p')
+      if clr[i][19].include?('2p')
+        p[1][1].push(clr[i][0])
+      elsif clr[i][19].include?('3p') || clr[i][19].include?('4p') || clr[i][19].include?('5p')
+        p[9][1].push("#{clr[i][0]} - 1#{"/3" if clr[i][19].include?('3p')}#{"/4" if clr[i][19].include?('4p')}#{"/5" if clr[i][19].include?('5p')}\\*")
+      else
+        p[0][1].push(clr[i][0])
+      end
+    elsif clr[i][19].include?('2p')
+      if clr[i][19].include?('3p')
+        p[3][1].push(clr[i][0])
+      elsif clr[i][19].include?('4p') || clr[i][19].include?('5p')
+        p[9][1].push("#{clr[i][0]} - 2#{"/4" if clr[i][19].include?('4p')}#{"/5" if clr[i][19].include?('5p')}\\*")
+      else
+        p[2][1].push(clr[i][0])
+      end
+    elsif clr[i][19].include?('3p')
+      if clr[i][19].include?('4p')
+        p[5][1].push(clr[i][0])
+      elsif clr[i][19].include?('5p')
+        p[9][1].push("#{clr[i][0]} - 3/5\\*")
+      else
+        p[4][1].push(clr[i][0])
+      end
+    elsif clr[i][19].include?('4p')
+      if clr[i][19].include?('5p')
+        p[7][1].push(clr[i][0])
+      else
+        p[6][1].push(clr[i][0])
+      end
+    elsif clr[i][19].include?('5p')
+      p[8][1].push(clr[i][0])
+    else
+      p[9][1].push("#{clr[i][0]} - weird")
+    end
+  end
+  for i in 0...p.length
+    if p[i][1].length<=0
+      p[i]=nil
+    else
+      p[i][1]=p[i][1].join("\n")
+    end
+  end
+  p.compact!
+  return p
+end
+
+def disp_summon_pool(event,args)
+  data_load()
+  k=@data.reject{|q| !q[19].include?('p') || !q[22].nil?}
+  colors=[]
+  for i in 0...args.length
+    args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
+    colors.push('Red') if ['red','reds'].include?(args[i].downcase)
+    colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
+    colors.push('Green') if ['green','greens'].include?(args[i].downcase)
+    colors.push('Colorless') if ['colorless','colourless','clear','clears'].include?(args[i].downcase)
+  end
+  colors=colors.uniq
+  if event.server.nil? || event.channel.id==283821884800499714 || @shardizard==4
+    colors=['Red','Blue','Green','Colorless'] if colors.length<=0
+  elsif colors.length<=0
+    event.respond "I will not show the entire summon pool as that would be spam.  Please specify a single color or use this command in PM."
+    return nil
+  else
+    colors=[colors[0]]
+  end
+  if colors.include?('Red')
+    r=k.reject{|q| q[1][0]!='Red'}
+    r=create_summon_list(r)
+    create_embed(event,"",'',0xB32400,"4-5\* availability can be affected by banner focus.",nil,r)
+  end
+  if colors.include?('Blue')
+    r=k.reject{|q| q[1][0]!='Blue'}
+    r=create_summon_list(r)
+    create_embed(event,"",'',0x208EFB,"4-5\* availability can be affected by banner focus.",nil,r)
+  end
+  if colors.include?('Green')
+    r=k.reject{|q| q[1][0]!='Green'}
+    r=create_summon_list(r)
+    create_embed(event,"",'',0x01AD00,"4-5\* availability can be affected by banner focus.",nil,r)
+  end
+  if colors.include?('Colorless')
+    r=k.reject{|q| q[1][0]!='Colorless'}
+    r=create_summon_list(r)
+    create_embed(event,"",'',0xC1CCD6,"4-5\* availability can be affected by banner focus.",nil,r)
+  end
+end
+
 def parse_function(callback,event,args,bot,healers=nil)
   event.channel.send_temporary_message("Calculating data, please wait...",3)
   k=find_name_in_string(event,nil,1)
@@ -5388,8 +5634,10 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   j=find_unit(name,event)
   u40x=@data[j]
   if u40x[4].nil? || (u40x[4].zero? && u40x[9].zero?)
-    event.respond "#{u40x[0]} does not have official stats.  I cannot study #{'his' if u40x[20]=='M'}#{'her' if u40x[20]=='F'}#{'their' unless ['M','F'].include?(u40x[20])} effective HP."
-    return nil
+    unless u40x[0]=="Kiran"
+      event.respond "#{u40x[0]} does not have official stats.  I cannot study #{'his' if u40x[20]=='M'}#{'her' if u40x[20]=='F'}#{'their' unless ['M','F'].include?(u40x[20])} effective HP."
+      return nil
+    end
   end
   stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
@@ -5478,6 +5726,20 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     stat_skills_2[i]="Hone #{@data[j][3].gsub('Flier','Fliers')}" if stat_skills_2[i]=="Hone Movement"
     stat_skills_2[i]="Fortify #{@data[j][3].gsub('Flier','Fliers')}" if stat_skills_2[i]=="Fortify Movement"
   end
+  photon=[u40[4]>=u40[5]+5,blu40[4]>=blu40[5]+5,cru40[4]>=cru40[5]+5,crblu40[4]>=crblu40[5]+5]
+  for i in 0...photon.length
+    if photon[i]
+      photon[i]=7
+    else
+      photon[i]=0
+    end
+  end
+  photon[0]="#{photon[0]}#{" (#{photon[1]})" if photon[0]!=photon[1]}"
+  if wl.include?("~~")
+    photon[1]="#{photon[2]}#{" (#{photon[3]})" if photon[2]!=photon[3]}"
+    photon[0]="~~#{photon[0]}~~ #{photon[1]}" unless photon[0]==photon[1]
+  end
+  photon=photon[0]
   rp=[u40[1]+u40[4],(u40[1]/2.0).ceil+u40[4],(u40[1]/4.0).ceil+u40[4],blu40[1]+blu40[4],(blu40[1]/2.0).ceil+blu40[4],(blu40[1]/4.0).ceil+blu40[4]]
   rm=[u40[1]+u40[5],(u40[1]/2.0).ceil+u40[5],(u40[1]/4.0).ceil+u40[5],blu40[1]+blu40[5],(blu40[1]/2.0).ceil+blu40[5],(blu40[1]/4.0).ceil+blu40[5]]
   rd=[u40[1]+[u40[4],u40[5]].min,(u40[1]/2.0).ceil+[u40[4],u40[5]].min,(u40[1]/4.0).ceil+[u40[4],u40[5]].min,blu40[1]+[blu40[4],blu40[5]].min,(blu40[1]/2.0).ceil+[blu40[4],blu40[5]].min,(blu40[1]/4.0).ceil+[blu40[4],blu40[5]].min]
@@ -5529,10 +5791,10 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   else
     x.push(["Frostbite",rd])
   end
-  x.push(["Misc.","Defense + Resistance = #{rdr}\n\nRequired to double this unit:\n#{rs}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless @data[j][1][1]=='Healer'}"])
+  x.push(["Misc.","Defense + Resistance = #{rdr}#{"\n\n#{u40[0]} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0]}:\n#{rs}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless @data[j][1][1]=='Healer'}"])
   pic=pick_thumbnail(event,j,bot)
   pic="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png" if u40[0]=="Robin (Shared stats)"
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,'"Frostbite" is weapons like Felicia\'s Plate that target the lower of the target\'s Def and Res.',pic,x)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,'"Frostbite" is weapons like Felicia\'s Plate.  "Photon" is weapons like Light Brand.',pic,x)
 end
 
 def unit_study(event,name,bot,weapon=nil)
@@ -5545,8 +5807,10 @@ def unit_study(event,name,bot,weapon=nil)
   j=find_unit(name,event)
   u40x=@data[j]
   if u40x[4].nil? || (u40x[4].zero? && u40x[9].zero?)
-    event.respond "#{u40x[0]} does not have official stats.  I cannot study #{'him' if u40x[20]=='M'}#{'her' if u40x[20]=='F'}#{'them' unless ['M','F'].include?(u40x[20])} at multiple rarities."
-    return nil
+    unless u40x[0]=="Kiran"
+      event.respond "#{u40x[0]} does not have official stats.  I cannot study #{'him' if u40x[20]=='M'}#{'her' if u40x[20]=='F'}#{'them' unless ['M','F'].include?(u40x[20])} at multiple rarities."
+      return nil
+    end
   end
   args=sever(event.message.text.downcase).split(" ")
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
@@ -5569,7 +5833,7 @@ def unit_study(event,name,bot,weapon=nil)
   end
   rardata=@data[j][19].downcase
   highest_merge=0
-  if rardata.include?('p')
+  if rardata.include?('p') || rardata.include?('s')
     highest_merge=10
   elsif rardata.include?('-')
     highest_merge=0
@@ -5692,8 +5956,10 @@ def heal_study(event,name,bot,weapon=nil)
   j=find_unit(name,event)
   u40x=@data[j]
   if u40x[4].nil? || (u40x[4].zero? && u40x[9].zero?)
-    event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[20]=='M'}#{'she does' if u40x[20]=='F'}#{'they do' unless ['M','F'].include?(u40x[20])} with each healing staff."
-    return nil
+    unless u40x[0]=="Kiran"
+      event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[20]=='M'}#{'she does' if u40x[20]=='F'}#{'they do' unless ['M','F'].include?(u40x[20])} with each healing staff."
+      return nil
+    end
   end
   data_load()
   weapon='-' if weapon.nil?
@@ -5849,6 +6115,20 @@ def heal_study(event,name,bot,weapon=nil)
   d="~~#{d}~~ #{cd}" unless d==cd
   staves.push("**Recover+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
   staves.push(" ")
+  staves.push("**Restore:** heals target for 8 HP, 18 HP when Imbue triggers") if event.message.text.downcase.include?(" all")
+  d=[atkk/2,8].max
+  d2=[blatkk/2,8].max
+  cd=[cratkk/2,8].max
+  cd2=[crblatkk/2,8].max
+  i="#{d+10}#{" (#{d2+10})" unless d==d2}"
+  ci="#{cd+10}#{" (#{cd2+10})" unless cd==cd2}"
+  i="~~#{i}~~ #{ci}" unless i==ci
+  d="#{d}#{" (#{d2})" unless d==d2}"
+  cd="#{cd}#{" (#{cd2})" unless cd==cd2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves.push("**Restore+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+  staves.push("~~Restore(+) will also remove any negative status effects placed on the target.~~")
+  staves.push(" ")
   d=hppp-1
   d2=blhppp-1
   cd=crhppp-1
@@ -5914,8 +6194,10 @@ def proc_study(event,name,bot,weapon=nil)
   j=find_unit(name,event)
   u40x=@data[j]
   if u40x[4].nil? || (u40x[4].zero? && u40x[9].zero?)
-    event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[20]=='M'}#{'she does' if u40x[20]=='F'}#{'they do' unless ['M','F'].include?(u40x[20])} with each proc skill."
-    return nil
+    unless u40x[0]=="Kiran"
+      event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[20]=='M'}#{'she does' if u40x[20]=='F'}#{'they do' unless ['M','F'].include?(u40x[20])} with each proc skill."
+      return nil
+    end
   end
   data_load()
   weapon='-' if weapon.nil?
@@ -6221,8 +6503,10 @@ def phase_study(event,name,bot,weapon=nil)
   j=find_unit(name,event)
   u40x=@data[j]
   if u40x[4].nil? || (u40x[4].zero? && u40x[9].zero?)
-    event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[20]=='M'}#{'she does' if u40x[20]=='F'}#{'they do' unless ['M','F'].include?(u40x[20])} in each phase."
-    return nil
+    unless u40x[0]=="Kiran"
+      event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[20]=='M'}#{'she does' if u40x[20]=='F'}#{'they do' unless ['M','F'].include?(u40x[20])} in each phase."
+      return nil
+    end
   end
   data_load()
   weapon='-' if weapon.nil?
@@ -6456,6 +6740,10 @@ def disp_art(event,name,bot,weapon=nil)
   artype="BtlFace_D" if args.include?('damage') || args.include?('damaged') || (args.include?('low') && (args.include?('health') || args.include?('hp'))) || args.include?('lowhealth') || args.include?('lowhp') || args.include?('low_health') || args.include?('low_hp')
   artype="BtlFace_C" if args.include?('critical') || args.include?('special') || args.include?('crit') || args.include?('proc')
   art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{j[0]}/#{artype}.png"
+  if j[0]=="Reinhardt(World)" && (rand(100)==0 || event.message.text.downcase.include?('zelda'))
+    art="https://i.redd.it/pdeqrncp21r01.png"
+    j[15]="u/ZachminSSB (ft. #{j[15]})"
+  end
   disp=""
   nammes=['','','']
   unless j[15].nil? || j[15].length<=0
@@ -6518,6 +6806,11 @@ def disp_art(event,name,bot,weapon=nil)
   return nil
 end
 
+bot.command([:summonpool,:summon_pool,:pool]) do |event, *args|
+  disp_summon_pool(event,args)
+  return nil
+end
+
 bot.command(:art) do |event, *args|
   if args.nil? || args.length<1
     event.respond "No unit was included"
@@ -6557,7 +6850,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
   sec=''
   tri=''
   for i in 0...l.length
-    l[i][15]=weapon_clss(l[i][1])
+    l[i][15]=weapon_clss(l[i][1],1)
   end
   x=prio(x,['Element','Stat','Weapon','Color','Movement'])
   pri=x[0]
@@ -6568,7 +6861,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
   elsif pri=='Stat'
     l2=split_list(event,l,['Attack','Speed','Defense','Resistance'],-6)
   elsif pri=='Weapon'
-    l2=split_list(event,l,['Sword','Red Tome','Red Dragon','Lance','Blue Tome','Blue Dragon','Axe','Green Tome','Green Dragon','Healer','Bow','Dagger','Colorless Dragon'],15)
+    l2=split_list(event,l,['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Dragon','Bow','Dagger','Healer'],15)
   elsif pri=='Color'
     l2=split_list(event,l,['Red','Blue','Green','Colorless'],-2)
   elsif pri=='Movement'
@@ -6588,13 +6881,13 @@ bot.command([:legendary,:legendaries]) do |event, *args|
     x2='.'
     x2=p1[i][0][2][0] if pri=='Element'
     x2=p1[i][0][2][1] if pri=='Stat'
-    x2=weapon_clss(p1[i][0][1]) if pri=='Weapon'
+    x2=weapon_clss(p1[i][0][1],1) if pri=='Weapon'
     x2=p1[i][0][1][0] if pri=='Color'
     x2=p1[i][0][3] if pri=='Movement'
     if sec=='Stat'
       l2=split_list(event,p1[i],['Attack','Speed','Defense','Resistance'],-6)
     elsif sec=='Weapon'
-      l2=split_list(event,p1[i],['Sword','Red Tome','Red Dragon','Lance','Blue Tome','Blue Dragon','Axe','Green Tome','Green Dragon','Healer','Bow','Dagger','Colorless Dragon'],15)
+      l2=split_list(event,p1[i],['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Dragon','Bow','Dagger','Healer'],15)
     elsif sec=='Color'
       l2=split_list(event,p1[i],['Red','Blue','Green','Colorless'],-2)
     elsif sec=='Movement'
@@ -6614,11 +6907,11 @@ bot.command([:legendary,:legendaries]) do |event, *args|
       x3='.'
       x3=p2[j][0][2][0] if sec=='Element'
       x3=p2[j][0][2][1] if sec=='Stat'
-      x3=weapon_clss(p2[j][0][1]) if sec=='Weapon'
+      x3=weapon_clss(p2[j][0][1],1) if sec=='Weapon'
       x3=p2[j][0][1][0] if sec=='Color'
       x3=p2[j][0][3] if sec=='Movement'
-      p2[j]="__*#{x3}*__\n#{p2[j].map{|q| "#{"~~" unless q[23].nil?}#{q[0]}#{" - *#{weapon_clss(q[1]) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{"~~" unless q[23].nil?}"}.join("\n")}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      p2[j]="*#{x3}*: #{p2[j].map{|q| "#{"~~" unless q[23].nil?}#{q[0]}#{" - *#{weapon_clss(q[1]) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{"~~" unless q[23].nil?}"}.join(", ")}" if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      p2[j]="__*#{x3}*__\n#{p2[j].map{|q| "#{"~~" unless q[23].nil?}#{q[0]}#{" - *#{weapon_clss(q[1],1) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{"~~" unless q[23].nil?}"}.join("\n")}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      p2[j]="*#{x3}*: #{p2[j].map{|q| "#{"~~" unless q[23].nil?}#{q[0]}#{" - *#{weapon_clss(q[1],1) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{"~~" unless q[23].nil?}"}.join(", ")}" if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     end
     p1[i]=[x2,p2.join("\n\n")] unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     p1[i]=[x2,p2.join("\n")] if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
@@ -6748,7 +7041,7 @@ bot.command([:random,:rand]) do |event, *args|
     clazzez.push('Standard') if ['standard'].include?(args[i].downcase)
   end
   colors=['Red', 'Green', 'Blue'] if colors.length<=0 && weapons.length>0
-  weapons=['Blade', 'Tome', 'Breath'] if colors.length>0 && weapons.length<=0
+  weapons=['Blade', 'Tome', 'Breath', 'Bow', 'Dagger'] if colors.length>0 && weapons.length<=0
   movement=['Infantry', 'Flier', 'Cavalry', 'Armor'] if movement.length<=0
   for i in 0...colors.length
     for j in 0...weapons.length
@@ -6757,7 +7050,7 @@ bot.command([:random,:rand]) do |event, *args|
   end
   colors2=['Colorless'] if colors2.length<=0 && weapons2.length>0
   if colors2.length>0 && weapons2.length<=0
-    weapons2=['Bow', 'Dagger', 'Breath']
+    weapons2=['Breath', 'Bow', 'Dagger']
     weapons2.push('Healer') unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
   end
   for i in 0...colors2.length
@@ -6767,10 +7060,10 @@ bot.command([:random,:rand]) do |event, *args|
     end
   end
   if color_weapons.length<=0
-    color_weapons=[['Red', 'Blade'],['Red', 'Tome'],['Red', 'Breath'],
-                   ['Blue', 'Blade'],['Blue', 'Tome'],['Blue', 'Breath'],
-                   ['Green', 'Blade'],['Green', 'Tome'],['Green', 'Breath'],
-                   ['Colorless', 'Bow'],['Colorless', 'Dagger'],['Colorless', 'Breath']]
+    color_weapons=[['Red', 'Blade'],      ['Red', 'Tome'],      ['Red', 'Breath'],      ['Red', 'Bow'],      ['Red', 'Dagger'],
+                   ['Blue', 'Blade'],     ['Blue', 'Tome'],     ['Blue', 'Breath'],     ['Blue', 'Bow'],     ['Blue', 'Dagger'],
+                   ['Green', 'Blade'],    ['Green', 'Tome'],    ['Green', 'Breath'],    ['Green', 'Bow'],    ['Green', 'Dagger'],
+                                                                ['Colorless', 'Breath'],['Colorless', 'Bow'],['Colorless', 'Dagger']]
     color_weapons.push(['Colorless', 'Healer']) unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
     unless event.server.nil?
       color_weapons.push(['Gold', 'Beast']) if event.server.id==256291408598663168
@@ -6984,9 +7277,17 @@ bot.command(:fourstar) do |event|
 end
 
 bot.command(:summon) do |event, *colors|
+  if colors.nil? || colors.length<=0
+  elsif colors[0].downcase=='pool'
+    args=colors.map{|q| q}
+    args[0]=nil
+    args.compact!
+    disp_summon_pool(event,args)
+    return nil
+  end
   if event.server.nil?
     event.respond "This command in unavailable in PM."
-  elsif ![330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,346883836208218112,341729526767681549,393775173095915521].include?(event.server.id)
+  elsif !@summon_servers.include?(event.server.id)
     event.respond "This command is unavailable in this server."
   else
     if !@banner[0].nil?
@@ -7032,22 +7333,43 @@ bot.command(:summon) do |event, *colors|
       five_star = 0
       four_star = (100.00 - focus - five_star) * 58.00 / (100.00 - b)
       three_star = 100.00 - focus - five_star - four_star
+      two_star = 0
+      one_star = 0
     else
       sr=(@summon_rate[0]/5)*0.5
       focus = bnr[1] + sr * bnr[1] / (bnr[1] + 3.00)
       five_star = 3.00 + sr * 3.00 / (bnr[1] + 3.00)
       four_star = (100.00 - focus - five_star) * 58.00 / (100.00 - bnr[1] - 3)
       three_star = 100.00 - focus - five_star - four_star
+      two_star = 0
+      one_star = 0
     end
     event << "5\\* Focus:	#{'%.2f' % focus}%"
     event << "Other 5\\*:	#{'%.2f' % five_star}%" unless five_star==0
-    if bnr[6].nil?
-      event << "4\\* Unit:	#{'%.2f' % four_star}%"
-    else
+    if bnr[8].nil?
+      event << "4\\* Unit:	#{'%.2f' % four_star}%" unless four_star==0
+    elsif four_star>0
       event << "4\\* Focus:	#{'%.2f' % (four_star/2)}%"
       event << "Other 4\\*:	#{'%.2f' % (four_star/2)}%"
     end
-    event << "3\\* Unit:	#{'%.2f' % three_star}%"
+    if bnr[9].nil?
+      event << "3\\* Unit:	#{'%.2f' % three_star}%" unless three_star==0
+    elsif three_star>0
+      event << "3\\* Focus:	#{'%.2f' % (three_star/2)}%"
+      event << "Other 3\\*:	#{'%.2f' % (three_star/2)}%"
+    end
+    if bnr[10].nil?
+      event << "2\\* Unit:	#{'%.2f' % two_star}%" unless two_star==0
+    elsif two_star>0
+      event << "2\\* Focus:	#{'%.2f' % (two_star/2)}%"
+      event << "Other 2\\*:	#{'%.2f' % (two_star/2)}%"
+    end
+    if bnr[11].nil?
+      event << "1\\* Unit:	#{'%.2f' % one_star}%" unless one_star==0
+    elsif two_star>0
+      event << "1\\* Focus:	#{'%.2f' % (one_star/2)}%"
+      event << "Other 1\\*:	#{'%.2f' % (one_star/2)}%"
+    end
     event << ""
     for i in 1...6
       k=rand(10000)
@@ -7059,16 +7381,36 @@ bot.command(:summon) do |event, *colors|
         hx=bnr[3].sample
         rx="5\\*"
         nr=["+HP -Atk","+HP -Spd","+HP -Def","+HP -Res","+Atk -HP","+Atk -Spd","+Atk -Def","+Atk -Res","+Spd -HP","+Spd -Atk","+Spd -Def","+Spd -Res","+Def -HP","+Def -Atk","+Def -Spd","+Def -Res","+Res -HP","+Res -Atk","+Res -Spd","+Res -Def","Neutral"].sample
-      elsif !bnr[6].nil? && k<focus*100+five_star*100+four_star*50
-        hx=bnr[6].sample
+      elsif !bnr[8].nil? && k<focus*100+five_star*100+four_star*50
+        hx=bnr[8].sample
         rx="4\\*"
         nr=n.sample
       elsif k<focus*100+five_star*100+four_star*100
         hx=bnr[4].sample
         rx="4\\*"
         nr=["+HP -Atk","+HP -Spd","+HP -Def","+HP -Res","+Atk -HP","+Atk -Spd","+Atk -Def","+Atk -Res","+Spd -HP","+Spd -Atk","+Spd -Def","+Spd -Res","+Def -HP","+Def -Atk","+Def -Spd","+Def -Res","+Res -HP","+Res -Atk","+Res -Spd","+Res -Def","Neutral"].sample
-      else
+      elsif !bnr[9].nil? && k<focus*100+five_star*100+four_star*100+three_star*50
+        hx=bnr[9].sample
+        rx="3\\*"
+        nr=n.sample
+      elsif k<focus*100+five_star*100+four_star*100+three_star*100
         hx=bnr[5].sample
+        rx="3\\*"
+        nr=["+HP -Atk","+HP -Spd","+HP -Def","+HP -Res","+Atk -HP","+Atk -Spd","+Atk -Def","+Atk -Res","+Spd -HP","+Spd -Atk","+Spd -Def","+Spd -Res","+Def -HP","+Def -Atk","+Def -Spd","+Def -Res","+Res -HP","+Res -Atk","+Res -Spd","+Res -Def","Neutral"].sample
+      elsif !bnr[10].nil? && k<focus*100+five_star*100+four_star*100+three_star*100+two_star*50
+        hx=bnr[10].sample
+        rx="3\\*"
+        nr=n.sample
+      elsif k<focus*100+five_star*100+four_star*100+three_star*100+two_star*100
+        hx=bnr[6].sample
+        rx="3\\*"
+        nr=["+HP -Atk","+HP -Spd","+HP -Def","+HP -Res","+Atk -HP","+Atk -Spd","+Atk -Def","+Atk -Res","+Spd -HP","+Spd -Atk","+Spd -Def","+Spd -Res","+Def -HP","+Def -Atk","+Def -Spd","+Def -Res","+Res -HP","+Res -Atk","+Res -Spd","+Res -Def","Neutral"].sample
+      elsif !bnr[11].nil? && k<focus*100+five_star*100+four_star*100+three_star*100+two_star*100+one_star*50
+        hx=bnr[11].sample
+        rx="3\\*"
+        nr=n.sample
+      else
+        hx=bnr[7].sample
         rx="3\\*"
         nr=["+HP -Atk","+HP -Spd","+HP -Def","+HP -Res","+Atk -HP","+Atk -Spd","+Atk -Def","+Atk -Res","+Spd -HP","+Spd -Atk","+Spd -Def","+Spd -Res","+Def -HP","+Def -Atk","+Def -Spd","+Def -Res","+Res -HP","+Res -Atk","+Res -Spd","+Res -Def","Neutral"].sample
       end
@@ -7089,7 +7431,7 @@ bot.command(:summon) do |event, *colors|
       end
       if trucolors.length>0
         for i in 1...@banner.length
-          cracked_orbs.push(@banner[i]) if trucolors.include?(@data[find_unit(@banner[i][1],event)][1][0])
+          cracked_orbs.push([@banner[i],i]) if trucolors.include?(@data[find_unit(@banner[i][1],event)][1][0])
         end
         event << "None of the colors you requested appeared.  Here are your **Orb options:**" if cracked_orbs.length==0
       else
@@ -7102,14 +7444,14 @@ bot.command(:summon) do |event, *colors|
       cutscene=true
       event << "**Summoning Results:**"
       for i in 0...cracked_orbs.length
-        if cutscene && ["Camilla","Lyn","Roy","Takumi","Lucina","Marth","Tiki(Young)","Robin(M)"].include?(cracked_orbs[i][1])
+        if cutscene && ["Camilla","Lyn","Roy","Takumi","Lucina","Marth","Tiki(Young)","Robin(M)"].include?(cracked_orbs[i][0][1])
           event.respond "OH!  Cutscene!  Cutscene!"
           sleep 5
           cutscene=false
         end
-        event << "Orb ##{i+1} contained a #{cracked_orbs[i][0]} **#{cracked_orbs[i][1]}** (*#{cracked_orbs[i][2]}*)"
+        event << "Orb ##{cracked_orbs[i][1]+1} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1]}** (*#{cracked_orbs[i][0][2]}*)"
         summons+=1
-        five_star=true if cracked_orbs[i][0][0].to_i==5
+        five_star=true if cracked_orbs[i][0][0][0].to_i==5
       end
       event << ""
       event << "In this current summoning session, you fired Breidablik #{summons} time#{"s" unless summons==1}, expending #{[0,5,9,13,17,20][summons]} orbs."
@@ -7745,7 +8087,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     return nil
   end
   logchn=386658080257212417
-  logchn=431862993194582036 if shardizard==4
+  logchn=431862993194582036 if @shardizard==4
   newname=newname.gsub('!','').gsub('(','').gsub(')','').gsub('_','')
   srv=0
   srv=event.server.id unless event.server.nil?
@@ -7881,7 +8223,7 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
   f=[]
   n=@names.map{|a| a}
   if unit.nil?
-    if event.server.nil? || event.channel.id == 283821884800499714
+    if event.server.nil? || event.channel.id == 283821884800499714 || @shardizard==4
       for i in 0...n.length
         if n[i][2].nil?
           f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
@@ -7930,7 +8272,7 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
     end
   end
   f.uniq!
-  if f.length>50 && !event.server.nil? && event.channel.id != 283821884800499714
+  if f.length>50 && !event.server.nil? && event.channel.id != 283821884800499714 && @shardizard != 4
     event.respond "There are so many aliases that I don't want to spam the server.  Please use the command in PM."
     return nil
   end
@@ -7996,7 +8338,7 @@ bot.command(:addgroup) do |event, groupname, *args|
   elsif event.server.nil? && event.user.id != 167657750971547648
     event.respond "Only my developer is allowed to use this command in PM."
     return nil
-  elsif ["dancers","singers","ghb","tempest","daily_rotation","falchionusers","mathoo'swaifus"].include?(groupname.downcase)
+  elsif ["dancers","singers","ghb","tempest","daily_rotation","falchionusers","mathoo'swaifus","legendary","legendaries","legends","retro-prfs"].include?(groupname.downcase)
     event.respond "This group is dynamic, automatically updating when a new unit that fits the criteria appears."
     return nil
   elsif ![167657750971547648,208905989619974144,168592191189417984].include?(event.user.id) && !is_mod?(event.user,event.server,event.channel)
@@ -8024,7 +8366,7 @@ bot.command(:addgroup) do |event, groupname, *args|
   args.compact!
   newgroup=false
   logchn=386658080257212417
-  logchn=431862993194582036 if shardizard==4
+  logchn=431862993194582036 if @shardizard==4
   k=0
   k=event.server.id unless event.server.nil?
   srvname="PM with dev"
@@ -8119,7 +8461,7 @@ bot.command([:deletegroup,:removegroup]) do |event, name|
     return nil
   end
   j=find_group(name.downcase,event)
-  if ["dancers","singers","ghb","tempest","daily_rotation","falchionusers","mathoo'swaifus"].include?(@groups[j][0].downcase)
+  if ["dancers","singers","ghb","tempest","daily_rotation","falchionusers","mathoo'swaifus","legendary","legendaries","legends","retro-prfs"].include?(@groups[j][0].downcase)
     event.respond "This group is dynamic, automatically updating when a new unit that fits the criteria appears."
     return nil
   end
@@ -8162,7 +8504,7 @@ bot.command([:removemember,:removefromgroup]) do |event, group, unit|
     return nil
   end
   j=find_group(group.downcase,event)
-  if ["dancers","singers","ghb","tempest","daily_rotation","falchionusers","mathoo'swaifus"].include?(@groups[j][0].downcase)
+  if ["dancers","singers","ghb","tempest","daily_rotation","falchionusers","mathoo'swaifus","legendary","legendaries","legends","retro-prfs"].include?(@groups[j][0].downcase)
     event.respond "This group is dynamic, automatically updating when a new unit that fits the criteria appears."
     return nil
   end
@@ -8209,7 +8551,9 @@ bot.command([:find,:search]) do |event, *args|
     display_skills(event, mode)
   else
     p1=find_in_units(event,mode,true)
+    p1=p1.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@data[find_unit(q,event,false,true)][22].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@data[find_unit(q,event,false,true)][22].nil?}"}
     p2=find_in_skills(event,mode,true,p1)
+    p2=p2.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9',''),event,false,true)][21].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9',''),event,false,true)][21].nil?}"}
     if !p1.is_a?(Array) && !p2.is_a?(Array)
       event.respond "Your request is gibberish."
     elsif !p1.is_a?(Array)
@@ -8218,7 +8562,7 @@ bot.command([:find,:search]) do |event, *args|
       display_units(event, mode)
     elsif p1.join("\n").length+p2.join("\n").length<=1900
       create_embed(event,"Results",'',0x9400D3,nil,nil,[['**Units**',p1.join("\n")],['**Skills**',p2.join("\n")]],2)
-    elsif !event.server.nil? && event.channel.id != 283821884800499714
+    elsif !event.server.nil? && event.channel.id != 283821884800499714 && @shardizard != 4
       event.respond "My response would be so long that I would prefer you ask me in PM."
     else
       t="**Units:** #{p1[0]}"
@@ -8252,7 +8596,7 @@ end
 
 bot.command([:sort,:list]) do |event, *args|
   if args.nil? || args[0].nil?
-  elsif event.user.id==167657750971547648 && ['group','groups'].include?(args[0].downcase)
+  elsif (event.user.id==167657750971547648 || event.channel.id==386658080257212417) && ['group','groups'].include?(args[0].downcase)
     data_load()
     groups_load()
     @groups.uniq!
@@ -8264,7 +8608,7 @@ bot.command([:sort,:list]) do |event, *args|
     }
     event.respond "The groups list has been sorted alphabetically"
     return nil
-  elsif event.user.id==167657750971547648 && ['alias','aliases'].include?(args[0].downcase)
+  elsif (event.user.id==167657750971547648 || event.channel.id==386658080257212417) && ['alias','aliases'].include?(args[0].downcase)
     data_load()
     nicknames_load()
     @names.uniq!
@@ -8349,7 +8693,7 @@ bot.command([:sort,:list]) do |event, *args|
     f.push(12) unless f.include?(12)
     f.push(13) unless f.include?(13)
   end
-  k2=find_in_units(event,2) # Narrow the list of units down based on the defined parameters
+  k2=find_in_units(event,2,false,true) # Narrow the list of units down based on the defined parameters
   event.channel.send_temporary_message("Units found, sorting now...",3)
   k=k2.reject{|q| find_unit(q[0],event)<0} if k2.is_a?(Array)
   k=@data.reject{|q| find_unit(q[0],event)<0}.sort{|a,b| a[0]<=>b[0]} unless k2.is_a?(Array)
@@ -8386,7 +8730,7 @@ bot.command([:sort,:list]) do |event, *args|
   elsif b>0
     display=[k.length-b,k.length]
   end
-  if event.server.nil? || event.channel.id==283821884800499714
+  if event.server.nil? || event.channel.id==283821884800499714 || @shardizard==4
   elsif k2==-1 && display[0]==0 && display[1]==k.length
     event.respond "Sorry, but you must specify filters.  I will not sort the entire roster as that would be spam.\nInstead, have the stats of the character whose name in Japanese means \"sort\"."
     disp_stats(bot,"Stahl",nil,event,true)
@@ -8423,7 +8767,7 @@ bot.command([:sort,:list]) do |event, *args|
   if f.include?(15)
     m="#{m}\nThe order of units listed here can also be affected by natures if a unit's Defense and Resistance are quite close.\n"
   end
-  if "#{m}\n#{m2.join("\n")}".length>2000 && !(event.server.nil? || event.channel.id==283821884800499714)
+  if "#{m}\n#{m2.join("\n")}".length>2000 && !(event.server.nil? || event.channel.id==283821884800499714 || @shardizard==4)
     event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
     return nil
   end
@@ -8702,7 +9046,7 @@ end
 
 bot.command(:natures) do |event|
   event << "A guide to nature names.  Though things like `+Atk` and `-Def` still work"
-  event << "https://img00.deviantart.net/39db/i/2018/047/4/f/untitled_by_rot8erconex-dc3e1fj.png"
+  event << "https://orig00.deviantart.net/d88e/f/2018/047/9/2/nature_names_by_rot8erconex-dc3e1fj.png"
 end
 
 bot.command([:growths, :gps, :growth, :gp]) do |event|
@@ -8869,13 +9213,13 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
   data_load()
   metadata_load()
   bot.servers.values(&:members)
-  @server_data[0][shardizard]=bot.servers.length
-  @server_data[1][shardizard]=bot.users.size
+  @server_data[0][@shardizard]=bot.servers.length
+  @server_data[1][@shardizard]=bot.users.size
   metadata_save()
-  unless event.user.id==167657750971547648 && !f.nil? && shardizard<4
+  unless event.user.id==167657750971547648 && !f.nil? && @shardizard<4
     bot.servers.values(&:members)
     event << "I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members."
-    event << "This shard is in #{longFormattedNumber(@server_data[0][shardizard])} servers, reaching #{longFormattedNumber(@server_data[1][shardizard])} unique members."
+    event << "This shard is in #{longFormattedNumber(@server_data[0][@shardizard])} servers, reaching #{longFormattedNumber(@server_data[1][@shardizard])} unique members."
     event << ''
     event << "There are #{longFormattedNumber(@data.reject{|q| !has_any?(g, q[22])}.length)} units and #{longFormattedNumber(@skills.reject{|q| !has_any?(g, q[21])}.length)} skills#{" if you include ones specific to this server." unless g.length<2}"
     event << "There are #{longFormattedNumber(@data.length)} units and #{longFormattedNumber(@skills.length)} skills if you include all the ones I can see." if event.server.nil? && event.user.id==167657750971547648
@@ -8911,7 +9255,7 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
 end
 
 bot.command(:shard) do |event, i|
-  if i.to_i.to_s==i && i.to_i.is_a?(Bignum) && shardizard != 4
+  if i.to_i.to_s==i && i.to_i.is_a?(Bignum) && @shardizard != 4
     srv=(bot.server(i.to_i) rescue nil)
     if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
       event.respond "I am not in that server, but it would use #{['Transparent','Scarlet','Azure','Verdant'][(i.to_i >> 22) % 4]} Shards."
@@ -8920,14 +9264,14 @@ bot.command(:shard) do |event, i|
     end
     return nil
   end
-  event.respond "This is the debug mode, which uses Golden Shards." if shardizard==4
+  event.respond "This is the debug mode, which uses Golden Shards." if @shardizard==4
   event.respond "PMs always use Colorless Shards." if event.server.nil?
-  event.respond "This server uses #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards." unless event.server.nil? || shardizard==4
+  event.respond "This server uses #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards." unless event.server.nil? || @shardizard==4
 end
 
 bot.command([:locateshards, :locate, :locateshards], from: 167657750971547648) do |event|
   return nil unless event.user.id==167657750971547648
-  if shardizard==4
+  if @shardizard==4
     event.respond "This command cannot be used by the debug version of me.  Please run this command in another server."
     return nil
   end
@@ -8940,7 +9284,7 @@ end
 
 bot.command(:cleanupaliases) do |event|
   event.channel.send_temporary_message("Please wait...",10)
-  if shardizard==4
+  if @shardizard==4
     event.respond "This command cannot be used by the debug version of me.  Please run this command in another server."
     return nil
   end
@@ -8971,7 +9315,7 @@ bot.command(:cleanupaliases) do |event|
 end
 
 bot.command(:backup) do |event, trigger|
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 || event.channel.id==386658080257212417
   if trigger.nil?
     event.respond "Backup what?"
   elsif ['aliases','alias'].include?(trigger.downcase)
@@ -9278,7 +9622,7 @@ bot.server_create do |event|
     end
     chn=chnn[0] if chnn.length>0
   end
-  if event.server.id != 285663217261477889 && shardizard==4
+  if event.server.id != 285663217261477889 && @shardizard==4
     (chn.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/Hf9RNj>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/f1wSGd>") rescue nil)
     event.server.leave
   else
@@ -9291,7 +9635,7 @@ bot.server_create do |event|
 end
 
 bot.server_delete do |event|
-  unless shardizard==4
+  unless @shardizard==4
     bot.user(167657750971547648).pm("Left server **#{event.server.name}**")
     metadata_load()
     @server_data[0][((event.server.id >> 22) % 4)] -= 1
@@ -9302,7 +9646,7 @@ end
 bot.message do |event|
   data_load()
   str=event.message.text.downcase
-  if shardizard==4 && (['fea!','fef!'].include?(str[0,4]) || ['fe13!','fe14!'].include?(str[0,5]) || ['fe!'].include?(str[0,3]))
+  if @shardizard==4 && (['fea!','fef!'].include?(str[0,4]) || ['fe13!','fe14!'].include?(str[0,5]) || ['fe!'].include?(str[0,3]))
     str=str[4,str.length-4] if ['fea!','fef!'].include?(str[0,4])
     str=str[5,str.length-5] if ['fe13!','fe14!'].include?(str[0,5])
     str=str[3,str.length-3] if ['fe!'].include?(str[0,3])
@@ -9419,7 +9763,7 @@ bot.message do |event|
 end
 
 bot.ready do |event|
-  if shardizard==4
+  if @shardizard==4
     for i in 0...bot.servers.values.length
       if bot.servers.values[i].id != 285663217261477889
         bot.servers.values[i].general_channel.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/Hf9RNj>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/f1wSGd>") rescue nil
@@ -9427,9 +9771,9 @@ bot.ready do |event|
       end
     end
   end
-  system("color 5#{"7CBAE"[shardizard,1]}")
-  system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][shardizard]} EliseBot")
-  bot.game="Loading, please wait..." if shardizard==0
+  system("color 5#{"7CBAE"[@shardizard,1]}")
+  system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
+  bot.game="Loading, please wait..." if @shardizard==0
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt').each_line do |line|
@@ -9456,14 +9800,14 @@ bot.ready do |event|
     end
   end
   metadata_save()
-  bot.game="Fire Emblem Heroes" if [0,4].include?(shardizard)
-  bot.user(bot.profile.id).on(285663217261477889).nickname="EliseBot (Debug)" if shardizard==4
-  bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r')) if shardizard==4
-  next_holiday(bot) if shardizard==0
+  bot.game="Fire Emblem Heroes" if [0,4].include?(@shardizard)
+  bot.user(bot.profile.id).on(285663217261477889).nickname="EliseBot (Debug)" if @shardizard==4
+  bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r')) if @shardizard==4
+  next_holiday(bot) if @shardizard==0
   metadata_load()
   devunits_load()
-  system("color e#{"04126"[shardizard,1]}")
-  system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][shardizard]} EliseBot")
+  system("color e#{"04126"[@shardizard,1]}")
+  system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
 end
 
 def calc_easter()
