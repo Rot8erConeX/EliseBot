@@ -585,7 +585,7 @@ def is_mod?(user,server,channel)
   return false if server.nil?
   return true if user.id==server.owner.id
   for i in 0...user.roles.length
-    return true if ['mod','mods','moderator','moderators','admin','admins','administrator','administrators','owner','owners'].include?(user.roles[i].name.downcase)
+    return true if ['mod','mods','moderator','moderators','admin','admins','administrator','administrators','owner','owners'].include?(user.roles[i].name.downcase.gsub(' ',''))
   end
   return true if user.permission?(:manage_messages,channel)
   return false
@@ -1122,7 +1122,8 @@ def find_in_dev_units(name)
   return -1
 end
 
-def stat_buffs(str,name)
+def stat_buffs(str,name=nil)
+  name=str.split(' ').join(' ') if name.nil?
   x=str.downcase.gsub('/',' ').gsub('+',' +').gsub('  ',' ')
   x=x.gsub('hone','hone ').gsub('fortify','fortify ').gsub('goad','goad ').gsub('ward','ward ')
   x=x.split(' ')
@@ -1177,10 +1178,12 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
   ftrlnth=0
   ftrlnth=xfooter.length unless xfooter.nil?
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    if header.include?('*') || header.include?('_')
-      event << header
-    else
-      event << "__**#{header.gsub('!','')}**__"
+    if header.length>0
+      if header.include?('*') || header.include?('_')
+        event << header
+      else
+        event << "__**#{header.gsub('!','')}**__"
+      end
     end
     event << ""
     event << text
@@ -1225,6 +1228,10 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
       elsif mode==3
         for i in 0...xfields.length
           event << "__#{xfields[i][0]}:__ #{xfields[i][1].gsub("\n",", ")}"
+        end
+      elsif mode==4
+        for i in 0...xfields.length
+          event << "**#{xfields[i][0]}:** #{xfields[i][1].gsub("\n",", ")}"
         end
       else
         for i in 0...xfields.length
@@ -1876,13 +1883,13 @@ def apply_stat_skills(event,skillls,stats,tempest=false,summoner='-',weapon='',r
       stats[4]+=6
       stats[5]+=6
     end
-    if skillls[i][0,17]=="Fortress Defense "
+    if skillls[i][0,17]=="Fortress Defense " || skillls[i][0,13]=="Fortress Def "
       stats[2]-=3
-      stats[4]+=(skillls[i][17,skillls[i].length-17].to_i+2)
+      stats[4]+=(skillls[i].scan(/\d+?/)[0].to_i+2)
     end
-    if skillls[i][0,20]=="Fortress Resistance "
+    if skillls[i][0,20]=="Fortress Resistance " || skillls[i][0,13]=="Fortress Res "
       stats[2]-=3
-      stats[5]+=(skillls[i][20,skillls[i].length-20].to_i+2)
+      stats[5]+=(skillls[i].scan(/\d+?/)[0].to_i+2)
     end
   end
   if tempest
@@ -4518,7 +4525,7 @@ end
 
 def display_skills(event, mode)
   k=find_in_skills(event,mode)
-  k=k.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9',''),event,false,true)][21].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9',''),event,false,true)][21].nil?}"}
+  k=k.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(stat_buffs(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','')),event,false,true)][21].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(stat_buffs(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','')),event,false,true)][21].nil?}"}
   if mode==1 && k.is_a?(Array)
     if k.include?("- - -")
       p1=[[]]
@@ -5485,22 +5492,38 @@ def disp_summon_pool(event,args)
   if colors.include?('Red')
     r=k.reject{|q| q[1][0]!='Red'}
     r=create_summon_list(r)
-    create_embed(event,"",'',0xB32400,"4-5\* availability can be affected by banner focus.",nil,r)
+    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
+    else
+      create_embed(event,"",'',0xB32400,"4-5\* availability can be affected by banner focus.",nil,r,4)
+    end
   end
   if colors.include?('Blue')
     r=k.reject{|q| q[1][0]!='Blue'}
     r=create_summon_list(r)
-    create_embed(event,"",'',0x208EFB,"4-5\* availability can be affected by banner focus.",nil,r)
+    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
+    else
+      create_embed(event,"",'',0x208EFB,"4-5\* availability can be affected by banner focus.",nil,r,4)
+    end
   end
   if colors.include?('Green')
     r=k.reject{|q| q[1][0]!='Green'}
     r=create_summon_list(r)
-    create_embed(event,"",'',0x01AD00,"4-5\* availability can be affected by banner focus.",nil,r)
+    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
+    else
+      create_embed(event,"",'',0x01AD00,"4-5\* availability can be affected by banner focus.",nil,r,4)
+    end
   end
   if colors.include?('Colorless')
     r=k.reject{|q| q[1][0]!='Colorless'}
     r=create_summon_list(r)
-    create_embed(event,"",'',0xC1CCD6,"4-5\* availability can be affected by banner focus.",nil,r)
+    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
+    else
+      create_embed(event,"",'',0xC1CCD6,"4-5\* availability can be affected by banner focus.",nil,r,4)
+    end
   end
 end
 
@@ -6781,9 +6804,9 @@ def disp_art(event,name,bot,weapon=nil)
   end
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     disp="#{disp}\n" if charsx.map{|q| q.length}.max>0
-    disp="#{disp}\n*Same artist:* #{charsx[0].join(', ')}" if charsx[0].length>0
-    disp="#{disp}\n*Same VA(EN):* #{charsx[1].join(', ')}" if charsx[1].length>0
-    disp="#{disp}\n*Same VA(JP):* #{charsx[2].join(', ')}" if charsx[2].length>0
+    disp="#{disp}\n**Same artist:** #{charsx[0].join(', ')}" if charsx[0].length>0
+    disp="#{disp}\n**Same VA(EN):** #{charsx[1].join(', ')}" if charsx[1].length>0
+    disp="#{disp}\n**Same VA(JP):** #{charsx[2].join(', ')}" if charsx[2].length>0
     disp=">No information<" if disp.length<=0
     event.respond "#{disp}\n\n#{art}"
   else
@@ -6934,42 +6957,40 @@ bot.command([:refinery,:refine]) do |event|
   srv=0
   srv=event.server.id unless event.server.nil?
   data_load()
-  stones=["__**Refinement**__"]
-  dew=["__**Refinement**__"]
+  stones=[]
+  dew=[]
   g=get_markers(event)
   skkz=@skills.map{|q| q}
   for i in 0...skkz.length
-    if skkz[i][4]=="Weapon" && skkz[i][0]!="Falchion" && !skkz[i][23].nil? && has_any?(g, skkz[i][21])
+    if skkz[i][4]=="Weapon" && skkz[i][0]!="Falchion" && skkz[i][0]!="Breidablik" && !skkz[i][23].nil? && has_any?(g, skkz[i][21])
       if skkz[i][6]=="-"
-        stones.push(skkz[i][0].gsub('Bladeblade','Laevatein'))
+        stones.push("#{"~~" unless skkz[i][21].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')}#{"~~" unless skkz[i][21].nil?}")
       else
-        dew.push(skkz[i][0].gsub('Bladeblade','Laevatein'))
+        dew.push("#{"~~" unless skkz[i][21].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')}#{"~~" unless skkz[i][21].nil?}")
       end
     end
   end
-  dew.push("- - -")
-  dew.push("__**Evolution**__")
-  stones.push("- - -")
-  stones.push("__**Evolution**__")
+  dew2=[]
+  stones2=[]
   for i in 0...skkz.length
     unless skkz[i].nil?
-      if skkz[i][4]=="Weapon" && !skkz[i][22].nil? && has_any?(g, skkz[i][21])
+      if skkz[i][4]=="Weapon" && skkz[i][0]!="Falchion" && skkz[i][0]!="Breidablik" && !skkz[i][22].nil? && has_any?(g, skkz[i][21])
         s=skkz[i][22].split(', ')
         for j in 0...s.length
           if s[j].include?('!')
             s[j]=s[j].split('!')
             s2=skkz[find_skill(s[j][1],event)]
             if s2[6]=="-"
-              stones.push("#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})")
+              stones2.push("#{"~~" unless skkz[i][21].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})#{"~~" unless skkz[i][21].nil?}")
             else
-              dew.push("#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})")
+              dew2.push("#{"~~" unless skkz[i][21].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})#{"~~" unless skkz[i][21].nil?}")
             end
           else
             s2=skkz[find_skill(s[j],event)]
             if s2[6]=="-"
-              stones.push("#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}")
+              stones2.push("#{"~~" unless skkz[i][21].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{"~~" unless skkz[i][21].nil?}")
             else
-              dew.push("#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}")
+              dew2.push("#{"~~" unless skkz[i][21].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{"~~" unless skkz[i][21].nil?}")
             end
           end
         end
@@ -6978,20 +6999,135 @@ bot.command([:refinery,:refine]) do |event|
   end
   stones.uniq!
   dew.uniq!
-  if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    msg="__**Divine Dew**__\n"
-    for i in 0...dew.length
-      msg=extend_message(msg,dew[i].gsub("__**","__*").gsub("**__","*__"),event)
+  stones2.uniq!
+  dew2.uniq!
+  if stones.join("\n").length+dew.join("\n").length+stones2.join("\n").length+dew2.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    if dew2.join("\n").length+stones2.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      if dew2.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg="__**Weapon Evolution: Divine Dew**__"
+        k=[["Swords",[]],["Red Tomes",[]],["Lances",[]],["Blue Tomes",[]],["Axes",[]],["Green Tomes",[]],["Dragonstones",[]],["Bows",[]],["Daggers",[]],["Staves",[]]]
+        for i in 0...dew2.length
+          k2="#{@skills[find_skill(stat_buffs(dew2[i].gsub('~~','').split(' -> ')[0]),event,false,true)][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone')}s"
+          for j in 0...k.length
+            k[j][1].push(dew2[i]) if k2==k[j][0]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        l=0
+        l=1 if dew2.length%3==2
+        m=0
+        m=1 if dew2.length%3==1
+        p1=dew2[0,dew2.length/3+l].join("\n")
+        p2=dew2[dew2.length/3+l,dew2.length/3+m].join("\n")
+        p3=dew2[2*(dew2.length/3)+l+m,dew2.length/3+l].join("\n")
+        create_embed(event,"__**Weapon Evolution: Divine Dew**__",'',0x9BFFFF,nil,nil,[['.',p1],['.',p2],['.',p3]],3)
+      end
+      if stones2.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg="__**Weapon Evolution: Refining Stones**__"
+        k=[["Swords",[]],["Red Tomes",[]],["Lances",[]],["Blue Tomes",[]],["Axes",[]],["Green Tomes",[]],["Dragonstones",[]],["Bows",[]],["Daggers",[]],["Staves",[]]]
+        for i in 0...stones2.length
+          k2="#{@skills[find_skill(stat_buffs(stones2[i].gsub('~~','').split(' -> ')[0]),event,false,true)][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone')}s"
+          for j in 0...k.length
+            k[j][1].push(stones2[i]) if k2==k[j][0]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        l=0
+        l=1 if stones2.length%3==2
+        m=0
+        m=1 if stones2.length%3==1
+        p1=stones2[0,stones2.length/3+l].join("\n")
+        p2=stones2[stones2.length/3+l,stones2.length/3+m].join("\n")
+        p3=stones2[2*(stones2.length/3)+l+m,stones2.length/3+l].join("\n")
+        create_embed(event,"__**Weapon Evolution: Refining Stones**__",'',0x9BFFFF,nil,nil,[['.',p1],['.',p2],['.',p3]],3)
+      end
+    else
+      create_embed(event,"__**Weapon Evolution**__",'',0x9BFFFF,nil,nil,[['**Divine Dew**',dew2.join("\n")],['**Refining Stones**',stones2.join("\n")]],3)
     end
-    msg=extend_message(msg,"__**Refining Stones**__\n",event,3)
-    for i in 0...stones.length
-      msg=extend_message(msg,stones[i].gsub("__**","__*").gsub("**__","*__"),event)
+    if stones.join("\n").length+dew.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      if dew.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg="__**Weapon Refines: Divine Dew**__"
+        k=[["Swords",[]],["Red Tomes",[]],["Lances",[]],["Blue Tomes",[]],["Axes",[]],["Green Tomes",[]],["Dragonstones",[]],["Bows",[]],["Daggers",[]],["Staves",[]]]
+        for i in 0...dew.length
+          k2="#{@skills[find_skill(stat_buffs(dew[i].gsub('~~','')),event,false,true)][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone')}s"
+          for j in 0...k.length
+            k[j][1].push(dew[i]) if k2==k[j][0]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        l=0
+        l=1 if dew.length%3==2
+        m=0
+        m=1 if dew.length%3==1
+        p1=dew[0,dew.length/3+l].join("\n")
+        p2=dew[dew.length/3+l,dew.length/3+m].join("\n")
+        p3=dew[2*(dew.length/3)+l+m,dew.length/3+l].join("\n")
+        create_embed(event,"__**Weapon Refines: Divine Dew**__",'',0x688C68,nil,nil,[['.',p1],['.',p2],['.',p3]],3)
+      end
+      if stones.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg="__**Weapon Refines: Refining Stones**__"
+        k=[["Swords",[]],["Red Tomes",[]],["Lances",[]],["Blue Tomes",[]],["Axes",[]],["Green Tomes",[]],["Dragonstones",[]],["Bows",[]],["Daggers",[]],["Staves",[]]]
+        for i in 0...stones.length
+          k2="#{@skills[find_skill(stat_buffs(stones[i].gsub('~~','')),event,false,true)][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone')}s"
+          for j in 0...k.length
+            k[j][1].push(stones[i]) if k2==k[j][0]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        l=0
+        l=1 if stones.length%3==2
+        m=0
+        m=1 if stones.length%3==1
+        p1=stones[0,stones.length/3+l].join("\n")
+        p2=stones[stones.length/3+l,stones.length/3+m].join("\n")
+        p3=stones[2*(stones.length/3)+l+m,stones.length/3+l].join("\n")
+        create_embed(event,"__**Weapon Refines: Refining Stones**__",'',0x688C68,nil,nil,[['.',p1],['.',p2],['.',p3]],3)
+      end
+    else
+      stones2=stones[stones.length/2+stones.length%2,stones.length/2]
+      stones=stones[0,stones.length/2+3*stones.length%2]
+      create_embed(event,"__**Weapon Refines**__",'',0x688C68,nil,nil,[['**Divine Dew**',dew.join("\n")],['**Refining Stones**',stones.join("\n")],['**Refining Stones**',stones2.join("\n")]],3)
     end
-    event.respond msg
     return nil
   else
+    dew3=["__**Refinement**__"]
+    stones3=["__**Refinement**__"]
+    for i in 0...dew.length
+      dew3.push(dew[i])
+    end
+    for i in 0...stones.length
+      stones3.push(stones[i])
+    end
+    stones=stones3.map{|q| q}
+    dew=dew3.map{|q| q}
+    dew.push("- - -")
+    dew.push("__**Evolution**__")
+    stones.push("- - -")
+    stones.push("__**Evolution**__")
+    for i in 0...dew2.length
+      dew.push(dew2[i])
+    end
+    for i in 0...stones2.length
+      stones.push(stones2[i])
+    end
     stones2=stones[stones.length/2+stones.length%2,stones.length/2]
-    stones=stones[0,stones.length/2+(2-stones.length%2)]
+    stones=stones[0,stones.length/2+3*stones.length%2]
     create_embed(event,"Weapon Refinery",'',0x688C68,nil,nil,[['**Divine Dew**',dew.join("\n")],['**Refining Stones**',stones.join("\n")],['**Refining Stones**',stones2.join("\n")]],3)
   end
 end
@@ -7568,7 +7704,15 @@ bot.command(:games) do |event, *args|
       j=find_unit("Lucina",event)
     elsif args.join('').downcase =~ /b(r|)lyn/
       j=find_unit("Lyn",event)
+    elsif args.join('').downcase =~ /grima/
+      j=find_unit("Robin(M)(Fallen)",event)
     end
+  elsif args.join('').downcase =~ /(robin|reflet|daraen)/ && args.join('').downcase =~ /(fallen|evil|alter)/
+    j=find_unit("Robin(M)(Fallen)",event)
+  elsif args.join('').downcase =~ /(robin|reflet|daraen)/ && !["Robin(F)(Fallen)","Robin(M)(Fallen)"].include?(@data[j][0])
+    j=find_unit("Robin(M)",event)
+  elsif args.join('').downcase =~ /(robin|reflet|daraen)/
+    j=find_unit("Robin(M)(Fallen)",event)
   end
   if j<0
     event.respond "No unit was included"
@@ -7593,6 +7737,10 @@ bot.command(:games) do |event, *args|
     pic="https://orig00.deviantart.net/97f6/f/2018/068/a/c/morgan_by_rot8erconex-dc5drdn.png"
     name="Morgan"
     xcolor=avg_color([[32,142,251],[179,36,0]])
+  elsif ["Robin(F)(Fallen)","Robin(M)(Fallen)"].include?(@data[j][0])
+    pic="https://orig00.deviantart.net/33ea/f/2018/104/2/7/grimleal_by_rot8erconex-dc8svax.png"
+    name="Grima: Robin(Fallen)"
+    xcolor=avg_color([[1,173,0],[222,95,9]])
   elsif ["Corrin(F)","Corrin(M)"].include?(@data[j][0])
     pic="https://orig00.deviantart.net/d8ce/f/2018/051/1/a/corrin_by_rot8erconex-dc3tj34.png"
     name="Corrin"
@@ -7617,7 +7765,7 @@ bot.command(:games) do |event, *args|
     ga=xa.uniq
   end
   ga=ga.reject{|q| q.downcase=="no games"}
-  create_embed(event,"__#{"Mathoo's " if mu}**#{name}**__","#{"**Credit in FEH**\n" unless g2=="No games"}#{g2}#{"\n\n**Other games**\n#{g.join("\n")}" unless g.length<1}#{"\n\n**Also appears via Amiibo functionality in**\n#{ga.join("\n")}" unless ga.length<1}",xcolor,nil,pic)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{name}**__","#{"**Credit in FEH**\n" unless g2=="No games"}#{g2}#{"\n\n**Other games**\n#{g.join("\n")}" unless g.length<1}#{"\n\n**#{"Male a" if ["Robin(F)","Robin(M)"].include?(@data[j][0])}#{"A" unless ["Robin(F)","Robin(M)"].include?(@data[j][0])}lso appears via Amiibo functionality in**\n#{ga.join("\n")}" unless ga.length<1}",xcolor,nil,pic)
 end
 
 bot.command([:bst, :BST]) do |event, *args|
@@ -8553,7 +8701,7 @@ bot.command([:find,:search]) do |event, *args|
     p1=find_in_units(event,mode,true)
     p1=p1.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@data[find_unit(q,event,false,true)][22].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@data[find_unit(q,event,false,true)][22].nil?}"}
     p2=find_in_skills(event,mode,true,p1)
-    p2=p2.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9',''),event,false,true)][21].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9',''),event,false,true)][21].nil?}"}
+    p2=p2.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(stat_buffs(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','')),event,false,true)][21].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(stat_buffs(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','')),event,false,true)][21].nil?}"}
     if !p1.is_a?(Array) && !p2.is_a?(Array)
       event.respond "Your request is gibberish."
     elsif !p1.is_a?(Array)
@@ -8788,6 +8936,7 @@ bot.command([:average,:mean]) do |event, *args|
   k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
   k222=@data.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
   k222=k222.reject{|q| q[9].nil? || q[9]==0}
+  k222=k222.reject{|q| !q[22].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
   for i2 in 0...k222.length
@@ -8816,6 +8965,7 @@ bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
   k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
   k222=@data.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
   k222=k222.reject{|q| q[9].nil? || q[9]==0}
+  k222=k222.reject{|q| !q[22].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
   event.channel.send_temporary_message("Units found, finding highest stats now...",5)
@@ -8861,6 +9011,7 @@ bot.command([:worstamong,:worstin,:worststats,:loweststats]) do |event, *args|
   k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
   k222=@data.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
   k222=k222.reject{|q| q[9].nil? || q[9]==0}
+  k222=k222.reject{|q| !q[22].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
   event.channel.send_temporary_message("Units found, finding lowest stats now...",5)
@@ -9201,8 +9352,16 @@ end
 bot.command(:leaveserver, from: 167657750971547648) do |event, server_id| # forces Elise to leave a server
   return nil unless event.server.nil?
   return nil unless event.user.id==167657750971547648
-  bot.server(server_id).general_channel.send_message("My coder would rather that I not associate with you guys.  I'm sorry.  If you would like me back, please take it up with him.")
-  bot.server(server_id).leave
+  chn=bot.server(server_id.to_i).general_channel
+  if chn.nil?
+    chnn=[]
+    for i in 0...bot.server(server_id.to_i).channels.length
+      chnn.push(bot.server(server_id.to_i).channels[i]) if bot.user(bot.profile.id).on(event.server.id).permission?(:send_messages,bot.server(server_id.to_i).channels[i]) && bot.server(server_id.to_i).channels[i].type==0
+    end
+    chn=chnn[0] if chnn.length>0
+  end
+  chn.general_channel.send_message("My coder would rather that I not associate with you guys.  I'm sorry.  If you would like me back, please take it up with him.") rescue nil
+  bot.server(server_id.to_i).leave
   return nil
 end
 
@@ -9618,7 +9777,7 @@ bot.server_create do |event|
   if chn.nil?
     chnn=[]
     for i in 0...event.server.channels.length
-      chnn.push(event.server.channels[i]) if bot.user(bot.profile.id).on(event.server.id).permission?(:send_messages,event.server.channels[i])
+      chnn.push(event.server.channels[i]) if bot.user(bot.profile.id).on(event.server.id).permission?(:send_messages,event.server.channels[i]) && event.server.channels[i].type==0
     end
     chn=chnn[0] if chnn.length>0
   end
@@ -9626,7 +9785,7 @@ bot.server_create do |event|
     (chn.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/Hf9RNj>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/f1wSGd>") rescue nil)
     event.server.leave
   else
-    bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards#{"\n__***The sidekick has overshadowed the original hero***__" if bot.servers.values.length==701}")
+    bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards")
     metadata_load()
     @server_data[0][((event.server.id >> 22) % 4)] += 1
     metadata_save()
