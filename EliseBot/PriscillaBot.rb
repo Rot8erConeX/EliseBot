@@ -1532,7 +1532,7 @@ def find_stats_in_string(event,stringx=nil,mode=0)
   s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4])
   a=s.split(' ')
   s=stringx if all_commands().include?(a[0])
-  s=first_sub(s,find_name_in_string(event,s,1)[1],'') unless s.downcase=='laevatein' || s.downcase.include?('blucina') || s.downcase.include?('bluecina') || s.downcase.include?('blyn') || s.downcase.include?('brlyn') || s.downcase.include?('axeura') || s.downcase.include?('axura') || s.downcase.include?('axezura') || s.downcase.include?('axzura') || s.downcase.include?('axe-ura') || s.downcase.include?('ax-ura') || s.downcase.include?('axe-zura') || s.downcase.include?('ax-zura') || s.downcase.include?('corrin') || s.downcase.include?('robin') || s.downcase.include?('kamui') || s.downcase.include?('tiki') || s.downcase.include?('chiki') || s.downcase.include?('reflet') || s.downcase.include?('daraen') || s.downcase.include?('eirika') || s.downcase.include?('eirik') || s.downcase.include?('eiriku') || s.downcase.include?('erika') || s.downcase.include?('morgan') || s.downcase.include?('marc') || s.downcase.include?('linfan') || s.downcase.include?('grima')
+  s=(first_sub(s,find_name_in_string(event,s,1)[1],'') rescue s) unless s.downcase=='laevatein' || s.downcase.include?('blucina') || s.downcase.include?('bluecina') || s.downcase.include?('blyn') || s.downcase.include?('brlyn') || s.downcase.include?('axeura') || s.downcase.include?('axura') || s.downcase.include?('axezura') || s.downcase.include?('axzura') || s.downcase.include?('axe-ura') || s.downcase.include?('ax-ura') || s.downcase.include?('axe-zura') || s.downcase.include?('ax-zura') || s.downcase.include?('corrin') || s.downcase.include?('robin') || s.downcase.include?('kamui') || s.downcase.include?('tiki') || s.downcase.include?('chiki') || s.downcase.include?('reflet') || s.downcase.include?('daraen') || s.downcase.include?('eirika') || s.downcase.include?('eirik') || s.downcase.include?('eiriku') || s.downcase.include?('erika') || s.downcase.include?('morgan') || s.downcase.include?('marc') || s.downcase.include?('linfan') || s.downcase.include?('grima')
   args=sever(s,true).split(" ")
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   merges=nil
@@ -1921,6 +1921,7 @@ def apply_stat_skills(event,skillls,stats,tempest=false,summoner='-',weapon='',r
       stats[5]+=4
     end
   end
+  negative=[0,0,0,0,0]
   rally=[0,0,0,0,0]
   for i in 0...skillls.length
     if skillls[i]=="Rally Attack" || skillls[i]=="Kindled-Fire Balm"
@@ -1942,19 +1943,53 @@ def apply_stat_skills(event,skillls,stats,tempest=false,summoner='-',weapon='',r
       rally[3]=[rally[3],2].max
       rally[4]=[rally[4],2].max
     end
-    rally[2]=[rally[2],skillls[i].scan(/\d+?/)[0].to_i+1] if skillls[i][0,12]=="Blaze Dance "
-    rally[3]=[rally[3],skillls[i].scan(/\d+?/)[0].to_i+1] if skillls[i][0,11]=="Gale Dance "
-    rally[4]=[rally[4],skillls[i].scan(/\d+?/)[0].to_i+1] if skillls[i][0,12]=="Earth Dance "
-    rally[5]=[rally[5],skillls[i].scan(/\d+?/)[0].to_i+1] if skillls[i][0,14]=="Torrent Dance "
+    rally[2]=[rally[2],skillls[i].scan(/\d+?/)[0].to_i+1].max if skillls[i][0,12]=="Blaze Dance "
+    rally[3]=[rally[3],skillls[i].scan(/\d+?/)[0].to_i+1].max if skillls[i][0,11]=="Gale Dance "
+    rally[4]=[rally[4],skillls[i].scan(/\d+?/)[0].to_i+1].max if skillls[i][0,12]=="Earth Dance "
+    rally[5]=[rally[5],skillls[i].scan(/\d+?/)[0].to_i+1].max if skillls[i][0,14]=="Torrent Dance "
     if skillls[i][0,13]=="Geyser Dance "
-      rally[4]=[rally[4],skillls[i].scan(/\d+?/)[0].to_i+2]
-      rally[5]=[rally[5],skillls[i].scan(/\d+?/)[0].to_i+2]
+      rally[4]=[rally[4],skillls[i].scan(/\d+?/)[0].to_i+2].max
+      rally[5]=[rally[5],skillls[i].scan(/\d+?/)[0].to_i+2].max
+    end
+    if skillls[i].include?(" Ploy ")
+      negative[1]-=skillls[i].scan(/\d+?/)[0].to_i+2 if skillls[i].include?("Atk")
+      negative[2]-=skillls[i].scan(/\d+?/)[0].to_i+2 if skillls[i].include?("Spd")
+      negative[3]-=skillls[i].scan(/\d+?/)[0].to_i+2 if skillls[i].include?("Def")
+      negative[4]-=skillls[i].scan(/\d+?/)[0].to_i+2 if skillls[i].include?("Res")
+    end
+    if skillls[i][0,5]=="Seal "
+      negative[1]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Atk")
+      negative[2]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Spd")
+      negative[3]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Def")
+      negative[4]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Res")
+    end
+    if skillls[i][0,9]=="Threaten "
+      negative[1]-=skillls[i].scan(/\d+?/)[0].to_i+2 if skillls[i].include?("Atk")
+      negative[2]-=skillls[i].scan(/\d+?/)[0].to_i+2 if skillls[i].include?("Spd")
+      negative[3]-=skillls[i].scan(/\d+?/)[0].to_i+2 if skillls[i].include?("Def")
+      negative[4]-=skillls[i].scan(/\d+?/)[0].to_i+2 if skillls[i].include?("Res")
+    end
+    if skillls[i][0,6]=="Chill "
+      negative[1]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Atk")
+      negative[2]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Spd")
+      negative[3]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Def")
+      negative[4]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Res")
+    end
+    if skillls[i]=="Chilling Seal"
+      negative[1]-=6
+      negative[2]-=6
+    end
+    if skillls[i].include?(" Smoke ")
+      negative[1]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Atk")
+      negative[2]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Spd")
+      negative[3]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Def")
+      negative[4]-=2*skillls[i].scan(/\d+?/)[0].to_i+1 if skillls[i].include?("Res")
     end
   end
-  stats[2]+=rally[1]
-  stats[3]+=rally[2]
-  stats[4]+=rally[3]
-  stats[5]+=rally[4]
+  stats[2]+=rally[1]+[negative[1],-7].max
+  stats[3]+=rally[2]+[negative[2],-7].max
+  stats[4]+=rally[3]+[negative[3],-7].max
+  stats[5]+=rally[4]+[negative[4],-7].max
   return stats
 end
 
@@ -2190,7 +2225,7 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
   return stat_skills
 end
 
-def make_stat_skill_list_2(name,event,args) # this is for blue-stat skills.  Character name is needed to know which movement Hone/Fortify to apply
+def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat skills.  Character name is needed to know which movement Hone/Fortify to apply
   args=sever(event.message.text,true).split(" ") if args.nil?
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   args=args.map{|q| q.downcase}
@@ -2206,7 +2241,128 @@ def make_stat_skill_list_2(name,event,args) # this is for blue-stat skills.  Cha
            ['Defiant Defense 1',['defiantdef1','defiantdefense1','defiantdefence1'],2],
            ['Defiant Resistance 3',['defiantres3','defiantresistance3','defiantres','defiantresistance'],2],
            ['Defiant Resistance 2',['defiantres2','defiantresistance2'],2],
-           ['Defiant Resistance 1',['defiantres1','defiantresistance1'],2]]
+           ['Defiant Resistance 1',['defiantres1','defiantresistance1'],2],
+           ['Atk Ploy 3',['attackploy','atkploy','attploy','attackploy3','atkploy3','attploy3'],2],
+           ['Atk Ploy 2',['attackploy2','atkploy2','attploy2'],2],
+           ['Atk Ploy 1',['attackploy1','atkploy1','attploy1'],3],
+           ['Spd Ploy 3',['speedploy','spdploy','speedploy3','spdploy3'],2],
+           ['Spd Ploy 2',['speedploy2','spdploy2'],2],
+           ['Spd Ploy 1',['speedploy1','spdploy1'],3],
+           ['Def Ploy 3',['defenseploy','defenceploy','defploy','defenseploy3','defenceploy3','defploy3'],2],
+           ['Def Ploy 2',['defenseploy2','defenceploy2','defploy2'],2],
+           ['Def Ploy 1',['defenseploy1','defenceploy1','defploy1'],3],
+           ['Res Ploy 3',['resistanceploy','resploy','resistanceploy3','resploy3'],2],
+           ['Res Ploy 2',['resistanceploy2','resploy2'],2],
+           ['Res Ploy 1',['resistanceploy1','resploy1'],3],
+           ['Atk/Spd Ploy 2',['attackspeedploy','atkspeedploy','attspeedploy','attackspdploy','atkspdploy','attspdploy','speedattackploy','speedatkploy','speedattploy','spdattackploy','spdatkploy','spdattploy','attackspeedploy2','atkspeedploy2','attspeedploy2','attackspdploy2','atkspdploy2','attspdploy2','speedattackploy2','speedatkploy2','speedattploy2','spdattackploy2','spdatkploy2','spdattploy2'],2],
+           ['Atk/Spd Ploy 1',['attackspeedploy1','atkspeedploy1','attspeedploy1','attackspdploy1','atkspdploy1','attspdploy1','speedattackploy1','speedatkploy1','speedattploy1','spdattackploy1','spdatkploy1','spdattploy1'],3],
+           ['Atk/Def Ploy 2',['attackdefenseploy','atkdefenseploy','attdefenseploy','attackdefenceploy','atkdefenceploy','attdefenceploy','attackdefploy','atkdefploy','attdefploy','defenseattackploy','defenseatkploy','defenseattploy','defenceattackploy','defenceatkploy','defenceattploy','defattackploy','defatkploy','defattploy','attackdefenseploy2','atkdefenseploy2','attdefenseploy2','attackdefenceploy2','atkdefenceploy2','attdefenceploy2','attackdefploy2','atkdefploy2','attdefploy2','defenseattackploy2','defenseatkploy2','defenseattploy2','defenceattackploy2','defenceatkploy2','defenceattploy2','defattackploy2','defatkploy2','defattploy2'],2],
+           ['Atk/Def Ploy 1',['attackdefenseploy1','atkdefenseploy1','attdefenseploy1','attackdefenceploy1','atkdefenceploy1','attdefenceploy1','attackdefploy1','atkdefploy1','attdefploy1','defenseattackploy1','defenseatkploy1','defenseattploy1','defenceattackploy1','defenceatkploy1','defenceattploy1','defattackploy1','defatkploy1','defattploy1'],3],
+           ['Atk/Res Ploy 2',['attackresistanceploy','atkresistanceploy','attresistanceploy','attackresploy','atkresploy','attresploy','resistanceattackploy','resistanceatkploy','resistanceattploy','resattackploy','resatkploy','resattploy','attackresistanceploy2','atkresistanceploy2','attresistanceploy2','attackresploy2','atkresploy2','attresploy2','resistanceattackploy2','resistanceatkploy2','resistanceattploy2','resattackploy2','resatkploy2','resattploy2'],2],
+           ['Atk/Res Ploy 1',['attackresistanceploy1','atkresistanceploy1','attresistanceploy1','attackresploy1','atkresploy1','attresploy1','resistanceattackploy1','resistanceatkploy1','resistanceattploy1','resattackploy1','resatkploy1','resattploy1'],3],
+           ['Spd/Def Ploy 2',['speeddefenseploy','spddefenseploy','speeddefenceploy','spddefenceploy','speeddefploy','spddefploy','defensespeedploy','defensespdploy','defencespeedploy','defencespdploy','defspeedploy','defspdploy','speeddefenseploy2','spddefenseploy2','speeddefenceploy2','spddefenceploy2','speeddefploy2','spddefploy2','defensespeedploy2','defensespdploy2','defencespeedploy2','defencespdploy2','defspeedploy2','defspdploy2'],2],
+           ['Spd/Def Ploy 1',['speeddefenseploy1','spddefenseploy1','speeddefenceploy1','spddefenceploy1','speeddefploy1','spddefploy1','defensespeedploy1','defensespdploy1','defencespeedploy1','defencespdploy1','defspeedploy1','defspdploy1'],3],
+           ['Spd/Res Ploy 2',['speedresistanceploy','spdresistanceploy','speedresploy','spdresploy','resistancespeedploy','resistancespdploy','resspeedploy','resspdploy','speedresistanceploy2','spdresistanceploy2','speedresploy2','spdresploy2','resistancespeedploy2','resistancespdploy2','resspeedploy2','resspdploy2'],2],
+           ['Spd/Res Ploy 1',['speedresistanceploy1','spdresistanceploy1','speedresploy1','spdresploy1','resistancespeedploy1','resistancespdploy1','resspeedploy1','resspdploy1'],3],
+           ['Def/Res Ploy 2',['defenseresistanceploy','defenceresistanceploy','defresistanceploy','defenseresploy','defenceresploy','defresploy','resistancedefenseploy','resistancedefenceploy','resistancedefploy','resdefenseploy','resdefenceploy','resdefploy','defenseresistanceploy2','defenceresistanceploy2','defresistanceploy2','defenseresploy2','defenceresploy2','defresploy2','resistancedefenseploy2','resistancedefenceploy2','resistancedefploy2','resdefenseploy2','resdefenceploy2','resdefploy2'],2],
+           ['Def/Res Ploy 1',['defenseresistanceploy1','defenceresistanceploy1','defresistanceploy1','defenseresploy1','defenceresploy1','defresploy1','resistancedefenseploy1','resistancedefenceploy1','resistancedefploy1','resdefenseploy1','resdefenceploy1','resdefploy1'],3],
+           ['Seal Atk 3',['sealattack','sealatk','sealatt','sealattack3','sealatk3','sealatt3'],2],
+           ['Seal Atk 2',['sealattack2','sealatk2','sealatt2'],2],
+           ['Seal Atk 1',['sealattack1','sealatk1','sealatt1'],3],
+           ['Seal Spd 3',['sealspeed','sealspd','sealspeed3','sealspd3'],2],
+           ['Seal Spd 2',['sealspeed2','sealspd2'],2],
+           ['Seal Spd 1',['sealspeed1','sealspd1'],3],
+           ['Seal Def 3',['sealdefense','sealdefence','sealdef','sealdefense3','sealdefence3','sealdef3'],2],
+           ['Seal Def 2',['sealdefense2','sealdefence2','sealdef2'],2],
+           ['Seal Def 1',['sealdefense1','sealdefence1','sealdef1'],3],
+           ['Seal Res 3',['sealresistance','sealres','sealresistance3','sealres3'],2],
+           ['Seal Res 2',['sealresistance2','sealres2'],2],
+           ['Seal Res 1',['sealresistance1','sealres1'],3],
+           ['Seal Atk/Spd 2',['sealattackspeed','sealatkspeed','sealattspeed','sealattackspd','sealatkspd','sealattspd','sealspeedattack','sealspeedatk','sealspeedatt','sealspdattack','sealspdatk','sealspdatt','sealattackspeed2','sealatkspeed2','sealattspeed2','sealattackspd2','sealatkspd2','sealattspd2','sealspeedattack2','sealspeedatk2','sealspeedatt2','sealspdattack2','sealspdatk2','sealspdatt2'],2],
+           ['Seal Atk/Spd 1',['sealattackspeed1','sealatkspeed1','sealattspeed1','sealattackspd1','sealatkspd1','sealattspd1','sealspeedattack1','sealspeedatk1','sealspeedatt1','sealspdattack1','sealspdatk1','sealspdatt1'],3],
+           ['Seal Atk/Def 2',['sealattackdefense','sealatkdefense','sealattdefense','sealattackdefence','sealatkdefence','sealattdefence','sealattackdef','sealatkdef','sealattdef','sealdefenseattack','sealdefenseatk','sealdefenseatt','sealdefenceattack','sealdefenceatk','sealdefenceatt','sealdefattack','sealdefatk','sealdefatt','sealattackdefense2','sealatkdefense2','sealattdefense2','sealattackdefence2','sealatkdefence2','sealattdefence2','sealattackdef2','sealatkdef2','sealattdef2','sealdefenseattack2','sealdefenseatk2','sealdefenseatt2','sealdefenceattack2','sealdefenceatk2','sealdefenceatt2','sealdefattack2','sealdefatk2','sealdefatt2'],2],
+           ['Seal Atk/Def 1',['sealattackdefense1','sealatkdefense1','sealattdefense1','sealattackdefence1','sealatkdefence1','sealattdefence1','sealattackdef1','sealatkdef1','sealattdef1','sealdefenseattack1','sealdefenseatk1','sealdefenseatt1','sealdefenceattack1','sealdefenceatk1','sealdefenceatt1','sealdefattack1','sealdefatk1','sealdefatt1'],3],
+           ['Seal Atk/Res 2',['sealattackresistance','sealatkresistance','sealattresistance','sealattackres','sealatkres','sealattres','sealresistanceattack','sealresistanceatk','sealresistanceatt','sealresattack','sealresatk','sealresatt','sealattackresistance2','sealatkresistance2','sealattresistance2','sealattackres2','sealatkres2','sealattres2','sealresistanceattack2','sealresistanceatk2','sealresistanceatt2','sealresattack2','sealresatk2','sealresatt2'],2],
+           ['Seal Atk/Res 1',['sealattackresistance1','sealatkresistance1','sealattresistance1','sealattackres1','sealatkres1','sealattres1','sealresistanceattack1','sealresistanceatk1','sealresistanceatt1','sealresattack1','sealresatk1','sealresatt1'],3],
+           ['Seal Spd/Def 2',['sealspeeddefense','sealspddefense','sealspeeddefence','sealspddefence','sealspeeddef','sealspddef','sealdefensespeed','sealdefensespd','sealdefencespeed','sealdefencespd','sealdefspeed','sealdefspd','sealspeeddefense2','sealspddefense2','sealspeeddefence2','sealspddefence2','sealspeeddef2','sealspddef2','sealdefensespeed2','sealdefensespd2','sealdefencespeed2','sealdefencespd2','sealdefspeed2','sealdefspd2'],2],
+           ['Seal Spd/Def 1',['sealspeeddefense1','sealspddefense1','sealspeeddefence1','sealspddefence1','sealspeeddef1','sealspddef1','sealdefensespeed1','sealdefensespd1','sealdefencespeed1','sealdefencespd1','sealdefspeed1','sealdefspd1'],3],
+           ['Seal Spd/Res 2',['sealspeedresistance','sealspdresistance','sealspeedres','sealspdres','sealresistancespeed','sealresistancespd','sealresspeed','sealresspd','sealspeedresistance2','sealspdresistance2','sealspeedres2','sealspdres2','sealresistancespeed2','sealresistancespd2','sealresspeed2','sealresspd2'],2],
+           ['Seal Spd/Res 1',['sealspeedresistance1','sealspdresistance1','sealspeedres1','sealspdres1','sealresistancespeed1','sealresistancespd1','sealresspeed1','sealresspd1'],3],
+           ['Seal Def/Res 2',['sealdefenseresistance','sealdefenceresistance','sealdefresistance','sealdefenseres','sealdefenceres','sealdefres','sealresistancedefense','sealresistancedefence','sealresistancedef','sealresdefense','sealresdefence','sealresdef','sealdefenseresistance2','sealdefenceresistance2','sealdefresistance2','sealdefenseres2','sealdefenceres2','sealdefres2','sealresistancedefense2','sealresistancedefence2','sealresistancedef2','sealresdefense2','sealresdefence2','sealresdef2'],2],
+           ['Seal Def/Res 1',['sealdefenseresistance1','sealdefenceresistance1','sealdefresistance1','sealdefenseres1','sealdefenceres1','sealdefres1','sealresistancedefense1','sealresistancedefence1','sealresistancedef1','sealresdefense1','sealresdefence1','sealresdef1'],3],
+           ['Threaten Atk 3',['threatenattack','threatenatk','threatenatt','threatenattack3','threatenatk3','threatenatt3'],2],
+           ['Threaten Atk 2',['threatenattack2','threatenatk2','threatenatt2'],2],
+           ['Threaten Atk 1',['threatenattack1','threatenatk1','threatenatt1'],3],
+           ['Threaten Spd 3',['threatenspeed','threatenspd','threatenspeed3','threatenspd3'],2],
+           ['Threaten Spd 2',['threatenspeed2','threatenspd2'],2],
+           ['Threaten Spd 1',['threatenspeed1','threatenspd1'],3],
+           ['Threaten Def 3',['threatendefense','threatendefence','threatendef','threatendefense3','threatendefence3','threatendef3'],2],
+           ['Threaten Def 2',['threatendefense2','threatendefence2','threatendef2'],2],
+           ['Threaten Def 1',['threatendefense1','threatendefence1','threatendef1'],3],
+           ['Threaten Res 3',['threatenresistance','threatenres','threatenresistance3','threatenres3'],2],
+           ['Threaten Res 2',['threatenresistance2','threatenres2'],2],
+           ['Threaten Res 1',['threatenresistance1','threatenres1'],3],
+           ['Threaten Atk/Spd 2',['threatenattackspeed','threatenatkspeed','threatenattspeed','threatenattackspd','threatenatkspd','threatenattspd','threatenspeedattack','threatenspeedatk','threatenspeedatt','threatenspdattack','threatenspdatk','threatenspdatt','threatenattackspeed2','threatenatkspeed2','threatenattspeed2','threatenattackspd2','threatenatkspd2','threatenattspd2','threatenspeedattack2','threatenspeedatk2','threatenspeedatt2','threatenspdattack2','threatenspdatk2','threatenspdatt2'],2],
+           ['Threaten Atk/Spd 1',['threatenattackspeed1','threatenatkspeed1','threatenattspeed1','threatenattackspd1','threatenatkspd1','threatenattspd1','threatenspeedattack1','threatenspeedatk1','threatenspeedatt1','threatenspdattack1','threatenspdatk1','threatenspdatt1'],3],
+           ['Threaten Atk/Def 2',['threatenattackdefense','threatenatkdefense','threatenattdefense','threatenattackdefence','threatenatkdefence','threatenattdefence','threatenattackdef','threatenatkdef','threatenattdef','threatendefenseattack','threatendefenseatk','threatendefenseatt','threatendefenceattack','threatendefenceatk','threatendefenceatt','threatendefattack','threatendefatk','threatendefatt','threatenattackdefense2','threatenatkdefense2','threatenattdefense2','threatenattackdefence2','threatenatkdefence2','threatenattdefence2','threatenattackdef2','threatenatkdef2','threatenattdef2','threatendefenseattack2','threatendefenseatk2','threatendefenseatt2','threatendefenceattack2','threatendefenceatk2','threatendefenceatt2','threatendefattack2','threatendefatk2','threatendefatt2'],2],
+           ['Threaten Atk/Def 1',['threatenattackdefense1','threatenatkdefense1','threatenattdefense1','threatenattackdefence1','threatenatkdefence1','threatenattdefence1','threatenattackdef1','threatenatkdef1','threatenattdef1','threatendefenseattack1','threatendefenseatk1','threatendefenseatt1','threatendefenceattack1','threatendefenceatk1','threatendefenceatt1','threatendefattack1','threatendefatk1','threatendefatt1'],3],
+           ['Threaten Atk/Res 2',['threatenattackresistance','threatenatkresistance','threatenattresistance','threatenattackres','threatenatkres','threatenattres','threatenresistanceattack','threatenresistanceatk','threatenresistanceatt','threatenresattack','threatenresatk','threatenresatt','threatenattackresistance2','threatenatkresistance2','threatenattresistance2','threatenattackres2','threatenatkres2','threatenattres2','threatenresistanceattack2','threatenresistanceatk2','threatenresistanceatt2','threatenresattack2','threatenresatk2','threatenresatt2'],2],
+           ['Threaten Atk/Res 1',['threatenattackresistance1','threatenatkresistance1','threatenattresistance1','threatenattackres1','threatenatkres1','threatenattres1','threatenresistanceattack1','threatenresistanceatk1','threatenresistanceatt1','threatenresattack1','threatenresatk1','threatenresatt1'],3],
+           ['Threaten Spd/Def 2',['threatenspeeddefense','threatenspddefense','threatenspeeddefence','threatenspddefence','threatenspeeddef','threatenspddef','threatendefensespeed','threatendefensespd','threatendefencespeed','threatendefencespd','threatendefspeed','threatendefspd','threatenspeeddefense2','threatenspddefense2','threatenspeeddefence2','threatenspddefence2','threatenspeeddef2','threatenspddef2','threatendefensespeed2','threatendefensespd2','threatendefencespeed2','threatendefencespd2','threatendefspeed2','threatendefspd2'],2],
+           ['Threaten Spd/Def 1',['threatenspeeddefense1','threatenspddefense1','threatenspeeddefence1','threatenspddefence1','threatenspeeddef1','threatenspddef1','threatendefensespeed1','threatendefensespd1','threatendefencespeed1','threatendefencespd1','threatendefspeed1','threatendefspd1'],3],
+           ['Threaten Spd/Res 2',['threatenspeedresistance','threatenspdresistance','threatenspeedres','threatenspdres','threatenresistancespeed','threatenresistancespd','threatenresspeed','threatenresspd','threatenspeedresistance2','threatenspdresistance2','threatenspeedres2','threatenspdres2','threatenresistancespeed2','threatenresistancespd2','threatenresspeed2','threatenresspd2'],2],
+           ['Threaten Spd/Res 1',['threatenspeedresistance1','threatenspdresistance1','threatenspeedres1','threatenspdres1','threatenresistancespeed1','threatenresistancespd1','threatenresspeed1','threatenresspd1'],3],
+           ['Threaten Def/Res 2',['threatendefenseresistance','threatendefenceresistance','threatendefresistance','threatendefenseres','threatendefenceres','threatendefres','threatenresistancedefense','threatenresistancedefence','threatenresistancedef','threatenresdefense','threatenresdefence','threatenresdef','threatendefenseresistance2','threatendefenceresistance2','threatendefresistance2','threatendefenseres2','threatendefenceres2','threatendefres2','threatenresistancedefense2','threatenresistancedefence2','threatenresistancedef2','threatenresdefense2','threatenresdefence2','threatenresdef2'],2],
+           ['Threaten Def/Res 1',['threatendefenseresistance1','threatendefenceresistance1','threatendefresistance1','threatendefenseres1','threatendefenceres1','threatendefres1','threatenresistancedefense1','threatenresistancedefence1','threatenresistancedef1','threatenresdefense1','threatenresdefence1','threatenresdef1'],3],
+           ['Chill Atk 3',['chillattack','chillatk','chillatt','chillattack3','chillatk3','chillatt3'],2],
+           ['Chill Atk 2',['chillattack2','chillatk2','chillatt2'],2],
+           ['Chill Atk 1',['chillattack1','chillatk1','chillatt1'],3],
+           ['Chill Spd 3',['chillspeed','chillspd','chillspeed3','chillspd3'],2],
+           ['Chill Spd 2',['chillspeed2','chillspd2'],2],
+           ['Chill Spd 1',['chillspeed1','chillspd1'],3],
+           ['Chill Def 3',['chilldefense','chilldefence','chilldef','chilldefense3','chilldefence3','chilldef3'],2],
+           ['Chill Def 2',['chilldefense2','chilldefence2','chilldef2'],2],
+           ['Chill Def 1',['chilldefense1','chilldefence1','chilldef1'],3],
+           ['Chill Res 3',['chillresistance','chillres','chillresistance3','chillres3'],2],
+           ['Chill Res 2',['chillresistance2','chillres2'],2],
+           ['Chill Res 1',['chillresistance1','chillres1'],3],
+           ['Chill Atk/Spd 2',['chillattackspeed','chillatkspeed','chillattspeed','chillattackspd','chillatkspd','chillattspd','chillspeedattack','chillspeedatk','chillspeedatt','chillspdattack','chillspdatk','chillspdatt','chillattackspeed2','chillatkspeed2','chillattspeed2','chillattackspd2','chillatkspd2','chillattspd2','chillspeedattack2','chillspeedatk2','chillspeedatt2','chillspdattack2','chillspdatk2','chillspdatt2'],2],
+           ['Chill Atk/Spd 1',['chillattackspeed1','chillatkspeed1','chillattspeed1','chillattackspd1','chillatkspd1','chillattspd1','chillspeedattack1','chillspeedatk1','chillspeedatt1','chillspdattack1','chillspdatk1','chillspdatt1'],3],
+           ['Chill Atk/Def 2',['chillattackdefense','chillatkdefense','chillattdefense','chillattackdefence','chillatkdefence','chillattdefence','chillattackdef','chillatkdef','chillattdef','chilldefenseattack','chilldefenseatk','chilldefenseatt','chilldefenceattack','chilldefenceatk','chilldefenceatt','chilldefattack','chilldefatk','chilldefatt','chillattackdefense2','chillatkdefense2','chillattdefense2','chillattackdefence2','chillatkdefence2','chillattdefence2','chillattackdef2','chillatkdef2','chillattdef2','chilldefenseattack2','chilldefenseatk2','chilldefenseatt2','chilldefenceattack2','chilldefenceatk2','chilldefenceatt2','chilldefattack2','chilldefatk2','chilldefatt2'],2],
+           ['Chill Atk/Def 1',['chillattackdefense1','chillatkdefense1','chillattdefense1','chillattackdefence1','chillatkdefence1','chillattdefence1','chillattackdef1','chillatkdef1','chillattdef1','chilldefenseattack1','chilldefenseatk1','chilldefenseatt1','chilldefenceattack1','chilldefenceatk1','chilldefenceatt1','chilldefattack1','chilldefatk1','chilldefatt1'],3],
+           ['Chill Atk/Res 2',['chillattackresistance','chillatkresistance','chillattresistance','chillattackres','chillatkres','chillattres','chillresistanceattack','chillresistanceatk','chillresistanceatt','chillresattack','chillresatk','chillresatt','chillattackresistance2','chillatkresistance2','chillattresistance2','chillattackres2','chillatkres2','chillattres2','chillresistanceattack2','chillresistanceatk2','chillresistanceatt2','chillresattack2','chillresatk2','chillresatt2'],2],
+           ['Chill Atk/Res 1',['chillattackresistance1','chillatkresistance1','chillattresistance1','chillattackres1','chillatkres1','chillattres1','chillresistanceattack1','chillresistanceatk1','chillresistanceatt1','chillresattack1','chillresatk1','chillresatt1'],3],
+           ['Chill Spd/Def 2',['chillspeeddefense','chillspddefense','chillspeeddefence','chillspddefence','chillspeeddef','chillspddef','chilldefensespeed','chilldefensespd','chilldefencespeed','chilldefencespd','chilldefspeed','chilldefspd','chillspeeddefense2','chillspddefense2','chillspeeddefence2','chillspddefence2','chillspeeddef2','chillspddef2','chilldefensespeed2','chilldefensespd2','chilldefencespeed2','chilldefencespd2','chilldefspeed2','chilldefspd2'],2],
+           ['Chill Spd/Def 1',['chillspeeddefense1','chillspddefense1','chillspeeddefence1','chillspddefence1','chillspeeddef1','chillspddef1','chilldefensespeed1','chilldefensespd1','chilldefencespeed1','chilldefencespd1','chilldefspeed1','chilldefspd1'],3],
+           ['Chill Spd/Res 2',['chillspeedresistance','chillspdresistance','chillspeedres','chillspdres','chillresistancespeed','chillresistancespd','chillresspeed','chillresspd','chillspeedresistance2','chillspdresistance2','chillspeedres2','chillspdres2','chillresistancespeed2','chillresistancespd2','chillresspeed2','chillresspd2'],2],
+           ['Chill Spd/Res 1',['chillspeedresistance1','chillspdresistance1','chillspeedres1','chillspdres1','chillresistancespeed1','chillresistancespd1','chillresspeed1','chillresspd1'],3],
+           ['Chill Def/Res 2',['chilldefenseresistance','chilldefenceresistance','chilldefresistance','chilldefenseres','chilldefenceres','chilldefres','chillresistancedefense','chillresistancedefence','chillresistancedef','chillresdefense','chillresdefence','chillresdef','chilldefenseresistance2','chilldefenceresistance2','chilldefresistance2','chilldefenseres2','chilldefenceres2','chilldefres2','chillresistancedefense2','chillresistancedefence2','chillresistancedef2','chillresdefense2','chillresdefence2','chillresdef2'],2],
+           ['Chill Def/Res 1',['chilldefenseresistance1','chilldefenceresistance1','chilldefresistance1','chilldefenseres1','chilldefenceres1','chilldefres1','chillresistancedefense1','chillresistancedefence1','chillresistancedef1','chillresdefense1','chillresdefence1','chillresdef1'],3],
+           ['Chilling Seal',['chillseal','chillingseal'],2],
+           ['Atk Smoke 3',['attacksmoke','atksmoke','attsmoke','attacksmoke3','atksmoke3','attsmoke3'],2],
+           ['Atk Smoke 2',['attacksmoke2','atksmoke2','attsmoke2'],2],
+           ['Atk Smoke 1',['attacksmoke1','atksmoke1','attsmoke1'],3],
+           ['Spd Smoke 3',['speedsmoke','spdsmoke','speedsmoke3','spdsmoke3'],2],
+           ['Spd Smoke 2',['speedsmoke2','spdsmoke2'],2],
+           ['Spd Smoke 1',['speedsmoke1','spdsmoke1'],3],
+           ['Def Smoke 3',['defensesmoke','defencesmoke','defsmoke','defensesmoke3','defencesmoke3','defsmoke3'],2],
+           ['Def Smoke 2',['defensesmoke2','defencesmoke2','defsmoke2'],2],
+           ['Def Smoke 1',['defensesmoke1','defencesmoke1','defsmoke1'],3],
+           ['Res Smoke 3',['resistancesmoke','ressmoke','resistancesmoke3','ressmoke3'],2],
+           ['Res Smoke 2',['resistancesmoke2','ressmoke2'],2],
+           ['Res Smoke 1',['resistancesmoke1','ressmoke1'],3],
+           ['Atk/Spd Smoke 2',['attackspeedsmoke','atkspeedsmoke','attspeedsmoke','attackspdsmoke','atkspdsmoke','attspdsmoke','speedattacksmoke','speedatksmoke','speedattsmoke','spdattacksmoke','spdatksmoke','spdattsmoke','attackspeedsmoke2','atkspeedsmoke2','attspeedsmoke2','attackspdsmoke2','atkspdsmoke2','attspdsmoke2','speedattacksmoke2','speedatksmoke2','speedattsmoke2','spdattacksmoke2','spdatksmoke2','spdattsmoke2'],2],
+           ['Atk/Spd Smoke 1',['attackspeedsmoke1','atkspeedsmoke1','attspeedsmoke1','attackspdsmoke1','atkspdsmoke1','attspdsmoke1','speedattacksmoke1','speedatksmoke1','speedattsmoke1','spdattacksmoke1','spdatksmoke1','spdattsmoke1'],3],
+           ['Atk/Def Smoke 2',['attackdefensesmoke','atkdefensesmoke','attdefensesmoke','attackdefencesmoke','atkdefencesmoke','attdefencesmoke','attackdefsmoke','atkdefsmoke','attdefsmoke','defenseattacksmoke','defenseatksmoke','defenseattsmoke','defenceattacksmoke','defenceatksmoke','defenceattsmoke','defattacksmoke','defatksmoke','defattsmoke','attackdefensesmoke2','atkdefensesmoke2','attdefensesmoke2','attackdefencesmoke2','atkdefencesmoke2','attdefencesmoke2','attackdefsmoke2','atkdefsmoke2','attdefsmoke2','defenseattacksmoke2','defenseatksmoke2','defenseattsmoke2','defenceattacksmoke2','defenceatksmoke2','defenceattsmoke2','defattacksmoke2','defatksmoke2','defattsmoke2'],2],
+           ['Atk/Def Smoke 1',['attackdefensesmoke1','atkdefensesmoke1','attdefensesmoke1','attackdefencesmoke1','atkdefencesmoke1','attdefencesmoke1','attackdefsmoke1','atkdefsmoke1','attdefsmoke1','defenseattacksmoke1','defenseatksmoke1','defenseattsmoke1','defenceattacksmoke1','defenceatksmoke1','defenceattsmoke1','defattacksmoke1','defatksmoke1','defattsmoke1'],3],
+           ['Atk/Res Smoke 2',['attackresistancesmoke','atkresistancesmoke','attresistancesmoke','attackressmoke','atkressmoke','attressmoke','resistanceattacksmoke','resistanceatksmoke','resistanceattsmoke','resattacksmoke','resatksmoke','resattsmoke','attackresistancesmoke2','atkresistancesmoke2','attresistancesmoke2','attackressmoke2','atkressmoke2','attressmoke2','resistanceattacksmoke2','resistanceatksmoke2','resistanceattsmoke2','resattacksmoke2','resatksmoke2','resattsmoke2'],2],
+           ['Atk/Res Smoke 1',['attackresistancesmoke1','atkresistancesmoke1','attresistancesmoke1','attackressmoke1','atkressmoke1','attressmoke1','resistanceattacksmoke1','resistanceatksmoke1','resistanceattsmoke1','resattacksmoke1','resatksmoke1','resattsmoke1'],3],
+           ['Spd/Def Smoke 2',['speeddefensesmoke','spddefensesmoke','speeddefencesmoke','spddefencesmoke','speeddefsmoke','spddefsmoke','defensespeedsmoke','defensespdsmoke','defencespeedsmoke','defencespdsmoke','defspeedsmoke','defspdsmoke','speeddefensesmoke2','spddefensesmoke2','speeddefencesmoke2','spddefencesmoke2','speeddefsmoke2','spddefsmoke2','defensespeedsmoke2','defensespdsmoke2','defencespeedsmoke2','defencespdsmoke2','defspeedsmoke2','defspdsmoke2'],2],
+           ['Spd/Def Smoke 1',['speeddefensesmoke1','spddefensesmoke1','speeddefencesmoke1','spddefencesmoke1','speeddefsmoke1','spddefsmoke1','defensespeedsmoke1','defensespdsmoke1','defencespeedsmoke1','defencespdsmoke1','defspeedsmoke1','defspdsmoke1'],3],
+           ['Spd/Res Smoke 2',['speedresistancesmoke','spdresistancesmoke','speedressmoke','spdressmoke','resistancespeedsmoke','resistancespdsmoke','resspeedsmoke','resspdsmoke','speedresistancesmoke2','spdresistancesmoke2','speedressmoke2','spdressmoke2','resistancespeedsmoke2','resistancespdsmoke2','resspeedsmoke2','resspdsmoke2'],2],
+           ['Spd/Res Smoke 1',['speedresistancesmoke1','spdresistancesmoke1','speedressmoke1','spdressmoke1','resistancespeedsmoke1','resistancespdsmoke1','resspeedsmoke1','resspdsmoke1'],3],
+           ['Def/Res Smoke 2',['defenseresistancesmoke','defenceresistancesmoke','defresistancesmoke','defenseressmoke','defenceressmoke','defressmoke','resistancedefensesmoke','resistancedefencesmoke','resistancedefsmoke','resdefensesmoke','resdefencesmoke','resdefsmoke','defenseresistancesmoke2','defenceresistancesmoke2','defresistancesmoke2','defenseressmoke2','defenceressmoke2','defressmoke2','resistancedefensesmoke2','resistancedefencesmoke2','resistancedefsmoke2','resdefensesmoke2','resdefencesmoke2','resdefsmoke2'],2],
+           ['Def/Res Smoke 1',['defenseresistancesmoke1','defenceresistancesmoke1','defresistancesmoke1','defenseressmoke1','defenceressmoke1','defressmoke1','resistancedefensesmoke1','resistancedefencesmoke1','resistancedefsmoke1','resdefensesmoke1','resdefencesmoke1','resdefsmoke1'],3]]
   for i in 0...lookout.length
     for i2 in 0...lookout[i][2]
       stat_skills_2.push(lookout[i][0]) if count_in(args,lookout[i][1])>i2
@@ -2491,7 +2647,7 @@ def pick_thumbnail(event,j,bot)
   return "https://cdn.discordapp.com/emojis/420339780421812227.png" if d[0]=="Amelia" && (event.message.text.downcase.include?('face') || rand(1000)==0)
   return "https://cdn.discordapp.com/emojis/420339781524783114.png" if d[0]=="Reinhardt(Bonds)" && (event.message.text.downcase.include?('grin') || rand(100)==0)
   return "https://cdn.discordapp.com/emojis/420360385862828052.png" if d[0]=="Sakura" && event.message.text.downcase.include?("mathoo's")
-  return "http://arcticsilverfox.com/feh_sim/heroes/#{url_name(j)}.png"
+  return "https://andu2.github.io/FEH-Mass-Simulator/heroes/#{url_name(j)}.png"
 end
 
 def unit_color(event,j,mode=0,m=false,chain=false)
@@ -2516,21 +2672,47 @@ def unit_color(event,j,mode=0,m=false,chain=false)
   return xcolor
 end
 
+def colored_healers?(event)
+  data_load()
+  g=get_markers(event)
+  return @data.reject{|q| !has_any?(g, q[22]) || q[1][1]!='Healer'}.map{|q| q[1][0]}.uniq.length>1
+end
+
+def colored_daggers?(event)
+  data_load()
+  g=get_markers(event)
+  return @data.reject{|q| !has_any?(g, q[22]) || q[1][1]!='Dagger'}.map{|q| q[1][0]}.uniq.length>1
+end
+
+def colorless_blades?(event)
+  data_load()
+  g=get_markers(event)
+  return @data.reject{|q| !has_any?(g, q[22]) || q[1][1]!='Blade'}.map{|q| q[1][0]}.uniq.length>3
+end
+
+def colorless_tomes?(event)
+  data_load()
+  g=get_markers(event)
+  return @data.reject{|q| !has_any?(g, q[22]) || q[1][1]!='Tome'}.map{|q| q[1][0]}.uniq.length>3
+end
+
 def unit_clss(event,j,name=nil)
   w=@data[j][1][1]
   w='Sword' if @data[j][1][0]=='Red' && w=='Blade'
   w='Lance' if @data[j][1][0]=='Blue' && w=='Blade'
   w='Axe' if @data[j][1][0]=='Green' && w=='Blade'
+  w='Rod' if @data[j][1][0]=='Colorless' && w=='Blade'
   if @data[j][1][1]!=w
-    w="*#{w}* (#{@data[j][1][0]} #{@data[j][1][1].gsub('Blade','Physical')})"
-  elsif ['Tome','Dragon','Bow','Dagger'].include?(w)
+    w="*#{w}* (#{@data[j][1][0]} #{@data[j][1][1]})"
+  elsif ['Tome', 'Dragon', 'Bow'].include?(w) || (w=='Healer' && colored_healers?(event)) || (w=='Dagger' && colored_daggers?(event))
     w="*#{@data[j][1][0]} #{@data[j][1][1]}*"
   elsif @data[j][1][0]=='Gold'
     w="*#{w}*"
   else
     w="*#{w}* (#{@data[j][1][0]})"
   end
-  w="*#{@data[j][1][2]} Mage* (#{@data[j][1][0]} Tome)" if w[w.length-6,6]==" Tome*"
+  w="*#{@data[j][1][2]} Mage* (#{@data[j][1][0]} Tome)" if w[w.length-6,6]==" Tome*" && !@data[j][1][2].nil?
+  w="*#{@data[j][1][0]} Mage* (#{@data[j][1][0]} Tome)" if w[w.length-6,6]==" Tome*" && @data[j][1][2].nil?
   w="*>Unknown<*" if @data[j][1].nil? || @data[j][1][0].nil? || @data[j][1][0].length<=0
   w="*Mage* (Tome)" if name=='Robin (Shared stats)'
   m=@data[j][3]
@@ -2732,7 +2914,16 @@ def disp_stats(bot,name,weapon,event,ignore=false)
     end
     ftr="Please note that the #{atk} stat displayed here does not include weapon might.  The Attack stat in-game does."
     ftr=nil if weapon != '-'
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:star:322905655730241547>"*5}#{"**+#{merges}**" if merges>0}\n*Neutral Nature only so far*#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n#{unit_clss(event,j)}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}",xcolor,ftr,pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","HP: unknown\n#{atk}: unknown\nSpeed: unknown\nDefense: unknown\nResistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"]],1)
+    stat_buffers=[]
+    stat_nerfers=[]
+    for i in 0...stat_skills_2.length
+      if stat_skills_2[i].include?(" Ploy ") || stat_skills_2[i].include?("Seal ") || stat_skills_2[i].include?("Threaten ") || stat_skills_2[i].include?("Chill ") || stat_skills_2[i].include?(" Smoke ")
+        stat_nerfers.push(stat_skills_2[i])
+      else
+        stat_buffers.push(stat_skills_2[i])
+      end
+    end
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:star:322905655730241547>"*5}#{"**+#{merges}**" if merges>0}\n*Neutral Nature only so far*#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n#{unit_clss(event,j)}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}",xcolor,ftr,pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","HP: unknown\n#{atk}: unknown\nSpeed: unknown\nDefense: unknown\nResistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"]],1)
     return nil
   end
   data_load()
@@ -2838,8 +3029,17 @@ def disp_stats(bot,name,weapon,event,ignore=false)
   end
   j=find_unit(name,event)
   img=pick_thumbnail(event,j,bot)
+  stat_buffers=[]
+  stat_nerfers=[]
+  for i in 0...stat_skills_2.length
+    if stat_skills_2[i].include?(" Ploy ") || stat_skills_2[i].include?("Seal ") || stat_skills_2[i].include?("Threaten ") || stat_skills_2[i].include?("Chill ") || stat_skills_2[i].include?(" Smoke ")
+      stat_nerfers.push(stat_skills_2[i])
+    else
+      stat_buffers.push(stat_skills_2[i])
+    end
+  end
   img="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png" if u40[0]=="Robin (Shared stats)"
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}",xcolor,ftr,img,flds,1)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}",xcolor,ftr,img,flds,1)
   return nil
 end
 
@@ -3046,7 +3246,7 @@ def disp_skill(name,event,ignore=false)
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
   else
     xcolor=0xFDDC7E
-    xpic="http://arcticsilverfox.com/feh_sim/skills/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','')}.png"
+    xpic="https://andu2.github.io/FEH-Mass-Simulator/skills/#{skill[0].gsub(' ','_').gsub('/','_')}.png"
     sklslt=skill[4].split(', ')
     if !skill[20].nil? && skill[20]!='' && skill[4].include?("Passive(W)")
       eff=skill[20].split(', ')
@@ -3599,7 +3799,7 @@ def url_name(j)
   if !@data[j][14].nil?
     return @data[j][14] unless @data[j][14]==''
   end
-  return @data[j][0]
+  return @data[j][0].gsub("(M)","%20(M)").gsub("(F)","%20(F)")
 end
 
 def skill_include?(table, skill)
@@ -3654,7 +3854,7 @@ def sever(str,sklz=false)
         k[i-1]="Speed" if ["spd","speed"].include?(k[i-1].downcase)
         k[i-1]="Defense" if ["defense","def","defence"].include?(k[i-1].downcase)
         k[i-1]="Resistance" if ["res","resistance"].include?(k[i-1].downcase)
-        if ["HP","Attack","Speed","Defense","Resistance"].include?(k[i-1])
+        if ["HP","Attack","Speed","Defense","Resistance"].include?(k[i-1]) || ['attackspeed','atkspeed','attspeed','attackspd','atkspd','attspd','speedattack','speedatk','speedatt','spdattack','spdatk','spdatt','attackdefense','atkdefense','attdefense','attackdefence','atkdefence','attdefence','attackdef','atkdef','attdef','defenseattack','defenseatk','defenseatt','defenceattack','defenceatk','defenceatt','defattack','defatk','defatt','attackresistance','atkresistance','attresistance','attackres','atkres','attres','resistanceattack','resistanceatk','resistanceatt','resattack','resatk','resatt','speeddefense','spddefense','speeddefence','spddefence','speeddef','spddef','defensespeed','defensespd','defencespeed','defencespd','defspeed','defspd','speedresistance','spdresistance','speedres','spdres','resistancespeed','resistancespd','resspeed','resspd','defenseresistance','defenceresistance','defresistance','defenseres','defenceres','defres','resistancedefense','resistancedefence','resistancedef','resdefense','resdefence','resdef'].include?(k[i-1].downcase)
           k[i-1]="#{k[i-1]}#{k[i]}"
           k[i]=nil
         end
@@ -3801,7 +4001,7 @@ def split_list(event,list,headers,mode=0,x=true)
     mips=list[i][1][2] if mode==-4
     mips=list[i][2][0] if mode==-5
     mips=list[i][2][1] if mode==-6
-    mips=weapon_clss(list[i][1]) if mode==-7
+    mips=weapon_clss(list[i][1],event) if mode==-7
     for j in 0...headers.length
       if mips==headers[j] || mips=="#{headers[j]} Users Only" || mips=="#{headers[j]}s Only" || mips=="#{headers[j]} Only"
         spli[j].push(list[i])
@@ -3866,7 +4066,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     weapons.push('Dragon') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
     weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase)
     weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
-    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves'].include?(args[i].downcase)
+    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves'].include?(args[i].downcase)
     weapons.push('Healer') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
     movement.push('Flier') if ['flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi'].include?(args[i].downcase)
     movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies'].include?(args[i].downcase)
@@ -3893,6 +4093,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     games.push('FE14C') if ['fe14','if','feif','fef','fates','fe14c','conquest'].include?(args[i].downcase)
     games.push('FE14R') if ['fe14','if','feif','fef','fates','fe14r','revelation'].include?(args[i].downcase)
     games.push('FE14g') if ['fe14g','gates'].include?(args[i].downcase)
+    games.push('FE15') if ['fe15','sov'].include?(args[i].downcase)
     games.push('FEH') if ['feh','heroes'].include?(args[i].downcase)
     games.push('FEW') if ['few','warriors'].include?(args[i].downcase)
     games.push('SSBM') if ['ssbm','melee'].include?(args[i].downcase)
@@ -3912,6 +4113,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
       units.push("Olwen(Bonds)") if args[i].downcase=="olwen"
       units.push("Olwen(World)") if args[i].downcase=="olwen"
       units.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(F)") if ['robin','corrin','morgan'].include?(args[i].downcase)
+      units.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(M)") if ['robin','corrin','morgan'].include?(args[i].downcase)
     end
   end
   colors=colors.uniq
@@ -3992,39 +4194,27 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   end
   matches5=matches5.sort {|a,b| a[0].downcase <=> b[0].downcase}
   if mode<2
-    if (weapons==['Blade'] && colors.length<=0 && color_weapons.length<=0) || color_weapons.length==3
+    if (weapons==['Blade'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.map{|q| q[1]}.reject{|q| q=='Blade'}.length<=0 && weapons.length<=0 && colors.length<=0)
       # Blades are the only type requested but no other restrictions are given
-      matches5=split_list(event,matches5,['Red','Blue','Green'],-2)
-    elsif weapons==['Tome'] && colors.length<=0 && color_weapons.length<=0
-      # Tomes are the only type requested but no other restrictions are given
-      matches5=split_list(event,matches5,['Red','Blue','Green'],-2)
-    elsif weapons==['Dragon'] && colors.length<=0 && color_weapons.length<=0
+      matches5=split_list(event,matches5,['Red','Blue','Green','Colorless'],-2)
+    elsif (weapons==['Tome'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.map{|q| q[1]}.reject{|q| q=='Tome'}.length<=0 && weapons.length<=0 && colors.length<=0)
       # Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Red','Blue','Green','Colorless'],-2)
-    elsif weapons==['Bow'] && colors.length<=0 && color_weapons.length<=0
-      # Tomes are the only type requested but no other restrictions are given
+    elsif weapons.length==1 && ['Dragon','Bow','Dagger','Healer'].include?(weapons[0]) && colors.length<=0 && color_weapons.length<=0
+      # Only one weapon type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Red','Blue','Green','Colorless'],-2)
-    elsif weapons==['Dagger'] && colors.length<=0 && color_weapons.length<=0
-      # Tomes are the only type requested but no other restrictions are given
-      matches5=split_list(event,matches5,['Red','Blue','Green','Colorless'],-2)
-    elsif colors==['Red'] && weapons.length<=0 && color_weapons.length<=0
-      # Tomes are the only type requested but no other restrictions are given
-      matches5=split_list(event,matches5,['Blade','Tome','Dragon','Bow','Dagger'],-3)
-    elsif colors==['Blue'] && weapons.length<=0 && color_weapons.length<=0
-      # Tomes are the only type requested but no other restrictions are given
-      matches5=split_list(event,matches5,['Blade','Tome','Dragon','Bow','Dagger'],-3)
-    elsif colors==['Green'] && weapons.length<=0 && color_weapons.length<=0
-      # Tomes are the only type requested but no other restrictions are given
-      matches5=split_list(event,matches5,['Blade','Tome','Dragon','Bow','Dagger'],-3)
-    elsif colors==['Colorless'] && weapons.length<=0 && color_weapons.length<=0
-      # Tomes are the only type requested but no other restrictions are given
-      matches5=split_list(event,matches5,['Healer','Dragon','Bow','Dagger'],-3)
+    elsif colors.length==1 && weapons.length<=0 && color_weapons.length<=0
+      # Only one color requested but no other restrictions are given
+      matches5=split_list(event,matches5,['Blade','Tome','Dragon','Bow','Dagger','Healer'],-3)
     elsif weapons==['Tome'] && colors==['Red'] && color_weapons.length<=0
-      # Tomes are the only type requested but no other restrictions are given
+      # Red Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Fire','Dark'],-4)
     elsif weapons==['Tome'] && colors==['Blue'] && color_weapons.length<=0
-      # Tomes are the only type requested but no other restrictions are given
+      # Blue Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Thunder','Light'],-4)
+    elsif weapons==['Tome'] && colors==['Green'] && color_weapons.length<=0
+      # Blue Tomes are the only type requested but no other restrictions are given
+      matches5=split_list(event,matches5,['Wind'],-4)
     end
   end
   if matches5.length==@data.reject{|q| find_unit(q[0],event)<0}.compact.length && !(args.nil? || args.length.zero?) && @shardizard != 4 && !event.server.nil? && event.channel.id != 283821884800499714 && mode != 3
@@ -4112,7 +4302,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     weapons.push('Tome') if ['tome','mage','magic','spell','tomes','mages','spells'].include?(args[i].downcase)
     weapons.push('Breath') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
     weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
-    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves'].include?(args[i].downcase)
+    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves'].include?(args[i].downcase)
     weapons.push('Staff') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
     weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase)
     assists.push('Health') if ['health','hp'].include?(args[i].downcase)
@@ -4342,32 +4532,32 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   if skill_types.length<=0 && weapons==['Staff'] && assists==['Staff'] && specials==['Staff']
     # Staff skills are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Weapons','Assists','Specials','Passives'],4)
-  elsif (weapons==['Blade'] && colors.length<=0 && color_weapons.length<=0) || color_weapons.length==3
+  elsif (weapons==['Blade'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.map{|q| q[1]}.reject{|q| q=='Blade'}.length<=0 && weapons.length<=0 && colors.length<=0)
     # Blades are the only type requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Sword','Lance','Axe'],5)
-  elsif weapons==['Tome'] && colors.length<=0 && color_weapons.length<=0
+    matches4=split_list(event,matches4,['Sword','Lance','Axe','Rod'],5)
+  elsif (weapons==['Tome'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.map{|q| q[1]}.reject{|q| q=='Tome'}.length<=0 && weapons.length<=0 && colors.length<=0)
     # Tomes are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Red Tome','Blue Tome','Green Tome'],5)
   elsif colors==['Red'] && weapons.length<=0 && color_weapons.length<=0
-    # Tomes are the only type requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Sword','Red Tome','Dragon','Bow','Dagger'],5)
+    # Red is the only color requested but no other restrictions are given
+    matches4=split_list(event,matches4,['Sword','Red Tome','Dragon','Bow','Dagger','Staff'],5)
   elsif colors==['Blue'] && weapons.length<=0 && color_weapons.length<=0
-    # Tomes are the only type requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Lance','Blue Tome','Dragon','Bow','Dagger'],5)
+    # Blue is the only color requested but no other restrictions are given
+    matches4=split_list(event,matches4,['Lance','Blue Tome','Dragon','Bow','Dagger','Staff'],5)
   elsif colors==['Green'] && weapons.length<=0 && color_weapons.length<=0
-    # Tomes are the only type requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Axe','Green Tome','Dragon','Bow','Dagger'],5)
+    # Green is the only color requested but no other restrictions are given
+    matches4=split_list(event,matches4,['Axe','Green Tome','Dragon','Bow','Dagger','Staff'],5)
   elsif colors==['Colorless'] && weapons.length<=0 && color_weapons.length<=0
-    # Tomes are the only type requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Staff','Dragon','Bow','Dagger'],5)
+    # Colorless is the only color requested but no other restrictions are given
+    matches4=split_list(event,matches4,['Rod','Colorless Tome','Dragon','Bow','Dagger','Staff'],5)
   elsif weapons==['Tome'] && colors==['Red'] && color_weapons.length<=0
-    # Tomes are the only type requested but no other restrictions are given
+    # Red Tomes are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Fire',"Rau\u00F0r",'Flux'],-1)
   elsif weapons==['Tome'] && colors==['Blue'] && color_weapons.length<=0
-    # Tomes are the only type requested but no other restrictions are given
+    # Blue Tomes are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Thunder',"Bl\u00E1r",'Light'],-1)
   elsif weapons==['Tome'] && colors==['Green'] && color_weapons.length<=0
-    # Tomes are the only type requested but no other restrictions are given
+    # Green Tomes are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Wind',"Gronn"],-1)
   end
   data_load()
@@ -4447,38 +4637,43 @@ def display_units(event, mode)
         end
       end
       for i in 0...p1.length
+        wpn1=p1[i].map{|q| @data[find_unit(q,event,false,true)][1]}
         h="."
         # blade type
-        h="Swords" if p1[i].include?("Alfonse") || @data[find_unit(p1[i][0],event,false,true)][1]==["Red", "Blade"]
-        h="Lances" if p1[i].include?("Sharena") || @data[find_unit(p1[i][0],event,false,true)][1]==["Blue", "Blade"]
-        h="Axes" if p1[i].include?("Anna") || @data[find_unit(p1[i][0],event,false,true)][1]==["Green", "Blade"]
+        h="Swords" if p1[i].include?("Alfonse") || wpn1[0]==["Red", "Blade"]
+        h="Lances" if p1[i].include?("Sharena") || wpn1[0]==["Blue", "Blade"]
+        h="Axes" if p1[i].include?("Anna") || wpn1[0]==["Green", "Blade"]
+        h="Rods" if wpn1[0]==["Colorless", "Blade"]
         # Magic types
-        h="Fire Mages" if p1[i].include?("Lilina")
-        h="Dark Mages" if p1[i].include?("Raigh")
-        h="Red Mages" if p1[i].include?("Lilina") && p1[i].include?("Raigh")
-        h="Thunder Mages" if p1[i].include?("Odin")
-        h="Light Mages" if p1[i].include?("Micaiah")
-        h="Blue Mages" if p1[i].include?("Odin") && p1[i].include?("Micaiah")
+        h="Fire Mages" if p1[i].include?("Lilina") || wpn1[0]==["Red", "Tome", "Fire"]
+        h="Dark Mages" if p1[i].include?("Raigh") || wpn1[0]==["Red", "Tome", "Dark"]
+        h="Red Mages" if (p1[i].include?("Lilina") && p1[i].include?("Raigh")) || (wpn1.include?(["Red", "Tome", "Fire"]) && wpn1.include?(["Red", "Tome", "Dark"]))
+        h="Thunder Mages" if p1[i].include?("Odin") || wpn1[0]==["Red", "Tome", "Thunder"]
+        h="Light Mages" if p1[i].include?("Micaiah") || wpn1[0]==["Red", "Tome", "Light"]
+        h="Blue Mages" if (p1[i].include?("Odin") && p1[i].include?("Micaiah")) || (wpn1.include?(["Blue", "Tome", "Thunder"]) && wpn1.include?(["Blue", "Tome", "Light"]))
         h="Green Mages" if p1[i].include?("Cecilia")
         # Dragon colors
-        h="Red Dragons" if p1[i].include?("Tiki(Young)") || @data[find_unit(p1[i][0],event,false,true)][1]==["Red", "Dragon"]
-        h="Blue Dragons" if p1[i].include?("Nowi") || @data[find_unit(p1[i][0],event,false,true)][1]==["Blue", "Dragon"]
-        h="Green Dragons" if p1[i].include?("Fae") || @data[find_unit(p1[i][0],event,false,true)][1]==["Green", "Dragon"]
-        h="Colorless Dragons" if p1[i].include?("Robin(F)(Fallen)") || @data[find_unit(p1[i][0],event,false,true)][1]==["Colorless", "Dragon"]
+        h="Red Dragons" if p1[i].include?("Tiki(Young)") || wpn1[0]==["Red", "Dragon"]
+        h="Blue Dragons" if p1[i].include?("Nowi") || wpn1[0]==["Blue", "Dragon"]
+        h="Green Dragons" if p1[i].include?("Fae") || wpn1[0]==["Green", "Dragon"]
+        h="Colorless Dragons" if p1[i].include?("Robin(F)(Fallen)") || wpn1[0]==["Colorless", "Dragon"]
         # archer colors
-        h="Red Archers" if @data[find_unit(p1[i][0],event,false,true)][1]==["Red", "Bow"]
-        h="Blue Archers" if @data[find_unit(p1[i][0],event,false,true)][1]==["Blue", "Bow"]
-        h="Green Archers" if @data[find_unit(p1[i][0],event,false,true)][1]==["Green", "Bow"]
-        h="Colorless Archers" if p1[i].include?("Takumi") || @data[find_unit(p1[i][0],event,false,true)][1]==["Colorless", "Bow"]
+        h="Red Archers" if wpn1[0]==["Red", "Bow"]
+        h="Blue Archers" if wpn1[0]==["Blue", "Bow"]
+        h="Green Archers" if wpn1[0]==["Green", "Bow"]
+        h="Colorless Archers" if p1[i].include?("Takumi") || wpn1[0]==["Colorless", "Bow"]
         # dagger colors
-        h="Red Thieves" if @data[find_unit(p1[i][0],event,false,true)][1]==["Red", "Dagger"]
-        h="Blue Thieves" if @data[find_unit(p1[i][0],event,false,true)][1]==["Blue", "Dagger"]
-        h="Green Thieves" if @data[find_unit(p1[i][0],event,false,true)][1]==["Green", "Dagger"]
-        h="Colorless Thieves" if p1[i].include?("Matthew") || @data[find_unit(p1[i][0],event,false,true)][1]==["Colorless", "Dagger"]
-        # Colorless unit types
-        h="Healers" if p1[i].include?("Sakura") || @data[find_unit(p1[i][0],event,false,true)][1][1]=="Healer"
-        if h=="." && @data[find_unit(p1[i][0],event,false,true)][1][1]=="Tome"
-          h=@data[find_unit(p1[i][0],event,false,true)][1][2]
+        h="Red Thieves" if wpn1[0]==["Red", "Dagger"]
+        h="Blue Thieves" if wpn1[0]==["Blue", "Dagger"]
+        h="Green Thieves" if wpn1[0]==["Green", "Dagger"]
+        h="#{"Colorless " if colored_daggers?(event)}Thieves" if p1[i].include?("Matthew") || wpn1[0]==["Colorless", "Dagger"]
+        # healer colors
+        h="Red Healers" if wpn1[0]==["Red", "Healer"]
+        h="Blue Healers" if wpn1[0]==["Blue", "Healer"]
+        h="Green Healers" if wpn1[0]==["Green", "Healer"]
+        h="#{"Colorless " if colored_healers?(event)}Healers" if p1[i].include?("Sakura") || wpn1[0]==["Colorless", "Healer"]
+        if h=="." && wpn1[0]=="Tome"
+          h=wpn1[0][2]
           for l in 0...p1[i].length
             h=@data[find_unit(p1[i][l],event,false,true)][1][0] if h != @data[find_unit(p1[i][l],event,false,true)][1][2]
           end
@@ -5077,12 +5272,14 @@ def detect_dual_unit_alias(str1,str2,robinmode=0)
   return nil
 end
 
-def weapon_clss(arr,mode=0)
+def weapon_clss(arr,event,mode=0)
   x="#{arr[0]} #{arr[1]}"
-  return 'Healer' if x=='Colorless Healer'
+  return 'Healer' if x=='Colorless Healer' && !colored_healers?(event)
+  return 'Dagger' if x=='Colorless Dagger' && !colored_daggers?(event)
   return 'Sword' if x=='Red Blade'
   return 'Lance' if x=='Blue Blade'
   return 'Axe' if x=='Green Blade'
+  return 'Rod' if x=='Colorless Blade'
   return x if arr[1]=='Tome'
   return arr[1] if mode==1
   return x
@@ -5253,7 +5450,7 @@ def weapon_legality(event,name,weapon,refinement,recursion=false)
   w2="#{weapon}"
   w2="#{weapon} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
   return "~~#{w2}~~" if w[6]!='-' && !w[6].split(', ').include?(u[0]) # prf weapons are illegal on anyone but their holders
-  u2=weapon_clss(u[1])
+  u2=weapon_clss(u[1],event)
   u2='Bow' if u2.include?('Bow')
   u2='Dagger' if u2.include?('Dagger')
   u2="#{u2.gsub('Healer','Staff')} Users Only"
@@ -5817,7 +6014,16 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   x.push(["Misc.","Defense + Resistance = #{rdr}#{"\n\n#{u40[0]} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0]}:\n#{rs}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless @data[j][1][1]=='Healer'}"])
   pic=pick_thumbnail(event,j,bot)
   pic="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png" if u40[0]=="Robin (Shared stats)"
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,'"Frostbite" is weapons like Felicia\'s Plate.  "Photon" is weapons like Light Brand.',pic,x)
+  stat_buffers=[]
+  stat_nerfers=[]
+  for i in 0...stat_skills_2.length
+    if stat_skills_2[i].include?(" Ploy ") || stat_skills_2[i].include?("Seal ") || stat_skills_2[i].include?("Threaten ") || stat_skills_2[i].include?("Chill ") || stat_skills_2[i].include?(" Smoke ")
+      stat_nerfers.push(stat_skills_2[i])
+    else
+      stat_buffers.push(stat_skills_2[i])
+    end
+  end
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,'"Frostbite" is weapons like Felicia\'s Plate.  "Photon" is weapons like Light Brand.',pic,x)
 end
 
 def unit_study(event,name,bot,weapon=nil)
@@ -6197,12 +6403,21 @@ def heal_study(event,name,bot,weapon=nil)
   staves.push("~~How much Rehabilitate(+) heals is based on how much damage the target has taken.~~\n~~If they are above 50% HP, the lower end of the range is how much is healed.~~")
   pic=pick_thumbnail(event,j,bot)
   pic="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png" if u40[0]=="Robin (Shared stats)"
-  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}"
+  stat_buffers=[]
+  stat_nerfers=[]
+  for i in 0...stat_skills_2.length
+    if stat_skills_2[i].include?(" Ploy ") || stat_skills_2[i].include?("Seal ") || stat_skills_2[i].include?("Threaten ") || stat_skills_2[i].include?("Chill ") || stat_skills_2[i].include?(" Smoke ")
+      stat_nerfers.push(stat_skills_2[i])
+    else
+      stat_buffers.push(stat_skills_2[i])
+    end
+  end
+  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.join("\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}"
     event.respond staves.join("\n")
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
   end
 end
 
@@ -6502,16 +6717,25 @@ def proc_study(event,name,bot,weapon=nil)
   staves[7].push("Vengeance - Up to #{d}, cooldown of #{c}")
   pic=pick_thumbnail(event,j,bot)
   pic="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png" if u40[0]=="Robin (Shared stats)"
-  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+  stat_buffers=[]
+  stat_nerfers=[]
+  for i in 0...stat_skills_2.length
+    if stat_skills_2[i].include?(" Ploy ") || stat_skills_2[i].include?("Seal ") || stat_skills_2[i].include?("Threaten ") || stat_skills_2[i].include?("Chill ") || stat_skills_2[i].include?(" Smoke ")
+      stat_nerfers.push(stat_skills_2[i])
+    else
+      stat_buffers.push(stat_skills_2[i])
+    end
+  end
+  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.map{|q| q.join("\n")}.join("\n\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
     s=""
     for i in 0...staves.length
       s=extend_message(s,staves[i].join("\n"),event,2)
     end
     event.respond s
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,[["Star",staves[0].join("\n")],["Moon",staves[1].join("\n")],["Sun",staves[2].join("\n")],["Eclipse",staves[3].join("\n")],["Fire",staves[4].join("\n")],["Ice",staves[5].join("\n")],["Dragon",staves[6].join("\n")],["Darkness",staves[7].join("\n")]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,[["Star",staves[0].join("\n")],["Moon",staves[1].join("\n")],["Sun",staves[2].join("\n")],["Eclipse",staves[3].join("\n")],["Fire",staves[4].join("\n")],["Ice",staves[5].join("\n")],["Dragon",staves[6].join("\n")],["Darkness",staves[7].join("\n")]])
   end
 end
 
@@ -6738,11 +6962,20 @@ def phase_study(event,name,bot,weapon=nil)
   epu40[16]=epu40[1]+epu40[2]+epu40[3]+epu40[4]+epu40[5]
   pic=pick_thumbnail(event,j,bot)
   pic="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png" if u40[0]=="Robin (Shared stats)"
+  stat_buffers=[]
+  stat_nerfers=[]
+  for i in 0...stat_skills_2.length
+    if stat_skills_2[i].include?(" Ploy ") || stat_skills_2[i].include?("Seal ") || stat_skills_2[i].include?("Threaten ") || stat_skills_2[i].include?("Chill ") || stat_skills_2[i].include?(" Smoke ")
+      stat_nerfers.push(stat_skills_2[i])
+    else
+      stat_buffers.push(stat_skills_2[i])
+    end
+  end
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all")
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"In-combat skills: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\n**Basic stats:** #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]}  (#{u40[16]} BST)\n**Displayed stats:** #{blu40[1]} / #{blu40[2]} / #{blu40[3]} / #{blu40[4]} / #{blu40[5]}  (#{blu40[16]} BST)"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"In-combat skills: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\n**Basic stats:** #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]}  (#{u40[16]} BST)\n**Displayed stats:** #{blu40[1]} / #{blu40[2]} / #{blu40[3]} / #{blu40[4]} / #{blu40[5]}  (#{blu40[16]} BST)"
   else
     u40=make_stat_string_list(u40,blu40)
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_skills_2.join(', ')}\n" if stat_skills_2.length>0}#{"In-combat skills: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,[["Displayed stats","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"],["Player Phase","HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\nSpeed: #{ppu40[3]}\nDefense: #{ppu40[4]}\nResistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","HP: #{epu40[1]}\n#{atk}: #{epu40[2]}\nSpeed: #{epu40[3]}\nDefense: #{epu40[4]}\nResistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"In-combat skills: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,[["Displayed stats","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"],["Player Phase","HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\nSpeed: #{ppu40[3]}\nDefense: #{ppu40[4]}\nResistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","HP: #{epu40[1]}\n#{atk}: #{epu40[2]}\nSpeed: #{epu40[3]}\nDefense: #{epu40[4]}\nResistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
   end
 end
 
@@ -6873,7 +7106,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
   sec=''
   tri=''
   for i in 0...l.length
-    l[i][15]=weapon_clss(l[i][1],1)
+    l[i][15]=weapon_clss(l[i][1],event,1)
   end
   x=prio(x,['Element','Stat','Weapon','Color','Movement'])
   pri=x[0]
@@ -6904,7 +7137,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
     x2='.'
     x2=p1[i][0][2][0] if pri=='Element'
     x2=p1[i][0][2][1] if pri=='Stat'
-    x2=weapon_clss(p1[i][0][1],1) if pri=='Weapon'
+    x2=weapon_clss(p1[i][0][1],event,1) if pri=='Weapon'
     x2=p1[i][0][1][0] if pri=='Color'
     x2=p1[i][0][3] if pri=='Movement'
     if sec=='Stat'
@@ -6930,11 +7163,11 @@ bot.command([:legendary,:legendaries]) do |event, *args|
       x3='.'
       x3=p2[j][0][2][0] if sec=='Element'
       x3=p2[j][0][2][1] if sec=='Stat'
-      x3=weapon_clss(p2[j][0][1],1) if sec=='Weapon'
+      x3=weapon_clss(p2[j][0][1],event,1) if sec=='Weapon'
       x3=p2[j][0][1][0] if sec=='Color'
       x3=p2[j][0][3] if sec=='Movement'
-      p2[j]="__*#{x3}*__\n#{p2[j].map{|q| "#{"~~" unless q[23].nil?}#{q[0]}#{" - *#{weapon_clss(q[1],1) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{"~~" unless q[23].nil?}"}.join("\n")}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      p2[j]="*#{x3}*: #{p2[j].map{|q| "#{"~~" unless q[23].nil?}#{q[0]}#{" - *#{weapon_clss(q[1],1) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{"~~" unless q[23].nil?}"}.join(", ")}" if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      p2[j]="__*#{x3}*__\n#{p2[j].map{|q| "#{"~~" unless q[23].nil?}#{q[0]}#{" - *#{weapon_clss(q[1],event,1) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{"~~" unless q[23].nil?}"}.join("\n")}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      p2[j]="*#{x3}*: #{p2[j].map{|q| "#{"~~" unless q[23].nil?}#{q[0]}#{" - *#{weapon_clss(q[1],event,1) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{"~~" unless q[23].nil?}"}.join(", ")}" if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     end
     p1[i]=[x2,p2.join("\n\n")] unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     p1[i]=[x2,p2.join("\n")] if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
@@ -7147,8 +7380,6 @@ end
 bot.command([:random,:rand]) do |event, *args|
   colors=[]
   weapons=[]
-  colors2=[]
-  weapons2=[]
   movement=[]
   clazzez=[]
   color_weapons=[]
@@ -7157,17 +7388,20 @@ bot.command([:random,:rand]) do |event, *args|
     colors.push('Red') if ['red','reds'].include?(args[i].downcase)
     colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
     colors.push('Green') if ['green','greens'].include?(args[i].downcase)
-    colors2.push('Colorless') if ['colorless','colourless','clear','clears'].include?(args[i].downcase)
+    colors.push('Colorless') if ['colorless','colourless','clear','clears'].include?(args[i].downcase)
     weapons.push('Blade') if ['physical','blade','blades'].include?(args[i].downcase)
     weapons.push('Tome') if ['tome','mage','magic','spell','tomes','mages','spells'].include?(args[i].downcase)
     weapons.push('Breath') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
-    weapons2.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
-    weapons2.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves'].include?(args[i].downcase)
-    weapons2.push('Healer') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
-    weapons2.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase) && event.server.id==256291408598663168
+    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
+    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves'].include?(args[i].downcase)
+    weapons.push('Healer') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
+    weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase) && event.server.id==256291408598663168
     color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
     color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
     color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
+    color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
+    color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
+    color_weapons.push(['Green','Tome']) if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
     movement.push('Flier') if ['flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi'].include?(args[i].downcase)
     movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies'].include?(args[i].downcase)
     movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
@@ -7176,37 +7410,48 @@ bot.command([:random,:rand]) do |event, *args|
     clazzez.push('Veteran') if ['veteran','vet','elder','jagen'].include?(args[i].downcase)
     clazzez.push('Standard') if ['standard'].include?(args[i].downcase)
   end
-  colors=['Red', 'Green', 'Blue'] if colors.length<=0 && weapons.length>0
-  weapons=['Blade', 'Tome', 'Breath', 'Bow', 'Dagger'] if colors.length>0 && weapons.length<=0
-  movement=['Infantry', 'Flier', 'Cavalry', 'Armor'] if movement.length<=0
+  colors=['Red', 'Blue', 'Green', 'Colorless'] if colors.length<=0 && weapons.length>0
+  if colors.length>0 && weapons.length<=0
+    weapons=['Blade', 'Tome', 'Breath', 'Bow', 'Dagger']
+    weapons.push('Healer') unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
+  end
   for i in 0...colors.length
     for j in 0...weapons.length
-      color_weapons.push([colors[i],weapons[j]])
-    end
-  end
-  colors2=['Colorless'] if colors2.length<=0 && weapons2.length>0
-  if colors2.length>0 && weapons2.length<=0
-    weapons2=['Breath', 'Bow', 'Dagger']
-    weapons2.push('Healer') unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
-  end
-  for i in 0...colors2.length
-    for j in 0...weapons2.length
-      color_weapons.push([colors2[i],weapons2[j]]) unless weapons2[j]=='Beast'
-      color_weapons.push(['gold',weapons2[j]]) if weapons2[j]=='Beast'
+      if colors[i]=='Colorless'
+        color_weapons.push([colors[i],weapons[j]]) unless (weapons[j]=='Blade' && !colorless_blades?(event)) || (weapons[j]=='Tome' && !colorless_tomes?(event))
+      elsif weapons[j]=='Healer' && !colored_healers?(event)
+      else
+        color_weapons.push([colors[i],weapons[j]])
+      end
     end
   end
   if color_weapons.length<=0
-    color_weapons=[['Red', 'Blade'],      ['Red', 'Tome'],      ['Red', 'Breath'],      ['Red', 'Bow'],      ['Red', 'Dagger'],
-                   ['Blue', 'Blade'],     ['Blue', 'Tome'],     ['Blue', 'Breath'],     ['Blue', 'Bow'],     ['Blue', 'Dagger'],
-                   ['Green', 'Blade'],    ['Green', 'Tome'],    ['Green', 'Breath'],    ['Green', 'Bow'],    ['Green', 'Dagger'],
-                                                                ['Colorless', 'Breath'],['Colorless', 'Bow'],['Colorless', 'Dagger']]
-    color_weapons.push(['Colorless', 'Healer']) unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
+    color_weapons=[['Red', 'Blade'],     ['Red', 'Tome'],     ['Red', 'Breath'],      ['Red', 'Bow'],
+                   ['Blue', 'Blade'],    ['Blue', 'Tome'],    ['Blue', 'Breath'],     ['Blue', 'Bow'],
+                   ['Green', 'Blade'],   ['Green', 'Tome'],   ['Green', 'Breath'],    ['Green', 'Bow'],
+                                                              ['Colorless', 'Breath'],['Colorless', 'Bow'],   ['Colorless', 'Dagger']]
+    if colored_daggers?(event)
+      color_weapons.push(['Red', 'Dagger'])
+      color_weapons.push(['Blue', 'Dagger'])
+      color_weapons.push(['Green', 'Dagger'])
+    end
+    color_weapons.push(['Colorless', 'Blade']) if colorless_blades?(event)
+    color_weapons.push(['Colorless', 'Tome']) if colorless_tomes?(event)
+    unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
+      color_weapons.push(['Red', 'Healer']) if colored_healers?(event)
+      color_weapons.push(['Blue', 'Healer']) if colored_healers?(event)
+      color_weapons.push(['Green', 'Healer']) if colored_healers?(event)
+      color_weapons.push(['Colorless', 'Healer'])
+    end
     unless event.server.nil?
       color_weapons.push(['Gold', 'Beast']) if event.server.id==256291408598663168
     end
+    color_weapons=color_weapons.reject{|q| !colors.include?(q[0]) || !weapons.include?(q[1])}
   end
   color_weapons.uniq!
   clazz=color_weapons.sample
+  movement=['Infantry', 'Flier', 'Cavalry', 'Armor'] if movement.length<=0
+  movement.uniq!
   mov=movement.sample
   l1_total=47
   gp_total=31
@@ -7357,9 +7602,10 @@ bot.command([:random,:rand]) do |event, *args|
   w='Sword' if clazz[0]=='Red' && w=='Blade'
   w='Lance' if clazz[0]=='Blue' && w=='Blade'
   w='Axe' if clazz[0]=='Green' && w=='Blade'
+  w='Rod' if clazz[0]=='Colorless' && w=='Blade'
   if clazz[1]!=w
-    w="*#{w}* (#{clazz[0]} #{clazz[1].gsub('Blade','Physical')})"
-  elsif ['Tome','Dragon'].include?(w)
+    w="*#{w}* (#{clazz[0]} #{clazz[1]})"
+  elsif ['Tome', 'Dragon', 'Bow'].include?(w) || (w=='Healer' && colored_healers?(event)) || (w=='Dagger' && colored_daggers?(event))
     w="*#{clazz[0]} #{clazz[1]}*"
   elsif clazz[0]=='Gold'
     w="*#{w}*"
@@ -7434,7 +7680,7 @@ bot.command([:skillrarity,:onestar,:twostar,:threestar,:fourstar,:fivestar,:skil
     xcolor=0xDC3461
   end
   if " #{event.message.text.downcase} ".include?(' progression ')
-    create_embed(event,"__**Non-healers**__","",xcolor,"Most non-healer units have one Scenario X passive and one Scenario Y passive",nil,[["__**Weapons**__","Tier 1 (*Iron, basic magic*) - Default at 1\\*\nTier 2 (*Steel, El- magic, Fire Breath+*) - Default at 2\\*\nTier 3 (*Silver, super magic*) - Available to 3\\*, default at 4\\*\nTier 4 (*+ weapons other than Fire Breath+, Prf weapons*) - default at 5\\*\nRetro-Prfs (*Felicia's Plate*) - Available at 5\\*, promotes from nothing"],["__**Assists**__","Tier 1 (*Rallies, Dance/Sing, etc.*) - Available at 3\\*, default at 4\\* ~~Sharena has hers default at 2\\*~~\nTier 2 (*Double Rallies*) - Available at 4\\*\nPrf Assists (*Sacrifice*) - Available at 5\\*"],["__**Specials**__","Miracle - Available at 3\\*, default at 5\\*\nTier 1 (*Daylight, New Moon, etc.*) - Available at 3\\*, default at 4\\* ~~Alfonse and Anna have their default at 2\\*~~\nTier 2 (*Sol, Luna, etc.*) - Available at 4\\* ~~Jaffar and Saber have theirs also default at 5\\*~~\nTier 3 (*Galeforce, Aether, Prf Specials*) - Available at 5\\*"],["__**Passives (scenario X)**__","Tier 1 - Available at 1\\*\nTier 2 - Available at 2\\*\nTier 3 - Available at 4\\*"],["__**Passives (scenario Y)**__","Tier 1 - Available at 3\\*\nTier 2 - Available at 4\\*\nTier 3 - Available at 5\\*"],["__**Prf Passives**__","Available at 5\\*"]],2)
+    create_embed(event,"__**Non-healers**__","",xcolor,"Most non-healer units have one Scenario X passive and one Scenario Y passive",nil,[["__**Weapons**__","Tier 1 (*Iron, basic magic*) - Default at 1\\*\nTier 2 (*Steel, El- magic, Fire Breath+*) - Default at 2\\*\nTier 3 (*Silver, super magic*) - Available to 3\\*, default at 4\\*\nTier 4 (*+ weapons other than Fire Breath+, Prf weapons*) - default at 5\\*\nRetro-Prfs (*Felicia's Plate*) - Available at 5\\*, promotes from nothing"],["__**Assists**__","Tier 1 (*Rallies, Dance/Sing, etc.*) - Available at 3\\*, default at 4\\* ~~Sharena has hers default at 2\\*~~\nTier 2 (*Double Rallies*) - Available at 4\\*\nPrf Assists (*Sacrifice*) - Available at 5\\*"],["__**Specials**__","Miracle - Available at 3\\*, default at 5\\*\nTier 1 (*Daylight, New Moon, etc.*) - Available at 3\\*, default at 4\\* ~~Alfonse and Anna have theirs default at 2\\*~~\nTier 2 (*Sol, Luna, etc.*) - Available at 4\\* ~~Jaffar and Saber have theirs also default at 5\\*~~\nTier 3 (*Galeforce, Aether, Prf Specials*) - Available at 5\\*"],["__**Passives (scenario X)**__","Tier 1 - Available at 1\\*\nTier 2 - Available at 2\\*\nTier 3 - Available at 4\\*"],["__**Passives (scenario Y)**__","Tier 1 - Available at 3\\*\nTier 2 - Available at 4\\*\nTier 3 - Available at 5\\*"],["__**Prf Passives**__","Available at 5\\*"]],2)
     create_embed(event,"__**Healers**__","",0xC1CCD6,"Most healers have a Scenario Y passive",nil,[["__**Damaging Staves**__","Tier 1 (*only Assault*) - Available at 1\\*\nTier 2 (*non-plus staves*) - Available at 3\\* ~~Lyn(Bride) has hers default at 5\\*~~\nTier 3 (*+ staves, Prf weapons*) - Available at 5\\*"],["__**Healing Staves**__","Tier 1 (*Heal*) - Default at 1\\*\nTier 2 (*Mend, Reconcile*) - Available at 2\\*, default at 3\\*\nTier 3 (*all other non-plus staves*) - Available at 4\\*, default at 5\\*\nTier 4 (*+ staves*) - Available at 5\\*"],["__**Healer Specials**__","Miracle - Available at 3\\*, default at 5\\*\nTier 1 (*Imbue*) - Available at 2\\*, default at 3\\*\nTier 2 (*Balms, Heavenly Light*) - Available at 3\\*, default at 5\\*"],["__**Passives (scenario X)**__","Tier 1 - Available at 1\\*\nTier 2 - Available at 2\\*\nTier 3 - Available at 4\\*"],["__**Passives (scenario Y)**__","Tier 1 - Available at 3\\*\nTier 2 - Available at 4\\*\nTier 3 - Available at 5\\*"],["__**Prf Passives**__","Available at 5\\*"]],2)
   else
     create_embed(event,"**Supposed Bug: X character, despite not being available at #{r}, has skills listed for #{r.gsub('Y','that')} in the `skill` command.**\n\nA word from my developer","By observing the skill lists of the Daily Hero Battle units - the only units we have available at 1\\* - I have learned that there is a set progression for which characters learn skills.  Only six units directly contradict this observation - and three of those units are the Askrians, who were likely given their Assists and Tier 1 Specials (depending on the character) at 2\\* in order to make them useable in the early story maps when the player has limited orbs and therefore limited unit choices.  One is Lyn(Bride), who as the only seasonal healer so far, may be the start of a new pattern.  The other two are Jaffar and Saber, who - for unknown reasons - have their respective Tier 2 Specials available right out of the box as 5\\*s.\n\nThe information as it is is not useless.  In fact, as seen quite recently as of the time of this writing, IntSys is willing to demote some units out of the 4-5\\* pool into the 3-4\\* one. This information allows us to predict which skills the new 3\\* versions of these characters will have.\n\nAs for units unlikely to demote, Paralogue maps will have lower-rarity versions of units with their base kits.  Training Tower and Tempest Trials attempt to build units according to recorded trends in Arena, but will use default base kits at lower difficulties.  Obviously you can't fodder a 4* Siegbert for Death Blow 3, but you can still encounter him in Tempest.",xcolor)
@@ -7615,7 +7861,7 @@ bot.command(:summon) do |event, *colors|
           sleep 5
           cutscene=false
         end
-        event << "Orb ##{cracked_orbs[i][1]+1} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1]}** (*#{cracked_orbs[i][0][2]}*)"
+        event << "Orb ##{cracked_orbs[i][1]} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1]}** (*#{cracked_orbs[i][0][2]}*)"
         summons+=1
         five_star=true if cracked_orbs[i][0][0][0].to_i==5
       end
@@ -9848,6 +10094,7 @@ bot.message do |event|
     end
   elsif ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4])
     s=event.message.text.downcase
+    puts s if @shardizard==3
     s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
     s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
     a=s.split(' ')
@@ -10024,7 +10271,7 @@ def next_holiday(bot,mode=0)
             [0,2,2,'Feh','the best gacha game ever!','Game Release Anniversary'],
             [0,2,14,'Cordelia(Bride)','with your heartstrings.',"Valentine's Day"],
             [0,4,1,'Priscilla','tribute to Xander for making this possible.',"April Fool's Day"],
-            [0,4,24,'Sakura','dressup as my best friend.',"Coder's birthday"],
+            [0,4,24,'Sakura(BDay)','dressup as my best friend.',"Coder's birthday"],
             [0,7,4,'Arthur','for freedom and justice.','Independance Day'],
             [0,10,31,'Henry(Halloween)','with a dead Emblian. Nyahaha!','Halloween'],
             [0,12,25,'Robin(M)(Winter)','as Santa Claus for Askr.','Christmas'],
