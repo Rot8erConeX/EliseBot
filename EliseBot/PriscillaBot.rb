@@ -91,7 +91,7 @@ bot.gateway.check_heartbeat_acks = false
           ["`\u22C1`Excitable","HP","Resistance",true]]
 
 def all_commands(include_nil=false) # a list of all the command names.  Used by Nino Mode to ignore messages that are commands, so responses do not double up.
-  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills','locate','locateshard','locateshards','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star']
+  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills','locate','locateshard','locateshards','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable']
   k[0]=nil if include_nil
   return k
 end
@@ -292,6 +292,8 @@ bot.command(:help) do |event, command, subcommand|
     create_embed(event,'**invite**',"PMs the invoker with a link to invite me to their server.",0x40C0F0)
   elsif command.downcase=='addalias'
     create_embed(event,'**addalias** __new alias__ __unit__',"Adds `new alias` to `unit`'s aliases.\nIf the arguments are listed in the opposite order, the command will auto-switch them.\n\nInforms you if the alias already belongs to someone.\nAlso informs you if the unit you wish to give the alias to does not exist.",0xC31C19)
+  elsif ['allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __name__","Shows all the skills that `name`can learn.\n\nIn servers, will only show the weapons, assists, and specials.\nIn PM, will also show the passive skills.",0xD49F61)
   elsif ['data','unit'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats, and skills.\n\nTyping in the names \"Robin\", \"Corrin\", and \"Tiki\" without any descriptors will display data on both variations of the named character, though only the stats and not the skills, due to not wanting to flood the channel with four embeds.",0xD49F61)
   elsif ['skill'].include?(command.downcase)
@@ -424,7 +426,7 @@ bot.command(:help) do |event, command, subcommand|
     end
   else
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
-    create_embed(event,"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit Data**__\n`data` __name__ - shows both stats and skills (*also `unit`*)\n`stats` __name__ - shows only the stats\n`skills` __name__ - shows only the skills (*also `fodder`*)\n`study` __name__ - for a study of the unit at multiple rarities and merges\n`effHP` __name__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __name__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __name__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __name__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __name__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`games` __unit__ - for a list of games the unit is in\n`art` __unit__ __art type__ - for the character's art\n\n__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
+    create_embed(event,"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit Data**__\n`data` __name__ - shows both stats and skills (*also `unit`*)\n`stats` __name__ - shows only the stats\n`skills` __name__ - shows only the skills (*also `fodder`*)\n`study` __name__ - for a study of the unit at multiple rarities and merges\n`effHP` __name__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __name__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __name__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __name__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __name__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`games` __unit__ - for a list of games the unit is in\n`art` __unit__ __art type__ - for the character's art\n`learnable` __name__ - for a list of all learnable skills (*also `inheritable`*)\n\n__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
     create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`skillrarity` (*also `skill_rarity`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed(event,"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
     create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n\n`snagstats` - snags server stats for multiple servers\n`setmarker` __letter__\n\n`reboot` - reboots this shard\n\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n`status` __\\*message__ - sets my status\n\n`locateshards` - lists one server you are in for each color of shard.",0x008b8b) if (event.server.nil? || command.downcase=='devcommands') && event.user.id==167657750971547648
@@ -967,7 +969,7 @@ def find_prevolutions(j,event)
   return p
 end
 
-def find_effect_name(x,event,shorten=true)
+def find_effect_name(x,event,shorten=0)
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -980,28 +982,34 @@ def find_effect_name(x,event,shorten=true)
       f=@skills[i][0] if ", #{@skills[i][20]},".include?(", #{x[0]},") && has_any?(g, @skills[i][21])
     end
   end
-  if f.length>0 && shorten
+  if f.length>0 && shorten==0
     f=f.split(' ')
     f[f.length-1]=nil if f[f.length-1].length<2
     f.compact!
+    f=f.join(' ')
+  elsif f.length>0 && shorten==2
+    f=f.split(' ')
+    f[f.length-1]="W" if f[f.length-1].length<2
     f=f.join(' ')
   end
   return f
 end
 
-def find_weapon(name,event,ignore=false)
+def find_weapon(name,event,ignore=false,ignore2=false)
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
   return -1 if name.nil?
   return -1 if name.gsub(' ','').length<=3
   name=normalize(name.gsub('!',''))
-  return find_weapon('Bladeblade',event) if name.downcase=='laevatein'
-  return find_weapon('Uror',event) if name.downcase=='urdr'
-  return find_weapon("Sack o' Gifts#{"+" if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='sackofgifts'
-  return find_weapon("Killing Edge#{"+" if name.include?('+')}",event) if ['killersword','killeredge','killingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
-  return find_weapon("Slaying Edge#{"+" if name.include?('+')}",event) if ['slayersword','slayeredge','slayingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
-  return find_weapon(name.downcase.gsub('rauor','raudr'),event) if name.downcase.include?('rauor')
+  unless ignore2
+    return find_weapon('Bladeblade',event) if name.downcase=='laevatein'
+    return find_weapon('Uror',event) if name.downcase=='urdr'
+    return find_weapon("Sack o' Gifts#{"+" if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='sackofgifts'
+    return find_weapon("Killing Edge#{"+" if name.include?('+')}",event) if ['killersword','killeredge','killingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
+    return find_weapon("Slaying Edge#{"+" if name.include?('+')}",event) if ['slayersword','slayeredge','slayingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
+    return find_weapon(name.downcase.gsub('rauor','raudr'),event) if name.downcase.include?('rauor')
+  end
   j=-1
   data_load()
   for i in 0...@skills.length
@@ -1010,6 +1018,7 @@ def find_weapon(name,event,ignore=false)
     end
   end
   return j if j>=0 && has_any?(g, @skills[j][21])
+  return -1 if ignore2
   for i in 0...@skills.length
     unless @skills[i].nil?
       j=i if @skills[i][0].downcase.gsub(' ','').gsub('/','').gsub("'",'')==name.downcase.gsub(' ','').gsub("'",'') && j<0 && @skills[i][4]=="Weapon"
@@ -1784,7 +1793,7 @@ def apply_stat_skills(event,skillls,stats,tempest=false,summoner='-',weapon='',r
   else
     s2=@skills[find_skill(weapon,event)]
     if !s2[23].nil? && !refinement.nil? && refinement.length>0 && s2[5]!="Staff Users Only"
-      skillls.push(find_effect_name(s2,event,false)) if refinement=='Effect' && find_effect_name(s2,event,false).length>0
+      skillls.push(find_effect_name(s2,event,1)) if refinement=='Effect' && find_effect_name(s2,event,1).length>0
       sttz=[]
       inner_skill=s2[23]
       mt=0
@@ -1990,6 +1999,11 @@ def apply_stat_skills(event,skillls,stats,tempest=false,summoner='-',weapon='',r
   stats[3]+=rally[2]+[negative[2],-7].max
   stats[4]+=rally[3]+[negative[3],-7].max
   stats[5]+=rally[4]+[negative[4],-7].max
+  stats[1]=[[stats[1],1].max,99].min
+  stats[2]=[stats[2],0].max
+  stats[3]=[stats[3],0].max
+  stats[4]=[stats[4],0].max
+  stats[5]=[stats[5],0].max
   return stats
 end
 
@@ -2646,8 +2660,10 @@ def pick_thumbnail(event,j,bot)
   return "https://cdn.discordapp.com/emojis/418140222530912256.png" if d[0]=="Nino" && (event.message.text.downcase.include?('face') || rand(100)==0)
   return "https://cdn.discordapp.com/emojis/420339780421812227.png" if d[0]=="Amelia" && (event.message.text.downcase.include?('face') || rand(1000)==0)
   return "https://cdn.discordapp.com/emojis/420339781524783114.png" if d[0]=="Reinhardt(Bonds)" && (event.message.text.downcase.include?('grin') || rand(100)==0)
+  return "https://cdn.discordapp.com/emojis/437515327652364288.png" if d[0]=="Reinhardt(World)" && (event.message.text.downcase.include?('grin') || rand(100)==0)
+  return "https://cdn.discordapp.com/emojis/437519293240836106.png" if d[0]=="Arden" && (event.message.text.downcase.include?('woke') || rand(100)==0)
   return "https://cdn.discordapp.com/emojis/420360385862828052.png" if d[0]=="Sakura" && event.message.text.downcase.include?("mathoo's")
-  return "https://andu2.github.io/FEH-Mass-Simulator/heroes/#{url_name(j)}.png"
+  return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{d[0]}/Face_FC.png"
 end
 
 def unit_color(event,j,mode=0,m=false,chain=false)
@@ -2718,6 +2734,15 @@ def unit_clss(event,j,name=nil)
   m=@data[j][3]
   m=">Unknown<" if @data[j][3].nil? || @data[j][3].length<=0
   return "Weapon type: #{w}\nMovement type: *#{m}*"
+end
+
+def skill_tier(name,event)
+  data_load()
+  j=find_skill(name,event)
+  return 1 if @skills[j][8]=='-'
+  return 1+skill_tier(@skills[j][8].gsub('*','').split(' or ')[0],event) if @skills[j][8].include?(' or ')
+  return 1+skill_tier(@skills[j][8].gsub('*','').split(', ')[0],event) if @skills[j][8].include?(', ')
+  return 1+skill_tier(@skills[j][8].gsub('*',''),event)
 end
 
 def disp_stats(bot,name,weapon,event,ignore=false)
@@ -2923,7 +2948,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
         stat_buffers.push(stat_skills_2[i])
       end
     end
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:star:322905655730241547>"*5}#{"**+#{merges}**" if merges>0}\n*Neutral Nature only so far*#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n#{unit_clss(event,j)}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}",xcolor,ftr,pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","HP: unknown\n#{atk}: unknown\nSpeed: unknown\nDefense: unknown\nResistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"]],1)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:star:322905655730241547>"*5}#{"**+#{merges}**" if merges>0}#{"	\u2764 **#{summoner}**" unless summoner=='-'}\n*Neutral Nature only so far*#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}Equipped weapon: #{wl}\n\n#{unit_clss(event,j)}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}",xcolor,ftr,pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","HP: unknown\n#{atk}: unknown\nSpeed: unknown\nDefense: unknown\nResistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"]],1)
     return nil
   end
   data_load()
@@ -2991,7 +3016,11 @@ def disp_stats(bot,name,weapon,event,ignore=false)
   r="**#{rarity} star**" if r.length>=500
   r="#{r}**+#{merges}**" if merges>0
   ftr="Please note that the #{atk} stat displayed here does not include weapon might.  The Attack stat in-game does."
-  ftr=nil if weapon != '-'
+  if weapon != '-'
+    ftr=nil
+    tr=skill_tier(weapon,event)
+    ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{weapon}+ ?" unless weapon[weapon.length-1,1]=='+' || find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.length<=0 || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ")
+  end
   flds=[["**Level 1#{" +#{merges}" if merges>0}**",["HP: #{u1[1]}","#{atk}: #{u1[2]}","Speed: #{u1[3]}","Defense: #{u1[4]}","Resistance: #{u1[5]}","","BST: #{u1[6]}"]]]
   if args.include?('gps') || args.include?('gp') || args.include?('growths') || args.include?('growth')
     flds.push(["**Growth Points**",["HP: #{u40[6]}","#{atk}: #{u40[7]}","Speed: #{u40[8]}","Defense: #{u40[9]}","Resistance: #{u40[10]}","","GPT: #{u40[6]+u40[7]+u40[8]+u40[9]+u40[10]}"]])
@@ -3008,7 +3037,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
     if superbaan.include?('(+)') || superbaan.include?('(-)')
       if ftr.nil?
         ftr="Please note that stats marked with (+)/(-) increase/decrease by 4, not the usual 3, with a boon/bane."
-      else
+      elsif weapon == '-'
         ftr='Attack stat in-game has weapon might included.  (+)/(-) marks a "super" boon/bane.'
       end
     end
@@ -3039,7 +3068,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
     end
   end
   img="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png" if u40[0]=="Robin (Shared stats)"
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}",xcolor,ftr,img,flds,1)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"	\u2764 **#{summoner}**" unless summoner=='-'}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}Equipped weapon: #{wl}\n\n#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}",xcolor,ftr,img,flds,1)
   return nil
 end
 
@@ -3172,6 +3201,21 @@ def disp_skill(name,event,ignore=false)
     return false
   end
   skill=@skills[f]
+  if skill[4]=="Weapon" && (" #{event.message.text.downcase} ".include?(' refinement ') || " #{event.message.text.downcase} ".include?(' (w) '))
+    if skill[0]=="Falchion"
+      disp_skill("Drive Spectrum",event,ignore)
+      disp_skill("Double Lions",event,ignore)
+      disp_skill("Spectrum Bond",event,ignore)
+      return true
+    elsif find_effect_name(skill,event).length>0
+      disp_skill(find_effect_name(skill,event),event,ignore)
+      return true
+    elsif !skill[23].nil?
+      event.respond "#{skill[0]} does not have an Effect Mode.  Showing #{skill[0]}'s default data."
+    else
+      event.respond "#{skill[0]} cannot be refined.  Showing #{skill[0]}'s default data."
+    end
+  end
   for i in 9...19
     untz=skill[i].split(', ')
     untz=untz.reject {|u| find_unit(u,event,false,true)<0 && u[0,4].downcase != 'all ' && u != '-'}
@@ -3222,6 +3266,8 @@ def disp_skill(name,event,ignore=false)
       str="**Skill Slot:** #{skill[4]}\n**Weapon Type:** Bow\n**Might:** #{skill[2]}\n**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     elsif skill[5]=="Dragons Only"
       str="**Skill Slot:** #{skill[4]}\n**Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}\n**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+    elsif skill[5]=="Beasts Only"
+      str="**Skill Slot:** #{skill[4]}\n**Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}\n**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     else
       s=skill[5]
       s=s[0,s.length-11]
@@ -3246,7 +3292,12 @@ def disp_skill(name,event,ignore=false)
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
   else
     xcolor=0xFDDC7E
-    xpic="https://andu2.github.io/FEH-Mass-Simulator/skills/#{skill[0].gsub(' ','_').gsub('/','_')}.png"
+    xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{skill[0].gsub(' ','_').gsub('/','_')}.png"
+    if " #{event.message.text.downcase} ".include?(' refinement ') || " #{event.message.text.downcase} ".include?(' (w) ')
+      s=skill[0].gsub('/','_').split(' ')
+      s[s.length-1]='W' if s[s.length-1].length<2
+      xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{s.join('_')}.png"
+    end
     sklslt=skill[4].split(', ')
     if !skill[20].nil? && skill[20]!='' && skill[4].include?("Passive(W)")
       eff=skill[20].split(', ')
@@ -3397,7 +3448,7 @@ def disp_skill(name,event,ignore=false)
     elsif inner_skill.length>1
       zzz=[0,0,0,0,0,0]
       if find_effect_name(skill,event).length>0
-        zzz=apply_stat_skills(event,[find_effect_name(skill,event,false)],zzz)
+        zzz=apply_stat_skills(event,[find_effect_name(skill,event,1)],zzz)
       end
       sttz.push([zzz[1],zzz[2],zzz[3],zzz[4],zzz[5],"Effect"])
     elsif skill[0]=="Falchion"
@@ -3450,12 +3501,19 @@ def disp_skill(name,event,ignore=false)
       sttz.push([3,refinements[2][3],0,0,0,"**Falchion(Awakening) (+) Effect Mode**#{" - #{find_effect_name(sk3,event)}" unless find_effect_name(sk3,event).length<=0}",refinements[2][1]]) unless refinements[2][1].nil?
     end
     if skill[5]=="Staff Users Only" && (skill[7].include?("This weapon's damage is calculated the same as other weapons.") || skill[7].include?("Damage from staff calculated like other weapons."))
+      xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Dazzling_W.png"
       sttzx=[[0,0,0,0,0,"Dazzling","The foe cannot counterattack."]]
+    elsif skill[5]=="Staff Users Only" && (skill[7].include?("The foe cannot counterattack."))
+      xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Wrathful_W.png"
+      sttzx=[[0,0,0,0,0,"Wrathful","This weapon's damage is calculated the same as other weapons."]]
     elsif skill[5]=="Staff Users Only"
+      xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Staff_Default_Refine.png"
       sttzx=[[0,0,0,0,0,"Wrathful","This weapon's damage is calculated the same as other weapons."],[0,0,0,0,0,"Dazzling","The foe cannot counterattack."]]
     elsif skill[5].include?("Tome Users Only") || ["Bow Users Only","Dagger Users Only"].include?(skill[5])
+      xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine.png"
       sttzx=[[2,1,0,0,0,"Attack"],[2,0,2,0,0,"Speed"],[2,0,0,3,0,"Defense"],[2,0,0,0,3,"Resistance"]]
     else
+      xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine.png"
       sttzx=[[5,2,0,0,0,"Attack"],[5,0,3,0,0,"Speed"],[5,0,0,4,0,"Defense"],[5,0,0,0,4,"Resistance"]]
     end
     for i in 0...sttzx.length
@@ -3471,7 +3529,10 @@ def disp_skill(name,event,ignore=false)
       else
         str="#{str}\n\n**#{skill[0]} (+) #{sttz[i][5]} Mode**"
       end
-      str="#{str} - #{find_effect_name(skill,event)}" if sttz[i][5]=="Effect" && find_effect_name(skill,event).length>0
+      if sttz[i][5]=="Effect" && find_effect_name(skill,event).length>0
+        xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{find_effect_name(skill,event,2).gsub(' ','_').gsub('/','_')}.png"
+        str="#{str} - #{find_effect_name(skill,event)}"
+      end
       str="#{str}\nMight: #{skill[2]+sttz[i][1]}	Range: #{skill[3]}"
       str="#{str}	HP +#{sttz[i][0]}" if sttz[i][0]>0
       str="#{str}	Attack #{"+" if skill[20][1]-skill[2]>0}#{skill[20][1]-skill[2]}" if skill[20][1]-skill[2]!=0
@@ -3485,7 +3546,8 @@ def disp_skill(name,event,ignore=false)
     end
     ftr="All refinements cost: 350 SP (525 if inherited), 500 Arena Medals, 50 Refining Stones"
     ftr="All refinements cost: 400 SP, 500 Arena Medals, 200 Divine Dew" if skill[6]!="-"
-    create_embed(event,"__**Refinery Options**__",str,0x688C68,ftr)
+    xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Falchion_Refines.png" if skill[0]=="Falchion"
+    create_embed(event,"__**Refinery Options**__",str,0x688C68,ftr,xpic)
   end
   if skill[0][0,14]=="Wrathful Staff"
     event.respond "#{event.user.mention}\nAnyone who feeds me a Genny is a monster. <:nobully:380601407767838721> It's not my fault the game mechanics prevent me from protesting!\nHeck, now that the Weapon Refinery exists, you can just give my staff the Wrathful Mode upgrade, it pairs well with my high Magic stat."
@@ -3745,12 +3807,12 @@ def disp_unit_skills(bot,name,event,ignore=false,chain=false,doubleunit=false)
   create_embed(event,"#{"__#{"Mathoo's " if mu}**#{@data[j][0]}**__" unless f}",txt,xcolor,xfooter,pick_thumbnail(event,j,bot),[["**Weapons**",sklz2[0].join("\n")],["**Assists**",sklz2[1].join("\n")],["**Specials**",sklz2[2].join("\n")],["**A Passives**",sklz2[3].join("\n")],["**B Passives**",sklz2[4].join("\n")],["**C Passives**",sklz2[5].join("\n")]])
 end
 
-def extend_message(msg1,msg2,event,enters=1)
-  if "#{msg1}#{"\n"*enters}#{msg2}".length>=2000
+def extend_message(msg1,msg2,event,enters=1,sym="\n")
+  if "#{msg1}#{sym*enters}#{msg2}".length>=2000
     event.respond msg1
     return msg2
   else
-    return "#{msg1}#{"\n"*enters}#{msg2}"
+    return "#{msg1}#{sym*enters}#{msg2}"
   end
 end
 
@@ -3793,13 +3855,6 @@ def nature_name(boon,bane)
   end
   return b
   return nil
-end
-
-def url_name(j)
-  if !@data[j][14].nil?
-    return @data[j][14] unless @data[j][14]==''
-  end
-  return @data[j][0].gsub("(M)","%20(M)").gsub("(F)","%20(F)")
 end
 
 def skill_include?(table, skill)
@@ -4009,6 +4064,10 @@ def split_list(event,list,headers,mode=0,x=true)
         spli[j].push(list[i])
       elsif ["Passive","Passives"].include?(headers[j]) && /Passive\((A|B|C)\)/ =~ mips
         spli[j].push(list[i])
+      elsif ["Passive(S)"].include?(headers[j]) && mips.include?('Seal')
+        spli[j].push(list[i])
+      elsif ["Passive(A)","Passive(B)","Passive(C)","Passive(S)""Passive(W)"].include?(headers[j]) && mips.include?(headers[j])
+        spli[j].push(list[i])
       end
     end
   end
@@ -4194,10 +4253,10 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   end
   matches5=matches5.sort {|a,b| a[0].downcase <=> b[0].downcase}
   if mode<2
-    if (weapons==['Blade'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.map{|q| q[1]}.reject{|q| q=='Blade'}.length<=0 && weapons.length<=0 && colors.length<=0)
+    if (weapons==['Blade'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.length>0 && color_weapons.map{|q| q[1]}.reject{|q| q=='Blade'}.length<=0 && weapons.length<=0 && colors.length<=0)
       # Blades are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Red','Blue','Green','Colorless'],-2)
-    elsif (weapons==['Tome'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.map{|q| q[1]}.reject{|q| q=='Tome'}.length<=0 && weapons.length<=0 && colors.length<=0)
+    elsif (weapons==['Tome'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.length>0 && color_weapons.map{|q| q[1]}.reject{|q| q=='Tome'}.length<=0 && weapons.length<=0 && colors.length<=0)
       # Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Red','Blue','Green','Colorless'],-2)
     elsif weapons.length==1 && ['Dragon','Bow','Dagger','Healer'].include?(weapons[0]) && colors.length<=0 && color_weapons.length<=0
@@ -4215,6 +4274,8 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     elsif weapons==['Tome'] && colors==['Green'] && color_weapons.length<=0
       # Blue Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Wind'],-4)
+    elsif matches5.length<=25
+      matches5=split_list(event,matches5,['Red','Blue','Green','Colorless'],-2)
     end
   end
   if matches5.length==@data.reject{|q| find_unit(q[0],event)<0}.compact.length && !(args.nil? || args.length.zero?) && @shardizard != 4 && !event.server.nil? && event.channel.id != 283821884800499714 && mode != 3
@@ -4516,7 +4577,17 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
           matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+1}")]=nil
           if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+2}")>=0
             matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+2}")]=nil
-            matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}"
+            if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+3}")>=0
+              matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+3}")]=nil
+              if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+4}")>=0
+                matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+4}")]=nil
+                matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}"
+              else
+                matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}"
+              end
+            else
+              matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}"
+            end
           else
             matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}"
           end
@@ -4532,10 +4603,10 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   if skill_types.length<=0 && weapons==['Staff'] && assists==['Staff'] && specials==['Staff']
     # Staff skills are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Weapons','Assists','Specials','Passives'],4)
-  elsif (weapons==['Blade'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.map{|q| q[1]}.reject{|q| q=='Blade'}.length<=0 && weapons.length<=0 && colors.length<=0)
+  elsif (weapons==['Blade'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.length>0 && color_weapons.map{|q| q[1]}.reject{|q| q=='Blade'}.length<=0 && weapons.length<=0 && colors.length<=0)
     # Blades are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Sword','Lance','Axe','Rod'],5)
-  elsif (weapons==['Tome'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.map{|q| q[1]}.reject{|q| q=='Tome'}.length<=0 && weapons.length<=0 && colors.length<=0)
+  elsif (weapons==['Tome'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.length>0 && color_weapons.map{|q| q[1]}.reject{|q| q=='Tome'}.length<=0 && weapons.length<=0 && colors.length<=0)
     # Tomes are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Red Tome','Blue Tome','Green Tome'],5)
   elsif colors==['Red'] && weapons.length<=0 && color_weapons.length<=0
@@ -4559,6 +4630,8 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   elsif weapons==['Tome'] && colors==['Green'] && color_weapons.length<=0
     # Green Tomes are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Wind',"Gronn"],-1)
+  elsif matches4.length<=25 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[4]}.uniq[0]=="Weapon"
+    matches4=split_list(event,matches4,['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Rod','Colorless Tome','Dragon','Bow','Dagger','Staff'],5)
   end
   data_load()
   miniskills=@skills.map{|q| q}
@@ -4623,8 +4696,8 @@ end
 
 def display_units(event, mode)
   k=find_in_units(event,mode)
-  k=k.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@data[find_unit(q,event,false,true)][22].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@data[find_unit(q,event,false,true)][22].nil?}"}
   if mode==1 && k.is_a?(Array)
+    k=k.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@data[find_unit(q,event,false,true)][22].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@data[find_unit(q,event,false,true)][22].nil?}"}
     if k.include?("- - -")
       p1=[[]]
       p2=0
@@ -4639,39 +4712,49 @@ def display_units(event, mode)
       for i in 0...p1.length
         wpn1=p1[i].map{|q| @data[find_unit(q,event,false,true)][1]}
         h="."
-        # blade type
-        h="Swords" if p1[i].include?("Alfonse") || wpn1[0]==["Red", "Blade"]
-        h="Lances" if p1[i].include?("Sharena") || wpn1[0]==["Blue", "Blade"]
-        h="Axes" if p1[i].include?("Anna") || wpn1[0]==["Green", "Blade"]
-        h="Rods" if wpn1[0]==["Colorless", "Blade"]
-        # Magic types
-        h="Fire Mages" if p1[i].include?("Lilina") || wpn1[0]==["Red", "Tome", "Fire"]
-        h="Dark Mages" if p1[i].include?("Raigh") || wpn1[0]==["Red", "Tome", "Dark"]
-        h="Red Mages" if (p1[i].include?("Lilina") && p1[i].include?("Raigh")) || (wpn1.include?(["Red", "Tome", "Fire"]) && wpn1.include?(["Red", "Tome", "Dark"]))
-        h="Thunder Mages" if p1[i].include?("Odin") || wpn1[0]==["Red", "Tome", "Thunder"]
-        h="Light Mages" if p1[i].include?("Micaiah") || wpn1[0]==["Red", "Tome", "Light"]
-        h="Blue Mages" if (p1[i].include?("Odin") && p1[i].include?("Micaiah")) || (wpn1.include?(["Blue", "Tome", "Thunder"]) && wpn1.include?(["Blue", "Tome", "Light"]))
-        h="Green Mages" if p1[i].include?("Cecilia")
-        # Dragon colors
-        h="Red Dragons" if p1[i].include?("Tiki(Young)") || wpn1[0]==["Red", "Dragon"]
-        h="Blue Dragons" if p1[i].include?("Nowi") || wpn1[0]==["Blue", "Dragon"]
-        h="Green Dragons" if p1[i].include?("Fae") || wpn1[0]==["Green", "Dragon"]
-        h="Colorless Dragons" if p1[i].include?("Robin(F)(Fallen)") || wpn1[0]==["Colorless", "Dragon"]
-        # archer colors
-        h="Red Archers" if wpn1[0]==["Red", "Bow"]
-        h="Blue Archers" if wpn1[0]==["Blue", "Bow"]
-        h="Green Archers" if wpn1[0]==["Green", "Bow"]
-        h="Colorless Archers" if p1[i].include?("Takumi") || wpn1[0]==["Colorless", "Bow"]
-        # dagger colors
-        h="Red Thieves" if wpn1[0]==["Red", "Dagger"]
-        h="Blue Thieves" if wpn1[0]==["Blue", "Dagger"]
-        h="Green Thieves" if wpn1[0]==["Green", "Dagger"]
-        h="#{"Colorless " if colored_daggers?(event)}Thieves" if p1[i].include?("Matthew") || wpn1[0]==["Colorless", "Dagger"]
-        # healer colors
-        h="Red Healers" if wpn1[0]==["Red", "Healer"]
-        h="Blue Healers" if wpn1[0]==["Blue", "Healer"]
-        h="Green Healers" if wpn1[0]==["Green", "Healer"]
-        h="#{"Colorless " if colored_healers?(event)}Healers" if p1[i].include?("Sakura") || wpn1[0]==["Colorless", "Healer"]
+        if wpn1.uniq.length==1
+          # blade type
+          h="Swords" if p1[i].include?("Alfonse") || (wpn1[0]==["Red", "Blade"])
+          h="Lances" if p1[i].include?("Sharena") || (wpn1[0]==["Blue", "Blade"])
+          h="Axes" if p1[i].include?("Anna") || (wpn1[0]==["Green", "Blade"])
+          h="Rods" if wpn1.uniq==0 && wpn1[0]==["Colorless", "Blade"]
+          # Magic types
+          h="Fire Mages" if p1[i].include?("Lilina") || (wpn1[0]==["Red", "Tome", "Fire"])
+          h="Dark Mages" if p1[i].include?("Raigh") || (wpn1[0]==["Red", "Tome", "Dark"])
+          h="Thunder Mages" if p1[i].include?("Odin") || (wpn1[0]==["Red", "Tome", "Thunder"])
+          h="Light Mages" if p1[i].include?("Micaiah") || (wpn1[0]==["Red", "Tome", "Light"])
+          h="Wind Mages" if p1[i].include?("Cecilia") || (wpn1[0]==["Green", "Tome", "Wind"])
+          # Dragon colors
+          h="Red Dragons" if p1[i].include?("Tiki(Young)") || (wpn1[0]==["Red", "Dragon"])
+          h="Blue Dragons" if p1[i].include?("Nowi") || (wpn1[0]==["Blue", "Dragon"])
+          h="Green Dragons" if p1[i].include?("Fae") || (wpn1[0]==["Green", "Dragon"])
+          h="Colorless Dragons" if p1[i].include?("Robin(F)(Fallen)") || (wpn1.uniq==0 && wpn1[0]==["Colorless", "Dragon"])
+          # archer colors
+          h="Red Archers" if (wpn1[0]==["Red", "Bow"])
+          h="Blue Archers" if (wpn1[0]==["Blue", "Bow"])
+          h="Green Archers" if (wpn1[0]==["Green", "Bow"])
+          h="Colorless Archers" if p1[i].include?("Takumi") || (wpn1[0]==["Colorless", "Bow"])
+          # dagger colors
+          h="Red Thieves" if wpn1[0]==["Red", "Dagger"]
+          h="Blue Thieves" if wpn1[0]==["Blue", "Dagger"]
+          h="Green Thieves" if wpn1[0]==["Green", "Dagger"]
+          h="#{"Colorless " if colored_daggers?(event)}Thieves" if p1[i].include?("Matthew") || (wpn1[0]==["Colorless", "Dagger"])
+          # healer colors
+          h="Red Healers" if wpn1[0]==["Red", "Healer"]
+          h="Blue Healers" if wpn1[0]==["Blue", "Healer"]
+          h="Green Healers" if wpn1[0]==["Green", "Healer"]
+          h="#{"Colorless " if colored_healers?(event)}Healers" if p1[i].include?("Sakura") || (wpn1[0]==["Colorless", "Healer"])
+        elsif wpn1.length>1 && wpn1.map{|q| [q[0],q[1]]}.uniq.length==1
+          h="Red Mages" if (p1[i].include?("Lilina") && p1[i].include?("Raigh")) || (wpn1.map{|q| [q[0],q[1]]}.include?(["Red", "Tome"]))
+          h="Blue Mages" if (p1[i].include?("Odin") && p1[i].include?("Micaiah")) || (wpn1.map{|q| [q[0],q[1]]}.include?(["Blue", "Tome"]))
+          h="Green Mages" if p1[i].include?("Cecilia") || (wpn1.map{|q| [q[0],q[1]]}.include?(["Green", "Tome"]))
+          h="Colorless Mages" if (wpn1.map{|q| [q[0],q[1]]}.include?(["Colorless", "Tome"]))
+        elsif wpn1.length>1 && wpn1.map{|q| q[0]}.uniq.length==1
+          h="Red" if (wpn1.map{|q| q[0]}.include?("Red"))
+          h="Blue" if (wpn1.map{|q| q[0]}.include?("Blue"))
+          h="Green" if (wpn1.map{|q| q[0]}.include?("Green"))
+          h="Colorless" if (wpn1.map{|q| q[0]}.include?("Colorless"))
+        end
         if h=="." && wpn1[0]=="Tome"
           h=wpn1[0][2]
           for l in 0...p1[i].length
@@ -4720,8 +4803,8 @@ end
 
 def display_skills(event, mode)
   k=find_in_skills(event,mode)
-  k=k.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(stat_buffs(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','')),event,false,true)][21].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(stat_buffs(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','')),event,false,true)][21].nil?}"}
   if mode==1 && k.is_a?(Array)
+    k=k.map{|q| "#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(stat_buffs(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','')),event,false,true)][21].nil?}#{q}#{"~~" if !["Laevatein","- - -"].include?(q) && !@skills[find_skill(stat_buffs(q.gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','')),event,false,true)][21].nil?}"}
     if k.include?("- - -")
       p1=[[]]
       p2=0
@@ -4734,35 +4817,50 @@ def display_skills(event, mode)
         end
       end
       for i in 0...p1.length
+        types=p1[i].map{|q| @skills[find_skill(stat_buffs(q.gsub('~~','').gsub('(+)','+').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','')),event)]}
+        types=types.map{|q| [q[4],q[5],find_base_skill(q,event)]}.uniq
+        for j in 0...types.length
+          types[j][0]="Passive" if types[j][0].include?("Passive") || types[j][0]=="Seal"
+          types[j][2]=nil if ["Passive","Assist","Special"].include?(types[j][0])
+          types[j].compact!
+        end
+        types.uniq!
         h="."
-        # staff type
-        h="Weapons" if p1[i].include?("Assault") && p1[i+1].include?("Heal")
-        h="Assists" if p1[i].include?("Heal")
-        h="Specials" if p1[i].include?("Imbue")
-        h="Passives" if p1[i].include?("Live to Serve 1/2/3")
-        # blade type
-        h="Swords" if p1[i].include?("Iron Sword")
-        h="Lances" if p1[i].include?("Iron Lance")
-        h="Axes" if p1[i].include?("Iron Axe")
-        # tome type
-        h="Fire Magic" if p1[i].include?("Fire")
-        h="Dark Magic" if p1[i].include?("Flux")
-        h="Rau\u00F0r Magic" if p1[i].include?("Raudrblade(+)")
-        h="Red Tomes" if p1[i].include?("Fire") && p1[i].include?("Flux")
-        h="Thunder Magic" if p1[i].include?("Thunder")
-        h="Light Magic" if p1[i].include?("Light")
-        h="Bl\u00E1r Magic" if p1[i].include?("Blarblade(+)")
-        h="Blue Tomes" if p1[i].include?("Thunder") && p1[i].include?("Light")
-        h="Wind Magic" if p1[i].include?("Wind")
-        h="Gronn Magic" if p1[i].include?("Gronnblade(+)")
-        h="Green Tomes" if p1[i].include?("Wind") && p1[i].include?("Gronnblade(+)")
-        # colorless weapon type
-        h="Staves" if p1[i].include?("Assault") && p1[i+1].include?("Fire Breath(+)")
-        h="Daggers" if p1[i].include?("Iron Dagger")
-        # Breaths
-        h="Dragon Breaths" if p1[i].include?("Fire Breath(+)")
-        # Bows
-        h="Bows" if p1[i].include?("Iron Bow")
+        if types.length==1
+          # staff type
+          if types[0][1]=="Staff Users Only"
+            h="Damaging Staves" if p1[i].include?("Assault") || types[0][0]=="Weapon"
+            h="Healing Staves" if p1[i].include?("Heal") || types[0][0]=="Assist"
+            h="Healer Specials" if p1[i].include?("Imbue") || types[0][0]=="Special"
+            h="Healer Passives" if p1[i].include?("Live to Serve 1/2/3") || types[0][0]=="Passive"
+          end
+          # weapons
+          if types[0][0]=="Weapon"
+            # blade type
+            h="Swords" if p1[i].include?("Iron Sword") || types[0][1]=="Sword Users Only"
+            h="Lances" if p1[i].include?("Iron Lance") || types[0][1]=="Lance Users Only"
+            h="Axes" if p1[i].include?("Iron Axe") || types[0][1]=="Axe Users Only"
+            # tome type
+            h="Fire Magic" if p1[i].include?("Fire") || types[0][2]=="Fire"
+            h="Dark Magic" if p1[i].include?("Flux") || types[0][2]=="Flux"
+            h="Rau\u00F0r Magic" if p1[i].include?("Raudrblade(+)") || types[0][2]=="Rau\u00F0r"
+            h="Thunder Magic" if p1[i].include?("Thunder") || types[0][2]=="Thunder"
+            h="Light Magic" if p1[i].include?("Light") || types[0][2]=="Light"
+            h="Bl\u00E1r Magic" if p1[i].include?("Blarblade(+)") || types[0][2]=="Bl\u00E1r"
+            h="Wind Magic" if p1[i].include?("Wind") || types[0][2]=="Wind"
+            h="Gronn Magic" if p1[i].include?("Gronnblade(+)") || types[0][2]=="Gronn"
+            # Breaths
+            h="Dragon Breaths" if p1[i].include?("Fire Breath(+)") || types[0][1]=="Dragons Only"
+            # Bows
+            h="Bows" if p1[i].include?("Iron Bow") || types[0][1]=="Bow Users Only"
+            # daggers
+            h="Daggers" if p1[i].include?("Iron Dagger") || types[0][1]=="Dagger Users Only"
+          end
+        elsif types.length>1 && types.map{|q| [q[0],q[1]]}.uniq.length==1
+          h="Red Tomes" if types.map{|q| q[2]}.include?("Fire") && types.map{|q| q[2]}.include?("Flux")
+          h="Blue Tomes" if types.map{|q| q[2]}.include?("Thunder") && types.map{|q| q[2]}.include?("Light")
+          h="Green Tomes" if types.map{|q| q[2]}.include?("Wind") && types.map{|q| q[2]}.include?("Gronn")
+        end
         p1[i]=[h,p1[i].join("\n")]
       end
       create_embed(event,"Results",'',0x9400D3,nil,nil,p1)
@@ -5305,8 +5403,8 @@ def disp_unit_stats_and_skills(event,args,bot)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.nil?
       disp_stats(bot,x[1],w,event,true)
-      disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
-      event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
+      disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
+      event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
     else
       event.respond "No matches found."
     end
@@ -5320,13 +5418,13 @@ def disp_unit_stats_and_skills(event,args,bot)
   if !detect_dual_unit_alias(str.downcase,event.message.text.downcase).nil?
     x=detect_dual_unit_alias(str.downcase,event.message.text.downcase)
     disp_stats(bot,x[1],w,event,true)
-    disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
-    event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
+    disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
+    event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
   elsif !detect_dual_unit_alias(str.downcase,str.downcase).nil?
     x=detect_dual_unit_alias(str.downcase,str.downcase)
     disp_stats(bot,x[1],w,event,true)
-    disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
-    event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
+    disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
+    event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
   elsif find_unit(str,event)>=0
     disp_stats(bot,str,w,event)
     disp_unit_skills(bot,str,event,true,true)
@@ -5455,6 +5553,7 @@ def weapon_legality(event,name,weapon,refinement,recursion=false)
   u2='Dagger' if u2.include?('Dagger')
   u2="#{u2.gsub('Healer','Staff')} Users Only"
   u2="Dragons Only" if u[1][1]=='Dragon'
+  u2="Beasts Only" if u[1][1]=='Beast'
   return w2 if u2==w[5]
   return "~~#{w2}~~" if recursion
   if "Raudr"==w[0][0,5] || "Blar"==w[0][0,4] || "Gronn"==w[0][0,5] || "Keen Raudr"==w[0][0,10] || "Keen Blar"==w[0][0,9] || "Keen Gronn"==w[0][0,10]
@@ -5659,7 +5758,7 @@ def create_summon_list(clr)
     if p[i][1].length<=0
       p[i]=nil
     else
-      p[i][1]=p[i][1].join("\n")
+      p[i][1]=p[i][1].uniq.join("\n")
     end
   end
   p.compact!
@@ -6023,7 +6122,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
       stat_buffers.push(stat_skills_2[i])
     end
   end
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,'"Frostbite" is weapons like Felicia\'s Plate.  "Photon" is weapons like Light Brand.',pic,x)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"	\u2764 **#{summoner}**" unless summoner=='-'}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,'"Frostbite" is weapons like Felicia\'s Plate.  "Photon" is weapons like Light Brand.',pic,x)
 end
 
 def unit_study(event,name,bot,weapon=nil)
@@ -6388,15 +6487,15 @@ def heal_study(event,name,bot,weapon=nil)
   staves.push("**Martyr+:** heals target for #{d} HP, #{i} HP when Imbue triggers, also heals #{u40[0].gsub('Lavatain','Laevatein')} for #{s} HP")
   staves.push("~~How much Martyr(+) heals is based on how much damage *#{u40[0].gsub('Lavatain','Laevatein')}* has taken.~~")
   staves.push(" ")
-  staves.push("**Rehabilitate:** heals target for 7-69 HP, 17-79 HP when Imbue triggers") if event.message.text.downcase.include?(" all")
+  staves.push("**Rehabilitate:** heals target for 7-105 HP, 17-115 HP when Imbue triggers") if event.message.text.downcase.include?(" all")
   d=[atkk/2-10,7].max
   d2=[blatkk/2-10,7].max
   cd=[cratkk/2-10,7].max
   cd2=[crblatkk/2-10,7].max
-  i="#{d+10}-#{d+72}#{" (#{d2+10}-#{d2+72})" unless d==d2}"
-  ci="#{cd+10}-#{cd+72}#{" (#{cd2+10}-#{cd2+72})" unless cd==cd2}"
-  d="#{d}-#{d+62}#{" (#{d2}-#{d2+62})" unless d==d2}"
-  cd="#{cd}-#{cd+62}#{" (#{cd2}-#{cd2+62})" unless cd==cd2}"
+  i="#{d+10}-#{d+108}#{" (#{d2+10}-#{d2+108})" unless d==d2}"
+  ci="#{cd+10}-#{cd+108}#{" (#{cd2+10}-#{cd2+108})" unless cd==cd2}"
+  d="#{d}-#{d+98}#{" (#{d2}-#{d2+98})" unless d==d2}"
+  cd="#{cd}-#{cd+98}#{" (#{cd2}-#{cd2+98})" unless cd==cd2}"
   i="~~#{i}~~ #{ci}" unless i==ci
   d="~~#{d}~~ #{cd}" unless d==cd
   staves.push("**Rehabilitate+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
@@ -6412,12 +6511,12 @@ def heal_study(event,name,bot,weapon=nil)
       stat_buffers.push(stat_skills_2[i])
     end
   end
-  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}"
+  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"	\u2764 **#{summoner}**" unless summoner=='-'}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.join("\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"	\u2764 **#{summoner}**" unless summoner=='-'}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}"
     event.respond staves.join("\n")
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"	\u2764 **#{summoner}**" unless summoner=='-'}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
   end
 end
 
@@ -6726,16 +6825,16 @@ def proc_study(event,name,bot,weapon=nil)
       stat_buffers.push(stat_skills_2[i])
     end
   end
-  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"	\u2764 **#{summoner}**" unless summoner=='-'}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.map{|q| q.join("\n")}.join("\n\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"	\u2764 **#{summoner}**" unless summoner=='-'}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
     s=""
     for i in 0...staves.length
       s=extend_message(s,staves[i].join("\n"),event,2)
     end
     event.respond s
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,[["Star",staves[0].join("\n")],["Moon",staves[1].join("\n")],["Sun",staves[2].join("\n")],["Eclipse",staves[3].join("\n")],["Fire",staves[4].join("\n")],["Ice",staves[5].join("\n")],["Dragon",staves[6].join("\n")],["Darkness",staves[7].join("\n")]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"	\u2764 **#{summoner}**" unless summoner=='-'}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"Equipped weapon: #{wl}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,[["Star",staves[0].join("\n")],["Moon",staves[1].join("\n")],["Sun",staves[2].join("\n")],["Eclipse",staves[3].join("\n")],["Fire",staves[4].join("\n")],["Ice",staves[5].join("\n")],["Dragon",staves[6].join("\n")],["Darkness",staves[7].join("\n")]])
   end
 end
 
@@ -6972,10 +7071,10 @@ def phase_study(event,name,bot,weapon=nil)
     end
   end
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all")
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"In-combat skills: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\n**Basic stats:** #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]}  (#{u40[16]} BST)\n**Displayed stats:** #{blu40[1]} / #{blu40[2]} / #{blu40[3]} / #{blu40[4]} / #{blu40[5]}  (#{blu40[16]} BST)"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{r}#{"	\u2764 **#{summoner}**" unless summoner=='-'}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"In-combat skills: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n\n**Basic stats:** #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]}  (#{u40[16]} BST)\n**Displayed stats:** #{blu40[1]} / #{blu40[2]} / #{blu40[3]} / #{blu40[4]} / #{blu40[5]}  (#{blu40[16]} BST)"
   else
     u40=make_stat_string_list(u40,blu40)
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"In-combat skills: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\nSummoner support rank: #{summoner}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,[["Displayed stats","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"],["Player Phase","HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\nSpeed: #{ppu40[3]}\nDefense: #{ppu40[4]}\nResistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","HP: #{epu40[1]}\n#{atk}: #{epu40[2]}\nSpeed: #{epu40[3]}\nDefense: #{epu40[4]}\nResistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{r}#{"	\u2764 **#{summoner}**" unless summoner=='-'}#{"+#{merges}" unless merges<=0}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\nTempest Bonus unit" if tempest}#{"\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0}\n#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"In-combat skills: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0}#{"Equipped weapon: #{weapon}#{" (+) #{refinement} Mode" if !refinement.nil? && refinement.length>0}\n\n" unless u40[0]=="Kiran"}#{unit_clss(event,j,u40[0])}#{"\nLegendary Hero type: *#{@data[j][2][0]}*/*#{@data[j][2][1]}*" unless @data[j][2][0]==" "}\n",xcolor,nil,pic,[["Displayed stats","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"],["Player Phase","HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\nSpeed: #{ppu40[3]}\nDefense: #{ppu40[4]}\nResistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","HP: #{epu40[1]}\n#{atk}: #{epu40[2]}\nSpeed: #{epu40[3]}\nDefense: #{epu40[4]}\nResistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
   end
 end
 
@@ -7059,6 +7158,178 @@ def disp_art(event,name,bot,weapon=nil)
       embed.image = Discordrb::Webhooks::EmbedImage.new(url: art)
     end
   end
+  return nil
+end
+
+def learnable_skills(event,name,bot,weapon=nil)
+  name=['Robin(M)','Robin(F)'] if name=='Robin'
+  if name.is_a?(Array)
+    for i in 0...name.length
+      learnable_skills(event,name[i],bot)
+    end
+    return nil
+  end
+  data_load()
+  name=find_name_in_string(event) if name.nil?
+  j=@data[find_unit(name,event)]
+  k=@skills.reject{|q| q[4]=="Passive(W)"}.map{|q| q[5]}.uniq
+  bbb=[]
+  for i in 0...k.length
+    k3=true
+    k2=k[i].split(', ')
+    for i2 in 0...k2.length
+      k3=false if k2[i2]=="No one"
+      if k2[i2].include?("Excludes")
+        k4=true
+        if k2[i2].include?("Weapon Users")
+          k4=false if k2[i2].include?(j[1][0])
+        elsif k2[i2].include?("Users")
+          k4=false if k2[i2].include?("Excludes Tome") && j[1][1]=="Tome"
+          k4=false if k2[i2].include?("and Tome") && j[1][1]=="Tome"
+          k4=false if k2[i2].include?("Excludes Bow") && j[1][1]=="Bow"
+          k4=false if k2[i2].include?("and Bow") && j[1][1]=="Bow"
+          k4=false if k2[i2].include?("Excludes Dagger") && j[1][1]=="Dagger"
+          k4=false if k2[i2].include?("and Dagger") && j[1][1]=="Dagger"
+          k4=false if k2[i2].include?(weapon_clss(j[1],event).gsub('Healer','Staff'))
+        else
+          k4=false if k2[i2].include?("Dragons") && j[1][1]=="Dragon"
+          k4=false if k2[i2].include?("Beasts") && j[1][1]=="Beast"
+          k4=false if k2[i2].include?(j[3].gsub('Flier','Fliers')) || k2[i2].include?(j[3].gsub('Armor','Armored'))
+        end
+        k3=(k3 && k4)
+      end
+      if k2[i2].include?("Only")
+        k4=false
+        k4=true if k2[i2]=="Dragons Only" && j[1][1]=="Dragon"
+        k4=true if k2[i2]=="Beasts Only" && j[1][1]=="Beast"
+        k4=true if k2[i2]=="Tome Users Only" && j[1][1]=="Tome"
+        k4=true if k2[i2]=="Bow Users Only" && j[1][1]=="Bow"
+        k4=true if k2[i2]=="Dagger Users Only" && j[1][1]=="Dagger"
+        k4=true if k2[i2]=="Melee Weapon Users Only" && ["Blade","Dragon","Beast"].include?(j[1][1])
+        k4=true if k2[i2]=="Ranged Weapon Users Only" && ["Tome","Bow","Dagger","Healer"].include?(j[1][1])
+        k4=true if k2[i2].include?(j[3].gsub('Flier','Fliers')) || k2[i2].include?(j[3].gsub('Armor','Armored'))
+        k4=true if k2[i2]=="#{weapon_clss(j[1],event).gsub('Healer','Staff')} Users Only"
+        k4=true if k2[i2]=="#{j[1][0]} Weapon Users Only"
+        k4=true if k2[i2]=="Summon Gun Users Only" && j[0]=="Kiran"
+        if k2[i2].include?("Dancers")
+          u2=@skills[find_skill("Dance",event)]
+          b=[]
+          for i3 in 14...19
+            u=u2[i3].split(', ')
+            for j2 in 0...u.length
+              b.push(u[j2].gsub('Lavatain','Laevatein')) unless b.include?(u[j2]) || u[j2].include?("-")
+            end
+          end
+          k4=true if b.include?(j[0])
+        end
+        if k2[i2].include?("Singers")
+          u2=@skills[find_skill("Sing",event)]
+          b=[]
+          for i3 in 14...19
+            u=u2[i3].split(', ')
+            for j2 in 0...u.length
+              b.push(u[j2].gsub('Lavatain','Laevatein')) unless b.include?(u[j2]) || u[j2].include?("-")
+            end
+          end
+          k4=true if b.include?(j[0])
+        end
+        k3=(k3 && k4)
+      end
+    end
+    bbb.push(k[i]) if k3
+  end
+  g=get_markers(event)
+  matches4=[]
+  matches3=@skills.reject{|q| !bbb.include?(q[5]) || !has_any?(g, q[21]) || (q[6]!='-' && !q[6].split(', ').include?(j[0])) || q[0].include?('Squad Ace ') || q[0].include?('Initiate Seal ') || (q[4].split(', ').include?('Passive(W)') && !q[4].split(', ').include?('Passive(S)') && !q[4].split(', ').include?('Seal') && [q[14].length,q[15].length,q[16].length,q[17].length,q[18].length].max<2)}
+  q=@skills[@skills.length-1]
+  puts [q[14].length,q[15].length,q[16].length,q[17].length,q[18].length].to_s
+  puts 
+  for i in 0...matches3.length
+    unless matches3[i].nil? || matches3[i][0][0,10]=="Falchion ("
+      if skill_include?(matches3,"#{matches3[i][0]}+")>=0
+        matches3[skill_include?(matches3,"#{matches3[i][0]}+")]=nil
+        matches3[i][0]="#{matches3[i][0]}(+)"
+      elsif matches3[i][0][matches3[i][0].length-1,1].to_i.to_s==matches3[i][0][matches3[i][0].length-1,1]
+        v=matches3[i][0][matches3[i][0].length-1,1].to_i
+        if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+1}")>=0
+          matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+1}")]=nil
+          if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+2}")>=0
+            matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+2}")]=nil
+            if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+3}")>=0
+              matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+3}")]=nil
+              if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+4}")>=0
+                matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+4}")]=nil
+                matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}"
+              else
+                matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}"
+              end
+            else
+              matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}"
+            end
+          else
+            matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}"
+          end
+        end
+      end
+      matches4.push(matches3[i])
+    end
+  end
+  for i in 0...matches4.length
+    matches4[i][0]=matches4[i][0].gsub('Bladeblade','Laevatein')
+  end
+  matches4=split_list(event,matches4,['Weapon','Assist','Special','Passive(A)','Passive(B)','Passive(C)','Passive(S)'],4)
+  p1=[[]]
+  p2=0
+  for i in 0...matches4.length
+    if matches4[i][0]=="- - -"
+      p1.push([])
+      p2+=1
+    else
+      p1[p2].push(matches4[i][0])
+    end
+  end
+  j=find_unit(j[0],event)
+  p1=p1.map{|q| q.join("\n")}
+  if p1[0].length+p1[1].length+p1[2].length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    msg="__Skills **#{@data[j][0]}** can learn__"
+    msg=extend_message(msg,"*Weapons:* #{p1[0].gsub("\n",', ')}",event,2)
+    msg=extend_message(msg,"*Assists:* #{p1[1].gsub("\n",', ')}",event,2)
+    msg=extend_message(msg,"*Specials:* #{p1[2].gsub("\n",', ')}",event,2)
+    event.respond msg
+  else
+    create_embed(event,"__Skills **#{@data[j][0]}** can learn__",'',unit_color(event,j),nil,pick_thumbnail(event,j,bot),[['Weapons',p1[0]],['Assists',p1[1]],['Specials',p1[2]]],4)
+  end
+  if !event.server.nil? && event.channel.id != 283821884800499714 && @shardizard != 4
+    event.respond "For the passive skills this unit can learn, please use this command in PM."
+    return nil
+  elsif p1[3].length+p1[4].length+p1[5].length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    msg=""
+    msg=extend_message(msg,"*Passives(A):* #{p1[3].gsub("\n",', ')}",event,2)
+    msg=extend_message(msg,"*Passives(B):* #{p1[4].gsub("\n",', ')}",event,2)
+    msg=extend_message(msg,"*Passives(C):* #{p1[5].gsub("\n",', ')}",event,2)
+    msg=extend_message(msg,"*Passives(S):* #{p1[6].gsub("\n",', ')}",event,2) unless p1[6].nil?
+    event.respond msg
+  else
+    create_embed(event,"",'',unit_color(event,j),nil,nil,[['Passives(A)',p1[3]],['Passives(B)',p1[4]],['Passives(C)',p1[5]]],4)
+    p1[6]=p1[6].split("\n")
+    l=0
+    l=1 if p1[6].length%3==2
+    m=0
+    m=1 if p1[6].length%3==1
+    p11=p1[6][0,p1[6].length/3+l].join("\n")
+    p2=p1[6][p1[6].length/3+l,p1[6].length/3+m].join("\n")
+    p3=p1[6][2*(p1[6].length/3)+l+m,p1[6].length/3+l].join("\n")
+    create_embed(event,"__Seals **#{@data[j][0]}** can equip__",'',unit_color(event,j),nil,nil,[['.',p11],['.',p2],['.',p3]],4)
+  end
+  return nil
+end
+
+bot.command([:allinheritance,:allinherit,:allinheritable,:skillinheritance,:skillinherit,:skillinheritable,:skilllearn,:skilllearnable,:skillsinheritance,:skillsinherit,:skillsinheritable,:skillslearn,:skillslearnable,:inheritanceskills,:inheritskill,:inheritableskill,:learnskill,:learnableskill,:inheritanceskills,:inheritskills,:inheritableskills,:learnskills,:learnableskills,:all_inheritance,:all_inherit,:all_inheritable,:skill_inheritance,:skill_inherit,:skill_inheritable,:skill_learn,:skill_learnable,:skills_inheritance,:skills_inherit,:skills_inheritable,:skills_learn,:skills_learnable,:inheritance_skills,:inherit_skill,:inheritable_skill,:learn_skill,:learnable_skill,:inheritance_skills,:inherit_skills,:inheritable_skills,:learn_skills,:learnable_skills,:inherit,:learn,:inheritance,:learnable,:inheritable,:skillearn,:skillearnable]) do |event, *args|
+  if args.nil? || args.length<1
+    event.respond "No unit was included"
+    return nil
+  end
+  parse_function(:learnable_skills,event,args,bot)
   return nil
 end
 
@@ -7446,7 +7717,8 @@ bot.command([:random,:rand]) do |event, *args|
     unless event.server.nil?
       color_weapons.push(['Gold', 'Beast']) if event.server.id==256291408598663168
     end
-    color_weapons=color_weapons.reject{|q| !colors.include?(q[0]) || !weapons.include?(q[1])}
+    color_weapons=color_weapons.reject{|q| !colors.include?(q[0])} unless colors.length<=0
+    color_weapons=color_weapons.reject{|q| !weapons.include?(q[1])} unless weapons.length<=0
   end
   color_weapons.uniq!
   clazz=color_weapons.sample
@@ -8297,6 +8569,11 @@ bot.command([:skills,:fodder]) do |event, *args|
       args.compact!
       skill_comparison(event,args)
       return nil
+    elsif ['learn','learnable','inherit','inheritance','inheritable'].include?(args[0].downcase)
+      args[0]=nil
+      args.compact!
+      k=parse_function(:learnable_skills,event,args,bot,true)
+      return nil unless k<0
     end
   end
   k=find_name_in_string(event,nil,1)
@@ -10116,8 +10393,8 @@ bot.message do |event|
           w=nil
           w=k2[0] unless k2.nil?
           disp_stats(bot,x[1],w,event,true)
-          disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
-          event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
+          disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
+          event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
         elsif !detect_dual_unit_alias(s.downcase,s.downcase).nil?
           x=detect_dual_unit_alias(s.downcase,s.downcase)
           event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
@@ -10125,8 +10402,8 @@ bot.message do |event|
           w=nil
           w=k2[0] unless k2.nil?
           disp_stats(bot,x[1],w,event,true)
-          disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
-          event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
+          disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
+          event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
         end
       elsif str[1].downcase=='ploy' && find_skill(stat_buffs(s,s),event)>=0
         disp_skill(stat_buffs(s,s),event,true)
@@ -10137,8 +10414,8 @@ bot.message do |event|
         w=nil
         w=k2[0] unless k2.nil?
         disp_stats(bot,x[1],w,event,true)
-        disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
-        event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
+        disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
+        event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
       elsif !detect_dual_unit_alias(str[0].downcase,str[0].downcase).nil?
         x=detect_dual_unit_alias(str[0].downcase,str[0].downcase)
         event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
@@ -10146,8 +10423,8 @@ bot.message do |event|
         w=nil
         w=k2[0] unless k2.nil?
         disp_stats(bot,x[1],w,event,true)
-        disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
-        event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
+        disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
+        event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
       elsif find_unit(str[0],event)>=0
         event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
         k=find_name_in_string(event,nil,1)
@@ -10170,8 +10447,8 @@ bot.message do |event|
         w=nil
         w=k2[0] unless k2.nil?
         disp_stats(bot,x[1],w,event,true)
-        disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array)
-        event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array)
+        disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
+        event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
       end
     end
   elsif event.message.text.include?('0x4') && !event.user.bot_account?
