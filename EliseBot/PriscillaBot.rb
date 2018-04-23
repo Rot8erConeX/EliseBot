@@ -5344,7 +5344,7 @@ def detect_dual_unit_alias(str1,str2,robinmode=0)
       return [str,['Chrom(Spring)']]
     elsif str2.include?("launch") || str2.include?("prince")
       return [str,['Chrom(Launch)']]
-    elsif str2.include?("branded") || str2.include?("brand") || str2.include?("exalted") || str2.include?("exalt") || str2.include?("king") || str2.include?("sealed") || str2.include?("horse")
+    elsif str2.include?("branded") || str2.include?("brand") || str2.include?("exalted") || str2.include?("exalt") || str2.include?("king") || str2.include?("sealed") || str2.include?("horse") || str2.include?("knight")
       return [str,['Chrom(Branded)']]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
@@ -8408,6 +8408,9 @@ bot.command(:games) do |event, *args|
     pic="https://orig00.deviantart.net/d8ce/f/2018/051/1/a/corrin_by_rot8erconex-dc3tj34.png"
     name="Corrin"
     xcolor=avg_color([[179,36,0],[32,142,251]])
+  elsif "Chrom(Branded)"==@data[j][0] && !args.join('').downcase.include?('brand') && !args.join('').downcase.include?('exalt') && !args.join('').downcase.include?('sealed') && !args.join('').downcase.include?('branded') && !args.join('').downcase.include?('exalted') && !args.join('').downcase.include?('knight')
+    pic=pick_thumbnail(event,find_unit("Chrom(Launch)",event),bot)
+    name="Chrom(Launch)"
   elsif "Tiki(Adult)"==@data[j][0] && !args.join('').downcase.gsub('games','gmes').include?('a')
     pic="https://orig00.deviantart.net/6c50/f/2018/051/9/e/tiki_by_rot8erconex-dc3tkzq.png"
     name="Tiki"
