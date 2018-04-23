@@ -38,7 +38,8 @@ bot.gateway.check_heartbeat_acks = false
 @server_markers=[]
 @x_markers=[]
 @dev_waifus=[]
-@dev_lowlifes=[]
+@dev_somebodies=[]
+@dev_nobodies=[]
 @dev_units=[]
 @stored_event=nil
 @announcement=''
@@ -231,10 +232,12 @@ def devunits_load() # this function loads information regarding the devunits
     b=[]
   end
   @dev_waifus=b[0].split('\\'[0])
-  @dev_lowlifes=b[1].split('\\'[0])
+  @dev_somebodies=b[1].split('\\'[0])
+  @dev_nobodies=b[2].split('\\'[0])
   b[0]=nil
   b[1]=nil
   b[2]=nil
+  b[3]=nil
   b.compact!
   @dev_units=[]
   for i in 0...b.length/10
@@ -257,9 +260,48 @@ def devunits_load() # this function loads information regarding the devunits
 end
 
 def devunits_save() # this function is used by the devedit command to save the devunits
-  s="#{@dev_waifus.join('\\'[0])}\n#{@dev_lowlifes.join('\\'[0])}"
-  for i in 0...@dev_units.length
-    s="#{s}\n\n#{@dev_units[i][0]}\n#{@dev_units[i][1]}\\#{@dev_units[i][2]}\\#{@dev_units[i][3]}\\#{@dev_units[i][4]}\\#{@dev_units[i][5]}\n#{@dev_units[i][6].join('\\'[0])}\n#{@dev_units[i][7].join('\\'[0])}\n#{@dev_units[i][8].join('\\'[0])}\n#{@dev_units[i][9].join('\\'[0])}\n#{@dev_units[i][10].join('\\'[0])}\n#{@dev_units[i][11].join('\\'[0])}\n#{@dev_units[i][12]}"
+  # sort the waifu list alphabetically, but move Sakura to the front of the list
+  k=@dev_waifus.map{|q| q}
+  for i in 0...k.length
+    k[i]=nil if k[i]=="Sakura"
+  end
+  k.compact!
+  k=k.sort{|a,b| a<=>b}
+  w=["Sakura"]
+  for i in 0...k.length
+    w.push(k[i])
+  end
+  # sort the "somebodies" and "nobodies" lists alphabetically
+  sb=@dev_somebodies.sort{|a,b| a<=>b}
+  nb=@dev_nobodies.sort{|a,b| a<=>b}
+  # remove units from the "somebody" ist if they're also in the waifu list.
+  for i in 0...sb.length
+    sb[i]=nil if w.include?(sb[i])
+  end
+  sb.compact!
+  # remove units from the "nobody" list if they're also in the waifu or "somebody" list, or if they're listed as a normal devunit.
+  for i in 0...nb.length
+    nb[i]=nil if w.include?(nb[i]) || sb.include?(nb[i]) || @dev_units.map{|q| q[0]}.include?(nb[i])
+  end
+  nb.compact!
+  # sort the unit list alphabetically, but move Sakura to the front of the line
+  k=@dev_units.map{|q| q}
+  saku=nil
+  for i in 0...k.length
+    if k[i][0]=="Sakura" && saku.nil?
+      saku=k[i].map{|q| q}
+      k[i]=nil
+    end
+  end
+  k.compact!
+  k=k.sort{|a,b| a[0]<=>b[0]}
+  untz=[saku.map{|q| q}]
+  for i in 0...k.length
+    untz.push(k[i].map{|q| q})
+  end
+  s="#{w.join('\\'[0])}\n#{sb.join('\\'[0])}\n#{nb.join('\\'[0])}"
+  for i in 0...untz.length
+    s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\n#{untz[i][6].join('\\'[0])}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12]}"
   end
   open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt', 'w') { |f|
     f.puts s
@@ -398,12 +440,20 @@ bot.command(:help) do |event, command, subcommand|
     create_embed(event,"**#{command.downcase}** __\*message__","Sets my status message to `message`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['locateshards','locateshard','locate'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** #{"shard#{['','s'].sample}" if command.downcase=='locate'}","Informs you of one server you and I share for each kind of shard.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
-  elsif ['devedit'].include?(command.downcase)
+  elsif ['devedit','dev_edit'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['create'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*stats__","Allows me to create a new devunit with the character `unit` and stats described in `stats`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['promote','rarity','feathers'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","Causes me to promote the devunit with the name `unit`.\n\nIf `number` is defined, I will promote the devunit that many times.\nIf not, I will promote them once.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+    elsif ['newwaifu','newaifu','addwaifu','new_waifu','add_waifu','waifu'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Adds a new unit to the list of the developer waifus.\n\nThis adds them to the [hidden] \"Mathoo'sWaifus\" searchable group.\nIt also causes me to congratulate my developer when he summons the unit.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+    elsif ['newsomebody','newsomeone','newsomebodies','addsomebody','addsomeone','addsomebodies','new_somebody','new_someone','new_somebodies','add_somebody','add_someone','add_somebodies','somebody','somebodies','someone'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Adds a new unit to the list of the developer \"somebodies\".\nThese are units he wants but doesn't consider waifu material.\n\nThis causes me to congratulate my developer when he summons the unit.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+    elsif ['newnobody','newnoone','newnobodies','addnobody','addnoone','addnobodies','new_nobody','new_noone','new_nobodies','add_nobody','add_noone','add_nobodies','nobody','nobodies','noone'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Adds a new unit to the list of the developer \"nobodies\".\nThese are units that he does not care for but keeps in his barracks for one reason or another.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+    elsif ['remove','delete','send_home','sendhome','fodder'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Removes a unit from either the developer \"nobodies\" list or the devunits.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['merge','combine'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['nature','ivs'].include?(subcommand.downcase)
@@ -411,7 +461,7 @@ bot.command(:help) do |event, command, subcommand|
     elsif ['learn','teach'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*skill types__","\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     else
-      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the devunits.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new devunit\n`FEH!#{command.downcase} promote` - promotes an existing devunit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a devunit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a devunit's nature (*also `ivs`*)\n`FEH!#{command.downcase} teach` - teaches a new skill to a devunit (*also `learn`*)\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the devunits.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new devunit\n`FEH!#{command.downcase} promote` - promotes an existing devunit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a devunit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a devunit's nature (*also `ivs`*)\n`FEH!#{command.downcase} teach` - teaches a new skill to a devunit (*also `learn`*)\n\n`FEH!#{command.downcase} new_waifu` - adds a dev waifu (*also `add_waifu`*)\n`FEH!#{command.downcase} new_somebody` - adds a dev \"somebody\" (*also `add_somebody`*)\n`FEH!#{command.downcase} new_nobody` - adds a dev \"nobody\" (*also `add_nobody`*)\n\n`FEH!#{command.downcase} send_home` - removes the unit from either the devunits or the \"nobodies\" list (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     end
   elsif ['skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Explains why some units have skills listed at lower rarities than they are available at.",0xD49F61)
@@ -429,7 +479,7 @@ bot.command(:help) do |event, command, subcommand|
     create_embed(event,"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit Data**__\n`data` __name__ - shows both stats and skills (*also `unit`*)\n`stats` __name__ - shows only the stats\n`skills` __name__ - shows only the skills (*also `fodder`*)\n`study` __name__ - for a study of the unit at multiple rarities and merges\n`effHP` __name__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __name__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __name__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __name__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __name__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`games` __unit__ - for a list of games the unit is in\n`art` __unit__ __art type__ - for the character's art\n`learnable` __name__ - for a list of all learnable skills (*also `inheritable`*)\n\n__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
     create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`skillrarity` (*also `skill_rarity`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed(event,"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
-    create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n\n`snagstats` - snags server stats for multiple servers\n`setmarker` __letter__\n\n`reboot` - reboots this shard\n\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n`status` __\\*message__ - sets my status\n\n`locateshards` - lists one server you are in for each color of shard.",0x008b8b) if (event.server.nil? || command.downcase=='devcommands') && event.user.id==167657750971547648
+    create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n\n`snagstats` - snags server stats for multiple servers\n`setmarker` __letter__\n\n`reboot` - reboots this shard\n\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n`status` __\\*message__ - sets my status\n\n`locateshards` - lists one server you are in for each color of shard.",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
     event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command."
   end
 end
@@ -2899,9 +2949,9 @@ def disp_stats(bot,name,weapon,event,ignore=false)
       else
         refinement=nil
       end
-    elsif @dev_lowlifes.include?(name)
+    elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
-    elsif @dev_waifus.include?(name)
+    elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
       event.respond "Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats."
     else
       event.respond "Mathoo does not have that character.  Showing neutral stats."
@@ -3861,9 +3911,9 @@ def disp_unit_skills(bot,name,event,ignore=false,chain=false,doubleunit=false)
       xcolor=0xFFABAF if @data[j][0]=='Sakura'
       rarity=@dev_units[dv][1]
       sklz2=[@dev_units[dv][6],@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],[@dev_units[dv][12]]]
-    elsif @dev_lowlifes.include?(@data[j][0])
+    elsif @dev_nobodies.include?(@data[j][0])
       event.respond "Mathoo has this character but doesn't care enough about including their skills.  Showing default skills." unless chain
-    elsif @dev_waifus.include?(@data[j][0])
+    elsif @dev_waifus.include?(@data[j][0]) || @dev_somebodies.include?(@data[j][0])
       event.respond "Mathoo does not have that character...but not for a lack of wanting.  Showing default skills." unless chain
     else
       event.respond "Mathoo does not have that character.  Showing default skills." unless chain
@@ -6091,9 +6141,9 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
       else
         refinement=nil
       end
-    elsif @dev_lowlifes.include?(name)
+    elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
-    elsif @dev_waifus.include?(name)
+    elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
       event.respond "Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats."
     else
       event.respond "Mathoo does not have that character.  Showing neutral stats."
@@ -6450,9 +6500,9 @@ def heal_study(event,name,bot,weapon=nil)
       else
         refinement=nil
       end
-    elsif @dev_lowlifes.include?(name)
+    elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
-    elsif @dev_waifus.include?(name)
+    elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
       event.respond "Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats."
     else
       event.respond "Mathoo does not have that character.  Showing neutral stats."
@@ -6697,9 +6747,9 @@ def proc_study(event,name,bot,weapon=nil)
       else
         refinement=nil
       end
-    elsif @dev_lowlifes.include?(name)
+    elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
-    elsif @dev_waifus.include?(name)
+    elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
       event.respond "Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats."
     else
       event.respond "Mathoo does not have that character.  Showing neutral stats."
@@ -7015,9 +7065,9 @@ def phase_study(event,name,bot,weapon=nil)
       else
         refinement=nil
       end
-    elsif @dev_lowlifes.include?(name)
+    elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
-    elsif @dev_waifus.include?(name)
+    elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
       event.respond "Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats."
     else
       event.respond "Mathoo does not have that character.  Showing neutral stats."
@@ -10259,21 +10309,114 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
     event.respond "There is no unit by that name."
     return nil
   end
+  if ['newwaifu','newaifu','addwaifu','new_waifu','add_waifu','waifu'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && args[0].downcase=='waifu')
+    if @dev_waifus.include?(@data[j][0])
+      event.respond "#{@data[j][0]} is already listed among your waifus."
+    else
+      @dev_waifus.push(@data[j][0])
+      rfs=false
+      ren=false
+      for i in 0...@dev_somebodies.length
+        if @dev_somebodies[i]==@data[j][0]
+          rfs=true
+          @dev_somebodies[i]=nil
+        end
+      end
+      @dev_somebodies.compact!
+      for i in 0...@dev_nobodies.length
+        if @dev_nobodies[i]==@data[j][0]
+          rfn=true
+          @dev_nobodies[i]=nil
+        end
+      end
+      @dev_nobodies.compact!
+      devunits_save()
+      event.respond "#{@data[j][0]} has been added to the list of your waifus.#{"\nI have also taken the liberty of removing #{@data[j][0]} from your #{"\"somebodies\"" if rfs}#{" and " if rfs && rfn}#{"\"nobodies\"" if rfn} list#{"s" if rfs && rfn}." if rfs || rfn}"
+    end
+    return nil
+  elsif ['newsomebody','newsomeone','newsomebodies','addsomebody','addsomeone','addsomebodies','new_somebody','new_someone','new_somebodies','add_somebody','add_someone','add_somebodies','somebody','somebodies','someone'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && ['somebody','somebodies','someone'].include?(args[0].downcase))
+    if @dev_waifus.include?(@data[j][0])
+      event.respond "#{@data[j][0]} is already listed among your waifus."
+    elsif @dev_somebodies.include?(@data[j][0])
+      event.respond "#{@data[j][0]} is already listed among your \"somebodies\" list."
+    else
+      @dev_somebodies.push(@data[j][0])
+      ren=false
+      for i in 0...@dev_nobodies.length
+        if @dev_nobodies[i]==@data[j][0]
+          rfn=true
+          @dev_nobodies[i]=nil
+        end
+      end
+      @dev_nobodies.compact!
+      devunits_save()
+      event.respond "#{@data[j][0]} has been added to your \"somebodies\" list.#{"\nI have also taken the liberty of removing #{@data[j][0]} from your \"nobodies\" list." if rfn}"
+    end
+    return nil
+  elsif ['newnobody','newnoone','newnobodies','addnobody','addnoone','addnobodies','new_nobody','new_noone','new_nobodies','add_nobody','add_noone','add_nobodies','nobody','nobodies','noone'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && ['nobody','nobodies','noone'].include?(args[0].downcase))
+    if @dev_waifus.include?(@data[j][0])
+      event.respond "#{@data[j][0]} is already listed among your waifus."
+    elsif @dev_somebodies.include?(@data[j][0])
+      event.respond "#{@data[j][0]} is already listed among your \"somebodies\" list."
+    elsif @dev_nobodies.include?(@data[j][0])
+      event.respond "#{@data[j][0]} is already listed among your \"nobodies\" list."
+    else
+      @dev_nobodies.push(@data[j][0])
+      devunits_save()
+      event.respond "#{@data[j][0]} has been added to your \"nobodies\" list."
+    end
+    return nil
+  end
   j2=find_in_dev_units(@data[j][0])
   if j2<0
     args=event.message.text.downcase.split(" ")
     if cmd.downcase=="create"
-      sklz2=unit_skills(@data[find_unit(find_name_in_string(event),event)][0],event,true)
+      jn=@data[find_unit(find_name_in_string(event),event)][0]
+      sklz2=unit_skills(jn,event,true)
       flurp=find_stats_in_string(event)
-      @dev_units.push([@data[find_unit(find_name_in_string(event),event)][0],flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
+      @dev_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
+      for i in 0...@dev_nobodies.length
+        @dev_nobodies[i]=nil if @dev_nobodies[i]==jn
+      end
+      @dev_nobodies.compact!
       devunits_save()
       congrate=false
-      congrats=true if @dev_waifus.include?(@data[find_unit(find_name_in_string(event),event)][0])
-      event.respond "You have added a #{flurp[0]}* #{@data[find_unit(find_name_in_string(event),event)][0]} to your collection.  #{"Congrats!" if congrats}"
+      congrats=true if @dev_waifus.include?(jn) || @dev_somebodies.include?(jn)
+      event.respond "You have added a #{flurp[0]}*#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{"Congrats!" if congrats}"
+    elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
+      if @dev_waifus.include?(@data[j][0])
+        event.respond "Woah, you're getting rid of one of your waifus?!?  Who hacked your Discord and/or FEH account?"
+      elsif @dev_somebodies.include?(@data[j][0])
+        @stored_event=event
+        event.respond "You're getting rid of one of your somebodies?  Should I remove them from the \"somebodies\" list?"
+        event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+          if e.message.text.downcase.include?('no')
+            e.respond "Okay."
+          else
+            jn=@data[find_unit(find_name_in_string(@stored_event),@stored_event)][0]
+            for i in 0...@dev_somebodies.length
+              @dev_somebodies[i]=nil if @dev_somebodies[i]==jn
+            end
+            @dev_somebodies.compact!
+            devunits_save()
+            e.respond "#{jn} has been removed from your \"somebodies\" list."
+          end
+        end
+      elsif @dev_nobodies.include?(@data[j][0])
+        for i in 0...@dev_nobodies.length
+          @dev_nobodies[i]=nil if @dev_nobodies[i]==@data[j][0]
+        end
+        @dev_nobodies.compact!
+        devunits_save()
+        e.respond "#{@data[j][0]} has been removed from your \"nobodies\" list."
+      else
+        event.respond "You never had that unit in the first place."
+      end
+      return nil
     else
       @stored_event=event
-      event.respond "You do not have this unit.  Do you wish to add them to your collection?" unless @dev_lowlifes.include?(@data[j][0])
-      event.respond "You Have this unit but previously stated you don't want to input their data.  Do you wish to add them to your collection?" if @dev_lowlifes.include?(@data[j][0])
+      event.respond "You do not have this unit.  Do you wish to add them to your collection?" unless @dev_nobodies.include?(@data[j][0])
+      event.respond "You Have this unit but previously stated you don't want to input their data.  Do you wish to add them to your collection?" if @dev_nobodies.include?(@data[j][0])
       event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
         if e.message.text.downcase.include?('no')
           e.respond "Okay."
@@ -10282,13 +10425,34 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
           sklz2=unit_skills(jn,@stored_event,true)
           flurp=find_stats_in_string(e)
           @dev_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5]])
+          for i in 0...@dev_nobodies.length
+            @dev_nobodies[i]=nil if @dev_nobodies[i]==jn
+          end
+          @dev_nobodies.compact!
           devunits_save()
           congrate=false
-          congrats=true if @dev_waifus.include?(jn)
-          e.respond "You have added a 3* #{jn} to your collection.  #{"Congrats!" if congrats}"
+          congrats=true if @dev_waifus.include?(jn) || @dev_somebodies.include?(jn)
+          e.respond "You have added a #{flurp[0]}*#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{"Congrats!" if congrats}"
         end
       end
     end
+  elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
+    @stored_event=event
+    event.respond "I have a devunit stored for #{@dev_units[j2][0]}.  Do you wish me to delete this build?"
+    event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+      if e.message.text.downcase.include?('no')
+        e.respond "Okay."
+      else
+        jn=@data[find_unit(find_name_in_string(@stored_event),@stored_event)][0]
+        @dev_units[find_in_dev_units(jn)]=nil
+        @dev_units.compact!
+        devunits_save()
+        e.respond "#{jn} has been removed from the devunits."
+      end
+    end
+  elsif cmd.downcase=="create"
+    event.respond "You already have a #{@dev_units[j2][0]}."
+    return nil
   elsif ['promote','rarity','feathers'].include?(cmd.downcase)
     flurp=find_stats_in_string(event,nil,1)
     @dev_units[j2][1]=flurp[0] unless flurp[0].nil?
