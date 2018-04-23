@@ -1333,6 +1333,14 @@ def find_name_in_string(event,stringx=nil,mode=0)
           name=args3[0]
         end
       end
+    elsif name=="Kana(M)" || name=="Kana(F)"
+      if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
+        if ['kana','kanna'].include?(args3[0].downcase)
+          name="Kana"
+        else
+          name=args3[0]
+        end
+      end
     elsif name=="Corrin(M)" || name=="Corrin(F)"
       name=args3[0] if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
     elsif name=="Tiki(Young)" || name=="Tiki(Adult)"
@@ -1347,6 +1355,22 @@ def find_name_in_string(event,stringx=nil,mode=0)
       if args3.length==1
         if ['eirika','eirik','eiriku','erika'].include?(args3[0].downcase)
           name="Eirika"
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=="Hinoka(Launch)" || name=="Hinoka(Wings)"
+      if args3.length==1
+        if ['hinoka'].include?(args3[0].downcase)
+          name="Hinoka"
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=="Chrom(Launch)" || name=="Chrom(Branded)"
+      if args3.length==1
+        if ['chrom'].include?(args3[0].downcase)
+          name="Chrom"
         else
           name=args3[0]
         end
@@ -1412,6 +1436,14 @@ def find_name_in_string(event,stringx=nil,mode=0)
           name=args3[0]
         end
       end
+    elsif name=="Kana(M)" || name=="Kana(F)"
+      if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
+        if ['kana','kanna'].include?(args3[0].downcase)
+          name="Kana"
+        else
+          name=args3[0]
+        end
+      end
     elsif name=="Corrin(M)" || name=="Corrin(F)"
       name=args3[0] if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
     elsif name=="Tiki(Young)" || name=="Tiki(Adult)"
@@ -1426,6 +1458,22 @@ def find_name_in_string(event,stringx=nil,mode=0)
       if args3.length==1
         if ['eirika','eirik','eiriku','erika'].include?(args3[0].downcase)
           name="Eirika"
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=="Hinoka(Launch)" || name=="Hinoka(Wings)"
+      if args3.length==1
+        if ['hinoka'].include?(args3[0].downcase)
+          name="Hinoka"
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=="Chrom(Launch)" || name=="Chrom(Branded)"
+      if args3.length==1
+        if ['chrom'].include?(args3[0].downcase)
+          name="Chrom"
         else
           name=args3[0]
         end
@@ -1493,6 +1541,14 @@ def find_name_in_string(event,stringx=nil,mode=0)
           name=args3[0]
         end
       end
+    elsif name=="Kana(M)" || name=="Kana(F)"
+      if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
+        if ['kana','kanna'].include?(args3[0].downcase)
+          name="Kana"
+        else
+          name=args3[0]
+        end
+      end
     elsif name=="Corrin(M)" || name=="Corrin(F)"
       name=args3[0] if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
     elsif name=="Tiki(Young)" || name=="Tiki(Adult)"
@@ -1507,6 +1563,22 @@ def find_name_in_string(event,stringx=nil,mode=0)
       if args3.length==1
         if ['eirika','eirik','eiriku','erika'].include?(args3[0].downcase)
           name="Eirika"
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=="Hinoka(Launch)" || name=="Hinoka(Wings)"
+      if args3.length==1
+        if ['hinoka'].include?(args3[0].downcase)
+          name="Hinoka"
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=="Chrom(Launch)" || name=="Chrom(Branded)"
+      if args3.length==1
+        if ['chrom'].include?(args3[0].downcase)
+          name="Chrom"
         else
           name=args3[0]
         end
@@ -1541,7 +1613,7 @@ def find_stats_in_string(event,stringx=nil,mode=0)
   s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4])
   a=s.split(' ')
   s=stringx if all_commands().include?(a[0])
-  s=(first_sub(s,find_name_in_string(event,s,1)[1],'') rescue s) unless s.downcase=='laevatein' || s.downcase.include?('blucina') || s.downcase.include?('bluecina') || s.downcase.include?('blyn') || s.downcase.include?('brlyn') || s.downcase.include?('axeura') || s.downcase.include?('axura') || s.downcase.include?('axezura') || s.downcase.include?('axzura') || s.downcase.include?('axe-ura') || s.downcase.include?('ax-ura') || s.downcase.include?('axe-zura') || s.downcase.include?('ax-zura') || s.downcase.include?('corrin') || s.downcase.include?('robin') || s.downcase.include?('kamui') || s.downcase.include?('tiki') || s.downcase.include?('chiki') || s.downcase.include?('reflet') || s.downcase.include?('daraen') || s.downcase.include?('eirika') || s.downcase.include?('eirik') || s.downcase.include?('eiriku') || s.downcase.include?('erika') || s.downcase.include?('morgan') || s.downcase.include?('marc') || s.downcase.include?('linfan') || s.downcase.include?('grima')
+  s=(first_sub(s,find_name_in_string(event,s,1)[1],'') rescue s) unless s.downcase=='laevatein' || s.downcase.include?('blucina') || s.downcase.include?('bluecina') || s.downcase.include?('blyn') || s.downcase.include?('brlyn') || s.downcase.include?('axeura') || s.downcase.include?('axura') || s.downcase.include?('axezura') || s.downcase.include?('axzura') || s.downcase.include?('axe-ura') || s.downcase.include?('ax-ura') || s.downcase.include?('axe-zura') || s.downcase.include?('ax-zura') || s.downcase.include?('corrin') || s.downcase.include?('robin') || s.downcase.include?('kamui') || s.downcase.include?('tiki') || s.downcase.include?('chiki') || s.downcase.include?('reflet') || s.downcase.include?('daraen') || s.downcase.include?('eirika') || s.downcase.include?('eirik') || s.downcase.include?('eiriku') || s.downcase.include?('erika') || s.downcase.include?('morgan') || s.downcase.include?('marc') || s.downcase.include?('linfan') || s.downcase.include?('grima') || s.downcase.include?('kana') || s.downcase.include?('kanna') || s.downcase.include?('hinoka') || s.downcase.include?('chrom')
   args=sever(s,true).split(" ")
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   merges=nil
@@ -4167,12 +4239,16 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
       units.push("Tiki(Adult)") if args[i].downcase=="tiki"
       units.push("Eirika(Bonds)") if args[i].downcase=="eirika"
       units.push("Eirika(Memories)") if args[i].downcase=="eirika"
+      units.push("Hinoka(Launch)") if args[i].downcase=="hinoka"
+      units.push("Hinoka(Wings)") if args[i].downcase=="hinoka"
+      units.push("Chrom(Launch)") if args[i].downcase=="chrom"
+      units.push("Chrom(Branded)") if args[i].downcase=="chrom"
       units.push("Reinhardt(Bonds)") if args[i].downcase=="reinhardt"
       units.push("Reinhardt(World)") if args[i].downcase=="reinhardt"
       units.push("Olwen(Bonds)") if args[i].downcase=="olwen"
       units.push("Olwen(World)") if args[i].downcase=="olwen"
-      units.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(F)") if ['robin','corrin','morgan'].include?(args[i].downcase)
-      units.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(M)") if ['robin','corrin','morgan'].include?(args[i].downcase)
+      units.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(F)") if ['robin','corrin','morgan','kana'].include?(args[i].downcase)
+      units.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(M)") if ['robin','corrin','morgan','kana'].include?(args[i].downcase)
     end
   end
   colors=colors.uniq
@@ -5250,6 +5326,29 @@ def detect_dual_unit_alias(str1,str2,robinmode=0)
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Eirika(Bonds)','Eirika(Memories)']]
+  elsif /hinoka/ =~ str1
+    str="hinoka"
+    if str2.include?("launch")
+      return [str,['Hinoka(Launch)']]
+    elsif str2.include?("wings") || str2.include?("kinshi") || str2.include?("winged")
+      return [str,['Hinoka(Wings)']]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Hinoka(Launch)','Hinoka(Wings)']]
+  elsif /(chrom|kuromu)/ =~ str1
+    str="chrom"
+    str="kuromu" if str2.include?("kuromu")
+    if str2.include?("winter") || str2.include?("christmas") || str2.include?("holiday") || str2.include?("we")
+      return [str,['Chrom(Winter)']]
+    elsif str2.include?("bunny") || str2.include?("spring") || str2.include?("easter") || str2.include?("sf")
+      return [str,['Chrom(Spring)']]
+    elsif str2.include?("launch") || str2.include?("prince")
+      return [str,['Chrom(Launch)']]
+    elsif str2.include?("branded") || str2.include?("brand") || str2.include?("exalted") || str2.include?("exalt") || str2.include?("king") || str2.include?("sealed") || str2.include?("horse")
+      return [str,['Chrom(Branded)']]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Chrom(Launch)','Chrom(Branded)']]
   elsif /(reinhardt|rainharuto)/ =~ str1
     str="reinhardt"
     str="rainharuto" if str2.include?("rainharuto")
@@ -5366,6 +5465,18 @@ def detect_dual_unit_alias(str1,str2,robinmode=0)
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Morgan(M)','Morgan(F)']]
+  elsif /kan(n|)a/ =~ str1
+    str="kana"
+    str="kanna" if str2.include?("kanna")
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("#{str}f") || str2.include?("f#{str}")
+      return [str,['Kana(F)']]
+    elsif str2.include?("male#{str}") || str2.include?("#{str}male") || str2.include?("#{str}m") || str2.include?("m#{str}")
+      return [str,['Kana(M)']]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Kana(M)','Kana(F)']]
   end
   return nil
 end
@@ -5666,8 +5777,9 @@ def weapon_legality(event,name,weapon,refinement,recursion=false)
     return weapon_legality(event,name,"Zanbato#{"+" if w[0].include?("+")}",refinement,true) if u[1][0]=="Red"
     return weapon_legality(event,name,"Ridersbane#{"+" if w[0].include?("+")}",refinement,true) if u[1][0]=="Blue"
     return weapon_legality(event,name,"Poleaxe#{"+" if w[0].include?("+")}",refinement,true) if u[1][0]=="Green"
-  elsif ["Wo Dao","Giant Spoon"].include?(w[0].gsub('+',''))
+  elsif ["Wo Dao","Harmonic Lance","Giant Spoon"].include?(w[0].gsub('+',''))
     return weapon_legality(event,name,"Wo Dao#{"+" if w[0].include?("+")}",refinement,true) if u[1][0]=="Red"
+    return weapon_legality(event,name,"Harmonic Lance#{"+" if w[0].include?("+")}",refinement,true) if u[1][0]=="Blue"
     return weapon_legality(event,name,"Giant Spoon#{"+" if w[0].include?("+")}",refinement,true) if u[1][0]=="Green"
   end
   return "~~#{w2}~~"
@@ -8285,6 +8397,9 @@ bot.command(:games) do |event, *args|
     pic="https://orig00.deviantart.net/97f6/f/2018/068/a/c/morgan_by_rot8erconex-dc5drdn.png"
     name="Morgan"
     xcolor=avg_color([[32,142,251],[179,36,0]])
+  elsif ["Kana(F)","Kana(M)"].include?(@data[j][0])
+    name="Kana"
+    xcolor=avg_color([[32,142,251],[1,173,0]])
   elsif ["Robin(F)(Fallen)","Robin(M)(Fallen)"].include?(@data[j][0])
     pic="https://orig00.deviantart.net/33ea/f/2018/104/2/7/grimleal_by_rot8erconex-dc8svax.png"
     name="Grima: Robin(Fallen)"
@@ -8421,7 +8536,7 @@ bot.command([:bst, :BST]) do |event, *args|
           counters[22][i2]+=1 if ["Xander","Xander(Spring)","Xander(Summer)"].include?(name)
           counters[23][i2]+=1 if ["Tiki(Young)","Tiki(Adult)","Tiki(Adult)(Summer)"].include?(name)
           counters[24][i2]+=1 if ["Lyn","Lyn(Bride)","Lyn(Brave)","Lyn(Love)"].include?(name)
-          counters[25][i2]+=1 if ["Chrom","Chrom(Spring)","Chrom(Winter)","Chrom(Branded)"].include?(name)
+          counters[25][i2]+=1 if ["Chrom(Launch)","Chrom(Spring)","Chrom(Winter)","Chrom(Branded)"].include?(name)
           counters[26][i2]+=1 if ["Azura","Azura(Performing)","Azura(Winter)"].include?(name)
           counters[27][i2]+=1 if ["Camilla","Camilla(Spring)","Camilla(Winter)"].include?(name)
           counters[28][i2]+=1 if ["Ike","Ike(Vanguard)","Ike(Brave)"].include?(name)
@@ -10047,7 +10162,7 @@ bot.command(:backup) do |event, trigger|
       end
     }
     event.respond "Alias list has been backed up."
-  elsif ['groupes','group'].include?(trigger.downcase)
+  elsif ['groups','group'].include?(trigger.downcase)
     groups_load()
     nzzzzz=@groups.map{|a| a}
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups2.txt', 'w') { |f|
