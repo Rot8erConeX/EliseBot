@@ -352,7 +352,7 @@ bot.command(:help) do |event, command, subcommand|
   elsif ['study'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows the level 40 stats for the unit `name` for a combination of multiple rarities with 0, 5, and 10 merges.",0xD49F61)
   elsif ['summonpool','summon_pool','pool'].include?(command.downcase) || (['summon'].include?(command.downcase) && "#{subcommand}".downcase=='pool')
-    create_embed(event,"**#{command.downcase}#{" pool" if command.downcase=='summon'}** __*colors__","Shows the summon pool for the listed color.\n\nIn PM, all colors listed will be displayed, or all colors if none are specified.\nIn servers, only the first color listed will be displayed.",0x9E682C)
+    create_embed(event,"**#{command.downcase}#{" pool" if command.downcase=='summon'}** __*colors__","Shows the summon pool for the listed color.\n\nIn PM, all colors listed will be displayed, or all colors if none are specified.\nIn servers, only the first color listed will be displayed.",0xD49F61)
   elsif @summon_servers.include?(k) && ['summon'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\n**This command is only available in certain servers**.",0x9E682C)
   elsif ['effhp','eff_hp'].include?(command.downcase)
@@ -10327,10 +10327,12 @@ bot.command(:cleanupaliases) do |event|
   for i in 0...nmz.length
     unless nmz[i][2].nil?
       for i2 in 0...nmz[i][2].length
-        srv=(bot.server(nmz[i][2][i2]) rescue nil)
-        if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
-          k+=1
-          nmz[i][2][i2]=nil
+        unless nmz[i][2][i2]=285663217261477889
+          srv=(bot.server(nmz[i][2][i2]) rescue nil)
+          if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
+            k+=1
+            nmz[i][2][i2]=nil
+          end
         end
       end
       nmz[i][2].compact!
