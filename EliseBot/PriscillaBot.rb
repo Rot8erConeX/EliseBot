@@ -92,7 +92,7 @@ bot.gateway.check_heartbeat_acks = false
           ["`\u22C1`Excitable","HP","Resistance",true]]
 
 def all_commands(include_nil=false) # a list of all the command names.  Used by Nino Mode to ignore messages that are commands, so responses do not double up.
-  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills','locate','locateshard','locateshards','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable']
+  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills','locate','locateshard','locateshards','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable','banners','banner']
   k[0]=nil if include_nil
   return k
 end
@@ -405,6 +405,8 @@ bot.command(:help) do |event, command, subcommand|
     create_embed(event,"**#{command.downcase}** __\*filters__","Lists all of the legendary heroes, sorted by up to three defined filters.\nBy default, will sort by Legendary __Element__ and then the non-HP __stat__ boost given by the hero.\n\nPossible filters (in order of priority when applied) :\nElement(s), Flavor(s), Affinity/Affinities\nStat(s), Boost(s)\nWeapon(s)\nColo(u)r(s)\nMove(s), Movement(s)",0xD49F61)
   elsif ['games'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows a list of games that the unit `name` is in.",0xD49F61)
+  elsif ['banners','banner'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __name__","Shows a list of banners that the unit `name` has been a focus unit on.",0xD49F61)
   elsif ['rand','random'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Generates a random unit with random, but still valid, stats.",0xD49F61)
   elsif ['compare','comparison'].include?(command.downcase)
@@ -476,7 +478,7 @@ bot.command(:help) do |event, command, subcommand|
     end
   else
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
-    create_embed(event,"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit Data**__\n`data` __name__ - shows both stats and skills (*also `unit`*)\n`stats` __name__ - shows only the stats\n`skills` __name__ - shows only the skills (*also `fodder`*)\n`study` __name__ - for a study of the unit at multiple rarities and merges\n`effHP` __name__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __name__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __name__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __name__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __name__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`games` __unit__ - for a list of games the unit is in\n`art` __unit__ __art type__ - for the character's art\n`learnable` __name__ - for a list of all learnable skills (*also `inheritable`*)\n\n__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
+    create_embed(event,"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit Data**__\n`data` __name__ - shows both stats and skills (*also `unit`*)\n`stats` __name__ - shows only the stats\n`skills` __name__ - shows only the skills (*also `fodder`*)\n`study` __name__ - for a study of the unit at multiple rarities and merges\n`effHP` __name__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __name__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __name__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __name__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __name__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`games` __unit__ - for a list of games the unit is in\n`banners` __unit__ - for a list of banners the unit has been a focus unit on\n`art` __unit__ __art type__ - for the character's art\n`learnable` __name__ - for a list of all learnable skills (*also `inheritable`*)\n\n__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
     create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`skillrarity` (*also `skill_rarity`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed(event,"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
     create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n\n`snagstats` - snags server stats for multiple servers\n`setmarker` __letter__\n\n`reboot` - reboots this shard\n\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n`status` __\\*message__ - sets my status\n\n`locateshards` - lists one server you are in for each color of shard.",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
@@ -487,6 +489,14 @@ end
 bot.command(:reboot, from: 167657750971547648) do |event| # reboots Elise
   return nil unless event.user.id==167657750971547648
   exec "cd C:/Users/Mini-Matt/Desktop/devkit && PriscillaBot.rb #{@shardizard}"
+end
+
+def safe_to_spam?(event)
+  return true if event.server.nil?
+  return true if @shardizard==4
+  return true if event.channel.id==283821884800499714
+  # return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam')
+  return false
 end
 
 def get_markers(event)
@@ -702,11 +712,11 @@ def make_banner()
     bnr.push(nil)
   end
   for i in 0...@data.length
-    bnr[3].push(@data[i][0]) if @data[i][19].include?('5p') && !bnr[2].include?(@data[i][0]) && @data[i][22].nil?
-    bnr[4].push(@data[i][0]) if @data[i][19].include?('4p') && @data[i][22].nil? && (!bnr[2].include?(@data[i][0]) || !x)
-    bnr[5].push(@data[i][0]) if @data[i][19].include?('3p') && @data[i][22].nil? && (!bnr[2].include?(@data[i][0]) || !y)
-    bnr[6].push(@data[i][0]) if @data[i][19].include?('2p') && @data[i][22].nil? && (!bnr[2].include?(@data[i][0]) || !z)
-    bnr[7].push(@data[i][0]) if @data[i][19].include?('1p') && @data[i][22].nil? && (!bnr[2].include?(@data[i][0]) || !w)
+    bnr[3].push(@data[i][0]) if @data[i][19].include?('5p') && @data[i][22].nil?
+    bnr[4].push(@data[i][0]) if @data[i][19].include?('4p') && @data[i][22].nil?
+    bnr[5].push(@data[i][0]) if @data[i][19].include?('3p') && @data[i][22].nil?
+    bnr[6].push(@data[i][0]) if @data[i][19].include?('2p') && @data[i][22].nil?
+    bnr[7].push(@data[i][0]) if @data[i][19].include?('1p') && @data[i][22].nil?
   end
   return bnr
 end
@@ -4133,7 +4143,6 @@ def get_group(name,event)
     return ["FalchionUsers",b.uniq]
   elsif name.downcase=="mathoo'swaifus"
     metadata_load()
-    metadata_load()
     return ["Mathoo'sWaifus",@dev_waifus]
   elsif name.downcase=="ghb"
     b=[]
@@ -4404,7 +4413,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
       matches5=split_list(event,matches5,['Red','Blue','Green','Colorless'],-2)
     end
   end
-  if matches5.length==@data.reject{|q| find_unit(q[0],event)<0}.compact.length && !(args.nil? || args.length.zero?) && @shardizard != 4 && !event.server.nil? && event.channel.id != 283821884800499714 && mode != 3
+  if matches5.length==@data.reject{|q| find_unit(q[0],event)<0}.compact.length && !(args.nil? || args.length.zero?) && !safe_to_spam?(event) && mode != 3
     event.respond "Your request is gibberish." if ['unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
     return -1
   elsif mode==3
@@ -4412,7 +4421,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   elsif matches5.length.zero?
     event.respond "There were no units that matched your request." unless paired
     return -2
-  elsif matches5.map{|k| k[0]}.join("\n").length>=1900 && !event.server.nil? && !ignore_limit
+  elsif matches5.map{|k| k[0]}.join("\n").length>=1900 && !safe_to_spam?(event) && !ignore_limit
     event.respond "There were so many unit matches that I would prefer you use the command in PM." unless paired
     return -2
   elsif mode==2
@@ -4787,13 +4796,13 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   end
   matches4=matches4.reject{|q| !has_any?(g, q[21])}
   data_load()
-  if matches4.length==microskills.length && !(args.nil? || args.length.zero?) && !event.server.nil?
+  if matches4.length==microskills.length && !(args.nil? || args.length.zero?) && !safe_to_spam?(event)
     event.respond "Your request is gibberish." if ['skill','skills'].include?(args[0].downcase)
     return -1
   elsif matches4.length.zero?
     event.respond "There were no skills that matched your request." unless paired
     return -2
-  elsif matches4.map{|k| k[0]}.join("\n").length>=1900 && !event.server.nil?
+  elsif matches4.map{|k| k[0]}.join("\n").length>=1900 && !safe_to_spam?(event)
     event.respond "\* \* \*" if !brk.is_a?(Array)
     event.respond "There were so many skill matches that I would prefer you use the command in PM." unless paired
     return -2
@@ -4907,7 +4916,7 @@ def display_units(event, mode)
         else
           create_embed(event,"Results",'',0x9400D3,nil,nil,[['.',p1],['.',p2],['.',p3]])
         end
-      elsif !event.server.nil?
+      elsif !safe_to_spam?(event)
         event.respond "There are so many unit results that I would prefer that you post this in PM."
       else
         t=k[0]
@@ -5021,7 +5030,7 @@ def display_skills(event, mode)
         event.respond t
       end
     end
-  elsif !event.server.nil?
+  elsif !safe_to_spam?(event)
   else
     t=k[0]
     if k.length>1
@@ -5939,7 +5948,7 @@ def disp_summon_pool(event,args)
     colors.push('Colorless') if ['colorless','colourless','clear','clears'].include?(args[i].downcase)
   end
   colors=colors.uniq
-  if event.server.nil? || event.channel.id==283821884800499714 || @shardizard==4
+  if safe_to_spam?(event)
     colors=['Red','Blue','Green','Colorless'] if colors.length<=0
   elsif colors.length<=0
     event.respond "I will not show the entire summon pool as that would be spam.  Please specify a single color or use this command in PM."
@@ -7461,7 +7470,7 @@ def learnable_skills(event,name,bot,weapon=nil)
   else
     create_embed(event,"__Skills **#{@data[j][0]}** can learn__",'',unit_color(event,j),nil,pick_thumbnail(event,j,bot),[['Weapons',p1[0]],['Assists',p1[1]],['Specials',p1[2]]],4)
   end
-  if !event.server.nil? && event.channel.id != 283821884800499714 && @shardizard != 4
+  if !safe_to_spam?(event)
     event.respond "For the passive skills this unit can learn, please use this command in PM."
     return nil
   elsif p1[3].length+p1[4].length+p1[5].length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
@@ -7483,6 +7492,135 @@ def learnable_skills(event,name,bot,weapon=nil)
     p3=p1[6][2*(p1[6].length/3)+l+m,p1[6].length/3+l].join("\n")
     create_embed(event,"__Seals **#{@data[j][0]}** can equip__",'',unit_color(event,j),nil,nil,[['.',p11],['.',p2],['.',p3]],4)
   end
+  return nil
+end
+
+def banner_list(event,name,bot,weapon=nil)
+  name=['Robin(M)','Robin(F)'] if name=='Robin'
+  if name.is_a?(Array)
+    for i in 0...name.length
+      banner_list(event,name[i],bot)
+    end
+    return nil
+  end
+  b=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
+      b.push(line.gsub("\n",''))
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    b[i]=b[i].split('\\'[0])
+    b[i][1]=b[i][1].to_i
+    b[i][2]=b[i][2].split(', ')
+    b[i]=nil if b[i][2][0]=='-'
+  end
+  justnames=true
+  if !safe_to_spam?(event)
+    justnames=false if " #{event.message.text.downcase} ".include?('rates') || " #{event.message.text.downcase} ".include?('details') || " #{event.message.text.downcase} ".include?('specifics')
+  else
+    justnames=false
+    justnames=true if " #{event.message.text.downcase} ".include?('justnames') || " #{event.message.text.downcase} ".include?('just_names') || " #{event.message.text.downcase} ".include?('just names')
+  end
+  b.compact!
+  b.reverse!
+  data_load()
+  name=find_name_in_string(event) if name.nil?
+  j=@data[find_unit(name,event)]
+  banners=[]
+  banner_count=0
+  if j[19].include?("LU")
+    banners.push("*Launch Unit*")
+    banner_count=-1
+  end
+  for i in 0...b.length
+    percentage=b[i][1]
+    percentage=0-percentage if percentage<0
+    shared_color=[]
+    other_color=[]
+    if b[i][2].include?(j[0])
+      for i2 in 0...b[i][2].length
+        u=@data[find_unit(b[i][2][i2],event)]
+        if u[0]==j[0]
+        elsif u[1][0]==j[1][0]
+          shared_color.push(u[0])
+        else
+          other_color.push(u[0])
+        end
+      end
+      if justnames
+        str=b[i][0]
+      else
+        str="__*Banner Name:* #{b[i][0]}__#{"\n*Shared Focus Color:* #{shared_color.join(', ')}" if shared_color.length>0}#{"\n*Other Focus Color:* #{other_color.join(', ')}" if other_color.length>0}\n*Focus Start:* #{'%.2f' % percentage}%"
+        if !b[i][3].nil? && b[i].include?('4')
+          str="#{str}#{" (5\\*), 29.00% (4\\*)\n_5\\* Start Chance:_ #{'%.2f' % (percentage*1.00/(shared_color.length+1))}% (Perceived), #{'%.2f' % (percentage*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
+          str="#{str}#{"\n_4\\* Start Chance:_ #{'%.2f' % (29.00/(shared_color.length+1))}% (Perceived), #{'%.2f' % (29.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
+        else
+          str="#{str}#{"\n*Start Chance:* #{'%.2f' % (percentage*1.00/(shared_color.length+1))}% (Perceived), #{'%.2f' % (percentage*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
+        end
+      end
+      banners.push(str)
+    end
+  end
+  banner_count+=banners.length
+  ftr="Banner count: #{banner_count}"
+  if banners.length>0
+    banners[0]="__**Debut:**__\n#{banners[0]}"
+    banners[1]="\n__**Other Banners:**__#{"\n" unless justnames}\n#{banners[1]}" if banners.length>1
+    if justnames && !safe_to_spam?(event)
+      banners.push("\n\n#{ftr}")
+      ftr='You can see more details about these banners by using this command in PM or by including the word "specifics" in the command.'
+    else
+      non_focus=[]
+      if j[19].include?("5p") && j[22].nil?
+        k=@data.reject{|q| !q[19].include?("5p") || !q[22].nil?}
+        non_focus.push("5\\* (on banners with 5\\* non-focus) - #{'%.2f' % (3.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (3.0/k.length)} (Actual)%")
+      end
+      if j[19].include?("4p") && j[22].nil?
+        k=@data.reject{|q| !q[19].include?("4p") || !q[22].nil?}
+        non_focus.push("4\\* (on normal banners) - #{'%.2f' % (58.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (58.0/k.length)}% (Actual)")
+        non_focus.push("4\\* (on 4\\* Focus banners) - #{'%.2f' % (29.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (29.0/k.length)}% (Actual)")
+      end
+      if j[19].include?("3p") && j[22].nil?
+        k=@data.reject{|q| !q[19].include?("3p") || !q[22].nil?}
+        non_focus.push("3\\* (on normal banners) - #{'%.2f' % (36.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (36.0/k.length)}% (Actual)")
+        non_focus.push("3\\* (on Hero Fests and Legendary banners) - #{'%.2f' % (34.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (34.0/k.length)}% (Actual)")
+      end
+      if j[19].include?("2p") && j[22].nil?
+        k=@data.reject{|q| !q[19].include?("2p") || !q[22].nil?}
+        non_focus.push("2\\* - #{'%.2f' % (0.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (0.0/k.length)}% (Actual)")
+      end
+      if j[19].include?("1p") && j[22].nil?
+        k=@data.reject{|q| !q[19].include?("1p") || !q[22].nil?}
+        non_focus.push("1\\* - #{'%.2f' % (0.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (0.0/k.length)}% (Actual)")
+      end
+      banners.push("\n__**Starting Non-Focus Chances:**__\n#{non_focus.join("\n")}") if non_focus.length>0
+    end
+  else
+    banners=[">No banners found<"]
+  end
+  if banners.join("\n#{"\n" unless justnames}").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    msg="__Banners **#{j[0]}** has been on__"
+    for i in 0...banners.length
+      msg=extend_message(msg,banners[i],event,1,"\n#{"\n" unless justnames}")
+    end
+    event.respond msg
+  else
+    j=find_unit(j[0],event)
+    create_embed(event,"__Banners **#{@data[j][0]}** has been on__",banners.join("\n#{"\n" unless justnames}"),unit_color(event,j),ftr,pick_thumbnail(event,j,bot),nil,4)
+  end
+  return nil
+end
+
+bot.command([:banners, :banner]) do |event, *args|
+  if args.nil? || args.length<1
+    event.respond "No unit was included"
+    return nil
+  end
+  parse_function(:banner_list,event,args,bot)
   return nil
 end
 
@@ -8076,7 +8214,7 @@ bot.command([:random,:rand]) do |event, *args|
 end
 
 bot.command(:whyelise) do |event|
-  if (!event.message.text.downcase.include?('full') && !event.message.text.downcase.include?('long')) && !event.server.nil?
+  if (!event.message.text.downcase.include?('full') && !event.message.text.downcase.include?('long')) && !safe_to_spam?(event)
     create_embed(event,"__A word from my developer__","When people learn that my main waifu is Sakura, almost invariably, the next question that springs to their mind is: \"If that's the case, then why does your bot take after the **opposite** *Fates* imouto healer?\"\n\nThe short answer is: I already had a SakuraBot for another server at the time of writing the bot, and lost a vote that would have made the bot be Priscilla.\n\nFor the full story, please use the command `FEH!whyelise full` or use the command in PM.",0x008b8b)
   elsif @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     event.respond "When people learn that my main waifu is Sakura, almost invariably, the next question that springs to their mind is: \"If that's the case, then why does your bot take after the **opposite** *Fates* imouto healer?\"\n\nThe short answer is: I already had a SakuraBot for another server at the time of writing the bot, and lost a vote that would have made the bot be Priscilla.\n\nThe long answer is:\n\nBack when the bot that would become EliseBot was created, she was an entirely different beast.  At the time, all the tier lists were quite horrible - ten times worse than everyone says the DefPloy iteration of the Gamepedia list was.  So one of the servers I was in made their own tier list, and the bot that would become Elise was intended to be a server-specific bot to look up information on their custom tier list.\n\nAt this time, the server had a few other bots, and they were all named after *Fire Emblem* characters: Lucina was a mod bot, NinoBot was NinoBot, and Robin(M) was a bot for looking up information in *Awakening* and *Fates*.  In *Heroes* mechanics, that was a red character, a green character, and a blue character.  So the admin of the server suggested that I name the bot after a colorless character so the bots formed a color-balanced team."
@@ -8221,7 +8359,7 @@ bot.command(:summon) do |event, *colors|
       k=rand(10000)
       if k<focus*100
         hx=bnr[2].sample
-        rx="5\\*"
+        rx="5\\*(f)"
         nr=n.sample
       elsif k<focus*100+five_star*100
         hx=bnr[3].sample
@@ -8229,7 +8367,7 @@ bot.command(:summon) do |event, *colors|
         nr=["+HP -Atk","+HP -Spd","+HP -Def","+HP -Res","+Atk -HP","+Atk -Spd","+Atk -Def","+Atk -Res","+Spd -HP","+Spd -Atk","+Spd -Def","+Spd -Res","+Def -HP","+Def -Atk","+Def -Spd","+Def -Res","+Res -HP","+Res -Atk","+Res -Spd","+Res -Def","Neutral"].sample
       elsif !bnr[8].nil? && k<focus*100+five_star*100+four_star*50
         hx=bnr[8].sample
-        rx="4\\*"
+        rx="4\\*(f)"
         nr=n.sample
       elsif k<focus*100+five_star*100+four_star*100
         hx=bnr[4].sample
@@ -8237,7 +8375,7 @@ bot.command(:summon) do |event, *colors|
         nr=["+HP -Atk","+HP -Spd","+HP -Def","+HP -Res","+Atk -HP","+Atk -Spd","+Atk -Def","+Atk -Res","+Spd -HP","+Spd -Atk","+Spd -Def","+Spd -Res","+Def -HP","+Def -Atk","+Def -Spd","+Def -Res","+Res -HP","+Res -Atk","+Res -Spd","+Res -Def","Neutral"].sample
       elsif !bnr[9].nil? && k<focus*100+five_star*100+four_star*100+three_star*50
         hx=bnr[9].sample
-        rx="3\\*"
+        rx="3\\*(f)"
         nr=n.sample
       elsif k<focus*100+five_star*100+four_star*100+three_star*100
         hx=bnr[5].sample
@@ -8245,19 +8383,19 @@ bot.command(:summon) do |event, *colors|
         nr=["+HP -Atk","+HP -Spd","+HP -Def","+HP -Res","+Atk -HP","+Atk -Spd","+Atk -Def","+Atk -Res","+Spd -HP","+Spd -Atk","+Spd -Def","+Spd -Res","+Def -HP","+Def -Atk","+Def -Spd","+Def -Res","+Res -HP","+Res -Atk","+Res -Spd","+Res -Def","Neutral"].sample
       elsif !bnr[10].nil? && k<focus*100+five_star*100+four_star*100+three_star*100+two_star*50
         hx=bnr[10].sample
-        rx="3\\*"
+        rx="2\\*(f)"
         nr=n.sample
       elsif k<focus*100+five_star*100+four_star*100+three_star*100+two_star*100
         hx=bnr[6].sample
-        rx="3\\*"
+        rx="2\\*"
         nr=["+HP -Atk","+HP -Spd","+HP -Def","+HP -Res","+Atk -HP","+Atk -Spd","+Atk -Def","+Atk -Res","+Spd -HP","+Spd -Atk","+Spd -Def","+Spd -Res","+Def -HP","+Def -Atk","+Def -Spd","+Def -Res","+Res -HP","+Res -Atk","+Res -Spd","+Res -Def","Neutral"].sample
       elsif !bnr[11].nil? && k<focus*100+five_star*100+four_star*100+three_star*100+two_star*100+one_star*50
         hx=bnr[11].sample
-        rx="3\\*"
+        rx="1\\*(f)"
         nr=n.sample
       else
         hx=bnr[7].sample
-        rx="3\\*"
+        rx="1\\*"
         nr=["+HP -Atk","+HP -Spd","+HP -Def","+HP -Res","+Atk -HP","+Atk -Spd","+Atk -Def","+Atk -Res","+Spd -HP","+Spd -Atk","+Spd -Def","+Spd -Res","+Def -HP","+Def -Atk","+Def -Spd","+Def -Res","+Res -HP","+Res -Atk","+Res -Spd","+Res -Def","Neutral"].sample
       end
       @banner.push([rx,hx,nr])
@@ -9092,10 +9230,21 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
   f=[]
   n=@names.map{|a| a}
   if unit.nil?
-    if event.server.nil? || event.channel.id == 283821884800499714 || @shardizard==4
+    if safe_to_spam?(event)
+      unless event.server.nil?
+        n=n.reject{|q| !q[2].nil? && !q[2].include?(event.server.id)}
+        msg=''
+        for i in 0...n.length
+          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{" - (only on this server)" unless n[i][2].nil?}",event)
+        end
+        event.respond msg
+        return nil
+      end
       for i in 0...n.length
         if n[i][2].nil?
           f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+        elsif !event.server.nil? && n[i][2].include?(event.server.id)
+          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (only on this server)")
         else
           a=[]
           for j in 0...n[i][2].length
@@ -9141,7 +9290,7 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
     end
   end
   f.uniq!
-  if f.length>50 && !event.server.nil? && event.channel.id != 283821884800499714 && @shardizard != 4
+  if f.length>50 && !safe_to_spam?(event)
     event.respond "There are so many aliases that I don't want to spam the server.  Please use the command in PM."
     return nil
   end
@@ -9157,6 +9306,9 @@ bot.command([:deletealias,:removealias]) do |event, name|
   nicknames_load()
   if name.nil?
     event.respond "I can't delete nothing, silly!" if name.nil?
+    return nil
+  elsif event.user.id != 167657750971547648 && event.server.nil?
+    event.respond "Only my developer is allowed to use this command in PM."
     return nil
   elsif !is_mod?(event.user,event.server,event.channel)
     event.respond "You are not a mod."
@@ -9431,7 +9583,7 @@ bot.command([:find,:search]) do |event, *args|
       display_units(event, mode)
     elsif p1.join("\n").length+p2.join("\n").length<=1900
       create_embed(event,"Results",'',0x9400D3,nil,nil,[['**Units**',p1.join("\n")],['**Skills**',p2.join("\n")]],2)
-    elsif !event.server.nil? && event.channel.id != 283821884800499714 && @shardizard != 4
+    elsif !safe_to_spam?(event)
       event.respond "My response would be so long that I would prefer you ask me in PM."
     else
       t="**Units:** #{p1[0]}"
@@ -9599,7 +9751,7 @@ bot.command([:sort,:list]) do |event, *args|
   elsif b>0
     display=[k.length-b,k.length]
   end
-  if event.server.nil? || event.channel.id==283821884800499714 || @shardizard==4
+  if safe_to_spam?(event)
   elsif k2==-1 && display[0]==0 && display[1]==k.length
     event.respond "Sorry, but you must specify filters.  I will not sort the entire roster as that would be spam.\nInstead, have the stats of the character whose name in Japanese means \"sort\"."
     disp_stats(bot,"Stahl",nil,event,true)
@@ -10013,9 +10165,9 @@ bot.command([:tools,:links]) do |event|
     event << "Gamepress FEH database: <https://fireemblem.gamepress.gg/>"
     event << ""
     event << "__Simulators__"
-    event << "Summon Simulator: <https://feh-stuff.github.io/>"
+    event << "Summon Simulator: <https://feh-stuff.github.io/summon-simulator/>"
     event << "Inheritance tracker: <https://arghblargh.github.io/feh-inheritance-tool/>"
-    event << "Visual unit builder: <https://feh-stuff.github.io/unit-builder.html>"
+    event << "Visual unit builder: <https://feh-stuff.github.io/unit-builder/>"
     event << ""
     event << "__Damage Calculators__"
     event << "ASFox's mass duel simulator: <http://arcticsilverfox.com/feh_sim/>"
@@ -10028,7 +10180,7 @@ bot.command([:tools,:links]) do |event|
     event << ""
     event << "Glimmer vs. Moonbow: <https://i.imgur.com/kDKPMp7.png>"
   else
-    create_embed(event,"**Useful tools for players of** ***Fire Emblem Heroes***","__Download the game__\n[Google Play](https://play.google.com/store/apps/details?id=com.nintendo.zaba&hl=en)\n[Apple App Store](https://itunes.apple.com/app/id1181774280)\n\n__Wikis and Databases__\n[Gamepedia FEH wiki](https://feheroes.gamepedia.com/)\n[Gamepress FEH database](https://fireemblem.gamepress.gg/)\n\n__Simulators__\n[Summon Simulator](https://feh-stuff.github.io/)\n[Inheritance tracker](https://arghblargh.github.io/feh-inheritance-tool/)\n[Visual unit builder](https://feh-stuff.github.io/unit-builder.html)\n\n__Damage Calculators__\n[ASFox's mass duel simulator](http://arcticsilverfox.com/feh_sim/)\n[KageroChart's damage calculator](https://kagerochart.com/damage-calc)\n[Andu2's mass duel simulator fork](https://andu2.github.io/FEH-Mass-Simulator/)\n\n[FEHKeeper](https://www.fehkeeper.com/)\n\n[Arena Score Calculator](http://www.arcticsilverfox.com/score_calc/)\n\n[Glimmer vs. Moonbow](https://i.imgur.com/kDKPMp7.png)",0xD49F61,nil,"https://lh3.googleusercontent.com/4ziItIIQ0pMqlUigjosG05YC5VkHKNy3ps26F5Hfi2lt0Zs3yB7dyi9bUQ4q1GgEPSE=w300-rw")
+    create_embed(event,"**Useful tools for players of** ***Fire Emblem Heroes***","__Download the game__\n[Google Play](https://play.google.com/store/apps/details?id=com.nintendo.zaba&hl=en)\n[Apple App Store](https://itunes.apple.com/app/id1181774280)\n\n__Wikis and Databases__\n[Gamepedia FEH wiki](https://feheroes.gamepedia.com/)\n[Gamepress FEH database](https://fireemblem.gamepress.gg/)\n\n__Simulators__\n[Summon Simulator](https://feh-stuff.github.io/summon-simulator/)\n[Inheritance tracker](https://arghblargh.github.io/feh-inheritance-tool/)\n[Visual unit builder](https://feh-stuff.github.io/unit-builder/)\n\n__Damage Calculators__\n[ASFox's mass duel simulator](http://arcticsilverfox.com/feh_sim/)\n[KageroChart's damage calculator](https://kagerochart.com/damage-calc)\n[Andu2's mass duel simulator fork](https://andu2.github.io/FEH-Mass-Simulator/)\n\n[FEHKeeper](https://www.fehkeeper.com/)\n\n[Arena Score Calculator](http://www.arcticsilverfox.com/score_calc/)\n\n[Glimmer vs. Moonbow](https://i.imgur.com/kDKPMp7.png)",0xD49F61,nil,"https://lh3.googleusercontent.com/4ziItIIQ0pMqlUigjosG05YC5VkHKNy3ps26F5Hfi2lt0Zs3yB7dyi9bUQ4q1GgEPSE=w300-rw")
     event.respond "If you are on a mobile device and cannot click the links in the embed above, type `FEH!tools mobile` to receive this message as plaintext."
   end
   event << ""
