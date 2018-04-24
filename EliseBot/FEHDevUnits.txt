@@ -1,5 +1,6 @@
-Sakura\Priscilla\Maria\Est\Anna\Rebecca\Celica\Genny\Mae\Cordelia\Cherche\Felicia\Cordelia(Bride)\Sakura(Halloween)\Olivia(Performing)\Gunnthra\Soleil\Marisa\Celica(Fallen)
-Alfonse\Sharena\Marth(Masked)\Robin(F)\Lyn(Brave)\Black_Knight\Arden\Takumi(Fallen)
+Sakura\Anna\Celica\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Est\Felicia\Genny\Gunnthra\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
+Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu
+Alfonse\Arden\Black_Knight\Lissa\Lyn(Brave)\Marth(Masked)\Nino\Robin(F)\Sharena\Takumi(Fallen)
 
 Sakura
 5\7\Resistance\Defense\S
@@ -11,15 +12,35 @@ Wings of Mercy 1\Wings of Mercy 2\Wings of Mercy 3
 Fortify Def 1\Fortify Def 2\Fortify Def 3
 Fortify Res 3
 
-Cordelia(Bride)
-5\0\Speed\Defense\-
-Iron Bow\Steel Bow\Brave Bow\Brave Bow+
-Rally Attack\Rally Atk/Spd
-New Moon\Moonbow
+Anna
+5\0\ \ \-
+Iron Axe\Steel Axe\Silver Axe\Noatun
+Reciprocal Aid
+Retribution\Vengeance
 Death Blow 1\Death Blow 2\Death Blow 3
-Escape Route 1\Escape Route 2\Escape Route 3
-Breath of Life 1\Breath of Life 2\Breath of Life 3
-Speed +2
+Vantage 1\Vantage 2\Vantage 3
+Savage Blow 1\Savage Blow 2\Savage Blow 3
+Breath of Life 3
+
+Celica
+5\0\HP\Speed\-
+Fire\Elfire\Bolganone\Ragnarok
+Draw Back
+Chilling Wind\Iceberg
+Death Blow 1\Death Blow 2\Death Blow 3
+Renewal 1\Renewal 2\Renewal 3
+Spur Def 1\Spur Def 2\Spur Def 3
+Hardy Bearing 3
+
+Celica(Fallen)
+5\0\HP\Speed\-
+Iron Sword\Steel Sword\Silver Sword\Beloved Zofia
+Rally Resistance
+New Moon\Luna
+Death Blow 1\Death Blow 2\Death Blow 3
+Chill Spd 1\Chill Spd 2\Chill Spd 3
+Hone Atk 1\Hone Atk 2\Hone Atk 3
+Spur Atk 2
 
 Cherche
 5\3\Attack\Speed\-
@@ -31,16 +52,6 @@ Desperation 1\Desperation 2
 Fortify Def 1\Fortify Def 2\Fortify Def 3
 Attack +2
 
-Est
-4\4\HP\Attack\-
-Iron Lance\Steel Lance\Heavy Spear
-Shove
-Chilling Wind\Glacies
-Defiant Resistance 1\Defiant Resistance 2\Defiant Resistance 3
-Quick Riposte 1
-Def Ploy 1\Def Ploy 2\Def Ploy 3
-Iote's Shield
-
 Cordelia
 5\4\Attack\HP\-
 Iron Lance\Steel Lance\Brave Lance\Brave Lance+
@@ -51,29 +62,29 @@ Escape Route 1\Escape Route 2\Escape Route 3
 Threaten Spd 1\Threaten Spd 2\Threaten Spd 3
 Quickened Pulse
 
-Anna
-5\0\ \ \-
-Iron Axe\Steel Axe\Silver Axe\Noatun
-Reciprocal Aid
-Retribution\Vengeance
+Cordelia(Bride)
+5\0\Speed\Defense\-
+Iron Bow\Steel Bow\Brave Bow\Brave Bow+
+Rally Attack\Rally Atk/Spd
+New Moon\Moonbow
 Death Blow 1\Death Blow 2\Death Blow 3
-Vantage 1\Vantage 2\Vantage 3
-Savage Blow 1\Savage Blow 2\Savage Blow 3
-Breath of Life 3
+Escape Route 1\Escape Route 2\Escape Route 3
+Breath of Life 1\Breath of Life 2\Breath of Life 3
+Speed +2
 
-Maria
-4\10\ \ \-
-Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
-Heal\Reconcile\Rehabilitate\Rehabilitate+
-Imbue\Heavenly Light
-HP +3\HP +4\HP +5
-Live to Serve 1\Live to Serve 2\Live to Serve 3
-Fortify Res 1\Fortify Res 2
-Fortify Def 2
+Est
+4\4\HP\Attack\-
+Iron Lance\Steel Lance\Brave Lance\Brave Lance+
+Shove
+Chilling Wind\Glacies
+Defiant Resistance 1\Defiant Resistance 2\Defiant Resistance 3
+Renewal 1\Renewal 2\Renewal 3
+Def Ploy 1\Def Ploy 2\Def Ploy 3
+Iote's Shield
 
 Felicia
 4\10\Resistance\HP\-
-Iron Dagger\Steel Dagger\Silver Dagger\Silver Dagger+\Felicia's Plate\Felicia's Plate (+) Effect Mode
+Iron Dagger\Steel Dagger\Silver Dagger\Felicia's Plate\Felicia's Plate (+) Effect Mode
 Rally Speed
 Chilling Wind\Glacies
 Warding Blow 1\Warding Blow 2\Warding Blow 3
@@ -81,100 +92,10 @@ Renewal 1\Renewal 2\Renewal 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Fortress Res 2
 
-Rebecca
-4\8\Speed\Resistance\-
-Iron Bow\Steel Bow\Silver Bow
-Rally Defense
-Chilling Wind\Iceberg
-Darting Blow 1\Darting Blow 2\Darting Blow 3
-Poison Strike 1\Poison Strike 2\Poison Strike 3
-Threaten Res 1\Threaten Res 2
-Distant Def 2
-
-Celica
-5\0\HP\Speed\-
-Fire\Elfire\Bolganone\Ragnarok
-Draw Back
-Chilling Wind\Iceberg
-Death Blow 1\Death Blow 2\Death Blow 3
-Renewal 1\Renewal 2\Renewal 3
-Spur Def 1\Spur Def 2\Spur Def 3
-Hardy Bearing 2
-
-Priscilla
-4\10\Resistance\Defense\-
-Assault\Panic\Panic+\Panic+ (+) Dazzling Mode
-Heal\Reconcile\Rehabilitate\Rehabilitate+
-Imbue\Heavenly Light
-HP +3\HP +4\HP +5
-Live to Serve 1\Live to Serve 2\Live to Serve 3
-Spur Def 1\Spur Def 2\Spur Def 3
-HP +4
-
-Matthew
-4\10\Resistance\Speed\-
-Iron Dagger\Steel Dagger\Silver Dagger
-Reciprocal Aid
-Chilling Wind\Glacies
-Fortress Def 1\Fortress Def 2\Fortress Def 3
-Renewal 1\Renewal 2\Renewal 3
-Breath of Life 1\Breath of Life 2
-Phantom Spd 2
-
-Olivia(Performing)
-5\0\Defense\Resistance\-
-Iron Dagger\Steel Dagger\Dancer's Fan\Dancer's Fan+\Dancer's Fan+ (+) Attack Mode
-Dance
-~~none~~
-Distant Def 1\Distant Def 2\Distant Def 3
-Blaze Dance 1\Blaze Dance 2\Blaze Dance 3
-Spur Res 1\Spur Res 2\Spur Res 3
-Spur Def 2
-
-Mae
-5\0\Defense\Attack\-
-Thunder\Elthunder\Blarowl\Blarowl+\Blarowl+ (+) Attack Mode
-Draw Back
-Dragon Gaze\Draconic Aura
-Defiant Atk 1\Defiant Atk 2\Defiant Atk 3
-Desperation 1\Desperation 2\Desperation 3
-B Tome Exp. 1\B Tome Exp. 2\B Tome Exp. 3
-Brash Assault 2
-
-Megan(Gates)
-5\0\HP\Speed\-
-Assault\Pain\Pain+\Pain+ (+) Dazzling Mode
-Heal\Mend\Recover\Recover+
-Nightshade\Earthly Shade
-HP +3\HP +4\HP +5
-Live to Serve 1\Live to Serve 2\Live to Serve 3
-Savage Blow 1\Savage Blow 2\Savage Blow 3
-Savage Blow 2
-
-Tailtiu
-5\1\Attack\Speed\-
-Thunder\Elthunder\Blarblade\Blarblade+
-Rally Resistance\Rally Spd/Res
-Chilling Wind\Glacies
-Attack +1\Attack/Res +1\Attack/Res +2
-Desperation 1\Desperation 2\Desperation 3
-Spur Spd 1\Drive Spd 1\Drive Spd 2
-Hone Spd 2
-
-Marisa
-5\1\ \ \-
-Iron Sword\Steel Sword\Wo Dao\Wo Dao+\Wo Dao+ (+) Speed Mode
-Shove
-Night Sky\Glimmer
-HP +3\HP Def 1\HP Def 2
-Vantage 1\Vantage 2
-Infantry Pulse 1\Infantry Pulse 2\Infantry Pulse 3
-Heavy Blade 2
-
 Fjorm
 5\1\Attack\HP\-
 Iron Lance\Steel Lance\Silver Lance\Leiptr
-~~none~~
+Rally Attack\Rally Atk/Def
 Holy Vestments\Sacred Cowl\Ice Mirror
 Atk/Def Bond 1\Atk/Def Bond 2\Atk/Def Bond 3
 Shield Pulse 1\Shield Pulse 2\Shield Pulse 3
@@ -191,25 +112,85 @@ Chilling Seal
 Res Ploy 1\Res Ploy 2\Res Ploy 3
 Atk Ploy 2
 
-Celica(Fallen)
-5\0\HP\Speed\-
-Iron Sword\Steel Sword\Silver Sword\Beloved Zofia
-Rally Resistance
-New Moon\Luna
-Death Blow 1\Death Blow 2\Death Blow 3
-Chill Spd 1\Chill Spd 2\Chill Spd 3
-Hone Atk 1\Hone Atk 2\Hone Atk 3
-Spur Atk 2
+Mae
+5\0\Defense\Attack\-
+Thunder\Elthunder\Blarowl\Blarowl+\Blarowl+ (+) Attack Mode
+Draw Back
+Dragon Gaze\Draconic Aura
+Defiant Atk 1\Defiant Atk 2\Defiant Atk 3
+Desperation 1\Desperation 2\Desperation 3
+B Tome Exp. 1\B Tome Exp. 2\B Tome Exp. 3
+Brash Assault 2
 
-Soleil
-5\0\Resistance\HP\-
-Iron Sword\Steel Sword\Firesweep Sword\Firesweep Sword+
-Rally Speed
-Rising Wind\~~Blazing Wind~~
+Maria
+4\10\ \ \-
+Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
+Heal\Reconcile\Rehabilitate\Rehabilitate+
+Imbue\Heavenly Light
+HP +3\HP +4\HP +5
+Live to Serve 1\Live to Serve 2\Live to Serve 3
+Fortify Res 1\Fortify Res 2
+Fortify Def 2
+
+Marisa
+5\1\ \ \-
+Iron Sword\Steel Sword\Wo Dao\Wo Dao+\Wo Dao+ (+) Speed Mode
+Shove
+Night Sky\Glimmer
+HP +3\HP Def 1\HP Def 2
+Vantage 1\Vantage 2
+Infantry Pulse 1\Infantry Pulse 2\Infantry Pulse 3
+Heavy Blade 2
+
+Matthew
+4\10\Resistance\Speed\-
+Iron Dagger\Steel Dagger\Lethal Carrot\Lethal Carrot+\Lethal Carrot+ (+) Resistance Mode
+Reciprocal Aid
+Chilling Wind\Glacies
+Fortress Def 1\Fortress Def 2\Fortress Def 3
+Renewal 1\Renewal 2\Renewal 3
+Breath of Life 1\Breath of Life 2\Breath of Life 3
+Phantom Spd 2
+
+Megan(Gates)
+5\0\HP\Speed\-
+Assault\Pain\Pain+\Pain+ (+) Dazzling Mode
+Heal\Mend\Recover\Recover+
+Nightshade\Earthly Shade
+HP +3\HP +4\HP +5
+Live to Serve 1\Live to Serve 2\Live to Serve 3
+Savage Blow 1\Savage Blow 2\Savage Blow 3
+Savage Blow 2
+
+Olivia(Performing)
+5\0\Defense\Resistance\-
+Iron Dagger\Steel Dagger\Dancer's Fan\Dancer's Fan+\Dancer's Fan+ (+) Attack Mode
+Dance
+Dragon Gaze\Draconic Aura
+Distant Def 1\Distant Def 2\Distant Def 3
+Blaze Dance 1\Blaze Dance 2\Blaze Dance 3
+Spur Res 1\Spur Res 2\Spur Res 3
+Spur Def 2
+
+Priscilla
+4\10\Resistance\Defense\-
+Assault\Panic\Panic+\Panic+ (+) Dazzling Mode
+Heal\Reconcile\Rehabilitate\Rehabilitate+
+Imbue\Heavenly Light
+HP +3\HP +4\HP +5
+Live to Serve 1\Live to Serve 2\Live to Serve 3
+Spur Def 1\Spur Def 2\Spur Def 3
+HP +4
+
+Rebecca
+4\8\Speed\Resistance\-
+Iron Bow\Steel Bow\Silver Bow
+Rally Defense
+Chilling Wind\Iceberg
 Darting Blow 1\Darting Blow 2\Darting Blow 3
-Renewal 1\Renewal 2
-Spur Res 1\Drive Res 1\Drive Res 2
-Deflect Melee 2
+Poison Strike 1\Poison Strike 2\Poison Strike 3
+Threaten Res 1\Threaten Res 2
+Distant Def 2
 
 Sakura(Halloween)
 5\0\Defense\Speed\-
@@ -220,4 +201,24 @@ Warding Stance 1\Warding Stance 2\Warding Stance 3
 Guard 1\Guard 2\Guard 3
 Dagger Valor 1\Dagger Valor 2\Dagger Valor 3
 Def Ploy 2
+
+Soleil
+5\0\Resistance\HP\-
+Iron Sword\Steel Sword\Firesweep Sword\Firesweep Sword+
+Rally Speed
+Daylight\Noontime
+Darting Blow 1\Darting Blow 2\Darting Blow 3
+Renewal 1\Renewal 2\Renewal 3
+Spur Res 1\Drive Res 1\Drive Res 2
+Deflect Melee 2
+
+Tailtiu
+5\1\Attack\Speed\-
+Thunder\Elthunder\Blarblade\Blarblade+
+Rally Resistance\Rally Spd/Res
+Chilling Wind\Glacies
+Attack +1\Attack/Res +1\Attack/Res +2
+Desperation 1\Desperation 2\Desperation 3
+Spur Spd 1\Drive Spd 1\Drive Spd 2
+Drive Atk 1
 
