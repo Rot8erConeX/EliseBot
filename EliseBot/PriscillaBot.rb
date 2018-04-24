@@ -3674,7 +3674,7 @@ def disp_skill(name,event,ignore=false)
       str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{inner_skill}" if inner_skill.length>1 && sttz[i][5]=="Effect"
       str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{sttz[i][6]}" unless sttz[i][6].nil?
       str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{outer_skill}" unless outer_skill.nil? || !sttz[i][7].nil?
-      str="#{str}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if skill[5]=="Dragons Only"
+      str="#{str}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if skill[5]=="Dragons Only" && !skill[7].include?("If foe's Range = 2, damage calculated using the lower of foe's Def or Res.")
     end
     ftr="All refinements cost: 350 SP (525 if inherited), 500 Arena Medals, 50 Refining Stones"
     ftr="All refinements cost: 400 SP, 500 Arena Medals, 200 Divine Dew" if skill[6]!="-"
