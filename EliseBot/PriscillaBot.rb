@@ -10960,7 +10960,6 @@ end
 def calc_easter()
   t = Time.now
   y = t.year
-  y += 1 if t.month >= 5
   c1 = y / 100
   n1 = y - 19 * (y / 19)
   k = (c1 - 17) / 25
@@ -10972,6 +10971,20 @@ def calc_easter()
   l1 = i1 - l1
   m = 3 + (l1 + 40) / 44
   d = l1 + 28 - 31 * (m / 4)
+  if t.month>m || (t.month==m && t.day>d)
+    y += 1
+    c1 = y / 100
+    n1 = y - 19 * (y / 19)
+    k = (c1 - 17) / 25
+    i1 = c1 - c1 / 4 - (c1 - k) / 3 + 19 * n1 + 15
+    i1 = i1 - 30 * (i1 / 30)
+    i1 = i1 - (i1 / 28) * (1 - (i1 / 28) * (29 / (i1 + 1)) * ((21 - n1) / 11))
+    l1 = y + y / 4 + i1 + 2 - c1 + c1 / 4
+    l1 = l1 - 7 * (l1 / 7)
+    l1 = i1 - l1
+    m = 3 + (l1 + 40) / 44
+    d = l1 + 28 - 31 * (m / 4)
+  end
   return [y,m,d]
 end
 
@@ -10979,13 +10992,13 @@ def next_holiday(bot,mode=0)
   t=Time.now
   t-=60*60*6
   holidays=[[0,1,1,'Tiki(Young)','as Babby New Year',"New Year's Day"],
-            [0,2,2,'Feh','the best gacha game ever!','Game Release Anniversary'],
+            [0,2,2,'Feh','the best gacha game ever!',"Game Release Anniversary"],
             [0,2,14,'Cordelia(Bride)','with your heartstrings.',"Valentine's Day"],
             [0,4,1,'Priscilla','tribute to Xander for making this possible.',"April Fool's Day"],
             [0,4,24,'Sakura(BDay)','dressup as my best friend.',"Coder's birthday"],
-            [0,7,4,'Arthur','for freedom and justice.','Independance Day'],
-            [0,10,31,'Henry(Halloween)','with a dead Emblian. Nyahaha!','Halloween'],
-            [0,12,25,'Robin(M)(Winter)','as Santa Claus for Askr.','Christmas'],
+            [0,7,4,'Arthur','for freedom and justice.',"Independance Day"],
+            [0,10,31,'Henry(Halloween)','with a dead Emblian. Nyahaha!',"Halloween"],
+            [0,12,25,'Robin(M)(Winter)','as Santa Claus for Askr.',"Christmas"],
             [0,12,31,'Tiki(Adult)','as Mother Time',"New Year's Eve"]]
   for i in 0...holidays.length
     if t.month>holidays[i][1] || (t.month==holidays[i][1] && t.day>holidays[i][2])
