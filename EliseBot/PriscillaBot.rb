@@ -30,6 +30,7 @@ bot.gateway.check_heartbeat_acks = false
 @data=[]
 @skills=[]
 @names=[]
+@multi_names=[]
 @groups=[]
 @embedless=[]
 @ignored=[]
@@ -172,6 +173,15 @@ def nicknames_load() # this function laods the nickname list
     b=[]
   end
   @names=b.uniq
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt').each_line do |line|
+      b.push(eval line)
+    end
+  else
+    b=[]
+  end
+  @multi_names=b.uniq
 end
 
 def groups_load() # this function loads the groups list
@@ -4309,18 +4319,12 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     group.push(@groups[find_group(args[i].downcase,event)]) if find_group(args[i].downcase,event)>=0 && args[i].length>=3
     unless ['red','reds','blue','blues','green','greens','sword','swords','katana','lance','lances','spear','spears','naginata','axe','axes','ax','club','clubs','axe','axes','ax','club','clubs','colorless','colourless','clear','clears','physical','blade','blades','tome','mage','magic','spell','tomes','mages','spells','dragon','dragons','manakete','manaketes','breath','bow','arrow','bows','arrows','archer','archers','dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves','healer','staff','cleric','healers','clerics','staves','flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi','cavalry','horse','pony','horsie','horses','horsies','ponies','infantry','foot','feet','armor','armour','armors','armours','armored','armoured','male','man','boy','female','woman','girl'].include?(args[i].downcase)
       units.push(@data[find_unit(args[i].downcase,event)][0]) if find_unit(args[i].downcase,event)>=0 && args[i].length>=3
-      units.push("Tiki(Young)") if args[i].downcase=="tiki"
-      units.push("Tiki(Adult)") if args[i].downcase=="tiki"
-      units.push("Eirika(Bonds)") if args[i].downcase=="eirika"
-      units.push("Eirika(Memories)") if args[i].downcase=="eirika"
-      units.push("Hinoka(Launch)") if args[i].downcase=="hinoka"
-      units.push("Hinoka(Wings)") if args[i].downcase=="hinoka"
-      units.push("Chrom(Launch)") if args[i].downcase=="chrom"
-      units.push("Chrom(Branded)") if args[i].downcase=="chrom"
-      units.push("Reinhardt(Bonds)") if args[i].downcase=="reinhardt"
-      units.push("Reinhardt(World)") if args[i].downcase=="reinhardt"
-      units.push("Olwen(Bonds)") if args[i].downcase=="olwen"
-      units.push("Olwen(World)") if args[i].downcase=="olwen"
+      if !detect_multi_unit_alias(event,args[i],args[i],3).nil?
+        x=detect_multi_unit_alias(event,args[i],args[i],3)
+        for i2 in 0...x[1].length
+          units.push(x[1][i2])
+        end
+      end
       units.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(F)") if ['robin','corrin','morgan','kana'].include?(args[i].downcase)
       units.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(M)") if ['robin','corrin','morgan','kana'].include?(args[i].downcase)
     end
@@ -5261,20 +5265,20 @@ def comparison(event,args)
   k=splice(s2)
   k2=[]
   for i in 0...k.length
-    x=detect_dual_unit_alias(event,k[i],k[i],1)
+    x=detect_multi_unit_alias(event,k[i],k[i],1)
     str=k[i]
     if k[i].downcase=="mathoo's"
       k2.push(str)
     elsif !x.nil? && x[1].is_a?(Array) && x[1].length>1
-      if (i>0 && !detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?) || (i<k.length-1 && !detect_dual_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?) || (i>0 && i<k.length-1 && !detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?) || !detect_dual_unit_alias(event,k[i],"#{k[i]}",1).nil?
-        if i>0 && i<k.length-1 && !detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?
-          x=detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1)
-        elsif i>0 && !detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?
-          x=detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1)
-        elsif i<k.length-1 && !detect_dual_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?
-          x=detect_dual_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1)
-        elsif !detect_dual_unit_alias(event,k[i],"#{k[i]}",1).nil?
-          x=detect_dual_unit_alias(event,k[i],"#{k[i]}",1)
+      if (i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?) || (i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?) || (i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?) || !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
+        if i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1)
+        elsif i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1)
+        elsif i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1)
+        elsif !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i]}",1)
         end
         if x[1].is_a?(Array) && x[1].length>1
           for i in 0...x[1].length
@@ -5413,12 +5417,28 @@ def comparison(event,args)
   return 2
 end
 
-def detect_dual_unit_alias(event,str1,str2,robinmode=0)
+def detect_multi_unit_alias(event,str1,str2,robinmode=0)
   str1=str1.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
-  return [str1,'Robin(F)(Fallen)'] if str1=='lobin'
+  if ['f?','e?','h?'].include?(str1.downcase[0,2]) || ['feh!','feh?'].include?(str1.downcase[0,4])
+    s=event.message.text.downcase
+    puts s if @shardizard==3 || @shardizard==0
+    s=s[2,s.length-2] if ['f?','e?','h?'].include?(str1.downcase[0,2])
+    s=s[4,s.length-4] if ['feh!','feh?'].include?(str1.downcase[0,4])
+    a=s.split(' ')
+    if all_commands(true).include?(a[0])
+      a[0]=nil
+      a.compact!
+    end
+    str1=a.join(' ')
+  end
+  nicknames_load()
+  for i in 0...@multi_names.length
+    return [str1, @multi_names[i][1], @multi_names[i][0].downcase] if @multi_names[i][0].downcase==str1
+  end
+  return nil if robinmode==3 # only allow actual multi-unit aliases without context clues
   str3=str2.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
   str2=str2.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
-  if /blu(e|)cina/ =~ str1
+  if /blu(e(-|)|)cina/ =~ str1
     str="blucina"
     str="bluecina" if str2.include?('bluecina')
     return nil if robinmode==2 && str2.downcase != str.downcase
@@ -5661,8 +5681,8 @@ def disp_unit_stats_and_skills(event,args,bot)
   if k.nil?
     if event.message.text.downcase.include?("flora") && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
       event.respond "Steel's waifu is not in the game."
-    elsif !detect_dual_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+    elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.nil?
       disp_stats(bot,x[1],w,event,true)
@@ -5678,13 +5698,13 @@ def disp_unit_stats_and_skills(event,args,bot)
   w=nil
   w=k2[0] unless k2.nil?
   data_load()
-  if !detect_dual_unit_alias(event,str.downcase,event.message.text.downcase).nil?
-    x=detect_dual_unit_alias(event,str.downcase,event.message.text.downcase)
+  if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
+    x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
     disp_stats(bot,x[1],w,event,true)
     disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
     event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
-  elsif !detect_dual_unit_alias(event,str.downcase,str.downcase).nil?
-    x=detect_dual_unit_alias(event,str.downcase,str.downcase)
+  elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
+    x=detect_multi_unit_alias(event,str.downcase,str.downcase)
     disp_stats(bot,x[1],w,event,true)
     disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
     event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
@@ -5714,7 +5734,7 @@ def skill_comparison(event,args)
   k=splice(s2)
   k2=[]
   for i in 0...k.length
-    x=detect_dual_unit_alias(event,k[i],k[i],1)
+    x=detect_multi_unit_alias(event,k[i],k[i],1)
     str=k[i]
     if !x.nil? && x[1].is_a?(Array)
       if x[1].is_a?(Array)
@@ -6091,8 +6111,8 @@ def parse_function(callback,event,args,bot,healers=nil)
   event.channel.send_temporary_message("Calculating data, please wait...",3)
   k=find_name_in_string(event,nil,1)
   if k.nil?
-    if !detect_dual_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+    if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(event.message.text,x[0],''),event)
       weapon='-'
       weapon=k2[0] unless k2.nil?
@@ -6127,8 +6147,8 @@ def parse_function(callback,event,args,bot,healers=nil)
     weapon='-'
     weapon=k2[0] unless k2.nil?
     name=find_name_in_string(event)
-    if !detect_dual_unit_alias(event,name.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(event,name.downcase,event.message.text.downcase)
+    if !detect_multi_unit_alias(event,name.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,name.downcase,event.message.text.downcase)
       x[1]=[x[1]] unless x[1].is_a?(Array)
       xx=[]
       xn=[]
@@ -6150,8 +6170,8 @@ def parse_function(callback,event,args,bot,healers=nil)
         event.respond "The following units are healers so cannot equip these skills:\n#{list_lift(xn,"and")}" if xn.length>1
       end
       method(callback).call(event,xx,bot,weapon) if xx.length>0
-    elsif !detect_dual_unit_alias(event,name.downcase,name.downcase).nil?
-      x=detect_dual_unit_alias(event,name.downcase,name.downcase)
+    elsif !detect_multi_unit_alias(event,name.downcase,name.downcase).nil?
+      x=detect_multi_unit_alias(event,name.downcase,name.downcase)
       x[1]=[x[1]] unless x[1].is_a?(Array)
       xx=[]
       xn=[]
@@ -8743,20 +8763,20 @@ bot.command([:bst, :BST]) do |event, *args|
   braves=[[],[0,0],[0,0]]
   m=false
   for i in 0...k.length
-    x=detect_dual_unit_alias(event,k[i],k[i],1)
+    x=detect_multi_unit_alias(event,k[i],k[i],1)
     name=nil
     if k[i].downcase=="mathoo's"
       m=true
     elsif !x.nil? && x[1].is_a?(Array) && x[1].length>1
-      if (i>0 && !detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?) || (i<k.length-1 && !detect_dual_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?) || (i>0 && i<k.length-1 && !detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?) || !detect_dual_unit_alias(event,k[i],"#{k[i]}",1).nil?
-        if i>0 && i<k.length-1 && !detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?
-          x=detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1)
-        elsif i>0 && !detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?
-          x=detect_dual_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1)
-        elsif i<k.length-1 && !detect_dual_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?
-          x=detect_dual_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1)
-        elsif !detect_dual_unit_alias(event,k[i],"#{k[i]}",1).nil?
-          x=detect_dual_unit_alias(event,k[i],"#{k[i]}",1)
+      if (i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?) || (i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?) || (i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?) || !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
+        if i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1)
+        elsif i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1)
+        elsif i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1)
+        elsif !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i]}",1)
         end
         if x[1].is_a?(Array) && x[1].length>1
           au+=1
@@ -8776,10 +8796,10 @@ bot.command([:bst, :BST]) do |event, *args|
       name=@data[find_unit(find_name_in_string(event,x[1]),event)][0]
       summon_type=@data[find_unit(find_name_in_string(event,x[1]),event)][19].downcase
     elsif x.nil?
-      if i>1 && !detect_dual_unit_alias(event,k[i-2],"#{k[i-2]} #{k[i-1]} #{k[i]}",1).nil?
-      elsif i>0 && !detect_dual_unit_alias(event,k[i-1],"#{k[i-1]} #{k[i]}",1).nil?
-      elsif i<k.length-2 && !detect_dual_unit_alias(event,k[i+2],"#{k[i]} #{k[i+1]} #{k[i+2]}",1).nil?
-      elsif i<k.length-1 && !detect_dual_unit_alias(event,k[i+1],"#{k[i]} #{k[i+1]}",1).nil?
+      if i>1 && !detect_multi_unit_alias(event,k[i-2],"#{k[i-2]} #{k[i-1]} #{k[i]}",1).nil?
+      elsif i>0 && !detect_multi_unit_alias(event,k[i-1],"#{k[i-1]} #{k[i]}",1).nil?
+      elsif i<k.length-2 && !detect_multi_unit_alias(event,k[i+2],"#{k[i]} #{k[i+1]} #{k[i+2]}",1).nil?
+      elsif i<k.length-1 && !detect_multi_unit_alias(event,k[i+1],"#{k[i]} #{k[i+1]}",1).nil?
       else
         n+=1
         event << "Nonsense term #{n}: #{k[i]}"
@@ -8979,8 +8999,8 @@ bot.command([:skills,:fodder]) do |event, *args|
   if k.nil?
     if event.message.text.downcase.include?("flora") && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
       event.respond "Steel's waifu is not in the game."
-    elsif !detect_dual_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+    elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       disp_unit_skills(bot,x[1],event,true,true,true)
     elsif s.downcase[0,6]=='skills'
       event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s."
@@ -8992,11 +9012,11 @@ bot.command([:skills,:fodder]) do |event, *args|
   str=k[0]
   data_load()
   if str.nil?
-  elsif !detect_dual_unit_alias(event,str.downcase,event.message.text.downcase).nil?
-    x=detect_dual_unit_alias(event,str.downcase,event.message.text.downcase)
+  elsif !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
+    x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
     disp_unit_skills(bot,x[1],event,true)
-  elsif !detect_dual_unit_alias(event,str.downcase,str.downcase).nil?
-    x=detect_dual_unit_alias(event,str.downcase,str.downcase)
+  elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
+    x=detect_multi_unit_alias(event,str.downcase,str.downcase)
     disp_unit_skills(bot,x[1],event,true)
   elsif find_unit(str,event)>=0
     disp_unit_skills(bot,str,event)
@@ -9073,8 +9093,8 @@ bot.command([:stats,:stat]) do |event, *args|
     w=nil
     if event.message.text.downcase.include?("flora") && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
       event.respond "Steel's waifu is not in the game."
-    elsif !detect_dual_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
-      x=detect_dual_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+    elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.nil?
       disp_stats(bot,x[1],w,event,true)
@@ -9088,11 +9108,11 @@ bot.command([:stats,:stat]) do |event, *args|
   w=nil
   w=k2[0] unless k2.nil?
   data_load()
-  if !detect_dual_unit_alias(event,str.downcase,event.message.text.downcase).nil?
-    x=detect_dual_unit_alias(event,str.downcase,event.message.text.downcase)
+  if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
+    x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
     disp_stats(bot,x[1],w,event,true)
-  elsif !detect_dual_unit_alias(event,str.downcase,str.downcase).nil?
-    x=detect_dual_unit_alias(event,str.downcase,str.downcase)
+  elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
+    x=detect_multi_unit_alias(event,str.downcase,str.downcase)
     disp_stats(bot,x[1],w,event,true)
   elsif find_unit(str,event)>=0
     disp_stats(bot,str,w,event)
@@ -9223,8 +9243,8 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     event.respond "#{newname} has __***NOT***__ been added to #{@data[find_unit(unit,event)][0]}'s aliases.\nYes, he is #{@data[find_unit(unit,event)][0].gsub('(performing)','')}, but eventually, he will join the game as a non-seaonal unit."
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Pre-emptive confusion prevention.")
     return nil
-  elsif !detect_dual_unit_alias(event,checkstr.downcase,checkstr.downcase,2).nil?
-    x=detect_dual_unit_alias(event,checkstr.downcase,checkstr.downcase,2)
+  elsif !detect_multi_unit_alias(event,checkstr.downcase,checkstr.downcase,2).nil?
+    x=detect_multi_unit_alias(event,checkstr.downcase,checkstr.downcase,2)
     if checkstr.downcase==x[0] || (!x[2].nil? && x[2].include?(checkstr.downcase))
       event.respond "#{newname} has __***NOT***__ been added to #{@data[find_unit(unit,event)][0]}'s aliases.\nThis is a multi-unit alias."
       bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Confusion prevention.")
@@ -9311,8 +9331,8 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
   nicknames_load()
   unless args.length==0
     unit=@data[find_unit(args.join(''),event)][0]
-    if !detect_dual_unit_alias(event,args.join(''),event.message.text.downcase,1).nil?
-      x=detect_dual_unit_alias(event,args.join(''),event.message.text.downcase,1)
+    if !detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1).nil?
+      x=detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1)
       unit=x[1]
     elsif find_unit(args.join(''),event)==-1
       event.respond "#{args.join(' ')} is not a unit name or an alias."
@@ -9324,6 +9344,8 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
   end
   f=[]
   n=@names.map{|a| a}
+  m=@multi_names.map{|a| a}
+  h=''
   if unit.nil?
     if safe_to_spam?(event)
       unless event.server.nil?
@@ -9359,10 +9381,14 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
     k=0
     k=event.server.id unless event.server.nil?
     unit=[unit] unless unit.is_a?(Array)
+    h=' that contain this unit'
+    h=' that contain both of these units' if unit.length>1
+    h=' that contain all of these units' if unit.length>2
     for i1 in 0...unit.length
       u=@data[find_unit(unit[i1],event)][0]
-      f.push("**#{u.gsub('_','\\_')}**")
-      f.push(u.gsub('_','\\_').gsub('(','').gsub(')','')) if u.include?('(') || u.include?(')')
+      m=m.reject{|q| !q[1].include?(u)}
+      f.push("#{"\n" unless i1==0}**#{u}**")
+      f.push(u.gsub('(','').gsub(')','')) if u.include?('(') || u.include?(')')
       for i in 0...n.length
         if n[i][1].downcase==u.downcase
           if event.server.nil? && !n[i][2].nil?
@@ -9381,9 +9407,15 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
           end
         end
       end
-      f.push("")
     end
   end
+  if m.length>0
+    f.push("\n**Multi-unit aliases#{h}**")
+    for i in 0...m.length
+      f.push(m[i][0])
+    end
+  end
+  puts m.map{|q| q.to_s}
   f.uniq!
   if f.length>50 && !safe_to_spam?(event)
     event.respond "There are so many aliases that I don't want to spam the server.  Please use the command in PM."
@@ -9706,7 +9738,7 @@ bot.command([:sort,:list]) do |event, *args|
     groups_load()
     @groups.uniq!
     @groups.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? (a[2][0] <=> b[2][0]) : (a[0].downcase <=> b[0].downcase)}
-    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt', 'w') { |f|
       for i in 0...@names.length
         f.puts "#{@names[i].to_s}#{"\n" if i<@names.length-1}"
       end
@@ -9721,6 +9753,13 @@ bot.command([:sort,:list]) do |event, *args|
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
       for i in 0...@names.length
         f.puts "#{@names[i].to_s}#{"\n" if i<@names.length-1}"
+      end
+    }
+    @multi_names.uniq!
+    @multi_names.sort! {|a,b| (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase}) == 0 ? (a[0].downcase <=> b[0].downcase) : (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase})}
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt', 'w') { |f|
+      for i in 0...@multi_names.length
+        f.puts "#{@multi_names[i].to_s}#{"\n" if i<@multi_names.length-1}"
       end
     }
     event.respond "The alias list has been sorted alphabetically"
@@ -10906,8 +10945,8 @@ bot.message do |event|
       elsif str.nil?
         if find_skill(s,event)>=0
           disp_skill(s,event,true)
-        elsif !detect_dual_unit_alias(event,s.downcase,event.message.text.downcase).nil?
-          x=detect_dual_unit_alias(event,s.downcase,event.message.text.downcase)
+        elsif !detect_multi_unit_alias(event,s.downcase,event.message.text.downcase).nil?
+          x=detect_multi_unit_alias(event,s.downcase,event.message.text.downcase)
           event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
           k2=get_weapon(first_sub(s,x[0],''),event)
           w=nil
@@ -10915,8 +10954,8 @@ bot.message do |event|
           disp_stats(bot,x[1],w,event,true)
           disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
           event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
-        elsif !detect_dual_unit_alias(event,s.downcase,s.downcase).nil?
-          x=detect_dual_unit_alias(event,s.downcase,s.downcase)
+        elsif !detect_multi_unit_alias(event,s.downcase,s.downcase).nil?
+          x=detect_multi_unit_alias(event,s.downcase,s.downcase)
           event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
           k2=get_weapon(first_sub(s,x[0],''),event)
           w=nil
@@ -10927,8 +10966,8 @@ bot.message do |event|
         end
       elsif str[1].downcase=='ploy' && find_skill(stat_buffs(s,s),event)>=0
         disp_skill(stat_buffs(s,s),event,true)
-      elsif !detect_dual_unit_alias(event,str[0].downcase,event.message.text.downcase).nil?
-        x=detect_dual_unit_alias(event,str[0].downcase,event.message.text.downcase)
+      elsif !detect_multi_unit_alias(event,str[0].downcase,event.message.text.downcase).nil?
+        x=detect_multi_unit_alias(event,str[0].downcase,event.message.text.downcase)
         event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
@@ -10936,8 +10975,8 @@ bot.message do |event|
         disp_stats(bot,x[1],w,event,true)
         disp_unit_skills(bot,x[1],event,true,true) unless x[1].is_a?(Array) && x[1].length>1
         event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
-      elsif !detect_dual_unit_alias(event,str[0].downcase,str[0].downcase).nil?
-        x=detect_dual_unit_alias(event,str[0].downcase,str[0].downcase)
+      elsif !detect_multi_unit_alias(event,str[0].downcase,str[0].downcase).nil?
+        x=detect_multi_unit_alias(event,str[0].downcase,str[0].downcase)
         event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
@@ -10960,8 +10999,8 @@ bot.message do |event|
         disp_unit_skills(bot,str,event,event.server.nil?,true)
       elsif find_skill(s,event)>0
         disp_skill(bot,s,event,true)
-      elsif !detect_dual_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
-        x=detect_dual_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+      elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+        x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
         event.channel.send_temporary_message("Calculating data, please wait...",event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
