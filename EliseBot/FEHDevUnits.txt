@@ -3,7 +3,7 @@ Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu
 Alfonse\Arden\Black_Knight\Lissa\Lyn(Brave)\Marth(Masked)\Nino\Robin(F)\Sharena\Takumi(Fallen)
 
 Sakura
-5\7\Resistance\Defense\S
+5\8\Resistance\Defense\S
 Assault\Slow\Slow+\Slow+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
