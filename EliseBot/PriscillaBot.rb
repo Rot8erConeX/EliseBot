@@ -5291,7 +5291,6 @@ def comparison(event,args)
       k2.push(str)
     end
   end
-  puts k2.to_s
   k=k2.map{|q| q}
   b=[]
   c=[]
@@ -5452,8 +5451,8 @@ def detect_dual_unit_alias(event,str1,str2,robinmode=0)
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?("launch")
       return [str,['Hinoka(Launch)'],["launch#{str}","#{str}launch"]]
-    elsif str2.include?("wings") || str2.include?("kinshi") || str2.include?("winged")
-      return [str,['Hinoka(Wings)'],["wings#{str}","#{str}wings","kinshi#{str}","#{str}kinshi","winged#{str}","#{str}winged"]]
+    elsif str2.include?("wings") || str2.include?("kinshi") || str2.include?("winged") || str2.include?("#{str}2")
+      return [str,['Hinoka(Wings)'],["wings#{str}","#{str}wings","kinshi#{str}","#{str}kinshi","winged#{str}","#{str}winged","#{str}2"]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Hinoka(Launch)','Hinoka(Wings)'],[str]]
@@ -5480,8 +5479,8 @@ def detect_dual_unit_alias(event,str1,str2,robinmode=0)
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?("bonds") || str2.include?("#{str}b") || str2.include?("b#{str}") || str2.include?("sb") || str2.include?("mage#{str}") || str2.include?("#{str}mage")
       return [str,['Reinhardt(Bonds)'],["bonds#{str}","#{str}bonds","b#{str}","#{str}b","sb#{str}","#{str}sb","mage#{str}","#{str}mage"]]
-    elsif str2.include?("world") || str2.include?("warudo") || str2.include?("#{str}w") || str2.include?("w#{str}") || str2.include?("wot") || str2.include?("wt")
-      return [str,['Reinhardt(World)'],["world#{str}","#{str}world","warudo#{str}","#{str}warudo","w#{str}","#{str}w","wot#{str}","#{str}wot","wt#{str}","#{str}wt"]]
+    elsif str2.include?("world") || str2.include?("warudo") || str2.include?("#{str}w") || str2.include?("w#{str}") || str2.include?("wot") || str2.include?("wt") || str2.include?("#{str}2")
+      return [str,['Reinhardt(World)'],["world#{str}","#{str}world","warudo#{str}","#{str}warudo","w#{str}","#{str}w","wot#{str}","#{str}wot","wt#{str}","#{str}wt","#{str}2"]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Reinhardt(Bonds)','Reinhardt(World)'],[str]]
@@ -5492,8 +5491,8 @@ def detect_dual_unit_alias(event,str1,str2,robinmode=0)
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?("bonds") || str2.include?("#{str}b") || str2.include?("b#{str}") || str2.include?("sb")
       return [str,['Olwen(Bonds)'],["bonds#{str}","#{str}bonds","b#{str}","#{str}b","sb#{str}","#{str}sb"]]
-    elsif str2.include?("world") || str2.include?("warudo") || str2.include?("wind") || str2.include?("#{str}w") || str2.include?("w#{str}") || str2.include?("wot") || str2.include?("wt")
-      return [str,['Olwen(World)'],["world#{str}","#{str}world","warudo#{str}","#{str}warudo","w#{str}","#{str}w","wot#{str}","#{str}wot","wt#{str}","#{str}wt"]]
+    elsif str2.include?("world") || str2.include?("warudo") || str2.include?("wind") || str2.include?("#{str}w") || str2.include?("w#{str}") || str2.include?("wot") || str2.include?("wt") || str2.include?("#{str}2")
+      return [str,['Olwen(World)'],["world#{str}","#{str}world","warudo#{str}","#{str}warudo","w#{str}","#{str}w","wot#{str}","#{str}wot","wt#{str}","#{str}wt","#{str}2"]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Olwen(Bonds)','Olwen(World)'],[str]]
@@ -5560,33 +5559,11 @@ def detect_dual_unit_alias(event,str1,str2,robinmode=0)
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Robin(M)(Fallen)','Robin(F)(Fallen)'],[str]]
-  elsif /(lyn(dis||)|rin(disu|))/ =~ str1
-    str="lyn"
-    str="rin" if str2.include?('rin')
-    str="lyndis" if str2.include?('lyndis')
-    str="rindisu" if str2.include?('rindisu')
-    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
-    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
-    if str2.include?("bb#{str}") || str2.include?("#{str}bb") || str2.include?("bride") || str2.include?("bridal") || str2.include?("wedding")
-      return [str,['Lyn(Bride)'],["bb#{str}","#{str}bb","#{str}bride","#{str}bridal","#{str}wedding","bride#{str}","bridal#{str}","wedding#{str}"]]
-    elsif str2.include?("brave") || str2.include?("cyl") || str2.include?("nomad") || str2.include?("bh#{str}") || str2.include?("#{str}bh")
-      return [str,['Lyn(Brave)'],["brave#{str}","nomad#{str}","cyl#{str}","bh#{str}","#{str}nomad","#{str}brave","#{str}cyl","#{str}bh"]]
-    elsif str2.include?("love") || str2.include?("abounds") || str2.include?("valentines") || str2.include?("valentine's") || str2.include?("la#{str}") || str2.include?("#{str}la") || str2.include?("v#{str}") || str2.include?("#{str}v")
-      return [str,['Lyn(Love)'],["love#{str}","abounds#{str}","valentines#{str}","valentine's#{str}","#{str}love","#{str}abounds","#{str}valentines","#{str}valentine's","la#{str}","#{str}la"]]
-    elsif str2.include?("wind") || str2.include?("bladelord") || str2.include?("legendary")
-      return [str,['Lyn(Wind)'],["wind#{str}","#{str}wind","bladelord#{str}","#{str}bladelord","#{str}legendary","legendary#{str}"]]
-    elsif str2.include?("bow") || str2.include?("archer")
-      return [str,['Lyn(Brave)','Lyn(Wind)'],["#{str}bow","#{str}archer","bow#{str}","archer#{str}"]]
-    elsif str2.include?("b#{str}") || str2.include?("br#{str}")
-      return [str,['Lyn(Bride)','Lyn(Brave)'],["b#{str}","br#{str}"]]
-    end
-    return nil if robinmode==2 && str2.downcase != str.downcase
-    return [str,['Lyn'],[str]]
   elsif /(corrin|kamui)/ =~ str1
     str="corrin"
     str="kamui" if str1.include?('kamui')
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
-    if str=="kamui" && (str2.include?("gaiden") || str2.include?("sov")) && find_unit('Kamui',event)>-1
+    if str=="kamui" && (str2.include?("gaiden") || str2.include?("sov")) && find_unit('Kamui',event,true)>-1
       return [str,['Kamui'],['kamuigaiden','kamuisov','gaidenkamui','sovkamui']]
     elsif str2.include?("summer") || str2.include?("beach") || str2.include?("swimsuit") || str2.include?("ns")
       return [str,['Corrin(F)(Summer)']]
@@ -5599,6 +5576,7 @@ def detect_dual_unit_alias(event,str1,str2,robinmode=0)
     elsif str2.include?("male") || str2.include?("#{str}m") || str2.include?("m#{str}")
       return [str,['Corrin(M)'],["male#{str}","m#{str}","#{str}male","#{str}m"]]
     end
+    return [str,['Kamui'],[str]] if str=='kamui' && find_unit('Kamui',event,true)>-1
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Corrin(M)','Corrin(F)'],[str]]
   elsif /(morgan|marc|linfan)/ =~ str1
@@ -5626,6 +5604,31 @@ def detect_dual_unit_alias(event,str1,str2,robinmode=0)
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Kana(M)','Kana(F)'],[str]]
+  elsif /(lyn(dis||)|rin(disu|))/ =~ str1
+    return nil if find_name_in_string(event,str1)
+    str="lyn"
+    str="rin" if str2.include?('rin')
+    str="lyndis" if str2.include?('lyndis')
+    str="rindisu" if str2.include?('rindisu')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?("bb#{str}") || str2.include?("#{str}bb") || str2.include?("bride") || str2.include?("bridal") || str2.include?("wedding")
+      return [str,['Lyn(Bride)'],["bb#{str}","#{str}bb","#{str}bride","#{str}bridal","#{str}wedding","bride#{str}","bridal#{str}","wedding#{str}"]]
+    elsif str2.include?("brave") || str2.include?("cyl") || str2.include?("nomad") || str2.include?("bh#{str}") || str2.include?("#{str}bh")
+      return [str,['Lyn(Brave)'],["brave#{str}","nomad#{str}","cyl#{str}","bh#{str}","#{str}nomad","#{str}brave","#{str}cyl","#{str}bh"]]
+    elsif str2.include?("abounds") || str2.include?("valentines") || str2.include?("valentine's") || str2.include?("la#{str}") || str2.include?("#{str}la") || str2.include?("v#{str}") || str2.include?("#{str}v")
+      return [str,['Lyn(Valentines)'],["love#{str}","abounds#{str}","valentines#{str}","valentine's#{str}","#{str}love","#{str}abounds","#{str}valentines","#{str}valentine's","la#{str}","#{str}la"]]
+    elsif str2.include?("wind") || str2.include?("bladelord") || str2.include?("legendary")
+      return [str,['Lyn(Wind)'],["wind#{str}","#{str}wind","bladelord#{str}","#{str}bladelord","#{str}legendary","legendary#{str}"]]
+    elsif str2.include?("love")
+      return [str,['Lyn(Bride)','Lyn(Valentines)'],["love#{str}","#{str}love"]]
+    elsif str2.include?("bow") || str2.include?("archer")
+      return [str,['Lyn(Brave)','Lyn(Wind)'],["#{str}bow","#{str}archer","bow#{str}","archer#{str}"]]
+    elsif str2.include?("b#{str}") || str2.include?("br#{str}")
+      return [str,['Lyn(Bride)','Lyn(Brave)'],["b#{str}","br#{str}"]]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Lyn'],[str]]
   end
   return nil
 end
@@ -8816,13 +8819,13 @@ bot.command([:bst, :BST]) do |event, *args|
           counters[21][i2]+=1 if ["Corrin(M)","Corrin(F)","Corrin(F)(Summer)","Corrin(M)(Winter)","Kamui"].include?(name)
           counters[22][i2]+=1 if ["Xander","Xander(Spring)","Xander(Summer)"].include?(name)
           counters[23][i2]+=1 if ["Tiki(Young)","Tiki(Adult)","Tiki(Adult)(Summer)"].include?(name)
-          counters[24][i2]+=1 if ["Lyn","Lyn(Bride)","Lyn(Brave)","Lyn(Love)","Lyn(Wind)"].include?(name)
+          counters[24][i2]+=1 if ["Lyn","Lyn(Bride)","Lyn(Brave)","Lyn(Valentines)","Lyn(Wind)"].include?(name)
           counters[25][i2]+=1 if ["Chrom(Launch)","Chrom(Spring)","Chrom(Winter)","Chrom(Branded)"].include?(name)
           counters[26][i2]+=1 if ["Azura","Azura(Performing)","Azura(Winter)"].include?(name)
           counters[27][i2]+=1 if ["Camilla","Camilla(Spring)","Camilla(Winter)"].include?(name)
           counters[28][i2]+=1 if ["Ike","Ike(Vanguard)","Ike(Brave)"].include?(name)
-          counters[29][i2]+=1 if ["Roy","Roy(Love)","Roy(Brave)"].include?(name)
-          counters[30][i2]+=1 if ["Hector","Hector(Love)","Hector(Brave)"].include?(name)
+          counters[29][i2]+=1 if ["Roy","Roy(Valentines)","Roy(Brave)"].include?(name)
+          counters[30][i2]+=1 if ["Hector","Hector(Valentines)","Hector(Brave)"].include?(name)
           counters[31][i2]+=1 if ["Celica","Celica(Fallen)","Celica(Brave)"].include?(name)
           counters[32][i2]+=1 if ["Takumi","Takumi(Fallen)","Takumi(Winter)"].include?(name)
           counters[33][i2]+=1 if ["Ephraim","Ephraim(Fire)","Ephraim(Brave)"].include?(name)
