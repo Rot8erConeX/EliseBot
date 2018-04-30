@@ -4293,9 +4293,10 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   movement=[]
   tier=[]
   group=[]
-  units=[]
+  unitz=[]
   genders=[]
   games=[]
+  supernatures=[]
   for i in 0...args.length
     args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
     colors.push('Red') if ['red','reds'].include?(args[i].downcase)
@@ -4348,17 +4349,27 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     games.push('SSB4') if ['ssb4','sm4sh','smish'].include?(args[i].downcase)
     games.push('PXZ2') if ['projextxzone','projextxzone2','xzone','x-zone'].include?(args[i].downcase)
     games.push('STEAM') if ['codename','steam','s.t.e.a.m','codenamesteam','codename:steam','codenames.t.e.a.m.','codename:s.t.e.a.m.'].include?(args[i].downcase)
+    supernatures.push('+HP') if ['hpboon','healthboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Atk') if ['atkboon','attboon','attackboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Spd') if ['spdboon','speedboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Def') if ['defboon','defenseboon','defenceboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Res') if ['resboon','resistanceboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-HP') if ['hpbane','healthbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Atk') if ['atkbane','attbane','attackbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Spd') if ['spdbane','speedbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Def') if ['defbane','defensebane','defencebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Res') if ['resbane','resistancebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     group.push(@groups[find_group(args[i].downcase,event)]) if find_group(args[i].downcase,event)>=0 && args[i].length>=3
     unless ['red','reds','blue','blues','green','greens','sword','swords','katana','lance','lances','spear','spears','naginata','axe','axes','ax','club','clubs','axe','axes','ax','club','clubs','colorless','colourless','clear','clears','physical','blade','blades','tome','mage','magic','spell','tomes','mages','spells','dragon','dragons','manakete','manaketes','breath','bow','arrow','bows','arrows','archer','archers','dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves','healer','staff','cleric','healers','clerics','staves','flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi','cavalry','horse','pony','horsie','horses','horsies','ponies','infantry','foot','feet','armor','armour','armors','armours','armored','armoured','male','man','boy','female','woman','girl'].include?(args[i].downcase)
-      units.push(@units[find_unit(args[i].downcase,event)][0]) if find_unit(args[i].downcase,event)>=0 && args[i].length>=3
+      unitz.push(@units[find_unit(args[i].downcase,event)][0]) if find_unit(args[i].downcase,event)>=0 && args[i].length>=3
       if !detect_multi_unit_alias(event,args[i],args[i],3).nil?
         x=detect_multi_unit_alias(event,args[i],args[i],3)
         for i2 in 0...x[1].length
-          units.push(x[1][i2])
+          unitz.push(x[1][i2])
         end
       end
-      units.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(F)") if ['robin','corrin','morgan','kana'].include?(args[i].downcase)
-      units.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(M)") if ['robin','corrin','morgan','kana'].include?(args[i].downcase)
+      unitz.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(F)") if ['robin','corrin','morgan','kana'].include?(args[i].downcase)
+      unitz.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(M)") if ['robin','corrin','morgan','kana'].include?(args[i].downcase)
     end
   end
   colors=colors.uniq
@@ -4367,22 +4378,59 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   genders=genders.uniq
   games=games.uniq
   tier=tier.uniq
+  supernatures=supernatures.uniq
   # prune based on inputs
   matches1=[]
+  matches0=@units.map{|q| q}
+  if supernatures.include?('+HP') && supernatures.include?('-HP')
+    matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4])}
+  elsif supernatures.include?('+HP')
+    matches0=matches0.reject{|q| ![1,5,10].include?(q[4])}
+  elsif supernatures.include?('-HP')
+    matches0=matches0.reject{|q| ![2,6,11].include?(q[4])}
+  end
+  if supernatures.include?('+Atk') && supernatures.include?('-Atk')
+    matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[5])}
+  elsif supernatures.include?('+Atk')
+    matches0=matches0.reject{|q| ![1,5,10].include?(q[5])}
+  elsif supernatures.include?('-Atk')
+    matches0=matches0.reject{|q| ![2,6,11].include?(q[5])}
+  end
+  if supernatures.include?('+Spd') && supernatures.include?('-Spd')
+    matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[6])}
+  elsif supernatures.include?('+Spd')
+    matches0=matches0.reject{|q| ![1,5,10].include?(q[6])}
+  elsif supernatures.include?('-Spd')
+    matches0=matches0.reject{|q| ![2,6,11].include?(q[6])}
+  end
+  if supernatures.include?('+Def') && supernatures.include?('-Def')
+    matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[7])}
+  elsif supernatures.include?('+Def')
+    matches0=matches0.reject{|q| ![1,5,10].include?(q[7])}
+  elsif supernatures.include?('-Def')
+    matches0=matches0.reject{|q| ![2,6,11].include?(q[7])}
+  end
+  if supernatures.include?('+Res') && supernatures.include?('-Res')
+    matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[8])}
+  elsif supernatures.include?('+Res')
+    matches0=matches0.reject{|q| ![1,5,10].include?(q[8])}
+  elsif supernatures.include?('-Res')
+    matches0=matches0.reject{|q| ![2,6,11].include?(q[8])}
+  end
   if colors.length>0 && weapons.length>0
-    matches1=@units.reject{|q| !colors.include?(q[1][0]) || !weapons.include?(q[1][1])}
+    matches1=matches0.reject{|q| !colors.include?(q[1][0]) || !weapons.include?(q[1][1])}
   elsif colors.length>0
-    matches1=@units.reject{|q| !colors.include?(q[1][0])}
+    matches1=matches0.reject{|q| !colors.include?(q[1][0])}
   elsif weapons.length>0
-    matches1=@units.reject{|q| !weapons.include?(q[1][1])}
+    matches1=matches0.reject{|q| !weapons.include?(q[1][1])}
   else
-    matches1=@units
+    matches1=matches0.map{|q| q}
   end
   if color_weapons.length>0
-    matches1=[] if matches1==@units
-    for i in 0...@units.length
+    matches1=[] if matches1==matches0
+    for i in 0...matches0.length
       for j in 0...color_weapons.length
-        matches1.push(@units[i]) if @units[i][1][0]==color_weapons[j][0] && @units[i][1][1]==color_weapons[j][1]
+        matches1.push(matches0[i]) if matches0[i][1][0]==color_weapons[j][0] && matches0[i][1][1]==color_weapons[j][1]
       end
     end
   end
@@ -4394,13 +4442,13 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   if movement.length>0
     matches2=matches1.reject{|q| !movement.include?(q[3])}
   else
-    matches2=matches1
+    matches2=matches1.map{|q| q}
   end
   matches3=[]
   if genders.length>0
     matches3=matches2.reject{|q| !genders.include?(q[20])}
   else
-    matches3=matches2
+    matches3=matches2.map{|q| q}
   end
   matches4=[]
   if games.length>0
@@ -4411,7 +4459,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
       end
     end
   else
-    matches4=matches3
+    matches4=matches3.map{|q| q}
   end
   matches4=matches4.uniq
   matches5=[]
@@ -4423,12 +4471,12 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
       end
     end
   else
-    matches5=matches4
+    matches5=matches4.map{|q| q}
   end
-  matches5=[] if matches5==@units && units.length>0
-  if units.length>0
-    for i in 0...units.length
-      matches5.push(@units[find_unit(units[i].downcase,event)])
+  matches5=[] if matches5==@units && unitz.length>0
+  if unitz.length>0
+    for i in 0...unitz.length
+      matches5.push(@units[find_unit(unitz[i].downcase,event)])
     end
   end
   matches5=matches5.uniq
@@ -4492,7 +4540,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
       f=[]
       matches5.sort! {|a,b| a[0] <=> b[0]}
       for i in 0...matches5.length
-        matches5[i][0]="__**#{matches5[i][0]}**__" if units.length>0 && units.include?(matches5[i][0])
+        matches5[i][0]="__**#{matches5[i][0]}**__" if unitz.length>0 && unitz.include?(matches5[i][0])
         f.push(matches5[i][0])
       end
       return f if mode==1
@@ -10098,7 +10146,18 @@ bot.command([:sort,:list]) do |event, *args|
   event.channel.send_temporary_message("Calculating data, please wait...",10)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   f=[0,0,0,0,0,0,0,0]
+  supernatures=[]
   for i in 0...args.length # find stat names, retain the order in which they're listed.
+    supernatures.push('+HP') if ['hpboon','healthboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Atk') if ['atkboon','attboon','attackboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Spd') if ['spdboon','speedboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Def') if ['defboon','defenseboon','defenceboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Res') if ['resboon','resistanceboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-HP') if ['hpbane','healthbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Atk') if ['atkbane','attbane','attackbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Spd') if ['spdbane','speedbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Def') if ['defbane','defensebane','defencebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Res') if ['resbane','resistancebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     if f[0]==0
       f[0]=9 if ["hp","health"].include?(args[i].downcase)
       f[0]=10 if ["str","strength","strong","mag","magic","atk","att","attack"].include?(args[i].downcase)
@@ -10157,10 +10216,22 @@ bot.command([:sort,:list]) do |event, *args|
       f[6]=15 if ["chill","frostbite","freeze","cold","frz","frzprotect","lower","lowerdefres","lowerdefenseresistance","lowerdef"].include?(args[i].downcase) && !f.include?(15)
     end
   end
-  for i in 0...args.length
-    args[i]=args[i].downcase
+  if supernatures.include?('+HP') || supernatures.include?('-HP')
+    f.push(9) unless f.include?(9)
   end
-  if args.include?('stats')
+  if supernatures.include?('+Atk') || supernatures.include?('-Atk')
+    f.push(10) unless f.include?(10)
+  end
+  if supernatures.include?('+Spd') || supernatures.include?('-Spd')
+    f.push(11) unless f.include?(11)
+  end
+  if supernatures.include?('+Def') || supernatures.include?('-Def')
+    f.push(12) unless f.include?(12)
+  end
+  if supernatures.include?('+Res') || supernatures.include?('-Res')
+    f.push(13) unless f.include?(13)
+  end
+  if args.map{|q| q.downcase}.include?('stats')
     f.push(9) unless f.include?(9)
     f.push(10) unless f.include?(10)
     f.push(11) unless f.include?(11)
@@ -10218,7 +10289,7 @@ bot.command([:sort,:list]) do |event, *args|
     for j in 0...f.length
       sf=s[f[j]]
       if f[j]==10 # give the proper attack stat name
-        if ['Staff','Tome','Dragon'].include?(k[i][1][1])
+        if ['Healer','Tome','Dragon'].include?(k[i][1][1])
           sf='Magic'
         elsif ['Blade','Dagger','Bow'].include?(k[i][1][1])
           sf='Strength'
