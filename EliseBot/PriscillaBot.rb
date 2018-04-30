@@ -4833,8 +4833,14 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     matches4=split_list(event,matches4,['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Rod','Colorless Tome','Dragon','Bow','Dagger','Staff'],5)
   elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[4]}.uniq[0]=="Assist" && matches4.map{|q| q[5]}.uniq.length>1
     matches4=split_list(event,matches4,[['Rally',1],['Move',2],['Music',1],['Health',2],['Staff',1]],19)
-  elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[4]}.uniq[0]=="Special" && matches4.map{|q| q[5]}.uniq.length>1
-    matches4=split_list(event,matches4,[['Damage',1],['Defense',1],['AoE',1],['Staff',1]],19)
+  elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[4]}.uniq[0]=="Special"
+    if matches4.reject{|q| q[19].split(', ').include?("Damage")}.length==0 && matches4[0][19].split(', ').include?("Damage")
+      matches4=split_list(event,matches4,[['StarSpecial',2],['MoonSpecial',2],['SunSpecial',2],['EclipseSpecial',1],['FireSpecial',2],['IceSpecial',2],['DragonSpecial',2],['DarkSpecial',2],['RendSpecial',2]],19)
+    elsif matches4.reject{|q| q[19].split(', ').include?("Defense")}.length==0 && matches4[0][19].split(', ').include?("Defense")
+      matches4=split_list(event,matches4,[['MiracleSpecial',2],['SupershieldSpecial',1],['AegisSpecial',2],['PaviseSpecial',2]],19)
+    elsif matches4.map{|q| q[5]}.uniq.length>1
+      matches4=split_list(event,matches4,[['Damage',1],['Defense',1],['AoE',1],['Staff',1]],19)
+    end
   elsif !has_any?(matches4.map{|q| q[4]}.uniq, ["Weapon", "Assist", "Special"])
     ptypes=matches4.map{|q| q[4]}.uniq
     if passives==['Seal'] || ptypes==ptypes.reject{|q| !q.split(', ').include?('Seal')} # when only seals are listed, sort by color.
@@ -5050,17 +5056,36 @@ def display_skills(event, mode)
         end
         types.uniq!
         h="."
-        if types2.reject{|q| !q.include?('Passive(S)') && !q.include?('Seal')}==types2 && types3.length==1
-          h="Scarlet Seals" if types3[0]=="scarlet"
-          h="Azure Seals" if types3[0]=="azure"
-          h="Verdant Seals" if types3[0]=="verdant"
-          h="Transparent Seals" if types3[0]=="transparent"
-          h="Enemy-exclusive Seals" if types3[0]=="gold"
-          h="Unknwon Color" if types3[0]=="-"
-        elsif types.length>1 && types.map{|q| q[0]}.uniq.length==1 || types.map{|q| q[0]}.uniq[0]=="Special"
+        if types.map{|q| q[0]}.uniq.length==1 || types.map{|q| q[0]}.uniq[0]=="Special"
           m=typesx.map{|q| q[19].split(', ')}
-          if m.reject{|q| !q.include?('Staff')}.length>0 && m.reject{|q| !q.include?('Staff')}.length==m.length
-            h="Healer Specials"
+          if m.reject{|q| !q.include?('SupershieldSpecial')}.length>0 && m.reject{|q| !q.include?('SupershieldSpecial')}.length==m.length
+            h="Supershield Specials"
+          elsif m.reject{|q| !q.include?('AegisSpecial')}.length>0 && m.reject{|q| !q.include?('AegisSpecial')}.length==m.length
+            h="Aegis Specials"
+          elsif m.reject{|q| !q.include?('PaviseSpecial')}.length>0 && m.reject{|q| !q.include?('PaviseSpecial')}.length==m.length
+            h="Pavise Specials"
+          elsif m.reject{|q| !q.include?('MiracleSpecial')}.length>0 && m.reject{|q| !q.include?('MiracleSpecial')}.length==m.length
+            h="Miracle Specials"
+          elsif m.reject{|q| !q.include?('MiracleSpecial')}.length>0 && m.reject{|q| !q.include?('MiracleSpecial')}.length==m.length
+            h="Miracle Specials"
+          elsif m.reject{|q| !q.include?('EclipseSpecial')}.length>0 && m.reject{|q| !q.include?('EclipseSpecial')}.length==m.length
+            h="Eclipse Specials"
+          elsif m.reject{|q| !q.include?('SunSpecial')}.length>0 && m.reject{|q| !q.include?('SunSpecial')}.length==m.length
+            h="Sun Specials"
+          elsif m.reject{|q| !q.include?('MoonSpecial')}.length>0 && m.reject{|q| !q.include?('MoonSpecial')}.length==m.length
+            h="Moon Specials"
+          elsif m.reject{|q| !q.include?('StarSpecial')}.length>0 && m.reject{|q| !q.include?('StarSpecial')}.length==m.length
+            h="Star Specials"
+          elsif m.reject{|q| !q.include?('FireSpecial')}.length>0 && m.reject{|q| !q.include?('FireSpecial')}.length==m.length
+            h="Fire Specials"
+          elsif m.reject{|q| !q.include?('IceSpecial')}.length>0 && m.reject{|q| !q.include?('IceSpecial')}.length==m.length
+            h="Ice Specials"
+          elsif m.reject{|q| !q.include?('DragonSpecial')}.length>0 && m.reject{|q| !q.include?('DragonSpecial')}.length==m.length
+            h="Dragon Specials"
+          elsif m.reject{|q| !q.include?('DarkSpecial')}.length>0 && m.reject{|q| !q.include?('DarkSpecial')}.length==m.length
+            h="Darkness Specials"
+          elsif m.reject{|q| !q.include?('RendSpecial')}.length>0 && m.reject{|q| !q.include?('RendSpecial')}.length==m.length
+            h="Rend Specials"
           elsif m.reject{|q| !q.include?('Damage')}.length>0 && m.reject{|q| !q.include?('Damage')}.length==m.length
             h="Offensive Specials"
           elsif m.reject{|q| !q.include?('Defense')}.length>0 && m.reject{|q| !q.include?('Defense')}.length==m.length
@@ -5070,6 +5095,13 @@ def display_skills(event, mode)
           else
             h="Misc. Specials"
           end
+        elsif types2.reject{|q| !q.include?('Passive(S)') && !q.include?('Seal')}==types2 && types3.length==1
+          h="Scarlet Seals" if types3[0]=="scarlet"
+          h="Azure Seals" if types3[0]=="azure"
+          h="Verdant Seals" if types3[0]=="verdant"
+          h="Transparent Seals" if types3[0]=="transparent"
+          h="Enemy-exclusive Seals" if types3[0]=="gold"
+          h="Unknwon Color" if types3[0]=="-"
         elsif types.length>1 && types.map{|q| q[0]}.uniq.length==1 || types.map{|q| q[0]}.uniq[0]=="Assist"
           m=typesx.map{|q| q[19].split(', ')}
           if m.reject{|q| !q.include?('Staff')}.length>0 && m.reject{|q| !q.include?('Staff')}.length==m.length
@@ -5485,7 +5517,6 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
   str1=str1.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
   if ['f?','e?','h?'].include?(str1.downcase[0,2]) || ['feh!','feh?'].include?(str1.downcase[0,4])
     s=event.message.text.downcase
-    puts s if @shardizard==3 || @shardizard==0
     s=s[2,s.length-2] if ['f?','e?','h?'].include?(str1.downcase[0,2])
     s=s[4,s.length-4] if ['feh!','feh?'].include?(str1.downcase[0,4])
     a=s.split(' ')
@@ -9488,7 +9519,6 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
       f.push("#{m[i][0]}#{" = #{m[i][1].join(', ')}" if unit.nil?}")
     end
   end
-  puts m.map{|q| q.to_s}
   f.uniq!
   if f.length>50 && !safe_to_spam?(event)
     event.respond "There are so many aliases that I don't want to spam the server.  Please use the command in PM."
@@ -11257,6 +11287,7 @@ bot.message do |event|
       event.respond "I am not Robin right now.  Please use `FE!reboot` to turn me into Robin."
     end
   elsif ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+    puts event.message.text
     s=event.message.text.downcase
     s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
     s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
