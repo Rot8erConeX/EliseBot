@@ -4616,7 +4616,8 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   end
   for i in 0...args.length
     weapon_subsets.push("Legendary") if ['legendary', 'legend', 'prf'].include?(args[i].downcase)
-    weapon_subsets.push("DC") if ['dc', 'distantcounter', 'distant-counter', 'counter'].include?(args[i].downcase)
+    weapon_subsets.push("DC") if ['dc', 'distantcounter', 'distant-counter', 'distant_counter', 'counter'].include?(args[i].downcase)
+    weapon_subsets.push("CC") if ['cc', 'closecounter', 'close-counter', 'close_counter', 'counter'].include?(args[i].downcase)
     weapon_subsets.push("Killer") if ['killer', 'killing', 'slaying', 'slayer'].include?(args[i].downcase)
     weapon_subsets.push("Effective") if ['effective'].include?(args[i].downcase)
     weapon_subsets.push("Harsh") if ['harsh'].include?(args[i].downcase)
@@ -5104,7 +5105,7 @@ def display_skills(event, mode)
         end
         types.uniq!
         h="."
-        if types.map{|q| q[0]}.uniq.length==1 || types.map{|q| q[0]}.uniq[0]=="Special"
+        if types2.length==1 && types2[0]=="Special"
           m=typesx.map{|q| q[19].split(', ')}
           if m.reject{|q| !q.include?('SupershieldSpecial')}.length>0 && m.reject{|q| !q.include?('SupershieldSpecial')}.length==m.length
             h="Supershield Specials"
@@ -5143,7 +5144,7 @@ def display_skills(event, mode)
           else
             h="Misc. Specials"
           end
-        elsif types.map{|q| q[0]}.uniq.length==1 || types.map{|q| q[0]}.uniq[0]=="Assist"
+        elsif types2.length==1 && types2[0]=="Assist"
           m=typesx.map{|q| q[19].split(', ')}
           if m.reject{|q| !q.include?('Staff')}.length>0 && m.reject{|q| !q.include?('Staff')}.length==m.length
             h="Healing Staves"
