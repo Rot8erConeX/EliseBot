@@ -5095,14 +5095,7 @@ def display_skills(event, mode)
           else
             h="Misc. Specials"
           end
-        elsif types2.reject{|q| !q.include?('Passive(S)') && !q.include?('Seal')}==types2 && types3.length==1
-          h="Scarlet Seals" if types3[0]=="scarlet"
-          h="Azure Seals" if types3[0]=="azure"
-          h="Verdant Seals" if types3[0]=="verdant"
-          h="Transparent Seals" if types3[0]=="transparent"
-          h="Enemy-exclusive Seals" if types3[0]=="gold"
-          h="Unknwon Color" if types3[0]=="-"
-        elsif types.length>1 && types.map{|q| q[0]}.uniq.length==1 || types.map{|q| q[0]}.uniq[0]=="Assist"
+        elsif types.map{|q| q[0]}.uniq.length==1 || types.map{|q| q[0]}.uniq[0]=="Assist"
           m=typesx.map{|q| q[19].split(', ')}
           if m.reject{|q| !q.include?('Staff')}.length>0 && m.reject{|q| !q.include?('Staff')}.length==m.length
             h="Healing Staves"
@@ -5117,6 +5110,13 @@ def display_skills(event, mode)
           else
             h="Misc. Assists"
           end
+        elsif types2.reject{|q| !q.include?('Passive(S)') && !q.include?('Seal')}==types2 && types3.length==1
+          h="Scarlet Seals" if types3[0]=="scarlet"
+          h="Azure Seals" if types3[0]=="azure"
+          h="Verdant Seals" if types3[0]=="verdant"
+          h="Transparent Seals" if types3[0]=="transparent"
+          h="Enemy-exclusive Seals" if types3[0]=="gold"
+          h="Unknwon Color" if types3[0]=="-"
         elsif types.length>1 && types.map{|q| q[0]}.uniq.length==1 || types.map{|q| q[0]}.uniq[0]=="Passive" && (types.map{|q| q[1]}.uniq.length>1 || types[0][1]!="Staff Users Only")
           h="A Passives" if types2.reject{|q| !q.include?('Passive(A)')}==types2
           h="B Passives" if types2.reject{|q| !q.include?('Passive(B)')}==types2
@@ -10699,6 +10699,10 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
   all_skills=@skills.reject{|q| !has_any?(g, q[21])}
   all_skills=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
   legal_skills=@skills.reject{|q| !q[21].nil?}
+  b=[]
+  File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
+    b.push(line) unless line.gsub(' ','').length<=0 || line.gsub(' ','')[0]=="#"
+  end
   unless event.user.id==167657750971547648 && !f.nil? && @shardizard<4
     bot.servers.values(&:members)
     event << "I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members."
@@ -10726,6 +10730,7 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
     event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups."
     event << ''
     event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
+    event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty, non-comment)."
     return nil
   end
   if f.to_i.to_s==f
@@ -10764,6 +10769,7 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
   event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups."
   event << ''
   event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
+  event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty, non-comment)."
   return nil
 end
 
