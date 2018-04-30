@@ -3052,7 +3052,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
     atk="Magic" if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
     atk="Strength" if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
     zzzl=@skills[find_weapon(weapon,event)]
-    if zzzl[7].include?("amage calculated using the lower of foe's Def or Res") || (zzzl[4]=="Weapon" && zzzl[5]=="Dragons Only" && !refinement.nil? && refinement.length>0)
+    if zzzl[19].split(', ').include?("Frostbite") || (zzzl[19].split(', ').include?("(R)Frostbite") && !refinement.nil? && refinement.length>0) || (zzzl[19].split(', ').include?("(E)Frostbite") && refinement=='Effect')
       atk="Freeze"
     end
     n=nature_name(boon,bane)
@@ -3123,7 +3123,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
   atk="Magic" if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
   atk="Strength" if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
   zzzl=@skills[find_weapon(weapon,event)]
-  if zzzl[7].include?("amage calculated using the lower of foe's Def or Res") || (zzzl[4]=="Weapon" && zzzl[5]=="Dragons Only" && !refinement.nil? && refinement.length>0)
+  if zzzl[19].split(', ').include?("Frostbite") || (zzzl[19].split(', ').include?("(R)Frostbite") && !refinement.nil? && refinement.length>0) || (zzzl[19].split(', ').include?("(E)Frostbite") && refinement=='Effect')
     atk="Freeze"
   end
   n=nature_name(boon,bane)
@@ -4651,7 +4651,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   if skill_types.length>0
     for i in 0...all_skills.length
       for j in 0...skill_types.length
-        matches0.push(all_skills[i]) if "#{all_skills[i][19]},".include?("#{skill_types[j]},")
+        matches0.push(all_skills[i]) if all_skills[i][19].split(', ').include?(skill_types[j])
       end
     end
   else
@@ -4670,13 +4670,13 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   elsif colors.length>0
     for i in 0...matches0.length
       for j in 0...colors.length
-        matches1.push(matches0[i]) if matches0[i][4]=="Weapon" && "#{matches0[i][19]},".include?("#{colors[j]},")
+        matches1.push(matches0[i]) if matches0[i][4]=="Weapon" && matches0[i][19].split(', ').include?(colors[j])
       end
     end
   elsif weapons.length>0
     for i in 0...matches0.length
       for j in 0...weapons.length
-        matches1.push(matches0[i]) if matches0[i][4]=="Weapon" && "#{matches0[i][19]},".include?("#{weapons[j]},")
+        matches1.push(matches0[i]) if matches0[i][4]=="Weapon" && matches0[i][19].split(', ').include?(weapons[j])
       end
     end
   else
@@ -4696,7 +4696,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   if assists.length>0
     for i in 0...matches0.length
       for j in 0...assists.length
-        matches2.push(matches0[i]) if matches0[i][4]=="Assist" && "#{matches0[i][19]},".include?("#{assists[j]},")
+        matches2.push(matches0[i]) if matches0[i][4]=="Assist" && matches0[i][19].split(', ').include?(assists[j])
       end
     end
   else
@@ -4707,7 +4707,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   if specials.length>0
     for i in 0...matches0.length
       for j in 0...specials.length
-        matches2.push(matches0[i]) if matches0[i][4]=="Special" && "#{matches0[i][19]},".include?("#{specials[j]},")
+        matches2.push(matches0[i]) if matches0[i][4]=="Special" && matches0[i][19].split(', ').include?(specials[j])
       end
     end
   else
@@ -4734,7 +4734,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   if weapon_subsets.length>0
     for i in 0...matches2.length
       for j in 0...weapon_subsets.length
-        matches3.push(matches2[i]) if matches2[i][4]=="Weapon" && "#{matches2[i][19]},".include?("#{weapon_subsets[j]},")
+        matches3.push(matches2[i]) if matches2[i][4]=="Weapon" && matches2[i][19].split(', ').include?(weapon_subsets[j])
       end
     end
   elsif weapons.length>0 || colors.length>0 || color_weapons.length>0 || skill_types.include?('Weapon')
@@ -4755,7 +4755,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   if passive_subsets.length>0
     for i in 0...matches2.length
       for j in 0...passive_subsets.length
-        matches3.push(matches2[i]) if (matches2[i][4].include?("Passive") || matches2[i][4]=="Seal") && "#{matches2[i][19]},".include?("#{passive_subsets[j]},")
+        matches3.push(matches2[i]) if (matches2[i][4].include?("Passive") || matches2[i][4]=="Seal") && matches2[i][19].split(', ').include?(passive_subsets[j])
       end
     end
   elsif passives.length>0 || skill_types.include?('Passive')
@@ -6392,7 +6392,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   atk="Magic" if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
   atk="Strength" if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
   zzzl=@skills[find_weapon(weapon,event)]
-  if zzzl[7].include?("amage calculated using the lower of foe's Def or Res") || (zzzl[4]=="Weapon" && zzzl[5]=="Dragons Only" && !refinement.nil? && refinement.length>0)
+  if zzzl[19].split(', ').include?("Frostbite") || (zzzl[19].split(', ').include?("(R)Frostbite") && !refinement.nil? && refinement.length>0) || (zzzl[19].split(', ').include?("(E)Frostbite") && refinement=='Effect')
     atk="Freeze"
   end
   n=nature_name(boon,bane)
@@ -6751,7 +6751,7 @@ def heal_study(event,name,bot,weapon=nil)
   atk="Magic" if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
   atk="Strength" if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
   zzzl=@skills[find_weapon(weapon,event)]
-  if zzzl[7].include?("amage calculated using the lower of foe's Def or Res") || (zzzl[4]=="Weapon" && zzzl[5]=="Dragons Only" && !refinement.nil? && refinement.length>0)
+  if zzzl[19].split(', ').include?("Frostbite") || (zzzl[19].split(', ').include?("(R)Frostbite") && !refinement.nil? && refinement.length>0) || (zzzl[19].split(', ').include?("(E)Frostbite") && refinement=='Effect')
     atk="Freeze"
   end
   n=nature_name(boon,bane)
@@ -6998,7 +6998,7 @@ def proc_study(event,name,bot,weapon=nil)
   atk="Magic" if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
   atk="Strength" if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
   zzzl=@skills[find_weapon(weapon,event)]
-  if zzzl[7].include?("amage calculated using the lower of foe's Def or Res") || (zzzl[4]=="Weapon" && zzzl[5]=="Dragons Only" && !refinement.nil? && refinement.length>0)
+  if zzzl[19].split(', ').include?("Frostbite") || (zzzl[19].split(', ').include?("(R)Frostbite") && !refinement.nil? && refinement.length>0) || (zzzl[19].split(', ').include?("(E)Frostbite") && refinement=='Effect')
     atk="Freeze"
   end
   n=nature_name(boon,bane)
@@ -7061,11 +7061,20 @@ def proc_study(event,name,bot,weapon=nil)
     wdamage2+=10
     stat_skills.push('Wrath')
   end
-  wdamage+=10 if @skills[find_skill(weapon,event)][19].split(', ').include?('WoDao')
-  wdamage2+=10 if @skills[find_skill(weapon,event)][19].split(', ').include?('WoDao') && !wl.include?("~~")
+  tags=@skills[find_skill(weapon,event)][19].split(', ')
+  wdamage+=10 if tags.include?('WoDao')
+  wdamage2+=10 if tags.include?('WoDao') && !wl.include?("~~")
+  wdamage+=10 if tags.include?('(R)WoDao') && !refinement.nil? && refinement.length>0
+  wdamage2+=10 if tags.include?('(R)WoDao') && !refinement.nil? && refinement.length>0 && !wl.include?("~~")
+  wdamage+=10 if tags.include?('(E)WoDao') && refinement=='Effect'
+  wdamage2+=10 if tags.include?('(E)WoDao') && refinement=='Effect' && !wl.include?("~~")
   cdwn=0
-  cdwn-=1 if @skills[find_skill(weapon,event)][19].split(', ').include?('Killer')
-  cdwn+=1 if @skills[find_skill(weapon,event)][19].split(', ').include?('SlowSpecial') || @skills[find_skill(weapon,event)][19].split(', ').include?('SpecialSlow')
+  cdwn-=1 if tags.include?('Killer')
+  cdwn+=1 if tags.include?('SlowSpecial') || tags.include?('SpecialSlow')
+  cdwn-=1 if tags.include?('(R)Killer') && !refinement.nil? && refinement.length>0
+  cdwn+=1 if (tags.include?('(R)SlowSpecial') || tags.include?('(R)SpecialSlow')) && !refinement.nil? && refinement.length>0
+  cdwn-=1 if tags.include?('(E)Killer') && refinement=='Effect'
+  cdwn+=1 if (tags.include?('(E)SlowSpecial') || tags.include?('(E)SpecialSlow')) && refinement=='Effect'
   cdwn2=0
   cdwn2=cdwn unless wl.include?("~~")
   cdwns=cdwn
@@ -7316,7 +7325,7 @@ def phase_study(event,name,bot,weapon=nil)
   atk="Magic" if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
   atk="Strength" if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
   zzzl=@skills[find_weapon(weapon,event)]
-  if zzzl[7].include?("amage calculated using the lower of foe's Def or Res") || (zzzl[4]=="Weapon" && zzzl[5]=="Dragons Only" && !refinement.nil? && refinement.length>0)
+  if zzzl[19].split(', ').include?("Frostbite") || (zzzl[19].split(', ').include?("(R)Frostbite") && !refinement.nil? && refinement.length>0) || (zzzl[19].split(', ').include?("(E)Frostbite") && refinement=='Effect')
     atk="Freeze"
   end
   n=nature_name(boon,bane)
@@ -10701,7 +10710,8 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
   legal_skills=@skills.reject{|q| !q[21].nil?}
   b=[]
   File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
-    b.push(line) unless line.gsub(' ','').length<=0 || line.gsub(' ','')[0]=="#"
+    l=line.gsub(' ','').gsub("\n",'')
+    b.push(l) unless l.length<=0
   end
   unless event.user.id==167657750971547648 && !f.nil? && @shardizard<4
     bot.servers.values(&:members)
@@ -10730,7 +10740,7 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
     event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups."
     event << ''
     event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
-    event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty, non-comment)."
+    event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
     return nil
   end
   if f.to_i.to_s==f
@@ -10769,7 +10779,7 @@ bot.command(:snagstats) do |event, f| # snags the number of members in each of t
   event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups."
   event << ''
   event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
-  event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty, non-comment)."
+  event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
   return nil
 end
 
