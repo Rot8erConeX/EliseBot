@@ -30,6 +30,7 @@
 ["Singers", []]
 ["Summer", ["Robin(F)(Summer)", "Tiki(Adult)(Summer)", "Frederick(Summer)", "Gaius(Summer)", "Corrin(F)(Summer)", "Xander(Summer)", "Leo(Summer)", "Elise(Summer)"]]
 ["Tempest", []]
+["TheBlazingBuds", ["Eliwood", "Lyn", "Hector"], [412303462764773376]]
 ["Valentine's", ["Eliwood(Valentines)", "Hector(Valentines)", "Lilina(Valentines)", "Lyn(Valentines)", "Roy(Valentines)"]]
 ["Waifus", ["Lilina(Valentines)", "Mae", "Minerva"], [356146569239855104]]
 ["Whitewings", ["Palla", "Catria", "Est", "Narcian"]]

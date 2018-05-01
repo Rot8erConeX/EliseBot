@@ -2,9 +2,9 @@ Legendary Heroes - Lyn Lady of the Wind\-8\Celica(Fallen), Eirika(Memories), Eph
 Wings of Fate\3\Hinoka(Wings), Kana(F), Shigure
 Heroes with Combat Boosts\3\Ayra, Lyn(Brave), Sonya
 "Thunder's Fist" Tempest Trials\3\Olwen(Bonds), Reinhardt(Bonds), Seliph
-World of Thracia\3\Finn, Leif, Nanna, Olwen(World), Reinhardt(World)
 GHB Units\5\-\34
 TT Units\5\-\4
+World of Thracia\3\Finn, Leif, Nanna, Olwen(World), Reinhardt(World)
 Cooldown Bonuses\3\Ike(Brave), Mia, Nephenee
 Hares at the Fair\3\Alfonse(Spring), Catria(Spring), Kagero(Spring), Sharena(Spring)
 Tiki & Nowi's Battle\3\Nowi, Robin(M)(Fallen), Tiki(Adult)
