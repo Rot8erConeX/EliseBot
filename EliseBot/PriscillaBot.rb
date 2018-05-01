@@ -320,7 +320,7 @@ def devunits_save() # this function is used by the devedit command to save the d
   return nil
 end
 
-bot.command(:help) do |event, command, subcommand|
+bot.command(:help) do |event, command, subcommand| # this command is used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
   command='' if command.nil?
   k=0
   k=event.server.id unless event.server.nil?
@@ -347,18 +347,18 @@ bot.command(:help) do |event, command, subcommand|
   elsif ['allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows all the skills that `name`can learn.\n\nIn servers, will only show the weapons, assists, and specials.\nIn PM, will also show the passive skills.",0xD49F61)
   elsif ['data','unit'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats, and skills.\n\nTyping in the names \"Robin\", \"Corrin\", and \"Tiki\" without any descriptors will display data on both variations of the named character, though only the stats and not the skills, due to not wanting to flood the channel with four embeds.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats, and skills.",0xD49F61)
   elsif ['skill'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.",0xD49F61)
   elsif ['stats'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats.\n\nTyping in the names \"Robin\", \"Corrin\", and \"Tiki\" without any descriptors will display data on both variations of the named character.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats.",0xD49F61)
     disp_more_info(event)
   elsif ['healstudy','studyheal','heal_study','study_heal'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Takes the stats of the unit `name` and uses them to determine how much is healed with each healing staff.",0xD49F61)
   elsif ['procstudy','studyproc','proc_study','study_proc'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Takes the stats of the unit `name` and uses them to determine how much extra damage is dealt when each Special skill procs.",0xD49F61)
   elsif ['phasestudy','studyphase','phase_study','study_phase'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__","Takes the stats of the unit `name` and uses them to determine The actual stats the unit has during combat.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Takes the stats of the unit `name` and uses them to determine the actual stats the unit has during combat.",0xD49F61)
   elsif ['study'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows the level 40 stats for the unit `name` for a combination of multiple rarities with 0, 5, and 10 merges.",0xD49F61)
   elsif ['summonpool','summon_pool','pool'].include?(command.downcase) || (['summon'].include?(command.downcase) && "#{subcommand}".downcase=='pool')
@@ -383,7 +383,7 @@ bot.command(:help) do |event, command, subcommand|
   elsif ['tools','links'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Responds with a list of links useful to players of *Fire Emblem Heroes*.",0xD49F61)
   elsif ['skills','fodder'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and skills.\nYou can also include a rarity to show the skills that the unit learns at that rarity.\n\nTyping in the names \"Robin\", \"Corrin\", and \"Tiki\" without any descriptors will display data on both variations of the named character.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and skills.\nYou can also include a rarity to show the skills that the unit learns at that rarity.",0xD49F61)
   elsif ['embed','embeds'].include?(command.downcase)
     event << "**embed**"
     event << ''
@@ -411,8 +411,7 @@ bot.command(:help) do |event, command, subcommand|
   elsif ['removemember','removefromgroup'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __group__ __unit__","Removes the unit `unit` from the group with the name `group`.\nIf this causes `group` to have no members, it will also delete it.",0xC31C19)
   elsif ['bst'].include?(command.downcase)
-    u=random_dev_unit_with_nature(event)
-    create_embed(event,"**#{command.downcase}** __*allies__","Shows the BST of the units listed in `allies`.  If more than four characters are listed, I show both the BST of all those listed and the BST of the first four listed.\n\n**IMPORRTANT NOTE**\nUnlike my other commands, this one is heavily context based.  Please format all allies like the example below:\n`#{u[1]}* #{u[0]} +#{u[2]} +#{u[3]} -#{u[4]}`\nAny field with the exception of unit name can be ignored, but unlike my other commands the order is important.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __*allies__","Shows the BST of the units listed in `allies`.  If more than four characters are listed, I show both the BST of all those listed and the BST of the first four listed.\n\n#{disp_more_info(event,1)}",0xD49F61)
   elsif ['refinery','refine'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Lists all weapons that can be refined or evolved in the weapon refinery, organized by whether they use Divine Dew or Refining Stones.",0xD49F61)
   elsif ['legendary','legendaries'].include?(command.downcase)
@@ -424,25 +423,24 @@ bot.command(:help) do |event, command, subcommand|
   elsif ['rand','random'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Generates a random unit with random, but still valid, stats.",0xD49F61)
   elsif ['compare','comparison'].include?(command.downcase)
-    u=random_dev_unit_with_nature(event)
-    create_embed(event,"**#{command.downcase}** __*allies__","Compares the units listed in `allies`.  Shows each set of stats, as well as an analysis.\nThis command can compare anywhere between two and ten units.\n\n**IMPORRTANT NOTE**\nUnlike my other commands, this one is heavily context based.  Please format all allies like the example below:\n`#{u[1]}* #{u[0]} +#{u[2]} +#{u[3]} -#{u[4]}`\nAny field with the exception of unit name can be ignored, but unlike my other commands the order is important.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __*allies__","Compares the units listed in `allies`.  Shows each set of stats, as well as an analysis.\nThis command can compare anywhere between two and ten units.\n\n#{disp_more_info(event,1)}",0xD49F61)
   elsif ['compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills'].include?(command.downcase)
     u=random_dev_unit_with_nature(event,false)
-    create_embed(event,"**#{command.downcase}** __*allies__","Compares the units listed in `allies`.  Shows the skills that the units have in common.\nThis command can compare exactly two units.\n\n**IMPORRTANT NOTE**\nUnlike my other commands, this one is heavily context based.  Please format all allies like the example below:\n`#{u[1]}\* #{u[0]}`\nThe rarity can be ignored (and thus assumed to be 5\\*), but if you include it, it must be before the name.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __*allies__","Compares the units listed in `allies`.  Shows the skills that the units have in common.\nThis command can compare exactly two units.\n\n#{disp_more_info(event,1)}",0xD49F61)
   elsif ['average','mean'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then calculates their average in each stat.\n\n__**Allowed unit descriptions**__\n*Colors*: Red(s), Blue(s), Green(s), Colo(u)rless, Gray(s), Grey(s)\n*Weapon Types*: Physical, Blade(s), Tome(s), Mage(s), Spell(s), Dragon(s), Manakete(s), Breath, Bow(s), Arrow(s), Archer(s), Dagger(s), Shuriken, Knive(s), Ninja(s), Thief/Thieves, Healer(s), Cleric(s), Staff/Staves\n*Combined color and weapon type*: Sword(s), Katana, Spear(s), Lance(s), Naginata, Axe(s), Ax, Club(s)\n*Movement*: Flier(s), Flyer(s), Flying, Pegasus/Pegasi, Wyvern(s), Cavalry, Horse(s), Pony/Ponies, Horsie(s), Infantry, Foot/Feet, Armo(u)r(s), Armo(u)red",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then calculates their average in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
   elsif ['art'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __unit__ __art type__","Displays `unit`'s character art.  Defaults to their normal portrait, but can be adjusted to other portraits with the following words:\n*Default Attacking Image:* Battle/Battling, Attack/Atk/Att\n*Special Proc Image:* Critical/Crit, Special, Proc\n*Damaged Art:* Damage/Damaged, LowHP/LowHealth",0xD49F61)
   elsif ['bestamong','bestin','beststats','higheststats'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then finds the unit(s) with the best in each stat.\n\n__**Allowed unit descriptions**__\n*Colors*: Red(s), Blue(s), Green(s), Colo(u)rless, Gray(s), Grey(s)\n*Weapon Types*: Physical, Blade(s), Tome(s), Mage(s), Spell(s), Dragon(s), Manakete(s), Breath, Bow(s), Arrow(s), Archer(s), Dagger(s), Shuriken, Knive(s), Ninja(s), Thief/Thieves, Healer(s), Cleric(s), Staff/Staves\n*Combined color and weapon type*: Sword(s), Katana, Spear(s), Lance(s), Naginata, Axe(s), Ax, Club(s)\n*Movement*: Flier(s), Flyer(s), Flying, Pegasus/Pegasi, Wyvern(s), Cavalry, Horse(s), Pony/Ponies, Horsie(s), Infantry, Foot/Feet, Armo(u)r(s), Armo(u)red",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then finds the unit(s) with the best in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
   elsif ['worstamong','worstin','worststats','loweststats'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then finds the unit(s) with the worst in each stat.\n\n__**Allowed unit descriptions**__\n*Colors*: Red(s), Blue(s), Green(s), Colo(u)rless, Gray(s), Grey(s)\n*Weapon Types*: Physical, Blade(s), Tome(s), Mage(s), Spell(s), Dragon(s), Manakete(s), Breath, Bow(s), Arrow(s), Archer(s), Dagger(s), Shuriken, Knive(s), Ninja(s), Thief/Thieves, Healer(s), Cleric(s), Staff/Staves\n*Combined color and weapon type*: Sword(s), Katana, Spear(s), Lance(s), Naginata, Axe(s), Ax, Club(s)\n*Movement*: Flier(s), Flyer(s), Flying, Pegasus/Pegasi, Wyvern(s), Cavalry, Horse(s), Pony/Ponies, Horsie(s), Infantry, Foot/Feet, Armo(u)r(s), Armo(u)red",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then finds the unit(s) with the worst in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
   elsif ['find','search'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['unit','char','character','person','units','chars','charas','chara','people'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, includes any units you name that don't fit into those filters, then displays the resulting list in alphabetical order.\n\n__**Allowed words**__\n*Colors*: Red(s), Blue(s), Green(s), Colo(u)rless, Gray(s), Grey(s)\n*Weapon Types*: Physical, Blade(s), Tome(s), Mage(s), Spell(s), Dragon(s), Manakete(s), Breath, Bow(s), Arrow(s), Archer(s), Dagger(s), Shuriken, Knive(s), Ninja(s), Thief/Thieves, Healer(s), Cleric(s), Staff/Staves\n*Combined color and weapon type*: Sword(s), Katana, Spear(s), Lance(s), Naginata, Axe(s), Ax, Club(s)\n*Movement*: Flier(s), Flyer(s), Flying, Pegasus/Pegasi, Wyvern(s), Cavalry, Horse(s), Pony/Ponies, Horsie(s), Infantry, Foot/Feet, Armo(u)r(s), Armo(u)red",0xD49F61)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, includes any units you name that don't fit into those filters, then displays the resulting list in alphabetical order.\n\n#{disp_more_info(event,2)}",0xD49F61)
     elsif ['skill','skills'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list.\nIf you specifically name one or more characters, their names will be underlined in the result.\n\n__**Allowed words**__\n*Colors*: Red(s), Blue(s), Green(s), Colo(u)rless, Gray(s), Grey(s)\n*Weapon Types*: Physical, Blade(s), Tome(s), Mage(s), Spell(s), Magic, Dragon(s), Manakete(s), Breath, Bow(s), Arrow(s), Archer(s), Dagger(s), Shuriken, Knive(s), Ninja(s), Thief/Thieves, Healer(s), Cleric(s), Staff/Staves\n*Combined color and weapon type*: Sword(s), Katana, Spear(s), Lance(s), Naginata, Axe(s), Ax, Club(s)\n\n*Assists*: Health, Hp, Move, Movement, Moving, Arrangement, Positioning, Position(s), Healer(s), Staff/Staves, Cleric(s), Rally/Rallies, Stat(s), Buff(s)\n\n*Specials*: Healer(s), Staff/Staves, Cleric(s), Balm(s), Defense/Defence, Defensive/Defencive, Damage, Damaging, Proc, AoE, Area, Spread\n\n*Passive*: A, B, C, S, Seal(s)",0xD49F61)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list.\nIf you specifically name one or more characters, their names will be underlined in the result.\n\n#{disp_more_info(event,3)}",0xD49F61)
     else
       create_embed(event,"**#{command.downcase}** __\*filters__","Combines the results of `FEH!find unit` and `FEH!find skill`, showing them in a single embed.  This combined form is particularly useful when looking at weapon types, so you can see all the weapons *and* all the units that can use them side-by-side.",0xD49F61)
     end
@@ -488,7 +486,7 @@ bot.command(:help) do |event, command, subcommand|
     elsif ['alias','aliases'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Sorts the alias list alphabetically by unit the alias is for.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     else
-      create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units which match your defined filters, includes any units you name that don't fit into those filters, then displays the resulting list in order based on the stats you include.\n\n__**Allowed unit descriptions**__\n*Colors*: Red(s), Blue(s), Green(s), Colo(u)rless, Gray(s), Grey(s)\n*Weapon Types*: Physical, Blade(s), Tome(s), Mage(s), Spell(s), Dragon(s), Manakete(s), Breath, Bow(s), Arrow(s), Archer(s), Dagger(s), Shuriken, Knive(s), Ninja(s), Thief/Thieves, Healer(s), Cleric(s), Staff/Staves\n*Combined color and weapon type*: Sword(s), Katana, Spear(s), Lance(s), Naginata, Axe(s), Ax, Club(s)\n*Movement*: Flier(s), Flyer(s), Flying, Pegasus/Pegasi, Wyvern(s), Cavalry, Horse(s), Pony/Ponies, Horsie(s), Infantry, Foot/Feet, Armo(u)r(s), Armo(u)red\n\n__**Allowed stat descriptions**__\nHP, Health, STR, Strength, MAG, Magic, ATK, Att, Attack, SPD, Speed, DEF, Defense/Defence, RES, Resistance",0xD49F61)
+      create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units which match your defined filters, includes any units you name that don't fit into those filters, then displays the resulting list in order based on the stats you include.\n\n#{disp_more_info(event,2)}",0xD49F61)
     end
   else
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
@@ -500,20 +498,20 @@ bot.command(:help) do |event, command, subcommand|
   end
 end
 
-bot.command(:reboot, from: 167657750971547648) do |event| # reboots Elise
-  return nil unless event.user.id==167657750971547648
+bot.command(:reboot, from: 167657750971547648) do |event| # this command reboots Elise
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   exec "cd C:/Users/Mini-Matt/Desktop/devkit && PriscillaBot.rb #{@shardizard}"
 end
 
-def safe_to_spam?(event)
-  return true if event.server.nil?
-  return true if @shardizard==4
-  return true if event.channel.id==283821884800499714
-  # return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam')
+def safe_to_spam?(event) # this function determines whether or not it is safe to send extremely long messages
+  return true if event.server.nil? # it is safe to spam in PM
+  return true if @shardizard==4 # it is safe to spam during debugging
+  return true if event.channel.id==283821884800499714 # it is safe to spam in Penumbra's bot_spam channel
+  return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam') # it is safe to spam in any bot spam channel
   return false
 end
 
-def get_markers(event)
+def get_markers(event) # this function is used to determine whether a server-specific unit/skill is safe to display
   metadata_load()
   k=0
   k=event.server.id unless event.server.nil?
@@ -527,20 +525,37 @@ def get_markers(event)
   return g
 end
 
-def disp_more_info(event)
-  create_embed(event,"","You can modify the unit by including any of the following in your message:\n\n**Rarity**\nProper format: #{rand(5)+1}\\*\n~~Alternatively, the first number not given proper context will be set as the rarity value unless the rarity value is already defined~~\nDefault: 5\\* unit\n\n**Merges**\nProper format: +#{rand(10)+1}\n~~Alternatively, the second number not given proper context will be set as the merges value unless the merges value is already defined~~\nDefault: +0\n\n**Boon**\nProper format: +#{['Atk','Spd','Def','Res','HP'].sample}\n~~Alternatively, the first stat name not given proper context will be set as the boon unless the boon is already defined~~\nDefault: No boon\n\n**Bane**\nProper format: -#{['Atk','Spd','Def','Res','HP'].sample}\n~~Alternatively, the second stat name not given proper context will be set as the bane unless the bane is already defined~~\nDefault: No bane\n\n**Weapon**\nProper format: Silver Dagger+ ~~just the weapon's name~~\nDefault: No weapon\n\n**Refined Weapon**\nProper format: Falchion (+) #{['Atk','Spd','Def','Res','Effect'].sample}\nSecondary format: Falchion #{['Atk','Spd','Def','Res','Effect'].sample} Mode\nTertiary format: Falchion (#{['Atk','Spd','Def','Res','Effect'].sample})\n~~Alternatively, the third stat name not given proper context, or the second stat given a + in front of it, will be set as the refinement for the weapon if one is equipped and it can be refined~~\n\n**Tempest Bonus Unit Buff**\nProper format: Tempest\nDefault: Not applied\n\n**Summoner Support**\nProper format: #{['C','B','A','S'].sample} ~~Just a single letter~~\nDefault: No support\n\n**Stat-affecting Skills**\nOptions: HP+, Atk+, Spd+, Def+, Res+, LifeAndDeath/LnD/LaD, Fury, FortressDef, FortressRes\n~~LnD, Fury, and the Fortress skills default to tier 3, but other tiers can be applied by including numbers like so: LnD1~~\nDefault: No skills applied\n\n**Stat-buffing Skills**\nOptions: Rally skills, Defiant skills, Hone/Fortify skills, Balm skills\n~~please note that the skill name must be written out without spaces~~\nDefault: No skills applied\n\nThese can be listed in any order.",0x40C0F0)
+def disp_more_info(event, mode=0) # this function is used by the `help` command to display info that repeats in multiple help descriptions.
+  if mode==0
+    create_embed(event,"","You can modify the unit by including any of the following in your message:\n\n**Rarity**\nProper format: #{rand(5)+1}\\*\n~~Alternatively, the first number not given proper context will be set as the rarity value unless the rarity value is already defined~~\nDefault: 5\\* unit\n\n**Merges**\nProper format: +#{rand(10)+1}\n~~Alternatively, the second number not given proper context will be set as the merges value unless the merges value is already defined~~\nDefault: +0\n\n**Boon**\nProper format: +#{['Atk','Spd','Def','Res','HP'].sample}\n~~Alternatively, the first stat name not given proper context will be set as the boon unless the boon is already defined~~\nDefault: No boon\n\n**Bane**\nProper format: -#{['Atk','Spd','Def','Res','HP'].sample}\n~~Alternatively, the second stat name not given proper context will be set as the bane unless the bane is already defined~~\nDefault: No bane\n\n**Weapon**\nProper format: Silver Dagger+ ~~just the weapon's name~~\nDefault: No weapon\n\n**Refined Weapon**\nProper format: Falchion (+) #{['Atk','Spd','Def','Res','Effect'].sample}\nSecondary format: Falchion #{['Atk','Spd','Def','Res','Effect'].sample} Mode\nTertiary format: Falchion (#{['Atk','Spd','Def','Res','Effect'].sample})\n~~Alternatively, the third stat name not given proper context, or the second stat given a + in front of it, will be set as the refinement for the weapon if one is equipped and it can be refined~~\n\n**Tempest Bonus Unit Buff**\nProper format: Tempest\nDefault: Not applied\n\n**Summoner Support**\nProper format: #{['C','B','A','S'].sample} ~~Just a single letter~~\nDefault: No support\n\n**Stat-affecting Skills**\nOptions: HP+, Atk+, Spd+, Def+, Res+, LifeAndDeath/LnD/LaD, Fury, FortressDef, FortressRes\n~~LnD, Fury, and the Fortress skills default to tier 3, but other tiers can be applied by including numbers like so: LnD1~~\nDefault: No skills applied\n\n**Stat-buffing Skills**\nOptions: Rally skills, Defiant skills, Hone/Fortify skills, Balm skills\n~~please note that the skill name must be written out without spaces~~\nDefault: No skills applied\n\nThese can be listed in any order.",0x40C0F0)
+  elsif mode==1
+    u=random_dev_unit_with_nature(event)
+    return "**IMPORRTANT NOTE**\nUnlike my other commands, this one is heavily context based.  Please format all allies like the example below:\n`#{u[1]}* #{u[0]} +#{u[2]} +#{u[3]} -#{u[4]}`\nAny field with the exception of unit name can be ignored, but unlike my other commands the order is important."
+  elsif [2,3,4].include?(mode)
+    str="__**Allowed#{" unit" if mode==2}#{" skill" if mode==3} descriptions**__"
+    str="#{str}\n*Colors*: Red(s), Blue(s), Green(s), Colo(u)rless, Gray(s), Grey(s)"
+    str="#{str}\n*Weapon Types*: Physical, Blade(s), Tome(s), Mage(s), Spell(s), Dragon(s), Manakete(s), Breath, Bow(s), Arrow(s), Archer(s), Dagger(s), Shuriken, Knive(s), Ninja(s), Thief/Thieves, Healer(s), Cleric(s), Staff/Staves"
+    str="#{str}\n*Combined color and weapon type*: Sword(s), Katana, Spear(s), Lance(s), Naginata, Axe(s), Ax, Club(s), Redtome(s), Redmage(s), Bluetome(s), Bluemage(s), Greentome(s), Greenmage(s)"
+    str="#{str}\n\n*Movement*: Flier(s), Flyer(s), Flying, Pegasus/Pegasi, Wyvern(s), Cavalry, Horse(s), Pony/Ponies, Horsie(s), Infantry, Foot/Feet, Armo(u)r(s), Armo(u)red" if mode==2
+    str="#{str}\n\n*Assists*: Health, HP, Move, Movement, Moving, Arrangement, Positioning, Position(s), Healer(s), Staff/Staves, Cleric(s), Rally/Rallies, Stat(s), Buff(s)" if mode==3
+    str="#{str}\n\n*Specials*: Healer(s), Staff/Staves, Cleric(s), Balm(s), Defense/Defence, Defensive/Defencive, Damage, Damaging, Proc, AoE, Area, Spread" if mode==3
+    str="#{str}\n\n*Passive*: A, B, C, S, W, Seal(s)" if mode==3
+    return str
+  end
+  return nil
 end
 
-def random_dev_unit_with_nature(event,x=true)
+def random_dev_unit_with_nature(event,x=true) # this function is used by `disp_more_info()` to randomly display a non-neutral dev unit as an example on how to format units
   devunits_load()
   u=@dev_units.sample
   if x
+    # try again if the randomly-chosen unit is neutral or server-specific to another server
     return random_dev_unit_with_nature(event) if u[3]==' ' || u[4]==' ' || find_unit(u[0],event,true)<0
   end
   return u
 end
 
-def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='')
+def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # this function is used by multiple commands to calculate a unit's stats
   data_load()
   # find neutral five-star level 40 stats
   f=@units[find_unit(name,event)]
@@ -627,12 +642,13 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='')
     # apply the difference above
   end
   if merges>0                                                                                                  # apply merges, two stats per merge
-    m=2*(merges/5)
+    # every five merges results in +2 to each stat
     u[1]+=2*(merges/5)
     u[2]+=2*(merges/5)
     u[3]+=2*(merges/5)
     u[4]+=2*(merges/5)
     u[5]+=2*(merges/5)
+    # beyond that, two stats per merge, order determined above
     if (merges%5)>0
       for i in 0...2*(merges%5)
         u[s[i][1]]+=1
@@ -642,7 +658,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='')
   return u
 end
 
-def make_stats_string(event,name,rarity,boon='',bane='',hm=10)
+def make_stats_string(event,name,rarity,boon='',bane='',hm=10) # this function is used by the `study` command to create the stat arrangement shown in it
   k=""
   hm=[hm.to_i, hm.to_i]
   args=sever(event.message.text.downcase).split(" ")
@@ -656,18 +672,18 @@ def make_stats_string(event,name,rarity,boon='',bane='',hm=10)
   return k
 end
 
-def is_mod?(user,server,channel)
-  return true if user.id==167657750971547648
-  return false if server.nil?
-  return true if user.id==server.owner.id
-  for i in 0...user.roles.length
+def is_mod?(user,server,channel) # this function is used by certain commands to determine if a user can use them
+  return true if user.id==167657750971547648 # bot developer is always an EliseMod
+  return false if server.nil? # no one is a EliseMmod in PMs
+  return true if user.id==server.owner.id # server owners are EliseMods by default
+  for i in 0...user.roles.length # certain role names will count as EliseMods even if they don't have legitimate mod powers
     return true if ['mod','mods','moderator','moderators','admin','admins','administrator','administrators','owner','owners'].include?(user.roles[i].name.downcase.gsub(' ',''))
   end
-  return true if user.permission?(:manage_messages,channel)
+  return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
   return false
 end
 
-def make_banner()
+def make_banner() # this function is used by the `summon` command to pick a random banner and choose which units are on it.
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
@@ -689,10 +705,10 @@ def make_banner()
   z=false
   w=false
   unless bnr[3].nil?
-    x=true if bnr[3].include?('4')
-    y=true if bnr[3].include?('3')
-    z=true if bnr[3].include?('2')
-    w=true if bnr[3].include?('1')
+    x=true if bnr[3].include?('4') # banner has 4* Focus Units
+    y=true if bnr[3].include?('3') # banner has 3* Focus Units
+    z=true if bnr[3].include?('2') # banner has 2* Focus Units
+    w=true if bnr[3].include?('1') # banner has 1* Focus Units
     bnr[3]=nil
   end
   bnr.compact!
@@ -702,30 +718,30 @@ def make_banner()
   bnr.push([])
   bnr.push([])
   for i in 0...@units.length
-    bnr[2].push(@units[i][0]) if @units[i][19].downcase.include?('g') && bnr[0]=='GHB Units' && @units[i][22].nil?
-    bnr[2].push(@units[i][0]) if @units[i][19].downcase.include?('t') && bnr[0]=='TT Units' && @units[i][22].nil?
+    bnr[2].push(@units[i][0]) if @units[i][19].downcase.include?('g') && bnr[0]=='GHB Units' && @units[i][22].nil? # the fake GHB Unit banner
+    bnr[2].push(@units[i][0]) if @units[i][19].downcase.include?('t') && bnr[0]=='TT Units' && @units[i][22].nil?  # the fake Tempest Unit banner
   end
-  if x
-    bnr.push(bnr[2].map{|q| q})
+  if x # 4* Focus Units
+    bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
   else
     bnr.push(nil)
   end
-  if y
-    bnr.push(bnr[2].map{|q| q})
+  if y # 3* Focus Units
+    bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
   else
     bnr.push(nil)
   end
-  if z
-    bnr.push(bnr[2].map{|q| q})
+  if z # 2* Focus Units
+    bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
   else
     bnr.push(nil)
   end
-  if w
-    bnr.push(bnr[2].map{|q| q})
+  if w # 1* Focus Units
+    bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
   else
     bnr.push(nil)
   end
-  for i in 0...@units.length
+  for i in 0...@units.length # non-focus units
     bnr[3].push(@units[i][0]) if @units[i][19].include?('5p') && @units[i][22].nil?
     bnr[4].push(@units[i][0]) if @units[i][19].include?('4p') && @units[i][22].nil?
     bnr[5].push(@units[i][0]) if @units[i][19].include?('3p') && @units[i][22].nil?
@@ -735,7 +751,7 @@ def make_banner()
   return bnr
 end
 
-def crack_orbs(event,e,user,list)
+def crack_orbs(event,e,user,list) # this function is used by the `summon` command to wait for a reply
   summons=0
   five_star=false
   cutscene=true
@@ -762,7 +778,7 @@ def crack_orbs(event,e,user,list)
   @banner=[]
 end
 
-def normalize(str)
+def normalize(str) # this function is used by the majority of commands that accept input, to replace all non-ASCII characters with their ASCII counterparts
   str=str.gsub("\u2019","'").gsub("`","'").gsub("\u2018","'")
   str=str.gsub("\u{1F1E6}","A").gsub("\u{1F1E7}","B").gsub("\u{1F1E8}","C").gsub("\u{1F1E9}","D").gsub("\u{1F1EA}","E").gsub("\u{1F1EB}","F").gsub("\u{1F1EC}","G").gsub("\u{1F1ED}","H").gsub("\u{1F1EE}","I").gsub("\u{1F1EF}","J").gsub("\u{1F1F0}","K").gsub("\u{1F1F1}","L").gsub("\u{1F1F2}","M").gsub("\u{1F1F3}","N").gsub("\u{1F1F4}","O").gsub("\u{1F1F5}","P").gsub("\u{1F1F6}","Q").gsub("\u{1F1F7}","R").gsub("\u{1F1F8}","S").gsub("\u{1F1F9}","T").gsub("\u{1F1FA}","U").gsub("\u{1F1FB}","V").gsub("\u{1F1FC}","W").gsub("\u{1F1FD}","X").gsub("\u{1F1FE}","Y").gsub("\u{1F1FF}","Z")
   str=str.gsub("\u{1F170}",'A').gsub("\u{1F171}",'B').gsub("\u{1F18E}",'AB').gsub("\u{1F191}",'CL').gsub("\u2B55",'O').gsub("\u{1F17E}",'O').gsub("\u{1F198}",'SOS')
@@ -807,7 +823,7 @@ def normalize(str)
   return str
 end
 
-def has_any?(arr1,arr2)
+def has_any?(arr1,arr2) # this function is used to determine if two arrays share any members
   return true if arr1.nil? && arr2.nil?
   return true if arr1.nil? && !arr2.nil? && arr2.include?(nil)
   return true if arr2.nil? && !arr1.nil? && arr1.include?(nil)
@@ -826,7 +842,7 @@ def has_any?(arr1,arr2)
   return false
 end
 
-def find_unit(name,event,ignore=false,ignore2=false)
+def find_unit(name,event,ignore=false,ignore2=false) # this function is used to find a unit's data entry based on their name
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -839,7 +855,7 @@ def find_unit(name,event,ignore=false,ignore2=false)
     name=name.split(':')[1] if find_unit(name.split(':')[1],event,ignore,ignore2)>=0
   end
   unless ignore2
-    for i in 0...@aliases.length
+    for i in 0...@aliases.length # replace any unit aliases with the actual unit name, if possible
       unless @aliases[i].nil?
         name=@aliases[i][1] if @aliases[i][0].downcase==name.gsub('(','').gsub(')','').downcase && (@aliases[i][2].nil? || @aliases[i][2].include?(k))
       end
@@ -848,7 +864,7 @@ def find_unit(name,event,ignore=false,ignore2=false)
   j=-1
   name=name.gsub('!','')
   name=name.gsub('(','').gsub(')','').gsub('_','') unless ignore2
-  for i in 0...@units.length
+  for i in 0...@units.length # try exact unit names
     unless @units[i].nil?
       m=@units[i][0]
       m=m.gsub('(','').gsub(')','') unless ignore2
@@ -857,7 +873,7 @@ def find_unit(name,event,ignore=false,ignore2=false)
   end
   return j if j>=0 && !@units[j].nil? && has_any?(g, @units[j][22])
   return -1 if ignore || name.downcase=='blade' || name.downcase=='blad' || name.downcase=='bla'
-  for i in 0...@units.length
+  for i in 0...@units.length # try the portion of a exact unit names that is exactly as long as the input string
     unless @units[i].nil?
       m=@units[i][0][0,name.length]
       m=m.gsub('(','').gsub(')','') unless ignore2
@@ -866,7 +882,7 @@ def find_unit(name,event,ignore=false,ignore2=false)
   end
   return j if j>=0 && !@units[j].nil? && has_any?(g, @units[j][22])
   unless ignore2
-    for i in 0...@aliases.length
+    for i in 0...@aliases.length # try the portion of any alias names that is exactly as long as the input string
       unless @aliases[i].nil?
         name=@aliases[i][1] if @aliases[i][0][0,name.length].downcase==name.downcase && (@aliases[i][2].nil? || @aliases[i][2].include?(k)) && find_unit(name,event,true)<0
       end
@@ -884,12 +900,12 @@ def find_unit(name,event,ignore=false,ignore2=false)
   return -1
 end
 
-def find_skill(name,event,ignore=false,ignore2=false,m=false)
-  return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
+def find_skill(name,event,ignore=false,ignore2=false,m=false) # this function is one of two functions used to find a skill's data entry based on its name
+  return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4' # Recover Ring is essentially Renewal 4 so I allow this alias
   data_load()
   sklz=@skills.map{|q| q}
-  x=x_find_skill(name,event,sklz,ignore,ignore2,m)
-  return x if x<0
+  x=x_find_skill(name,event,sklz,ignore,ignore2,m) # find the skill that matches.
+  return x if x<0 # if no skill matches, skip more
   return -1 if sklz[x].nil?
   return x if ["weapon","assist","special"].include?(sklz[x][4].downcase) # weapons and such do not need weird calculations
   return x if sklz[x][0].downcase==name.downcase # exact matches do not need weird calculations
@@ -903,25 +919,27 @@ def find_skill(name,event,ignore=false,ignore2=false,m=false)
   xx=sklz[x][0].reverse.scan(/\d+/)[0].reverse
   # removing any numbers that weren't part of the original input
   for j in 0..xx.length
-    for i in 0...10
+    for i in 0...10 # find the highest tier skill with a matching name
       n=n[0,n.length-2] if n[n.length-2,2]=="+#{i}" && name[name.length-2,2]!="+#{i}"
       n=n[0,n.length-1] if n[n.length-1,1]==i.to_s && name[name.length-1,1]!=i.to_s
     end
   end
-  return x_find_skill(n,event,sklz) if n[n.length-1,1].to_i.to_s==n[n.length-1,1]
+  return x_find_skill(n,event,sklz) if n[n.length-1,1].to_i.to_s==n[n.length-1,1] # if the skill already has a match with a name that ends in a number, return that value
   x2=first_sub(sklz[x][0].reverse,xx.reverse,'').reverse
   x3=[]
+  # find any skills with the same name but different values...
   for i in 0...sklz.length
     if sklz[i][0][sklz[i][0].length-1].to_i.to_s==sklz[i][0][sklz[i][0].length-1]
       m2=sklz[i][0].reverse.scan(/\d+/)[0].reverse
       x3.push([i,m2.to_i,sklz[i][0]]) if first_sub(sklz[i][0].reverse,m2.reverse,'').reverse==x2
     end
   end
+  # ...and return the one at the end of the list (which is the beginning of the list after the sorting)
   x3=x3.sort{|a,b| b[1]<=>a[1]}
   return x3[0][0]
 end
 
-def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false)
+def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this function is one of two functions used to find a skill's data entry based on its name
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -930,6 +948,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false)
   if name.downcase.gsub(' ','').gsub('_','')[0,2]=="<:"
     name=name.split(':')[1] if x_find_skill(name.split(':')[1],event,sklz,ignore,ignore2)>=0
   end
+  # certain common skill aliases work
   return find_skill('Bladeblade',event) if name.downcase.gsub(' ','')=='laevatein'
   return find_skill('Uror',event) if name.downcase.gsub(' ','')=='urdr'
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
@@ -942,6 +961,8 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false)
   return find_skill(name.downcase.gsub(' ','').gsub('greentome','g tome'),event) if name.downcase.gsub(' ','').include?('greentome')
   return find_skill(name.downcase.gsub('rauor','raudr'),event) if name.downcase.include?('rauor')
   j=-1
+  # use the `stat_buffs` function so that "Atk" and "Attack", for example, are treated the same
+  # try with only replacing spaces and underscores first...
   x2=stat_buffs(name.gsub(' ','').gsub('_',''),name)
   for i in 0...sklz.length
     unless sklz[i].nil?
@@ -949,6 +970,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false)
     end
   end
   return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][21])
+  # ...if that fails, try removing quotes, slashes, and hyphens as well
   x2=stat_buffs(name.gsub(' ','').gsub('_','').gsub("'",'').gsub('/','').gsub("-",''),name)
   for i in 0...sklz.length
     unless sklz[i].nil?
@@ -957,18 +979,21 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false)
   end
   return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][21])
   return -1 if ignore
+  # more common skill aliases...
   return find_skill(name.downcase.gsub('killing','killer'),event,true) if name.downcase.include?('killing') && find_skill(name.downcase.gsub('killing','killer'),event,true)>=0
   return find_skill(name.downcase.gsub('killer','killing'),event,true) if name.downcase.include?('killer') && find_skill(name.downcase.gsub('killer','killing'),event,true)>=0
   return find_skill(name.downcase.gsub('slaying','slayer'),event,true) if name.downcase.include?('slaying') && find_skill(name.downcase.gsub('slaying','slayer'),event,true)>=0
   return find_skill(name.downcase.gsub('slayer','slaying'),event,true) if name.downcase.include?('slayer') && find_skill(name.downcase.gsub('slayer','slaying'),event,true)>=0
-  return find_skill(name.downcase.gsub('defence','defense'),event,true) if name.downcase.include?('defence') && find_skill(name.downcase.gsub('defence','defense'),event,true)>=0
-  return find_skill(name.downcase.gsub('armour','armor'),event,true) if name.downcase.include?('armour') && find_skill(name.downcase.gsub('armour','armor'),event,true)>=0
-  return find_skill(name.downcase.gsub('honour','honor'),event,true) if name.downcase.include?('honour') && find_skill(name.downcase.gsub('honour','honor'),event,true)>=0
   return find_skill(name.downcase.gsub('angery','fury'),event,true) if name.downcase.include?('angery') && find_skill(name.downcase.gsub('angery','fury'),event,true)>=0
   return find_skill(name.downcase.gsub('lnd','lifeanddeath'),event,true) if name.downcase.include?('lnd') && find_skill(name.downcase.gsub('lnd','lifeanddeath'),event,true)>=0
   return find_skill(name.downcase.gsub('l&d','lifeanddeath'),event,true) if name.downcase.include?('lnd') && find_skill(name.downcase.gsub('l&d','lifeanddeath'),event,true)>=0
   return find_skill(name.downcase.gsub('berserker','berserk'),event,true) if name.downcase.include?('berserker') && find_skill(name.downcase.gsub('berserker','berserk'),event,true)>=0
+  # ...including non-American spellings of official words
+  return find_skill(name.downcase.gsub('defence','defense'),event,true) if name.downcase.include?('defence') && find_skill(name.downcase.gsub('defence','defense'),event,true)>=0
+  return find_skill(name.downcase.gsub('armour','armor'),event,true) if name.downcase.include?('armour') && find_skill(name.downcase.gsub('armour','armor'),event,true)>=0
+  return find_skill(name.downcase.gsub('honour','honor'),event,true) if name.downcase.include?('honour') && find_skill(name.downcase.gsub('honour','honor'),event,true)>=0
   return -1 if ignore2
+  # try everything again, but this time matching the portion of the skill name that is exactly as long as the input string.
   x2=stat_buffs(name.gsub(' ','').gsub('_',''),name)
   for i in 0...sklz.length
     unless sklz[i].nil?
@@ -991,7 +1016,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false)
   return -1
 end
 
-def find_promotions(j,event)
+def find_promotions(j,event) # this function finds the promotions of a given skill.  Input is given in the skill's entry number, not name
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -1006,7 +1031,7 @@ def find_promotions(j,event)
   return p
 end
 
-def find_prevolutions(j,event)
+def find_prevolutions(j,event) # this function finds any "pre-evolutions" of evolved weapons.  Input is given in the weapon's entry number, not name
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -1017,7 +1042,7 @@ def find_prevolutions(j,event)
     unless @skills[i][22].nil?
       k=@skills[i][22].split(', ')
       for i2 in 0...k.length
-        if k[i2].include?('!')
+        if k[i2].include?('!') # this is currently-unused code that allows for character-specific evolutions
           z=k[i2].split('!')
           z2=@skills[i].map{|q| q}
           for i3 in 14...19
@@ -1028,7 +1053,7 @@ def find_prevolutions(j,event)
             end
           end
           p.push([z2,"but only when on"]) if z[1]==@skills[j][0] && has_any?(g, @skills[i][21])
-        else
+        else # used code starts back here.
           p.push([@skills[i],"which is learned by"]) if k[i2]==@skills[j][0] && has_any?(g, @skills[i][21])
         end
       end
@@ -1041,7 +1066,7 @@ def find_prevolutions(j,event)
   return p
 end
 
-def find_effect_name(x,event,shorten=0)
+def find_effect_name(x,event,shorten=0) # this function is used to find the name of the Effect Mode refine of a weapon.  Input is given in the weapon's entire entry, not name.
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -1054,77 +1079,35 @@ def find_effect_name(x,event,shorten=0)
       f=@skills[i][0] if ", #{@skills[i][20]},".include?(", #{x[0]},") && has_any?(g, @skills[i][21])
     end
   end
-  if f.length>0 && shorten==0
+  if f.length>0 && shorten%2==0
     f=f.split(' ')
-    f[f.length-1]=nil if f[f.length-1].length<2 || ['W2','W3','W4','W5','W6','W7','W8','W9'].include?(f[f.length-1])
+    if f[f.length-1].length<2 || f[f.length-1].to_i.to_s==f[f.length-1] || ['W1','W2','W3','W4','W5','W6','W7','W8','W9'].include?(f[f.length-1])
+      # shorten value of 0 means to just remove the "W" or number at the end of a skill name
+      # used when displaying the name in the refinement section of the `skill` command
+      f[f.length-1]=nil if shorten==0
+      # shorten value of 2 means to, if a skill name ends in a single "W" or number, to replace that with a "W"
+      # used when searching for the icon of a weapon's refinement
+      f[f.length-1]="W" if shorten==2
+    end
     f.compact!
-    f=f.join(' ')
-  elsif f.length>0 && shorten==2
-    f=f.split(' ')
-    f[f.length-1]="W" if f[f.length-1].length<2 || ['W2','W3','W4','W5','W6','W7','W8','W9'].include?(f[f.length-1])
     f=f.join(' ')
   end
   return f
 end
 
-def find_weapon(name,event,ignore=false,ignore2=false)
-  k=0
-  k=event.server.id unless event.server.nil?
-  g=get_markers(event)
-  return -1 if name.nil?
-  return -1 if name.gsub(' ','').length<=3
-  name=normalize(name.gsub('!',''))
-  unless ignore2
-    return find_weapon('Bladeblade',event) if name.downcase=='laevatein'
-    return find_weapon('Uror',event) if name.downcase=='urdr'
-    return find_weapon("Sack o' Gifts#{"+" if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='sackofgifts'
-    return find_weapon("Killing Edge#{"+" if name.include?('+')}",event) if ['killersword','killeredge','killingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
-    return find_weapon("Slaying Edge#{"+" if name.include?('+')}",event) if ['slayersword','slayeredge','slayingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
-    return find_weapon(name.downcase.gsub('rauor','raudr'),event) if name.downcase.include?('rauor')
-  end
-  j=-1
-  data_load()
-  for i in 0...@skills.length
-    unless @skills[i].nil?
-      j=i if @skills[i][0].downcase==name.downcase && j<0 && @skills[i][4]=="Weapon"
-    end
-  end
-  return j if j>=0 && has_any?(g, @skills[j][21])
-  return -1 if ignore2
-  for i in 0...@skills.length
-    unless @skills[i].nil?
-      j=i if @skills[i][0].downcase.gsub(' ','').gsub('/','').gsub("'",'')==name.downcase.gsub(' ','').gsub("'",'') && j<0 && @skills[i][4]=="Weapon"
-    end
-  end
-  return j if j>=0 && has_any?(g, @skills[j][21])
-  return -1 if ignore
-  return find_weapon(name.downcase.gsub('berserker','berserk'),event,true) if name.downcase.include?('berserker') && find_weapon(name.downcase.gsub('berserker','berserk'),event,true)>=0
-  return find_weapon(name.downcase.gsub('killing','killer'),event,true) if name.downcase.include?('killing') && find_weapon(name.downcase.gsub('killing','killer'),event,true)>=0
-  return find_weapon(name.downcase.gsub('killer','killing'),event,true) if name.downcase.include?('killer') && find_weapon(name.downcase.gsub('killer','killing'),event,true)>=0
-  return find_weapon(name.downcase.gsub('slaying','slayer'),event,true) if name.downcase.include?('slaying') && find_weapon(name.downcase.gsub('slaying','slayer'),event,true)>=0
-  return find_weapon(name.downcase.gsub('slayer','slaying'),event,true) if name.downcase.include?('slayer') && find_weapon(name.downcase.gsub('slayer','slaying'),event,true)>=0
-  for i in 0...@skills.length
-    unless @skills[i].nil? || @skills[i][0].nil?
-      j=i if @skills[i][0][0,name.length].downcase==name.downcase && j<0 && @skills[i][4]=="Weapon"
-    end
-  end
-  return j if j>=0 && has_any?(g, @skills[j][21])
-  for i in 0...@skills.length
-    unless @skills[i].nil? || @skills[i][0].nil?
-      j=i if @skills[i][0][0,name.length].downcase.gsub(' ','').gsub('/','').gsub("'",'')==name.downcase.gsub(' ','').gsub("'",'') && j<0 && @skills[i][4]=="Weapon"
-    end
-  end
-  return j if j>=0 && has_any?(g, @skills[j][21])
-  return -1
+def find_weapon(name,event,ignore=false,ignore2=false) # this function is used by the `get_weapon` function
+  sklz=@skills.reject{|q| q[4]!='Weapon'}
+  return x_find_skill(name,event,sklz,ignore,ignore2)
 end
 
-def get_weapon(str,event)
+def get_weapon(str,event) # this function is used by the `stats` command and many derivations to find a weapon's name in the inputs that remain after the unit is decided
   return nil if str.gsub(' ','').length<=0
   args=str.split(' ')
   args2=args.join(' ').split(' ')
   args4=args.join(' ').split(' ')
   name=args.join(' ')
   args3=args.join(' ').split(' ')
+  # try full-name matches first...
   if find_weapon(name,event)<0
     for i in 0...args.length-1
       args[args.length-1]=nil
@@ -1155,6 +1138,7 @@ def get_weapon(str,event)
     end
   end
   args2=args4.join(' ').split(' ')
+  # ...then try partial name matches
   if find_weapon(name,event)<0
     for i in 0...args.length-1
       args[args.length-1]=nil
@@ -1188,14 +1172,16 @@ def get_weapon(str,event)
   return nil
 end
 
-def find_in_dev_units(name)
+def find_in_dev_units(name) # this function is used by the `stats` command and many derivations to determine if the bot developer has recorded owning a listed unit
   return -1 if name.nil?
   devunits_load()
   j=-1
+  # try full-name matches first...
   for i in 0...@dev_units.length
     j=i if @dev_units[i][0].downcase==name.downcase && j<0
   end
   return j if j>-1
+  # ...then try partial-name matches
   for i in 0...@dev_units.length
     j=i if @dev_units[i][0][0,name.length].downcase==name.downcase && j<0
   end
@@ -1203,26 +1189,26 @@ def find_in_dev_units(name)
   return -1
 end
 
-def stat_buffs(str,name=nil)
+def stat_buffs(str,name=nil) # this function is used by almost all commands to be sure that end users can type all common abbreviations for stats and not worry about input
   name=str.split(' ').join(' ') if name.nil?
   x=str.downcase.gsub('/',' ').gsub('+',' +').gsub('  ',' ')
   x=x.gsub('hone','hone ').gsub('fortify','fortify ').gsub('goad','goad ').gsub('ward','ward ')
   x=x.split(' ')
-  for i in 0...x.length
+  for i in 0...x.length # replacing common stat aliases with the names that are used in the majority of the code
     x[i]='hp' if ['health'].include?(x[i])
     x[i]='attack' if ['atk','att'].include?(x[i])
     x[i]='speed' if ['spd'].include?(x[i])
     x[i]='defense' if ['def','defence'].include?(x[i])
     x[i]='resistance' if ['res'].include?(x[i])
   end
-  for i in 0...x.length-1
+  for i in 0...x.length-1 # making sure that Hones/Fortifies still work even if one includes the wrong skill class / stat combination
     x[i]='fortify' if ['hone'].include?(x[i]) && ['defense','resistance'].include?(x[i+1])
     x[i]='hone' if ['fortify'].include?(x[i]) && ['attack','speed'].include?(x[i+1])
   end
   n=x.join('')
   nn=name.reverse.scan(/\d+/)[0]
   nn=' ' if nn.nil?
-  for i in 0...nn.length
+  for i in 0...nn.length # removing ending numbers from the resulting skill, unless the input also includes ending numbers
     for i in 0...10
       n=n[0,n.length-2] if n[n.length-2,2]=="+#{i}" && name[name.length-2,2]!="+#{i}"
       n=n[0,n.length-1] if n[n.length-1,1]==i.to_s && name[name.length-1,1]!=i.to_s
@@ -1231,15 +1217,17 @@ def stat_buffs(str,name=nil)
   return n
 end
 
-def find_group(name,event)
+def find_group(name,event) # this function is used to find a group's data entry based on their name
   k=0
   k=event.server.id unless event.server.nil?
   groups_load()
   j=-1
+  # try full-name matches first...
   for i in 0...@groups.length
     j=i if @groups[i][0].downcase==name.downcase && (@groups[i][2].nil? || @groups[i][2].include?(k))
   end
   return j if j>=0
+  # ...then try partial-name matches
   for i in 0...@groups.length
     j=i if @groups[i][0][0,name.length].downcase==name.downcase && (@groups[i][2].nil? || @groups[i][2].include?(k))
   end
@@ -1249,6 +1237,7 @@ end
 
 def was_embedless_mentioned?(event)
   for i in 0...@embedless.length
+    return true if event.user.id==@embedless[i]
     return true if event.message.text.include?("<@#{@embedless[i].to_s}>")
     return true if event.message.text.include?("<@!#{@embedless[i].to_s}>")
   end
@@ -1936,7 +1925,7 @@ def apply_stat_skills(event,skillls,stats,tempest=false,summoner='-',weapon='',r
   elsif weapon=='' || weapon==' ' || weapon=='-'
   else
     s2=@skills[find_skill(weapon,event)]
-    if !s2[23].nil? && !refinement.nil? && refinement.length>0 && s2[5]!="Staff Users Only"
+    if !s2[23].nil? && !refinement.nil? && refinement.length>0 && (s2[5]!="Staff Users Only" || refinement=='Effect')
       skillls.push(find_effect_name(s2,event,1)) if refinement=='Effect' && find_effect_name(s2,event,1).length>0
       sttz=[]
       inner_skill=s2[23]
@@ -5577,7 +5566,9 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
   end
   nicknames_load()
   for i in 0...@multi_aliases.length
-    return [str1, @multi_aliases[i][1], @multi_aliases[i][0].downcase] if @multi_aliases[i][0].downcase==str1
+    m=@multi_aliases[i][1].map{|q| q}
+    m=['Robin'] if m==['Robin(M)', 'Robin(F)'] || m==['Robin(F)', 'Robin(M)']
+    return [str1, m, @multi_aliases[i][0].downcase] if @multi_aliases[i][0].downcase==str1
   end
   return nil if robinmode==3 # only allow actual multi-unit aliases without context clues
   k=0
@@ -5699,7 +5690,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       strx="fh" if str2.include?("fh")
       strx="grima" if str2.include?("grima")
       str2=str3.gsub(strx,'').gsub("#{str} ",str).gsub(" #{str}",str)
-      if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("#{str}f") || str2.include?("f#{str}") || str2.include?("legendary")
+      if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("#{str}f") || str2.include?("f#{str}") || str2.include?("legendary") || str2.include?("#{str}lh") || str2.include?("lh#{str}")
         return [str,['Robin(F)(Fallen)'],["#{strx}#{str}","#{str}#{strx}"]]
       elsif str2.include?("male#{str}") || str2.include?("#{str}male") || str2.include?("#{str}m") || str2.include?("m#{str}")
         return [str,['Robin(M)(Fallen)'],["#{strx}#{str}","#{str}#{strx}"]]
@@ -5721,8 +5712,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str="grima"
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
-    if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("#{str}f") || str2.include?("f#{str}") || str2.include?("legendary")
-      return [str,['Robin(F)(Fallen)'],["legendary#{str}","#{str}legendary","female#{str}","f#{str}","#{str}female","#{str}f"]]
+    if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("#{str}f") || str2.include?("f#{str}") || str2.include?("legendary") || str2.include?("#{str}lh") || str2.include?("lh#{str}")
+      return [str,['Robin(F)(Fallen)'],["legendary#{str}","#{str}legendary","female#{str}","f#{str}","#{str}female","#{str}f","lh#{str}","#{str}lh"]]
     elsif str2.include?("male#{str}") || str2.include?("#{str}male") || str2.include?("#{str}m") || str2.include?("m#{str}")
       return [str,['Robin(M)(Fallen)'],["male#{str}","m#{str}","#{str}male","#{str}m"]]
     end
@@ -5787,8 +5778,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       return [str,['Lyn(Brave)'],["brave#{str}","nomad#{str}","cyl#{str}","bh#{str}","#{str}nomad","#{str}brave","#{str}cyl","#{str}bh"]]
     elsif str2.include?("abounds") || str2.include?("valentines") || str2.include?("valentine's") || str2.include?("la#{str}") || str2.include?("#{str}la") || str2.include?("v#{str}") || str2.include?("#{str}v")
       return [str,['Lyn(Valentines)'],["love#{str}","abounds#{str}","valentines#{str}","valentine's#{str}","#{str}love","#{str}abounds","#{str}valentines","#{str}valentine's","la#{str}","#{str}la"]]
-    elsif str2.include?("wind") || str2.include?("bladelord") || str2.include?("legendary")
-      return [str,['Lyn(Wind)'],["wind#{str}","#{str}wind","bladelord#{str}","#{str}bladelord","#{str}legendary","legendary#{str}"]]
+    elsif str2.include?("wind") || str2.include?("bladelord") || str2.include?("legendary") || str2.include?("#{str}lh") || str2.include?("lh#{str}")
+      return [str,['Lyn(Wind)'],["wind#{str}","#{str}wind","bladelord#{str}","#{str}bladelord","#{str}legendary","legendary#{str}","lh#{str}","#{str}lh"]]
     elsif str2.include?("love")
       return [str,['Lyn(Bride)','Lyn(Valentines)'],["love#{str}","#{str}love"]]
     elsif str2.include?("bow") || str2.include?("archer")
@@ -7540,6 +7531,9 @@ def disp_art(event,name,bot,weapon=nil)
   if j[0]=="Reinhardt(World)" && (rand(100)==0 || event.message.text.downcase.include?('zelda'))
     art="https://i.redd.it/pdeqrncp21r01.png"
     j[15]="u/ZachminSSB (ft. #{j[15]})"
+  elsif j[0]=="Arden" && (rand(1000)==0 || event.message.text.downcase.include?('infinity'))
+    art="https://pbs.twimg.com/media/DcEh5jRWsAAYofz.png"
+    j[15]="@_DJSaturn (twitter)"
   end
   disp=""
   nammes=['','','']
@@ -8579,7 +8573,7 @@ bot.command(:summon) do |event, *colors|
     event << ""
     event << "**Summon rates:**"
     @banner=[[event.user.id,Time.now,event.server.id]]
-    if bnr[1]<0
+    if bnr[1]<0 # negative "starting focus" numbers indicate there is no non-focus rate
       sr=(@summon_rate[0]/5)*0.5
       b= 0 - bnr[1]
       focus = b + sr
@@ -9385,6 +9379,10 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     event.respond "#{newname} has __***NOT***__ been added to #{@units[find_unit(unit,event)][0]}'s aliases.\nYes, the two are the same character, but eventually Swordmaster Owain will join the game, and this alias will conflict."
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Pre-emptive confusion prevention.")
     return nil
+  elsif ["Lyn(Wind)","Lyn(Valentines)","Lyn(Bride)","Lyn(Brave)"].include?(@units[find_unit(unit,event)][0]) && ['llyn','lynl'].include?(checkstr.downcase)
+    event.respond "#{newname} has __***NOT***__ been added to #{@units[find_unit(unit,event)][0]}'s aliases.\n\"L\" could stand for \"Love\", which describes both Lyn(Bride) and Lyn(Valentines); or it could stand for \"Legend\", which not only applies to the Legendary Hero Lyn(Wind), but Lyn(Brave) as well, since she was the result of Lyn winning the Choose Your *Legends* poll for 2017."
+    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Confusion prevention.")
+    return nil
   elsif @units[find_unit(unit,event)][0]=="Laslow" && checkstr.downcase.include?("inigo")
     event.respond "#{newname} has __***NOT***__ been added to #{@units[find_unit(unit,event)][0]}'s aliases.\nYes, the two are the same character, but eventually Inigo will join the game, and this alias will conflict."
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Pre-emptive confusion prevention.")
@@ -9397,7 +9395,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     event.respond "#{newname} has __***NOT***__ been added to #{@units[find_unit(unit,event)][0]}'s aliases.\nYes, she is Charlotte, but eventually, she will join the game as a non-seaonal unit."
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Pre-emptive confusion prevention.")
     return nil
-  elsif (@units[find_unit(unit,event)][0]=="Inigo(Performing)" && checkstr.downcase.include?("inigo"))
+  elsif @units[find_unit(unit,event)][0]=="Inigo(Performing)" && checkstr.downcase.include?("inigo")
     event.respond "#{newname} has __***NOT***__ been added to #{@units[find_unit(unit,event)][0]}'s aliases.\nYes, he is #{@units[find_unit(unit,event)][0].gsub('(performing)','')}, but eventually, he will join the game as a non-seaonal unit."
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Pre-emptive confusion prevention.")
     return nil
@@ -9654,7 +9652,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
 end
 
 bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddualunitalias,:addualunitalias,:multialias,:dualalias,:addmulti], from: 167657750971547648) do |event, multi, *args|
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   if args.nil? || args.length==0
     event.respond "No units were included."
     return nil
@@ -9719,7 +9717,7 @@ bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddu
 end
 
 bot.command([:deletemultialias,:deletedualalias,:deletemultiunitalias,:deletedualunitalias,:deletemulti,:removemultialias,:removedualalias,:removemultiunitalias,:removedualunitalias,:removemulti], from: 167657750971547648) do |event, multi|
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   if multi.nil? || multi.length<=0
     event.respond "No name was included."
     return nil
@@ -9747,7 +9745,7 @@ bot.command([:deletemultialias,:deletedualalias,:deletemultiunitalias,:deletedua
 end
 
 bot.command([:removefrommultialias,:removefromdualalias,:removefrommultiunitalias,:removefromdualunitalias,:removefrommulti], from: 167657750971547648) do |event, multi, unit|
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   if args.nil? || args.length==0
     event.respond "No units were included."
     return nil
@@ -10713,7 +10711,7 @@ end
 
 bot.command(:sendpm, from: 167657750971547648) do |event, user_id, *args| # sends a PM to a specific user
   return nil unless event.server.nil?
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   f=event.message.text.split(' ')
   f="#{f[0]} #{f[1]} "
   bot.user(user_id.to_i).pm(event.message.text.gsub(f,''))
@@ -10722,7 +10720,7 @@ end
 
 bot.command(:ignoreuser, from: 167657750971547648) do |event, user_id| # causes Elise to ignore the specified user
   return nil unless event.server.nil?
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   metadata_load()
   bot.ignore_user(user_id.to_i)
   event.respond "#{bot.user(user_id.to_i).distinct} is now being ignored."
@@ -10749,7 +10747,7 @@ end
 
 bot.command(:leaveserver, from: 167657750971547648) do |event, server_id| # forces Elise to leave a server
   return nil unless event.server.nil?
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   chn=bot.server(server_id.to_i).general_channel
   if chn.nil?
     chnn=[]
@@ -10871,7 +10869,7 @@ bot.command(:shard) do |event, i|
 end
 
 bot.command([:locateshards, :locate, :locateshards], from: 167657750971547648) do |event|
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   if @shardizard==4
     event.respond "This command cannot be used by the debug version of me.  Please run this command in another server."
     return nil
@@ -10889,7 +10887,7 @@ bot.command(:cleanupaliases) do |event|
     event.respond "This command cannot be used by the debug version of me.  Please run this command in another server."
     return nil
   end
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   nicknames_load()
   nmz=@aliases.map{|q| q}
   k=0
@@ -11024,7 +11022,7 @@ bot.command(:restore) do |event, trigger|
 end
 
 bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *args|
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   str=find_name_in_string(event)
   data_load()
   j=find_unit(str,event)
@@ -11295,13 +11293,13 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
 end
 
 bot.command(:status, from: 167657750971547648) do |event, *args|
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   bot.game=args.join(' ')
   event.respond "Status set."
 end
 
 bot.command(:setmarker, from: 167657750971547648) do |event, letter|
-  return nil unless event.user.id==167657750971547648
+  return nil unless event.user.id==167657750971547648 # only work when used by the developer
   return nil if event.server.nil?
   return nil if letter.nil?
   letter=letter[0,1].upcase
