@@ -7788,6 +7788,18 @@ def banner_list(event,name,bot,weapon=nil)
     justnames=false
     justnames=true if " #{event.message.text.downcase} ".include?('justnames') || " #{event.message.text.downcase} ".include?('just_names') || " #{event.message.text.downcase} ".include?('just names')
   end
+  star_buff=nil
+  args=event.message.text.downcase.split(' ').reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  for i in 0...args.length
+    if args[i].to_i.to_s==args[i]
+      star_buff=args[i].to_i if star_buff.nil?
+    elsif args[i][0,1]=="+" && args[i][1,args[i].length-1].to_i.to_s==args[i][1,args[i].length-1]
+      star_buff=args[i][1,args[i].length-1].to_i if star_buff.nil?
+    elsif args[i][0,1]=="-" && args[i][1,args[i].length-1].to_i.to_s==args[i][1,args[i].length-1]
+      star_buff=0-args[i][1,args[i].length-1].to_i if star_buff.nil?
+    end
+  end
+  star_buff=0 if star_buff.nil?
   b.compact!
   b.reverse!
   data_load()
@@ -7802,6 +7814,10 @@ def banner_list(event,name,bot,weapon=nil)
   for i in 0...b.length
     percentage=b[i][1]
     percentage=0-percentage if percentage<0
+    disperc=percentage*1.0+star_buff*0.5
+    disperc=percentage*1.0+star_buff*percentage/(percentage+3.00) if b[i][1]>0
+    five_star=3+star_buff*3/(percentage+3)
+    four_star=(100.00 - disperc - five_star) * 58.00 / (100.00 - percentage - 3)
     shared_color=[]
     other_color=[]
     if b[i][2].include?(j[0])
@@ -7817,12 +7833,12 @@ def banner_list(event,name,bot,weapon=nil)
       if justnames
         str=b[i][0]
       else
-        str="__*Banner Name:* #{b[i][0]}__#{"\n*Shared Focus Color:* #{shared_color.join(', ')}" if shared_color.length>0}#{"\n*Other Focus Color:* #{other_color.join(', ')}" if other_color.length>0}\n*Focus Start:* #{'%.2f' % percentage}%"
+        str="__*#{b[i][0]}*__#{"\n*Shared Focus Color:* #{shared_color.join(', ')}" if shared_color.length>0}#{"\n*Other Focus Color:* #{other_color.join(', ')}" if other_color.length>0}\n*Starting Focus Chance:* #{'%.2f' % percentage}%#{" (5\\*), 29.00% (4\\*)" if !b[i][3].nil? && b[i].include?('4')}#{"\n*Current Focus Chance:* #{'%.2f' % disperc}%" if star_buff>0}"
         if !b[i][3].nil? && b[i].include?('4')
-          str="#{str}#{" (5\\*), 29.00% (4\\*)\n_5\\* Start Chance:_ #{'%.2f' % (percentage*1.00/(shared_color.length+1))}% (Perceived), #{'%.2f' % (percentage*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
-          str="#{str}#{"\n_4\\* Start Chance:_ #{'%.2f' % (29.00/(shared_color.length+1))}% (Perceived), #{'%.2f' % (29.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
+          str="#{str}#{" (5\\*), #{'%.2f' % (four_star/2)}% (4\\*)\n_5\\*#{" Start" unless star_buff>0} Chance:_ #{'%.2f' % (disperc*1.00/(shared_color.length+1))}% (Perceived), #{'%.2f' % (disperc*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
+          str="#{str}#{"\n_4\\*#{" Start" unless star_buff>0} Chance:_ #{'%.2f' % ((four_star/2)/(shared_color.length+1))}% (Perceived), #{'%.2f' % ((four_star/2)/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
         else
-          str="#{str}#{"\n*Start Chance:* #{'%.2f' % (percentage*1.00/(shared_color.length+1))}% (Perceived), #{'%.2f' % (percentage*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
+          str="#{str}#{"\n*#{"Start " unless star_buff>0}Chance:* #{'%.2f' % (disperc*1.00/(shared_color.length+1))}% (Perceived), #{'%.2f' % (disperc*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
         end
       end
       banners.push(str)
@@ -7837,43 +7853,52 @@ def banner_list(event,name,bot,weapon=nil)
       banners.push("\n\n#{ftr}")
       ftr='You can see more details about these banners by using this command in PM or by including the word "specifics" in the command.'
     else
-      non_focus=[]
+      five_star=[3+star_buff*3/(8),3+star_buff*3/(6)]
+      four_star=[(97.00-star_buff*0.5-five_star[0])*58.00/(94.00),(95.00-star_buff*0.5-five_star[0])*58.00/(92.00)]
+      three_star=[100.00-(8+star_buff*0.5)-four_star[0],100.00-2*five_star[1]-four_star[1]]
+      two_star=[0,0]
+      one_star=[0,0]
+      non_focus=[[],[]]
       if j[19].include?("5p") && j[22].nil?
         k=@units.reject{|q| !q[19].include?("5p") || !q[22].nil?}
-        non_focus.push("5\\* (on banners with 5\\* non-focus) - #{'%.2f' % (3.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (3.0/k.length)} (Actual)%")
+        non_focus[0].push("5\\* Non-Focus (Hero Fest only) - #{'%.2f' % (five_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (five_star[0]/k.length)}% (Actual)")
+        non_focus[1].push("5\\* Non-Focus - #{'%.2f' % (five_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (five_star[1]/k.length)}% (Actual)")
       end
       if j[19].include?("4p") && j[22].nil?
         k=@units.reject{|q| !q[19].include?("4p") || !q[22].nil?}
-        non_focus.push("4\\* (on normal banners) - #{'%.2f' % (58.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (58.0/k.length)}% (Actual)")
-        non_focus.push("4\\* (on 4\\* Focus banners) - #{'%.2f' % (29.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (29.0/k.length)}% (Actual)")
+        non_focus[0].push("4\\* (standard banner) - #{'%.2f' % (four_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (four_star[0]/k.length)}% (Actual)")
+        non_focus[0].push("4\\* Non-Focus - #{'%.2f' % ((four_star[0]/2)/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % ((four_star[0]/2)/k.length)}% (Actual)")
+        non_focus[1].push("4\\* all the time - #{'%.2f' % (four_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (four_star[1]/k.length)}% (Actual)")
       end
       if j[19].include?("3p") && j[22].nil?
         k=@units.reject{|q| !q[19].include?("3p") || !q[22].nil?}
-        non_focus.push("3\\* (on normal banners) - #{'%.2f' % (36.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (36.0/k.length)}% (Actual)")
-        non_focus.push("3\\* (on Hero Fests and Legendary banners) - #{'%.2f' % (34.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (34.0/k.length)}% (Actual)")
+        non_focus[0].push("3\\* all the time - #{'%.2f' % (three_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (three_star[0]/k.length)}% (Actual)")
+        non_focus[1].push("3\\* all the time - #{'%.2f' % (three_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (three_star[1]/k.length)}% (Actual)")
       end
       if j[19].include?("2p") && j[22].nil?
         k=@units.reject{|q| !q[19].include?("2p") || !q[22].nil?}
-        non_focus.push("2\\* - #{'%.2f' % (0.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (0.0/k.length)}% (Actual)")
+        non_focus[0].push("2\\* all the time - #{'%.2f' % (two_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (two_star[0]/k.length)}% (Actual)")
+        non_focus[1].push("2\\* all the time - #{'%.2f' % (two_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (two_star[1]/k.length)}% (Actual)")
       end
       if j[19].include?("1p") && j[22].nil?
         k=@units.reject{|q| !q[19].include?("1p") || !q[22].nil?}
-        non_focus.push("1\\* - #{'%.2f' % (0.0/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (0.0/k.length)}% (Actual)")
+        non_focus[0].push("1\\* all the time - #{'%.2f' % (one_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (one_star[0]/k.length)}% (Actual)")
+        non_focus[1].push("1\\* all the time - #{'%.2f' % (one_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{'%.2f' % (one_star[1]/k.length)}% (Actual)")
       end
-      banners.push("\n__**Starting Non-Focus Chances:**__\n#{non_focus.join("\n")}") if non_focus.length>0
+      banners.push("\n__**Starting Non-Focus Chances:**__#{"\n\n__*Standard 3% banners*__\n#{non_focus[0].join("\n")}" if non_focus[0].length>0}#{"\n\n__*Hero Fests and Legendary banners*__\n#{non_focus[1].join("\n")}" if non_focus[1].length>0}") if non_focus[0].length>0 || non_focus[1].length>0
     end
   else
     banners=[">No banners found<"]
   end
   if banners.join("\n#{"\n" unless justnames}").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    msg="__Banners **#{j[0]}** has been on__"
+    msg="__Banners **#{j[0]}** has been on__#{"\nBanners in **+#{star_buff}** form (after #{star_buff*5} to #{star_buff*5+4} failures to get a 5\\*)" if star_buff>0}"
     for i in 0...banners.length
       msg=extend_message(msg,banners[i],event,1,"\n#{"\n" unless justnames}")
     end
     event.respond msg
   else
     j=find_unit(j[0],event)
-    create_embed(event,"__Banners **#{@units[j][0]}** has been on__",banners.join("\n#{"\n" unless justnames}"),unit_color(event,j),ftr,pick_thumbnail(event,j,bot),nil,4)
+    create_embed(event,"__Banners **#{@units[j][0]}** has been on__#{"\nBanners in **+#{star_buff}** form (after #{star_buff*5} to #{star_buff*5+4} failures to get a 5\\*)" if star_buff>0}",banners.join("\n#{"\n" unless justnames}"),unit_color(event,j),ftr,pick_thumbnail(event,j,bot),nil,4)
   end
   return nil
 end
@@ -11368,7 +11393,7 @@ bot.message do |event|
     a=str.split(' ')
     if a[0].downcase=='reboot'
       event.respond "Becoming Robin.  Please wait approximately ten seconds..."
-      exec "cd C:/Users/Mini-Matt/Desktop/devkit/FEIndex && feindex.rb 4"
+      exec "cd C:/Users/Mini-Matt/Desktop/devkit && feindex.rb 4"
     else
       event.respond "I am not Robin right now.  Please use `FE!reboot` to turn me into Robin."
     end
