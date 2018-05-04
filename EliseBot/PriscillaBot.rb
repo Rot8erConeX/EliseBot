@@ -25,6 +25,7 @@ else
   bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: shardizard, num_shards: 4, client_id: 312451658908958721, prefix: @prefix
 end
 bot.gateway.check_heartbeat_acks = false
+
 # initialize global variables
 @units=[]
 @skills=[]
@@ -92,7 +93,7 @@ bot.gateway.check_heartbeat_acks = false
           ["`\u22C1`Excitable","HP","Resistance",true]]
 
 def all_commands(include_nil=false) # a list of all the command names.  Used by Nino Mode to ignore messages that are commands, so responses do not double up.
-  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills','locate','locateshard','locateshards','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable','banners','banner','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti','deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias','removedualalias','removemultiunitalias','removedualunitalias','removemulti']
+  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills','locate','locateshard','locateshards','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable','banners','banner','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti','deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias','removedualalias','removemultiunitalias','removedualunitalias','removemulti','snagchannels']
   k[0]=nil if include_nil
   return k
 end
@@ -505,8 +506,8 @@ end
 def safe_to_spam?(event) # this function determines whether or not it is safe to send extremely long messages
   return true if event.server.nil? # it is safe to spam in PM
   return true if @shardizard==4 # it is safe to spam during debugging
-  return true if event.channel.id==283821884800499714 # it is safe to spam in Penumbra's bot_spam channel
   return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam') # it is safe to spam in any bot spam channel
+  return true if event.channel.name.downcase.include?('elisebot') # it is safe to spam in channels designed specifically for EliseBot
   return false
 end
 
@@ -979,6 +980,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][21])
   return -1 if ignore
   # more common skill aliases...
+  return find_skill(name.downcase.gsub('spooky','spectral'),event,true) if name.downcase.include?('spooky') && find_skill(name.downcase.gsub('spooky','spectral'),event,true)>=0
   return find_skill(name.downcase.gsub('killing','killer'),event,true) if name.downcase.include?('killing') && find_skill(name.downcase.gsub('killing','killer'),event,true)>=0
   return find_skill(name.downcase.gsub('killer','killing'),event,true) if name.downcase.include?('killer') && find_skill(name.downcase.gsub('killer','killing'),event,true)>=0
   return find_skill(name.downcase.gsub('slaying','slayer'),event,true) if name.downcase.include?('slaying') && find_skill(name.downcase.gsub('slaying','slayer'),event,true)>=0
@@ -7890,8 +7892,8 @@ def banner_list(event,name,bot,weapon=nil)
       non_focus=[[],[]]
       if j[19].include?("5p") && j[22].nil?
         k=@units.reject{|q| !q[19].include?("5p") || !q[22].nil?}
-        non_focus[0].push("5\\* Non-Focus (Hero Fest only) - #{len % (five_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[0]/k.length)}% (Actual)")
-        non_focus[1].push("5\\* Non-Focus - #{len % (five_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[1]/k.length)}% (Actual)")
+        non_focus[0].push("5\\* Non-Focus - #{len % (five_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[0]/k.length)}% (Actual)")
+        non_focus[1].push("5\\* Non-Focus (Hero Fest only) - #{len % (five_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[1]/k.length)}% (Actual)")
       end
       if j[19].include?("4p") && j[22].nil?
         k=@units.reject{|q| !q[19].include?("4p") || !q[22].nil?}
@@ -10365,7 +10367,7 @@ bot.command([:sort,:list]) do |event, *args|
   if f.include?(15)
     m="#{m}\nThe order of units listed here can also be affected by natures if a unit's Defense and Resistance are quite close.\n"
   end
-  if "#{m}\n#{m2.join("\n")}".length>2000 && !(event.server.nil? || event.channel.id==283821884800499714 || @shardizard==4)
+  if "#{m}\n#{m2.join("\n")}".length>2000 && !safe_to_spam?(event)
     event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
     return nil
   end
@@ -10692,7 +10694,7 @@ end
 
 bot.command(:invite) do |event, user|
   usr=event.user
-  txt="To invite me to your server: <https://goo.gl/Hf9RNj>\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://orig00.deviantart.net/cd2d/f/2018/047/e/0/marketing___elise_by_rot8erconex-dbxj4mq.png"
+  txt="To invite me to your server: <https://goo.gl/2WZ4yn>\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://orig00.deviantart.net/cd2d/f/2018/047/e/0/marketing___elise_by_rot8erconex-dbxj4mq.png"
   user_to_name="you"
   unless user.nil?
     if /<@!?(?:\d+)>/ =~ user
@@ -11382,6 +11384,32 @@ bot.command(:setmarker, from: 167657750971547648) do |event, letter|
   event.respond "This server has been added to those that can see entries marked with #{letter}." if letter=="X"
 end
 
+bot.command(:snagchannels, from: 167657750971547648) do |event, server_id|
+  return nil unless event.user.id==167657750971547648
+  if server_id.to_i==285663217261477889 && @shardizard != 4
+    event.respond "That is the testing server.  Please run this command in the testing server for this information."
+    return nil
+  elsif server_id.to_i != 285663217261477889 && @shardizard == 4
+    event.respond "The debug version of the bot can only see the debug server.  Please run this command in another server for the desired information.\nThat server ID (#{server_id}) is in the #{['Transparent','Scarlet','Azure','Verdant'][(server_id.to_i >> 22) % 4]} Shard, that is likely your best bet."
+    return nil
+  elsif @shardizard == 4
+  elsif (bot.server(server_id.to_i) rescue nil).nil? || bot.user(bot.profile.id).on(server_id.to_i).nil?
+    event.respond "I am not in that server."
+    return nil
+  elsif @shardizard != (server_id.to_i >> 22) % 4
+    event.respond "This shard is unable to read the channel set of that server.  Perhaps it would be best to use the #{['Transparent','Scarlet','Azure','Verdant'][(server_id.to_i >> 22) % 4]} Shard."
+    return nil
+  end
+  msg="__**#{bot.server(server_id.to_i).name}**__\n\n__*Text Channels*__"
+  srv=bot.server(server_id.to_i)
+  for i in 0...srv.channels.length
+    chn=srv.channels[i]
+    puts bot.user(bot.profile.id).on(srv.id).permission?(:send_messages,chn).to_s
+    msg=extend_message(msg,"*#{chn.name}* (#{chn.id})#{" - can post" if bot.user(bot.profile.id).on(srv.id).permission?(:send_messages,chn)}",event) if chn.type==0
+  end
+  event.respond msg
+end
+
 bot.server_create do |event|
   chn=event.server.general_channel
   if chn.nil?
@@ -11392,7 +11420,7 @@ bot.server_create do |event|
     chn=chnn[0] if chnn.length>0
   end
   if event.server.id != 285663217261477889 && @shardizard==4
-    (chn.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/Hf9RNj>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/f1wSGd>") rescue nil)
+    (chn.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/2WZ4yn>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/v3ADBG>") rescue nil)
     event.server.leave
   else
     bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['Transparent','Scarlet','Azure','Verdant'][(event.server.id >> 22) % 4]} Shards")
@@ -11571,13 +11599,17 @@ bot.ready do |event|
   end
   metadata_save()
   bot.game="Fire Emblem Heroes" if [0,4].include?(@shardizard)
-  bot.user(bot.profile.id).on(285663217261477889).nickname="EliseBot (Debug)" if @shardizard==4
-  bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r')) if @shardizard==4
-  next_holiday(bot) if @shardizard==0
   metadata_load()
   devunits_load()
   system("color e#{"04126"[@shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
+  if @shardizard==0
+    next_holiday(bot)
+    puts "Avatar loaded"
+  elsif @shardizard==4
+    bot.user(bot.profile.id).on(285663217261477889).nickname="EliseBot (Debug)"
+    bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r'))
+  end
 end
 
 def calc_easter()
