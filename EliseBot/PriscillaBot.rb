@@ -93,7 +93,28 @@ bot.gateway.check_heartbeat_acks = false
           ["`\u22C1`Excitable","HP","Resistance",true]]
 
 def all_commands(include_nil=false) # a list of all the command names.  Used by Nino Mode to ignore messages that are commands, so responses do not double up.
-  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills','locate','locateshard','locateshards','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable','banners','banner','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti','deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias','removedualalias','removemultiunitalias','removedualunitalias','removemulti','snagchannels']
+  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup',
+    'sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup',
+    'removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats',
+    'devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison',
+    'fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup',
+    'restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback',
+    'suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills',
+    'stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill',
+    'stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills',
+    'compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill',
+    'skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common',
+    'commonskills','common_skills','locate','locateshard','locateshards','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar',
+    'skill_rarity','one_star','two_star','three_star','four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit',
+    'allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit',
+    'skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill',
+    'inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable',
+    'skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable',
+    'skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills',
+    'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn',
+    'skillearnable','banners','banner','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias',
+    'dualalias','addmulti','deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias',
+    'removedualalias','removemultiunitalias','removedualunitalias','removemulti','snagchannels','statstudy','studystats','studystat']
   k[0]=nil if include_nil
   return k
 end
@@ -2810,10 +2831,10 @@ end
 def unit_color(event,j,mode=0,m=false,chain=false)
   xcolor=0xFFD800
   # Weapon colors
-  xcolor=0xB32400 if @units[j][1][0]=='Red'
-  xcolor=0x208EFB if @units[j][1][0]=='Blue'
-  xcolor=0x01AD00 if @units[j][1][0]=='Green'
-  xcolor=0xC1CCD6 if @units[j][1][0]=='Colorless'
+  xcolor=0xE22141 if @units[j][1][0]=='Red'
+  xcolor=0x2764DE if @units[j][1][0]=='Blue'
+  xcolor=0x09AA24 if @units[j][1][0]=='Green'
+  xcolor=0x64757D if @units[j][1][0]=='Colorless'
   unless chain
     # Elemental colors
     xcolor=0xF2463A if @units[j][2][0]=='Fire'
@@ -5402,7 +5423,7 @@ def get_games_list(arr,includefeh=true)
   return g
 end
 
-def comparison(event,args)
+def comparison(event,args,bot)
   event.channel.send_temporary_message("Calculating data, please wait...",3)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   s1=args.join(' ').gsub(',','').gsub('/','')
@@ -5469,13 +5490,22 @@ def comparison(event,args)
       end
       st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
       st[0]=st[0].gsub('Lavatain','Laevatein')
-      b.push([st,"#{r[0]}\\* #{name} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}"])
+      b.push([st,"#{r[0]}\\* #{name} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0)])
       c.push(unit_color(event,find_unit(find_name_in_string(event,sever(k[i])),event),1,m))
     elsif k[i].downcase=="mathoo's"
       m=true
     end
   end
-  if b.length<2
+  if b.uniq.length != b.length
+    event.channel.send_temporary_message("Duplicate units found, removing duplicates..",3)
+    sleep 1
+    b.uniq!
+  end
+  if b.length==1 && !['unit','stats'].include?(event.message.text.downcase.split(' ')[0].gsub('feh!','').gsub('feh?','').gsub('f?','').gsub('e?','').gsub('h?',''))
+    event.respond "I need at least two units in order to compare anything.\nInstead, I will show you the results of the `study` command, which is similar to `compare` but for one unit."
+    unit_study(event,name,bot)
+    return 1
+  elsif b.length<2
     event.respond "I need at least two units in order to compare anything."
     return 0
   elsif b.length>2
@@ -5531,6 +5561,43 @@ def comparison(event,args)
   d1=[b[0][1],[],0]
   d2=[b[1][1],[],0]
   d3=["Analysis",[]]
+  names=["#{b[0][0][0]}","#{b[1][0][0]}"]
+  xpic=nil
+  if names.uniq.length<=1
+    xpic=pick_thumbnail(event,find_unit(b[0][0][0],event),bot)
+    mll=[b[0][1].split(' '), b[1][1].split(' ')]
+    if mll[0][mll[0].length-1][mll[0][mll[0].length-1].length-1,1]==')' && mll[0][mll[0].length-1][0,1]!='('
+      mll[0][mll[0].length-2]="#{mll[0][mll[0].length-2]} #{mll[0][mll[0].length-1]}"
+      mll[0][mll[0].length-1]=nil
+      mll[0].compact!
+    end
+    if mll[1][mll[1].length-1][mll[1][mll[1].length-1].length-1,1]==')' && mll[1][mll[1].length-1][0,1]!='('
+      mll[1][mll[1].length-2]="#{mll[1][mll[1].length-2]} #{mll[1][mll[1].length-1]}"
+      mll[1][mll[1].length-1]=nil
+      mll[1].compact!
+    end
+    if mll[0][0]==mll[1][0]
+      mll[0][0]=nil
+      mll[1][0]=nil
+    end
+    if mll[0][2]==mll[1][2]
+      mll[0][2]=nil
+      mll[1][2]=nil
+    end
+    if mll[0][3]==mll[1][3]
+      mll[0][3]=nil
+      mll[1][3]=nil
+    end
+    names=["#{mll[0].compact.join(' ')}","#{mll[1].compact.join(' ')}"]
+    if b[0][2] && !b[1][2]
+      names[0]="Mathoo's #{b[0][0][0]}"
+      names[1]="Neutral #{b[1][0][0]}" if names[1]=="#{b[1][0][0]} (neutral)"
+    end
+    if !b[0][2] && b[1][2]
+      names[1]="Mathoo's #{b[1][0][0]}" if b[1][2]
+      names[0]="Neutral #{b[0][0][0]}" if names[0]=="#{b[0][0][0]} (neutral)"
+    end
+  end
   for i in 1...6
     d1[1].push("#{stzzz[i]}: #{b[0][0][i]}")
     d2[1].push("#{stzzz[i]}: #{b[1][0][i]}")
@@ -5539,9 +5606,9 @@ def comparison(event,args)
     if b[0][0][i]==b[1][0][i]
       d3[1].push("Equal #{stzzz[i]}")
     elsif b[0][0][i]>b[1][0][i]
-      d3[1].push("#{b[0][0][0]} has #{b[0][0][i]-b[1][0][i]} more #{stzzz[i]}")
+      d3[1].push("#{names[0]} has #{b[0][0][i]-b[1][0][i]} more #{stzzz[i]}")
     elsif b[0][0][i]<b[1][0][i]
-      d3[1].push("#{b[1][0][0]} has #{b[1][0][i]-b[0][0][i]} more #{stzzz[i]}")
+      d3[1].push("#{names[1]} has #{b[1][0][i]-b[0][0][i]} more #{stzzz[i]}")
     else
       d3[1].push("#{stzzz[i]} calculation error")
     end
@@ -5554,9 +5621,9 @@ def comparison(event,args)
   if d1[2]==d2[2]
     d3[1].push("Equal BST")
   elsif d1[2]>d2[2]
-    d3[1].push("#{b[0][0][0]} has #{d1[2]-d2[2]} more BST")
+    d3[1].push("#{names[0]} has #{d1[2]-d2[2]} more BST")
   elsif d1[2]<d2[2]
-    d3[1].push("#{b[1][0][0]} has #{d2[2]-d1[2]} more BST")
+    d3[1].push("#{names[1]} has #{d2[2]-d1[2]} more BST")
   else
     d3[1].push("#{stzzz[i]} calculation error")
   end
@@ -5567,7 +5634,7 @@ def comparison(event,args)
   d2[2]=nil
   d1.compact!
   d2.compact!
-  create_embed(event,"**Comparing #{b[0][0][0]} and #{b[1][0][0]}**",'',avg_color([c[0],c[1]]),nil,nil,[d1,d2,d3],-1)
+  create_embed(event,"**Comparing #{names[0]} and #{names[1]}**",'',avg_color([c[0],c[1]]),nil,xpic,[d1,d2,d3],-1)
   return 2
 end
 
@@ -6235,7 +6302,7 @@ def disp_summon_pool(event,args)
     if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
     else
-      create_embed(event,"",'',0xB32400,"4-5\* availability can be affected by banner focus.",nil,r,4)
+      create_embed(event,"",'',0xE22141,"4-5\* availability can be affected by banner focus.",nil,r,4)
     end
   end
   if colors.include?('Blue')
@@ -6244,7 +6311,7 @@ def disp_summon_pool(event,args)
     if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
     else
-      create_embed(event,"",'',0x208EFB,"4-5\* availability can be affected by banner focus.",nil,r,4)
+      create_embed(event,"",'',0x2764DE,"4-5\* availability can be affected by banner focus.",nil,r,4)
     end
   end
   if colors.include?('Green')
@@ -6253,7 +6320,7 @@ def disp_summon_pool(event,args)
     if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
     else
-      create_embed(event,"",'',0x01AD00,"4-5\* availability can be affected by banner focus.",nil,r,4)
+      create_embed(event,"",'',0x09AA24,"4-5\* availability can be affected by banner focus.",nil,r,4)
     end
   end
   if colors.include?('Colorless')
@@ -6262,7 +6329,7 @@ def disp_summon_pool(event,args)
     if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
     else
-      create_embed(event,"",'',0xC1CCD6,"4-5\* availability can be affected by banner focus.",nil,r,4)
+      create_embed(event,"",'',0x64757D,"4-5\* availability can be affected by banner focus.",nil,r,4)
     end
   end
 end
@@ -8484,10 +8551,10 @@ bot.command([:random,:rand]) do |event, *args|
     stats[i+5]="#{stats[i+5]} (-)" if [2,6,11].include?(gps[i])
   end
   xcolor=0xFFD800
-  xcolor=0xB32400 if clazz[0]=='Red'
-  xcolor=0x208EFB if clazz[0]=='Blue'
-  xcolor=0x01AD00 if clazz[0]=='Green'
-  xcolor=0xC1CCD6 if clazz[0]=='Colorless'
+  xcolor=0xE22141 if clazz[0]=='Red'
+  xcolor=0x2764DE if clazz[0]=='Blue'
+  xcolor=0x09AA24 if clazz[0]=='Green'
+  xcolor=0x64757D if clazz[0]=='Colorless'
   clazz[1]=clazz[1].gsub('Breath','Dragon')
   w=clazz[1]
   w='Sword' if clazz[0]=='Red' && w=='Blade'
@@ -8572,7 +8639,7 @@ bot.command([:skillrarity,:onestar,:twostar,:threestar,:fourstar,:fivestar,:skil
   end
   if " #{event.message.text.downcase} ".include?(' progression ')
     create_embed(event,"__**Non-healers**__","",xcolor,"Most non-healer units have one Scenario X passive and one Scenario Y passive",nil,[["__**Weapons**__","Tier 1 (*Iron, basic magic*) - Default at 1\\*\nTier 2 (*Steel, El- magic, Fire Breath+*) - Default at 2\\*\nTier 3 (*Silver, super magic*) - Available to 3\\*, default at 4\\*\nTier 4 (*+ weapons other than Fire Breath+, Prf weapons*) - default at 5\\*\nRetro-Prfs (*Felicia's Plate*) - Available at 5\\*, promotes from nothing"],["__**Assists**__","Tier 1 (*Rallies, Dance/Sing, etc.*) - Available at 3\\*, default at 4\\* ~~Sharena has hers default at 2\\*~~\nTier 2 (*Double Rallies*) - Available at 4\\*\nPrf Assists (*Sacrifice*) - Available at 5\\*"],["__**Specials**__","Miracle - Available at 3\\*, default at 5\\*\nTier 1 (*Daylight, New Moon, etc.*) - Available at 3\\*, default at 4\\* ~~Alfonse and Anna have theirs default at 2\\*~~\nTier 2 (*Sol, Luna, etc.*) - Available at 4\\* ~~Jaffar and Saber have theirs also default at 5\\*~~\nTier 3 (*Galeforce, Aether, Prf Specials*) - Available at 5\\*"],["__**Passives (scenario X)**__","Tier 1 - Available at 1\\*\nTier 2 - Available at 2\\*\nTier 3 - Available at 4\\*"],["__**Passives (scenario Y)**__","Tier 1 - Available at 3\\*\nTier 2 - Available at 4\\*\nTier 3 - Available at 5\\*"],["__**Prf Passives**__","Available at 5\\*"]],2)
-    create_embed(event,"__**Healers**__","",0xC1CCD6,"Most healers have a Scenario Y passive",nil,[["__**Damaging Staves**__","Tier 1 (*only Assault*) - Available at 1\\*\nTier 2 (*non-plus staves*) - Available at 3\\* ~~Lyn(Bride) has hers default at 5\\*~~\nTier 3 (*+ staves, Prf weapons*) - Available at 5\\*"],["__**Healing Staves**__","Tier 1 (*Heal*) - Default at 1\\*\nTier 2 (*Mend, Reconcile*) - Available at 2\\*, default at 3\\*\nTier 3 (*all other non-plus staves*) - Available at 4\\*, default at 5\\*\nTier 4 (*+ staves*) - Available at 5\\*"],["__**Healer Specials**__","Miracle - Available at 3\\*, default at 5\\*\nTier 1 (*Imbue*) - Available at 2\\*, default at 3\\*\nTier 2 (*Balms, Heavenly Light*) - Available at 3\\*, default at 5\\*"],["__**Passives (scenario X)**__","Tier 1 - Available at 1\\*\nTier 2 - Available at 2\\*\nTier 3 - Available at 4\\*"],["__**Passives (scenario Y)**__","Tier 1 - Available at 3\\*\nTier 2 - Available at 4\\*\nTier 3 - Available at 5\\*"],["__**Prf Passives**__","Available at 5\\*"]],2)
+    create_embed(event,"__**Healers**__","",0x64757D,"Most healers have a Scenario Y passive",nil,[["__**Damaging Staves**__","Tier 1 (*only Assault*) - Available at 1\\*\nTier 2 (*non-plus staves*) - Available at 3\\* ~~Lyn(Bride) has hers default at 5\\*~~\nTier 3 (*+ staves, Prf weapons*) - Available at 5\\*"],["__**Healing Staves**__","Tier 1 (*Heal*) - Default at 1\\*\nTier 2 (*Mend, Reconcile*) - Available at 2\\*, default at 3\\*\nTier 3 (*all other non-plus staves*) - Available at 4\\*, default at 5\\*\nTier 4 (*+ staves*) - Available at 5\\*"],["__**Healer Specials**__","Miracle - Available at 3\\*, default at 5\\*\nTier 1 (*Imbue*) - Available at 2\\*, default at 3\\*\nTier 2 (*Balms, Heavenly Light*) - Available at 3\\*, default at 5\\*"],["__**Passives (scenario X)**__","Tier 1 - Available at 1\\*\nTier 2 - Available at 2\\*\nTier 3 - Available at 4\\*"],["__**Passives (scenario Y)**__","Tier 1 - Available at 3\\*\nTier 2 - Available at 4\\*\nTier 3 - Available at 5\\*"],["__**Prf Passives**__","Available at 5\\*"]],2)
   else
     create_embed(event,"**Supposed Bug: X character, despite not being available at #{r}, has skills listed for #{r.gsub('Y','that')} in the `skill` command.**\n\nA word from my developer","By observing the skill lists of the Daily Hero Battle units - the only units we have available at 1\\* - I have learned that there is a set progression for which characters learn skills.  Only six units directly contradict this observation - and three of those units are the Askrians, who were likely given their Assists and Tier 1 Specials (depending on the character) at 2\\* in order to make them useable in the early story maps when the player has limited orbs and therefore limited unit choices.  One is Lyn(Bride), who as the only seasonal healer so far, may be the start of a new pattern.  The other two are Jaffar and Saber, who - for unknown reasons - have their respective Tier 2 Specials available right out of the box as 5\\*s.\n\nThe information as it is is not useless.  In fact, as seen quite recently as of the time of this writing, IntSys is willing to demote some units out of the 4-5\\* pool into the 3-4\\* one. This information allows us to predict which skills the new 3\\* versions of these characters will have.\n\nAs for units unlikely to demote, Paralogue maps will have lower-rarity versions of units with their base kits.  Training Tower and Tempest Trials attempt to build units according to recorded trends in Arena, but will use default base kits at lower difficulties.  Obviously you can't fodder a 4* Siegbert for Death Blow 3, but you can still encounter him in Tempest.",xcolor)
     event.respond "To see the progression I have discovered, please use the command `FEH!skillrarity progression`."
@@ -8828,7 +8895,7 @@ bot.command([:phase_study,:phasestudy,:studyphase,:study_phase]) do |event, *arg
   return nil
 end
 
-bot.command(:study) do |event, *args|
+bot.command([:study,:statstudy,:studystats]) do |event, *args|
   if args.nil? || args.length<1
     event.respond "No unit was included"
     return nil
@@ -9142,7 +9209,7 @@ bot.command([:compare, :comparison]) do |event, *args|
     skill_comparison(event,args)
     return nil
   end
-  k=comparison(event,args)
+  k=comparison(event,args,bot)
   return nil
 end
 
@@ -9240,7 +9307,7 @@ bot.command([:stats,:stat]) do |event, *args|
   if ['compare','comparison'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=comparison(event,args)
+    k=comparison(event,args,bot)
     return nil unless k<1
   elsif ['study'].include?(args[0].downcase)
     args[0]=nil
@@ -9334,7 +9401,7 @@ bot.command([:unit, :data, :statsskills, :statskills, :stats_skills, :stat_skill
   if ['compare','comparison'].include?(args[0].downcase)
     args[0]=nil
     args.compact!
-    k=comparison(event,args)
+    k=comparison(event,args,bot)
     return nil unless k<1
   elsif ['study'].include?(args[0].downcase)
     args[0]=nil
@@ -11598,11 +11665,11 @@ bot.ready do |event|
     end
   end
   metadata_save()
-  bot.game="Fire Emblem Heroes" if [0,4].include?(@shardizard)
   metadata_load()
   devunits_load()
   system("color e#{"04126"[@shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
+  bot.game="Fire Emblem Heroes" if [0,4].include?(@shardizard)
   if @shardizard==0
     next_holiday(bot)
     puts "Avatar loaded"
