@@ -572,7 +572,7 @@ end
 def disp_more_info(event, mode=0) # this function is used by the `help` command to display info that repeats in multiple help descriptions.
   if mode<1
     create_embed(event,"","You can modify the unit by including any of the following in your message:\n\n**Rarity**\nProper format: #{rand(5)+1}\\*\n~~Alternatively, the first number not given proper context will be set as the rarity value unless the rarity value is already defined~~\nDefault: 5\\* unit\n\n**Merges**\nProper format: +#{rand(10)+1}\n~~Alternatively, the second number not given proper context will be set as the merges value unless the merges value is already defined~~\nDefault: +0\n\n**Boon**\nProper format: +#{['Atk','Spd','Def','Res','HP'].sample}\n~~Alternatively, the first stat name not given proper context will be set as the boon unless the boon is already defined~~\nDefault: No boon\n\n**Bane**\nProper format: -#{['Atk','Spd','Def','Res','HP'].sample}\n~~Alternatively, the second stat name not given proper context will be set as the bane unless the bane is already defined~~\nDefault: No bane\n\n**Weapon**\nProper format: Silver Dagger+ ~~just the weapon's name~~\nDefault: No weapon\n\n**Arena/Tempest Bonus Unit Buff**\nProper format: Bonus\nSecondary format: Tempest, Arena\nDefault: Not applied\n\n**Summoner Support**\nProper format: #{['C','B','A','S'].sample} ~~Just a single letter~~\nDefault: No support",0x40C0F0)
-    create_embed(event,"","**Refined Weapon**\nProper format: Falchion (+) #{['Atk','Spd','Def','Res','Effect'].sample}\nSecondary format: Falchion #{['Atk','Spd','Def','Res','Effect'].sample} Mode\nTertiary format: Falchion (#{['Atk','Spd','Def','Res','Effect'].sample})\n~~Alternatively, the third stat name not given proper context, or the second stat given a + in front of it, will be set as the refinement for the weapon if one is equipped and it can be refined~~\n\n**Stat-affecting skills**\nOptions: HP+, Atk+, Spd+, Def+, Res+, LifeAndDeath/LnD/LaD, Fury, FortressDef, FortressRes\n~~LnD, Fury, and the Fortress skills default to tier 3, but other tiers can be applied by including numbers like so: LnD1~~\nDefault: No skills applied\n\n**Stat-buffing skills**\nOptions: Rally skills, Defiant skills, Hone/Fortify skills, Balm skills\n~~please note that the skill name must be written out without spaces~~\nDefault: No skills applied\n\n**Stat-nerfing skills**\nOptions: Smoke skills, Seal skills, Threaten skills, Chill skills, Ploy skills\n~~please note that the skill name must be written out without spaces~~\nDefault: No skills applied#{"\n\n**In-combat buffs**\nOptions: Blow skills, Stance/Breath skills, Bond skills, Brazen skills, Close/Distant Def, Fire/Wind/Earth/Water Boost\n~~please note that the skill name must be written out without spaces~~\nDefault: No skills applied" if mode==-1}\n\n**Stat buffs from Legendary Hero/Blessing interaction**\nProper format: #{['Atk','Spd','Def','Res'].sample} Blessing ~~following the stat buffed by the word \"blessing\"~~\nSecondary format: #{['Atk','Spd','Def','Res'].sample}Blessing ~~no space~~, Blessing#{['Atk','Spd','Def','Res'].sample}\nDefault: No blessings applied\n\nThese can be listed in any order.",0x40C0F0)
+    create_embed(event,"","**Refined Weapon**\nProper format: Falchion (+) #{['Atk','Spd','Def','Res','Effect'].sample}\nSecondary format: Falchion #{['Atk','Spd','Def','Res','Effect'].sample} Mode\nTertiary format: Falchion (#{['Atk','Spd','Def','Res','Effect'].sample})\n~~Alternatively, the third stat name not given proper context, or the second stat given a + in front of it, will be set as the refinement for the weapon if one is equipped and it can be refined~~\n\n**Stat-affecting skills**\nOptions: HP+, Atk+, Spd+, Def+, Res+, LifeAndDeath/LnD/LaD, Fury, FortressDef, FortressRes\n~~LnD, Fury, and the Fortress skills default to tier 3, but other tiers can be applied by including numbers like so: LnD1~~\nDefault: No skills applied\n\n**Stat-buffing skills**\nOptions: Rally skills, Defiant skills, Hone/Fortify skills, Balm skills, Even/Odd Atk/Spd/Def/Res Wave\n~~please note that the skill name must be written out without spaces~~\nDefault: No skills applied\n\n**Stat-nerfing skills**\nOptions: Smoke skills, Seal skills, Threaten skills, Chill skills, Ploy skills\n~~please note that the skill name must be written out without spaces~~\nDefault: No skills applied#{"\n\n**In-combat buffs**\nOptions: Blow skills, Stance/Breath skills, Bond skills, Brazen skills, Close/Distant Def, Fire/Wind/Earth/Water Boost\n~~please note that the skill name must be written out without spaces~~\nDefault: No skills applied" if mode==-1}\n\n**Stat buffs from Legendary Hero/Blessing interaction**\nProper format: #{['Atk','Spd','Def','Res'].sample} Blessing ~~following the stat buffed by the word \"blessing\"~~\nSecondary format: #{['Atk','Spd','Def','Res'].sample}Blessing ~~no space~~, Blessing#{['Atk','Spd','Def','Res'].sample}\nDefault: No blessings applied\n\nThese can be listed in any order.",0x40C0F0)
   elsif mode==1
     u=random_dev_unit_with_nature(event)
     return "**IMPORRTANT NOTE**\nUnlike my other commands, this one is heavily context based.  Please format all allies like the example below:\n`#{u[1]}* #{u[0]} +#{u[2]} +#{u[3]} -#{u[4]}`\nAny field with the exception of unit name can be ignored, but unlike my other commands the order is important."
@@ -2090,8 +2090,13 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
   negative=[0,0,0,0,0]
   rally=[0,0,0,0,0]
   for i in 0...skillls.length
-    val=skillls[i].scan(/\d+?/)[0].to_i
-    if (skillls[i][0,4]=="Odd " || skillls[i][0,5]=="Even ") && skillls[i][skillls[i].length-7,6]==" Wave "
+    val=skillls[i].scan(/\d+?/)[0].to_i rescue 0
+    if skillls[i]=="Odd Spectrum Wave" || skillls[i]=="Even Spectrum Wave"
+      rally[1]=[rally[1],4].max if skillls[i].include?("Atk")
+      rally[2]=[rally[2],4].max if skillls[i].include?("Spd")
+      rally[3]=[rally[3],4].max if skillls[i].include?("Def")
+      rally[4]=[rally[4],4].max if skillls[i].include?("Res")
+    elsif (skillls[i][0,4]=="Odd " || skillls[i][0,5]=="Even ") && skillls[i][skillls[i].length-7,6]==" Wave "
       rally[1]=[rally[1],(2*val)].max if skillls[i].include?("Atk")
       rally[2]=[rally[2],(2*val)].max if skillls[i].include?("Spd")
       rally[3]=[rally[3],(2*val)].max if skillls[i].include?("Def")
@@ -2451,6 +2456,56 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
            ['Defiant Resistance 3',['defiantres3','defiantresistance3','defiantres','defiantresistance'],2],
            ['Defiant Resistance 2',['defiantres2','defiantresistance2'],2],
            ['Defiant Resistance 1',['defiantres1','defiantresistance1'],2],
+           ['Odd Atk Wave 3',['oddattackwave','oddatkwave','oddattwave','oddattackwave3','oddatkwave3','oddattwave3'],2],
+           ['Odd Atk Wave 2',['oddattackwave2','oddatkwave2','oddattwave2'],2],
+           ['Odd Atk Wave 1',['oddattackwave1','oddatkwave1','oddattwave1'],2],
+           ['Odd Spd Wave 3',['oddspeedwave','oddspdwave','oddspeedwave3','oddspdwave3'],2],
+           ['Odd Spd Wave 2',['oddspeedwave2','oddspdwave2'],2],
+           ['Odd Spd Wave 1',['oddspeedwave1','oddspdwave1'],2],
+           ['Odd Def Wave 3',['odddefensewave','odddefencewave','odddefwave','odddefensewave3','odddefencewave3','odddefwave3'],2],
+           ['Odd Def Wave 2',['odddefensewave2','odddefencewave2','odddefwave2'],2],
+           ['Odd Def Wave 1',['odddefensewave1','odddefencewave1','odddefwave1'],2],
+           ['Odd Res Wave 3',['oddresistancewave','oddreswave','oddresistancewave3','oddreswave3'],2],
+           ['Odd Res Wave 2',['oddresistancewave2','oddreswave2'],2],
+           ['Odd Res Wave 1',['oddresistancewave1','oddreswave1'],2],
+           ['Odd Atk/Spd Wave 2',['oddattackspeedwave2','oddatkspeedwave2','oddattspeedwave2','oddattackspdwave2','oddatkspdwave2','oddattspdwave2','oddspeedattackwave2','oddspeedatkwave2','oddspeedattwave2','oddspdattackwave2','oddspdatkwave2','oddspdattwave2','oddattackspeedwave','oddatkspeedwave','oddattspeedwave','oddattackspdwave','oddatkspdwave','oddattspdwave','oddspeedattackwave','oddspeedatkwave','oddspeedattwave','oddspdattackwave','oddspdatkwave','oddspdattwave'],2],
+           ['Odd Atk/Spd Wave 1',['oddattackspeedwave1','oddatkspeedwave1','oddattspeedwave1','oddattackspdwave1','oddatkspdwave1','oddattspdwave1','oddspeedattackwave1','oddspeedatkwave1','oddspeedattwave1','oddspdattackwave1','oddspdatkwave1','oddspdattwave1'],2],
+           ['Odd Atk/Def Wave 2',['oddattackdefensewave2','oddatkdefensewave2','oddattdefensewave2','oddattackdefencewave2','oddatkdefencewave2','oddattdefencewave2','oddattackdefwave2','oddatkdefwave2','oddattdefwave2','odddefenseattackwave2','odddefenseatkwave2','odddefenseattwave2','odddefenceattackwave2','odddefenceatkwave2','odddefenceattwave2','odddefattackwave2','odddefatkwave2','odddefattwave2','oddattackdefensewave','oddatkdefensewave','oddattdefensewave','oddattackdefencewave','oddatkdefencewave','oddattdefencewave','oddattackdefwave','oddatkdefwave','oddattdefwave','odddefenseattackwave','odddefenseatkwave','odddefenseattwave','odddefenceattackwave','odddefenceatkwave','odddefenceattwave','odddefattackwave','odddefatkwave','odddefattwave'],2],
+           ['Odd Atk/Def Wave 1',['oddattackdefensewave1','oddatkdefensewave1','oddattdefensewave1','oddattackdefencewave1','oddatkdefencewave1','oddattdefencewave1','oddattackdefwave1','oddatkdefwave1','oddattdefwave1','odddefenseattackwave1','odddefenseatkwave1','odddefenseattwave1','odddefenceattackwave1','odddefenceatkwave1','odddefenceattwave1','odddefattackwave1','odddefatkwave1','odddefattwave1'],2],
+           ['Odd Atk/Res Wave 2',['oddattackresistancewave2','oddatkresistancewave2','oddattresistancewave2','oddattackreswave2','oddatkreswave2','oddattreswave2','oddresistanceattackwave2','oddresistanceatkwave2','oddresistanceattwave2','oddresattackwave2','oddresatkwave2','oddresattwave2','oddattackresistancewave','oddatkresistancewave','oddattresistancewave','oddattackreswave','oddatkreswave','oddattreswave','oddresistanceattackwave','oddresistanceatkwave','oddresistanceattwave','oddresattackwave','oddresatkwave','oddresattwave'],2],
+           ['Odd Atk/Res Wave 1',['oddattackresistancewave1','oddatkresistancewave1','oddattresistancewave1','oddattackreswave1','oddatkreswave1','oddattreswave1','oddresistanceattackwave1','oddresistanceatkwave1','oddresistanceattwave1','oddresattackwave1','oddresatkwave1','oddresattwave1'],2],
+           ['Odd Spd/Def Wave 2',['oddspeeddefensewave2','oddspddefensewave2','oddspeeddefencewave2','oddspddefencewave2','oddspeeddefwave2','oddspddefwave2','odddefensespeedwave2','odddefensespdwave2','odddefencespeedwave2','odddefencespdwave2','odddefspeedwave2','odddefspdwave2','oddspeeddefensewave','oddspddefensewave','oddspeeddefencewave','oddspddefencewave','oddspeeddefwave','oddspddefwave','odddefensespeedwave','odddefensespdwave','odddefencespeedwave','odddefencespdwave','odddefspeedwave','odddefspdwave'],2],
+           ['Odd Spd/Def Wave 1',['oddspeeddefensewave1','oddspddefensewave1','oddspeeddefencewave1','oddspddefencewave1','oddspeeddefwave1','oddspddefwave1','odddefensespeedwave1','odddefensespdwave1','odddefencespeedwave1','odddefencespdwave1','odddefspeedwave1','odddefspdwave1'],2],
+           ['Odd Spd/Res Wave 2',['oddspeedresistancewave2','oddspdresistancewave2','oddspeedreswave2','oddspdreswave2','oddresistancespeedwave2','oddresistancespdwave2','oddresspeedwave2','oddresspdwave2','oddspeedresistancewave','oddspdresistancewave','oddspeedreswave','oddspdreswave','oddresistancespeedwave','oddresistancespdwave','oddresspeedwave','oddresspdwave'],2],
+           ['Odd Spd/Res Wave 1',['oddspeedresistancewave1','oddspdresistancewave1','oddspeedreswave1','oddspdreswave1','oddresistancespeedwave1','oddresistancespdwave1','oddresspeedwave1','oddresspdwave1'],2],
+           ['Odd Def/Res Wave 2',['odddefenseresistancewave2','odddefenceresistancewave2','odddefresistancewave2','odddefensereswave2','odddefencereswave2','odddefreswave2','oddresistancedefensewave2','oddresistancedefencewave2','oddresistancedefwave2','oddresdefensewave2','oddresdefencewave2','oddresdefwave2','odddefenseresistancewave','odddefenceresistancewave','odddefresistancewave','odddefensereswave','odddefencereswave','odddefreswave','oddresistancedefensewave','oddresistancedefencewave','oddresistancedefwave','oddresdefensewave','oddresdefencewave','oddresdefwave'],2],
+           ['Odd Def/Res Wave 1',['odddefenseresistancewave1','odddefenceresistancewave1','odddefresistancewave1','odddefensereswave1','odddefencereswave1','odddefreswave1','oddresistancedefensewave1','oddresistancedefencewave1','oddresistancedefwave1','oddresdefensewave1','oddresdefencewave1','oddresdefwave1'],2],
+           ['Odd Spectrum Wave 1',['oddspectrumwave','oddomniwave','oddallwave'],2],
+           ['Even Atk Wave 3',['evenattackwave','evenatkwave','evenattwave','evenattackwave3','evenatkwave3','evenattwave3'],2],
+           ['Even Atk Wave 2',['evenattackwave2','evenatkwave2','evenattwave2'],2],
+           ['Even Atk Wave 1',['evenattackwave1','evenatkwave1','evenattwave1'],2],
+           ['Even Spd Wave 3',['evenspeedwave','evenspdwave','evenspeedwave3','evenspdwave3'],2],
+           ['Even Spd Wave 2',['evenspeedwave2','evenspdwave2'],2],
+           ['Even Spd Wave 1',['evenspeedwave1','evenspdwave1'],2],
+           ['Even Def Wave 3',['evendefensewave','evendefencewave','evendefwave','evendefensewave3','evendefencewave3','evendefwave3'],2],
+           ['Even Def Wave 2',['evendefensewave2','evendefencewave2','evendefwave2'],2],
+           ['Even Def Wave 1',['evendefensewave1','evendefencewave1','evendefwave1'],2],
+           ['Even Res Wave 3',['evenresistancewave','evenreswave','evenresistancewave3','evenreswave3'],2],
+           ['Even Res Wave 2',['evenresistancewave2','evenreswave2'],2],
+           ['Even Res Wave 1',['evenresistancewave1','evenreswave1'],2],
+           ['Even Atk/Spd Wave 2',['evenattackspeedwave2','evenatkspeedwave2','evenattspeedwave2','evenattackspdwave2','evenatkspdwave2','evenattspdwave2','evenspeedattackwave2','evenspeedatkwave2','evenspeedattwave2','evenspdattackwave2','evenspdatkwave2','evenspdattwave2','evenattackspeedwave','evenatkspeedwave','evenattspeedwave','evenattackspdwave','evenatkspdwave','evenattspdwave','evenspeedattackwave','evenspeedatkwave','evenspeedattwave','evenspdattackwave','evenspdatkwave','evenspdattwave'],2],
+           ['Even Atk/Spd Wave 1',['evenattackspeedwave1','evenatkspeedwave1','evenattspeedwave1','evenattackspdwave1','evenatkspdwave1','evenattspdwave1','evenspeedattackwave1','evenspeedatkwave1','evenspeedattwave1','evenspdattackwave1','evenspdatkwave1','evenspdattwave1'],2],
+           ['Even Atk/Def Wave 2',['evenattackdefensewave2','evenatkdefensewave2','evenattdefensewave2','evenattackdefencewave2','evenatkdefencewave2','evenattdefencewave2','evenattackdefwave2','evenatkdefwave2','evenattdefwave2','evendefenseattackwave2','evendefenseatkwave2','evendefenseattwave2','evendefenceattackwave2','evendefenceatkwave2','evendefenceattwave2','evendefattackwave2','evendefatkwave2','evendefattwave2','evenattackdefensewave','evenatkdefensewave','evenattdefensewave','evenattackdefencewave','evenatkdefencewave','evenattdefencewave','evenattackdefwave','evenatkdefwave','evenattdefwave','evendefenseattackwave','evendefenseatkwave','evendefenseattwave','evendefenceattackwave','evendefenceatkwave','evendefenceattwave','evendefattackwave','evendefatkwave','evendefattwave'],2],
+           ['Even Atk/Def Wave 1',['evenattackdefensewave1','evenatkdefensewave1','evenattdefensewave1','evenattackdefencewave1','evenatkdefencewave1','evenattdefencewave1','evenattackdefwave1','evenatkdefwave1','evenattdefwave1','evendefenseattackwave1','evendefenseatkwave1','evendefenseattwave1','evendefenceattackwave1','evendefenceatkwave1','evendefenceattwave1','evendefattackwave1','evendefatkwave1','evendefattwave1'],2],
+           ['Even Atk/Res Wave 2',['evenattackresistancewave2','evenatkresistancewave2','evenattresistancewave2','evenattackreswave2','evenatkreswave2','evenattreswave2','evenresistanceattackwave2','evenresistanceatkwave2','evenresistanceattwave2','evenresattackwave2','evenresatkwave2','evenresattwave2','evenattackresistancewave','evenatkresistancewave','evenattresistancewave','evenattackreswave','evenatkreswave','evenattreswave','evenresistanceattackwave','evenresistanceatkwave','evenresistanceattwave','evenresattackwave','evenresatkwave','evenresattwave'],2],
+           ['Even Atk/Res Wave 1',['evenattackresistancewave1','evenatkresistancewave1','evenattresistancewave1','evenattackreswave1','evenatkreswave1','evenattreswave1','evenresistanceattackwave1','evenresistanceatkwave1','evenresistanceattwave1','evenresattackwave1','evenresatkwave1','evenresattwave1'],2],
+           ['Even Spd/Def Wave 2',['evenspeeddefensewave2','evenspddefensewave2','evenspeeddefencewave2','evenspddefencewave2','evenspeeddefwave2','evenspddefwave2','evendefensespeedwave2','evendefensespdwave2','evendefencespeedwave2','evendefencespdwave2','evendefspeedwave2','evendefspdwave2','evenspeeddefensewave','evenspddefensewave','evenspeeddefencewave','evenspddefencewave','evenspeeddefwave','evenspddefwave','evendefensespeedwave','evendefensespdwave','evendefencespeedwave','evendefencespdwave','evendefspeedwave','evendefspdwave'],2],
+           ['Even Spd/Def Wave 1',['evenspeeddefensewave1','evenspddefensewave1','evenspeeddefencewave1','evenspddefencewave1','evenspeeddefwave1','evenspddefwave1','evendefensespeedwave1','evendefensespdwave1','evendefencespeedwave1','evendefencespdwave1','evendefspeedwave1','evendefspdwave1'],2],
+           ['Even Spd/Res Wave 2',['evenspeedresistancewave2','evenspdresistancewave2','evenspeedreswave2','evenspdreswave2','evenresistancespeedwave2','evenresistancespdwave2','evenresspeedwave2','evenresspdwave2','evenspeedresistancewave','evenspdresistancewave','evenspeedreswave','evenspdreswave','evenresistancespeedwave','evenresistancespdwave','evenresspeedwave','evenresspdwave'],2],
+           ['Even Spd/Res Wave 1',['evenspeedresistancewave1','evenspdresistancewave1','evenspeedreswave1','evenspdreswave1','evenresistancespeedwave1','evenresistancespdwave1','evenresspeedwave1','evenresspdwave1'],2],
+           ['Even Def/Res Wave 2',['evendefenseresistancewave2','evendefenceresistancewave2','evendefresistancewave2','evendefensereswave2','evendefencereswave2','evendefreswave2','evenresistancedefensewave2','evenresistancedefencewave2','evenresistancedefwave2','evenresdefensewave2','evenresdefencewave2','evenresdefwave2','evendefenseresistancewave','evendefenceresistancewave','evendefresistancewave','evendefensereswave','evendefencereswave','evendefreswave','evenresistancedefensewave','evenresistancedefencewave','evenresistancedefwave','evenresdefensewave','evenresdefencewave','evenresdefwave'],2],
+           ['Even Def/Res Wave 1',['evendefenseresistancewave1','evendefenceresistancewave1','evendefresistancewave1','evendefensereswave1','evendefencereswave1','evendefreswave1','evenresistancedefensewave1','evenresistancedefencewave1','evenresistancedefwave1','evenresdefensewave1','evenresdefencewave1','evenresdefwave1'],2],
+           ['Even Spectrum Wave 1',['evenspectrumwave','evenomniwave','evenallwave'],2],
            ['Atk Ploy 3',['attackploy','atkploy','attploy','attackploy3','atkploy3','attploy3'],2],
            ['Atk Ploy 2',['attackploy2','atkploy2','attploy2'],2],
            ['Atk Ploy 1',['attackploy1','atkploy1','attploy1'],3],
@@ -2571,55 +2626,7 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
            ['Spd/Res Smoke 2',['speedresistancesmoke','spdresistancesmoke','speedressmoke','spdressmoke','resistancespeedsmoke','resistancespdsmoke','resspeedsmoke','resspdsmoke','speedresistancesmoke2','spdresistancesmoke2','speedressmoke2','spdressmoke2','resistancespeedsmoke2','resistancespdsmoke2','resspeedsmoke2','resspdsmoke2'],2],
            ['Spd/Res Smoke 1',['speedresistancesmoke1','spdresistancesmoke1','speedressmoke1','spdressmoke1','resistancespeedsmoke1','resistancespdsmoke1','resspeedsmoke1','resspdsmoke1'],3],
            ['Def/Res Smoke 2',['defenseresistancesmoke','defenceresistancesmoke','defresistancesmoke','defenseressmoke','defenceressmoke','defressmoke','resistancedefensesmoke','resistancedefencesmoke','resistancedefsmoke','resdefensesmoke','resdefencesmoke','resdefsmoke','defenseresistancesmoke2','defenceresistancesmoke2','defresistancesmoke2','defenseressmoke2','defenceressmoke2','defressmoke2','resistancedefensesmoke2','resistancedefencesmoke2','resistancedefsmoke2','resdefensesmoke2','resdefencesmoke2','resdefsmoke2'],2],
-           ['Def/Res Smoke 1',['defenseresistancesmoke1','defenceresistancesmoke1','defresistancesmoke1','defenseressmoke1','defenceressmoke1','defressmoke1','resistancedefensesmoke1','resistancedefencesmoke1','resistancedefsmoke1','resdefensesmoke1','resdefencesmoke1','resdefsmoke1'],3],
-           ['Odd Atk Wave 3',['oddattackwave','oddatkwave','oddattwave','oddattackwave3','oddatkwave3','oddattwave3'],2],
-           ['Odd Atk Wave 2',['oddattackwave2','oddatkwave2','oddattwave2'],2],
-           ['Odd Atk Wave 1',['oddattackwave1','oddatkwave1','oddattwave1'],2],
-           ['Odd Spd Wave 3',['oddspeedwave','oddspdwave','oddspeedwave3','oddspdwave3'],2],
-           ['Odd Spd Wave 2',['oddspeedwave2','oddspdwave2'],2],
-           ['Odd Spd Wave 1',['oddspeedwave1','oddspdwave1'],2],
-           ['Odd Def Wave 3',['odddefensewave','odddefencewave','odddefwave','odddefensewave3','odddefencewave3','odddefwave3'],2],
-           ['Odd Def Wave 2',['odddefensewave2','odddefencewave2','odddefwave2'],2],
-           ['Odd Def Wave 1',['odddefensewave1','odddefencewave1','odddefwave1'],2],
-           ['Odd Res Wave 3',['oddresistancewave','oddreswave','oddresistancewave3','oddreswave3'],2],
-           ['Odd Res Wave 2',['oddresistancewave2','oddreswave2'],2],
-           ['Odd Res Wave 1',['oddresistancewave1','oddreswave1'],2],
-           ['Odd Atk/Spd Wave 2',['oddattackspeedwave2','oddatkspeedwave2','oddattspeedwave2','oddattackspdwave2','oddatkspdwave2','oddattspdwave2','oddspeedattackwave2','oddspeedatkwave2','oddspeedattwave2','oddspdattackwave2','oddspdatkwave2','oddspdattwave2','oddattackspeedwave','oddatkspeedwave','oddattspeedwave','oddattackspdwave','oddatkspdwave','oddattspdwave','oddspeedattackwave','oddspeedatkwave','oddspeedattwave','oddspdattackwave','oddspdatkwave','oddspdattwave'],2],
-           ['Odd Atk/Spd Wave 1',['oddattackspeedwave1','oddatkspeedwave1','oddattspeedwave1','oddattackspdwave1','oddatkspdwave1','oddattspdwave1','oddspeedattackwave1','oddspeedatkwave1','oddspeedattwave1','oddspdattackwave1','oddspdatkwave1','oddspdattwave1'],2],
-           ['Odd Atk/Def Wave 2',['oddattackdefensewave2','oddatkdefensewave2','oddattdefensewave2','oddattackdefencewave2','oddatkdefencewave2','oddattdefencewave2','oddattackdefwave2','oddatkdefwave2','oddattdefwave2','odddefenseattackwave2','odddefenseatkwave2','odddefenseattwave2','odddefenceattackwave2','odddefenceatkwave2','odddefenceattwave2','odddefattackwave2','odddefatkwave2','odddefattwave2','oddattackdefensewave','oddatkdefensewave','oddattdefensewave','oddattackdefencewave','oddatkdefencewave','oddattdefencewave','oddattackdefwave','oddatkdefwave','oddattdefwave','odddefenseattackwave','odddefenseatkwave','odddefenseattwave','odddefenceattackwave','odddefenceatkwave','odddefenceattwave','odddefattackwave','odddefatkwave','odddefattwave'],2],
-           ['Odd Atk/Def Wave 1',['oddattackdefensewave1','oddatkdefensewave1','oddattdefensewave1','oddattackdefencewave1','oddatkdefencewave1','oddattdefencewave1','oddattackdefwave1','oddatkdefwave1','oddattdefwave1','odddefenseattackwave1','odddefenseatkwave1','odddefenseattwave1','odddefenceattackwave1','odddefenceatkwave1','odddefenceattwave1','odddefattackwave1','odddefatkwave1','odddefattwave1'],2],
-           ['Odd Atk/Res Wave 2',['oddattackresistancewave2','oddatkresistancewave2','oddattresistancewave2','oddattackreswave2','oddatkreswave2','oddattreswave2','oddresistanceattackwave2','oddresistanceatkwave2','oddresistanceattwave2','oddresattackwave2','oddresatkwave2','oddresattwave2','oddattackresistancewave','oddatkresistancewave','oddattresistancewave','oddattackreswave','oddatkreswave','oddattreswave','oddresistanceattackwave','oddresistanceatkwave','oddresistanceattwave','oddresattackwave','oddresatkwave','oddresattwave'],2],
-           ['Odd Atk/Res Wave 1',['oddattackresistancewave1','oddatkresistancewave1','oddattresistancewave1','oddattackreswave1','oddatkreswave1','oddattreswave1','oddresistanceattackwave1','oddresistanceatkwave1','oddresistanceattwave1','oddresattackwave1','oddresatkwave1','oddresattwave1'],2],
-           ['Odd Spd/Def Wave 2',['oddspeeddefensewave2','oddspddefensewave2','oddspeeddefencewave2','oddspddefencewave2','oddspeeddefwave2','oddspddefwave2','odddefensespeedwave2','odddefensespdwave2','odddefencespeedwave2','odddefencespdwave2','odddefspeedwave2','odddefspdwave2','oddspeeddefensewave','oddspddefensewave','oddspeeddefencewave','oddspddefencewave','oddspeeddefwave','oddspddefwave','odddefensespeedwave','odddefensespdwave','odddefencespeedwave','odddefencespdwave','odddefspeedwave','odddefspdwave'],2],
-           ['Odd Spd/Def Wave 1',['oddspeeddefensewave1','oddspddefensewave1','oddspeeddefencewave1','oddspddefencewave1','oddspeeddefwave1','oddspddefwave1','odddefensespeedwave1','odddefensespdwave1','odddefencespeedwave1','odddefencespdwave1','odddefspeedwave1','odddefspdwave1'],2],
-           ['Odd Spd/Res Wave 2',['oddspeedresistancewave2','oddspdresistancewave2','oddspeedreswave2','oddspdreswave2','oddresistancespeedwave2','oddresistancespdwave2','oddresspeedwave2','oddresspdwave2','oddspeedresistancewave','oddspdresistancewave','oddspeedreswave','oddspdreswave','oddresistancespeedwave','oddresistancespdwave','oddresspeedwave','oddresspdwave'],2],
-           ['Odd Spd/Res Wave 1',['oddspeedresistancewave1','oddspdresistancewave1','oddspeedreswave1','oddspdreswave1','oddresistancespeedwave1','oddresistancespdwave1','oddresspeedwave1','oddresspdwave1'],2],
-           ['Odd Def/Res Wave 2',['odddefenseresistancewave2','odddefenceresistancewave2','odddefresistancewave2','odddefensereswave2','odddefencereswave2','odddefreswave2','oddresistancedefensewave2','oddresistancedefencewave2','oddresistancedefwave2','oddresdefensewave2','oddresdefencewave2','oddresdefwave2','odddefenseresistancewave','odddefenceresistancewave','odddefresistancewave','odddefensereswave','odddefencereswave','odddefreswave','oddresistancedefensewave','oddresistancedefencewave','oddresistancedefwave','oddresdefensewave','oddresdefencewave','oddresdefwave'],2],
-           ['Odd Def/Res Wave 1',['odddefenseresistancewave1','odddefenceresistancewave1','odddefresistancewave1','odddefensereswave1','odddefencereswave1','odddefreswave1','oddresistancedefensewave1','oddresistancedefencewave1','oddresistancedefwave1','oddresdefensewave1','oddresdefencewave1','oddresdefwave1'],2],
-           ['Even Atk Wave 3',['evenattackwave','evenatkwave','evenattwave','evenattackwave3','evenatkwave3','evenattwave3'],2],
-           ['Even Atk Wave 2',['evenattackwave2','evenatkwave2','evenattwave2'],2],
-           ['Even Atk Wave 1',['evenattackwave1','evenatkwave1','evenattwave1'],2],
-           ['Even Spd Wave 3',['evenspeedwave','evenspdwave','evenspeedwave3','evenspdwave3'],2],
-           ['Even Spd Wave 2',['evenspeedwave2','evenspdwave2'],2],
-           ['Even Spd Wave 1',['evenspeedwave1','evenspdwave1'],2],
-           ['Even Def Wave 3',['evendefensewave','evendefencewave','evendefwave','evendefensewave3','evendefencewave3','evendefwave3'],2],
-           ['Even Def Wave 2',['evendefensewave2','evendefencewave2','evendefwave2'],2],
-           ['Even Def Wave 1',['evendefensewave1','evendefencewave1','evendefwave1'],2],
-           ['Even Res Wave 3',['evenresistancewave','evenreswave','evenresistancewave3','evenreswave3'],2],
-           ['Even Res Wave 2',['evenresistancewave2','evenreswave2'],2],
-           ['Even Res Wave 1',['evenresistancewave1','evenreswave1'],2],
-           ['Even Atk/Spd Wave 2',['evenattackspeedwave2','evenatkspeedwave2','evenattspeedwave2','evenattackspdwave2','evenatkspdwave2','evenattspdwave2','evenspeedattackwave2','evenspeedatkwave2','evenspeedattwave2','evenspdattackwave2','evenspdatkwave2','evenspdattwave2','evenattackspeedwave','evenatkspeedwave','evenattspeedwave','evenattackspdwave','evenatkspdwave','evenattspdwave','evenspeedattackwave','evenspeedatkwave','evenspeedattwave','evenspdattackwave','evenspdatkwave','evenspdattwave'],2],
-           ['Even Atk/Spd Wave 1',['evenattackspeedwave1','evenatkspeedwave1','evenattspeedwave1','evenattackspdwave1','evenatkspdwave1','evenattspdwave1','evenspeedattackwave1','evenspeedatkwave1','evenspeedattwave1','evenspdattackwave1','evenspdatkwave1','evenspdattwave1'],2],
-           ['Even Atk/Def Wave 2',['evenattackdefensewave2','evenatkdefensewave2','evenattdefensewave2','evenattackdefencewave2','evenatkdefencewave2','evenattdefencewave2','evenattackdefwave2','evenatkdefwave2','evenattdefwave2','evendefenseattackwave2','evendefenseatkwave2','evendefenseattwave2','evendefenceattackwave2','evendefenceatkwave2','evendefenceattwave2','evendefattackwave2','evendefatkwave2','evendefattwave2','evenattackdefensewave','evenatkdefensewave','evenattdefensewave','evenattackdefencewave','evenatkdefencewave','evenattdefencewave','evenattackdefwave','evenatkdefwave','evenattdefwave','evendefenseattackwave','evendefenseatkwave','evendefenseattwave','evendefenceattackwave','evendefenceatkwave','evendefenceattwave','evendefattackwave','evendefatkwave','evendefattwave'],2],
-           ['Even Atk/Def Wave 1',['evenattackdefensewave1','evenatkdefensewave1','evenattdefensewave1','evenattackdefencewave1','evenatkdefencewave1','evenattdefencewave1','evenattackdefwave1','evenatkdefwave1','evenattdefwave1','evendefenseattackwave1','evendefenseatkwave1','evendefenseattwave1','evendefenceattackwave1','evendefenceatkwave1','evendefenceattwave1','evendefattackwave1','evendefatkwave1','evendefattwave1'],2],
-           ['Even Atk/Res Wave 2',['evenattackresistancewave2','evenatkresistancewave2','evenattresistancewave2','evenattackreswave2','evenatkreswave2','evenattreswave2','evenresistanceattackwave2','evenresistanceatkwave2','evenresistanceattwave2','evenresattackwave2','evenresatkwave2','evenresattwave2','evenattackresistancewave','evenatkresistancewave','evenattresistancewave','evenattackreswave','evenatkreswave','evenattreswave','evenresistanceattackwave','evenresistanceatkwave','evenresistanceattwave','evenresattackwave','evenresatkwave','evenresattwave'],2],
-           ['Even Atk/Res Wave 1',['evenattackresistancewave1','evenatkresistancewave1','evenattresistancewave1','evenattackreswave1','evenatkreswave1','evenattreswave1','evenresistanceattackwave1','evenresistanceatkwave1','evenresistanceattwave1','evenresattackwave1','evenresatkwave1','evenresattwave1'],2],
-           ['Even Spd/Def Wave 2',['evenspeeddefensewave2','evenspddefensewave2','evenspeeddefencewave2','evenspddefencewave2','evenspeeddefwave2','evenspddefwave2','evendefensespeedwave2','evendefensespdwave2','evendefencespeedwave2','evendefencespdwave2','evendefspeedwave2','evendefspdwave2','evenspeeddefensewave','evenspddefensewave','evenspeeddefencewave','evenspddefencewave','evenspeeddefwave','evenspddefwave','evendefensespeedwave','evendefensespdwave','evendefencespeedwave','evendefencespdwave','evendefspeedwave','evendefspdwave'],2],
-           ['Even Spd/Def Wave 1',['evenspeeddefensewave1','evenspddefensewave1','evenspeeddefencewave1','evenspddefencewave1','evenspeeddefwave1','evenspddefwave1','evendefensespeedwave1','evendefensespdwave1','evendefencespeedwave1','evendefencespdwave1','evendefspeedwave1','evendefspdwave1'],2],
-           ['Even Spd/Res Wave 2',['evenspeedresistancewave2','evenspdresistancewave2','evenspeedreswave2','evenspdreswave2','evenresistancespeedwave2','evenresistancespdwave2','evenresspeedwave2','evenresspdwave2','evenspeedresistancewave','evenspdresistancewave','evenspeedreswave','evenspdreswave','evenresistancespeedwave','evenresistancespdwave','evenresspeedwave','evenresspdwave'],2],
-           ['Even Spd/Res Wave 1',['evenspeedresistancewave1','evenspdresistancewave1','evenspeedreswave1','evenspdreswave1','evenresistancespeedwave1','evenresistancespdwave1','evenresspeedwave1','evenresspdwave1'],2],
-           ['Even Def/Res Wave 2',['evendefenseresistancewave2','evendefenceresistancewave2','evendefresistancewave2','evendefensereswave2','evendefencereswave2','evendefreswave2','evenresistancedefensewave2','evenresistancedefencewave2','evenresistancedefwave2','evenresdefensewave2','evenresdefencewave2','evenresdefwave2','evendefenseresistancewave','evendefenceresistancewave','evendefresistancewave','evendefensereswave','evendefencereswave','evendefreswave','evenresistancedefensewave','evenresistancedefencewave','evenresistancedefwave','evenresdefensewave','evenresdefencewave','evenresdefwave'],2],
-           ['Even Def/Res Wave 1',['evendefenseresistancewave1','evendefenceresistancewave1','evendefresistancewave1','evendefensereswave1','evendefencereswave1','evendefreswave1','evenresistancedefensewave1','evenresistancedefencewave1','evenresistancedefwave1','evenresdefensewave1','evenresdefencewave1','evenresdefwave1'],2]]
+           ['Def/Res Smoke 1',['defenseresistancesmoke1','defenceresistancesmoke1','defresistancesmoke1','defenseressmoke1','defenceressmoke1','defressmoke1','resistancedefensesmoke1','resistancedefencesmoke1','resistancedefsmoke1','resdefensesmoke1','resdefencesmoke1','resdefsmoke1'],3]]
   for i in 0...lookout.length
     for i2 in 0...lookout[i][2]
       stat_skills_2.push(lookout[i][0]) if count_in(args,lookout[i][1])>i2
@@ -4497,6 +4504,46 @@ def split_list(event,list,headers,mode=0,x=true)
   return list
 end
 
+def collapse_skill_list(list)
+  list=list.uniq
+  newlist=[]
+  for i in 0...list.length
+    unless list[i].nil? || list[i][0][0,10]=="Falchion ("
+      if skill_include?(list,"#{list[i][0]}+")>=0
+        list[skill_include?(list,"#{list[i][0]}+")]=nil
+        list[i][0]="#{list[i][0]}(+)"
+      elsif list[i][0][list[i][0].length-1,1].to_i.to_s==list[i][0][list[i][0].length-1,1]
+        v=list[i][0][list[i][0].length-1,1].to_i
+        if skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+1}")>=0
+          list[skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+1}")]=nil
+          if skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+2}")>=0
+            list[skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+2}")]=nil
+            if skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+3}")>=0
+              list[skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+3}")]=nil
+              if skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+4}")>=0
+                list[skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+4}")]=nil
+                list[i][0]="#{list[i][0][0,list[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}"
+              else
+                list[i][0]="#{list[i][0][0,list[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}"
+              end
+            else
+              list[i][0]="#{list[i][0][0,list[i][0].length-1]}#{v}/#{v+1}/#{v+2}"
+            end
+          else
+            list[i][0]="#{list[i][0][0,list[i][0].length-1]}#{v}/#{v+1}"
+          end
+        end
+      end
+      newlist.push(list[i])
+    end
+  end
+  for i in 0...newlist.length
+    newlist[i][0]=newlist[i][0].gsub('Bladeblade','Laevatein')
+  end
+  newlist=newlist.sort {|a,b| a[0].downcase <=> b[0].downcase}
+  return newlist
+end
+
 def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   data_load()
   groups_load()
@@ -5035,42 +5082,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
       matches3.push(matches2[i]) if matches2[i][4].include?("Passive") || matches2[i][4]=="Seal"
     end
   end
-  matches3=matches3.uniq
-  matches4=[]
-  for i in 0...matches3.length
-    unless matches3[i].nil? || matches3[i][0][0,10]=="Falchion ("
-      if skill_include?(matches3,"#{matches3[i][0]}+")>=0
-        matches3[skill_include?(matches3,"#{matches3[i][0]}+")]=nil
-        matches3[i][0]="#{matches3[i][0]}(+)"
-      elsif matches3[i][0][matches3[i][0].length-1,1].to_i.to_s==matches3[i][0][matches3[i][0].length-1,1]
-        v=matches3[i][0][matches3[i][0].length-1,1].to_i
-        if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+1}")>=0
-          matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+1}")]=nil
-          if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+2}")>=0
-            matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+2}")]=nil
-            if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+3}")>=0
-              matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+3}")]=nil
-              if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+4}")>=0
-                matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+4}")]=nil
-                matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}"
-              else
-                matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}"
-              end
-            else
-              matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}"
-            end
-          else
-            matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}"
-          end
-        end
-      end
-      matches4.push(matches3[i])
-    end
-  end
-  for i in 0...matches4.length
-    matches4[i][0]=matches4[i][0].gsub('Bladeblade','Laevatein')
-  end
-  matches4=matches4.sort {|a,b| a[0].downcase <=> b[0].downcase}
+  matches4=collapse_skill_list(matches3)
   if skill_types.length<=0 && weapons==['Staff'] && assists==['Staff'] && specials==['Staff']
     # Staff skills are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Weapons','Assists','Specials','Passives'],4)
@@ -5123,31 +5135,10 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     end
   end
   data_load()
-  miniskills=@skills.map{|q| q}
-  microskills=[]
+  microskills=collapse_skill_list(@skills.map{|q| q})
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
-  for i in 0...miniskills.length
-    unless miniskills[i].nil?
-      if skill_include?(miniskills,"#{miniskills[i][0]}+")>=0
-        miniskills[skill_include?(miniskills,"#{miniskills[i][0]}+")]=nil
-        miniskills[i][0]="#{miniskills[i][0]}(+)"
-      elsif miniskills[i][0][miniskills[i][0].length-1,1].to_i.to_s==miniskills[i][0][miniskills[i][0].length-1,1]
-        v=miniskills[i][0][miniskills[i][0].length-1,1].to_i
-        if skill_include?(miniskills,"#{miniskills[i][0][0,miniskills[i][0].length-1]}#{v+1}")>=0
-          miniskills[skill_include?(miniskills,"#{miniskills[i][0][0,miniskills[i][0].length-1]}#{v+1}")]=nil
-          if skill_include?(miniskills,"#{miniskills[i][0][0,miniskills[i][0].length-1]}#{v+2}")>=0
-            miniskills[skill_include?(miniskills,"#{miniskills[i][0][0,miniskills[i][0].length-1]}#{v+2}")]=nil
-            miniskills[i][0]="#{miniskills[i][0][0,miniskills[i][0].length-1]}#{v}/#{v+1}/#{v+2}"
-          else
-            miniskills[i][0]="#{miniskills[i][0][0,miniskills[i][0].length-1]}#{v}/#{v+1}"
-          end
-        end
-      end
-      microskills.push(miniskills[i]) if has_any?(g, miniskills[i][13])
-    end
-  end
   matches4=matches4.reject{|q| !has_any?(g, q[13])}
   data_load()
   if matches4.length>=microskills.length && !(args.nil? || args.length.zero?) && !safe_to_spam?(event)
@@ -8018,42 +8009,9 @@ def learnable_skills(event,name,bot,weapon=nil)
     bbb.push(k[i]) if k3
   end
   g=get_markers(event)
-  matches4=[]
   matches3=@skills.reject{|q| !bbb.include?(q[5]) || !has_any?(g, q[13]) || (q[6]!='-' && !q[6].split(', ').include?(j[0])) || q[0].include?('Squad Ace ') || q[0].include?('Initiate Seal ') || (q[4].split(', ').include?('Passive(W)') && !q[4].split(', ').include?('Passive(S)') && !q[4].split(', ').include?('Seal') && q[10].map{|q2| q2.split(', ').length}.max<2)}
   q=@skills[@skills.length-1]
-  for i in 0...matches3.length
-    unless matches3[i].nil? || matches3[i][0][0,10]=="Falchion ("
-      if skill_include?(matches3,"#{matches3[i][0]}+")>=0
-        matches3[skill_include?(matches3,"#{matches3[i][0]}+")]=nil
-        matches3[i][0]="#{matches3[i][0]}(+)"
-      elsif matches3[i][0][matches3[i][0].length-1,1].to_i.to_s==matches3[i][0][matches3[i][0].length-1,1]
-        v=matches3[i][0][matches3[i][0].length-1,1].to_i
-        if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+1}")>=0
-          matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+1}")]=nil
-          if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+2}")>=0
-            matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+2}")]=nil
-            if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+3}")>=0
-              matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+3}")]=nil
-              if skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+4}")>=0
-                matches3[skill_include?(matches3,"#{matches3[i][0][0,matches3[i][0].length-1]}#{v+4}")]=nil
-                matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}"
-              else
-                matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}"
-              end
-            else
-              matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}/#{v+2}"
-            end
-          else
-            matches3[i][0]="#{matches3[i][0][0,matches3[i][0].length-1]}#{v}/#{v+1}"
-          end
-        end
-      end
-      matches4.push(matches3[i])
-    end
-  end
-  for i in 0...matches4.length
-    matches4[i][0]=matches4[i][0].gsub('Bladeblade','Laevatein')
-  end
+  matches4=collapse_skill_list(matches3)
   matches4=split_list(event,matches4,['Weapon','Assist','Special','Passive(A)','Passive(B)','Passive(C)','Passive(S)'],4)
   p1=[[]]
   p2=0
@@ -8281,13 +8239,83 @@ def banner_list(event,name,bot,weapon=nil)
 end
 
 def games_list(event,name,bot,weapon=nil)
-  name='Robin' if name==['Robin(M)','Robin(F)']
+  name='Robin' if name==['Robin(M)','Robin(F)'] || name==['Robin(F)','Robin(M)']
+  name='Azura' if name==['Azura(Performing)','Azura(Winter)']
+  name='Lucina' if name==['Lucina(Spring)','Lucina(Brave)']
+  name='Lyn' if name==['Lyn(Bride)','Lyn(Brave)'] || name==['Lyn(Brave)','Lyn(Wind)'] || name==['Lyn(Bride)','Lyn(Valentines)']
+  name=name[0].gsub('(M)','(F)') if name.is_a?(Array) && name.length==2 && name[0].gsub('(M)','').gsub('(F)','')!=name[0] && name[0].gsub('(M)','').gsub('(F)','')==name[0].gsub('(F)','').gsub('(M)','')
   if name.is_a?(Array)
     for i in 0...name.length
       games_list(event,name[i],bot)
     end
     return nil
   end
+  data_load()
+  args=sever(event.message.text.downcase).split(" ")
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  name=find_name_in_string(event)
+  name='grima' if name.nil? && event.message.text.downcase.gsub(' ','').include?('grima')
+  j=find_unit(name,event)
+  name='Robin(M)(Fallen)' if name.downcase.include?('grima') && j<0
+  j=find_unit(name,event)
+  if j<0
+    event.respond "No unit was included"
+    return nil
+  end
+  rg=@units[j][11].reject{|q| q[0,3]=="(a)"}
+  ag=@units[j][11].reject{|q| q[0,3]!="(a)"}.map{|q| q[3,q.length-3]}
+  g=get_games_list(rg)
+  ga=get_games_list(ag,false)
+  mu=(event.message.text.downcase.include?("mathoo's"))
+  xcolor=unit_color(event,j,0,mu)
+  pic=pick_thumbnail(event,j,bot)
+  g2="#{g[0]}"
+  g[0]=nil
+  g.compact!
+  name="#{@units[j][0].gsub('Lavatain','Laevatein')}"
+  if ["Robin(F)","Robin(M)"].include?(@units[j][0])
+    pic="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png"
+    name="Robin"
+    xcolor=avg_color([[39,100,222],[9,170,36]])
+  elsif ["Morgan(F)","Morgan(M)"].include?(@units[j][0])
+    pic="https://orig00.deviantart.net/97f6/f/2018/068/a/c/morgan_by_rot8erconex-dc5drdn.png"
+    name="Morgan"
+    xcolor=avg_color([[39,100,222],[226,33,65]])
+  elsif ["Kana(F)","Kana(M)"].include?(@units[j][0])
+    name="Kana"
+    xcolor=avg_color([[39,100,222],[9,170,36]])
+  elsif ["Robin(F)(Fallen)","Robin(M)(Fallen)"].include?(@units[j][0])
+    pic="https://orig00.deviantart.net/33ea/f/2018/104/2/7/grimleal_by_rot8erconex-dc8svax.png"
+    name="Grima: Robin(Fallen)"
+    xcolor=avg_color([[9,170,36],[222,95,9]])
+  elsif ["Corrin(F)","Corrin(M)"].include?(@units[j][0])
+    pic="https://orig00.deviantart.net/d8ce/f/2018/051/1/a/corrin_by_rot8erconex-dc3tj34.png"
+    name="Corrin"
+    xcolor=avg_color([[226,33,65],[39,100,222]])
+  elsif "Chrom(Branded)"==@units[j][0] && !args.join('').downcase.include?('brand') && !args.join('').downcase.include?('exalt') && !args.join('').downcase.include?('sealed') && !args.join('').downcase.include?('branded') && !args.join('').downcase.include?('exalted') && !args.join('').downcase.include?('knight')
+    pic=pick_thumbnail(event,find_unit("Chrom(Launch)",event),bot)
+    name="Chrom(Launch)"
+  elsif "Tiki(Adult)"==@units[j][0] && !args.join('').downcase.gsub('games','gmes').include?('a')
+    pic="https://orig00.deviantart.net/6c50/f/2018/051/9/e/tiki_by_rot8erconex-dc3tkzq.png"
+    name="Tiki"
+    rx=@units[find_unit("Tiki(Young)",event)][11].reject{|q| q[0,3]=="(a)"}
+    ax=@units[find_unit("Tiki(Young)",event)][11].reject{|q| q[0,3]!="(a)"}.map{|q| q[3,q.length-3]}
+    x=get_games_list(rx)
+    xa=get_games_list(ax,false)
+    g2="#{x[0]}\n#{g2}"
+    x[0]=nil
+    x.compact!
+    for i in 0...g.length
+      x.push(g[i])
+    end
+    for i in 0...ga.length
+      xa.push(ga[i])
+    end
+    g=x.uniq
+    ga=xa.uniq
+  end
+  ga=ga.reject{|q| q.downcase=="no games"}
+  create_embed(event,"__#{"Mathoo's " if mu}**#{name}**__","#{"**Credit in FEH**\n" unless g2=="No games"}#{g2}#{"\n\n**Other games**\n#{g.join("\n")}" unless g.length<1}#{"\n\n**#{"Male a" if ["Robin(F)","Robin(M)"].include?(@units[j][0])}#{"A" unless ["Robin(F)","Robin(M)"].include?(@units[j][0])}lso appears via Amiibo functionality in**\n#{ga.join("\n")}" unless ga.length<1}",xcolor,nil,pic)
 end
 
 bot.command([:banners, :banner]) do |event, *args|
@@ -9272,86 +9300,12 @@ end
 
 bot.command(:games) do |event, *args|
   return nil if overlap_prevent(event)
-  data_load()
-  args=sever(event.message.text.downcase).split(" ")
-  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
-  name=find_name_in_string(event)
-  j=find_unit(name,event)
-  if j<0
-    if args.join('').downcase =~ /ax(e|)(-|)(z|)ura/
-      j=find_unit("Azura",event)
-    elsif args.join('').downcase =~ /blu(e|)cina/
-      j=find_unit("Lucina",event)
-    elsif args.join('').downcase =~ /b(r|)lyn/
-      j=find_unit("Lyn",event)
-    elsif args.join('').downcase =~ /grima/
-      j=find_unit("Robin(M)(Fallen)",event)
-    end
-  elsif args.join('').downcase =~ /(robin|reflet|daraen)/ && args.join('').downcase =~ /(fallen|evil|alter)/
-    j=find_unit("Robin(M)(Fallen)",event)
-  elsif args.join('').downcase =~ /(robin|reflet|daraen)/ && !["Robin(F)(Fallen)","Robin(M)(Fallen)"].include?(@units[j][0])
-    j=find_unit("Robin(M)",event)
-  elsif args.join('').downcase =~ /(robin|reflet|daraen)/
-    j=find_unit("Robin(M)(Fallen)",event)
-  end
-  if j<0
+  if args.nil? || args.length<1
     event.respond "No unit was included"
     return nil
   end
-  rg=@units[j][11].reject{|q| q[0,3]=="(a)"}
-  ag=@units[j][11].reject{|q| q[0,3]!="(a)"}.map{|q| q[3,q.length-3]}
-  g=get_games_list(rg)
-  ga=get_games_list(ag,false)
-  mu=(event.message.text.downcase.include?("mathoo's"))
-  xcolor=unit_color(event,j,0,mu)
-  pic=pick_thumbnail(event,j,bot)
-  g2="#{g[0]}"
-  g[0]=nil
-  g.compact!
-  name="#{@units[j][0].gsub('Lavatain','Laevatein')}"
-  if ["Robin(F)","Robin(M)"].include?(@units[j][0])
-    pic="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png"
-    name="Robin"
-    xcolor=avg_color([[39,100,222],[9,170,36]])
-  elsif ["Morgan(F)","Morgan(M)"].include?(@units[j][0])
-    pic="https://orig00.deviantart.net/97f6/f/2018/068/a/c/morgan_by_rot8erconex-dc5drdn.png"
-    name="Morgan"
-    xcolor=avg_color([[39,100,222],[226,33,65]])
-  elsif ["Kana(F)","Kana(M)"].include?(@units[j][0])
-    name="Kana"
-    xcolor=avg_color([[39,100,222],[9,170,36]])
-  elsif ["Robin(F)(Fallen)","Robin(M)(Fallen)"].include?(@units[j][0])
-    pic="https://orig00.deviantart.net/33ea/f/2018/104/2/7/grimleal_by_rot8erconex-dc8svax.png"
-    name="Grima: Robin(Fallen)"
-    xcolor=avg_color([[9,170,36],[222,95,9]])
-  elsif ["Corrin(F)","Corrin(M)"].include?(@units[j][0])
-    pic="https://orig00.deviantart.net/d8ce/f/2018/051/1/a/corrin_by_rot8erconex-dc3tj34.png"
-    name="Corrin"
-    xcolor=avg_color([[226,33,65],[39,100,222]])
-  elsif "Chrom(Branded)"==@units[j][0] && !args.join('').downcase.include?('brand') && !args.join('').downcase.include?('exalt') && !args.join('').downcase.include?('sealed') && !args.join('').downcase.include?('branded') && !args.join('').downcase.include?('exalted') && !args.join('').downcase.include?('knight')
-    pic=pick_thumbnail(event,find_unit("Chrom(Launch)",event),bot)
-    name="Chrom(Launch)"
-  elsif "Tiki(Adult)"==@units[j][0] && !args.join('').downcase.gsub('games','gmes').include?('a')
-    pic="https://orig00.deviantart.net/6c50/f/2018/051/9/e/tiki_by_rot8erconex-dc3tkzq.png"
-    name="Tiki"
-    rx=@units[find_unit("Tiki(Young)",event)][11].reject{|q| q[0,3]=="(a)"}
-    ax=@units[find_unit("Tiki(Young)",event)][11].reject{|q| q[0,3]!="(a)"}.map{|q| q[3,q.length-3]}
-    x=get_games_list(rx)
-    xa=get_games_list(ax,false)
-    g2="#{x[0]}\n#{g2}"
-    x[0]=nil
-    x.compact!
-    for i in 0...g.length
-      x.push(g[i])
-    end
-    for i in 0...ga.length
-      xa.push(ga[i])
-    end
-    g=x.uniq
-    ga=xa.uniq
-  end
-  ga=ga.reject{|q| q.downcase=="no games"}
-  create_embed(event,"__#{"Mathoo's " if mu}**#{name}**__","#{"**Credit in FEH**\n" unless g2=="No games"}#{g2}#{"\n\n**Other games**\n#{g.join("\n")}" unless g.length<1}#{"\n\n**#{"Male a" if ["Robin(F)","Robin(M)"].include?(@units[j][0])}#{"A" unless ["Robin(F)","Robin(M)"].include?(@units[j][0])}lso appears via Amiibo functionality in**\n#{ga.join("\n")}" unless ga.length<1}",xcolor,nil,pic)
+  parse_function(:games_list,event,args,bot)
+  return nil
 end
 
 bot.command([:bst, :BST]) do |event, *args|
