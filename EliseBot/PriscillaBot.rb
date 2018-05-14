@@ -42,7 +42,7 @@ bot.gateway.check_heartbeat_acks = false
 @dev_units=[]
 @stored_event=nil
 @announcement=''
-@zero_by_four=[0,0]
+@zero_by_four=[0,0,0,'']
 @headpats=[0,0,0]
 @summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,
                  341729526767681549,393775173095915521,380013135576432651]
@@ -535,9 +535,9 @@ def safe_to_spam?(event) # this function determines whether or not it is safe to
   return true if [443172595580534784,443181099494146068].include?(event.server.id) # it is safe to spam in the emoji servers
   return true if @shardizard==4 # it is safe to spam during debugging
   return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam') # it is safe to spam in any bot spam channel
-  return true if event.channel.name.downcase.include?('elisebot') # it is safe to spam in channels designed specifically for EliseBot
-  return true if event.channel.name.downcase.include?('elise-bot') # it is safe to spam in channels designed specifically for EliseBot
-  return true if event.channel.name.downcase.include?('elise_bot') # it is safe to spam in channels designed specifically for EliseBot
+  return true if event.channel.name.downcase.include?('elisebot')  # it is safe to spam in channels designed specifically for EliseBot
+  return true if event.channel.name.downcase.include?('elise-bot')
+  return true if event.channel.name.downcase.include?('elise_bot')
   return false
 end
 
@@ -549,6 +549,20 @@ def overlap_prevent(event)
     return @shardizard == 4
   elsif event.server.id==443181099494146068 || event.server.id==443704357335203840 # The Misc Emoji servers are in shards I already have access to, so I don't care
     return @shardizard != 4
+  elsif event.server.id==332249772180111360 # two identical commands cannot be used in the same minute in the FEHKeeper server
+    canpost=true
+    post=Time.now
+    if (post - @zero_by_four[2]).to_f > 60
+      @zero_by_four[2]=post
+    else
+      canpost=false
+    end
+    s=event.message.text.downcase
+    s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
+    s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+    return false if !canpost && s==@zero_by_four[3]
+    @zero_by_four[3]=s
+    return true
   end
   return false
 end
@@ -4740,6 +4754,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     games.push('FEW') if ['few','warriors'].include?(args[i].downcase)
     games.push('SSBM') if ['ssbm','melee'].include?(args[i].downcase)
     games.push('SSBB') if ['ssbb','brawl'].include?(args[i].downcase)
+    games.push('SSBProM') if ['ssbprom','projectm','promelee'].include?(args[i].downcase)
     games.push('SSB4') if ['ssb4','sm4sh','smish'].include?(args[i].downcase)
     games.push('PXZ2') if ['projextxzone','projextxzone2','xzone','x-zone'].include?(args[i].downcase)
     games.push('STEAM') if ['codename','steam','s.t.e.a.m','codenamesteam','codename:steam','codenames.t.e.a.m.','codename:s.t.e.a.m.'].include?(args[i].downcase)
@@ -5326,7 +5341,7 @@ def display_units(event, mode)
         end
       end
       for i in 0...p1.length
-        wpn1=p1[i].map{|q| @units[find_unit(q.gsub('~~',''),event,false,true)][1]}
+        wpn1=p1[i].map{|q| @units[find_unit(q.gsub('Laevatein','Lavatain').gsub('~~',''),event,false,true)][1]}
         h="."
         if wpn1.uniq.length==1
           # blade type
@@ -5755,6 +5770,7 @@ def get_games_list(arr,includefeh=true)
     g.push("FEW - *Fire Emblem Warriors*") if arr[i]=="FEW"
     g.push("*Super Smash Bros.: Melee*") if arr[i]=="SSBM"
     g.push("*Super Smash Bros.: Brawl*") if arr[i]=="SSBB"
+    g.push("*Project: M*") if arr[i]=="SSBProM"
     g.push("*Super Smash Bros. for 3DS and Wii U*") if arr[i]=="SSB4"
     g.push("*Project X Zone 2*") if arr[i]=="PXZ2"
     g.push("*Codename: S.T.E.A.M.*") if arr[i]=="STEAM"
@@ -11328,101 +11344,6 @@ bot.command(:leaveserver, from: 167657750971547648) do |event, server_id| # forc
   return nil
 end
 
-bot.command(:snagstats) do |event, f| # snags the number of members in each of the servers Elise is in
-  return nil if overlap_prevent(event)
-  nicknames_load()
-  groups_load()
-  g=get_markers(event)
-  data_load()
-  metadata_load()
-  f='' if f.nil?
-  bot.servers.values(&:members)
-  k=bot.servers.length
-  k-=3 if @shardizard==4 # Debug shard shares the three emote servers with the main account
-  @server_data[0][@shardizard]=k
-  @server_data[1][@shardizard]=bot.users.size
-  metadata_save()
-  all_units=@units.reject{|q| !has_any?(g, q[12])}
-  all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
-  legal_units=@units.reject{|q| !q[12].nil?}
-  all_skills=@skills.reject{|q| !has_any?(g, q[13])}
-  all_skills=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
-  legal_skills=@skills.reject{|q| !q[13].nil?}
-  b=[]
-  File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
-    l=line.gsub(' ','').gsub("\n",'')
-    b.push(l) unless l.length<=0
-  end
-  unless event.user.id==167657750971547648 && !f.nil? && @shardizard<4
-    bot.servers.values(&:members)
-    event << "I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members."
-    event << "This shard is in #{longFormattedNumber(@server_data[0][@shardizard])} server#{"s" if @server_data[0][@shardizard]!=1}, reaching #{longFormattedNumber(@server_data[1][@shardizard])} unique members."
-    event << ''
-    event << "There are #{longFormattedNumber(legal_units.length)}#{" (#{longFormattedNumber(all_units.length)})" unless legal_units.length==all_units.length} units#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
-    if safe_to_spam?(event) || f.downcase=="all"
-      event << "#{longFormattedNumber(legal_units.reject{|q| !q[9].include?('p')}.length)}#{" (#{longFormattedNumber(all_units.reject{|q| !q[9].include?('p')}.length)})" unless legal_units.reject{|q| !q[9].include?('p')}.length==all_units.reject{|q| !q[9].include?('p')}.length} summonable units"
-      event << "#{longFormattedNumber(legal_units.reject{|q| !q[9].include?('g')}.length)}#{" (#{longFormattedNumber(all_units.reject{|q| !q[9].include?('g')}.length)})" unless legal_units.reject{|q| !q[9].include?('g')}.length==all_units.reject{|q| !q[9].include?('g')}.length} Grand Hero Battle reward units"
-      event << "#{longFormattedNumber(legal_units.reject{|q| !q[9].include?('t')}.length)}#{" (#{longFormattedNumber(all_units.reject{|q| !q[9].include?('t')}.length)})" unless legal_units.reject{|q| !q[9].include?('t')}.length==all_units.reject{|q| !q[9].include?('t')}.length} Tempest Trials reward units"
-      event << "#{longFormattedNumber(legal_units.reject{|q| !q[9].include?('s') || q[2][0].length>1}.length)}#{" (#{longFormattedNumber(all_units.reject{|q| !q[9].include?('s') || q[2][0].length>1}.length)})" unless legal_units.reject{|q| !q[9].include?('s') || q[2][0].length>1}.length==all_units.reject{|q| !q[9].include?('s') || q[2][0].length>1}.length} seasonal units"
-      event << "#{longFormattedNumber(legal_units.reject{|q| q[2][0].length<=1}.length)}#{" (#{longFormattedNumber(all_units.reject{|q| q[2][0].length<=1}.length)})" unless legal_units.reject{|q| q[2][0].length<=1}.length==all_units.reject{|q| q[2][0].length<=1}.length} legendary units"
-      event << ''
-    end
-    event << "There are #{longFormattedNumber(legal_skills.length)}#{" (#{longFormattedNumber(all_skills.length)})" unless legal_skills.length==all_skills.length} skills#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
-    if safe_to_spam?(event) || f.downcase=="all"
-      event << "#{longFormattedNumber(legal_skills.reject{|q| q[4]!='Weapon'}.length)}#{" (#{longFormattedNumber(all_skills.reject{|q| q[4]!='Weapon'}.length)})" unless legal_skills.reject{|q| q[4]!='Weapon'}.length==all_skills.reject{|q| q[4]!='Weapon'}.length} Weapons"
-      event << "#{longFormattedNumber(legal_skills.reject{|q| q[4]!='Assist'}.length)}#{" (#{longFormattedNumber(all_skills.reject{|q| q[4]!='Assist'}.length)})" unless legal_skills.reject{|q| q[4]!='Assist'}.length==all_skills.reject{|q| q[4]!='Assist'}.length} Assists"
-      event << "#{longFormattedNumber(legal_skills.reject{|q| q[4]!='Special'}.length)}#{" (#{longFormattedNumber(all_skills.reject{|q| q[4]!='Special'}.length)})" unless legal_skills.reject{|q| q[4]!='Special'}.length==all_skills.reject{|q| q[4]!='Special'}.length} Specials"
-      event << "#{longFormattedNumber(legal_skills.reject{|q| ['Weapon','Assist','Special'].include?(q[4])}.length)}#{" (#{longFormattedNumber(all_skills.reject{|q| ['Weapon','Assist','Special'].include?(q[4])}.length)})" unless legal_skills.reject{|q| ['Weapon','Assist','Special'].include?(q[4])}.length==all_skills.reject{|q| ['Weapon','Assist','Special'].include?(q[4])}.length} Passives"
-    end
-    event << ''
-    event << "There are #{longFormattedNumber(@aliases.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@aliases.reject{|q| q[2].nil?}.length)} server-specific [single-unit] aliases."
-    event << "There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases."
-    event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups."
-    event << ''
-    event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
-    event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
-    return nil
-  end
-  if f.to_i.to_s==f
-    srv=(bot.server(f.to_i) rescue nil)
-    if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
-      s2="I am not in that server."
-    else
-      s2="__**#{srv.name}** (#{srv.id})__\n*Owner:* #{srv.owner.distinct} (#{srv.owner.id})\n*Shard:* #{(srv.id >> 22) % 4}\n*My nickname:* #{bot.user(312451658908958721).on(srv.id).display_name}"
-    end
-    event.respond s2
-    return nil
-  end
-  bot.servers.values(&:members)
-  event << "I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members."
-  event << "This shard is in #{longFormattedNumber(bot.servers.length)} servers, reaching #{longFormattedNumber(bot.users.size)} unique members."
-  event << ''
-  event << "There are #{longFormattedNumber(legal_units.length)}#{" (#{longFormattedNumber(all_units.length)})" unless legal_units.length==all_units.length} units#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
-  if safe_to_spam?(event) || f.downcase=="all"
-    event << "#{longFormattedNumber(legal_units.reject{|q| !q[9].include?('p')}.length)}#{" (#{longFormattedNumber(all_units.reject{|q| !q[9].include?('p')}.length)})" unless legal_units.reject{|q| !q[9].include?('p')}.length==all_units.reject{|q| !q[9].include?('p')}.length} summonable units"
-    event << "#{longFormattedNumber(legal_units.reject{|q| !q[9].include?('g')}.length)}#{" (#{longFormattedNumber(all_units.reject{|q| !q[9].include?('g')}.length)})" unless legal_units.reject{|q| !q[9].include?('g')}.length==all_units.reject{|q| !q[9].include?('g')}.length} Grand Hero Battle reward units"
-    event << "#{longFormattedNumber(legal_units.reject{|q| !q[9].include?('t')}.length)}#{" (#{longFormattedNumber(all_units.reject{|q| !q[9].include?('t')}.length)})" unless legal_units.reject{|q| !q[9].include?('t')}.length==all_units.reject{|q| !q[9].include?('t')}.length} Tempest Trials reward units"
-    event << "#{longFormattedNumber(legal_units.reject{|q| !q[9].include?('s') || q[2][0].length>1}.length)}#{" (#{longFormattedNumber(all_units.reject{|q| !q[9].include?('s') || q[2][0].length>1}.length)})" unless legal_units.reject{|q| !q[9].include?('s') || q[2][0].length>1}.length==all_units.reject{|q| !q[9].include?('s') || q[2][0].length>1}.length} seasonal units"
-    event << "#{longFormattedNumber(legal_units.reject{|q| q[2][0].length<=1}.length)}#{" (#{longFormattedNumber(all_units.reject{|q| q[2][0].length<=1}.length)})" unless legal_units.reject{|q| q[2][0].length<=1}.length==all_units.reject{|q| q[2][0].length<=1}.length} legendary units"
-      event << ''
-  end
-  event << "There are #{longFormattedNumber(legal_skills.length)}#{" (#{longFormattedNumber(all_skills.length)})" unless legal_skills.length==all_skills.length} skills#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
-  if safe_to_spam?(event) || f.downcase=="all"
-    event << "#{longFormattedNumber(legal_skills.reject{|q| q[4]!='Weapon'}.length)}#{" (#{longFormattedNumber(all_skills.reject{|q| q[4]!='Weapon'}.length)})" unless legal_skills.reject{|q| q[4]!='Weapon'}.length==all_skills.reject{|q| q[4]!='Weapon'}.length} Weapons"
-    event << "#{longFormattedNumber(legal_skills.reject{|q| q[4]!='Assist'}.length)}#{" (#{longFormattedNumber(all_skills.reject{|q| q[4]!='Assist'}.length)})" unless legal_skills.reject{|q| q[4]!='Assist'}.length==all_skills.reject{|q| q[4]!='Assist'}.length} Assists"
-    event << "#{longFormattedNumber(legal_skills.reject{|q| q[4]!='Special'}.length)}#{" (#{longFormattedNumber(all_skills.reject{|q| q[4]!='Special'}.length)})" unless legal_skills.reject{|q| q[4]!='Special'}.length==all_skills.reject{|q| q[4]!='Special'}.length} Specials"
-    event << "#{longFormattedNumber(legal_skills.reject{|q| ['Weapon','Assist','Special'].include?(q[4])}.length)}#{" (#{longFormattedNumber(all_skills.reject{|q| ['Weapon','Assist','Special'].include?(q[4])}.length)})" unless legal_skills.reject{|q| ['Weapon','Assist','Special'].include?(q[4])}.length==all_skills.reject{|q| ['Weapon','Assist','Special'].include?(q[4])}.length} Passives"
-  end
-  event << ''
-  event << "There are #{longFormattedNumber(@aliases.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@aliases.reject{|q| q[2].nil?}.length)} server-specific [single-unit] aliases."
-  event << "There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases."
-  event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups."
-  event << ''
-  event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
-  event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
-  return nil
-end
-
 bot.command(:shard) do |event, i|
   return nil if overlap_prevent(event)
   if i.to_i.to_s==i && i.to_i.is_a?(Bignum) && @shardizard != 4
@@ -11927,6 +11848,231 @@ bot.command(:snagchannels, from: 167657750971547648) do |event, server_id|
   event.respond msg
 end
 
+def filler(list1,list2,n,m=-1,key='',type=0,mode="||",mode2="")
+  return "#{longFormattedNumber(list1.length)}#{" (#{longFormattedNumber(list2.length)})" unless list1.length==list2.length}" if n==-1
+  if n.is_a?(Array)
+    y=""
+    for i in 0...key.length
+      key[i]="'#{key[i]}'" if key[i].is_a?(String)
+    end
+    type=[type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type] unless type.is_a?(Array)
+    for i in 0...n.length
+      x="q[#{n[i]}][#{m[i]}]"
+      x="q[#{n[i]}].split(', ')[0]" if m[i]==-2
+      x="q[#{n[i]}]" if m[i]==-1
+      x="#{x}.split(', ').include?(#{key[i]})" if type[i]==-4
+      x="!#{key[i]}.include?(#{x})" if type[i]==-3
+      x="#{x}.length>=#{0-key[i]}" if type[i]==-2 && key[i]<0
+      x="#{x}.length>#{key[i]}" if type[i]==-2
+      x="#{x}.include?(#{key[i]})" if type[i]==-1
+      x="!#{x}.split(', ').include?(#{key[i]})" if type[i]==4
+      x="#{key[i]}.include?(#{x})" if type[i]==3
+      x="#{x}.length<=#{0-key[i]}" if type[i]==2 && key[i]<0
+      x="#{x}.length<#{key[i]}" if type[i]==2
+      x="!#{x}.include?(#{key[i]})" if type[i]==1
+      x="#{x}==#{key[i]}" if type[i]==10
+      x="#{x}!=#{key[i]}" if type[i]==0
+      if y.length>=1
+        y="#{y} #{mode} #{x}"
+      else
+        y="#{x}"
+      end
+    end
+    y="#{mode2}(#{y})"
+    return "#{longFormattedNumber(list1.reject{|q| eval(y)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(y)}.length)})" unless list1.reject{|q| eval(y)}.length==list2.reject{|q| eval(y)}.length}"
+  elsif m.is_a?(Array)
+    y=""
+    for i in 0...key.length
+      key[i]="'#{key[i]}'" if key[i].is_a?(String)
+    end
+    type=[type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type] unless type.is_a?(Array)
+    for i in 0...m.length
+      x="q[#{n}][#{m[i]}]"
+      x="q[#{n[i]}].split(', ')[0]" if m[i]==-2
+      x="q[#{n}]" if m[i]==-1
+      x="has_any?(#{x},#{key[i]})" if type[i]==-4
+      x="!#{key[i]}.include?(#{x})" if type[i]==-3
+      x="#{x}.length>=#{0-key[i]}" if type[i]==-2 && key[i]<0
+      x="#{x}.length>#{key[i]}" if type[i]==-2
+      x="#{x}.include?(#{key[i]})" if type[i]==-1
+      x="!has_any?(#{x},#{key[i]})" if type[i]==4
+      x="#{key[i]}.include?(#{x})" if type[i]==3
+      x="#{x}.length<=#{0-key[i]}" if type[i]==2 && key[i]<0
+      x="#{x}.length<#{key[i]}" if type[i]==2
+      x="!#{x}.include?(#{key[i]})" if type[i]==1
+      x="#{x}==#{key[i]}" if type[i]==10
+      x="#{x}!=#{key[i]}" if type[i]==0
+      if y.length>=1
+        y="#{y} #{mode} #{x}"
+      else
+        y="#{x}"
+      end
+    end
+    y="#{mode2}(#{y})"
+    return "#{longFormattedNumber(list1.reject{|q| eval(y)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(y)}.length)})" unless list1.reject{|q| eval(y)}.length==list2.reject{|q| eval(y)}.length}"
+  end
+  x="q[#{n}][#{m}]"
+  x="q[#{n}].split(', ')[0]" if m==-2
+  x="q[#{n}]" if m==-1
+  return "#{longFormattedNumber(list1.reject{|q| !has_any?(eval(x),key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| !has_any?(eval(x),key)}.length)})" unless list1.reject{|q| !has_any?(eval(x),key)}.length==list2.reject{|q| !has_any?(eval(x),key)}.length}" if type==4
+  return "#{longFormattedNumber(list1.reject{|q| has_any?(eval(x),key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| has_any?(eval(x),key)}.length)})" unless list1.reject{|q| has_any?(eval(x),key)}.length==list2.reject{|q| has_any?(eval(x),key)}.length}" if type==-4
+  return "#{longFormattedNumber(list1.reject{|q| key.include?(eval(x))}.length)}#{" (#{longFormattedNumber(list2.reject{|q| key.include?(eval(x))}.length)})" unless list1.reject{|q| key.include?(eval(x))}.length==list2.reject{|q| key.include?(eval(x))}.length}" if type==3
+  return "#{longFormattedNumber(list1.reject{|q| !key.include?(eval(x))}.length)}#{" (#{longFormattedNumber(list2.reject{|q| !key.include?(eval(x))}.length)})" unless list1.reject{|q| !key.include?(eval(x))}.length==list2.reject{|q| !key.include?(eval(x))}.length}" if type==-3
+  return "#{longFormattedNumber(list1.reject{|q| eval(x).length<=0-key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length<=0-key}.length)})" unless list1.reject{|q| eval(x).length<=0-key}.length==list2.reject{|q| eval(x).length<=0-key}.length}" if type==2 && key<0
+  return "#{longFormattedNumber(list1.reject{|q| eval(x).length<key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length<key}.length)})" unless list1.reject{|q| eval(x).length<key}.length==list2.reject{|q| eval(x).length<key}.length}" if type==2
+  return "#{longFormattedNumber(list1.reject{|q| eval(x).length>=0-key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length>=0-key}.length)})" unless list1.reject{|q| eval(x).length>=0-key}.length==list2.reject{|q| eval(x).length>=0-key}.length}" if type==-2 && key<0
+  return "#{longFormattedNumber(list1.reject{|q| eval(x).length>key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length>key}.length)})" unless list1.reject{|q| eval(x).length>key}.length==list2.reject{|q| eval(x).length>key}.length}" if type==-2
+  return "#{longFormattedNumber(list1.reject{|q| !eval(x).include?(key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| !eval(x).include?(key)}.length)})" unless list1.reject{|q| !eval(x).include?(key)}.length==list2.reject{|q| !eval(x).include?(key)}.length}" if type==1
+  return "#{longFormattedNumber(list1.reject{|q| eval(x).include?(key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).include?(key)}.length)})" unless list1.reject{|q| eval(x).include?(key)}.length==list2.reject{|q| eval(x).include?(key)}.length}" if type==-1
+  return "#{longFormattedNumber(list1.reject{|q| eval(x)==key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x)==key}.length)})" unless list1.reject{|q| eval(x)==key}.length==list2.reject{|q| eval(x)==key}.length}" if type==10
+  return "#{longFormattedNumber(list1.reject{|q| eval(x)!=key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x)!=key}.length)})" unless list1.reject{|q| eval(x)!=key}.length==list2.reject{|q| eval(x)!=key}.length}"
+end
+
+bot.command(:snagstats) do |event, f, f2| # snags the number of members in each of the servers Elise is in
+  return nil if overlap_prevent(event)
+  nicknames_load()
+  groups_load()
+  g=get_markers(event)
+  data_load()
+  metadata_load()
+  f='' if f.nil?
+  bot.servers.values(&:members)
+  k=bot.servers.length
+  k-=3 if @shardizard==4 # Debug shard shares the three emote servers with the main account
+  @server_data[0][@shardizard]=k
+  @server_data[1][@shardizard]=bot.users.size
+  metadata_save()
+  all_units=@units.reject{|q| !has_any?(g, q[12])}
+  all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
+  legal_units=@units.reject{|q| !q[12].nil?}
+  all_skills=@skills.reject{|q| !has_any?(g, q[13])}
+  all_skills=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
+  legal_skills=@skills.reject{|q| !q[13].nil?}
+  b=[]
+  File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
+    l=line.gsub(' ','').gsub("\n",'')
+    b.push(l) unless l.length<=0
+  end
+  if ["units","characters","unit","character","charas","chara","chars","char"].include?(f.downcase)
+    event << "There are #{filler(legal_units,all_units,-1)} units, including:"
+    event << ''
+    event << "#{filler(legal_units,all_units,9,-1,'p',1)} summonable units"
+    event << "#{filler(legal_units,all_units,9,-1,'g',1)} Grand Hero Battle reward units"
+    event << "#{filler(legal_units,all_units,9,-1,'t',1)} Tempest Trials reward units"
+    event << "#{filler(legal_units,all_units,[9,2],[-1,0],['s',2],[1,-2])} seasonal units"
+    event << "#{filler(legal_units,all_units,2,0,2,2)} legendary units"
+    event << "#{filler(legal_units,all_units,9,-1,'-',1)} unobtainable units"
+    event << ''
+    event << "#{filler(legal_units,all_units,1,0,'Red')} red units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Red','p'],[0,1])} in the main summon pool"
+    event << "#{filler(legal_units,all_units,1,0,'Blue')} blue units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Blue','p'],[0,1])} in the main summon pool"
+    event << "#{filler(legal_units,all_units,1,0,'Green')} green units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Green','p'],[0,1])} in the main summon pool"
+    event << "#{filler(legal_units,all_units,1,0,'Colorless')} colorless units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Colorless','p'],[0,1])} in the main summon pool"
+    event << ''
+    event << "#{filler(legal_units,all_units,1,1,'Blade')} blade users - 	#{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, and #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes"
+    event << "#{filler(legal_units,all_units,1,1,'Tome')} tome users - 	#{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, and #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green"
+    event << "#{filler(legal_units,all_units,1,1,'Dragon')} dragon units"
+    event << "#{filler(legal_units,all_units,1,1,'Bow')} bow users"
+    event << "#{filler(legal_units,all_units,1,1,'Dagger')} dagger users"
+    event << "#{filler(legal_units,all_units,1,1,'Healer')} staff users"
+    event << "#{filler(legal_units,all_units,1,1,'Beast')} beast units"
+    event << ''
+    event << "#{filler(legal_units,all_units,3,-1,'Infantry')} infantry units"
+    event << "#{filler(legal_units,all_units,3,-1,'Cavalry')} cavalry units"
+    event << "#{filler(legal_units,all_units,3,-1,'Flier')} flying units"
+    event << "#{filler(legal_units,all_units,3,-1,'Armor')} armored units"
+    if safe_to_spam?(event) || f2.downcase=="all"
+      event << ''
+      event << "#{filler(legal_units,all_units,11,-1,'FE1',1)} units from *FE1*,	#{filler(legal_units,all_units,11,0,'FE1')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE2',1)} units from *FE2*,	#{filler(legal_units,all_units,11,0,'FE2')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE3',1)} units from *FE3*,	#{filler(legal_units,all_units,11,0,'FE3')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE4',1)} units from *FE4*,	#{filler(legal_units,all_units,11,0,'FE4')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE5',1)} units from *FE5*,	#{filler(legal_units,all_units,11,0,'FE5')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE6',1)} units from *FE6*,	#{filler(legal_units,all_units,11,0,'FE6')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE7',1)} units from *FE7*,	#{filler(legal_units,all_units,11,0,'FE7')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE8',1)} units from *FE8*,	#{filler(legal_units,all_units,11,0,'FE8')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE9',1)} units from *FE9*,	#{filler(legal_units,all_units,11,0,'FE9')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE10',1)} units from *FE10*,	#{filler(legal_units,all_units,11,0,'FE10')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE11',1)} units from *FE11*,	#{filler(legal_units,all_units,11,0,'FE11')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE12',1)} units from *FE12*,	#{filler(legal_units,all_units,11,0,'FE12')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE13',1)} units from *FE13*,	#{filler(legal_units,all_units,11,0,'FE13')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,['FE14','FE14B','FE14C','FE14R','FE14g'],4)} units from *FE14*,	#{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],-3)} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE15',1)} units from *FE15*,	#{filler(legal_units,all_units,11,0,'FE15')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE16',1)} units from *FE16*,	#{filler(legal_units,all_units,11,0,'FE16')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FEH',1)} units from *FEH* itself,	#{filler(legal_units,all_units,11,0,'FEH')} of which are credited"
+    end
+    return nil
+  elsif !(event.user.id==167657750971547648 && !f.nil? && @shardizard<4)
+    bot.servers.values(&:members)
+    event << "I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members."
+    event << "This shard is in #{longFormattedNumber(@server_data[0][@shardizard])} server#{"s" if @server_data[0][@shardizard]!=1}, reaching #{longFormattedNumber(@server_data[1][@shardizard])} unique members."
+    event << ''
+    event << "There are #{filler(legal_units,all_units,-1)} units#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+    if safe_to_spam?(event) || f.downcase=="all"
+      event << "#{filler(legal_units,all_units,9,-1,'p',1)} summonable units"
+      event << "#{filler(legal_units,all_units,9,-1,'g',1)} Grand Hero Battle reward units"
+      event << "#{filler(legal_units,all_units,9,-1,'t',1)} Tempest Trials reward units"
+      event << "#{filler(legal_units,all_units,[9,2],[-1,0],['s',2],[1,-2])} seasonal units"
+      event << "#{filler(legal_units,all_units,2,0,2,2)} legendary units"
+      event << "#{filler(legal_units,all_units,9,-1,'-',1)} unobtainable units"
+      event << ''
+    end
+    event << "There are #{filler(legal_skills,all_skills,-1)} skills#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+    if safe_to_spam?(event) || f.downcase=="all"
+      event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
+      event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
+      event << "#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
+      event << "#{filler(legal_skills,all_skills,4,-1,['Weapon','Assist','Special'],3)} Passives"
+    end
+    event << ''
+    event << "There are #{longFormattedNumber(@aliases.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@aliases.reject{|q| q[2].nil?}.length)} server-specific [single-unit] aliases."
+    event << "There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases."
+    event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups."
+    event << ''
+    event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
+    event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
+    return nil
+  end
+  if f.to_i.to_s==f
+    srv=(bot.server(f.to_i) rescue nil)
+    if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
+      s2="I am not in that server."
+    else
+      s2="__**#{srv.name}** (#{srv.id})__\n*Owner:* #{srv.owner.distinct} (#{srv.owner.id})\n*Shard:* #{(srv.id >> 22) % 4}\n*My nickname:* #{bot.user(312451658908958721).on(srv.id).display_name}"
+    end
+    event.respond s2
+    return nil
+  end
+  bot.servers.values(&:members)
+  event << "I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members."
+  event << "This shard is in #{longFormattedNumber(bot.servers.length)} servers, reaching #{longFormattedNumber(bot.users.size)} unique members."
+  event << ''
+  event << "There are #{filler(legal_units,all_units,-1)} units#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+  if safe_to_spam?(event) || f.downcase=="all"
+    event << "#{filler(legal_units,all_units,9,-1,'p',1)} summonable units"
+    event << "#{filler(legal_units,all_units,9,-1,'g',1)} Grand Hero Battle reward units"
+    event << "#{filler(legal_units,all_units,9,-1,'t',1)} Tempest Trials reward units"
+    event << "#{filler(legal_units,all_units,[9,2],[-1,0],['s',2],[1,-2])} seasonal units"
+    event << "#{filler(legal_units,all_units,2,0,2,2)} legendary units"
+    event << "#{filler(legal_units,all_units,9,-1,'-',1)} unobtainable units"
+    event << ''
+  end
+  event << "There are #{filler(legal_skills,all_skills,-1)} skills#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+  if safe_to_spam?(event) || f.downcase=="all"
+    event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
+    event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
+    event << "#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
+    event << "#{filler(legal_skills,all_skills,4,-1,['Weapon','Assist','Special'],3)} Passives"
+  end
+  event << ''
+  event << "There are #{longFormattedNumber(@aliases.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@aliases.reject{|q| q[2].nil?}.length)} server-specific [single-unit] aliases."
+  event << "There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases."
+  event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups."
+  event << ''
+  event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
+  event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
+  return nil
+end
+
 bot.server_create do |event|
   chn=event.server.general_channel
   if chn.nil?
@@ -12075,58 +12221,6 @@ bot.message do |event|
        event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{["","Pair it with a Breath skill to get 0x8 even faster."].sample}","Be sure to include Astra to increase damage by 150%.","Be sure to use a dancer for 0x8.","Be sure to use Sol, so you can heal for half of that.  #{["","Peck, Ephraim(Fire) heals for 80% with his Solar Brace.","Pair it with a Breath skill to get even more healing!"].sample}","#{["Be sure to use Galeforce for 0x8.","Be sure to use a dancer for 0x8."].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}" if canpost
       end
     end
-  end
-end
-
-bot.ready do |event|
-  if @shardizard==4
-    for i in 0...bot.servers.values.length
-      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840].include?(bot.servers.values[i].id)
-        bot.servers.values[i].general_channel.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/Hf9RNj>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/f1wSGd>") rescue nil
-        bot.servers.values[i].leave
-      end
-    end
-  end
-  system("color 5#{"7CBAE"[@shardizard,1]}")
-  system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
-  bot.game="Loading, please wait..." if @shardizard==0
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
-    b=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt').each_line do |line|
-      b.push(eval line)
-    end
-  else
-    b=[]
-  end
-  @aliases=b
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt')
-    b=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt').each_line do |line|
-      b.push(eval line)
-    end
-  else
-    b=[]
-  end
-  groups_load()
-  @groups=b
-  metadata_load()
-  if @ignored.length>0
-    for i in 0...@ignored.length
-      bot.ignore_user(@ignored[i].to_i)
-    end
-  end
-  metadata_save()
-  metadata_load()
-  devunits_load()
-  system("color e#{"04126"[@shardizard,1]}")
-  system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
-  bot.game="Fire Emblem Heroes" if [0,4].include?(@shardizard)
-  if @shardizard==0
-    next_holiday(bot)
-    puts "Avatar loaded"
-  elsif @shardizard==4
-    bot.user(bot.profile.id).on(285663217261477889).nickname="EliseBot (Debug)"
-    bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r'))
   end
 end
 
@@ -12280,6 +12374,58 @@ def next_holiday(bot,mode=0)
     @scheduler.at "#{k[0][0]}/#{k[0][1]}/#{k[0][2]} 0000" do
       next_holiday(bot,1)
     end
+  end
+end
+
+bot.ready do |event|
+  if @shardizard==4
+    for i in 0...bot.servers.values.length
+      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840].include?(bot.servers.values[i].id)
+        bot.servers.values[i].general_channel.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/Hf9RNj>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/f1wSGd>") rescue nil
+        bot.servers.values[i].leave
+      end
+    end
+  end
+  system("color 5#{"7CBAE"[@shardizard,1]}")
+  system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
+  bot.game="Loading, please wait..." if @shardizard==0
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt').each_line do |line|
+      b.push(eval line)
+    end
+  else
+    b=[]
+  end
+  @aliases=b
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt').each_line do |line|
+      b.push(eval line)
+    end
+  else
+    b=[]
+  end
+  groups_load()
+  @groups=b
+  metadata_load()
+  if @ignored.length>0
+    for i in 0...@ignored.length
+      bot.ignore_user(@ignored[i].to_i)
+    end
+  end
+  metadata_save()
+  metadata_load()
+  devunits_load()
+  system("color e#{"04126"[@shardizard,1]}")
+  system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
+  bot.game="Fire Emblem Heroes" if [0,4].include?(@shardizard)
+  if @shardizard==0
+    next_holiday(bot)
+    puts "Avatar loaded"
+  elsif @shardizard==4
+    bot.user(bot.profile.id).on(285663217261477889).nickname="EliseBot (Debug)"
+    bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r'))
   end
 end
 
