@@ -112,7 +112,7 @@ def all_commands(include_nil=false) # a list of all the command names.  Used by 
     'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn',
     'skillearnable','banners','banner','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias',
     'dualalias','addmulti','deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias',
-    'removedualalias','removemultiunitalias','removedualunitalias','removemulti','snagchannels','statstudy','studystats','studystat','echomoji']
+    'removedualalias','removemultiunitalias','removedualunitalias','removemulti','snagchannels','statstudy','studystats','studystat','echomoji','daily','today','todayinfeh','today_in_feh']
   k[0]=nil if include_nil
   return k
 end
@@ -422,6 +422,8 @@ bot.command(:help) do |event, command, subcommand| # this command is used to sho
     return nil
   elsif ['aliases','checkaliases','seealiases'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __unit__","Responds with a list of all `unit`'s aliases.\nIf no unit is listed, responds with a list of all aliases and who they are for.\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
+  elsif ['daily','today','todayinfeh','today_in_feh'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}**","Shows the day's in-game daily events.\nIf in PM, will also show tomorrow's.",0xD49F61)
   elsif ['deletealias','removealias'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __alias__","Removes `alias` from the list of aliases, regardless of who it was for.",0xC31C19)
   elsif ['addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti'].include?(command.downcase)
@@ -517,7 +519,7 @@ bot.command(:help) do |event, command, subcommand| # this command is used to sho
   else
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
     create_embed(event,"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit Data**__\n`data` __name__ - shows both stats and skills (*also `unit`*)\n`stats` __name__ - shows only the stats\n`skills` __name__ - shows only the skills (*also `fodder`*)\n`study` __name__ - for a study of the unit at multiple rarities and merges\n`effHP` __name__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __name__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __name__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __name__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __name__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`games` __unit__ - for a list of games the unit is in\n`banners` __unit__ - for a list of banners the unit has been a focus unit on\n`art` __unit__ __art type__ - for the character's art\n`learnable` __name__ - for a list of all learnable skills (*also `inheritable`*)\n\n__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
-    create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`skillrarity` (*also `skill_rarity`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
+    create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`daily` - shows the current day's in-game daily events (*also `today` or `todayInFEH`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`skillrarity` (*also `skill_rarity`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed(event,"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
     create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**The Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n`locateshards` - lists one server you are in for each color of shard.\n\n__**Meta Data Storage**__\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
     event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command."
@@ -5347,7 +5349,7 @@ def display_units(event, mode)
           # blade type
           h="<:Red_Blade:443172811830198282> Swords" if p1[i].include?("Alfonse") || (wpn1[0]==["Red", "Blade"])
           h="<:Blue_Blade:443172811582996480> Lances" if p1[i].include?("Sharena") || (wpn1[0]==["Blue", "Blade"])
-          h="<:Green_Blade:443172811721146368>Axes" if p1[i].include?("Anna") || (wpn1[0]==["Green", "Blade"])
+          h="<:Green_Blade:443172811721146368> Axes" if p1[i].include?("Anna") || (wpn1[0]==["Green", "Blade"])
           h="<:Colorless_Blade:443692132310712322> Rods" if wpn1.uniq==0 && wpn1[0]==["Colorless", "Blade"]
           # Magic types
           h="<:Red_Tome:443172811826003968> Fire Mages" if p1[i].include?("Lilina") || (wpn1[0]==["Red", "Tome", "Fire"])
@@ -11846,6 +11848,85 @@ bot.command(:snagchannels, from: 167657750971547648) do |event, server_id|
     msg=extend_message(msg,"*#{chn.name}* (#{chn.id})#{" - can post" if bot.user(bot.profile.id).on(srv.id).permission?(:send_messages,chn)}",event) if chn.type==0
   end
   event.respond msg
+end
+
+bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily]) do |event|
+  t=Time.now
+  t-=60*60*8
+  event << "Time elapsed since today's reset: #{"#{t.hour} hours, " if t.hour>0}#{"#{'0' if t.min<10}#{t.min} minutes, " if t.hour>0 || t.min>0}#{'0' if t.sec<10}#{t.sec} seconds"
+  event << "Time until tomorrow's reset: #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds"
+  t2=Time.new(2017,2,2)
+  t2-=60*60*8
+  t2=t-t2
+  date=(((t2/60)/60)/24).to_i
+  event << "The Arena season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete your daily Arena-related quests before then!" if date%7==4 && 15-t.hour>=0
+  colors=["Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>",
+          "Colorless <:Shard_Colorless:443733396921909248><:Crystal_Transparent:445510676295843870><:Badge_Transparent:445510675976945664><:Great_Badge_Transparent:443704781597573120>",
+          "Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>",
+          "Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>",
+          "Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>",
+          "Red <:Shard_Red:443733396842348545><:Crystal_Scarlet:445510676350500897><:Badge_Scarlet:445510676060962816><:Great_Badge_Scarlet:443704781001850910>",
+          "Blue <:Shard_Blue:443733396741554181><:Crystal_Azure:445510676434124800><:Badge_Azure:445510675352125441><:Great_Badge_Azure:443704780783616016>"]
+  dhb=["Stahl <:Red_Blade:443172811830198282><:Icon_Move_Cavalry:443331186530451466>",
+       "Sophia <:Red_Tome:443172811826003968><:Icon_Move_Infantry:443331187579289601>",
+       "Virion <:Colorless_Bow:443692132616896512><:Icon_Move_Infantry:443331187579289601>",
+       "Hana <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601>",
+       "Subaki <:Blue_Blade:443172811582996480><:Icon_Move_Flier:443331186698354698>",
+       "Donnel <:Blue_Blade:443172811582996480><:Icon_Move_Infantry:443331187579289601>",
+       "Lissa <:Colorless_Staff:443692132323295243><:Icon_Move_Infantry:443331187579289601>",
+       "Gunter <:Green_Blade:443172811721146368><:Icon_Move_Cavalry:443331186530451466>",
+       "Cecilia <:Green_Tome:443172811759157248><:Icon_Move_Cavalry:443331186530451466>",
+       "Felicia <:Colorless_Dagger:443692132683743232><:Icon_Move_Infantry:443331187579289601>",
+       "Wrys <:Colorless_Staff:443692132323295243><:Icon_Move_Infantry:443331187579289601>",
+       "Olivia <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601>"]
+  ghb=["Ursula <:Blue_Tome:443172811104714763><:Icon_Move_Cavalry:443331186530451466> / Clarisse <:Colorless_Bow:443692132616896512><:Icon_Move_Infantry:443331187579289601>",
+       "Lloyd <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601> / Berkut <:Blue_Blade:443172811582996480><:Icon_Move_Cavalry:443331186530451466>",
+       "Michalis <:Green_Blade:443172811721146368><:Icon_Move_Flier:443331186698354698> / Valter <:Blue_Blade:443172811582996480><:Icon_Move_Flier:443331186698354698>",
+       "Xander <:Red_Blade:443172811830198282><:Icon_Move_Cavalry:443331186530451466> / Arvis <:Red_Tome:443172811826003968><:Icon_Move_Infantry:443331187579289601>",
+       "Narcian <:Green_Blade:443172811721146368><:Icon_Move_Flier:443331186698354698> / Zephiel <:Red_Blade:443172811830198282><:Icon_Move_Armor:443331186316673025>",
+       "Navarre <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601> / Camus <:Blue_Blade:443172811582996480><:Icon_Move_Cavalry:443331186530451466>",
+       "Robin(F) <:Green_Tome:443172811759157248><:Icon_Move_Infantry:443331187579289601> / Legion <:Green_Blade:443172811721146368><:Icon_Move_Infantry:443331187579289601>"]
+  rd=["Cavalry <:Icon_Move_Cavalry:443331186530451466>",
+      "Flying <:Icon_Move_Flier:443331186698354698>",
+      "Infantry <:Icon_Move_Infantry:443331187579289601>",
+      "Armored <:Icon_Move_Armor:443331186316673025>"]
+  garden=["Earth <:Legendary_Effect_Earth:443331186392170508>",
+          "Fire <:Legendary_Effect_Fire:443331186480119808>",
+          "Water <:Legendary_Effect_Water:443331186534776832>",
+          "Wind <:Legendary_Effect_Wind:443331186467536896>"]
+  event << ''
+  event << "Days since game release: #{longFormattedNumber(date)}"
+  event << ''
+  event << "__**Today in** ***Fire Emblem Heroes***__"
+  event << "Training Tower color: #{colors[date%7]}"
+  event << "Daily Hero Battle: #{dhb[date%12]}"
+  event << "Weekend SP bonus!" if [1,2].include?(date%7)
+  event << "Special Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][date%5]}"
+  event << "Grand Hero Battle revival: #{ghb[date%7]}"
+  event << "Newest Blessed Gardens addition: #{garden[week_from(date,3)%4]}"
+  event << "Rival Domains movement preference: #{rd[week_from(date,2)%4]}"
+  if safe_to_spam?(event) || " #{event.message.tect.downcase} ".include?(' tomorrow ') || " #{event.message.tect.downcase} ".include?(' next ')
+    event << ''
+    event << "__**Tomorrow in** ***Fire Emblem Heroes***__"
+    event << "Training Tower color: #{colors[(date+1)%7]}"
+    event << "Daily Hero Battle: #{dhb[(date+1)%12]}"
+    event << "Weekend SP bonus!" if [1,2].include?((date+1)%7)
+    event << "Special Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][(date+1)%5]}"
+    event << "Grand Hero Battle revival: #{ghb[(date+1)%7]}"
+    event << "New Blessed Gardens addition: #{garden[week_from(date+1,3)%4]}" if date%7==3
+    event << "Rival Domains movement preference: #{rd[week_from(date+1,2)%4]}" if date%7==2
+  end
+  event << ''
+  event << "Please note that due to being non-cyclical, I cannot predict the following:"
+  event << "Arena bonus heroes, Elemental season, anything in the game's Events tab, new GHBs"
+end
+
+def week_from(d,dow)
+  m=d*1
+  m-=m%7
+  m/=7
+  return m+1 if d%7>=dow
+  return m
 end
 
 def filler(list1,list2,n,m=-1,key='',type=0,mode="||",mode2="")
