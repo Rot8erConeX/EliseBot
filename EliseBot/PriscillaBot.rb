@@ -12148,7 +12148,7 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
     event << "#{filler(legal_units,all_units,3,-1,'Cavalry')} cavalry units"
     event << "#{filler(legal_units,all_units,3,-1,'Flier')} flying units"
     event << "#{filler(legal_units,all_units,3,-1,'Armor')} armored units"
-    if safe_to_spam?(event) || f2.downcase=="all"
+    if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
       event << ''
       event << "#{filler(legal_units,all_units,11,-1,'FE1',1)} units from *FE1*,	#{filler(legal_units,all_units,11,0,'FE1')} of which are credited"
       event << "#{filler(legal_units,all_units,11,-1,'FE2',1)} units from *FE2*,	#{filler(legal_units,all_units,11,0,'FE2')} of which are credited"
@@ -12171,44 +12171,7 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
     return nil
   elsif ["skill","skills","weapon","weapons"].include?(f.downcase)
     event.channel.send_temporary_message("Calculating data, please wait...",3)
-    event << "**There are #{filler(legal_skills,all_skills,-1)} skills, including:**"
-    if safe_to_spam?(event) || f2.downcase=="all"
-      ls2=legal_skills.reject{|q| q[4]!='Weapon'}
-      as2=all_skills.reject{|q| q[4]!='Weapon'}
-      event << "#{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades 	#{filler(ls2,as2,5,-1,'Sword Users Only')} swords, #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
-      event << "#{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes 	#{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
-      event << "#{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
-      event << "#{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
-      event << "#{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
-      event << "#{filler(ls2,as2,5,-1,'Staff Users Only')} damaging staves"
-      event << "__#{filler(ls2,as2,5,-1,'Beasts Only')} beaststones__"
-      ls2=legal_skills.reject{|q| q[4]!='Assist'}
-      as2=all_skills.reject{|q| q[4]!='Assist'}
-      event << "#{filler(ls2,as2,11,-1,'Rally',1)} rally assists"
-      event << "#{filler(ls2,as2,11,[-1,-1],['Move','Music'],[1,-1])} movement assists"
-      event << "#{filler(ls2,as2,11,-1,'Music',1)} musical assists"
-      event << "#{filler(ls2,as2,11,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
-      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healing staves"
-      event << "__#{filler(ls2,as2,11,-3,['Rally','Move','Health','Music','Staff'],-4)} misc. assists__"
-      ls2=legal_skills.reject{|q| q[4]!='Special'}
-      as2=all_skills.reject{|q| q[4]!='Special'}
-      event << "#{filler(ls2,as2,11,[-1,-1],['Damage','Defense'],[1,-1])} offensive specials"
-      event << "#{filler(ls2,as2,11,-1,'Defense',1)} defensive specials"
-      event << "#{filler(ls2,as2,11,-1,'AoE',1)} Area-of-Effect specials"
-      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healer specials"
-      event << "__#{filler(ls2,as2,11,-3,['Damage','Defense','AoE','Staff'],-4)} misc. specials__"
-    else
-      event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
-      event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
-      event << "#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
-    end
-    ls2=legal_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
-    as2=all_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
-    event << "#{filler(ls2,as2,4,-1,'Passive(A)',1)} A Passives"
-    event << "#{filler(ls2,as2,4,-1,'Passive(B)',1)} B Passives"
-    event << "#{filler(ls2,as2,4,-1,'Passive(C)',1)} C Passives"
-    event << "#{filler(ls2,as2,4,-1,'Seal',1)} Passive Seals 	#{filler(ls2,as2,4,-1,'Seal')} of which are exclusive to the Seal slot"
-    event << ''
+    msg=skill_data(legal_skills,all_skills,event,0)
     data_load()
     legal_skills=@skills.reject{|q| !q[13].nil?}
     legal_skills=collapse_skill_list(legal_skills,6)
@@ -12216,43 +12179,7 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
     all_skills=@skills.reject{|q| !has_any?(g, q[13])}
     all_skills=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
     all_skills=collapse_skill_list(all_skills,6)
-    event << "**There are #{filler(legal_skills,all_skills,-1)} skill branches, including:**"
-    if safe_to_spam?(event) || f2.downcase=="all"
-      ls2=legal_skills.reject{|q| q[4]!='Weapon'}
-      as2=all_skills.reject{|q| q[4]!='Weapon'}
-      event << "#{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades 	#{filler(ls2,as2,5,-1,'Sword Users Only')} swords, #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
-      event << "#{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes 	#{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
-      event << "#{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
-      event << "#{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
-      event << "#{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
-      event << "#{filler(ls2,as2,5,-1,'Staff Users Only')} damaging staves"
-      event << "__#{filler(ls2,as2,5,-1,'Beasts Only')} beaststones__"
-      ls2=legal_skills.reject{|q| q[4]!='Assist'}
-      as2=all_skills.reject{|q| q[4]!='Assist'}
-      event << "#{filler(ls2,as2,11,-1,'Rally',1)} rally assists"
-      event << "#{filler(ls2,as2,11,[-1,-1],['Move','Music'],[1,-1])} movement assists"
-      event << "#{filler(ls2,as2,11,-1,'Music',1)} musical assists"
-      event << "#{filler(ls2,as2,11,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
-      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healing staves"
-      event << "__#{filler(ls2,as2,11,-3,['Rally','Move','Health','Music','Staff'],-4)} misc. assists__"
-      ls2=legal_skills.reject{|q| q[4]!='Special'}
-      as2=all_skills.reject{|q| q[4]!='Special'}
-      event << "#{filler(ls2,as2,11,[-1,-1],['Damage','Defense'],[1,-1])} offensive specials"
-      event << "#{filler(ls2,as2,11,-1,'Defense',1)} defensive specials"
-      event << "#{filler(ls2,as2,11,-1,'AoE',1)} Area-of-Effect specials"
-      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healer specials"
-      event << "__#{filler(ls2,as2,11,-3,['Damage','Defense','AoE','Staff'],-4)} misc. specials__"
-    else
-      event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
-      event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
-      event << "#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
-    end
-    ls2=legal_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
-    as2=all_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
-    event << "#{filler(ls2,as2,4,-1,'Passive(A)',1)} A Passives"
-    event << "#{filler(ls2,as2,4,-1,'Passive(B)',1)} B Passives"
-    event << "#{filler(ls2,as2,4,-1,'Passive(C)',1)} C Passives"
-    event << "#{filler(ls2,as2,4,-1,'Seal',1)} Passive Seals 	#{filler(ls2,as2,4,-1,'Seal')} of which are exclusive to the Seal slot"
+    msg=extend_message(msg,skill_data(legal_skills,all_skills,event,1),event,2)
     data_load()
     legal_skills=@skills.reject{|q| !q[13].nil?}
     legal_skills=collapse_skill_list(legal_skills,14)
@@ -12260,51 +12187,15 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
     all_skills=@skills.reject{|q| !has_any?(g, q[13])}
     all_skills=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
     all_skills=collapse_skill_list(all_skills,14)
-    event << ''
-    event << "**There are #{filler(legal_skills,all_skills,-1)} skill trees, including:**"
-    if safe_to_spam?(event) || f2.downcase=="all"
-      ls2=legal_skills.reject{|q| q[4]!='Weapon'}
-      as2=all_skills.reject{|q| q[4]!='Weapon'}
-      event << "#{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades 	#{filler(ls2,as2,5,-1,'Sword Users Only')} swords, #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
-      event << "#{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes 	#{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
-      event << "#{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
-      event << "#{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
-      event << "#{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
-      event << "#{filler(ls2,as2,5,-1,'Staff Users Only')} damaging staves"
-      event << "__#{filler(ls2,as2,5,-1,'Beasts Only')} beaststones__"
-      ls2=legal_skills.reject{|q| q[4]!='Assist'}
-      as2=all_skills.reject{|q| q[4]!='Assist'}
-      event << "#{filler(ls2,as2,11,-1,'Rally',1)} rally assists"
-      event << "#{filler(ls2,as2,11,[-1,-1],['Move','Music'],[1,-1])} movement assists"
-      event << "#{filler(ls2,as2,11,-1,'Music',1)} musical assists"
-      event << "#{filler(ls2,as2,11,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
-      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healing staves"
-      event << "__#{filler(ls2,as2,11,-3,['Rally','Move','Health','Music','Staff'],-4)} misc. assists__"
-      ls2=legal_skills.reject{|q| q[4]!='Special'}
-      as2=all_skills.reject{|q| q[4]!='Special'}
-      event << "#{filler(ls2,as2,11,[-1,-1],['Damage','Defense'],[1,-1])} offensive specials"
-      event << "#{filler(ls2,as2,11,-1,'Defense',1)} defensive specials"
-      event << "#{filler(ls2,as2,11,-1,'AoE',1)} Area-of-Effect specials"
-      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healer specials"
-      event << "__#{filler(ls2,as2,11,-3,['Damage','Defense','AoE','Staff'],-4)} misc. specials__"
-    else
-      event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
-      event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
-      event << "#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
-    end
-    ls2=legal_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
-    as2=all_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
-    event << "#{filler(ls2,as2,4,-1,'Passive(A)',1)} A Passives"
-    event << "#{filler(ls2,as2,4,-1,'Passive(B)',1)} B Passives"
-    event << "#{filler(ls2,as2,4,-1,'Passive(C)',1)} C Passives"
-    event << "#{filler(ls2,as2,4,-1,'Seal')} Passive Seals"
+    msg=extend_message(msg,skill_data(legal_skills,all_skills,event,2),event,2)
+    event.respond msg
     return nil
   elsif !(event.user.id==167657750971547648 && !f.nil? && @shardizard<4)
     bot.servers.values(&:members)
     event << "**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
     event << "This shard is in #{longFormattedNumber(@server_data[0][@shardizard])} server#{"s" if @server_data[0][@shardizard]!=1}, reaching #{longFormattedNumber(@server_data[1][@shardizard])} unique members."
     event << ''
-    event << "#{"**" if safe_to_spam?(event) || f.downcase=="all"}There are #{filler(legal_units,all_units,-1)} units#{", including:**" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+    event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_units,all_units,-1)} units#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
     if safe_to_spam?(event) || f.downcase=="all"
       event << "#{filler(legal_units,all_units,9,-1,'p',1)} summonable units"
       event << "#{filler(legal_units,all_units,9,-1,'g',1)} Grand Hero Battle reward units"
@@ -12314,7 +12205,7 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
       event << "#{filler(legal_units,all_units,9,-1,'-',1)} unobtainable units"
       event << ''
     end
-    event << "#{"**" if safe_to_spam?(event) || f.downcase=="all"}There are #{filler(legal_skills,all_skills,-1)} skills#{", including:**" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+    event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_skills,all_skills,-1)} skills#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
     if safe_to_spam?(event) || f.downcase=="all"
       event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
       event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
@@ -12344,7 +12235,7 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
   event << "**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
   event << "This shard is in #{longFormattedNumber(bot.servers.length)} servers, reaching #{longFormattedNumber(bot.users.size)} unique members."
   event << ''
-  event << "#{"**" if safe_to_spam?(event) || f.downcase=="all"}There are #{filler(legal_units,all_units,-1)} units#{", including:**" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+  event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_units,all_units,-1)} units#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
   if safe_to_spam?(event) || f.downcase=="all"
     event << "#{filler(legal_units,all_units,9,-1,'p',1)} summonable units"
     event << "#{filler(legal_units,all_units,9,-1,'g',1)} Grand Hero Battle reward units"
@@ -12354,7 +12245,7 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
     event << "#{filler(legal_units,all_units,9,-1,'-',1)} unobtainable units"
     event << ''
   end
-  event << "#{"**" if safe_to_spam?(event) || f.downcase=="all"}There are #{filler(legal_skills,all_skills,-1)} skills#{", including:**" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+  event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_skills,all_skills,-1)} skills#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
   if safe_to_spam?(event) || f.downcase=="all"
     event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
     event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
@@ -12369,6 +12260,51 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
   event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
   event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
   return nil
+end
+
+def skill_data(legal_skills,all_skills,event,mode=0)
+  str="**There are #{filler(legal_skills,all_skills,-1)} #{['skills','skill branches','skill trees'][mode]}, including:**"
+  if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
+    ls2=legal_skills.reject{|q| q[4]!='Weapon'}
+    as2=all_skills.reject{|q| q[4]!='Weapon'}
+    str="#{str}\n#{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades 	#{filler(ls2,as2,5,-1,'Sword Users Only')} swords, #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
+    str="#{str}\n#{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes 	#{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
+    str="#{str}\n#{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
+    str="#{str}\n#{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
+    str="#{str}\n#{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
+    str="#{str}\n#{filler(ls2,as2,5,-1,'Staff Users Only')} damaging staves"
+    str="#{str}\n__#{filler(ls2,as2,5,-1,'Beasts Only')} beaststones__"
+    ls2=legal_skills.reject{|q| q[4]!='Assist'}
+    as2=all_skills.reject{|q| q[4]!='Assist'}
+    str="#{str}\n#{filler(ls2,as2,11,-1,'Rally',1)} rally assists"
+    str="#{str}\n#{filler(ls2,as2,11,[-1,-1],['Move','Music'],[1,-1])} movement assists"
+    str="#{str}\n#{filler(ls2,as2,11,-1,'Music',1)} musical assists"
+    str="#{str}\n#{filler(ls2,as2,11,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
+    str="#{str}\n#{filler(ls2,as2,11,-1,'Staff',1)} healing staves"
+    str="#{str}\n__#{filler(ls2,as2,11,-3,['Rally','Move','Health','Music','Staff'],-4)} misc. assists__"
+    ls2=legal_skills.reject{|q| q[4]!='Special'}
+    as2=all_skills.reject{|q| q[4]!='Special'}
+    str="#{str}\n#{filler(ls2,as2,11,[-1,-1],['Damage','Defense'],[1,-1])} offensive specials"
+    str="#{str}\n#{filler(ls2,as2,11,-1,'Defense',1)} defensive specials"
+    str="#{str}\n#{filler(ls2,as2,11,-1,'AoE',1)} Area-of-Effect specials"
+    str="#{str}\n#{filler(ls2,as2,11,-1,'Staff',1)} healer specials"
+    str="#{str}\n__#{filler(ls2,as2,11,-3,['Damage','Defense','AoE','Staff'],-4)} misc. specials__"
+  else
+    str="#{str}\n#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
+    str="#{str}\n#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
+    str="#{str}\n#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
+  end
+  ls2=legal_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
+  as2=all_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
+  str="#{str}\n#{filler(ls2,as2,4,-1,'Passive(A)',1)} A Passives"
+  str="#{str}\n#{filler(ls2,as2,4,-1,'Passive(B)',1)} B Passives"
+  str="#{str}\n#{filler(ls2,as2,4,-1,'Passive(C)',1)} C Passives"
+  if mode==2
+    str="#{str}\n#{filler(ls2,as2,4,-1,'Seal')} Passive Seals"
+  else
+    str="#{str}\n#{filler(ls2,as2,4,-1,'Seal',1)} Passive Seals 	#{filler(ls2,as2,4,-1,'Seal')} of which are exclusive to the Seal slot"
+  end
+  return str
 end
 
 bot.server_create do |event|
