@@ -365,8 +365,10 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of servers and unique members each shard reaches.",0x40C0F0)
     elsif ['unit','char','character','units','chars','charas','chara'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of units sorted in each of the following ways:\nObtainability\nColor\nWeapon type\nMovement type\nGame of origin (in PM)",0x40C0F0)
+    elsif ['skills','skill','weapon','weapons'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of skills, as well as numbers condensing them into branches (same name with different number) and trees (all skills that promote into/from each other are a single entry).",0x40C0F0)
     else
-      create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases and groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s)\nUnit(s), Character(s), Char(a)(s)",0x40C0F0)
+      create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases and groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s)\nUnit(s), Character(s), Char(a)(s)\nSkill(s)",0x40C0F0)
     end
   elsif command.downcase=='shard'
     create_embed(event,'**shard**',"Returns the shard that this server is served by.",0x40C0F0)
