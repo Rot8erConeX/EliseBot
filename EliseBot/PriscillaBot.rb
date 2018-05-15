@@ -1,4 +1,4 @@
-shardizard = ARGV.first.to_i             # taking a single variable from the command prompt to get the shard value
+shardizard = ARGV.first.to_i              # taking a single variable from the command prompt to get the shard value
 system("color 0#{"7CBAE"[shardizard,1]}") # command prompt color and title determined by the shard
 system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][shardizard]} EliseBot")
 
@@ -112,7 +112,7 @@ def all_commands(include_nil=false) # a list of all the command names.  Used by 
     'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn',
     'skillearnable','banners','banner','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias',
     'dualalias','addmulti','deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias',
-    'removedualalias','removemultiunitalias','removedualunitalias','removemulti','snagchannels','statstudy','studystats','studystat','echomoji','daily','today','todayinfeh','today_in_feh']
+    'removedualalias','removemultiunitalias','removedualunitalias','removemulti','snagchannels','statstudy','studystats','studystat','echomoji','daily','today','todayinfeh','today_in_feh','commands','command_list','commandlist']
   k[0]=nil if include_nil
   return k
 end
@@ -344,13 +344,13 @@ def devunits_save() # this function is used by the devedit command to save the d
   return nil
 end
 
-bot.command(:help) do |event, command, subcommand| # this command is used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
+bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, subcommand| # this command is used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
   return nil if overlap_prevent(event)
   command='' if command.nil?
   k=0
   k=event.server.id unless event.server.nil?
-  if command.downcase=='help'
-    event.respond 'The `help` command displays this message:'
+  if ['help','commands','command_list','commandlist'].include?(command.downcase)
+    event.respond "The `#{command.downcase}` command displays this message:"
     command=''
   end
   if command.downcase=='reboot'
@@ -360,7 +360,14 @@ bot.command(:help) do |event, command, subcommand| # this command is used to sho
   elsif command.downcase=='leaveserver'
     create_embed(event,'**leaveserver** __server id number__',"Forces me to leave the server with the id `server id`.\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.",0x008b8b)
   elsif command.downcase=='snagstats'
-    create_embed(event,'**snagstats**',"Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases and groups I keep track of\n- how long of a file I am.",0x40C0F0)
+    subcommand='' if subcommand.nil?
+    if ['server','servers','member','members'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of servers and unique members each shard reaches.",0x40C0F0)
+    elsif ['unit','char','character','units','chars','charas','chara'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of units sorted in each of the following ways:\nObtainability\nColor\nWeapon type\nMovement type\nGame of origin (in PM)",0x40C0F0)
+    else
+      create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases and groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s)\nUnit(s), Character(s), Char(a)(s)",0x40C0F0)
+    end
   elsif command.downcase=='shard'
     create_embed(event,'**shard**',"Returns the shard that this server is served by.",0x40C0F0)
   elsif ['bugreport','suggestion','feedback'].include?(command.downcase)
@@ -534,7 +541,7 @@ end
 
 def safe_to_spam?(event) # this function determines whether or not it is safe to send extremely long messages
   return true if event.server.nil? # it is safe to spam in PM
-  return true if [443172595580534784,443181099494146068].include?(event.server.id) # it is safe to spam in the emoji servers
+  return true if [443172595580534784,443181099494146068,443704357335203840].include?(event.server.id) # it is safe to spam in the emoji servers
   return true if @shardizard==4 # it is safe to spam during debugging
   return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam') # it is safe to spam in any bot spam channel
   return true if event.channel.name.downcase.include?('elisebot')  # it is safe to spam in channels designed specifically for EliseBot
@@ -562,9 +569,9 @@ def overlap_prevent(event)
     s=event.message.text.downcase
     s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
     s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
-    return false if !canpost && s==@zero_by_four[3]
+    return true if !canpost && s==@zero_by_four[3]
     @zero_by_four[3]=s
-    return true
+    return false
   end
   return false
 end
@@ -4680,11 +4687,69 @@ def collapse_skill_list(list,mode=0)
   end
   newlist.compact!
   newlist.uniq!
-  for i in 0...newlist.length
-    newlist[i][0]=newlist[i][0].gsub('Bladeblade','Laevatein')
-    newlist[i][0]="~~#{newlist[i][0]}~~" if !newlist[i][13].nil? && newlist[i][13].length>0 && mode%2==1
+  unless (mode/4)%2==1
+    for i in 0...newlist.length
+      newlist[i][0]=newlist[i][0].gsub('Bladeblade','Laevatein')
+      newlist[i][0]="~~#{newlist[i][0]}~~" if !newlist[i][13].nil? && newlist[i][13].length>0 && mode%2==1
+    end
   end
-  newlist=newlist.sort {|a,b| a[0].gsub("~~",'').gsub("(El)",'').downcase <=> b[0].gsub("~~",'').gsub("(El)",'').downcase}
+  if (mode/8)%2==1
+    for i in 0...newlist.length
+      if newlist[i][0].include?('Iron/Steel/Silver(+) ')
+        m=newlist[i][0].gsub('Iron/Steel/Silver(+) ','')
+        newlist[i][0]=["Iron #{m}","Steel #{m}","Silver #{m}","Silver #{m}+"]
+      else
+        newlist[i][0]=newlist[i][0].split('/')
+        for i2 in 0...newlist[i][0].length
+          newlist[i][0][i2]="#{newlist[i][0][i2].gsub('(El)','')}/El#{newlist[i][0][i2].gsub('(El)','').downcase}" if newlist[i][0][i2].include?('(El)')
+          newlist[i][0][i2]="#{newlist[i][0][i2].gsub('(+)','')}/#{newlist[i][0][i2].gsub('(+)','')}+" if newlist[i][0][i2].include?('(+)')
+        end
+      end
+      newlist[i][0]=newlist[i][0].join('/').split('/')
+      if !newlist[i][0][1].nil? && newlist[i][0][1].length<=1
+        m=newlist[i][0][0][0,newlist[i][0][0].length-1]
+        for i2 in 1...newlist[i][0].length
+          newlist[i][0][i2]="#{m}#{newlist[i][0][i2]}"
+        end
+      end
+      if newlist[i][8].include?("*, *")
+        newlist[i][8]=newlist[i][8].gsub('*','').split(', ')
+      elsif newlist[i][8].include?("* or *")
+        newlist[i][8]=newlist[i][8].split('* or *').map{|q| q.gsub('*','')}
+      elsif newlist[i][8].include?("*")
+        newlist[i][8]=[newlist[i][8].gsub('*','')]
+      else
+        newlist[i][8]=[]
+      end
+    end
+    for i in 0...newlist.length
+      m=false
+      for i2 in 0...newlist.length
+        if i != i2 && !newlist[i2].nil? && has_any?(newlist[i][8],newlist[i2][0])
+          m=true
+          for i3 in 0...newlist[i][0].length
+            newlist[i2][0].push(newlist[i][0][i3])
+          end
+        end
+      end
+      newlist[i]=nil if m
+    end
+    newlist.compact!
+    for i in 0...newlist.length
+      for i2 in 0...newlist.length
+        if i != i2 && !newlist[i].nil? && !newlist[i2].nil? && has_any?(newlist[i][0],newlist[i2][0])
+          for i3 in 0...newlist[i][0].length
+            newlist[i2][0].push(newlist[i][0][i3])
+          end
+          newlist[i2][0].uniq!
+          newlist[i2][0]=newlist[i2][0].sort{|a,b| a <=> b}
+          newlist[i]=nil
+        end
+      end
+    end
+    newlist.compact!
+  end
+  newlist=newlist.sort {|a,b| a[0].gsub("~~",'').gsub("(El)",'').downcase <=> b[0].gsub("~~",'').gsub("(El)",'').downcase} unless (mode/8)%2==1
   return newlist
 end
 
@@ -5772,7 +5837,7 @@ def get_games_list(arr,includefeh=true)
     g.push("FEW - *Fire Emblem Warriors*") if arr[i]=="FEW"
     g.push("*Super Smash Bros.: Melee*") if arr[i]=="SSBM"
     g.push("*Super Smash Bros.: Brawl*") if arr[i]=="SSBB"
-    g.push("*Project: M*") if arr[i]=="SSBProM"
+    g.push("*[Super Smash Bros.:] Project: M*") if arr[i]=="SSBProM"
     g.push("*Super Smash Bros. for 3DS and Wii U*") if arr[i]=="SSB4"
     g.push("*Project X Zone 2*") if arr[i]=="PXZ2"
     g.push("*Codename: S.T.E.A.M.*") if arr[i]=="STEAM"
@@ -6267,6 +6332,8 @@ def disp_unit_stats_and_skills(event,args,bot)
   if k.nil?
     if event.message.text.downcase.include?("flora") && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
       event.respond "Steel's waifu is not in the game."
+    elsif event.message.text.downcase.include?("flora") && !event.server.nil? && event.server.id==332249772180111360
+      event.respond "If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats."
     elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
@@ -6691,6 +6758,88 @@ def disp_summon_pool(event,args)
       create_embed(event,"",'',0x64757D,"4-5\* availability can be affected by banner focus.",nil,r,4)
     end
   end
+end
+
+def filler(list1,list2,n,m=-1,key='',type=0,mode="||",mode2="")
+  return "#{longFormattedNumber(list1.length)}#{" (#{longFormattedNumber(list2.length)})" unless list1.length==list2.length}" if n==-1
+  if n.is_a?(Array)
+    y=""
+    for i in 0...key.length
+      key[i]="'#{key[i]}'" if key[i].is_a?(String)
+    end
+    type=[type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type] unless type.is_a?(Array)
+    for i in 0...n.length
+      x="q[#{n[i]}][#{m[i]}]"
+      x="q[#{n[i]}].split(', ')[0]" if m[i]==-2
+      x="q[#{n[i]}]" if m[i]==-1
+      x="#{x}.split(', ').include?(#{key[i]})" if type[i]==-4
+      x="!#{key[i]}.include?(#{x})" if type[i]==-3
+      x="#{x}.length>=#{0-key[i]}" if type[i]==-2 && key[i]<0
+      x="#{x}.length>#{key[i]}" if type[i]==-2
+      x="#{x}.include?(#{key[i]})" if type[i]==-1
+      x="!#{x}.split(', ').include?(#{key[i]})" if type[i]==4
+      x="#{key[i]}.include?(#{x})" if type[i]==3
+      x="#{x}.length<=#{0-key[i]}" if type[i]==2 && key[i]<0
+      x="#{x}.length<#{key[i]}" if type[i]==2
+      x="!#{x}.include?(#{key[i]})" if type[i]==1
+      x="#{x}==#{key[i]}" if type[i]==10
+      x="#{x}!=#{key[i]}" if type[i]==0
+      if y.length>=1
+        y="#{y} #{mode} #{x}"
+      else
+        y="#{x}"
+      end
+    end
+    y="#{mode2}(#{y})"
+    return "#{longFormattedNumber(list1.reject{|q| eval(y)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(y)}.length)})" unless list1.reject{|q| eval(y)}.length==list2.reject{|q| eval(y)}.length}"
+  elsif m.is_a?(Array)
+    y=""
+    for i in 0...key.length
+      key[i]="'#{key[i]}'" if key[i].is_a?(String)
+    end
+    type=[type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type] unless type.is_a?(Array)
+    for i in 0...m.length
+      x="q[#{n}][#{m[i]}]"
+      x="q[#{n[i]}].split(', ')[0]" if m[i]==-2
+      x="q[#{n[i]}].split(', ')" if m[i]==-3
+      x="q[#{n}]" if m[i]==-1
+      x="has_any?(#{x},#{key[i]})" if type[i]==-4
+      x="!#{key[i]}.include?(#{x})" if type[i]==-3
+      x="#{x}.length>=#{0-key[i]}" if type[i]==-2 && key[i]<0
+      x="#{x}.length>#{key[i]}" if type[i]==-2
+      x="#{x}.include?(#{key[i]})" if type[i]==-1
+      x="!has_any?(#{x},#{key[i]})" if type[i]==4
+      x="#{key[i]}.include?(#{x})" if type[i]==3
+      x="#{x}.length<=#{0-key[i]}" if type[i]==2 && key[i]<0
+      x="#{x}.length<#{key[i]}" if type[i]==2
+      x="!#{x}.include?(#{key[i]})" if type[i]==1
+      x="#{x}==#{key[i]}" if type[i]==10
+      x="#{x}!=#{key[i]}" if type[i]==0
+      if y.length>=1
+        y="#{y} #{mode} #{x}"
+      else
+        y="#{x}"
+      end
+    end
+    y="#{mode2}(#{y})"
+    return "#{longFormattedNumber(list1.reject{|q| eval(y)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(y)}.length)})" unless list1.reject{|q| eval(y)}.length==list2.reject{|q| eval(y)}.length}"
+  end
+  x="q[#{n}][#{m}]"
+  x="q[#{n}].split(', ')" if m==-3
+  x="q[#{n}].split(', ')[0]" if m==-2
+  x="q[#{n}]" if m==-1
+  return "#{longFormattedNumber(list1.reject{|q| !has_any?(eval(x),key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| !has_any?(eval(x),key)}.length)})" unless list1.reject{|q| !has_any?(eval(x),key)}.length==list2.reject{|q| !has_any?(eval(x),key)}.length}" if type==4
+  return "#{longFormattedNumber(list1.reject{|q| has_any?(eval(x),key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| has_any?(eval(x),key)}.length)})" unless list1.reject{|q| has_any?(eval(x),key)}.length==list2.reject{|q| has_any?(eval(x),key)}.length}" if type==-4
+  return "#{longFormattedNumber(list1.reject{|q| key.include?(eval(x))}.length)}#{" (#{longFormattedNumber(list2.reject{|q| key.include?(eval(x))}.length)})" unless list1.reject{|q| key.include?(eval(x))}.length==list2.reject{|q| key.include?(eval(x))}.length}" if type==3
+  return "#{longFormattedNumber(list1.reject{|q| !key.include?(eval(x))}.length)}#{" (#{longFormattedNumber(list2.reject{|q| !key.include?(eval(x))}.length)})" unless list1.reject{|q| !key.include?(eval(x))}.length==list2.reject{|q| !key.include?(eval(x))}.length}" if type==-3
+  return "#{longFormattedNumber(list1.reject{|q| eval(x).length<=0-key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length<=0-key}.length)})" unless list1.reject{|q| eval(x).length<=0-key}.length==list2.reject{|q| eval(x).length<=0-key}.length}" if type==2 && key<0
+  return "#{longFormattedNumber(list1.reject{|q| eval(x).length<key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length<key}.length)})" unless list1.reject{|q| eval(x).length<key}.length==list2.reject{|q| eval(x).length<key}.length}" if type==2
+  return "#{longFormattedNumber(list1.reject{|q| eval(x).length>=0-key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length>=0-key}.length)})" unless list1.reject{|q| eval(x).length>=0-key}.length==list2.reject{|q| eval(x).length>=0-key}.length}" if type==-2 && key<0
+  return "#{longFormattedNumber(list1.reject{|q| eval(x).length>key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length>key}.length)})" unless list1.reject{|q| eval(x).length>key}.length==list2.reject{|q| eval(x).length>key}.length}" if type==-2
+  return "#{longFormattedNumber(list1.reject{|q| !eval(x).include?(key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| !eval(x).include?(key)}.length)})" unless list1.reject{|q| !eval(x).include?(key)}.length==list2.reject{|q| !eval(x).include?(key)}.length}" if type==1
+  return "#{longFormattedNumber(list1.reject{|q| eval(x).include?(key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).include?(key)}.length)})" unless list1.reject{|q| eval(x).include?(key)}.length==list2.reject{|q| eval(x).include?(key)}.length}" if type==-1
+  return "#{longFormattedNumber(list1.reject{|q| eval(x)==key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x)==key}.length)})" unless list1.reject{|q| eval(x)==key}.length==list2.reject{|q| eval(x)==key}.length}" if type==10
+  return "#{longFormattedNumber(list1.reject{|q| eval(x)!=key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x)!=key}.length)})" unless list1.reject{|q| eval(x)!=key}.length==list2.reject{|q| eval(x)!=key}.length}"
 end
 
 def parse_function(callback,event,args,bot,healers=nil)
@@ -9743,6 +9892,8 @@ bot.command([:skills,:fodder]) do |event, *args|
   if k.nil?
     if event.message.text.downcase.include?("flora") && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
       event.respond "Steel's waifu is not in the game."
+    elsif event.message.text.downcase.include?("flora") && !event.server.nil? && event.server.id==332249772180111360
+      event.respond "If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats."
     elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       disp_unit_skills(bot,x[1],event,true,true,true)
@@ -9766,6 +9917,8 @@ bot.command([:skills,:fodder]) do |event, *args|
     disp_unit_skills(bot,str,event)
   elsif event.message.text.downcase.include?("flora") && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
     event.respond "Steel's waifu is not in the game."
+  elsif event.message.text.downcase.include?("flora") && !event.server.nil? && event.server.id==332249772180111360
+    event.respond "If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats."
   else
     event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s."
   end
@@ -9838,6 +9991,8 @@ bot.command([:stats,:stat]) do |event, *args|
     w=nil
     if event.message.text.downcase.include?("flora") && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
       event.respond "Steel's waifu is not in the game."
+    elsif event.message.text.downcase.include?("flora") && !event.server.nil? && event.server.id==332249772180111360
+      event.respond "If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats."
     elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
@@ -11851,14 +12006,15 @@ bot.command(:snagchannels, from: 167657750971547648) do |event, server_id|
 end
 
 bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily]) do |event|
+  return nil if overlap_prevent(event)
   t=Time.now
-  t-=60*60*8
+  timeshift=8
+  t-=60*60*timeshift
   event << "Time elapsed since today's reset: #{"#{t.hour} hours, " if t.hour>0}#{"#{'0' if t.min<10}#{t.min} minutes, " if t.hour>0 || t.min>0}#{'0' if t.sec<10}#{t.sec} seconds"
   event << "Time until tomorrow's reset: #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds"
-  t2=Time.new(2017,2,2)
-  t2-=60*60*8
+  t2=Time.new(2017,2,1,23,0)
   t2=t-t2
-  date=(((t2/60)/60)/24).to_i
+  date=(((t2.to_i/60)/60)/24)
   event << "The Arena season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete your daily Arena-related quests before then!" if date%7==4 && 15-t.hour>=0
   colors=["Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>",
           "Colorless <:Shard_Colorless:443733396921909248><:Crystal_Transparent:445510676295843870><:Badge_Transparent:445510675976945664><:Great_Badge_Transparent:443704781597573120>",
@@ -11895,118 +12051,37 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
           "Water <:Legendary_Effect_Water:443331186534776832>",
           "Wind <:Legendary_Effect_Wind:443331186467536896>"]
   event << ''
+  event << "Date assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year}"
   event << "Days since game release: #{longFormattedNumber(date)}"
+  if event.user.id==167657750971547648
+    event << "Daycycles: #{date%5}/5 - #{date%7}/7 - #{date%12}/12"
+    event << "Weekcycles: #{week_from(date,3)%4}/Sunday - #{week_from(date,2)%4}/Saturday"
+  end
   event << ''
   event << "__**Today in** ***Fire Emblem Heroes***__"
   event << "Training Tower color: #{colors[date%7]}"
   event << "Daily Hero Battle: #{dhb[date%12]}"
   event << "Weekend SP bonus!" if [1,2].include?(date%7)
   event << "Special Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][date%5]}"
-  event << "Grand Hero Battle revival: #{ghb[date%7]}"
+  event << "Grand Hero Battle revival: #{ghb[date%7].split(' / ')[0]}"
+  event << "Grand Hero Battle revival 2: #{ghb[date%7].split(' / ')[1]}"
   event << "Newest Blessed Gardens addition: #{garden[week_from(date,3)%4]}"
   event << "Rival Domains movement preference: #{rd[week_from(date,2)%4]}"
-  if safe_to_spam?(event) || " #{event.message.tect.downcase} ".include?(' tomorrow ') || " #{event.message.tect.downcase} ".include?(' next ')
+  if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(' tomorrow ') || " #{event.message.text.downcase} ".include?(' next ')
     event << ''
     event << "__**Tomorrow in** ***Fire Emblem Heroes***__"
     event << "Training Tower color: #{colors[(date+1)%7]}"
     event << "Daily Hero Battle: #{dhb[(date+1)%12]}"
     event << "Weekend SP bonus!" if [1,2].include?((date+1)%7)
     event << "Special Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][(date+1)%5]}"
-    event << "Grand Hero Battle revival: #{ghb[(date+1)%7]}"
-    event << "New Blessed Gardens addition: #{garden[week_from(date+1,3)%4]}" if date%7==3
-    event << "Rival Domains movement preference: #{rd[week_from(date+1,2)%4]}" if date%7==2
+    event << "Grand Hero Battle revival: #{ghb[(date+1)%7].split(' / ')[0]}"
+    event << "Grand Hero Battle revival 2: #{ghb[(date+1)%7].split(' / ')[1]}"
+    event << "New Blessed Gardens addition: #{garden[week_from(date+1,3)%4]}" if (date+1)%7==3
+    event << "Rival Domains movement preference: #{rd[week_from(date+1,2)%4]}" if (date+1)%7==2
   end
   event << ''
   event << "Please note that due to being non-cyclical, I cannot predict the following:"
   event << "Arena bonus heroes, Elemental season, anything in the game's Events tab, new GHBs"
-end
-
-def week_from(d,dow)
-  m=d*1
-  m-=m%7
-  m/=7
-  return m+1 if d%7>=dow
-  return m
-end
-
-def filler(list1,list2,n,m=-1,key='',type=0,mode="||",mode2="")
-  return "#{longFormattedNumber(list1.length)}#{" (#{longFormattedNumber(list2.length)})" unless list1.length==list2.length}" if n==-1
-  if n.is_a?(Array)
-    y=""
-    for i in 0...key.length
-      key[i]="'#{key[i]}'" if key[i].is_a?(String)
-    end
-    type=[type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type] unless type.is_a?(Array)
-    for i in 0...n.length
-      x="q[#{n[i]}][#{m[i]}]"
-      x="q[#{n[i]}].split(', ')[0]" if m[i]==-2
-      x="q[#{n[i]}]" if m[i]==-1
-      x="#{x}.split(', ').include?(#{key[i]})" if type[i]==-4
-      x="!#{key[i]}.include?(#{x})" if type[i]==-3
-      x="#{x}.length>=#{0-key[i]}" if type[i]==-2 && key[i]<0
-      x="#{x}.length>#{key[i]}" if type[i]==-2
-      x="#{x}.include?(#{key[i]})" if type[i]==-1
-      x="!#{x}.split(', ').include?(#{key[i]})" if type[i]==4
-      x="#{key[i]}.include?(#{x})" if type[i]==3
-      x="#{x}.length<=#{0-key[i]}" if type[i]==2 && key[i]<0
-      x="#{x}.length<#{key[i]}" if type[i]==2
-      x="!#{x}.include?(#{key[i]})" if type[i]==1
-      x="#{x}==#{key[i]}" if type[i]==10
-      x="#{x}!=#{key[i]}" if type[i]==0
-      if y.length>=1
-        y="#{y} #{mode} #{x}"
-      else
-        y="#{x}"
-      end
-    end
-    y="#{mode2}(#{y})"
-    return "#{longFormattedNumber(list1.reject{|q| eval(y)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(y)}.length)})" unless list1.reject{|q| eval(y)}.length==list2.reject{|q| eval(y)}.length}"
-  elsif m.is_a?(Array)
-    y=""
-    for i in 0...key.length
-      key[i]="'#{key[i]}'" if key[i].is_a?(String)
-    end
-    type=[type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type,type] unless type.is_a?(Array)
-    for i in 0...m.length
-      x="q[#{n}][#{m[i]}]"
-      x="q[#{n[i]}].split(', ')[0]" if m[i]==-2
-      x="q[#{n}]" if m[i]==-1
-      x="has_any?(#{x},#{key[i]})" if type[i]==-4
-      x="!#{key[i]}.include?(#{x})" if type[i]==-3
-      x="#{x}.length>=#{0-key[i]}" if type[i]==-2 && key[i]<0
-      x="#{x}.length>#{key[i]}" if type[i]==-2
-      x="#{x}.include?(#{key[i]})" if type[i]==-1
-      x="!has_any?(#{x},#{key[i]})" if type[i]==4
-      x="#{key[i]}.include?(#{x})" if type[i]==3
-      x="#{x}.length<=#{0-key[i]}" if type[i]==2 && key[i]<0
-      x="#{x}.length<#{key[i]}" if type[i]==2
-      x="!#{x}.include?(#{key[i]})" if type[i]==1
-      x="#{x}==#{key[i]}" if type[i]==10
-      x="#{x}!=#{key[i]}" if type[i]==0
-      if y.length>=1
-        y="#{y} #{mode} #{x}"
-      else
-        y="#{x}"
-      end
-    end
-    y="#{mode2}(#{y})"
-    return "#{longFormattedNumber(list1.reject{|q| eval(y)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(y)}.length)})" unless list1.reject{|q| eval(y)}.length==list2.reject{|q| eval(y)}.length}"
-  end
-  x="q[#{n}][#{m}]"
-  x="q[#{n}].split(', ')[0]" if m==-2
-  x="q[#{n}]" if m==-1
-  return "#{longFormattedNumber(list1.reject{|q| !has_any?(eval(x),key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| !has_any?(eval(x),key)}.length)})" unless list1.reject{|q| !has_any?(eval(x),key)}.length==list2.reject{|q| !has_any?(eval(x),key)}.length}" if type==4
-  return "#{longFormattedNumber(list1.reject{|q| has_any?(eval(x),key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| has_any?(eval(x),key)}.length)})" unless list1.reject{|q| has_any?(eval(x),key)}.length==list2.reject{|q| has_any?(eval(x),key)}.length}" if type==-4
-  return "#{longFormattedNumber(list1.reject{|q| key.include?(eval(x))}.length)}#{" (#{longFormattedNumber(list2.reject{|q| key.include?(eval(x))}.length)})" unless list1.reject{|q| key.include?(eval(x))}.length==list2.reject{|q| key.include?(eval(x))}.length}" if type==3
-  return "#{longFormattedNumber(list1.reject{|q| !key.include?(eval(x))}.length)}#{" (#{longFormattedNumber(list2.reject{|q| !key.include?(eval(x))}.length)})" unless list1.reject{|q| !key.include?(eval(x))}.length==list2.reject{|q| !key.include?(eval(x))}.length}" if type==-3
-  return "#{longFormattedNumber(list1.reject{|q| eval(x).length<=0-key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length<=0-key}.length)})" unless list1.reject{|q| eval(x).length<=0-key}.length==list2.reject{|q| eval(x).length<=0-key}.length}" if type==2 && key<0
-  return "#{longFormattedNumber(list1.reject{|q| eval(x).length<key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length<key}.length)})" unless list1.reject{|q| eval(x).length<key}.length==list2.reject{|q| eval(x).length<key}.length}" if type==2
-  return "#{longFormattedNumber(list1.reject{|q| eval(x).length>=0-key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length>=0-key}.length)})" unless list1.reject{|q| eval(x).length>=0-key}.length==list2.reject{|q| eval(x).length>=0-key}.length}" if type==-2 && key<0
-  return "#{longFormattedNumber(list1.reject{|q| eval(x).length>key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).length>key}.length)})" unless list1.reject{|q| eval(x).length>key}.length==list2.reject{|q| eval(x).length>key}.length}" if type==-2
-  return "#{longFormattedNumber(list1.reject{|q| !eval(x).include?(key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| !eval(x).include?(key)}.length)})" unless list1.reject{|q| !eval(x).include?(key)}.length==list2.reject{|q| !eval(x).include?(key)}.length}" if type==1
-  return "#{longFormattedNumber(list1.reject{|q| eval(x).include?(key)}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x).include?(key)}.length)})" unless list1.reject{|q| eval(x).include?(key)}.length==list2.reject{|q| eval(x).include?(key)}.length}" if type==-1
-  return "#{longFormattedNumber(list1.reject{|q| eval(x)==key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x)==key}.length)})" unless list1.reject{|q| eval(x)==key}.length==list2.reject{|q| eval(x)==key}.length}" if type==10
-  return "#{longFormattedNumber(list1.reject{|q| eval(x)!=key}.length)}#{" (#{longFormattedNumber(list2.reject{|q| eval(x)!=key}.length)})" unless list1.reject{|q| eval(x)!=key}.length==list2.reject{|q| eval(x)!=key}.length}"
 end
 
 bot.command(:snagstats) do |event, f, f2| # snags the number of members in each of the servers Elise is in
@@ -12017,6 +12092,7 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
   data_load()
   metadata_load()
   f='' if f.nil?
+  f2='' if f2.nil?
   bot.servers.values(&:members)
   k=bot.servers.length
   k-=3 if @shardizard==4 # Debug shard shares the three emote servers with the main account
@@ -12034,8 +12110,17 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
     l=line.gsub(' ','').gsub("\n",'')
     b.push(l) unless l.length<=0
   end
-  if ["units","characters","unit","character","charas","chara","chars","char"].include?(f.downcase)
-    event << "There are #{filler(legal_units,all_units,-1)} units, including:"
+  if ['servers','server','members','member'].include?(f.downcase)
+    event << "**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
+    event << "The <:Shard_Colorless:443733396921909248> Transparent Shard is in #{longFormattedNumber(@server_data[0][0])} server#{"s" if @server_data[0][0]!=1}, reaching #{longFormattedNumber(@server_data[1][0])} unique members."
+    event << "The <:Shard_Red:443733396842348545> Scarlet Shard is in #{longFormattedNumber(@server_data[0][1])} server#{"s" if @server_data[0][1]!=1}, reaching #{longFormattedNumber(@server_data[1][1])} unique members."
+    event << "The <:Shard_Blue:443733396741554181> Azure Shard is in #{longFormattedNumber(@server_data[0][2])} server#{"s" if @server_data[0][2]!=1}, reaching #{longFormattedNumber(@server_data[1][2])} unique members."
+    event << "The <:Shard_Green:443733397190344714> Verdant Shard is in #{longFormattedNumber(@server_data[0][3])} server#{"s" if @server_data[0][3]!=1}, reaching #{longFormattedNumber(@server_data[1][3])} unique members."
+    event << "The <:Shard_Gold:443733396913520640> Golden Shard is in #{longFormattedNumber(@server_data[0][4])} server#{"s" if @server_data[0][4]!=1}, reaching #{longFormattedNumber(@server_data[1][4])} unique members." if event.user.id==167657750971547648
+    return nil
+  elsif ["units","characters","unit","character","charas","chara","chars","char"].include?(f.downcase)
+    event.channel.send_temporary_message("Calculating data, please wait...",1)
+    event << "**There are #{filler(legal_units,all_units,-1)} units, including:**"
     event << ''
     event << "#{filler(legal_units,all_units,9,-1,'p',1)} summonable units"
     event << "#{filler(legal_units,all_units,9,-1,'g',1)} Grand Hero Battle reward units"
@@ -12049,8 +12134,8 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
     event << "#{filler(legal_units,all_units,1,0,'Green')} green units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Green','p'],[0,1])} in the main summon pool"
     event << "#{filler(legal_units,all_units,1,0,'Colorless')} colorless units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Colorless','p'],[0,1])} in the main summon pool"
     event << ''
-    event << "#{filler(legal_units,all_units,1,1,'Blade')} blade users - 	#{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, and #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes"
-    event << "#{filler(legal_units,all_units,1,1,'Tome')} tome users - 	#{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, and #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green"
+    event << "#{filler(legal_units,all_units,1,1,'Blade')} blade users: 	#{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, and #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes"
+    event << "#{filler(legal_units,all_units,1,1,'Tome')} tome users: 	#{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, and #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green"
     event << "#{filler(legal_units,all_units,1,1,'Dragon')} dragon units"
     event << "#{filler(legal_units,all_units,1,1,'Bow')} bow users"
     event << "#{filler(legal_units,all_units,1,1,'Dagger')} dagger users"
@@ -12082,12 +12167,142 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
       event << "#{filler(legal_units,all_units,11,-1,'FEH',1)} units from *FEH* itself,	#{filler(legal_units,all_units,11,0,'FEH')} of which are credited"
     end
     return nil
+  elsif ["skill","skills","weapon","weapons"].include?(f.downcase)
+    event.channel.send_temporary_message("Calculating data, please wait...",3)
+    event << "**There are #{filler(legal_skills,all_skills,-1)} skills, including:**"
+    if safe_to_spam?(event) || f2.downcase=="all"
+      ls2=legal_skills.reject{|q| q[4]!='Weapon'}
+      as2=all_skills.reject{|q| q[4]!='Weapon'}
+      event << "#{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades 	#{filler(ls2,as2,5,-1,'Sword Users Only')} swords, #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
+      event << "#{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes 	#{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
+      event << "#{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
+      event << "#{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
+      event << "#{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
+      event << "#{filler(ls2,as2,5,-1,'Staff Users Only')} damaging staves"
+      event << "__#{filler(ls2,as2,5,-1,'Beasts Only')} beaststones__"
+      ls2=legal_skills.reject{|q| q[4]!='Assist'}
+      as2=all_skills.reject{|q| q[4]!='Assist'}
+      event << "#{filler(ls2,as2,11,-1,'Rally',1)} rally assists"
+      event << "#{filler(ls2,as2,11,[-1,-1],['Move','Music'],[1,-1])} movement assists"
+      event << "#{filler(ls2,as2,11,-1,'Music',1)} musical assists"
+      event << "#{filler(ls2,as2,11,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
+      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healing staves"
+      event << "__#{filler(ls2,as2,11,-3,['Rally','Move','Health','Music','Staff'],-4)} misc. assists__"
+      ls2=legal_skills.reject{|q| q[4]!='Special'}
+      as2=all_skills.reject{|q| q[4]!='Special'}
+      event << "#{filler(ls2,as2,11,[-1,-1],['Damage','Defense'],[1,-1])} offensive specials"
+      event << "#{filler(ls2,as2,11,-1,'Defense',1)} defensive specials"
+      event << "#{filler(ls2,as2,11,-1,'AoE',1)} Area-of-Effect specials"
+      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healer specials"
+      event << "__#{filler(ls2,as2,11,-3,['Damage','Defense','AoE','Staff'],-4)} misc. specials__"
+    else
+      event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
+      event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
+      event << "#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
+    end
+    ls2=legal_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
+    as2=all_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
+    event << "#{filler(ls2,as2,4,-1,'Passive(A)',1)} A Passives"
+    event << "#{filler(ls2,as2,4,-1,'Passive(B)',1)} B Passives"
+    event << "#{filler(ls2,as2,4,-1,'Passive(C)',1)} C Passives"
+    event << "#{filler(ls2,as2,4,-1,'Seal',1)} Passive Seals 	#{filler(ls2,as2,4,-1,'Seal')} of which are exclusive to the Seal slot"
+    event << ''
+    data_load()
+    legal_skills=@skills.reject{|q| !q[13].nil?}
+    legal_skills=collapse_skill_list(legal_skills,6)
+    data_load()
+    all_skills=@skills.reject{|q| !has_any?(g, q[13])}
+    all_skills=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
+    all_skills=collapse_skill_list(all_skills,6)
+    event << "**There are #{filler(legal_skills,all_skills,-1)} skill branches, including:**"
+    if safe_to_spam?(event) || f2.downcase=="all"
+      ls2=legal_skills.reject{|q| q[4]!='Weapon'}
+      as2=all_skills.reject{|q| q[4]!='Weapon'}
+      event << "#{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades 	#{filler(ls2,as2,5,-1,'Sword Users Only')} swords, #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
+      event << "#{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes 	#{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
+      event << "#{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
+      event << "#{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
+      event << "#{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
+      event << "#{filler(ls2,as2,5,-1,'Staff Users Only')} damaging staves"
+      event << "__#{filler(ls2,as2,5,-1,'Beasts Only')} beaststones__"
+      ls2=legal_skills.reject{|q| q[4]!='Assist'}
+      as2=all_skills.reject{|q| q[4]!='Assist'}
+      event << "#{filler(ls2,as2,11,-1,'Rally',1)} rally assists"
+      event << "#{filler(ls2,as2,11,[-1,-1],['Move','Music'],[1,-1])} movement assists"
+      event << "#{filler(ls2,as2,11,-1,'Music',1)} musical assists"
+      event << "#{filler(ls2,as2,11,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
+      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healing staves"
+      event << "__#{filler(ls2,as2,11,-3,['Rally','Move','Health','Music','Staff'],-4)} misc. assists__"
+      ls2=legal_skills.reject{|q| q[4]!='Special'}
+      as2=all_skills.reject{|q| q[4]!='Special'}
+      event << "#{filler(ls2,as2,11,[-1,-1],['Damage','Defense'],[1,-1])} offensive specials"
+      event << "#{filler(ls2,as2,11,-1,'Defense',1)} defensive specials"
+      event << "#{filler(ls2,as2,11,-1,'AoE',1)} Area-of-Effect specials"
+      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healer specials"
+      event << "__#{filler(ls2,as2,11,-3,['Damage','Defense','AoE','Staff'],-4)} misc. specials__"
+    else
+      event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
+      event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
+      event << "#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
+    end
+    ls2=legal_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
+    as2=all_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
+    event << "#{filler(ls2,as2,4,-1,'Passive(A)',1)} A Passives"
+    event << "#{filler(ls2,as2,4,-1,'Passive(B)',1)} B Passives"
+    event << "#{filler(ls2,as2,4,-1,'Passive(C)',1)} C Passives"
+    event << "#{filler(ls2,as2,4,-1,'Seal',1)} Passive Seals 	#{filler(ls2,as2,4,-1,'Seal')} of which are exclusive to the Seal slot"
+    data_load()
+    legal_skills=@skills.reject{|q| !q[13].nil?}
+    legal_skills=collapse_skill_list(legal_skills,14)
+    data_load()
+    all_skills=@skills.reject{|q| !has_any?(g, q[13])}
+    all_skills=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
+    all_skills=collapse_skill_list(all_skills,14)
+    event << ''
+    event << "**There are #{filler(legal_skills,all_skills,-1)} skill trees, including:**"
+    if safe_to_spam?(event) || f2.downcase=="all"
+      ls2=legal_skills.reject{|q| q[4]!='Weapon'}
+      as2=all_skills.reject{|q| q[4]!='Weapon'}
+      event << "#{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades 	#{filler(ls2,as2,5,-1,'Sword Users Only')} swords, #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
+      event << "#{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes 	#{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
+      event << "#{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
+      event << "#{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
+      event << "#{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
+      event << "#{filler(ls2,as2,5,-1,'Staff Users Only')} damaging staves"
+      event << "__#{filler(ls2,as2,5,-1,'Beasts Only')} beaststones__"
+      ls2=legal_skills.reject{|q| q[4]!='Assist'}
+      as2=all_skills.reject{|q| q[4]!='Assist'}
+      event << "#{filler(ls2,as2,11,-1,'Rally',1)} rally assists"
+      event << "#{filler(ls2,as2,11,[-1,-1],['Move','Music'],[1,-1])} movement assists"
+      event << "#{filler(ls2,as2,11,-1,'Music',1)} musical assists"
+      event << "#{filler(ls2,as2,11,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
+      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healing staves"
+      event << "__#{filler(ls2,as2,11,-3,['Rally','Move','Health','Music','Staff'],-4)} misc. assists__"
+      ls2=legal_skills.reject{|q| q[4]!='Special'}
+      as2=all_skills.reject{|q| q[4]!='Special'}
+      event << "#{filler(ls2,as2,11,[-1,-1],['Damage','Defense'],[1,-1])} offensive specials"
+      event << "#{filler(ls2,as2,11,-1,'Defense',1)} defensive specials"
+      event << "#{filler(ls2,as2,11,-1,'AoE',1)} Area-of-Effect specials"
+      event << "#{filler(ls2,as2,11,-1,'Staff',1)} healer specials"
+      event << "__#{filler(ls2,as2,11,-3,['Damage','Defense','AoE','Staff'],-4)} misc. specials__"
+    else
+      event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
+      event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
+      event << "#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
+    end
+    ls2=legal_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
+    as2=all_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
+    event << "#{filler(ls2,as2,4,-1,'Passive(A)',1)} A Passives"
+    event << "#{filler(ls2,as2,4,-1,'Passive(B)',1)} B Passives"
+    event << "#{filler(ls2,as2,4,-1,'Passive(C)',1)} C Passives"
+    event << "#{filler(ls2,as2,4,-1,'Seal')} Passive Seals"
+    return nil
   elsif !(event.user.id==167657750971547648 && !f.nil? && @shardizard<4)
     bot.servers.values(&:members)
-    event << "I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members."
+    event << "**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
     event << "This shard is in #{longFormattedNumber(@server_data[0][@shardizard])} server#{"s" if @server_data[0][@shardizard]!=1}, reaching #{longFormattedNumber(@server_data[1][@shardizard])} unique members."
     event << ''
-    event << "There are #{filler(legal_units,all_units,-1)} units#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+    event << "#{"**" if safe_to_spam?(event) || f.downcase=="all"}There are #{filler(legal_units,all_units,-1)} units#{", including:**" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
     if safe_to_spam?(event) || f.downcase=="all"
       event << "#{filler(legal_units,all_units,9,-1,'p',1)} summonable units"
       event << "#{filler(legal_units,all_units,9,-1,'g',1)} Grand Hero Battle reward units"
@@ -12097,7 +12312,7 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
       event << "#{filler(legal_units,all_units,9,-1,'-',1)} unobtainable units"
       event << ''
     end
-    event << "There are #{filler(legal_skills,all_skills,-1)} skills#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+    event << "#{"**" if safe_to_spam?(event) || f.downcase=="all"}There are #{filler(legal_skills,all_skills,-1)} skills#{", including:**" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
     if safe_to_spam?(event) || f.downcase=="all"
       event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
       event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
@@ -12124,10 +12339,10 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
     return nil
   end
   bot.servers.values(&:members)
-  event << "I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members."
+  event << "**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
   event << "This shard is in #{longFormattedNumber(bot.servers.length)} servers, reaching #{longFormattedNumber(bot.users.size)} unique members."
   event << ''
-  event << "There are #{filler(legal_units,all_units,-1)} units#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+  event << "#{"**" if safe_to_spam?(event) || f.downcase=="all"}There are #{filler(legal_units,all_units,-1)} units#{", including:**" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
   if safe_to_spam?(event) || f.downcase=="all"
     event << "#{filler(legal_units,all_units,9,-1,'p',1)} summonable units"
     event << "#{filler(legal_units,all_units,9,-1,'g',1)} Grand Hero Battle reward units"
@@ -12137,7 +12352,7 @@ bot.command(:snagstats) do |event, f, f2| # snags the number of members in each 
     event << "#{filler(legal_units,all_units,9,-1,'-',1)} unobtainable units"
     event << ''
   end
-  event << "There are #{filler(legal_skills,all_skills,-1)} skills#{", including:" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
+  event << "#{"**" if safe_to_spam?(event) || f.downcase=="all"}There are #{filler(legal_skills,all_skills,-1)} skills#{", including:**" if safe_to_spam?(event) || f.downcase=="all"}#{"." unless safe_to_spam?(event) || f.downcase=="all"}"
   if safe_to_spam?(event) || f.downcase=="all"
     event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
     event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
@@ -12303,6 +12518,14 @@ bot.message do |event|
       end
     end
   end
+end
+
+def week_from(d,dow)
+  m=d*1
+  m-=m%7
+  m/=7
+  return m+1 if d%7>=dow
+  return m
 end
 
 def calc_easter()
