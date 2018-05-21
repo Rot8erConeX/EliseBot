@@ -1300,6 +1300,7 @@ def find_group(name,event) # this function is used to find a group's data entry 
   k=event.server.id unless event.server.nil?
   groups_load()
   name='Wedding' if ['brides','grooms'].include?(name.downcase)
+  name='Dancers&Singers' if ['dancers','singers'].include?(name.downcase)
   j=-1
   # try full-name matches first...
   for i in 0...@groups.length
@@ -1308,6 +1309,7 @@ def find_group(name,event) # this function is used to find a group's data entry 
   return j if j>=0
   # ...then try partial-name matches
   name='Wedding' if name.length<6 && ['brides','grooms'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='Dancers&Singers' if ['dancers','singers'].map{|q| q[0,name.length]}.include?(name.downcase)
   for i in 0...@groups.length
     j=i if @groups[i][0][0,name.length].downcase==name.downcase && (@groups[i][2].nil? || @groups[i][2].include?(k))
   end
@@ -4450,7 +4452,7 @@ def get_group(name,event)
   srv=0
   srv=event.server.id unless event.server.nil?
   g=get_markers(event)
-  if ["dancer","singer","dancers","singers"].include?(name.downcase)
+  if ["dancer","singer","refresher","dancers","singers","refreshers","dancers&singers"].include?(name.downcase)
     k=@skills[find_skill("Dance",event)]
     k2=@skills[find_skill("Sing",event)]
     b=[]
@@ -4474,11 +4476,11 @@ def get_group(name,event)
     for i in 0...r.length
       u=r[i][6].split(', ')
       for j in 0...u.length
-        b.push(u[j].gsub('Lavatain','Laevatein')) unless b.include?(u[j]) || !has_any?(g, @units[find_unit(u[j],event)][12])
+        b.push(u[j].gsub('Lavatain','Laevatein')) unless b.include?(u[j]) || u[j]=='Kiran' || !has_any?(g, @units[find_unit(u[j],event)][12])
       end
     end
     return ["Retro-Prfs",b.uniq]
-  elsif ["falchionusers"].include?(name.downcase)
+  elsif ["falchion_users"].include?(name.downcase)
     k=@skills[find_skill("Falchion",event)]
     k2=@skills[find_skill("Sealed Falchion",event)]
     b=[]
@@ -4492,7 +4494,7 @@ def get_group(name,event)
         b.push(u2[j].gsub('Lavatain','Laevatein')) unless b.include?(u2[j]) || u2[j].include?("-") || !has_any?(g, @units[find_unit(u[j],event)][12])
       end
     end
-    return ["FalchionUsers",b.uniq]
+    return ["Falchion_Users",b.uniq]
   elsif name.downcase=="mathoo'swaifus"
     metadata_load()
     return ["Mathoo'sWaifus",@dev_waifus]
@@ -5546,14 +5548,25 @@ def display_units(event, mode)
           end
           h="#{h} Mages"
         end
-        p1[i]=[h,p1[i].join("\n")]
+        p1[i]=[h,p1[i]]
+      end
+      if p1.map{|q| q[0]}.uniq.length<=1
+        for i in 0...p1.length
+          mov=p1[i][1].map{|q| @units[find_unit(q.gsub('Laevatein','Lavatain').gsub('~~',''),event,false,true)][3]}.uniq
+          if mov.length<=1
+            p1[i][0]="<:Icon_Move_Infantry:443331187579289601> Infantry" if mov[0]=='Infantry'
+            p1[i][0]="<:Icon_Move_Armor:443331186316673025> Armor" if mov[0]=='Armor'
+            p1[i][0]="<:Icon_Move_Flier:443331186698354698> Flying" if mov[0]=='Flier'
+            p1[i][0]="<:Icon_Move_Cavalry:443331186530451466> Cavalry" if mov[0]=='Cavalry'
+          end
+        end
       end
       if mode==1
-        create_embed(event,"Results",'',0x9400D3,nil,nil,p1)
+        create_embed(event,"Results",'',0x9400D3,nil,nil,p1.map{|q| [q[0],q[1].join("\n")]})
       else
         msg=""
         for i in 0...p1.length
-          msg=extend_message(msg,"**#{p1[i][0]}** - #{p1[i][1].gsub("\n",', ')}",event,2)
+          msg=extend_message(msg,"**#{p1[i][0]}** - #{p1[i][1].join(', ')}",event,2)
         end
         event.respond msg
       end
@@ -7218,7 +7231,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   else
     x.push(["Frostbite",rd])
   end
-  x.push(["Misc.","Defense + Resistance = #{rdr}#{"\n\n#{u40[0]} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0]}:\n#{rs}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless @units[j][1][1]=='Healer'}"])
+  x.push(["Misc.","Defense + Resistance = #{rdr}#{"\n\n#{u40[0]} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0]}:\n#{rs}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless @units[j][1][1]=='Healer'}",1])
   pic=pick_thumbnail(event,j,bot)
   pic="https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png" if u40[0]=="Robin (Shared stats)"
   create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0])}**__","#{r}#{"**+#{merges}**" unless merges<=0}#{"	\u2764 **#{summoner}**" unless summoner=='-'}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(event,j,u40[0])}\n",xcolor,'"Frostbite" is weapons like Felicia\'s Plate.  "Photon" is weapons like Light Brand.',pic,x)
@@ -8318,7 +8331,7 @@ def disp_art(event,name,bot,weapon=nil)
   else
     disp=">No information<" if disp.length<=0
     flds=[]
-    flds.push(['Same Artist',charsx[0].join("\n")]) if charsx[0].length>0
+    flds.push(['Same Artist',charsx[0].join("\n"),1]) if charsx[0].length>0
     flds.push(['Same VA (English)',charsx[1].join("\n")]) if charsx[1].length>0
     flds.push(['Same VA (Japanese)',charsx[2].join("\n")]) if charsx[2].length>0
     event.channel.send_embed("__**#{j[0].gsub('Lavatain','Laevatein')}**__") do |embed|
@@ -10599,14 +10612,19 @@ bot.command([:seegroups,:checkgroups,:groups]) do |event|
   k=event.server.id unless event.server.nil?
   msg=""
   for i in 0...@groups.length
-    if @groups[i][0].downcase=="dancers"
+    if @groups[i][0].downcase=="dancers&singers"
       msg=extend_message(msg,"**Dancers/Singers**\n#{get_group("Dancer",event)[1].map{|q| q.gsub('Lavatain','Laevatein')}.sort.join(', ')}",event,2)
-    elsif @groups[i][0].downcase=="singers"
     elsif @groups[i][2].nil?
-      if @groups[i][1].length<=0
-        msg=extend_message(msg,"**#{@groups[i][0]}**\n#{get_group(@groups[i][0],event)[1].map{|q| q.gsub('Lavatain','Laevatein')}.sort.join(', ')}",event,2) if event.user.id==167657750971547648 || @groups[i][0].downcase != "mathoo'swaifus"
-      else
-        msg=extend_message(msg,"**#{@groups[i][0]}**\n#{@groups[i][1].map{|q| q.gsub('Lavatain','Laevatein')}.sort.join(', ')}",event,2) if event.user.id==167657750971547648 || @groups[i][0].downcase != "mathoo'swaifus"
+      display=true
+      display=false if @groups[i][0].downcase=="mathoo'swaifus"
+      display=true if event.user.id==167657750971547648
+      display=true if !event.server.nil? && !bot.user(167657750971547648).on(event.server.id).nil? && rand(100)==0
+      if display
+        if @groups[i][1].length<=0
+          msg=extend_message(msg,"**#{@groups[i][0]}**\n#{get_group(@groups[i][0],event)[1].map{|q| q.gsub('Lavatain','Laevatein')}.sort.join(', ')}",event,2) if event.user.id==167657750971547648 || @groups[i][0].downcase != "mathoo'swaifus"
+        else
+          msg=extend_message(msg,"**#{@groups[i][0]}**\n#{@groups[i][1].map{|q| q.gsub('Lavatain','Laevatein')}.sort.join(', ')}",event,2)
+        end
       end
     elsif @groups[i][2].include?(k)
       msg=extend_message(msg,"**#{@groups[i][0]}**\n#{@groups[i][1].map{|q| q.gsub('Lavatain','Laevatein')}.sort.join(', ')}\n~~server exclusive~~",event,2)
@@ -12307,7 +12325,13 @@ bot.command(:snagstats) do |event, f, f2|
     end
     event << ''
     event << "**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-unit] aliases.**"
-    event << "This server has #{srv_spec.reject{|q| !q[2].include?(event.server.id)}.length} server-specific aliases." unless event.server.nil?
+    if event.server.nil? && @shardizard==4
+      event << "Due to being the debug version, I cannot show more information."
+    elsif event.server.nil?
+      event << "Servers you and I share account for #{@aliases.reject{|q| q[2].nil? || q[2].reject{|q2| bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
+    else
+      event << "This server accounts for #{@aliases.reject{|q| q[2].nil? || !q[2].include?(event.server.id)}.length} of those."
+    end
     all_units=all_units.sort{|b,a| supersort(a,b,2)==0 ? supersort(a,b,0) : supersort(a,b,2)}
     k=all_units.reject{|q| q[2]!=all_units[0][2]}.map{|q| "*#{q[0]}*"}
     event << "The unit#{"s" unless k.length==1} with the most server-specific aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][2]} server-specific aliases#{" each" unless k.length==1}."
@@ -12332,10 +12356,30 @@ bot.command(:snagstats) do |event, f, f2|
     event << "#{list_lift(k,"and")} #{"is" if k.length==1}#{"are" unless k.length==1} the group#{"s" unless k.length==1} of units with the fewest multi-unit aliases (among those that have them), with #{m[0][1]} multi-unit alias#{"es" unless m[0][1]==1}#{" each" unless k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
     return nil
   elsif ["groups","group","groupings","grouping"].include?(f.downcase)
-    event.channel.send_temporary_message("Calculating data, please wait...",0.1)
-    event << "**There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global groups**"
+    event.channel.send_temporary_message("Calculating data, please wait...",3)
+    event << "**There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global groups**, including the following dynamic ones:"
+    gg=@groups.reject{|q| !q[2].nil? || q[1].length>0}.map{|q| [q[0],get_group(q[0],event)[1].reject{|q2| all_units.find_index{|q3| q3[0]==q2}.nil?}]}
+    event << "*Daily Rotation* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Daily_Rotation'}][1].length)} current members) - Any unit that can be obtained via the twelve rotating Daily Hero Battle maps."
+    event << "*Dancers/Singers* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Dancers&Singers'}][1].length)} current members) - Any unit that can learn the skill Dance or the skill Sing."
+    event << "*Falchion Users* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Falchion_Users'}][1].length)} current members) - Any unit that can use one of the three Falchions, or any of their evolutions."
+    event << "*GHB* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='GHB'}][1].length)} current members) - Any unit that can obtained via a Grand Hero Battle map."
+    event << "*Legendaries* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Legendaries'}][1].length)} current members) - Any unit that gives a Legendary Hero Boost to blessed allies during specific seasons."
+    event << "*Retro-Prfs* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro-Prfs'}][1].length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything."
+    event << "*Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can obtained via a Tempest Trials event."
+    display=false
+    display=true if event.user.id==167657750971547648
+    display=true if !event.server.nil? && !bot.user(167657750971547648).on(event.server.id).nil? && rand(100)==0
+    display=true if !event.server.nil? && bot.user(167657750971547648).on(event.server.id).nil? && rand(10000)==0
+    event << "*Mathoo's Waifus* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Mathoo'sWaifus"}][1].length)} current members) - Any unit that my developer would enjoy cuddling." if display
     event << ''
     event << "**There are #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups.**"
+    if event.server.nil? && @shardizard==4
+      event << "Due to being the debug version, I cannot show more information."
+    elsif event.server.nil?
+      event << "Servers you and I share account for #{@groups.reject{|q| q[2].nil? || q[2].reject{|q2| bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
+    else
+      event << "This server accounts for #{@groups.reject{|q| q[2].nil? || !q[2].include?(event.server.id)}.length} of those."
+    end
     return nil
   elsif event.user.id==167657750971547648 && @shardizard<4 && !f.nil? && f.to_i.to_s==f
     srv=(bot.server(f.to_i) rescue nil)
@@ -12348,10 +12392,10 @@ bot.command(:snagstats) do |event, f, f2|
     return nil
   end
   bot.servers.values(&:members)
-  event << "**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
+  event << "**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} *servers*, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
   event << "This shard is in #{longFormattedNumber(@server_data[0][@shardizard])} server#{"s" unless @server_data[0][@shardizard]==1}, reaching #{longFormattedNumber(bot.users.size)} unique members."
   event << ''
-  event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_units,all_units,-1)} units#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
+  event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_units,all_units,-1)} *units*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
   if safe_to_spam?(event) || f.downcase=="all"
     event << "#{filler(legal_units,all_units,9,-1,'p',1)} summonable units"
     event << "#{filler(legal_units,all_units,9,-1,'g',1)} Grand Hero Battle reward units"
@@ -12361,7 +12405,7 @@ bot.command(:snagstats) do |event, f, f2|
     event << "#{filler(legal_units,all_units,9,-1,'-',1)} unobtainable units"
     event << ''
   end
-  event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_skills,all_skills,-1)} skills#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
+  event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_skills,all_skills,-1)} *skills*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
   if safe_to_spam?(event) || f.downcase=="all"
     event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
     event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
@@ -12375,10 +12419,10 @@ bot.command(:snagstats) do |event, f, f2|
   all_units=all_units.map{|q| q[0]}
   srv_spec=srv_spec.reject{|q| !all_units.include?(q[1])}
   event << ''
-  event << "There are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-unit] aliases."
+  event << "There are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-unit] *aliases*."
   event << "There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases."
   event << ''
-  event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups."
+  event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific *groups*."
   event << ''
   event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
   event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
@@ -12480,6 +12524,8 @@ bot.message do |event|
     s=event.message.text.downcase
     s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
     s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+    s=s[1,s.length-1] if s[0,1]==' '
+    s=s[2,s.length-2] if s[0,2]=='5*'
     a=s.split(' ')
     if s.gsub(' ','').downcase=="laevatein"
       disp_stats(bot,"Lavatain",nil,event,true)
