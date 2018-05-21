@@ -5060,6 +5060,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
       matches5=split_list(event,matches5,['Wind'],-4)
     elsif matches5.map{|q| q[0]}.join("\n").length<=1800
       matches5=split_list(event,matches5,['Red','Blue','Green','Colorless','Gold','Purple'],-2)
+      matches5=split_list(event,matches5,['Infantry','Armor','Flier','Cavalry'],3) unless matches5.map{|q| q[0]}.include?('- - -')
     end
   end
   if matches5.length==@units.reject{|q| find_unit(q[0],event)<0}.compact.length && !(args.nil? || args.length.zero?) && !safe_to_spam?(event) && mode != 3
@@ -6174,7 +6175,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
   end
   str3=str2.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
   str2=str2.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
-  if /blu(e(-|)|)cina/ =~ str1
+  if /blu(e(-|)|)cina/ =~ str1 || /bluc(i|y)/ =~ str1
     str="blucina"
     str="bluecina" if str2.include?('bluecina')
     return nil if robinmode==2 && str2.downcase != str.downcase
@@ -9737,7 +9738,7 @@ bot.command([:bst, :BST]) do |event, *args|
             [["","F2P","F2P"],0,0],["Story",0,0],["GHB",0,0],["Tempest",0,0],                        # Game Mode Emblem
             ["Yandere",0,0],
             ["Lucina",0,0],["Robin",0,0],["Corrin",0,0],["Xander",0,0],["Tiki",0,0],["Lyn",0,0],["Chrom",0,0],["Azura",0,0],["Camilla",0,0],
-            ["Ike",0,0],["Roy",0,0],["Hector",0,0],["Celica",0,0],["Takumi",0,0],["Ephraim",0,0]]    # Character emblems
+            ["Ike",0,0],["Roy",0,0],["Hector",0,0],["Celica",0,0],["Takumi",0,0],["Ephraim",0,0],["Tharja",0,0]]    # Character emblems
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0],[0,0]]
   m=false
@@ -9828,6 +9829,7 @@ bot.command([:bst, :BST]) do |event, *args|
           counters[31][i2]+=1 if ["Celica","Celica(Fallen)","Celica(Brave)"].include?(name)
           counters[32][i2]+=1 if ["Takumi","Takumi(Fallen)","Takumi(Winter)"].include?(name)
           counters[33][i2]+=1 if ["Ephraim","Ephraim(Fire)","Ephraim(Brave)"].include?(name)
+          counters[34][i2]+=1 if ["Tharja","Tharja(Winter)","Tharja(Bride)"].include?(name)
           colors[i2][0]+=1 if j[1][0]=="Red"
           colors[i2][1]+=1 if j[1][0]=="Blue"
           colors[i2][2]+=1 if j[1][0]=="Green"
@@ -11350,7 +11352,7 @@ end
 
 bot.command([:tools,:links]) do |event|
   return nil if overlap_prevent(event)
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.user.id==195303206933233665 || event.message.text.include?('<@195303206933233665>') || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
     event << "**Useful tools for players of** ***Fire Emblem Heroes***"
     event << "__Download the game__"
     event << "Google Play: <https://play.google.com/store/apps/details?id=com.nintendo.zaba&hl=en>"
