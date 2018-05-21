@@ -1,6 +1,6 @@
-shardizard = ARGV.first.to_i              # taking a single variable from the command prompt to get the shard value
-system("color 0#{"7CBAE"[shardizard,1]}") # command prompt color and title determined by the shard
-system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][shardizard]} EliseBot")
+@shardizard = ARGV.first.to_i              # taking a single variable from the command prompt to get the shard value
+system("color 0#{"7CBAE"[@shardizard,1]}") # command prompt color and title determined by the shard
+system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
 
 require 'discordrb'                    # Download link: https://github.com/meew0/discordrb
 require 'open-uri'                     # pre-installed with Ruby in Windows
@@ -17,10 +17,10 @@ ENV['TZ'] = 'America/Chicago'
 @prefix = ['FEH!','FEh!','FeH!','Feh!','fEH!','fEh!','feH!','feh!','FEH?','FEh?','FeH?','Feh?','fEH?','fEh?','feH?','feh?','f?','F?','e?','E?','h?','H?']
 
 # The bot's token is basically their password, so is censored for obvious reasons
-if shardizard==4
+if @shardizard==4
   bot = Discordrb::Commands::CommandBot.new token: '>Debug Token<', client_id: >Debug ID<, prefix: @prefix
 else
-  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: shardizard, num_shards: 4, client_id: 312451658908958721, prefix: @prefix
+  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: @shardizard, num_shards: 4, client_id: 312451658908958721, prefix: @prefix
 end
 bot.gateway.check_heartbeat_acks = false
 
