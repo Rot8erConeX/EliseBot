@@ -112,7 +112,7 @@ def all_commands(include_nil=false) # a list of all the command names.  Used by 
     'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn',
     'skillearnable','banners','banner','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias',
     'dualalias','addmulti','deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias',
-    'removedualalias','removemultiunitalias','removedualunitalias','removemulti','snagchannels','statstudy','studystats','studystat','echomoji','daily','today','todayinfeh','today_in_feh','commands','command_list','commandlist']
+    'removedualalias','removemultiunitalias','removedualunitalias','removemulti','snagchannels','statstudy','studystats','studystat','echomoji','daily','today','todayinfeh','today_in_feh','commands','command_list','commandlist','effect']
   k[0]=nil if include_nil
   return k
 end
@@ -453,8 +453,10 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}** __group__ __unit__","Removes the unit `unit` from the group with the name `group`.\nIf this causes `group` to have no members, it will also delete it.",0xC31C19)
   elsif ['bst'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __*allies__","Shows the BST of the units listed in `allies`.  If more than four characters are listed, I show both the BST of all those listed and the BST of the first four listed.\n\n#{disp_more_info(event,1)}",0xD49F61)
+  elsif ['effect'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}**","Lists all weapons that can be refined to obtain an Effect Mode in the weapon refinery.",0xD49F61)
   elsif ['refinery','refine'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}**","Lists all weapons that can be refined or evolved in the weapon refinery, organized by whether they use Divine Dew or Refining Stones.",0xD49F61)
+    create_embed(event,"**#{command.downcase}**","Lists all weapons that can be refined or evolved in the weapon refinery, organized by whether they use Divine Dew or Refining Stones.\n\nYou can also include the word \"Effect\" in your message to show only weapons that get Effect Mode refines.",0xD49F61)
   elsif ['legendary','legendaries'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Lists all of the legendary heroes, sorted by up to three defined filters.\nBy default, will sort by Legendary __Element__ and then the non-HP __stat__ boost given by the hero.\n\nPossible filters (in order of priority when applied) :\nElement(s), Flavor(s), Affinity/Affinities\nStat(s), Boost(s)\nWeapon(s)\nColo(u)r(s)\nMove(s), Movement(s)",0xD49F61)
   elsif ['games'].include?(command.downcase)
@@ -1164,7 +1166,7 @@ def find_effect_name(x,event,shorten=0) # this function is used to find the name
     if f[f.length-1].length<2 || f[f.length-1].to_i.to_s==f[f.length-1] || ['W1','W2','W3','W4','W5','W6','W7','W8','W9'].include?(f[f.length-1])
       # shorten value of 0 means to just remove the "W" or number at the end of a skill name
       # used when displaying the name in the refinement section of the `skill` command
-      f[f.length-1]=nil if shorten==0
+      f[f.length-1]=nil if shorten.zero?
       # shorten value of 2 means to, if a skill name ends in a single "W" or number, to replace that with a "W"
       # used when searching for the icon of a weapon's refinement
       f[f.length-1]="W" if shorten==2
@@ -1342,7 +1344,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
     event << ""
     event << text
     unless xfields.nil?
-      if mode==0
+      if mode.zero?
         event << ""
         for i in 0...xfields.length
           event << "__#{xfields[i][0]}:__ #{xfields[i][1].gsub("\n"," / ")}"
@@ -1363,7 +1365,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
           flumb[5]=nil
           flumb.compact!
           for j in 0...flumb.length
-            if i==0
+            if i.zero?
               fields[j+1][0]="#{fields[j+1][0]}	#{flumb[j].gsub(statnames[j],"").gsub("GPT: ","")}"
             else
               fields[j+1].push(flumb[j].gsub(statnames[j],"").gsub("GPT: ",""))
@@ -3027,11 +3029,11 @@ def pick_thumbnail(event,j,bot)
   d=@units[j]
   return 'http://vignette.wikia.nocookie.net/fireemblem/images/0/04/Kiran.png' if d[0]=='Kiran'
   return bot.user(d[13]).avatar_url if d.length>13 && !d[13].nil? && d[13].is_a?(Bignum)
-  return 'https://cdn.discordapp.com/emojis/418140222530912256.png' if d[0]=='Nino' && (event.message.text.downcase.include?('face') || rand(100)==0)
-  return 'https://cdn.discordapp.com/emojis/420339780421812227.png' if d[0]=='Amelia' && (event.message.text.downcase.include?('face') || rand(1000)==0)
-  return 'https://cdn.discordapp.com/emojis/420339781524783114.png' if d[0]=='Reinhardt(Bonds)' && (event.message.text.downcase.include?('grin') || rand(100)==0)
-  return 'https://cdn.discordapp.com/emojis/437515327652364288.png' if d[0]=='Reinhardt(World)' && (event.message.text.downcase.include?('grin') || rand(100)==0)
-  return 'https://cdn.discordapp.com/emojis/437519293240836106.png' if d[0]=='Arden' && (event.message.text.downcase.include?('woke') || rand(100)==0)
+  return 'https://cdn.discordapp.com/emojis/418140222530912256.png' if d[0]=='Nino' && (event.message.text.downcase.include?('face') || rand(100).zero?)
+  return 'https://cdn.discordapp.com/emojis/420339780421812227.png' if d[0]=='Amelia' && (event.message.text.downcase.include?('face') || rand(1000).zero?)
+  return 'https://cdn.discordapp.com/emojis/420339781524783114.png' if d[0]=='Reinhardt(Bonds)' && (event.message.text.downcase.include?('grin') || rand(100).zero?)
+  return 'https://cdn.discordapp.com/emojis/437515327652364288.png' if d[0]=='Reinhardt(World)' && (event.message.text.downcase.include?('grin') || rand(100).zero?)
+  return 'https://cdn.discordapp.com/emojis/437519293240836106.png' if d[0]=='Arden' && (event.message.text.downcase.include?('woke') || rand(100).zero?)
   return 'https://cdn.discordapp.com/emojis/420360385862828052.png' if d[0]=='Sakura' && event.message.text.downcase.include?("mathoo's")
   return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{d[0]}/Face_FC.png"
 end
@@ -3265,8 +3267,8 @@ def display_stars(rarity,merges,support='-')
   end
   emo="<:Icon_Rarity_S:448266418035621888>" unless support=='-'
   emo="<:Icon_Rarity_Sp10:448272715653054485>" if rarity==5 && merges==@max_rarity_merge[1] && support != '-'
-  return "**#{rarity}-star#{" +#{merges}" unless merges==0}**#{"	<:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}" if rarity>5
-  return "#{emo*rarity}#{"**+#{merges}**" unless merges==0}#{"	<:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}"
+  return "**#{rarity}-star#{" +#{merges}" unless merges.zero?}**#{"	<:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}" if rarity>5
+  return "#{emo*rarity}#{"**+#{merges}**" unless merges.zero?}#{"	<:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}"
 end
 
 def disp_stats(bot,name,weapon,event,ignore=false)
@@ -3842,7 +3844,7 @@ def disp_skill(name,event,ignore=false)
   else
     p=p.reject{|q| !has_any?(sklslt, @skills[find_skill(q,event,true,true)][4].split(', '))}
   end
-  if p.length==0
+  if p.length.zero?
     p=nil
   else
     for i2 in 0...p.length
@@ -4093,7 +4095,7 @@ def unit_skills(name,event,justdefault=false,r=0)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(" ")
-  if name.nil? || name.length==0
+  if name.nil? || name.length.zero?
     str=find_name_in_string(event)
     char=@units[find_unit(str,event)]
   else
@@ -4161,8 +4163,8 @@ def unit_skills(name,event,justdefault=false,r=0)
       box2[i].push(box[i][j][0]) if box[i][j][8]=='-'
     end
     for j in 0...sklz[i].length
-      sklz2[i].push(sklz[i][j][0]) if sklz[i][j][8]=='-' && !(i==0 && sklz[i][j][6]!='-')
-      retroprf=sklz[i][j][0] if sklz[i][j][8]=='-' && i==0 && sklz[i][j][6]!='-'
+      sklz2[i].push(sklz[i][j][0]) if sklz[i][j][8]=='-' && !(i.zero? && sklz[i][j][6]!='-')
+      retroprf=sklz[i][j][0] if sklz[i][j][8]=='-' && i.zero? && sklz[i][j][6]!='-'
     end
   end
   retroprf="**#{retroprf}**" if box2[0].include?(retroprf)
@@ -4177,7 +4179,7 @@ def unit_skills(name,event,justdefault=false,r=0)
     end
   end
   for i in 0...6
-    if box[i].length>0 && box2[i].length==0
+    if box[i].length>0 && box2[i].length.zero?
       box2[i].push("~~Unknown base~~")
       for j in 0...box[i].length
         box2[i].push(box[i][j][0].gsub('Bladeblade','Laevatein')) if box[i][j][8].include?("* or *") || box[i][j][8].include?("*, *")
@@ -4188,7 +4190,7 @@ def unit_skills(name,event,justdefault=false,r=0)
         end
       end
     end
-    if sklz[i].length>0 && sklz2[i].length==0
+    if sklz[i].length>0 && sklz2[i].length.zero?
       sklz2[i].push("~~Unknown base~~")
       for j in 0...sklz[i].length
         sklz2[i].push(sklz[i][j][0].gsub('Bladeblade','Laevatein')) if sklz[i][j][8].include?("* or *") || sklz[i][j][8].include?("*, *")
@@ -4291,7 +4293,7 @@ def disp_unit_skills(bot,name,event,ignore=false,chain=false,doubleunit=false)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(" ")
-  if name.nil? || name.length==0
+  if name.nil? || name.length.zero?
     str=find_name_in_string(event)
     char=@units[find_unit(str,event)]
   else
@@ -4304,7 +4306,7 @@ def disp_unit_skills(bot,name,event,ignore=false,chain=false,doubleunit=false)
   boon=flurp[2]
   bane=flurp[3]
   j=find_unit(find_name_in_string(event),event)
-  j=find_unit(name,event) unless name.nil? || name.length==0
+  j=find_unit(name,event) unless name.nil? || name.length.zero?
   xcolor=unit_color(event,j,0,false,chain)
   mu=false
   txt="#{["<:Icon_Rarity_1:448266417481973781>","<:Icon_Rarity_2:448266417872044032>","<:Icon_Rarity_3:448266417934958592>","<:Icon_Rarity_4:448266418459377684>","<:Icon_Rarity_5:448266417553539104>"][rarity.to_i-1]*rarity.to_i}"
@@ -4418,7 +4420,9 @@ def sever(str,sklz=false)
   str=str.split('/').join(' / ')
   s=str.split(' ').join(' ')
   k=str.split('*')
-  for i in 0...k.length-1
+  k2=1
+  k2=0 if k.length==1 && k[0][0,1].to_i.to_s==k[0][0,1]
+  for i in 0...k.length-k2
     k[i]="#{k[i]}*"
   end
   str=k.join(' ')
@@ -5124,7 +5128,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     return f
   else
     matches5=matches5.uniq
-    if matches5.length==0
+    if matches5.length.zero?
       event.respond 'No matches found.'
       return false
     elsif matches5.length==1
@@ -5465,9 +5469,9 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[4]}.uniq[0]=='Assist' && matches4.map{|q| q[5]}.uniq.length>1
     matches4=split_list(event,matches4,[['Rally',1],['Move',2],['Music',1],['Health',2],['Staff',1]],11)
   elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[4]}.uniq[0]=='Special'
-    if matches4.reject{|q| q[11].split(', ').include?('Damage')}.length==0 && matches4[0][11].split(', ').include?('Damage')
+    if matches4.reject{|q| q[11].split(', ').include?('Damage')}.length.zero? && matches4[0][11].split(', ').include?('Damage')
       matches4=split_list(event,matches4,[['StarSpecial',2],['MoonSpecial',2],['SunSpecial',2],['EclipseSpecial',1],['FireSpecial',2],['IceSpecial',2],['DragonSpecial',2],['DarkSpecial',2],['RendSpecial',2]],11)
-    elsif matches4.reject{|q| q[11].split(', ').include?('Defense')}.length==0 && matches4[0][11].split(', ').include?('Defense')
+    elsif matches4.reject{|q| q[11].split(', ').include?('Defense')}.length.zero? && matches4[0][11].split(', ').include?('Defense')
       matches4=split_list(event,matches4,[['MiracleSpecial',2],['SupershieldSpecial',1],['AegisSpecial',2],['PaviseSpecial',2]],11)
     elsif matches4.map{|q| q[5]}.uniq.length>1
       matches4=split_list(event,matches4,[['Damage',1],['Defense',1],['AoE',1],['Staff',1]],11)
@@ -5544,7 +5548,7 @@ def display_units(event, mode)
           h="<:Red_Blade:443172811830198282> Swords" if p1[i].include?("Alfonse") || (wpn1[0]==["Red", "Blade"])
           h="<:Blue_Blade:443172811582996480> Lances" if p1[i].include?("Sharena") || (wpn1[0]==["Blue", "Blade"])
           h="<:Green_Blade:443172811721146368> Axes" if p1[i].include?("Anna") || (wpn1[0]==["Green", "Blade"])
-          h="<:Colorless_Blade:443692132310712322> Rods" if wpn1.uniq==0 && wpn1[0]==["Colorless", "Blade"]
+          h="<:Colorless_Blade:443692132310712322> Rods" if wpn1.uniq.zero? && wpn1[0]==["Colorless", "Blade"]
           # Magic types
           h="<:Red_Tome:443172811826003968> Fire Mages" if p1[i].include?("Lilina") || (wpn1[0]==["Red", "Tome", "Fire"])
           h="<:Red_Tome:443172811826003968> Dark Mages" if p1[i].include?("Raigh") || (wpn1[0]==["Red", "Tome", "Dark"])
@@ -5555,7 +5559,7 @@ def display_units(event, mode)
           h="<:Red_Dragon:443172811796774932> Red Dragons" if p1[i].include?("Tiki(Young)") || (wpn1[0]==["Red", "Dragon"])
           h="<:Blue_Dragon:443172811952095232> Blue Dragons" if p1[i].include?("Nowi") || (wpn1[0]==["Blue", "Dragon"])
           h="<:Green_Dragon:443172811780128768> Green Dragons" if p1[i].include?("Fae") || (wpn1[0]==["Green", "Dragon"])
-          h="<:Colorless_Dragon:443692132415438849> Colorless Dragons" if p1[i].include?("Robin(F)(Fallen)") || (wpn1.uniq==0 && wpn1[0]==["Colorless", "Dragon"])
+          h="<:Colorless_Dragon:443692132415438849> Colorless Dragons" if p1[i].include?("Robin(F)(Fallen)") || (wpn1.uniq.zero? && wpn1[0]==["Colorless", "Dragon"])
           # archer colors
           h="<:Red_Bow:443172812455280641> Red Archers" if (wpn1[0]==["Red", "Bow"])
           h="<:Blue_Bow:443172811612225536> Blue Archers" if (wpn1[0]==["Blue", "Bow"])
@@ -5620,9 +5624,9 @@ def display_units(event, mode)
       p2=k[k.length/3+l,k.length/3+m].join("\n")
       p3=k[2*(k.length/3)+l+m,k.length/3+l].join("\n")
       if p1.length+p2.length+p3.length<=1900
-        if p2.length==0
+        if p2.length.zero?
           create_embed(event,"Results",'',0x9400D3,nil,nil,[['.',p1],['.',p3]])
-        elsif p1.length==0
+        elsif p1.length.zero?
           create_embed(event,"Results",p2,0x9400D3)
         else
           create_embed(event,"Results",'',0x9400D3,nil,nil,[['.',p1],['.',p2],['.',p3]])
@@ -5814,9 +5818,9 @@ def display_skills(event, mode)
       p2=k[k.length/3+l,k.length/3+m].join("\n")
       p3=k[2*(k.length/3)+l+m,k.length/3+l].join("\n")
       if p1.length+p2.length+p3.length<=1900
-        if p2.length==0
+        if p2.length.zero?
           create_embed(event,"Results",'',0x9400D3,nil,nil,[['.',p1],['.',p3]])
-        elsif p1.length==0
+        elsif p1.length.zero?
           create_embed(event,"Results",p2,0x9400D3)
         else
           create_embed(event,"Results",'',0x9400D3,nil,nil,[['.',p1],['.',p2],['.',p3]])
@@ -6357,7 +6361,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       return [str,['Robin(M)'],["male#{str}","m#{str}","#{str}male","#{str}m"]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
-    return [str,['Robin'],[str]] if robinmode==0
+    return [str,['Robin'],[str]] if robinmode.zero?
     return [str,['Robin(M)','Robin(F)'],[str]] if robinmode==1
   elsif /grima/ =~ str1
     str="grima"
@@ -6923,7 +6927,7 @@ def filler(list1,list2,n,m=-1,key='',type=0,mode="||",mode2='')
       x="#{x}.length<#{key[i]}" if type[i]==2
       x="!#{x}.include?(#{key[i]})" if type[i]==1
       x="#{x}==#{key[i]}" if type[i]==10
-      x="#{x}!=#{key[i]}" if type[i]==0
+      x="#{x}!=#{key[i]}" if type[i].zero?
       if y.length>=1
         y="#{y} #{mode} #{x}"
       else
@@ -6954,7 +6958,7 @@ def filler(list1,list2,n,m=-1,key='',type=0,mode="||",mode2='')
       x="#{x}.length<#{key[i]}" if type[i]==2
       x="!#{x}.include?(#{key[i]})" if type[i]==1
       x="#{x}==#{key[i]}" if type[i]==10
-      x="#{x}!=#{key[i]}" if type[i]==0
+      x="#{x}!=#{key[i]}" if type[i].zero?
       if y.length>=1
         y="#{y} #{mode} #{x}"
       else
@@ -7389,7 +7393,7 @@ def unit_study(event,name,bot,weapon=nil)
     summon_type[6]=nil
   end
   summon_type.compact!
-  summon_type=["Unobtainable"] if summon_type.nil? || summon_type.length==0
+  summon_type=["Unobtainable"] if summon_type.nil? || summon_type.length.zero?
   summon_type=summon_type.join(', ')
   if j<0
     event.respond "No unit was included"
@@ -8316,10 +8320,10 @@ def disp_art(event,name,bot,weapon=nil)
   artype="BtlFace_D" if args.include?('damage') || args.include?('damaged') || (args.include?('low') && (args.include?('health') || args.include?('hp'))) || args.include?('lowhealth') || args.include?('lowhp') || args.include?('low_health') || args.include?('low_hp')
   artype="BtlFace_C" if args.include?('critical') || args.include?('special') || args.include?('crit') || args.include?('proc')
   art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{j[0]}/#{artype}.png"
-  if j[0]=="Reinhardt(World)" && (rand(100)==0 || event.message.text.downcase.include?('zelda'))
+  if j[0]=="Reinhardt(World)" && (rand(100).zero? || event.message.text.downcase.include?('zelda'))
     art="https://i.redd.it/pdeqrncp21r01.png"
     j[6]="u/ZachminSSB (ft. #{j[6]})"
-  elsif j[0]=="Arden" && (rand(1000)==0 || event.message.text.downcase.include?('infinity'))
+  elsif j[0]=="Arden" && (rand(1000).zero? || event.message.text.downcase.include?('infinity'))
     art="https://pbs.twimg.com/media/DcEh5jRWsAAYofz.png"
     j[6]="@_DJSaturn (twitter)"
   end
@@ -8940,7 +8944,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
   return nil
 end
 
-bot.command([:refinery,:refine]) do |event|
+bot.command([:refinery,:refine,:effect]) do |event|
   return nil if overlap_prevent(event)
   event.channel.send_temporary_message("Calculating data, please wait...",1)
   srv=0
@@ -8949,9 +8953,80 @@ bot.command([:refinery,:refine]) do |event|
   stones=[]
   dew=[]
   g=get_markers(event)
-  skkz=@skills.map{|q| q}
+  skkz=@skills.map{|q| q}.reject{|q| q[0]=="Falchion" || q[0]=="Breidablik" || q[4]!='Weapon' || !has_any?(g, q[13])}
+  if event.message.text.downcase.include?('effect')
+    for i in 0...skkz.length
+      eff=false
+      unless skkz[i][15].nil? || skkz[i][15].length.zero?
+        str=skkz[i][15].split(' ').join(' ')
+        for i2 in 0...6
+          if str[0,1]=='-' && str[1,1].to_i.to_s==str[1,1]
+            str=str[2,str.length-2]
+          elsif str[0,1].to_i.to_s==str[0,1]
+            str=str[1,str.length-1]
+          end
+        end
+        eff=true if str[0,1]!='*' && str != 'y'
+      end
+      if eff
+        if skkz[i][6]=="-"
+          stones.push("#{"~~" unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} (->) #{find_effect_name(skkz[i],event,1)}#{"~~" unless skkz[i][13].nil?}")
+        else
+          dew.push("#{"~~" unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} (->) #{find_effect_name(skkz[i],event,1)}#{"~~" unless skkz[i][13].nil?}")
+        end
+      end
+    end
+    stones.uniq!
+    dew.uniq!
+    puts stones.to_s
+    puts dew.to_s
+    if stones.join("\n").length+dew.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      if dew.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg="__**Weapon Refines with Effect Modes: Divine Dew**__"
+        k=[["<:Red_Blade:443172811830198282> Swords",[]],["<:Red_Tome:443172811826003968> Red Tomes",[]],["<:Blue_Blade:443172811582996480> Lances",[]],["<:Blue_Tome:443172811104714763> Blue Tomes",[]],["<:Green_Blade:443172811721146368> Axes",[]],["<:Green_Tome:443172811759157248> Green Tomes",[]],["<:Gold_Dragon:443172811641454592> Dragonstones",[]],["<:Gold_Bow:443172812492898314> Bows",[]],["#{"<:Gold_Dagger:443172811461230603>" if colored_daggers?(event)}#{"<:Colorless_Dagger:443692132683743232>" unless colored_daggers?(event)} Daggers",[]],["#{"<:Gold_Staff:443172811628871720>" if colored_healers?(event)}#{"<:Colorless_Staff:443692132323295243>" unless colored_healers?(event)} Staves",[]],["<:Gold_Beast:443172811608162324> Beaststones",[]]]
+        for i in 0...dew.length
+          k2="#{@skills[find_skill(stat_buffs(dew[i].gsub('~~','').split(' (->) ')[0]),event,false,true)][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          for j in 0...k.length
+            k[j][1].push(dew[i]) if k2==k[j][0].split('> ')[1]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        dew2=dew[dew.length/2+dew.length%2,dew.length/2].join("\n")
+        dew=dew[0,dew.length/2+3*dew.length%2].join("\n")
+        create_embed(event,"__**Weapon Refines with Effect Modes: Divine Dew**__",'',0x9BFFFF,nil,nil,[['.',dew],['.',dew2]],3)
+      end
+      if stones.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg="__**Weapon Refines with Effect Modes: Refining Stones**__"
+        k=[["<:Red_Blade:443172811830198282> Swords",[]],["<:Red_Tome:443172811826003968> Red Tomes",[]],["<:Blue_Blade:443172811582996480> Lances",[]],["<:Blue_Tome:443172811104714763> Blue Tomes",[]],["<:Green_Blade:443172811721146368> Axes",[]],["<:Green_Tome:443172811759157248> Green Tomes",[]],["<:Gold_Dragon:443172811641454592> Dragonstones",[]],["<:Gold_Bow:443172812492898314> Bows",[]],["#{"<:Gold_Dagger:443172811461230603>" if colored_daggers?(event)}#{"<:Colorless_Dagger:443692132683743232>" unless colored_daggers?(event)} Daggers",[]],["#{"<:Gold_Staff:443172811628871720>" if colored_healers?(event)}#{"<:Colorless_Staff:443692132323295243>" unless colored_healers?(event)} Staves",[]],["<:Gold_Beast:443172811608162324> Beaststones",[]]]
+        for i in 0...stones.length
+          k2="#{@skills[find_skill(stat_buffs(stones[i].gsub('~~','').split(' (->) ')[0]),event,false,true)][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          for j in 0...k.length
+            k[j][1].push(stones[i]) if k2==k[j][0].split('> ')[1]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        stones2=stones[stones.length/2+stones.length%2,stones.length/2].join("\n")
+        stones=stones[0,stones.length/2+3*stones.length%2].join("\n")
+        create_embed(event,"__**Weapon Refines with Effect Modes: Refining Stones**__",'',0x688C68,nil,nil,[['.',stones],['.',stones2]],3)
+      end
+    else
+      dew2=dew[dew.length/2+dew.length%2,dew.length/2].join("\n")
+      dew=dew[0,dew.length/2+3*dew.length%2].join("\n")
+      create_embed(event,"__**Weapon Refines with Effect Modes**__",'',0x688C68,nil,nil,[['Divine Dew',dew],['Divine Dew',dew2],['Refining Stones',stones.join("\n"),1]],3)
+    end
+    return nil
+  end
+  puts skkz.map{|q| q.to_s}
   for i in 0...skkz.length
-    if skkz[i][4]=="Weapon" && skkz[i][0]!="Falchion" && skkz[i][0]!="Breidablik" && !skkz[i][15].nil? && has_any?(g, skkz[i][13])
+    if !skkz[i][15].nil?
       if skkz[i][6]=="-"
         stones.push("#{"~~" unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')}#{"~~" unless skkz[i][13].nil?}")
       else
@@ -8963,19 +9038,19 @@ bot.command([:refinery,:refine]) do |event|
   stones2=[]
   for i in 0...skkz.length
     unless skkz[i].nil?
-      if skkz[i][4]=="Weapon" && skkz[i][0]!="Falchion" && skkz[i][0]!="Breidablik" && !skkz[i][14].nil? && has_any?(g, skkz[i][13])
+      if !skkz[i][14].nil?
         s=skkz[i][14].split(', ')
         for j in 0...s.length
           if s[j].include?('!')
             s[j]=s[j].split('!')
-            s2=skkz[find_skill(s[j][1],event)]
+            s2=skkz[skkz.find_index{|q| q[0]==s[j][1]}]
             if s2[6]=="-"
               stones2.push("#{"~~" unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})#{"~~" unless skkz[i][13].nil?}")
             else
               dew2.push("#{"~~" unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})#{"~~" unless skkz[i][13].nil?}")
             end
           else
-            s2=skkz[find_skill(s[j],event)]
+            s2=skkz[skkz.find_index{|q| q[0]==s[j]}]
             if s2[6]=="-"
               stones2.push("#{"~~" unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{"~~" unless skkz[i][13].nil?}")
             else
@@ -8994,11 +9069,11 @@ bot.command([:refinery,:refine]) do |event|
     if dew2.join("\n").length+stones2.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew2.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg="__**Weapon Evolution: Divine Dew**__"
-        k=[["Swords",[]],["Red Tomes",[]],["Lances",[]],["Blue Tomes",[]],["Axes",[]],["Green Tomes",[]],["Dragonstones",[]],["Bows",[]],["Daggers",[]],["Staves",[]]]
+        k=[["<:Red_Blade:443172811830198282> Swords",[]],["<:Red_Tome:443172811826003968> Red Tomes",[]],["<:Blue_Blade:443172811582996480> Lances",[]],["<:Blue_Tome:443172811104714763> Blue Tomes",[]],["<:Green_Blade:443172811721146368> Axes",[]],["<:Green_Tome:443172811759157248> Green Tomes",[]],["<:Gold_Dragon:443172811641454592> Dragonstones",[]],["<:Gold_Bow:443172812492898314> Bows",[]],["#{"<:Gold_Dagger:443172811461230603>" if colored_daggers?(event)}#{"<:Colorless_Dagger:443692132683743232>" unless colored_daggers?(event)} Daggers",[]],["#{"<:Gold_Staff:443172811628871720>" if colored_healers?(event)}#{"<:Colorless_Staff:443692132323295243>" unless colored_healers?(event)} Staves",[]],["<:Gold_Beast:443172811608162324> Beaststones",[]]]
         for i in 0...dew2.length
           k2="#{@skills[find_skill(stat_buffs(dew2[i].gsub('~~','').split(' -> ')[0]),event,false,true)][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone')}s"
           for j in 0...k.length
-            k[j][1].push(dew2[i]) if k2==k[j][0]
+            k[j][1].push(dew2[i]) if k2==k[j][0].split('> ')[1]
           end
         end
         for i in 0...k.length
@@ -9017,11 +9092,11 @@ bot.command([:refinery,:refine]) do |event|
       end
       if stones2.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg="__**Weapon Evolution: Refining Stones**__"
-        k=[["Swords",[]],["Red Tomes",[]],["Lances",[]],["Blue Tomes",[]],["Axes",[]],["Green Tomes",[]],["Dragonstones",[]],["Bows",[]],["Daggers",[]],["Staves",[]]]
+        k=[["<:Red_Blade:443172811830198282> Swords",[]],["<:Red_Tome:443172811826003968> Red Tomes",[]],["<:Blue_Blade:443172811582996480> Lances",[]],["<:Blue_Tome:443172811104714763> Blue Tomes",[]],["<:Green_Blade:443172811721146368> Axes",[]],["<:Green_Tome:443172811759157248> Green Tomes",[]],["<:Gold_Dragon:443172811641454592> Dragonstones",[]],["<:Gold_Bow:443172812492898314> Bows",[]],["#{"<:Gold_Dagger:443172811461230603>" if colored_daggers?(event)}#{"<:Colorless_Dagger:443692132683743232>" unless colored_daggers?(event)} Daggers",[]],["#{"<:Gold_Staff:443172811628871720>" if colored_healers?(event)}#{"<:Colorless_Staff:443692132323295243>" unless colored_healers?(event)} Staves",[]],["<:Gold_Beast:443172811608162324> Beaststones",[]]]
         for i in 0...stones2.length
           k2="#{@skills[find_skill(stat_buffs(stones2[i].gsub('~~','').split(' -> ')[0]),event,false,true)][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone')}s"
           for j in 0...k.length
-            k[j][1].push(stones2[i]) if k2==k[j][0]
+            k[j][1].push(stones2[i]) if k2==k[j][0].split('> ')[1]
           end
         end
         for i in 0...k.length
@@ -9044,11 +9119,11 @@ bot.command([:refinery,:refine]) do |event|
     if stones.join("\n").length+dew.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg="__**Weapon Refines: Divine Dew**__"
-        k=[["Swords",[]],["Red Tomes",[]],["Lances",[]],["Blue Tomes",[]],["Axes",[]],["Green Tomes",[]],["Dragonstones",[]],["Bows",[]],["Daggers",[]],["Staves",[]]]
+        k=[["<:Red_Blade:443172811830198282> Swords",[]],["<:Red_Tome:443172811826003968> Red Tomes",[]],["<:Blue_Blade:443172811582996480> Lances",[]],["<:Blue_Tome:443172811104714763> Blue Tomes",[]],["<:Green_Blade:443172811721146368> Axes",[]],["<:Green_Tome:443172811759157248> Green Tomes",[]],["<:Gold_Dragon:443172811641454592> Dragonstones",[]],["<:Gold_Bow:443172812492898314> Bows",[]],["#{"<:Gold_Dagger:443172811461230603>" if colored_daggers?(event)}#{"<:Colorless_Dagger:443692132683743232>" unless colored_daggers?(event)} Daggers",[]],["#{"<:Gold_Staff:443172811628871720>" if colored_healers?(event)}#{"<:Colorless_Staff:443692132323295243>" unless colored_healers?(event)} Staves",[]],["<:Gold_Beast:443172811608162324> Beaststones",[]]]
         for i in 0...dew.length
           k2="#{@skills[find_skill(stat_buffs(dew[i].gsub('~~','')),event,false,true)][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone')}s"
           for j in 0...k.length
-            k[j][1].push(dew[i]) if k2==k[j][0]
+            k[j][1].push(dew[i]) if k2==k[j][0].split('> ')[1]
           end
         end
         for i in 0...k.length
@@ -9067,11 +9142,11 @@ bot.command([:refinery,:refine]) do |event|
       end
       if stones.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg="__**Weapon Refines: Refining Stones**__"
-        k=[["Swords",[]],["Red Tomes",[]],["Lances",[]],["Blue Tomes",[]],["Axes",[]],["Green Tomes",[]],["Dragonstones",[]],["Bows",[]],["Daggers",[]],["Staves",[]]]
+        k=[["<:Red_Blade:443172811830198282> Swords",[]],["<:Red_Tome:443172811826003968> Red Tomes",[]],["<:Blue_Blade:443172811582996480> Lances",[]],["<:Blue_Tome:443172811104714763> Blue Tomes",[]],["<:Green_Blade:443172811721146368> Axes",[]],["<:Green_Tome:443172811759157248> Green Tomes",[]],["<:Gold_Dragon:443172811641454592> Dragonstones",[]],["<:Gold_Bow:443172812492898314> Bows",[]],["#{"<:Gold_Dagger:443172811461230603>" if colored_daggers?(event)}#{"<:Colorless_Dagger:443692132683743232>" unless colored_daggers?(event)} Daggers",[]],["#{"<:Gold_Staff:443172811628871720>" if colored_healers?(event)}#{"<:Colorless_Staff:443692132323295243>" unless colored_healers?(event)} Staves",[]],["<:Gold_Beast:443172811608162324> Beaststones",[]]]
         for i in 0...stones.length
           k2="#{@skills[find_skill(stat_buffs(stones[i].gsub('~~','')),event,false,true)][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone')}s"
           for j in 0...k.length
-            k[j][1].push(stones[i]) if k2==k[j][0]
+            k[j][1].push(stones[i]) if k2==k[j][0].split('> ')[1]
           end
         end
         for i in 0...k.length
@@ -9245,7 +9320,7 @@ bot.command([:random,:rand]) do |event, *args|
     l1_total-=8
   elsif event.message.text.downcase.split(' ').include?('nonmusical')
   elsif event.message.text.downcase.split(' ').include?('non-musical')
-  elsif clazz[1]!='Healer' && rand(10)==0
+  elsif clazz[1]!='Healer' && rand(10).zero?
     clazz2.push(['Dancer','Singer'].sample)
     l1_total-=8
   end
@@ -9392,7 +9467,7 @@ bot.command([:random,:rand]) do |event, *args|
   ftr=nil
   unless event.server.nil?
     imgx=event.server.users.sample
-    imgx=event.user if rand(100)==0 && event.server.users.length>100
+    imgx=event.user if rand(100).zero? && event.server.users.length>100
     img=imgx.avatar_url
     ftr="Unit profile provided by #{imgx.distinct}"
   end
@@ -9437,7 +9512,7 @@ bot.command([:skillrarity,:onestar,:twostar,:threestar,:fourstar,:fivestar,:skil
   elsif s=='fivestar'
     xcolor=0x9B7423
     r="5\\*"
-  elsif rand(100)==0
+  elsif rand(100).zero?
     xcolor=0xDC3461
   end
   if " #{event.message.text.downcase} ".include?(' progression ')
@@ -9531,53 +9606,53 @@ bot.command(:summon) do |event, *colors|
     fakes=false
     fakes=true if @summon_rate[0]>=120 && @summon_rate[2]%3==0
     event << "5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % focus}%"
-    event << "Other 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % five_star}%" unless five_star==0
+    event << "Other 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % five_star}%" unless five_star.zero?
     if fakes
       if bnr[8].nil?
-        event << "~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % four_star}%" unless four_star==0
+        event << "~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % four_star}%" unless four_star.zero?
       elsif four_star>0
         event << "~~4\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (four_star/2)}%"
         event << "Other ~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (four_star/2)}%"
       end
       if bnr[9].nil?
-        event << "~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % three_star}%" unless three_star==0
+        event << "~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % three_star}%" unless three_star.zero?
       elsif three_star>0
         event << "~~3\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (three_star/2)}%"
         event << "Other ~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (three_star/2)}%"
       end
       if bnr[10].nil?
-        event << "~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % two_star}%" unless two_star==0
+        event << "~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % two_star}%" unless two_star.zero?
       elsif two_star>0
         event << "~~2\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (two_star/2)}%"
         event << "Other ~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (two_star/2)}%"
       end
       if bnr[11].nil?
-        event << "~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % one_star}%" unless one_star==0
+        event << "~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % one_star}%" unless one_star.zero?
       elsif two_star>0
         event << "~~1\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (one_star/2)}%"
         event << "Other ~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (one_star/2)}%"
       end
     else
       if bnr[8].nil?
-        event << "4<:Icon_Rarity_4:448266418459377684> Unit:	#{'%.2f' % four_star}%" unless four_star==0
+        event << "4<:Icon_Rarity_4:448266418459377684> Unit:	#{'%.2f' % four_star}%" unless four_star.zero?
       elsif four_star>0
         event << "4<:Icon_Rarity_4p10:448272714210476033> Focus:	#{'%.2f' % (four_star/2)}%"
         event << "Other 4<:Icon_Rarity_4:448266418459377684>:	#{'%.2f' % (four_star/2)}%"
       end
       if bnr[9].nil?
-        event << "3<:Icon_Rarity_3:448266417934958592> Unit:	#{'%.2f' % three_star}%" unless three_star==0
+        event << "3<:Icon_Rarity_3:448266417934958592> Unit:	#{'%.2f' % three_star}%" unless three_star.zero?
       elsif three_star>0
         event << "3<:Icon_Rarity_3p10:448294378293952513> Focus:	#{'%.2f' % (three_star/2)}%"
         event << "Other 3<:Icon_Rarity_3:448266417934958592>:	#{'%.2f' % (three_star/2)}%"
       end
       if bnr[10].nil?
-        event << "2<:Icon_Rarity_2:448266417872044032> Unit:	#{'%.2f' % two_star}%" unless two_star==0
+        event << "2<:Icon_Rarity_2:448266417872044032> Unit:	#{'%.2f' % two_star}%" unless two_star.zero?
       elsif two_star>0
         event << "2<:Icon_Rarity_2p10:448294378205872130> Focus:	#{'%.2f' % (two_star/2)}%"
         event << "Other 2<:Icon_Rarity_2:448266417872044032>:	#{'%.2f' % (two_star/2)}%"
       end
       if bnr[11].nil?
-        event << "1<:Icon_Rarity_1:448266417481973781> Unit:	#{'%.2f' % one_star}%" unless one_star==0
+        event << "1<:Icon_Rarity_1:448266417481973781> Unit:	#{'%.2f' % one_star}%" unless one_star.zero?
       elsif two_star>0
         event << "1<:Icon_Rarity_1p10:448294377878716417> Focus:	#{'%.2f' % (one_star/2)}%"
         event << "Other 1<:Icon_Rarity_1:448266417481973781>:	#{'%.2f' % (one_star/2)}%"
@@ -9640,7 +9715,7 @@ bot.command(:summon) do |event, *colors|
     cracked_orbs=[]
     if colors.nil?
       event << "**Orb options:**"
-    elsif colors.length==0
+    elsif colors.length.zero?
       event << "**Orb options:**"
     else
       trucolors=[]
@@ -9654,7 +9729,7 @@ bot.command(:summon) do |event, *colors|
         for i in 1...@banner.length
           cracked_orbs.push([@banner[i],i]) if trucolors.include?(@units[find_unit(@banner[i][1],event)][1][0])
         end
-        event << "None of the colors you requested appeared.  Here are your **Orb options:**" if cracked_orbs.length==0
+        event << "None of the colors you requested appeared.  Here are your **Orb options:**" if cracked_orbs.length.zero?
       else
         event << "**Orb options:**"
       end
@@ -10286,7 +10361,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   srv=event.server.id unless event.server.nil?
   srv=modifier.to_i if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
   srvname="PM with dev"
-  srvname=bot.server(srv).name unless event.server.nil? && srv==0
+  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
   checkstr=normalize(newname)
   k=event.message.emoji
   for i in 0...k.length
@@ -10343,7 +10418,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   srv=event.server.id unless event.server.nil?
   srv=modifier.to_i if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
   srvname='PM with dev'
-  srvname=bot.server(srv).name unless event.server.nil? && srv==0
+  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
   if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
     m=[modifier.to_i]
     modifier=nil
@@ -10407,7 +10482,7 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   data_load()
   nicknames_load()
-  unless args.length==0
+  unless args.length.zero?
     unit=@units[find_unit(args.join(''),event)][0]
     if !detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1).nil?
       x=detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1)
@@ -10469,7 +10544,7 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
     for i1 in 0...unit.length
       u=@units[find_unit(unit[i1],event)][0]
       m=m.reject{|q| !q[1].include?(u)}
-      f.push("#{"\n" unless i1==0}**#{u.gsub('Lavatain','Laevatein')}**")
+      f.push("#{"\n" unless i1.zero?}**#{u.gsub('Lavatain','Laevatein')}**")
       f.push(u) if u=='Lavatain'
       f.push(u.gsub('(','').gsub(')','')) if u.include?('(') || u.include?(')')
       for i in 0...n.length
@@ -10553,7 +10628,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname="PM with dev"
-  srvname=bot.server(srv).name unless event.server.nil? && srv==0
+  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
   bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**Alias:** #{name} for #{@units[j][0]}~~ **DELETED**.")
   open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
     for i in 0...@aliases.length
@@ -10683,7 +10758,7 @@ bot.command([:seegroups,:checkgroups,:groups]) do |event|
       display=true
       display=false if @groups[i][0].downcase=="mathoo'swaifus"
       display=true if event.user.id==167657750971547648
-      display=true if !event.server.nil? && !bot.user(167657750971547648).on(event.server.id).nil? && rand(100)==0
+      display=true if !event.server.nil? && !bot.user(167657750971547648).on(event.server.id).nil? && rand(100).zero?
       if display
         if @groups[i][1].length<=0
           msg=extend_message(msg,"**#{@groups[i][0]}**\n#{get_group(@groups[i][0],event)[1].map{|q| q.gsub('Lavatain','Laevatein')}.sort.join(', ')}",event,2) if event.user.id==167657750971547648 || @groups[i][0].downcase != "mathoo'swaifus"
@@ -10740,7 +10815,7 @@ bot.command([:deletegroup,:removegroup]) do |event, name|
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname="PM with dev"
-  srvname=bot.server(srv).name unless event.server.nil? && srv==0
+  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
   bot.channel(logchn).send_message("**Server:** #{srvname} (#{k})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**Group:** #{name}~~\n**DELETED**")
   @groups.compact!
   open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt', 'w') { |f|
@@ -10802,7 +10877,7 @@ bot.command([:removemember,:removefromgroup]) do |event, group, unit|
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname="PM with dev"
-  srvname=bot.server(srv).name unless event.server.nil? && srv==0
+  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
   if r
     event << "#{@units[i][0].gsub('Lavatain','Laevatein')} has been removed from the group #{@groups[j][0]}"
     if @groups[j][1].length<=0
@@ -10952,7 +11027,7 @@ bot.command([:sort,:list]) do |event, *args|
     if v>0 && !f.include?(v)
       v2=0
       for i2 in 0...f.length
-        if f[i2]==0 && v2==0 && !f.include?(v)
+        if f[i2].zero? && v2.zero? && !f.include?(v)
           f[i2]=v
           v2=i2
         end
@@ -11000,9 +11075,9 @@ bot.command([:sort,:list]) do |event, *args|
   t=0
   b=0
   for i in 0...args.length
-    if args[i].downcase[0,3]=='top' && t==0
+    if args[i].downcase[0,3]=='top' && t.zero?
       t=[args[i][3,args[i].length-3].to_i,k.length].min
-    elsif args[i].downcase[0,6]=='bottom' && b==0
+    elsif args[i].downcase[0,6]=='bottom' && b.zero?
       b=[args[i][6,args[i].length-6].to_i,k.length].min
     end
   end
@@ -11019,11 +11094,11 @@ bot.command([:sort,:list]) do |event, *args|
     display=[k.length-b,k.length]
   end
   if safe_to_spam?(event)
-  elsif k2==-1 && display[0]==0 && display[1]==k.length
+  elsif k2==-1 && display[0].zero? && display[1]==k.length
     event.respond "Sorry, but you must specify filters.  I will not sort the entire roster as that would be spam.\nInstead, have the stats of the character whose name in Japanese means \"sort\"."
     disp_stats(bot,"Stahl",nil,event,true)
     return false
-  elsif !k2.is_a?(Array) && display[0]==0 && display[1]==k.length
+  elsif !k2.is_a?(Array) && display[0].zero? && display[1]==k.length
     return false
   end
   m2=[]
@@ -11078,7 +11153,7 @@ bot.command([:average,:mean]) do |event, *args|
   k22=k22[0]
   k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
   k222=@units.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
-  k222=k222.reject{|q| q[9].nil? || q[9]==0}
+  k222=k222.reject{|q| q[9].nil? || q[9].zero?}
   k222=k222.reject{|q| !q[12].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
@@ -11090,7 +11165,7 @@ bot.command([:average,:mean]) do |event, *args|
     f2[4]+=k222[i2][12]
     f2[5]+=k222[i2][13]
   end
-  if ccz.length==0
+  if ccz.length.zero?
     ccz=0xFFD800
   else
     ccz=avg_color(ccz)
@@ -11108,7 +11183,7 @@ bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
   k22=k22[0]
   k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
   k222=@units.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
-  k222=k222.reject{|q| q[9].nil? || q[9]==0}
+  k222=k222.reject{|q| q[9].nil? || q[9].zero?}
   k222=k222.reject{|q| !q[12].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
@@ -11119,7 +11194,7 @@ bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
     ccz.push(unit_color(event,find_unit(k222[i][0],event),1))
     for j in 0...6
       stz=d[8+j]
-      stz=d[9]+d[10]+d[11]+d[12]+d[13] if j==0
+      stz=d[9]+d[10]+d[11]+d[12]+d[13] if j.zero?
       if stz==hstats[j][0]
         hstats[j][1].push(d[0])
       elsif stz>hstats[j][0]
@@ -11127,7 +11202,7 @@ bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
       end
     end
   end
-  if ccz.length==0
+  if ccz.length.zero?
     ccz=0xFFD800
   else
     ccz=avg_color(ccz)
@@ -11155,7 +11230,7 @@ bot.command([:worstamong,:worstin,:worststats,:loweststats]) do |event, *args|
   k22=k22[0]
   k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
   k222=@units.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
-  k222=k222.reject{|q| q[9].nil? || q[9]==0}
+  k222=k222.reject{|q| q[9].nil? || q[9].zero?}
   k222=k222.reject{|q| !q[12].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
@@ -11166,7 +11241,7 @@ bot.command([:worstamong,:worstin,:worststats,:loweststats]) do |event, *args|
     ccz.push(unit_color(event,find_unit(k222[i][0],event),1))
     for j in 0...6
       stz=d[8+j]
-      stz=d[9]+d[10]+d[11]+d[12]+d[13] if j==0
+      stz=d[9]+d[10]+d[11]+d[12]+d[13] if j.zero?
       if stz==hstats[j][0]
         hstats[j][1].push(d[0])
       elsif stz<hstats[j][0]
@@ -11174,7 +11249,7 @@ bot.command([:worstamong,:worstin,:worststats,:loweststats]) do |event, *args|
       end
     end
   end
-  if ccz.length==0
+  if ccz.length.zero?
     ccz=0xFFD800
   else
     ccz=avg_color(ccz)
@@ -11238,7 +11313,7 @@ bot.command([:headpat,:patpat,:pat]) do |event|
   r=[["Please don't, #{p2[0]} just did my hair. Do you know how much time #{p2[1]} spent on these drills?",false],
      ["^-^",true],["That feels good.",true],["Hee hee hee, yay!",true],
      ["\\*purrs\\* ...wait, why am *I* purring?  Sakura's the one who dressed up as a cat!",true]]
-  r.push(["My husband wouldn't appreciate you doing this.",(rand(2)==0)]) unless event.user.id==hubbyid
+  r.push(["My husband wouldn't appreciate you doing this.",(rand(2).zero?)]) unless event.user.id==hubbyid
   r.push(["\\*pulls away* Don't do that, please!",false]) unless event.user.id==hubbyid
   r.push(["\\*hums happily*",true]) if event.user.id==hubbyid
   r.push(["Aww, thanks, honey!  I have the bestest hubby ever!",true]) if event.user.id==hubbyid
@@ -11251,7 +11326,7 @@ bot.command([:headpat,:patpat,:pat]) do |event|
   end
   r.push(["Do I remind you of Joseph? He's the cutest puppy that ever was!",true]) if can_joseph
   r2=r.sample
-  if r2[1] && rand(10)==0
+  if r2[1] && rand(10).zero?
     if event.user.id==270372601107447808
       event << "Elise: #{r2[0]}"
       event << "Leo: \\*spies the two, grumbles\\*"
@@ -11565,7 +11640,7 @@ end
 bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddualunitalias,:addualunitalias,:multialias,:dualalias,:addmulti], from: 167657750971547648) do |event, multi, *args|
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
-  if args.nil? || args.length==0
+  if args.nil? || args.length.zero?
     event.respond "No units were included."
     return nil
   elsif multi.nil? || multi.length<=0
@@ -11588,7 +11663,7 @@ bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddu
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname="PM with dev"
-  srvname=bot.server(srv).name unless event.server.nil? && srv==0
+  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
   args=args.compact.join(' ').split(' ')
   if !detect_multi_unit_alias(event,multi.downcase,multi.downcase,3).nil?
     j=-1
@@ -11645,7 +11720,7 @@ bot.command([:deletemultialias,:deletedualalias,:deletemultiunitalias,:deletedua
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname="PM with dev"
-  srvname=bot.server(srv).name unless event.server.nil? && srv==0
+  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
   bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**Multi-unit alias:** #{multi}~~\n**DELETED**")
   @multi_aliases.uniq!
   @multi_aliases.sort! {|a,b| (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase}) == 0 ? (a[0].downcase <=> b[0].downcase) : (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase})}
@@ -11660,7 +11735,7 @@ end
 bot.command([:removefrommultialias,:removefromdualalias,:removefrommultiunitalias,:removefromdualunitalias,:removefrommulti], from: 167657750971547648) do |event, multi, unit|
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
-  if args.nil? || args.length==0
+  if args.nil? || args.length.zero?
     event.respond "No units were included."
     return nil
   elsif multi.nil? || multi.length<=0
@@ -11690,7 +11765,7 @@ bot.command([:removefrommultialias,:removefromdualalias,:removefrommultiunitalia
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname="PM with dev"
-  srvname=bot.server(srv).name unless event.server.nil? && srv==0
+  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
   if r
     event << "#{@units[i][0].gsub('Lavatain','Laevatein')} has been removed from the multi-unit alias #{@multi_aliases[j][0]}"
     if @multi_aliases[j][1].length==1
@@ -11762,7 +11837,7 @@ bot.command(:leaveserver, from: 167657750971547648) do |event, server_id| # forc
   if chn.nil?
     chnn=[]
     for i in 0...bot.server(server_id.to_i).channels.length
-      chnn.push(bot.server(server_id.to_i).channels[i]) if bot.user(bot.profile.id).on(event.server.id).permission?(:send_messages,bot.server(server_id.to_i).channels[i]) && bot.server(server_id.to_i).channels[i].type==0
+      chnn.push(bot.server(server_id.to_i).channels[i]) if bot.user(bot.profile.id).on(event.server.id).permission?(:send_messages,bot.server(server_id.to_i).channels[i]) && bot.server(server_id.to_i).channels[i].type.zero?
     end
     chn=chnn[0] if chnn.length>0
   end
@@ -12006,7 +12081,7 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
       devunits_save()
       congrate=false
       congrats=true if @dev_waifus.include?(jn) || @dev_somebodies.include?(jn)
-      event.respond "You have added a #{flurp[0]}*#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{"Congrats!" if congrats}"
+      event.respond "You have added a #{flurp[0]}#{["<:Icon_Rarity_1:448266417481973781>","<:Icon_Rarity_2:448266417872044032>","<:Icon_Rarity_3:448266417934958592>","<:Icon_Rarity_4:448266418459377684>","<:Icon_Rarity_5:448266417553539104>"][flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{"Congrats!" if congrats}"
     elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
       if @dev_waifus.include?(@units[j][0])
         event.respond "Woah, you're getting rid of one of your waifus?!?  Who hacked your Discord and/or FEH account?"
@@ -12056,7 +12131,7 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
           devunits_save()
           congrate=false
           congrats=true if @dev_waifus.include?(jn) || @dev_somebodies.include?(jn)
-          e.respond "You have added a #{flurp[0]}*#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{"Congrats!" if congrats}"
+          e.respond "You have added a #{flurp[0]}#{["<:Icon_Rarity_1:448266417481973781>","<:Icon_Rarity_2:448266417872044032>","<:Icon_Rarity_3:448266417934958592>","<:Icon_Rarity_4:448266418459377684>","<:Icon_Rarity_5:448266417553539104>"][flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{"Congrats!" if congrats}"
         end
       end
     end
@@ -12084,7 +12159,7 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
     @dev_units[j2][1]=[@dev_units[j2][1],5].min
     @dev_units[j2][2]=0
     devunits_save()
-    event.respond "You have promoted your #{@dev_units[j2][0]} to #{@dev_units[j2][1]}*!"
+    event.respond "You have promoted your #{@dev_units[j2][0]} to #{@dev_units[j2][1]}#{["<:Icon_Rarity_1:448266417481973781>","<:Icon_Rarity_2:448266417872044032>","<:Icon_Rarity_3:448266417934958592>","<:Icon_Rarity_4:448266418459377684>","<:Icon_Rarity_5:448266417553539104>"][@dev_units[j2][1]-1]}!"
   elsif ['merge','combine'].include?(cmd.downcase)
     flurp=find_stats_in_string(event,nil,1)
     @dev_units[j2][2]+=flurp[1] unless flurp[1].nil?
@@ -12254,7 +12329,7 @@ bot.command(:snagchannels, from: 167657750971547648) do |event, server_id|
   srv=bot.server(server_id.to_i)
   for i in 0...srv.channels.length
     chn=srv.channels[i]
-    msg=extend_message(msg,"*#{chn.name}* (#{chn.id})#{" - can post" if bot.user(bot.profile.id).on(srv.id).permission?(:send_messages,chn)}",event) if chn.type==0
+    msg=extend_message(msg,"*#{chn.name}* (#{chn.id})#{" - can post" if bot.user(bot.profile.id).on(srv.id).permission?(:send_messages,chn)}",event) if chn.type.zero?
   end
   event.respond msg
 end
@@ -12376,13 +12451,13 @@ bot.command(:snagstats) do |event, f, f2|
       all_units[j][2]+=srv_spec.reject{|q| q[1]!=all_units[j][0]}.length
     end
     event << "**There are #{longFormattedNumber(glbl.length)} global single-unit aliases.**"
-    all_units=all_units.sort{|b,a| supersort(a,b,1)==0 ? supersort(a,b,0) : supersort(a,b,1)}
+    all_units=all_units.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
     k=all_units.reject{|q| q[1]!=all_units[0][1]}.map{|q| "*#{q[0]}*"}
     event << "The unit#{"s" unless k.length==1} with the most global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global aliases#{" each" unless k.length==1}."
     k=all_units.reject{|q| q[1]!=0}.map{|q| "*#{q[0]}*"}
     if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
-      if k.length==0
-        all_units=all_units.sort{|a,b| supersort(a,b,1)==0 ? supersort(b,a,0) : supersort(a,b,1)}
+      if k.length.zero?
+        all_units=all_units.sort{|a,b| supersort(a,b,1).zero? ? supersort(b,a,0) : supersort(a,b,1)}
         event << "The unit#{"s" unless k.length==1} with the fewest global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global alias#{"es" unless all_units[0][1]==1}#{" each" unless k.length==1}."
       else
         event << "The following unit#{"s" unless k.length==1} have no global aliases: #{list_lift(k,"and")}"
@@ -12397,13 +12472,13 @@ bot.command(:snagstats) do |event, f, f2|
     else
       event << "This server accounts for #{@aliases.reject{|q| q[2].nil? || !q[2].include?(event.server.id)}.length} of those."
     end
-    all_units=all_units.sort{|b,a| supersort(a,b,2)==0 ? supersort(a,b,0) : supersort(a,b,2)}
+    all_units=all_units.sort{|b,a| supersort(a,b,2).zero? ? supersort(a,b,0) : supersort(a,b,2)}
     k=all_units.reject{|q| q[2]!=all_units[0][2]}.map{|q| "*#{q[0]}*"}
     event << "The unit#{"s" unless k.length==1} with the most server-specific aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][2]} server-specific aliases#{" each" unless k.length==1}."
     for i in 0...srv_spec.length
       srv_spec[i][2]=srv_spec[i][2].length
     end
-    srv_spec=srv_spec.sort{|b,a| supersort(a,b,2)==0 ? (supersort(a,b,1)==0 ? supersort(a,b,1) : supersort(a,b,1)) : supersort(a,b,2)}
+    srv_spec=srv_spec.sort{|b,a| supersort(a,b,2).zero? ? (supersort(a,b,1).zero? ? supersort(a,b,1) : supersort(a,b,1)) : supersort(a,b,2)}
     k=srv_spec.reject{|q| q[2]!=srv_spec[0][2]}.map{|q| "#{q[0]} = #{q[1]}"}
     event << "The most agreed-upon server-specific alias#{"es are" unless k.length==1}#{" is" if k.length==1} #{list_lift(k,"and")}.  #{srv_spec[0][2]} servers agree on #{"them" unless k.length==1}#{"it" if k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
     event << ''
@@ -12413,10 +12488,10 @@ bot.command(:snagstats) do |event, f, f2|
       m[i][1]+=@multi_aliases.reject{|q| q[1]!=m[i][0]}.length
       m[i][0]=m[i][0].join('/')
     end
-    m=m.sort{|b,a| supersort(a,b,1)==0 ? supersort(a,b,0) : supersort(a,b,1)}
+    m=m.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
     k=m.reject{|q| q[1]!=m[0][1]}.map{|q| "*#{q[0]}*"}
     event << "#{list_lift(k,"and")} #{"is" if k.length==1}#{"are" unless k.length==1} the group#{"s" unless k.length==1} of units with the most multi-unit aliases, with #{m[0][1]} multi-unit aliases#{" each" unless k.length==1}."
-    m=m.sort{|a,b| supersort(a,b,1)==0 ? supersort(b,a,0) : supersort(a,b,1)}
+    m=m.sort{|a,b| supersort(a,b,1).zero? ? supersort(b,a,0) : supersort(a,b,1)}
     k=m.reject{|q| q[1]!=m[0][1]}.map{|q| "*#{q[0]}*"}
     event << "#{list_lift(k,"and")} #{"is" if k.length==1}#{"are" unless k.length==1} the group#{"s" unless k.length==1} of units with the fewest multi-unit aliases (among those that have them), with #{m[0][1]} multi-unit alias#{"es" unless m[0][1]==1}#{" each" unless k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
     return nil
@@ -12433,8 +12508,8 @@ bot.command(:snagstats) do |event, f, f2|
     event << "*Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can obtained via a Tempest Trials event."
     display=false
     display=true if event.user.id==167657750971547648
-    display=true if !event.server.nil? && !bot.user(167657750971547648).on(event.server.id).nil? && rand(100)==0
-    display=true if !event.server.nil? && bot.user(167657750971547648).on(event.server.id).nil? && rand(10000)==0
+    display=true if !event.server.nil? && !bot.user(167657750971547648).on(event.server.id).nil? && rand(100).zero?
+    display=true if !event.server.nil? && bot.user(167657750971547648).on(event.server.id).nil? && rand(10000).zero?
     event << "*Mathoo's Waifus* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Mathoo'sWaifus"}][1].length)} current members) - Any unit that my developer would enjoy cuddling." if display
     event << ''
     event << "**There are #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups.**"
@@ -12544,7 +12619,7 @@ bot.server_create do |event|
   if chn.nil?
     chnn=[]
     for i in 0...event.server.channels.length
-      chnn.push(event.server.channels[i]) if bot.user(bot.profile.id).on(event.server.id).permission?(:send_messages,event.server.channels[i]) && event.server.channels[i].type==0
+      chnn.push(event.server.channels[i]) if bot.user(bot.profile.id).on(event.server.id).permission?(:send_messages,event.server.channels[i]) && event.server.channels[i].type.zero?
     end
     chn=chnn[0] if chnn.length>0
   end
@@ -12864,7 +12939,7 @@ bot.ready do |event|
   end
   system("color 5#{"7CBAE"[@shardizard,1]}")
   system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
-  bot.game="Loading, please wait..." if @shardizard==0
+  bot.game="Loading, please wait..." if @shardizard.zero?
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt').each_line do |line|
@@ -12896,7 +12971,7 @@ bot.ready do |event|
   system("color e#{"04126"[@shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
   bot.game="Fire Emblem Heroes" if [0,4].include?(@shardizard)
-  if @shardizard==0
+  if @shardizard.zero?
     next_holiday(bot)
     puts "Avatar loaded"
   elsif @shardizard==4
