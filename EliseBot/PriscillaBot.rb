@@ -44,8 +44,8 @@ bot.gateway.check_heartbeat_acks = false
 @stored_event=nil
 @zero_by_four=[0,0,0,'']
 @headpats=[0,0,0]
-@summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,
-                 341729526767681549,393775173095915521,380013135576432651]
+@summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,
+                 341729526767681549,380013135576432651]
 @summon_rate=[0,0,3]
 @mods=[[0, 6, 7, 7, 8, 8], # this is a translation of the graphic displayed in the "growths" command.
        [0, 8, 8, 9,10,10],
@@ -91,28 +91,26 @@ bot.gateway.check_heartbeat_acks = false
           ["`\u22C1`Excitable","HP","Resistance",true]]
 
 def all_commands(include_nil=false) # a list of all the command names.  Used by Nino Mode to ignore messages that are commands, so responses do not double up.
-  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup',
-    'sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup',
-    'removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats',
-    'devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison',
-    'fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup',
-    'restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback',
-    'suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills',
-    'stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill',
-    'stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills',
-    'compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill',
-    'skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common',
-    'commonskills','common_skills','locate','locateshard','locateshards','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar',
-    'skill_rarity','one_star','two_star','three_star','four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit',
-    'allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit',
-    'skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill',
-    'inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable',
-    'skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable',
-    'skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills',
-    'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn',
-    'skillearnable','banners','banner','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias',
-    'dualalias','addmulti','deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias',
-    'removedualalias','removemultiunitalias','removedualunitalias','removemulti','snagchannels','statstudy','studystats','studystat','echomoji','daily','today','todayinfeh','today_in_feh','commands','command_list','commandlist','effect']
+  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','next','effect','commands',
+     'sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','commandlist','command_list',
+     'removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','today_in_feh','todayinfeh',
+     'devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','today','daily',
+     'fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','studystat','studystats',
+     'restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','statstudy','dualalias',
+     'suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','snagchannels','removemulti',
+     'stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','removedualunitalias','addmulti',
+     'stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','removemultiunitalias',
+     'compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','removedualalias',
+     'skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','removemultialias',
+     'commonskills','common_skills','locate','locateshard','locateshards','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','deletemulti',
+     'skill_rarity','one_star','two_star','three_star','four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit','deletedualunitalias','multialias',
+     'allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','deletemultiunitalias','addualunitalias',
+     'skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','deletedualalias','adddualunitalias',
+     'inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','deletemultialias','addmultiunitalias',
+     'skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','addualalias','adddualalias',
+     'skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','addmultialias','schedule',
+     'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','banners','banner',
+     'skillearnable']
   k[0]=nil if include_nil
   return k
 end
@@ -437,6 +435,8 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}** __unit__","Responds with a list of all `unit`'s aliases.\nIf no unit is listed, responds with a list of all aliases and who they are for.\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
   elsif ['daily','today','todayinfeh','today_in_feh'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Shows the day's in-game daily events.\nIf in PM, will also show tomorrow's.",0xD49F61)
+  elsif ['next','schedule'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.",0xD49F61)
   elsif ['deletealias','removealias'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __alias__","Removes `alias` from the list of aliases, regardless of who it was for.",0xC31C19)
   elsif ['addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti'].include?(command.downcase)
@@ -534,7 +534,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   else
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
     create_embed(event,"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit Data**__\n`data` __name__ - shows both stats and skills (*also `unit`*)\n`stats` __name__ - shows only the stats\n`skills` __name__ - shows only the skills (*also `fodder`*)\n`study` __name__ - for a study of the unit at multiple rarities and merges\n`effHP` __name__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __name__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __name__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __name__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __name__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`games` __unit__ - for a list of games the unit is in\n`banners` __unit__ - for a list of banners the unit has been a focus unit on\n`art` __unit__ __art type__ - for the character's art\n`learnable` __name__ - for a list of all learnable skills (*also `inheritable`*)\n\n__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
-    create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`daily` - shows the current day's in-game daily events (*also `today` or `todayInFEH`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`skillrarity` (*also `skill_rarity`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
+    create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`daily` - shows the current day's in-game daily events (*also `today` or `todayInFEH`*)\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`skillrarity` (*also `skill_rarity`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed(event,"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
     create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**The Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n`locateshards` - lists one server you are in for each color of shard.\n\n__**Meta Data Storage**__\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
     event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command."
@@ -1184,7 +1184,9 @@ end
 
 def get_weapon(str,event) # this function is used by the `stats` command and many derivations to find a weapon's name in the inputs that remain after the unit is decided
   return nil if str.gsub(' ','').length<=0
+  skz=@skills.map{|q| q}
   args=str.gsub('(','').gsub(')','').split(' ')
+  args=args.reject{|q| q.gsub("*",'').gsub('+','').to_i.to_s==q.gsub("*",'').gsub('+','') || skz.reject{|q2| ['Weapon','Assist','Special'].include?(q2[4])}.map{|q2| stat_buffs(q2[0]).downcase.gsub(' ','')}.include?(stat_buffs(q,nil,2).downcase) || skz.reject{|q2| ['Weapon','Assist','Special'].include?(q2[4])}.map{|q2| q2[0].gsub('/','').downcase.gsub(' ','')}.include?(q.downcase) || ['+','-'].include?(q[0,1])} if args.length>1
   args2=args.join(' ').split(' ')
   args4=args.join(' ').split(' ')
   name=args.join(' ')
@@ -1196,7 +1198,7 @@ def get_weapon(str,event) # this function is used by the `stats` command and man
       args.compact!
       if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event,true)>=0
         args3=args.join(' ').split(' ') 
-        name=@skills[find_weapon(args.join('').downcase,event,true)][0]
+        name=skz[find_weapon(args.join('').downcase,event,true)][0]
       end
     end
     if find_weapon(name,event)<0
@@ -1206,14 +1208,14 @@ def get_weapon(str,event) # this function is used by the `stats` command and man
         args=args2.join(' ').split(' ')
         if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event,true)>=0
           args3=args.join(' ').split(' ') 
-          name=@skills[find_weapon(args.join('').downcase,event,true)][0]
+          name=skz[find_weapon(args.join('').downcase,event,true)][0]
         end
         for i in 0...args.length-1
           args[args.length-1]=nil
           args.compact!
           if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event,true)>=0
             args3=args.join(' ').split(' ') 
-            name=@skills[find_weapon(args.join('').downcase,event,true)][0]
+            name=skz[find_weapon(args.join('').downcase,event,true)][0]
           end
         end
       end
@@ -1227,7 +1229,7 @@ def get_weapon(str,event) # this function is used by the `stats` command and man
       args.compact!
       if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event)>=0
         args3=args.join(' ').split(' ') 
-        name=@skills[find_weapon(args.join('').downcase,event)][0]
+        name=skz[find_weapon(args.join('').downcase,event)][0]
       end
     end
     if find_weapon(name,event)<0
@@ -1237,20 +1239,20 @@ def get_weapon(str,event) # this function is used by the `stats` command and man
         args=args2.join(' ').split(' ')
         if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event)>=0
           args3=args.join(' ').split(' ') 
-          name=@skills[find_weapon(args.join('').downcase,event)][0]
+          name=skz[find_weapon(args.join('').downcase,event)][0]
         end
         for i in 0...args.length-1
           args[args.length-1]=nil
           args.compact!
           if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event)>=0
             args3=args.join(' ').split(' ') 
-            name=@skills[find_weapon(args.join('').downcase,event)][0]
+            name=skz[find_weapon(args.join('').downcase,event)][0]
           end
         end
       end
     end
   end
-  return [@skills[find_weapon(name,event)][0],args3.join(' ')] if find_weapon(name,event)>-1
+  return [skz[find_weapon(name,event)][0],args3.join(' ')] if find_weapon(name,event)>-1
   return nil
 end
 
@@ -1271,7 +1273,7 @@ def find_in_dev_units(name) # this function is used by the `stats` command and m
   return -1
 end
 
-def stat_buffs(str,name=nil) # this function is used by almost all commands to be sure that end users can type all common abbreviations for stats and not worry about input
+def stat_buffs(str,name=nil,mode=0) # this function is used by almost all commands to be sure that end users can type all common abbreviations for stats and not worry about input
   name=str.split(' ').join(' ') if name.nil?
   x=str.downcase.gsub('/',' ').gsub('+',' +').gsub('  ',' ')
   x=x.gsub('hone','hone ').gsub('fortify','fortify ').gsub('goad','goad ').gsub('ward','ward ')
@@ -1288,6 +1290,13 @@ def stat_buffs(str,name=nil) # this function is used by almost all commands to b
     x[i]='hone' if ['fortify'].include?(x[i]) && ['attack','speed'].include?(x[i+1])
   end
   n=x.join('')
+  if mode==2
+    n=n.gsub('health','hp')
+    n=n.gsub('atk','attack').gsub('att','attack').gsub('attackack','attack')
+    n=n.gsub('spd','speed')
+    n=n.gsub('def','defense').gsub('defence','defense').gsub('defenseense','defense')
+    n=n.gsub('res','resistance').gsub('resistanceistance','resistance')
+  end
   nn=name.reverse.scan(/\d+/)[0]
   nn=' ' if nn.nil?
   for i in 0...nn.length # removing ending numbers from the resulting skill, unless the input also includes ending numbers
@@ -2037,6 +2046,8 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       ks=3 if refinement==sttz[3][5]
       ks=4 if refinement==sttz[4][5]
     else
+      s2=[]
+      s2[12]=[0,0,0,0,0]
       sttz=[[0,0,0,0,0]]
       ks=0
     end
@@ -3525,7 +3536,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
   if weapon != '-'
     ftr=nil
     tr=skill_tier(weapon,event)
-    ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{weapon}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ")
+    ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ")
   end
   flds=[["**Level 1#{" +#{merges}" if merges>0}**",["HP: #{u1[1]}","#{atk}: #{u1[2]}","Speed: #{u1[3]}","Defense: #{u1[4]}","Resistance: #{u1[5]}","","BST: #{u1[6]}"]]]
   if args.include?('gps') || args.include?('gp') || args.include?('growths') || args.include?('growth')
@@ -3629,6 +3640,19 @@ def find_base_skill(x,event)
     return k
   end
   return find_base_skill(@skills[find_skill(x[8][1,x[8].length-2],event)],event)
+end
+
+def cumulitive_sp_cost(x,event)
+  return 0 if x.nil?
+  return x[1] if x[8]=='-'
+  if x[8].include?("*, *")
+    k=@skills[find_skill(x[8].gsub('*','').split(', ')[0],event)]
+  elsif x[8].include?("* or *")
+    k=@skills[find_skill(x[8].gsub('*','').split(' or ')[0],event)]
+  else
+    k=@skills[find_skill(x[8].gsub('*',''),event)]
+  end
+  return x[1]+cumulitive_sp_cost(k,event)
 end
 
 def disp_skill(name,event,ignore=false)
@@ -3788,17 +3812,23 @@ def disp_skill(name,event,ignore=false)
     str="#{str}\n**Stats affected:** #{"+" if skill[12][1]>0}#{skill[12][1]}/#{"+" if skill[12][2]>0}#{skill[12][2]}/#{"+" if skill[12][3]>0}#{skill[12][3]}/#{"+" if skill[12][4]>0}#{skill[12][4]}"
     sklslt=['Weapon']
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
+    cumul=cumulitive_sp_cost(skill,event)
+    str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
   elsif skill[4]=="Assist"
     sklslt=['Assist']
     xcolor=0x07DFBB
     str="**Skill Slot:** #{skill[4]}\n**Range:** #{skill[3]}\n**Effect:** #{skill[7]}"
     str="#{str}\n**Heals:** #{skill[14]}" if skill[5]=="Staff Users Only"
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
+    cumul=cumulitive_sp_cost(skill,event)
+    str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
   elsif skill[4]=="Special"
     sklslt=['Special']
     xcolor=0xF67EF8
     str="**Skill Slot:** #{skill[4]}\n**Cooldown:** #{skill[2]}\n**Effect:** #{skill[7]}#{"\n**Range:** ```\n#{skill[3].gsub("n","\n")}```" if skill[3]!="-"}"
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
+    cumul=cumulitive_sp_cost(skill,event)
+    str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
   else
     xcolor=0xFDDC7E
     xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{skill[0].gsub(' ','_').gsub('/','_')}.png"
@@ -3829,6 +3859,8 @@ def disp_skill(name,event,ignore=false)
       str="#{str}\n**Secondary effect:** Breaks consecutiveness of enemy sword/axe/lance/breath attacks"
     end
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
+    cumul=cumulitive_sp_cost(skill,event)
+    str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
     if skill[4].split(', ').include?('Seal') && skill[3]!="-" && skill[3][0,1].downcase!=skill[3][0,1]
       floop=skill[3].split(' ')
       str="#{str}\n**Seal Cost:** #{floop[1]} Great #{floop[0]} Badges, #{floop[2]} #{floop[0]} Badges, #{"and " if skill[8]=='-'}#{floop[3]} Sacred Coins#{", and a #{skill[8].gsub('*','')} seal" unless skill[8]=='-' || skill[0][0,skill[0].length-2] != skill[8][0,skill[8].length-2]}"
@@ -7093,7 +7125,7 @@ end
 def calculate_effective_HP(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     for i in 0...name.length
-      calculate_effective_HP(event,name[i],weapon=nil)
+      calculate_effective_HP(event,name[i],bot,weapon=nil)
     end
     return nil
   end
@@ -8380,7 +8412,7 @@ def disp_art(event,name,bot,weapon=nil)
       embed.color=unit_color(event,find_unit(j[0],event),0)
       unless flds.nil?
         for i in 0...flds.length
-          embed.add_field(name: flds[i][0], value: flds[i][1], inline: true)
+          embed.add_field(name: flds[i][0], value: flds[i][1], inline: flds[i][2].nil?)
         end
       end
       embed.image = Discordrb::Webhooks::EmbedImage.new(url: art)
@@ -8978,8 +9010,6 @@ bot.command([:refinery,:refine,:effect]) do |event|
     end
     stones.uniq!
     dew.uniq!
-    puts stones.to_s
-    puts dew.to_s
     if stones.join("\n").length+dew.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew.join("\n").length>1950 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg="__**Weapon Refines with Effect Modes: Divine Dew**__"
@@ -9024,7 +9054,6 @@ bot.command([:refinery,:refine,:effect]) do |event|
     end
     return nil
   end
-  puts skkz.map{|q| q.to_s}
   for i in 0...skkz.length
     if !skkz[i][15].nil?
       if skkz[i][6]=="-"
@@ -9198,7 +9227,7 @@ end
 
 bot.command([:donation, :donate]) do |event|
   return nil if overlap_prevent(event)
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.user.id==195303206933233665 || event.message.text.include?('<@195303206933233665>') || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
     event << "__A word from my developer__\nI made EliseBot, as she is now, as a free service.  During development, I never once considered making people pay to add her to their servers, or anything of the sort.  The creation of Elise's core functionality, the `stats` function, was mainly a way for me to better understand the mechanics behind FEH's growths, because how games work is one of my interests.\n\nDespite this, people in at least two servers have asked me about possibly creating a Patreon or Paypal donation button to allow users to show their support.  I am humbled to know that EliseBot's information-dump-and-stat-calculation functionality is something people are willing to pay for, especially considering there are many other methods users can obtain this data.\n\nConsidering how adamant some people were about wanting to support me, it seems almost rude not to start a Patreon...but I, unfortunately, must toss the idea aside.  Due to certain insurance regulations regarding places like the one I live in, I would only be allowed to keep a small portion of any secondary income I receive.  Starting a Patreon only to have only a third or even less reach my hands seems dishonest to my supporters, and that is something I do not wish to have hanging over my head.  Since they were spending that money with the intention of supporting the development of EliseBot, they may not wish to have their money go to a corporation that may or may not spend that money to increase my quality of life."
     event.respond "However, there is a roundabout solution for those who wish to support me: Gift cards - such as those for the Nintendo eShop or Google Play - do not count as secondary income, and as such I get to keep the full amount of any I receive.  As such, if you wish to support me, and only if you really wish to support me, the best way to do so is acquire a gift card and email the code to **rot8er.conex@gmail.com**.  There is also, if there are items on it, my Amazon wish list, linked below.  I recently learned that I can have items purchased from that list delivered to me without giving out my address.\n\n~~Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.~~\n\nhttp://a.co/0p3sBec"
   else
@@ -11637,6 +11666,170 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   event << "Arena bonus heroes, Elemental season, anything in the game's Events tab, new GHBs"
 end
 
+bot.command([:next,:schedule]) do |event, type|
+  return nil if overlap_prevent(event)
+  type='' if type.nil?
+  idx=-1
+  idx=1 if ['trainingtower','training_tower','tower','color','shard','crystal'].include?(type.downcase)
+  idx=2 if ['free','1*','2*','f2p','freehero','free_hero'].include?(type.downcase)
+  idx=3 if ['special','specialtraining','special_training'].include?(type.downcase)
+  idx=4 if ['ghb'].include?(type.downcase)
+  idx=5 if ['ghb2'].include?(type.downcase)
+  idx=6 if ['rival','domains','domain','rd','rivaldomains','rival_domains','rivaldomain','rival_domain'].include?(type.downcase)
+  idx=7 if ['blessed','blessing','garden','gardens','blessedgarden','blessed_garden','blessedgardens','blessed_gardens','blessinggarden','blessing_garden','blessinggardens','blessing_gardens'].include?(type.downcase)
+  if idx<0 && !safe_to_spam?(event)
+    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2p, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)"
+    return nil
+  end
+  t=Time.now
+  timeshift=8
+  t-=60*60*timeshift
+  msg="Date assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
+  t2=Time.new(2017,2,1,23,0)
+  t2=t-t2
+  date=(((t2.to_i/60)/60)/24)
+  msg=extend_message(msg,"Days since game release: #{longFormattedNumber(date)}",event)
+  if event.user.id==167657750971547648
+    msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
+    msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday)",event)
+  end
+  puts idx
+  if [-1,1].include?(idx)
+    colors=["Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>",
+            "Colorless <:Shard_Colorless:443733396921909248><:Crystal_Transparent:445510676295843870><:Badge_Transparent:445510675976945664><:Great_Badge_Transparent:443704781597573120>",
+            "Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>",
+            "Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>",
+            "Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>",
+            "Red <:Shard_Red:443733396842348545><:Crystal_Scarlet:445510676350500897><:Badge_Scarlet:445510676060962816><:Great_Badge_Scarlet:443704781001850910>",
+            "Blue <:Shard_Blue:443733396741554181><:Crystal_Azure:445510676434124800><:Badge_Azure:445510675352125441><:Great_Badge_Azure:443704780783616016>"]
+    colors.rotate(date%7)
+    msg2="__**Training Tower colors**__"
+    for i in 0...colors.length
+      if i==0
+        msg2="#{msg2}\n#{colors[i]} - Today"
+      elsif colors[i]!=colors[i-1]
+        t2=t+24*60*60*i
+        msg2="#{msg2}\n#{colors[i]} - #{"#{i} days from now" if i>1}#{"Tomorrow" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+      end
+    end
+    unless colors[0]==colors[colors.length-1]
+      t2=t+24*60*60*7
+      msg2="#{msg2}\n#{colors[0]} - 7 days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+    end
+    msg=extend_message(msg,msg2,event,2)
+  end
+  if [-1,2].include?(idx)
+    dhb=["Sophia <:Red_Tome:443172811826003968><:Icon_Move_Infantry:443331187579289601>",
+         "Virion <:Colorless_Bow:443692132616896512><:Icon_Move_Infantry:443331187579289601>",
+         "Hana <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601>",
+         "Subaki <:Blue_Blade:443172811582996480><:Icon_Move_Flier:443331186698354698>",
+         "Donnel <:Blue_Blade:443172811582996480><:Icon_Move_Infantry:443331187579289601>",
+         "Lissa <:Colorless_Staff:443692132323295243><:Icon_Move_Infantry:443331187579289601>",
+         "Gunter <:Green_Blade:443172811721146368><:Icon_Move_Cavalry:443331186530451466>",
+         "Cecilia <:Green_Tome:443172811759157248><:Icon_Move_Cavalry:443331186530451466>",
+         "Felicia <:Colorless_Dagger:443692132683743232><:Icon_Move_Infantry:443331187579289601>",
+         "Wrys <:Colorless_Staff:443692132323295243><:Icon_Move_Infantry:443331187579289601>",
+         "Olivia <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601>",
+         "Stahl <:Red_Blade:443172811830198282><:Icon_Move_Cavalry:443331186530451466>"]
+    dhb.rotate(date%12)
+    msg2="__**Daily Hero Battles**__"
+    for i in 0...dhb.length
+      if i==0
+        msg2="#{msg2}\n#{dhb[i]} - Today"
+      else
+        t2=t+24*60*60*i
+        msg2="#{msg2}\n#{dhb[i]} - #{"#{i} days from now" if i>1}#{"Tomorrow" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+      end
+    end
+    t2=t+24*60*60*12
+    msg2="#{msg2}\n#{dhb[0]} - 12 days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+    msg=extend_message(msg,msg2,event,2)
+  end
+  if [-1,3].include?(idx)
+    spec=['Magic','The Workout','Melee','Ranged','Bows']
+    spec.rotate(date%5)
+    msg2="__**Special Training Maps**__"
+    for i in 0...spec.length
+      if i==0
+        msg2="#{msg2}\n#{spec[i]} - Today"
+      else
+        t2=t+24*60*60*i
+        msg2="#{msg2}\n#{spec[i]} - #{"#{i} days from now" if i>1}#{"Tomorrow" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+      end
+    end
+    t2=t+24*60*60*5
+    msg2="#{msg2}\n#{spec[0]} - 5 days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+    msg=extend_message(msg,msg2,event,2)
+  end
+  ghb=["Ursula <:Blue_Tome:443172811104714763><:Icon_Move_Cavalry:443331186530451466> / Clarisse <:Colorless_Bow:443692132616896512><:Icon_Move_Infantry:443331187579289601>",
+       "Lloyd <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601> / Berkut <:Blue_Blade:443172811582996480><:Icon_Move_Cavalry:443331186530451466>",
+       "Michalis <:Green_Blade:443172811721146368><:Icon_Move_Flier:443331186698354698> / Valter <:Blue_Blade:443172811582996480><:Icon_Move_Flier:443331186698354698>",
+       "Xander <:Red_Blade:443172811830198282><:Icon_Move_Cavalry:443331186530451466> / Arvis <:Red_Tome:443172811826003968><:Icon_Move_Infantry:443331187579289601>",
+       "Narcian <:Green_Blade:443172811721146368><:Icon_Move_Flier:443331186698354698> / Zephiel <:Red_Blade:443172811830198282><:Icon_Move_Armor:443331186316673025>",
+       "Navarre <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601> / Camus <:Blue_Blade:443172811582996480><:Icon_Move_Cavalry:443331186530451466>",
+       "Robin(F) <:Green_Tome:443172811759157248><:Icon_Move_Infantry:443331187579289601> / Legion <:Green_Blade:443172811721146368><:Icon_Move_Infantry:443331187579289601>"]
+  ghb.rotate(date%7)
+  msg2="__**GHB Revival**__"
+  msg3="__**GHB Revival 2**__"
+  for i in 0...ghb.length
+    if i==0
+      msg2="#{msg2}\n#{ghb[i].split(' / ')[0]} - Today"
+      msg3="#{msg3}\n#{ghb[i].split(' / ')[1]} - Today"
+    else
+      t2=t+24*60*60*i
+      msg2="#{msg2}\n#{ghb[i].split(' / ')[0]} - #{"#{i} days from now" if i>1}#{"Tomorrow" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+      msg3="#{msg3}\n#{ghb[i].split(' / ')[1]} - #{"#{i} days from now" if i>1}#{"Tomorrow" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+    end
+  end
+  t2=t+24*60*60*7
+  msg2="#{msg2}\n#{ghb[0].split(' / ')[0]} - 7 days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+  msg3="#{msg3}\n#{ghb[0].split(' / ')[1]} - 7 days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+  msg=extend_message(msg,msg2,event,2) if [-1,4].include?(idx)
+  msg=extend_message(msg,msg3,event,2) if [-1,5].include?(idx)
+  msg=extend_message(msg,'Try the command again with "GHB2" if you\'re looking for the second set of Grand Hero Battles.',event,2) if [4].include?(idx)
+  if [-1,6].include?(idx)
+    rd=["Cavalry <:Icon_Move_Cavalry:443331186530451466>",
+        "Flying <:Icon_Move_Flier:443331186698354698>",
+        "Infantry <:Icon_Move_Infantry:443331187579289601>",
+        "Armored <:Icon_Move_Armor:443331186316673025>"]
+    rd.rotate(week_from(date,2)%4)
+    msg2="__**Rival Domains Prefered Movement Type**__"
+    for i in 0...rd.length
+      if i==0
+        t2=t-24*60*60*t.wday+7*24*60*60-24*60*60
+        msg2="#{msg2}\n#{rd[i]} - This week until #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (Saturday)"
+      else
+        t2=t-24*60*60*t.wday+7*24*60*60*i-24*60*60
+        msg2="#{msg2}\n#{rd[i]} - #{"#{i} weeks from now" if i>1}#{"Next week" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
+      end
+    end
+    t2=t-24*60*60*t.wday+7*24*60*60*4-24*60*60
+    msg2="#{msg2}\n#{rd[0]} - 4 weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
+    msg=extend_message(msg,msg2,event,2)
+  end
+  if [-1,7].include?(idx)
+    garden=["Earth <:Legendary_Effect_Earth:443331186392170508>",
+            "Fire <:Legendary_Effect_Fire:443331186480119808>",
+            "Water <:Legendary_Effect_Water:443331186534776832>",
+            "Wind <:Legendary_Effect_Wind:443331186467536896>"]
+    garden.rotate(week_from(date,3)%4)
+    msg2="__**Next Blessed Gardens**__"
+    for i in 0...garden.length
+      if i==0
+        t2=t-24*60*60*t.wday+7*24*60*60
+        msg2="#{msg2}\nCurrent newest: #{garden[i]} - This week"
+      else
+        t2=t-24*60*60*t.wday+7*24*60*60*i
+        msg2="#{msg2}\n#{garden[i]} - #{"#{i} weeks from now" if i>1}#{"Next week" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}#{" (Sunday)" if i==1}"
+      end
+    end
+    t2=t-24*60*60*t.wday+7*24*60*60*4
+    msg2="#{msg2}\n#{garden[0]} - 4 weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
+    msg=extend_message(msg,msg2,event,2)
+  end
+  event.respond msg
+end
+
 bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddualunitalias,:addualunitalias,:multialias,:dualalias,:addmulti], from: 167657750971547648) do |event, multi, *args|
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
@@ -12478,9 +12671,11 @@ bot.command(:snagstats) do |event, f, f2|
     for i in 0...srv_spec.length
       srv_spec[i][2]=srv_spec[i][2].length
     end
-    srv_spec=srv_spec.sort{|b,a| supersort(a,b,2).zero? ? (supersort(a,b,1).zero? ? supersort(a,b,1) : supersort(a,b,1)) : supersort(a,b,2)}
+    srv_spec=srv_spec.sort{|b,a| supersort(a,b,2).zero? ? (supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)) : supersort(a,b,2)}
     k=srv_spec.reject{|q| q[2]!=srv_spec[0][2]}.map{|q| "#{q[0]} = #{q[1]}"}
     event << "The most agreed-upon server-specific alias#{"es are" unless k.length==1}#{" is" if k.length==1} #{list_lift(k,"and")}.  #{srv_spec[0][2]} servers agree on #{"them" unless k.length==1}#{"it" if k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
+    k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
+    event << "Counting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
     event << ''
     event << "**There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases.**"
     m=@multi_aliases.map{|q| [q[1],0]}.uniq
