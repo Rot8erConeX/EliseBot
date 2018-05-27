@@ -362,6 +362,8 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     subcommand='' if subcommand.nil?
     if ['server','servers','member','members'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of servers and unique members each shard reaches.",0x40C0F0)
+    elsif ['alts','alt','alternate','alternates','alternative','alternatives'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of units within each type of alt, as well as specifics about characters with the most alts.",0x40C0F0)
     elsif ['unit','char','character','units','chars','charas','chara'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of units sorted in each of the following ways:\nObtainability\nColor\nWeapon type\nMovement type\nGame of origin (in PM)",0x40C0F0)
     elsif ['skills','skill','weapon','weapons','assist','assists','special','specials','passive','passives'].include?(subcommand.downcase)
@@ -371,7 +373,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     elsif ['groups','group','groupings','grouping'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of groups in each of the two categories - global and server-specific.\nAlso returns specifics about the dynamically-created global groups.",0x40C0F0)
     else
-      create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s)\nUnit(s), Character(s), Char(a)(s)\nSkill(s)\nAlias(es), Name(s), Nickname(s)",0x40C0F0)
+      create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s)\nUnit(s), Character(s), Char(a)(s)\nSkill(s)\nAlias(es), Name(s), Nickname(s)\nAlt(s)",0x40C0F0)
     end
   elsif command.downcase=='shard'
     create_embed(event,'**shard**',"Returns the shard that this server is served by.",0x40C0F0)
@@ -12590,6 +12592,73 @@ bot.command(:snagstats) do |event, f, f2|
     event << "The <:Shard_Green:443733397190344714> Verdant Shard is in #{longFormattedNumber(@server_data[0][3])} server#{"s" if @server_data[0][3]!=1}, reaching #{longFormattedNumber(@server_data[1][3])} unique members."
     event << "The <:Shard_Gold:443733396913520640> Golden Shard is in #{longFormattedNumber(@server_data[0][4])} server#{"s" if @server_data[0][4]!=1}, reaching #{longFormattedNumber(@server_data[1][4])} unique members." if event.user.id==167657750971547648
     return nil
+  elsif ["alts","alt","alternate","alternates","alternative","alternatives"].include?(f.downcase)
+    event.channel.send_temporary_message("Please wait...",3)
+    g=get_markers(event)
+    data_load()
+    nicknames_load()
+    untz=@units.map{|q| q}
+    untz2=[]
+    for i in 0...untz.length
+      m=[]
+      m.push('default') if untz[i][0]==untz[i][12].split(', ')[0] || untz[i][12].split(', ')[0][untz[i][12].split(', ')[0].length-1,1]=='*'
+      m.push('faceted') if untz[i][12].split(', ')[0][0,1]=='*' && untz[i][12].split(', ').length>1
+      m.push('sensible') if untz[i][12].split(', ')[0][0,1]=='*' && untz[i][12].split(', ').length<2
+      m.push('seasonal') if untz[i][9].include?('s') && !(!untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1)
+      m.push('community-voted') if @aliases.reject{|q| q[1]!=untz[i][0] || !q[2].nil?}.map{|q| q[0]}.include?("#{untz[i][0].split('(')[0]}CYL")
+      m.push('Legendary') if !untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1 && !m.include?('default')
+      m.push('Fallen') if untz[i][0].include?('(Fallen)')
+      m.push('out-of-left-field') if m.length<=0
+      n=''
+      unless untz[i][0]==untz[i][12] || untz[i][12][untz[i][12].length-1,1]=='*'
+        k=untz.reject{|q| q[12].gsub('*','').split(', ')[0]!=untz[i][12].gsub('*','').split(', ')[0] || q[0]==untz[i][0] || !(q[0]==q[12].split(', ')[0] || q[12].split(', ')[0].include?('*'))}
+        n="x" if k.length<=0
+      end
+      untz2.push([untz[i][0],untz[i][12].gsub('*','').split(', '),m,n,untz[i][13]])
+    end
+    untz2.uniq!
+    all_units=untz2.reject{|q| !has_any?(g, q[4][0])}
+    all_units=untz2.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
+    legal_units=untz2.reject{|q| !q[4][0].nil?}
+    a2=all_units.reject{|q| q[1][1].nil?}.map{|q| q[1][0]}.uniq
+    l2=legal_units.reject{|q| q[1][1].nil?}.map{|q| q[1][0]}.uniq
+    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'default',1)} characters in their default form, alongside #{l2.length}#{" (#{a2.length})" unless l2.length==a2.length} sets of character facets *(Tiki, dual-gendered characters, etc.)*"
+    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'sensible',1)} sensible alts *(Masked Marth, Dark Azura, etc.)*"
+    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'seasonal',1)} seasonal alts"
+    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'community-voted',1)} community-voted alts *(CYL winners)*"
+    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'Legendary',1)} Legendary alts"
+    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'Fallen',1)} Fallen alts"
+    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'out-of-left-field',1)} out-of-left-field alts *(Eirika, Reinhardt, Hinoka, etc.)*"
+    k=[]
+    for i in 0...all_units.length
+      x="#{"~~" unless all_units[i][4][0].nil? || all_units[i][4][0].length.zero?}"
+      k.push("#{x}#{all_units[i][1][0]}#{x}") if all_units[i][3].length>0
+    end
+    k.uniq!
+    if k.length>0
+      event << ''
+      event << "The following characters have alts but not default units in FEH: #{list_lift(k.map{|q| "*#{q}*"},"and")}"
+    end
+    k=legal_units.map{|q| [q[1][0],0]}.uniq
+    for i in 0...k.length
+      k[i][1]=legal_units.reject{|q| q[1][0]!=k[i][0]}.uniq.length
+    end
+    k=k.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
+    k=k.reject{|q| q[1]!=k[0][1]}
+    event << "#{list_lift(k.map{|q| "*#{q[0]}*"},'and')} #{"is" if k.length==1}#{"are" unless k.length==1} the character#{"s" unless k.length==1} with the most alts, with #{k[0][1]} alts (including the default)#{" each" unless k.length==1}."
+    k=legal_units.map{|q| [q[1],0]}.uniq
+    for i in 0...k.length
+      k[i][1]=legal_units.reject{|q| q[1]!=k[i][0]}.uniq.length
+      if k[i][0].length>1
+        k[i][0]="#{k[i][0][0]}(#{k[i][0][1]})"
+      else
+        k[i][0]=k[i][0][0]
+      end
+    end
+    k=k.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
+    k=k.reject{|q| q[1]!=k[0][1]}
+    event << "#{list_lift(k.map{|q| "*#{q[0]}*"},'and')} #{"is" if k.length==1}#{"are" unless k.length==1} the character facet#{"s" unless k.length==1} with the most alts, with #{k[0][1]} alts (including the default)#{" each" unless k.length==1}."
+    return nil
   elsif ["units","characters","unit","character","charas","chara","chars","char"].include?(f.downcase)
     event.channel.send_temporary_message("Calculating data, please wait...",1)
     event << "**There are #{filler(legal_units,all_units,-1)} units, including:**"
@@ -12792,54 +12861,6 @@ bot.command(:snagstats) do |event, f, f2|
   event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
   event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
   return nil
-end
-
-bot.command(:altstatus) do |event, *args|
-    event.channel.send_temporary_message("Please wait...",3)
-    g=get_markers(event)
-    data_load()
-    nicknames_load()
-    untz=@units.map{|q| q}
-    untz2=[]
-    for i in 0...untz.length
-      m=[]
-      m.push('default') if untz[i][0]==untz[i][12].split(', ')[0] || untz[i][12].split(', ')[0][untz[i][12].split(', ')[0].length-1,1]=='*'
-      m.push('faceted') if untz[i][12].split(', ')[0][0,1]=='*' && untz[i][12].split(', ').length>1
-      m.push('sensible') if untz[i][12].split(', ')[0][0,1]=='*' && untz[i][12].split(', ').length<2
-      m.push('seasonal') if untz[i][9].include?('s') && !(!untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1)
-      m.push('community-voted') if @aliases.reject{|q| q[1]!=untz[i][0] || !q[2].nil?}.map{|q| q[0]}.include?("#{untz[i][0].split('(')[0]}CYL")
-      m.push('Legendary') if !untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1 && !m.include?('default')
-      m.push('Fallen') if untz[i][0].include?('(Fallen)')
-      m.push('out-of-left-field') if m.length<=0
-      n=''
-      unless untz[i][0]==untz[i][12] || untz[i][12][untz[i][12].length-1,1]=='*'
-        k=untz.reject{|q| q[12].gsub('*','').split(', ')[0]!=untz[i][12].gsub('*','').split(', ')[0] || q[0]==untz[i][0] || !(q[0]==q[12].split(', ')[0] || q[12].split(', ')[0].include?('*'))}
-        n="x" if k.length<=0
-      end
-      untz2.push([untz[i][0],untz[i][12].gsub('*','').split(', '),m,n,untz[i][13]])
-    end
-    untz2.uniq!
-    all_units=untz2.reject{|q| !has_any?(g, q[4][0])}
-    all_units=untz2.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
-    legal_units=untz2.reject{|q| !q[4][0].nil?}
-    a2=all_units.reject{|q| q[1][1].nil?}.map{|q| q[1][0]}.uniq
-    l2=legal_units.reject{|q| q[1][1].nil?}.map{|q| q[1][0]}.uniq
-    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'default',1)} characters in their default form, alongside #{l2.length}#{" (#{a2.length})" unless l2.length==a2.length} sets of character facets *(Tiki, dual-gendered characters, etc.)*"
-    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'sensible',1)} sensible alts *(Masked Marth, Dark Azura, etc.)*"
-    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'seasonal',1)} seasonal alts"
-    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'community-voted',1)} community-voted alts *(CYL winners)*"
-    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'Legendary',1)} Legendary alts"
-    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'Fallen',1)} Fallen alts"
-    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'out-of-left-field',1)} out-of-left-field alts *(Eirika, Reinhardt, Hinoka, etc.)*"
-    event << ''
-    k=[]
-    for i in 0...all_units.length
-      x="#{"~~" unless all_units[i][4][0].nil? || all_units[i][4][0].length.zero?}"
-      k.push("#{x}#{all_units[i][1][0]}#{x}") if all_units[i][3].length>0
-    end
-    k.uniq!
-    event << "The following characters have alts but not default units in FEH: #{list_lift(k.map{|q| "*#{q}*"},"and")}"
-    return nil
 end
 
 def skill_data(legal_skills,all_skills,event,mode=0)
