@@ -110,7 +110,7 @@ def all_commands(include_nil=false) # a list of all the command names.  Used by 
      'skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','addualalias','adddualalias',
      'skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','addmultialias','schedule',
      'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','banners','banner',
-     'skillearnable','altstatus']
+     'skillearnable','alts','alt']
   k[0]=nil if include_nil
   return k
 end
@@ -422,6 +422,8 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}**","Causes the invoker to try to headpat me.",0xD49F61)
   elsif ['tools','links'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Responds with a list of links useful to players of *Fire Emblem Heroes*.",0xD49F61)
+  elsif ['alts','alt'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __name__","Responds with a list of alts that the character has in *Fire Emblem Heroes*.",0xD49F61)
   elsif ['skills','fodder'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and skills.\nYou can also include a rarity to show the skills that the unit learns at that rarity.",0xD49F61)
   elsif ['embed','embeds'].include?(command.downcase)
@@ -536,10 +538,11 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     end
   else
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
-    create_embed(event,"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit Data**__\n`data` __name__ - shows both stats and skills (*also `unit`*)\n`stats` __name__ - shows only the stats\n`skills` __name__ - shows only the skills (*also `fodder`*)\n`study` __name__ - for a study of the unit at multiple rarities and merges\n`effHP` __name__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __name__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __name__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __name__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __name__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`games` __unit__ - for a list of games the unit is in\n`banners` __unit__ - for a list of banners the unit has been a focus unit on\n`art` __unit__ __art type__ - for the character's art\n`learnable` __name__ - for a list of all learnable skills (*also `inheritable`*)\n\n__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
+    create_embed(event,"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit/Character Data**__\n\n`data` __unit__ - shows both stats and skills (*also `unit`*)\n`stats` __unit__ - shows only the stats\n`skills` __unit__ - shows only the skills (*also `fodder`*)\n`study` __unit__ - for a study of the unit at multiple rarities and merges\n`effHP` __unit__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __unit__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __unit__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`banners` __unit__ - for a list of banners the unit has been a focus unit on\n`art` __unit__ __art type__ - for the character's art\n`learnable` __unit__ - for a list of all learnable skills (*also `inheritable`*)\n\n`games` __character__ - for a list of games the character is in\n`alts` __character__ - for a list of all units this character has",0xD49F61)
+    create_embed(event,"","__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
     create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`daily` - shows the current day's in-game daily events (*also `today` or `todayInFEH`*)\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`skillrarity` (*also `skill_rarity`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed(event,"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
-    create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**The Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n`locateshards` - lists one server you are in for each color of shard.\n\n__**Meta Data Storage**__\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
+    create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**Mjolnr, the Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n`locateshards` - lists one server you are in for each color of shard.\n\n__**Meta Data Storage**__\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
     event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command."
   end
 end
@@ -3777,7 +3780,7 @@ def disp_skill(name,event,ignore=false)
         s="Dark"
         xfooter=xfooter.gsub('Dark','Fire')
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n**Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Red_Tome:443172811826003968> **Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=="Blue Tome Users Only"
       s=find_base_skill(skill,event)
@@ -3787,29 +3790,33 @@ def disp_skill(name,event,ignore=false)
       elsif s=="Light"
         xfooter=xfooter.gsub('Light','Thunder')
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n**Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Blue_Tome:443172811104714763> **Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=="Green Tome Users Only"
       s=find_base_skill(skill,event)
       if s=="Gronn"
         xfooter=nil
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n**Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Green_Tome:443172811759157248> **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=="Bow Users Only"
       xfooter="All bows deal effective damage against flying units"
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n**Weapon Type:** Bow\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+    elsif skill[5]=="Dagger Users Only"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if colored_daggers?(event)}#{"<:Colorless_Dagger:443692132683743232>" unless colored_daggers?(event)} **Weapon Type:** Dagger\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+    elsif skill[5]=="Staff Users Only"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if colored_daggers?(event)}#{"<:Colorless_Staff:443692132323295243>" unless colored_daggers?(event)} **Weapon Type:** Staff\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     elsif skill[5]=="Dragons Only"
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n**Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     elsif skill[5]=="Beasts Only"
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n**Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:443172811608162324> **Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     else
       s=skill[5]
       s=s[0,s.length-11]
-      s="Sword (Red Blade)" if s=="Sword"
-      s="Lance (Blue Blade)" if s=="Lance"
-      s="Axe (Green Blade)" if s=="Axe"
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n**Weapon Type:** #{s}\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      s="<:Red_Blade:443172811830198282> / Sword (Red Blade)" if s=="Sword"
+      s="<:Blue_Blade:443172811582996480> / Lance (Blue Blade)" if s=="Lance"
+      s="<:Green_Blade:443172811721146368> / Axe (Green Blade)" if s=="Axe"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     end
     str="#{str}\n**Stats affected:** #{"+" if skill[12][1]>0}#{skill[12][1]}/#{"+" if skill[12][2]>0}#{skill[12][2]}/#{"+" if skill[12][3]>0}#{skill[12][3]}/#{"+" if skill[12][4]>0}#{skill[12][4]}"
     sklslt=['Weapon']
@@ -4002,6 +4009,7 @@ def disp_skill(name,event,ignore=false)
         inner_skill='y' if inner_skill.nil? || inner_skill.length<1
       end
     end
+    puts mt.to_s
     outer_skill=nil
     if inner_skill[0,1]=='*'
       outer_skill=inner_skill[1,inner_skill.length-1]
@@ -7056,6 +7064,120 @@ def get_match_in_list(list, str)
   return nil
 end
 
+def parse_function_alts(callback,event,args,bot)
+  event.channel.send_temporary_message("Calculating data, please wait...",3)
+  k=find_name_in_string(event,nil,1)
+  if k.nil?
+    if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+      k2=get_weapon(first_sub(event.message.text,x[0],''),event)
+      weapon='-'
+      weapon=k2[0] unless k2.nil?
+      xx=[]
+      for i in 0...x[1].length
+        j2=find_unit(x[1][i],event)
+        xx.push(@units[j2][12].gsub('*','').split(', ')[0])
+      end
+      method(callback).call(event,xx.uniq,bot) if xx.length>0
+      return 0
+    else
+      event.respond "No unit was included"
+      return -1
+    end
+  else
+    str=k[0]
+    k2=get_weapon(first_sub(event.message.text,k[1],''),event)
+    weapon='-'
+    weapon=k2[0] unless k2.nil?
+    name=find_name_in_string(event)
+    if !detect_multi_unit_alias(event,name.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,name.downcase,event.message.text.downcase)
+      k2=get_weapon(first_sub(event.message.text,x[0],''),event)
+      weapon='-'
+      weapon=k2[0] unless k2.nil?
+      xx=[]
+      for i in 0...x[1].length
+        j2=find_unit(x[1][i],event)
+        xx.push(@units[j2][12].gsub('*','').split(', ')[0])
+      end
+      method(callback).call(event,xx.uniq,bot) if xx.length>0
+    elsif !detect_multi_unit_alias(event,name.downcase,name.downcase).nil?
+      x=detect_multi_unit_alias(event,name.downcase,name.downcase)
+      k2=get_weapon(first_sub(event.message.text,x[0],''),event)
+      weapon='-'
+      weapon=k2[0] unless k2.nil?
+      xx=[]
+      for i in 0...x[1].length
+        j2=find_unit(x[1][i],event)
+        xx.push(@units[j2][12].gsub('*','').split(', ')[0])
+      end
+      method(callback).call(event,xx.uniq,bot) if xx.length>0
+    else
+      j2=@units[@units.find_index{|q| q[0]==name}][12].gsub('*','').split(', ')[0]
+      method(callback).call(event,j2,bot)
+    end
+  end
+  return 0
+end
+
+def find_alts(event,name,bot)
+  if name.is_a?(Array)
+    for i in 0...name.length
+      find_alts(event,name[i],bot)
+    end
+    return nil
+  end
+  data_load()
+  nicknames_load()
+  k=@units.reject{|q| q[12].gsub('*','').split(', ')[0]!=name}.uniq
+  untz2=[]
+  color=[]
+  for i in 0...k.length
+    color.push(unit_color(event,find_unit(k[i][0],event),1))
+    m=[]
+    m.push('default') if k[i][0]==k[i][12].split(', ')[0] || k[i][12].split(', ')[0][k[i][12].split(', ')[0].length-1,1]=='*'
+    m.push('default') if k[i][12].split(', ')[0][0,1]=='*' && k[i][12].split(', ').length>1
+    m.push('sensible') if k[i][12].split(', ')[0][0,1]=='*' && k[i][12].split(', ').length<2
+    m.push('seasonal') if k[i][9].include?('s') && !(!k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1)
+    m.push('community-voted') if @aliases.reject{|q| q[1]!=k[i][0] || !q[2].nil?}.map{|q| q[0]}.include?("#{k[i][0].split('(')[0]}CYL")
+    m.push('Legendary') if !k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1 && !m.include?('default')
+    m.push('Fallen') if k[i][0].include?('(Fallen)')
+    m.push('out-of-left-field') if m.length<=0
+    n=''
+    unless k[i][0]==k[i][12] || k[i][12][k[i][12].length-1,1]=='*'
+      k2=k.reject{|q| q[12].gsub('*','').split(', ')[0]!=k[i][12].gsub('*','').split(', ')[0] || q[0]==k[i][0] || !(q[0]==q[12].split(', ')[0] || q[12].split(', ')[0].include?('*'))}
+      n="x" if k2.length<=0
+    end
+    untz2.push(["#{k[i][0]}#{unit_moji(bot,event,-1,k[i][0])} - #{m.uniq.join(', ')}",k[i][12].gsub('*','').split(', '),k[i][13]])
+  end
+  if color.length.zero?
+    color=0xFFD800
+  else
+    color=avg_color(color)
+  end
+  k2=k.map{|q| q[12].split(', ').length}
+  if k2.max>1
+    k2=k.map{|q| q[12].split(', ')[1]}.uniq.map{|q| ["#{name}(#{q})",[],q]}
+    for i in 0...untz2.length
+      for j in 0...k2.length
+        k2[j][1].push(untz2[i][0]) if k2[j][2]==untz2[i][1][1]
+      end
+    end
+    for i in 0...k2.length
+      k2[i][0]="**Facet #{i+1}: #{k2[i][0]}**"
+      k2[i][1]=k2[i][1].join("\n")
+      k2[i][2]=nil
+      k2[i].compact!
+      k2[i]=nil if k2[i][1].length<=0
+    end
+    k2.compact!
+  else
+    k2=[[".",untz2.map{|q| q[0]}.join("\n")]]
+  end
+  create_embed(event,"__**#{name}**__",'',color,nil,nil,k2,2)
+  return nil
+end
+
 def parse_function(callback,event,args,bot,healers=nil)
   event.channel.send_temporary_message("Calculating data, please wait...",3)
   k=find_name_in_string(event,nil,1)
@@ -7156,7 +7278,7 @@ end
 def calculate_effective_HP(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     for i in 0...name.length
-      calculate_effective_HP(event,name[i],bot,weapon=nil)
+      calculate_effective_HP(event,name[i],bot,weapon)
     end
     return nil
   end
@@ -8837,6 +8959,16 @@ def games_list(event,name,bot,weapon=nil)
   end
   ga=ga.reject{|q| q.downcase=="no games"}
   create_embed(event,"__#{"Mathoo's " if mu}**#{name}**__","#{"**Credit in FEH**\n" unless g2=="No games"}#{g2}#{"\n\n**Other games**\n#{g.join("\n")}" unless g.length<1}#{"\n\n**#{"Male a" if ["Robin(F)","Robin(M)"].include?(@units[j][0])}#{"A" unless ["Robin(F)","Robin(M)"].include?(@units[j][0])}lso appears via Amiibo functionality in**\n#{ga.join("\n")}" unless ga.length<1}",xcolor,nil,pic)
+end
+
+bot.command([:alts,:alt]) do |event, *args|
+  return nil if overlap_prevent(event)
+  if args.nil? || args.length<1
+    event.respond "No unit was included"
+    return nil
+  end
+  parse_function_alts(:find_alts,event,args,bot)
+  return nil
 end
 
 bot.command([:banners, :banner]) do |event, *args|
@@ -12569,7 +12701,7 @@ bot.command(:snagstats) do |event, f, f2|
   f2='' if f2.nil?
   bot.servers.values(&:members)
   k=bot.servers.length
-  k-=3 if @shardizard==4 # Debug shard shares the three emote servers with the main account
+  k=1 if @shardizard==4 # Debug shard shares the three emote servers with the main account
   @server_data[0][@shardizard]=k
   @server_data[1][@shardizard]=bot.users.size
   metadata_save()
@@ -12593,7 +12725,7 @@ bot.command(:snagstats) do |event, f, f2|
     event << "The <:Shard_Gold:443733396913520640> Golden Shard is in #{longFormattedNumber(@server_data[0][4])} server#{"s" if @server_data[0][4]!=1}, reaching #{longFormattedNumber(@server_data[1][4])} unique members." if event.user.id==167657750971547648
     return nil
   elsif ["alts","alt","alternate","alternates","alternative","alternatives"].include?(f.downcase)
-    event.channel.send_temporary_message("Please wait...",3)
+    event.channel.send_temporary_message("Calculating data, please wait...",3)
     g=get_markers(event)
     data_load()
     nicknames_load()
