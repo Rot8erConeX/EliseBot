@@ -1571,7 +1571,7 @@ def find_name_in_string(event,stringx=nil,mode=0)
         end
       end
     end
-    if name.include?('(M)') || namename.include?('(F)')
+    if name.include?('(M)') || name.include?('(F)')
       if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
         if ['robin','reflet','daraen'].include?(args3[0].downcase)
           name='Robin'
@@ -1662,7 +1662,7 @@ def find_name_in_string(event,stringx=nil,mode=0)
         end
       end
     end
-    if name.include?('(M)') || namename.include?('(F)')
+    if name.include?('(M)') || name.include?('(F)')
       if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
         if ['robin','reflet','daraen'].include?(args3[0].downcase)
           name='Robin'
@@ -6665,13 +6665,13 @@ def weapon_legality(event,name,weapon,refinement,recursion=false)
       weapon='Falchion (Echoes)'
     elsif ['FE1','FE3','FE11','FE12'].include?(u[11][0])
       weapon='Falchion (Mystery)'
-    elsif u[11][0].include?('FE13')
+    elsif u[11].include?('FE13')
       weapon='Falchion (Awakening)'
-    elsif u[11][0].include?('FE2') || u[11][0].include?('FE15')
+    elsif u[11].include?('FE2') || u[11].include?('FE15')
       weapon='Falchion (Echoes)'
-    elsif u[11][0].include?('FE1') || u[11][0].include?('FE3') || u[11][0].include?('FE11') || u[11][0].include?('FE12')
+    elsif u[11].include?('FE1') || u[11].include?('FE3') || u[11].include?('FE11') || u[11].include?('FE12')
       weapon='Falchion (Mystery)'
-    elsif u[11][0].include?('FE14')
+    elsif u[11].map{|q| q[0,4]}.include?('FE14')
       weapon='Falchion (Awakening)'
     end
   end
