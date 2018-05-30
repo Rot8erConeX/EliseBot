@@ -353,11 +353,11 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     command=''
   end
   if command.downcase=='reboot'
-    create_embed(event,'**reboot**','Reboots this shard of the bot, installing any updates.\n\n**This command is only able to be used by Rot8er_ConeX**',0x008b8b)
+    create_embed(event,'**reboot**',"Reboots this shard of the bot, installing any updates.\n\n**This command is only able to be used by Rot8er_ConeX**",0x008b8b)
   elsif command.downcase=='sendmessage'
-    create_embed(event,'**sendmessage** __channel id__ __*message__','Sends the message `message` to the channel with id `channel`\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.',0x008b8b)
+    create_embed(event,'**sendmessage** __channel id__ __*message__',"Sends the message `message` to the channel with id `channel`\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.",0x008b8b)
   elsif command.downcase=='leaveserver'
-    create_embed(event,'**leaveserver** __server id number__','Forces me to leave the server with the id `server id`.\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.',0x008b8b)
+    create_embed(event,'**leaveserver** __server id number__',"Forces me to leave the server with the id `server id`.\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.",0x008b8b)
   elsif command.downcase=='snagstats'
     subcommand='' if subcommand.nil?
     if ['server','servers','member','members'].include?(subcommand.downcase)
@@ -365,13 +365,13 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     elsif ['alts','alt','alternate','alternates','alternative','alternatives'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of units within each type of alt, as well as specifics about characters with the most alts.',0x40C0F0)
     elsif ['unit','char','character','units','chars','charas','chara'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of units sorted in each of the following ways:\nObtainability\nColor\nWeapon type\nMovement type\nGame of origin (in PM)',0x40C0F0)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of units sorted in each of the following ways:\nObtainability\nColor\nWeapon type\nMovement type\nGame of origin (in PM)",0x40C0F0)
     elsif ['skills','skill','weapon','weapons','assist','assists','special','specials','passive','passives'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of skills, as well as numbers condensing them into branches (same name with different number) and trees (all skills that promote into/from each other are a single entry).',0x40C0F0)
     elsif ['alias','aliases','name','names','nickname','nicknames'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of aliases in each of the three categories - global single-unit, server-specific [single-unit], and [global] multi-unit.\nAlso returns specifics about the most frequent instances of each category',0x40C0F0)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of aliases in each of the three categories - global single-unit, server-specific [single-unit], and [global] multi-unit.\nAlso returns specifics about the most frequent instances of each category",0x40C0F0)
     elsif ['groups','group','groupings','grouping'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of groups in each of the two categories - global and server-specific.\nAlso returns specifics about the dynamically-created global groups.',0x40C0F0)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of groups in each of the two categories - global and server-specific.\nAlso returns specifics about the dynamically-created global groups.",0x40C0F0)
     else
       create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s)\nUnit(s), Character(s), Char(a)(s)\nSkill(s)\nAlias(es), Name(s), Nickname(s)\nAlt(s)",0x40C0F0)
     end
@@ -384,11 +384,11 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif command.downcase=='addalias'
     create_embed(event,'**addalias** __new alias__ __unit__',"Adds `new alias` to `unit`'s aliases.\nIf the arguments are listed in the opposite order, the command will auto-switch them.\n\nInforms you if the alias already belongs to someone.\nAlso informs you if the unit you wish to give the alias to does not exist.",0xC31C19)
   elsif ['allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__",'Shows all the skills that `name`can learn.\n\nIn servers, will only show the weapons, assists, and specials.\nIn PM, will also show the passive skills.',0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Shows all the skills that `name`can learn.\n\nIn servers, will only show the weapons, assists, and specials.\nIn PM, will also show the passive skills.",0xD49F61)
   elsif ['data','unit'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats, and skills.",0xD49F61)
   elsif ['skill'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__",'Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word "default" or "base" in these cases will make this command only show the default weapon.\nOn the flip side, including the word "refined" will make this command only show data on the refinements.',0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.",0xD49F61)
   elsif ['stats'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats.",0xD49F61)
     disp_more_info(event)
@@ -402,9 +402,9 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['study'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows the level 40 stats for the unit `name` for a combination of multiple rarities with 0, 5, and 10 merges.',0xD49F61)
   elsif ['summonpool','summon_pool','pool'].include?(command.downcase) || (['summon'].include?(command.downcase) && "#{subcommand}".downcase=='pool')
-    create_embed(event,"**#{command.downcase}#{" pool" if command.downcase=='summon'}** __*colors__",'Shows the summon pool for the listed color.\n\nIn PM, all colors listed will be displayed, or all colors if none are specified.\nIn servers, only the first color listed will be displayed.',0xD49F61)
+    create_embed(event,"**#{command.downcase}#{" pool" if command.downcase=='summon'}** __*colors__","Shows the summon pool for the listed color.\n\nIn PM, all colors listed will be displayed, or all colors if none are specified.\nIn servers, only the first color listed will be displayed.",0xD49F61)
   elsif @summon_servers.include?(k) && ['summon'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __*colors__",'Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\n**This command is only available in certain servers**.',0x9E682C)
+    create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\n**This command is only available in certain servers**.",0x9E682C)
   elsif ['effhp','eff_hp'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows the effective HP data for the unit `name`.',0xD49F61)
     disp_more_info(event)
@@ -441,29 +441,29 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['daily','today','todayinfeh','today_in_feh'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Shows the day's in-game daily events.\nIf in PM, will also show tomorrow's.",0xD49F61)
   elsif ['next','schedule'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __type__",'Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)',0xD49F61)
+    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)",0xD49F61)
   elsif ['deletealias','removealias'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __alias__",'Removes `alias` from the list of aliases, regardless of who it was for.',0xC31C19)
   elsif ['addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__ __\*members__",'If there is already a multi-unit alias named `name`, adds `members` to it.\nIf there is not already a multi-unit alias with the name `name`, makes one and adds `members` to it.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+    create_embed(event,"**#{command.downcase}** __name__ __\*members__","If there is already a multi-unit alias named `name`, adds `members` to it.\nIf there is not already a multi-unit alias with the name `name`, makes one and adds `members` to it.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['addgroup'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__ __\*members__",'If there is already a group named `name`, adds `members` to it.\nIf there is not already a group with the name `name`, makes one and adds `members` to it.',0xC31C19)
+    create_embed(event,"**#{command.downcase}** __name__ __\*members__","If there is already a group named `name`, adds `members` to it.\nIf there is not already a group with the name `name`, makes one and adds `members` to it.",0xC31C19)
   elsif ['seegroups','groups','checkgroups'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**",'Shows all the existing groups, and their members.',0xD49F61)
   elsif ['deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias','removedualalias','removemultiunitalias','removedualunitalias','removemulti'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__",'Removes the multi-unit alias with the name `name`\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+    create_embed(event,"**#{command.downcase}** __name__","Removes the multi-unit alias with the name `name`\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['deletegroup','removegroup'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Removes the group with the name `name`',0xC31C19)
   elsif ['removemember','removefromgroup'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __group__ __unit__",'Removes the unit `unit` from the group with the name `group`.\nIf this causes `group` to have no members, it will also delete it.',0xC31C19)
+    create_embed(event,"**#{command.downcase}** __group__ __unit__","Removes the unit `unit` from the group with the name `group`.\nIf this causes `group` to have no members, it will also delete it.",0xC31C19)
   elsif ['bst'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __*allies__","Shows the BST of the units listed in `allies`.  If more than four characters are listed, I show both the BST of all those listed and the BST of the first four listed.\n\n#{disp_more_info(event,1)}",0xD49F61)
   elsif ['effect'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**",'Lists all weapons that can be refined to obtain an Effect Mode in the weapon refinery.',0xD49F61)
   elsif ['refinery','refine'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}**",'Lists all weapons that can be refined or evolved in the weapon refinery, organized by whether they use Divine Dew or Refining Stones.\n\nYou can also include the word "Effect" in your message to show only weapons that get Effect Mode refines.',0xD49F61)
+    create_embed(event,"**#{command.downcase}**","Lists all weapons that can be refined or evolved in the weapon refinery, organized by whether they use Divine Dew or Refining Stones.\n\nYou can also include the word \"Effect\" in your message to show only weapons that get Effect Mode refines.",0xD49F61)
   elsif ['legendary','legendaries'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __\*filters__",'Lists all of the legendary heroes, sorted by up to three defined filters.\nBy default, will sort by Legendary __Element__ and then the non-HP __stat__ boost given by the hero.\n\nPossible filters (in order of priority when applied) :\nElement(s), Flavor(s), Affinity/Affinities\nStat(s), Boost(s)\nWeapon(s)\nColo(u)r(s)\nMove(s), Movement(s)',0xD49F61)
+    create_embed(event,"**#{command.downcase}** __\*filters__","Lists all of the legendary heroes, sorted by up to three defined filters.\nBy default, will sort by Legendary __Element__ and then the non-HP __stat__ boost given by the hero.\n\nPossible filters (in order of priority when applied) :\nElement(s), Flavor(s), Affinity/Affinities\nStat(s), Boost(s)\nWeapon(s)\nColo(u)r(s)\nMove(s), Movement(s)",0xD49F61)
   elsif ['games'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows a list of games that the unit `name` is in.',0xD49F61)
   elsif ['banners','banner'].include?(command.downcase)
@@ -495,33 +495,33 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['setmarker'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __letter__","Sets the server's \"marker\", allowing for server-specific custom units and skills.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['backup'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __item__",'Backs up the alias list or the group list, depending on the word used as `item`.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+    create_embed(event,"**#{command.downcase}** __item__","Backs up the alias list or the group list, depending on the word used as `item`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['restore'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}**",'Restores the the alias list or the group list, depending on the word used as `item`, from last backup.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+    create_embed(event,"**#{command.downcase}**","Restores the the alias list or the group list, depending on the word used as `item`, from last backup.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['status'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __\*message__",'Sets my status message to `message`.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+    create_embed(event,"**#{command.downcase}** __\*message__","Sets my status message to `message`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['locateshards','locateshard','locate'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** #{"shard#{['','s'].sample}" if command.downcase=='locate'}",'Informs you of one server you and I share for each kind of shard.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+    create_embed(event,"**#{command.downcase}** #{"shard#{['','s'].sample}" if command.downcase=='locate'}","Informs you of one server you and I share for each kind of shard.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['devedit','dev_edit'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['create'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*stats__",'Allows me to create a new devunit with the character `unit` and stats described in `stats`.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*stats__","Allows me to create a new devunit with the character `unit` and stats described in `stats`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['promote','rarity','feathers'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__",'Causes me to promote the devunit with the name `unit`.\n\nIf `number` is defined, I will promote the devunit that many times.\nIf not, I will promote them once.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","Causes me to promote the devunit with the name `unit`.\n\nIf `number` is defined, I will promote the devunit that many times.\nIf not, I will promote them once.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['newwaifu','newaifu','addwaifu','new_waifu','add_waifu','waifu'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Adds a new unit to the list of the developer waifus.\n\nThis adds them to the [hidden] \"Mathoo'sWaifus\" searchable group.\nIt also causes me to congratulate my developer when he summons the unit.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['newsomebody','newsomeone','newsomebodies','addsomebody','addsomeone','addsomebodies','new_somebody','new_someone','new_somebodies','add_somebody','add_someone','add_somebodies','somebody','somebodies','someone'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Adds a new unit to the list of the developer \"somebodies\".\nThese are units he wants but doesn't consider waifu material.\n\nThis causes me to congratulate my developer when he summons the unit.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['newnobody','newnoone','newnobodies','addnobody','addnoone','addnobodies','new_nobody','new_noone','new_nobodies','add_nobody','add_noone','add_nobodies','nobody','nobodies','noone'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__",'Adds a new unit to the list of the developer "nobodies".\nThese are units that he does not care for but keeps in his barracks for one reason or another.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Adds a new unit to the list of the developer \"nobodies\".\nThese are units that he does not care for but keeps in his barracks for one reason or another.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['remove','delete','send_home','sendhome','fodder'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__",'Removes a unit from either the developer "nobodies" list or the devunits.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Removes a unit from either the developer \"nobodies\" list or the devunits.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['merge','combine'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__",'Causes me to merge the devunit with the name `unit`.\n\nIf `number` is defined, I will merge the devunit that many times.\nIf not, I will merge them once.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","Causes me to merge the devunit with the name `unit`.\n\nIf `number` is defined, I will merge the devunit that many times.\nIf not, I will merge them once.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['nature','ivs'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*effects__",'Causes me to change the nature of the devunit with the name `unit`\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*effects__","Causes me to change the nature of the devunit with the name `unit`\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['learn','teach'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*skill types__",'Causes me to teach the skills in slots `skill types` to the devunit with the name `unit`.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*skill types__","Causes me to teach the skills in slots `skill types` to the devunit with the name `unit`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     else
       create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the devunits.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new devunit\n`FEH!#{command.downcase} promote` - promotes an existing devunit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a devunit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a devunit's nature (*also `ivs`*)\n`FEH!#{command.downcase} teach` - teaches a new skill to a devunit (*also `learn`*)\n\n`FEH!#{command.downcase} new_waifu` - adds a dev waifu (*also `add_waifu`*)\n`FEH!#{command.downcase} new_somebody` - adds a dev \"somebody\" (*also `add_somebody`*)\n`FEH!#{command.downcase} new_nobody` - adds a dev \"nobody\" (*also `add_nobody`*)\n\n`FEH!#{command.downcase} send_home` - removes the unit from either the devunits or the \"nobodies\" list (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     end
@@ -530,9 +530,9 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['sort'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['groups','group'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Sorts the groups list alphabetically by group name.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Sorts the groups list alphabetically by group name.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['alias','aliases'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Sorts the alias list alphabetically by unit the alias is for.\n\n**This command is only able to be used by Rot8er_ConeX**.',0x008b8b)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Sorts the alias list alphabetically by unit the alias is for.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     else
       create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units which match your defined filters, includes any units you name that don't fit into those filters, then displays the resulting list in order based on the stats you include.\n\n#{disp_more_info(event,2)}",0xD49F61)
     end
@@ -1033,7 +1033,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
     name=name.split(':')[1] if x_find_skill(name.split(':')[1],event,sklz,ignore,ignore2)>=0
   end
   # certain common skill aliases work
-  return find_skill('Yato',event) if name.downcase.gsub(' ','')=='yatogami'
+  return find_skill('Yato',event) if ['yatogami','yatokami','yatonogami','yatonokami'].include?(name.downcase.gsub(' ',''))
   return find_skill('Bladeblade',event) if name.downcase.gsub(' ','')=='laevatein'
   return find_skill('Uror',event) if name.downcase.gsub(' ','')=='urdr'
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
@@ -1091,7 +1091,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][13])
   return -1 if name.length<4
   namex=name.gsub(' ','').downcase
-  return find_skill('Yato',event) if namex=='yatogami'[0,namex.length]
+  return find_skill('Yato',event) if ['yatogami','yatokami','yatonogami','yatonokami'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill('Laevatein',event) if namex=='bladeblade'[0,namex.length]
   return find_skill("Sack o' Gifts",event) if namex=='sackofgifts'[0,namex.length]
   return find_skill("Killing Edge",event) if ['killersword','killeredge','killingsword'].map{|q| q[0,namex.length]}.include?(namex)
@@ -2014,6 +2014,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       ks=0
     end
     s2=@skills[find_skill(weapon,event)]
+    s2[12]=[0,0,0,0,0] if s2[12].nil?
     stats[1]+=sttz[ks][0]
     stats[2]+=s2[12][1]+sttz[ks][1]
     stats[3]+=s2[12][2]+sttz[ks][2]
@@ -2101,146 +2102,26 @@ def apply_combat_buffs(event,skillls,stats,phase)
   skillls=skillls.map{|q| q}
   close=[0,0,0,0,0,0]
   distant=[0,0,0,0,0,0]
+  lookout=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+    lookout=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+      lookout.push(eval line)
+    end
+    lookout=lookout.reject{|q| !['Enemy Phase','Player Phase','In-Combat Buffs 1','In-Combat Buffs 2'].include?(q[3])}
+  end
   for i in 0...skillls.length
-    val=skillls[i].scan(/\d+?/)[0].to_i
-    if skillls[i][0,12]=='Spur Attack ' || skillls[i][0,13]=='Drive Attack '
-      stats[2]+=val+1
-    elsif skillls[i][0,11]=='Spur Speed ' || skillls[i][0,12]=='Drive Speed '
-      stats[3]+=val+1
-    elsif skillls[i][0,13]=='Spur Defense ' || skillls[i][0,14]=='Drive Defense '
-      stats[4]+=val+1
-    elsif skillls[i][0,16]=='Spur Resistance ' || skillls[i][0,17]=='Drive Resistance '
-      stats[5]+=val+1
-    elsif skillls[i]=='Spur Spectrum'
-      stats[2]+=3
-      stats[3]+=3
-      stats[4]+=3
-      stats[5]+=3
-    elsif skillls[i]=='Drive Spectrum'
-      stats[2]+=2
-      stats[3]+=2
-      stats[4]+=2
-      stats[5]+=2
-    elsif skillls[i][0,5]=='Spur ' || skillls[i][0,6]=='Drive '
-      stats[2]+=val+1 if skillls[i].include?('Atk')
-      stats[3]+=val+1 if skillls[i].include?('Spd')
-      stats[4]+=val+1 if skillls[i].include?('Def')
-      stats[5]+=val+1 if skillls[i].include?('Res')
-    end
-    if skillls[i]=='Goad Movement' || skillls[i]=='Goad Dragons'
-      stats[2]+=4
-      stats[3]+=4
-    end
-    if skillls[i]=='Ward Movement' || skillls[i]=='Ward Dragons'
-      stats[4]+=4
-      stats[5]+=4
-    end
-    if skillls[i]=='Spectrum Bond' || skillls[i]=='Supportive'
-      stats[2]+=4
-      stats[3]+=4
-      stats[4]+=4
-      stats[5]+=4
-    elsif skillls[i][7,6]==' Bond '
-      stats[2]+=val+2 if skillls[i].include?('Atk')
-      stats[3]+=val+2 if skillls[i].include?('Spd')
-      stats[4]+=val+2 if skillls[i].include?('Def')
-      stats[5]+=val+2 if skillls[i].include?('Res')
-    end
-    if skillls[i]=='Brazen Spectrum'
-      stats[2]+=5
-      stats[3]+=5
-      stats[4]+=5
-      stats[5]+=5
-    elsif skillls[i][0,7]=='Brazen '
-      stats[2]+=2*val+1 if skillls[i].include?('Atk')
-      stats[3]+=2*val+1 if skillls[i].include?('Spd')
-      stats[4]+=2*val+1 if skillls[i].include?('Def')
-      stats[5]+=2*val+1 if skillls[i].include?('Res')
-    end
-    stats[2]+=val+1 if skillls[i][0,11]=='Fire Boost '
-    stats[3]+=val+1 if skillls[i][0,11]=='Wind Boost '
-    stats[4]+=val+1 if skillls[i][0,12]=='Earth Boost '
-    stats[5]+=val+1 if skillls[i][0,12]=='Water Boost '
-    if phase=='Player'
-      stats[2]+=val*2 if skillls[i][0,11]=='Death Blow '
-      stats[3]+=val*2 if skillls[i][0,13]=='Darting Blow '
-      stats[4]+=val*2 if skillls[i][0,13]=='Armored Blow '
-      stats[5]+=val*2 if skillls[i][0,13]=='Warding Blow '
-      if skillls[i][0,14]=='Swift Sparrow ' # Atk/Spd
-        stats[2]+=val*2
-        stats[3]+=val*2
-      elsif skillls[i][0,12]=='Sturdy Blow ' # Atk/Def
-        stats[2]+=val*2
-        stats[4]+=val*2
-      elsif skillls[i][0,14]=='Mirror Strike ' # Atk/Res
-        stats[2]+=val*2
-        stats[5]+=val*2
-      elsif skillls[i][0,12]=='Steady Blow ' # Spd/Def
-        stats[3]+=val*2
-        stats[4]+=val*2
-      elsif skillls[i][0,13]=='Swift Strike ' # Spd/Res
-        stats[3]+=val*2
-        stats[5]+=val*2
-      elsif skillls[i][0,13]=='Bracing Blow ' # Def/Res
-        stats[4]+=val*2
-        stats[5]+=val*2
-      end
-    elsif phase=='Enemy'
-      if skillls[i]=='Laws of Sacae'
-        stats[2]+=4
-        stats[3]+=4
-        stats[4]+=4
-        stats[5]+=4
-      end
-      stats[2]+=val*2 if skillls[i][0,14]=='Fierce Stance '
-      stats[3]+=val*2 if skillls[i][0,15]=='Darting Stance '
-      stats[4]+=val*2 if skillls[i][0,14]=='Steady Stance '
-      stats[5]+=val*2 if skillls[i][0,15]=='Warding Stance '
-      if skillls[i][0,15]=='Kestrel Stance ' # Atk/Spd
-        stats[2]+=val*2
-        stats[3]+=val*2
-      elsif skillls[i][0,14]=='Sturdy Stance ' # Atk/Def
-        stats[2]+=val*2
-        stats[4]+=val*2
-      elsif skillls[i][0,14]=='Mirror Stance ' # Atk/Res
-        stats[2]+=val*2
-        stats[5]+=val*2
-      elsif skillls[i][0,15]=='Spd/Def Stance ' # Spd/Def
-        stats[3]+=val*2
-        stats[4]+=val*2
-      elsif skillls[i][0,13]=='Swift Stance ' # Spd/Res
-        stats[3]+=val*2
-        stats[5]+=val*2
-      elsif skillls[i][0,15]=='Bracing Stance ' # Def/Res
-        stats[4]+=val*2
-        stats[5]+=val*2
-      end
-      if skillls[i]=='Dragonskin'
-        stats[4]+=4
-        stats[5]+=4
-      end
-      stats[2]+=4 if skillls[i]=='Fierce Breath'
-      stats[3]+=4 if skillls[i]=='Darting Breath'
-      stats[4]+=4 if skillls[i]=='Steady Breath'
-      stats[5]+=4 if skillls[i]=='Warding Breath'
-      if skillls[i]=='Kestrel Breath' # Atk/Spd
-        stats[2]+=2
-        stats[3]+=2
-      elsif skillls[i]=='Sturdy Breath' # Atk/Def
-        stats[2]+=2
-        stats[4]+=2
-      elsif skillls[i]=='Mirror Breath' # Atk/Res
-        stats[2]+=2
-        stats[5]+=2
-      elsif skillls[i]=='Spd/Def Breath' # Spd/Def
-        stats[3]+=2
-        stats[4]+=2
-      elsif skillls[i]=='Swift Breath' # Spd/Res
-        stats[3]+=2
-        stats[5]+=2
-      elsif skillls[i]=='Bracing Breath' # Def/Res
-        stats[4]+=2
-        stats[5]+=2
+    statskl=lookout.find_index{|q| q[0]==skillls[i]}
+    unless statskl.nil?
+      statskl=lookout[statskl]
+      if statskl[3]=='Player Phase' && phase=='Enemy'
+      elsif statskl[3]=='Enemy Phase' && phase=='Player'
+      else
+        stats[1]+=statskl[4][0]
+        stats[2]+=statskl[4][1]
+        stats[3]+=statskl[4][2]
+        stats[4]+=statskl[4][3]
+        stats[5]+=statskl[4][4]
       end
     end
   end
@@ -2391,135 +2272,14 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   args=args.map{|q| q.gsub('(','').gsub(')','').downcase}
   stat_skills_3=[]
-  lookout=[['Death Blow 3',['deathblow3','fierceblow3','attackblow3','atkblow3','attblow3','deathblow','fierceblow','attackblow','atkblow','attblow'],2],
-           ['Death Blow 2',['deathblow2','fierceblow2','attackblow2','atkblow2','attblow2'],2],
-           ['Death Blow 1',['deathblow1','fierceblow1','attackblow1','atkblow1','attblow1'],2],
-           ['Darting Blow 3',['dartingblow3','sparrowblow3','speedblow3','spdblow3','dartingblow','sparrowblow','speedblow','spdblow'],2],
-           ['Darting Blow 2',['dartingblow2','sparrowblow2','speedblow2','spdblow2'],2],
-           ['Darting Blow 1',['dartingblow1','sparrowblow1','speedblow1','spdblow1'],2],
-           ['Armored Blow 3',['armoredblow3','armouredblow3','defenseblow3','defenceblow3','defblow3','armoredblow','armouredblow','defenseblow','defenceblow','defblow'],2],
-           ['Armored Blow 2',['armoredblow2','armouredblow2','defenseblow2','defenceblow2','defblow2'],2],
-           ['Armored Blow 1',['armoredblow1','armouredblow1','defenseblow1','defenceblow1','defblow1'],2],
-           ['Warding Blow 3',['wardingblow3','resistanceblow3','resblow3','wardedblow3','wardingblow','resistanceblow','resblow','wardedblow'],2],
-           ['Warding Blow 2',['wardingblow2','resistanceblow2','resblow2','wardedblow2'],2],
-           ['Warding Blow 1',['wardingblow1','resistanceblow1','resblow1','wardedblow1'],2],
-           ['Swift Sparrow 2',['kestrelblow2','kestrelblow','swiftsparrow2','attackspeedblow2','atkspeedblow2','attspeedblow2','attackspdblow2','atkspdblow2','attspdblow2','speedattackblow2','spdattackblow2','speedatkblow2','spdatkblow2','speedattblow2','spdattblow2','swiftsparrow','attackspeedblow','atkspeedblow','attspeedblow','attackspdblow','atkspdblow','attspdblow','speedattackblow','spdattackblow','speedatkblow','spdatkblow','speedattblow','spdattblow'],2],
-           ['Swift Sparrow 1',['kestrelblow','swiftsparrow1','attackspeedblow1','atkspeedblow1','attspeedblow1','attackspdblow1','atkspdblow1','attspdblow1','speedattackblow1','spdattackblow1','speedatkblow1','spdatkblow1','speedattblow1','spdattblow1'],2],
-           ['Sturdy Blow 2',['sturdyblow2','attackdefenseblow2','atkdefenseblow2','attdefenseblow2','attackdefenceblow2','atkdefenceblow2','attdefenceblow2','attackdefblow2','atkdefblow2','attdefblow2','defenseattackblow2','defenceattackblow2','defattackblow2','defenseatkblow2','defenceatkblow2','defatkblow2','defenseattblow2','defenceattblow2','defattblow2','sturdyblow','attackdefenseblow','atkdefenseblow','attdefenseblow','attackdefenceblow','atkdefenceblow','attdefenceblow','attackdefblow','atkdefblow','attdefblow','defenseattackblow','defenceattackblow','defattackblow','defenseatkblow','defenceatkblow','defatkblow','defenseattblow','defenceattblow','defattblow'],2],
-           ['Sturdy Blow 1',['sturdyblow1','attackdefenseblow1','atkdefenseblow1','attdefenseblow1','attackdefenceblow1','atkdefenceblow1','attdefenceblow1','attackdefblow1','atkdefblow1','attdefblow1','defenseattackblow1','defenceattackblow1','defattackblow1','defenseatkblow1','defenceatkblow1','defatkblow1','defenseattblow1','defenceattblow1','defattblow1'],2],
-           ['Mirror Strike 2',['mirrorstrike2','mirrorblow2','attackresistanceblow2','atkresistanceblow2','attresistanceblow2','attackresblow2','atkresblow2','attresblow2','resistanceattackblow2','resattackblow2','resistanceatkblow2','resatkblow2','resistanceattblow2','resattblow2','mirrorstrike','mirrorblow','attackresistanceblow','atkresistanceblow','attresistanceblow','attackresblow','atkresblow','attresblow','resistanceattackblow','resattackblow','resistanceatkblow','resatkblow','resistanceattblow','resattblow'],2],
-           ['Mirror Strike 1',['mirrorstrike1','mirrorblow1','attackresistanceblow1','atkresistanceblow1','attresistanceblow1','attackresblow1','atkresblow1','attresblow1','resistanceattackblow1','resattackblow1','resistanceatkblow1','resatkblow1','resistanceattblow1','resattblow1'],2],
-           ['Steady Blow 2',['steadyblow2','speeddefenseblow2','spddefenseblow2','speeddefenceblow2','spddefenceblow2','speeddefblow2','spddefblow2','defensespeedblow2','defencespeedblow2','defspeedblow2','defensespdblow2','defencespdblow2','defspdblow2','steadyblow','speeddefenseblow','spddefenseblow','speeddefenceblow','spddefenceblow','speeddefblow','spddefblow','defensespeedblow','defencespeedblow','defspeedblow','defensespdblow','defencespdblow','defspdblow'],2],
-           ['Steady Blow 1',['steadyblow1','speeddefenseblow1','spddefenseblow1','speeddefenceblow1','spddefenceblow1','speeddefblow1','spddefblow1','defensespeedblow1','defencespeedblow1','defspeedblow1','defensespdblow1','defencespdblow1','defspdblow1'],2],
-           ['Swift Strike 2',['swiftstrike2','swiftblow2','speedresistanceblow2','spdresistanceblow2','speedresblow2','spdresblow2','swiftstrike','swiftblow','speedresistanceblow','spdresistanceblow','speedresblow','spdresblow'],2],
-           ['Swift Strike 1',['swiftstrike1','swiftblow1','speedresistanceblow1','spdresistanceblow1','speedresblow1','spdresblow1'],2],
-           ['Bracing Blow 2',['bracingblow2','defenseresistanceblow2','defenceresistanceblow2','defresistanceblow2','defenseresblow2','defenceresblow2','defresblow2','resistancedefenseblow2','resdefenseblow2','resistancedefenceblow2','resdefenceblow2','resistancedefblow2','resdefblow2','bracingblow','defenseresistanceblow','defenceresistanceblow','defresistanceblow','defenseresblow','defenceresblow','defresblow','resistancedefenseblow','resdefenseblow','resistancedefenceblow','resdefenceblow','resistancedefblow','resdefblow'],2],
-           ['Bracing Blow 1',['bracingblow1','defenseresistanceblow1','defenceresistanceblow1','defresistanceblow1','defenseresblow1','defenceresblow1','defresblow1','resistancedefenseblow1','resdefenseblow1','resistancedefenceblow1','resdefenceblow1','resistancedefblow1','resdefblow1'],2],
-           ['Fierce Stance 3',['deathstance3','fiercestance3','attackstance3','atkstance3','attstance3','deathstance','fiercestance','attackstance','atkstance','attstance'],2],
-           ['Fierce Stance 2',['deathstance2','fiercestance2','attackstance2','atkstance2','attstance2'],2],
-           ['Fierce Stance 1',['deathstance1','fiercestance1','attackstance1','atkstance1','attstance1'],2],
-           ['Fierce Breath',['deathbreath','fiercebreath','attackbreath','atkbreath','attbreath'],2],
-           ['Darting Stance 3',['dartingstance3','speedstance3','spdstance3','dartingstance','speedstance','spdstance'],2],
-           ['Darting Stance 2',['dartingstance2','speedstance2','spdstance2'],2],
-           ['Darting Stance 1',['dartingstance1','speedstance1','spdstance1'],2],
-           ['Darting Breath',['dartingbreath','speedbreath','spdbreath'],2],
-           ['Steady Stance 3',['steadystance3','armouredstance3','armoredstance3','defensestance3','defencestance3','defstance3','armoredstance','armouredstance','armouredstance','defensestance','defencestance','defstance'],2],
-           ['Steady Stance 2',['steadystance2','armouredstance2','armoredstance2','defensestance2','defencestance2','defstance2'],2],
-           ['Steady Stance 1',['steadystance1','armouredstance1','armoredstance1','defensestance1','defencestance1','defstance1'],2],
-           ['Steady Breath',['steadybreath','armouredbreath','armoredbreath','defensebreath','defencebreath','defbreath'],2],
-           ['Warding Stance 3',['wardingstance3','resistancestance3','resstance3','wardedstance3','wardingstance','resistancestance','resstance','wardedstance'],2],
-           ['Warding Stance 2',['wardingstance2','resistancestance2','resstance2','wardedstance2'],2],
-           ['Warding Stance 1',['wardingstance1','resistancestance1','resstance1','wardedstance1'],2],
-           ['Warding Breath',['wardingbreath','resistancebreath','resbreath','wardedbreath'],2],
-           ['Kestrel Stance 2',['kestrelstance2','attackspeedstance2','atkspeedstance2','attspeedstance2','attackspdstance2','atkspdstance2','attspdstance2','speedattackstance2','spdattackstance2','speedatkstance2','spdatkstance2','speedattstance2','spdattstance2','kestrelstance','attackspeedstance','atkspeedstance','attspeedstance','attackspdstance','atkspdstance','attspdstance','speedattackstance','spdattackstance','speedatkstance','spdatkstance','speedattstance','spdattstance'],2],
-           ['Kestrel Stance 1',['kestrelstance1','attackspeedstance1','atkspeedstance1','attspeedstance1','attackspdstance1','atkspdstance1','attspdstance1','speedattackstance1','spdattackstance1','speedatkstance1','spdatkstance1','speedattstance1','spdattstance1'],2],
-           ['Kestrel Breath',['kestrelbreath','attackspeedbreath','atkspeedbreath','attspeedbreath','attackspdbreath','atkspdbreath','attspdbreath','speedattackbreath','spdattackbreath','speedatkbreath','spdatkbreath','speedattbreath','spdattbreath'],2],
-           ['Sturdy Stance 2',['sturdystance2','attackdefensestance2','atkdefensestance2','attdefensestance2','attackdefencestance2','atkdefencestance2','attdefencestance2','attackdefstance2','atkdefstance2','attdefstance2','defenseattackstance2','defenceattackstance2','defattackstance2','defenseatkstance2','defenceatkstance2','defatkstance2','defenseattstance2','defenceattstance2','defattstance2','sturdystance','attackdefensestance','atkdefensestance','attdefensestance','attackdefencestance','atkdefencestance','attdefencestance','attackdefstance','atkdefstance','attdefstance','defenseattackstance','defenceattackstance','defattackstance','defenseatkstance','defenceatkstance','defatkstance','defenseattstance','defenceattstance','defattstance'],2],
-           ['Sturdy Stance 1',['sturdystance1','attackdefensestance1','atkdefensestance1','attdefensestance1','attackdefencestance1','atkdefencestance1','attdefencestance1','attackdefstance1','atkdefstance1','attdefstance1','defenseattackstance1','defenceattackstance1','defattackstance1','defenseatkstance1','defenceatkstance1','defatkstance1','defenseattstance1','defenceattstance1','defattstance1'],2],
-           ['Sturdy Breath',['sturdybreath','attackdefensebreath','atkdefensebreath','attdefensebreath','attackdefencebreath','atkdefencebreath','attdefencebreath','attackdefbreath','atkdefbreath','attdefbreath','defenseattackbreath','defenceattackbreath','defattackbreath','defenseatkbreath','defenceatkbreath','defatkbreath','defenseattbreath','defenceattbreath','defattbreath'],2],
-           ['Mirror Stance 2',['mirrorstance2','attackresistancestance2','atkresistancestance2','attresistancestance2','attackresstance2','atkresstance2','attresstance2','resistanceattackstance2','resattackstance2','resistanceatkstance2','resatkstance2','resistanceattstance2','resattstance2','mirrorstance','attackresistancestance','atkresistancestance','attresistancestance','attackresstance','atkresstance','attresstance','resistanceattackstance','resattackstance','resistanceatkstance','resatkstance','resistanceattstance','resattstance'],2],
-           ['Mirror Stance 1',['mirrorstance1','attackresistancestance1','atkresistancestance1','attresistancestance1','attackresstance1','atkresstance1','attresstance1','resistanceattackstance1','resattackstance1','resistanceatkstance1','resatkstance1','resistanceattstance1','resattstance1'],2],
-           ['Mirror Breath',['mirrorbreath','attackresistancebreath','atkresistancebreath','attresistancebreath','attackresbreath','atkresbreath','attresbreath','resistanceattackbreath','resattackbreath','resistanceatkbreath','resatkbreath','resistanceattbreath','resattbreath'],2],
-           ['Spd/Def Stance 2',['speeddefensestance2','spddefensestance2','speeddefencestance2','spddefencestance2','speeddefstance2','spddefstance2','defensespeedstance2','defencespeedstance2','defspeedstance2','defensespdstance2','defencespdstance2','defspdstance2','speeddefensestance','spddefensestance','speeddefencestance','spddefencestance','speeddefstance','spddefstance','defensespeedstance','defencespeedstance','defspeedstance','defensespdstance','defencespdstance','defspdstance'],2],
-           ['Spd/Def Stance 1',['speeddefensestance1','spddefensestance1','speeddefencestance1','spddefencestance1','speeddefstance1','spddefstance1','defensespeedstance1','defencespeedstance1','defspeedstance1','defensespdstance1','defencespdstance1','defspdstance1'],2],
-           ['Spd/Def Breath',['speeddefensebreath','spddefensebreath','speeddefencebreath','spddefencebreath','speeddefbreath','spddefbreath','defensespeedbreath','defencespeedbreath','defspeedbreath','defensespdbreath','defencespdbreath','defspdbreath'],2],
-           ['Swift Stance 2',['swiftstance2','speedresistancestance2','spdresistancestance2','speedresstance2','spdresstance2','swiftstance','speedresistancestance','spdresistancestance','speedresstance','spdresstance'],2],
-           ['Swift Stance 1',['swiftstance1','speedresistancestance1','spdresistancestance1','speedresstance1','spdresstance1'],2],
-           ['Swift Breath',['swiftbreath','speedresistancebreath','spdresistancebreath','speedresbreath','spdresbreath'],2],
-           ['Bracing Stance 2',['bracingstance2','defenseresistancestance2','defenceresistancestance2','defresistancestance2','defenseresstance2','defenceresstance2','defresstance2','resistancedefensestance2','resdefensestance2','resistancedefencestance2','resdefencestance2','resistancedefstance2','resdefstance2','bracingstance','defenseresistancestance','defenceresistancestance','defresistancestance','defenseresstance','defenceresstance','defresstance','resistancedefensestance','resdefensestance','resistancedefencestance','resdefencestance','resistancedefstance','resdefstance'],2],
-           ['Bracing Stance 1',['bracingstance1','defenseresistancestance1','defenceresistancestance1','defresistancestance1','defenseresstance1','defenceresstance1','defresstance1','resistancedefensestance1','resdefensestance1','resistancedefencestance1','resdefencestance1','resistancedefstance1','resdefstance1'],2],
-           ['Bracing Breath',['bracingbreath','defenseresistancebreath','defenceresistancebreath','defresistancebreath','defenseresbreath','defenceresbreath','defresbreath','resistancedefensebreath','resdefensebreath','resistancedefencebreath','resdefencebreath','resistancedefbreath','resdefbreath'],2],
-           ['Atk/Spd Bond 3',['attackspeedbond3','atkspeedbond3','attspeedbond3','attackspdbond3','atkspdbond3','attspdbond3','speedattackbond3','speedatkbond3','speedattbond3','spdattackbond3','spdatkbond3','spdattbond3','attackspeedbond','atkspeedbond','attspeedbond','attackspdbond','atkspdbond','attspdbond','speedattackbond','speedatkbond','speedattbond','spdattackbond','spdatkbond','spdattbond'],2],
-           ['Atk/Spd Bond 2',['attackspeedbond2','atkspeedbond2','attspeedbond2','attackspdbond2','atkspdbond2','attspdbond2','speedattackbond2','speedatkbond2','speedattbond2','spdattackbond2','spdatkbond2','spdattbond2'],2],
-           ['Atk/Spd Bond 1',['attackspeedbond1','atkspeedbond1','attspeedbond1','attackspdbond1','atkspdbond1','attspdbond1','speedattackbond1','speedatkbond1','speedattbond1','spdattackbond1','spdatkbond1','spdattbond1'],2],
-           ['Atk/Def Bond 3',['attackdefensebond3','atkdefensebond3','attdefensebond3','attackdefencebond3','atkdefencebond3','attdefencebond3','attackdefbond3','atkdefbond3','attdefbond3','defenseattackbond3','defenseatkbond3','defenseattbond3','defenceattackbond3','defenceatkbond3','defenceattbond3','defattackbond3','defatkbond3','defattbond3','attackdefensebond','atkdefensebond','attdefensebond','attackdefencebond','atkdefencebond','attdefencebond','attackdefbond','atkdefbond','attdefbond','defenseattackbond','defenseatkbond','defenseattbond','defenceattackbond','defenceatkbond','defenceattbond','defattackbond','defatkbond','defattbond'],2],
-           ['Atk/Def Bond 2',['attackdefensebond2','atkdefensebond2','attdefensebond2','attackdefencebond2','atkdefencebond2','attdefencebond2','attackdefbond2','atkdefbond2','attdefbond2','defenseattackbond2','defenseatkbond2','defenseattbond2','defenceattackbond2','defenceatkbond2','defenceattbond2','defattackbond2','defatkbond2','defattbond2'],2],
-           ['Atk/Def Bond 1',['attackdefensebond1','atkdefensebond1','attdefensebond1','attackdefencebond1','atkdefencebond1','attdefencebond1','attackdefbond1','atkdefbond1','attdefbond1','defenseattackbond1','defenseatkbond1','defenseattbond1','defenceattackbond1','defenceatkbond1','defenceattbond1','defattackbond1','defatkbond1','defattbond1'],2],
-           ['Atk/Res Bond 3',['attackresistancebond3','atkresistancebond3','attresistancebond3','attackresbond3','atkresbond3','attresbond3','resistanceattackbond3','resistanceatkbond3','resistanceattbond3','resattackbond3','resatkbond3','resattbond3','attackresistancebond','atkresistancebond','attresistancebond','attackresbond','atkresbond','attresbond','resistanceattackbond','resistanceatkbond','resistanceattbond','resattackbond','resatkbond','resattbond'],2],
-           ['Atk/Res Bond 2',['attackresistancebond2','atkresistancebond2','attresistancebond2','attackresbond2','atkresbond2','attresbond2','resistanceattackbond2','resistanceatkbond2','resistanceattbond2','resattackbond2','resatkbond2','resattbond2','flyingattackresistancebond','flyingatkresistancebond','flyingattresistancebond','flyingattackresbond','flyingatkresbond','flyingattresbond','flyingresistanceattackbond','flyingresistanceatkbond','flyingresistanceattbond','flyingresattackbond','flyingresatkbond','flyingresattbond'],2],
-           ['Atk/Res Bond 1',['attackresistancebond1','atkresistancebond1','attresistancebond1','attackresbond1','atkresbond1','attresbond1','resistanceattackbond1','resistanceatkbond1','resistanceattbond1','resattackbond1','resatkbond1','resattbond1'],2],
-           ['Spd/Def Bond 3',['speeddefensebond3','spddefensebond3','speeddefencebond3','spddefencebond3','speeddefbond3','spddefbond3','defensespeedbond3','defensespdbond3','defencespeedbond3','defencespdbond3','defspeedbond3','defspdbond3','speeddefensebond','spddefensebond','speeddefencebond','spddefencebond','speeddefbond','spddefbond','defensespeedbond','defensespdbond','defencespeedbond','defencespdbond','defspeedbond','defspdbond'],2],
-           ['Spd/Def Bond 2',['speeddefensebond2','spddefensebond2','speeddefencebond2','spddefencebond2','speeddefbond2','spddefbond2','defensespeedbond2','defensespdbond2','defencespeedbond2','defencespdbond2','defspeedbond2','defspdbond2'],2],
-           ['Spd/Def Bond 1',['speeddefensebond1','spddefensebond1','speeddefencebond1','spddefencebond1','speeddefbond1','spddefbond1','defensespeedbond1','defensespdbond1','defencespeedbond1','defencespdbond1','defspeedbond1','defspdbond1'],2],
-           ['Spd/Res Bond 3',['speedresistancebond3','spdresistancebond3','speedresbond3','spdresbond3','resistancespeedbond3','resistancespdbond3','resspeedbond3','resspdbond3','speedresistancebond','spdresistancebond','speedresbond','spdresbond','resistancespeedbond','resistancespdbond','resspeedbond','resspdbond'],2],
-           ['Spd/Res Bond 2',['speedresistancebond2','spdresistancebond2','speedresbond2','spdresbond2','resistancespeedbond2','resistancespdbond2','resspeedbond2','resspdbond2'],2],
-           ['Spd/Res Bond 1',['speedresistancebond1','spdresistancebond1','speedresbond1','spdresbond1','resistancespeedbond1','resistancespdbond1','resspeedbond1','resspdbond1'],2],
-           ['Def/Res Bond 3',['defenseresistancebond3','defenceresistancebond3','defresistancebond3','defenseresbond3','defenceresbond3','defresbond3','resistancedefensebond3','resistancedefencebond3','resistancedefbond3','resdefensebond3','resdefencebond3','resdefbond3','defenseresistancebond','defenceresistancebond','defresistancebond','defenseresbond','defenceresbond','defresbond','resistancedefensebond','resistancedefencebond','resistancedefbond','resdefensebond','resdefencebond','resdefbond'],2],
-           ['Def/Res Bond 2',['defenseresistancebond2','defenceresistancebond2','defresistancebond2','defenseresbond2','defenceresbond2','defresbond2','resistancedefensebond2','resistancedefencebond2','resistancedefbond2','resdefensebond2','resdefencebond2','resdefbond2'],2],
-           ['Def/Res Bond 1',['defenseresistancebond1','defenceresistancebond1','defresistancebond1','defenseresbond1','defenceresbond1','defresbond1','resistancedefensebond1','resistancedefencebond1','resistancedefbond1','resdefensebond1','resdefencebond1','resdefbond1'],2],
-           ['Spectrum Bond',['spectrumbond','allbond','bondspectrum','bondall'],2],
-           ['Brazen Atk/Spd 3',['brazenattackspeed3','brazenatkspeed3','brazenattspeed3','brazenattackspd3','brazenatkspd3','brazenattspd3','brazenspeedattack3','brazenspeedatk3','brazenspeedatt3','brazenspdattack3','brazenspdatk3','brazenspdatt3','brazenattackspeed','brazenatkspeed','brazenattspeed','brazenattackspd','brazenatkspd','brazenattspd','brazenspeedattack','brazenspeedatk','brazenspeedatt','brazenspdattack','brazenspdatk','brazenspdatt'],2],
-           ['Brazen Atk/Spd 2',['brazenattackspeed2','brazenatkspeed2','brazenattspeed2','brazenattackspd2','brazenatkspd2','brazenattspd2','brazenspeedattack2','brazenspeedatk2','brazenspeedatt2','brazenspdattack2','brazenspdatk2','brazenspdatt2'],2],
-           ['Brazen Atk/Spd 1',['brazenattackspeed1','brazenatkspeed1','brazenattspeed1','brazenattackspd1','brazenatkspd1','brazenattspd1','brazenspeedattack1','brazenspeedatk1','brazenspeedatt1','brazenspdattack1','brazenspdatk1','brazenspdatt1'],2],
-           ['Brazen Atk/Def 3',['brazenattackdefense3','brazenatkdefense3','brazenattdefense3','brazenattackdefence3','brazenatkdefence3','brazenattdefence3','brazenattackdef3','brazenatkdef3','brazenattdef3','brazendefenseattack3','brazendefenseatk3','brazendefenseatt3','brazendefenceattack3','brazendefenceatk3','brazendefenceatt3','brazendefattack3','brazendefatk3','brazendefatt3','brazenattackdefense','brazenatkdefense','brazenattdefense','brazenattackdefence','brazenatkdefence','brazenattdefence','brazenattackdef','brazenatkdef','brazenattdef','brazendefenseattack','brazendefenseatk','brazendefenseatt','brazendefenceattack','brazendefenceatk','brazendefenceatt','brazendefattack','brazendefatk','brazendefatt'],2],
-           ['Brazen Atk/Def 2',['brazenattackdefense2','brazenatkdefense2','brazenattdefense2','brazenattackdefence2','brazenatkdefence2','brazenattdefence2','brazenattackdef2','brazenatkdef2','brazenattdef2','brazendefenseattack2','brazendefenseatk2','brazendefenseatt2','brazendefenceattack2','brazendefenceatk2','brazendefenceatt2','brazendefattack2','brazendefatk2','brazendefatt2'],2],
-           ['Brazen Atk/Def 1',['brazenattackdefense1','brazenatkdefense1','brazenattdefense1','brazenattackdefence1','brazenatkdefence1','brazenattdefence1','brazenattackdef1','brazenatkdef1','brazenattdef1','brazendefenseattack1','brazendefenseatk1','brazendefenseatt1','brazendefenceattack1','brazendefenceatk1','brazendefenceatt1','brazendefattack1','brazendefatk1','brazendefatt1'],2],
-           ['Brazen Atk/Res 3',['brazenattackresistance3','brazenatkresistance3','brazenattresistance3','brazenattackres3','brazenatkres3','brazenattres3','brazenresistanceattack3','brazenresistanceatk3','brazenresistanceatt3','brazenresattack3','brazenresatk3','brazenresatt3','brazenattackresistance','brazenatkresistance','brazenattresistance','brazenattackres','brazenatkres','brazenattres','brazenresistanceattack','brazenresistanceatk','brazenresistanceatt','brazenresattack','brazenresatk','brazenresatt'],2],
-           ['Brazen Atk/Res 2',['brazenattackresistance2','brazenatkresistance2','brazenattresistance2','brazenattackres2','brazenatkres2','brazenattres2','brazenresistanceattack2','brazenresistanceatk2','brazenresistanceatt2','brazenresattack2','brazenresatk2','brazenresatt2'],2],
-           ['Brazen Atk/Res 1',['brazenattackresistance1','brazenatkresistance1','brazenattresistance1','brazenattackres1','brazenatkres1','brazenattres1','brazenresistanceattack1','brazenresistanceatk1','brazenresistanceatt1','brazenresattack1','brazenresatk1','brazenresatt1'],2],
-           ['Brazen Spd/Def 3',['brazenspeeddefense3','brazenspddefense3','brazenspeeddefence3','brazenspddefence3','brazenspeeddef3','brazenspddef3','brazendefensespeed3','brazendefensespd3','brazendefencespeed3','brazendefencespd3','brazendefspeed3','brazendefspd3','brazenspeeddefense','brazenspddefense','brazenspeeddefence','brazenspddefence','brazenspeeddef','brazenspddef','brazendefensespeed','brazendefensespd','brazendefencespeed','brazendefencespd','brazendefspeed','brazendefspd'],2],
-           ['Brazen Spd/Def 2',['brazenspeeddefense2','brazenspddefense2','brazenspeeddefence2','brazenspddefence2','brazenspeeddef2','brazenspddef2','brazendefensespeed2','brazendefensespd2','brazendefencespeed2','brazendefencespd2','brazendefspeed2','brazendefspd2'],2],
-           ['Brazen Spd/Def 1',['brazenspeeddefense1','brazenspddefense1','brazenspeeddefence1','brazenspddefence1','brazenspeeddef1','brazenspddef1','brazendefensespeed1','brazendefensespd1','brazendefencespeed1','brazendefencespd1','brazendefspeed1','brazendefspd1'],2],
-           ['Brazen Spd/Res 3',['brazenspeedresistance3','brazenspdresistance3','brazenspeedres3','brazenspdres3','brazenresistancespeed3','brazenresistancespd3','brazenresspeed3','brazenresspd3','brazenspeedresistance','brazenspdresistance','brazenspeedres','brazenspdres','brazenresistancespeed','brazenresistancespd','brazenresspeed','brazenresspd'],2],
-           ['Brazen Spd/Res 2',['brazenspeedresistance2','brazenspdresistance2','brazenspeedres2','brazenspdres2','brazenresistancespeed2','brazenresistancespd2','brazenresspeed2','brazenresspd2'],2],
-           ['Brazen Spd/Res 1',['brazenspeedresistance1','brazenspdresistance1','brazenspeedres1','brazenspdres1','brazenresistancespeed1','brazenresistancespd1','brazenresspeed1','brazenresspd1'],2],
-           ['Brazen Def/Res 3',['brazendefenseresistance3','brazendefenceresistance3','brazendefresistance3','brazendefenseres3','brazendefenceres3','brazendefres3','brazenresistancedefense3','brazenresistancedefence3','brazenresistancedef3','brazenresdefense3','brazenresdefence3','brazenresdef3','brazendefenseresistance','brazendefenceresistance','brazendefresistance','brazendefenseres','brazendefenceres','brazendefres','brazenresistancedefense','brazenresistancedefence','brazenresistancedef','brazenresdefense','brazenresdefence','brazenresdef'],2],
-           ['Brazen Def/Res 2',['brazendefenseresistance2','brazendefenceresistance2','brazendefresistance2','brazendefenseres2','brazendefenceres2','brazendefres2','brazenresistancedefense2','brazenresistancedefence2','brazenresistancedef2','brazenresdefense2','brazenresdefence2','brazenresdef2'],2],
-           ['Brazen Def/Res 1',['brazendefenseresistance1','brazendefenceresistance1','brazendefresistance1','brazendefenseres1','brazendefenceres1','brazendefres1','brazenresistancedefense1','brazenresistancedefence1','brazenresistancedef1','brazenresdefense1','brazenresdefence1','brazenresdef1'],2],
-           ['Brazen Spectrum',['brazenspectrum','brazenall','allbrazen','spectrumbrazen'],2],
-           ['Dragonskin',['dragonskin','wyrmskin','dracoskin'],2],
-           ['Fire Boost 3',['fireboost3','blazeboost3','attackboost3','atkboost3','attboost3','fireboost','blazeboost','attackboost','atkboost','attboost'],2],
-           ['Fire Boost 2',['fireboost2','blazeboost2','attackboost2','atkboost2','attboost2'],2],
-           ['Fire Boost 1',['fireboost1','blazeboost1','attackboost1','atkboost1','attboost1'],2],
-           ['Wind Boost 3',['windboost3','galeboost3','speedboost3','spdboost3','windboost','galeboost','speedboost','spdboost'],2],
-           ['Wind Boost 2',['windboost2','galeboost2','speedboost2','spdboost2'],2],
-           ['Wind Boost 1',['windboost1','galeboost1','speedboost1','spdboost1'],2],
-           ['Earth Boost 3',['earthboost3','defenseboost3','defenceboost3','defboost3','earthboost','defenseboost','defenceboost','defboost'],2],
-           ['Earth Boost 2',['earthboost2','defenseboost2','defenceboost2','defboost2'],2],
-           ['Earth Boost 1',['earthboost1','defenseboost1','defenceboost1','defboost1'],2],
-           ['Water Boost 3',['waterboost3','torrentboost3','resistanceboost3','resboost3','waterboost','torrentboost','resistanceboost','resboost'],2],
-           ['Water Boost 2',['waterboost2','torrentboost2','resistanceboost2','resboost2'],2],
-           ['Water Boost 1',['waterboost1','torrentboost1','resistanceboost1','resboost1'],2],
-           ['Laws of Sacae',['lawofsacae','lawsofsacae','sacaeslaw'],1],
-           ['Close Def 3',['closedefense','closedefence','closedef','closeresistance','closeres','closedefenseresistance','closedefenceresistance','closedefresistance','closeresistancedefense','closeresdefense','closedefenseres','closedefenceres','closedefres','closeresistancedefence','closeresdefence','closeresistancedef','closeresdef','closedefense3','closedefence3','closedef3','closeresistance3','closeres3','closedefenseresistance3','closedefenceresistance3','closedefresistance3','closeresistancedefense3','closeresdefense3','closedefenseres3','closedefenceres3','closedefres3','closeresistancedefence3','closeresdefence3','closeresistancedef3','closeresdef3'],2],
-           ['Close Def 2',['closedefense2','closedefence2','closedef2','closeresistance2','closeres2','closedefenseresistance2','closedefenceresistance2','closedefresistance2','closeresistancedefense2','closeresdefense2','closedefenseres2','closedefenceres2','closedefres2','closeresistancedefence2','closeresdefence2','closeresistancedef2','closeresdef2'],2],
-           ['Close Def 1',['closedefense1','closedefence1','closedef1','closeresistance1','closeres1','closedefenseresistance1','closedefenceresistance1','closedefresistance1','closeresistancedefense1','closeresdefense1','closedefenseres1','closedefenceres1','closedefres1','closeresistancedefence1','closeresdefence1','closeresistancedef1','closeresdef1'],2],
-           ['Distant Def 3',['distantdefense','distantdefence','distantdef','distantresistance','distantres','distantdefenseresistance','distantdefenceresistance','distantdefresistance','distantresistancedefense','distantresdefense','distantdefenseres','distantdefenceres','distantdefres','distantresistancedefence','distantresdefence','distantresistancedef','distantresdef','distantdefense3','distantdefence3','distantdef3','distantresistance3','distantres3','distantdefenseresistance3','distantdefenceresistance3','distantdefresistance3','distantresistancedefense3','distantresdefense3','distantdefenseres3','distantdefenceres3','distantdefres3','distantresistancedefence3','distantresdefence3','distantresistancedef3','distantresdef3'],2],
-           ['Distant Def 2',['distantdefense2','distantdefence2','distantdef2','distantresistance2','distantres2','distantdefenseresistance2','distantdefenceresistance2','distantdefresistance2','distantresistancedefense2','distantresdefense2','distantdefenseres2','distantdefenceres2','distantdefres2','distantresistancedefence2','distantresdefence2','distantresistancedef2','distantresdef2'],2],
-           ['Distant Def 1',['distantdefense1','distantdefence1','distantdef1','distantresistance1','distantres1','distantdefenseresistance1','distantdefenceresistance1','distantdefresistance1','distantresistancedefense1','distantresdefense1','distantdefenseres1','distantdefenceres1','distantdefres1','distantresistancedefence1','distantresdefence1','distantresistancedef1','distantresdef1'],2],
-           ['Close Atk 3',['closeattack','closeatk','closeatt','closeattack3','closeatk3','closeatt3'],2],
-           ['Close Atk 2',['closeattack2','closeatk2','closeatt2'],2],
-           ['Close Atk 1',['closeattack1','closeatk1','closeatt1'],2],
-           ['Close Spd 3',['closespeed','closespd','closespeed3','closespd3'],2],
-           ['Close Spd 2',['closespeed2','closespd2'],2],
-           ['Close Spd 1',['closespeed1','closespd1'],2],
-           ['Distant Atk 3',['distantattack','distantatk','distantatt','distantattack3','distantatk3','distantatt3'],2],
-           ['Distant Atk 2',['distantattack2','distantatk2','distantatt2'],2],
-           ['Distant Atk 1',['distantattack1','distantatk1','distantatt1'],2],
-           ['Distant Spd 3',['distantspeed','distantspd','distantspeed3','distantspd3'],2],
-           ['Distant Spd 2',['distantspeed2','distantspd2'],2],
-           ['Distant Spd 1',['distantspeed1','distantspd1'],2],
-           ['Supportive',['supportive','yatolove','yatogamilove','yatobond','yatogamibond'],2]]
+  lookout=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+    lookout=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+      lookout.push(eval line)
+    end
+    lookout=lookout.reject{|q| q[3]!='Enemy Phase' && q[3]!='Player Phase' && q[3]!='In-Combat Buffs 1'}
+  end
   for i in 0...lookout.length
     for i2 in 0...lookout[i][2]
       stat_skills_3.push(lookout[i][0]) if count_in(args,lookout[i][1])>i2
@@ -2543,51 +2303,24 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
   j=find_unit(name,event)
   # Only the first eight Spur/Goad/Ward skills are allowed, as that's the most that can apply to the unit at once.
   # Tactic skills stack with this list's limit, but allow up to fourteen to be applied
+  lookout=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+    lookout=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+      lookout.push(eval line)
+    end
+    lookout=lookout.reject{|q| q[3]!='In-Combat Buffs 2'}
+  end
   for i in 0...args.length
-    hf.push('Spur Attack 3') if ['spurattack','spuratk','spuratk','spurattack3','spuratk3','spuratk3'].include?(args[i].downcase)
-    hf.push('Spur Attack 2') if ['spurattack2','spuratk2','spuratk2'].include?(args[i].downcase)
-    hf.push('Spur Attack 1') if ['spurattack1','spuratk1','spuratk1'].include?(args[i].downcase)
-    hf.push('Spur Speed 3') if ['spurspeed','spurspd','spurspeed3','spurspd3'].include?(args[i].downcase)
-    hf.push('Spur Speed 2') if ['spurspeed2','spurspd2'].include?(args[i].downcase)
-    hf.push('Spur Speed 1') if ['spurspeed1','spurspd1'].include?(args[i].downcase)
-    hf.push('Spur Defense 3') if ['spurdefense','spurdefence','spurdef','spurdefense3','spurdefence3','spurdef3'].include?(args[i].downcase)
-    hf.push('Spur Defense 2') if ['spurdefense2','spurdefence2','spurdef2'].include?(args[i].downcase)
-    hf.push('Spur Defense 1') if ['spurdefense1','spurdefence1','spurdef1'].include?(args[i].downcase)
-    hf.push('Spur Resistance 3') if ['spurresistance','spurres','spurresistance3','spurres3'].include?(args[i].downcase)
-    hf.push('Spur Resistance 2') if ['spurresistance2','spurres2'].include?(args[i].downcase)
-    hf.push('Spur Resistance 1') if ['spurresistance1','spurres1'].include?(args[i].downcase)
-    hf.push('Spur Atk Spd 2') if ['spurattackspeed2','spuratkspeed2','spuratkspeed2','spurattackspd2','spuratkspd2','spuratkspd2','spurspeedattack2','spurspdattack2','spurspeedatk2','spurspdatk2','spurspeedatt2','spurspdatt2','spurattackspeed','spuratkspeed','spuratkspeed','spurattackspd','spuratkspd','spuratkspd','spurspeedattack','spurspdattack','spurspeedatk','spurspdatk','spurspeedatt','spurspdatt'].include?(args[i].downcase)
-    hf.push('Spur Atk Spd 1') if ['spurattackspeed1','spuratkspeed1','spuratkspeed1','spurattackspd1','spuratkspd1','spuratkspd1','spurspeedattack1','spurspdattack1','spurspeedatk1','spurspdatk1','spurspeedatt1','spurspdatt1'].include?(args[i].downcase)
-    hf.push('Spur Atk Def 2') if ['spurattackdefense2','spuratkdefense2','spuratkdefense2','spurattackdefence2','spuratkdefence2','spuratkdefence2','spurattackdef2','spuratkdef2','spuratkdef2','spurdefenseattack2','spurdefenceattack2','spurdefattack2','spurdefenseatk2','spurdefenceatk2','spurdefatk2','spurdefenseatt2','spurdefenceatt2','spurdefatt2','spurattackdefense','spuratkdefense','spuratkdefense','spurattackdefence','spuratkdefence','spuratkdefence','spurattackdef','spuratkdef','spuratkdef','spurdefenseattack','spurdefenceattack','spurdefattack','spurdefenseatk','spurdefenceatk','spurdefatk','spurdefenseatt','spurdefenceatt','spurdefatt'].include?(args[i].downcase)
-    hf.push('Spur Atk Def 1') if ['spurattackdefense1','spuratkdefense1','spuratkdefense1','spurattackdefence1','spuratkdefence1','spuratkdefence1','spurattackdef1','spuratkdef1','spuratkdef1','spurdefenseattack1','spurdefenceattack1','spurdefattack1','spurdefenseatk1','spurdefenceatk1','spurdefatk1','spurdefenseatt1','spurdefenceatt1','spurdefatt1'].include?(args[i].downcase)
-    hf.push('Spur Atk Res 2') if ['spurattackresistance2','spuratkresistance2','spuratkresistance2','spurattackres2','spuratkres2','spuratkres2','spurresistanceattack2','spurresattack2','spurresistanceatk2','spurresatk2','spurresistanceatt2','spurresatt2','spurattackresistance','spuratkresistance','spuratkresistance','spurattackres','spuratkres','spuratkres','spurresistanceattack','spurresattack','spurresistanceatk','spurresatk','spurresistanceatt','spurresatt'].include?(args[i].downcase)
-    hf.push('Spur Atk Res 1') if ['spurattackresistance1','spuratkresistance1','spuratkresistance1','spurattackres1','spuratkres1','spuratkres1','spurresistanceattack1','spurresattack1','spurresistanceatk1','spurresatk1','spurresistanceatt1','spurresatt1'].include?(args[i].downcase)
-    hf.push('Spur Spd Def 2') if ['spurspeeddefense2','spurspddefense2','spurspeeddefence2','spurspddefence2','spurspeeddef2','spurspddef2','spurdefensespeed2','spurdefencespeed2','spurdefspeed2','spurdefensespd2','spurdefencespd2','spurdefspd2','spurspeeddefense','spurspddefense','spurspeeddefence','spurspddefence','spurspeeddef','spurspddef','spurdefensespeed','spurdefencespeed','spurdefspeed','spurdefensespd','spurdefencespd','spurdefspd'].include?(args[i].downcase)
-    hf.push('Spur Spd Def 1') if ['spurspeeddefense1','spurspddefense1','spurspeeddefence1','spurspddefence1','spurspeeddef1','spurspddef1','spurdefensespeed1','spurdefencespeed1','spurdefspeed1','spurdefensespd1','spurdefencespd1','spurdefspd1'].include?(args[i].downcase)
-    hf.push('Spur Spd Res 2') if ['spurspeedresistance2','spurspdresistance2','spurspeedres2','spurspdres2','spurresistancespeed2','spurresspeed2','spurresistancespd2','spurresspd2','spurspeedresistance','spurspdresistance','spurspeedres','spurspdres','spurresistancespeed','spurresspeed','spurresistancespd','spurresspd'].include?(args[i].downcase)
-    hf.push('Spur Spd Res 1') if ['spurspeedresistance1','spurspdresistance1','spurspeedres1','spurspdres1','spurresistancespeed1','spurresspeed1','spurresistancespd1','spurresspd1'].include?(args[i].downcase)
-    hf.push('Spur Def Res 2') if ['spurdefenseresistance2','spurdefenceresistance2','spurdefresistance2','spurdefenseres2','spurdefenceres2','spurdefres2','spurresistancedefense2','spurresdefense2','spurresistancedefence2','spurresdefence2','spurresistancedef2','spurresdef2','spurdefenseresistance','spurdefenceresistance','spurdefresistance','spurdefenseres','spurdefenceres','spurdefres','spurresistancedefense','spurresdefense','spurresistancedefence','spurresdefence','spurresistancedef','spurresdef'].include?(args[i].downcase)
-    hf.push('Spur Def Res 1') if ['spurdefenseresistance1','spurdefenceresistance1','spurdefresistance1','spurdefenseres1','spurdefenceres1','spurdefres1','spurresistancedefense1','spurresdefense1','spurresistancedefence1','spurresdefence1','spurresistancedef1','spurresdef1'].include?(args[i].downcase)
-    hf.push('Goad Movement') if ['goadcavalry','goadcav','goadhorse','goadflier','goadfliers','goadarmor','goadarmour','goadarmors','goadarmours','goadmove','goadmov','goadmovement','goadinfantry','goad'].include?(args[i].downcase)
-    hf.push('Goad Dragons') if ['goaddragons','goadwyrms','goaddragon','goadserpents','goadwyrm','goadserpent','goadmanaketes','goaddrakes','goadmanakete','goaddrake','goadragons','goadragon','goadrake','goadrakes'].include?(args[i].downcase) && @units[j][1][1]=='Dragon'
-    hf.push('Ward Movement') if ['wardcavalry','wardcav','wardhorse','wardflier','wardfliers','wardarmor','wardarmour','wardarmors','wardarmours','wardmove','wardmov','wardmovement','wardinfantry','ward'].include?(args[i].downcase)
-    hf.push('Ward Dragons') if ['warddragonns','wardwyrms','warddragon','wardserpents','wardwyrm','wardserpent','wardmanaketes','warddrakes','wardmanakete','warddrake','wardragons','wardragon','wardrake','wardrakes'].include?(args[i].downcase) && @units[j][1][1]=='Dragon'
-    hf.push('Spur Spectrum') if ['spurspectrum','spurall','spectrumspur','allspur'].include?(args[i].downcase)
-    hf2.push('Drive Attack 2') if ['driveattack','driveatk','driveatk','driveattack2','driveatk2','driveatk2'].include?(args[i].downcase)
-    hf2.push('Drive Attack 1') if ['driveattack1','driveatk1','driveatk1'].include?(args[i].downcase)
-    hf2.push('Drive Speed 2') if ['drivespeed','drivespd','drivespeed2','drivespd2'].include?(args[i].downcase)
-    hf2.push('Drive Speed 1') if ['drivespeed1','drivespd1'].include?(args[i].downcase)
-    hf2.push('Drive Defense 2') if ['drivedefense','drivedefence','drivedef','drivedefense2','drivedefence2','drivedef2'].include?(args[i].downcase)
-    hf2.push('Drive Defense 1') if ['drivedefense1','drivedefence1','drivedef1'].include?(args[i].downcase)
-    hf2.push('Drive Resistance 2') if ['driveresistance','driveres','driveresistance2','driveres2'].include?(args[i].downcase)
-    hf2.push('Drive Resistance 1') if ['driveresistance1','driveres1'].include?(args[i].downcase)
-    hf2.push('Drive Atk Spd 1') if ['driveattackspeed1','driveatkspeed1','driveatkspeed1','driveattackspd1','driveatkspd1','driveatkspd1','drivespeedattack1','drivespdattack1','drivespeedatk1','drivespdatk1','drivespeedatt1','drivespdatt1','driveattackspeed','driveatkspeed','driveatkspeed','driveattackspd','driveatkspd','driveatkspd','drivespeedattack','drivespdattack','drivespeedatk','drivespdatk','drivespeedatt','drivespdatt'].include?(args[i].downcase)
-    hf2.push('Drive Atk Def 1') if ['driveattackdefense1','driveatkdefense1','driveatkdefense1','driveattackdefence1','driveatkdefence1','driveatkdefence1','driveattackdef1','driveatkdef1','driveatkdef1','drivedefenseattack1','drivedefenceattack1','drivedefattack1','drivedefenseatk1','drivedefenceatk1','drivedefatk1','drivedefenseatt1','drivedefenceatt1','drivedefatt1','driveattackdefense','driveatkdefense','driveatkdefense','driveattackdefence','driveatkdefence','driveatkdefence','driveattackdef','driveatkdef','driveatkdef','drivedefenseattack','drivedefenceattack','drivedefattack','drivedefenseatk','drivedefenceatk','drivedefatk','drivedefenseatt','drivedefenceatt','drivedefatt'].include?(args[i].downcase)
-    hf2.push('Drive Atk Res 1') if ['driveattackresistance1','driveatkresistance1','driveatkresistance1','driveattackres1','driveatkres1','driveatkres1','driveresistanceattack1','driveresattack1','driveresistanceatk1','driveresatk1','driveresistanceatt1','driveresatt1','driveattackresistance','driveatkresistance','driveatkresistance','driveattackres','driveatkres','driveatkres','driveresistanceattack','driveresattack','driveresistanceatk','driveresatk','driveresistanceatt','driveresatt'].include?(args[i].downcase)
-    hf2.push('Drive Spd Def 1') if ['drivespeeddefense1','drivespddefense1','drivespeeddefence1','drivespddefence1','drivespeeddef1','drivespddef1','drivedefensespeed1','drivedefencespeed1','drivedefspeed1','drivedefensespd1','drivedefencespd1','drivedefspd1','drivespeeddefense','drivespddefense','drivespeeddefence','drivespddefence','drivespeeddef','drivespddef','drivedefensespeed','drivedefencespeed','drivedefspeed','drivedefensespd','drivedefencespd','drivedefspd'].include?(args[i].downcase)
-    hf2.push('Drive Spd Res 1') if ['drivespeedresistance1','drivespdresistance1','drivespeedres1','drivespdres1','driveresistancespeed1','driveresspeed1','driveresistancespd1','driveresspd1','drivespeedresistance','drivespdresistance','drivespeedres','drivespdres','driveresistancespeed','driveresspeed','driveresistancespd','driveresspd'].include?(args[i].downcase)
-    hf2.push('Drive Def Res 1') if ['drivedefenseresistance1','drivedefenceresistance1','drivedefresistance1','drivedefenseres1','drivedefenceres1','drivedefres1','driveresistancedefense1','driveresdefense1','driveresistancedefence1','driveresdefence1','driveresistancedef1','driveresdef1','drivedefenseresistance','drivedefenceresistance','drivedefresistance','drivedefenseres','drivedefenceres','drivedefres','driveresistancedefense','driveresdefense','driveresistancedefence','driveresdefence','driveresistancedef','driveresdef'].include?(args[i].downcase)
-    hf2.push('Drive Spectrum') if ['drivespectrum','driveall','spectrumdrive','alldrive'].include?(args[i].downcase)
+    skl=lookout.find_index{|q| q[1].include?(args[i].downcase)}
+    unless skl.nil? || (lookout[skl][5] && @units[j][1][1]!='Dragon')
+      skl=lookout[skl]
+      if skl[2]==1
+        hf.push(skl[0])
+      elsif skl[2]==2
+        hf2.push(skl[0])
+      end
+    end
   end
   for i in 0...8
     stat_skills_3.push(hf[i]) if hf.length>i
@@ -2787,8 +2520,8 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   stat_skills=k.map{|q| "#{q[0]}#{" (x#{q[1]})" if q[1]>1}"}
   stat_skills_2=[] if stat_skills_2.nil?
   for i in 0...stat_skills_2.length
-    stat_skills_2[i]="Hone #{@units[j][3].gsub('Flier','Fliers')}" if stat_skills_2=='Hone Movement'
-    stat_skills_2[i]="Fortify #{@units[j][3].gsub('Flier','Fliers')}" if stat_skills_2=='Fortify Movement'
+    stat_skills_2[i]="Hone #{@units[j][3].gsub('Flier','Fliers')}" if stat_skills_2[i]=='Hone Movement'
+    stat_skills_2[i]="Fortify #{@units[j][3].gsub('Flier','Fliers')}" if stat_skills_2[i]=='Fortify Movement'
   end
   k=[]
   for i in 0...stat_skills_2.length
@@ -3669,7 +3402,6 @@ def disp_skill(name,event,ignore=false)
     end
     for i in 0...sttz.length
       sttz[i][0]+=mt[0]
-      sttz[i][1]+=mt[1]
       sttz[i][2]+=mt[2]
       sttz[i][3]+=mt[3]
       sttz[i][4]+=mt[4]
@@ -3700,7 +3432,7 @@ def disp_skill(name,event,ignore=false)
       end
       str="#{str}\nMight: #{skill[2]+sttz[i][1]}	Range: #{skill[3]}"
       str="#{str}	HP +#{sttz[i][0]}" if sttz[i][0]>0
-      atk=skill[12][1]-skill[2]+mt[1]
+      atk=mt[1]
       atk+=skill[12][10] if sttz[i][5]=="Effect"
       str="#{str}	Attack #{'+' if atk>0}#{atk}" if atk != 0
       str="#{str}	Speed #{'+' if skill[12][2]+sttz[i][2]>0}#{skill[12][2]+sttz[i][2]}" if skill[12][2]+sttz[i][2]!=0
@@ -5710,7 +5442,7 @@ def comparison(event,args,bot)
     b.uniq!
   end
   if b.length==1 && !['unit','stats'].include?(event.message.text.downcase.split(' ')[0].gsub('feh!','').gsub('feh?','').gsub('f?','').gsub('e?','').gsub('h?',''))
-    event.respond 'I need at least two units in order to compare anything.\nInstead, I will show you the results of the `study` command, which is similar to `compare` but for one unit.'
+    event.respond "I need at least two units in order to compare anything.\nInstead, I will show you the results of the `study` command, which is similar to `compare` but for one unit."
     unit_study(event,name,bot)
     return 1
   elsif b.length<2
@@ -5893,8 +5625,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str='erika' if str2.include?('erika')
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
-    if str2.include?('bonds') || str2.include?("#{str}b") || str2.include?("b#{str}") || str2.include?("fb")
-      return [str,['Eirika(Bonds)'],["bonds#{str}","b#{str}","fb#{str}","#{str}bonds","#{str}b","#{str}fb"]]
+    if str2.include?('bonds') || str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?("#{str}b") || str2.include?("b#{str}") || str2.include?("fb")
+      return [str,['Eirika(Bonds)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","bonds#{str}","b#{str}","fb#{str}","#{str}bonds","#{str}b","#{str}fb"]]
     elsif str2.include?('memories') || str2.include?("#{str}m") || str2.include?("m#{str}") || str2.include?("sm") || str2.include?("mage#{str}") || str2.include?("#{str}mage") || str2.include?("#{str}2")
       return [str,['Eirika(Memories)'],["memories#{str}","mage#{str}","m#{str}","sm#{str}","#{str}memories","#{str}mage","#{str}m","#{str}sm","#{str}2"]]
     end
@@ -5904,8 +5636,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str='hinoka'
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
-    if str2.include?('launch')
-      return [str,['Hinoka(Launch)'],["launch#{str}","#{str}launch"]]
+    if str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
+      return [str,['Hinoka(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch"]]
     elsif str2.include?('wings') || str2.include?('kinshi') || str2.include?('winged') || str2.include?("#{str}2")
       return [str,['Hinoka(Wings)'],["wings#{str}","#{str}wings","kinshi#{str}","#{str}kinshi","winged#{str}","#{str}winged","#{str}2"]]
     end
@@ -5920,8 +5652,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       return [str,['Chrom(Winter)'],["winter#{str}","#{str}winter","christmas#{str}","#{str}christmas","holiday#{str}","#{str}holiday","we#{str}","#{str}we"]]
     elsif str2.include?('bunny') || str2.include?('spring') || str2.include?('easter') || str2.include?('sf')
       return [str,['Chrom(Spring)'],["bunny#{str}","#{str}bunny","spring#{str}","#{str}spring","easter#{str}","#{str}easter","sf#{str}","#{str}sf"]]
-    elsif str2.include?('launch') || str2.include?('prince')
-      return [str,['Chrom(Launch)'],["launch#{str}","#{str}launch","prince#{str}","#{str}prince"]]
+    elsif str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch') || str2.include?('prince')
+      return [str,['Chrom(Launch)'],["launch#{str}","#{str}launch","vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","prince#{str}","#{str}prince"]]
     elsif str2.include?('branded') || str2.include?('brand') || str2.include?('exalted') || str2.include?('exalt') || str2.include?('king') || str2.include?('sealed') || str2.include?('horse') || str2.include?('knight')
       return [str,['Chrom(Branded)'],["branded#{str}","#{str}branded","brand#{str}","#{str}brand","exalted#{str}","#{str}exalted","exalt#{str}","#{str}exalt","king#{str}","#{str}king","sealed#{str}","#{str}sealed","horse#{str}","#{str}horse","knight#{str}","#{str}knight"]]
     end
@@ -7343,7 +7075,7 @@ def heal_study(event,name,bot,weapon=nil)
   crblatkk=crblu40[2]
   crblhppp=crblu40[1]
   staves=[]
-  staves.push('**Heal:** heals target for 5 HP, 15 HP when Imbue triggers\n\n**Mend:** heals target for 10 HP, 20 HP when Imbue triggers\n\n**Physic:** heals target for 8 HP, 18 HP when Imbue triggers') if event.message.text.downcase.include?(' all')
+  staves.push("**Heal:** heals target for 5 HP, 15 HP when Imbue triggers\n\n**Mend:** heals target for 10 HP, 20 HP when Imbue triggers\n\n**Physic:** heals target for 8 HP, 18 HP when Imbue triggers") if event.message.text.downcase.include?(' all')
   d=[atkk/2,8].max
   d2=[blatkk/2,8].max
   cd=[cratkk/2,8].max
@@ -7426,7 +7158,7 @@ def heal_study(event,name,bot,weapon=nil)
   i="~~#{i}~~ #{ci}" unless i==ci
   d="~~#{d}~~ #{cd}" unless d==cd
   staves.push("**Rehabilitate+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
-  staves.push('~~How much Rehabilitate(+) heals is based on how much damage the target has taken.~~\n~~If they are above 50% HP, the lower end of the range is how much is healed.~~')
+  staves.push("~~How much Rehabilitate(+) heals is based on how much damage the target has taken.~~\n~~If they are above 50% HP, the lower end of the range is how much is healed.~~")
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
@@ -7590,6 +7322,11 @@ def proc_study(event,name,bot,weapon=nil)
     wdamage+=10
     wdamage2+=10
     stat_skills.push('Wrath')
+  end
+  if event.message.text.downcase.include?(' bushido') && u40[0]=='Ryoma(Supreme)'
+    wdamage+=10
+    wdamage2+=10
+    stat_skills.push('Bushido')
   end
   tags=@skills[find_skill(weapon,event)][11].split(', ')
   wdamage+=10 if tags.include?('WoDao')
@@ -8146,6 +7883,8 @@ def disp_art(event,name,bot,weapon=nil)
     flds.push(['Same Artist',charsx[0].join("\n"),1]) if charsx[0].length>0
     flds.push(['Same VA (English)',charsx[1].join("\n")]) if charsx[1].length>0
     flds.push(['Same VA (Japanese)',charsx[2].join("\n")]) if charsx[2].length>0
+    flds[0][2]=nil if flds.length<3
+    flds[0].compact!
     event.channel.send_embed("__**#{j[0].gsub('Lavatain','Laevatein')}**__") do |embed|
       embed.description=disp
       embed.color=unit_color(event,find_unit(j[0],event),0)
@@ -10878,7 +10617,7 @@ bot.command([:sort,:list]) do |event, *args|
   end
   if safe_to_spam?(event)
   elsif k2==-1 && display[0].zero? && display[1]==k.length
-    event.respond 'Sorry, but you must specify filters.  I will not sort the entire roster as that would be spam.\nInstead, have the stats of the character whose name in Japanese means "sort".'
+    event.respond "Sorry, but you must specify filters.  I will not sort the entire roster as that would be spam.\nInstead, have the stats of the character whose name in Japanese means \"sort\"."
     disp_stats(bot,'Stahl',nil,event,true)
     return false
   elsif !k2.is_a?(Array) && display[0].zero? && display[1]==k.length
@@ -11251,7 +10990,7 @@ end
 bot.command(:invite) do |event, user|
   return nil if overlap_prevent(event)
   usr=event.user
-  txt='To invite me to your server: <https://goo.gl/2WZ4yn>\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://orig00.deviantart.net/cd2d/f/2018/047/e/0/marketing___elise_by_rot8erconex-dbxj4mq.png'
+  txt="To invite me to your server: <https://goo.gl/2WZ4yn>\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://orig00.deviantart.net/cd2d/f/2018/047/e/0/marketing___elise_by_rot8erconex-dbxj4mq.png"
   user_to_name='you'
   unless user.nil?
     if /<@!?(?:\d+)>/ =~ user
@@ -11432,7 +11171,7 @@ bot.command([:next,:schedule]) do |event, type|
   idx=6 if ['rival','domains','domain','rd','rivaldomains','rival_domains','rivaldomain','rival_domain'].include?(type.downcase)
   idx=7 if ['blessed','blessing','garden','gardens','blessedgarden','blessed_garden','blessedgardens','blessed_gardens','blessinggarden','blessing_garden','blessinggardens','blessing_gardens'].include?(type.downcase)
   if idx<0 && !safe_to_spam?(event)
-    event.respond 'I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)'
+    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)"
     return nil
   end
   t=Time.now
@@ -11647,7 +11386,7 @@ bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddu
       f.puts "#{@multi_aliases[i].to_s}#{"\n" if i<@multi_aliases.length-1}"
     end
   }
-  bot.channel(logchn).send_message('Multi-unit alias list saved.\n\nNo backup needed.')
+  bot.channel(logchn).send_message("Multi-unit alias list saved.\n\nNo backup needed.")
 end
 
 bot.command([:deletemultialias,:deletedualalias,:deletemultiunitalias,:deletedualunitalias,:deletemulti,:removemultialias,:removedualalias,:removemultiunitalias,:removedualunitalias,:removemulti], from: 167657750971547648) do |event, multi|
@@ -11676,7 +11415,7 @@ bot.command([:deletemultialias,:deletedualalias,:deletemultiunitalias,:deletedua
       f.puts "#{@multi_aliases[i].to_s}#{"\n" if i<@multi_aliases.length-1}"
     end
   }
-  bot.channel(logchn).send_message('Multi-unit alias list saved.\n\nNo backup needed.')
+  bot.channel(logchn).send_message("Multi-unit alias list saved.\n\nNo backup needed.")
 end
 
 bot.command([:removefrommultialias,:removefromdualalias,:removefrommultiunitalias,:removefromdualunitalias,:removefrommulti], from: 167657750971547648) do |event, multi, unit|
@@ -11730,7 +11469,7 @@ bot.command([:removefrommultialias,:removefromdualalias,:removefrommultiunitalia
         f.puts "#{@multi_aliases[i].to_s}#{"\n" if i<@multi_aliases.length-1}"
       end
     }
-    bot.channel(logchn).send_message('Multi-unit alias list saved.\n\nNo backup needed.')
+    bot.channel(logchn).send_message("Multi-unit alias list saved.\n\nNo backup needed.")
   else
     event << "#{@units[i][0]} wasn't even in the multi-unit alias #{@multi_aliases[j][0]}, silly!"
   end
