@@ -1,10 +1,18 @@
-Legendary Heroes - Lyn Lady of the Wind\-8\Celica(Fallen), Eirika(Memories), Ephraim(Fire), Genny, Henry(Halloween), Ike(Vanguard), Inigo(Performing), Jakob(Halloween), Lyn(Wind), Micaiah, Robin(F)(Fallen), Shigure(Performing)
-Wings of Fate\3\Hinoka(Wings), Kana(F), Shigure
-Heroes with Combat Boosts\3\Ayra, Lyn(Brave), Sonya
-"Thunder's Fist" Tempest Trials\3\Olwen(Bonds), Reinhardt(Bonds), Seliph
+Legendary Heroes - Ryoma: Supreme Samurai\-8\Azura(Winter), Chrom(Winter), Fjorm, Gunnthra, Hardin(Fallen), Innes, Robin(F)(Fallen), Robin(M)(Winter), Ryoma(Supreme), Sigurd, Takumi(Winter), Tiki(Young)
+Heroes with Stance Skills\3\Morgan(F), Shiro, Zelgius
+Bridal Blessings (June 2018 Voting Gauntlet revival)\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)
+"Loki's Flames" Tempest Trials\3\Marth, Ninian, Sanaki, Tharja
+Bridal Bloom\3\Ninian(Bride), Sanaki(Bride), Tharja(Bride)
 GHB Units\5\-\34
 TT Units\5\-\4
-World of Thracia\3\Finn, Leif, Nanna, Olwen(World), Reinhardt(World)
+New Power (May 2018)\3\Camilla, Clair, Corrin(M)
+Genealogy\3\Ares, Ishtar, Lene
+Countering Weapon Skills\3\Dorcas, Nowi, Ryoma
+Wings of Fate\3\Hinoka(Wings), Kana(F), Shigure
+Legendary Heroes - Lyn Lady of the Wind\-8\Celica(Fallen), Eirika(Memories), Ephraim(Fire), Genny, Henry(Halloween), Ike(Vanguard), Inigo(Performing), Jakob(Halloween), Lyn(Wind), Micaiah, Robin(F)(Fallen), Shigure(Performing)
+Heroes with Combat Boosts\3\Ayra, Lyn(Brave), Sonya
+"Thunder's Fist" Tempest Trials\3\Olwen(Bonds), Reinhardt(Bonds), Seliph
+World of Thracia\3\Leif, Nanna, Olwen(World), Reinhardt(World)
 Cooldown Bonuses\3\Ike(Brave), Mia, Nephenee
 Hares at the Fair\3\Alfonse(Spring), Catria(Spring), Kagero(Spring), Sharena(Spring)
 Tiki & Nowi's Battle\3\Nowi, Robin(M)(Fallen), Tiki(Adult)

@@ -3,7 +3,7 @@ Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu
 Alfonse\Arden\Black_Knight\Lissa\Lyn(Brave)\Marth(Masked)\Nino\Robin(F)\Sharena\Takumi(Fallen)
 
 Sakura
-5\8\Resistance\Defense\S
+5\10\Resistance\Defense\S
 Assault\Slow\Slow+\Slow+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -17,7 +17,7 @@ Anna
 Iron Axe\Steel Axe\Silver Axe\Noatun
 Reciprocal Aid
 Retribution\Vengeance
-Death Blow 1\Death Blow 2\Death Blow 3
+Fierce Stance 1\Fierce Stance 2\Fierce Stance 3
 Vantage 1\Vantage 2\Vantage 3
 Savage Blow 1\Savage Blow 2\Savage Blow 3
 Breath of Life 3
@@ -90,7 +90,7 @@ Chilling Wind\Glacies
 Warding Blow 1\Warding Blow 2\Warding Blow 3
 Renewal 1\Renewal 2\Renewal 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
-Fortress Res 2
+Fortress Res 3
 
 Fjorm
 5\1\Attack\HP\-
@@ -102,6 +102,16 @@ Shield Pulse 1\Shield Pulse 2\Shield Pulse 3
 Spur Atk 1\Drive Atk 1\Drive Atk 2
 Drive Def 1
 
+Genny
+5\0\HP\Defense\-
+Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
+Heal\Reconcile\Rehabilitate\Rehabilitate+
+Imbue\Heavenly Light
+~~none~~
+Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
+~~none~~
+Savage Blow 3
+
 Gunnthra
 5\0\Attack\Speed\-
 Wind\Elwind\Rexcalibur\Blizzard
@@ -112,8 +122,18 @@ Chilling Seal
 Res Ploy 1\Res Ploy 2\Res Ploy 3
 Atk Ploy 2
 
+Kana(F)
+5\0\Attack\Defense\-
+Fire Breath\Fire Breath+\Lightning Breath\Lightning Breath+\Lightning Breath (+) Resistance Mode
+~~none~~
+Dragon Gaze\Draconic Aura
+Fierce Stance 1\Fierce Stance 2\Fierce Stance 3
+~~none~~
+Spur Atk 1\Drive Atk 1\Drive Atk 2
+Close Def 2
+
 Mae
-5\0\Defense\Attack\-
+5\1\Speed\Resistance\-
 Thunder\Elthunder\Blarowl\Blarowl+\Blarowl+ (+) Attack Mode
 Draw Back
 Dragon Gaze\Draconic Aura
@@ -168,7 +188,7 @@ Iron Dagger\Steel Dagger\Dancer's Fan\Dancer's Fan+\Dancer's Fan+ (+) Attack Mod
 Dance
 Dragon Gaze\Draconic Aura
 Distant Def 1\Distant Def 2\Distant Def 3
-Blaze Dance 1\Blaze Dance 2\Blaze Dance 3
+Blaze Dance 1\Firestorm Dance 1\Firestorm Dance 2
 Spur Res 1\Spur Res 2\Spur Res 3
 Spur Def 2
 
