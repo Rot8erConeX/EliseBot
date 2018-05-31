@@ -5380,7 +5380,7 @@ def comparison(event,args,bot)
       end
       st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
       st[0]=st[0].gsub('Lavatain','Laevatein')
-      b.push([st,"#{r[0]}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][r[0]-1]} #{name} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0)])
+      b.push([st,"#{r[0]}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][r[0]-1]} #{name} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0]])
       c.push(unit_color(event,find_unit(find_name_in_string(event,sever(k[i])),event),1,m))
     elsif k[i].downcase=="mathoo's"
       m=true
@@ -5404,13 +5404,20 @@ def comparison(event,args,bot)
     czz=[]
     hstats=[[0,[]],[0,[]],[0,[]],[0,[]],[0,[]],[0,[]]]
     event.respond "I detect #{b.length} names.\nUnfortunately, due to embed limits, I can only compare ten names\nand due to the formatting of this command, plaintext is not an answer." if b.length>10
-    for iz in 0...[b.length, 10].min
+    b=b[0,10] if b.length>10
+    for iz in 0...b.length
       dzz.push(["**#{b[iz][1]}**",[],0])
       czz.push(c[iz])
       for jz in 1...6
         stz=b[iz][0][jz]
         dzz[iz][2]+=stz
-        dzz[iz][1].push("#{stzzz[jz]}: #{stz}")
+        s=''
+        s=' (+)' if [1,5,10].include?(b[iz][0][jz+5]) && b[iz][3]==5
+        s=' (-)' if [2,6,11].include?(b[iz][0][jz+5]) && b[iz][3]==5
+        s=' (+)' if [10].include?(b[iz][0][jz+5]) && b[iz][3]==4
+        s=' (-)' if [11].include?(b[iz][0][jz+5]) && b[iz][3]==4
+        s='' unless b.reject{|q| q[1][q[1].length-10,10]==' (neutral)'}.length<=0
+        dzz[iz][1].push("#{stzzz[jz]}: #{stz}#{s}")
         if stz>hstats[jz][0]
           hstats[jz][0]=stz
           hstats[jz][1]=[b[iz][0][0]]
@@ -5489,8 +5496,20 @@ def comparison(event,args,bot)
     end
   end
   for i in 1...6
-    d1[1].push("#{stzzz[i]}: #{b[0][0][i]}")
-    d2[1].push("#{stzzz[i]}: #{b[1][0][i]}")
+    s=''
+    s=' (+)' if [1,5,10].include?(b[0][0][i+5]) && b[0][3]==5
+    s=' (-)' if [2,6,11].include?(b[0][0][i+5]) && b[0][3]==5
+    s=' (+)' if [10].include?(b[0][0][i+5]) && b[0][3]==4
+    s=' (-)' if [11].include?(b[0][0][i+5]) && b[0][3]==4
+    s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)'
+    d1[1].push("#{stzzz[i]}: #{b[0][0][i]}#{s}")
+    s=''
+    s=' (+)' if [1,5,10].include?(b[1][0][i+5]) && b[1][3]==5
+    s=' (-)' if [2,6,11].include?(b[1][0][i+5]) && b[1][3]==5
+    s=' (+)' if [10].include?(b[1][0][i+5]) && b[1][3]==4
+    s=' (-)' if [11].include?(b[1][0][i+5]) && b[1][3]==4
+    s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)'
+    d2[1].push("#{stzzz[i]}: #{b[1][0][i]}#{s}")
     d1[2]+=b[0][0][i]
     d2[2]+=b[1][0][i]
     if b[0][0][i]==b[1][0][i]
