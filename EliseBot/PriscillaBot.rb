@@ -1035,6 +1035,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   # certain common skill aliases work
   return find_skill('Yato',event) if ['yatogami','yatokami','yatonogami','yatonokami'].include?(name.downcase.gsub(' ',''))
   return find_skill('Bladeblade',event) if name.downcase.gsub(' ','')=='laevatein'
+  return find_skill('Eckesachs',event) if ['exaccus','exesack','exsack','eggsacks'].include?(name.downcase.gsub(' ',''))
   return find_skill('Uror',event) if name.downcase.gsub(' ','')=='urdr'
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
   return find_skill("Tannenboom!#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='tanenboom'
@@ -1048,7 +1049,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   j=-1
   # use the `stat_buffs` function so that "Atk" and "Attack", for example, are treated the same
   # try with only replacing spaces and underscores first...
-  x2=stat_buffs(name.gsub(' ','').gsub('_',''),name)
+  x2=stat_buffs(name.gsub(' ','').gsub('_',''),name,2)
   for i in 0...sklz.length
     unless sklz[i].nil?
       j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!',''),name).gsub('?','').gsub(' ','').gsub('_','')==x2 && j<0
@@ -1056,7 +1057,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   end
   return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][13])
   # ...if that fails, try removing quotes, slashes, and hyphens as well
-  x2=stat_buffs(name.gsub(' ','').gsub('_','').gsub("'",'').gsub('/','').gsub("-",''),name)
+  x2=stat_buffs(name.gsub(' ','').gsub('_','').gsub("'",'').gsub('/','').gsub("-",''),name,2)
   for i in 0...sklz.length
     unless sklz[i].nil?
       j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!','').gsub('?','').gsub('/','').gsub("'",'').gsub("-",''),name).gsub(' ','').gsub('_','')==x2 && j<0
@@ -1080,7 +1081,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   return find_skill(name.downcase.gsub('honour','honor'),event,true) if name.downcase.include?('honour') && find_skill(name.downcase.gsub('honour','honor'),event,true)>=0
   return -1 if ignore2
   # try everything again, but this time matching the portion of the skill name that is exactly as long as the input string.
-  x2=stat_buffs(name.gsub(' ','').gsub('_',''),name)
+  x2=stat_buffs(name.gsub(' ','').gsub('_',''),name,2)
   for i in 0...sklz.length
     unless sklz[i].nil?
       unless sklz[i][0].nil?
@@ -1092,7 +1093,8 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   return -1 if name.length<4
   namex=name.gsub(' ','').downcase
   return find_skill('Yato',event) if ['yatogami','yatokami','yatonogami','yatonokami'].map{|q| q[0,namex.length]}.include?(namex)
-  return find_skill('Laevatein',event) if namex=='bladeblade'[0,namex.length]
+  return find_skill('Bladeblade',event) if namex=='laevatein'[0,namex.length]
+  return find_skill('Eckesachs',event) if ['exaccus','exesack','exsack','eggsacks'].map{|q| q[0,namex.length]}.include?(name.downcase.gsub(' ',''))
   return find_skill("Sack o' Gifts",event) if namex=='sackofgifts'[0,namex.length]
   return find_skill("Killing Edge",event) if ['killersword','killeredge','killingsword'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill("Slaying Edge",event) if ['slayersword','slayeredge','slayingsword'].map{|q| q[0,namex.length]}.include?(namex)
