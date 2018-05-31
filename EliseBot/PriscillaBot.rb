@@ -4584,71 +4584,21 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     passives.push('Seal') if ['s','seal','seals','spassives','spassive','passives','passivess','s_passives','s_passive','passive_s','passives_s','sealpassives','sealpassive','passiveseal','passivesseal','seal_passives','seal_passive','passive_seal','passives_seal','sealspassives','sealspassive','passiveseals','passivesseals','seals_passives','seals_passive','passive_seals','passives_seals'].include?(args[i].downcase)
     passives.push('W') if ['w','wpassives','wpassive','passivew','passivesw','w_passives','w_passive','passive_w','passives_w'].include?(args[i].downcase)
   end
+  lookout=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
+    lookout=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
+      lookout.push(eval line)
+    end
+  end
   for i in 0...args.length
-    weapon_subsets.push('Legendary') if ['legendary', 'legend', 'prf'].include?(args[i].downcase)
-    weapon_subsets.push('DC') if ['dc', 'distantcounter', 'distant-counter', 'distant_counter', 'counter'].include?(args[i].downcase)
-    weapon_subsets.push('CC') if ['cc', 'closecounter', 'close-counter', 'close_counter', 'counter'].include?(args[i].downcase)
-    weapon_subsets.push('Killer') if ['killer', 'killing', 'slaying', 'slayer'].include?(args[i].downcase)
-    weapon_subsets.push('Effective') if ['effective'].include?(args[i].downcase)
-    weapon_subsets.push('Harsh') if ['harsh'].include?(args[i].downcase)
-    weapon_subsets.push('Frostbite') if ['levin', 'bolt', 'ice', 'frost', 'cold', 'frostbite'].include?(args[i].downcase)
-    weapon_subsets.push('Silver') if ['silver', 'vanilla', 'arcmagic', 'arc-', 'tier3'].include?(args[i].downcase)
-    weapon_subsets.push('Steel') if ['steel', 'elmagic', 'el-', 'tier2'].include?(args[i].downcase)
-    weapon_subsets.push('Iron') if ['iron', 'basic', 'tier1'].include?(args[i].downcase)
-    weapon_subsets.push('Firesweep') if ['firesweep', 'anti-counter', 'anticounter'].include?(args[i].downcase)
-    weapon_subsets.push('Life-Giver') if ['life-giver', 'lifegiver', 'bol', 'breath-of-life', 'breathoflife'].include?(args[i].downcase)
-    weapon_subsets.push('WoDao') if ['wodao', 'wo-dao'].include?(args[i].downcase)
-    weapon_subsets.push('Bladetome') if ['bladetome'].include?(args[i].downcase)
-    weapon_subsets.push('Hogtome') if ['hogtome', 'hog'].include?(args[i].downcase)
-    weapon_subsets.push('Serpenttome') if ['serpenttome', 'serpentome', 'snaketome', 'snektome', 'serpent', 'snake', 'snek'].include?(args[i].downcase)
-    weapon_subsets.push('Owltome') if ['owltome', 'owl'].include?(args[i].downcase)
-    weapon_subsets.push('Raventome') if ['raventome', 'raven'].include?(args[i].downcase)
-    weapon_subsets.push('Wolftome') if ['wolftome', 'wolf', 'horse-killer', 'horsekiller', 'anti-horse', 'antihorse', 'cavalry-killer', 'cavalrykiller', 'anti-cavalry', 'anticavalry', 'horse-killing', 'horsekiling', 'cavalry-killing', 'cavalrykilling', 'horse-effective', 'horseeffective', 'cavalry-effective', 'cavalryeffective', 'cav-killer', 'cavkiller', 'anti-cav', 'anticav', 'cav-killing', 'cavkilling', 'cav-effective', 'caveffective', 'pony-killer', 'ponykiller', 'anti-pony', 'antipony', 'pony-killing', 'ponykilling', 'pony-effective', 'ponyeffective', 'effective'].include?(args[i].downcase)
-    weapon_subsets.push('Gem') if ['gem', 'triangle', 'ta', 'triangleadept', 'triangle-adept', 'adept', 'ruby', 'sapphire', 'emerald', 'crystal'].include?(args[i].downcase)
-    weapon_subsets.push('Brave') if ['brave', 'twohit', 'two-hit', 'double-hit', 'doublehit', '2-hit', '2hit', 'hit-twice', 'hittwice', 'hits-twice', 'hitstwice'].include?(args[i].downcase)
-    weapon_subsets.push('Armor-killer') if ['armor-killer', 'armorkiller', 'anti-armor', 'antiarmor', 'armour-killer', 'armourkiller', 'anti-armour', 'antiarmour', 'armor-killing', 'armorkiling', 'armour-killing', 'armourkilling', 'armor-effective', 'armoreffective', 'armour-effective', 'armoureffective', 'effective'].include?(args[i].downcase)
-    weapon_subsets.push('Horse-killer') if ['horse-killer', 'horsekiller', 'anti-horse', 'antihorse', 'cavalry-killer', 'cavalrykiller', 'anti-cavalry', 'anticavalry', 'horse-killing', 'horsekiling', 'cavalry-killing', 'cavalrykilling', 'horse-effective', 'horseeffective', 'cavalry-effective', 'cavalryeffective', 'cav-killer', 'cavkiller', 'anti-cav', 'anticav', 'cav-killing', 'cavkilling', 'cav-effective', 'caveffective', 'pony-killer', 'ponykiller', 'anti-pony', 'antipony', 'pony-killing', 'ponykilling', 'pony-effective', 'ponyeffective', 'effective'].include?(args[i].downcase)
-    passive_subsets.push('Blow') if ['blow'].include?(args[i].downcase)
-    passive_subsets.push('Bond') if ['bond'].include?(args[i].downcase)
-    passive_subsets.push('Stats') if ['stats', 'stat', '+'].include?(args[i].downcase)
-    passive_subsets.push('Counter') if ['counter'].include?(args[i].downcase)
-    passive_subsets.push('Defense') if ['defense', 'defence', 'defensive', 'defencive'].include?(args[i].downcase)
-    passive_subsets.push('Defiant') if ['defiant'].include?(args[i].downcase)
-    passive_subsets.push('Brazen') if ['brazen'].include?(args[i].downcase)
-    passive_subsets.push('Boost') if ['boost'].include?(args[i].downcase)
-    passive_subsets.push('Chill') if ['chill'].include?(args[i].downcase)
-    passive_subsets.push('Dull') if ['dull','nullify'].include?(args[i].downcase)
-    passive_subsets.push('Stance') if ['stance'].include?(args[i].downcase)
-    passive_subsets.push('Bladeskill') if ['bladeskill'].include?(args[i].downcase)
+    for i2 in 0...lookout.length
+      if lookout[i2][1].include?(args[i].downcase)
+        weapon_subsets.push(lookout[i2][0]) if lookout[i2][2]=='Weapon'
+        passive_subsets.push(lookout[i2][0]) if lookout[i2][2]=='Passive'
+      end
+    end
     passive_subsets.push('Bladeskill') if ['blade'].include?(args[i].downcase) && !skill_types.include?('weapon') && skill_types.length>0
-    passive_subsets.push('Fortress') if ['fortress'].include?(args[i].downcase)
-    passive_subsets.push('Shield') if ['shield'].include?(args[i].downcase)
-    passive_subsets.push('Cooldown') if ['cooldown'].include?(args[i].downcase)
-    passive_subsets.push('Breaker') if ['breaker'].include?(args[i].downcase)
-    passive_subsets.push('Blessing') if ['blessing'].include?(args[i].downcase)
-    passive_subsets.push('Link') if ['link','pull'].include?(args[i].downcase)
-    passive_subsets.push('Faint') if ['feint','faint','fient','fiant'].include?(args[i].downcase)
-    passive_subsets.push('DanceRally') if ['dancerally', 'dance-rally', 'rally'].include?(args[i].downcase)
-    passive_subsets.push('Follow-up') if ['follow-up', 'followup'].include?(args[i].downcase)
-    passive_subsets.push('Fighter') if ['fighter'].include?(args[i].downcase)
-    passive_subsets.push('Deflect') if ['deflect'].include?(args[i].downcase)
-    passive_subsets.push('Move') if ['movement', 'move', 'moving'].include?(args[i].downcase)
-    passive_subsets.push('Flight') if ['flight', 'warp', 'warping'].include?(args[i].downcase)
-    passive_subsets.push('Staff') if ['staff', 'staves'].include?(args[i].downcase)
-    passive_subsets.push('Wave') if ['wave', 'evenodd', 'waves'].include?(args[i].downcase)
-    passive_subsets.push('Damage') if ['damage'].include?(args[i].downcase)
-    passive_subsets.push('StatDrops') if ['stat-drops', 'statdrops'].include?(args[i].downcase)
-    passive_subsets.push('Sweep') if ['sweep', 'elementsweep'].include?(args[i].downcase)
-    passive_subsets.push('Ploy') if ['ploy'].include?(args[i].downcase)
-    passive_subsets.push('Smoke') if ['smoke'].include?(args[i].downcase)
-    passive_subsets.push('Tactic') if ['tactic'].include?(args[i].downcase)
-    passive_subsets.push('Exp') if ['exp', 'exp.', 'experience'].include?(args[i].downcase)
-    passive_subsets.push('Valor') if ['valor', 'sp'].include?(args[i].downcase)
-    passive_subsets.push('Spur') if ['spur', 'drive', 'goad', 'ward'].include?(args[i].downcase)
-    passive_subsets.push('Fortify/Hone') if ['fortify/hone', 'fortify', 'hone'].include?(args[i].downcase)
-    passive_subsets.push('Threaten') if ['threaten', 'threatening', 'threat'].include?(args[i].downcase)
-    passive_subsets.push('Priority') if ['priority', 'order', 'attackorder', 'attack-order', 'attackpriority', 'attack-priority'].include?(args[i].downcase)
-    passive_subsets.push('Enemy') if ['enemy', 'enemies'].include?(args[i].downcase)
   end
   colors=colors.uniq
   weapons=weapons.uniq
@@ -5565,7 +5515,7 @@ def comparison(event,args,bot)
   elsif d1[2]<d2[2]
     d3[1].push("#{names[1]} has #{d2[2]-d1[2]} more BST")
   else
-    d3[1].push("#{stzzz[i]} calculation error")
+    d3[1].push("BST calculation error")
   end
   d1[1]=d1[1].join("\n")
   d2[1]=d2[1].join("\n")
@@ -9407,13 +9357,20 @@ bot.command([:bst, :BST]) do |event, *args|
   n=0
   au=0
   b=[]
-  counters=[['Infantry',0,0],['Horse',0,0],['Armor',0,0],['Flier',0,0],                              # Movement Emblem
-            ['Magic',0,0],['Dragon',0,0],['Melee',0,0],['Healer',0,0],['Dagger',0,0],['Archer',0,0], # Weapon Emblem
-            ['Red',0,0],['Blue',0,0],['Green',0,0],['Colorless',0,0],                                # Color Emblem
-            [['','F2P','F2P'],0,0],['Story',0,0],['GHB',0,0],['Tempest',0,0],                        # Game Mode Emblem
-            ['Yandere',0,0],
-            ['Lucina',0,0],['Robin',0,0],['Corrin',0,0],['Xander',0,0],['Tiki',0,0],['Lyn',0,0],['Chrom',0,0],['Azura',0,0],['Camilla',0,0],
-            ['Ike',0,0],['Roy',0,0],['Hector',0,0],['Celica',0,0],['Takumi',0,0],['Ephraim',0,0],['Tharja',0,0]]    # Character emblems
+  counters=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHEmblemTeams.txt')
+    counters=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHEmblemTeams.txt').each_line do |line|
+      counters.push(eval line)
+    end
+  end
+  if counters.length<=0
+    counters=[['Infantry',0,0],['Horse',0,0],['Armor',0,0],['Flier',0,0],
+              ['Magic',0,0],['Dragon',0,0],['Melee',0,0],['Healer',0,0],['Dagger',0,0],['Archer',0,0],
+              ['Red',0,0],['Blue',0,0],['Green',0,0],['Colorless',0,0],
+              [['','F2P','F2P'],0,0],
+              ['Story',0,0],['GHB',0,0],['Tempest',0,0]]
+  end
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0],[0,0]]
   m=false
@@ -9488,23 +9445,11 @@ bot.command([:bst, :BST]) do |event, *args|
           counters[15][i2]+=1 if [summon_type].include?('y')
           counters[16][i2]+=1 if [summon_type].include?('g')
           counters[17][i2]+=1 if [summon_type].include?('t')
-          counters[18][i2]+=1 if ['Valter','Tharja','Rhajat','Camilla','Faye','Tharja(Winter)'].include?(name)
-          counters[19][i2]+=1 if ['Lucina','Lucina(Spring)','Lucina(Brave)','Marth(Masked)'].include?(name)
-          counters[20][i2]+=1 if ['Robin(M)','Robin(F)','Robin(F)(Summer)','Robin(M)(Winter)','Robin(M)(Fallen)','Robin(F)(Fallen)','Tobin'].include?(name)
-          counters[21][i2]+=1 if ['Corrin(M)','Corrin(F)','Corrin(F)(Summer)','Corrin(M)(Winter)','Kamui'].include?(name)
-          counters[22][i2]+=1 if ['Xander','Xander(Spring)','Xander(Summer)'].include?(name)
-          counters[23][i2]+=1 if ['Tiki(Young)','Tiki(Adult)','Tiki(Adult)(Summer)'].include?(name)
-          counters[24][i2]+=1 if ['Lyn','Lyn(Bride)','Lyn(Brave)','Lyn(Valentines)','Lyn(Wind)'].include?(name)
-          counters[25][i2]+=1 if ['Chrom(Launch)','Chrom(Spring)','Chrom(Winter)','Chrom(Branded)'].include?(name)
-          counters[26][i2]+=1 if ['Azura','Azura(Performing)','Azura(Winter)'].include?(name)
-          counters[27][i2]+=1 if ['Camilla','Camilla(Spring)','Camilla(Winter)'].include?(name)
-          counters[28][i2]+=1 if ['Ike','Ike(Vanguard)','Ike(Brave)'].include?(name)
-          counters[29][i2]+=1 if ['Roy','Roy(Valentines)','Roy(Brave)'].include?(name)
-          counters[30][i2]+=1 if ['Hector','Hector(Valentines)','Hector(Brave)'].include?(name)
-          counters[31][i2]+=1 if ['Celica','Celica(Fallen)','Celica(Brave)'].include?(name)
-          counters[32][i2]+=1 if ['Takumi','Takumi(Fallen)','Takumi(Winter)'].include?(name)
-          counters[33][i2]+=1 if ['Ephraim','Ephraim(Fire)','Ephraim(Brave)'].include?(name)
-          counters[34][i2]+=1 if ['Tharja','Tharja(Winter)','Tharja(Bride)'].include?(name)
+          if counters.length>18
+            for i3 in 18...counters.length
+              counters[i3][i2]+=1 if counters[i3][3].include?(name)
+            end
+          end
           colors[i2][0]+=1 if j[1][0]=='Red'
           colors[i2][1]+=1 if j[1][0]=='Blue'
           colors[i2][2]+=1 if j[1][0]=='Green'
