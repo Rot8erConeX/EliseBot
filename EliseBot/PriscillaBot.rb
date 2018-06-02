@@ -783,6 +783,7 @@ def make_banner() # this function is used by the `summon` command to pick a rand
     b[i][2]=b[i][2].gsub(' ','').split(',')
     b[i][2]=[] if b[i][2][0]=='-'
   end
+  b=b.reject{|q| q[2].length==0 && !q[0].include?('GHB') && !q[0].include?('TT')}
   data_load()
   bnr=b.sample
   x=false
@@ -1052,7 +1053,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   x2=stat_buffs(name.gsub(' ','').gsub('_',''),name,2)
   for i in 0...sklz.length
     unless sklz[i].nil?
-      j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!',''),name).gsub('?','').gsub(' ','').gsub('_','')==x2 && j<0
+      j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!',''),name,2).gsub('?','').gsub(' ','').gsub('_','')==x2 && j<0
     end
   end
   return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][13])
@@ -1060,7 +1061,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   x2=stat_buffs(name.gsub(' ','').gsub('_','').gsub("'",'').gsub('/','').gsub("-",''),name,2)
   for i in 0...sklz.length
     unless sklz[i].nil?
-      j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!','').gsub('?','').gsub('/','').gsub("'",'').gsub("-",''),name).gsub(' ','').gsub('_','')==x2 && j<0
+      j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!','').gsub('?','').gsub('/','').gsub("'",'').gsub("-",''),name,2).gsub(' ','').gsub('_','')==x2 && j<0
     end
   end
   return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][13])
@@ -1085,7 +1086,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   for i in 0...sklz.length
     unless sklz[i].nil?
       unless sklz[i][0].nil?
-        j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!','').gsub('?',''),name).gsub(' ','').gsub('_','')[0,name.length]==x2 && j<0
+        j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!','').gsub('?',''),name,2).gsub(' ','').gsub('_','')[0,name.length]==x2 && j<0
       end
     end
   end
@@ -1829,7 +1830,13 @@ def find_stats_in_string(event,stringx=nil,mode=0)
         rarity=x.to_i
         args[i]=nil
       end
-    elsif args[i].gsub('(','').gsub(')','').length>5 && args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-4,4].downcase=='-star' # numbers followed by the word "star" automatically fill the rarity variable
+    elsif args[i].gsub('(','').gsub(')','').length>5 && args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-5,5].downcase=='-star' # numbers followed by the word "star" automatically fill the rarity variable
+      x=args[i].gsub('(','').gsub(')','')[0,args[i].gsub('(','').gsub(')','').length-5]
+      if x.to_i.to_s==x && rarity.nil?
+        rarity=x.to_i
+        args[i]=nil
+      end
+    elsif args[i].gsub('(','').gsub(')','').length>4 && args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-4,4].downcase=='star' # numbers followed by the word "star" automatically fill the rarity variable
       x=args[i].gsub('(','').gsub(')','')[0,args[i].gsub('(','').gsub(')','').length-4]
       if x.to_i.to_s==x && rarity.nil?
         rarity=x.to_i
@@ -2705,6 +2712,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
   unitz=@units[find_unit(name,event)]
   wl=weapon_legality(event,unitz[0],weapon,refinement)
+  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   if find_unit(name,event)<0
     event.respond 'No unit was included' unless ignore
     return nil
@@ -2766,6 +2774,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
       end
     end
     wl=weapon_legality(event,u40[0],weapon,refinement)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
     tempest=get_bonus_type(event)
     cru40=u40.map{|a| a}
     u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
@@ -2819,6 +2828,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
     w='*Tome*'
   end
   wl=weapon_legality(event,u40[0],weapon,refinement)
+  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   cru40=u40.map{|a| a}
   u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
   cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing)
@@ -3311,7 +3321,6 @@ def disp_skill(name,event,ignore=false)
         inner_skill='y' if inner_skill.nil? || inner_skill.length<1
       end
     end
-    puts mt.to_s
     outer_skill=nil
     if inner_skill[0,1]=='*'
       outer_skill=inner_skill[1,inner_skill.length-1]
@@ -3794,6 +3803,11 @@ def sever(str,sklz=false)
   k=str.split('*')
   k2=1
   k2=0 if k.length==1 && k[0][0,1].to_i.to_s==k[0][0,1]
+  if k.length==1 && k[0].include?(' ')
+    k3=k[0].split(' ')
+    k3=k3[k3.length-1]
+    k2=0 if k3[0,1].to_i.to_s==k3[0,1]
+  end
   for i in 0...k.length-k2
     k[i]="#{k[i]}*"
   end
@@ -3827,11 +3841,13 @@ def sever(str,sklz=false)
     k.compact!
     str=k.join(' ')
   end
+  str=str.gsub('-star','``star')
   k=str.split('-')
   for i in 1...k.length
     k[i]="-#{k[i]}"
   end
   str=k.join(' ')
+  str=str.gsub('``star','-star')
   str="#{str} +" if s[s.length-1,1]=='+'
   str="#{str} -" if s[s.length-1,1]=='-'
   str="* #{str}" if s[0,1]=='*'
@@ -6057,16 +6073,35 @@ def weapon_legality(event,name,weapon,refinement,recursion=false)
     t='Silver' if 'Silver '==w[0][0,7]
     t='Brave' if 'Brave '==w[0][0,6]
     t='Firesweep' if 'Firesweep '==w[0][0,10]
+    if event.message.text.downcase.include?('sword') || event.message.text.downcase.include?('edge')
+    elsif event.message.text.downcase.include?('lance')
+    elsif event.message.text.downcase.include?('axe')
+    elsif (['Iron','Steel','Silver'].include?(t) && u[1][1]=='Dagger') || u[1][1]=='Bow'
+      return weapon_legality(event,name,"#{t} Dagger#{'+' if w[0].include?('+')}",refinement,true) if u[1][1]=='Dagger'
+      return weapon_legality(event,name,"#{t} Bow#{'+' if w[0].include?('+')}",refinement,true) if u[1][1]=='Bow'
+    end
     return weapon_legality(event,name,"#{t} Sword#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
     return weapon_legality(event,name,"#{t} Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
     return weapon_legality(event,name,"#{t} Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless u[1][0]=='Colorless'
+    w2="#{t} Rod"
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
   elsif ['Killing Edge','Killer Lance','Killer Axe','Slaying Edge','Slaying Lance','Slaying Axe'].include?(w[0].gsub('+',''))
     t='Killer'
     t='Killing' if u[1][0]=='Red'
     t='Slaying' if 'Slaying '==w[0][0,8]
+    if event.message.text.downcase.include?('sword') || event.message.text.downcase.include?('edge')
+    elsif event.message.text.downcase.include?('lance')
+    elsif event.message.text.downcase.include?('axe')
+    elsif u[1][1]=='Bow'
+      return weapon_legality(event,name,"#{t} Bow#{'+' if w[0].include?('+')}",refinement,true) if u[1][1]=='Bow'
+    end
     return weapon_legality(event,name,"#{t} Edge#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
     return weapon_legality(event,name,"#{t} Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
     return weapon_legality(event,name,"#{t} Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless u[1][0]=='Colorless'
+    w2="#{t} Rod"
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
   elsif ['Fire','Flux','Thunder','Light','Wind'].include?(w[0].gsub('+',''))
     return weapon_legality(event,name,"Fire#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Fire'
     return weapon_legality(event,name,"Flux#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Dark'
@@ -6661,6 +6696,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
   wl=weapon_legality(event,u40[0],weapon,refinement)
+  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
     xcolor=avg_color([[39,100,222],[9,170,36]])
@@ -7012,6 +7048,7 @@ def heal_study(event,name,bot,weapon=nil)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
   wl=weapon_legality(event,u40[0],weapon,refinement)
+  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
     xcolor=avg_color([[39,100,222],[9,170,36]])
@@ -7244,6 +7281,7 @@ def proc_study(event,name,bot,weapon=nil)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
   wl=weapon_legality(event,u40[0],weapon,refinement)
+  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
     xcolor=avg_color([[39,100,222],[9,170,36]])
@@ -7565,6 +7603,7 @@ def phase_study(event,name,bot,weapon=nil)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
   wl=weapon_legality(event,u40[0],weapon,refinement)
+  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
     xcolor=avg_color([[39,100,222],[9,170,36]])
@@ -8091,7 +8130,13 @@ def banner_list(event,name,bot,weapon=nil)
       if justnames
         str=b[i][0]
       else
-        str="__*#{b[i][0]}*__#{"\n*Shared Focus Color:* #{shared_color.join(', ')}" if shared_color.length>0}#{"\n*Other Focus Color:* #{other_color.join(', ')}" if other_color.length>0}\n*Starting Focus Chance:* #{len % percentage}%#{"\n*Current Focus Chance:* #{len % disperc}%" if star_buff>0}"
+        tm=''
+        unless b[i][4].nil?
+          mo=['','January','February','March','April','May','June','July','August','September','October','November','December']
+          t=b[i][4].split(', ').map{|q| q.split('/').map{|q2| q2.to_i}}
+          tm="\n*Duration:* #{t[0][0]} #{mo[t[0][1]]} #{t[0][2]} - #{t[1][0]} #{mo[t[1][1]]} #{t[1][2]}"
+        end
+        str="__*#{b[i][0]}*__#{tm}#{"\n*Shared Focus Color:* #{shared_color.join(', ')}" if shared_color.length>0}#{"\n*Other Focus Color:* #{other_color.join(', ')}" if other_color.length>0}\n*Starting Focus Chance:* #{len % percentage}%#{"\n*Current Focus Chance:* #{len % disperc}%" if star_buff>0}"
         if !b[i][3].nil? && b[i].include?('4')
           str="#{str}#{" (5<:Icon_Rarity_5p10:448272715099406336>), #{len % (four_star/2)}% (4<:Icon_Rarity_4p10:448272714210476033>)\n*5<:Icon_Rarity_5p10:448272715099406336>#{" Start" unless star_buff>0} Chance:* #{len % (disperc*1.00/(shared_color.length+1))}% (Perceived), #{len % (disperc*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
           str="#{str}#{"\n*4<:Icon_Rarity_4p10:448272714210476033>#{" Start" unless star_buff>0} Chance:* #{len % ((four_star/2)/(shared_color.length+1))}% (Perceived), #{len % ((four_star/2)/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
@@ -10956,7 +11001,7 @@ end
 bot.command(:invite) do |event, user|
   return nil if overlap_prevent(event)
   usr=event.user
-  txt="To invite me to your server: <https://goo.gl/2WZ4yn>\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://orig00.deviantart.net/cd2d/f/2018/047/e/0/marketing___elise_by_rot8erconex-dbxj4mq.png"
+  txt="To invite me to your server: <https://goo.gl/HEuQK2>\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://orig00.deviantart.net/cd2d/f/2018/047/e/0/marketing___elise_by_rot8erconex-dbxj4mq.png"
   user_to_name='you'
   unless user.nil?
     if /<@!?(?:\d+)>/ =~ user
@@ -11051,12 +11096,12 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   t=Time.now
   timeshift=8
   t-=60*60*timeshift
-  event << "Time elapsed since today's reset: #{"#{t.hour} hours, " if t.hour>0}#{"#{'0' if t.min<10}#{t.min} minutes, " if t.hour>0 || t.min>0}#{'0' if t.sec<10}#{t.sec} seconds"
-  event << "Time until tomorrow's reset: #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds"
+  str="Time elapsed since today's reset: #{"#{t.hour} hours, " if t.hour>0}#{"#{'0' if t.min<10}#{t.min} minutes, " if t.hour>0 || t.min>0}#{'0' if t.sec<10}#{t.sec} seconds"
+  str="#{str}\nTime until tomorrow's reset: #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds"
   t2=Time.new(2017,2,1,23,0)
   t2=t-t2
   date=(((t2.to_i/60)/60)/24)
-  event << "The Arena season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete your daily Arena-related quests before then!" if date%7==4 && 15-t.hour>=0
+  str="#{str}\nThe Arena season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete your daily Arena-related quests before then!" if date%7==4 && 15-t.hour>=0
   colors=['Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>',
           'Colorless <:Shard_Colorless:443733396921909248><:Crystal_Transparent:445510676295843870><:Badge_Transparent:445510675976945664><:Great_Badge_Transparent:443704781597573120>',
           'Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>',
@@ -11091,38 +11136,77 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
           'Fire <:Legendary_Effect_Fire:443331186480119808>',
           'Water <:Legendary_Effect_Water:443331186534776832>',
           'Wind <:Legendary_Effect_Wind:443331186467536896>']
-  event << ''
-  event << "Date assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
-  event << "Days since game release: #{longFormattedNumber(date)}"
+  str="#{str}\n"
+  str="#{str}\nDate assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
+  str="#{str}\nDays since game release: #{longFormattedNumber(date)}"
   if event.user.id==167657750971547648
-    event << "Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12"
-    event << "Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday)"
+    str="#{str}\nDaycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12"
+    str="#{str}\nWeekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday)"
   end
-  event << ''
-  event << '__**Today in** ***Fire Emblem Heroes***__'
-  event << "Training Tower color: #{colors[date%7]}"
-  event << "Daily Hero Battle: #{dhb[date%12]}"
-  event << "Weekend SP bonus!" if [1,2].include?(date%7)
-  event << "Special Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][date%5]}"
-  event << "Grand Hero Battle revival: #{ghb[date%7].split(' / ')[0]}"
-  event << "Grand Hero Battle revival 2: #{ghb[date%7].split(' / ')[1]}"
-  event << "Newest Blessed Gardens addition: #{garden[week_from(date,3)%4]}"
-  event << "Rival Domains movement preference: #{rd[week_from(date,2)%4]}"
+  str2='__**Today in** ***Fire Emblem Heroes***__'
+  str2="#{str2}\nTraining Tower color: #{colors[date%7]}"
+  str2="#{str2}\nDaily Hero Battle: #{dhb[date%12]}"
+  str2="#{str2}\nWeekend SP bonus!" if [1,2].include?(date%7)
+  str2="#{str2}\nSpecial Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][date%5]}"
+  str2="#{str2}\nGrand Hero Battle revival: #{ghb[date%7].split(' / ')[0]}"
+  str2="#{str2}\nGrand Hero Battle revival 2: #{ghb[date%7].split(' / ')[1]}"
+  str2="#{str2}\nNewest Blessed Gardens addition: #{garden[week_from(date,3)%4]}"
+  str2="#{str2}\nRival Domains movement preference: #{rd[week_from(date,2)%4]}"
+  b=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
+      b.push(line.gsub("\n",''))
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    b[i]=b[i].split('\\'[0])
+    b[i][1]=b[i][1].to_i
+    b[i][2]=b[i][2].split(', ')
+    b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
+  end
+  b.compact!
+  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm}
+  str=extend_message(str,str2,event,2)
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(' tomorrow ') || " #{event.message.text.downcase} ".include?(' next ')
-    event << ''
-    event << '__**Tomorrow in** ***Fire Emblem Heroes***__'
-    event << "Training Tower color: #{colors[(date+1)%7]}"
-    event << "Daily Hero Battle: #{dhb[(date+1)%12]}"
-    event << "Weekend SP bonus!" if [1,2].include?((date+1)%7)
-    event << "Special Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][(date+1)%5]}"
-    event << "Grand Hero Battle revival: #{ghb[(date+1)%7].split(' / ')[0]}"
-    event << "Grand Hero Battle revival 2: #{ghb[(date+1)%7].split(' / ')[1]}"
-    event << "New Blessed Gardens addition: #{garden[week_from(date+1,3)%4]}" if (date+1)%7==3
-    event << "Rival Domains movement preference: #{rd[week_from(date+1,2)%4]}" if (date+1)%7==2
+    str2='__**Current Banners**__'
+    for i in 0...b2.length
+      t2=b2[i][4].split(', ')[1].split('/').map{|q| q.to_i}
+      t2=Time.new(t2[2],t2[1],t2[0],23,0)
+      t2=t2-t
+      if t2/(24*60*60)>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/(24*60*60)).floor} days left"
+      elsif t2/(60*60)>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/(60*60)).floor} hours left"
+      elsif t2/60>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/60).floor} minutes left"
+      elsif t2>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2).floor} seconds left"
+      end
+    end
+    str=extend_message(str,str2,event,2)
+    str2='__**Tomorrow in** ***Fire Emblem Heroes***__'
+    str2="#{str2}\nTraining Tower color: #{colors[(date+1)%7]}"
+    str2="#{str2}\nDaily Hero Battle: #{dhb[(date+1)%12]}"
+    str2="#{str2}\nWeekend SP bonus!" if [1,2].include?((date+1)%7)
+    str2="#{str2}\nSpecial Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][(date+1)%5]}"
+    str2="#{str2}\nGrand Hero Battle revival: #{ghb[(date+1)%7].split(' / ')[0]}"
+    str2="#{str2}\nGrand Hero Battle revival 2: #{ghb[(date+1)%7].split(' / ')[1]}"
+    str2="#{str2}\nNew Blessed Gardens addition: #{garden[week_from(date+1,3)%4]}" if (date+1)%7==3
+    str2="#{str2}\nRival Domains movement preference: #{rd[week_from(date+1,2)%4]}" if (date+1)%7==2
+    t3=t+24*60*60
+    tm="#{'0' if t3.day<10}#{t3.day}/#{'0' if t3.month<10}#{t3.month}/#{t3.year}"
+    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0]!=tm}
+    str=extend_message(str,str2,event,2)
+    str="#{str}\nNew Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}" if b2.length>0
+  else
+    str="#{str}\nCurrent Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}"
   end
-  event << ''
-  event << 'Please note that due to being non-cyclical, I cannot predict the following:'
-  event << "Arena bonus heroes, Elemental season, anything in the game's Events tab, new GHBs"
+  str=extend_message(str,"Please note that due to being non-cyclical, I cannot predict the following:\nArena bonus heroes, Elemental season, anything in the game's Events tab, new GHBs",event,2)
+  event.respond str
 end
 
 bot.command([:next,:schedule]) do |event, type|
@@ -11136,8 +11220,9 @@ bot.command([:next,:schedule]) do |event, type|
   idx=5 if ['ghb2'].include?(type.downcase)
   idx=6 if ['rival','domains','domain','rd','rivaldomains','rival_domains','rivaldomain','rival_domain'].include?(type.downcase)
   idx=7 if ['blessed','blessing','garden','gardens','blessedgarden','blessed_garden','blessedgardens','blessed_gardens','blessinggarden','blessing_garden','blessinggardens','blessing_gardens'].include?(type.downcase)
+  idx=8 if ['banners','summoning','summon','banner','summonings','summons'].include?(type.downcase)
   if idx<0 && !safe_to_spam?(event)
-    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)"
+    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nBanner(s), Summon(ing)(s)"
     return nil
   end
   t=Time.now
@@ -11152,7 +11237,6 @@ bot.command([:next,:schedule]) do |event, type|
     msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
     msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday)",event)
   end
-  puts idx
   if [-1,1].include?(idx)
     colors=['Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>',
             'Colorless <:Shard_Colorless:443733396921909248><:Crystal_Transparent:445510676295843870><:Badge_Transparent:445510675976945664><:Great_Badge_Transparent:443704781597573120>',
@@ -11161,7 +11245,7 @@ bot.command([:next,:schedule]) do |event, type|
             'Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>',
             'Red <:Shard_Red:443733396842348545><:Crystal_Scarlet:445510676350500897><:Badge_Scarlet:445510676060962816><:Great_Badge_Scarlet:443704781001850910>',
             'Blue <:Shard_Blue:443733396741554181><:Crystal_Azure:445510676434124800><:Badge_Azure:445510675352125441><:Great_Badge_Azure:443704780783616016>']
-    colors.rotate(date%7)
+    colors=colors.rotate(date%7)
     msg2='__**Training Tower colors**__'
     for i in 0...colors.length
       if i==0
@@ -11190,7 +11274,7 @@ bot.command([:next,:schedule]) do |event, type|
          'Wrys <:Colorless_Staff:443692132323295243><:Icon_Move_Infantry:443331187579289601>',
          'Olivia <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601>',
          'Stahl <:Red_Blade:443172811830198282><:Icon_Move_Cavalry:443331186530451466>']
-    dhb.rotate(date%12)
+    dhb=dhb.rotate(date%12)
     msg2='__**Daily Hero Battles**__'
     for i in 0...dhb.length
       if i==0
@@ -11205,8 +11289,7 @@ bot.command([:next,:schedule]) do |event, type|
     msg=extend_message(msg,msg2,event,2)
   end
   if [-1,3].include?(idx)
-    spec=['Magic','The Workout','Melee','Ranged','Bows']
-    spec.rotate(date%5)
+    spec=['Magic','The Workout','Melee','Ranged','Bows'].rotate(date%5)
     msg2="__**Special Training Maps**__"
     for i in 0...spec.length
       if i==0
@@ -11227,7 +11310,7 @@ bot.command([:next,:schedule]) do |event, type|
        'Narcian <:Green_Blade:443172811721146368><:Icon_Move_Flier:443331186698354698> / Zephiel <:Red_Blade:443172811830198282><:Icon_Move_Armor:443331186316673025>',
        'Navarre <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601> / Camus <:Blue_Blade:443172811582996480><:Icon_Move_Cavalry:443331186530451466>',
        'Robin(F) <:Green_Tome:443172811759157248><:Icon_Move_Infantry:443331187579289601> / Legion <:Green_Blade:443172811721146368><:Icon_Move_Infantry:443331187579289601>']
-  ghb.rotate(date%7)
+  ghb=ghb.rotate(date%7)
   msg2='__**GHB Revival**__'
   msg3='__**GHB Revival 2**__'
   for i in 0...ghb.length
@@ -11247,22 +11330,26 @@ bot.command([:next,:schedule]) do |event, type|
   msg=extend_message(msg,msg3,event,2) if [-1,5].include?(idx)
   msg=extend_message(msg,'Try the command again with "GHB2" if you\'re looking for the second set of Grand Hero Battles.',event,2) if [4].include?(idx)
   if [-1,6].include?(idx)
-    rd=['Cavalry <:Icon_Move_Cavalry:443331186530451466>',
-        'Flying <:Icon_Move_Flier:443331186698354698>',
+    rd=['Flying <:Icon_Move_Flier:443331186698354698>',
         'Infantry <:Icon_Move_Infantry:443331187579289601>',
-        'Armored <:Icon_Move_Armor:443331186316673025>']
-    rd.rotate(week_from(date,2)%4)
+        'Armored <:Icon_Move_Armor:443331186316673025>',
+        'Cavalry <:Icon_Move_Cavalry:443331186530451466>']
+    rd=rd.rotate(week_from(date,2)%4)
+    rd=rd.rotate(-1) if t.wday==6
     msg2='__**Rival Domains Prefered Movement Type**__'
     for i in 0...rd.length
       if i==0
-        t2=t-24*60*60*t.wday+7*24*60*60-24*60*60
+        t2=t-24*60*60*t.wday+6*24*60*60
+        t2+=7*24*60*60 if t.wday==6
         msg2="#{msg2}\n#{rd[i]} - This week until #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (Saturday)"
       else
         t2=t-24*60*60*t.wday+7*24*60*60*i-24*60*60
+        t2+=7*24*60*60 if t.wday==6
         msg2="#{msg2}\n#{rd[i]} - #{"#{i} weeks from now" if i>1}#{"Next week" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
       end
     end
     t2=t-24*60*60*t.wday+7*24*60*60*4-24*60*60
+    t2+=7*24*60*60 if t.wday==6
     msg2="#{msg2}\n#{rd[0]} - 4 weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
     msg=extend_message(msg,msg2,event,2)
   end
@@ -11271,20 +11358,75 @@ bot.command([:next,:schedule]) do |event, type|
             'Fire <:Legendary_Effect_Fire:443331186480119808>',
             'Water <:Legendary_Effect_Water:443331186534776832>',
             'Wind <:Legendary_Effect_Wind:443331186467536896>']
-    garden.rotate(week_from(date,3)%4)
+    garden=garden.rotate(week_from(date,3)%4)
+    garden=garden.rotate(-1) if t.wday==0
     msg2='__**Next Blessed Gardens**__'
     for i in 0...garden.length
       if i==0
         t2=t-24*60*60*t.wday+7*24*60*60
-        msg2="#{msg2}\nCurrent newest: #{garden[i]} - This week"
+        t2+=7*24*60*60 if t.wday==0
+        msg2="#{msg2}\n#{garden[i]} - This week until #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (Sunday)"
       else
         t2=t-24*60*60*t.wday+7*24*60*60*i
-        msg2="#{msg2}\n#{garden[i]} - #{"#{i} weeks from now" if i>1}#{"Next week" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}#{" (Sunday)" if i==1}"
+        t2+=7*24*60*60 if t.wday==0
+        msg2="#{msg2}\n#{garden[i]} - #{"#{i} weeks from now" if i>1}#{"Next week" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
       end
     end
     t2=t-24*60*60*t.wday+7*24*60*60*4
+    t2+=7*24*60*60 if t.wday==0
     msg2="#{msg2}\n#{garden[0]} - 4 weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
     msg=extend_message(msg,msg2,event,2)
+  end
+  if [-1,8].include?(idx)
+    b=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
+      b=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
+        b.push(line.gsub("\n",''))
+      end
+    end
+    for i in 0...b.length
+      b[i]=b[i].split('\\'[0])
+      b[i][1]=b[i][1].to_i
+      b[i][2]=b[i][2].split(', ')
+      b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
+    end
+    b.compact!
+    tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm}
+    str2='__**Current Banners**__'
+    for i in 0...b2.length
+      t2=b2[i][4].split(', ')[1].split('/').map{|q| q.to_i}
+      t2=Time.new(t2[2],t2[1],t2[0],23,0)
+      t2=t2-t
+      if t2/(24*60*60)>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/(24*60*60)).floor} days left"
+      elsif t2/(60*60)>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/(60*60)).floor} hours left"
+      elsif t2/60>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/60).floor} minutes left"
+      elsif t2>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2).floor} seconds left"
+      end
+    end
+    msg=extend_message(msg,str2,event,2)
+    str2='__**Future Banners**__'
+    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm}.reverse
+    for i in 0...b2.length
+      t2=b2[i][4].split(', ')[0].split('/').map{|q| q.to_i}
+      t2=Time.new(t2[2],t2[1],t2[0],23,0)-24*60*60
+      t2=t2-t
+      if t2/(24*60*60)>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/(24*60*60)).floor} days from now"
+      elsif t2/(60*60)>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/(60*60)).floor} hours from now"
+      elsif t2/60>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/60).floor} minutes from now"
+      elsif t2>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2).floor} seconds from now"
+      end
+    end
+    msg=extend_message(msg,str2,event,2)
   end
   event.respond msg
 end
@@ -12346,7 +12488,7 @@ bot.server_create do |event|
     chn=chnn[0] if chnn.length>0
   end
   if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920].include?(event.server.id) && @shardizard==4
-    (chn.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/2WZ4yn>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/v3ADBG>") rescue nil)
+    (chn.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/HEuQK2>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/v3ADBG>") rescue nil)
     event.server.leave
   else
     bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(event.server.id >> 22) % 4]} Shards")
