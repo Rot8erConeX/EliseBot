@@ -4364,7 +4364,6 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   games=games.uniq
   tier=tier.uniq
   group=group.uniq
-  puts group.to_s
   supernatures=supernatures.uniq
   # prune based on inputs
   matches1=[]
@@ -10686,10 +10685,11 @@ bot.command([:average,:mean]) do |event, *args|
   k22=k22[0]
   k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
   k222=@units.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
-  k222=k222.reject{|q| q[9].nil? || q[9].zero?}
+  k222=k222.reject{|q| q[5][0].nil? || q[5][0].zero?}
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
+  event.channel.send_temporary_message('Units found, finding average stats now...',5)
   for i2 in 0...k222.length
     ccz.push(unit_color(event,find_unit(k222[i2][0],event),1))
     f2[1]+=k222[i2][5][0]
@@ -10716,7 +10716,7 @@ bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
   k22=k22[0]
   k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
   k222=@units.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
-  k222=k222.reject{|q| q[9].nil? || q[9].zero?}
+  k222=k222.reject{|q| q[5][0].nil? || q[5][0].zero?}
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
@@ -10763,7 +10763,7 @@ bot.command([:worstamong,:worstin,:worststats,:loweststats]) do |event, *args|
   k22=k22[0]
   k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
   k222=@units.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
-  k222=k222.reject{|q| q[9].nil? || q[9].zero?}
+  k222=k222.reject{|q| q[5][0].nil? || q[5][0].zero?}
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
