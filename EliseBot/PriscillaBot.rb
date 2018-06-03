@@ -102,7 +102,7 @@ def all_commands(include_nil=false) # a list of all the command names.  Used by 
      'stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','removemultiunitalias',
      'compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','removedualalias',
      'skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','removemultialias',
-     'commonskills','common_skills','locate','locateshard','locateshards','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','deletemulti',
+     'commonskills','common_skills','locate','locateshard','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','deletemulti',
      'skill_rarity','one_star','two_star','three_star','four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit','deletedualunitalias','multialias',
      'allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','deletemultiunitalias','addualunitalias',
      'skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','deletedualalias','adddualunitalias',
@@ -500,8 +500,6 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}**","Restores the the alias list or the group list, depending on the word used as `item`, from last backup.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['status'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*message__","Sets my status message to `message`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
-  elsif ['locateshards','locateshard','locate'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** #{"shard#{['','s'].sample}" if command.downcase=='locate'}","Informs you of one server you and I share for each kind of shard.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['devedit','dev_edit'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['create'].include?(subcommand.downcase)
@@ -542,7 +540,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"","__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
     create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`daily` - shows the current day's in-game daily events (*also `today` or `todayInFEH`*)\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`skillrarity` (*also `skill_rarity`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed(event,"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
-    create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**Mjolnr, the Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n`locateshards` - lists one server you are in for each color of shard.\n\n__**Meta Data Storage**__\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
+    create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**Mjolnr, the Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n\n__**Meta Data Storage**__\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
     event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command."
   end
 end
@@ -571,10 +569,10 @@ def overlap_prevent(event)
   # this function is used to prevent scenarios where both the main version of Elise and the debug version respond even though they're both in the emoji servers
   if event.server.nil? # failsafe code catching PMs as not a server
     return false
-  elsif event.server.id==443172595580534784 # The Weapon Emoji server is in the Verdant Shard so I want the main account to respond
+  elsif event.message.text.downcase.split(' ').include?('debug') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920].include?(event.server.id)
+    return @shardizard != 4 # the debug bot can be forced to be used in the emoji servers by including the word "debug" in your message
+  elsif [443172595580534784,443704357335203840,443181099494146068,449988713330769920].include?(event.server.id) # emoji servers will use default Elise otherwise
     return @shardizard == 4
-  elsif event.server.id==443181099494146068 || event.server.id==443704357335203840 || event.server.id==449988713330769920 # The Misc Emoji servers are in shards I already have access to, so I don't care
-    return @shardizard != 4
   elsif event.server.id==332249772180111360 # two identical commands cannot be used in the same minute in the FEHKeeper server
     canpost=true
     post=Time.now
@@ -2972,7 +2970,7 @@ def cumulitive_sp_cost(x,event)
   return x[1]+cumulitive_sp_cost(k,event)
 end
 
-def disp_skill(name,event,ignore=false)
+def disp_skill(bot,name,event,ignore=false)
   data_load()
   s=event.message.text
   s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
@@ -3045,12 +3043,12 @@ def disp_skill(name,event,ignore=false)
   skill=@skills[f]
   if skill[4]=='Weapon' && (" #{event.message.text.downcase} ".include?(' refinement ') || " #{event.message.text.downcase} ".include?(' (w) '))
     if skill[0]=='Falchion'
-      disp_skill('Drive Spectrum',event,ignore)
-      disp_skill('Double Lions',event,ignore)
-      disp_skill('Spectrum Bond',event,ignore)
+      disp_skill(bot,'Drive Spectrum',event,ignore)
+      disp_skill(bot,'Double Lions',event,ignore)
+      disp_skill(bot,'Spectrum Bond',event,ignore)
       return true
     elsif find_effect_name(skill,event).length>0
-      disp_skill(find_effect_name(skill,event),event,ignore)
+      disp_skill(bot,find_effect_name(skill,event),event,ignore)
       return true
     elsif !skill[15].nil?
       event.respond "#{skill[0]} does not have an Effect Mode.  Showing #{skill[0]}'s default data."
@@ -3138,6 +3136,9 @@ def disp_skill(name,event,ignore=false)
     if skill[0][skill[0].length-1,1]=='+' && skill[11].split(', ').include?("Seasonal")
       # seasonal + weapons come bundled with their non-plus selves, so their minimum inherited SP cost has to include the non-plus version as inherited as well
       cumul2+=@skills[@skills.find_index{|q| q[0]==skill[0].gsub('+','')}][1]/2
+    elsif skill[0][skill[0].length-1,1]=='+' && skill[5]=="Staff Users Only"
+      # seasonal + weapons come bundled with their non-plus selves, so their minimum inherited SP cost has to include the non-plus version as inherited as well
+      cumul2+=@skills[@skills.find_index{|q| q[0]==skill[0].gsub('+','')}][1]/2
     end
     str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
   elsif skill[4]=='Assist'
@@ -3147,7 +3148,12 @@ def disp_skill(name,event,ignore=false)
     str="#{str}\n**Heals:** #{skill[14]}" if skill[5]=="Staff Users Only"
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
     cumul=cumulitive_sp_cost(skill,event)
-    str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
+    cumul2=cumul+skill[1]/2
+    if skill[0][skill[0].length-1,1]=='+' && skill[5]=="Staff Users Only"
+      # seasonal + weapons come bundled with their non-plus selves, so their minimum inherited SP cost has to include the non-plus version as inherited as well
+      cumul2+=@skills[@skills.find_index{|q| q[0]==skill[0].gsub('+','')}][1]/2
+    end
+    str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
   elsif skill[4]=='Special'
     sklslt=['Special']
     xcolor=0xF67EF8
@@ -3464,7 +3470,14 @@ def disp_skill(name,event,ignore=false)
     create_embed(event,'__**Refinery Options**__',str,0x688C68,ftr,xpic)
   end
   if skill[0][0,15]=='Wrathful Staff '
-    event.respond "#{event.user.mention}\nAnyone who feeds me a Genny is a monster. <:nobully:443331186618793984> It's not my fault the game mechanics prevent me from protesting!\nHeck, now that the Weapon Refinery exists, you can just give my staff the Wrathful Mode upgrade, it pairs well with my high Magic stat."
+    p=''
+    p="\nSince #{bot.user(170070293493186561).distinct} is a fun-sucker, I guess I'll mention other healers.  It's still monsterous to feed Genny to them.  Almost more so, since I'm the healer who does the most attacking." if !event.server.nil? && !bot.user(170070293493186561).on(event.server.id).nil?
+    p="\nSince you're a fun-sucker, I guess I'll mention other healers.  It's still monsterous to feed Genny to them.  Almost more so, since I'm the healer who does the most attacking." if event.user.id==206993446223872002
+    event.respond "#{"#{event.user.mention}\n" unless event.user.id==206993446223872002}Anyone who feeds me a Genny is a monster. <:nobully:443331186618793984> It's not my fault the game mechanics prevent me from protesting!\nHeck, now that the Weapon Refinery exists, you can just give my staff the Wrathful Mode upgrade, it pairs well with my high Magic stat.#{p}"
+  elsif skill[0][0,15]=='Dazzling Staff ' && ((event.server.nil? && event.user.id==206993446223872002) || (!event.server.nil? && !bot.user(170070293493186561).on(event.server.id).nil?))
+    g=get_markers(event)
+    p=@units.reject{|q| !has_any?(g, q[13][0]) || q[12].gsub('*','').split(', ')[0]!='Lyn'}.uniq
+    event.respond "Go ahead, give the skill to whoever you want.  There's #{p} of her in the game, who would miss one?"
   end
 end
 
@@ -6452,7 +6465,8 @@ def find_alts(event,name,bot)
   end
   data_load()
   nicknames_load()
-  k=@units.reject{|q| q[12].gsub('*','').split(', ')[0]!=name}.uniq
+  g=get_markers(event)
+  k=@units.reject{|q| !has_any?(g, q[13][0]) || q[12].gsub('*','').split(', ')[0]!=name}.uniq
   untz2=[]
   color=[]
   for i in 0...k.length
@@ -9632,7 +9646,7 @@ bot.command(:skill) do |event, *args|
   end
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   data_load()
-  disp_skill(args.join(' '),event)
+  disp_skill(bot,args.join(' '),event)
   return nil
 end
 
@@ -11640,15 +11654,6 @@ bot.command(:leaveserver, from: 167657750971547648) do |event, server_id| # forc
   return nil
 end
 
-bot.command([:locateshards, :locate, :locateshards], from: 167657750971547648) do |event|
-  return nil if overlap_prevent(event)
-  return nil unless event.user.id==167657750971547648 # only work when used by the developer
-  event << '<:Shard_Colorless:443733396921909248> Transparent Shards are used in PMs and in server C-137.'
-  event << '<:Shard_Red:443733396842348545> Scarlet Shards are used in the FE Fates Fancord.'
-  event << '<:Shard_Blue:443733396741554181> Azure Shards are used in Penumbra.'
-  event << '<:Shard_Green:443733397190344714> Verdant Shards are used in my weapon emote server.'
-end
-
 bot.command(:cleanupaliases, from: 167657750971547648) do |event|
   return nil if overlap_prevent(event)
   event.channel.send_temporary_message('Please wait...',10)
@@ -12385,12 +12390,16 @@ bot.command(:snagstats) do |event, f, f2|
       event << "This server accounts for #{@groups.reject{|q| q[2].nil? || !q[2].include?(event.server.id)}.length} of those."
     end
     return nil
-  elsif event.user.id==167657750971547648 && @shardizard<4 && !f.nil? && f.to_i.to_s==f
-    srv=(bot.server(f.to_i) rescue nil)
-    if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
-      s2='I am not in that server.'
+  elsif event.user.id==167657750971547648 && !f.nil? && f.to_i.to_s==f
+    if @shardizard==4
+      s2="That server uses/would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(f.to_i >> 22) % 4]} Shards."
     else
-      s2="__**#{srv.name}** (#{srv.id})__\n*Owner:* #{srv.owner.distinct} (#{srv.owner.id})\n*Shard:* #{(srv.id >> 22) % 4}\n*My nickname:* #{bot.user(312451658908958721).on(srv.id).display_name}"
+      srv=(bot.server(f.to_i) rescue nil)
+      if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
+        s2="I am not in that server, but it would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(f.to_i >> 22) % 4]} Shards."
+      else
+        s2="__**#{srv.name}** (#{srv.id})__\n*Owner:* #{srv.owner.distinct} (#{srv.owner.id})\n*Shard:* #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(srv.id >> 22) % 4]}\n*My nickname:* #{bot.user(312451658908958721).on(srv.id).display_name}"
+      end
     end
     event.respond s2
     return nil
@@ -12533,15 +12542,15 @@ bot.message do |event|
     a=s.split(' ')
     if s.gsub(' ','').downcase=='laevatein'
       disp_stats(bot,'Lavatain',nil,event,true)
-      disp_skill('Bladeblade',event,true)
+      disp_skill(bot,'Bladeblade',event,true)
     elsif !all_commands(true).include?(a[0])
       str=find_name_in_string(event,nil,1)
       data_load()
       if find_skill(s,event,false,true)>=0
-        disp_skill(s,event,true)
+        disp_skill(bot,s,event,true)
       elsif str.nil?
         if find_skill(s,event)>=0
-          disp_skill(s,event,true)
+          disp_skill(bot,s,event,true)
         elsif !detect_multi_unit_alias(event,s.downcase,event.message.text.downcase).nil?
           x=detect_multi_unit_alias(event,s.downcase,event.message.text.downcase)
           event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -12562,7 +12571,7 @@ bot.message do |event|
           event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
         end
       elsif str[1].downcase=='ploy' && find_skill(stat_buffs(s,s),event)>=0
-        disp_skill(stat_buffs(s,s),event,true)
+        disp_skill(bot,stat_buffs(s,s),event,true)
       elsif !detect_multi_unit_alias(event,str[0].downcase,event.message.text.downcase).nil?
         x=detect_multi_unit_alias(event,str[0].downcase,event.message.text.downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -12612,6 +12621,7 @@ bot.message do |event|
     s=remove_format(s,'```')              # remove large code blocks
     s=remove_format(s,'`')                # remove small code blocks
     s=remove_format(s,'~~')               # remove crossed-out text
+    s=s.gsub("\n",' ').gsub("	",'')
     if s=='0x4' || s[0,4]=='0x4 ' || s[s.length-4,4]==' 0x4' || s.include?(' 0x4 ')
       canpost=true
       k=0
@@ -12624,8 +12634,9 @@ bot.message do |event|
           canpost=false
         end
       elsif event.channel.id==330850148261298176
-      else
-       event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{['','Pair it with a Breath skill to get 0x8 even faster.'].sample}",'Be sure to include Astra to increase damage by 150%.','Be sure to use a dancer for 0x8.',"Be sure to use Sol, so you can heal for half of that.  #{['','Peck, Ephraim(Fire) heals for 80% with his Solar Brace.','Pair it with a Breath skill to get even more healing!'].sample}","#{['Be sure to use Galeforce for 0x8.','Be sure to use a dancer for 0x8.'].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}" if canpost
+      elsif canpost
+        puts s
+        event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{['','Pair it with a Breath skill to get 0x8 even faster.'].sample}",'Be sure to include Astra to increase damage by 150%.','Be sure to use a dancer for 0x8.',"Be sure to use Sol, so you can heal for half of that.  #{['','Peck, Ephraim(Fire) heals for 80% with his Solar Brace.','Pair it with a Breath skill to get even more healing!'].sample}","#{['Be sure to use Galeforce for 0x8.','Be sure to use a dancer for 0x8.'].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}"
       end
     end
   end
