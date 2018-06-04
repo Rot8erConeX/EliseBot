@@ -14,7 +14,9 @@ ENV['TZ'] = 'America/Chicago'
 @scheduler = Rufus::Scheduler.new
 
 # All the possible command prefixes, not case insensitive so I have to fake it by including every combination of lower- and upper-case
-@prefix = ['FEH!','FEh!','FeH!','Feh!','fEH!','fEh!','feH!','feh!','FEH?','FEh?','FeH?','Feh?','fEH?','fEh?','feH?','feh?','f?','F?','e?','E?','h?','H?']
+@prefix = ['FEH!','FEh!','FeH!','Feh!','fEH!','fEh!','feH!','feh!',
+           'FEH?','FEh?','FeH?','Feh?','fEH?','fEh?','feH?','feh?',
+           'f?','F?','e?','E?','h?','H?']
 
 # The bot's token is basically their password, so is censored for obvious reasons
 if @shardizard==4
@@ -2214,6 +2216,7 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
       stat_skills_2.push(lookout[i][0]) if count_in(args,lookout[i][1])>i2
     end
   end
+  lokoout=lookout.map{|q| q[0]}
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
@@ -2660,6 +2663,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
   mu=false
   stat_skills_2=make_stat_skill_list_2(name,event,args)
   tempest=get_bonus_type(event)
+  diff_num=[0,'','']
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
@@ -2687,9 +2691,21 @@ def disp_stats(bot,name,weapon,event,ignore=false)
       event.respond 'Mathoo does not have that character.  Showing neutral stats.'
     end
   elsif " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
-    uskl=unit_skills(name,event,true)[0].reject{|q| q.include?('~~')}
-    weapon='-'
-    weapon=uskl[uskl.length-1] if uskl.length>0
+    if name=='Robin'
+      uskl=unit_skills('Robin(M)',event,true)[0].reject{|q| q.include?('~~')}
+      uskl2=unit_skills('Robin(F)',event,true)[0].reject{|q| q.include?('~~')}
+      weapon='-'
+      weapon2='-'
+      weapon=uskl[uskl.length-1] if uskl.length>0
+      weapon2=uskl2[uskl2.length-1] if uskl2.length>0
+      w2=@skills[find_skill(weapon,event)]
+      w22=@skills[find_skill(weapon2,event)]
+      diff_num=[w2[2]-w22[2],'M','F']
+    else
+      uskl=unit_skills(name,event,true)[0].reject{|q| q.include?('~~')}
+      weapon='-'
+      weapon=uskl[uskl.length-1] if uskl.length>0
+    end
     summoner='-'
     tempest=''
     stat_skills=[]
@@ -2709,8 +2725,24 @@ def disp_stats(bot,name,weapon,event,ignore=false)
   refinement=nil if w2[5]!='Staff Users Only' && ['Wrathful','Dazzling'].include?(refinement)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
   unitz=@units[find_unit(name,event)]
-  wl=weapon_legality(event,unitz[0],weapon,refinement)
-  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  spec_wpn=false
+  if name=='Robin'
+    if " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
+      spec_wpn=true
+      wl=weapon_legality(event,'Robin(M)',weapon)
+      wl2=weapon_legality(event,'Robin(F)',weapon2)
+      wl="#{wl}(M) / #{wl2}(F)"
+    else
+      spec_wpn=true
+      wl=weapon_legality(event,'Robin(M)',weapon)
+      wl2=weapon_legality(event,'Robin(F)',weapon)
+      wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+    end
+  end
+  unless spec_wpn
+    wl=weapon_legality(event,unitz[0],weapon,refinement)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  end
   if find_unit(name,event)<0
     event.respond 'No unit was included' unless ignore
     return nil
@@ -2771,8 +2803,17 @@ def disp_stats(bot,name,weapon,event,ignore=false)
         u40[s[i][1]]+=1
       end
     end
-    wl=weapon_legality(event,u40[0],weapon,refinement)
-    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+    spec_wpn=false
+    if name=='Robin'
+      spec_wpn=true
+      wl=weapon_legality(event,'Robin(M)',weapon)
+      wl2=weapon_legality(event,'Robin(F)',weapon)
+      wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+    end
+    unless spec_wpn
+      wl=weapon_legality(event,unitz[0],weapon,refinement)
+      weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+    end
     tempest=get_bonus_type(event)
     cru40=u40.map{|a| a}
     u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
@@ -2786,7 +2827,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
     u40=make_stat_string_list_2(u40,cru40) if wl.include?('~~')
     ftr="Please note that the #{atk} stat displayed here does not include weapon might.  The Attack stat in-game does."
     ftr=nil if weapon != '-'
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0}#{"	\u2764 **#{summoner}**" unless summoner=='-'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","HP: unknown\n#{atk}: unknown\nSpeed: unknown\nDefense: unknown\nResistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"]],1)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0}#{"	\u2764 **#{summoner}**" unless summoner=='-'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","HP: unknown\n#{atk}: unknown\nSpeed: unknown\nDefense: unknown\nResistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","HP: #{u40[1]}\n#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"]],1)
     return nil
   end
   data_load()
@@ -2825,8 +2866,10 @@ def disp_stats(bot,name,weapon,event,ignore=false)
     xcolor=avg_color([[39,100,222],[9,170,36]])
     w='*Tome*'
   end
-  wl=weapon_legality(event,u40[0],weapon,refinement)
-  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  unless spec_wpn
+    wl=weapon_legality(event,u40[0],weapon,refinement)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  end
   cru40=u40.map{|a| a}
   u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
   cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing)
@@ -2853,11 +2896,11 @@ def disp_stats(bot,name,weapon,event,ignore=false)
     tr=skill_tier(weapon,event)
     ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ")
   end
-  flds=[["**Level 1#{" +#{merges}" if merges>0}**",["HP: #{u1[1]}","#{atk}: #{u1[2]}","Speed: #{u1[3]}","Defense: #{u1[4]}","Resistance: #{u1[5]}","","BST: #{u1[6]}"]]]
+  flds=[["**Level 1#{" +#{merges}" if merges>0}**",["HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","Speed: #{u1[3]}","Defense: #{u1[4]}","Resistance: #{u1[5]}","","BST: #{u1[6]}"]]]
   if args.include?('gps') || args.include?('gp') || args.include?('growths') || args.include?('growth')
     flds.push(["**Growth Points**",["HP: #{u40[6]}","#{atk}: #{u40[7]}","Speed: #{u40[8]}","Defense: #{u40[9]}","Resistance: #{u40[10]}","","GPT: #{u40[6]+u40[7]+u40[8]+u40[9]+u40[10]}"]])
   end
-  flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["HP: #{u40[1]}","#{atk}: #{u40[2]}","Speed: #{u40[3]}","Defense: #{u40[4]}","Resistance: #{u40[5]}","","BST: #{u40[16]}"]])
+  flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","Speed: #{u40[3]}","Defense: #{u40[4]}","Resistance: #{u40[5]}","","BST: #{u40[16]}"]])
   superbaan=['','','','','','']
   if boon=="" && bane=="" && ((stat_skills_2.length<=0 && !wl.include?('~~')) || flds.length==3)
     for i in 6...11
@@ -5992,7 +6035,7 @@ def skill_comparison(event,args)
   return 2
 end
 
-def weapon_legality(event,name,weapon,refinement,recursion=false)
+def weapon_legality(event,name,weapon,refinement='-',recursion=false)
   return '-' if weapon=='-'
   u=@units[find_unit(name,event)]
   w=@skills[find_weapon(weapon,event)]
@@ -6708,12 +6751,19 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
-  wl=weapon_legality(event,u40[0],weapon,refinement)
-  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  spec_wpn=false
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
     xcolor=avg_color([[39,100,222],[9,170,36]])
     w='*Tome*'
+    spec_wpn=true
+    wl=weapon_legality(event,'Robin(M)',weapon)
+    wl2=weapon_legality(event,'Robin(F)',weapon)
+    wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+  end
+  unless spec_wpn
+    wl=weapon_legality(event,unitz[0],weapon,refinement)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|a| a}
   u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
@@ -7060,12 +7110,19 @@ def heal_study(event,name,bot,weapon=nil)
     n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
-  wl=weapon_legality(event,u40[0],weapon,refinement)
-  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  spec_wpn=false
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
     xcolor=avg_color([[39,100,222],[9,170,36]])
     w='*Tome*'
+    spec_wpn=true
+    wl=weapon_legality(event,'Robin(M)',weapon)
+    wl2=weapon_legality(event,'Robin(F)',weapon)
+    wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+  end
+  unless spec_wpn
+    wl=weapon_legality(event,unitz[0],weapon,refinement)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|q| q}
   u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
@@ -7293,12 +7350,19 @@ def proc_study(event,name,bot,weapon=nil)
     n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
-  wl=weapon_legality(event,u40[0],weapon,refinement)
-  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  spec_wpn=false
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
     xcolor=avg_color([[39,100,222],[9,170,36]])
     w='*Tome*'
+    spec_wpn=true
+    wl=weapon_legality(event,'Robin(M)',weapon)
+    wl2=weapon_legality(event,'Robin(F)',weapon)
+    wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+  end
+  unless spec_wpn
+    wl=weapon_legality(event,unitz[0],weapon,refinement)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|q| q}
   u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
@@ -7615,12 +7679,19 @@ def phase_study(event,name,bot,weapon=nil)
     n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
-  wl=weapon_legality(event,u40[0],weapon,refinement)
-  weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  spec_wpn=false
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
     xcolor=avg_color([[39,100,222],[9,170,36]])
     w='*Tome*'
+    spec_wpn=true
+    wl=weapon_legality(event,'Robin(M)',weapon)
+    wl2=weapon_legality(event,'Robin(F)',weapon)
+    wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+  end
+  unless spec_wpn
+    wl=weapon_legality(event,unitz[0],weapon,refinement)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|a| a}
   u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
@@ -11153,7 +11224,7 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   str="#{str}\n"
   str="#{str}\nDate assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
   str="#{str}\nDays since game release: #{longFormattedNumber(date)}"
-  if event.user.id==167657750971547648
+  if event.user.id==167657750971547648 && @shardizard==4
     str="#{str}\nDaycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12"
     str="#{str}\nWeekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday)"
   end
@@ -11247,7 +11318,7 @@ bot.command([:next,:schedule]) do |event, type|
   t2=t-t2
   date=(((t2.to_i/60)/60)/24)
   msg=extend_message(msg,"Days since game release: #{longFormattedNumber(date)}",event)
-  if event.user.id==167657750971547648
+  if event.user.id==167657750971547648 && @shardizard==4
     msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
     msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday)",event)
   end
