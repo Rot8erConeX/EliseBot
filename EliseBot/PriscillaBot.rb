@@ -5047,7 +5047,14 @@ def display_skills(event, mode)
     if k.include?('- - -')
       p1=[[]]
       p2=0
-      typesx=k.reject{|q| q=='- - -'}.map{|q| @skills[find_skill(stat_buffs(q.gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('(El)','').gsub('Flux/Ruin/Fenrir(+)','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver(+)','Iron').gsub('(+)','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').split('/')[0]),event)]}
+      typesx=[]
+      for i in 0...k.length
+        unless k[i]=='- - -'
+          f=k[i].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('(El)','').gsub('Flux/Ruin/Fenrir(+)','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver(+)','Iron').gsub('(+)','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron')
+          f=f.split('/')[0] if find_skill(stat_buffs(f),event)<0
+          typesx.push(@skills[find_skill(stat_buffs(f),event)])
+        end
+      end
       colors=[]
       if typesx.reject{|q| q[4]!='Weapon'}==typesx
         colors.push('Red') if typesx.reject{|q| !q[11].split(', ').include?('Red')}==typesx
@@ -5071,7 +5078,14 @@ def display_skills(event, mode)
         end
       end
       for i in 0...p1.length
-        typesx=p1[i].map{|q| @skills[find_skill(stat_buffs(q.gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('(El)','').gsub('Flux/Ruin/Fenrir(+)','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver(+)','Iron').gsub('(+)','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').split('/')[0]),event)]}
+        typesx=[]
+        for i2 in 0...p1[i].length
+          unless p1[i][i2]=='- - -'
+            f=p1[i][i2].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('(El)','').gsub('Flux/Ruin/Fenrir(+)','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver(+)','Iron').gsub('(+)','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron')
+            f=f.split('/')[0] if find_skill(stat_buffs(f),event)<0
+            typesx.push(@skills[find_skill(stat_buffs(f),event)])
+          end
+        end
         types=typesx.map{|q| [q[4],q[5],find_base_skill(q,event)]}.uniq
         types2=typesx.map{|q| q[4]}.uniq
         types3=typesx.map{|q| q[3].split(' ')[0].downcase}.uniq
