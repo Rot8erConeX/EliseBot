@@ -1524,7 +1524,7 @@ def find_name_in_string(event,stringx=nil,mode=0)
           name=args3[0]
         end
       end
-    elsif name=='Nino(Launch)' || name=='Nino(Wings)'
+    elsif name=='Nino(Launch)' || name=='Nino(Fangs)'
       if args3.length==1
         if ['nino'].include?(args3[0].downcase)
           name='nino'
@@ -1621,7 +1621,7 @@ def find_name_in_string(event,stringx=nil,mode=0)
           name=args3[0]
         end
       end
-    elsif name=='Nino(Launch)' || name=='Nino(Wings)'
+    elsif name=='Nino(Launch)' || name=='Nino(Fangs)'
       if args3.length==1
         if ['nino'].include?(args3[0].downcase)
           name='nino'
@@ -1720,7 +1720,7 @@ def find_name_in_string(event,stringx=nil,mode=0)
           name=args3[0]
         end
       end
-    elsif name=='Nino(Launch)' || name=='Nino(Wings)'
+    elsif name=='Nino(Launch)' || name=='Nino(Fangs)'
       if args3.length==1
         if ['nino'].include?(args3[0].downcase)
           name='nino'
@@ -5727,6 +5727,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Hinoka(Launch)','Hinoka(Wings)'],[str]]
   elsif /nino/ =~ str1
+    puts nino
     str='nino'
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
