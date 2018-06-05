@@ -1076,6 +1076,9 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   return find_skill(name.downcase.gsub('lnd','lifeanddeath'),event,true) if name.downcase.include?('lnd') && find_skill(name.downcase.gsub('lnd','lifeanddeath'),event,true)>=0
   return find_skill(name.downcase.gsub('l&d','lifeanddeath'),event,true) if name.downcase.include?('lnd') && find_skill(name.downcase.gsub('l&d','lifeanddeath'),event,true)>=0
   return find_skill(name.downcase.gsub('berserker','berserk'),event,true) if name.downcase.include?('berserker') && find_skill(name.downcase.gsub('berserker','berserk'),event,true)>=0
+  return find_skill("the#{name.downcase.gsub(' ','')}",event) if find_skill("the#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("the#{name.downcase.gsub(' ','')}",event,true)][0][0,4]=='The '
+  return find_skill("a#{name.downcase.gsub(' ','')}",event) if find_skill("a#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("a#{name.downcase.gsub(' ','')}",event,true)][0][0,2]=='A '
+  return find_skill("an#{name.downcase.gsub(' ','')}",event) if find_skill("an#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("an#{name.downcase.gsub(' ','')}",event,true)][0][0,3]=='An '
   # ...including non-American spellings of official words
   return find_skill(name.downcase.gsub('defence','defense'),event,true) if name.downcase.include?('defence') && find_skill(name.downcase.gsub('defence','defense'),event,true)>=0
   return find_skill(name.downcase.gsub('armour','armor'),event,true) if name.downcase.include?('armour') && find_skill(name.downcase.gsub('armour','armor'),event,true)>=0
@@ -1521,6 +1524,14 @@ def find_name_in_string(event,stringx=nil,mode=0)
           name=args3[0]
         end
       end
+    elsif name=='Nino(Launch)' || name=='Nino(Wings)'
+      if args3.length==1
+        if ['nino'].include?(args3[0].downcase)
+          name='nino'
+        else
+          name=args3[0]
+        end
+      end
     elsif name=='Chrom(Launch)' || name=='Chrom(Branded)'
       if args3.length==1
         if ['chrom'].include?(args3[0].downcase)
@@ -1606,6 +1617,14 @@ def find_name_in_string(event,stringx=nil,mode=0)
       if args3.length==1
         if ['hinoka'].include?(args3[0].downcase)
           name='Hinoka'
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=='Nino(Launch)' || name=='Nino(Wings)'
+      if args3.length==1
+        if ['nino'].include?(args3[0].downcase)
+          name='nino'
         else
           name=args3[0]
         end
@@ -1697,6 +1716,14 @@ def find_name_in_string(event,stringx=nil,mode=0)
       if args3.length==1
         if ['hinoka'].include?(args3[0].downcase)
           name='Hinoka'
+        else
+          name=args3[0]
+        end
+      end
+    elsif name=='Nino(Launch)' || name=='Nino(Wings)'
+      if args3.length==1
+        if ['nino'].include?(args3[0].downcase)
+          name='nino'
         else
           name=args3[0]
         end
@@ -3280,7 +3307,7 @@ def disp_skill(bot,name,event,ignore=false)
         prm[i]=nil if find_unit(sklll[0],event,false,true)<0
       end
     end
-    str="#{str}\n**Evolves into:** #{list_lift(prm,"or")}"
+    str="#{str}\n**Evolves into:** #{list_lift(prm.map{|q| "*#{q}*"},"or")}"
   elsif skill[0]=='Falchion'
     sk1=@skills[find_skill('Falchion (Mystery)',event,true,true)]
     sk2=@skills[find_skill('Falchion (Echoes)',event,true,true)]
@@ -5247,7 +5274,7 @@ def display_skills(event, mode)
   elsif !safe_to_spam?(event)
   else
     t=k[0]
-    if k.length>1
+    if k.is_a?(Array) && k.length>1
       for i in 1...k.length
         st=extend_message(t,k[i],event)
       end
@@ -5699,6 +5726,17 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Hinoka(Launch)','Hinoka(Wings)'],[str]]
+  elsif /nino/ =~ str1
+    str='nino'
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
+      return [str,['Nino(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch"]]
+    elsif str2.include?('fangs') || str2.include?('fanged') || str2.include?('fang')
+      return [str,['Nino(Fangs)'],["wings#{str}","#{str}wings","kinshi#{str}","#{str}kinshi","winged#{str}","#{str}winged","#{str}2"]]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Nino(Launch)','Nino(Fangs)'],[str]]
   elsif /(chrom|kuromu)/ =~ str1
     str='chrom'
     str='kuromu' if str2.include?('kuromu')
@@ -11708,7 +11746,7 @@ end
 
 bot.command(:sendmessage, from: 167657750971547648) do |event, channel_id, *args| # sends a message to a specific channel
   return nil if overlap_prevent(event)
-  return nil unless event.server.nil? || event.server.id==443172595580534784
+  return nil unless event.server.nil? || [443172595580534784,443181099494146068,443704357335203840,449988713330769920].include?(event.server.id)
   if event.user.id==167657750971547648
   else
     event.respond 'Are you trying to use the `bugreport`, `suggestion`, or `feedback` command?'
