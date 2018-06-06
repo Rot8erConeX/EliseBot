@@ -93,7 +93,7 @@ bot.gateway.check_heartbeat_acks = false
           ["`\u22C1`Fragile",'HP','Defense',true],
           ["`\u22C1`Excitable",'HP','Resistance',true]]
 
-def all_commands(include_nil=false) # a list of all the command names.  Used by Nino Mode to ignore messages that are commands, so responses do not double up.
+def all_commands(include_nil=false,permissions=-1) # a list of all the command names.  Used by Nino Mode to ignore messages that are commands, so responses do not double up.
   k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','next','effect','commands',
      'sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','commandlist','command_list',
      'removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','today_in_feh','todayinfeh',
@@ -114,6 +114,16 @@ def all_commands(include_nil=false) # a list of all the command names.  Used by 
      'skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','addmultialias','schedule',
      'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','banners','banner',
      'skillearnable','alts','alt','reload']
+  if permissions==0
+    k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
+  elsif permissions==1
+    k=['addalias','deletealias','removealias','addgroup','deletegroup','removegroup','removemember','removefromgroup']
+  elsif permissions==2
+    k=['reboot','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti','deletemultialias',
+       'deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias','removedualalias','removemultiunitalias','removedualunitalias','removemulti',
+       'removefrommultialias','removefromdualalias','removefrommultiunitalias','removefromdualunitalias','removefrommulti','sendpm','ignoreuser','sendmessage','leaveserver',
+       'cleanupaliases','backup','restore','devedit','dev_edit','status','setmarker','snagchannels','reload']
+  end
   k[0]=nil if include_nil
   return k
 end
@@ -375,8 +385,10 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of aliases in each of the three categories - global single-unit, server-specific [single-unit], and [global] multi-unit.\nAlso returns specifics about the most frequent instances of each category",0x40C0F0)
     elsif ['groups','group','groupings','grouping'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of groups in each of the two categories - global and server-specific.\nAlso returns specifics about the dynamically-created global groups.",0x40C0F0)
+    elsif ['code','lines','line','sloc'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the specifics about my code, including number of commands and functions, as well as - if in PM - loops, statements, and conditionals.",0x40C0F0)
     else
-      create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s)\nUnit(s), Character(s), Char(a)(s)\nSkill(s)\nAlias(es), Name(s), Nickname(s)\nAlt(s)",0x40C0F0)
+      create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s)\nUnit(s), Character(s), Char(a)(s)\nAlt(s)\nSkill(s)\nAlias(es), Name(s), Nickname(s)\nCode, Line(s), SLOC",0x40C0F0)
     end
   elsif command.downcase=='shard'
     create_embed(event,'**shard**','Returns the shard that this server is served by.',0x40C0F0)
@@ -2174,6 +2186,8 @@ end
 def count_in(arr,str)
   if str.is_a?(Array)
     return arr.count{|x| str.map{|y| y.downcase}.include?(x.downcase)}
+  elsif arr.is_a?(String)
+    return arr.chars.count{|x| x.downcase==str.downcase}
   end
   return arr.count{|x| x.downcase==str.downcase}
 end
@@ -10373,7 +10387,7 @@ bot.command(:addgroup) do |event, groupname, *args|
     event.respond 'This group is dynamic, automatically updating when a new unit that fits the criteria appears.'
     return nil
   elsif ![167657750971547648,208905989619974144,168592191189417984].include?(event.user.id) && !is_mod?(event.user,event.server,event.channel)
-    event.respond 'You do not have the privileges to use this command.'
+    event.respond 'You are not a mod.'
     return nil
   elsif find_group(groupname,event)>-1 && @groups[find_group(groupname,event)][2].nil? && event.user.id != 167657750971547648
     event.respond 'You do not have the privileges to edit this global group.'
@@ -10494,7 +10508,7 @@ bot.command([:deletegroup,:removegroup]) do |event, name|
     event.respond "The group #{name} doesn't even exist in the first place, silly!"
     return nil
   elsif !is_mod?(event.user,event.server,event.channel)
-    event.respond 'You do not have the privileges to use this command.'
+    event.respond 'You are not a mod.'
     return nil
   elsif find_group(groupname,event)>-1 && @groups[find_group(groupname,event)][2].nil? && event.user.id != 167657750971547648
     event.respond 'You do not have the privileges to edit this global group.'
@@ -10557,7 +10571,7 @@ bot.command([:removemember,:removefromgroup]) do |event, group, unit|
     event << "The unit #{unit} doesn't even exist in the first place, silly!" if find_unit(unit.downcase)<0
     return nil
   elsif ![167657750971547648,208905989619974144,168592191189417984].include?(event.user.id) && !is_mod?(event.user,event.server,event.channel)
-    event.respond 'You do not have the privileges to use this command.'
+    event.respond 'You are not a mod.'
     return nil
   elsif find_group(groupname,event)>-1 && @groups[find_group(groupname,event)][2].nil? && event.user.id != 167657750971547648
     event.respond 'You do not have the privileges to edit this global group.'
@@ -11060,17 +11074,7 @@ bot.command([:headpat,:patpat,:pat]) do |event|
     @headpats[z]=1
   end
   metadata_save()
-  if event.user.id==270372601107447808
-    event << "~~This is the #{longFormattedNumber(@headpats[1],true)} time you have given me a headpat.~~"
-    z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-    z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-    event << "~~#{z}% of the attempted headpats were performed by you.~~"
-  elsif event.user.id==261321388344868867
-    event << "~~This is the #{longFormattedNumber(@headpats[2],true)} time you have given me a headpat.~~"
-    z=(@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-    z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-    event << "~~#{z}% of the attempted headpats were performed by you.~~"
-  elsif event.user.id==167657750971547648
+  if event.user.id==167657750971547648 || event.message.text.downcase.split(' ').include?('stats')
     event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[1]+@headpats[2],true)} time someone has tried to give me a headpat.~~"
     event << ""
     if event.server.nil?
@@ -11111,6 +11115,16 @@ bot.command([:headpat,:patpat,:pat]) do |event|
         event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0]+@headpats[1])} time#{"s" unless @headpats[0]+@headpats[1]==1}, which is #{z}% of the headpats I've received.~~"
       end
     end
+  elsif event.user.id==270372601107447808
+    event << "~~This is the #{longFormattedNumber(@headpats[1],true)} time you have given me a headpat.~~"
+    z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+    z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+    event << "~~#{z}% of the attempted headpats were performed by you.~~"
+  elsif event.user.id==261321388344868867
+    event << "~~This is the #{longFormattedNumber(@headpats[2],true)} time you have given me a headpat.~~"
+    z=(@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+    z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+    event << "~~#{z}% of the attempted headpats were performed by you.~~"
   elsif event.server.nil?
     event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[1]+@headpats[2],true)} time someone has tried to give me a headpat.~~"
   elsif !bot.user(270372601107447808).on(event.server.id).nil?
@@ -12549,6 +12563,46 @@ bot.command(:snagstats) do |event, f, f2|
       event << "This server accounts for #{@groups.reject{|q| q[2].nil? || !q[2].include?(event.server.id)}.length} of those."
     end
     return nil
+  elsif ['code','lines','line','sloc'].include?(f.downcase)
+    event.channel.send_temporary_message('Calculating data, please wait...',3)
+    b=[[],[]]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
+      l=line.gsub("\n",'')
+      b[0].push(l)
+      l=line.gsub("\n",'').gsub(' ','')
+      b[1].push(l) unless l.length<=0
+    end
+    event << "**I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long.**"
+    event << "Of those, #{longFormattedNumber(b[1].length)} are SLOC (non-empty)."
+    event << "~~When fully collapsed, I appear to be #{longFormattedNumber(b[0].reject{|q| q.length>0 && (q[0,2]=='  ' || q[0,3]=='end' || q[0,4]=='else')}.length)} lines of code long.~~"
+    event << ''
+    event << "**There are #{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command('}.length)} commands, invoked with #{longFormattedNumber(all_commands().length)} different phrases.**"
+    event << 'This includes:'
+    event << "#{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command(' || q.include?('from: 167657750971547648')}.length-b[0].reject{|q| q.gsub('  ','')!="event.respond 'You are not a mod.'"}.length)} global commands, invoked with #{longFormattedNumber(all_commands(false,0).length)} different phrases."
+    event << "#{longFormattedNumber(b[0].reject{|q| q.gsub('  ','')!="event.respond 'You are not a mod.'"}.length)} mod-only commands, invoked with #{longFormattedNumber(all_commands(false,1).length)} different phrases."
+    event << "#{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command(' || !q.include?('from: 167657750971547648')}.length)} dev-only commands, invoked with #{longFormattedNumber(all_commands(false,2).length)} different phrases."
+    event << ''
+    event << "**There are #{longFormattedNumber(@prefix.map{|q| q.downcase}.uniq.length)} command prefixes**, but because I am faking case-insensitivity it's actually #{longFormattedNumber(@prefix.length)} prefixes."
+    event << ''
+    event << "**There are #{longFormattedNumber(b[0].reject{|q| q[0,4]!='def '}.length)} functions the commands use.**"
+    if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
+      b=b[0].map{|q| q.gsub('  ','')}.reject{|q| q.length<=0}
+      for i in 0...b.length
+        b[i]=b[i][1,b[i].length-1] if b[i][0,1]==' '
+      end
+      event << ''
+      event << 'There are:'
+      event << "#{longFormattedNumber(b.reject{|q| q[0,4]!='for '}.length)} `for` loops."
+      event << "#{longFormattedNumber(b.reject{|q| q[0,6]!='while '}.length)} `while` loops."
+      event << "#{longFormattedNumber(b.reject{|q| q[0,3]!='if '}.length)} `if` trees, along with #{longFormattedNumber(b.reject{|q| q[0,6]!='elsif '}.length)} `elsif` branches and #{longFormattedNumber(b.reject{|q| q[0,4]!='else'}.length)} `else` branches."
+      event << "#{longFormattedNumber(b.reject{|q| q[0,7]!='unless '}.length)} `unless` trees."
+      event << "#{longFormattedNumber(b.reject{|q| count_in(q,'[')<=count_in(q,']')}.length)} multi-line arrays."
+      event << "#{longFormattedNumber(b.reject{|q| count_in(q,'{')<=count_in(q,'}')}.length)} multi-line hashes."
+      event << "#{longFormattedNumber(b.reject{|q| q[0,3]=='if ' || !remove_format(remove_format(q,"'"),'"').include?(' if ')}.length)} single-line `if` conditionals."
+      event << "#{longFormattedNumber(b.reject{|q| q[0,7]=='unless ' || !remove_format(remove_format(q,"'"),'"').include?(' unless ')}.length)} single-line `unless` conditionals."
+      event << "#{longFormattedNumber(b.reject{|q| q[0,7]!='return '}.length)} `return` lines."
+    end
+    return nil
   elsif event.user.id==167657750971547648 && !f.nil? && f.to_i.to_s==f
     if @shardizard==4
       s2="That server uses/would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(f.to_i >> 22) % 4]} Shards."
@@ -12596,7 +12650,7 @@ bot.command(:snagstats) do |event, f, f2|
   event << ''
   event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific *groups*."
   event << ''
-  event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
+  event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of *code* long."
   event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
   return nil
 end
