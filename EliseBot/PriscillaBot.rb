@@ -5,6 +5,7 @@ system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][@sh
 require 'discordrb'                    # Download link: https://github.com/meew0/discordrb
 require 'open-uri'                     # pre-installed with Ruby in Windows
 require 'net/http'                     # pre-installed with Ruby in Windows
+require 'certified'
 require 'tzinfo/data'                  # Downloaded with active_support below, but the require must be above active_support's require
 require 'rufus-scheduler'              # Download link: https://github.com/jmettraux/rufus-scheduler
 require 'active_support/core_ext/time' # Download link: https://rubygems.org/gems/activesupport/versions/5.0.0
@@ -112,7 +113,7 @@ def all_commands(include_nil=false) # a list of all the command names.  Used by 
      'skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','addualalias','adddualalias',
      'skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','addmultialias','schedule',
      'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','banners','banner',
-     'skillearnable','alts','alt']
+     'skillearnable','alts','alt','reload']
   k[0]=nil if include_nil
   return k
 end
@@ -499,7 +500,9 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['backup'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __item__","Backs up the alias list or the group list, depending on the word used as `item`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['restore'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}**","Restores the the alias list or the group list, depending on the word used as `item`, from last backup.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+    create_embed(event,"**#{command.downcase}** __item__","Restores the the alias list or the group list, depending on the word used as `item`, from last backup.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+  elsif ['reload'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}**","Reloads the unit and skill data, based on the remote entries stored on GitHub.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['status'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*message__","Sets my status message to `message`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['devedit','dev_edit'].include?(command.downcase)
@@ -542,7 +545,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"","__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
     create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`daily` - shows the current day's in-game daily events (*also `today` or `todayInFEH`*)\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`skillrarity` (*also `skill_rarity`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed(event,"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
-    create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**Mjolnr, the Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n\n__**Meta Data Storage**__\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
+    create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**Mjolnr, the Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n\n__**Meta Data Storage**__\n`reload` - reloads the unit and skill data\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
     event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command."
   end
 end
@@ -3216,6 +3219,8 @@ def disp_skill(bot,name,event,ignore=false)
       s='<:Red_Blade:443172811830198282> / Sword (Red Blade)' if s=='Sword'
       s='<:Blue_Blade:443172811582996480> / Lance (Blue Blade)' if s=='Lance'
       s='<:Green_Blade:443172811721146368> / Axe (Green Blade)' if s=='Axe'
+      s='<:Summon_Gun:453639908968628229> / Summon Gun' if s=='Summon Gun'
+      s="<:Gold_Unknown:443172811499110411> / #{s}" unless s.include?(' / ')
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     end
     str="#{str}\n**Stats affected:** #{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}"
@@ -6845,7 +6850,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
   end
   unless spec_wpn
-    wl=weapon_legality(event,unitz[0],weapon,refinement)
+    wl=weapon_legality(event,u40[0],weapon,refinement)
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|a| a}
@@ -7204,7 +7209,7 @@ def heal_study(event,name,bot,weapon=nil)
     wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
   end
   unless spec_wpn
-    wl=weapon_legality(event,unitz[0],weapon,refinement)
+    wl=weapon_legality(event,u40[0],weapon,refinement)
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|q| q}
@@ -7444,7 +7449,7 @@ def proc_study(event,name,bot,weapon=nil)
     wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
   end
   unless spec_wpn
-    wl=weapon_legality(event,unitz[0],weapon,refinement)
+    wl=weapon_legality(event,u40[0],weapon,refinement)
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|q| q}
@@ -7773,7 +7778,7 @@ def phase_study(event,name,bot,weapon=nil)
     wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
   end
   unless spec_wpn
-    wl=weapon_legality(event,unitz[0],weapon,refinement)
+    wl=weapon_legality(event,u40[0],weapon,refinement)
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|a| a}
@@ -9217,7 +9222,7 @@ bot.command([:skillrarity,:onestar,:twostar,:threestar,:fourstar,:fivestar,:skil
   end
   if " #{event.message.text.downcase} ".include?(' progression ')
     create_embed(event,"__**Non-healers**__","",xcolor,"Most non-healer units have one Scenario X passive and one Scenario Y passive",nil,[["__<:Skill_Weapon:444078171114045450> **Weapons**__","Tier 1 (*Iron, basic magic*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Steel, El- magic, Fire Breath+*) - Default at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 (*Silver, super magic*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~unless a Dragon breath weapon with built-in Frostbite~~, default at 4<:Icon_Rarity_4:448266418459377684>\nTier 4 (*+ weapons other than Fire Breath+, Prf weapons*) - default at 5<:Icon_Rarity_5:448266417553539104>\nRetro-Prfs (*Felicia's Plate*) - Available at 5<:Icon_Rarity_5:448266417553539104>, promotes from nothing",1],["__<:Skill_Assist:444078171025965066> **Assists**__","Tier 1 (*Rallies, Dance/Sing, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Sharena has hers default at 2\\*~~\nTier 2 (*Double Rallies*) - Available at 4<:Icon_Rarity_4:448266418459377684>\nPrf Assists (*Sacrifice*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Skill_Special:444078170665254929> **Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Daylight, New Moon, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Alfonse and Anna have theirs default at 2\\*~~\nTier 2 (*Sol, Luna, etc.*) - Available at 4<:Icon_Rarity_4:448266418459377684> ~~Jaffar and Saber have theirs also default at 5\\*~~\nTier 3 (*Galeforce, Aether, Prf Specials*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Passive_X:444078170900135936> **Passives (scenario X)**__","Tier 1 - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 - Available at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>"],["__<:Passive_Y:444078171113914368> **Passives (scenario Y)**__","Tier 1 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 3 - Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Prf:444078170887553024> **Prf Passives**__","Available at 5<:Icon_Rarity_5:448266417553539104>"]],2)
-    create_embed(event,"__**Healers**__","",0x64757D,"Most healers have a Scenario Y passive",nil,[["__#{"<:Colorless_Staff:443692132323295243>" unless colored_healers?(event)}#{"<:Gold_Staff:443172811628871720>" if colored_healers?(event)} **Damaging Staves**__","Tier 1 (*only Assault*) - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*non-plus staves*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Lyn(Bride) has hers default at 5\\*~~\nTier 3 (*+ staves, Prf weapons*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Assist_Staff:443603018269720596> **Healing Staves**__","Tier 1 (*Heal*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Mend, Reconcile*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 (*all other non-plus staves*) - Available at 4<:Icon_Rarity_4:448266418459377684>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 4 (*+ staves, Prf staves if healers got them*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Special_Healer:443578910605574154> **Healer Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Imbue*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 (*Balms, Heavenly Light*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nPrf Specials (*no examples yet, but they may come*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Passive_X:444078170900135936> **Passives (scenario X)**__","Tier 1 - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 - Available at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>"],["__<:Passive_Y:444078171113914368> **Passives (scenario Y)**__","Tier 1 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 3 - Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Prf:444078170887553024> **Prf Passives**__","Available at 5<:Icon_Rarity_5:448266417553539104>"]],2)
+    create_embed(event,"__**Healers**__","",0x64757D,"Most healers have a Scenario Y passive",nil,[["__#{"<:Colorless_Staff:443692132323295243>" unless colored_healers?(event)}#{"<:Gold_Staff:443172811628871720>" if colored_healers?(event)} **Damaging Staves**__","Tier 1 (*only Assault*) - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*non-plus staves*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Lyn(Bride) has hers default when summoned~~\nTier 3 (*+ staves, Prf weapons*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Assist_Staff:443603018269720596> **Healing Staves**__","Tier 1 (*Heal*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Mend, Reconcile*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 (*all other non-plus staves*) - Available at 4<:Icon_Rarity_4:448266418459377684>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 4 (*+ staves, Prf staves if healers got them*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Special_Healer:443578910605574154> **Healer Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Imbue*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 (*Balms, Heavenly Light*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nPrf Specials (*no examples yet, but they may come*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Passive_X:444078170900135936> **Passives (scenario X)**__","Tier 1 - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 - Available at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>"],["__<:Passive_Y:444078171113914368> **Passives (scenario Y)**__","Tier 1 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 3 - Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Prf:444078170887553024> **Prf Passives**__","Available at 5<:Icon_Rarity_5:448266417553539104>"]],2)
   else
     create_embed(event,"**Supposed Bug: X character, despite not being available at #{r}, has skills listed for #{r.gsub('Y','that')} in the `skill` command.**\n\nA word from my developer","By observing the skill lists of the Daily Hero Battle units - the only units we have available at 1\\* - I have learned that there is a set progression for which characters learn skills.  Only six units directly contradict this observation - and three of those units are the Askrians, who were likely given their Assists and Tier 1 Specials (depending on the character) at 2\\* in order to make them useable in the early story maps when the player has limited orbs and therefore limited unit choices.  One is Lyn(Bride), who as the only seasonal healer so far, may be the start of a new pattern.  The other two are Jaffar and Saber, who - for unknown reasons - have their respective Tier 2 Specials available right out of the box as 5\\*s.\n\nThe information as it is is not useless.  In fact, as seen quite recently as of the time of this writing, IntSys is willing to demote some units out of the 4-5\\* pool into the 3-4\\* one. This information allows us to predict which skills the new 3\\* versions of these characters will have.\n\nAs for units unlikely to demote, Paralogue maps will have lower-rarity versions of units with their base kits.  Training Tower and Tempest Trials attempt to build units according to recorded trends in Arena, but will use default base kits at lower difficulties.  Obviously you can't fodder a 4* Siegbert for Death Blow 3, but you can still encounter him in Tempest.",xcolor)
     event.respond "To see the progression I have discovered, please use the command `FEH!skillrarity progression`."
@@ -12594,6 +12599,27 @@ bot.command(:snagstats) do |event, f, f2|
   event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long."
   event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
   return nil
+end
+
+bot.command(:reload, from: 167657750971547648) do |event|
+  return nil if overlap_prevent(event)
+  return nil unless event.user.id==167657750971547648
+  event.channel.send_temporary_message('Loading.  Please wait 5 seconds...',3)
+  to_reload=['FEHUnits','FEHSkills','FEHStatSkills','FEHSkillSubsets','FEHEmblemTeams','FEHBanners']
+  for i in 0...to_reload.length
+    download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/#{to_reload[i]}.txt")
+    IO.copy_stream(download, "FEHTemp.txt")
+    if File.size("FEHTemp.txt")>100
+      b=[]
+      File.open("FEHTemp.txt").each_line.with_index do |line, idx|
+        b.push(line)
+      end
+      open("#{to_reload[i]}.txt", 'w') { |f|
+        f.puts b.join('')
+      }
+    end
+  end
+  event.respond 'New data loaded.'
 end
 
 def skill_data(legal_skills,all_skills,event,mode=0)
