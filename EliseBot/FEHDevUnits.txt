@@ -1,6 +1,6 @@
 Sakura\Anna\Celica\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Est\Felicia\Genny\Gunnthra\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
 Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu
-Alfonse\Arden\Black_Knight\Lissa\Lyn(Brave)\Marth(Masked)\Nino\Robin(F)\Sharena\Takumi(Fallen)
+Alfonse\Arden\Black_Knight\Lissa\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena\Takumi(Fallen)
 
 Sakura
 5\10\Resistance\Defense\S
@@ -73,7 +73,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Speed +2
 
 Est
-4\4\HP\Attack\-
+4\5\HP\Attack\-
 Iron Lance\Steel Lance\Brave Lance\Brave Lance+
 Shove
 Chilling Wind\Glacies
@@ -107,9 +107,9 @@ Genny
 Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
-~~none~~
+Attack +1\Attack +2\Attack +3
 Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
-~~none~~
+Fortify Res 1\Fortify Res 2\Fortify Res 3
 Savage Blow 3
 
 Gunnthra
@@ -127,8 +127,8 @@ Kana(F)
 Fire Breath\Fire Breath+\Lightning Breath\Lightning Breath+\Lightning Breath (+) Resistance Mode
 ~~none~~
 Dragon Gaze\Draconic Aura
-Fierce Stance 1\Fierce Stance 2\Fierce Stance 3
-~~none~~
+Steady Stance 1\Steady Stance 2\Steady Breath
+Renewal 1\Renewal 2\Renewal 3
 Spur Atk 1\Drive Atk 1\Drive Atk 2
 Close Def 2
 

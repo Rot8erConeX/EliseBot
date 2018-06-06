@@ -55,6 +55,7 @@
 ["Linfan", ["Morgan(M)", "Morgan(F)"]]
 ["Marc", ["Morgan(M)", "Morgan(F)"]]
 ["Morgan", ["Morgan(M)", "Morgan(F)"]]
+["Nino", ["Nino(Launch)", "Nino(Fangs)"]]
 ["Olwen", ["Olwen(Bonds)", "Olwen(World)"]]
 ["Oruen", ["Olwen(Bonds)", "Olwen(World)"]]
 ["Rainharuto", ["Reinhardt(Bonds)", "Reinhardt(World)"]]

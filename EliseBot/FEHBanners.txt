@@ -1,127 +1,131 @@
-Legendary Heroes - Ryoma: Supreme Samurai\-8\Azura(Winter), Chrom(Winter), Fjorm, Gunnthra, Hardin(Fallen), Innes, Robin(F)(Fallen), Robin(M)(Winter), Ryoma(Supreme), Sigurd, Takumi(Winter), Tiki(Young)
-Heroes with Stance Skills\3\Morgan(F), Shiro, Zelgius
-Bridal Blessings (June 2018 Voting Gauntlet revival)\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)
-"Loki's Flames" Tempest Trials\3\Marth, Ninian, Sanaki, Tharja
-Bridal Bloom\3\Ninian(Bride), Sanaki(Bride), Tharja(Bride)
-GHB Units\5\-\34
-TT Units\5\-\4
-New Power (May 2018)\3\Camilla, Clair, Corrin(M)
-Genealogy\3\Ares, Ishtar, Lene
-Countering Weapon Skills\3\Dorcas, Nowi, Ryoma
-Wings of Fate\3\Hinoka(Wings), Kana(F), Shigure
-Legendary Heroes - Lyn Lady of the Wind\-8\Celica(Fallen), Eirika(Memories), Ephraim(Fire), Genny, Henry(Halloween), Ike(Vanguard), Inigo(Performing), Jakob(Halloween), Lyn(Wind), Micaiah, Robin(F)(Fallen), Shigure(Performing)
-Heroes with Combat Boosts\3\Ayra, Lyn(Brave), Sonya
-"Thunder's Fist" Tempest Trials\3\Olwen(Bonds), Reinhardt(Bonds), Seliph
-World of Thracia\3\Leif, Nanna, Olwen(World), Reinhardt(World)
-Cooldown Bonuses\3\Ike(Brave), Mia, Nephenee
-Hares at the Fair\3\Alfonse(Spring), Catria(Spring), Kagero(Spring), Sharena(Spring)
-Tiki & Nowi's Battle\3\Nowi, Robin(M)(Fallen), Tiki(Adult)
-4 Star and 5 Star Heroes, April 2018\3\Abel, Cain, Camilla, Fae, Felicia, Hinata, Jeorge, Klein, L'Arachel, Nino, Soleil, Tailtiu\4
-Spring Festival (April 2018 Voting Gauntlet revival)\3\Camilla(Spring), Chrom(Spring), Lucina(Spring), Xander(Spring)
-Heroes with Miracle\3\Delthea, Mist, Sigurd
-Legendary Heroes - Robin Fell Vessel\-8\Elise(Summer), Fjorm, Gunnthra, Ike, Lucina(Brave), Lute, Lyn(Brave), Nowi(Halloween), Robin(F)(Fallen), Sakura(Halloween), Tiki(Adult)(Summer), Zelgius
-"Invisible Ties" Tempest Trials\3\Cherche, Donnel, Olivia
-Weapons to Refine III (New Power, Mar 2018)\3\Eirika(Bonds), Leo, Soren
-Chrom and Lissa's Battle\3\Chrom(Launch), Lissa, Robin(M)
-Countering Skills\3\Hector, Ike, Takumi
-Heroes with Falchion\3\Alm, Chrom(Launch), Lucina, Marth
-4 Star and 5 Star Heroes, March 2018\3\Abel, Barst, Camilla, Fae, Hinata, Jeorge, Klein, Mathilda, Roy, Setsuna, Soleil, Tailtiu\4
-The Branded King\3\Chrom(Branded), Morgan(F), Morgan(M)
-Fallen Heroes\3\Celica(Fallen), Hardin(Fallen), Robin(M)(Fallen)
-Love Abounds\3\Hector(Valentines), Lilina(Valentines), Lyn(Valentines), Roy(Valentines)
-Shadow in the Mirror\3\Celica, Robin(M), Takumi, Zelgius
-New Power (Feb 2018)\3\Caeda, Felicia, Hinoka(Launch), Raven
-Legendary Heroes - Legendary Ephraim\-8\Corrin(F)(Summer), Dorcas, Ephraim(Fire), Gaius(Summer), Gunnthra, Ike(Brave), Ike(Vanguard), Jaffar, Leo(Summer), Mia, Olivia(Performing), Shiro
-"Breath of Destiny" Tempest Trials\3\Clarine, Klein, Ninian
-Corrin & Azura's Battle\3\Azura, Corrin, Kagero
-Movement Skills\3\Amelia, Elincia, Tana
-Hero Fest III\5\Ike(Brave), Lyn(Brave), Nephenee, Sigurd
-Sacred Memories\3\Eirika(Memories), L'Arachel, Myrrh
-Legendary Heroes - Vanguard Ike\-8\Azura(Performing), Faye, Fjorm, Frederick(Summer), Gunnthra, Ike(Vanguard), Lucina(Brave), Robin(F)(Summer), Sanaki, Siegbert, Takumi, Xander(Summer)
-4 Star and 5 Star Heroes, February 2018\3\Abel, Barst, Fae, Frederick, Hinata, Klein, Laslow, Mathilda, Oscar, Rebecca, Roy, Setsuna\4
-Happy New Year's\3\Azura(Winter), Camilla(Winter), Takumi(Winter)
-World of Dawn\3\Micaiah, Sothe, Zelgius
-"Stepping into a New Year" Tempest Trials\3\Hinoka(Launch), Ryoma, Sakura
-Effective Against Cavalry\3\Gray, Mathilda, Rhajat
-Raven & Lucius's Battle\3\Lucius, Priscilla, Raven
-"Gift of Peace" Tempest Trials\3\Frederick, Lucina, Nowi
-Weapons to Refine II\3\Eldigan, Jaffar, Minerva
-Legendary Heroes - Gunnthra\-8\Amelia, Charlotte(Bride), Chrom(Spring), Elise, Fjorm, Gunnthra, Innes, Lucina(Spring), Lyn(Bride), Roy(Brave), Ryoma, Sigurd
-Winter's Envoy\3\Chrom(Winter), Lissa(Winter), Robin(M)(Winter), Tharja(Winter)
-Tana & Amelia's Battle\3\Amelia, Eirika(Bonds), Tana
-Weapons to Refine\3\Ephraim, Lyn, Takumi
-Children of Fate\3\Shiro, Siegbert, Soleil
-Unrequitted Love, Block A\3\Faye, Priscilla, Rhajat, Tharja
-Unrequitted Love, Block B\3\Catria, Dorcas, Katarina, Seliph
-Legendary Heroes - Fjorm\-8\Ayra, Caeda(Bride), Camilla(Spring), Celica, Cordelia(Bride), Deirdre, Fjorm, Genny, Hector, Ike, Lyn(Brave), Xander(Spring)
-"Less Than Heroic" Tempest Trials\3\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)
-Farfetched Heroes\3\Dorcas, Lute, Mia
-Heroes with Death Blow\3\Delthea, Elincia, Klein
-Takumi and Hinoka's Battle\3\Hinoka(Launch), Sakura, Takumi
-Trick or Defeat\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)
-Short-Haired Ladies\3\Amelia, Hinoka(Launch), Katarina, Shanna
-Long-haired Gents\3\Karel, Ryoma, Soren, Takumi
-Heroes with Flier skills\3\Caeda, Hinoka(Launch), Minerva
-"Holy War" Tempest Trials\3\Ayra, Eldigan, Lachesis
-World of Holy War\3\Deirdre, Sigurd, Tailtiu
-Performing Arts\3\Azura(Performing), Inigo(Performing), Olivia(Performing), Shigure(Performing)
-Heroes with Threaten Speed\3\Jaffar, Shanna, Takumi
-Maria and Minerva's Battle\3\Maria, Minerva, Palla
-The Blood of Dragons, Block A\3\Corrin(M), Fae, Ninian, Tiki(Young)
-The Blood of Dragons, Block B\3\Corrin(F), Nowi, Sophia, Tiki(Adult)
-"Moment of Fate" Tempest Trials\3\Ike, Mist, Soren, Titania
-Ninian and Hawkeye's Battle\3\Eliwood, Hawkeye, Ninian
-Heroes with Death Blow\3\Effie, Hawkeye, Klein
-Dauntless Crimeans\3\Elincia, Nephenee, Oscar
-Ephraim and Eirika's Battle\3\Ephraim, Eirika(Bonds), Seth
-"To Die on the Battlefield" Tempest Trials Mini\3\Eliwood, Hector, Lyn, Ninian
-Heroes With Threaten Defense\3\Ephraim, Peri, Raven
-Brave Heroes\3\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)
-CYL Top 8 Block B\3\Camilla, Lucina, Lyn, Tharja
-CYL Top 8 Block A\3\Chrom(Launch), Hector, Ike, Roy
-Hero Fest I\5\Azura, Hector, Ryoma, Takumi
-Hero Fest II\5\Genny, Ike, Julia, Ninian
-Bridal Blessings\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)
-Spring Festival\3\Camilla(Spring), Chrom(Spring), Lucina(Spring), Xander(Spring)
-Ylissian Summer\3\Frederick(Summer), Gaius(Summer), Robin(F)(Summer), Tiki(Adult)(Summer)
-Nohrian Summer\3\Corrin(F)(Summer), Elise(Summer), Leo(Summer), Xander(Summer)
-Heroes with Blade Skills\3\Nino, Odin, Tharja
-The Sacred World\3\Amelia, Innes, Seth, Tana
-"Reunited at Last" Tempest Trials\3\Celica, Delthea, Gray, Sonya
-Cecilia and Lilina's Battle\3\Cecilia, Lilina, Roy
-Heroes with Life and Death\3\Hana, Jaffar, Minerva
-Heroes with Quick Riposte\3\Klein, Leo, Subaki
-Cavalry\3\Eldigan, Olwen(Bonds), Titania
-Alm's Army\3\Delthea, Gray, Mathilda
-Celica's Army\3\Leon, Saber, Sonya
-Heroes with Hone Attack\3\Corrin(F), Nino, Sanaki
-Alm and Celica's Battle\3\Clair, Genny, Lukas
-"Resonating Fangs" Tempest Trials\3\Alm, Boey, Faye, Mae
-Heroes with Fury\3\Bartre, Eldigan, Jagen
-The War of the Clerics Block A\3\Elise, Lachesis, Maria, Sakura
-The War of the Clerics Block B\3\Clarine, Lissa, Mist, Priscilla
-Echoes of Mystery\3\Athena, Katarina, Luke, Roderick
-Heroes with Vantage\3\Gordin, Lon'qu, Reinhardt(Bonds)
-"Awakening" Tempest Trials\3\Lucina, Nowi, Robin(M), Tharja
-Battling Camus\3\Fae, Jaffar, Olwen(Bonds), Tiki(Young)
-Weapon Triangle\3\Azura, Cecilia, Hinata, Titania
-Battling Lloyd\3\Hinoka(Launch), Klein, Ninian, Raven
-Rite of Shadows\3\Boey, Celica, Genny, Mae
-Male Mages\3\Henry, Leo, Merric, Robin(M)
-Female Mages\3\Julia, Linde, Sanaki, Tharja
-Battling Xander\3\Arthur, Chrom(Launch), Cordelia, Linde
-World of Radiance\3\Ike, Mist, Soren, Titania
-Battling Zephiel\3\Frederick, Hana, Nowi, Reinhardt(Bonds)
-World of Shadows\3\Alm, Clair, Faye, Lukas
-Battling Navarre\3\Caeda, Effie, Kagero, Sophia
-Pegasus Knights\3\Cordelia, Hinoka(Launch), Subaki, Palla
-Wyvern Riders\3\Beruka, Camilla, Cherche, Minerva
-Battling Michalis\3\Eliwood, Gordin, Minerva, Selena
-Blazing Shadows\3\Jaffar, Karel, Lucius, Ninian, Priscilla, Rebecca
-Battling Ursula\3\Effie, Felicia, Nino, Setsuna
-Princes\3\Chrom(Launch), Ephraim, Leo
-Princesses\3\Eirika(Bonds), Elise, Lucina
-Sibling Bonds\3\Klein, Sanaki, Reinhardt(Bonds), Olwen(Bonds), Eldigan, Lachesis
-Family Bonds\3\Ephraim, Eirika(Bonds), Seliph, Julia
-Deep Devotion\3\Camilla, Lyn, Roy, Takumi
-Legendary Heroes (Feb 2017)\3\Lucina, Marth, Tiki(Young), Robin(M)
+New Power (June 2018)\3\Linde, Merric, Tiki(Adult), Tiki(Young)\5\10/06/2018, 22/06/2018
+Scattered Fangs\3\Karla, Legault, Nino(Fangs)\5\08/06/2018, 20/06/2018
+Seliph & Julia's Battle\3\Deirdre, Julia, Seliph\5\05/06/2018, 11/06/2018
+Legendary Heroes - Ryoma: Supreme Samurai\-8\Azura(Winter), Chrom(Winter), Fjorm, Gunnthra, Hardin(Fallen), Innes, Robin(F)(Fallen), Robin(M)(Winter), Ryoma(Supreme), Sigurd, Takumi(Winter), Tiki(Young)\5\30/05/2018, 06/06/2018
+Heroes with Stance Skills\3\Morgan(F), Shiro, Zelgius\5\27/05/2018, 08/06/2018
+Bridal Blessings (June 2018 revival)\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)\5\25/05/2018, 20/06/2018
+"Loki's Flames" Tempest Trials\3\Marth, Ninian, Sanaki, Tharja\5\22/05/2018, 03/06/2018
+Bridal Bloom\3\Ninian(Bride), Sanaki(Bride), Tharja(Bride)\5\21/05/2018, 20/06/2018
+GHB Units\5\-\543
+TT Units\5\-\54
+New Power (May 2018)\3\Camilla, Clair, Corrin(M)\5
+Genealogy\3\Ares, Ishtar, Lene\5
+Countering Weapon Skills\3\Dorcas, Nowi, Ryoma\5
+Wings of Fate\3\Hinoka(Wings), Kana(F), Shigure\5
+Legendary Heroes - Lyn Lady of the Wind\-8\Celica(Fallen), Eirika(Memories), Ephraim(Fire), Genny, Henry(Halloween), Ike(Vanguard), Inigo(Performing), Jakob(Halloween), Lyn(Wind), Micaiah, Robin(F)(Fallen), Shigure(Performing)\5
+Heroes with Combat Boosts\3\Ayra, Lyn(Brave), Sonya\5
+"Thunder's Fist" Tempest Trials\3\Olwen(Bonds), Reinhardt(Bonds), Seliph\5
+World of Thracia\3\Leif, Nanna, Olwen(World), Reinhardt(World)\5
+Cooldown Bonuses\3\Ike(Brave), Mia, Nephenee\5
+Hares at the Fair\3\Alfonse(Spring), Catria(Spring), Kagero(Spring), Sharena(Spring)\5
+Tiki & Nowi's Battle\3\Nowi, Robin(M)(Fallen), Tiki(Adult)\5
+4 Star and 5 Star Heroes, April 2018\3\Abel, Cain, Camilla, Fae, Felicia, Hinata, Jeorge, Klein, L'Arachel, Nino(Launch), Soleil, Tailtiu\54
+Spring Festival (April 2018 Voting Gauntlet revival)\3\Camilla(Spring), Chrom(Spring), Lucina(Spring), Xander(Spring)\5
+Heroes with Miracle\3\Delthea, Mist, Sigurd\5
+Legendary Heroes - Robin Fell Vessel\-8\Elise(Summer), Fjorm, Gunnthra, Ike, Lucina(Brave), Lute, Lyn(Brave), Nowi(Halloween), Robin(F)(Fallen), Sakura(Halloween), Tiki(Adult)(Summer), Zelgius\5
+"Invisible Ties" Tempest Trials\3\Cherche, Donnel, Olivia\5
+Weapons to Refine III (New Power, Mar 2018)\3\Eirika(Bonds), Leo, Soren\5
+Chrom and Lissa's Battle\3\Chrom(Launch), Lissa, Robin(M)\5
+Countering Skills\3\Hector, Ike, Takumi\5
+Heroes with Falchion\3\Alm, Chrom(Launch), Lucina, Marth\5
+4 Star and 5 Star Heroes, March 2018\3\Abel, Barst, Camilla, Fae, Hinata, Jeorge, Klein, Mathilda, Roy, Setsuna, Soleil, Tailtiu\54
+The Branded King\3\Chrom(Branded), Morgan(F), Morgan(M)\5
+Fallen Heroes\3\Celica(Fallen), Hardin(Fallen), Robin(M)(Fallen)\5
+Love Abounds\3\Hector(Valentines), Lilina(Valentines), Lyn(Valentines), Roy(Valentines)\5
+Shadow in the Mirror\3\Celica, Robin(M), Takumi, Zelgius\5
+New Power (Feb 2018)\3\Caeda, Felicia, Hinoka(Launch), Raven\5
+Legendary Heroes - Legendary Ephraim\-8\Corrin(F)(Summer), Dorcas, Ephraim(Fire), Gaius(Summer), Gunnthra, Ike(Brave), Ike(Vanguard), Jaffar, Leo(Summer), Mia, Olivia(Performing), Shiro\5
+"Breath of Destiny" Tempest Trials\3\Clarine, Klein, Ninian\5
+Corrin & Azura's Battle\3\Azura, Corrin, Kagero\5
+Movement Skills\3\Amelia, Elincia, Tana\5
+Hero Fest III\5\Ike(Brave), Lyn(Brave), Nephenee, Sigurd\5
+Sacred Memories\3\Eirika(Memories), L'Arachel, Myrrh\5
+Legendary Heroes - Vanguard Ike\-8\Azura(Performing), Faye, Fjorm, Frederick(Summer), Gunnthra, Ike(Vanguard), Lucina(Brave), Robin(F)(Summer), Sanaki, Siegbert, Takumi, Xander(Summer)\5
+4 Star and 5 Star Heroes, February 2018\3\Abel, Barst, Fae, Frederick, Hinata, Klein, Laslow, Mathilda, Oscar, Rebecca, Roy, Setsuna\54
+Happy New Year's\3\Azura(Winter), Camilla(Winter), Takumi(Winter)\5
+World of Dawn\3\Micaiah, Sothe, Zelgius\5
+"Stepping into a New Year" Tempest Trials\3\Hinoka(Launch), Ryoma, Sakura\5
+Effective Against Cavalry\3\Gray, Mathilda, Rhajat\5
+Raven & Lucius's Battle\3\Lucius, Priscilla, Raven\5
+"Gift of Peace" Tempest Trials\3\Frederick, Lucina, Nowi\5
+Weapons to Refine II\3\Eldigan, Jaffar, Minerva\5
+Legendary Heroes - Gunnthra\-8\Amelia, Charlotte(Bride), Chrom(Spring), Elise, Fjorm, Gunnthra, Innes, Lucina(Spring), Lyn(Bride), Roy(Brave), Ryoma, Sigurd\5
+Winter's Envoy\3\Chrom(Winter), Lissa(Winter), Robin(M)(Winter), Tharja(Winter)\5
+Tana & Amelia's Battle\3\Amelia, Eirika(Bonds), Tana\5
+Weapons to Refine\3\Ephraim, Lyn, Takumi\5
+Children of Fate\3\Shiro, Siegbert, Soleil\5
+Unrequitted Love, Block A\3\Faye, Priscilla, Rhajat, Tharja\5
+Unrequitted Love, Block B\3\Catria, Dorcas, Katarina, Seliph\5
+Legendary Heroes - Fjorm\-8\Ayra, Caeda(Bride), Camilla(Spring), Celica, Cordelia(Bride), Deirdre, Fjorm, Genny, Hector, Ike, Lyn(Brave), Xander(Spring)\5
+"Less Than Heroic" Tempest Trials\3\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5
+Farfetched Heroes\3\Dorcas, Lute, Mia\5
+Heroes with Death Blow\3\Delthea, Elincia, Klein\5
+Takumi and Hinoka's Battle\3\Hinoka(Launch), Sakura, Takumi\5
+Trick or Defeat\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5
+Short-Haired Ladies\3\Amelia, Hinoka(Launch), Katarina, Shanna\5
+Long-haired Gents\3\Karel, Ryoma, Soren, Takumi\5
+Heroes with Flier skills\3\Caeda, Hinoka(Launch), Minerva\5
+"Holy War" Tempest Trials\3\Ayra, Eldigan, Lachesis\5
+World of Holy War\3\Deirdre, Sigurd, Tailtiu\5
+Performing Arts\3\Azura(Performing), Inigo(Performing), Olivia(Performing), Shigure(Performing)\5
+Heroes with Threaten Speed\3\Jaffar, Shanna, Takumi\5
+Maria and Minerva's Battle\3\Maria, Minerva, Palla\5
+The Blood of Dragons, Block A\3\Corrin(M), Fae, Ninian, Tiki(Young)\5
+The Blood of Dragons, Block B\3\Corrin(F), Nowi, Sophia, Tiki(Adult)\5
+"Moment of Fate" Tempest Trials\3\Ike, Mist, Soren, Titania\5
+Ninian and Hawkeye's Battle\3\Eliwood, Hawkeye, Ninian\5
+Heroes with Death Blow\3\Effie, Hawkeye, Klein\5
+Dauntless Crimeans\3\Elincia, Nephenee, Oscar\5
+Ephraim and Eirika's Battle\3\Ephraim, Eirika(Bonds), Seth\5
+"To Die on the Battlefield" Tempest Trials Mini\3\Eliwood, Hector, Lyn, Ninian\5
+Heroes With Threaten Defense\3\Ephraim, Peri, Raven\5
+Brave Heroes\3\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5
+CYL Top 8 Block B\3\Camilla, Lucina, Lyn, Tharja\5
+CYL Top 8 Block A\3\Chrom(Launch), Hector, Ike, Roy\5
+Hero Fest I\5\Azura, Hector, Ryoma, Takumi\5
+Hero Fest II\5\Genny, Ike, Julia, Ninian\5
+Bridal Blessings\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)\5
+Spring Festival\3\Camilla(Spring), Chrom(Spring), Lucina(Spring), Xander(Spring)\5
+Ylissian Summer\3\Frederick(Summer), Gaius(Summer), Robin(F)(Summer), Tiki(Adult)(Summer)\5
+Nohrian Summer\3\Corrin(F)(Summer), Elise(Summer), Leo(Summer), Xander(Summer)\5
+Heroes with Blade Skills\3\Nino(Launch), Odin, Tharja\5
+The Sacred World\3\Amelia, Innes, Seth, Tana\5
+"Reunited at Last" Tempest Trials\3\Celica, Delthea, Gray, Sonya\5
+Cecilia and Lilina's Battle\3\Cecilia, Lilina, Roy\5
+Heroes with Life and Death\3\Hana, Jaffar, Minerva\5
+Heroes with Quick Riposte\3\Klein, Leo, Subaki\5
+Cavalry\3\Eldigan, Olwen(Bonds), Titania\5
+Alm's Army\3\Delthea, Gray, Mathilda\5
+Celica's Army\3\Leon, Saber, Sonya\5
+Heroes with Hone Attack\3\Corrin(F), Nino(Launch), Sanaki\5
+Alm and Celica's Battle\3\Clair, Genny, Lukas\5
+"Resonating Fangs" Tempest Trials\3\Alm, Boey, Faye, Mae\5
+Heroes with Fury\3\Bartre, Eldigan, Jagen\5
+The War of the Clerics Block A\3\Elise, Lachesis, Maria, Sakura\5
+The War of the Clerics Block B\3\Clarine, Lissa, Mist, Priscilla\5
+Echoes of Mystery\3\Athena, Katarina, Luke, Roderick\5
+Heroes with Vantage\3\Gordin, Lon'qu, Reinhardt(Bonds)\5
+"Awakening" Tempest Trials\3\Lucina, Nowi, Robin(M), Tharja\5
+Battling Camus\3\Fae, Jaffar, Olwen(Bonds), Tiki(Young)\5
+Weapon Triangle\3\Azura, Cecilia, Hinata, Titania\5
+Battling Lloyd\3\Hinoka(Launch), Klein, Ninian, Raven\5
+Rite of Shadows\3\Boey, Celica, Genny, Mae\5
+Male Mages\3\Henry, Leo, Merric, Robin(M)\5
+Female Mages\3\Julia, Linde, Sanaki, Tharja\5
+Battling Xander\3\Arthur, Chrom(Launch), Cordelia, Linde\5
+World of Radiance\3\Ike, Mist, Soren, Titania\5
+Battling Zephiel\3\Frederick, Hana, Nowi, Reinhardt(Bonds)\5
+World of Shadows\3\Alm, Clair, Faye, Lukas\5
+Battling Navarre\3\Caeda, Effie, Kagero, Sophia\5
+Pegasus Knights\3\Cordelia, Hinoka(Launch), Subaki, Palla\5
+Wyvern Riders\3\Beruka, Camilla, Cherche, Minerva\5
+Battling Michalis\3\Eliwood, Gordin, Minerva, Selena\5
+Blazing Shadows\3\Jaffar, Karel, Lucius, Ninian, Priscilla, Rebecca\5
+Battling Ursula\3\Effie, Felicia, Nino(Launch), Setsuna\5
+Princes\3\Chrom(Launch), Ephraim, Leo\5\07/03/2017, 12/03/2017
+Princesses\3\Eirika(Bonds), Elise, Lucina\5\07/03/2017, 12/03/2017
+Sibling Bonds\3\Klein, Sanaki, Reinhardt(Bonds), Olwen(Bonds), Eldigan, Lachesis\5\27/02/2017, 13/03/2017
+Battling Robin(F)\3\Fir, Hawkeye, Maria, Tiki(Adult)\5\23/02/2017, 26/02/2017
+Family Bonds\3\Ephraim, Eirika(Bonds), Seliph, Julia\5\15/02/2017, 26/02/2017
+Deep Devotion\3\Camilla, Lyn, Roy, Takumi\5\02/02/2017, 14/02/2017
+Legendary Heroes (Feb 2017)\3\Lucina, Marth, Tiki(Young), Robin(M)\5\02/02/2017, 14/02/2017
