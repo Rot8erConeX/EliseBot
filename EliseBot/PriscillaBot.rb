@@ -11407,6 +11407,7 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   else
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
     b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm}
+    c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
     str="#{str}\nCurrent Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}"
     str="#{str}\nCurrent Events: #{c2.map{|q| "*#{q[0]} (#{q[1]})*"}.join('; ')}"
   end
@@ -12639,7 +12640,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648
   event.channel.send_temporary_message('Loading.  Please wait 5 seconds...',3)
-  to_reload=['FEHUnits','FEHSkills','FEHStatSkills','FEHSkillSubsets','FEHEmblemTeams','FEHBanners']
+  to_reload=['FEHUnits','FEHSkills','FEHStatSkills','FEHSkillSubsets','FEHEmblemTeams','FEHBanners','FEHEvents']
   for i in 0...to_reload.length
     download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/#{to_reload[i]}.txt")
     IO.copy_stream(download, "FEHTemp.txt")
@@ -12973,7 +12974,11 @@ def disp_current_events(mode=0)
         t3=Time.new(t.year,t.month,t.day,23,0)
         t2=t3-t2
         t2=t2/(24*60*60)
-        str2="#{str2} - #{(11-t2).floor} gifts remain for daily players"
+        if 10-t2>0
+          str2="#{str2} - #{(10-t2).floor} gifts remain for daily players"
+        else
+          str2="#{str2} - no gifts remain for daily players"
+        end
       elsif c2[i][1]=='Grand Conquest' && mode>0
       elsif c2[i][1]=='Voting Gauntlet' && mode>0
         t4=c2[i][2][0].split('/').map{|q| q.to_i}
