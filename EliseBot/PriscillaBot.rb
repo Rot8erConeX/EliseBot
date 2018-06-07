@@ -456,7 +456,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['daily','today','todayinfeh','today_in_feh'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Shows the day's in-game daily events.\nIf in PM, will also show tomorrow's.",0xD49F61)
   elsif ['next','schedule'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nBanner(s), Summon(ing)(s)\nEvent(s)",0xD49F61)
   elsif ['deletealias','removealias'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __alias__",'Removes `alias` from the list of aliases, regardless of who it was for.',0xC31C19)
   elsif ['addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti'].include?(command.downcase)
@@ -2390,7 +2390,7 @@ def pick_thumbnail(event,j,bot)
   d=@units[j]
   return 'http://vignette.wikia.nocookie.net/fireemblem/images/0/04/Kiran.png' if d[0]=='Kiran'
   return bot.user(d[13][1]).avatar_url if d.length>13 && !d[13].nil? && !d[13][1].nil? && d[13][1].is_a?(Bignum)
-  return 'https://cdn.discordapp.com/emojis/418140222530912256.png' if d[0]=='Nino' && (event.message.text.downcase.include?('face') || rand(100).zero?)
+  return 'https://cdn.discordapp.com/emojis/418140222530912256.png' if d[0]=='Nino(Launch)' && (event.message.text.downcase.include?('face') || rand(100).zero?)
   return 'https://cdn.discordapp.com/emojis/420339780421812227.png' if d[0]=='Amelia' && (event.message.text.downcase.include?('face') || rand(1000).zero?)
   return 'https://cdn.discordapp.com/emojis/420339781524783114.png' if d[0]=='Reinhardt(Bonds)' && (event.message.text.downcase.include?('grin') || rand(100).zero?)
   return 'https://cdn.discordapp.com/emojis/437515327652364288.png' if d[0]=='Reinhardt(World)' && (event.message.text.downcase.include?('grin') || rand(100).zero?)
@@ -11077,7 +11077,7 @@ bot.command([:headpat,:patpat,:pat]) do |event|
   if event.user.id==167657750971547648 || event.message.text.downcase.split(' ').include?('stats')
     event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[1]+@headpats[2],true)} time someone has tried to give me a headpat.~~"
     event << ""
-    if event.server.nil?
+    if event.server.nil? && event.user.id==167657750971547648
       z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
       z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
       event << "~~Moosie has headpatted me #{longFormattedNumber(@headpats[1])} time#{"s" unless @headpats[1]==1}, which is #{z}% of the headpats I've received~~"
@@ -11087,6 +11087,13 @@ bot.command([:headpat,:patpat,:pat]) do |event|
       z=(@headpats[0]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
       z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
       event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0])} time#{"s" unless @headpats[0]==1}, which is #{z}% of the headpats I've received~~"
+    elsif event.server.nil?
+      z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+      event << "~~Moosie has headpatted me #{longFormattedNumber(@headpats[1])} time#{"s" unless @headpats[1]==1}, which is #{z}% of the headpats I've received.~~"
+      z=(@headpats[0]*10000+@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+      event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0]+@headpats[2])} time#{"s" unless @headpats[0]+@headpats[2]==1}, which is #{z}% of the headpats I've received.~~"
     else
       moosiebean=[false,false]
       if !bot.user(270372601107447808).on(event.server.id).nil?
@@ -11355,25 +11362,31 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
   end
   b.compact!
-  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
-  b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm}
+  c=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt')
+    c=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt').each_line do |line|
+      c.push(line.gsub("\n",''))
+    end
+  else
+    c=[]
+  end
+  for i in 0...c.length
+    c[i]=c[i].split('\\'[0])
+    c[i][1]='Voting Gauntlet' if c[i][1]=='VG'
+    c[i][1]='Bound Hero Battle' if c[i][1]=='BHB'
+    c[i][1]='Grand Hero Battle' if c[i][1]=='GHB'
+    c[i][1]='Grand Conquests' if c[i][1]=='GC'
+    c[i][1]='Tempest Trials' if c[i][1]=='TT' || c[i][1]=='Tempest'
+    c[i][1]='Tap Battle' if c[i][1]=='Illusory Dungeon'
+    c[i][1]='Log-In Bonus' if c[i][1]=='Log-In' || c[i][1]=='Login'
+    c[i][2]=c[i][2].split(', ')
+  end
   str=extend_message(str,str2,event,2)
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(' tomorrow ') || " #{event.message.text.downcase} ".include?(' next ')
-    str2='__**Current Banners**__'
-    for i in 0...b2.length
-      t2=b2[i][4].split(', ')[1].split('/').map{|q| q.to_i}
-      t2=Time.new(t2[2],t2[1],t2[0],23,0)
-      t2=t2-t
-      if t2/(24*60*60)>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/(24*60*60)).floor} days left"
-      elsif t2/(60*60)>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/(60*60)).floor} hours left"
-      elsif t2/60>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/60).floor} minutes left"
-      elsif t2>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2).floor} seconds left"
-      end
-    end
+    str2=disp_current_events(1)
+    str=extend_message(str,str2,event,2)
+    str2=disp_current_events(2)
     str=extend_message(str,str2,event,2)
     str2='__**Tomorrow in** ***Fire Emblem Heroes***__'
     str2="#{str2}\nTraining Tower color: #{colors[(date+1)%7]}"
@@ -11387,12 +11400,17 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     t3=t+24*60*60
     tm="#{'0' if t3.day<10}#{t3.day}/#{'0' if t3.month<10}#{t3.month}/#{t3.year}"
     b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0]!=tm}
+    c2=c.reject{|q| q[2].nil? || q[2][0]!=tm}
+    str2="#{str2}\nNew Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}" if b2.length>0
+    str2="#{str2}\nNew Events: #{c2.map{|q| "*#{q[0]} (#{q[1]})*"}.join('; ')}" if c2.length>0
     str=extend_message(str,str2,event,2)
-    str="#{str}\nNew Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}" if b2.length>0
   else
+    tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm}
     str="#{str}\nCurrent Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}"
+    str="#{str}\nCurrent Events: #{c2.map{|q| "*#{q[0]} (#{q[1]})*"}.join('; ')}"
   end
-  str=extend_message(str,"Please note that due to being non-cyclical, I cannot predict the following:\nArena bonus heroes, Elemental season, anything in the game's Events tab, new GHBs",event,2)
+  str=extend_message(str,"Please note that I cannot predict the following: Arena/Tempest bonus heroes, Elemental season",event,2)
   event.respond str
 end
 
@@ -11408,8 +11426,9 @@ bot.command([:next,:schedule]) do |event, type|
   idx=6 if ['rival','domains','domain','rd','rivaldomains','rival_domains','rivaldomain','rival_domain'].include?(type.downcase)
   idx=7 if ['blessed','blessing','garden','gardens','blessedgarden','blessed_garden','blessedgardens','blessed_gardens','blessinggarden','blessing_garden','blessinggardens','blessing_gardens'].include?(type.downcase)
   idx=8 if ['banners','summoning','summon','banner','summonings','summons'].include?(type.downcase)
+  idx=9 if ['event','events'].include?(type.downcase)
   if idx<0 && !safe_to_spam?(event)
-    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nBanner(s), Summon(ing)(s)"
+    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nBanner(s), Summon(ing)(s)\nEvent(s)"
     return nil
   end
   t=Time.now
@@ -11515,7 +11534,7 @@ bot.command([:next,:schedule]) do |event, type|
   msg3="#{msg3}\n#{ghb[0].split(' / ')[1]} - 7 days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
   msg=extend_message(msg,msg2,event,2) if [-1,4].include?(idx)
   msg=extend_message(msg,msg3,event,2) if [-1,5].include?(idx)
-  msg=extend_message(msg,'Try the command again with "GHB2" if you\'re looking for the second set of Grand Hero Battles.',event,2) if [4].include?(idx)
+  msg=extend_message(msg,"Try the command again with \"GHB2\" if you're looking for the second set of Grand Hero Battles.\nYou may also want to try \"Events\" if you're looking for non-cyclical GHBs.",event,2) if [4].include?(idx)
   if [-1,6].include?(idx)
     rd=['Flying <:Icon_Move_Flier:443331186698354698>',
         'Infantry <:Icon_Move_Infantry:443331187579289601>',
@@ -11565,54 +11584,15 @@ bot.command([:next,:schedule]) do |event, type|
     msg=extend_message(msg,msg2,event,2)
   end
   if [-1,8].include?(idx)
-    b=[]
-    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
-      b=[]
-      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
-        b.push(line.gsub("\n",''))
-      end
-    end
-    for i in 0...b.length
-      b[i]=b[i].split('\\'[0])
-      b[i][1]=b[i][1].to_i
-      b[i][2]=b[i][2].split(', ')
-      b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
-    end
-    b.compact!
-    tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
-    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm}
-    str2='__**Current Banners**__'
-    for i in 0...b2.length
-      t2=b2[i][4].split(', ')[1].split('/').map{|q| q.to_i}
-      t2=Time.new(t2[2],t2[1],t2[0],23,0)
-      t2=t2-t
-      if t2/(24*60*60)>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/(24*60*60)).floor} days left"
-      elsif t2/(60*60)>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/(60*60)).floor} hours left"
-      elsif t2/60>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/60).floor} minutes left"
-      elsif t2>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2).floor} seconds left"
-      end
-    end
+    str2=disp_current_events(1)
     msg=extend_message(msg,str2,event,2)
-    str2='__**Future Banners**__'
-    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm}.reverse
-    for i in 0...b2.length
-      t2=b2[i][4].split(', ')[0].split('/').map{|q| q.to_i}
-      t2=Time.new(t2[2],t2[1],t2[0],23,0)-24*60*60
-      t2=t2-t
-      if t2/(24*60*60)>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/(24*60*60)).floor} days from now"
-      elsif t2/(60*60)>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/(60*60)).floor} hours from now"
-      elsif t2/60>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/60).floor} minutes from now"
-      elsif t2>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2).floor} seconds from now"
-      end
-    end
+    str2=disp_current_events(-1)
+    msg=extend_message(msg,str2,event,2)
+  end
+  if [-1,9].include?(idx)
+    str2=disp_current_events(2)
+    msg=extend_message(msg,str2,event,2)
+    str2=disp_current_events(-2)
     msg=extend_message(msg,str2,event,2)
   end
   event.respond msg
@@ -12850,13 +12830,30 @@ bot.message do |event|
         event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
       end
     end
+  elsif event.message.text.downcase.include?('owo') && !event.user.bot_account?
+    s=event.message.text
+    s=remove_format(s,'```')              # remove large code blocks
+    s=remove_format(s,'`')                # remove small code blocks
+    s=remove_format(s,'~~')               # remove crossed-out text
+    s=s.gsub("\n",' ').gsub("	",'')
+    if s.split(' ').include?('owo') || s.split(' ').include?('OwO')
+      k=0
+      k=event.server.id unless event.server.nil?
+      if k==271642342153388034
+      elsif rand(100)<3
+        puts 'responded to OwO'
+        event.respond "What's this?"
+      else
+        puts 'saw OwO, did not respond'
+      end
+    end
   elsif event.message.text.include?('0x4') && !event.user.bot_account?
     s=event.message.text
     s=remove_format(s,'```')              # remove large code blocks
     s=remove_format(s,'`')                # remove small code blocks
     s=remove_format(s,'~~')               # remove crossed-out text
     s=s.gsub("\n",' ').gsub("	",'')
-    if s=='0x4' || s[0,4]=='0x4 ' || s[s.length-4,4]==' 0x4' || s.include?(' 0x4 ')
+    if s.split(' ').include?('0x4')
       canpost=true
       k=0
       k=event.server.id unless event.server.nil?
@@ -12874,6 +12871,136 @@ bot.message do |event|
       end
     end
   end
+end
+
+def disp_current_events(mode=0)
+  t=Time.now
+  timeshift=8
+  t-=60*60*timeshift
+  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  mdfr='left'
+  mdfr='from now' if mode<0
+  m=mode*1
+  m=0-m if m<0
+  str2="__**#{'Current' if mode>0}#{'Future' if mode<0} #{['','Banners','Events'][m]}**__"
+  if [1,-1].include?(mode) # current/future banners
+    b=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
+      b=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
+        b.push(line.gsub("\n",''))
+      end
+    else
+      b=[]
+    end
+    for i in 0...b.length
+      b[i]=b[i].split('\\'[0])
+      b[i][1]=b[i][1].to_i
+      b[i][2]=b[i][2].split(', ')
+      b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
+    end
+    b.compact!
+    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm}
+    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm}.reverse if mode<0
+    for i in 0...b2.length
+      t2=b2[i][4].split(', ')[[mode,0].max].split('/').map{|q| q.to_i}
+      t2=Time.new(t2[2],t2[1],t2[0],23,0)+24*60*60*[0,mode].min
+      t2=t2-t
+      if t2/(24*60*60)>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/(24*60*60)).floor} days #{mdfr}"
+      elsif t2/(60*60)>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/(60*60)).floor} hours #{mdfr}"
+      elsif t2/60>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/60).floor} minutes #{mdfr}"
+      elsif t2>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2).floor} seconds #{mdfr}"
+      end
+    end
+  elsif [2,-2].include?(mode) # current/future events
+    mode/=2
+    c=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt')
+      c=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt').each_line do |line|
+        c.push(line.gsub("\n",''))
+      end
+    else
+      c=[]
+    end
+    for i in 0...c.length
+      c[i]=c[i].split('\\'[0])
+      c[i][1]='Voting Gauntlet' if c[i][1]=='VG'
+      c[i][1]='Bound Hero Battle' if c[i][1]=='BHB'
+      c[i][1]='Grand Hero Battle' if c[i][1]=='GHB'
+      c[i][1]='Grand Conquests' if c[i][1]=='GC'
+      c[i][1]='Tempest Trials' if c[i][1]=='TT' || c[i][1]=='Tempest'
+      c[i][1]='Tap Battle' if c[i][1]=='Illusory Dungeon'
+      c[i][1]='Log-In Bonus' if c[i][1]=='Log-In' || c[i][1]=='Login'
+      c[i][2]=c[i][2].split(', ')
+    end
+    c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
+    c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i<=tm} if mode<0
+    for i in 0...c2.length
+      t2=c2[i][2][[mode,0].max].split('/').map{|q| q.to_i}
+      t2=Time.new(t2[2],t2[1],t2[0],23,0)+24*60*60*[0,mode].min
+      t2=t2-t
+      n=c2[i][0]
+      if ['Voting Gauntlet','Tempest Trials','Quests','Log-In Bonus'].include?(c2[i][1])
+        n="\"#{n}\" #{c2[i][1]}"
+      elsif ['Bound Hero Battle','Grand Hero Battle','Special Maps'].include?(c2[i][1])
+        n="#{c2[i][1]}: #{n}"
+      elsif c2[i][1]=='Grand Conquests'
+        n="Grand Conquests"
+      elsif c2[i][1]=='Tap Battle'
+        n="Illusory Dungeon: #{n}"
+      elsif c2[i][1]=='Update'
+        n="#{n} Update"
+      else
+        n="#{n} (#{c2[i][1]})"
+      end
+      if t2/(24*60*60)>1
+        str2="#{str2}\n#{n} - #{(t2/(24*60*60)).floor} days #{mdfr}"
+      elsif t2/(60*60)>1
+        str2="#{str2}\n#{n} - #{(t2/(60*60)).floor} hours #{mdfr}"
+      elsif t2/60>1
+        str2="#{str2}\n#{n} - #{(t2/60).floor} minutes #{mdfr}"
+      elsif t2>1
+        str2="#{str2}\n#{n} - #{(t2).floor} seconds #{mdfr}"
+      end
+      if c2[i][1]=='Log-In Bonus' && mode>0
+        t2=c2[i][2][0].split('/').map{|q| q.to_i}
+        t2=Time.new(t2[2],t2[1],t2[0],23,0)
+        t3=Time.new(t.year,t.month,t.day,23,0)
+        t2=t3-t2
+        t2=t2/(24*60*60)
+        str2="#{str2} - #{(11-t2).floor} gifts remain for daily players"
+      elsif c2[i][1]=='Grand Conquest' && mode>0
+      elsif c2[i][1]=='Voting Gauntlet' && mode>0
+        t4=c2[i][2][0].split('/').map{|q| q.to_i}
+        t4=Time.new(t4[2],t4[1],t4[0],23,0)
+        t3=Time.new(t.year,t.month,t.day,23,0)
+        t4=t3-t4
+        t4=t4/(24*60*60)
+        t4=t4.floor
+        t2=c2[i][2][0].split('/').map{|q| q.to_i}
+        t2=Time.new(t2[2],t2[1],t2[0],21,0)
+        t2+=24*60*60*(2*(t4/2+1)-1)
+        t2=t2-t
+        if t2/(60*60)>1
+          str2="#{str2} - #{(t2/(60*60)).floor} hours remain in Round #{t4/2+1}"
+        elsif t2/60>1
+          str2="#{str2} - #{(t2/60).floor} minutes remain in Round #{t4/2+1}"
+        elsif t2>1
+          str2="#{str2} - #{t2.floor} minutes remain in Round #{t4/2+1}"
+        elsif t4/2<2
+          str2="#{str2} - waiting until Round #{t4/2+2}"
+        else
+          str2="#{str2} - post-gauntlet buffer period"
+        end
+      end
+    end
+  end
+  return str2
 end
 
 def week_from(d,dow)
