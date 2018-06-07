@@ -3188,6 +3188,7 @@ def disp_skill(bot,name,event,ignore=false)
   sklslt=['']
   if skill[4]=='Weapon'
     xcolor=0xF4728C
+    xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Weapons/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png"
     if skill[5]=='Red Tome Users Only'
       s=find_base_skill(skill,event)
       xfooter='Dark Mages can still learn this skill, it just takes more SP.'
@@ -3253,13 +3254,13 @@ def disp_skill(bot,name,event,ignore=false)
   elsif skill[4]=='Assist'
     sklslt=['Assist']
     xcolor=0x07DFBB
+    xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Assists/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png"
     str="<:Skill_Assist:444078171025965066> **Skill Slot:** #{skill[4]}\n**Range:** #{skill[3]}\n**Effect:** #{skill[7]}"
     str="#{str}\n**Heals:** #{skill[14]}" if skill[5]=="Staff Users Only"
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
     cumul=cumulitive_sp_cost(skill,event)
     cumul2=cumul+skill[1]/2
     if skill[0][skill[0].length-1,1]=='+' && skill[5]=="Staff Users Only"
-      # seasonal + weapons come bundled with their non-plus selves, so their minimum inherited SP cost has to include the non-plus version as inherited as well
       cumul2+=@skills[@skills.find_index{|q| q[0]==skill[0].gsub('+','')}][1]/2
     end
     str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
@@ -3360,9 +3361,9 @@ def disp_skill(bot,name,event,ignore=false)
     sk1=@skills[find_skill('Falchion (Mystery)',event,true,true)]
     sk2=@skills[find_skill('Falchion (Echoes)',event,true,true)]
     sk3=@skills[find_skill('Falchion (Awakening)',event,true,true)]
-    str="#{str}\n**Falchion(Mystery) evolves into:** #{sk1[14]}" if !sk1[14].nil? && sk1[14].length>0 && sk1[4]=='Weapon'
-    str="#{str}\n**Falchion(Echoes) evolves into:** #{sk2[14]}" if !sk2[14].nil? && sk2[14].length>0 && sk2[4]=='Weapon'
-    str="#{str}\n**Falchion(Awakening) evolves into:** #{sk3[14]}" if !sk3[14].nil? && sk3[14].length>0 && sk3[4]=='Weapon'
+    str="#{str}\n**Falchion(Mystery) evolves into:** #{list_lift(sk1[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk1[14].nil? && sk1[14].length>0 && sk1[4]=='Weapon'
+    str="#{str}\n**Falchion(Echoes) evolves into:** #{list_lift(sk2[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk2[14].nil? && sk2[14].length>0 && sk2[4]=='Weapon'
+    str="#{str}\n**Falchion(Awakening) evolves into:** #{list_lift(sk3[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk3[14].nil? && sk3[14].length>0 && sk3[4]=='Weapon'
   end
   x=false
   can_also=true
