@@ -157,6 +157,13 @@ def data_load() # loads the character and skill data from the files on my comput
         bob4[5][j]=bob4[5][j].to_i
       end
     end
+    if bob4.length>8 # the list of games should be spliced into an array of game abbreviations
+      if bob4[9].length>1
+        bob4[9]=bob4[9].split(', ')
+      else
+        bob4[9]=['-']
+      end
+    end
     if bob4.length>10 # the list of games should be spliced into an array of game abbreviations
       if bob4[11].length>1
         bob4[11]=bob4[11].split(', ')
@@ -819,8 +826,8 @@ def make_banner() # this function is used by the `summon` command to pick a rand
   bnr.push([])
   bnr.push([])
   for i in 0...@units.length
-    bnr[2].push(@units[i][0]) if @units[i][9].downcase.include?('g') && bnr[0]=='GHB Units' && @units[i][13][0].nil? # the fake GHB Unit banner
-    bnr[2].push(@units[i][0]) if @units[i][9].downcase.include?('t') && bnr[0]=='TT Units' && @units[i][13][0].nil?  # the fake Tempest Unit banner
+    bnr[2].push(@units[i][0]) if @units[i][9][0].downcase.include?('g') && bnr[0]=='GHB Units' && @units[i][13][0].nil? # the fake GHB Unit banner
+    bnr[2].push(@units[i][0]) if @units[i][9][0].downcase.include?('t') && bnr[0]=='TT Units' && @units[i][13][0].nil?  # the fake Tempest Unit banner
   end
   if x # 4* Focus Units
     bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
@@ -843,11 +850,11 @@ def make_banner() # this function is used by the `summon` command to pick a rand
     bnr.push(nil)
   end
   for i in 0...@units.length # non-focus units
-    bnr[3].push(@units[i][0]) if @units[i][9].include?('5p') && @units[i][13][0].nil?
-    bnr[4].push(@units[i][0]) if @units[i][9].include?('4p') && @units[i][13][0].nil?
-    bnr[5].push(@units[i][0]) if @units[i][9].include?('3p') && @units[i][13][0].nil?
-    bnr[6].push(@units[i][0]) if @units[i][9].include?('2p') && @units[i][13][0].nil?
-    bnr[7].push(@units[i][0]) if @units[i][9].include?('1p') && @units[i][13][0].nil?
+    bnr[3].push(@units[i][0]) if @units[i][9][0].include?('5p') && @units[i][13][0].nil?
+    bnr[4].push(@units[i][0]) if @units[i][9][0].include?('4p') && @units[i][13][0].nil?
+    bnr[5].push(@units[i][0]) if @units[i][9][0].include?('3p') && @units[i][13][0].nil?
+    bnr[6].push(@units[i][0]) if @units[i][9][0].include?('2p') && @units[i][13][0].nil?
+    bnr[7].push(@units[i][0]) if @units[i][9][0].include?('1p') && @units[i][13][0].nil?
   end
   return bnr
 end
@@ -1053,6 +1060,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   return find_skill('Bladeblade',event) if name.downcase.gsub(' ','')=='laevatein'
   return find_skill('Eckesachs',event) if ['exaccus','exesack','exsack','eggsacks'].include?(name.downcase.gsub(' ',''))
   return find_skill('Uror',event) if name.downcase.gsub(' ','')=='urdr'
+  return find_skill('Giga Excalibur',event) if name.downcase.gsub(' ','')=='gigascalibur'
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
   return find_skill("Tannenboom!#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='tanenboom'
   return find_skill("Sack o' Gifts#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='sackofgifts'
@@ -1115,6 +1123,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   return find_skill('Bladeblade',event) if namex=='laevatein'[0,namex.length]
   return find_skill('Eckesachs',event) if ['exaccus','exesack','exsack','eggsacks'].map{|q| q[0,namex.length]}.include?(name.downcase.gsub(' ',''))
   return find_skill("Sack o' Gifts",event) if namex=='sackofgifts'[0,namex.length]
+  return find_skill('Giga Excalibur',event) if namex=='gigascalibur'[0,namex.length]
   return find_skill("Killing Edge",event) if ['killersword','killeredge','killingsword'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill("Slaying Edge",event) if ['slayersword','slayeredge','slayingsword'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill(name.downcase.gsub(' ','').gsub('redt','r t'),event) if namex.downcase=='redtome'[0,namex.length]
@@ -2941,7 +2950,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
     ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ")
   end
   flds=[["**Level 1#{" +#{merges}" if merges>0}**",["HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","Speed: #{u1[3]}","Defense: #{u1[4]}","Resistance: #{u1[5]}","","BST: #{u1[6]}"]]]
-  if args.include?('gps') || args.include?('gp') || args.include?('growths') || args.include?('growth')
+  if args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth')
     flds.push(["**Growth Points**",["HP: #{u40[6]}","#{atk}: #{u40[7]}","Speed: #{u40[8]}","Defense: #{u40[9]}","Resistance: #{u40[10]}","","GPT: #{u40[6]+u40[7]+u40[8]+u40[9]+u40[10]}"]])
   end
   flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","Speed: #{u40[3]}","Defense: #{u40[4]}","Resistance: #{u40[5]}","","BST: #{u40[16]}"]])
@@ -4068,19 +4077,19 @@ def get_group(name,event)
   elsif name.downcase=='ghb'
     b=[]
     for i in 0...@units.length
-      b.push(@units[i][0].gsub('Lavatain','Laevatein')) if @units[i][9].downcase.include?('g') && has_any?(g, @units[i][13][0])
+      b.push(@units[i][0].gsub('Lavatain','Laevatein')) if @units[i][9][0].downcase.include?('g') && has_any?(g, @units[i][13][0])
     end
     return ['GHB',b]
   elsif name.downcase=='tempest'
     b=[]
     for i in 0...@units.length
-      b.push(@units[i][0].gsub('Lavatain','Laevatein')) if @units[i][9].downcase.include?('t') && has_any?(g, @units[i][13][0])
+      b.push(@units[i][0].gsub('Lavatain','Laevatein')) if @units[i][9][0].downcase.include?('t') && has_any?(g, @units[i][13][0])
     end
     return ['Tempest',b]
   elsif name.downcase=='daily_rotation'
     b=[]
     for i in 0...@units.length
-      b.push(@units[i][0].gsub('Lavatain','Laevatein')) if @units[i][9].downcase.include?('d') && has_any?(g, @units[i][13][0])
+      b.push(@units[i][0].gsub('Lavatain','Laevatein')) if @units[i][9][0].downcase.include?('d') && has_any?(g, @units[i][13][0])
     end
     return ['Daily_Rotation',b]
   elsif find_group(name,event)>0
@@ -5778,14 +5787,13 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Hinoka(Launch)','Hinoka(Wings)'],[str]]
   elsif /nino/ =~ str1
-    puts nino
     str='nino'
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
       return [str,['Nino(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch"]]
-    elsif str2.include?('fangs') || str2.include?('fanged') || str2.include?('fang')
-      return [str,['Nino(Fangs)'],["wings#{str}","#{str}wings","kinshi#{str}","#{str}kinshi","winged#{str}","#{str}winged","#{str}2"]]
+    elsif str2.include?('fangs') || str2.include?('fanged') || str2.include?('fang') || str2.include?('sf')
+      return [str,['Nino(Fangs)'],["wings#{str}","#{str}wings","kinshi#{str}","#{str}kinshi","winged#{str}","#{str}winged","#{str}2","#{str}sf","sf#{str}"]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Nino(Launch)','Nino(Fangs)'],[str]]
@@ -6353,40 +6361,40 @@ end
 def create_summon_list(clr)
   p=[['1<:Icon_Rarity_1:448266417481973781> exclusive',[]],['1<:Icon_Rarity_1:448266417481973781>-2<:Icon_Rarity_2:448266417872044032>',[]],['2<:Icon_Rarity_2:448266417872044032> exclusive',[]],['2<:Icon_Rarity_2:448266417872044032>-3<:Icon_Rarity_3:448266417934958592>',[]],['3<:Icon_Rarity_3:448266417934958592> exclusive',[]],['3<:Icon_Rarity_3:448266417934958592>-4<:Icon_Rarity_4:448266418459377684>',[]],['4<:Icon_Rarity_4:448266418459377684> exclusive',[]],['4<:Icon_Rarity_4:448266418459377684>-5<:Icon_Rarity_5:448266417553539104>',[]],['5<:Icon_Rarity_5:448266417553539104> exclusive',[]],['Other',[]]]
   for i in 0...clr.length
-    if clr[i][9].include?('1p')
-      if clr[i][9].include?('2p')
+    if clr[i][9][0].include?('1p')
+      if clr[i][9][0].include?('2p')
         p[1][1].push(clr[i][0])
-      elsif clr[i][9].include?('3p') || clr[i][9].include?('4p') || clr[i][9].include?('5p')
-        p[9][1].push("#{clr[i][0]} - 1#{'/3' if clr[i][9].include?('3p')}#{'/4' if clr[i][9].include?('4p')}#{'/5' if clr[i][9].include?('5p')}<:Icon_Rarity_S:448266418035621888>")
+      elsif clr[i][9][0].include?('3p') || clr[i][9][0].include?('4p') || clr[i][9][0].include?('5p')
+        p[9][0][1].push("#{clr[i][0]} - 1#{'/3' if clr[i][9][0].include?('3p')}#{'/4' if clr[i][9][0].include?('4p')}#{'/5' if clr[i][9][0].include?('5p')}<:Icon_Rarity_S:448266418035621888>")
       else
         p[0][1].push(clr[i][0])
       end
-    elsif clr[i][9].include?('2p')
-      if clr[i][9].include?('3p')
+    elsif clr[i][9][0].include?('2p')
+      if clr[i][9][0].include?('3p')
         p[3][1].push(clr[i][0])
-      elsif clr[i][9].include?('4p') || clr[i][9].include?('5p')
-        p[9][1].push("#{clr[i][0]} - 2#{'/4' if clr[i][9].include?('4p')}#{'/5' if clr[i][9].include?('5p')}<:Icon_Rarity_S:448266418035621888>")
+      elsif clr[i][9][0].include?('4p') || clr[i][9][0].include?('5p')
+        p[9][0][1].push("#{clr[i][0]} - 2#{'/4' if clr[i][9][0].include?('4p')}#{'/5' if clr[i][9][0].include?('5p')}<:Icon_Rarity_S:448266418035621888>")
       else
         p[2][1].push(clr[i][0])
       end
-    elsif clr[i][9].include?('3p')
-      if clr[i][9].include?('4p')
+    elsif clr[i][9][0].include?('3p')
+      if clr[i][9][0].include?('4p')
         p[5][1].push(clr[i][0])
-      elsif clr[i][9].include?('5p')
-        p[9][1].push("#{clr[i][0]} - 3/5<:Icon_Rarity_S:448266418035621888>")
+      elsif clr[i][9][0].include?('5p')
+        p[9][0][1].push("#{clr[i][0]} - 3/5<:Icon_Rarity_S:448266418035621888>")
       else
         p[4][1].push(clr[i][0])
       end
-    elsif clr[i][9].include?('4p')
-      if clr[i][9].include?('5p')
+    elsif clr[i][9][0].include?('4p')
+      if clr[i][9][0].include?('5p')
         p[7][1].push(clr[i][0])
       else
         p[6][1].push(clr[i][0])
       end
-    elsif clr[i][9].include?('5p')
+    elsif clr[i][9][0].include?('5p')
       p[8][1].push(clr[i][0])
     else
-      p[9][1].push("#{clr[i][0]} - weird")
+      p[9][0][1].push("#{clr[i][0]} - weird")
     end
   end
   for i in 0...p.length
@@ -6402,7 +6410,7 @@ end
 
 def disp_summon_pool(event,args)
   data_load()
-  k=@units.reject{|q| !q[9].include?('p') || !q[13][0].nil?}
+  k=@units.reject{|q| !q[9][0].include?('p') || !q[13][0].nil?}
   colors=[]
   for i in 0...args.length
     args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
@@ -6622,7 +6630,7 @@ def find_alts(event,name,bot)
     m.push('default') if k[i][0]==k[i][12].split(', ')[0] || k[i][12].split(', ')[0][k[i][12].split(', ')[0].length-1,1]=='*'
     m.push('default') if k[i][12].split(', ')[0][0,1]=='*' && k[i][12].split(', ').length>1
     m.push('sensible') if k[i][12].split(', ')[0][0,1]=='*' && k[i][12].split(', ').length<2
-    m.push('seasonal') if k[i][9].include?('s') && !(!k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1)
+    m.push('seasonal') if k[i][9][0].include?('s') && !(!k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1)
     m.push('community-voted') if @aliases.reject{|q| q[1]!=k[i][0] || !q[2].nil?}.map{|q| q[0]}.include?("#{k[i][0].split('(')[0]}CYL")
     m.push('Legendary') if !k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1 && !m.include?('default')
     m.push('Fallen') if k[i][0].include?('(Fallen)')
@@ -6991,7 +6999,7 @@ def unit_study(event,name,bot,weapon=nil)
       bane=@dev_units[dv][4].gsub(' ','')
     end
   end
-  rardata=@units[j][9].downcase.gsub('0s','')
+  rardata=@units[j][9][0].downcase.gsub('0s','')
   highest_merge=0
   if rardata.include?('p') || rardata.include?('s')
     highest_merge=@max_rarity_merge[1]
@@ -8276,7 +8284,7 @@ def banner_list(event,name,bot,weapon=nil)
   banner_count=0
   len='%.2f'
   len='%.4f' if @shardizard==4
-  if j[9].include?('LU')
+  if j[9][0].include?('LU')
     banners.push('*Launch Unit*')
     banner_count=-1
   end
@@ -8338,62 +8346,128 @@ def banner_list(event,name,bot,weapon=nil)
   banner_count+=banners.length
   ftr="Banner count: #{banner_count}"
   banners=['>Fake unit<'] if !j[13][0].nil? && banners.length<=0
+  five_star=[3+star_buff*3.00/(8.00),3+star_buff*3.00/(6.00)]
+  four_star=[(97.00-star_buff*0.5-five_star[0])*58.00/(94.00),(95.00-star_buff*0.5-five_star[0])*58.00/(92.00)]
+  three_star=[100.00-2*five_star[0]-four_star[0],100.00-(8+star_buff*0.5)-four_star[1]]
+  two_star=[0.0,0.0]
+  one_star=[0.0,0.0]
+  if star_buff>=24 && fail_mode==1
+    five_star=[50.0,50.0]
+    four_star=[0.0,0.0]
+    three_star=[0.0,0.0]
+    two_star=[0.0,0.0]
+    one_star=[0.0,0.0]
+  elsif star_buff>=24 && fail_mode==2
+    five_star=[50.0,37.5]
+    four_star=[0.0,0.0]
+    three_star=[0.0,0.0]
+    two_star=[0.0,0.0]
+    one_star=[0.0,0.0]
+  end
+  non_focus=[[],[]]
+  if j[9][0].include?('5p')
+    k=@units.reject{|q| !q[9][0].include?('5p') || !q[13][0].nil?}
+    non_focus[0].push("5<:Icon_Rarity_5:448266417553539104> Non-Focus - #{len % (five_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[0]/k.length)}% (Actual)") unless five_star[0]<=0
+      non_focus[1].push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Hero Fest only) - #{len % (five_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[1]/k.length)}% (Actual)") unless five_star[1]<=0
+    end
+  if j[9][0].include?('4p')
+    k=@units.reject{|q| !q[9][0].include?('4p') || !q[13][0].nil?}
+    non_focus[0].push("4<:Icon_Rarity_4:448266418459377684> (standard banner) - #{len % (four_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (four_star[0]/k.length)}% (Actual)") unless four_star[0]<=0
+    non_focus[0].push("4<:Icon_Rarity_4:448266418459377684> Non-Focus - #{len % ((four_star[0]/2)/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % ((four_star[0]/2)/k.length)}% (Actual)") unless four_star[0]<=0
+    non_focus[1].push("4<:Icon_Rarity_4:448266418459377684> all the time - #{len % (four_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (four_star[1]/k.length)}% (Actual)") unless four_star[1]<=0
+  end
+  if j[9][0].include?('3p')
+    k=@units.reject{|q| !q[9][0].include?('3p') || !q[13][0].nil?}
+    non_focus[0].push("3<:Icon_Rarity_3:448266417934958592> all the time - #{len % (three_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (three_star[0]/k.length)}% (Actual)") unless three_star[0]<=0
+    non_focus[1].push("3<:Icon_Rarity_3:448266417934958592> all the time - #{len % (three_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (three_star[1]/k.length)}% (Actual)") unless three_star[1]<=0
+  end
+  if j[9][0].include?('2p')
+    k=@units.reject{|q| !q[9][0].include?('2p') || !q[13][0].nil?}
+    non_focus[0].push("2<:Icon_Rarity_2:448266417872044032> all the time - #{len % (two_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (two_star[0]/k.length)}% (Actual)") unless two_star[0]<=0
+    non_focus[1].push("2<:Icon_Rarity_2:448266417872044032> all the time - #{len % (two_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (two_star[1]/k.length)}% (Actual)") unless two_star[1]<=0
+  end
+  if j[9][0].include?('1p')
+    k=@units.reject{|q| !q[9][0].include?('1p') || !q[13][0].nil?}
+    non_focus[0].push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % (one_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (one_star[0]/k.length)}% (Actual)") unless one_star[0]<=0
+    non_focus[1].push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % (one_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (one_star[1]/k.length)}% (Actual)") unless one_star[1]<=0
+  end
+  puts j[9].to_s
+  unless j[9][1].nil?
+    rardata=j[9][0].downcase.gsub('0s','').split('p')[0]
+    puts rardata
+    summon_type=[[],[],[],[],[],[],[]]
+    for m in 1...@max_rarity_merge[0]+1
+      if rardata.include?("#{m}p")
+        summon_type[0].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Summon Pool
+      end
+      if rardata.include?("#{m}d")
+        summon_type[1].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Daily Rotation Heroes
+      end
+      if rardata.include?("#{m}g")
+        summon_type[2].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Grand Hero Battles
+      end
+      if rardata.include?("#{m}f")
+        summon_type[3].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # free heroes
+      end
+      if rardata.include?("#{m}q")
+        summon_type[4].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # quest rewards
+      end
+      if rardata.include?("#{m}t")
+        summon_type[5].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Tempest Trials rewards
+      end
+      if rardata.include?("#{m}s")
+        summon_type[6].push("Seasonal #{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]} summon")
+      end
+      if rardata.include?("#{m}y")
+        summon_type[6].push("Story unit starting at #{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}")
+      end
+      if rardata.include?("#{m}b")
+        summon_type[6].push("Purchasable at #{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}")
+      end
+    end
+    if summon_type[6].include?('Story unit starting at 2<:Icon_Rarity_2:448266417872044032>') && summon_type[6].include?('Story unit starting at 4<:Icon_Rarity_4:448266418459377684>')
+      for i in 0...summon_type[6].length
+        if summon_type[6][i]=='Story unit starting at 2<:Icon_Rarity_2:448266417872044032>'
+          summon_type[6][i]='Story unit starting at 2<:Icon_Rarity_2:448266417872044032> (prior to version 2.5.0)'
+        elsif summon_type[6][i]=='Story unit starting at 4<:Icon_Rarity_4:448266418459377684>'
+          summon_type[6][i]='Story unit starting at 4<:Icon_Rarity_4:448266418459377684> (after version 2.5.0)'
+        end
+      end
+    end
+    for m in 0...5
+      summon_type[m]=summon_type[m].sort{|a,b| a <=> b}
+    end
+    mz=['summon','daily rotation battles','Grand Hero Battle','free hero','quest reward','Tempest Trial reward']
+    for m in 0...6
+      if summon_type[m].length>0
+        summon_type[m]="#{summon_type[m].join('/')} #{mz[m]}"
+      else
+        summon_type[m]=nil
+      end
+    end
+    if summon_type[6].length>0
+      summon_type[6]=summon_type[6].join(', ')
+    else
+      summon_type[6]=nil
+    end
+    summon_type.compact!
+    summon_type=['Unobtainable'] if summon_type.nil? || summon_type.length.zero?
+    summon_type=summon_type.join("\n")
+    banners.unshift(summon_type)
+  end
   if banners.length>0
     banners[0]="__**Debut:**__\n#{banners[0]}"
+    banners[0]="#{banners[0]}\n\n\n__**Joined the summon pool during:**__\n#{j[9][1]}" unless j[9][1].nil?
     banners[1]="\n__**Other Banners:**__#{"\n" unless justnames}\n#{banners[1]}" if banners.length>1
     if justnames && !safe_to_spam?(event)
       banners.push("\n\n#{ftr}")
       ftr='You can see more details about these banners by using this command in PM or by including the word "specifics" in the command.'
     else
-      five_star=[3+star_buff*3.00/(8.00),3+star_buff*3.00/(6.00)]
-      four_star=[(97.00-star_buff*0.5-five_star[0])*58.00/(94.00),(95.00-star_buff*0.5-five_star[0])*58.00/(92.00)]
-      three_star=[100.00-2*five_star[0]-four_star[0],100.00-(8+star_buff*0.5)-four_star[1]]
-      two_star=[0.0,0.0]
-      one_star=[0.0,0.0]
-      if star_buff>=24 && fail_mode==1
-        five_star=[50.0,50.0]
-        four_star=[0.0,0.0]
-        three_star=[0.0,0.0]
-        two_star=[0.0,0.0]
-        one_star=[0.0,0.0]
-      elsif star_buff>=24 && fail_mode==2
-        five_star=[50.0,37.5]
-        four_star=[0.0,0.0]
-        three_star=[0.0,0.0]
-        two_star=[0.0,0.0]
-        one_star=[0.0,0.0]
-      end
-      non_focus=[[],[]]
-      if j[9].include?('5p')
-        k=@units.reject{|q| !q[9].include?('5p') || !q[13][0].nil?}
-        non_focus[0].push("5<:Icon_Rarity_5:448266417553539104> Non-Focus - #{len % (five_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[0]/k.length)}% (Actual)") unless five_star[0]<=0
-        non_focus[1].push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Hero Fest only) - #{len % (five_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[1]/k.length)}% (Actual)") unless five_star[1]<=0
-      end
-      if j[9].include?('4p')
-        k=@units.reject{|q| !q[9].include?('4p') || !q[13][0].nil?}
-        non_focus[0].push("4<:Icon_Rarity_4:448266418459377684> (standard banner) - #{len % (four_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (four_star[0]/k.length)}% (Actual)") unless four_star[0]<=0
-        non_focus[0].push("4<:Icon_Rarity_4:448266418459377684> Non-Focus - #{len % ((four_star[0]/2)/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % ((four_star[0]/2)/k.length)}% (Actual)") unless four_star[0]<=0
-        non_focus[1].push("4<:Icon_Rarity_4:448266418459377684> all the time - #{len % (four_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (four_star[1]/k.length)}% (Actual)") unless four_star[1]<=0
-      end
-      if j[9].include?('3p')
-        k=@units.reject{|q| !q[9].include?('3p') || !q[13][0].nil?}
-        non_focus[0].push("3<:Icon_Rarity_3:448266417934958592> all the time - #{len % (three_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (three_star[0]/k.length)}% (Actual)") unless three_star[0]<=0
-        non_focus[1].push("3<:Icon_Rarity_3:448266417934958592> all the time - #{len % (three_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (three_star[1]/k.length)}% (Actual)") unless three_star[1]<=0
-      end
-      if j[9].include?('2p')
-        k=@units.reject{|q| !q[9].include?('2p') || !q[13][0].nil?}
-        non_focus[0].push("2<:Icon_Rarity_2:448266417872044032> all the time - #{len % (two_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (two_star[0]/k.length)}% (Actual)") unless two_star[0]<=0
-        non_focus[1].push("2<:Icon_Rarity_2:448266417872044032> all the time - #{len % (two_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (two_star[1]/k.length)}% (Actual)") unless two_star[1]<=0
-      end
-      if j[9].include?('1p')
-        k=@units.reject{|q| !q[9].include?('1p') || !q[13][0].nil?}
-        non_focus[0].push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % (one_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (one_star[0]/k.length)}% (Actual)") unless one_star[0]<=0
-        non_focus[1].push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % (one_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (one_star[1]/k.length)}% (Actual)") unless one_star[1]<=0
-      end
       banners.push("\n__**Starting Non-Focus Chances:**__#{"\n\n__*Standard 3% banners*__\n#{non_focus[0].join("\n")}" if non_focus[0].length>0}#{"\n\n__*Hero Fests and Legendary banners*__\n#{non_focus[1].join("\n")}" if non_focus[1].length>0}") if non_focus[0].length>0 || non_focus[1].length>0
     end
   else
     banners=[">No banners found<"]
+    banners.push("\n__**Starting Non-Focus Chances:**__#{"\n\n__*Standard 3% banners*__\n#{non_focus[0].join("\n")}" if non_focus[0].length>0}#{"\n\n__*Hero Fests and Legendary banners*__\n#{non_focus[1].join("\n")}" if non_focus[1].length>0}") if (non_focus[0].length>0 || non_focus[1].length>0) && !justnames && safe_to_spam?(event)
   end
   hdr="__Banners **#{j[0].gsub('Lavatain','Laevatein')}** has been on__#{"\nBanners in **+#{star_buff}** form (after #{star_buff*5} to #{star_buff*5+4} failures to get a 5<:Icon_Rarity_5:448266417553539104>)" if star_buff>0}"
   hdr="__Banners **#{j[0].gsub('Lavatain','Laevatein')}** has been on__\nBanners in **Omega** form (after 120 failures to get a 5<:Icon_Rarity_5:448266417553539104>)" if star_buff>=24
@@ -9649,7 +9723,7 @@ bot.command([:bst, :BST]) do |event, *args|
           event << "Ambiguous Unit #{au}: #{x[0]} - #{list_lift(x[1].map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"},'or')}"
         else
           name=@units[find_unit(find_name_in_string(event,x[1][0]),event)][0]
-          summon_type=@units[find_unit(find_name_in_string(event,x[1][0]),event)][9].downcase
+          summon_type=@units[find_unit(find_name_in_string(event,x[1][0]),event)][9][0].downcase
         end
       else
         au+=1
@@ -9657,10 +9731,10 @@ bot.command([:bst, :BST]) do |event, *args|
       end
     elsif find_name_in_string(event,sever(k[i]))!=nil
       name=@units[find_unit(find_name_in_string(event,sever(k[i])),event)][0]
-      summon_type=@units[find_unit(find_name_in_string(event,sever(k[i])),event)][9].downcase
+      summon_type=@units[find_unit(find_name_in_string(event,sever(k[i])),event)][9][0].downcase
     elsif !x.nil? && !x[1].is_a?(Array)
       name=@units[find_unit(find_name_in_string(event,x[1]),event)][0]
-      summon_type=@units[find_unit(find_name_in_string(event,x[1]),event)][9].downcase
+      summon_type=@units[find_unit(find_name_in_string(event,x[1]),event)][9][0].downcase
     elsif x.nil?
       if i>1 && !detect_multi_unit_alias(event,k[i-2],"#{k[i-2]} #{k[i-1]} #{k[i]}",1).nil?
       elsif i>0 && !detect_multi_unit_alias(event,k[i-1],"#{k[i-1]} #{k[i]}",1).nil?
@@ -12335,7 +12409,7 @@ bot.command(:snagstats) do |event, f, f2|
       m.push('default') if untz[i][0]==untz[i][12].split(', ')[0] || untz[i][12].split(', ')[0][untz[i][12].split(', ')[0].length-1,1]=='*'
       m.push('faceted') if untz[i][12].split(', ')[0][0,1]=='*' && untz[i][12].split(', ').length>1
       m.push('sensible') if untz[i][12].split(', ')[0][0,1]=='*' && untz[i][12].split(', ').length<2
-      m.push('seasonal') if untz[i][9].include?('s') && !(!untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1)
+      m.push('seasonal') if untz[i][9][0].include?('s') && !(!untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1)
       m.push('community-voted') if @aliases.reject{|q| q[1]!=untz[i][0] || !q[2].nil?}.map{|q| q[0]}.include?("#{untz[i][0].split('(')[0]}CYL")
       m.push('Legendary') if !untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1 && !m.include?('default')
       m.push('Fallen') if untz[i][0].include?('(Fallen)')
