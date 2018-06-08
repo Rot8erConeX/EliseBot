@@ -3267,6 +3267,7 @@ def disp_skill(bot,name,event,ignore=false)
   elsif skill[4]=='Special'
     sklslt=['Special']
     xcolor=0xF67EF8
+    xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Specials/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png"
     str="<:Skill_Special:444078170665254929> **Skill Slot:** #{skill[4]}\n**Cooldown:** #{skill[2]}\n**Effect:** #{skill[7]}#{"\n**Range:** ```\n#{skill[3].gsub("n","\n")}```" if skill[3]!="-"}"
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
     cumul=cumulitive_sp_cost(skill,event)
@@ -5176,56 +5177,56 @@ def display_skills(event, mode)
         if types2.length==1 && types2[0]=='Special'
           m=typesx.map{|q| q[11].split(', ')}
           if m.reject{|q| !q.include?('SupershieldSpecial')}.length>0 && m.reject{|q| !q.include?('SupershieldSpecial')}.length==m.length
-            h='<:Special_Defensive_Supershield:443688197558370304> Supershield Specials'
+            h='<:Special_Defensive_Supershield:454460021066170378> Supershield Specials'
           elsif m.reject{|q| !q.include?('AegisSpecial')}.length>0 && m.reject{|q| !q.include?('AegisSpecial')}.length==m.length
-            h='<:Special_Defensive_Aegis:443688197474484224> Aegis Specials'
+            h='<:Special_Defensive_Aegis:454460020625768470> Aegis Specials'
           elsif m.reject{|q| !q.include?('PaviseSpecial')}.length>0 && m.reject{|q| !q.include?('PaviseSpecial')}.length==m.length
-            h='<:Special_Defensive_Pavise:443688197118099458> Pavise Specials'
+            h='<:Special_Defensive_Pavise:454460020801929237> Pavise Specials'
           elsif m.reject{|q| !q.include?('MiracleSpecial')}.length>0 && m.reject{|q| !q.include?('MiracleSpecial')}.length==m.length
-            h='<:Special_Defensive_Miracle:443688197470289920> Miracle Specials'
+            h='<:Special_Defensive_Miracle:454460020973764610> Miracle Specials'
           elsif m.reject{|q| !q.include?('EclipseSpecial')}.length>0 && m.reject{|q| !q.include?('EclipseSpecial')}.length==m.length
-            h='<:Special_Offensive_Eclipse:443683135830622208> Eclipse Specials'
+            h='<:Special_Offensive_Eclipse:454473651308199956> Eclipse Specials'
           elsif m.reject{|q| !q.include?('SunSpecial')}.length>0 && m.reject{|q| !q.include?('SunSpecial')}.length==m.length
-            h='<:Special_Offensive_Sun:443683135046025227> Sun Specials'
+            h='<:Special_Offensive_Sun:454473651429965834> Sun Specials'
           elsif m.reject{|q| !q.include?('MoonSpecial')}.length>0 && m.reject{|q| !q.include?('MoonSpecial')}.length==m.length
-            h='<:Special_Offensive_Moon:443683135394283540> Moon Specials'
+            h='<:Special_Offensive_Moon:454473651345948683> Moon Specials'
           elsif m.reject{|q| !q.include?('StarSpecial')}.length>0 && m.reject{|q| !q.include?('StarSpecial')}.length==m.length
-            h='<:Special_Offensive_Star:443683135964708864> Star Specials'
+            h='<:Special_Offensive_Star:454473651396542504> Star Specials'
           elsif m.reject{|q| !q.include?('FireSpecial')}.length>0 && m.reject{|q| !q.include?('FireSpecial')}.length==m.length
-            h='<:Special_Offensive_Fire:443683354286751744> Fire Specials'
+            h='<:Special_Offensive_Fire:454473651861979156> Fire Specials'
           elsif m.reject{|q| !q.include?('IceSpecial')}.length>0 && m.reject{|q| !q.include?('IceSpecial')}.length==m.length
-            h='<:Special_Offensive_Ice:443683354504855552> Ice Specials'
+            h='<:Special_Offensive_Ice:454473651291422720> Ice Specials'
           elsif m.reject{|q| !q.include?('DragonSpecial')}.length>0 && m.reject{|q| !q.include?('DragonSpecial')}.length==m.length
-            h='<:Special_Offensive_Dragon:443683135226380288> Dragon Specials'
+            h='<:Special_Offensive_Dragon:454473651186696192> Dragon Specials'
           elsif m.reject{|q| !q.include?('DarkSpecial')}.length>0 && m.reject{|q| !q.include?('DarkSpecial')}.length==m.length
-            h='<:Special_Offensive_Darkness:443683135230836756> Darkness Specials'
+            h='<:Special_Offensive_Darkness:454473651010535435> Darkness Specials'
           elsif m.reject{|q| !q.include?('RendSpecial')}.length>0 && m.reject{|q| !q.include?('RendSpecial')}.length==m.length
-            h='<:Special_Offensive_Rend:443683135377375232> Rend Specials'
+            h='<:Special_Offensive_Rend:454473651119718401> Rend Specials'
           elsif m.reject{|q| !q.include?('Damage')}.length>0 && m.reject{|q| !q.include?('Damage')}.length==m.length
-            h='<:Special_Offensive:443573422954381333> Offensive Specials'
+            h='<:Special_Offensive:454460020793278475> Offensive Specials'
           elsif m.reject{|q| !q.include?('Defense')}.length>0 && m.reject{|q| !q.include?('Defense')}.length==m.length
-            h='<:Special_Defensive:443573424015540224> Defensive Specials'
+            h='<:Special_Defensive:454460020591951884> Defensive Specials'
           elsif m.reject{|q| !q.include?('AoE')}.length>0 && m.reject{|q| !q.include?('AoE')}.length==m.length
-            h='<:Special_AoE:443573422942060555> AoE Specials'
+            h='<:Special_AoE:454460021665693696> AoE Specials'
           elsif m.reject{|q| !q.include?('Staff')}.length>0 && m.reject{|q| !q.include?('Staff')}.length==m.length
-            h='<:Special_Healer:443578910605574154> Healer Specials'
+            h='<:Special_Healer:454451451805040640> Healer Specials'
           else
-            h='<:Special_Unknown:443573423453503488> Misc. Specials'
+            h='<:Special_Unknown:454451451603976192> Misc. Specials'
           end
         elsif types2.length==1 && types2[0]=='Assist'
           m=typesx.map{|q| q[11].split(', ')}
           if m.reject{|q| !q.include?('Staff')}.length>0 && m.reject{|q| !q.include?('Staff')}.length==m.length
-            h='<:Assist_Staff:443603018269720596> Healing Staves'
+            h='<:Assist_Staff:454451496831025162> Healing Staves'
           elsif m.reject{|q| !q.include?('Health')}.length>0 && m.reject{|q| !q.include?('Health')}.length==m.length
-            h='<:Assist_Health:443603017757884426> Health Assists'
+            h='<:Assist_Health:454462054636584981> Health Assists'
           elsif m.reject{|q| !q.include?('Music')}.length>0 && m.reject{|q| !q.include?('Music')}.length==m.length
-            h='<:Assist_Music:443603018064068608> Musical Assists'
+            h='<:Assist_Music:454462054959415296> Musical Assists'
           elsif m.reject{|q| !q.include?('Move')}.length>0 && m.reject{|q| !q.include?('Move')}.length==m.length
-            h='<:Assist_Move:443603018039033856> Movement Assists'
+            h='<:Assist_Move:454462055479508993> Movement Assists'
           elsif m.reject{|q| !q.include?('Rally')}.length>0 && m.reject{|q| !q.include?('Rally')}.length==m.length
-            h='<:Assist_Rally:443603018265526287> Rally Assists'
+            h='<:Assist_Rally:454462054619807747> Rally Assists'
           else
-            h='<:Assist_Unknown:443573423189262336> Misc. Assists'
+            h='<:Assist_Unknown:454451496482897921> Misc. Assists'
           end
         elsif types2.reject{|q| !q.include?('Passive(S)') && !q.include?('Seal')}==types2 && types3.length==1
           h='<:Great_Badge_Scarlet:443704781001850910> Scarlet Seals' if types3[0]=='scarlet'
@@ -5244,8 +5245,8 @@ def display_skills(event, mode)
           # staff type
           if types[0][1]=='Staff Users Only'
             h="#{emotes[0]} Damaging Staves" if p1[i].include?('Assault') || types[0][0]=='Weapon'
-            h='<:Assist_Staff:443603018269720596> Healing Staves' if p1[i].include?('Heal') || types[0][0]=='Assist'
-            h='<:Special_Healer:443578910605574154> Healer Specials' if p1[i].include?('Imbue') || types[0][0]=='Special'
+            h='<:Assist_Staff:454451496831025162> Healing Staves' if p1[i].include?('Heal') || types[0][0]=='Assist'
+            h='<:Special_Healer:454451451805040640> Healer Specials' if p1[i].include?('Imbue') || types[0][0]=='Special'
             h='<:Passive_Staff:443677023848890388> Healer Passives' if p1[i].include?('Live to Serve 1/2/3') || types[0][0]=='Passive'
           end
           # weapons
@@ -9237,7 +9238,7 @@ bot.command([:skillrarity,:onestar,:twostar,:threestar,:fourstar,:fivestar,:skil
   end
   if " #{event.message.text.downcase} ".include?(' progression ')
     create_embed(event,"__**Non-healers**__","",xcolor,"Most non-healer units have one Scenario X passive and one Scenario Y passive",nil,[["__<:Skill_Weapon:444078171114045450> **Weapons**__","Tier 1 (*Iron, basic magic*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Steel, El- magic, Fire Breath+*) - Default at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 (*Silver, super magic*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~unless a Dragon breath weapon with built-in Frostbite~~, default at 4<:Icon_Rarity_4:448266418459377684>\nTier 4 (*+ weapons other than Fire Breath+, Prf weapons*) - default at 5<:Icon_Rarity_5:448266417553539104>\nRetro-Prfs (*Felicia's Plate*) - Available at 5<:Icon_Rarity_5:448266417553539104>, promotes from nothing",1],["__<:Skill_Assist:444078171025965066> **Assists**__","Tier 1 (*Rallies, Dance/Sing, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Sharena has hers default at 2\\*~~\nTier 2 (*Double Rallies*) - Available at 4<:Icon_Rarity_4:448266418459377684>\nPrf Assists (*Sacrifice*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Skill_Special:444078170665254929> **Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Daylight, New Moon, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Alfonse and Anna have theirs default at 2\\*~~\nTier 2 (*Sol, Luna, etc.*) - Available at 4<:Icon_Rarity_4:448266418459377684> ~~Jaffar and Saber have theirs also default at 5\\*~~\nTier 3 (*Galeforce, Aether, Prf Specials*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Passive_X:444078170900135936> **Passives (scenario X)**__","Tier 1 - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 - Available at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>"],["__<:Passive_Y:444078171113914368> **Passives (scenario Y)**__","Tier 1 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 3 - Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Prf:444078170887553024> **Prf Passives**__","Available at 5<:Icon_Rarity_5:448266417553539104>"]],2)
-    create_embed(event,"__**Healers**__","",0x64757D,"Most healers have a Scenario Y passive",nil,[["__#{"<:Colorless_Staff:443692132323295243>" unless colored_healers?(event)}#{"<:Gold_Staff:443172811628871720>" if colored_healers?(event)} **Damaging Staves**__","Tier 1 (*only Assault*) - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*non-plus staves*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Lyn(Bride) has hers default when summoned~~\nTier 3 (*+ staves, Prf weapons*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Assist_Staff:443603018269720596> **Healing Staves**__","Tier 1 (*Heal*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Mend, Reconcile*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 (*all other non-plus staves*) - Available at 4<:Icon_Rarity_4:448266418459377684>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 4 (*+ staves, Prf staves if healers got them*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Special_Healer:443578910605574154> **Healer Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Imbue*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 (*Balms, Heavenly Light*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nPrf Specials (*no examples yet, but they may come*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Passive_X:444078170900135936> **Passives (scenario X)**__","Tier 1 - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 - Available at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>"],["__<:Passive_Y:444078171113914368> **Passives (scenario Y)**__","Tier 1 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 3 - Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Prf:444078170887553024> **Prf Passives**__","Available at 5<:Icon_Rarity_5:448266417553539104>"]],2)
+    create_embed(event,"__**Healers**__","",0x64757D,"Most healers have a Scenario Y passive",nil,[["__#{"<:Colorless_Staff:443692132323295243>" unless colored_healers?(event)}#{"<:Gold_Staff:443172811628871720>" if colored_healers?(event)} **Damaging Staves**__","Tier 1 (*only Assault*) - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*non-plus staves*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Lyn(Bride) has hers default when summoned~~\nTier 3 (*+ staves, Prf weapons*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Assist_Staff:454451496831025162> **Healing Staves**__","Tier 1 (*Heal*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Mend, Reconcile*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 (*all other non-plus staves*) - Available at 4<:Icon_Rarity_4:448266418459377684>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 4 (*+ staves, Prf staves if healers got them*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Special_Healer:454451451805040640> **Healer Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Imbue*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 (*Balms, Heavenly Light*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nPrf Specials (*no examples yet, but they may come*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Passive_X:444078170900135936> **Passives (scenario X)**__","Tier 1 - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 - Available at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>"],["__<:Passive_Y:444078171113914368> **Passives (scenario Y)**__","Tier 1 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 3 - Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Prf:444078170887553024> **Prf Passives**__","Available at 5<:Icon_Rarity_5:448266417553539104>"]],2)
   else
     create_embed(event,"**Supposed Bug: X character, despite not being available at #{r}, has skills listed for #{r.gsub('Y','that')} in the `skill` command.**\n\nA word from my developer","By observing the skill lists of the Daily Hero Battle units - the only units we have available at 1\\* - I have learned that there is a set progression for which characters learn skills.  Only six units directly contradict this observation - and three of those units are the Askrians, who were likely given their Assists and Tier 1 Specials (depending on the character) at 2\\* in order to make them useable in the early story maps when the player has limited orbs and therefore limited unit choices.  One is Lyn(Bride), who as the only seasonal healer so far, may be the start of a new pattern.  The other two are Jaffar and Saber, who - for unknown reasons - have their respective Tier 2 Specials available right out of the box as 5\\*s.\n\nThe information as it is is not useless.  In fact, as seen quite recently as of the time of this writing, IntSys is willing to demote some units out of the 4-5\\* pool into the 3-4\\* one. This information allows us to predict which skills the new 3\\* versions of these characters will have.\n\nAs for units unlikely to demote, Paralogue maps will have lower-rarity versions of units with their base kits.  Training Tower and Tempest Trials attempt to build units according to recorded trends in Arena, but will use default base kits at lower difficulties.  Obviously you can't fodder a 4* Siegbert for Death Blow 3, but you can still encounter him in Tempest.",xcolor)
     event.respond "To see the progression I have discovered, please use the command `FEH!skillrarity progression`."
