@@ -2142,6 +2142,16 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       stats[5]+=4
     end
   end
+  if skillls.include?('Panic Ploy')
+    for i in 0...rally.length
+      rally[i]=0-rally[i]
+    end
+  end
+  if skillls.include?('Harsh Command')
+    for i in 0...negative.length
+      negative[i]=0-negative[i]
+    end
+  end
   stats[2]+=rally[1]+negative[1]
   stats[3]+=rally[2]+negative[2]
   stats[4]+=rally[3]+negative[3]
@@ -7952,9 +7962,7 @@ def phase_study(event,name,bot,weapon=nil)
   end
   for i in 1...close.length
     m=[close[i],distant[i]].min
-    ppu40xw[i]+=m
     epu40xw[i]+=m
-    ppu40[i]+=m
     epu40[i]+=m
     close[i]-=m
     distant[i]-=m
@@ -7962,7 +7970,6 @@ def phase_study(event,name,bot,weapon=nil)
   ppu40xw[16]=ppu40xw[1]+ppu40xw[2]+ppu40xw[3]+ppu40xw[4]+ppu40xw[5]
   epu40xw[16]=epu40xw[1]+epu40xw[2]+epu40xw[3]+epu40xw[4]+epu40xw[5]
   for i in 1...close.length
-    ppu40xw[i]="#{ppu40xw[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
     epu40xw[i]="#{epu40xw[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
   end
   ppu40[16]=ppu40[1]+ppu40[2]+ppu40[3]+ppu40[4]+ppu40[5]
@@ -7990,13 +7997,11 @@ def phase_study(event,name,bot,weapon=nil)
   end
   for i in 1...close.length
     m=[close[i],distant[i]].min
-    ppu40[i]+=m
     epu40[i]+=m
     close[i]-=m
     distant[i]-=m
   end
   for i in 1...close.length
-    ppu40[i]="#{ppu40[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
     epu40[i]="#{epu40[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
   end
   for i in 0...ppu40.length
@@ -12468,12 +12473,12 @@ bot.command(:snagstats) do |event, f, f2|
     event.channel.send_temporary_message('Calculating data, please wait...',1)
     event << "**There are #{filler(legal_units,all_units,-1)} units, including:**"
     event << ''
-    event << "#{filler(legal_units,all_units,9,-1,'p',1)} summonable units"
-    event << "#{filler(legal_units,all_units,9,-1,'g',1)} Grand Hero Battle reward units"
-    event << "#{filler(legal_units,all_units,9,-1,'t',1)} Tempest Trials reward units"
-    event << "#{filler(legal_units,all_units,[9,2],[-1,0],['s',2],[1,-2])} seasonal units"
+    event << "#{filler(legal_units,all_units,9,0,'p',1)} summonable units"
+    event << "#{filler(legal_units,all_units,9,0,'g',1)} Grand Hero Battle reward units"
+    event << "#{filler(legal_units,all_units,9,0,'t',1)} Tempest Trials reward units"
+    event << "#{filler(legal_units,all_units,[9,2],[0,0],['s',2],[1,-2])} seasonal units"
     event << "#{filler(legal_units,all_units,2,0,2,2)} legendary units"
-    event << "#{filler(legal_units,all_units,9,-1,'-',1)} unobtainable units"
+    event << "#{filler(legal_units,all_units,9,0,'-',1)} unobtainable units"
     event << ''
     event << "#{filler(legal_units,all_units,1,0,'Red')} red units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Red','p'],[0,1])} in the main summon pool"
     event << "#{filler(legal_units,all_units,1,0,'Blue')} blue units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Blue','p'],[0,1])} in the main summon pool"
@@ -12680,12 +12685,12 @@ bot.command(:snagstats) do |event, f, f2|
   event << ''
   event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_units,all_units,-1)} *units*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
   if safe_to_spam?(event) || f.downcase=="all"
-    event << "#{filler(legal_units,all_units,9,-1,'p',1)} summonable units"
-    event << "#{filler(legal_units,all_units,9,-1,'g',1)} Grand Hero Battle reward units"
-    event << "#{filler(legal_units,all_units,9,-1,'t',1)} Tempest Trials reward units"
-    event << "#{filler(legal_units,all_units,[9,2],[-1,0],['s',2],[1,-2])} seasonal units"
+    event << "#{filler(legal_units,all_units,9,0,'p',1)} summonable units"
+    event << "#{filler(legal_units,all_units,9,0,'g',1)} Grand Hero Battle reward units"
+    event << "#{filler(legal_units,all_units,9,0,'t',1)} Tempest Trials reward units"
+    event << "#{filler(legal_units,all_units,[9,2],[0,0],['s',2],[1,-2])} seasonal units"
     event << "#{filler(legal_units,all_units,2,0,2,2)} legendary units"
-    event << "#{filler(legal_units,all_units,9,-1,'-',1)} unobtainable units"
+    event << "#{filler(legal_units,all_units,9,0,'-',1)} unobtainable units"
     event << ''
   end
   event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_skills,all_skills,-1)} *skills*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
