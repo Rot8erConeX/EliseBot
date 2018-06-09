@@ -48,7 +48,9 @@ bot.gateway.check_heartbeat_acks = false
 @zero_by_four=[0,0,0,'']
 @headpats=[0,0,0]
 @summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,
-                 341729526767681549,380013135576432651]
+                 341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,238770788272963585,297459718249512961,283833293894582272,
+                 214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,347491426852143109,392557615177007104,295686580528742420,
+                 412303462764773376,442465051371372544,353997181193289728]
 @summon_rate=[0,0,3]
 @mods=[[0, 6, 7, 7, 8, 8], # this is a translation of the graphic displayed in the "growths" command.
        [0, 8, 8, 9,10,10],
@@ -426,7 +428,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['summonpool','summon_pool','pool'].include?(command.downcase) || (['summon'].include?(command.downcase) && "#{subcommand}".downcase=='pool')
     create_embed(event,"**#{command.downcase}#{" pool" if command.downcase=='summon'}** __*colors__","Shows the summon pool for the listed color.\n\nIn PM, all colors listed will be displayed, or all colors if none are specified.\nIn servers, only the first color listed will be displayed.",0xD49F61)
   elsif @summon_servers.include?(k) && ['summon'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\n**This command is only available in certain servers**.",0x9E682C)
+    create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\nYou can also include the word \"current\" or \"now\" to force me to choose a banner that is currently available in-game.\n\n**This command is only available in certain servers**.",0x9E682C)
   elsif ['effhp','eff_hp'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows the effective HP data for the unit `name`.',0xD49F61)
     disp_more_info(event)
@@ -790,7 +792,7 @@ def is_mod?(user,server,channel) # this function is used by certain commands to 
   return false
 end
 
-def make_banner() # this function is used by the `summon` command to pick a random banner and choose which units are on it.
+def make_banner(event) # this function is used by the `summon` command to pick a random banner and choose which units are on it.
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
@@ -804,10 +806,36 @@ def make_banner() # this function is used by the `summon` command to pick a rand
     b[i][1]=b[i][1].to_i
     b[i][2]=b[i][2].gsub(' ','').split(',')
     b[i][2]=[] if b[i][2][0]=='-'
+    b[i][4]=nil if !b[i][4].nil? && b[i][4].length<=0
   end
   b=b.reject{|q| q[2].length==0 && !q[0].include?('GHB') && !q[0].include?('TT')}
+  args=event.message.text.downcase.gsub("\n",' ').split(' ')
+  lookout=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
+    lookout=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
+      lookout.push(eval line)
+    end
+  end
+  banner_types=[]
+  for i in 0...args.length
+    for i2 in 0...lookout.length
+      if lookout[i2][1].include?(args[i].downcase)
+        banner_types.push(lookout[i2][0]) if lookout[i2][2]=='Banner'
+      end
+    end
+  end
+  b2=b.map{|q| q}
+  b2=b2.reject{|q| q[5].nil? || !has_any?(q[5].split(', '),banner_types.reject{|q2| q2=='Current'})} if banner_types.reject{|q2| q2=='Current'}.length>0
+  b2=b.map{|q| q} if b2.length==0
+  t=Time.now
+  timeshift=8
+  t-=60*60*timeshift
+  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  b2=b2.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm} if banner_types.include?('Current')
+  b2=b.map{|q| q} if b2.length==0
   data_load()
-  bnr=b.sample
+  bnr=b2.sample
   x=false
   y=false
   z=false
@@ -820,6 +848,7 @@ def make_banner() # this function is used by the `summon` command to pick a rand
     bnr[3]=nil
   end
   bnr[4]=nil
+  bnr[5]=nil
   bnr.compact!
   bnr.push([])
   bnr.push([])
@@ -5053,7 +5082,7 @@ def display_units(event, mode)
           h='<:Red_Blade:443172811830198282> Swords' if p1[i].include?('Alfonse') || (wpn1[0]==['Red', 'Blade'])
           h='<:Blue_Blade:443172811582996480> Lances' if p1[i].include?('Sharena') || (wpn1[0]==['Blue', 'Blade'])
           h='<:Green_Blade:443172811721146368> Axes' if p1[i].include?('Anna') || (wpn1[0]==['Green', 'Blade'])
-          h='<:Colorless_Blade:443692132310712322> Rods' if wpn1.uniq.zero? && wpn1[0]==['Colorless', 'Blade']
+          h='<:Colorless_Blade:443692132310712322> Rods' if wpn1[0]==['Colorless', 'Blade']
           # Magic types
           h='<:Red_Tome:443172811826003968> Fire Mages' if p1[i].include?('Lilina') || (wpn1[0]==['Red', 'Tome', 'Fire'])
           h='<:Red_Tome:443172811826003968> Dark Mages' if p1[i].include?('Raigh') || (wpn1[0]==['Red', 'Tome', 'Dark'])
@@ -5064,7 +5093,7 @@ def display_units(event, mode)
           h='<:Red_Dragon:443172811796774932> Red Dragons' if p1[i].include?('Tiki(Young)') || (wpn1[0]==['Red', 'Dragon'])
           h='<:Blue_Dragon:443172811952095232> Blue Dragons' if p1[i].include?('Nowi') || (wpn1[0]==['Blue', 'Dragon'])
           h='<:Green_Dragon:443172811780128768> Green Dragons' if p1[i].include?('Fae') || (wpn1[0]==['Green', 'Dragon'])
-          h='<:Colorless_Dragon:443692132415438849> Colorless Dragons' if p1[i].include?('Robin(F)(Fallen)') || (wpn1.uniq.zero? && wpn1[0]==['Colorless', 'Dragon'])
+          h='<:Colorless_Dragon:443692132415438849> Colorless Dragons' if p1[i].include?('Robin(F)(Fallen)') || (wpn1[0]==['Colorless', 'Dragon'])
           # archer colors
           h='<:Red_Bow:443172812455280641> Red Archers' if (wpn1[0]==['Red', 'Bow'])
           h='<:Blue_Bow:443172811612225536> Blue Archers' if (wpn1[0]==['Blue', 'Bow'])
@@ -8273,6 +8302,7 @@ def banner_list(event,name,bot,weapon=nil)
     b[i][1]=b[i][1].to_i
     b[i][2]=b[i][2].split(', ')
     b[i]=nil if b[i][2][0]=='-'
+    b[i][4]=nil if !b[i][4].nil? && b[i][4].length<=0
   end
   justnames=true
   if !safe_to_spam?(event)
@@ -9337,6 +9367,7 @@ end
 
 bot.command(:summon) do |event, *colors|
   return nil if overlap_prevent(event)
+  event.channel.send_temporary_message('Calculating data, please wait...',8)
   if colors.nil? || colors.length<=0
   elsif colors[0].downcase=='pool'
     args=colors.map{|q| q}
@@ -9364,7 +9395,7 @@ bot.command(:summon) do |event, *colors|
       end
     end
     metadata_load()
-    bnr=make_banner()
+    bnr=make_banner(event)
     n=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP','+Def -Atk','+Def -Spd',
        '+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral']
     n=['Neutral'] if bnr[0]=='TT Units' || bnr[0]=='GHB Units'
@@ -11458,6 +11489,7 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     b[i][1]=b[i][1].to_i
     b[i][2]=b[i][2].split(', ')
     b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
+    b[i][4]=nil if !b[i][4].nil? && b[i][4].length<=0
   end
   b.compact!
   c=[]
