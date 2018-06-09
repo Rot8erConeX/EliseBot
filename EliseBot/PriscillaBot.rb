@@ -819,6 +819,7 @@ def make_banner() # this function is used by the `summon` command to pick a rand
     w=true if bnr[3].include?('1') # banner has 1* Focus Units
     bnr[3]=nil
   end
+  bnr[4]=nil
   bnr.compact!
   bnr.push([])
   bnr.push([])
@@ -8349,12 +8350,12 @@ def banner_list(event,name,bot,weapon=nil)
           t=b[i][4].split(', ').map{|q| q.split('/').map{|q2| q2.to_i}}
           tm="\n*Duration:* #{t[0][0]} #{mo[t[0][1]]} #{t[0][2]} - #{t[1][0]} #{mo[t[1][1]]} #{t[1][2]}"
         end
-        str="__*#{b[i][0]}*__#{tm}#{"\n*Shared Focus Color:* #{shared_color.join(', ')}" if shared_color.length>0}#{"\n*Other Focus Color:* #{other_color.join(', ')}" if other_color.length>0}\n*Starting Focus Chance:* #{len % percentage}%#{"\n*Current Focus Chance:* #{len % disperc}%" if star_buff>0}"
-        if !b[i][3].nil? && b[i].include?('4')
-          str="#{str}#{" (5<:Icon_Rarity_5p10:448272715099406336>), #{len % (four_star/2)}% (4<:Icon_Rarity_4p10:448272714210476033>)\n*5<:Icon_Rarity_5p10:448272715099406336>#{" Start" unless star_buff>0} Chance:* #{len % (disperc*1.00/(shared_color.length+1))}% (Perceived), #{len % (disperc*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
+        str="__*#{b[i][0]}*__#{tm}#{"\n*Shared Focus Color:* #{shared_color.join(', ')}" if shared_color.length>0}#{"\n*Other Focus Color:* #{other_color.join(', ')}" if other_color.length>0}\n*Starting Focus Chance:* #{len % percentage}% (5<:Icon_Rarity_5p10:448272715099406336>)#{"\n*Current Focus Chance:* #{len % disperc}% (5<:Icon_Rarity_5p10:448272715099406336>)" if star_buff>0}"
+        if !b[i][3].nil? && b[i][3].include?('4')
+          str="#{str}#{", #{len % (four_star/2)}% (4<:Icon_Rarity_4p10:448272714210476033>)\n*5<:Icon_Rarity_5p10:448272715099406336>#{" Start" unless star_buff>0} Chance:* #{len % (disperc*1.00/(shared_color.length+1))}% (Perceived), #{len % (disperc*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
           str="#{str}#{"\n*4<:Icon_Rarity_4p10:448272714210476033>#{" Start" unless star_buff>0} Chance:* #{len % ((four_star/2)/(shared_color.length+1))}% (Perceived), #{len % ((four_star/2)/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
         else
-          str="#{str}#{"\n*#{"Start " unless star_buff>0}Chance:* #{len % (disperc*1.00/(shared_color.length+1))}% (Perceived), #{len % (disperc*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
+          str="#{str}#{"\n5<:Icon_Rarity_5p10:448272715099406336> *#{"Start " unless star_buff>0}Chance:* #{len % (disperc*1.00/(shared_color.length+1))}% (Perceived), #{len % (disperc*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
         end
       end
       banners.push(str)
@@ -8408,10 +8409,8 @@ def banner_list(event,name,bot,weapon=nil)
     non_focus[0].push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % (one_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (one_star[0]/k.length)}% (Actual)") unless one_star[0]<=0
     non_focus[1].push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % (one_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (one_star[1]/k.length)}% (Actual)") unless one_star[1]<=0
   end
-  puts j[9].to_s
   unless j[9][1].nil?
     rardata=j[9][0].downcase.gsub('0s','').split('p')[0]
-    puts rardata
     summon_type=[[],[],[],[],[],[],[]]
     for m in 1...@max_rarity_merge[0]+1
       if rardata.include?("#{m}p")
@@ -9371,19 +9370,21 @@ bot.command(:summon) do |event, *colors|
     n=['Neutral'] if bnr[0]=='TT Units' || bnr[0]=='GHB Units'
     event << "**Banner:** #{bnr[0]}"
     event << ''
-    k=[[],[],[],[]]
+    k=[[],[],[],[],[]]
     for i in 0...bnr[2].length
       k2=@units[find_unit(bnr[2][i],event)][1][0]
       k[0].push(bnr[2][i]) if k2=='Red'
       k[1].push(bnr[2][i]) if k2=='Blue'
       k[2].push(bnr[2][i]) if k2=='Green'
       k[3].push(bnr[2][i]) if k2=='Colorless'
+      k[4].push(bnr[2][i]) unless ['Red','Blue','Green','Colorless'].include?(k2)
     end
     event << '**Focus Heroes:**'
-    event << "<:Red_Unknown:443172811486396417> *Red*:	#{k[0].join(', ')}" if k[0].length>0
-    event << "<:Blue_Unknown:443172811264098325> *Blue*:	#{k[1].join(', ')}" if k[1].length>0
-    event << "<:Green_Unknown:443172811482071041> *Green*:	#{k[2].join(', ')}" if k[2].length>0
-    event << "<:Colorless_Unknown:443692132738531328> *Colorless*:	#{k[3].join(', ')}" if k[3].length>0
+    event << "<:Orb_Red:455053002256941056> *Red*:	#{k[0].join(', ')}" if k[0].length>0
+    event << "<:Orb_Blue:455053001971859477> *Blue*:	#{k[1].join(', ')}" if k[1].length>0
+    event << "<:Orb_Green:455053002311467048> *Green*:	#{k[2].join(', ')}" if k[2].length>0
+    event << "<:Orb_Colorless:455053002152083457> *Colorless*:	#{k[3].join(', ')}" if k[3].length>0
+    event << "<:Orb_Gold:455053002911514634> *Gold*:	#{k[4].join(', ')}" if k[4].length>0
     event << ''
     event << '**Summon rates:**'
     @banner=[[event.user.id,Time.now,event.server.id]]
@@ -9576,7 +9577,11 @@ bot.command(:summon) do |event, *colors|
       @banner=[]
     else
       for i in 1...@banner.length
-        event << "#{i}.) #{@units[find_unit(@banner[i][1],event)][1][0]}"
+        event << "#{i}.) <:Orb_Red:455053002256941056> *Red*" if @units[find_unit(@banner[i][1],event)][1][0]=='Red'
+        event << "#{i}.) <:Orb_Blue:455053001971859477> *Blue*" if @units[find_unit(@banner[i][1],event)][1][0]=='Blue'
+        event << "#{i}.) <:Orb_Green:455053002311467048> *Green*" if @units[find_unit(@banner[i][1],event)][1][0]=='Green'
+        event << "#{i}.) <:Orb_Colorless:455053002152083457> *Colorless*" if @units[find_unit(@banner[i][1],event)][1][0]=='Colorless'
+        event << "#{i}.) <:Orb_Gold:455053002911514634> *Gold*" unless ['Red','Blue','Green','Colorless'].include?(@units[find_unit(@banner[i][1],event)][1][0])
       end
       event << ''
       event << 'To open orbs, please respond - in a single message - with the number of each orb you want to crack.'
