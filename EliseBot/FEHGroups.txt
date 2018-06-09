@@ -15,7 +15,7 @@
 ["Halloween", ["Henry(Halloween)", "Jakob(Halloween)", "Nowi(Halloween)", "Sakura(Halloween)"]]
 ["KauArena", ["Tana", "Michalis", "Nowi(Halloween)", "Robin(F)(Fallen)"], [416442223828271104]]
 ["Legendaries", []]
-["Lords", ["Marth", "Roy", "Ike", "Chrom(Launch)", "Lucina", "Corrin(F)", "Alm", "Celica", "Seliph", "Sigurd", "Hector", "Eliwood", "Lyn", "Eirika(Bonds)", "Ephraim", "Eirika(Memories)", "Corrin(M)", "Marth(Masked)", "Roy(Brave)", "Ike(Brave)", "Chrom(Spring)", "Chrom(Winter)", "Lucina(Spring)", "Lucina(Brave)", "Lyn(Bride)", "Lyn(Brave)", "Lyn(Wind)", "Corrin(F)(Summer)", "Corrin(M)(Winter)", "Hector(Valentines)", "Ephraim(Fire)", "Leif"]]
+["Lords", ["Marth", "Roy", "Ike", "Chrom(Launch)", "Lucina", "Corrin(F)", "Alm", "Celica", "Seliph", "Sigurd", "Hector", "Eliwood", "Lyn", "Eirika(Bonds)", "Ephraim", "Eirika(Memories)", "Corrin(M)", "Marth(Masked)", "Roy(Brave)", "Ike(Brave)", "Chrom(Spring)", "Chrom(Winter)", "Lucina(Spring)", "Lucina(Brave)", "Lyn(Bride)", "Lyn(Valentines)", "Lyn(Brave)", "Lyn(Wind)", "Corrin(F)(Summer)", "Corrin(M)(Winter)", "Hector(Valentines)", "Ephraim(Fire)", "Leif"]]
 ["LordsNormal", ["Marth", "Roy", "Ike", "Chrom(Launch)", "Lucina", "Corrin(F)", "Corrin(M)", "Alm", "Celica", "Seliph", "Sigurd", "Hector", "Eliwood", "Lyn", "Eirika(Bonds)", "Ephraim", "Leif"]]
 ["MarioBros", ["Barst", "Bartre"], [371883120951164928]]
 ["Mathoo'sWaifus", []]

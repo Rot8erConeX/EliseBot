@@ -1,6 +1,6 @@
 Sakura\Anna\Celica\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Est\Felicia\Genny\Gunnthra\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
 Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu
-Alfonse\Arden\Black_Knight\Lissa\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena\Takumi(Fallen)
+Alfonse\Arden\Black_Knight\Lissa\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
 5\10\Resistance\Defense\S
@@ -241,4 +241,14 @@ Attack +1\Attack/Res +1\Attack/Res +2
 Desperation 1\Desperation 2\Desperation 3
 Spur Spd 1\Drive Spd 1\Drive Spd 2
 Drive Atk 1
+
+Takumi(Fallen)
+4\0\ \ \-
+Iron Bow\Steel Bow\Silver Bow\~~Skadi~~
+~~none~~
+Retribution\Vengeance
+~~Close Counter~~
+~~none~~
+Spd Smoke 1\Spd Smoke 2\~~Spd Smoke 3~~
+Quick Riposte 2
 
