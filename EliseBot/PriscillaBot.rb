@@ -2142,14 +2142,15 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       stats[5]+=4
     end
   end
+  if skillls.include?('Harsh Command')
+    for i in 0...negative.length
+      rally[i]=[rally[i],0-negative[i]].max
+      negative[i]=0
+    end
+  end
   if skillls.include?('Panic Ploy')
     for i in 0...rally.length
       rally[i]=0-rally[i]
-    end
-  end
-  if skillls.include?('Harsh Command')
-    for i in 0...negative.length
-      negative[i]=0-negative[i]
     end
   end
   stats[2]+=rally[1]+negative[1]
@@ -3192,6 +3193,7 @@ def disp_skill(bot,name,event,ignore=false)
     end
     skill[9][i]=untz.join(', ')
     untz=skill[10][i].split(', ')
+    untz=untz.map {|u| u.gsub('[Retro]','')}
     untz=untz.reject {|u| find_unit(u,event,false,true)<0 && u[0,4].downcase != 'all ' && u != '-'}
     untz=untz.map {|u| u.gsub('Lavatain','Laevatein')}
     untz=untz.sort {|a,b| a.downcase <=> b.downcase}
@@ -3654,9 +3656,10 @@ def unit_skills(name,event,justdefault=false,r=0)
   clss="#{clss} Users"
   clss='Dragons' if char[1][1]=='Dragon'
   clss='Beasts' if char[1][1]=='Beast'
+  retroprf=''
   for i in 0...@skills.length
     for j in 0...rarity
-      if "#{@skills[i][9][j]},".include?("#{char[0]},") || @skills[i][9][j]=="All #{clss}"
+      if @skills[i][9][j].split(', ').include?(char[0]) || @skills[i][9][j]=="All #{clss}"
         box[0].push(@skills[i]) if @skills[i][4]=='Weapon'
         box[1].push(@skills[i]) if @skills[i][4]=='Assist'
         box[2].push(@skills[i]) if @skills[i][4]=='Special'
@@ -3666,16 +3669,18 @@ def unit_skills(name,event,justdefault=false,r=0)
       end
     end
     for j in 0...rarity
-      if "#{@skills[i][10][j]},".include?("#{char[0]},") || @skills[i][10][j]=="All #{clss}"
+      if @skills[i][10][j].split(', ').include?(char[0]) || @skills[i][10][j]=="All #{clss}"
         sklz[0].push(@skills[i]) if @skills[i][4]=='Weapon'
         sklz[1].push(@skills[i]) if @skills[i][4]=='Assist'
         sklz[2].push(@skills[i]) if @skills[i][4]=='Special'
         sklz[3].push(@skills[i]) if @skills[i][4].include?('Passive(A)')
         sklz[4].push(@skills[i]) if @skills[i][4].include?('Passive(B)')
         sklz[5].push(@skills[i]) if @skills[i][4].include?('Passive(C)')
+      elsif @skills[i][10][j].split(', ').include?("[Retro]#{char[0]}") || @skills[i][10][j].split(', ').include?("#{char[0]}[Retro]") || @skills[i][10][j].split(', ').include?("[Retro] #{char[0]}") || @skills[i][10][j].split(', ').include?("#{char[0]} [Retro]")
+        retroprf=@skills[i][0]
       end
     end
-    if "#{@skills[i][6]},".include?("#{char[0]},") && rarity>5
+    if @skills[i][6].split(', ').include?(char[0]) && rarity>5
       sklz[0].push(@skills[i]) if @skills[i][4]=='Weapon'
       sklz[1].push(@skills[i]) if @skills[i][4]=='Assist'
       sklz[2].push(@skills[i]) if @skills[i][4]=='Special'
@@ -3691,7 +3696,6 @@ def unit_skills(name,event,justdefault=false,r=0)
   box=box.map{|q| q.uniq}
   box2=[[],[],[],[],[],[]]
   sklz2=[[],[],[],[],[],[]]
-  retroprf=''
   for i in 0...6
     for j in 0...box[i].length
       box2[i].push(box[i][j][0]) if box[i][j][8]=='-'
@@ -4063,6 +4067,14 @@ def get_group(name,event)
       u=r[i][6].split(', ')
       for j in 0...u.length
         b.push(u[j].gsub('Lavatain','Laevatein')) unless b.include?(u[j]) || u[j]=='Kiran' || !has_any?(g, @units[find_unit(u[j],event)][13][0])
+      end
+    end
+    r=@skills.reject{|q| q[4]!='Weapon'}.map{|q| q[10]}.map{|q| q.map{|q2| q2.split(', ').reject{|q3| !q3.include?('[Retro]')}.map{|q3| q3.gsub('[Retro]','')}}.reject{|q2| q2.length<=0}}.reject{|q| q.length<=0}
+    for i in 0...r.length
+      for i2 in 0...r[i].length
+        for i3 in 0...r[i][i2].length
+          b.push(r[i][i2][i3].gsub('Lavatain','Laevatein')) unless b.include?(r[i][i2][i3]) || r[i][i2][i3]=='Kiran' || !has_any?(g, @units[find_unit(r[i][i2][i3],event)][13][0])
+        end
       end
     end
     return ['Retro-Prfs',b.uniq]
