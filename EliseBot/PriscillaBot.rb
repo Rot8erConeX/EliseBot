@@ -3686,6 +3686,9 @@ def disp_skill(bot,name,event,ignore=false)
       sttz.push([3,refinements[1][3],0,0,0,"**Falchion(Valentia) (+) Effect Mode**#{" - #{find_effect_name(sk2,event)}" unless find_effect_name(sk2,event).length<=0}",refinements[1][1]]) unless refinements[1][1].nil?
       sttz.push([3,refinements[2][3],0,0,0,"**Falchion(Awakening) (+) Effect Mode**#{" - #{find_effect_name(sk3,event)}" unless find_effect_name(sk3,event).length<=0}",refinements[2][1]]) unless refinements[2][1].nil?
     end
+    xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine_Strength.png'
+    xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine_Magic.png' if skill[5].include?('Tome Users Only') || skill[5]=='Dragons Only'
+    xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine_Freeze.png' if skill[11].split(', ').include?('Frostbite') || skill[11].split(', ').include?('(R)Frostbite')
     if skill[5]=='Staff Users Only' && (skill[7].include?("This weapon's damage is calculated the same as other weapons.") || skill[7].include?('Damage from staff calculated like other weapons.'))
       xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Dazzling_W.png'
       sttzx=[[0,0,0,0,0,'Dazzling','The foe cannot counterattack.']]
@@ -3696,10 +3699,8 @@ def disp_skill(bot,name,event,ignore=false)
       xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Staff_Default_Refine.png'
       sttzx=[[0,0,0,0,0,'Wrathful',"This weapon's damage is calculated the same as other weapons."],[0,0,0,0,0,'Dazzling','The foe cannot counterattack.']]
     elsif skill[5].include?('Tome Users Only') || ['Bow Users Only','Dagger Users Only'].include?(skill[5])
-      xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine.png'
       sttzx=[[2,1,0,0,0,'Attack'],[2,0,2,0,0,'Speed'],[2,0,0,3,0,'Defense'],[2,0,0,0,3,'Resistance']]
     else
-      xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine.png'
       sttzx=[[5,2,0,0,0,'Attack'],[5,0,3,0,0,'Speed'],[5,0,0,4,0,'Defense'],[5,0,0,0,4,'Resistance']]
     end
     for i in 0...sttzx.length
