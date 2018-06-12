@@ -3261,7 +3261,7 @@ def disp_skill(bot,name,event,ignore=false)
   sklslt=['']
   if skill[4]=='Weapon'
     xcolor=0xF4728C
-    xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Weapons/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png"
+    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/weapons/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
     if skill[5]=='Red Tome Users Only'
       s=find_base_skill(skill,event)
       xfooter='Dark Mages can still learn this skill, it just takes more SP.'
@@ -3327,7 +3327,7 @@ def disp_skill(bot,name,event,ignore=false)
   elsif skill[4]=='Assist'
     sklslt=['Assist']
     xcolor=0x07DFBB
-    xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Assists/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png"
+    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Assists/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
     str="<:Skill_Assist:444078171025965066> **Skill Slot:** #{skill[4]}\n**Range:** #{skill[3]}\n**Effect:** #{skill[7]}"
     str="#{str}\n**Heals:** #{skill[14]}" if skill[5]=="Staff Users Only"
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
@@ -3340,18 +3340,18 @@ def disp_skill(bot,name,event,ignore=false)
   elsif skill[4]=='Special'
     sklslt=['Special']
     xcolor=0xF67EF8
-    xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Specials/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png"
+    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Specials/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
     str="<:Skill_Special:444078170665254929> **Skill Slot:** #{skill[4]}\n**Cooldown:** #{skill[2]}\n**Effect:** #{skill[7]}#{"\n**Range:** ```\n#{skill[3].gsub("n","\n")}```" if skill[3]!="-"}"
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
     cumul=cumulitive_sp_cost(skill,event)
     str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
   else
     xcolor=0xFDDC7E
-    xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{skill[0].gsub(' ','_').gsub('/','_')}.png"
+    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/skills/#{skill[0].gsub(' ','_').gsub('/','_').gsub('!','')}.png?raw=true"
     if " #{event.message.text.downcase} ".include?(' refinement ') || " #{event.message.text.downcase} ".include?(' (w) ')
       s=skill[0].gsub('/','_').split(' ')
       s[s.length-1]='W' if s[s.length-1].length<2
-      xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{s.join('_')}.png"
+      xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/skills/#{s.join('_')}.png?raw=true"
     end
     sklslt=skill[4].split(', ')
     if !skill[12].nil? && skill[12]!='' && skill[4].include?('Passive(W)')
