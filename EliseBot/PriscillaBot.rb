@@ -3494,15 +3494,17 @@ def disp_skill(bot,name,event,ignore=false)
       lookout.push(eval line)
     end
   end
-  if lookout.map{|q| q[0]}.include?(skill[0])
-    statskill=lookout[lookout.find_index{|q| q[0]==skill[0]}]
+  if lookout.map{|q| q[0]}.include?(skill[0]) || skill[0][0,11]=='Panic Ploy '
+    statskill=lookout.find_index{|q| q[0]==skill[0]}
+    statskill=lookout.find_index{|q| q[0]=='Panic Ploy'} if statskill.nil?
+    statskill=lookout[statskill]
     statskill[3]=statskill[3].gsub(' 1','').gsub(' 2','').gsub(' 3','').gsub(' 4','').gsub(' 5','').gsub(' 6','').gsub(' 7','').gsub(' 8','').gsub(' 9','')
     if ['Enemy Phase','Player Phase'].include?(statskill[3])
-      str="#{str}\n\n**This skill can be applied to units in the `phasestudy` command.**\nInclude the word \"#{skill[0].gsub('/','').gsub(' ','')}\" in your message\n*Skill type:* #{statskill[3]}"
+      str="#{str}\n\n**This skill can be applied to units in the `phasestudy` command.**\nInclude the word \"#{statskill[0].gsub('/','').gsub(' ','')}\" in your message\n*Skill type:* #{statskill[3]}"
     elsif 'In-Combat Buffs'==statskill[3]
-      str="#{str}\n\n**This skill can be applied to units in the `phasestudy` command.**\nInclude the word \"#{skill[0].gsub('/','').gsub(' ','')}\" in your message\n*Skill type:* In-Combat Buff"
+      str="#{str}\n\n**This skill can be applied to units in the `phasestudy` command.**\nInclude the word \"#{statskill[0].gsub('/','').gsub(' ','')}\" in your message\n*Skill type:* In-Combat Buff"
     else
-      str="#{str}\n\n**This skill can be applied to units in the `stats` command and any derivatives.**\nInclude the word \"#{skill[0].gsub('/','').gsub(' ','')}\" in your message\n*Skill type:* #{statskill[3]}"
+      str="#{str}\n\n**This skill can be applied to units in the `stats` command and any derivatives.**\nInclude the word \"#{statskill[0].gsub('/','').gsub(' ','')}\" in your message\n*Skill type:* #{statskill[3]}"
     end
     for i4 in 0...statskill[4].length
       if statskill[4][i4]==0
@@ -3830,7 +3832,7 @@ def unit_skills(name,event,justdefault=false,r=0)
   clss="#{clss} Users"
   clss='Dragons' if char[1][1]=='Dragon'
   clss='Beasts' if char[1][1]=='Beast'
-  retroprf=''
+  retroprf=[]
   for i in 0...@skills.length
     for j in 0...rarity
       if @skills[i][9][j].split(', ').include?(char[0]) || @skills[i][9][j]=="All #{clss}"
@@ -3851,7 +3853,7 @@ def unit_skills(name,event,justdefault=false,r=0)
         sklz[4].push(@skills[i]) if @skills[i][4].include?('Passive(B)')
         sklz[5].push(@skills[i]) if @skills[i][4].include?('Passive(C)')
       elsif @skills[i][10][j].split(', ').include?("[Retro]#{char[0]}") || @skills[i][10][j].split(', ').include?("#{char[0]}[Retro]") || @skills[i][10][j].split(', ').include?("[Retro] #{char[0]}") || @skills[i][10][j].split(', ').include?("#{char[0]} [Retro]")
-        retroprf=@skills[i][0]
+        retroprf.push(@skills[i][0])
       end
     end
     if @skills[i][6].split(', ').include?(char[0]) && rarity>5
@@ -3876,10 +3878,12 @@ def unit_skills(name,event,justdefault=false,r=0)
     end
     for j in 0...sklz[i].length
       sklz2[i].push(sklz[i][j][0]) if sklz[i][j][8]=='-' && !(i.zero? && sklz[i][j][6]!='-')
-      retroprf=sklz[i][j][0] if sklz[i][j][8]=='-' && i.zero? && sklz[i][j][6]!='-'
+      retroprf.push(sklz[i][j][0]) if sklz[i][j][8]=='-' && i.zero? && sklz[i][j][6]!='-'
     end
   end
-  retroprf="**#{retroprf}**" if box2[0].include?(retroprf)
+  for i in 0...retroprf.length
+    retroprf[i]="**#{retroprf[i]}**" if box2[0].include?(retroprf[i])
+  end
   for k in 0...7
     for i in 0...6
       for j in 0...box[i].length
@@ -3944,22 +3948,24 @@ def unit_skills(name,event,justdefault=false,r=0)
         end
       end
     end
-    if retroprf != ''
-      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-        sklz2[0].push('    ')
-      else
-        sklz2[0][sklz2[0].length-1]="__#{sklz2[0][sklz2[0].length-1]}__"
-      end
-      sklz2[0].push(retroprf)
-      s=@skills[find_skill(sklz2[0][sklz2[0].length-1].gsub('**',''),event)]
-      if !s[14].nil? && s[14].length>0 && s[4]=='Weapon'
-        s2=s[14].split(', ')
-        for i in 0...s2.length
-          if s2[i].include?('!')
-            s3=s2[i].split('!')
-            sklz2[0].push("~~#{s3[1]}~~") if s3[0]==name && find_skill(s3[1],event,false,true)>-1
-          else
-            sklz2[0].push("~~#{s2[i]}~~") if find_skill(s2[i],event,false,true)>-1
+    if retroprf.length>0
+      for i in 0...retroprf.length
+        if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+          sklz2[0].push('    ')
+        else
+          sklz2[0][sklz2[0].length-1]="__#{sklz2[0][sklz2[0].length-1]}__"
+        end
+        sklz2[0].push(retroprf[i])
+        s=@skills[find_skill(sklz2[0][sklz2[0].length-1].gsub('**',''),event)]
+        if !s[14].nil? && s[14].length>0 && s[4]=='Weapon'
+          s2=s[14].split(', ')
+          for i in 0...s2.length
+            if s2[i].include?('!')
+              s3=s2[i].split('!')
+              sklz2[0].push("~~#{s3[1]}~~") if s3[0]==name && find_skill(s3[1],event,false,true)>-1
+            else
+              sklz2[0].push("~~#{s2[i]}~~") if find_skill(s2[i],event,false,true)>-1
+            end
           end
         end
       end
