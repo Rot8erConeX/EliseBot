@@ -11557,7 +11557,7 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   t-=60*60*timeshift
   str="Time elapsed since today's reset: #{"#{t.hour} hours, " if t.hour>0}#{"#{'0' if t.min<10}#{t.min} minutes, " if t.hour>0 || t.min>0}#{'0' if t.sec<10}#{t.sec} seconds"
   str="#{str}\nTime until tomorrow's reset: #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds"
-  t2=Time.new(2017,2,1,23,0)
+  t2=Time.new(2017,2,2)
   t2=t-t2
   date=(((t2.to_i/60)/60)/24)
   str="#{str}\nThe Arena season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete your daily Arena-related quests before then!" if date%7==4 && 15-t.hour>=0
@@ -11702,7 +11702,7 @@ bot.command([:next,:schedule]) do |event, type|
   timeshift=8
   t-=60*60*timeshift
   msg="Date assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
-  t2=Time.new(2017,2,1,23,0)
+  t2=Time.new(2017,2,2)
   t2=t-t2
   date=(((t2.to_i/60)/60)/24)
   msg=extend_message(msg,"Days since game release: #{longFormattedNumber(date)}",event)
@@ -13141,7 +13141,7 @@ bot.message do |event|
 end
 
 bot.mention do |event|
-  return nil unless @shardizard==4
+  if @shardizard==4
   data_load()
   puts event.message.text
   s=event.message.text.downcase
@@ -13224,6 +13224,7 @@ bot.mention do |event|
       event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
     end
   end
+  end
 end
 
 def disp_current_events(mode=0)
@@ -13258,7 +13259,7 @@ def disp_current_events(mode=0)
     b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm}.reverse if mode<0
     for i in 0...b2.length
       t2=b2[i][4].split(', ')[[mode,0].max].split('/').map{|q| q.to_i}
-      t2=Time.new(t2[2],t2[1],t2[0],23,0)+24*60*60*[0,mode].min
+      t2=Time.new(t2[2],t2[1],t2[0])+24*60*60*([0,mode].min+1)
       t2=t2-t
       if t2/(24*60*60)>1
         str2="#{str2}\n#{b2[i][0]} - #{(t2/(24*60*60)).floor} days #{mdfr}"
@@ -13297,7 +13298,7 @@ def disp_current_events(mode=0)
     c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i<=tm} if mode<0
     for i in 0...c2.length
       t2=c2[i][2][[mode,0].max].split('/').map{|q| q.to_i}
-      t2=Time.new(t2[2],t2[1],t2[0],23,0)+24*60*60*[0,mode].min
+      t2=Time.new(t2[2],t2[1],t2[0])+24*60*60*([0,mode].min+1)
       t2=t2-t
       n=c2[i][0]
       if ['Voting Gauntlet','Tempest Trials','Quests','Log-In Bonus'].include?(c2[i][1])
@@ -13324,8 +13325,8 @@ def disp_current_events(mode=0)
       end
       if c2[i][1]=='Log-In Bonus' && mode>0
         t2=c2[i][2][0].split('/').map{|q| q.to_i}
-        t2=Time.new(t2[2],t2[1],t2[0],23,0)
-        t3=Time.new(t.year,t.month,t.day,23,0)
+        t2=Time.new(t2[2],t2[1],t2[0])+24*60*60
+        t3=Time.new(t.year,t.month,t.day)+24*60*60
         t2=t3-t2
         t2=t2/(24*60*60)
         if 10-t2>0
@@ -13335,13 +13336,13 @@ def disp_current_events(mode=0)
         end
       elsif c2[i][1]=='Grand Conquests' && mode>0
         t4=c2[i][2][0].split('/').map{|q| q.to_i}
-        t4=Time.new(t4[2],t4[1],t4[0],23,0)
-        t3=Time.new(t.year,t.month,t.day,23,0)
+        t4=Time.new(t4[2],t4[1],t4[0])+24*60*60
+        t3=Time.new(t.year,t.month,t.day)+24*60*60
         t4=t3-t4
         t4=t4/(24*60*60)
         t4=t4.floor
         t2=c2[i][2][0].split('/').map{|q| q.to_i}
-        t2=Time.new(t2[2],t2[1],t2[0],23,0)
+        t2=Time.new(t2[2],t2[1],t2[0])+24*60*60
         t2+=24*60*60*(2*(t4/2+1)-1)
         t2=t2-t
         if t2/(60*60)>44
@@ -13355,8 +13356,8 @@ def disp_current_events(mode=0)
         end
       elsif c2[i][1]=='Voting Gauntlet' && mode>0
         t4=c2[i][2][0].split('/').map{|q| q.to_i}
-        t4=Time.new(t4[2],t4[1],t4[0],23,0)
-        t3=Time.new(t.year,t.month,t.day,23,0)
+        t4=Time.new(t4[2],t4[1],t4[0])+24*60*60
+        t3=Time.new(t.year,t.month,t.day)+24*60*60
         t4=t3-t4
         t4=t4/(24*60*60)
         t4=t4.floor
