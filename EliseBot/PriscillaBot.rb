@@ -126,7 +126,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
        'removefrommultialias','removefromdualalias','removefrommultiunitalias','removefromdualunitalias','removefrommulti','sendpm','ignoreuser','sendmessage','leaveserver',
        'cleanupaliases','backup','restore','devedit','dev_edit','status','setmarker','snagchannels','reload']
   end
-  k[0]=nil if include_nil
+  k.unshift(nil) if include_nil
   return k
 end
 
@@ -289,11 +289,10 @@ def devunits_load() # this function loads information regarding the devunits
   @dev_waifus=b[0].split('\\'[0])
   @dev_somebodies=b[1].split('\\'[0])
   @dev_nobodies=b[2].split('\\'[0])
-  b[0]=nil
-  b[1]=nil
-  b[2]=nil
-  b[3]=nil
-  b.compact!
+  b.shift
+  b.shift
+  b.shift
+  b.shift
   @dev_units=[]
   for i in 0...b.length/10
     @dev_units[i]=[]
@@ -428,7 +427,23 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['summonpool','summon_pool','pool'].include?(command.downcase) || (['summon'].include?(command.downcase) && "#{subcommand}".downcase=='pool')
     create_embed(event,"**#{command.downcase}#{" pool" if command.downcase=='summon'}** __*colors__","Shows the summon pool for the listed color.\n\nIn PM, all colors listed will be displayed, or all colors if none are specified.\nIn servers, only the first color listed will be displayed.",0xD49F61)
   elsif @summon_servers.include?(k) && ['summon'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\nYou can also include the word \"current\" or \"now\" to force me to choose a banner that is currently available in-game.\n\n**This command is only available in certain servers**.",0x9E682C)
+    create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\nYou can include the word \"current\" or \"now\" to force me to choose a banner that is currently available in-game.\nYou can also include one or more of the words below to force the banner to fit into those categories.\n\n**This command is only available in certain servers**.",0x9E682C)
+    lookout=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
+      lookout=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
+        lookout.push(eval line)
+      end
+    end
+    w=lookout.reject{|q| q[2]!='Banner'}.map{|q| q[0]}.sort
+    l=0
+    l=1 if w.length%3==2
+    m=0
+    m=1 if w.length%3==1
+    p1=w[0,w.length/3+l].join("\n")
+    p2=w[w.length/3+l,w.length/3+m].join("\n")
+    p3=w[2*(w.length/3)+l+m,w.length/3+l].join("\n")
+    create_embed(event,'Banner types','',0x40C0F0,nil,nil,[['.',p1],['.',p2],['.',p3]])
   elsif ['effhp','eff_hp'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows the effective HP data for the unit `name`.',0xD49F61)
     disp_more_info(event)
@@ -510,9 +525,41 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['find','search'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['unit','char','character','person','units','chars','charas','chara','people'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, includes any units you name that don't fit into those filters, then displays the resulting list in alphabetical order.\n\n#{disp_more_info(event,2)}",0xD49F61)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, includes any units you name that don't fit into those filters, then displays the resulting list.\n\n#{disp_more_info(event,2)}",0xD49F61)
     elsif ['skill','skills'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list.\nIf you specifically name one or more characters, their names will be underlined in the result.\n\n#{disp_more_info(event,3)}",0xD49F61)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,3)}#{"\n\nI also have tags for weapon and passive \"flavors\".  Use this command in PM to see them." unless safe_to_spam?(event)}",0xD49F61)
+      if safe_to_spam?(event)
+        lookout=[]
+        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
+          lookout=[]
+          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
+            lookout.push(eval line)
+          end
+        end
+        w=lookout.reject{|q| q[2]!='Weapon'}.map{|q| q[0]}.sort
+        p=lookout.reject{|q| q[2]!='Passive'}.map{|q| q[0]}.sort
+        w=w.reject{|q| q=='Hogtome'} unless !event.server.nil? && event.server.id==330850148261298176
+        if w.join("\n").length+p.join("\n").length>=1950 || !safe_to_spam?(event)
+          l=0
+          l=1 if w.length%3==2
+          m=0
+          m=1 if w.length%3==1
+          p1=w[0,w.length/3+l].join("\n")
+          p2=w[w.length/3+l,w.length/3+m].join("\n")
+          p3=w[2*(w.length/3)+l+m,w.length/3+l].join("\n")
+          create_embed(event,'Weapon Flavors','',0x40C0F0,nil,nil,[['.',p1],['.',p2],['.',p3]])
+          l=0
+          l=1 if p.length%3==2
+          m=0
+          m=1 if p.length%3==1
+          p1=p[0,p.length/3+l].join("\n")
+          p2=p[p.length/3+l,p.length/3+m].join("\n")
+          p3=p[2*(p.length/3)+l+m,p.length/3+l].join("\n")
+          create_embed(event,'Passive Flavors','',0x40C0F0,nil,nil,[['.',p1],['.',p2],['.',p3]])
+        else
+          create_embed(event,'','',0x40C0F0,nil,nil,[['Weapon Flavors',w.join("\n")],['Passive Flavors',p.join("\n")]])
+        end
+      end
     else
       create_embed(event,"**#{command.downcase}** __\*filters__",'Combines the results of `FEH!find unit` and `FEH!find skill`, showing them in a single embed.  This combined form is particularly useful when looking at weapon types, so you can see all the weapons *and* all the units that can use them side-by-side.',0xD49F61)
     end
@@ -640,8 +687,8 @@ def disp_more_info(event, mode=0) # this function is used by the `help` command 
     return "**IMPORRTANT NOTE**\nUnlike my other commands, this one is heavily context based.  Please format all allies like the example below:\n`#{u[1]}* #{u[0]} +#{u[2]} +#{u[3]} -#{u[4]}`\nAny field with the exception of unit name can be ignored, but unlike my other commands the order is important."
   elsif [2,3,4].include?(mode)
     str="__**Allowed#{" unit" if mode==2}#{" skill" if mode==3} descriptions**__"
-    str="#{str}\n*Colors*: Red(s), Blue(s), Green(s), Colo(u)rless, Gray(s), Grey(s)"
-    str="#{str}\n*Weapon Types*: Physical, Blade(s), Tome(s), Mage(s), Spell(s), Dragon(s), Manakete(s), Breath, Bow(s), Arrow(s), Archer(s), Dagger(s), Shuriken, Knive(s), Ninja(s), Thief/Thieves, Healer(s), Cleric(s), Staff/Staves"
+    str="#{str}\n*Colors*: Red(s), Blue(s), Green(s), Colo(u)rless(es), Gray(s), Grey(s)"
+    str="#{str}\n*Weapon Types*: Physical, Blade(s), Tome(s), Mage(s), Spell(s), Dragon(s), Manakete(s), Breath, Bow(s), Arrow(s), Archer(s), Dagger(s), Shuriken, Knive(s), Ninja(s), Thief/Thieves, Healer(s), Cleric(s), Staff/Staves#{', Beast(s), Laguz' if alter_classes(event,'Beasts')}"
     str="#{str}\n*Combined color and weapon type*: Sword(s), Katana, Spear(s), Lance(s), Naginata, Axe(s), Ax, Club(s), Redtome(s), Redmage(s), Bluetome(s), Bluemage(s), Greentome(s), Greenmage(s)"
     str="#{str}\n\n*Movement*: Flier(s), Flyer(s), Flying, Pegasus/Pegasi, Wyvern(s), Cavalry, Cavalier(s), Cav(s), Horse(s), Pony/Ponies, Horsie(s), Infantry, Foot/Feet, Armo(u)r(s), Armo(u)red" if mode==2
     str="#{str}\n\n*Assists*: Health, HP, Move, Movement, Moving, Arrangement, Positioning, Position(s), Healer(s), Staff/Staves, Cleric(s), Rally/Rallies, Stat(s), Buff(s)" if mode==3
@@ -833,10 +880,11 @@ def make_banner(event) # this function is used by the `summon` command to pick a
   timeshift=8
   t-=60*60*timeshift
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  b3=b2.map{|q| q}
   b3=b2.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm} if banner_types.include?('Current')
   b3=b2.map{|q| q} if b2.length==0
-  data_load()
   bnr=b3.sample
+  data_load()
   x=false
   y=false
   z=false
@@ -848,6 +896,7 @@ def make_banner(event) # this function is used by the `summon` command to pick a
     w=true if bnr[3].include?('1') # banner has 1* Focus Units
     bnr[3]=nil
   end
+  bnr[0]=[bnr[0],bnr[4]]
   bnr[4]=nil
   bnr[5]=nil
   bnr.compact!
@@ -1269,8 +1318,7 @@ def get_weapon(str,event) # this function is used by the `stats` command and man
   # try full-name matches first...
   if find_weapon(name,event)<0
     for i in 0...args.length-1
-      args[args.length-1]=nil
-      args.compact!
+      args.pop
       if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event,true)>=0
         args3=args.join(' ').split(' ') 
         name=skz[find_weapon(args.join('').downcase,event,true)][0]
@@ -1278,16 +1326,14 @@ def get_weapon(str,event) # this function is used by the `stats` command and man
     end
     if find_weapon(name,event)<0
       for j in 0...args2.length-1
-        args2[0]=nil
-        args2.compact!
+        args2.shift
         args=args2.join(' ').split(' ')
         if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event,true)>=0
           args3=args.join(' ').split(' ') 
           name=skz[find_weapon(args.join('').downcase,event,true)][0]
         end
         for i in 0...args.length-1
-          args[args.length-1]=nil
-          args.compact!
+          args.pop
           if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event,true)>=0
             args3=args.join(' ').split(' ') 
             name=skz[find_weapon(args.join('').downcase,event,true)][0]
@@ -1300,8 +1346,7 @@ def get_weapon(str,event) # this function is used by the `stats` command and man
   # ...then try partial name matches
   if find_weapon(name,event)<0
     for i in 0...args.length-1
-      args[args.length-1]=nil
-      args.compact!
+      args.pop
       if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event)>=0
         args3=args.join(' ').split(' ') 
         name=skz[find_weapon(args.join('').downcase,event)][0]
@@ -1309,16 +1354,14 @@ def get_weapon(str,event) # this function is used by the `stats` command and man
     end
     if find_weapon(name,event)<0
       for j in 0...args2.length-1
-        args2[0]=nil
-        args2.compact!
+        args2.shift
         args=args2.join(' ').split(' ')
         if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event)>=0
           args3=args.join(' ').split(' ') 
           name=skz[find_weapon(args.join('').downcase,event)][0]
         end
         for i in 0...args.length-1
-          args[args.length-1]=nil
-          args.compact!
+          args.pop
           if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event)>=0
             args3=args.join(' ').split(' ') 
             name=skz[find_weapon(args.join('').downcase,event)][0]
@@ -1440,8 +1483,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
         if mode==-1
           last_field=xfields[xfields.length-1][1].split("\n").join("\n")
           last_field_name=xfields[xfields.length-1][0].split("\n").join("\n")
-          xfields[xfields.length-1]=nil
-          xfields.compact!
+          xfields.pop
         end
         atk=xfields[0][1].split("\n")[1].split(': ')[0]
         statnames=['HP: ',"#{atk}: ",'Speed: ','Defense: ','Resistance: ','BST: ']
@@ -1539,10 +1581,7 @@ def find_name_in_string(event,stringx=nil,mode=0)
   s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2])
   s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4])
   a=s.split(' ')
-  if all_commands().include?(a[0])
-    args[0]=nil
-    args.compact!
-  end
+  args.shift if all_commands().include?(a[0])
   args2=args.join(' ').split(' ')
   args4=args.join(' ').split(' ')
   name=args.join('')
@@ -1622,8 +1661,7 @@ def find_name_in_string(event,stringx=nil,mode=0)
     end
   else
     for i in 0...args.length-1
-      args[args.length-1]=nil
-      args.compact!
+      args.pop
       if find_unit(name,event)<0 && find_unit(args.join('').downcase,event,true)>=0
         args3=args.join(' ').split(' ') 
         name=@units[find_unit(args.join('').downcase,event,true)][0]
@@ -1631,16 +1669,14 @@ def find_name_in_string(event,stringx=nil,mode=0)
     end
     if find_unit(name,event)<0
       for j in 0...args2.length-1
-        args2[0]=nil
-        args2.compact!
+        args2.shift
         args=args2.join(' ').split(' ')
         if find_unit(name,event)<0 && find_unit(args.join('').downcase,event,true)>=0
           args3=args.join(' ').split(' ') 
           name=@units[find_unit(args.join('').downcase,event,true)][0]
         end
         for i in 0...args.length-1
-          args[args.length-1]=nil
-          args.compact!
+          args.pop
           if find_unit(name,event)<0 && find_unit(args.join('').downcase,event,true)>=0
             args3=args.join(' ').split(' ') 
             name=@units[find_unit(args.join('').downcase,event,true)][0]
@@ -1721,8 +1757,7 @@ def find_name_in_string(event,stringx=nil,mode=0)
   args2=args4.join(' ').split(' ')
   if find_unit(name,event)<0
     for i in 0...args.length-1
-      args[args.length-1]=nil
-      args.compact!
+      args.pop
       if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
         args3=args.join(' ').split(' ') 
         name=@units[find_unit(args.join('').downcase,event)][0]
@@ -1730,16 +1765,14 @@ def find_name_in_string(event,stringx=nil,mode=0)
     end
     if find_unit(name,event)<0
       for j in 0...args2.length-1
-        args2[0]=nil
-        args2.compact!
+        args2.shift
         args=args2.join(' ').split(' ')
         if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
           args3=args.join(' ').split(' ') 
           name=@units[find_unit(args.join('').downcase,event)][0]
         end
         for i in 0...args.length-1
-          args[args.length-1]=nil
-          args.compact!
+          args.pop
           if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
             args3=args.join(' ').split(' ') 
             name=@units[find_unit(args.join('').downcase,event)][0]
@@ -2480,28 +2513,15 @@ def unit_color(event,j,mode=0,m=false,chain=false)
   return xcolor
 end
 
-def colored_healers?(event)
+def alter_classes(event,str)
   data_load()
   g=get_markers(event)
-  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Healer'}.map{|q| q[1][0]}.uniq.length>1
-end
-
-def colored_daggers?(event)
-  data_load()
-  g=get_markers(event)
-  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Dagger'}.map{|q| q[1][0]}.uniq.length>1
-end
-
-def colorless_blades?(event)
-  data_load()
-  g=get_markers(event)
-  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Blade'}.map{|q| q[1][0]}.uniq.length>3
-end
-
-def colorless_tomes?(event)
-  data_load()
-  g=get_markers(event)
-  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Tome'}.map{|q| q[1][0]}.uniq.length>3
+  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Healer'}.map{|q| q[1][0]}.uniq.length>1 if str=='Colored Healers'
+  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Dagger'}.map{|q| q[1][0]}.uniq.length>1 if str=='Colored Daggers'
+  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Blade'}.map{|q| q[1][0]}.uniq.length>3 if str=='Colorless Blades' || str=='Rods'
+  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Tome'}.map{|q| q[1][0]}.uniq.length>3 if str=='Colorless Tomes'
+  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Beast'}.map{|q| q[1][0]}.uniq.length>0 if str=='Beasts'
+  return false
 end
 
 def unit_clss(bot,event,j,name=nil)
@@ -2520,7 +2540,7 @@ def unit_clss(bot,event,j,name=nil)
   w='Rod' if @units[j][1][0]=='Colorless' && w=='Blade'
   if @units[j][1][1]!=w
     w="*#{w}* (#{@units[j][1][0]} #{@units[j][1][1]})"
-  elsif ['Tome', 'Dragon', 'Bow'].include?(w) || (w=='Healer' && colored_healers?(event)) || (w=='Dagger' && colored_daggers?(event))
+  elsif ['Tome', 'Dragon', 'Bow'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers')) || (w=='Dagger' && alter_classes(event,'Colored Daggers'))
     w="*#{@units[j][1][0]} #{@units[j][1][1]}*"
   elsif @units[j][1][0]=='Gold'
     w="*#{w}*"
@@ -2743,19 +2763,16 @@ def disp_stats(bot,name,weapon,event,ignore=false)
     # Find the most accurate unit name among the remaining inputs
     if find_unit(name,event)<0
       for i in 0...args.length-1
-        args[args.length-1]=nil
-        args.compact!
+        args.pop
         name=@units[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
       end
       if find_unit(name,event)<0
         for j in 0...args2.length-1
-          args2[0]=nil
-          args2.compact!
+          args2.shift
           args=args2.join(' ').split(' ')
           name=@units[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
           for i in 0...args.length-1
-            args[args.length-1]=nil
-            args.compact!
+            args.pop
             name=@units[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
           end
         end
@@ -3143,8 +3160,7 @@ def disp_skill(bot,name,event,ignore=false)
   s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
   a=s.split(' ')
   if all_commands().include?(a[0])
-    a[0]=nil
-    a.compact!
+    a.shift
     s=a.join(' ')
   end
   args=sever(s,true).split(' ')
@@ -3158,19 +3174,16 @@ def disp_skill(bot,name,event,ignore=false)
     # Find the most accurate skill name among the remaining inputs
     if find_skill(name,event,true)<0
       for i in 0...args.length-1
-        args[args.length-1]=nil
-        args.compact!
+        args.pop
         name=@skills[find_skill(args.join('').downcase,event,true)][0] if find_skill(name,event,true)<0 && find_skill(args.join('').downcase,event,true)>=0
       end
       if find_skill(name,event,true)<0
         for j in 0...args2.length-1
-          args2[0]=nil
-          args2.compact!
+          args2.shift
           args=args2.join(' ').split(' ')
           name=@skills[find_skill(args.join('').downcase,event,true)][0] if find_skill(name,event,true)<0 && find_skill(args.join('').downcase,event,true)>=0
           for i in 0...args.length-1
-            args[args.length-1]=nil
-            args.compact!
+            args.pop
             name=@skills[find_skill(args.join('').downcase,event,true)][0] if find_skill(name,event,true)<0 && find_skill(args.join('').downcase,event,true)>=0
           end
         end
@@ -3178,19 +3191,16 @@ def disp_skill(bot,name,event,ignore=false)
     end
     if find_skill(name,event)<0
       for i in 0...args.length-1
-        args[args.length-1]=nil
-        args.compact!
+        args.pop
         name=@skills[find_skill(args.join('').downcase,event)][0] if find_skill(name,event)<0 && find_skill(args.join('').downcase,event)>=0
       end
       if find_skill(name,event)<0
         for j in 0...args2.length-1
-          args2[0]=nil
-          args2.compact!
+          args2.shift
           args=args2.join(' ').split(' ')
           name=@skills[find_skill(args.join('').downcase,event)][0] if find_skill(name,event)<0 && find_skill(args.join('').downcase,event)>=0
           for i in 0...args.length-1
-            args[args.length-1]=nil
-            args.compact!
+            args.pop
             name=@skills[find_skill(args.join('').downcase,event)][0] if find_skill(name,event)<0 && find_skill(args.join('').downcase,event)>=0
           end
         end
@@ -3284,9 +3294,9 @@ def disp_skill(bot,name,event,ignore=false)
       xfooter='All bows deal effective damage against flying units'
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     elsif skill[5]=='Dagger Users Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if colored_daggers?(event)}#{"<:Colorless_Dagger:443692132683743232>" unless colored_daggers?(event)} **Weapon Type:** Dagger\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Dagger:443692132683743232>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Dagger\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     elsif skill[5]=='Staff Users Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if colored_daggers?(event)}#{"<:Colorless_Staff:443692132323295243>" unless colored_daggers?(event)} **Weapon Type:** Staff\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     elsif skill[5]=='Dragons Only'
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     elsif skill[5]=='Beasts Only'
@@ -3959,14 +3969,12 @@ def unit_skills(name,event,justdefault=false,r=0)
       sklz2[0]=['~~none~~']
       s=@skills[find_skill(sklz2[1][sklz2[1].length-1].gsub('**','').gsub('~~',''),event)]
       if !s.nil? && s[6]!='-'
-        sklz2[1][sklz2[1].length-1]=nil
-        sklz2[1].compact!
+        sklz2[1].pop
         sklz2[1]=['~~none~~'] if sklz2[1].length<=0
       end
       s=@skills[find_skill(sklz2[2][sklz2[2].length-1].gsub('**','').gsub('~~',''),event)]
       if !s.nil? && s[6]!='-'
-        sklz2[2][sklz2[2].length-1]=nil
-        sklz2[2].compact!
+        sklz2[2].pop
         sklz2[2]=['~~none~~'] if sklz2[2].length<=0
       end
     end
@@ -4596,8 +4604,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   srv=0
   srv=event.server.id unless event.server.nil?
   args=event.message.text.split(' ')
-  args[0]=nil
-  args.compact!
+  args.shift
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   colors=[]
   weapons=[]
@@ -4614,7 +4621,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     colors.push('Red') if ['red','reds'].include?(args[i].downcase)
     colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
     colors.push('Green') if ['green','greens','grean','greans'].include?(args[i].downcase)
-    colors.push('Colorless') if ['colorless','colourless','clear','clears'].include?(args[i].downcase)
+    colors.push('Colorless') if ['colorless','colourless','colorlesses','colourlesses','clear','clears'].include?(args[i].downcase)
     color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
     color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
     color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
@@ -4881,8 +4888,7 @@ end
 def find_in_skills(event, mode=0, paired=false, brk=false)
   data_load()
   args=event.message.text.split(' ')
-  args[0]=nil
-  args.compact!
+  args.shift
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   colors=[]
   weapons=[]
@@ -4897,7 +4903,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     colors.push('Red') if ['red','reds'].include?(args[i].downcase)
     colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
     colors.push('Green') if ['green','greens','grean','greans'].include?(args[i].downcase)
-    colors.push('Colorless') if ['colorless','colourless','clear','clears'].include?(args[i].downcase)
+    colors.push('Colorless') if ['colorless','colourless','colorlesses','colourlesses','clear','clears'].include?(args[i].downcase)
     color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
     color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
     color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
@@ -4943,7 +4949,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
         passive_subsets.push(lookout[i2][0]) if lookout[i2][2]=='Passive'
       end
     end
-    passive_subsets.push('Breath') if ['breath'].include?(args[i].downcase) && !skill_types.include?('weapon') && skill_types.length>0
+    passive_subsets.push('Breathskill') if ['breath'].include?(args[i].downcase) && !skill_types.include?('weapon') && skill_types.length>0
     passive_subsets.push('Bladeskill') if ['blade'].include?(args[i].downcase) && !skill_types.include?('weapon') && skill_types.length>0
   end
   colors=colors.uniq
@@ -5238,12 +5244,12 @@ def display_units(event, mode)
           h='<:Red_Dagger:443172811490721804> Red Thieves' if wpn1[0]==['Red', 'Dagger']
           h='<:Blue_Dagger:443172811591385098> Blue Thieves' if wpn1[0]==['Blue', 'Dagger']
           h='<:Green_Dagger:443172811603968003> Green Thieves' if wpn1[0]==['Green', 'Dagger']
-          h="<:Colorless_Dagger:443692132683743232> #{'Colorless ' if colored_daggers?(event)}Thieves" if p1[i].include?('Matthew') || (wpn1[0]==['Colorless', 'Dagger'])
+          h="<:Colorless_Dagger:443692132683743232> #{'Colorless ' if alter_classes(event,'Colored Daggers')}Thieves" if p1[i].include?('Matthew') || (wpn1[0]==['Colorless', 'Dagger'])
           # healer colors
           h='<:Red_Staff:443172812455280640> Red Healers' if wpn1[0]==['Red', 'Healer']
           h='<:Blue_Staff:443172811582865408> Blue Healers' if wpn1[0]==['Blue', 'Healer']
           h='<:Green_Staff:443172811784060939> Green Healers' if wpn1[0]==['Green', 'Healer']
-          h="<:Colorless_Staff:443692132323295243> #{'Colorless ' if colored_healers?(event)}Healers" if p1[i].include?('Sakura') || (wpn1[0]==['Colorless', 'Healer'])
+          h="<:Colorless_Staff:443692132323295243> #{'Colorless ' if alter_classes(event,'Colored Healers')}Healers" if p1[i].include?('Sakura') || (wpn1[0]==['Colorless', 'Healer'])
         elsif wpn1.length>1 && wpn1.map{|q| [q[0],q[1]]}.uniq.length==1
           h='<:Red_Tome:443172811826003968> Red Mages' if (p1[i].include?('Lilina') && p1[i].include?('Raigh')) || (wpn1.map{|q| [q[0],q[1]]}.include?(['Red', 'Tome']))
           h='<:Blue_Tome:443172811104714763> Blue Mages' if (p1[i].include?('Odin') && p1[i].include?('Micaiah')) || (wpn1.map{|q| [q[0],q[1]]}.include?(['Blue', 'Tome']))
@@ -5338,8 +5344,8 @@ def display_skills(event, mode)
         colors.push('Colorless') if typesx.reject{|q| !q[11].split(', ').include?('Colorless')}==typesx
       end
       emotes=['<:Gold_Staff:443172811628871720>','<:Gold_Dagger:443172811461230603>','<:Gold_Dragon:443172811641454592>','<:Gold_Bow:443172812492898314>','<:Gold_Beast:443172811608162324>']
-      emotes[0]='<:Colorless_Staff:443692132323295243>' unless colored_healers?(event)
-      emotes[1]='<:Colorless_Dagger:443692132683743232>' unless colored_daggers?(event)
+      emotes[0]='<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')
+      emotes[1]='<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')
       emotes=['<:Red_Staff:443172812455280640>','<:Red_Dagger:443172811490721804>','<:Red_Dragon:443172811796774932>','<:Red_Bow:443172812455280641>','<:Red_Beast:443172811599773734>'] if colors.length==1 && colors[0]=='Red'
       emotes=['<:Blue_Staff:443172811582865408>','<:Blue_Dagger:443172811591385098>','<:Blue_Dragon:443172811952095232>','<:Blue_Bow:443172811612225536>','<:Blue_Beast:443172811595317288>'] if colors.length==1 && colors[0]=='Blue'
       emotes=['<:Green_Staff:443172811784060939>','<:Green_Dagger:443172811603968003>','<:Green_Dragon:443172811780128768>','<:Green_Bow:443172811758895104>','<:Green_Beast:443172811733991424>'] if colors.length==1 && colors[0]=='Green'
@@ -5562,9 +5568,8 @@ def list_lift(a,c)
     return "#{a[0]} #{c} #{a[1]}"
   else
     b=a[a.length-1]
-    a[a.length-1]=nil
+    a.pop
     a.uniq!
-    a.compact!
     return "#{a.join(', ')}, #{c} #{b}"
   end
 end
@@ -5827,13 +5832,11 @@ def comparison(event,args,bot)
     mll=[b[0][1].split(' '), b[1][1].split(' ')]
     if mll[0][mll[0].length-1][mll[0][mll[0].length-1].length-1,1]==')' && mll[0][mll[0].length-1][0,1]!='('
       mll[0][mll[0].length-2]="#{mll[0][mll[0].length-2]} #{mll[0][mll[0].length-1]}"
-      mll[0][mll[0].length-1]=nil
-      mll[0].compact!
+      mll[0].pop
     end
     if mll[1][mll[1].length-1][mll[1][mll[1].length-1].length-1,1]==')' && mll[1][mll[1].length-1][0,1]!='('
       mll[1][mll[1].length-2]="#{mll[1][mll[1].length-2]} #{mll[1][mll[1].length-1]}"
-      mll[1][mll[1].length-1]=nil
-      mll[1].compact!
+      mll[1].pop
     end
     if mll[0][0]==mll[1][0]
       mll[0][0]=nil
@@ -5916,10 +5919,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     s=s[2,s.length-2] if ['f?','e?','h?'].include?(str1.downcase[0,2])
     s=s[4,s.length-4] if ['feh!','feh?'].include?(str1.downcase[0,4])
     a=s.split(' ')
-    if all_commands(true).include?(a[0])
-      a[0]=nil
-      a.compact!
-    end
+    a.shift if all_commands(true).include?(a[0])
     str1=a.join(' ')
   end
   nicknames_load()
@@ -6164,8 +6164,8 @@ end
 
 def weapon_clss(arr,event,mode=0)
   x="#{arr[0]} #{arr[1]}"
-  return 'Healer' if x=='Colorless Healer' && !colored_healers?(event)
-  return 'Dagger' if x=='Colorless Dagger' && !colored_daggers?(event)
+  return 'Healer' if x=='Colorless Healer' && !alter_classes(event,'Colored Healers')
+  return 'Dagger' if x=='Colorless Dagger' && !alter_classes(event,'Colored Daggers')
   return 'Sword' if x=='Red Blade'
   return 'Lance' if x=='Blue Blade'
   return 'Axe' if x=='Green Blade'
@@ -7026,7 +7026,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   tempest=get_bonus_type(event)
   stat_skills_2=make_stat_skill_list_2(name,event,args)
   ww2=sklz.find_index{|q| q[0]==weapon}
-  ww2=-1 if ws2.nil?
+  ww2=-1 if ww2.nil?
   w2=sklz[ww2]
   if w2[15].nil?
     refinement=nil
@@ -7388,7 +7388,7 @@ def heal_study(event,name,bot,weapon=nil)
   tempest=get_bonus_type(event)
   stat_skills_2=make_stat_skill_list_2(name,event,args)
   ww2=sklz.find_index{|q| q[0]==weapon}
-  ww2=-1 if ws2.nil?
+  ww2=-1 if ww2.nil?
   w2=sklz[ww2]
   if w2[15].nil?
     refinement=nil
@@ -8223,7 +8223,7 @@ def disp_art(event,name,bot,weapon=nil)
   end
   name=find_name_in_string(event) if name.nil?
   untz=@units.map{|q| q}
-  j=untz[unts.find_index{|q| q[0]==name}]
+  j=untz[untz.find_index{|q| q[0]==name}]
   data_load()
   args=event.message.text.downcase.split(' ')
   artype='Face'
@@ -8716,8 +8716,7 @@ def games_list(event,name,bot,weapon=nil)
   xcolor=unit_color(event,j,0,mu)
   pic=pick_thumbnail(event,j,bot)
   g2="#{g[0]}"
-  g[0]=nil
-  g.compact!
+  g.shift
   name="#{untz[j][0].gsub('Lavatain','Laevatein')}"
   if ['Robin(F)','Robin(M)'].include?(untz[j][0])
     pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png'
@@ -8750,8 +8749,7 @@ def games_list(event,name,bot,weapon=nil)
     x=get_games_list(rx)
     xa=get_games_list(ax,false)
     g2="#{x[0]}\n#{g2}"
-    x[0]=nil
-    x.compact!
+    x.shifr
     for i in 0...g.length
       x.push(g[i])
     end
@@ -8980,7 +8978,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
     if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if colored_daggers?(event)}#{'<:Colorless_Dagger:443692132683743232>' unless colored_daggers?(event)} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if colored_healers?(event)}#{'<:Colorless_Staff:443692132323295243>' unless colored_healers?(event)} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...dew.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew[i].gsub('~~','').split(' (->) ')[0])}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -8998,7 +8996,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
       end
       if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if colored_daggers?(event)}#{'<:Colorless_Dagger:443692132683743232>' unless colored_daggers?(event)} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if colored_healers?(event)}#{'<:Colorless_Staff:443692132323295243>' unless colored_healers?(event)} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...stones.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones[i].gsub('~~','').split(' (->) ')[0])}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -9065,7 +9063,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
     if dew2.join("\n").length+stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if colored_daggers?(event)}#{'<:Colorless_Dagger:443692132683743232>' unless colored_daggers?(event)} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if colored_healers?(event)}#{'<:Colorless_Staff:443692132323295243>' unless colored_healers?(event)} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...dew2.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -9088,7 +9086,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
       end
       if stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if colored_daggers?(event)}#{'<:Colorless_Dagger:443692132683743232>' unless colored_daggers?(event)} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if colored_healers?(event)}#{'<:Colorless_Staff:443692132323295243>' unless colored_healers?(event)} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...stones2.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -9115,7 +9113,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
     if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if colored_daggers?(event)}#{'<:Colorless_Dagger:443692132683743232>' unless colored_daggers?(event)} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if colored_healers?(event)}#{'<:Colorless_Staff:443692132323295243>' unless colored_healers?(event)} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...dew.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -9138,7 +9136,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
       end
       if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if colored_daggers?(event)}#{'<:Colorless_Dagger:443692132683743232>' unless colored_daggers?(event)} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if colored_healers?(event)}#{'<:Colorless_Staff:443692132323295243>' unless colored_healers?(event)} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:443172811582996480> Lances',[]],['<:Blue_Tome:443172811104714763> Blue Tomes',[]],['<:Green_Blade:443172811721146368> Axes',[]],['<:Green_Tome:443172811759157248> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...stones.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -9247,8 +9245,8 @@ bot.command([:random,:rand]) do |event, *args|
   for i in 0...colors.length
     for j in 0...weapons.length
       if colors[i]=='Colorless'
-        color_weapons.push([colors[i],weapons[j]]) unless (weapons[j]=='Blade' && !colorless_blades?(event)) || (weapons[j]=='Tome' && !colorless_tomes?(event))
-      elsif weapons[j]=='Healer' && !colored_healers?(event)
+        color_weapons.push([colors[i],weapons[j]]) unless (weapons[j]=='Blade' && !alter_classes(event,'Colorless Blades')) || (weapons[j]=='Tome' && !alter_classes(event,'Colorless Tomes'))
+      elsif weapons[j]=='Healer' && !alter_classes(event,'Colored Healers')
       else
         color_weapons.push([colors[i],weapons[j]])
       end
@@ -9259,17 +9257,17 @@ bot.command([:random,:rand]) do |event, *args|
                    ['Blue', 'Blade'],    ['Blue', 'Tome'],    ['Blue', 'Breath'],     ['Blue', 'Bow'],
                    ['Green', 'Blade'],   ['Green', 'Tome'],   ['Green', 'Breath'],    ['Green', 'Bow'],
                                                               ['Colorless', 'Breath'],['Colorless', 'Bow'],   ['Colorless', 'Dagger']]
-    if colored_daggers?(event)
+    if alter_classes(event,'Colored Daggers')
       color_weapons.push(['Red', 'Dagger'])
       color_weapons.push(['Blue', 'Dagger'])
       color_weapons.push(['Green', 'Dagger'])
     end
-    color_weapons.push(['Colorless', 'Blade']) if colorless_blades?(event)
-    color_weapons.push(['Colorless', 'Tome']) if colorless_tomes?(event)
+    color_weapons.push(['Colorless', 'Blade']) if alter_classes(event,'Colorless Blades')
+    color_weapons.push(['Colorless', 'Tome']) if alter_classes(event,'Colorless Tomes')
     unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
-      color_weapons.push(['Red', 'Healer']) if colored_healers?(event)
-      color_weapons.push(['Blue', 'Healer']) if colored_healers?(event)
-      color_weapons.push(['Green', 'Healer']) if colored_healers?(event)
+      color_weapons.push(['Red', 'Healer']) if alter_classes(event,'Colored Healers')
+      color_weapons.push(['Blue', 'Healer']) if alter_classes(event,'Colored Healers')
+      color_weapons.push(['Green', 'Healer']) if alter_classes(event,'Colored Healers')
       color_weapons.push(['Colorless', 'Healer'])
     end
     unless event.server.nil?
@@ -9435,7 +9433,7 @@ bot.command([:random,:rand]) do |event, *args|
   w='Rod' if clazz[0]=='Colorless' && w=='Blade'
   if clazz[1]!=w
     w="*#{w}* (#{clazz[0]} #{clazz[1]})"
-  elsif ['Tome', 'Dragon', 'Bow'].include?(w) || (w=='Healer' && colored_healers?(event)) || (w=='Dagger' && colored_daggers?(event))
+  elsif ['Tome', 'Dragon', 'Bow'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers')) || (w=='Dagger' && alter_classes(event,'Colored Daggers'))
     w="*#{clazz[0]} #{clazz[1]}*"
   elsif clazz[0]=='Gold'
     w="*#{w}*"
@@ -9513,7 +9511,7 @@ bot.command([:skillrarity,:onestar,:twostar,:threestar,:fourstar,:fivestar,:skil
   end
   if " #{event.message.text.downcase} ".include?(' progression ')
     create_embed(event,"__**Non-healers**__","",xcolor,"Most non-healer units have one Scenario X passive and one Scenario Y passive",nil,[["__<:Skill_Weapon:444078171114045450> **Weapons**__","Tier 1 (*Iron, basic magic*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Steel, El- magic, Fire Breath+*) - Default at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 (*Silver, super magic*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~unless a Dragon breath weapon with built-in Frostbite~~, default at 4<:Icon_Rarity_4:448266418459377684>\nTier 4 (*+ weapons other than Fire Breath+, Prf weapons*) - default at 5<:Icon_Rarity_5:448266417553539104>\nRetro-Prfs (*Felicia's Plate*) - Available at 5<:Icon_Rarity_5:448266417553539104>, promotes from nothing",1],["__<:Skill_Assist:444078171025965066> **Assists**__","Tier 1 (*Rallies, Dance/Sing, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Sharena has hers default at 2\\*~~\nTier 2 (*Double Rallies*) - Available at 4<:Icon_Rarity_4:448266418459377684>\nPrf Assists (*Sacrifice*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Skill_Special:444078170665254929> **Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Daylight, New Moon, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Alfonse and Anna have theirs default at 2\\*~~\nTier 2 (*Sol, Luna, etc.*) - Available at 4<:Icon_Rarity_4:448266418459377684> ~~Jaffar and Saber have theirs also default at 5\\*~~\nTier 3 (*Galeforce, Aether, Prf Specials*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Passive_X:444078170900135936> **Passives (scenario X)**__","Tier 1 - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 - Available at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>"],["__<:Passive_Y:444078171113914368> **Passives (scenario Y)**__","Tier 1 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 3 - Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Prf:444078170887553024> **Prf Passives**__","Available at 5<:Icon_Rarity_5:448266417553539104>"]],2)
-    create_embed(event,"__**Healers**__","",0x64757D,"Most healers have a Scenario Y passive",nil,[["__#{"<:Colorless_Staff:443692132323295243>" unless colored_healers?(event)}#{"<:Gold_Staff:443172811628871720>" if colored_healers?(event)} **Damaging Staves**__","Tier 1 (*only Assault*) - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*non-plus staves*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Lyn(Bride) has hers default when summoned~~\nTier 3 (*+ staves, Prf weapons*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Assist_Staff:454451496831025162> **Healing Staves**__","Tier 1 (*Heal*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Mend, Reconcile*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 (*all other non-plus staves*) - Available at 4<:Icon_Rarity_4:448266418459377684>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 4 (*+ staves, Prf staves if healers got them*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Special_Healer:454451451805040640> **Healer Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Imbue*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 (*Balms, Heavenly Light*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nPrf Specials (*no examples yet, but they may come*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Passive_X:444078170900135936> **Passives (scenario X)**__","Tier 1 - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 - Available at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>"],["__<:Passive_Y:444078171113914368> **Passives (scenario Y)**__","Tier 1 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 3 - Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Prf:444078170887553024> **Prf Passives**__","Available at 5<:Icon_Rarity_5:448266417553539104>"]],2)
+    create_embed(event,"__**Healers**__","",0x64757D,"Most healers have a Scenario Y passive",nil,[["__#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')}#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')} **Damaging Staves**__","Tier 1 (*only Assault*) - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*non-plus staves*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Lyn(Bride) has hers default when summoned~~\nTier 3 (*+ staves, Prf weapons*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Assist_Staff:454451496831025162> **Healing Staves**__","Tier 1 (*Heal*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Mend, Reconcile*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 (*all other non-plus staves*) - Available at 4<:Icon_Rarity_4:448266418459377684>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 4 (*+ staves, Prf staves if healers got them*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Special_Healer:454451451805040640> **Healer Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Imbue*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 (*Balms, Heavenly Light*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nPrf Specials (*no examples yet, but they may come*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Passive_X:444078170900135936> **Passives (scenario X)**__","Tier 1 - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 - Available at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>"],["__<:Passive_Y:444078171113914368> **Passives (scenario Y)**__","Tier 1 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 3 - Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Prf:444078170887553024> **Prf Passives**__","Available at 5<:Icon_Rarity_5:448266417553539104>"]],2)
   else
     create_embed(event,"**Supposed Bug: X character, despite not being available at #{r}, has skills listed for #{r.gsub('Y','that')} in the `skill` command.**\n\nA word from my developer","By observing the skill lists of the Daily Hero Battle units - the only units we have available at 1\\* - I have learned that there is a set progression for which characters learn skills.  Only six units directly contradict this observation - and three of those units are the Askrians, who were likely given their Assists and Tier 1 Specials (depending on the character) at 2\\* in order to make them useable in the early story maps when the player has limited orbs and therefore limited unit choices.  One is Lyn(Bride), who as the only seasonal healer so far, may be the start of a new pattern.  The other two are Jaffar and Saber, who - for unknown reasons - have their respective Tier 2 Specials available right out of the box as 5\\*s.\n\nThe information as it is is not useless.  In fact, as seen quite recently as of the time of this writing, IntSys is willing to demote some units out of the 4-5\\* pool into the 3-4\\* one. This information allows us to predict which skills the new 3\\* versions of these characters will have.\n\nAs for units unlikely to demote, Paralogue maps will have lower-rarity versions of units with their base kits.  Training Tower and Tempest Trials attempt to build units according to recorded trends in Arena, but will use default base kits at lower difficulties.  Obviously you can't fodder a 4* Siegbert for Death Blow 3, but you can still encounter him in Tempest.",xcolor)
     event.respond "To see the progression I have discovered, please use the command `FEH!skillrarity progression`."
@@ -9525,8 +9523,7 @@ bot.command(:summon) do |event, *colors|
   if colors.nil? || colors.length<=0
   elsif colors[0].downcase=='pool'
     args=colors.map{|q| q}
-    args[0]=nil
-    args.compact!
+    args.shift
     disp_summon_pool(event,args)
     return nil
   end
@@ -9534,6 +9531,12 @@ bot.command(:summon) do |event, *colors|
     event.respond 'This command in unavailable in PM.'
   elsif !@summon_servers.include?(event.server.id)
     event.respond 'This command is unavailable in this server.'
+  elsif event.server.id==238770788272963585 && event.channel.id != 377526015939051520
+    event.respond 'This command is unavailable in this channel.  Please go to <#377526015939051520>.'
+  elsif event.server.id==330850148261298176 && event.channel.id != 330851389104455680
+    event.respond 'This command is unavailable in this channel.  Please go to <#330851389104455680>.'
+  elsif event.server.id==271642342153388034 && event.channel.id != 312736133203361792
+    event.respond 'This command is unavailable in this channel.  Please go to <#312736133203361792>.'
   else
     if !@banner[0].nil?
       post=Time.now
@@ -9552,9 +9555,16 @@ bot.command(:summon) do |event, *colors|
     bnr=make_banner(event)
     n=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP','+Def -Atk','+Def -Spd',
        '+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral']
-    n=['Neutral'] if bnr[0]=='TT Units' || bnr[0]=='GHB Units'
-    event << "**Banner:** #{bnr[0]}"
-    event << ''
+    n=['Neutral'] if bnr[0][0]=='TT Units' || bnr[0][0]=='GHB Units'
+    str="**Summoner:** #{event.user.distinct}"
+    str="#{str}\n"
+    str="#{str}\n**Banner:** #{bnr[0][0]}"
+    unless bnr[0][1].nil? || bnr[0][1].length.zero?
+      b=bnr[0][1].split(', ').map{|q| q.split('/')}
+      m=['','January','February','March','April','May','June','July','August','September','October','November','December']
+      str="#{str}\n*Real world run:* #{b[0][0]} #{m[b[0][1].to_i]} #{b[0][2]} - #{b[1][0]} #{m[b[1][1].to_i]} #{b[1][2]}"
+    end
+    str="#{str}\n"
     k=[[],[],[],[],[]]
     untz=@units.map{|q| q}
     for i in 0...bnr[2].length
@@ -9565,14 +9575,14 @@ bot.command(:summon) do |event, *colors|
       k[3].push(bnr[2][i]) if k2=='Colorless'
       k[4].push(bnr[2][i]) unless ['Red','Blue','Green','Colorless'].include?(k2)
     end
-    event << '**Focus Heroes:**'
-    event << "<:Orb_Red:455053002256941056> *Red*:	#{k[0].join(', ')}" if k[0].length>0
-    event << "<:Orb_Blue:455053001971859477> *Blue*:	#{k[1].join(', ')}" if k[1].length>0
-    event << "<:Orb_Green:455053002311467048> *Green*:	#{k[2].join(', ')}" if k[2].length>0
-    event << "<:Orb_Colorless:455053002152083457> *Colorless*:	#{k[3].join(', ')}" if k[3].length>0
-    event << "<:Orb_Gold:455053002911514634> *Gold*:	#{k[4].join(', ')}" if k[4].length>0
-    event << ''
-    event << '**Summon rates:**'
+    str="#{str}\n**Focus Heroes:**"
+    str="#{str}\n<:Orb_Red:455053002256941056> *Red*:	#{k[0].join(', ')}" if k[0].length>0
+    str="#{str}\n<:Orb_Blue:455053001971859477> *Blue*:	#{k[1].join(', ')}" if k[1].length>0
+    str="#{str}\n<:Orb_Green:455053002311467048> *Green*:	#{k[2].join(', ')}" if k[2].length>0
+    str="#{str}\n<:Orb_Colorless:455053002152083457> *Colorless*:	#{k[3].join(', ')}" if k[3].length>0
+    str="#{str}\n<:Orb_Gold:455053002911514634> *Gold*:	#{k[4].join(', ')}" if k[4].length>0
+    str="#{str}\n"
+    str="#{str}\n**Summon rates:**"
     @banner=[[event.user.id,Time.now,event.server.id]]
     if bnr[1]<0 # negative "starting focus" numbers indicate there is no non-focus rate
       sr=(@summon_rate[0]/5)*0.5
@@ -9604,60 +9614,60 @@ bot.command(:summon) do |event, *colors|
     end
     fakes=false
     fakes=true if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-    event << "5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % focus}%"
-    event << "Other 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % five_star}%" unless five_star.zero?
+    str="#{str}\n5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % focus}%"
+    str="#{str}\nOther 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % five_star}%" unless five_star.zero?
     if fakes
       if bnr[8].nil?
-        event << "~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % four_star}%" unless four_star.zero?
+        str="#{str}\n~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % four_star}%" unless four_star.zero?
       elsif four_star>0
-        event << "~~4\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (four_star/2)}%"
-        event << "Other ~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (four_star/2)}%"
+        str="#{str}\n~~4\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (four_star/2)}%"
+        str="#{str}\nOther ~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (four_star/2)}%"
       end
       if bnr[9].nil?
-        event << "~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % three_star}%" unless three_star.zero?
+        str="#{str}\n~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % three_star}%" unless three_star.zero?
       elsif three_star>0
-        event << "~~3\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (three_star/2)}%"
-        event << "Other ~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (three_star/2)}%"
+        str="#{str}\n~~3\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (three_star/2)}%"
+        str="#{str}\nOther ~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (three_star/2)}%"
       end
       if bnr[10].nil?
-        event << "~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % two_star}%" unless two_star.zero?
+        str="#{str}\n~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % two_star}%" unless two_star.zero?
       elsif two_star>0
-        event << "~~2\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (two_star/2)}%"
-        event << "Other ~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (two_star/2)}%"
+        str="#{str}\n~~2\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (two_star/2)}%"
+        str="#{str}\nOther ~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (two_star/2)}%"
       end
       if bnr[11].nil?
-        event << "~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % one_star}%" unless one_star.zero?
+        str="#{str}\n~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % one_star}%" unless one_star.zero?
       elsif two_star>0
-        event << "~~1\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (one_star/2)}%"
-        event << "Other ~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (one_star/2)}%"
+        str="#{str}\n~~1\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (one_star/2)}%"
+        str="#{str}\nOther ~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (one_star/2)}%"
       end
     else
       if bnr[8].nil?
-        event << "4<:Icon_Rarity_4:448266418459377684> Unit:	#{'%.2f' % four_star}%" unless four_star.zero?
+        str="#{str}\n4<:Icon_Rarity_4:448266418459377684> Unit:	#{'%.2f' % four_star}%" unless four_star.zero?
       elsif four_star>0
-        event << "4<:Icon_Rarity_4p10:448272714210476033> Focus:	#{'%.2f' % (four_star/2)}%"
-        event << "Other 4<:Icon_Rarity_4:448266418459377684>:	#{'%.2f' % (four_star/2)}%"
+        str="#{str}\n4<:Icon_Rarity_4p10:448272714210476033> Focus:	#{'%.2f' % (four_star/2)}%"
+        str="#{str}\nOther 4<:Icon_Rarity_4:448266418459377684>:	#{'%.2f' % (four_star/2)}%"
       end
       if bnr[9].nil?
-        event << "3<:Icon_Rarity_3:448266417934958592> Unit:	#{'%.2f' % three_star}%" unless three_star.zero?
+        str="#{str}\n3<:Icon_Rarity_3:448266417934958592> Unit:	#{'%.2f' % three_star}%" unless three_star.zero?
       elsif three_star>0
-        event << "3<:Icon_Rarity_3p10:448294378293952513> Focus:	#{'%.2f' % (three_star/2)}%"
-        event << "Other 3<:Icon_Rarity_3:448266417934958592>:	#{'%.2f' % (three_star/2)}%"
+        str="#{str}\n3<:Icon_Rarity_3p10:448294378293952513> Focus:	#{'%.2f' % (three_star/2)}%"
+        str="#{str}\nOther 3<:Icon_Rarity_3:448266417934958592>:	#{'%.2f' % (three_star/2)}%"
       end
       if bnr[10].nil?
-        event << "2<:Icon_Rarity_2:448266417872044032> Unit:	#{'%.2f' % two_star}%" unless two_star.zero?
+        str="#{str}\n2<:Icon_Rarity_2:448266417872044032> Unit:	#{'%.2f' % two_star}%" unless two_star.zero?
       elsif two_star>0
-        event << "2<:Icon_Rarity_2p10:448294378205872130> Focus:	#{'%.2f' % (two_star/2)}%"
-        event << "Other 2<:Icon_Rarity_2:448266417872044032>:	#{'%.2f' % (two_star/2)}%"
+        str="#{str}\n2<:Icon_Rarity_2p10:448294378205872130> Focus:	#{'%.2f' % (two_star/2)}%"
+        str="#{str}\nOther 2<:Icon_Rarity_2:448266417872044032>:	#{'%.2f' % (two_star/2)}%"
       end
       if bnr[11].nil?
-        event << "1<:Icon_Rarity_1:448266417481973781> Unit:	#{'%.2f' % one_star}%" unless one_star.zero?
+        str="#{str}\n1<:Icon_Rarity_1:448266417481973781> Unit:	#{'%.2f' % one_star}%" unless one_star.zero?
       elsif two_star>0
-        event << "1<:Icon_Rarity_1p10:448294377878716417> Focus:	#{'%.2f' % (one_star/2)}%"
-        event << "Other 1<:Icon_Rarity_1:448266417481973781>:	#{'%.2f' % (one_star/2)}%"
+        str="#{str}\n1<:Icon_Rarity_1p10:448294377878716417> Focus:	#{'%.2f' % (one_star/2)}%"
+        str="#{str}\nOther 1<:Icon_Rarity_1:448266417481973781>:	#{'%.2f' % (one_star/2)}%"
       end
     end
-    event << ""
+    str="#{str}\n"
     for i in 1...6
       k=rand(10000)
       if k<focus*100
@@ -9717,10 +9727,8 @@ bot.command(:summon) do |event, *colors|
       @banner.push([rx,hx,nr])
     end
     cracked_orbs=[]
-    if colors.nil?
-      event << '**Orb options:**'
-    elsif colors.length.zero?
-      event << '**Orb options:**'
+    if colors.nil? || colors.length.zero?
+      str="#{str}\n**Orb options:**"
     else
       trucolors=[]
       for i in 0...colors.length
@@ -9733,27 +9741,28 @@ bot.command(:summon) do |event, *colors|
         for i in 1...@banner.length
           cracked_orbs.push([@banner[i],i]) if trucolors.include?(@units[find_unit(@banner[i][1],event)][1][0])
         end
-        event << 'None of the colors you requested appeared.  Here are your **Orb options:**' if cracked_orbs.length.zero?
+        str="#{str}\nNone of the colors you requested appeared.  Here are your **Orb options:**" if cracked_orbs.length.zero?
       else
-        event << '**Orb options:**'
+        str="#{str}\n**Orb options:**"
       end
     end
     if cracked_orbs.length>0
       summons=0
       five_star=false
-      event << '**Summoning Results:**'
+      str="#{str}\n**Summoning Results:**"
       for i in 0...cracked_orbs.length
-        event << "Orb ##{cracked_orbs[i][1]} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1]}**#{unit_moji(bot,event,-1,cracked_orbs[i][0][1])} (*#{cracked_orbs[i][0][2]}*)"
+        str="#{str}\nOrb ##{cracked_orbs[i][1]} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1]}**#{unit_moji(bot,event,-1,cracked_orbs[i][0][1])} (*#{cracked_orbs[i][0][2]}*)"
         summons+=1
         five_star=true if cracked_orbs[i][0][0].include?('5<:Icon_Rarity_5:448266417553539104>')
         five_star=true if cracked_orbs[i][0][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
       end
-      event << ''
-      event << "In this current summoning session, you fired Breidablik #{summons} time#{'s' unless summons==1}, expending #{[0,5,9,13,17,20][summons]} orbs."
+      str="#{str}\n"
+      str="#{str}\nIn this current summoning session, you fired Breidablik #{summons} time#{'s' unless summons==1}, expending #{[0,5,9,13,17,20][summons]} orbs."
       metadata_load()
       @summon_rate[0]+=summons
       @summon_rate[1]+=[0,5,9,13,17,20][summons]
-      event << "Since the last 5\* summons, Breidablik has been fired #{@summon_rate[0]} time#{"s" unless @summon_rate[0]==1} and #{@summon_rate[1]} orbs have been expended."
+      str="#{str}\nSince the last 5\* summons, Breidablik has been fired #{@summon_rate[0]} time#{"s" unless @summon_rate[0]==1} and #{@summon_rate[1]} orbs have been expended."
+      event.respond str
       if @summon_rate[2]>2
         @summon_rate=[0,0,(@summon_rate[2]+1)%3+3] if five_star
       else
@@ -9764,15 +9773,16 @@ bot.command(:summon) do |event, *colors|
     else
       for i in 1...@banner.length
         k=untz[untz.find_index{|q| q[0]==@banner[i][1]}][1][0]
-        event << "#{i}.) <:Orb_Red:455053002256941056> *Red*" if k=='Red'
-        event << "#{i}.) <:Orb_Blue:455053001971859477> *Blue*" if k=='Blue'
-        event << "#{i}.) <:Orb_Green:455053002311467048> *Green*" if k=='Green'
-        event << "#{i}.) <:Orb_Colorless:455053002152083457> *Colorless*" if k=='Colorless'
-        event << "#{i}.) <:Orb_Gold:455053002911514634> *Gold*" unless ['Red','Blue','Green','Colorless'].include?(k)
+        str="#{str}\n#{i}.) <:Orb_Red:455053002256941056> *Red*" if k=='Red'
+        str="#{str}\n#{i}.) <:Orb_Blue:455053001971859477> *Blue*" if k=='Blue'
+        str="#{str}\n#{i}.) <:Orb_Green:455053002311467048> *Green*" if k=='Green'
+        str="#{str}\n#{i}.) <:Orb_Colorless:455053002152083457> *Colorless*" if k=='Colorless'
+        str="#{str}\n#{i}.) <:Orb_Gold:455053002911514634> *Gold*" unless ['Red','Blue','Green','Colorless'].include?(k)
       end
-      event << ''
-      event << 'To open orbs, please respond - in a single message - with the number of each orb you want to crack.'
-      event << 'You can also just say "Summon all" to open all orbs.'
+      str="#{str}\n"
+      str="#{str}\nTo open orbs, please respond - in a single message - with the number of each orb you want to crack."
+      str="#{str}\nYou can also just say \"Summon all\" to open all orbs."
+      event.respond str
       event.channel.await(:bob, from: event.user.id) do |e|
         if @banner[0].nil?
         elsif e.user.id == @banner[0][0] && e.message.text.downcase.include?('summon all')
@@ -9787,10 +9797,9 @@ bot.command(:summon) do |event, *colors|
           return false
         end
       end
-      event << ''
     end
   end
-  event << ''
+  return nil
 end
 
 bot.command([:effhp,:effHP,:eff_hp,:eff_HP,:bulk]) do |event, *args|
@@ -9840,23 +9849,19 @@ bot.command([:study,:statstudy,:studystats]) do |event, *args|
     return nil
   end
   if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=parse_function(:calculate_effective_HP,event,args,bot)
     return nil unless k<0
   elsif ['heal'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=parse_function(:heal_study,event,args,bot,true)
     return nil unless k<0
   elsif ['proc'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=parse_function(:proc_study,event,args,bot,false)
     return nil unless k<0
   elsif ['phase'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=parse_function(:phase_study,event,args,bot)
     return nil unless k<0
   end
@@ -10068,8 +10073,7 @@ end
 bot.command([:compare, :comparison]) do |event, *args|
   return nil if overlap_prevent(event)
   if ['skills','skill'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     skill_comparison(event,args)
     return nil
   end
@@ -10086,19 +10090,16 @@ end
 bot.command(:skill) do |event, *args|
   return nil if overlap_prevent(event)
   if ['stat','stats'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     disp_unit_stats_and_skills(event,args,bot)
     return nil
   elsif ['and','n','&'].include?(args[0].downcase) && ['stat','stat'].include?(args[1].downcase)
-    args[0]=nil
-    args[1]=nil
-    args.compact!
+    args.shift
+    args.shift
     disp_unit_stats_and_skills(event,args,bot)
     return nil
   elsif ['compare','comparison'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     skill_comparison(event,args)
     return nil
   end
@@ -10115,24 +10116,20 @@ bot.command([:skills,:fodder]) do |event, *args|
   s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
   if s.downcase[0,6]=='skills'
     if ['stat','stats'].include?(args[0].downcase)
-      args[0]=nil
-      args.compact!
+      args.shift
       disp_unit_stats_and_skills(event,args,bot)
       return nil
     elsif ['and','n','&'].include?(args[0].downcase) && ['stat','stat'].include?(args[1].downcase)
-      args[0]=nil
-      args[1]=nil
-      args.compact!
+      args.shift
+      args.shift
       disp_unit_stats_and_skills(event,args,bot)
       return nil
     elsif ['compare','comparison'].include?(args[0].downcase)
-      args[0]=nil
-      args.compact!
+      args.shift
       skill_comparison(event,args)
       return nil
     elsif ['learn','learnable','inherit','inheritance','inheritable'].include?(args[0].downcase)
-      args[0]=nil
-      args.compact!
+      args.shift
       k=parse_function(:learnable_skills,event,args,bot,true)
       return nil unless k<0
     end
@@ -10177,60 +10174,49 @@ end
 bot.command([:stats,:stat]) do |event, *args|
   return nil if overlap_prevent(event)
   if ['compare','comparison'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=comparison(event,args,bot)
     return nil unless k<1
   elsif ['study'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
-      args[0]=nil
-      args.compact!
+      args.shift
       k=parse_function(:calculate_effective_HP,event,args,bot)
       return nil unless k<0
     elsif ['heal'].include?(args[0].downcase)
-      args[0]=nil
-      args.compact!
+      args.shift
       k=parse_function(:heal_study,event,args,bot,true)
       return nil unless k<0
     elsif ['proc'].include?(args[0].downcase)
-      args[0]=nil
-      args.compact!
+      args.shift
       k=parse_function(:proc_study,event,args,bot,false)
       return nil unless k<0
     elsif ['phase'].include?(args[0].downcase)
-      args[0]=nil
-      args.compact!
+      args.shift
       k=parse_function(:phase_study,event,args,bot)
       return nil unless k<0
     end
     k=parse_function(:unit_study,event,args,bot)
     return nil unless k<0
   elsif ['effhp','eff_hp','bulk'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=parse_function(:calculate_effective_HP,event,args,bot)
     return nil unless k<0
   elsif ['heal_study','healstudy','studyheal','study_heal'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=parse_function(:heal_study,event,args,bot,true)
     return nil unless k<0
   elsif ['proc_study','procstudy','studyproc','study_proc'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=parse_function(:proc_studyevent,args,bot,false)
     return nil unless k<0
   elsif ['skill','skills'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     disp_unit_stats_and_skills(event,args,bot)
     return nil
   elsif ['and','n','&'].include?(args[0].downcase) && ['skill','skills'].include?(args[1].downcase)
-    args[0]=nil
-    args[1]=nil
-    args.compact!
+    args.shift
+    args.shift
     disp_unit_stats_and_skills(event,args,bot)
     return nil
   end
@@ -10274,49 +10260,40 @@ end
 bot.command([:unit, :data, :statsskills, :statskills, :stats_skills, :stat_skills, :statsandskills, :statandskills, :stats_and_skills, :stat_and_skills, :statsskill, :statskill, :stats_skill, :stat_skill, :statsandskill, :statandskill, :stats_and_skill, :stat_and_skill]) do |event, *args|
   return nil if overlap_prevent(event)
   if ['compare','comparison'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=comparison(event,args,bot)
     return nil unless k<1
   elsif ['study'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
-      args[0]=nil
-      args.compact!
+      args.shift
       k=parse_function(:calculate_effective_HP,event,args,bot)
       return nil unless k<0
     elsif ['heal'].include?(args[0].downcase)
-      args[0]=nil
-      args.compact!
+      args.shift
       k=parse_function(:heal_study,event,args,bot,true)
       return nil unless k<0
     elsif ['proc'].include?(args[0].downcase)
-      args[0]=nil
-      args.compact!
+      args.shift
       k=parse_function(:proc_studyevent,args,bot,false)
       return nil unless k<0
     elsif ['phase'].include?(args[0].downcase)
-      args[0]=nil
-      args.compact!
+      args.shift
       k=parse_function(:phase_study,event,args,bot)
       return nil unless k<0
     end
     k=parse_function(:unit_study,event,args,bot)
     return nil unless k<0
   elsif ['effhp','eff_hp','bulk'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=parse_function(:calculate_effective_HP,event,args,bot)
     return nil unless k<0
   elsif ['heal_study','healstudy','studyheal','study_heal'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=parse_function(:heal_study,event,args,bot,true)
     return nil unless k<0
   elsif ['proc_study','procstudy','studyproc','study_proc'].include?(args[0].downcase)
-    args[0]=nil
-    args.compact!
+    args.shift
     k=parse_function(:proc_studyevent,args,bot,false)
     return nil unless k<0
   end
@@ -10438,6 +10415,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     elsif @aliases[i][0].downcase==newname.downcase && @aliases[i][1].downcase==unit.downcase
       if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?
         @aliases[i][2]=nil
+        @aliases[i][3]=nil
         @aliases[i].compact!
         bot.channel(chn).send_message("The alias #{newname} for #{unit.gsub('Lavatain','Laevatein')} exists in a server already.  Making it global now.")
         event.respond "The alias #{newname} for #{unit.gsub('Lavatain','Laevatein')} exists in a server already.  Making it global now.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
@@ -13307,6 +13285,7 @@ def disp_current_events(mode=0)
       c[i][1]='Voting Gauntlet' if c[i][1]=='VG'
       c[i][1]='Bound Hero Battle' if c[i][1]=='BHB'
       c[i][1]='Grand Hero Battle' if c[i][1]=='GHB'
+      c[i][1]='Legendary Hero Battle' if c[i][1]=='LHB'
       c[i][1]='Grand Conquests' if c[i][1]=='GC'
       c[i][1]='Tempest Trials' if c[i][1]=='TT' || c[i][1]=='Tempest'
       c[i][1]='Tap Battle' if c[i][1]=='Illusory Dungeon'
@@ -13322,8 +13301,8 @@ def disp_current_events(mode=0)
       n=c2[i][0]
       if ['Voting Gauntlet','Tempest Trials','Quests','Log-In Bonus'].include?(c2[i][1])
         n="\"#{n}\" #{c2[i][1]}"
-      elsif ['Bound Hero Battle','Grand Hero Battle','Special Maps'].include?(c2[i][1])
-        n="#{c2[i][1]}: #{n}"
+      elsif ['Bound Hero Battle','Grand Hero Battle','Legendary Hero Battle','Special Maps'].include?(c2[i][1])
+        n="#{c2[i][1]}: *#{n}*"
       elsif c2[i][1]=='Grand Conquests'
         n="Grand Conquests"
       elsif c2[i][1]=='Tap Battle'
@@ -13353,7 +13332,26 @@ def disp_current_events(mode=0)
         else
           str2="#{str2} - no gifts remain for daily players"
         end
-      elsif c2[i][1]=='Grand Conquest' && mode>0
+      elsif c2[i][1]=='Grand Conquests' && mode>0
+        t4=c2[i][2][0].split('/').map{|q| q.to_i}
+        t4=Time.new(t4[2],t4[1],t4[0],23,0)
+        t3=Time.new(t.year,t.month,t.day,23,0)
+        t4=t3-t4
+        t4=t4/(24*60*60)
+        t4=t4.floor
+        t2=c2[i][2][0].split('/').map{|q| q.to_i}
+        t2=Time.new(t2[2],t2[1],t2[0],23,0)
+        t2+=24*60*60*(2*(t4/2+1)-1)
+        t2=t2-t
+        if t2/(60*60)>44
+          str2="#{str2} - waiting until Battle #{t4/2+1}"
+        elsif t2/(60*60)>1
+          str2="#{str2} - #{(t2/(60*60)).floor} hours remain in Battle #{t4/2+1}"
+        elsif t2/60>1
+          str2="#{str2} - #{(t2/60).floor} minutes remain in Battle #{t4/2+1}"
+        elsif t2>1
+          str2="#{str2} - #{t2.floor} minutes remain in Battle #{t4/2+1}"
+        end
       elsif c2[i][1]=='Voting Gauntlet' && mode>0
         t4=c2[i][2][0].split('/').map{|q| q.to_i}
         t4=Time.new(t4[2],t4[1],t4[0],23,0)
