@@ -3261,7 +3261,7 @@ def disp_skill(bot,name,event,ignore=false)
   sklslt=['']
   if skill[4]=='Weapon'
     xcolor=0xF4728C
-    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/weapons/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
+    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Weapons/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
     if skill[5]=='Red Tome Users Only'
       s=find_base_skill(skill,event)
       xfooter='Dark Mages can still learn this skill, it just takes more SP.'
