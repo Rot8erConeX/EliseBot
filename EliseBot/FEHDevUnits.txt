@@ -7,7 +7,7 @@ Sakura
 Assault\Slow\Slow+\Slow+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
-HP +3\HP +4\HP +5
+Brazen Atk/Spd 1\Brazen Atk/Spd 2\Brazen Atk/Spd 3
 Wings of Mercy 1\Wings of Mercy 2\Wings of Mercy 3
 Fortify Def 1\Fortify Def 2\Fortify Def 3
 Fortify Res 3
