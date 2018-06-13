@@ -525,7 +525,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['find','search'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['unit','char','character','person','units','chars','charas','chara','people'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, includes any units you name that don't fit into those filters, then displays the resulting list.\n\n#{disp_more_info(event,2)}",0xD49F61)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,2)}",0xD49F61)
     elsif ['skill','skills'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,3)}#{"\n\nI also have tags for weapon and passive \"flavors\".  Use this command in PM to see them." unless safe_to_spam?(event)}",0xD49F61)
       if safe_to_spam?(event)
@@ -4623,6 +4623,13 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   genders=[]
   games=[]
   supernatures=[]
+  lookout=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
+    lookout=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt').each_line do |line|
+      lookout.push(eval line)
+    end
+  end
   for i in 0...args.length
     args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
     colors.push('Red') if ['red','reds'].include?(args[i].downcase)
@@ -4648,34 +4655,9 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
     genders.push('M') if ['male','man','boy'].include?(args[i].downcase)
     genders.push('F') if ['female','woman','girl'].include?(args[i].downcase)
-    games.push('FE1') if ['fe1','bladeoflight'].include?(args[i].downcase)
-    games.push('FE2') if ['fe2','gaiden'].include?(args[i].downcase)
-    games.push('FE3') if ['fe3','mystery','mote','mysteryoftheemblem'].include?(args[i].downcase)
-    games.push('FE4') if ['fe4','genealogy','gothw','ghw','genealogyoftheholywar'].include?(args[i].downcase)
-    games.push('FE5') if ['fe5','thracia','776','thracia776'].include?(args[i].downcase)
-    games.push('FE6') if ['fe6','binding',"roy'sgame",'theonewithroy','bindingblade'].include?(args[i].downcase)
-    games.push('FE7') if ['fe7','blazing','firstoneinthewest','blazingblade'].include?(args[i].downcase)
-    games.push('FE8') if ['fe8','sacred','sacredstones'].include?(args[i].downcase)
-    games.push('FE9') if ['fe9','por','pathofradiance'].include?(args[i].downcase)
-    games.push('FE10') if ['fe10','radiantdawn'].include?(args[i].downcase)
-    games.push('FE11') if ['fe11','shadowdragon'].include?(args[i].downcase)
-    games.push('FE12') if ['fe12','newmystery','newmysteryoftheemblem'].include?(args[i].downcase)
-    games.push('FE13') if ['fe13','awakening','fea'].include?(args[i].downcase)
-    games.push('FE15') if ['fe15','feesov','sov','shadowsofvalentia'].include?(args[i].downcase)
-    games.push('FE14') if ['fe14','if','feif','fef','fates','fe14b','fe14c','birthright','conquest','fe14r','revelation'].include?(args[i].downcase)
-    games.push('FE14B') if ['fe14','if','feif','fef','fates','fe14b','birthright'].include?(args[i].downcase)
-    games.push('FE14C') if ['fe14','if','feif','fef','fates','fe14c','conquest'].include?(args[i].downcase)
-    games.push('FE14R') if ['fe14','if','feif','fef','fates','fe14r','revelation'].include?(args[i].downcase)
-    games.push('FE14g') if ['fe14g','gates'].include?(args[i].downcase)
-    games.push('FE15') if ['fe15','sov'].include?(args[i].downcase)
-    games.push('FEH') if ['feh','heroes'].include?(args[i].downcase)
-    games.push('FEW') if ['few','warriors'].include?(args[i].downcase)
-    games.push('SSBM') if ['ssbm','melee'].include?(args[i].downcase)
-    games.push('SSBB') if ['ssbb','brawl'].include?(args[i].downcase)
-    games.push('SSBProM') if ['ssbprom','projectm','promelee'].include?(args[i].downcase)
-    games.push('SSB4') if ['ssb4','sm4sh','smish'].include?(args[i].downcase)
-    games.push('PXZ2') if ['projextxzone','projextxzone2','xzone','x-zone'].include?(args[i].downcase)
-    games.push('STEAM') if ['codename','steam','s.t.e.a.m','codenamesteam','codename:steam','codenames.t.e.a.m.','codename:s.t.e.a.m.'].include?(args[i].downcase)
+    for i2 in 0...lookout.length
+      games.push(lookout[i2][0]) if lookout[i2][1].include?(args[i].downcase)
+    end
     supernatures.push('+HP') if ['hpboon','healthboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     supernatures.push('+Atk') if ['atkboon','attboon','attackboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     supernatures.push('+Spd') if ['spdboon','speedboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
@@ -4687,17 +4669,6 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     supernatures.push('-Def') if ['defbane','defensebane','defencebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     supernatures.push('-Res') if ['resbane','resistancebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     group.push(@groups[find_group(args[i].downcase,event)]) if find_group(args[i].downcase,event)>=0 && args[i].length>=3
-    unless ['red','reds','blue','blues','green','greens','sword','swords','katana','lance','lances','spear','spears','naginata','axe','axes','ax','club','clubs','axe','axes','ax','club','clubs','colorless','colourless','clear','clears','physical','blade','blades','tome','mage','magic','spell','tomes','mages','spells','dragon','dragons','manakete','manaketes','breath','bow','arrow','bows','arrows','archer','archers','dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves','healer','staff','cleric','healers','clerics','staves','flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi','cavalry','cavalier','horse','pony','horsie','horses','horsies','ponies','infantry','foot','feet','armor','armour','armors','armours','armored','armoured','male','man','boy','female','woman','girl'].include?(args[i].downcase)
-      unitz.push(@units[find_unit(args[i].downcase,event)][0]) if find_unit(args[i].downcase,event)>=0 && args[i].length>=3
-      if !detect_multi_unit_alias(event,args[i],args[i],3).nil?
-        x=detect_multi_unit_alias(event,args[i],args[i],3)
-        for i2 in 0...x[1].length
-          unitz.push(x[1][i2])
-        end
-      end
-      unitz.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(F)") if ['robin','corrin','morgan','kana'].include?(args[i].downcase)
-      unitz.push("#{args[i][0,1].upcase}#{args[i][1,args[i].length-1].downcase}(M)") if ['robin','corrin','morgan','kana'].include?(args[i].downcase)
-    end
   end
   colors=colors.uniq
   weapons=weapons.uniq
@@ -4782,8 +4753,12 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   if games.length>0
     for i in 0...matches3.length
       for j in 0...games.length
-        matches4.push(matches3[i]) if matches3[i][11].map{|q| q.downcase}.include?(games[j].downcase)
-        matches4.push(matches3[i]) if games[j]=='FE14R' && (matches3[i][11].include?('FE14C') || matches3[i][11].include?('FE14B'))
+        if matches3[i][11].map{|q| q.downcase}.include?(games[j].downcase)
+          matches4.push(matches3[i])
+        elsif matches3[i][11].map{|q| q.downcase.gsub('(a)','')}.include?(games[j].downcase)
+          matches3[i][0]="#{matches3[i][0]} *[Amiibo]*"
+          matches4.push(matches3[i])
+        end
       end
     end
   else
@@ -5210,7 +5185,7 @@ def display_units(event, mode)
   k=find_in_units(event,1)
   if k.is_a?(Array)
     untz=@units.map{|q| q}
-    k=k.map{|q| "#{'~~' if !['Laevatein','- - -'].include?(q) && !untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' if !['Laevatein','- - -'].include?(q) && !untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
+    k=k.map{|q| "#{'~~' if !['Laevatein','- - -'].include?(q) && !untz[untz.find_index{|q2| q2[0]==q.gsub(' *[Amiibo]*','')}][13][0].nil?}#{q}#{'~~' if !['Laevatein','- - -'].include?(q) && !untz[untz.find_index{|q2| q2[0]==q.gsub(' *[Amiibo]*','')}][13][0].nil?}"}
     if k.include?('- - -')
       p1=[[]]
       p2=0
@@ -5223,7 +5198,7 @@ def display_units(event, mode)
         end
       end
       for i in 0...p1.length
-        wpn1=p1[i].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','')}][1]}
+        wpn1=p1[i].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','')}][1]}
         h='.'
         if wpn1.uniq.length==1
           # blade type
@@ -5271,7 +5246,7 @@ def display_units(event, mode)
         if h=='.' && wpn1[0]=='Tome'
           h=wpn1[0][2]
           for l in 0...p1[i].length
-            h=untz[untz.find_index{|q2| q2[0]==p1[i][l]}][1][0] if h != untz[untz.find_index{|q2| q2[0]==p1[i][l]}][1][2]
+            h=untz[untz.find_index{|q2| q2[0]==p1[i][l].gsub(' *[Amiibo]*','')}][1][0] if h != untz[untz.find_index{|q2| q2[0]==p1[i][l]}][1][2]
           end
           h="#{h} Mages"
         end
@@ -5279,7 +5254,7 @@ def display_units(event, mode)
       end
       if p1.map{|q| q[0]}.uniq.length<=1
         for i in 0...p1.length
-          mov=p1[i][1].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','')}][3]}.uniq
+          mov=p1[i][1].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','')}][3]}.uniq
           if mov.length<=1
             p1[i][0]='<:Icon_Move_Infantry:443331187579289601> Infantry' if mov[0]=='Infantry'
             p1[i][0]='<:Icon_Move_Armor:443331186316673025> Armor' if mov[0]=='Armor'
@@ -5650,39 +5625,17 @@ end
 
 def get_games_list(arr,includefeh=true)
   g=[]
-  for i in 0...arr.length
-    g.push('FE1 - *Fire Emblem: Shadow Dragon and the Blade of Light*') if arr[i]=='FE1'
-    g.push('FE2 - *Fire Emblem: Gaiden*') if arr[i]=='FE2'
-    g.push('FE3 - *Fire Emblem: Mystery of the Emblem*') if arr[i]=='FE3'
-    g.push('FE4 - *Fire Emblem: Genealogy of the Holy War*') if arr[i]=='FE4'
-    g.push('FE5 - *Fire Emblem: Thracia 776*') if arr[i]=='FE5'
-    g.push('FE6 - *Fire Emblem: The Binding Blade*') if arr[i]=='FE6'
-    g.push('FE7 - *Fire Emblem: [The Blazing Blade]*') if arr[i]=='FE7'
-    g.push('FE8 - *Fire Emblem: The Sacred Stones*') if arr[i]=='FE8'
-    g.push('FE9 - *Fire Emblem: Path of Radiance*') if arr[i]=='FE9'
-    g.push('FE10 - *Fire Emblem: Radiant Dawn*') if arr[i]=='FE10'
-    g.push('FE11 - *Fire Emblem: Shadow Dragon*') if arr[i]=='FE11'
-    g.push('FE12 - *Fire Emblem: New Mystery of the Emblem*') if arr[i]=='FE12'
-    g.push('FE13 - *Fire Emblem: Awakening*') if arr[i]=='FE13'
-    if arr[i]=='FE14'
-      g.push('FE14 - *Fire Emblem: Fates* (All paths)')
-    elsif arr[i].include?('FE14')
-      g.push('FE14 - *Fire Emblem: Fates: Birthright*') if arr[i][4,1].downcase=='b'
-      g.push('FE14 - *Fire Emblem: Fates: Conquest*') if arr[i][4,1].downcase=='c'
-      g.push('FE14 - *Fire Emblem: Fates: Revelation*') if arr[i][4,1].downcase=='r' || arr[i][4,1]!=arr[i][4,1].downcase
-      g.push('FE14x - *Fire Emblem: Gates*') if arr[i][4,1].downcase=='g'
+  lookout=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
+    lookout=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt').each_line do |line|
+      lookout.push(eval line)
     end
-    g.push('FE15 - *Fire Emblem Echoes: Shadows of Valentia*') if arr[i]=='FE15'
-    g.push('FE16 - *Fire Emblem: Three Houses*') if arr[i]=='FE16'
-    g.push('FEH - *Fire Emblem: Heroes*') if arr[i]=='FEH'
-    g.push('FEW - *Fire Emblem Warriors*') if arr[i]=='FEW'
-    g.push('*Super Smash Bros.: Melee*') if arr[i]=='SSBM'
-    g.push('*Super Smash Bros.: Brawl*') if arr[i]=='SSBB'
-    g.push('*[Super Smash Bros.:] Project: M*') if arr[i]=='SSBProM'
-    g.push('*Super Smash Bros. for 3DS and Wii U*') if arr[i]=='SSB4'
-    g.push('*Super Smash Bros.: Ultimate*') if arr[i]=='SSBU'
-    g.push('*Project X Zone 2*') if arr[i]=='PXZ2'
-    g.push('*Codename: S.T.E.A.M.*') if arr[i]=='STEAM'
+  end
+  for i in 0...arr.length
+    for i2 in 0...lookout.length
+      g.push(lookout[i2][2]) if lookout[i2][0]==arr[i]
+    end
   end
   g.push('FEH - *Fire Emblem: Heroes* (obviously)') if !g.include?('FEH - *Fire Emblem: Heroes*') && includefeh && g.length>0
   g.push('No games') if g.length<=0
@@ -12912,16 +12865,16 @@ bot.command(:reload, from: 167657750971547648) do |event|
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648
   event.channel.send_temporary_message('Loading.  Please wait 5 seconds...',3)
-  to_reload=['FEHUnits','FEHSkills','FEHStatSkills','FEHSkillSubsets','FEHEmblemTeams','FEHBanners','FEHEvents']
+  to_reload=['Units','Skills','StatSkills','SkillSubsets','EmblemTeams','Banners','Events','Games']
   for i in 0...to_reload.length
-    download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/#{to_reload[i]}.txt")
+    download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEH#{to_reload[i]}.txt")
     IO.copy_stream(download, "FEHTemp.txt")
     if File.size("FEHTemp.txt")>100
       b=[]
       File.open("FEHTemp.txt").each_line.with_index do |line, idx|
         b.push(line)
       end
-      open("#{to_reload[i]}.txt", 'w') { |f|
+      open("FEH#{to_reload[i]}.txt", 'w') { |f|
         f.puts b.join('')
       }
     end
