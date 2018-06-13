@@ -5673,12 +5673,14 @@ def get_games_list(arr,includefeh=true)
       g.push('FE14x - *Fire Emblem: Gates*') if arr[i][4,1].downcase=='g'
     end
     g.push('FE15 - *Fire Emblem Echoes: Shadows of Valentia*') if arr[i]=='FE15'
+    g.push('FE16 - *Fire Emblem: Three Houses*') if arr[i]=='FE16'
     g.push('FEH - *Fire Emblem: Heroes*') if arr[i]=='FEH'
     g.push('FEW - *Fire Emblem Warriors*') if arr[i]=='FEW'
     g.push('*Super Smash Bros.: Melee*') if arr[i]=='SSBM'
     g.push('*Super Smash Bros.: Brawl*') if arr[i]=='SSBB'
     g.push('*[Super Smash Bros.:] Project: M*') if arr[i]=='SSBProM'
     g.push('*Super Smash Bros. for 3DS and Wii U*') if arr[i]=='SSB4'
+    g.push('*Super Smash Bros.: Ultimate*') if arr[i]=='SSBU'
     g.push('*Project X Zone 2*') if arr[i]=='PXZ2'
     g.push('*Codename: S.T.E.A.M.*') if arr[i]=='STEAM'
   end
@@ -6744,9 +6746,7 @@ def filler(list1,list2,n,m=-1,key='',type=0,mode='||',mode2='')
 end
 
 def get_match_in_list(list, str)
-  for i in 0...list.length
-    return list[i] if list[i][0].downcase==str.downcase
-  end
+  return list[list.find_index{|q| q[0].downcase==str.downcase}] unless list.find_index{|q| q[0].downcase==str.downcase}.nil?
   return nil
 end
 
