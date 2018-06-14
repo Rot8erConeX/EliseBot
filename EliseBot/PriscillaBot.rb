@@ -525,7 +525,37 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['find','search'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['unit','char','character','person','units','chars','charas','chara','people'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,2)}",0xD49F61)
+      lookout=[]
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
+        lookout=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt').each_line do |line|
+          lookout.push(eval line)
+        end
+      end
+      lookout=lookout.reject{|q| q[0].length>4 && q[0][0,4]=='FE14'}
+      d=[]
+      for i in 0...lookout.length
+        d.push("**#{lookout[i][2].gsub("#{lookout[i][0]} - ",'').gsub(" (All paths)",'')}**\n#{lookout[i][1].join(', ')}")
+      end
+      if d.join("\n\n").length>=1900 || !safe_to_spam?(event)
+        d=lookout.map{|q| q[0]}
+        l=0
+        l=1 if d.length%3==2
+        m=0
+        m=1 if d.length%3==1
+        p1=d[0,d.length/3+l].join("\n")
+        p2=d[d.length/3+l,d.length/3+m].join("\n")
+        p3=d[2*(d.length/3)+l+m,d.length/3+l].join("\n")
+        if d.length>50 && !safe_to_spam?(event)
+          create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,2)}\n\nYou can also search for units by gender.\nYou can search by game as well, and game options can be displayed if you use this command in PM.",0xD49F61)
+        else
+          create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,2)}\n\nYou can also search for units by gender.\nYou can search by game as well, by using the words below.",0xD49F61)
+          create_embed(event,'Games','',0x40C0F0,nil,nil,[['.',p1],['.',p2],['.',p3]])
+        end
+      else
+        create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,2)}\n\nYou can also search for units by gender.\nYou can search by game as well, by using the words below.",0xD49F61)
+        create_embed(event,'Games',d.join("\n\n"),0x40C0F0)
+      end
     elsif ['skill','skills'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,3)}#{"\n\nI also have tags for weapon and passive \"flavors\".  Use this command in PM to see them." unless safe_to_spam?(event)}",0xD49F61)
       if safe_to_spam?(event)
@@ -561,7 +591,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
         end
       end
     else
-      create_embed(event,"**#{command.downcase}** __\*filters__",'Combines the results of `FEH!find unit` and `FEH!find skill`, showing them in a single embed.  This combined form is particularly useful when looking at weapon types, so you can see all the weapons *and* all the units that can use them side-by-side.',0xD49F61)
+      create_embed(event,"**#{command.downcase}** __\*filters__","Combines the results of `FEH!find unit` and `FEH!find skill`, showing them in a single embed.  This combined form is particularly useful when looking at weapon types, so you can see all the weapons *and* all the units that can use them side-by-side.\n\n#{disp_more_info(event,4)}",0xD49F61)
     end
   elsif ['setmarker'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __letter__","Sets the server's \"marker\", allowing for server-specific custom units and skills.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
@@ -4656,7 +4686,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     genders.push('M') if ['male','man','boy'].include?(args[i].downcase)
     genders.push('F') if ['female','woman','girl'].include?(args[i].downcase)
     for i2 in 0...lookout.length
-      games.push(lookout[i2][0]) if lookout[i2][1].include?(args[i].downcase)
+      games.push(lookout[i2][0]) if lookout[i2][1].map{|q| q.downcase}.include?(args[i].downcase)
     end
     supernatures.push('+HP') if ['hpboon','healthboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     supernatures.push('+Atk') if ['atkboon','attboon','attackboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
