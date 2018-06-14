@@ -4636,6 +4636,7 @@
 ["Zeto", "Seth"]
 ["Bonyari", "Setsuna"]
 ["Setstoned", "Setsuna", [238059616028590080]]
+["<:EverythingsFine:379362788226891796>", "Shanna", [323916507174404098]]
 ["<:shannawink:387453304176902144>", "Shanna", [330850148261298176]]
 ["<:smugshanna:389144850165006357>", "Shanna", [238770788272963585]]
 ["Despe-chan", "Shanna", [238059616028590080]]
