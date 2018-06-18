@@ -644,7 +644,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`daily` - shows the current day's in-game daily events (*also `today` or `todayInFEH`*)\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__\n`suggestion` __\\*message__\n`feedback` __\\*message__\n`donation` (*also `donate`*)\n`whyelise`\n`skillrarity` (*also `skill_rarity`*)\n`snagstats` __type__ - to receive relevant bot stats#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed(event,"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
     create_embed(event,"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**Mjolnr, the Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n\n__**Meta Data Storage**__\n`reload` - reloads the unit and skill data\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
-    event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command."
+    event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n\nWhen looking up a character or skill, you also have the option of @ mentioning me in a message that includes that character/skill's name"
   end
 end
 
@@ -743,7 +743,11 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # this func
   data_load()
   # find neutral five-star level 40 stats
   u=@units.map{|q| q}
-  f=u[u.find_index{|q| q[0]==name}]
+  if name=='Robin'
+    f=u[u.find_index{|q| q[0]=='Robin(F)'}]
+  else
+    f=u[u.find_index{|q| q[0]==name}]
+  end
   # find neutral level 1 stats based on rarity
   r=f[4].map{|q| q}                                                         # rate numbers
   m=r.map{|q| @mods[q][5]}                                                  # growth rates
@@ -2751,10 +2755,10 @@ def display_stars(rarity,merges,support='-')
   return "#{emo*rarity}#{"**+#{merges}**" unless merges.zero?}#{"	<:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}"
 end
 
-def disp_stats(bot,name,weapon,event,ignore=false)
+def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false)
   if name.is_a?(Array)
     for i in 0...name.length
-      disp_stats(bot,name[i],weapon,event,ignore)
+      disp_stats(bot,name[i],weapon,event,ignore,skillstoo)
     end
     return nil
   end
@@ -2917,12 +2921,14 @@ def disp_stats(bot,name,weapon,event,ignore=false)
       n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
     end
     create_embed(event,"__**#{@units[j][0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n",0x9400D3,"Please note that the #{atk} stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","HP: 0\n#{atk}: 0\nSpeed: 0\nDefense: 0\nResistance: 0\n\nBST: 0"],["**Level 40#{" +#{merges}" if merges>0}**","HP: 0\n#{atk}: 0\nSpeed: 0\nDefense: 0\nResistance: 0\n\nBST: 0"]],1)
+    disp_unit_skills(bot,@units[j][0],event) if skillstoo
     return nil
   elsif unitz[4].nil? || (unitz[4].max.zero? && unitz[5].max.zero?)
     data_load()
     j=find_unit(name,event)
     xcolor=unit_color(event,j,0,mu)
     create_embed(event,"__**#{@units[j][0].gsub('Lavatain','Laevatein')}**__","#{unit_clss(bot,event,j)}",xcolor,'Stats currently unknown',pick_thumbnail(event,j,bot))
+    disp_unit_skills(bot,@units[j][0],event) if skillstoo
     return nil
   elsif unitz[4].max.zero?
     data_load()
@@ -2978,6 +2984,7 @@ def disp_stats(bot,name,weapon,event,ignore=false)
     ftr="Please note that the #{atk} stat displayed here does not include weapon might.  The Attack stat in-game does."
     ftr=nil if weapon != '-'
     create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0}#{"	\u2764 **#{summoner}**" unless summoner=='-'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","HP: unknown\n#{atk}: unknown\nSpeed: unknown\nDefense: unknown\nResistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","HP: #{u40[1]}\n#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"]],1)
+    disp_unit_skills(bot,@units[j][0],event) if skillstoo
     return nil
   end
   data_load()
@@ -3081,10 +3088,35 @@ def disp_stats(bot,name,weapon,event,ignore=false)
   for i in 0...flds.length
     flds[i][1]=flds[i][1].join("\n")
   end
+  if skillstoo && name != 'Robin'
+    uskl=unit_skills(name,event)
+    for i in 0...3
+      if uskl[i][0].include?('**') && uskl[i]!=uskl[i].reject{|q| !q.include?('**')}
+        uskl[i][-1]="#{uskl[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{uskl[i][-1]}"
+      end
+    end
+    uskl=uskl.map{|q| q[q.length-1]}
+    if event.message.text.downcase.include?("mathoo's")
+      devunits_load()
+      dv=find_in_dev_units(name)
+      if dv>=0
+        mu=true
+        sklz2=[@dev_units[dv][6],@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],[@dev_units[dv][12]]]
+        uskl=sklz2.map{|q| q[q.length-1]}
+      end
+    end
+    flds.push(['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"])
+  end
   j=find_unit(name,event)
   img=pick_thumbnail(event,j,bot)
   img='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}",xcolor,ftr,img,flds,1)
+  xtype=1
+  xtype=-1 if skillstoo && name != 'Robin'
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}",xcolor,ftr,img,flds,xtype)
+  if skillstoo && name == 'Robin'
+    disp_unit_skills(bot,'Robin(M)',event)
+    disp_unit_skills(bot,'Robin(F)',event)
+  end
   return nil
 end
 
@@ -3250,7 +3282,7 @@ def disp_skill(bot,name,event,ignore=false)
   sklz=@skills.map{|q| q}
   g=get_markers(event)
   unitz=@units.reject{|q| !has_any?(g, q[13][0])}
-  if skill[4]=='Weapon' && (" #{event.message.text.downcase} ".include?(' refinement ') || " #{event.message.text.downcase} ".include?(' (w) '))
+  if skill[4]=='Weapon' && (" #{event.message.text.downcase} ".include?(' refinement ') || " #{event.message.text.downcase} ".include?(' refinements ') || " #{event.message.text.downcase} ".include?(' (w) '))
     if skill[0]=='Falchion'
       disp_skill(bot,'Drive Spectrum',event,ignore)
       disp_skill(bot,'Double Lion',event,ignore)
@@ -3378,7 +3410,7 @@ def disp_skill(bot,name,event,ignore=false)
   else
     xcolor=0xFDDC7E
     xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/skills/#{skill[0].gsub(' ','_').gsub('/','_').gsub('!','')}.png?raw=true"
-    if " #{event.message.text.downcase} ".include?(' refinement ') || " #{event.message.text.downcase} ".include?(' (w) ')
+    if " #{event.message.text.downcase} ".include?(' refinement ') || " #{event.message.text.downcase} ".include?(' refinements ') || " #{event.message.text.downcase} ".include?(' (w) ')
       s=skill[0].gsub('/','_').split(' ')
       s[s.length-1]='W' if s[s.length-1].length<2
       xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/skills/#{s.join('_')}.png?raw=true"
@@ -6188,9 +6220,7 @@ def disp_unit_stats_and_skills(event,args,bot)
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.nil?
-      disp_stats(bot,x[1],w,event,true)
-      disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-      event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+      disp_stats(bot,x[1],w,event,true,true)
     else
       event.respond 'No matches found.'
     end
@@ -6203,17 +6233,12 @@ def disp_unit_stats_and_skills(event,args,bot)
   data_load()
   if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
     x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
-    disp_stats(bot,x[1],w,event,true)
-    disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-    event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+    disp_stats(bot,x[1],w,event,true,true)
   elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
     x=detect_multi_unit_alias(event,str.downcase,str.downcase)
-    disp_stats(bot,x[1],w,event,true)
-    disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-    event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+    disp_stats(bot,x[1],w,event,true,true)
   elsif find_unit(str,event)>=0
-    disp_stats(bot,str,w,event)
-    disp_unit_skills(bot,str,event,true)
+    disp_stats(bot,str,w,event,false,true)
   else
     event.respond 'No matches found'
   end
@@ -12654,10 +12679,10 @@ bot.command(:snagstats) do |event, f, f2|
     event << "#{filler(legal_units,all_units,2,0,2,2)} legendary units"
     event << "#{filler(legal_units,all_units,9,0,'-',1)} unobtainable units"
     event << ''
-    event << "#{filler(legal_units,all_units,1,0,'Red')} red units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Red','p'],[0,1])} in the main summon pool"
-    event << "#{filler(legal_units,all_units,1,0,'Blue')} blue units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Blue','p'],[0,1])} in the main summon pool"
-    event << "#{filler(legal_units,all_units,1,0,'Green')} green units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Green','p'],[0,1])} in the main summon pool"
-    event << "#{filler(legal_units,all_units,1,0,'Colorless')} colorless units, 	with #{filler(legal_units,all_units,[1,9],[0,-1],['Colorless','p'],[0,1])} in the main summon pool"
+    event << "#{filler(legal_units,all_units,1,0,'Red')} red units, 	with #{filler(legal_units,all_units,[1,9],[0,0],['Red','p'],[0,1])} in the main summon pool"
+    event << "#{filler(legal_units,all_units,1,0,'Blue')} blue units, 	with #{filler(legal_units,all_units,[1,9],[0,0],['Blue','p'],[0,1])} in the main summon pool"
+    event << "#{filler(legal_units,all_units,1,0,'Green')} green units, 	with #{filler(legal_units,all_units,[1,9],[0,0],['Green','p'],[0,1])} in the main summon pool"
+    event << "#{filler(legal_units,all_units,1,0,'Colorless')} colorless units, 	with #{filler(legal_units,all_units,[1,9],[0,0],['Colorless','p'],[0,1])} in the main summon pool"
     event << ''
     event << "#{filler(legal_units,all_units,1,1,'Blade')} blade users: 	#{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, and #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes"
     event << "#{filler(legal_units,all_units,1,1,'Tome')} tome users: 	#{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, and #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green"
@@ -12673,23 +12698,23 @@ bot.command(:snagstats) do |event, f, f2|
     event << "#{filler(legal_units,all_units,3,-1,'Armor')} armored units"
     if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
       event << ''
-      event << "#{filler(legal_units,all_units,11,-1,'FE1',1)} units from *FE1*,	#{filler(legal_units,all_units,11,0,'FE1')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE2',1)} units from *FE2*,	#{filler(legal_units,all_units,11,0,'FE2')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE3',1)} units from *FE3*,	#{filler(legal_units,all_units,11,0,'FE3')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE4',1)} units from *FE4*,	#{filler(legal_units,all_units,11,0,'FE4')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE5',1)} units from *FE5*,	#{filler(legal_units,all_units,11,0,'FE5')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE6',1)} units from *FE6*,	#{filler(legal_units,all_units,11,0,'FE6')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE7',1)} units from *FE7*,	#{filler(legal_units,all_units,11,0,'FE7')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE8',1)} units from *FE8*,	#{filler(legal_units,all_units,11,0,'FE8')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE9',1)} units from *FE9*,	#{filler(legal_units,all_units,11,0,'FE9')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE10',1)} units from *FE10*,	#{filler(legal_units,all_units,11,0,'FE10')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE11',1)} units from *FE11*,	#{filler(legal_units,all_units,11,0,'FE11')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE12',1)} units from *FE12*,	#{filler(legal_units,all_units,11,0,'FE12')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE13',1)} units from *FE13*,	#{filler(legal_units,all_units,11,0,'FE13')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE1',1)} units from *FE1*,		#{filler(legal_units,all_units,11,0,'FE1')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE2',1)} units from *FE2*,		#{filler(legal_units,all_units,11,0,'FE2')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE3',1)} units from *FE3*,		#{filler(legal_units,all_units,11,0,'FE3')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE4',1)} units from *FE4*,		#{filler(legal_units,all_units,11,0,'FE4')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE5',1)} units from *FE5*,		#{filler(legal_units,all_units,11,0,'FE5')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE6',1)} units from *FE6*,		#{filler(legal_units,all_units,11,0,'FE6')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE7',1)} units from *FE7*,		#{filler(legal_units,all_units,11,0,'FE7')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE8',1)} units from *FE8*,		#{filler(legal_units,all_units,11,0,'FE8')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE9',1)} units from *FE9*,		#{filler(legal_units,all_units,11,0,'FE9')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE10',1)} units from *FE10*,		#{filler(legal_units,all_units,11,0,'FE10')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE11',1)} units from *FE11*,		#{filler(legal_units,all_units,11,0,'FE11')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE12',1)} units from *FE12*,		#{filler(legal_units,all_units,11,0,'FE12')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE13',1)} units from *FE13*,		#{filler(legal_units,all_units,11,0,'FE13')} of which are credited"
       event << "#{filler(legal_units,all_units,11,-1,['FE14','FE14B','FE14C','FE14R','FE14g'],4)} units from *FE14*,	#{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],-3)} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE15',1)} units from *FE15*,	#{filler(legal_units,all_units,11,0,'FE15')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE16',1)} units from *FE16*,	#{filler(legal_units,all_units,11,0,'FE16')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FEH',1)} units from *FEH* itself,	#{filler(legal_units,all_units,11,0,'FEH')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE15',1)} units from *FE15*,		#{filler(legal_units,all_units,11,0,'FE15')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE16',1)} units from *FE16*,		#{filler(legal_units,all_units,11,0,'FE16')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FEH',1)} units from *FEH* itself,		#{filler(legal_units,all_units,11,0,'FEH')} of which are credited"
     end
     return nil
   elsif ['skill','skills','weapon','weapons','assist','assists','special','specials','passive','passives'].include?(f.downcase)
@@ -13027,18 +13052,14 @@ bot.message do |event|
           k2=get_weapon(first_sub(s,x[0],''),event)
           w=nil
           w=k2[0] unless k2.nil?
-          disp_stats(bot,x[1],w,event,true)
-          disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-          event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+          disp_stats(bot,x[1],w,event,true,true)
         elsif !detect_multi_unit_alias(event,s.downcase,s.downcase).nil?
           x=detect_multi_unit_alias(event,s.downcase,s.downcase)
           event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
           k2=get_weapon(first_sub(s,x[0],''),event)
           w=nil
           w=k2[0] unless k2.nil?
-          disp_stats(bot,x[1],w,event,true)
-          disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-          event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+          disp_stats(bot,x[1],w,event,true,true)
         end
       elsif str[1].downcase=='ploy' && find_skill(stat_buffs(s,s),event)>=0
         disp_skill(bot,stat_buffs(s,s),event,true)
@@ -13048,18 +13069,14 @@ bot.message do |event|
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
         w=k2[0] unless k2.nil?
-        disp_stats(bot,x[1],w,event,true)
-        disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-        event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+        disp_stats(bot,x[1],w,event,true,true)
       elsif !detect_multi_unit_alias(event,str[0].downcase,str[0].downcase).nil?
         x=detect_multi_unit_alias(event,str[0].downcase,str[0].downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
         w=k2[0] unless k2.nil?
-        disp_stats(bot,x[1],w,event,true)
-        disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-        event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+        disp_stats(bot,x[1],w,event,true,true)
       elsif find_unit(str[0],event)>=0
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
         k=find_name_in_string(event,nil,1)
@@ -13071,8 +13088,7 @@ bot.message do |event|
           w=nil
           w=k2[0] unless k2.nil?
         end
-        disp_stats(bot,str,w,event,event.server.nil?)
-        disp_unit_skills(bot,str,event,true)
+        disp_stats(bot,str,w,event,event.server.nil?,true)
       elsif find_skill(s,event)>0
         disp_skill(bot,s,event,true)
       elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
@@ -13081,9 +13097,7 @@ bot.message do |event|
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
         w=k2[0] unless k2.nil?
-        disp_stats(bot,x[1],w,event,true)
-        disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-        event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+        disp_stats(bot,x[1],w,event,true,true)
       end
     end
   elsif event.message.text.downcase.include?('owo') && !event.user.bot_account?
@@ -13130,7 +13144,6 @@ bot.message do |event|
 end
 
 bot.mention do |event|
-  if @shardizard==4
   data_load()
   puts event.message.text
   s=event.message.text.downcase
@@ -13154,18 +13167,14 @@ bot.mention do |event|
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
         w=k2[0] unless k2.nil?
-        disp_stats(bot,x[1],w,event,true)
-        disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-        event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+        disp_stats(bot,x[1],w,event,true,true)
       elsif !detect_multi_unit_alias(event,s.downcase,s.downcase).nil?
         x=detect_multi_unit_alias(event,s.downcase,s.downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
         w=k2[0] unless k2.nil?
-        disp_stats(bot,x[1],w,event,true)
-        disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-        event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+        disp_stats(bot,x[1],w,event,true,true)
       end
     elsif str[1].downcase=='ploy' && find_skill(stat_buffs(s,s),event)>=0
       disp_skill(bot,stat_buffs(s,s),event,true)
@@ -13175,18 +13184,14 @@ bot.mention do |event|
       k2=get_weapon(first_sub(s,x[0],''),event)
       w=nil
       w=k2[0] unless k2.nil?
-      disp_stats(bot,x[1],w,event,true)
-      disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-      event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+      disp_stats(bot,x[1],w,event,true,true)
     elsif !detect_multi_unit_alias(event,str[0].downcase,str[0].downcase).nil?
       x=detect_multi_unit_alias(event,str[0].downcase,str[0].downcase)
       event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
       k2=get_weapon(first_sub(s,x[0],''),event)
       w=nil
       w=k2[0] unless k2.nil?
-      disp_stats(bot,x[1],w,event,true)
-      disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-      event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+      disp_stats(bot,x[1],w,event,true,true)
     elsif find_unit(str[0],event)>=0
       event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
       k=find_name_in_string(event,nil,1)
@@ -13198,8 +13203,7 @@ bot.mention do |event|
         w=nil
         w=k2[0] unless k2.nil?
       end
-      disp_stats(bot,str,w,event,event.server.nil?)
-      disp_unit_skills(bot,str,event,true)
+      disp_stats(bot,str,w,event,event.server.nil?,true)
     elsif find_skill(s,event)>0
       disp_skill(bot,s,event,true)
     elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
@@ -13208,11 +13212,8 @@ bot.mention do |event|
       k2=get_weapon(first_sub(s,x[0],''),event)
       w=nil
       w=k2[0] unless k2.nil?
-      disp_stats(bot,x[1],w,event,true)
-      disp_unit_skills(bot,x[1],event,true) unless x[1].is_a?(Array) && x[1].length>1
-      event.respond "For these characters' skills, please use the command `FEH!skills #{x[0]}`." if x[1].is_a?(Array) && x[1].length>1
+      disp_stats(bot,x[1],w,event,true,true)
     end
-  end
   end
 end
 
