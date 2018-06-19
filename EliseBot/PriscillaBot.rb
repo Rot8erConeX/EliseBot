@@ -3650,12 +3650,37 @@ def disp_skill(bot,name,event,ignore=false)
       create_embed(event,"__**#{skill[0].gsub('Bladeblade','Laevatein')}**__",str,xcolor,xfooter,xpic)
     end
   end
+  g=get_markers(event)
   if skill[4]=="Assist" && skill[11].split(', ').include?('Music')
-    w=sklz.reject{|q| !q[11].split(', ').include?('DanceRally')}
+    w=sklz.reject{|q| !q[11].split(', ').include?('DanceRally') || !has_any?(g, q[13])}
     w=collapse_skill_list(w)
     w=w.map{|q| q[0]}
-    create_embed(event,'',"The following skills are triggered when their holder uses #{skill[0]}",0x40C0F0,nil,nil,triple_finish(w))
-    puts "Match"
+    create_embed(event,'',"The following skills are triggered when their holder uses #{skill[0]}:",0x40C0F0,nil,nil,triple_finish(w))
+  elsif skill[4]=="Assist" && skill[11].split(', ').include?('Move') && skill[11].split(', ').include?('Rally')
+    w=sklz.reject{|q| !(q[11].split(', ').include?('Link') || q[11].split(', ').include?('Feint')) || !has_any?(g, q[13])}
+    w=collapse_skill_list(w)
+    w=w.map{|q| q[0]}
+    create_embed(event,'',"The following skills are triggered when their holder uses or is targeted by #{skill[0]}:",0x40C0F0,nil,nil,triple_finish(w))
+  elsif skill[4]=="Assist" && skill[11].split(', ').include?('Move')
+    w=sklz.reject{|q| !q[11].split(', ').include?('Link') || !has_any?(g, q[13])}
+    w=collapse_skill_list(w)
+    w=w.map{|q| q[0]}
+    create_embed(event,'',"The following skills are triggered when their holder uses or is targeted by #{skill[0]}:",0x40C0F0,nil,nil,triple_finish(w))
+  elsif skill[4]=="Assist" && skill[11].split(', ').include?('Rally')
+    w=sklz.reject{|q| !q[11].split(', ').include?('Feint') || !has_any?(g, q[13])}
+    w=collapse_skill_list(w)
+    w=w.map{|q| q[0]}
+    create_embed(event,'',"The following skills are triggered when their holder uses or is targeted by #{skill[0]}:",0x40C0F0,nil,nil,triple_finish(w))
+  elsif !['Weapon','Assist','Special'].include?(skill[4]) && skill[11].split(', ').include?('Link')
+    w=sklz.reject{|q| q[4]!='Assist' || !q[11].split(', ').include?('Move') || q[11].split(', ').include?('Music') || !has_any?(g, q[13])}
+    w=collapse_skill_list(w)
+    w=w.map{|q| q[0]}
+    create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[0]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
+  elsif !['Weapon','Assist','Special'].include?(skill[4]) && skill[11].split(', ').include?('Feint')
+    w=sklz.reject{|q| q[4]!='Assist' || !q[11].split(', ').include?('Rally') || !has_any?(g, q[13])}
+    w=collapse_skill_list(w)
+    w=w.map{|q| q[0]}
+    create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[0]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
   elsif " #{event.message.text.downcase} ".include?(' refined ') && skill[15].nil? && skill[4]=="Weapon"
     event.respond "#{skill[0].gsub('Bladeblade','Laevatein')} does not have any refinements."
     return nil
