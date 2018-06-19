@@ -436,14 +436,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
       end
     end
     w=lookout.reject{|q| q[2]!='Banner'}.map{|q| q[0]}.sort
-    l=0
-    l=1 if w.length%3==2
-    m=0
-    m=1 if w.length%3==1
-    p1=w[0,w.length/3+l].join("\n")
-    p2=w[w.length/3+l,w.length/3+m].join("\n")
-    p3=w[2*(w.length/3)+l+m,w.length/3+l].join("\n")
-    create_embed(event,'Banner types','',0x40C0F0,nil,nil,[['.',p1],['.',p2],['.',p3]])
+    create_embed(event,'Banner types','',0x40C0F0,nil,nil,triple_finish(w))
   elsif ['effhp','eff_hp'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows the effective HP data for the unit `name`.',0xD49F61)
     disp_more_info(event)
@@ -539,18 +532,11 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
       end
       if d.join("\n\n").length>=1900 || !safe_to_spam?(event)
         d=lookout.map{|q| q[0]}
-        l=0
-        l=1 if d.length%3==2
-        m=0
-        m=1 if d.length%3==1
-        p1=d[0,d.length/3+l].join("\n")
-        p2=d[d.length/3+l,d.length/3+m].join("\n")
-        p3=d[2*(d.length/3)+l+m,d.length/3+l].join("\n")
         if d.length>50 && !safe_to_spam?(event)
           create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,2)}\n\nYou can also search for units by gender.\nYou can search by game as well, and game options can be displayed if you use this command in PM.",0xD49F61)
         else
           create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,2)}\n\nYou can also search for units by gender.\nYou can search by game as well, by using the words below.",0xD49F61)
-          create_embed(event,'Games','',0x40C0F0,nil,nil,[['.',p1],['.',p2],['.',p3]])
+          create_embed(event,'Games','',0x40C0F0,nil,nil,triple_finish(d))
         end
       else
         create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,2)}\n\nYou can also search for units by gender.\nYou can search by game as well, by using the words below.",0xD49F61)
@@ -570,22 +556,8 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
         p=lookout.reject{|q| q[2]!='Passive'}.map{|q| q[0]}.sort
         w=w.reject{|q| q=='Hogtome'} unless !event.server.nil? && event.server.id==330850148261298176
         if w.join("\n").length+p.join("\n").length>=1950 || !safe_to_spam?(event)
-          l=0
-          l=1 if w.length%3==2
-          m=0
-          m=1 if w.length%3==1
-          p1=w[0,w.length/3+l].join("\n")
-          p2=w[w.length/3+l,w.length/3+m].join("\n")
-          p3=w[2*(w.length/3)+l+m,w.length/3+l].join("\n")
-          create_embed(event,'Weapon Flavors','',0x40C0F0,nil,nil,[['.',p1],['.',p2],['.',p3]])
-          l=0
-          l=1 if p.length%3==2
-          m=0
-          m=1 if p.length%3==1
-          p1=p[0,p.length/3+l].join("\n")
-          p2=p[p.length/3+l,p.length/3+m].join("\n")
-          p3=p[2*(p.length/3)+l+m,p.length/3+l].join("\n")
-          create_embed(event,'Passive Flavors','',0x40C0F0,nil,nil,[['.',p1],['.',p2],['.',p3]])
+          create_embed(event,'Weapon Flavors','',0x40C0F0,nil,nil,triple_finish(w))
+          create_embed(event,'Passive Flavors','',0x40C0F0,nil,nil,triple_finish(p))
         else
           create_embed(event,'','',0x40C0F0,nil,nil,[['Weapon Flavors',w.join("\n")],['Passive Flavors',p.join("\n")]])
         end
@@ -653,6 +625,25 @@ bot.command(:reboot, from: 167657750971547648) do |event| # this command reboots
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
   puts 'FEH!reboot'
   exec "cd C:/Users/Mini-Matt/Desktop/devkit && PriscillaBot.rb #{@shardizard}"
+end
+
+def triple_finish(list,forcetwo=false)
+  return [['.',list.join("\n")]] if list.length<5
+  if list.length<10 || forcetwo
+    l=0
+    l=1 if list.length%2==1
+    p1=list[0,list.length/2+l].join("\n")
+    p2=list[list.length/2+l,list.length/2].join("\n")
+    return [['.',p1],['.',p2]]
+  end
+  l=0
+  l=1 if list.length%3==2
+  m=0
+  m=1 if list.length%3==1
+  p1=list[0,list.length/3+l].join("\n")
+  p2=list[list.length/3+l,list.length/3+m].join("\n")
+  p3=list[2*(list.length/3)+l+m,list.length/3+l].join("\n")
+  return [['.',p1],['.',p2],['.',p3]]
 end
 
 def safe_to_spam?(event) # this function determines whether or not it is safe to send extremely long messages
@@ -3659,7 +3650,13 @@ def disp_skill(bot,name,event,ignore=false)
       create_embed(event,"__**#{skill[0].gsub('Bladeblade','Laevatein')}**__",str,xcolor,xfooter,xpic)
     end
   end
-  if " #{event.message.text.downcase} ".include?(' refined ') && skill[15].nil? && skill[4]=="Weapon"
+  if skill[4]=="Assist" && skill[11].split(', ').include?('Music')
+    w=sklz.reject{|q| !q[11].split(', ').include?('DanceRally')}
+    w=collapse_skill_list(w)
+    w=w.map{|q| q[0]}
+    create_embed(event,'',"The following skills are triggered when their holder uses #{skill[0]}",0x40C0F0,nil,nil,triple_finish(w))
+    puts "Match"
+  elsif " #{event.message.text.downcase} ".include?(' refined ') && skill[15].nil? && skill[4]=="Weapon"
     event.respond "#{skill[0].gsub('Bladeblade','Laevatein')} does not have any refinements."
     return nil
   elsif !skill[15].nil? && !((" #{event.message.text.downcase} ".include?(' default ') || " #{event.message.text.downcase} ".include?(' base ')) && !" #{event.message.text.downcase} ".include?(' refined '))
@@ -5346,21 +5343,8 @@ def display_units(event, mode)
         event.respond msg
       end
     else
-      l=0
-      l=1 if k.length%3==2
-      m=0
-      m=1 if k.length%3==1
-      p1=k[0,k.length/3+l].join("\n")
-      p2=k[k.length/3+l,k.length/3+m].join("\n")
-      p3=k[2*(k.length/3)+l+m,k.length/3+l].join("\n")
-      if p1.length+p2.length+p3.length<=1900
-        if p2.length.zero?
-          create_embed(event,'Results','',0x9400D3,nil,nil,[['.',p1],['.',p3]])
-        elsif p1.length.zero?
-          create_embed(event,'Results',p2,0x9400D3)
-        else
-          create_embed(event,'Results','',0x9400D3,nil,nil,[['.',p1],['.',p2],['.',p3]])
-        end
+      if k.join("\n").length<=1900
+        create_embed(event,'Results','',0x9400D3,nil,nil,triple_finish(k))
       elsif !safe_to_spam?(event)
         event.respond 'There are so many unit results that I would prefer that you post this in PM.'
       else
@@ -5555,21 +5539,8 @@ def display_skills(event, mode)
         event.respond msg
       end
     else
-      l=0
-      l=1 if k.length%3==2
-      m=0
-      m=1 if k.length%3==1
-      p1=k[0,k.length/3+l].join("\n")
-      p2=k[k.length/3+l,k.length/3+m].join("\n")
-      p3=k[2*(k.length/3)+l+m,k.length/3+l].join("\n")
-      if p1.length+p2.length+p3.length<=1900
-        if p2.length.zero?
-          create_embed(event,'Results','',0x9400D3,nil,nil,[['.',p1],['.',p3]])
-        elsif p1.length.zero?
-          create_embed(event,'Results',p2,0x9400D3)
-        else
-          create_embed(event,'Results','',0x9400D3,nil,nil,[['.',p1],['.',p2],['.',p3]])
-        end
+      if k.join("\n").length<=1900
+        create_embed(event,'Results','',0x9400D3,nil,nil,triple_finish(k))
       else
         t=k[0]
         if k.length>1
@@ -8340,7 +8311,7 @@ def learnable_skills(event,name,bot,weapon=nil)
   name=find_name_in_string(event) if name.nil?
   untz=@units.map{|q| q}
   sklz=@skills.map{|q| q}
-  j=untz[unts.find_index{|q| q[0]==name}]
+  j=untz[untz.find_index{|q| q[0]==name}]
   k=sklz.reject{|q| q[4]=='Passive(W)'}.map{|q| q[5]}.uniq
   bbb=[]
   for i in 0...k.length
@@ -8445,15 +8416,7 @@ def learnable_skills(event,name,bot,weapon=nil)
     event.respond msg
   else
     create_embed(event,'','',unit_color(event,j),nil,nil,[['<:Passive_A:443677024192823327> Passives(A)',p1[3]],['<:Passive_B:443677023257493506> Passives(B)',p1[4]],['<:Passive_C:443677023555026954> Passives(C)',p1[5]]],4)
-    p1[6]=p1[6].split("\n")
-    l=0
-    l=1 if p1[6].length%3==2
-    m=0
-    m=1 if p1[6].length%3==1
-    p11=p1[6][0,p1[6].length/3+l].join("\n")
-    p2=p1[6][p1[6].length/3+l,p1[6].length/3+m].join("\n")
-    p3=p1[6][2*(p1[6].length/3)+l+m,p1[6].length/3+l].join("\n")
-    create_embed(event,"__<:Passive_S:443677023626330122> Seals **#{untz[j][0].gsub('Lavatain','Laevatein')}** can equip__",'',unit_color(event,j),nil,nil,[['.',p11],['.',p2],['.',p3]],4)
+    create_embed(event,"__<:Passive_S:443677023626330122> Seals **#{untz[j][0].gsub('Lavatain','Laevatein')}** can equip__",'',unit_color(event,j),nil,nil,triple_finish(p1[6].split("\n")),4)
   end
   return nil
 end
@@ -8769,7 +8732,7 @@ def games_list(event,name,bot,weapon=nil)
   elsif 'Tiki(Adult)'==untz[j][0] && !args.join('').downcase.gsub('games','gmes').include?('a')
     pic='https://orig00.deviantart.net/6c50/f/2018/051/9/e/tiki_by_rot8erconex-dc3tkzq.png'
     name='Tiki'
-    m=untz[unts.find_index{|q| q[0]=='Tiki(Young)'}]
+    m=untz[untz.find_index{|q| q[0]=='Tiki(Young)'}]
     rx=m[11].reject{|q| q[0,3]=='(a)'}
     ax=m[11].reject{|q| q[0,3]!='(a)'}.map{|q| q[3,q.length-3]}
     x=get_games_list(rx)
@@ -9016,9 +8979,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
         end
         event.respond msg
       else
-        dew2=dew[dew.length/2+dew.length%2,dew.length/2].join("\n")
-        dew=dew[0,dew.length/2+3*dew.length%2].join("\n")
-        create_embed(event,'__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x9BFFFF,nil,nil,[['.',dew],['.',dew2]],3)
+        create_embed(event,'__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x9BFFFF,nil,nil,triple_finish(dew,true),3)
       end
       if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__'
@@ -9034,9 +8995,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
         end
         event.respond msg
       else
-        stones2=stones[stones.length/2+stones.length%2,stones.length/2].join("\n")
-        stones=stones[0,stones.length/2+3*stones.length%2].join("\n")
-        create_embed(event,'__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x688C68,nil,nil,[['.',stones],['.',stones2]],3)
+        create_embed(event,'__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x688C68,nil,nil,triple_finish(stones,true),3)
       end
     else
       dew2=dew[dew.length/2+dew.length%2,dew.length/2].join("\n")
@@ -9101,14 +9060,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
         end
         event.respond msg
       else
-        l=0
-        l=1 if dew2.length%3==2
-        m=0
-        m=1 if dew2.length%3==1
-        p1=dew2[0,dew2.length/3+l].join("\n")
-        p2=dew2[dew2.length/3+l,dew2.length/3+m].join("\n")
-        p3=dew2[2*(dew2.length/3)+l+m,dew2.length/3+l].join("\n")
-        create_embed(event,'__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x9BFFFF,nil,nil,[['.',p1],['.',p2],['.',p3]],3)
+        create_embed(event,'__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x9BFFFF,nil,nil,triple_finish(dew2),3)
       end
       if stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__'
@@ -9124,14 +9076,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
         end
         event.respond msg
       else
-        l=0
-        l=1 if stones2.length%3==2
-        m=0
-        m=1 if stones2.length%3==1
-        p1=stones2[0,stones2.length/3+l].join("\n")
-        p2=stones2[stones2.length/3+l,stones2.length/3+m].join("\n")
-        p3=stones2[2*(stones2.length/3)+l+m,stones2.length/3+l].join("\n")
-        create_embed(event,'__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x9BFFFF,nil,nil,[['.',p1],['.',p2],['.',p3]],3)
+        create_embed(event,'__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x9BFFFF,nil,nil,triple_finish(stones2),3)
       end
     else
       create_embed(event,'__**Weapon Evolution**__','',0x9BFFFF,nil,nil,[['**Divine Dew** <:Divine_Dew:453618312434417691>',dew2.join("\n")],['**Refining Stones** <:Refining_Stone:453618312165720086>',stones2.join("\n")]],3)
@@ -9151,14 +9096,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
         end
         event.respond msg
       else
-        l=0
-        l=1 if dew.length%3==2
-        m=0
-        m=1 if dew.length%3==1
-        p1=dew[0,dew.length/3+l].join("\n")
-        p2=dew[dew.length/3+l,dew.length/3+m].join("\n")
-        p3=dew[2*(dew.length/3)+l+m,dew.length/3+l].join("\n")
-        create_embed(event,'__**Weapon Refines: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x688C68,nil,nil,[['.',p1],['.',p2],['.',p3]],3)
+        create_embed(event,'__**Weapon Refines: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x688C68,nil,nil,triple_finish(dew),3)
       end
       if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__'
@@ -9174,14 +9112,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
         end
         event.respond msg
       else
-        l=0
-        l=1 if stones.length%3==2
-        m=0
-        m=1 if stones.length%3==1
-        p1=stones[0,stones.length/3+l].join("\n")
-        p2=stones[stones.length/3+l,stones.length/3+m].join("\n")
-        p3=stones[2*(stones.length/3)+l+m,stones.length/3+l].join("\n")
-        create_embed(event,'__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x688C68,nil,nil,[['.',p1],['.',p2],['.',p3]],3)
+        create_embed(event,'__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x688C68,nil,nil,triple_finish(stones),3)
       end
     else
       stones2=stones[stones.length/2+stones.length%2,stones.length/2]
