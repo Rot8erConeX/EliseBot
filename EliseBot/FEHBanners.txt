@@ -1,7 +1,7 @@
 >Special Heroes<\3\-\5\10/07/2018, 09/08/2018\Seasonal
 Heroes with Luna\3\-\5\06/07/2018, 16/07/2018\SkillBanner
 Hector & Matthew's Battle\3\Hector, Matthew\5\05/07/2018, 11/07/2018\BHB
-Legendary Heroes\-8\-\5\20/06/2018, 04/07/2018\Legendary
+Legendary Heroes\-8\-\5\28/06/2018, 04/07/2018\Legendary
 Heroes with Death Blow\3\-\5\23/06/2018, 05/07/2018\SkillBanner
 >Special Heroes<\3\-\5\21/06/2018, 24/07/2018\Seasonal
 "Feud of the Fangs" Tempest Trials\3\Jaffar, Karel, Nino(Launch)\5\13/06/2018, 25/06/2018\Tempest
@@ -43,7 +43,7 @@ Shadow in the Mirror\3\Celica, Robin(M), Takumi, Zelgius\5\\VotingGauntlet
 New Power (Feb 2018)\3\Caeda, Felicia, Hinoka(Launch), Raven\5\\NewPower
 Legendary Heroes - Legendary Ephraim\-8\Corrin(F)(Summer), Dorcas, Ephraim(Fire), Gaius(Summer), Gunnthra, Ike(Brave), Ike(Vanguard), Jaffar, Leo(Summer), Mia, Olivia(Performing), Shiro\5\\Legendary
 "Breath of Destiny" Tempest Trials\3\Clarine, Klein, Ninian\5\\Tempest
-Corrin & Azura's Battle\3\Azura, Corrin, Kagero\5\\BHB
+Corrin & Azura's Battle\3\Azura, Corrin(M), Kagero\5\\BHB
 Movement Skills\3\Amelia, Elincia, Tana\5\\SkillBanner
 Hero Fest III\5\Ike(Brave), Lyn(Brave), Nephenee, Sigurd\5\\HeroFest
 Sacred Memories\3\Eirika(Memories), L'Arachel, Myrrh\5

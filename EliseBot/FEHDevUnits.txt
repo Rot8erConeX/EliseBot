@@ -4,13 +4,13 @@ Alfonse\Arden\Black_Knight\Lissa\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\
 
 Sakura
 5\10\Resistance\Defense\S
-Assault\Slow\Slow+\Slow+ (+) Dazzling Mode
+Assault\Absorb\Absorb+\Absorb+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
 Brazen Atk/Spd 1\Brazen Atk/Spd 2\Brazen Atk/Spd 3
 Wings of Mercy 1\Wings of Mercy 2\Wings of Mercy 3
 Fortify Def 1\Fortify Def 2\Fortify Def 3
-Fortify Res 3
+Live to Serve 3
 
 Anna
 5\0\ \ \-
@@ -58,7 +58,7 @@ Iron Lance\Steel Lance\Brave Lance\Brave Lance+
 Reposition
 Night Sky\Astra\Galeforce
 Triangle Adept 1\Triangle Adept 2\Triangle Adept 3
-Escape Route 1\Escape Route 2\Escape Route 3
+Def/Res Link 1\Def/Res Link 2\Def/Res Link 3
 Threaten Spd 1\Threaten Spd 2\Threaten Spd 3
 Quickened Pulse
 
@@ -84,7 +84,7 @@ Iote's Shield
 
 Felicia
 4\10\Resistance\HP\-
-Iron Dagger\Steel Dagger\Silver Dagger\Felicia's Plate\Felicia's Plate (+) Effect Mode
+Iron Dagger\Steel Dagger\Silver Dagger\__Silver Dagger+__\Felicia's Plate\Felicia's Plate (+) Effect Mode
 Rally Speed
 Chilling Wind\Glacies
 Warding Blow 1\Warding Blow 2\Warding Blow 3
@@ -109,7 +109,7 @@ Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
 Attack +1\Attack +2\Attack +3
 Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
-Fortify Res 1\Fortify Res 2\Fortify Res 3
+Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Gunnthra
@@ -190,7 +190,7 @@ Dragon Gaze\Draconic Aura
 Distant Def 1\Distant Def 2\Distant Def 3
 Blaze Dance 1\Firestorm Dance 1\Firestorm Dance 2
 Spur Res 1\Spur Res 2\Spur Res 3
-Spur Def 2
+Earth Dance 2
 
 Priscilla
 4\10\Resistance\Defense\-
@@ -219,7 +219,7 @@ Rally Resistance
 Chilling Wind\Glacies
 Warding Stance 1\Warding Stance 2\Warding Stance 3
 Guard 1\Guard 2\Guard 3
-Dagger Valor 1\Dagger Valor 2\Dagger Valor 3
+Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Def Ploy 2
 
 Soleil
@@ -233,7 +233,7 @@ Spur Res 1\Drive Res 1\Drive Res 2
 Deflect Melee 2
 
 Tailtiu
-5\1\Attack\Speed\-
+5\2\ \ \-
 Thunder\Elthunder\Blarblade\Blarblade+
 Rally Resistance\Rally Spd/Res
 Chilling Wind\Glacies
