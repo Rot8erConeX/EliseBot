@@ -2465,6 +2465,10 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   memote=moji[0].mention unless moji.length<=0
   lemote1=''
   lemote2=''
+  dancer=''
+  sklz=@skills.map{|q| q}
+  dancer="\n<:Assist_Music:454462054959415296> *Dancer*" if sklz[sklz.find_index{|q| q[0]=='Dance'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
+  dancer="\n<:Assist_Music:454462054959415296> *Singer*" if sklz[sklz.find_index{|q| q[0]=='Sing'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   if !jj[2].nil? && jj[2][0]!=' '
     element='Unknown'
     element=jj[2][0] if ['Fire','Water','Wind','Earth','Dark'].include?(jj[2][0])
@@ -2475,7 +2479,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{stat}"}
     lemote2=moji[0].mention unless moji.length<=0
   end
-  return "#{wemote} #{w}\n#{memote} *#{m}*#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* Legendary Hero" unless jj[2][0]==" "}"
+  return "#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* Legendary Hero" unless jj[2][0]==" "}"
 end
 
 def unit_moji(bot,event,j=-1,name=nil) # used primarilally by the BST and Alt commands to display a unit's weapon and movement classes as emojis
@@ -2497,6 +2501,10 @@ def unit_moji(bot,event,j=-1,name=nil) # used primarilally by the BST and Alt co
   moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{mov}"}
   memote=''
   memote=moji[0].mention unless moji.length<=0
+  dancer=''
+  sklz=@skills.map{|q| q}
+  dancer='<:Assist_Music:454462054959415296>' if sklz[sklz.find_index{|q| q[0]=='Dance'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
+  dancer='<:Assist_Music:454462054959415296>' if sklz[sklz.find_index{|q| q[0]=='Sing'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   lemote1=''
   lemote2=''
   if !jj[2].nil? && jj[2][0]!=' '
@@ -2509,7 +2517,7 @@ def unit_moji(bot,event,j=-1,name=nil) # used primarilally by the BST and Alt co
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{stat}"}
     lemote2=moji[0].mention unless moji.length<=0
   end
-  return "#{wemote}#{memote}#{lemote1}#{lemote2}"
+  return "#{wemote}#{memote}#{dancer}#{lemote1}#{lemote2}"
 end
 
 def skill_tier(name,event) # used by the "used a non-plus version of a weapon that has a + form" tooltip in the stats command to figure out the tier of the weapon
