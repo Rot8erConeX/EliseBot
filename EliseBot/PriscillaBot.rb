@@ -3114,8 +3114,19 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false)
   xtype=-1 if skillstoo && name != 'Robin'
   create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}",xcolor,ftr,img,flds,xtype)
   if skillstoo && name == 'Robin'
-    disp_unit_skills(bot,'Robin(M)',event)
-    disp_unit_skills(bot,'Robin(F)',event)
+    usklm=unit_skills('Robin(M)',event)
+    usklf=unit_skills('Robin(F)',event)
+    for i in 0...3
+      if usklm[i][0].include?('**') && usklm[i]!=usklm[i].reject{|q| !q.include?('**')}
+        usklm[i][-1]="#{usklm[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{usklm[i][-1]}"
+      end
+      if usklf[i][0].include?('**') && usklf[i]!=usklf[i].reject{|q| !q.include?('**')}
+        usklf[i][-1]="#{usklf[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{usklf[i][-1]}"
+      end
+    end
+    usklm=usklm.map{|q| q[q.length-1]}
+    usklf=usklf.map{|q| q[q.length-1]}
+    create_embed(event,'','',xcolor,nil,img,[['Robin(M)',"<:Skill_Weapon:444078171114045450> #{usklm[0]}\n<:Skill_Assist:444078171025965066> #{usklm[1]}\n<:Skill_Special:444078170665254929> #{usklm[2]}\n<:Passive_A:443677024192823327> #{usklm[3]}\n<:Passive_B:443677023257493506> #{usklm[4]}\n<:Passive_C:443677023555026954> #{usklm[5]}"],['Robin(F)',"<:Skill_Weapon:444078171114045450> #{usklf[0]}\n<:Skill_Assist:444078171025965066> #{usklf[1]}\n<:Skill_Special:444078170665254929> #{usklf[2]}\n<:Passive_A:443677024192823327> #{usklf[3]}\n<:Passive_B:443677023257493506> #{usklf[4]}\n<:Passive_C:443677023555026954> #{usklf[5]}"]])
   end
   return nil
 end
