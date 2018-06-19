@@ -208,7 +208,7 @@ def data_load() # loads the character and skill data from the files on my comput
   end
 end
 
-def nicknames_load() # this function laods the nickname list
+def nicknames_load() # laods the nickname list
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt').each_line do |line|
@@ -229,7 +229,7 @@ def nicknames_load() # this function laods the nickname list
   @multi_aliases=b.uniq
 end
 
-def groups_load() # this function loads the groups list
+def groups_load() # loads the groups list
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt').each_line do |line|
@@ -241,7 +241,7 @@ def groups_load() # this function loads the groups list
   @groups=b.uniq
 end
 
-def metadata_load() # this function loads the metadata - users who choose to see plaintext over embeds, data regarding each shard's server count, number of headpats received, etc.
+def metadata_load() # loads the metadata - users who choose to see plaintext over embeds, data regarding each shard's server count, number of headpats received, etc.
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSave.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSave.txt').each_line do |line|
@@ -263,7 +263,7 @@ def metadata_load() # this function loads the metadata - users who choose to see
   @x_markers=b[6] unless b[6].nil?
 end
 
-def metadata_save() # this function saves the metadata
+def metadata_save() # saves the metadata
   x=[@embedless.map{|q| q}, @ignored.map{|q| q}, @summon_rate.map{|q| q}, @server_data.map{|q| q}, @headpats.map{|q| q}, @server_markers.map{|q| q}, @x_markers.map{|q| q}]
   open('C:/Users/Mini-Matt/Desktop/devkit/FEHSave.txt', 'w') { |f|
     f.puts x[0].to_s
@@ -277,7 +277,7 @@ def metadata_save() # this function saves the metadata
   }
 end
 
-def devunits_load() # this function loads information regarding the devunits
+def devunits_load() # loads information regarding the devunits
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt').each_line do |line|
@@ -313,7 +313,7 @@ def devunits_load() # this function loads information regarding the devunits
   end
 end
 
-def devunits_save() # this function is used by the devedit command to save the devunits
+def devunits_save() # used by the devedit command to save the devunits
   # sort the waifu list alphabetically, but move Sakura to the front of the list
   k=@dev_waifus.map{|q| q}
   for i in 0...k.length
@@ -364,7 +364,7 @@ def devunits_save() # this function is used by the devedit command to save the d
   return nil
 end
 
-bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, subcommand| # this command is used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
+bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, subcommand| # used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
   return nil if overlap_prevent(event)
   command='' if command.nil?
   k=0
@@ -620,14 +620,14 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   end
 end
 
-bot.command(:reboot, from: 167657750971547648) do |event| # this command reboots Elise
+bot.command(:reboot, from: 167657750971547648) do |event| # reboots Elise
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
   puts 'FEH!reboot'
   exec "cd C:/Users/Mini-Matt/Desktop/devkit && PriscillaBot.rb #{@shardizard}"
 end
 
-def triple_finish(list,forcetwo=false)
+def triple_finish(list,forcetwo=false) # used to split a list into three roughly-equal parts for use in embeds
   return [['.',list.join("\n")]] if list.length<5
   if list.length<10 || forcetwo
     l=0
@@ -646,7 +646,7 @@ def triple_finish(list,forcetwo=false)
   return [['.',p1],['.',p2],['.',p3]]
 end
 
-def safe_to_spam?(event) # this function determines whether or not it is safe to send extremely long messages
+def safe_to_spam?(event) # determines whether or not it is safe to send extremely long messages
   return true if event.server.nil? # it is safe to spam in PM
   return true if [443172595580534784,443181099494146068,443704357335203840,449988713330769920].include?(event.server.id) # it is safe to spam in the emoji servers
   return true if @shardizard==4 # it is safe to spam during debugging
@@ -659,8 +659,7 @@ def safe_to_spam?(event) # this function determines whether or not it is safe to
   return false
 end
 
-def overlap_prevent(event)
-  # this function is used to prevent scenarios where both the main version of Elise and the debug version respond even though they're both in the emoji servers
+def overlap_prevent(event) # used to prevent servers with both Elise and her debug form from receiving two replies
   if event.server.nil? # failsafe code catching PMs as not a server
     return false
   elsif event.message.text.downcase.split(' ').include?('debug') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920].include?(event.server.id)
@@ -685,7 +684,7 @@ def overlap_prevent(event)
   return false
 end
 
-def get_markers(event) # this function is used to determine whether a server-specific unit/skill is safe to display
+def get_markers(event) # used to determine whether a server-specific unit/skill is safe to display
   metadata_load()
   k=0
   k=event.server.id unless event.server.nil?
@@ -699,7 +698,7 @@ def get_markers(event) # this function is used to determine whether a server-spe
   return g
 end
 
-def disp_more_info(event, mode=0) # this function is used by the `help` command to display info that repeats in multiple help descriptions.
+def disp_more_info(event, mode=0) # used by the `help` command to display info that repeats in multiple help descriptions.
   if mode<1
     create_embed(event,"","You can modify the unit by including any of the following in your message:\n\n**Rarity**\nProper format: #{rand(@max_rarity_merge[0])+1}\\*\n~~Alternatively, the first number not given proper context will be set as the rarity value unless the rarity value is already defined~~\nDefault: 5\\* unit\n\n**Merges**\nProper format: +#{rand(@max_rarity_merge[1])+1}\n~~Alternatively, the second number not given proper context will be set as the merges value unless the merges value is already defined~~\nDefault: +0\n\n**Boon**\nProper format: +#{['Atk','Spd','Def','Res','HP'].sample}\n~~Alternatively, the first stat name not given proper context will be set as the boon unless the boon is already defined~~\nDefault: No boon\n\n**Bane**\nProper format: -#{['Atk','Spd','Def','Res','HP'].sample}\n~~Alternatively, the second stat name not given proper context will be set as the bane unless the bane is already defined~~\nDefault: No bane\n\n**Weapon**\nProper format: Silver Dagger+ ~~just the weapon's name~~\nDefault: No weapon\n\n**Arena/Tempest Bonus Unit Buff**\nProper format: Bonus\nSecondary format: Tempest, Arena\nDefault: Not applied\n\n**Summoner Support**\nProper format: #{['C','B','A','S'].sample} ~~Just a single letter~~\nDefault: No support",0x40C0F0)
     create_embed(event,"","**Refined Weapon**\nProper format: Falchion (+) #{['Atk','Spd','Def','Res','Effect'].sample}\nSecondary format: Falchion #{['Atk','Spd','Def','Res','Effect'].sample} Mode\nTertiary format: Falchion (#{['Atk','Spd','Def','Res','Effect'].sample})\n~~Alternatively, the third stat name not given proper context, or the second stat given a + in front of it, will be set as the refinement for the weapon if one is equipped and it can be refined~~\n\n**Stat-affecting skills**\nOptions: HP+, Atk+, Spd+, Def+, Res+, LifeAndDeath/LnD/LaD, Fury, FortressDef, FortressRes\n~~LnD, Fury, and the Fortress skills default to tier 3, but other tiers can be applied by including numbers like so: LnD1~~\nDefault: No skills applied\n\n**Stat-buffing skills**\nOptions: Rally skills, Defiant skills, Hone/Fortify skills, Balm skills, Even/Odd Atk/Spd/Def/Res Wave\n~~please note that the skill name must be written out without spaces~~\nDefault: No skills applied\n\n**Stat-nerfing skills**\nOptions: Smoke skills, Seal skills, Threaten skills, Chill skills, Ploy skills\n~~please note that the skill name must be written out without spaces~~\nDefault: No skills applied#{"\n\n**In-combat buffs**\nOptions: Blow skills, Stance/Breath skills, Bond skills, Brazen skills, Close/Distant Def, Fire/Wind/Earth/Water Boost\n~~please note that the skill name must be written out without spaces~~\nDefault: No skills applied" if mode==-1}\n\n**Stat buffs from Legendary Hero/Blessing interaction**\nProper format: #{['Atk','Spd','Def','Res'].sample} Blessing ~~following the stat buffed by the word \"blessing\"~~\nSecondary format: #{['Atk','Spd','Def','Res'].sample}Blessing ~~no space~~, Blessing#{['Atk','Spd','Def','Res'].sample}\nDefault: No blessings applied\n\nThese can be listed in any order.",0x40C0F0)
@@ -720,7 +719,7 @@ def disp_more_info(event, mode=0) # this function is used by the `help` command 
   return nil
 end
 
-def random_dev_unit_with_nature(event,x=true) # this function is used by `disp_more_info()` to randomly display a non-neutral dev unit as an example on how to format units
+def random_dev_unit_with_nature(event,x=true) # used by `disp_more_info()` to randomly display a non-neutral dev unit as an example on how to format units
   devunits_load()
   u=@dev_units.sample
   if x
@@ -730,7 +729,7 @@ def random_dev_unit_with_nature(event,x=true) # this function is used by `disp_m
   return u
 end
 
-def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # this function is used by multiple commands to calculate a unit's stats
+def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # used by multiple commands to calculate a unit's stats
   data_load()
   # find neutral five-star level 40 stats
   u=@units.map{|q| q}
@@ -840,7 +839,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # this func
   return u
 end
 
-def make_stats_string(event,name,rarity,boon='',bane='',hm=@max_rarity_merge[1]) # this function is used by the `study` command to create the stat arrangement shown in it
+def make_stats_string(event,name,rarity,boon='',bane='',hm=@max_rarity_merge[1]) # used by the `study` command to create the stat arrangement shown in it
   k=''
   hm=[hm.to_i, hm.to_i]
   args=sever(event.message.text.downcase).split(' ')
@@ -854,7 +853,7 @@ def make_stats_string(event,name,rarity,boon='',bane='',hm=@max_rarity_merge[1])
   return k
 end
 
-def is_mod?(user,server,channel) # this function is used by certain commands to determine if a user can use them
+def is_mod?(user,server,channel) # used by certain commands to determine if a user can use them
   return true if user.id==167657750971547648 # bot developer is always an EliseMod
   return false if server.nil? # no one is a EliseMmod in PMs
   return true if user.id==server.owner.id # server owners are EliseMods by default
@@ -865,7 +864,7 @@ def is_mod?(user,server,channel) # this function is used by certain commands to 
   return false
 end
 
-def make_banner(event) # this function is used by the `summon` command to pick a random banner and choose which units are on it.
+def make_banner(event) # used by the `summon` command to pick a random banner and choose which units are on it.
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
@@ -965,7 +964,7 @@ def make_banner(event) # this function is used by the `summon` command to pick a
   return bnr
 end
 
-def crack_orbs(bot,event,e,user,list) # this function is used by the `summon` command to wait for a reply
+def crack_orbs(bot,event,e,user,list) # used by the `summon` command to wait for a reply
   summons=0
   five_star=false
   for i in 1...6
@@ -991,7 +990,7 @@ def crack_orbs(bot,event,e,user,list) # this function is used by the `summon` co
   @banner=[]
 end
 
-def normalize(str) # this function is used by the majority of commands that accept input, to replace all non-ASCII characters with their ASCII counterparts
+def normalize(str) # used by the majority of commands that accept input, to replace all non-ASCII characters with their ASCII counterparts
   str=str.gsub(/\s+/,' ').gsub(/[[:space:]]+/,' ').gsub(/[[:cntrl:]]/,' ')
   str=str.gsub("\u2019","'").gsub("`","'").gsub("\u2018","'")
   str=str.gsub("\u{1F1E6}","A").gsub("\u{1F1E7}","B").gsub("\u{1F1E8}","C").gsub("\u{1F1E9}","D").gsub("\u{1F1EA}","E").gsub("\u{1F1EB}","F").gsub("\u{1F1EC}","G").gsub("\u{1F1ED}","H").gsub("\u{1F1EE}","I").gsub("\u{1F1EF}","J").gsub("\u{1F1F0}","K").gsub("\u{1F1F1}","L").gsub("\u{1F1F2}","M").gsub("\u{1F1F3}","N").gsub("\u{1F1F4}","O").gsub("\u{1F1F5}","P").gsub("\u{1F1F6}","Q").gsub("\u{1F1F7}","R").gsub("\u{1F1F8}","S").gsub("\u{1F1F9}","T").gsub("\u{1F1FA}","U").gsub("\u{1F1FB}","V").gsub("\u{1F1FC}","W").gsub("\u{1F1FD}","X").gsub("\u{1F1FE}","Y").gsub("\u{1F1FF}","Z")
@@ -1037,7 +1036,7 @@ def normalize(str) # this function is used by the majority of commands that acce
   return str
 end
 
-def has_any?(arr1,arr2) # this function is used to determine if two arrays share any members
+def has_any?(arr1,arr2) # used to determine if two arrays share any members
   return true if arr1.nil? && arr2.nil?
   return true if arr1.nil? && !arr2.nil? && arr2.include?(nil)
   return true if arr2.nil? && !arr1.nil? && arr1.include?(nil)
@@ -1056,7 +1055,7 @@ def has_any?(arr1,arr2) # this function is used to determine if two arrays share
   return false
 end
 
-def find_unit(name,event,ignore=false,ignore2=false) # this function is used to find a unit's data entry based on their name
+def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's data entry based on their name
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -1114,7 +1113,7 @@ def find_unit(name,event,ignore=false,ignore2=false) # this function is used to 
   return -1
 end
 
-def find_skill(name,event,ignore=false,ignore2=false,m=false) # this function is one of two functions used to find a skill's data entry based on its name
+def find_skill(name,event,ignore=false,ignore2=false,m=false) # one of two functions used to find a skill's data entry based on its name
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4' # Recover Ring is essentially Renewal 4 so I allow this alias
   data_load()
   sklz=@skills.map{|q| q}
@@ -1153,7 +1152,7 @@ def find_skill(name,event,ignore=false,ignore2=false,m=false) # this function is
   return x3[0][0]
 end
 
-def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this function is one of two functions used to find a skill's data entry based on its name
+def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of two functions used to find a skill's data entry based on its name
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -1242,7 +1241,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # this func
   return -1
 end
 
-def find_promotions(j,event) # this function finds the promotions of a given skill.  Input is given in the skill's entry number, not name
+def find_promotions(j,event) # finds the promotions of a given skill.  Input is given in the skill's entry number, not name
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -1260,7 +1259,7 @@ def find_promotions(j,event) # this function finds the promotions of a given ski
   return p
 end
 
-def find_prevolutions(j,event) # this function finds any "pre-evolutions" of evolved weapons.  Input is given in the weapon's entry number, not name
+def find_prevolutions(j,event) # finds any "pre-evolutions" of evolved weapons.  Input is given in the weapon's entry number, not name
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -1296,7 +1295,7 @@ def find_prevolutions(j,event) # this function finds any "pre-evolutions" of evo
   return p
 end
 
-def find_effect_name(x,event,shorten=0) # this function is used to find the name of the Effect Mode refine of a weapon.  Input is given in the weapon's entire entry, not name.
+def find_effect_name(x,event,shorten=0) # used to find the name of the Effect Mode refine of a weapon.  Input is given in the weapon's entire entry, not name.
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -1326,12 +1325,12 @@ def find_effect_name(x,event,shorten=0) # this function is used to find the name
   return f
 end
 
-def find_weapon(name,event,ignore=false,ignore2=false) # this function is used by the `get_weapon` function
+def find_weapon(name,event,ignore=false,ignore2=false) # used by the `get_weapon` function
   sklz=@skills.reject{|q| q[4]!='Weapon'}
   return x_find_skill(name,event,sklz,ignore,ignore2)
 end
 
-def get_weapon(str,event) # this function is used by the `stats` command and many derivations to find a weapon's name in the inputs that remain after the unit is decided
+def get_weapon(str,event) # used by the `stats` command and many derivations to find a weapon's name in the inputs that remain after the unit is decided
   return nil if str.gsub(' ','').length<=0
   skz=@skills.map{|q| q}
   args=str.gsub('(','').gsub(')','').split(' ')
@@ -1399,7 +1398,7 @@ def get_weapon(str,event) # this function is used by the `stats` command and man
   return nil
 end
 
-def find_in_dev_units(name) # this function is used by the `stats` command and many derivations to determine if the bot developer has recorded owning a listed unit
+def find_in_dev_units(name) # used by the `stats` command and many derivations to determine if the bot developer has recorded owning a listed unit
   return -1 if name.nil?
   devunits_load()
   j=-1
@@ -1416,7 +1415,7 @@ def find_in_dev_units(name) # this function is used by the `stats` command and m
   return -1
 end
 
-def stat_buffs(str,name=nil,mode=0) # this function is used by almost all commands to be sure that end users can type all common abbreviations for stats and not worry about input
+def stat_buffs(str,name=nil,mode=0) # used by almost all commands to be sure that end users can type all common abbreviations for stats and not worry about input
   name=str.split(' ').join(' ') if name.nil?
   x=str.downcase.gsub('/',' ').gsub('+',' +').gsub('  ',' ')
   x=x.gsub('hone','hone ').gsub('fortify','fortify ').gsub('goad','goad ').gsub('ward','ward ')
@@ -1451,7 +1450,7 @@ def stat_buffs(str,name=nil,mode=0) # this function is used by almost all comman
   return n
 end
 
-def find_group(name,event) # this function is used to find a group's data entry based on their name
+def find_group(name,event) # used to find a group's data entry based on their name
   k=0
   k=event.server.id unless event.server.nil?
   groups_load()
@@ -1476,7 +1475,7 @@ def find_group(name,event) # this function is used to find a group's data entry 
   return -1
 end
 
-def was_embedless_mentioned?(event)
+def was_embedless_mentioned?(event) # used to detect if someone who wishes to see responses as plaintext is relevent to the information being displayed
   for i in 0...@embedless.length
     return true if event.user.id==@embedless[i]
     return true if event.message.text.include?("<@#{@embedless[i].to_s}>")
@@ -1485,7 +1484,7 @@ def was_embedless_mentioned?(event)
   return false
 end
 
-def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,mode=0)
+def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,mode=0) # used by most commands to display embeds or plaintext, based on the results of the above funtion
   ftrlnth=0
   ftrlnth=xfooter.length unless xfooter.nil?
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
@@ -1585,7 +1584,80 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
   return nil
 end
 
-def find_name_in_string(event,stringx=nil,mode=0)
+def reshape_unit_into_multi(name,args3) # used by the find_unit_in_string function to switch a unit match into a relevant multi-unit
+  if name.include?('(M)') || name.include?('(F)')
+    if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
+      if ['robin','reflet','daraen'].include?(args3[0].downcase)
+        name='Robin'
+      elsif ['morgan','marc','linfan'].include?(args3[0].downcase)
+        name='Morgan'
+      elsif ['kana','kanna'].include?(args3[0].downcase)
+        name='Kana'
+      else
+        name=args3[0]
+      end
+    end
+  elsif name=='Tiki(Young)' || name=='Tiki(Adult)'
+    if args3.length==1
+      if ['tiki','chiki'].include?(args3[0].downcase)
+        name='Tiki'
+      else
+        name=args3[0]
+      end
+    end
+  elsif name=='Eirika(Bonds)' || name=='Eirika(Memories)'
+    if args3.length==1
+      if ['eirika','eirik','eiriku','erika'].include?(args3[0].downcase)
+        name='Eirika'
+      else
+        name=args3[0]
+      end
+    end
+  elsif name=='Hinoka(Launch)' || name=='Hinoka(Wings)'
+    if args3.length==1
+      if ['hinoka'].include?(args3[0].downcase)
+        name='Hinoka'
+      else
+        name=args3[0]
+      end
+    end
+  elsif name=='Nino(Launch)' || name=='Nino(Fangs)'
+    if args3.length==1
+      if ['nino'].include?(args3[0].downcase)
+        name='nino'
+      else
+        name=args3[0]
+      end
+    end
+  elsif name=='Chrom(Launch)' || name=='Chrom(Branded)'
+    if args3.length==1
+      if ['chrom'].include?(args3[0].downcase)
+        name='Chrom'
+      else
+        name=args3[0]
+      end
+    end
+  elsif name=='Reinhardt(Bonds)' || name=='Reinhardt(World)'
+    if args3.length==1
+      if ['reinhardt','rainharuto'].include?(args3[0].downcase)
+        name='Reinhardt'
+      else
+        name=args3[0]
+      end
+    end
+  elsif name=='Olwen(Bonds)' || name=='Olwen(World)'
+    if args3.length==1
+      if ['olwen','oruen'].include?(args3[0].downcase)
+        name='Olwen'
+      else
+        name=args3[0]
+      end
+    end
+  end
+  return name
+end
+
+def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit based on the input string, but also the portion of said input string that matched the unit - name, alias, multi-unit alias, etc.
   data_load()
   stringx=event.message.text if stringx.nil?
   s=stringx
@@ -1615,75 +1687,7 @@ def find_name_in_string(event,stringx=nil,mode=0)
   if find_unit(name,event)>=0
     args3=args.join(' ').split(' ')
     name=@units[find_unit(name,event)][0]
-    if name.include?('(M)') || name.include?('(F)')
-      if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
-        if ['robin','reflet','daraen'].include?(args3[0].downcase)
-          name='Robin'
-        elsif ['morgan','marc','linfan'].include?(args3[0].downcase)
-          name='Morgan'
-        elsif ['kana','kanna'].include?(args3[0].downcase)
-          name='Kana'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Tiki(Young)' || name=='Tiki(Adult)'
-      if args3.length==1
-        if ['tiki','chiki'].include?(args3[0].downcase)
-          name='Tiki'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Eirika(Bonds)' || name=='Eirika(Memories)'
-      if args3.length==1
-        if ['eirika','eirik','eiriku','erika'].include?(args3[0].downcase)
-          name='Eirika'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Hinoka(Launch)' || name=='Hinoka(Wings)'
-      if args3.length==1
-        if ['hinoka'].include?(args3[0].downcase)
-          name='Hinoka'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Nino(Launch)' || name=='Nino(Fangs)'
-      if args3.length==1
-        if ['nino'].include?(args3[0].downcase)
-          name='nino'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Chrom(Launch)' || name=='Chrom(Branded)'
-      if args3.length==1
-        if ['chrom'].include?(args3[0].downcase)
-          name='Chrom'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Reinhardt(Bonds)' || name=='Reinhardt(World)'
-      if args3.length==1
-        if ['reinhardt','rainharuto'].include?(args3[0].downcase)
-          name='Reinhardt'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Olwen(Bonds)' || name=='Olwen(World)'
-      if args3.length==1
-        if ['olwen','oruen'].include?(args3[0].downcase)
-          name='Olwen'
-        else
-          name=args3[0]
-        end
-      end
-    end
+    name=reshape_unit_into_multi(name,args3)
   else
     for i in 0...args.length-1
       args.pop
@@ -1709,75 +1713,7 @@ def find_name_in_string(event,stringx=nil,mode=0)
         end
       end
     end
-    if name.include?('(M)') || name.include?('(F)')
-      if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
-        if ['robin','reflet','daraen'].include?(args3[0].downcase)
-          name='Robin'
-        elsif ['morgan','marc','linfan'].include?(args3[0].downcase)
-          name='Morgan'
-        elsif ['kana','kanna'].include?(args3[0].downcase)
-          name='Kana'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Tiki(Young)' || name=='Tiki(Adult)'
-      if args3.length==1
-        if ['tiki','chiki'].include?(args3[0].downcase)
-          name='Tiki'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Eirika(Bonds)' || name=='Eirika(Memories)'
-      if args3.length==1
-        if ['eirika','eirik','eiriku','erika'].include?(args3[0].downcase)
-          name='Eirika'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Hinoka(Launch)' || name=='Hinoka(Wings)'
-      if args3.length==1
-        if ['hinoka'].include?(args3[0].downcase)
-          name='Hinoka'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Nino(Launch)' || name=='Nino(Fangs)'
-      if args3.length==1
-        if ['nino'].include?(args3[0].downcase)
-          name='nino'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Chrom(Launch)' || name=='Chrom(Branded)'
-      if args3.length==1
-        if ['chrom'].include?(args3[0].downcase)
-          name='Chrom'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Reinhardt(Bonds)' || name=='Reinhardt(World)'
-      if args3.length==1
-        if ['reinhardt','rainharuto'].include?(args3[0].downcase)
-          name='Reinhardt'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Olwen(Bonds)' || name=='Olwen(World)'
-      if args3.length==1
-        if ['olwen','oruen'].include?(args3[0].downcase)
-          name='Olwen'
-        else
-          name=args3[0]
-        end
-      end
-    end
+    name=reshape_unit_into_multi(name,args3)
   end
   args2=args4.join(' ').split(' ')
   if find_unit(name,event)<0
@@ -1805,82 +1741,14 @@ def find_name_in_string(event,stringx=nil,mode=0)
         end
       end
     end
-    if name.include?('(M)') || name.include?('(F)')
-      if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
-        if ['robin','reflet','daraen'].include?(args3[0].downcase)
-          name='Robin'
-        elsif ['morgan','marc','linfan'].include?(args3[0].downcase)
-          name='Morgan'
-        elsif ['kana','kanna'].include?(args3[0].downcase)
-          name='Kana'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Tiki(Young)' || name=='Tiki(Adult)'
-      if args3.length==1
-        if ['tiki','chiki'].include?(args3[0].downcase)
-          name='Tiki'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Eirika(Bonds)' || name=='Eirika(Memories)'
-      if args3.length==1
-        if ['eirika','eirik','eiriku','erika'].include?(args3[0].downcase)
-          name='Eirika'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Hinoka(Launch)' || name=='Hinoka(Wings)'
-      if args3.length==1
-        if ['hinoka'].include?(args3[0].downcase)
-          name='Hinoka'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Nino(Launch)' || name=='Nino(Fangs)'
-      if args3.length==1
-        if ['nino'].include?(args3[0].downcase)
-          name='nino'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Chrom(Launch)' || name=='Chrom(Branded)'
-      if args3.length==1
-        if ['chrom'].include?(args3[0].downcase)
-          name='Chrom'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Reinhardt(Bonds)' || name=='Reinhardt(World)'
-      if args3.length==1
-        if ['reinhardt','rainharuto'].include?(args3[0].downcase)
-          name='Reinhardt'
-        else
-          name=args3[0]
-        end
-      end
-    elsif name=='Olwen(Bonds)' || name=='Olwen(World)'
-      if args3.length==1
-        if ['olwen','oruen'].include?(args3[0].downcase)
-          name='Olwen'
-        else
-          name=args3[0]
-        end
-      end
-    end
+    name=reshape_unit_into_multi(name,args3)
   end
   return nil if args3.nil?
   return [name,args3.join(' ')] if mode==1
   return name
 end
 
-def stat_modify(x,includerefines=false)
+def stat_modify(x,includerefines=false) # used to find all stat names regardless of format and turn them into their proper format
   x='HP' if ['hp','health'].include?(x.downcase)
   x='Attack' if ['attack','atk','att','strength','str','magic','mag'].include?(x.downcase)
   x='Speed' if ['spd','speed'].include?(x.downcase)
@@ -1894,7 +1762,7 @@ def stat_modify(x,includerefines=false)
   return x
 end
 
-def find_stats_in_string(event,stringx=nil,mode=0)
+def find_stats_in_string(event,stringx=nil,mode=0) # used to find the rarity, merge count, nature, weapon refinement, and any blessings within the inputs
   stringx=event.message.text if stringx.nil?
   s=stringx
   s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2])
@@ -2112,13 +1980,14 @@ def find_stats_in_string(event,stringx=nil,mode=0)
   return [rarity,merges,boon,bane,summoner,refinement,blessing]
 end
 
-def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refinement='',blessing=[],ignoremax=false)
+def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refinement='',blessing=[],ignoremax=false) # used to add skill stat increases to a unit's stats
   skillls=skillls.map{|q| q}
   if weapon.nil? || weapon=='' || weapon==' ' || weapon=='-'
-  else
+  else # this is the weapon's stat effect
     s2=@skills[find_skill(weapon,event)]
     if !s2.nil? && !s2[15].nil? && !refinement.nil? && refinement.length>0 && (s2[5]!='Staff Users Only' || refinement=='Effect')
-      skillls.push(find_effect_name(s2,event,1)) if refinement=='Effect' && find_effect_name(s2,event,1).length>0
+      # weapon refinement...
+      skillls.push(find_effect_name(s2,event,1)) if refinement=='Effect' && find_effect_name(s2,event,1).length>0 # ...including any stat-based Effect Modes
       sttz=[]
       inner_skill=s2[15]
       mt=[0,0,0,0,0]
@@ -2178,8 +2047,6 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
     stats[4]+=s2[12][3]+sttz[ks][3]
     stats[5]+=s2[12][4]+sttz[ks][4]
   end
-  negative=[0,0,0,0,0]
-  rally=[0,0,0,0,0]
   lookout=[]
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
     lookout=[]
@@ -2188,22 +2055,27 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
     end
     lookout=lookout.reject{|q| !['Stat-Affecting','Stat-Buffing','Stat-Nerfing'].include?(q[3][0,q[3].length-2])}
   end
+  negative=[0,0,0,0,0]
+  rally=[0,0,0,0,0]
   for i in 0...skillls.length
     statskl=lookout.find_index{|q| q[0]==skillls[i]}
     unless statskl.nil?
       if lookout[statskl][3].include?('Stat-Nerfing')
         statskl=lookout[statskl][4]
+        # only the strongest nerf is applied
         negative[1]=[negative[1],-statskl[1]].min
         negative[2]=[negative[2],-statskl[2]].min
         negative[3]=[negative[3],-statskl[3]].min
         negative[4]=[negative[4],-statskl[4]].min
       elsif lookout[statskl][3].include?('Stat-Buffing')
         statskl=lookout[statskl][4]
+        # only the strongest buff is applied
         rally[1]=[rally[1],statskl[1]].max
         rally[2]=[rally[2],statskl[2]].max
         rally[3]=[rally[3],statskl[3]].max
         rally[4]=[rally[4],statskl[4]].max
       else
+        # all stat-affecting skills are applied
         statskl=lookout[statskl][4]
         stats[1]+=statskl[0]
         stats[2]+=statskl[1]
@@ -2213,6 +2085,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       end
     end
   end
+  # Tempest/Arena bonus unit buff: +10 HP, +4 to all other stats
   if tempest.length>0
     stats[1]+=10
     stats[2]+=4
@@ -2220,6 +2093,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
     stats[4]+=4
     stats[5]+=4
   end
+  # Summoner Support buffs
   stats[1]+=5 if summoner=='S'
   stats[1]+=4 if ['A','B'].include?(summoner)
   stats[1]+=3 if summoner=='C'
@@ -2227,6 +2101,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
   stats[3]+=2 if ['S','A'].include?(summoner)
   stats[4]+=2 if ['S','A','B'].include?(summoner)
   stats[5]+=2 if ['S','A','B','C'].include?(summoner)
+  # Blessing buffs
   for i in 0...[blessing.length,7].min
     stats[1]+=3
     if blessing[i]=='Attack'
@@ -2239,12 +2114,14 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       stats[5]+=4
     end
   end
+  # Harsh Command will turn all nerfs into buffs
   if skillls.include?('Harsh Command')
     for i in 0...negative.length
       rally[i]=[rally[i],0-negative[i]].max
       negative[i]=0
     end
   end
+  # Panic Ploy reverses all buffs (negative buffs are not the same as debuffs)
   if skillls.include?('Panic Ploy')
     for i in 0...rally.length
       rally[i]=0-rally[i]
@@ -2264,7 +2141,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
   return stats
 end
 
-def apply_combat_buffs(event,skillls,stats,phase)
+def apply_combat_buffs(event,skillls,stats,phase) # used to apply in-combat buffs
   k=0
   k=event.server.id unless event.server.nil?
   skillls=skillls.map{|q| q}
@@ -2300,7 +2177,7 @@ def apply_combat_buffs(event,skillls,stats,phase)
   return stats
 end
 
-def count_in(arr,str)
+def count_in(arr,str) # used to count the number of times a skill is mentioned
   if str.is_a?(Array)
     return arr.count{|x| str.map{|y| y.downcase}.include?(x.downcase)}
   elsif arr.is_a?(String)
@@ -2502,7 +2379,7 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
   return stat_skills_3
 end
 
-def pick_thumbnail(event,j,bot)
+def pick_thumbnail(event,j,bot) # used to choose the thumbnail used by most embeds involving units
   data_load()
   d=@units[j]
   return 'http://vignette.wikia.nocookie.net/fireemblem/images/0/04/Kiran.png' if d[0]=='Kiran'
@@ -2516,132 +2393,136 @@ def pick_thumbnail(event,j,bot)
   return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{d[0]}/Face_FC.png"
 end
 
-def unit_color(event,j,mode=0,m=false,chain=false)
+def unit_color(event,j,mode=0,m=false,chain=false) # used to choose the color of the sidebar used by must embeds including units.
   xcolor=0xFFD800
+  jj=@units[j]
   # Weapon colors
-  xcolor=0xE22141 if @units[j][1][0]=='Red'
-  xcolor=0x2764DE if @units[j][1][0]=='Blue'
-  xcolor=0x09AA24 if @units[j][1][0]=='Green'
-  xcolor=0x64757D if @units[j][1][0]=='Colorless'
+  xcolor=0xE22141 if jj[1][0]=='Red'
+  xcolor=0x2764DE if jj[1][0]=='Blue'
+  xcolor=0x09AA24 if jj[1][0]=='Green'
+  xcolor=0x64757D if jj[1][0]=='Colorless'
   unless chain
-    # Elemental colors
-    xcolor=0xF2463A if @units[j][2][0]=='Fire'
-    xcolor=0x66DAFA if @units[j][2][0]=='Water'
-    xcolor=0x7AE970 if @units[j][2][0]=='Wind'
-    xcolor=0xDE5F09 if @units[j][2][0]=='Earth'
-    xcolor=0x5000A0 if @units[j][2][0]=='Dark'
+    # Elemental colors - unused after the first embed
+    xcolor=0xF2463A if jj[2][0]=='Fire'
+    xcolor=0x66DAFA if jj[2][0]=='Water'
+    xcolor=0x7AE970 if jj[2][0]=='Wind'
+    xcolor=0xDE5F09 if jj[2][0]=='Earth'
+    xcolor=0x5000A0 if jj[2][0]=='Dark'
   end
   # Special colors
-  xcolor=0xFFABAF if @units[j][0]=='Sakura' && m
-  xcolor=0x9400D3 if @units[j][0]=='Kiran'
-  return [xcolor/256/256, (xcolor/256)%256, xcolor%256] if mode==1
+  xcolor=0xFFABAF if jj[0]=='Sakura' && m
+  xcolor=0x9400D3 if jj[0]=='Kiran'
+  return [xcolor/256/256, (xcolor/256)%256, xcolor%256] if mode==1 # in mode 1, return as three single-channel numbers - used when averaging colors
   return xcolor
 end
 
-def alter_classes(event,str)
+def alter_classes(event,str) # used to see if weapon classes that didn't exist at the time of coding this function do exist now
   data_load()
   g=get_markers(event)
-  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Healer'}.map{|q| q[1][0]}.uniq.length>1 if str=='Colored Healers'
-  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Dagger'}.map{|q| q[1][0]}.uniq.length>1 if str=='Colored Daggers'
-  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Blade'}.map{|q| q[1][0]}.uniq.length>3 if str=='Colorless Blades' || str=='Rods'
-  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Tome'}.map{|q| q[1][0]}.uniq.length>3 if str=='Colorless Tomes'
+  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Healer'}.map{|q| q[1][0]}.reject{|q| q=='Colorless'}.uniq.length>0 if str=='Colored Healers'
+  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Dagger'}.map{|q| q[1][0]}.reject{|q| q=='Colorless'}.uniq.length>0 if str=='Colored Daggers'
+  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Blade'}.map{|q| q[1][0]}.reject{|q| q !='Colorless'}.uniq.length>0 if str=='Colorless Blades' || str=='Rods'
+  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Tome'}.map{|q| q[1][0]}.reject{|q| q != 'Colorless'}.uniq.length>0 if str=='Colorless Tomes'
   return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Beast'}.map{|q| q[1][0]}.uniq.length>0 if str=='Beasts'
   return false
 end
 
-def unit_clss(bot,event,j,name=nil)
-  w=@units[j][1][1]
+def unit_clss(bot,event,j,name=nil) # used by almost every command involving a unit to figure out how to display their weapon and movement class
+  jj=@units[j]
+  w=jj[1][1]
   clr='Gold'
-  clr=@units[j][1][0] if ['Red','Blue','Green','Colorless'].include?(@units[j][1][0])
+  clr=jj[1][0] if ['Red','Blue','Green','Colorless'].include?(jj[1][0])
   clr='Cyan' if name=='Robin (Shared stats)'
   wpn='Unknown'
-  wpn=@units[j][1][1].gsub('Healer','Staff') if ['Blade','Tome','Dragon','Beast','Bow','Dagger','Healer'].include?(@units[j][1][1])
+  wpn=jj[1][1].gsub('Healer','Staff') if ['Blade','Tome','Dragon','Beast','Bow','Dagger','Healer'].include?(jj[1][1])
   wemote=''
   moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clr}_#{wpn}"}
   wemote=moji[0].mention unless moji.length<=0
-  w='Sword' if @units[j][1][0]=='Red' && w=='Blade'
-  w='Lance' if @units[j][1][0]=='Blue' && w=='Blade'
-  w='Axe' if @units[j][1][0]=='Green' && w=='Blade'
-  w='Rod' if @units[j][1][0]=='Colorless' && w=='Blade'
-  if @units[j][1][1]!=w
-    w="*#{w}* (#{@units[j][1][0]} #{@units[j][1][1]})"
+  w='Sword' if jj[1][0]=='Red' && w=='Blade'
+  w='Lance' if jj[1][0]=='Blue' && w=='Blade'
+  w='Axe' if jj[1][0]=='Green' && w=='Blade'
+  w='Rod' if jj[1][0]=='Colorless' && w=='Blade'
+  if jj[1][1]!=w
+    w="*#{w}* (#{jj[1][0]} #{jj[1][1]})"
   elsif ['Tome', 'Dragon', 'Bow'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers')) || (w=='Dagger' && alter_classes(event,'Colored Daggers'))
-    w="*#{@units[j][1][0]} #{@units[j][1][1]}*"
-  elsif @units[j][1][0]=='Gold'
+    w="*#{jj[1][0]} #{jj[1][1]}*"
+  elsif jj[1][0]=='Gold'
     w="*#{w}*"
   else
-    w="*#{w}* (#{@units[j][1][0]})"
+    w="*#{w}* (#{jj[1][0]})"
   end
-  w="*#{@units[j][1][2]} Mage* (#{@units[j][1][0]} Tome)" if w[w.length-6,6]==" Tome*" && !@units[j][1][2].nil?
-  w="*#{@units[j][1][0]} Mage* (#{@units[j][1][0]} Tome)" if w[w.length-6,6]==" Tome*" && @units[j][1][2].nil?
-  w='*>Unknown<*' if @units[j][1].nil? || @units[j][1][0].nil? || @units[j][1][0].length<=0
+  w="*#{jj[1][2]} Mage* (#{jj[1][0]} Tome)" if w[w.length-6,6]==" Tome*" && !jj[1][2].nil?
+  w="*#{jj[1][0]} Mage* (#{jj[1][0]} Tome)" if w[w.length-6,6]==" Tome*" && jj[1][2].nil?
+  w='*>Unknown<*' if jj[1].nil? || jj[1][0].nil? || jj[1][0].length<=0
   w='*Mage* (Tome)' if name=='Robin (Shared stats)'
-  w=@units[j][1][1] if @units[j][0]=='Kiran'
-  m=@units[j][3]
-  m='>Unknown<' if @units[j][3].nil? || @units[j][3].length<=0
+  w=jj[1][1] if jj[0]=='Kiran'
+  m=jj[3]
+  m='>Unknown<' if jj[3].nil? || jj[3].length<=0
   mov='Unknown'
-  mov=@units[j][3] if ['Infantry','Armor','Flier','Cavalry'].include?(@units[j][3])
+  mov=jj[3] if ['Infantry','Armor','Flier','Cavalry'].include?(jj[3])
   moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{mov}"}
   memote=''
   memote=moji[0].mention unless moji.length<=0
   lemote1=''
   lemote2=''
-  if !@units[j][2].nil? && @units[j][2][0]!=' '
+  if !jj[2].nil? && jj[2][0]!=' '
     element='Unknown'
-    element=@units[j][2][0] if ['Fire','Water','Wind','Earth','Dark'].include?(@units[j][2][0])
+    element=jj[2][0] if ['Fire','Water','Wind','Earth','Dark'].include?(jj[2][0])
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
     lemote1=moji[0].mention unless moji.length<=0
     stat='Spectrum'
-    stat=@units[j][2][1] if ['Attack','Speed','Defense','Resistance'].include?(@units[j][2][1])
+    stat=jj[2][1] if ['Attack','Speed','Defense','Resistance'].include?(jj[2][1])
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{stat}"}
     lemote2=moji[0].mention unless moji.length<=0
   end
-  return "#{wemote} #{w}\n#{memote} *#{m}*#{"\n#{lemote1}*#{@units[j][2][0]}*/#{lemote2}*#{@units[j][2][1]}* Legendary Hero" unless @units[j][2][0]==" "}"
+  return "#{wemote} #{w}\n#{memote} *#{m}*#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* Legendary Hero" unless jj[2][0]==" "}"
 end
 
-def unit_moji(bot,event,j=-1,name=nil)
+def unit_moji(bot,event,j=-1,name=nil) # used primarilally by the BST and Alt commands to display a unit's weapon and movement classes as emojis
   return '' if was_embedless_mentioned?(event)
   return '' if name.nil? && j<0
   j=@units.find_index{|q| q[0]==name} if j<0
   return '' if j.nil?
+  jj=@units[j]
   clr='Gold'
-  clr=@units[j][1][0] if ['Red','Blue','Green','Colorless'].include?(@units[j][1][0])
+  clr=jj[1][0] if ['Red','Blue','Green','Colorless'].include?(jj[1][0])
   clr='Cyan' if name=='Robin (Shared stats)'
   wpn='Unknown'
-  wpn=@units[j][1][1].gsub('Healer','Staff') if ['Blade','Tome','Dragon','Beast','Bow','Dagger','Healer'].include?(@units[j][1][1])
+  wpn=jj[1][1].gsub('Healer','Staff') if ['Blade','Tome','Dragon','Beast','Bow','Dagger','Healer'].include?(jj[1][1])
   wemote=''
   moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clr}_#{wpn}"}
   wemote=moji[0].mention unless moji.length<=0
   mov='Unknown'
-  mov=@units[j][3] if ['Infantry','Armor','Flier','Cavalry'].include?(@units[j][3])
+  mov=jj[3] if ['Infantry','Armor','Flier','Cavalry'].include?(jj[3])
   moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{mov}"}
   memote=''
   memote=moji[0].mention unless moji.length<=0
   lemote1=''
   lemote2=''
-  if !@units[j][2].nil? && @units[j][2][0]!=' '
+  if !jj[2].nil? && jj[2][0]!=' '
     element='Unknown'
-    element=@units[j][2][0] if ['Fire','Water','Wind','Earth','Dark'].include?(@units[j][2][0])
+    element=jj[2][0] if ['Fire','Water','Wind','Earth','Dark'].include?(jj[2][0])
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
     lemote1=moji[0].mention unless moji.length<=0
     stat='Spectrum'
-    stat=@units[j][2][1] if ['Attack','Speed','Defense','Resistance'].include?(@units[j][2][1])
+    stat=jj[2][1] if ['Attack','Speed','Defense','Resistance'].include?(jj[2][1])
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{stat}"}
     lemote2=moji[0].mention unless moji.length<=0
   end
   return "#{wemote}#{memote}#{lemote1}#{lemote2}"
 end
 
-def skill_tier(name,event)
+def skill_tier(name,event) # used by the "used a non-plus version of a weapon that has a + form" tooltip in the stats command to figure out the tier of the weapon
   data_load()
-  j=find_skill(name,event)
-  return 1 if @skills[j][8]=='-'
-  return 1+skill_tier(@skills[j][8].gsub('*','').split(' or ')[0],event) if @skills[j][8].include?(' or ')
-  return 1+skill_tier(@skills[j][8].gsub('*','').split(', ')[0],event) if @skills[j][8].include?(', ')
-  return 1+skill_tier(@skills[j][8].gsub('*',''),event)
+  s=@skills.map{|q| q}
+  j=s[s.find_index{|q| q[0]==name}]
+  return 1 if j[8]=='-'
+  return 1+skill_tier(j[8].gsub('*','').split(' or ')[0],event) if j[8].include?(' or ')
+  return 1+skill_tier(j[8].gsub('*','').split(', ')[0],event) if j[8].include?(', ')
+  return 1+skill_tier(j[8].gsub('*',''),event)
 end
 
-def get_bonus_type(event)
+def get_bonus_type(event) # used to determine if the embed header should say Tempest or Arena bonus unit
   if event.message.text.downcase.split(' ').include?('bonus')
     if event.message.text.downcase.split(' ').include?('tempest') && !event.message.text.downcase.split(' ').include?('arena')
       return 'Tempest'
@@ -2660,7 +2541,7 @@ def get_bonus_type(event)
   return ''
 end
 
-def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,weapon='-')
+def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,weapon='-') # used by the stats command and any derivitives to display which skills are affecting the stats being displayed
   blessing=[] if blessing.nil?
   stat_skills=[] if stat_skills.nil?
   k=[]
@@ -2734,7 +2615,7 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   return "#{"#{tempest} Bonus unit\n" if tempest.length>0}#{"Blessings applied: #{blessing.join(', ')}\n" if blessing.length>0}#{"Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0}#{"Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0}#{"Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0}#{"In-combat buffs: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0}Equipped weapon: #{weapon}\n"
 end
 
-def display_stars(rarity,merges,support='-')
+def display_stars(rarity,merges,support='-') # used to determine which star emojis should be used, based on the rarity, merge count, and whether the unit is Summoner Supported
   emo=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][rarity-1]
   if merges==@max_rarity_merge[1]
     emo='<:Icon_Rarity_4p10:448272714210476033>' if rarity==4
@@ -2746,7 +2627,7 @@ def display_stars(rarity,merges,support='-')
   return "#{emo*rarity}#{"**+#{merges}**" unless merges.zero?}#{"	<:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}"
 end
 
-def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false)
+def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays stats
   if name.is_a?(Array)
     for i in 0...name.length
       disp_stats(bot,name[i],weapon,event,ignore,skillstoo)
@@ -2914,14 +2795,14 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false)
     create_embed(event,"__**#{@units[j][0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n",0x9400D3,"Please note that the #{atk} stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","HP: 0\n#{atk}: 0\nSpeed: 0\nDefense: 0\nResistance: 0\n\nBST: 0"],["**Level 40#{" +#{merges}" if merges>0}**","HP: 0\n#{atk}: 0\nSpeed: 0\nDefense: 0\nResistance: 0\n\nBST: 0"]],1)
     disp_unit_skills(bot,@units[j][0],event) if skillstoo
     return nil
-  elsif unitz[4].nil? || (unitz[4].max.zero? && unitz[5].max.zero?)
+  elsif unitz[4].nil? || (unitz[4].max.zero? && unitz[5].max.zero?) # unknown stats
     data_load()
     j=find_unit(name,event)
     xcolor=unit_color(event,j,0,mu)
     create_embed(event,"__**#{@units[j][0].gsub('Lavatain','Laevatein')}**__","#{unit_clss(bot,event,j)}",xcolor,'Stats currently unknown',pick_thumbnail(event,j,bot))
     disp_unit_skills(bot,@units[j][0],event) if skillstoo
     return nil
-  elsif unitz[4].max.zero?
+  elsif unitz[4].max.zero? # level 40 stats are known but not level 1
     data_load()
     merges=0 if merges.nil?
     j=find_unit(name,event)
@@ -2942,11 +2823,18 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false)
     atk='Attack' if weapon != '-'
     u40=[@units[j][0],@units[j][5][0],@units[j][5][1],@units[j][5][2],@units[j][5][3],@units[j][5][4]]
     # find stats based on merges
-    s=[[u40[1],1],[u40[2],2],[u40[3],3],[u40[4],4],[u40[5],5]]                                                   # all stats
-    s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}                                     # sort the stats based on amount
-    s.push(s[0],s[1],s[2],s[3],s[4])                                                                             # loop the list for use with multiple merges
-    if merges>0                                                                                                  # apply merges, two stats per merge
-      for i in 0...2*merges
+    s=[[u40[1],1],[u40[2],2],[u40[3],3],[u40[4],4],[u40[5],5]]                # all stats
+    s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}  # sort the stats based on amount
+    s.push(s[0],s[1],s[2],s[3],s[4])                                          # loop the list for use with multiple merges
+    m=merges/5                                                                # apply merges, two stats per merge
+    if m>0
+      for i in 1...6
+        u40[i]+=2*m
+      end
+    end
+    m=merges%5
+    if m>0
+      for i in 0...2*m
         u40[s[i][1]]+=1
       end
     end
@@ -2971,13 +2859,14 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false)
     crblu40=apply_stat_skills(event,stat_skills_2,crblu40)
     u40=make_stat_string_list(u40,blu40)
     cru40=make_stat_string_list(cru40,crblu40)
-    u40=make_stat_string_list_2(u40,cru40) if wl.include?('~~')
+    u40=make_stat_string_list(u40,cru40,2) if wl.include?('~~')
     ftr="Please note that the #{atk} stat displayed here does not include weapon might.  The Attack stat in-game does."
     ftr=nil if weapon != '-'
     create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0}#{"	\u2764 **#{summoner}**" unless summoner=='-'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","HP: unknown\n#{atk}: unknown\nSpeed: unknown\nDefense: unknown\nResistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","HP: #{u40[1]}\n#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"]],1)
     disp_unit_skills(bot,@units[j][0],event) if skillstoo
     return nil
   end
+  # units for whom both level 40 and level 1 stats are known
   data_load()
   merges=@max_rarity_merge[1] if merges>@max_rarity_merge[1]
   merges=0 if merges<0
@@ -3027,7 +2916,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false)
   crblu40=apply_stat_skills(event,stat_skills_2,crblu40)
   u40=make_stat_string_list(u40,blu40)
   cru40=make_stat_string_list(cru40,crblu40)
-  u40=make_stat_string_list_2(u40,cru40) if wl.include?('~~')
+  u40=make_stat_string_list(u40,cru40,2) if wl.include?('~~')
   cru1=u1.map{|a| a}
   u1=apply_stat_skills(event,stat_skills,u1,tempest,summoner,weapon,refinement,blessing)
   cru1=apply_stat_skills(event,stat_skills,cru1,tempest,summoner,'-','',blessing)
@@ -3037,7 +2926,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false)
   crblu1=apply_stat_skills(event,stat_skills_2,crblu1)
   u1=make_stat_string_list(u1,blu1)
   cru1=make_stat_string_list(cru1,crblu1)
-  u1=make_stat_string_list_2(u1,cru1) if wl.include?('~~')
+  u1=make_stat_string_list(u1,cru1,2) if wl.include?('~~')
   ftr="Please note that the #{atk} stat displayed here does not include weapon might.  The Attack stat in-game does."
   if weapon != '-'
     ftr=nil
@@ -3079,7 +2968,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false)
   for i in 0...flds.length
     flds[i][1]=flds[i][1].join("\n")
   end
-  if skillstoo && name != 'Robin'
+  if skillstoo && name != 'Robin' # when invoked any way except the main stats command, will also display the unit's top level skills
     uskl=unit_skills(name,event)
     for i in 0...3
       if uskl[i][0].include?('**') && uskl[i]!=uskl[i].reject{|q| !q.include?('**')}
@@ -3104,7 +2993,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false)
   xtype=1
   xtype=-1 if skillstoo && name != 'Robin'
   create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}",xcolor,ftr,img,flds,xtype)
-  if skillstoo && name == 'Robin'
+  if skillstoo && name == 'Robin' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
     for i in 0...3
@@ -3117,12 +3006,18 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false)
     end
     usklm=usklm.map{|q| q[q.length-1]}
     usklf=usklf.map{|q| q[q.length-1]}
-    create_embed(event,'','',xcolor,nil,img,[['Robin(M)',"<:Skill_Weapon:444078171114045450> #{usklm[0]}\n<:Skill_Assist:444078171025965066> #{usklm[1]}\n<:Skill_Special:444078170665254929> #{usklm[2]}\n<:Passive_A:443677024192823327> #{usklm[3]}\n<:Passive_B:443677023257493506> #{usklm[4]}\n<:Passive_C:443677023555026954> #{usklm[5]}"],['Robin(F)',"<:Skill_Weapon:444078171114045450> #{usklf[0]}\n<:Skill_Assist:444078171025965066> #{usklf[1]}\n<:Skill_Special:444078170665254929> #{usklf[2]}\n<:Passive_A:443677024192823327> #{usklf[3]}\n<:Passive_B:443677023257493506> #{usklf[4]}\n<:Passive_C:443677023555026954> #{usklf[5]}"]])
+    create_embed(event,'','',xcolor,nil,img,[['Robin(M)<:Blue_Tome:443172811104714763><:Icon_Move_Infantry:443331187579289601>',"<:Skill_Weapon:444078171114045450> #{usklm[0]}\n<:Skill_Assist:444078171025965066> #{usklm[1]}\n<:Skill_Special:444078170665254929> #{usklm[2]}\n<:Passive_A:443677024192823327> #{usklm[3]}\n<:Passive_B:443677023257493506> #{usklm[4]}\n<:Passive_C:443677023555026954> #{usklm[5]}"],['Robin(F)<:Green_Tome:443172811759157248><:Icon_Move_Infantry:443331187579289601>',"<:Skill_Weapon:444078171114045450> #{usklf[0]}\n<:Skill_Assist:444078171025965066> #{usklf[1]}\n<:Skill_Special:444078170665254929> #{usklf[2]}\n<:Passive_A:443677024192823327> #{usklf[3]}\n<:Passive_B:443677023257493506> #{usklf[4]}\n<:Passive_C:443677023555026954> #{usklf[5]}"]])
   end
   return nil
 end
 
-def make_stat_string_list(a,b)
+def make_stat_string_list(a,b,n=1)
+  if n==2
+    for i in 1...a.length
+      a[i]="~~#{a[i]}~~ #{b[i]}" unless a[i]==b[i]
+    end
+    return a
+  end
   for i in 1...6
     a[i]=[a[i],0].max
   end
@@ -3133,13 +3028,6 @@ def make_stat_string_list(a,b)
   b.push(b[1]+b[2]+b[3]+b[4]+b[5])
   for i in 1...a.length
     a[i]="#{a[i]} (#{b[i]})" unless a[i]==b[i]
-  end
-  return a
-end
-
-def make_stat_string_list_2(a,b)
-  for i in 1...a.length
-    a[i]="~~#{a[i]}~~ #{b[i]}" unless a[i]==b[i]
   end
   return a
 end
@@ -8036,7 +7924,7 @@ def phase_study(event,name,bot,weapon=nil)
   crblu40=apply_stat_skills(event,stat_skills_2,crblu40)
   u40=make_stat_string_list(u40,blu40)
   cru40=make_stat_string_list(cru40,crblu40)
-  u40=make_stat_string_list_2(u40,cru40) if wl.include?('~~')
+  u40=make_stat_string_list(u40,cru40,2) if wl.include?('~~')
   if u40[0]=='Kiran'
     u40[1]=0
     u40[2]=0
