@@ -6979,7 +6979,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     wl2=weapon_legality(event,'Robin(F)',weapon)
     wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
   end
-  xcolor=unit_color(event,j,u4[0],0,mu)
+  xcolor=unit_color(event,j,u40[0],0,mu)
   unless spec_wpn
     wl=weapon_legality(event,u40[0],weapon,refinement)
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
