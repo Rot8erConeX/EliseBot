@@ -3000,6 +3000,9 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   img='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   xtype=1
   xtype=-1 if skillstoo && name != 'Robin'
+  if skillstoo && mu && flds.length<=3
+    flds.shift
+  end
   create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}",xcolor,ftr,img,flds,xtype)
   if skillstoo && name == 'Robin' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
@@ -4037,12 +4040,12 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   xcolor=unit_color(event,j,@units[j][0],0,mu,chain)
   f=chain
   f=false if doubleunit
-  xfooter=nil
-  xfooter="Sacred Seal: #{sklz2[6][0]}" unless sklz2[6].nil? || sklz2[6][0].length.zero? || sklz2[6][0]==" "
   sklz2[0]=sklz2[0].reject {|a| ['Falchion','**Falchion**'].include?(a)}
   txt="#{txt}\n#{unit_clss(bot,event,j)}\n"
   txt=' ' if f
-  create_embed(event,"#{"__#{"Mathoo's " if mu}**#{@units[j][0]}**__" unless f}",txt,xcolor,xfooter,pick_thumbnail(event,j,bot),[["<:Skill_Weapon:444078171114045450> **Weapons**",sklz2[0].join("\n")],["<:Skill_Assist:444078171025965066> **Assists**",sklz2[1].join("\n")],["<:Skill_Special:444078170665254929> **Specials**",sklz2[2].join("\n")],["<:Passive_A:443677024192823327> **A Passives**",sklz2[3].join("\n")],["<:Passive_B:443677023257493506> **B Passives**",sklz2[4].join("\n")],["<:Passive_C:443677023555026954> **C Passives**",sklz2[5].join("\n")]])
+  flds=[["<:Skill_Weapon:444078171114045450> **Weapons**",sklz2[0].join("\n")],["<:Skill_Assist:444078171025965066> **Assists**",sklz2[1].join("\n")],["<:Skill_Special:444078170665254929> **Specials**",sklz2[2].join("\n")],["<:Passive_A:443677024192823327> **A Passives**",sklz2[3].join("\n")],["<:Passive_B:443677023257493506> **B Passives**",sklz2[4].join("\n")],["<:Passive_C:443677023555026954> **C Passives**",sklz2[5].join("\n")]]
+  flds.push(["<:Passive_S:443677023626330122> **Sacred Seal**",sklz2[6][0]]) unless sklz2[6].nil? || sklz2[6][0].length.zero? || sklz2[6][0]==" "
+  create_embed(event,"#{"__#{"Mathoo's " if mu}**#{@units[j][0]}**__" unless f}",txt,xcolor,nil,pick_thumbnail(event,j,bot),flds)
 end
 
 def extend_message(msg1,msg2,event,enters=1,sym="\n")
