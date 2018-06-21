@@ -2947,7 +2947,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   end
   flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","Speed: #{u40[3]}","Defense: #{u40[4]}","Resistance: #{u40[5]}","","BST: #{u40[16]}"]])
   superbaan=['','','','','','']
-  if boon=="" && bane=="" && ((stat_skills_2.length<=0 && !wl.include?('~~')) || flds.length==3)
+  if boon=="" && bane=="" && !mu && ((stat_skills_2.length<=0 && !wl.include?('~~')) || flds.length==3)
     for i in 6...11
       superbaan[i-5]='(+)' if [1,5,10].include?(u40[i]) && rarity==5
       superbaan[i-5]='(-)' if [2,6,11].include?(u40[i]) && rarity==5
@@ -5795,14 +5795,14 @@ def comparison(event,args,bot)
     s=' (-)' if [2,6,11].include?(b[0][0][i+5]) && b[0][3]==5
     s=' (+)' if [10].include?(b[0][0][i+5]) && b[0][3]==4
     s=' (-)' if [11].include?(b[0][0][i+5]) && b[0][3]==4
-    s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)'
+    s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)' && !names[0].include?("Mathoo's ")
     d1[1].push("#{stzzz[i]}: #{b[0][0][i]}#{s}")
     s=''
     s=' (+)' if [1,5,10].include?(b[1][0][i+5]) && b[1][3]==5
     s=' (-)' if [2,6,11].include?(b[1][0][i+5]) && b[1][3]==5
     s=' (+)' if [10].include?(b[1][0][i+5]) && b[1][3]==4
     s=' (-)' if [11].include?(b[1][0][i+5]) && b[1][3]==4
-    s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)'
+    s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)' && !names[1].include?("Mathoo's ")
     d2[1].push("#{stzzz[i]}: #{b[1][0][i]}#{s}")
     d1[2]+=b[0][0][i]
     d2[2]+=b[1][0][i]
