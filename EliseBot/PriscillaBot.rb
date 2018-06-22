@@ -9187,6 +9187,9 @@ bot.command([:random,:rand]) do |event, *args|
   elsif event.message.text.downcase.split(' ').include?('dancer')
     clazz2.push('Dancer')
     l1_total-=8
+  elsif event.message.text.downcase.split(' ').include?('music') || event.message.text.downcase.split(' ').include?('musical')
+    clazz2.push(['Dancer','Singer'].sample)
+    l1_total-=8
   elsif event.message.text.downcase.split(' ').include?('nonmusical')
   elsif event.message.text.downcase.split(' ').include?('non-musical')
   elsif clazz[1]!='Healer' && rand(10).zero?
@@ -9325,7 +9328,7 @@ bot.command([:random,:rand]) do |event, *args|
   atk='Attack'
   atk='Magic' if ['Tome','Dragon','Healer'].include?(clazz[1])
   atk='Strength' if ['Blade','Bow','Dagger'].include?(clazz[1])
-  r='<:star:322905655730241547>'*5
+  r='<:Icon_Rarity_5:448266417553539104>'*5
   flds=[['**Level 1**',"HP: #{stats[0]}\n#{atk}: #{stats[1]}\nSpeed: #{stats[2]}\nDefense: #{stats[3]}\nResistance: #{stats[4]}\n\nBST: #{stats[10]}"]]
   args=args.map{|q| q.downcase}
   if args.include?('gps') || args.include?('gp') || args.include?('growths') || args.include?('growth')
@@ -9340,7 +9343,14 @@ bot.command([:random,:rand]) do |event, *args|
     img=imgx.avatar_url
     ftr="Unit profile provided by #{imgx.distinct}"
   end
-  create_embed(event,"__**#{name}**__","#{r}\nNeutral nature\nWeapon type: #{w}\nMovement type: *#{mov}*\n#{"Additional Modifier#{'s' if clazz2.length>1}: #{clazz2.map{|q| "*#{q}*"}.join(', ')}" if clazz2.length>0}",xcolor,ftr,img,flds,1)
+  wemote=''
+  moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clazz[0]}_#{clazz[1]}"}
+  wemote=moji[0].mention unless moji.length<=0
+  memote=''
+  moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{mov}"}
+  memote=moji[0].mention unless moji.length<=0
+  clazz3=clazz2.reject{|q| ['Dancer','Singer'].include?(q)}
+  create_embed(event,"__**#{name}**__","#{r}\nNeutral nature\n#{wemote} #{w}\n#{memote} *#{mov}*#{"\n<:Assist_Music:454462054959415296> *Dancer*" if clazz2.include?('Dancer')}#{"\n<:Assist_Music:454462054959415296> *Singer*" if clazz2.include?('Singer')}\n#{"Additional Modifier#{'s' if clazz3.length>1}: #{clazz3.map{|q| "*#{q}*"}.join(', ')}" if clazz3.length>0}",xcolor,ftr,img,flds,1)
   return nil
 end
 
