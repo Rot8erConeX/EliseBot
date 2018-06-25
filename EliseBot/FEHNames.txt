@@ -941,7 +941,7 @@
 ["IdolCare", "Cordelia", [385296694801334279]]
 ["Jakob'sWaifuWannabeBecauseOliverIsHisTrueWaifu", "Cordelia", [410853660508028929]]
 ["Merdelia", "Cordelia", [246641598178263040]]
-["Nerd", "Cordelia", [204049440665894912]]
+["Nerdelia", "Cordelia", [204049440665894912]]
 ["Perfection", "Cordelia", [281748301731201024]]
 ["r63subaki", "Cordelia", [295686580528742420]]
 ["Tiamo", "Cordelia"]
