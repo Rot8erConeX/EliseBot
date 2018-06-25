@@ -1991,7 +1991,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       sttz=[]
       inner_skill=s2[15]
       mt=[0,0,0,0,0]
-      mt[1]=1 if s2[7]=='-'
+      mt[1]=1 if s2[11].split(', ').include?('Silver')
       if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
         mt[1]+=inner_skill[0,1].to_i
         inner_skill=inner_skill[1,inner_skill.length-1]
@@ -3177,7 +3177,7 @@ def disp_skill(bot,name,event,ignore=false)
       lookout.push(eval line)
     end
   end
-  lookout=lookout.reject{|q| q[2]!='Weapon' || q[3].nil?}
+  lookout2=lookout.reject{|q| q[2]!='Weapon' || q[3].nil?}
   f=find_skill(name,event)
   if f<0
     if event.message.text.downcase.include?('psychic')
@@ -3283,8 +3283,8 @@ def disp_skill(bot,name,event,ignore=false)
       s="<:Gold_Unknown:443172811499110411> / #{s}" unless s.include?(' / ')
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     end
-    for i in 0...lookout.length
-      effective.push(lookout[i][3]) if skill[11].split(', ').include?(lookout[i][0])
+    for i in 0...lookout2.length
+      effective.push(lookout2[i][3]) if skill[11].split(', ').include?(lookout2[i][0])
     end
     str="#{str}\n**Effective against:** #{effective.join('')}" if effective.length>0
     str="#{str}\n**Stats affected:** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}"
@@ -3463,13 +3463,6 @@ def disp_skill(bot,name,event,ignore=false)
     eff.compact!
     str="#{str}\n\n**Gained via Effect Mode on:** #{eff.join(', ')}" if eff.length>0
   end
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-  end
   if lookout.map{|q| q[0]}.include?(skill[0]) || skill[0][0,11]=='Panic Ploy '
     statskill=lookout.find_index{|q| q[0]==skill[0]}
     statskill=lookout.find_index{|q| q[0]=='Panic Ploy'} if statskill.nil?
@@ -3600,8 +3593,8 @@ def disp_skill(bot,name,event,ignore=false)
     sttz=[]
     inner_skill=skill[15]
     mt=[0,0,0,0,0]
-    skill[12][1]+=1 if skill[7]=='-'
-    skill[2]+=1 if skill[7]=='-'
+    skill[12][1]+=1 if skill[11].split(', ').include?('Silver')
+    skill[2]+=1 if skill[11].split(', ').include?('Silver')
     if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
       skill[12][1]+=inner_skill[0,1].to_i
       skill[2]+=inner_skill[0,1].to_i
@@ -3754,11 +3747,11 @@ def disp_skill(bot,name,event,ignore=false)
       str="#{str}	Defense #{'+' if skill[12][3]+sttz[i][3]>0}#{skill[12][3]+sttz[i][3]}" if skill[12][3]+sttz[i][3]!=0
       str="#{str}	Resistance #{'+' if skill[12][4]+sttz[i][4]>0}#{skill[12][4]+sttz[i][4]}" if skill[12][4]+sttz[i][4]!=0
       effective=[]
-      effective.push('<:Icon_Move_Flier:443331186698354698>') if skill[4]=="Bow Users Only"
-      for i2 in 0...lookout.length
-        effective.push(lookout[i2][3]) if skill[11].split(', ').include?(lookout[i2][0])
-        effective.push(lookout[i2][3]) if skill[11].split(', ').include?("(R)#{lookout[i2][0]}")
-        effective.push(lookout[i2][3]) if sttz[i][5]=="Effect" && skill[11].split(', ').include?("(E)#{lookout[i2][0]}")
+      effective.push('<:Icon_Move_Flier:443331186698354698>') if skill[5]=="Bow Users Only"
+      for i2 in 0...lookout2.length
+        effective.push(lookout2[i2][3]) if skill[11].split(', ').include?(lookout2[i2][0])
+        effective.push(lookout2[i2][3]) if skill[11].split(', ').include?("(R)#{lookout2[i2][0]}")
+        effective.push(lookout2[i2][3]) if sttz[i][5]=="Effect" && skill[11].split(', ').include?("(E)#{lookout2[i2][0]}")
       end
       str="#{str}\nEffective against: #{effective.join('')}" if effective.length>0
       if outer_skill.nil? || !sttz[i][7].nil?
