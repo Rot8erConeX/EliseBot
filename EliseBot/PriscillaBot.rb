@@ -552,8 +552,8 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
             lookout.push(eval line)
           end
         end
-        w=lookout.reject{|q| q[2]!='Weapon'}.map{|q| q[0]}.sort
-        p=lookout.reject{|q| q[2]!='Passive'}.map{|q| q[0]}.sort
+        w=lookout.reject{|q| q[2]!='Weapon' || !q[4].nil?}.map{|q| q[0]}.sort
+        p=lookout.reject{|q| q[2]!='Passive' || !q[4].nil?}.map{|q| q[0]}.sort
         w=w.reject{|q| q=='Hogtome'} unless !event.server.nil? && event.server.id==330850148261298176
         if w.join("\n").length+p.join("\n").length>=1950 || !safe_to_spam?(event)
           create_embed(event,'Weapon Flavors','',0x40C0F0,nil,nil,triple_finish(w))
@@ -2483,7 +2483,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   return "#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* Legendary Hero" unless jj[2][0]==" "}"
 end
 
-def unit_moji(bot,event,j=-1,name=nil) # used primarilally by the BST and Alt commands to display a unit's weapon and movement classes as emojis
+def unit_moji(bot,event,j=-1,name=nil,m=false) # used primarilally by the BST and Alt commands to display a unit's weapon and movement classes as emojis
   return '' if was_embedless_mentioned?(event)
   return '' if name.nil? && j<0
   j=@units.find_index{|q| q[0]==name} if j<0
@@ -2518,7 +2518,7 @@ def unit_moji(bot,event,j=-1,name=nil) # used primarilally by the BST and Alt co
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{stat}"}
     lemote2=moji[0].mention unless moji.length<=0
   end
-  return "#{wemote}#{memote}#{dancer}#{lemote1}#{lemote2}"
+  return "#{wemote}#{memote}#{dancer}#{lemote1}#{lemote2}#{'<:Icon_Support:448293527642701824>' if jj[0]=='Sakura' && m}"
 end
 
 def skill_tier(name,event) # used by the "used a non-plus version of a weapon that has a + form" tooltip in the stats command to figure out the tier of the weapon
@@ -3170,6 +3170,14 @@ def disp_skill(bot,name,event,ignore=false)
       end
     end
   end
+  lookout=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
+    lookout=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
+      lookout.push(eval line)
+    end
+  end
+  lookout=lookout.reject{|q| q[2]!='Weapon' || q[3].nil?}
   f=find_skill(name,event)
   if f<0
     if event.message.text.downcase.include?('psychic')
@@ -3224,6 +3232,7 @@ def disp_skill(bot,name,event,ignore=false)
   sklslt=['']
   if skill[4]=='Weapon'
     xcolor=0xF4728C
+    effective=[]
     xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Weapons/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
     if skill[5]=='Red Tome Users Only'
       s=find_base_skill(skill,event)
@@ -3254,7 +3263,7 @@ def disp_skill(bot,name,event,ignore=false)
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Green_Tome:443172811759157248> **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Bow Users Only'
-      xfooter='All bows deal effective damage against flying units'
+      effective.push('<:Icon_Move_Flier:443331186698354698>')
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     elsif skill[5]=='Dagger Users Only'
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Dagger:443692132683743232>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Dagger\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
@@ -3274,6 +3283,10 @@ def disp_skill(bot,name,event,ignore=false)
       s="<:Gold_Unknown:443172811499110411> / #{s}" unless s.include?(' / ')
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     end
+    for i in 0...lookout.length
+      effective.push(lookout[i][3]) if skill[11].split(', ').include?(lookout[i][0])
+    end
+    str="#{str}\n**Effective against:** #{effective.join('')}" if effective.length>0
     str="#{str}\n**Stats affected:** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}"
     sklslt=['Weapon']
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
@@ -3392,7 +3405,7 @@ def disp_skill(bot,name,event,ignore=false)
       p=list_lift(p.map{|q| "*#{q}*"},"or")
     end
   end
-  str="#{str}\n#{"**Restrictions on inheritance:** #{skill[5]}" if skill[6]=='-'}#{"**Exclusive to:** #{skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[6]=='-'}#{"\n**Promotes from:** #{skill[8]}" unless skill[8]=='-'}#{"\n**Promotes into:** #{p}" unless p.nil?}"
+  str="#{str}#{"\n**Restrictions on inheritance:** #{skill[5]}" if skill[6]=='-' && skill[4]!='Weapon'}#{"\n**Exclusive to:** #{skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[6]=='-'}#{"\n**Promotes from:** #{skill[8]}" unless skill[8]=='-'}#{"\n**Promotes into:** #{p}" unless p.nil?}"
   if !skill[14].nil? && skill[14].length>0 && skill[4]=='Weapon'
     prm=skill[14].split(', ')
     for i in 0...prm.length
@@ -3740,12 +3753,20 @@ def disp_skill(bot,name,event,ignore=false)
       str="#{str}	Speed #{'+' if skill[12][2]+sttz[i][2]>0}#{skill[12][2]+sttz[i][2]}" if skill[12][2]+sttz[i][2]!=0
       str="#{str}	Defense #{'+' if skill[12][3]+sttz[i][3]>0}#{skill[12][3]+sttz[i][3]}" if skill[12][3]+sttz[i][3]!=0
       str="#{str}	Resistance #{'+' if skill[12][4]+sttz[i][4]>0}#{skill[12][4]+sttz[i][4]}" if skill[12][4]+sttz[i][4]!=0
+      effective=[]
+      effective.push('<:Icon_Move_Flier:443331186698354698>') if skill[4]=="Bow Users Only"
+      for i2 in 0...lookout.length
+        effective.push(lookout[i2][3]) if skill[11].split(', ').include?(lookout[i2][0])
+        effective.push(lookout[i2][3]) if skill[11].split(', ').include?("(R)#{lookout[i2][0]}")
+        effective.push(lookout[i2][3]) if sttz[i][5]=="Effect" && skill[11].split(', ').include?("(E)#{lookout[i2][0]}")
+      end
+      str="#{str}\nEffective against: #{effective.join('')}" if effective.length>0
       if outer_skill.nil? || !sttz[i][7].nil?
         str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{skill[7]}" unless skill[7]=='-'
       else
         str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{outer_skill}"
       end
-      str="#{str}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if skill[11].split(', ').include?("(R)Frostbite")
+      str="#{str}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if skill[11].split(', ').include?("(R)Frostbite") || (sttz[i][5]=="Effect" && skill[11].split(', ').include?("(E)Frostbite"))
       str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{sttz[i][6]}" unless sttz[i][6].nil?
       str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{inner_skill}" if inner_skill.length>1 && sttz[i][5]=="Effect"
     end
@@ -5044,7 +5065,9 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   if weapon_subsets.length>0
     for i in 0...matches2.length
       for j in 0...weapon_subsets.length
-        if matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?(weapon_subsets[j])
+        if matches2[i][4]=='Weapon' && weapon_subsets[j]=='Pega-killer' && !weapon_subsets.include?('Effective')
+          matches3.push(matches2[i]) if matches2[i][5]=='Bow Users Only' || matches2[i][11].split(', ').include?(weapon_subsets[j])
+        elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?(weapon_subsets[j])
           matches3.push(matches2[i])
         elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(R)#{weapon_subsets[j]}")
           matches2[i][0]="#{matches2[i][0]} *(+) All*"
@@ -8314,13 +8337,13 @@ def learnable_skills(event,name,bot,weapon=nil)
   j=untz.find_index{|q| q[0]==j[0]}
   p1=p1.map{|q| q.join("\n")}
   if p1[0].length+p1[1].length+p1[2].length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    msg="__Skills **#{untz[j][0]}** can learn__"
+    msg="__Skills **#{untz[j][0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,j)} can learn__"
     msg=extend_message(msg,"<:Skill_Weapon:444078171114045450> *Weapons:* #{p1[0].gsub("\n",', ')}",event,2)
     msg=extend_message(msg,"<:Skill_Assist:444078171025965066> *Assists:* #{p1[1].gsub("\n",', ')}",event,2)
     msg=extend_message(msg,"<:Skill_Special:444078170665254929> *Specials:* #{p1[2].gsub("\n",', ')}",event,2)
     event.respond msg
   else
-    create_embed(event,"__Skills **#{untz[j][0].gsub('Lavatain','Laevatein')}** can learn__",'',unit_color(event,j),nil,pick_thumbnail(event,j,bot),[["<:Skill_Weapon:444078171114045450> Weapons",p1[0]],["<:Skill_Assist:444078171025965066> Assists",p1[1]],["<:Skill_Special:444078170665254929> Specials",p1[2]]],4)
+    create_embed(event,"__Skills **#{untz[j][0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,j)} can learn__",'',unit_color(event,j),nil,pick_thumbnail(event,j,bot),[["<:Skill_Weapon:444078171114045450> Weapons",p1[0]],["<:Skill_Assist:444078171025965066> Assists",p1[1]],["<:Skill_Special:444078170665254929> Specials",p1[2]]],4)
   end
   if !safe_to_spam?(event)
     event.respond 'For the passive skills this unit can learn, please use this command in PM.'
@@ -8334,7 +8357,7 @@ def learnable_skills(event,name,bot,weapon=nil)
     event.respond msg
   else
     create_embed(event,'','',unit_color(event,j),nil,nil,[['<:Passive_A:443677024192823327> Passives(A)',p1[3]],['<:Passive_B:443677023257493506> Passives(B)',p1[4]],['<:Passive_C:443677023555026954> Passives(C)',p1[5]]],4)
-    create_embed(event,"__<:Passive_S:443677023626330122> Seals **#{untz[j][0].gsub('Lavatain','Laevatein')}** can equip__",'',unit_color(event,j),nil,nil,triple_finish(p1[6].split("\n")),4)
+    create_embed(event,"__<:Passive_S:443677023626330122> Seals **#{untz[j][0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,j)} can equip__",'',unit_color(event,j),nil,nil,triple_finish(p1[6].split("\n")),4)
   end
   return nil
 end
@@ -9893,7 +9916,7 @@ bot.command([:bst, :BST]) do |event, *args|
       end
       st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
       b.push(st[1]+st[2]+st[3]+st[4]+st[5])
-      event << "Unit #{u}: #{r[0]}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][r[0]-1]} #{name.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,name)} +#{r[1]} #{"(+#{r[2]}, -#{r[3]})" if !['',' '].include?(r[2]) || !['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}     BST: #{b[b.length-1]}"
+      event << "Unit #{u}: #{r[0]}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][r[0]-1]} #{name.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,name,m)} +#{r[1]} #{"(+#{r[2]}, -#{r[3]})" if !['',' '].include?(r[2]) || !['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}     BST: #{b[b.length-1]}"
     end
   end
   if braves[1].max==1
