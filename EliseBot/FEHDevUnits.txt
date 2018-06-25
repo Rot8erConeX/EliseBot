@@ -1,4 +1,4 @@
-Sakura\Anna\Celica\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Est\Felicia\Genny\Gunnthra\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
+Sakura\Anna\Celica\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Felicia\Genny\Gunnthra\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
 Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu
 Alfonse\Arden\Black_Knight\Lissa\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
@@ -134,7 +134,7 @@ Close Def 2
 
 Mae
 5\1\Speed\Resistance\-
-Thunder\Elthunder\Blarowl\Blarowl+\Blarowl+ (+) Attack Mode
+Light\Ellight\Blarowl\Blarowl+\Blarowl+ (+) Attack Mode
 Draw Back
 Dragon Gaze\Draconic Aura
 Defiant Atk 1\Defiant Atk 2\Defiant Atk 3
@@ -215,7 +215,7 @@ Distant Def 2
 Sakura(Halloween)
 5\0\Defense\Speed\-
 Iron Dagger\Steel Dagger\Kitty Paddle\Kitty Paddle+
-Rally Resistance
+Rally Resistance\Rally Def/Res
 Chilling Wind\Glacies
 Warding Stance 1\Warding Stance 2\Warding Stance 3
 Guard 1\Guard 2\Guard 3
