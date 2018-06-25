@@ -3243,7 +3243,7 @@ def disp_skill(bot,name,event,ignore=false)
         s='Dark'
         xfooter=xfooter.gsub('Dark','Fire')
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Red_Tome:443172811826003968> **Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Red_Tome:443172811826003968> **Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Blue Tome Users Only'
       s=find_base_skill(skill,event)
@@ -3253,26 +3253,28 @@ def disp_skill(bot,name,event,ignore=false)
       elsif s=='Light'
         xfooter=xfooter.gsub('Light','Thunder')
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Blue_Tome:443172811104714763> **Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Blue_Tome:443172811104714763> **Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Green Tome Users Only'
       s=find_base_skill(skill,event)
       if s=='Gronn'
         xfooter=nil
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Green_Tome:443172811759157248> **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Green_Tome:443172811759157248> **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Bow Users Only'
       effective.push('<:Icon_Move_Flier:443331186698354698>')
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
     elsif skill[5]=='Dagger Users Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Dagger:443692132683743232>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Dagger\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      skill[7]=skill[7].split(' *** ')
+      xfooter="Debuff is applied at end of combat if unit attacks, and lasts until the foes' next actions."
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Dagger:443692132683743232>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Dagger\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
     elsif skill[5]=='Staff Users Only'
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
     elsif skill[5]=='Dragons Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
     elsif skill[5]=='Beasts Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:443172811608162324> **Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:443172811608162324> **Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
     else
       s=skill[5]
       s=s[0,s.length-11]
@@ -3281,12 +3283,27 @@ def disp_skill(bot,name,event,ignore=false)
       s='<:Green_Blade:443172811721146368> / Axe (Green Blade)' if s=='Axe'
       s='<:Summon_Gun:453639908968628229> / Summon Gun' if s=='Summon Gun'
       s="<:Gold_Unknown:443172811499110411> / #{s}" unless s.include?(' / ')
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
     end
     for i in 0...lookout2.length
       effective.push(lookout2[i][3]) if skill[11].split(', ').include?(lookout2[i][0])
     end
     str="#{str}\n**Effective against:** #{effective.join('')}" if effective.length>0
+    if skill[7].is_a?(Array)
+      if skill[7][1].nil?
+        str="#{str}\n**Debuff:**	*None*"
+      else
+        eff=skill[7][1].split(', ')
+        str="#{str}\n**Debuff:**	*Effect:* #{eff[0,eff.length-1].join(', ')}	*Affects:* #{eff[eff.length-1]}"
+      end
+      unless skill[7][2].nil?
+        eff=skill[7][2].split(', ')
+        str="#{str}\n**Buff:**	*Effect:* #{eff[0,eff.length-1].join(', ')}	*Affects:* #{eff[eff.length-1]}"
+      end
+      str="#{str}\n**Additional Effect:**	#{skill[7][0]}" unless skill[7][0]=='-'
+    else
+      str="#{str}\n**Effect:** #{skill[7]}" unless skill[7]=='-'
+    end
     str="#{str}\n**Stats affected:** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}"
     sklslt=['Weapon']
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
@@ -3626,6 +3643,21 @@ def disp_skill(bot,name,event,ignore=false)
       inner_skill=x[0]
       outer_skill=x[1]
     end
+    debuff=nil
+    buff=nil
+    if skill[7].is_a?(Array)
+      debuff=skill[7][1] unless skill[7][1].nil?
+      buff=skill[7][2] unless skill[7][2].nil?
+      skill[7]=skill[7][0]
+    end
+    if outer_skill.nil?
+    elsif outer_skill.include?(' *** ')
+      x=outer_skill.split(' *** ')
+      debuff=x[1] unless x[1].nil?
+      buff=x[2] unless x[2].nil?
+      outer_skill=x[0]
+      outer_skill=nil if outer_skill==' ' || outer_skill.length<=0
+    end
     if skill[6]=='Nebby'
       inner_skill=inner_skill.split('  ')
       sttz.push([3,0,0,0,0,'Full Metal',inner_skill[0]])
@@ -3753,7 +3785,11 @@ def disp_skill(bot,name,event,ignore=false)
         effective.push(lookout2[i2][3]) if skill[11].split(', ').include?("(R)#{lookout2[i2][0]}")
         effective.push(lookout2[i2][3]) if sttz[i][5]=="Effect" && skill[11].split(', ').include?("(E)#{lookout2[i2][0]}")
       end
-      str="#{str}\nEffective against: #{effective.join('')}" if effective.length>0
+      str="#{str}\n*Effective against*: #{effective.join('')}" if effective.length>0
+      unless debuff.nil?
+        d=debuff.split(', ')
+        str="#{str}\n*Debuff*:	Effect: #{d[0,d.length-1].join(', ')}	Affects: #{d[d.length-1]}"
+      end
       if outer_skill.nil? || !sttz[i][7].nil?
         str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{skill[7]}" unless skill[7]=='-'
       else
@@ -7970,8 +8006,10 @@ def phase_study(event,name,bot,weapon=nil)
   unless weapon.nil? || weapon=='-'
     desc = /((G|g)rants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d ((if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (attack|combat)))|during combat(| (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat)))))/
     desc2 = /((G|g)rants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d during combat (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat)))/
-    x=desc.match(sklz[ww2][7]).to_s
-    x=desc2.match(sklz[ww2][7]).to_s unless desc2.match(sklz[ww2][7]).nil?
+    wpnnn=sklz[ww2][7]
+    wpnnn=wpnnn.split(' *** ')[0] if sklz[ww2][5]=='Dagger Users Only'
+    x=desc.match(wpnnn).to_s
+    x=desc2.match(wpnnn).to_s unless desc2.match(sklz[ww2][7]).nil?
     x=nil if !x.nil? && x.include?('to allies') # remove any matches that include "to allies", which were caught in the prior line so they weren't considered non-phase-based
     x=nil if sklz[ww2][7].include?(", #{x}") && (sklz[ww2][7].include?('If foe uses') || sklz[ww2][7].include?('If foe initiates combat and uses'))
     x=nil if sklz[ww2][11].split(', ').include?('(R)Overwrite') && !refinement.nil? && refinement.length>0
@@ -8005,6 +8043,7 @@ def phase_study(event,name,bot,weapon=nil)
         inner_skill=x[0]
         outer_skill=x[1]
       end
+      outer_skill=outer_skill.split(' *** ')[0] if sklz[ww2][5]=='Dagger Users Only'
       x=desc.match(outer_skill).to_s
       x=desc2.match(outer_skill).to_s unless desc2.match(outer_skill).nil?
       x=nil if outer_skill.include?(", #{x}") && (outer_skill.include?('If foe uses') || outer_skill.include?('If foe initiates combat and uses'))
