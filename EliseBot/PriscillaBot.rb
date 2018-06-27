@@ -3969,16 +3969,13 @@ def unit_skills(name,event,justdefault=false,r=0)
     box2[i].uniq!
     sklz2[i].uniq!
   end
-  puts char[12].split(', ')[0].gsub('*','')
   if char[12].split(', ')[0].gsub('*','')=='Hector'
     if sklz2[0].length<3
       sklz2[0].push('Silver Axe') if rarity==3
       sklz2[0].push('**Silver Axe**') if rarity>3
     end
     sklz2[0].push('Some variation on **Armads**') if sklz2[0].length<4 && rarity>4
-    if sklz2[3].length.zero? && (sklz2[4].length.zero? || sklz2[5].length.zero?)
-      sklz2[3].push('Distant Counter')
-    end
+    sklz2[3].push('Distant Counter') if sklz2[3].length.zero? && (sklz2[4].length.zero? || sklz2[5].length.zero?) && rarity>4
   end
   if justdefault
     for i in 0...6
@@ -5947,7 +5944,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str="#{str}ura"
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Azura(Performing)','Azura(Winter)'],[str]]
-  elsif /(hector|kektor|heckutoru)/ =~ str1 && str1.include?('legend')
+  elsif /(hector|kektor|heckutoru)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
     str='hector'
     str='kektor' if str2.include?('kektor')
     str='heckutoru' if str2.include?('heckutoru')
@@ -5959,7 +5956,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       return [str,['Hector(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Hector(Marquess)','Hector(Brave)'],[str]]
-  elsif /(ike|aiku)/ =~ str1 && str1.include?('legend')
+  elsif /(ike|aiku)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
     str='ike'
     str='akiu' if str2.include?('aiku')
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
