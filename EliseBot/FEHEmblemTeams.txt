@@ -28,7 +28,7 @@
 ['Camilla', 0, 0, ['Camilla', 'Camilla(Spring)', 'Camilla(Winter)']]
 ['Ike', 0, 0, ['Ike', 'Ike(Vanguard)', 'Ike(Brave)']]
 ['Roy', 0, 0, ['Roy', 'Roy(Valentines)', 'Roy(Brave)']]
-['Hector', 0, 0, ['Hector', 'Hector(Valentines)', 'Hector(Brave)']]
+['Hector', 0, 0, ['Hector', 'Hector(Valentines)', 'Hector(Marquess)', 'Hector(Brave)']]
 ['Celica', 0, 0, ['Celica', 'Celica(Fallen)', 'Celica(Brave)']]
 ['Takumi', 0, 0, ['Takumi', 'Takumi(Fallen)', 'Takumi(Winter)']]
 ['Ephraim', 0, 0, ['Ephraim', 'Ephraim(Fire)', 'Ephraim(Brave)']]

@@ -90,7 +90,8 @@ Hana\Red, Blade\ \Infantry\5, 8, 8, 4, 6\37, 35, 36, 23, 26\Fuzichoco\Karen Stra
 Hardin(Fallen)\Blue, Blade\ \Armor\6, 8, 6, 8, 7\45, 34, 28, 36, 32\Daisuke Izuka\Richard Epcar\Nakaya Kazuhiro\5p\M\FE3, FE12\Hardin
 Hawkeye\Green, Blade\ \Infantry\7, 7, 4, 6, 7\45, 33, 22, 28, 30\HACCAN\Taylor Henry\Tanzawa Teruyuki\3p4p\M\FE7\Hawkeye
 Hector\Green, Blade\ \Armor\9, 8, 5, 8, 3\52, 36, 24, 37, 19\AKIRA\Patrick Seitz\Toriumi Kousuke\5pLU\M\FE7, FE6\Hector
-Hector(Valentines)\Green, Blade\ \Armor\8, 10, 4, 9, 4\50, 38, 21, 40, 24\Suekane Kumiko\Patrick Seitz\Toriumi Kousuke\5s\M\FE7\Hector
+Hector(Marquess)\Green, Blade\Fire, Attack\Armor\0, 0, 0, 0, 0\0, 0, 0, 0, 0\Wada Sachiko\Patrick Seitz\Toriumi Kousuke\5s\M\FE7, FE6\Hector
+Hector(Valentines)\Green, Blade\ \Armor\8, 10, 4, 9, 4\50, 38, 21, 40, 24\Suekane Kumiko\Patrick Seitz\Toriumi Kousuke\5s\M\FE7, FE6\Hector
 Helbindi\Green, Blade\ \Infantry\0, 0, 0, 0, 0\0, 0, 0, 0, 0\Maeshima Shigeki\Raymond K. Essel\Nakai Kazuya\-\M\FEH\Helbindi
 Henry\Red, Tome, Dark\ \Infantry\8, 4, 4, 7, 5\45, 23, 22, 32, 25\Kusugi Toku\Bryce Papenbrook\Okamura Akemi\3p4p3qLU\M\FE13\Henry
 Henry(Halloween)\Green, Tome, Wind\ \Armor\5, 7, 7, 6, 7\36, 33, 34, 26, 36\Kusugi Toku\Bryce Papenbrook\Okamura Akemi\5s\M\FE13\Henry
