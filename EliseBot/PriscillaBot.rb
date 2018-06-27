@@ -1528,9 +1528,9 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
     end
     event << ''
     event << text
+    event << '' unless [text[text.length-1,1],text[text.length-2,2]].include?("\n")
     unless xfields.nil?
       if mode.zero?
-        event << ''
         for i in 0...xfields.length
           event << "__#{xfields[i][0]}:__ #{xfields[i][1].gsub("\n",' / ')}"
         end
@@ -1542,7 +1542,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
         end
         atk=xfields[0][1].split("\n")[1].split(': ')[0]
         statnames=['HP: ',"#{atk}: ",'Speed: ','Defense: ','Resistance: ','BST: ']
-        fields=[[],['__**HP:**__'],["__**#{atk}:**__"],['__**Speed:**__'],['__**Defense:**__'],['__**Resistance:**__'],['__**BST:**__']]
+        fields=[[],['**HP:**'],["**#{atk}:**"],['**Speed:**'],['**Defense:**'],['**Resistance:**'],['**BST:**']]
         for i in 0...xfields.length
           fields[0].push(xfields[i][0])
           flumb=xfields[i][1].split("\n")
@@ -1572,6 +1572,20 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
       elsif mode==4
         for i in 0...xfields.length
           event << "**#{xfields[i][0]}:** #{xfields[i][1].gsub("\n",', ')}"
+        end
+      elsif mode==5
+        for i in 0...xfields.length-1
+          event << "**#{xfields[i][0]}:** #{xfields[i][1].gsub("\n",' / ')}"
+        end
+        i=xfields.length-1
+        event << "**#{xfields[i][0]}:**"
+        m=xfields[i][1].split("\n\n").map{|q| q.split("\n")}
+        for i in 0...m.length
+          if m[i].length<=1
+            event << "*#{m[i][0]}*"
+          else
+            event << "*#{m[i][0]}*: #{m[i][1,m[i].length-1].join(' / ')}"
+          end
         end
       else
         for i in 0...xfields.length
@@ -7193,9 +7207,16 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     x.push(['Frostbite',rd])
   end
   x.push(['Misc.',"Defense + Resistance = #{rdr}#{"\n\n#{u40[0]} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0]}:\n#{rs}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\nOutnumber #{u40[0]}'s allies within 2 spaces" if weapon=='Thunder Armads'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless @units[j][1][1]=='Healer'}",1])
+  ftr="\"Frostbite\" is weapons like Felicia's Plate"
+  ftr="#{ftr} and refined dragonstones" if ['Healer','Tome','Bow','Dagger'].include?(@units[j][1][1])
+  if photon=="0"
+    ftr="#{ftr} that deal damage based on lower of Def and Res."
+  else
+    ftr="#{ftr}.  \"Photon\" is weapons like Light Brand."
+  end
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,'"Frostbite" is weapons like Felicia\'s Plate.  "Photon" is weapons like Light Brand.',pic,x)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,ftr,pic,x,5)
 end
 
 def unit_study(event,name,bot,weapon=nil)
@@ -11025,7 +11046,7 @@ bot.command([:sort,:list]) do |event, *args|
   end
   event.channel.send_temporary_message('Calculating data, please wait...',10)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
-  f=[0,0,0,0,0,0,0,0]
+  f=[0,0,0,0,0,0,0,0,0]
   supernatures=[]
   for i in 0...args.length # find stat names, retain the order in which they're listed.
     supernatures.push('+HP') if ['hpboon','healthboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
@@ -11045,7 +11066,8 @@ bot.command([:sort,:list]) do |event, *args|
     v=4 if ['def','defense','defence','defensive','defencive'].include?(args[i].downcase)
     v=5 if ['res','resistance'].include?(args[i].downcase)
     v=6 if ['bst','base','total'].include?(args[i].downcase)
-    v=7 if ['chill','frostbite','freeze','cold','frz','frzprotect','lower','lowerdefres','lowerdefenseresistance','lowerdef'].include?(args[i].downcase)
+    v=7 if ['chill','frostbite','freeze','cold','frz','antifreeze','antifrz','frzprotect','lower','lowerdefres','lowerdefenseresistance','lowerdefenceresistance','lowerdef','lowerres','loweres'].include?(args[i].downcase)
+    v=8 if ['photon','light','shine','defresdifference','defenseresistancedifference','defenceresistancedifference','defresdiff','defenseresistancediff','defenceresistancediff'].include?(args[i].downcase)
     if v>0 && !f.include?(v)
       v2=0
       for i2 in 0...f.length
@@ -11085,13 +11107,14 @@ bot.command([:sort,:list]) do |event, *args|
   for i in 0...k.length # remove any units who don't have known stats yet
     k[i]=nil if k[i][5].nil? || k[i][5].max.zero?
   end
-  s=['','HP','Attack','Speed','Defense','Resistance','BST','FrzProtect']
+  s=['','HP','Attack','Speed','Defense','Resistance','BST','FrzProtect','Photon Points']
   k.compact!
   k=k.reject {|q| find_unit(q[0],event)<0}
-  if f.include?(6) || f.include?(7)
+  if f.include?(6) || f.include?(7) || f.include?(8)
     for i in 0...k.length
       k[i][5][5]=k[i][5][0]+k[i][5][1]+k[i][5][2]+k[i][5][3]+k[i][5][4]
       k[i][5][6]=[k[i][5][3],k[i][5][4]].min
+      k[i][5][7]=k[i][5][3]-k[i][5][4]
     end
   end
   t=0
@@ -11104,7 +11127,7 @@ bot.command([:sort,:list]) do |event, *args|
     end
   end
   k=k.reject{|q| !q[13][0].nil?} if t>0 || b>0
-  k.sort! {|b,a| (supersort(a,b,5,f[0]-1)) == 0 ? ((supersort(a,b,5,f[1]-1)) == 0 ? ((supersort(a,b,5,f[2]-1)) == 0 ? ((supersort(a,b,5,f[3]-1)) == 0 ? ((supersort(a,b,5,f[4]-1)) == 0 ? ((supersort(a,b,5,f[5]-1)) == 0 ? ((supersort(a,b,5,f[6]-1)) == 0 ? (supersort(a,b,0)) : (supersort(a,b,5,f[6]-1))) : (supersort(a,b,5,f[5]-1))) : (supersort(a,b,5,f[4]-1))) : (supersort(a,b,5,f[3]-1))) : (supersort(a,b,5,f[2]-1))) : (supersort(a,b,5,f[1]-1))) : (supersort(a,b,5,f[0]-1))}
+  k.sort! {|b,a| (supersort(a,b,5,f[0]-1)) == 0 ? ((supersort(a,b,5,f[1]-1)) == 0 ? ((supersort(a,b,5,f[2]-1)) == 0 ? ((supersort(a,b,5,f[3]-1)) == 0 ? ((supersort(a,b,5,f[4]-1)) == 0 ? ((supersort(a,b,5,f[5]-1)) == 0 ? ((supersort(a,b,5,f[6]-1)) == 0 ? ((supersort(a,b,5,f[7]-1)) == 0 ? (supersort(a,b,0)) : (supersort(a,b,5,f[7]-1))) : (supersort(a,b,5,f[6]-1))) : (supersort(a,b,5,f[5]-1))) : (supersort(a,b,5,f[4]-1))) : (supersort(a,b,5,f[3]-1))) : (supersort(a,b,5,f[2]-1))) : (supersort(a,b,5,f[1]-1))) : (supersort(a,b,5,f[0]-1))}
   m="Please note that the stats listed are for neutral-nature units without stat-affecting skills.\n"
   if f.include?(2)
     m="#{m}The Strength/Magic stat also does not account for weapon might.\n"
@@ -11140,7 +11163,15 @@ bot.command([:sort,:list]) do |event, *args|
         sfn='(+) ' if [1,5,10].include?(k[i][4][f[j]-1])
         sfn='(-) ' if [2,6,11].include?(k[i][4][f[j]-1])
       end
-      ls.push("#{k[i][5][f[j]-1]} #{sfn}#{sf}") if sf.length>0
+      if k[i][5][f[j]-1]<0 && sf.length>0
+        k[i][5][f[j]-1]=0-k[i][5][f[j]-1]
+        sf="Anti#{sf[0,1].downcase}#{sf[1,sf.length-1]}"
+        ls.push("#{k[i][5][f[j]-1]} #{sfn}#{sf}")
+      elsif f[j]==8 && k[i][5][f[j]-1]>=5
+        ls.push("*#{k[i][5][f[j]-1]} #{sfn}#{sf}*") if sf.length>0
+      else
+        ls.push("#{k[i][5][f[j]-1]} #{sfn}#{sf}") if sf.length>0
+      end
     end
     m2.push("#{'~~' if !k[i][13][0].nil?}**#{k[i][0]}** - #{ls.join(', ')}#{'~~' if !k[i][13][0].nil?}")
   end
@@ -11151,8 +11182,10 @@ bot.command([:sort,:list]) do |event, *args|
   elsif (f.include?(1) || f.include?(2) || f.include?(3) || f.include?(4) || f.include?(5)) && m2.join("\n").include?("(-)")
     m="#{m}\n(-) marks units for whom a bane would decrease a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.\n"
   end
-  if f.include?(7)
-    m="#{m}\nThe order of units listed here can also be affected by natures if a unit's Defense and Resistance are quite close.\n"
+  if f.include?(7) || f.include?(8)
+    m="#{m}\nFrzProtect is the lower of the units' Defense and Resistance stats, used by dragonstones when attacking ranged units and by Felicia's Plate all the time." if f.include?(7)
+    m="#{m}\nLight Brand deals +7 damage to units with at least 5 Photon Points." if f.include?(8)
+    m="#{m}\nThe order of units listed here can be affected by natures that affect a unit's Defense and/or Resistance.\n"
   end
   if "#{m}\n#{m2.join("\n")}".length>2000 && !safe_to_spam?(event)
     event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
