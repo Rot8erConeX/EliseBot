@@ -2638,6 +2638,9 @@ end
 
 def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays stats
   if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q)}
     for i in 0...name.length
       disp_stats(bot,name[i],weapon,event,ignore,skillstoo)
     end
@@ -4036,6 +4039,9 @@ end
 def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   name=['Robin(M)','Robin(F)'] if name=='Robin'
   if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q)}
     for i in 0...name.length
       disp_unit_skills(bot,name[i],event,chain,(name.length>1))
     end
@@ -5930,6 +5936,29 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str="#{str}ura"
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Azura(Performing)','Azura(Winter)'],[str]]
+  elsif /(hector|kektor|heckutoru)/ =~ str1 && str1.include?('legend')
+    str='hector'
+    str='kektor' if str2.include?('kektor')
+    str='heckutoru' if str2.include?('heckutoru')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('legendary') || str2.include?('marquess') || str2.include?('ostia')
+      return [str,['Hector(Marquess)'],["legendary#{str}","#{str}legendary","marquess#{str}","#{str}marquess","ostia#{str}","#{str}ostia"]]
+    elsif str2.include?('brave') || str2.include?('cyl')
+      return [str,['Hector(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
+    end
+    return [str,['Hector(Marquess)','Hector(Brave)'],[str]]
+  elsif /(ike|aiku)/ =~ str1 && str1.include?('legend')
+    str='ike'
+    str='akiu' if str2.include?('aiku')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('legendary') || str2.include?('radiant') || str2.include?('rd') || str2.include?('vanguard')
+      return [str,['Ike(Vanguard)'],["legendary#{str}","#{str}legendary","radiant#{str}","#{str}radiant","rd#{str}","#{str}rd","vanguard#{str}","#{str}vanguard","radiantdawn#{str}","#{str}radiantdawn"]]
+    elsif str2.include?('brave') || str2.include?('cyl') || str2.include?('bh')
+      return [str,['Ike(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
+    end
+    return [str,['Ike(Vanguard)','Ike(Brave)'],[str]]
   elsif /(eirika|eirik|eiriku|erika)/ =~ str1
     str='eirik'
     str='eiriku' if str2.include?('eiriku')
@@ -6929,6 +6958,9 @@ end
 
 def calculate_effective_HP(event,name,bot,weapon=nil)
   if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q)}
     for i in 0...name.length
       calculate_effective_HP(event,name[i],bot,weapon)
     end
@@ -7129,6 +7161,9 @@ end
 
 def unit_study(event,name,bot,weapon=nil)
   if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q)}
     for i in 0...name.length
       unit_study(event,name[i],bot)
     end
@@ -7283,6 +7318,9 @@ end
 
 def heal_study(event,name,bot,weapon=nil)
   if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q)}
     for i in 0...name.length
       heal_study(event,name[i],bot,weapon)
     end
@@ -7525,6 +7563,9 @@ end
 
 def proc_study(event,name,bot,weapon=nil)
   if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q)}
     for i in 0...name.length
       proc_study(event,name[i],bot,weapon)
     end
@@ -7856,6 +7897,9 @@ end
 
 def phase_study(event,name,bot,weapon=nil)
   if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q)}
     for i in 0...name.length
       phase_study(event,name[i],bot,weapon)
     end
@@ -8186,6 +8230,9 @@ end
 def disp_art(event,name,bot,weapon=nil)
   name=['Robin(M)','Robin(F)'] if name=='Robin'
   if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q)}
     for i in 0...name.length
       disp_art(event,name[i],bot)
     end
@@ -8275,6 +8322,9 @@ end
 def learnable_skills(event,name,bot,weapon=nil)
   name=['Robin(M)','Robin(F)'] if name=='Robin'
   if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q)}
     for i in 0...name.length
       learnable_skills(event,name[i],bot)
     end
@@ -8397,6 +8447,9 @@ end
 def banner_list(event,name,bot,weapon=nil)
   name=['Robin(M)','Robin(F)'] if name=='Robin'
   if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q)}
     for i in 0...name.length
       banner_list(event,name[i],bot)
     end
@@ -8649,9 +8702,13 @@ def games_list(event,name,bot,weapon=nil)
   name='Robin' if name==['Robin(M)','Robin(F)'] || name==['Robin(F)','Robin(M)']
   name='Azura' if name==['Azura(Performing)','Azura(Winter)']
   name='Lucina' if name==['Lucina(Spring)','Lucina(Brave)']
+  name='Hector' if name==['Hector(Marquess)','Hector(Brave)']
   name='Lyn' if name==['Lyn(Bride)','Lyn(Brave)'] || name==['Lyn(Brave)','Lyn(Wind)'] || name==['Lyn(Bride)','Lyn(Valentines)']
   name=name[0].gsub('(M)','(F)') if name.is_a?(Array) && name.length==2 && name[0].gsub('(M)','').gsub('(F)','')!=name[0] && name[0].gsub('(M)','').gsub('(F)','')==name[0].gsub('(F)','').gsub('(M)','')
   if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q)}
     for i in 0...name.length
       games_list(event,name[i],bot)
     end
@@ -10410,6 +10467,9 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
     if !detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1).nil?
       x=detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1)
       unit=x[1]
+      g=get_markers(event)
+      u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+      unit=unit.reject{|q| !u.include?(q)}
     elsif find_unit(args.join(''),event)==-1
       event.respond "#{args.join(' ')} is not a unit name or an alias."
       return nil
