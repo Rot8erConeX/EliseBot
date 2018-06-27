@@ -12832,7 +12832,7 @@ bot.command(:snagstats) do |event, f, f2|
     event << "*GHB* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='GHB'}][1].length)} current members) - Any unit that can obtained via a Grand Hero Battle map."
     event << "*Legendaries* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Legendaries'}][1].length)} current members) - Any unit that gives a Legendary Hero Boost to blessed allies during specific seasons."
     event << "*Retro-Prfs* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro-Prfs'}][1].length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything."
-    event << "*Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can obtained via a Tempest Trials event."
+    event << "*Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can be obtained via a Tempest Trials event."
     display=false
     display=true if event.user.id==167657750971547648
     display=true if !event.server.nil? && !bot.user(167657750971547648).on(event.server.id).nil? && rand(100).zero?
