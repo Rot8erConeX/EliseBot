@@ -3969,6 +3969,17 @@ def unit_skills(name,event,justdefault=false,r=0)
     box2[i].uniq!
     sklz2[i].uniq!
   end
+  puts char[12].split(', ')[0].gsub('*','')
+  if char[12].split(', ')[0].gsub('*','')=='Hector'
+    if sklz2[0].length<3
+      sklz2[0].push('Silver Axe') if rarity==3
+      sklz2[0].push('**Silver Axe**') if rarity>3
+    end
+    sklz2[0].push('Some variation on **Armads**') if sklz2[0].length<4 && rarity>4
+    if sklz2[3].length.zero? && (sklz2[4].length.zero? || sklz2[5].length.zero?)
+      sklz2[3].push('Distant Counter')
+    end
+  end
   if justdefault
     for i in 0...6
       sklz2[i]=['~~none~~'] if sklz2[i].length.zero?
