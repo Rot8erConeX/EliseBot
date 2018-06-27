@@ -217,7 +217,38 @@ def nicknames_load() # laods the nickname list
   else
     b=[]
   end
-  @aliases=b.uniq
+  @aliases=b.reject{|q| q.nil? || q[1].nil?}.uniq
+  if @aliases[@aliases.length-1][1]<'Zephiel'
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt')
+      b=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt').each_line do |line|
+        b.push(eval line)
+      end
+    else
+      b=[]
+    end
+    nzzzzz=b.reject{|q| q.nil? || q[1].nil?}.uniq
+    if nzzzzz[nzzzzz.length-1][1]<'Zephiel'
+      puts 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt').each_line do |line|
+          b.push(eval line)
+        end
+      else
+        b=[]
+      end
+      nzzzzz=b.reject{|q| q.nil? || q[1].nil?}.uniq
+    else
+      puts 'Last backup of the alias list being used.'
+    end
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
+      for i in 0...nzzzzz.length
+        f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
+      end
+    }
+    puts 'Alias list has been restored from backup.'
+  end
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt').each_line do |line|
@@ -12778,7 +12809,7 @@ bot.command(:snagstats) do |event, f, f2|
     k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
     event << "Counting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
     event << ''
-    event << "**There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases.**"
+    event << "**There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases, covering #{@multi_aliases.map{|q| q[1]}.uniq.length} groups of units.**"
     m=@multi_aliases.map{|q| [q[1],0]}.uniq
     for i in 0...m.length
       m[i][1]+=@multi_aliases.reject{|q| q[1]!=m[i][0]}.length
