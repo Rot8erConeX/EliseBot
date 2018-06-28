@@ -4784,115 +4784,143 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   supernatures=supernatures.uniq
   # prune based on inputs
   matches1=[]
-  matches0=@units.map{|q| q}
-  if supernatures.include?('+HP') && supernatures.include?('-HP')
-    matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][0])}
-  elsif supernatures.include?('+HP')
-    matches0=matches0.reject{|q| ![1,5,10].include?(q[4][0])}
-  elsif supernatures.include?('-HP')
-    matches0=matches0.reject{|q| ![2,6,11].include?(q[4][0])}
+  g=get_markers(event)
+  matches0=@units.reject{|q| !has_any?(g, q[13][0])}
+  for i in 0...matches0.length
+    matches0[i][0]=matches0[i][0].gsub('Lavatain','Laevatein')
   end
-  if supernatures.include?('+Atk') && supernatures.include?('-Atk')
-    matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][1])}
-  elsif supernatures.include?('+Atk')
-    matches0=matches0.reject{|q| ![1,5,10].include?(q[4][1])}
-  elsif supernatures.include?('-Atk')
-    matches0=matches0.reject{|q| ![2,6,11].include?(q[4][1])}
-  end
-  if supernatures.include?('+Spd') && supernatures.include?('-Spd')
-    matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][2])}
-  elsif supernatures.include?('+Spd')
-    matches0=matches0.reject{|q| ![1,5,10].include?(q[4][2])}
-  elsif supernatures.include?('-Spd')
-    matches0=matches0.reject{|q| ![2,6,11].include?(q[4][2])}
-  end
-  if supernatures.include?('+Def') && supernatures.include?('-Def')
-    matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][3])}
-  elsif supernatures.include?('+Def')
-    matches0=matches0.reject{|q| ![1,5,10].include?(q[4][3])}
-  elsif supernatures.include?('-Def')
-    matches0=matches0.reject{|q| ![2,6,11].include?(q[4][3])}
-  end
-  if supernatures.include?('+Res') && supernatures.include?('-Res')
-    matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][4])}
-  elsif supernatures.include?('+Res')
-    matches0=matches0.reject{|q| ![1,5,10].include?(q[4][4])}
-  elsif supernatures.include?('-Res')
-    matches0=matches0.reject{|q| ![2,6,11].include?(q[4][4])}
-  end
-  if colors.length>0 && weapons.length>0
-    matches1=matches0.reject{|q| !colors.include?(q[1][0]) || !weapons.include?(q[1][1])}
-  elsif colors.length>0
-    matches1=matches0.reject{|q| !colors.include?(q[1][0])}
-  elsif weapons.length>0
-    matches1=matches0.reject{|q| !weapons.include?(q[1][1])}
+  if supernatures.length.zero? && colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && movement.length.zero? && genders.length.zero? && games.length.zero? && group.length.zero?
+    return matches0.map{|q| q}.uniq if mode==3
+    matches5=matches0.map{|q| q}.sort {|a,b| a[0].downcase <=> b[0].downcase}.uniq
   else
-    matches1=matches0.map{|q| q}
-  end
-  if color_weapons.length>0
-    matches1=[] if matches1==matches0
-    for i in 0...matches0.length
-      for j in 0...color_weapons.length
-        matches1.push(matches0[i]) if matches0[i][1][0]==color_weapons[j][0] && matches0[i][1][1]==color_weapons[j][1]
-      end
+    if supernatures.include?('+HP') && supernatures.include?('-HP')
+      matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][0])}
+    elsif supernatures.include?('+HP')
+      matches0=matches0.reject{|q| ![1,5,10].include?(q[4][0])}
+    elsif supernatures.include?('-HP')
+      matches0=matches0.reject{|q| ![2,6,11].include?(q[4][0])}
     end
-  end
-  for i in 0...color_weapons.length
-    colors.push(color_weapons[i][0])
-  end
-  matches1=matches1.uniq
-  matches2=[]
-  if movement.length>0
-    matches2=matches1.reject{|q| !movement.include?(q[3])}
-  else
-    matches2=matches1.map{|q| q}
-  end
-  matches3=[]
-  if genders.length>0
-    matches3=matches2.reject{|q| !genders.include?(q[10])}
-  else
-    matches3=matches2.map{|q| q}
-  end
-  matches4=[]
-  if games.length>0
-    for i in 0...matches3.length
-      for j in 0...games.length
-        if matches3[i][11].map{|q| q.downcase}.include?(games[j].downcase)
-          matches4.push(matches3[i])
-        elsif matches3[i][11].map{|q| q.downcase.gsub('(a)','')}.include?(games[j].downcase)
-          matches3[i][0]="#{matches3[i][0]} *[Amiibo]*"
-          matches4.push(matches3[i])
+    if supernatures.include?('+Atk') && supernatures.include?('-Atk')
+      matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][1])}
+    elsif supernatures.include?('+Atk')
+      matches0=matches0.reject{|q| ![1,5,10].include?(q[4][1])}
+    elsif supernatures.include?('-Atk')
+      matches0=matches0.reject{|q| ![2,6,11].include?(q[4][1])}
+    end
+    if supernatures.include?('+Spd') && supernatures.include?('-Spd')
+      matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][2])}
+    elsif supernatures.include?('+Spd')
+      matches0=matches0.reject{|q| ![1,5,10].include?(q[4][2])}
+    elsif supernatures.include?('-Spd')
+      matches0=matches0.reject{|q| ![2,6,11].include?(q[4][2])}
+    end
+    if supernatures.include?('+Def') && supernatures.include?('-Def')
+      matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][3])}
+    elsif supernatures.include?('+Def')
+      matches0=matches0.reject{|q| ![1,5,10].include?(q[4][3])}
+    elsif supernatures.include?('-Def')
+      matches0=matches0.reject{|q| ![2,6,11].include?(q[4][3])}
+    end
+    if supernatures.include?('+Res') && supernatures.include?('-Res')
+      matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][4])}
+    elsif supernatures.include?('+Res')
+      matches0=matches0.reject{|q| ![1,5,10].include?(q[4][4])}
+    elsif supernatures.include?('-Res')
+      matches0=matches0.reject{|q| ![2,6,11].include?(q[4][4])}
+    end
+    if colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && movement.length.zero? && genders.length.zero? && games.length.zero? && group.length.zero?
+      return matches0.map{|q| q}.uniq if mode==3
+      matches5=matches0.map{|q| q}.sort {|a,b| a[0].downcase <=> b[0].downcase}.uniq
+    else
+      if colors.length>0 && weapons.length>0
+        matches1=matches0.reject{|q| !colors.include?(q[1][0]) || !weapons.include?(q[1][1])}
+      elsif colors.length>0
+        matches1=matches0.reject{|q| !colors.include?(q[1][0])}
+      elsif weapons.length>0
+        matches1=matches0.reject{|q| !weapons.include?(q[1][1])}
+      else
+        matches1=matches0.map{|q| q}
+      end
+      if color_weapons.length>0
+        matches1=[] if matches1==matches0
+        for i in 0...matches0.length
+          for j in 0...color_weapons.length
+            matches1.push(matches0[i]) if matches0[i][1][0]==color_weapons[j][0] && matches0[i][1][1]==color_weapons[j][1]
+          end
+        end
+      end
+      for i in 0...color_weapons.length
+        colors.push(color_weapons[i][0])
+      end
+      matches1=matches1.uniq
+      if movement.length.zero? && genders.length.zero? && games.length.zero? && group.length.zero?
+        return matches1.map{|q| q}.uniq if mode==3
+        matches5=matches1.map{|q| q}.sort {|a,b| a[0].downcase <=> b[0].downcase}.uniq
+      else
+        matches2=[]
+        if movement.length>0
+          matches2=matches1.reject{|q| !movement.include?(q[3])}
+        else
+          matches2=matches1.map{|q| q}
+        end
+        if genders.length.zero? && games.length.zero? && group.length.zero?
+          return matches2.map{|q| q} if mode==3
+          matches5=matches2.map{|q| q}.sort {|a,b| a[0].downcase <=> b[0].downcase}.uniq
+        else
+          matches3=[]
+          if genders.length>0
+            matches3=matches2.reject{|q| !genders.include?(q[10])}
+          else
+            matches3=matches2.map{|q| q}
+          end
+          if games.length.zero? && group.length.zero?
+            return matches3.map{|q| q}.uniq if mode==3
+            matches5=matches3.map{|q| q}.sort {|a,b| a[0].downcase <=> b[0].downcase}.uniq
+          else
+            matches4=[]
+            if games.length>0
+              for i in 0...matches3.length
+                for j in 0...games.length
+                  if matches3[i][11].map{|q| q.downcase}.include?(games[j].downcase)
+                    matches4.push(matches3[i])
+                  elsif matches3[i][11].map{|q| q.downcase.gsub('(a)','')}.include?(games[j].downcase)
+                    matches3[i][0]="#{matches3[i][0]} *[Amiibo]*"
+                    matches4.push(matches3[i])
+                  end
+                end
+              end
+            else
+              matches4=matches3.map{|q| q}
+            end
+            matches4=matches4.uniq
+            if group.length.zero?
+              return matches4.map{|q| q}.uniq if mode==3
+              matches5=matches4.map{|q| q}.sort {|a,b| a[0].downcase <=> b[0].downcase}.uniq
+            else
+              matches5=[]
+              if group.length>0
+                for j in 0...group.length
+                  gg=get_group(group[j][0],event)
+                  for i in 0...matches4.length
+                    matches5.push(matches4[i]) if gg[1].include?(matches4[i][0])
+                  end
+                end
+              else
+                matches5=matches4.map{|q| q}
+              end
+              matches5=matches5.uniq
+              matches5.compact!
+              matches5=matches5.sort {|a,b| a[0].downcase <=> b[0].downcase}
+            end
+          end
         end
       end
     end
-  else
-    matches4=matches3.map{|q| q}
   end
-  matches4=matches4.uniq
-  matches5=[]
-  if group.length>0
-    for j in 0...group.length
-      gg=get_group(group[j][0],event)
-      for i in 0...matches4.length
-        matches5.push(matches4[i]) if gg[1].include?(matches4[i][0])
-      end
-    end
-  else
-    matches5=matches4.map{|q| q}
-  end
-  matches5=[] if matches5==@units && unitz.length>0
-  if unitz.length>0
-    for i in 0...unitz.length
-      matches5.push(@units[find_unit(unitz[i].downcase,event)])
-    end
-  end
-  matches5=matches5.uniq
-  g=get_markers(event)
-  matches5=matches5.reject {|a| !has_any?(g, a[13][0])}.compact
   for i in 0...matches5.length
     matches5[i][0]=matches5[i][0].gsub('Lavatain','Laevatein')
   end
-  matches5=matches5.sort {|a,b| a[0].downcase <=> b[0].downcase}
+  return matches5.map{|q| q}.uniq if mode==3
   if mode<2
     if (weapons==['Blade'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.length>0 && color_weapons.map{|q| q[1]}.reject{|q| q=='Blade'}.length<=0 && weapons.length<=0 && colors.length<=0)
       # Blades are the only type requested but no other restrictions are given
@@ -4920,11 +4948,12 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
       matches5=split_list(event,matches5,['Infantry','Armor','Flier','Cavalry'],3) unless matches5.map{|q| q[0]}.include?('- - -')
     end
   end
-  if matches5.length==@units.reject{|q| find_unit(q[0],event)<0}.compact.length && !(args.nil? || args.length.zero?) && !safe_to_spam?(event) && mode != 3
+  g=get_markers(event)
+  if matches5.length==@units.reject{|q| has_any?(g, q[13][0])}.compact.length && !(args.nil? || args.length.zero?) && !safe_to_spam?(event) && mode != 3
     event.respond 'Your request is gibberish.' if ['unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
     return -1
   elsif mode==3
-    return [matches5,colors]
+    return matches5
   elsif matches5.length.zero?
     event.respond 'There were no units that matched your request.' unless paired
     return -2
@@ -11053,7 +11082,7 @@ bot.command([:sort,:list]) do |event, *args|
     event.respond 'The alias list has been sorted alphabetically'
     return nil
   end
-  event.channel.send_temporary_message('Calculating data, please wait...',10)
+  event.channel.send_temporary_message('Calculating data, please wait...',3)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   f=[0,0,0,0,0,0,0,0,0]
   supernatures=[]
@@ -11109,10 +11138,16 @@ bot.command([:sort,:list]) do |event, *args|
     f.push(4) unless f.include?(4)
     f.push(5) unless f.include?(5)
   end
-  k2=find_in_units(event,2,false,true) # Narrow the list of units down based on the defined parameters
+  k2=find_in_units(event,3,false,true) # Narrow the list of units down based on the defined parameters
   event.channel.send_temporary_message('Units found, sorting now...',3)
-  k=k2.reject{|q| find_unit(q[0],event)<0} if k2.is_a?(Array)
-  k=@units.reject{|q| find_unit(q[0],event)<0}.sort{|a,b| a[0]<=>b[0]} unless k2.is_a?(Array)
+  g=get_markers(event)
+  u=@units.map{|q| q}
+  k=k2.reject{|q| !has_any?(g, q[13][0])}.uniq if k2.is_a?(Array)
+  k=u.reject{|q| !has_any?(g, q[13][0])}.sort{|a,b| a[0]<=>b[0]}.uniq unless k2.is_a?(Array)
+  if k.length>=u.reject{|q| !has_any?(g, q[13][0])}.length && !safe_to_spam?(event)
+    event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
+    return nil
+  end
   for i in 0...k.length # remove any units who don't have known stats yet
     k[i]=nil if k[i][5].nil? || k[i][5].max.zero?
   end
@@ -11209,21 +11244,21 @@ end
 
 bot.command([:average,:mean]) do |event, *args|
   return nil if overlap_prevent(event)
-  event.channel.send_temporary_message('Calculating data, please wait...',5)
+  event.channel.send_temporary_message('Calculating data, please wait...',2)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   f2=[0,0,0,0,0,0,0]
   k22=find_in_units(event,3) # Narrow the list of units down based on the defined parameters
-  colorz=k22[1]
-  k22=k22[0]
-  k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
-  k222=@units.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
+  g=get_markers(event)
+  k222=k22.reject{|q| !has_any?(g, q[13][0])} if k22.is_a?(Array)
+  k222=@units.reject{|q| !has_any?(g, q[13][0])} unless k22.is_a?(Array)
   k222=k222.reject{|q| q[5][0].nil? || q[5][0].zero?}
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
-  event.channel.send_temporary_message('Units found, finding average stats now...',5)
+  event.channel.send_temporary_message('Units found, finding average stats now...',2)
+  u=@units.map{|q| q}
   for i2 in 0...k222.length
-    ccz.push(unit_color(event,find_unit(k222[i2][0],event),k222[i2][0],1))
+    ccz.push(unit_color(event,u.find_index{|q| q[0]==k22[i2][0]},k222[i2][0],1))
     f2[1]+=k222[i2][5][0]
     f2[2]+=k222[i2][5][1]
     f2[3]+=k222[i2][5][2]
@@ -11241,22 +11276,22 @@ end
 
 bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
   return nil if overlap_prevent(event)
-  event.channel.send_temporary_message('Calculating data, please wait...',5)
+  event.channel.send_temporary_message('Calculating data, please wait...',2)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   k22=find_in_units(event,3) # Narrow the list of units down based on the defined parameters
-  colorz=k22[1]
-  k22=k22[0]
-  k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
-  k222=@units.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
+  g=get_markers(event)
+  k222=k22.reject{|q| !has_any?(g, q[13][0])} if k22.is_a?(Array)
+  k222=@units.reject{|q| !has_any?(g, q[13][0])} unless k22.is_a?(Array)
   k222=k222.reject{|q| q[5][0].nil? || q[5][0].zero?}
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
-  event.channel.send_temporary_message('Units found, finding highest stats now...',5)
+  event.channel.send_temporary_message('Units found, finding highest stats now...',2)
   hstats=[[0,[]],[0,[]],[0,[]],[0,[]],[0,[]],[0,[]]]
+  u=@units.map{|q| q}
   for i in 0...k222.length
-    d=@units[find_unit(k222[i][0],event)]
-    ccz.push(unit_color(event,find_unit(k222[i2][0],event),k222[i2][0],1))
+    d=u[u.find_index{|q| q[0]==k22[i][0]}]
+    ccz.push(unit_color(event,u.find_index{|q| q[0]==k22[i][0]},k222[i][0],1))
     for j in 0...6
       stz=d[5][j-1]
       stz=d[5][0]+d[5][1]+d[5][2]+d[5][3]+d[5][4] if j.zero?
@@ -11288,22 +11323,22 @@ end
 
 bot.command([:worstamong,:worstin,:worststats,:loweststats]) do |event, *args|
   return nil if overlap_prevent(event)
-  event.channel.send_temporary_message('Calculating data, please wait...',5)
+  event.channel.send_temporary_message('Calculating data, please wait...',2)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   k22=find_in_units(event,3) # Narrow the list of units down based on the defined parameters
-  colorz=k22[1]
-  k22=k22[0]
-  k222=k22.reject{|q| find_unit(q[0],event)<0} if k22.is_a?(Array)
-  k222=@units.reject{|q| find_unit(q[0],event)<0} unless k22.is_a?(Array)
+  g=get_markers(event)
+  k222=k22.reject{|q| !has_any?(g, q[13][0])} if k22.is_a?(Array)
+  k222=@units.reject{|q| !has_any?(g, q[13][0])} unless k22.is_a?(Array)
   k222=k222.reject{|q| q[5][0].nil? || q[5][0].zero?}
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
-  event.channel.send_temporary_message('Units found, finding lowest stats now...',5)
+  event.channel.send_temporary_message('Units found, finding lowest stats now...',2)
   hstats=[[1000,[]],[1000,[]],[1000,[]],[1000,[]],[1000,[]],[1000,[]]]
+  u=@units.map{|q| q}
   for i in 0...k222.length
-    d=@units[find_unit(k222[i][0],event)]
-    ccz.push(unit_color(event,find_unit(k222[i2][0],event),k222[i2][0],1))
+    d=u[u.find_index{|q| q[0]==k22[i][0]}]
+    ccz.push(unit_color(event,u.find_index{|q| q[0]==k22[i][0]},k222[i][0],1))
     for j in 0...6
       stz=d[5][j-1]
       stz=d[5][0]+d[5][1]+d[5][2]+d[5][3]+d[5][4] if j.zero?
