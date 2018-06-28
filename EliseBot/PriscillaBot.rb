@@ -10408,11 +10408,14 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     checkstr=checkstr.gsub("<:#{k[i].name}:#{k[i].id}>",k[i].name)
   end
   unt=@units[find_unit(unit,event)]
+  checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
+  cck=nil
+  cck=unt[12].split(', ')[1][0,1].downcase if unt[12].split(', ').length>1
   if find_skill(checkstr,event,false,true)>=0
     event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nThat is the name of a skill, and I do not want confusion when people in this server attempt `FEH!#{newname}`"
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** #{newname} is a skill name.")
     return nil
-  elsif checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'').length<=1 && event.user.id != 167657750971547648
+  elsif checkstr2.length<=1 && checkstr2 != cck && event.user.id != 167657750971547648
     event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nOne need look no farther than BLucina and BLyn to understand why single-letter alias differentiation is a bad idea."
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Single-letter differentiation.")
     return nil
