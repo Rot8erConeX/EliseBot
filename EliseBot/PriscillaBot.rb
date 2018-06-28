@@ -13367,6 +13367,8 @@ def disp_current_events(mode=0)
         n="Illusory Dungeon: #{n}"
       elsif c2[i][1]=='Update'
         n="#{n} Update"
+      elsif c2[i][1]=='Orb Promo'
+        n="#{c2[i][1]} (#{n})"
       else
         n="#{n} (#{c2[i][1]})"
       end
@@ -13405,10 +13407,15 @@ def disp_current_events(mode=0)
           str2="#{str2} - waiting until Battle #{t4/2+1}"
         elsif t2/(60*60)>1
           str2="#{str2} - #{(t2/(60*60)).floor} hours remain in Battle #{t4/2+1}"
+          str2="#{str2} (Round #{(22-(t2/(60*60)).floor/2).floor} currently ongoing)"
         elsif t2/60>1
           str2="#{str2} - #{(t2/60).floor} minutes remain in Battle #{t4/2+1}"
+          str2="#{str2} (Round #{(22-(t2/(60*60)).floor/2).floor} currently ongoing)"
         elsif t2>1
-          str2="#{str2} - #{t2.floor} minutes remain in Battle #{t4/2+1}"
+          str2="#{str2} - #{t2.floor} seconds remain in Battle #{t4/2+1}"
+          str2="#{str2} (Round #{(22-(t2/(60*60)).floor/2).floor} currently ongoing)"
+        elsif t2.floor<=0
+          str2="#{str2} - waiting until Battle #{t4/2+2}"
         end
       elsif c2[i][1]=='Voting Gauntlet' && mode>0
         t4=c2[i][2][0].split('/').map{|q| q.to_i}
@@ -13426,7 +13433,7 @@ def disp_current_events(mode=0)
         elsif t2/60>1
           str2="#{str2} - #{(t2/60).floor} minutes remain in Round #{t4/2+1}"
         elsif t2>1
-          str2="#{str2} - #{t2.floor} minutes remain in Round #{t4/2+1}"
+          str2="#{str2} - #{t2.floor} seconds remain in Round #{t4/2+1}"
         elsif t4/2<2
           str2="#{str2} - waiting until Round #{t4/2+2}"
         else
