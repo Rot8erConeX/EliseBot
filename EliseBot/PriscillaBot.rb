@@ -3388,7 +3388,9 @@ def disp_skill(bot,name,event,ignore=false)
     str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
   else
     xcolor=0xFDDC7E
-    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/skills/#{skill[0].gsub(' ','_').gsub('/','_').gsub('!','')}.png?raw=true"
+    sklimg=skill[0].gsub(' ','_').gsub('/','_').gsub('!','')
+    sklimg="Squad_Ace_#{"ABCDE"["ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(skill[0][10,1])[0].length%5,1]}_#{skill[0][12,skill[0].length-12]}" if skill[0][0,10]=='Squad Ace '
+    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/skills/#{sklimg}.png?raw=true"
     if " #{event.message.text.downcase} ".include?(' refinement ') || " #{event.message.text.downcase} ".include?(' refinements ') || " #{event.message.text.downcase} ".include?(' (w) ')
       s=skill[0].gsub('/','_').split(' ')
       s[s.length-1]='W' if s[s.length-1].length<2
@@ -10409,6 +10411,10 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   if find_skill(checkstr,event,false,true)>=0
     event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nThat is the name of a skill, and I do not want confusion when people in this server attempt `FEH!#{newname}`"
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** #{newname} is a skill name.")
+    return nil
+  elsif checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'').length<=1 && event.user.id != 167657750971547648
+    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nOne need look no farther than BLucina and BLyn to understand why single-letter alias differentiation is a bad idea."
+    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Single-letter differentiation.")
     return nil
   elsif unt[0]=="Odin" && checkstr.downcase.include?("owain")
     event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nYes, the two are the same character, but eventually Swordmaster Owain will join the game, and this alias will conflict."
