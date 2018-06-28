@@ -5090,137 +5090,152 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     tmp[i][4]='Passive(W)'
     all_skills.push(tmp[i])
   end
-  if skill_types.length>0
-    for i in 0...all_skills.length
-      for j in 0...skill_types.length
-        matches0.push(all_skills[i]) if all_skills[i][11].split(', ').include?(skill_types[j])
-      end
-    end
+  if skill_types.length.zero? && colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && assists.length.zero? && specials.length.zero? && passives.length.zero? && weapon_subsets.length.zero? && passive_subsets.length.zero?
+    matches3=all_skills.map{|q| q}.uniq
   else
-    matches0=@skills.map{|q| q}
-  end
-  # weapon-only inputs
-  matches1=[]
-  cwc=false
-  if colors.length>0 && weapons.length>0
-    for i in 0...matches0.length
-      for j in 0...weapons.length
-        for j2 in 0...colors.length
-          matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(weapons[j]) && matches0[i][11].split(', ').include?(colors[j])
+    if skill_types.length>0
+      for i in 0...all_skills.length
+        for j in 0...skill_types.length
+          matches0.push(all_skills[i]) if all_skills[i][11].split(', ').include?(skill_types[j])
         end
       end
+    else
+      matches0=@skills.map{|q| q}
     end
-  elsif colors.length>0
-    for i in 0...matches0.length
-      for j in 0...colors.length
-        matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(colors[j])
+    # weapon-only inputs
+    if colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && assists.length.zero? && specials.length.zero? && passives.length.zero? && weapon_subsets.length.zero? && passive_subsets.length.zero?
+      matches3=matches0.map{|q| q}.uniq
+    else
+      skill_types.push('Weapon') unless colors.length.zero? && weapons.length.zero? && color_weapons.length.zero?
+      matches1=[]
+      cwc=false
+      if colors.length>0 && weapons.length>0
+        for i in 0...matches0.length
+          for j in 0...weapons.length
+            for j2 in 0...colors.length
+              matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(weapons[j]) && matches0[i][11].split(', ').include?(colors[j])
+            end
+          end
+        end
+      elsif colors.length>0
+        for i in 0...matches0.length
+          for j in 0...colors.length
+            matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(colors[j])
+          end
+        end
+      elsif weapons.length>0
+        for i in 0...matches0.length
+          for j in 0...weapons.length
+            matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(weapons[j])
+          end
+        end
+      elsif color_weapons.length>0
+        for i in 0...matches0.length
+          for j in 0...color_weapons.length
+            matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(color_weapons[j][1]) && matches0[i][11].split(', ').include?(color_weapons[j][0])
+          end
+        end
+        cwc=true
+      else
+        matches1=matches0.reject{|q| q[4]!='Weapon'}.map{|q| q}
       end
-    end
-  elsif weapons.length>0
-    for i in 0...matches0.length
-      for j in 0...weapons.length
-        matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(weapons[j])
-      end
-    end
-  elsif color_weapons.length>0
-    for i in 0...matches0.length
-      for j in 0...color_weapons.length
-        matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(color_weapons[j][1]) && matches0[i][11].split(', ').include?(color_weapons[j][0])
-      end
-    end
-    cwc=true
-  else
-    matches1=matches0.reject{|q| q[4]!='Weapon'}.map{|q| q}
-  end
-  if color_weapons.length>0 && !cwc
-    matches1=[] if matches1.reject{|q| !has_any?(g, q[13])}==all_skills.reject{|q| q[4]!='Weapon'}
-    for i in 0...all_skills.length
-      for j in 0...color_weapons.length
-        p1=all_skills[i][11]
-        matches1.push(all_skills[i]) if " #{p1},".include?(" #{color_weapons[j][0]},") && " #{p1},".include?(" #{color_weapons[j][1]},") && all_skills[i][4]=='Weapon'
-      end
-    end
-  end
-  # Specific types
-  matches2=matches1.map{|q| q}
-  if assists.length>0
-    for i in 0...matches0.length
-      for j in 0...assists.length
-        matches2.push(matches0[i]) if matches0[i][4]=='Assist' && matches0[i][11].split(', ').include?(assists[j])
-      end
-    end
-  else
-    for i in 0...matches0.length
-      matches2.push(matches0[i]) if matches0[i][4]=='Assist'
-    end
-  end
-  if specials.length>0
-    for i in 0...matches0.length
-      for j in 0...specials.length
-        matches2.push(matches0[i]) if matches0[i][4]=='Special' && matches0[i][11].split(', ').include?(specials[j])
-      end
-    end
-  else
-    for i in 0...matches0.length
-      matches2.push(matches0[i]) if matches0[i][4]=='Special'
-    end
-  end
-  if passives.length>0
-    for i in 0...matches0.length
-      matches2.push(matches0[i]) if matches0[i][4].include?('Passive(A)') && passives.include?('A')
-      matches2.push(matches0[i]) if matches0[i][4].include?('Passive(B)') && passives.include?('B')
-      matches2.push(matches0[i]) if matches0[i][4].include?('Passive(C)') && passives.include?('C')
-      matches2.push(matches0[i]) if matches0[i][4].include?('Seal') && passives.include?('Seal')
-      matches2.push(matches0[i]) if matches0[i][4].include?('Passive(W)') && passives.include?('W')
-    end
-  else
-    for i in 0...matches0.length
-      matches2.push(matches0[i]) if matches0[i][11].split(', ').include?('Passive')
-    end
-  end
-  matches2=matches2.uniq
-  # subsets
-  matches3=[]
-  if weapon_subsets.length>0
-    for i in 0...matches2.length
-      for j in 0...weapon_subsets.length
-        if matches2[i][4]=='Weapon' && weapon_subsets[j]=='Pega-killer' && !weapon_subsets.include?('Effective')
-          matches3.push(matches2[i]) if matches2[i][5]=='Bow Users Only' || matches2[i][11].split(', ').include?(weapon_subsets[j])
-        elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?(weapon_subsets[j])
-          matches3.push(matches2[i])
-        elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(R)#{weapon_subsets[j]}")
-          matches2[i][0]="#{matches2[i][0]} *(+) All*"
-          matches3.push(matches2[i])
-        elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(E)#{weapon_subsets[j]}")
-          matches2[i][0]="#{matches2[i][0]} *(+) Effect*"
-          matches3.push(matches2[i])
+      if color_weapons.length>0 && !cwc
+        matches1=[] if matches1.reject{|q| !has_any?(g, q[13])}==all_skills.reject{|q| q[4]!='Weapon'}
+        for i in 0...all_skills.length
+          for j in 0...color_weapons.length
+            p1=all_skills[i][11]
+            matches1.push(all_skills[i]) if " #{p1},".include?(" #{color_weapons[j][0]},") && " #{p1},".include?(" #{color_weapons[j][1]},") && all_skills[i][4]=='Weapon'
+          end
         end
       end
-    end
-  elsif weapons.length>0 || colors.length>0 || color_weapons.length>0 || skill_types.include?('Weapon')
-    for i in 0...matches2.length
-      matches3.push(matches2[i]) if matches2[i][4]=='Weapon'
-    end
-  end
-  if assists.length>0 || skill_types.include?('Assist')
-    for i in 0...matches2.length
-      matches3.push(matches2[i]) if matches2[i][4]=='Assist'
-    end
-  end
-  if specials.length>0 || skill_types.include?('Special')
-    for i in 0...matches2.length
-      matches3.push(matches2[i]) if matches2[i][4]=='Special'
-    end
-  end
-  if passive_subsets.length>0
-    for i in 0...matches2.length
-      for j in 0...passive_subsets.length
-        matches3.push(matches2[i]) if (matches2[i][4].include?('Passive') || matches2[i][4]=='Seal') && matches2[i][11].split(', ').include?(passive_subsets[j])
+      # Specific types
+      matches2=matches1.map{|q| q}
+      if assists.length>0
+        for i in 0...matches0.length
+          for j in 0...assists.length
+            matches2.push(matches0[i]) if matches0[i][4]=='Assist' && matches0[i][11].split(', ').include?(assists[j])
+          end
+        end
+      else
+        for i in 0...matches0.length
+          matches2.push(matches0[i]) if matches0[i][4]=='Assist' && (skill_types.length.zero? || skill_types.include?('Assist'))
+        end
       end
-    end
-  elsif passives.length>0 || skill_types.include?('Passive')
-    for i in 0...matches2.length
-      matches3.push(matches2[i]) if matches2[i][4].include?('Passive') || matches2[i][4]=='Seal'
+      if specials.length>0
+        for i in 0...matches0.length
+          for j in 0...specials.length
+            matches2.push(matches0[i]) if matches0[i][4]=='Special' && matches0[i][11].split(', ').include?(specials[j])
+          end
+        end
+      else
+        for i in 0...matches0.length
+          matches2.push(matches0[i]) if matches0[i][4]=='Special' && (skill_types.length.zero? || skill_types.include?('Special'))
+        end
+      end
+      if passives.length>0
+        for i in 0...matches0.length
+          matches2.push(matches0[i]) if matches0[i][4].include?('Passive(A)') && passives.include?('A')
+          matches2.push(matches0[i]) if matches0[i][4].include?('Passive(B)') && passives.include?('B')
+          matches2.push(matches0[i]) if matches0[i][4].include?('Passive(C)') && passives.include?('C')
+          matches2.push(matches0[i]) if matches0[i][4].include?('Seal') && passives.include?('Seal')
+          matches2.push(matches0[i]) if matches0[i][4].include?('Passive(W)') && passives.include?('W')
+        end
+      else
+        for i in 0...matches0.length
+          matches2.push(matches0[i]) if matches0[i][11].split(', ').include?('Passive') && (skill_types.length.zero? || skill_types.include?('Passive'))
+        end
+      end
+      matches2=matches2.uniq
+      if weapon_subsets.length.zero? && passive_subsets.length.zero?
+        matches3=matches2.map{|q| q}.uniq
+      else
+        # subsets
+        matches3=[]
+        if weapon_subsets.length>0
+          for i in 0...matches2.length
+            for j in 0...weapon_subsets.length
+              if matches2[i][4]=='Weapon' && weapon_subsets[j]=='Inheritable'
+                matches3.push(matches2[i]) unless matches2[i][11].split(', ').include?('Prf')
+              elsif matches2[i][4]=='Weapon' && weapon_subsets[j]=='Pega-killer' && !weapon_subsets.include?('Effective')
+                matches3.push(matches2[i]) if matches2[i][5]=='Bow Users Only' || matches2[i][11].split(', ').include?(weapon_subsets[j])
+              elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?(weapon_subsets[j])
+                matches3.push(matches2[i])
+              elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(R)#{weapon_subsets[j]}")
+                matches2[i][0]="#{matches2[i][0]} *(+) All*"
+                matches3.push(matches2[i])
+              elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(E)#{weapon_subsets[j]}")
+                matches2[i][0]="#{matches2[i][0]} *(+) Effect*"
+                matches3.push(matches2[i])
+              end
+            end
+          end
+        elsif weapons.length>0 || colors.length>0 || color_weapons.length>0 || skill_types.include?('Weapon')
+          for i in 0...matches2.length
+            matches3.push(matches2[i]) if matches2[i][4]=='Weapon'
+          end
+        end
+        if assists.length>0 || skill_types.include?('Assist')
+          for i in 0...matches2.length
+            matches3.push(matches2[i]) if matches2[i][4]=='Assist'
+          end
+        end
+        if specials.length>0 || skill_types.include?('Special')
+          for i in 0...matches2.length
+            matches3.push(matches2[i]) if matches2[i][4]=='Special'
+          end
+        end
+        if passive_subsets.length>0
+          for i in 0...matches2.length
+            for j in 0...passive_subsets.length
+              matches3.push(matches2[i]) if (matches2[i][4].include?('Passive') || matches2[i][4]=='Seal') && matches2[i][11].split(', ').include?(passive_subsets[j])
+            end
+          end
+        elsif passives.length>0 || skill_types.include?('Passive')
+          for i in 0...matches2.length
+            matches3.push(matches2[i]) if matches2[i][4].include?('Passive') || matches2[i][4]=='Seal'
+          end
+        end
+      end
     end
   end
   g=get_markers(event)
@@ -5435,7 +5450,7 @@ def display_skills(event, mode)
       typesx=[]
       for i in 0...k.length
         unless k[i]=='- - -'
-          f=k[i].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron')
+          f=k[i].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade')
           f=f.split('/')[0] if sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}.nil?
           typesx.push(sklz[sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}])
         end
@@ -5466,7 +5481,7 @@ def display_skills(event, mode)
         typesx=[]
         for i2 in 0...p1[i].length
           unless p1[i][i2]=='- - -'
-            f=p1[i][i2].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron')
+            f=p1[i][i2].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade')
             f=f.split('/')[0] if sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}.nil?
             typesx.push(sklz[sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}])
           end
