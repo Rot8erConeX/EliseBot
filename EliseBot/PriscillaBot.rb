@@ -2685,7 +2685,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
-    name=name.reject{|q| !u.include?(q)}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
       disp_stats(bot,name[i],weapon,event,ignore,skillstoo)
     end
@@ -2795,6 +2795,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
     stat_skills_2=[]
     refinement=nil
   end
+  puts name
   w2=@skills[find_skill(weapon,event)]
   if w2[15].nil?
     refinement=nil
@@ -2958,6 +2959,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
     u40[0]='Robin (Shared stats)'
     w='*Tome*'
   end
+  puts u40[0]
   xcolor=unit_color(event,j,u40[0],0,mu)
   unless spec_wpn
     wl=weapon_legality(event,u40[0],weapon,refinement)
@@ -3024,7 +3026,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   for i in 0...flds.length
     flds[i][1]=flds[i][1].join("\n")
   end
-  if skillstoo && name != 'Robin' # when invoked any way except the main stats command, will also display the unit's top level skills
+  if skillstoo && u40[0]!='Robin (Shared stats)' # when invoked any way except the main stats command, will also display the unit's top level skills
     uskl=unit_skills(name,event)
     for i in 0...3
       if uskl[i][0].include?('**') && uskl[i]!=uskl[i].reject{|q| !q.include?('**')}
@@ -3047,12 +3049,12 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   img=pick_thumbnail(event,j,bot)
   img='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   xtype=1
-  xtype=-1 if skillstoo && name != 'Robin'
+  xtype=-1 if skillstoo && u40[0]!='Robin (Shared stats)'
   if skillstoo && mu && flds.length<=3
     flds.shift
   end
   create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}",xcolor,ftr,img,flds,xtype)
-  if skillstoo && name == 'Robin' # due to the two Robins having different skills, a second embed is displayed with both their skills
+  if skillstoo && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
     for i in 0...3
@@ -4096,7 +4098,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
-    name=name.reject{|q| !u.include?(q)}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
       disp_unit_skills(bot,name[i],event,chain,(name.length>1))
     end
@@ -7059,7 +7061,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
-    name=name.reject{|q| !u.include?(q)}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
       calculate_effective_HP(event,name[i],bot,weapon)
     end
@@ -7269,7 +7271,7 @@ def unit_study(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
-    name=name.reject{|q| !u.include?(q)}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
       unit_study(event,name[i],bot)
     end
@@ -7426,7 +7428,7 @@ def heal_study(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
-    name=name.reject{|q| !u.include?(q)}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
       heal_study(event,name[i],bot,weapon)
     end
@@ -7671,7 +7673,7 @@ def proc_study(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
-    name=name.reject{|q| !u.include?(q)}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
       proc_study(event,name[i],bot,weapon)
     end
@@ -8005,7 +8007,7 @@ def phase_study(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
-    name=name.reject{|q| !u.include?(q)}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
       phase_study(event,name[i],bot,weapon)
     end
@@ -8338,7 +8340,7 @@ def disp_art(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
-    name=name.reject{|q| !u.include?(q)}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
       disp_art(event,name[i],bot)
     end
@@ -8430,7 +8432,7 @@ def learnable_skills(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
-    name=name.reject{|q| !u.include?(q)}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
       learnable_skills(event,name[i],bot)
     end
@@ -8555,7 +8557,7 @@ def banner_list(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
-    name=name.reject{|q| !u.include?(q)}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
       banner_list(event,name[i],bot)
     end
@@ -8814,7 +8816,7 @@ def games_list(event,name,bot,weapon=nil)
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
-    name=name.reject{|q| !u.include?(q)}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
       games_list(event,name[i],bot)
     end
