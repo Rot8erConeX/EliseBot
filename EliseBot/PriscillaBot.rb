@@ -2795,7 +2795,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
     stat_skills_2=[]
     refinement=nil
   end
-  puts name
   w2=@skills[find_skill(weapon,event)]
   if w2[15].nil?
     refinement=nil
