@@ -5335,6 +5335,7 @@ end
 def display_units(event, mode)
   k=find_in_units(event,1)
   if k.is_a?(Array)
+    data_load()
     untz=@units.map{|q| q}
     k=k.map{|q| "#{'~~' if !['Laevatein','- - -'].include?(q) && !untz[untz.find_index{|q2| q2[0]==q.gsub(' *[Amiibo]*','')}][13][0].nil?}#{q}#{'~~' if !['Laevatein','- - -'].include?(q) && !untz[untz.find_index{|q2| q2[0]==q.gsub(' *[Amiibo]*','')}][13][0].nil?}"}
     if k.include?('- - -')
@@ -5443,6 +5444,7 @@ end
 
 def display_skills(event, mode)
   k=find_in_skills(event,1)
+  data_load()
   sklz=@skills.map{|q| q}
   if k.is_a?(Array)
     if k.include?('- - -')
