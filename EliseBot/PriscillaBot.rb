@@ -684,6 +684,7 @@ def safe_to_spam?(event) # determines whether or not it is safe to send extremel
   return true if event.channel.id==407149643923849218
   return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam') # it is safe to spam in any bot spam channel
   return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('command') # it is safe to spam in any bot spam channel
+  return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('channel') # it is safe to spam in any bot spam channel
   return true if event.channel.name.downcase.include?('elisebot')  # it is safe to spam in channels designed specifically for EliseBot
   return true if event.channel.name.downcase.include?('elise-bot')
   return true if event.channel.name.downcase.include?('elise_bot')
@@ -2958,7 +2959,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
     u40[0]='Robin (Shared stats)'
     w='*Tome*'
   end
-  puts u40[0]
   xcolor=unit_color(event,j,u40[0],0,mu)
   unless spec_wpn
     wl=weapon_legality(event,u40[0],weapon,refinement)
@@ -11591,7 +11591,7 @@ end
 bot.command(:invite) do |event, user|
   return nil if overlap_prevent(event)
   usr=event.user
-  txt="To invite me to your server: <https://goo.gl/HEuQK2>\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://orig00.deviantart.net/cd2d/f/2018/047/e/0/marketing___elise_by_rot8erconex-dbxj4mq.png"
+  txt="To invite me to your server: <https://goo.gl/HEuQK2>\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nTo follow my creator's development Twitter and learn of updates: <https://twitter.com/EliseBotDev>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://orig00.deviantart.net/cd2d/f/2018/047/e/0/marketing___elise_by_rot8erconex-dbxj4mq.png"
   user_to_name='you'
   unless user.nil?
     if /<@!?(?:\d+)>/ =~ user
@@ -11690,7 +11690,6 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   str="#{str}\nTime until tomorrow's reset: #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds"
   t2=Time.new(2017,2,2)-60*60
   t2=t-t2
-  puts "#{Time.at(t2).hour}:#{Time.at(t2).min}:#{Time.at(t2).sec}"
   date=(((t2.to_i/60)/60)/24)
   str="#{str}\nThe Arena season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete your daily Arena-related quests before then!" if date%7==4 && 15-t.hour>=0
   colors=['Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>',
