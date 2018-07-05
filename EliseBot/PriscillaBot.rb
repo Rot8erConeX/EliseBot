@@ -11011,7 +11011,6 @@ end
 
 bot.command([:find,:search]) do |event, *args|
   return nil if overlap_prevent(event)
-  event.channel.send_temporary_message('Calculating data, please wait...',5)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   metadata_load()
   mode=1
@@ -11029,10 +11028,13 @@ bot.command([:find,:search]) do |event, *args|
       event.respond "I'm not displaying all units *and* all skills!"
     end
   elsif ['unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
+    event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
     display_units(event, mode)
   elsif ['skill','skills'].include?(args[0].downcase)
+    event.channel.send_temporary_message('Calculating data, please wait...',(event.message.text.length/30).floor+1)
     display_skills(event, mode)
   else
+    event.channel.send_temporary_message('Calculating data, please wait...',(event.message.text.length/30).floor+2)
     p1=find_in_units(event,mode,true)
     p1=p1.map{|q| "#{'~~' if !["Laevatein","- - -"].include?(q) && !@units[find_unit(q,event,false,true)][13][0].nil?}#{q}#{'~~' if !["Laevatein","- - -"].include?(q) && !@units[find_unit(q,event,false,true)][13][0].nil?}"}
     p2=find_in_skills(event,mode,true,p1)
@@ -11100,7 +11102,7 @@ bot.command([:sort,:list]) do |event, *args|
     event.respond 'The alias list has been sorted alphabetically'
     return nil
   end
-  event.channel.send_temporary_message('Calculating data, please wait...',3)
+  event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   f=[0,0,0,0,0,0,0,0,0]
   supernatures=[]
@@ -11262,7 +11264,7 @@ end
 
 bot.command([:average,:mean]) do |event, *args|
   return nil if overlap_prevent(event)
-  event.channel.send_temporary_message('Calculating data, please wait...',2)
+  event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   f2=[0,0,0,0,0,0,0]
   k22=find_in_units(event,3) # Narrow the list of units down based on the defined parameters
@@ -11294,7 +11296,7 @@ end
 
 bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
   return nil if overlap_prevent(event)
-  event.channel.send_temporary_message('Calculating data, please wait...',2)
+  event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   k22=find_in_units(event,3) # Narrow the list of units down based on the defined parameters
   g=get_markers(event)
@@ -11341,7 +11343,7 @@ end
 
 bot.command([:worstamong,:worstin,:worststats,:loweststats]) do |event, *args|
   return nil if overlap_prevent(event)
-  event.channel.send_temporary_message('Calculating data, please wait...',2)
+  event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   k22=find_in_units(event,3) # Narrow the list of units down based on the defined parameters
   g=get_markers(event)
@@ -13229,7 +13231,7 @@ bot.message do |event|
       k=0
       k=event.server.id unless event.server.nil?
       if k==271642342153388034
-      elsif rand(100)<3
+      elsif rand(1000)<13
         puts 'responded to OwO'
         event.respond "What's this?"
       else
