@@ -11269,16 +11269,16 @@ bot.command([:average,:mean]) do |event, *args|
   f2=[0,0,0,0,0,0,0]
   k22=find_in_units(event,3) # Narrow the list of units down based on the defined parameters
   g=get_markers(event)
-  k222=k22.reject{|q| !has_any?(g, q[13][0])} if k22.is_a?(Array)
-  k222=@units.reject{|q| !has_any?(g, q[13][0])} unless k22.is_a?(Array)
-  k222=k222.reject{|q| q[5][0].nil? || q[5][0].zero?}
+  data_load()
+  k222=k22.reject{|q| !has_any?(g, q[13][0]) || q[5][0].nil? || q[5][0].to_i.zero?} if k22.is_a?(Array)
+  k222=@units.reject{|q| !has_any?(g, q[13][0]) || q[5][0].nil? || q[5][0].to_i.zero?} unless k22.is_a?(Array)
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
   event.channel.send_temporary_message('Units found, finding average stats now...',2)
   u=@units.map{|q| q}
   for i2 in 0...k222.length
-    ccz.push(unit_color(event,u.find_index{|q| q[0]==k22[i2][0]},k222[i2][0],1))
+    ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i2][0]},k222[i2][0],1))
     f2[1]+=k222[i2][5][0]
     f2[2]+=k222[i2][5][1]
     f2[3]+=k222[i2][5][2]
@@ -11300,9 +11300,9 @@ bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   k22=find_in_units(event,3) # Narrow the list of units down based on the defined parameters
   g=get_markers(event)
-  k222=k22.reject{|q| !has_any?(g, q[13][0])} if k22.is_a?(Array)
-  k222=@units.reject{|q| !has_any?(g, q[13][0])} unless k22.is_a?(Array)
-  k222=k222.reject{|q| q[5][0].nil? || q[5][0].zero?}
+  data_load()
+  k222=k22.reject{|q| !has_any?(g, q[13][0]) || q[5][0].nil? || q[5][0].to_i.zero?} if k22.is_a?(Array)
+  k222=@units.reject{|q| !has_any?(g, q[13][0]) || q[5][0].nil? || q[5][0].to_i.zero?} unless k22.is_a?(Array)
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
@@ -11310,8 +11310,8 @@ bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
   hstats=[[0,[]],[0,[]],[0,[]],[0,[]],[0,[]],[0,[]]]
   u=@units.map{|q| q}
   for i in 0...k222.length
-    d=u[u.find_index{|q| q[0]==k22[i][0]}]
-    ccz.push(unit_color(event,u.find_index{|q| q[0]==k22[i][0]},k222[i][0],1))
+    d=u[u.find_index{|q| q[0]==k222[i][0]}]
+    ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i][0]},k222[i][0],1))
     for j in 0...6
       stz=d[5][j-1]
       stz=d[5][0]+d[5][1]+d[5][2]+d[5][3]+d[5][4] if j.zero?
@@ -11347,9 +11347,9 @@ bot.command([:worstamong,:worstin,:worststats,:loweststats]) do |event, *args|
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   k22=find_in_units(event,3) # Narrow the list of units down based on the defined parameters
   g=get_markers(event)
-  k222=k22.reject{|q| !has_any?(g, q[13][0])} if k22.is_a?(Array)
-  k222=@units.reject{|q| !has_any?(g, q[13][0])} unless k22.is_a?(Array)
-  k222=k222.reject{|q| q[5][0].nil? || q[5][0].zero?}
+  data_load()
+  k222=k22.reject{|q| !has_any?(g, q[13][0]) || q[5][0].nil? || q[5][0].to_i.zero?} if k22.is_a?(Array)
+  k222=@units.reject{|q| !has_any?(g, q[13][0]) || q[5][0].nil? || q[5][0].to_i.zero?} unless k22.is_a?(Array)
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
@@ -11357,8 +11357,8 @@ bot.command([:worstamong,:worstin,:worststats,:loweststats]) do |event, *args|
   hstats=[[1000,[]],[1000,[]],[1000,[]],[1000,[]],[1000,[]],[1000,[]]]
   u=@units.map{|q| q}
   for i in 0...k222.length
-    d=u[u.find_index{|q| q[0]==k22[i][0]}]
-    ccz.push(unit_color(event,u.find_index{|q| q[0]==k22[i][0]},k222[i][0],1))
+    d=u[u.find_index{|q| q[0]==k222[i][0]}]
+    ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i][0]},k222[i][0],1))
     for j in 0...6
       stz=d[5][j-1]
       stz=d[5][0]+d[5][1]+d[5][2]+d[5][3]+d[5][4] if j.zero?
