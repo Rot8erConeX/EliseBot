@@ -50,7 +50,7 @@ bot.gateway.check_heartbeat_acks = false
 @summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,
                  341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,238770788272963585,297459718249512961,283833293894582272,
                  214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,347491426852143109,392557615177007104,295686580528742420,
-                 412303462764773376,442465051371372544,353997181193289728]
+                 412303462764773376,442465051371372544,353997181193289728,462100851864109056]
 @summon_rate=[0,0,3]
 @mods=[[0, 6, 7, 7, 8, 8], # this is a translation of the graphic displayed in the "growths" command.
        [0, 8, 8, 9,10,10],
@@ -466,7 +466,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
         lookout.push(eval line)
       end
     end
-    w=lookout.reject{|q| q[2]!='Banner'}.map{|q| q[0]}.sort
+    w=lookout.reject{|q| q[2]!='Banner' || q[0]=='Current'}.map{|q| q[0]}.sort
     create_embed(event,'Banner types','',0x40C0F0,nil,nil,triple_finish(w))
   elsif ['effhp','eff_hp'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows the effective HP data for the unit `name`.',0xD49F61)
@@ -13058,6 +13058,10 @@ bot.command(:reload, from: 167657750971547648) do |event|
   event.respond 'New data loaded.'
 end
 
+bot.command(:anemonte) do |event|
+  event.respond "<a:zeldawave:460815459487449088>"
+end
+
 def skill_data(legal_skills,all_skills,event,mode=0)
   str="**There are #{filler(legal_skills,all_skills,-1)} #{['skills','skill branches','skill trees'][mode]}, including:**"
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
@@ -13120,7 +13124,7 @@ bot.server_create do |event|
     metadata_load()
     @server_data[0][((event.server.id >> 22) % 4)] += 1
     metadata_save()
-    chn.send_message("I'm here to deliver the happiest of hellos - as well as data for heroes and skills in *Fire Emblem: Heroes*!  So, here I am!") rescue nil
+    chn.send_message("<a:zeldawave:464974581434679296> I'm here to deliver the happiest of hellos - as well as data for heroes and skills in *Fire Emblem: Heroes*!  So, here I am!") rescue nil
   end
 end
 
