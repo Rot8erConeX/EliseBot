@@ -8157,12 +8157,14 @@ def phase_study(event,name,bot,weapon=nil)
   epu40xw=crblu40.map{|q| q}
   epu40xw=apply_combat_buffs(event,stat_skills_3,epu40xw,'Enemy')
   unless weapon.nil? || weapon=='-'
-    desc = /((G|g)rants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d ((if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (attack|combat)))|during combat(| (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat)))))/
+    desc = /((((I|i)f|(w|W)hen) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (attack|combat)))|during combat(| (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat))))), |)((G|g)rants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d ((if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (attack|combat)))|during combat(| (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat)))))/
     desc2 = /((G|g)rants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d during combat (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat)))/
+    desc3 = /((i|I)f|(W|w)hen) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat))), (grants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d during combat/
     wpnnn=sklz[ww2][7]
     wpnnn=wpnnn.split(' *** ')[0] if sklz[ww2][5]=='Dagger Users Only'
     x=desc.match(wpnnn).to_s
     x=desc2.match(wpnnn).to_s unless desc2.match(sklz[ww2][7]).nil?
+    x=desc3.match(wpnnn).to_s unless desc3.match(sklz[ww2][7]).nil?
     x=nil if !x.nil? && x.include?('to allies') # remove any matches that include "to allies", which were caught in the prior line so they weren't considered non-phase-based
     x=nil if sklz[ww2][7].include?(", #{x}") && (sklz[ww2][7].include?('If foe uses') || sklz[ww2][7].include?('If foe initiates combat and uses'))
     x=nil if sklz[ww2][11].split(', ').include?('(R)Overwrite') && !refinement.nil? && refinement.length>0
@@ -8199,6 +8201,7 @@ def phase_study(event,name,bot,weapon=nil)
       outer_skill=outer_skill.split(' *** ')[0] if sklz[ww2][5]=='Dagger Users Only'
       x=desc.match(outer_skill).to_s
       x=desc2.match(outer_skill).to_s unless desc2.match(outer_skill).nil?
+      x=desc3.match(outer_skill).to_s unless desc3.match(outer_skill).nil?
       x=nil if outer_skill.include?(", #{x}") && (outer_skill.include?('If foe uses') || outer_skill.include?('If foe initiates combat and uses'))
       x=nil if !x.nil? && x.include?('to allies')
       unless x.nil?
@@ -8221,6 +8224,7 @@ def phase_study(event,name,bot,weapon=nil)
       end
       x=desc.match(inner_skill).to_s
       x=desc2.match(inner_skill).to_s unless desc2.match(inner_skill).nil?
+      x=desc3.match(inner_skill).to_s unless desc3.match(inner_skill).nil?
       x=nil if inner_skill.include?(", #{x}") && (inner_skill.include?('If foe uses') || inner_skill.include?('If foe initiates combat and uses'))
       x=nil if !x.nil? && x.include?('to allies')
       unless x.nil? || refinement != 'Effect'
