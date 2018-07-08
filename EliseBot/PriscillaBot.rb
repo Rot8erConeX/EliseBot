@@ -9569,7 +9569,7 @@ bot.command([:random,:rand]) do |event, *args|
     ftr="Unit profile provided by #{imgx.distinct}"
   end
   wemote=''
-  moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clazz[0]}_#{clazz[1]}"}
+  moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clazz[0]}_#{clazz[1].gsub('Healer','Staff')}"}
   wemote=moji[0].mention unless moji.length<=0
   memote=''
   moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{mov}"}
