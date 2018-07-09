@@ -3531,10 +3531,18 @@ def disp_skill(bot,name,event,ignore=false)
     eff.compact!
     str="#{str}\n\n**Gained via Effect Mode on:** #{eff.join(', ')}" if eff.length>0
   end
-  if lookout.map{|q| q[0]}.include?(skill[0]) || skill[0][0,11]=='Panic Ploy '
-    statskill=lookout.find_index{|q| q[0]==skill[0]}
-    statskill=lookout.find_index{|q| q[0]=='Panic Ploy'} if statskill.nil?
-    statskill=lookout[statskill]
+  lookoutx=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+    lookoutx=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+      lookoutx.push(eval line)
+    end
+  end
+  if lookoutx.map{|q| q[0]}.include?(skill[0]) || skill[0][0,11]=='Panic Ploy '
+    puts skill[0]
+    statskill=lookoutx.find_index{|q| q[0]==skill[0]}
+    statskill=lookoutx.find_index{|q| q[0]=='Panic Ploy'} if statskill.nil?
+    statskill=lookoutx[statskill]
     statskill[3]=statskill[3].gsub(' 1','').gsub(' 2','').gsub(' 3','').gsub(' 4','').gsub(' 5','').gsub(' 6','').gsub(' 7','').gsub(' 8','').gsub(' 9','')
     if ['Enemy Phase','Player Phase'].include?(statskill[3])
       str="#{str}\n\n**This skill can be applied to units in the `phasestudy` command.**\nInclude the word \"#{statskill[0].gsub('/','').gsub(' ','')}\" in your message\n*Skill type:* #{statskill[3]}"
@@ -6141,8 +6149,17 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str="tiki"
     str="chiki" if str2.include?("chiki")
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
-    if str2.include?("summer") || str2.include?("beach") || str2.include?("swimsuit") || str2.include?("ys")
-      return [str,['Tiki(Adult)(Summer)'],["summer#{str}","beach#{str}","swimsuit#{str}","ys#{str}","#{str}summer","#{str}beach","#{str}swimsuit","#{str}ys"]]
+    if str2.include?("summer") || str2.include?("beach") || str2.include?("swimsuit")
+      strx='summer'
+      strx='beach' if str2.include?('beach')
+      strx='swimsuit' if str2.include?('swimsuit')
+      str2=str3.gsub(strx,'').gsub("#{str} ",str).gsub(" #{str}",str)
+      if str2.include?('young') || str2.include?('child') || str2.include?('loli') || str2.include?("#{str}c") || str2.include?("c#{str}") || str2.include?("#{str}y") || str2.include?("y#{str}")
+        return [str,['Tiki(Young)(Summer)'],["#{strx}#{str}","#{str}#{strx}"]]
+      elsif str2.include?('adult') || str2.include?('old') || str2.include?('bae') || str2.include?("#{str}a") || str2.include?("a#{str}")
+        return [str,['Tiki(Adult)(Summer)'],["#{strx}#{str}","#{str}#{strx}"]]
+      end
+      return [str,['Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)'],["summer#{str}","beach#{str}","swimsuit#{str}","ys#{str}","#{str}summer","#{str}beach","#{str}swimsuit","#{str}ys"]]
     end
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?('young') || str2.include?('child') || str2.include?('loli') || str2.include?("#{str}c") || str2.include?("c#{str}") || str2.include?("#{str}y") || str2.include?("y#{str}")
