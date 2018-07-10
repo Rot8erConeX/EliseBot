@@ -115,7 +115,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','addualalias','adddualalias',
      'skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','addmultialias','schedule',
      'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','banners','banner',
-     'skillearnable','alts','alt','reload','colors','color']
+     'skillearnable','alts','alt','reload','colors','color','colours','colour']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -441,10 +441,10 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}** __name__","Shows all the skills that `name`can learn.\n\nIn servers, will only show the weapons, assists, and specials.\nIn PM, will also show the passive skills.",0xD49F61)
   elsif ['data','unit'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats, and skills.",0xD49F61)
-  elsif ['color','colors'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['color','colors'].include?("#{subcommand}".downcase))
+  elsif ['color','colors','colour','colours'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['color','colors','colour','colours'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.\n\nThis version of the command causes the display to sort the units by color instead of rarity, allowing users to see what color they should summon when looking for a particular skill.",0xD49F61)
   elsif ['skill'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.\n\nFollowing the command with the word \"colors\" will cause the display to sort the units by color instead of rarity, allowing users to see what color they should summon when looking for a particular skill.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.\n\nFollowing the command with the word \"colo(u)rs\" will cause the display to sort the units by color instead of rarity, allowing users to see what color they should summon when looking for a particular skill.",0xD49F61)
   elsif ['stats'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats.",0xD49F61)
     disp_more_info(event)
@@ -10307,7 +10307,7 @@ bot.command(:skill) do |event, *args|
     args.shift
     skill_comparison(event,args)
     return nil
-  elsif ['color','colors'].include?(args[0].downcase)
+  elsif ['color','colors','colour','colours'].include?(args[0].downcase)
     args.shift
     args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
     data_load()
@@ -10320,7 +10320,7 @@ bot.command(:skill) do |event, *args|
   return nil
 end
 
-bot.command([:colors,:color]) do |event, *args|
+bot.command([:colors,:color,:colours,:colour]) do |event, *args|
   return nil if overlap_prevent(event)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   data_load()
