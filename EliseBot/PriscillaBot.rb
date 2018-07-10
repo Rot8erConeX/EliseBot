@@ -115,7 +115,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','addualalias','adddualalias',
      'skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','addmultialias','schedule',
      'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','banners','banner',
-     'skillearnable','alts','alt','reload']
+     'skillearnable','alts','alt','reload','colors','color']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -441,8 +441,10 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}** __name__","Shows all the skills that `name`can learn.\n\nIn servers, will only show the weapons, assists, and specials.\nIn PM, will also show the passive skills.",0xD49F61)
   elsif ['data','unit'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats, and skills.",0xD49F61)
+  elsif ['color','colors'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['color','colors'].include?("#{subcommand}".downcase))
+    create_embed(event,"**#{command.downcase}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.\n\nThis version of the command causes the display to sort the units by color instead of rarity, allowing users to see what color they should summon when looking for a particular skill.",0xD49F61)
   elsif ['skill'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.\n\nFollowing the command with the word \"colors\" will cause the display to sort the units by color instead of rarity, allowing users to see what color they should summon when looking for a particular skill.",0xD49F61)
   elsif ['stats'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats.",0xD49F61)
     disp_more_info(event)
@@ -1201,6 +1203,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill('Giga Excalibur',event) if name.downcase.gsub(' ','')=='gigascalibur'
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
   return find_skill('Loptous',event) if name.downcase.gsub(' ','')=='loptyr'
+  return find_skill('Draconic Poleax',event) if name.downcase.gsub(' ','')=='draconicpoleaxe'
   return find_skill("Tannenboom!#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='tanenboom'
   return find_skill("Sack o' Gifts#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='sackofgifts'
   return find_skill("Killing Edge#{'+' if name.include?('+')}",event) if ['killersword','killeredge','killingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
@@ -3165,7 +3168,7 @@ def cumulitive_sp_cost(x,event,mode=0)
   return x[1]+cumulitive_sp_cost(k,event)
 end
 
-def disp_skill(bot,name,event,ignore=false)
+def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   data_load()
   s=event.message.text
   s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
@@ -3497,32 +3500,134 @@ def disp_skill(bot,name,event,ignore=false)
   end
   x=false
   can_also=true
-  str2='**Heroes who know it out of the box:**'
-  for i in 0...@max_rarity_merge[0]
-    if skill[9][i]=='-' || skill[9][i]==''
-    elsif skill[4]=='Weapon' && skill[9][i].split(', ').length>8 && !event.message.text.downcase.split(' ').include?('expanded')
-      xfooter='If you would like to include the Prfs and units who have them, include the word "expanded" when retrying this command.'
-      m=skill[9][i].split(', ').reject{|q| !p3.include?(q)}.join(', ')
-      str2="#{str2}\n*#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]}:* #{m}, and #{skill[9][i].split(', ').length-m.split(', ').length} units who end up having Prf weapons."
-    else
-      str2="#{str2}\n*#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]}:* #{skill[9][i]}"
+  unless dispcolors
+    str2='**Heroes who know it out of the box:**'
+    for i in 0...@max_rarity_merge[0]
+      if skill[9][i]=='-' || skill[9][i]==''
+      elsif skill[4]=='Weapon' && skill[9][i].split(', ').length>8 && !event.message.text.downcase.split(' ').include?('expanded')
+        xfooter='If you would like to include the Prfs and units who have them, include the word "expanded" when retrying this command.'
+        m=skill[9][i].split(', ').reject{|q| !p3.include?(q)}.join(', ')
+        str2="#{str2}\n*#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]}:* #{m}, and #{skill[9][i].split(', ').length-m.split(', ').length} units who end up having Prf weapons."
+      else
+        str2="#{str2}\n*#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]}:* #{skill[9][i]}"
+      end
     end
+    str="#{str}#{"\n" unless x}\n#{str2}" unless str2=='**Heroes who know it out of the box:**'
+    x=true unless str2=='**Heroes who know it out of the box:**'
   end
-  str="#{str}#{"\n" unless x}\n#{str2}" unless str2=='**Heroes who know it out of the box:**'
-  x=true unless str2=='**Heroes who know it out of the box:**'
   str2='**Heroes who can learn without inheritance:**'
+  clrz=[[],[],[],[],[],[],[],[],[],[],[]]
+  unitz=@units.map{|q| q}
   for i in 0...@max_rarity_merge[0]
     if skill[10][i]=='-' || skill[10][i]==''
     elsif skill[4]=='Weapon' && skill[10][i].split(', ').length>8 && !event.message.text.downcase.split(' ').include?('expanded')
       xfooter='If you would like to include the Prfs and units who have them, include the word "expanded" when retrying this command.'
       m=skill[10][i].split(', ').reject{|q| !p3.include?(q)}.join(', ')
       str2="#{str2}\n*#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]}:* #{m}, and #{skill[10][i].split(', ').length-m.split(', ').length} units who end up having Prf weapons."
+    elsif dispcolors
+      m=skill[10][i].split(', ')
+      for i2 in 0...m.length
+        m2=unitz[unitz.find_index{|q| q[0]==m[i2].gsub('~~','')}]
+        m3="#{m[i2]} (#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]})"
+        if m2[9][0].include?('p')
+          clrz[0].push(m3) if m2[1][0]=='Red'
+          clrz[1].push(m3) if m2[1][0]=='Blue'
+          clrz[2].push(m3) if m2[1][0]=='Green'
+          clrz[3].push(m3) if m2[1][0]=='Colorless'
+          clrz[4].push(m3) unless ['Red','Blue','Green','Colorless'].include?(m2[1][0])
+        elsif m2[9][0].gsub('0s','').include?('s')
+          clrz[5].push(m3) if m2[1][0]=='Red'
+          clrz[6].push(m3) if m2[1][0]=='Blue'
+          clrz[7].push(m3) if m2[1][0]=='Green'
+          clrz[8].push(m3) if m2[1][0]=='Colorless'
+          clrz[9].push(m3) unless ['Red','Blue','Green','Colorless'].include?(m2[1][0])
+        else
+          clrz[10].push(m3)
+        end
+      end
     else
       str2="#{str2}\n*#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]}:* #{skill[10][i]}"
     end
   end
+  str2="#{str2}\n*<:Orb_Red:455053002256941056> Red Summonables:* #{clrz[0].join(', ')}" unless clrz[0].length<=0
+  str2="#{str2}\n*<:Orb_Blue:455053001971859477> Blue Summonables:* #{clrz[1].join(', ')}" unless clrz[1].length<=0
+  str2="#{str2}\n*<:Orb_Green:455053002311467048> Green Summonables:* #{clrz[2].join(', ')}" unless clrz[2].length<=0
+  str2="#{str2}\n*<:Orb_Colorless:455053002152083457> Colorless Summonables:* #{clrz[3].join(', ')}" unless clrz[3].length<=0
+  str2="#{str2}\n*<:Orb_Gold:455053002911514634> Summonables:* #{clrz[4].join(', ')}" unless clrz[4].length<=0
+  str2="#{str2}\n*<:Orb_Red:455053002256941056> Red Limited:* #{clrz[5].join(', ')}" unless clrz[5].length<=0
+  str2="#{str2}\n*<:Orb_Blue:455053001971859477> Blue Limited:* #{clrz[6].join(', ')}" unless clrz[6].length<=0
+  str2="#{str2}\n*<:Orb_Green:455053002311467048> Green Limited:* #{clrz[7].join(', ')}" unless clrz[7].length<=0
+  str2="#{str2}\n*<:Orb_Colorless:455053002152083457> Colorless Limited:* #{clrz[8].join(', ')}" unless clrz[8].length<=0
+  str2="#{str2}\n*<:Orb_Gold:455053002911514634> Limited:* #{clrz[9].join(', ')}" unless clrz[9].length<=0
+  str2="#{str2}\n*<:Orb_Pink:466196714513235988> Free units:* #{clrz[10].join(', ')}" unless clrz[10].length<=0
+  clrz=[[],[],[],[],[],[],[],[],[],[],[]]
+  unitz=@units.map{|q| q}
   str="#{str}#{"\n" unless x}\n#{str2}" unless str2=='**Heroes who can learn without inheritance:**'
   x=true unless str2=='**Heroes who can learn without inheritance:**'
+  prev=find_prevolutions(f,event)
+  if prev.length>0
+    for i in 0...prev.length
+      skill2=prev[i][0]
+      for i2 in 0...@max_rarity_merge[0]
+        untz=skill2[10][i2].split(', ')
+        untz=untz.reject {|u| find_unit(u,event,false,true)<0 && u[0,4].downcase != 'all ' && u != '-'}
+        untz=untz.map {|u| u.gsub('Lavatain','Laevatein')}
+        untz=untz.sort {|a,b| a.downcase <=> b.downcase}
+        skill2[10][i2]=untz.join(', ')
+      end
+      str2="**It#{' also' if x} evolves from #{skill2[0]}, #{prev[i][1]} the following heroes:**"
+      unitz=@units.map{|q| q}
+      for i2 in 0...@max_rarity_merge[0]
+        if skill2[10][i2]=='-' || skill2[10][i2]==''
+        elsif dispcolors
+          m=skill2[10][i2].split(', ')
+          for i3 in 0...m.length
+            puts m[i3]
+            m2=unitz[unitz.find_index{|q| q[0]==m[i3].gsub('~~','')}]
+            m3="#{m[i3]} (#{i2+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i2]})"
+            if m2[9][0].include?('p')
+              clrz[0].push(m3) if m2[1][0]=='Red'
+              clrz[1].push(m3) if m2[1][0]=='Blue'
+              clrz[2].push(m3) if m2[1][0]=='Green'
+              clrz[3].push(m3) if m2[1][0]=='Colorless'
+              clrz[4].push(m3) unless ['Red','Blue','Green','Colorless'].include?(m2[1][0])
+            elsif m2[9][0].gsub('0s','').include?('s')
+              clrz[5].push(m3) if m2[1][0]=='Red'
+              clrz[6].push(m3) if m2[1][0]=='Blue'
+              clrz[7].push(m3) if m2[1][0]=='Green'
+              clrz[8].push(m3) if m2[1][0]=='Colorless'
+              clrz[9].push(m3) unless ['Red','Blue','Green','Colorless'].include?(m2[1][0])
+            else
+              clrz[10].push(m3)
+            end
+          end
+        else
+          str2="#{str2}\n*#{i2+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i2]}:* #{skill2[10][i2]}"
+        end
+      end
+      str2="#{str2}\n*<:Orb_Red:455053002256941056> Red Summonables:* #{clrz[0].join(', ')}" unless clrz[0].length<=0
+      str2="#{str2}\n*<:Orb_Blue:455053001971859477> Blue Summonables:* #{clrz[1].join(', ')}" unless clrz[1].length<=0
+      str2="#{str2}\n*<:Orb_Green:455053002311467048> Green Summonables:* #{clrz[2].join(', ')}" unless clrz[2].length<=0
+      str2="#{str2}\n*<:Orb_Colorless:455053002152083457> Colorless Summonables:* #{clrz[3].join(', ')}" unless clrz[3].length<=0
+      str2="#{str2}\n*<:Orb_Gold:455053002911514634> Summonables:* #{clrz[4].join(', ')}" unless clrz[4].length<=0
+      str2="#{str2}\n*<:Orb_Red:455053002256941056> Red Limited:* #{clrz[5].join(', ')}" unless clrz[5].length<=0
+      str2="#{str2}\n*<:Orb_Blue:455053001971859477> Blue Limited:* #{clrz[6].join(', ')}" unless clrz[6].length<=0
+      str2="#{str2}\n*<:Orb_Green:455053002311467048> Green Limited:* #{clrz[7].join(', ')}" unless clrz[7].length<=0
+      str2="#{str2}\n*<:Orb_Colorless:455053002152083457> Colorless Limited:* #{clrz[8].join(', ')}" unless clrz[8].length<=0
+      str2="#{str2}\n*<:Orb_Gold:455053002911514634> Limited:* #{clrz[9].join(', ')}" unless clrz[9].length<=0
+      str2="#{str2}\n*<:Orb_Pink:466196714513235988> Free units:* #{clrz[10].join(', ')}" unless clrz[10].length<=0
+      if str2=="**It#{' also' if x} evolves from #{skill2[0]}, #{prev[i][1]} the following heroes:**"
+        str="#{str}\n\n**It#{' also' if x} evolves from #{skill2[0]}**"
+      else
+        str="#{str}\n\n#{str2}"
+      end
+    end
+    str2='**Evolution cost:** 300 SP (450 if inherited), 200<:Arena_Medal:453618312446738472> 20<:Refining_Stone:453618312165720086>'
+    str2='**Evolution cost:** 300 SP (450 if inherited), 100<:Arena_Medal:453618312446738472> 10<:Refining_Stone:453618312165720086>' if skill[0]=='Candlelight+'
+    str2='**Evolution cost:** 400 SP, 375<:Arena_Medal:453618312446738472> 150<:Divine_Dew:453618312434417691>' if skill[6]!='-'
+    str2='**Evolution cost:** 1 story-gift Gunnthra<:Green_Tome:443172811759157248><:Icon_Move_Cavalry:443331186530451466><:Legendary_Effect_Wind:443331186467536896><:Ally_Boost_Resistance:443331185783865355>' if skill[0]=='Chill Breidablik'
+    str="#{str}\n#{"\n" if prev.length>1}#{str2}"
+  end
   if !skill[12].nil? && skill[12]!='' && skill[4].include?('Passive(W)')
     eff=skill[12].split(', ')
     for i in 0...eff.length
@@ -3565,33 +3670,6 @@ def disp_skill(bot,name,event,ignore=false)
     else
       str="#{str}\n*Stat alterations:* #{statskill[4]}"
     end
-  end
-  prev=find_prevolutions(f,event)
-  if prev.length>0
-    for i in 0...prev.length
-      skill2=prev[i][0]
-      for i2 in 0...@max_rarity_merge[0]
-        untz=skill2[10][i2].split(', ')
-        untz=untz.reject {|u| find_unit(u,event,false,true)<0 && u[0,4].downcase != 'all ' && u != '-'}
-        untz=untz.map {|u| u.gsub('Lavatain','Laevatein')}
-        untz=untz.sort {|a,b| a.downcase <=> b.downcase}
-        skill2[10][i2]=untz.join(', ')
-      end
-      str2="**It#{' also' if x} evolves from #{skill2[0]}, #{prev[i][1]} the following heroes:**"
-      for i2 in 0...@max_rarity_merge[0]
-        str2="#{str2}\n*#{i2+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i2]}:* #{skill2[10][i2]}" unless skill2[10][i2]=='-' || skill2[10][i2]==''
-      end
-      if str2=="**It#{' also' if x} evolves from #{skill2[0]}, #{prev[i][1]} the following heroes:**"
-        str="#{str}\n\n**It#{' also' if x} evolves from #{skill2[0]}**"
-      else
-        str="#{str}\n\n#{str2}"
-      end
-    end
-    str2='**Evolution cost:** 300 SP (450 if inherited), 200<:Arena_Medal:453618312446738472> 20<:Refining_Stone:453618312165720086>'
-    str2='**Evolution cost:** 300 SP (450 if inherited), 100<:Arena_Medal:453618312446738472> 10<:Refining_Stone:453618312165720086>' if skill[0]=='Candlelight+'
-    str2='**Evolution cost:** 400 SP, 375<:Arena_Medal:453618312446738472> 150<:Divine_Dew:453618312434417691>' if skill[6]!='-'
-    str2='**Evolution cost:** 1 story-gift Gunnthra<:Green_Tome:443172811759157248><:Icon_Move_Cavalry:443331186530451466><:Legendary_Effect_Wind:443331186467536896><:Ally_Boost_Resistance:443331185783865355>' if skill[0]=='Chill Breidablik'
-    str="#{str}\n#{"\n" if prev.length>1}#{str2}"
   end
   unless (" #{event.message.text.downcase} ".include?(' refined ') && !" #{event.message.text.downcase} ".include?(' default ') && !" #{event.message.text.downcase} ".include?(' base ')) && skill[4]=="Weapon"
     x=0
@@ -10229,10 +10307,24 @@ bot.command(:skill) do |event, *args|
     args.shift
     skill_comparison(event,args)
     return nil
+  elsif ['color','colors'].include?(args[0].downcase)
+    args.shift
+    args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+    data_load()
+    disp_skill(bot,args.join(' '),event,false,true)
+    return nil
   end
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   data_load()
   disp_skill(bot,args.join(' '),event)
+  return nil
+end
+
+bot.command([:colors,:color]) do |event, *args|
+  return nil if overlap_prevent(event)
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  data_load()
+  disp_skill(bot,args.join(' '),event,false,true)
   return nil
 end
 
