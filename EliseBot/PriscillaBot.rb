@@ -2966,9 +2966,9 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
     u40=make_stat_string_list(u40,blu40)
     cru40=make_stat_string_list(cru40,crblu40)
     u40=make_stat_string_list(u40,cru40,2) if wl.include?('~~')
-    ftr="Please note that the #{atk} stat displayed here does not include weapon might.  The Attack stat in-game does."
+    ftr="Please note that the #{atk.split('> ')[1]} stat displayed here does not include weapon might.  The Attack stat in-game does."
     ftr=nil if weapon != '-'
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0}#{"	\u2764 **#{summoner}**" unless summoner=='-'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: unknown\n#{atk}: unknown\n<:SpeedS:467037520534962186> Speed: unknown\n<:DefenseS:467037520249487372> Defense: unknown\n<:ResistanceS:467037520379641858> Resistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}"]],1)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0}#{"	\u2764 **#{summoner}**" unless summoner=='-'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: unknown\n#{atk}: unknown\n<:SpeedS:467037520534962186> Speed: unknown\n<:DefenseS:467037520249487372> Defense: unknown\n<:ResistanceS:467037520379641858> Resistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}#{"(#{diff_num[1]}) / #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}"]],1)
     disp_unit_skills(bot,@units[j][0],event) if skillstoo
     return nil
   end
@@ -3032,7 +3032,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   u1=make_stat_string_list(u1,blu1)
   cru1=make_stat_string_list(cru1,crblu1)
   u1=make_stat_string_list(u1,cru1,2) if wl.include?('~~')
-  ftr="Please note that the #{atk} stat displayed here does not include weapon might.  The Attack stat in-game does."
+  ftr="Please note that the #{atk.split('> ')[1]} stat displayed here does not include weapon might.  The Attack stat in-game does."
   if weapon != '-'
     ftr=nil
     tr=skill_tier(weapon,event)
