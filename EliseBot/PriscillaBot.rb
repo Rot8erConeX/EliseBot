@@ -1536,6 +1536,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   k=event.server.id unless event.server.nil?
   groups_load()
   name='Wedding' if ['brides','grooms'].include?(name.downcase)
+  name='Falchion_Users' if ['falchionusers'].include?(name.downcase.gsub('-','').gsub('_',''))
   name='Dancers&Singers' if ['dancers','singers'].include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends'].include?(name.downcase)
   j=-1
@@ -1547,6 +1548,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   return j if j>=0
   # ...then try partial-name matches
   name='Wedding' if name.length<6 && ['brides','grooms'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='Falchion_Users' if ['falchionusers'].map{|q| q[0,name.gsub('-','').gsub('_','').length]}.include?(name.downcase.gsub('-','').gsub('_',''))
   name='Dancers&Singers' if ['dancers','singers'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends'].map{|q| q[0,name.length]}.include?(name.downcase)
   for i in 0...g.length
@@ -4494,7 +4496,7 @@ def get_group(name,event)
       end
     end
     return ['Retro-Prfs',b.uniq]
-  elsif ['falchion_users'].include?(name.downcase)
+  elsif ['falchion_users','falchionusers','falchion-users'].include?(name.downcase)
     k=sklz.reject{|q| q[0][0,10]!='Falchion ('}
     k2=[]
     for i in 0...k.length
@@ -11444,9 +11446,10 @@ bot.command([:average,:mean]) do |event, *args|
   ccz=[]
   atkstat=[]
   event.channel.send_temporary_message('Units found, finding average stats now...',2)
+  data_load()
   u=@units.map{|q| q}
   for i2 in 0...k222.length
-    ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i2][0]},k222[i2][0],1))
+    ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i2][0].gsub('Laevatein','Lavatain')},k222[i2][0],1))
     atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(k222[i2][1][1])
     atkstat.push('Magic') if ['Tome','Healer'].include?(k222[i2][1][1])
     atkstat.push('Freeze') if ['Dragon'].include?(k222[i2][1][1])
@@ -11483,15 +11486,17 @@ bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
+  atkstat=[]
   event.channel.send_temporary_message('Units found, finding highest stats now...',2)
   hstats=[[0,[]],[0,[]],[0,[]],[0,[]],[0,[]],[0,[]]]
+  data_load()
   u=@units.map{|q| q}
   for i in 0...k222.length
-    d=u[u.find_index{|q| q[0]==k222[i][0]}]
-    ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i][0]},k222[i][0],1))
-    atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(k222[i2][1][1])
-    atkstat.push('Magic') if ['Tome','Healer'].include?(k222[i2][1][1])
-    atkstat.push('Freeze') if ['Dragon'].include?(k222[i2][1][1])
+    d=u[u.find_index{|q| q[0]==k222[i][0].gsub('Laevatein','Lavatain')}]
+    ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i][0].gsub('Laevatein','Lavatain')},k222[i][0],1))
+    atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(k222[i][1][1])
+    atkstat.push('Magic') if ['Tome','Healer'].include?(k222[i][1][1])
+    atkstat.push('Freeze') if ['Dragon'].include?(k222[i][1][1])
     for j in 0...6
       stz=d[5][j-1]
       stz=d[5][0]+d[5][1]+d[5][2]+d[5][3]+d[5][4] if j.zero?
@@ -11539,15 +11544,17 @@ bot.command([:worstamong,:worstin,:worststats,:loweststats]) do |event, *args|
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   ccz=[]
+  atkstat=[]
   event.channel.send_temporary_message('Units found, finding lowest stats now...',2)
   hstats=[[1000,[]],[1000,[]],[1000,[]],[1000,[]],[1000,[]],[1000,[]]]
+  data_load()
   u=@units.map{|q| q}
   for i in 0...k222.length
-    d=u[u.find_index{|q| q[0]==k222[i][0]}]
-    ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i][0]},k222[i][0],1))
-    atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(k222[i2][1][1])
-    atkstat.push('Magic') if ['Tome','Healer'].include?(k222[i2][1][1])
-    atkstat.push('Freeze') if ['Dragon'].include?(k222[i2][1][1])
+    d=u[u.find_index{|q| q[0]==k222[i][0].gsub('Laevatein','Lavatain')}]
+    ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i][0].gsub('Laevatein','Lavatain')},k222[i][0],1))
+    atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(k222[i][1][1])
+    atkstat.push('Magic') if ['Tome','Healer'].include?(k222[i][1][1])
+    atkstat.push('Freeze') if ['Dragon'].include?(k222[i][1][1])
     for j in 0...6
       stz=d[5][j-1]
       stz=d[5][0]+d[5][1]+d[5][2]+d[5][3]+d[5][4] if j.zero?
