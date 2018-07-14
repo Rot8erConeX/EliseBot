@@ -5068,13 +5068,13 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     elsif colors.length==1 && weapons.length<=0 && color_weapons.length<=0
       # Only one color requested but no other restrictions are given
       matches5=split_list(event,matches5,['Blade','Tome','Dragon','Bow','Dagger','Healer'],-3)
-    elsif (weapons==['Tome'] && colors==['Red'] && color_weapons.length<=0) || (color_weapons==[['Red', 'Tome']] && colors.length<=0 && weapons.length<=0)
+    elsif (weapons==['Tome'] && colors==['Red'] && color_weapons.length<=0) || (color_weapons==[['Red', 'Tome']] && (colors==['Red'] || colors.length<=0) && weapons.length<=0)
       # Red Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Fire','Dark'],-4)
-    elsif (weapons==['Tome'] && colors==['Blue'] && color_weapons.length<=0) || (color_weapons==[['Blue', 'Tome']] && colors.length<=0 && weapons.length<=0)
+    elsif (weapons==['Tome'] && colors==['Blue'] && color_weapons.length<=0) || (color_weapons==[['Blue', 'Tome']] && (colors==['Blue'] || colors.length<=0) && weapons.length<=0)
       # Blue Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Thunder','Light'],-4)
-    elsif (weapons==['Tome'] && colors==['Green'] && color_weapons.length<=0) || (color_weapons==[['Green', 'Tome']] && colors.length<=0 && weapons.length<=0)
+    elsif (weapons==['Tome'] && colors==['Green'] && color_weapons.length<=0) || (color_weapons==[['Green', 'Tome']] && (colors==['Green'] || colors.length<=0)  && weapons.length<=0)
       # Blue Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Wind'],-4)
     elsif matches5.map{|q| q[0]}.join("\n").length<=1800
