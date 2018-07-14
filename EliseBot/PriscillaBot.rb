@@ -50,7 +50,7 @@ bot.gateway.check_heartbeat_acks = false
 @summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,
                  341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,238770788272963585,297459718249512961,283833293894582272,
                  214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,347491426852143109,392557615177007104,295686580528742420,
-                 412303462764773376,442465051371372544,353997181193289728,462100851864109056]
+                 412303462764773376,442465051371372544,353997181193289728,462100851864109056,337397338823852034,446111983155150875]
 @summon_rate=[0,0,3]
 @mods=[[0, 6, 7, 7, 8, 8], # this is a translation of the graphic displayed in the "growths" command.
        [0, 8, 8, 9,10,10],
@@ -3000,7 +3000,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   end
   n=nature_name(boon,bane)
   unless n.nil?
-    n=n[0] if atk=='Strength'
+    n=n[0] if atk=='<:StrengthS:467037520484630539> Strength'
     n=n[n.length-1] if atk=='<:MagicS:467043867611627520> Magic'
     n=n.join(' / ') if ['<:StrengthS:467037520484630539> Attack','<:FreezeS:467043868148236299> Freeze'].include?(atk)
   end
@@ -5068,13 +5068,13 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     elsif colors.length==1 && weapons.length<=0 && color_weapons.length<=0
       # Only one color requested but no other restrictions are given
       matches5=split_list(event,matches5,['Blade','Tome','Dragon','Bow','Dagger','Healer'],-3)
-    elsif weapons==['Tome'] && colors==['Red'] && color_weapons.length<=0
+    elsif (weapons==['Tome'] && colors==['Red'] && color_weapons.length<=0) || (color_weapons==[['Red', 'Tome']] && colors.length<=0 && weapons.length<=0)
       # Red Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Fire','Dark'],-4)
-    elsif weapons==['Tome'] && colors==['Blue'] && color_weapons.length<=0
+    elsif (weapons==['Tome'] && colors==['Blue'] && color_weapons.length<=0) || (color_weapons==[['Blue', 'Tome']] && colors.length<=0 && weapons.length<=0)
       # Blue Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Thunder','Light'],-4)
-    elsif weapons==['Tome'] && colors==['Green'] && color_weapons.length<=0
+    elsif (weapons==['Tome'] && colors==['Green'] && color_weapons.length<=0) || (color_weapons==[['Green', 'Tome']] && colors.length<=0 && weapons.length<=0)
       # Blue Tomes are the only type requested but no other restrictions are given
       matches5=split_list(event,matches5,['Wind'],-4)
     elsif matches5.map{|q| q[0]}.join("\n").length<=1800
@@ -6010,7 +6010,7 @@ def comparison(event,args,bot)
     event.respond "I detect #{b.length} names.\nUnfortunately, due to embed limits, I can only compare ten names\nand due to the formatting of this command, plaintext is not an answer." if b.length>10
     b=b[0,10] if b.length>10
     for iz in 0...b.length
-      dzz.push(["**#{b[iz][1]}**",[unit_moji(bot,event,-1,b[iz][0][0],b[iz][2])],0])
+      dzz.push(["**#{b[iz][1].gsub('Lavatain','Laevatein')}**",[unit_moji(bot,event,-1,b[iz][0][0].gsub('Laevatein','Lavatain'),b[iz][2])],0])
       czz.push(c[iz])
       for jz in 1...6
         stz=b[iz][0][jz]
@@ -6065,8 +6065,8 @@ def comparison(event,args,bot)
     stemoji[2]='<:MagicS:467043867611627520>' if atkstat.uniq[0]=='Magic'
     stemoji[2]='<:FreezeS:467043868148236299>' if atkstat.uniq[0]=='Freeze'
   end
-  d1=[b[0][1],[unit_moji(bot,event,-1,b[0][0][0],b[0][2])],0]
-  d2=[b[1][1],[unit_moji(bot,event,-1,b[1][0][0],b[1][2])],0]
+  d1=[b[0][1].gsub('Lavatain','Laevatein'),[unit_moji(bot,event,-1,b[0][0][0].gsub('Laevatein','Lavatain'),b[0][2])],0]
+  d2=[b[1][1].gsub('Lavatain','Laevatein'),[unit_moji(bot,event,-1,b[1][0][0].gsub('Laevatein','Lavatain'),b[1][2])],0]
   d3=['<:Ally_Boost_Spectrum:443337604054646804> Analysis',[]]
   names=["#{b[0][0][0]}","#{b[1][0][0]}"]
   xpic=nil
@@ -6558,8 +6558,8 @@ def skill_comparison(event,args,bot)
     event.respond "I detect #{b.length} names.\nUnfortunately, due to embed limits, I can only compare two units' skillsets."
   end
   b2=[[],[],[],[],[],[]]
-  b[1][0]=b[1][0].map{|q| q.gsub('__','')}
-  b[0][0]=b[0][0].map{|q| q.gsub('__','')}
+  b[1][0]=b[1][0].map{|q| q.map{|q2| q2.gsub('__','')}}
+  b[0][0]=b[0][0].map{|q| q.map{|q2| q2.gsub('__','')}}
   for i in 0...b[0][0].length
     if b[0][0][i]==b[1][0][i]
       b2[i]=b[0][0][i]
@@ -6601,7 +6601,7 @@ def skill_comparison(event,args,bot)
       b2[i]=['~~nothing in common~~']
     end
   end
-  create_embed(event,"**Skills #{b[0][1]} and #{b[1][1]} have in common**",'',avg_color([c[0],c[1]]),nil,"https://cdn.discordapp.com/emojis/448304646814171136.png",[["<:Skill_Weapon:444078171114045450> **Weapons**",b2[0].join("\n")],["<:Skill_Assist:444078171025965066> **Assists**",b2[1].join("\n")],["<:Skill_Special:444078170665254929> **Specials**",b2[2].join("\n")],["<:Passive_A:443677024192823327> **A Passives**",b2[3].join("\n")],["<:Passive_B:443677023257493506> **B Passives**",b2[4].join("\n")],["<:Passive_C:443677023555026954> **C Passives**",b2[5].join("\n")]],-1)
+  create_embed(event,"**Skills #{b[0][1].gsub('Lavatain','Laevatein')} and #{b[1][1].gsub('Lavatain','Laevatein')} have in common**",'',avg_color([c[0],c[1]]),nil,"https://cdn.discordapp.com/emojis/448304646814171136.png",[["<:Skill_Weapon:444078171114045450> **Weapons**",b2[0].join("\n")],["<:Skill_Assist:444078171025965066> **Assists**",b2[1].join("\n")],["<:Skill_Special:444078170665254929> **Specials**",b2[2].join("\n")],["<:Passive_A:443677024192823327> **A Passives**",b2[3].join("\n")],["<:Passive_B:443677023257493506> **B Passives**",b2[4].join("\n")],["<:Passive_C:443677023555026954> **C Passives**",b2[5].join("\n")]],-1)
   return 2
 end
 
@@ -7420,7 +7420,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   else
     x.push(['Frostbite',rd])
   end
-  x.push(['Misc.',"Defense + Resistance = #{rdr}#{"\n\n#{u40[0]} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0]}:\n#{rs}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\nOutnumber #{u40[0]}'s allies within 2 spaces" if weapon=='Thunder Armads'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless @units[j][1][1]=='Healer'}",1])
+  x.push(['Misc.',"Defense + Resistance = #{rdr}#{"\n\n#{u40[0].gsub('Lavatain','Laevatein')} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0].gsub('Lavatain','Laevatein')}:\n#{rs}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\nOutnumber #{u40[0].gsub('Lavatain','Laevatein')}'s allies within 2 spaces" if weapon=='Thunder Armads'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless @units[j][1][1]=='Healer'}",1])
   ftr="\"Frostbite\" is weapons like Felicia's Plate"
   ftr="#{ftr} and refined dragonstones" if ['Healer','Tome','Bow','Dagger'].include?(@units[j][1][1])
   if photon=="0"
@@ -8260,20 +8260,21 @@ def phase_study(event,name,bot,weapon=nil)
   elsif w2[0,1]=='-' && w2[15][1,1].to_i.to_s==w2[15][1,1] && refinement=='Effect'
     refinement=nil if w2[15][2,1]=='*'
   end
+   
   refinement=nil if w2[5]!='Staff Users Only' && ['Wrathful','Dazzling'].include?(refinement)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
-  atk='Attack'
-  atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
-  atk='Strength' if ['Blade','Bow','Dagger'].include?(u40x[1][1])
+  atk='<:StrengthS:467037520484630539> Attack'
+  atk='<:MagicS:467043867611627520> Magic' if ['Tome','Healer','Dragon'].include?(u40x[1][1])
+  atk='<:StrengthS:467037520484630539> Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
   zzzl=sklz[ww2]
   if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
-    atk='Freeze'
+    atk='<:FreezeS:467043868148236299> Freeze'
   end
   n=nature_name(boon,bane)
   unless n.nil?
-    n=n[0] if atk=='Strength'
-    n=n[n.length-1] if atk=='Magic'
-    n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
+    n=n[0] if atk=='<:StrengthS:467037520484630539> Strength'
+    n=n[n.length-1] if atk=='<:MagicS:467043867611627520> Magic'
+    n=n.join(' / ') if ['<:StrengthS:467037520484630539> Attack','Freeze'].include?(atk)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
   spec_wpn=false
@@ -8499,9 +8500,9 @@ def phase_study(event,name,bot,weapon=nil)
     event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
     event.respond "**Displayed stats:**	#{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]}\n**#{"Player Phase" unless ppu40==epu40}#{"In-combat Stats" if ppu40==epu40}:**	#{ppu40[1]} / #{ppu40[2]} / #{ppu40[3]} / #{ppu40[4]} / #{ppu40[5]}  (#{ppu40[16]} BST)#{"\n**Enemy Phase:**	#{epu40[1]} / #{epu40[2]} / #{epu40[3]} / #{epu40[4]} / #{epu40[5]}  (#{epu40[16]} BST)" unless ppu40==epu40}"
   elsif ppu40==epu40
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"],["In-combat Stats","HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\nSpeed: #{ppu40[3]}\nDefense: #{ppu40[4]}\nResistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}"],["In-combat Stats","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:467037520534962186> Speed: #{ppu40[3]}\n<:DefenseS:467037520249487372> Defense: #{ppu40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","HP: #{u40[1]}\n#{atk}: #{u40[2]}\nSpeed: #{u40[3]}\nDefense: #{u40[4]}\nResistance: #{u40[5]}\n\nBST: #{u40[16]}"],["Player Phase","HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\nSpeed: #{ppu40[3]}\nDefense: #{ppu40[4]}\nResistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","HP: #{epu40[1]}\n#{atk}: #{epu40[2]}\nSpeed: #{epu40[3]}\nDefense: #{epu40[4]}\nResistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}"],["Player Phase","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:467037520534962186> Speed: #{ppu40[3]}\n<:DefenseS:467037520249487372> Defense: #{ppu40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","<:HP_S:467037520538894336> HP: #{epu40[1]}\n#{atk}: #{epu40[2]}\n<:SpeedS:467037520534962186> Speed: #{epu40[3]}\n<:DefenseS:467037520249487372> Defense: #{epu40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
   end
 end
 
