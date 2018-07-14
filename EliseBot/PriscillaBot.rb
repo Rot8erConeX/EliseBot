@@ -2527,6 +2527,7 @@ end
 
 def unit_clss(bot,event,j,name=nil) # used by almost every command involving a unit to figure out how to display their weapon and movement class
   jj=@units[j]
+  return "<:Summon_Gun:467557566050861074> *Summon Gun*\n<:Icon_Move_Unknown:443332226478768129> *Summoning Gates*" if jj[0]=='Kiran' || name=='Kiran'
   w=jj[1][1]
   clr='Gold'
   clr=jj[1][0] if ['Red','Blue','Green','Colorless'].include?(jj[1][0])
@@ -2890,7 +2891,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
       event.respond "I can't merge that high"
       merges=10000000
     end
-    rarity=@mods[0].length-1 if rarity>@mods[0].length-1
+    rarity=@max_rarity_merge[0] if rarity>@max_rarity_merge[0]
     rarity=1 if rarity<1
     if rarity>10000000
       event.respond "I can't do rarities that high"
@@ -2900,8 +2901,19 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
     unless n.nil?
       n=n.join(' / ')
     end
-    create_embed(event,"__**#{@units[j][0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n",0x9400D3,"Please note that the #{atk} stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: 0\n<:StrengthS:467037520484630539> Attack: 0\n<:SpeedS:467037520534962186> Speed: 0\n<:DefenseS:467037520249487372> Defense: 0\n<:ResistanceS:467037520379641858> Resistance: 0\n\nBST: 0"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: 0\n<:StrengthS:467037520484630539> Attack: 0\n<:SpeedS:467037520534962186> Speed: 0\n<:DefenseS:467037520249487372> Defense: 0\n<:ResistanceS:467037520379641858> Resistance: 0\n\nBST: 0"]],1)
-    disp_unit_skills(bot,@units[j][0],event) if skillstoo
+    flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: 0\n<:StrengthS:467037520484630539> Attack: 0\n<:SpeedS:467037520534962186> Speed: 0\n<:DefenseS:467037520249487372> Defense: 0\n<:ResistanceS:467037520379641858> Resistance: 0\n\nBST: 0"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: 0\n<:StrengthS:467037520484630539> Attack: 0\n<:SpeedS:467037520534962186> Speed: 0\n<:DefenseS:467037520249487372> Defense: 0\n<:ResistanceS:467037520379641858> Resistance: 0\n\nBST: 0"]]
+    if skillstoo
+      uskl=unit_skills(name,event).map{|q| q.reject{|q2| q2.include?('Unknown base')}}
+      puts uskl.map{|q| q.to_s}
+      for i in 0...3
+        if uskl[i][0].include?('**') && uskl[i]!=uskl[i].reject{|q| !q.include?('**')}
+          uskl[i][-1]="#{uskl[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{uskl[i][-1]}"
+        end
+      end
+      uskl=uskl.map{|q| q[q.length-1]}
+      flds.push(['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"])
+    end
+    create_embed(event,"__**#{@units[j][0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n",0x9400D3,"Please note that the Attack stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),flds,1)
     return nil
   elsif unitz[4].nil? || (unitz[4].max.zero? && unitz[5].max.zero?) # unknown stats
     data_load()
@@ -2970,15 +2982,27 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
     u40=make_stat_string_list(u40,cru40,2) if wl.include?('~~')
     ftr="Please note that the #{atk.split('> ')[1]} stat displayed here does not include weapon might.  The Attack stat in-game does."
     ftr=nil if weapon != '-'
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0}#{"	\u2764 **#{summoner}**" unless summoner=='-'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: unknown\n#{atk}: unknown\n<:SpeedS:467037520534962186> Speed: unknown\n<:DefenseS:467037520249487372> Defense: unknown\n<:ResistanceS:467037520379641858> Resistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}#{"(#{diff_num[1]}) / #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}"]],1)
-    disp_unit_skills(bot,@units[j][0],event) if skillstoo
+    flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: unknown\n#{atk}: unknown\n<:SpeedS:467037520534962186> Speed: unknown\n<:DefenseS:467037520249487372> Defense: unknown\n<:ResistanceS:467037520379641858> Resistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}#{"(#{diff_num[1]}) / #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}"]]
+    if skillstoo
+      uskl=unit_skills(name,event).map{|q| q.reject{|q2| q2.include?('Unknown base')}}
+      puts uskl.map{|q| q.to_s}
+      for i in 0...3
+        if uskl[i][0].include?('**') && uskl[i]!=uskl[i].reject{|q| !q.include?('**')}
+          uskl[i][-1]="#{uskl[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{uskl[i][-1]}"
+        end
+      end
+      uskl=uskl.map{|q| q[q.length-1]}
+      flds.push(['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"])
+      flds.shift
+    end
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0}#{"	\u2764 **#{summoner}**" unless summoner=='-'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),flds,1)
     return nil
   end
   # units for whom both level 40 and level 1 stats are known
   data_load()
   merges=@max_rarity_merge[1] if merges>@max_rarity_merge[1]
   merges=0 if merges<0
-  rarity=@mods[0].length-1 if rarity>@mods[0].length-1
+  rarity=@max_rarity_merge[0] if rarity>@max_rarity_merge[0]
   rarity=1 if rarity<1
   if merges>10000000
     event.respond "I can't merge that high"
@@ -4778,9 +4802,16 @@ def collapse_skill_list(list,mode=0)
   newlist.compact!
   newlist.uniq!
   unless (mode/4)%2==1
+    data_load()
+    u=@units.map{|q| q}
     for i in 0...newlist.length
       newlist[i][0]=newlist[i][0].gsub('Bladeblade','Laevatein')
       newlist[i][0]="~~#{newlist[i][0]}~~" if !newlist[i][13].nil? && newlist[i][13].length>0 && mode%2==1
+      m=[]
+      if newlist[i][4]=='Weapon' && newlist[i][6]!='-'
+        m=newlist[i][6].split(', ').reject{|q| !u.map{|q2| q2[0]}.include?(q) || u[u.find_index{|q2| q2[0]==q}][9][0]=='-'}
+        newlist[i][0]="*#{newlist[i][0]}*" if m.length==0
+      end
     end
   end
   if (mode/8)%2==1
@@ -4839,7 +4870,7 @@ def collapse_skill_list(list,mode=0)
     end
     newlist.compact!
   end
-  newlist=newlist.sort {|a,b| a[0].gsub('~~','').gsub('[El]','').downcase <=> b[0].gsub('~~','').gsub('[El]','').downcase} unless (mode/8)%2==1
+  newlist=newlist.sort {|a,b| a[0].gsub('~~','').gsub('*','').gsub('[El]','').downcase <=> b[0].gsub('~~','').gsub('*','').gsub('[El]','').downcase} unless (mode/8)%2==1
   return newlist
 end
 
@@ -5240,7 +5271,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     if colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && assists.length.zero? && specials.length.zero? && passives.length.zero? && weapon_subsets.length.zero? && passive_subsets.length.zero?
       matches3=matches0.map{|q| q}.uniq
     else
-      skill_types.push('Weapon') unless colors.length.zero? && weapons.length.zero? && color_weapons.length.zero?
+      skill_types.push('Weapon*') unless colors.length.zero? && weapons.length.zero? && color_weapons.length.zero?
       matches1=[]
       cwc=false
       if colors.length>0 && weapons.length>0
@@ -5292,7 +5323,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
         end
       else
         for i in 0...matches0.length
-          matches2.push(matches0[i]) if matches0[i][4]=='Assist' && (skill_types.length.zero? || skill_types.include?('Assist'))
+          matches2.push(matches0[i]) if matches0[i][4]=='Assist' && (skill_types.reject{|q| q.include?('*')}.length.zero? || skill_types.map{|q| q.gsub('*','')}.include?('Assist'))
         end
       end
       if specials.length>0
@@ -5303,7 +5334,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
         end
       else
         for i in 0...matches0.length
-          matches2.push(matches0[i]) if matches0[i][4]=='Special' && (skill_types.length.zero? || skill_types.include?('Special'))
+          matches2.push(matches0[i]) if matches0[i][4]=='Special' && (skill_types.reject{|q| q.include?('*')}.length.zero? || skill_types.map{|q| q.gsub('*','')}.include?('Special'))
         end
       end
       if passives.length>0
@@ -5316,7 +5347,10 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
         end
       else
         for i in 0...matches0.length
-          matches2.push(matches0[i]) if matches0[i][11].split(', ').include?('Passive') && (skill_types.length.zero? || skill_types.include?('Passive'))
+          if matches0[i][11].split(', ').include?('Passive')
+            matches2.push(matches0[i]) if skill_types.length.zero? || skill_types.include?('Passive')
+            matches2.push(matches0[i]) if skill_types.reject{|q| q.include?('*')}.length.zero? && weapons==['Staff'] && assists==['Staff'] && specials==['Staff']
+          end
         end
       end
       matches2=matches2.uniq
@@ -5343,7 +5377,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
               end
             end
           end
-        elsif weapons.length>0 || colors.length>0 || color_weapons.length>0 || skill_types.include?('Weapon')
+        elsif weapons.length>0 || colors.length>0 || color_weapons.length>0 || skill_types.map{|q| q.gsub('*','')}.include?('Weapon')
           for i in 0...matches2.length
             matches3.push(matches2[i]) if matches2[i][4]=='Weapon'
           end
@@ -5374,6 +5408,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   end
   g=get_markers(event)
   matches4=collapse_skill_list(matches3.reject{|q| !has_any?(g, q[13])},3)
+  skill_types=skill_types.reject{|q| q.include?('*')}
   if skill_types.length<=0 && weapons==['Staff'] && assists==['Staff'] && specials==['Staff']
     # Staff skills are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Weapons','Assists','Specials','Passives'],4)
@@ -5426,7 +5461,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     end
   end
   data_load()
-  microskills=collapse_skill_list(@skills.map{|q| q})
+  microskills=collapse_skill_list(@skills.map{|q| q},4)
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -5601,7 +5636,7 @@ def display_skills(event, mode)
       typesx=[]
       for i in 0...k.length
         unless k[i]=='- - -'
-          f=k[i].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade')
+          f=k[i].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade').gsub('*','')
           f=f.split('/')[0] if sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}.nil?
           typesx.push(sklz[sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}])
         end
@@ -5632,7 +5667,7 @@ def display_skills(event, mode)
         typesx=[]
         for i2 in 0...p1[i].length
           unless p1[i][i2]=='- - -'
-            f=p1[i][i2].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade')
+            f=p1[i][i2].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade').gsub('*','')
             f=f.split('/')[0] if sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}.nil?
             typesx.push(sklz[sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}])
           end
@@ -13274,10 +13309,6 @@ bot.command(:reload, from: 167657750971547648) do |event|
   event.respond 'New data loaded.'
 end
 
-bot.command(:anemonte) do |event|
-  event.respond "<a:zeldawave:460815459487449088>"
-end
-
 def skill_data(legal_skills,all_skills,event,mode=0)
   str="**There are #{filler(legal_skills,all_skills,-1)} #{['skills','skill branches','skill trees'][mode]}, including:**"
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
@@ -13300,8 +13331,8 @@ def skill_data(legal_skills,all_skills,event,mode=0)
     str="#{str}\n__#{filler(ls2,as2,11,-3,['Rally','Move','Health','Music','Staff'],-4)} misc. assists__"
     ls2=legal_skills.reject{|q| q[4]!='Special'}
     as2=all_skills.reject{|q| q[4]!='Special'}
-    str="#{str}\n#{filler(ls2,as2,11,[-1,-1],['Damage','Defense'],[1,-1])} offensive specials"
-    str="#{str}\n#{filler(ls2,as2,11,-1,'Defense',1)} defensive specials"
+    str="#{str}\n#{filler(ls2,as2,11,[-1,-1],['Offensive','Defensive'],[1,-1])} offensive specials"
+    str="#{str}\n#{filler(ls2,as2,11,-1,'Defensive',1)} defensive specials"
     str="#{str}\n#{filler(ls2,as2,11,-1,'AoE',1)} Area-of-Effect specials"
     str="#{str}\n#{filler(ls2,as2,11,-1,'Staff',1)} healer specials"
     str="#{str}\n__#{filler(ls2,as2,11,-3,['Damage','Defense','AoE','Staff'],-4)} misc. specials__"
