@@ -5470,7 +5470,17 @@ def display_units(event, mode)
   if k.is_a?(Array)
     data_load()
     untz=@units.map{|q| q}
-    k=k.map{|q| "#{'~~' if !['Laevatein','- - -'].include?(q) && !untz[untz.find_index{|q2| q2[0]==q.gsub(' *[Amiibo]*','')}][13][0].nil?}#{q}#{'~~' if !['Laevatein','- - -'].include?(q) && !untz[untz.find_index{|q2| q2[0]==q.gsub(' *[Amiibo]*','')}][13][0].nil?}"}
+    for i in 0...k.length
+      m=''
+      m='*' if ['Laevatein'].include?(k[i])
+      unless ['Laevatein','- - -'].include?(k[i])
+        m2=untz[untz.find_index{|q2| q2[0]==k[i].gsub(' *[Amiibo]*','')}]
+        m='~~' unless m2[13][0].nil?
+        m='*' if m2[9][0].downcase.gsub('0s','')=='-'
+      end
+      m='' if m=='*' && k.reject{|q| !q.include?(' *[Amiibo]*')}.length>0
+      k[i]="#{m}#{k[i]}#{m}"
+    end
     if k.include?('- - -')
       p1=[[]]
       p2=0
@@ -5483,7 +5493,7 @@ def display_units(event, mode)
         end
       end
       for i in 0...p1.length
-        wpn1=p1[i].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','')}][1]}
+        wpn1=p1[i].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','').gsub('*','')}][1]}
         h='.'
         if wpn1.uniq.length==1
           # blade type
@@ -5536,7 +5546,7 @@ def display_units(event, mode)
         if h=='.' && wpn1[0]=='Tome'
           h=wpn1[0][2]
           for l in 0...p1[i].length
-            h=untz[untz.find_index{|q2| q2[0]==p1[i][l].gsub(' *[Amiibo]*','')}][1][0] if h != untz[untz.find_index{|q2| q2[0]==p1[i][l]}][1][2]
+            h=untz[untz.find_index{|q2| q2[0]==p1[i][l].gsub(' *[Amiibo]*','').gsub('*','')}][1][0] if h != untz[untz.find_index{|q2| q2[0]==p1[i][l]}][1][2]
           end
           h="#{h} Mages"
         end
@@ -5544,7 +5554,7 @@ def display_units(event, mode)
       end
       if p1.map{|q| q[0]}.uniq.length<=1
         for i in 0...p1.length
-          mov=p1[i][1].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','')}][3]}.uniq
+          mov=p1[i][1].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','').gsub('*','')}][3]}.uniq
           if mov.length<=1
             p1[i][0]='<:Icon_Move_Infantry:443331187579289601> Infantry' if mov[0]=='Infantry'
             p1[i][0]='<:Icon_Move_Armor:443331186316673025> Armor' if mov[0]=='Armor'
@@ -7549,7 +7559,10 @@ def unit_study(event,name,bot,weapon=nil)
     summon_type[6]=nil
   end
   summon_type.compact!
-  summon_type=['Unobtainable'] if summon_type.nil? || summon_type.length.zero?
+  if summon_type.nil? || summon_type.length.zero?
+    summon_type=['Unobtainable']
+    lowest_rarity=1
+  end
   summon_type=summon_type.join(', ')
   if j<0
     event.respond 'No unit was included'
