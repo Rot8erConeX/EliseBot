@@ -1702,6 +1702,14 @@ def reshape_unit_into_multi(name,args3) # used by the find_unit_in_string functi
         name=args3[0]
       end
     end
+  elsif name=='Tiki(Young)(Summer)' || name=='Tiki(Adult)(Summer)'
+    if args3.reject{|q| ['summer','beach','swimsuit'].include?(q.downcase)}.length==1
+      if ['tiki','chiki'].include?(args3[0].downcase)
+        name='TikiSummer'
+      else
+        name=args3[0]
+      end
+    end
   elsif name=='Eirika(Bonds)' || name=='Eirika(Memories)'
     if args3.length==1
       if ['eirika','eirik','eiriku','erika'].include?(args3[0].downcase)
@@ -2601,6 +2609,7 @@ def unit_moji(bot,event,j=-1,name=nil,m=false) # used primarilally by the BST an
   memote=''
   memote=moji[0].mention unless moji.length<=0
   dancer=''
+  data_load()
   sklz=@skills.map{|q| q}
   dancer='<:Assist_Music:454462054959415296>' if sklz[sklz.find_index{|q| q[0]=='Dance'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   dancer='<:Assist_Music:454462054959415296>' if sklz[sklz.find_index{|q| q[0]=='Sing'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
@@ -6345,15 +6354,29 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       strx='beach' if str2.include?('beach')
       strx='swimsuit' if str2.include?('swimsuit')
       str2=str3.gsub(strx,'').gsub("#{str} ",str).gsub(" #{str}",str)
-      if str2.include?('young') || str2.include?('child') || str2.include?('loli') || str2.include?("#{str}c") || str2.include?("c#{str}") || str2.include?("#{str}y") || str2.include?("y#{str}")
-        return [str,['Tiki(Young)(Summer)'],["#{strx}#{str}","#{str}#{strx}"]]
-      elsif str2.include?('adult') || str2.include?('old') || str2.include?('bae') || str2.include?("#{str}a") || str2.include?("a#{str}")
-        return [str,['Tiki(Adult)(Summer)'],["#{strx}#{str}","#{str}#{strx}"]]
+      m=["#{strx}#{str}","#{str}#{strx}","#{strx} #{str}","#{str} #{strx}"]
+      if str2.include?('adult') || str2.include?('old') || str2.include?('bae') || str2.include?("#{str}a") || str2.include?("a#{str}")
+        for i in 0...m.length
+          return [m[i],['Tiki(Adult)(Summer)'],m] if event.message.text.downcase.include?(m[i])
+        end
+        return [str,['Tiki(Adult)(Summer)'],m]
+      elsif str2.include?('young') || str2.include?('child') || str2.include?('loli') || str2.include?("#{str}c") || str2.include?("c#{str}") || str2.include?("#{str}y") || str2.include?("y#{str}")
+        for i in 0...m.length
+          return [m[i],['Tiki(Young)(Summer)'],m] if event.message.text.downcase.include?(m[i])
+        end
+        return [str,['Tiki(Young)(Summer)'],m]
       end
-      return [str,['Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)'],["summer#{str}","beach#{str}","swimsuit#{str}","ys#{str}","#{str}summer","#{str}beach","#{str}swimsuit","#{str}ys"]]
+      for i in 0...m.length
+        return [m[i],['Tiki(Adult)(Summer)','Tiki(Young)(Summer)'],m] if event.message.text.downcase.include?(m[i])
+      end
+      return [str,['Tiki(Adult)(Summer)','Tiki(Young)(Summer)'],m]
     end
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
-    if str2.include?('young') || str2.include?('child') || str2.include?('loli') || str2.include?("#{str}c") || str2.include?("c#{str}") || str2.include?("#{str}y") || str2.include?("y#{str}")
+    if str2.include?("#{str}ys") || str2.include?("ys#{str}")
+      return [str,['Tiki(Adult)(Summer)'],["ys#{str}","#{str}ys"]]
+    elsif str2.include?("#{str}ss") || str2.include?("ss#{str}")
+      return [str,['Tiki(Young)(Summer)'],["ss#{str}","#{str}ss"]]
+    elsif str2.include?('young') || str2.include?('child') || str2.include?('loli') || str2.include?("#{str}c") || str2.include?("c#{str}") || str2.include?("#{str}y") || str2.include?("y#{str}")
       return [str,['Tiki(Young)'],["#{str}young","#{str}child","#{str}loli","#{str}y","#{str}c","young#{str}","child#{str}","loli#{str}","y#{str}","c#{str}"]]
     elsif str2.include?('adult') || str2.include?('old') || str2.include?('bae') || str2.include?("#{str}a") || str2.include?("a#{str}")
       return [str,['Tiki(Adult)'],["#{str}adult","#{str}bae","#{str}a","adult#{str}","bae#{str}","a#{str}"]]
@@ -6379,12 +6402,22 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       strx='fh' if str2.include?('fh')
       strx='grima' if str2.include?('grima')
       str2=str3.gsub(strx,'').gsub("#{str} ",str).gsub(" #{str}",str)
+      m=["#{strx}#{str}","#{str}#{strx}","#{strx} #{str}","#{str} #{strx}"]
       if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("#{str}f") || str2.include?("f#{str}") || str2.include?("legendary") || str2.include?("#{str}lh") || str2.include?("lh#{str}")
-        return [str,['Robin(F)(Fallen)'],["#{strx}#{str}","#{str}#{strx}"]]
+        for i in 0...m.length
+          return [m[i],['Robin(F)(Fallen)'],m] if event.message.text.downcase.include?(m[i])
+        end
+        return [str,['Robin(F)(Fallen)'],m]
       elsif str2.include?("male#{str}") || str2.include?("#{str}male") || str2.include?("#{str}m") || str2.include?("m#{str}")
-        return [str,['Robin(M)(Fallen)'],["#{strx}#{str}","#{str}#{strx}"]]
+        for i in 0...m.length
+          return [m[i],['Robin(M)(Fallen)'],m] if event.message.text.downcase.include?(m[i])
+        end
+        return [str,['Robin(M)(Fallen)'],m]
       end
-      return [str,['Robin(M)(Fallen)','Robin(F)(Fallen)'],["#{strx}#{str}","#{str}#{strx}"]]
+      for i in 0...m.length
+        return [m[i],['Robin(M)(Fallen)','Robin(F)(Fallen)'],m] if event.message.text.downcase.include?(m[i])
+      end
+      return [str,['Robin(M)(Fallen)','Robin(F)(Fallen)'],m]
     elsif str2.include?('legendary')
       return [str,['Robin(F)(Fallen)'],["legendary#{str}","#{str}legendary"]]
     end
