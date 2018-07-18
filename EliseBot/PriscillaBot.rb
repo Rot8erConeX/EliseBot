@@ -47,6 +47,8 @@ bot.gateway.check_heartbeat_acks = false
 @stored_event=nil
 @zero_by_four=[0,0,0,'']
 @headpats=[0,0,0]
+@rarity_stars=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>',
+               '<:Icon_Rarity_5:448266417553539104>','<:Icon_Rarity_5:448266417553539104>']
 @summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,
                  341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,238770788272963585,297459718249512961,283833293894582272,
                  214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,347491426852143109,392557615177007104,295686580528742420,
@@ -2732,7 +2734,7 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
 end
 
 def display_stars(rarity,merges,support='-') # used to determine which star emojis should be used, based on the rarity, merge count, and whether the unit is Summoner Supported
-  emo=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][rarity-1]
+  emo=@rarity_stars[rarity-1]
   if merges==@max_rarity_merge[1]
     emo='<:Icon_Rarity_4p10:448272714210476033>' if rarity==4
     emo='<:Icon_Rarity_5p10:448272715099406336>' if rarity==5
@@ -3587,9 +3589,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       elsif skill[4]=='Weapon' && skill[9][i].split(', ').length>8 && !event.message.text.downcase.split(' ').include?('expanded')
         xfooter='If you would like to include the Prfs and units who have them, include the word "expanded" when retrying this command.'
         m=skill[9][i].split(', ').reject{|q| !p3.include?(q)}.join(', ')
-        str2="#{str2}\n*#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]}:* #{m}, and #{skill[9][i].split(', ').length-m.split(', ').length} units who end up having Prf weapons."
+        str2="#{str2}\n*#{i+1}#{@rarity_stars[i]}:* #{m}, and #{skill[9][i].split(', ').length-m.split(', ').length} units who end up having Prf weapons."
       else
-        str2="#{str2}\n*#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]}:* #{skill[9][i]}"
+        str2="#{str2}\n*#{i+1}#{@rarity_stars[i]}:* #{skill[9][i]}"
       end
     end
     str="#{str}#{"\n" unless x}\n#{str2}" unless str2=='**Heroes who know it out of the box:**'
@@ -3603,12 +3605,12 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     elsif skill[4]=='Weapon' && skill[10][i].split(', ').length>8 && !event.message.text.downcase.split(' ').include?('expanded')
       xfooter='If you would like to include the Prfs and units who have them, include the word "expanded" when retrying this command.'
       m=skill[10][i].split(', ').reject{|q| !p3.include?(q)}.join(', ')
-      str2="#{str2}\n*#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]}:* #{m}, and #{skill[10][i].split(', ').length-m.split(', ').length} units who end up having Prf weapons."
+      str2="#{str2}\n*#{i+1}#{@rarity_stars[i]}:* #{m}, and #{skill[10][i].split(', ').length-m.split(', ').length} units who end up having Prf weapons."
     elsif dispcolors
       m=skill[10][i].split(', ')
       for i2 in 0...m.length
         m2=unitz[unitz.find_index{|q| q[0]==m[i2].gsub('~~','')}]
-        m3="#{m[i2]} (#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]})"
+        m3="#{m[i2]} (#{i+1}#{@rarity_stars[i]})"
         if m2[9][0].include?('p')
           clrz[0].push(m3) if m2[1][0]=='Red'
           clrz[1].push(m3) if m2[1][0]=='Blue'
@@ -3626,7 +3628,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         end
       end
     else
-      str2="#{str2}\n*#{i+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]}:* #{skill[10][i]}"
+      str2="#{str2}\n*#{i+1}#{@rarity_stars[i]}:* #{skill[10][i]}"
     end
   end
   str2="#{str2}\n*<:Orb_Red:455053002256941056> Red Summonables:* #{clrz[0].join(', ')}" unless clrz[0].length<=0
@@ -3664,7 +3666,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
           for i3 in 0...m.length
             puts m[i3]
             m2=unitz[unitz.find_index{|q| q[0]==m[i3].gsub('~~','')}]
-            m3="#{m[i3]} (#{i2+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i2]})"
+            m3="#{m[i3]} (#{i2+1}#{@rarity_stars[i2]})"
             if m2[9][0].include?('p')
               clrz[0].push(m3) if m2[1][0]=='Red'
               clrz[1].push(m3) if m2[1][0]=='Blue'
@@ -3682,7 +3684,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
             end
           end
         else
-          str2="#{str2}\n*#{i2+1}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i2]}:* #{skill2[10][i2]}"
+          str2="#{str2}\n*#{i2+1}#{@rarity_stars[i2]}:* #{skill2[10][i2]}"
         end
       end
       str2="#{str2}\n*<:Orb_Red:455053002256941056> Red Summonables:* #{clrz[0].join(', ')}" unless clrz[0].length<=0
@@ -4296,7 +4298,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   j=find_unit(find_name_in_string(event),event)
   j=find_unit(name,event) unless name.nil? || name.length.zero?
   mu=false
-  txt="#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][rarity.to_i-1]*rarity.to_i}"
+  txt="#{@rarity_stars[rarity.to_i-1]*rarity.to_i}"
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     namehere=str
@@ -6029,7 +6031,7 @@ def comparison(event,args,bot)
       end
       st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
       st[0]=st[0].gsub('Lavatain','Laevatein')
-      b.push([st,"#{r[0]}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][r[0]-1]} #{name} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0]])
+      b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]} #{name} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0]])
       c.push(unit_color(event,find_unit(find_name_in_string(event,sever(k[i])),event),nil,1,m))
       atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
       atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
@@ -6623,7 +6625,7 @@ def skill_comparison(event,args,bot)
       end
       st=[]
       st=unit_skills(name,event,false,r[0]) if i<=1
-      b.push([st,"#{r[0]}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][r[0]-1]} #{name} #{unit_moji(bot,event,-1,name,m)}",name])
+      b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]} #{name} #{unit_moji(bot,event,-1,name,m)}",name])
       c.push(unit_color(event,find_unit(find_name_in_string(event,sever(k[i])),event),nil,1,m))
     elsif k[i].downcase=="mathoo's"
       m=true
@@ -7564,42 +7566,16 @@ def unit_study(event,name,bot,weapon=nil)
   lowest_rarity=@max_rarity_merge[0]
   summon_type=[[],[],[],[],[],[],[]]
   for m in 1...@max_rarity_merge[0]+1
-    if rardata.include?("#{m}p")
-      lowest_rarity=[m,lowest_rarity].min
-      summon_type[0].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Summon Pool
-    end
-    if rardata.include?("#{m}d")
-      lowest_rarity=[m,lowest_rarity].min
-      summon_type[1].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Daily Rotation Heroes
-    end
-    if rardata.include?("#{m}g")
-      lowest_rarity=[m,lowest_rarity].min
-      summon_type[2].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Grand Hero Battles
-    end
-    if rardata.include?("#{m}f")
-      lowest_rarity=[m,lowest_rarity].min
-      summon_type[3].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # free heroes
-    end
-    if rardata.include?("#{m}q")
-      lowest_rarity=[m,lowest_rarity].min
-      summon_type[4].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # quest rewards
-    end
-    if rardata.include?("#{m}t")
-      lowest_rarity=[m,lowest_rarity].min
-      summon_type[5].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Tempest Trials rewards
-    end
-    if rardata.include?("#{m}s")
-      lowest_rarity=[m,lowest_rarity].min
-      summon_type[6].push("Seasonal #{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]} summon")
-    end
-    if rardata.include?("#{m}y")
-      lowest_rarity=[m,lowest_rarity].min
-      summon_type[6].push("Story unit starting at #{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}")
-    end
-    if rardata.include?("#{m}b")
-      lowest_rarity=[m,lowest_rarity].min
-      summon_type[6].push("Purchasable at #{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}")
-    end
+    lowest_rarity=[m,lowest_rarity].min if has_any?(rardata.scan(/.{1,2}/),["#{m}p","#{m}d","#{m}g","#{m}f","#{m}q","#{m}t","#{m}s","#{m}y","#{m}b"])
+    summon_type[0].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}p") # Summon Pool
+    summon_type[1].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}d") # Daily Rotation Heroes
+    summon_type[2].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}g") # Grand Hero Battles
+    summon_type[3].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}f") # free heroes
+    summon_type[4].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}q") # quest rewards
+    summon_type[5].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}t") # Tempest Trials rewards
+    summon_type[6].push("Seasonal #{m}#{@rarity_stars[m-1]} summon") if rardata.include?("#{m}s")
+    summon_type[6].push("Story unit starting at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}y")
+    summon_type[6].push("Purchasable at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}b")
   end
   if summon_type[6].include?('Story unit starting at 2<:Icon_Rarity_2:448266417872044032>') && summon_type[6].include?('Story unit starting at 4<:Icon_Rarity_4:448266418459377684>')
     for i in 0...summon_type[6].length
@@ -7662,7 +7638,7 @@ def unit_study(event,name,bot,weapon=nil)
   xcolor=0x9400D3 if u40[0]=='Kiran'
   rar=[]
   for i in 0...@max_rarity_merge[0]
-    rx=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][i]*(i+1)
+    rx=@rarity_stars[i]*(i+1)
     rx="#{i+1}-star" if i>4
     rar.push([rx,r[i]]) if (lowest_rarity<=i+1 && ((boon=="" && bane=="") || i>=3)) || args.include?('full') || args.include?('rarities') || i==@max_rarity_merge[0]-1
   end
@@ -8971,33 +8947,15 @@ def banner_list(event,name,bot,weapon=nil)
     rardata=j[9][0].downcase.gsub('0s','').split('p')[0]
     summon_type=[[],[],[],[],[],[],[]]
     for m in 1...@max_rarity_merge[0]+1
-      if rardata.include?("#{m}p")
-        summon_type[0].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Summon Pool
-      end
-      if rardata.include?("#{m}d")
-        summon_type[1].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Daily Rotation Heroes
-      end
-      if rardata.include?("#{m}g")
-        summon_type[2].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Grand Hero Battles
-      end
-      if rardata.include?("#{m}f")
-        summon_type[3].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # free heroes
-      end
-      if rardata.include?("#{m}q")
-        summon_type[4].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # quest rewards
-      end
-      if rardata.include?("#{m}t")
-        summon_type[5].push("#{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}") # Tempest Trials rewards
-      end
-      if rardata.include?("#{m}s")
-        summon_type[6].push("Seasonal #{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]} summon")
-      end
-      if rardata.include?("#{m}y")
-        summon_type[6].push("Story unit starting at #{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}")
-      end
-      if rardata.include?("#{m}b")
-        summon_type[6].push("Purchasable at #{m}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][m-1]}")
-      end
+      summon_type[0].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}p") # Summon Pool
+      summon_type[1].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}d") # Daily Rotation Heroes
+      summon_type[2].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}g") # Grand Hero Battles
+      summon_type[3].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}f") # free heroes
+      summon_type[4].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}q") # quest rewards
+      summon_type[5].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}t") # Tempest Trials rewards
+      summon_type[6].push("Seasonal #{m}#{@rarity_stars[m-1]} summon") if rardata.include?("#{m}s")
+      summon_type[6].push("Story unit starting at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}y")
+      summon_type[6].push("Purchasable at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}b")
     end
     if summon_type[6].include?('Story unit starting at 2<:Icon_Rarity_2:448266417872044032>') && summon_type[6].include?('Story unit starting at 4<:Icon_Rarity_4:448266418459377684>')
       for i in 0...summon_type[6].length
@@ -10343,7 +10301,7 @@ bot.command([:bst, :BST]) do |event, *args|
       end
       st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
       b.push(st[1]+st[2]+st[3]+st[4]+st[5])
-      event << "Unit #{u}: #{r[0]}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][r[0]-1]} #{name.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,name,m)} +#{r[1]} #{"(+#{r[2]}, -#{r[3]})" if !['',' '].include?(r[2]) || !['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}     BST: #{b[b.length-1]}"
+      event << "Unit #{u}: #{r[0]}#{@rarity_stars[r[0]-1]} #{name.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,name,m)} +#{r[1]} #{"(+#{r[2]}, -#{r[3]})" if !['',' '].include?(r[2]) || !['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}     BST: #{b[b.length-1]}"
     end
   end
   if braves[1].max==1
@@ -12719,7 +12677,7 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
       devunits_save()
       congrate=false
       congrats=true if @dev_waifus.include?(jn) || @dev_somebodies.include?(jn)
-      event.respond "You have added a #{flurp[0]}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{'Congrats!' if congrats}"
+      event.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{'Congrats!' if congrats}"
     elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
       if @dev_waifus.include?(@units[j][0])
         event.respond "Woah, you're getting rid of one of your waifus?!?  Who hacked your Discord and/or FEH account?"
@@ -12769,7 +12727,7 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
           devunits_save()
           congrate=false
           congrats=true if @dev_waifus.include?(jn) || @dev_somebodies.include?(jn)
-          e.respond "You have added a #{flurp[0]}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{"Congrats!" if congrats}"
+          e.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{"Congrats!" if congrats}"
         end
       end
     end
@@ -12797,7 +12755,7 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
     @dev_units[j2][1]=[@dev_units[j2][1],5].min
     @dev_units[j2][2]=0
     devunits_save()
-    event.respond "You have promoted your #{@dev_units[j2][0]} to #{@dev_units[j2][1]}#{['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>'][@dev_units[j2][1]-1]}!"
+    event.respond "You have promoted your #{@dev_units[j2][0]} to #{@dev_units[j2][1]}#{@rarity_stars[@dev_units[j2][1]-1]}!"
   elsif ['merge','combine'].include?(cmd.downcase)
     flurp=find_stats_in_string(event,nil,1)
     @dev_units[j2][2]+=flurp[1] unless flurp[1].nil?
