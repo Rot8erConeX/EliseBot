@@ -13595,7 +13595,8 @@ bot.mention do |event|
   a=s.split(' ')
   a=a.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   s=a.join(' ')
-  if s.gsub(' ','').downcase=='laevatein'
+  if ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  elsif s.gsub(' ','').downcase=='laevatein'
     disp_stats(bot,'Lavatain',nil,event,true)
     disp_skill(bot,'Bladeblade',event,true)
   else
