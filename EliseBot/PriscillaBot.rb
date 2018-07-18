@@ -2605,7 +2605,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   return "#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* Legendary Hero" unless jj[2][0]==" "}"
 end
 
-def unit_moji(bot,event,j=-1,name=nil,m=false) # used primarilally by the BST and Alt commands to display a unit's weapon and movement classes as emojis
+def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0) # used primarilally by the BST and Alt commands to display a unit's weapon and movement classes as emojis
   return '' if was_embedless_mentioned?(event)
   return '' if name.nil? && j<0
   j=@units.find_index{|q| q[0]==name} if j<0
@@ -2614,11 +2614,17 @@ def unit_moji(bot,event,j=-1,name=nil,m=false) # used primarilally by the BST an
   clr='Gold'
   clr=jj[1][0] if ['Red','Blue','Green','Colorless'].include?(jj[1][0])
   clr='Cyan' if name=='Robin (Shared stats)'
+  if mode==1
+    clr='Gold' if ['Dragon','Bow'].include?(jj[1][1])
+    clr='Gold' if jj[1][1]=='Healer' && alter_classes(event,'Colored Healers')
+    clr='Gold' if jj[1][1]=='Dagger' && alter_classes(event,'Colored Daggers')
+  end
   wpn='Unknown'
   wpn=jj[1][1].gsub('Healer','Staff') if ['Blade','Tome','Dragon','Beast','Bow','Dagger','Healer'].include?(jj[1][1])
   wemote=''
   moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clr}_#{wpn}"}
   wemote=moji[0].mention unless moji.length<=0
+  return wemote if mode==1
   mov='Unknown'
   mov=jj[3] if ['Infantry','Armor','Flier','Cavalry'].include?(jj[3])
   moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{mov}"}
@@ -2929,7 +2935,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
     flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: 0\n<:StrengthS:467037520484630539> Attack: 0\n<:SpeedS:467037520534962186> Speed: 0\n<:DefenseS:467037520249487372> Defense: 0\n<:ResistanceS:467037520379641858> Resistance: 0\n\nBST: 0"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: 0\n<:StrengthS:467037520484630539> Attack: 0\n<:SpeedS:467037520534962186> Speed: 0\n<:DefenseS:467037520249487372> Defense: 0\n<:ResistanceS:467037520379641858> Resistance: 0\n\nBST: 0"]]
     if skillstoo
       uskl=unit_skills(name,event).map{|q| q.reject{|q2| q2.include?('Unknown base')}}
-      puts uskl.map{|q| q.to_s}
       for i in 0...3
         if uskl[i][0].include?('**') && uskl[i]!=uskl[i].reject{|q| !q.include?('**')}
           uskl[i][-1]="#{uskl[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{uskl[i][-1]}"
@@ -3010,7 +3015,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
     flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: unknown\n#{atk}: unknown\n<:SpeedS:467037520534962186> Speed: unknown\n<:DefenseS:467037520249487372> Defense: unknown\n<:ResistanceS:467037520379641858> Resistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}#{"(#{diff_num[1]}) / #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}"]]
     if skillstoo
       uskl=unit_skills(name,event).map{|q| q.reject{|q2| q2.include?('Unknown base')}}
-      puts uskl.map{|q| q.to_s}
       for i in 0...3
         if uskl[i][0].include?('**') && uskl[i]!=uskl[i].reject{|q| !q.include?('**')}
           uskl[i][-1]="#{uskl[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{uskl[i][-1]}"
@@ -3231,7 +3235,7 @@ def find_base_skill(x,event)
   return find_base_skill(@skills[find_skill(x[8][1,x[8].length-2],event)],event)
 end
 
-def cumulitive_sp_cost(x,event,mode=0)
+def cumulative_sp_cost(x,event,mode=0)
   if mode==1
     return ['',0,0,0] if ['Weapon','Assist','Special'].include?(x[4]) || x[3]=='-' || x[3].split(' ').length<4
     m=x[3].split(' ')
@@ -3249,7 +3253,7 @@ def cumulitive_sp_cost(x,event,mode=0)
     k=k.reject{|q| q.scan(/[[:alpha:]]+?/).join != x[0].scan(/[[:alpha:]]+?/).join}
     return m if k.length<=0
     k=k[0]
-    n=cumulitive_sp_cost(@skills[find_skill(k,event)],event,1)
+    n=cumulative_sp_cost(@skills[find_skill(k,event)],event,1)
     return [m[0],m[1]+n[1],m[2]+n[2],m[3]+n[3]]
   end
   return 0 if x.nil?
@@ -3261,7 +3265,7 @@ def cumulitive_sp_cost(x,event,mode=0)
   else
     k=@skills[find_skill(x[8].gsub('*',''),event)]
   end
-  return x[1]+cumulitive_sp_cost(k,event)
+  return x[1]+cumulative_sp_cost(k,event)
 end
 
 def disp_skill(bot,name,event,ignore=false,dispcolors=false)
@@ -3455,7 +3459,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     str="#{str}\n**Stats affected:** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}"
     sklslt=['Weapon']
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
-    cumul=cumulitive_sp_cost(skill,event)
+    cumul=cumulative_sp_cost(skill,event)
     cumul2=cumul+skill[1]/2
     if skill[0][skill[0].length-1,1]=='+' && skill[11].split(', ').include?("Seasonal")
       # seasonal + weapons come bundled with their non-plus selves, so their minimum inherited SP cost has to include the non-plus version as inherited as well
@@ -3464,7 +3468,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       # seasonal + weapons come bundled with their non-plus selves, so their minimum inherited SP cost has to include the non-plus version as inherited as well
       cumul2+=sklz[sklz.find_index{|q| q[0]==skill[0].gsub('+','')}][1]/2
     end
-    str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
+    str="#{str}\n**Cumulative SP Cost:** #{cumul} #{"(#{cumul2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
   elsif skill[4]=='Assist'
     sklslt=['Assist']
     xcolor=0x07DFBB
@@ -3472,20 +3476,20 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     str="<:Skill_Assist:444078171025965066> **Skill Slot:** #{skill[4]}\n**Range:** #{skill[3]}\n**Effect:** #{skill[7]}"
     str="#{str}\n**Heals:** #{skill[14]}" if skill[5]=="Staff Users Only"
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
-    cumul=cumulitive_sp_cost(skill,event)
+    cumul=cumulative_sp_cost(skill,event)
     cumul2=cumul+skill[1]/2
     if skill[0][skill[0].length-1,1]=='+' && skill[5]=="Staff Users Only"
       cumul2+=sklz[sklz.find_index{|q| q[0]==skill[0].gsub('+','')}][1]/2
     end
-    str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
+    str="#{str}\n**Cumulative SP Cost:** #{cumul} #{"(#{cumul2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
   elsif skill[4]=='Special'
     sklslt=['Special']
     xcolor=0xF67EF8
     xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Specials/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
     str="<:Skill_Special:444078170665254929> **Skill Slot:** #{skill[4]}\n**Cooldown:** #{skill[2]}\n**Effect:** #{skill[7]}#{"\n**Range:** ```\n#{skill[3].gsub("n","\n")}```" if skill[3]!="-"}"
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
-    cumul=cumulitive_sp_cost(skill,event)
-    str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
+    cumul=cumulative_sp_cost(skill,event)
+    str="#{str}\n**Cumulative SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
   else
     xcolor=0xFDDC7E
     sklimg=skill[0].gsub(' ','_').gsub('/','_').gsub('!','')
@@ -3526,8 +3530,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="#{str}\n**Secondary effect:** Breaks consecutiveness of enemy sword/axe/lance/breath attacks"
     end
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
-    cumul=cumulitive_sp_cost(skill,event)
-    str="#{str}\n**Cumulitive SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
+    cumul=cumulative_sp_cost(skill,event)
+    str="#{str}\n**Cumulative SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
     if skill[4].split(', ').include?('Seal') && skill[3]!="-" && skill[3][0,1].downcase!=skill[3][0,1]
       floop=skill[3].split(' ')
       floop[0]='<:Great_Badge_Transparent:443704781597573120> <:Badge_Transparent:445510675976945664>' if floop[0].downcase=='transparent'
@@ -3538,8 +3542,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         floop[i]=floop[i].to_i
       end
       str="#{str}\n**Seal Cost:** #{floop[1]}#{floop[0].split(' ')[0]} #{floop[2]}#{floop[0].split(' ')[1]} #{floop[3]}<:Sacred_Coin:453618312996323338>"
-      cumul=cumulitive_sp_cost(skill,event,1)
-      str="#{str}\n**Cumulitive Seal Cost:** #{cumul[1]}#{floop[0].split(' ')[0]} #{cumul[2]}#{floop[0].split(' ')[1]} #{cumul[3]}<:Sacred_Coin:453618312996323338>" if [cumul[1],cumul[2],cumul[3]]!=[floop[1],floop[2],floop[3]]
+      cumul=cumulative_sp_cost(skill,event,1)
+      str="#{str}\n**Cumulative Seal Cost:** #{cumul[1]}#{floop[0].split(' ')[0]} #{cumul[2]}#{floop[0].split(' ')[1]} #{cumul[3]}<:Sacred_Coin:453618312996323338>" if [cumul[1],cumul[2],cumul[3]]!=[floop[1],floop[2],floop[3]]
     end
   end
   p=find_promotions(f,event)
@@ -3678,7 +3682,6 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         elsif dispcolors
           m=skill2[10][i2].split(', ')
           for i3 in 0...m.length
-            puts m[i3]
             m2=unitz[unitz.find_index{|q| q[0]==m[i3].gsub('~~','')}]
             m3="#{m[i3]} (#{i2+1}#{@rarity_stars[i2]})"
             if m2[9][0].include?('p')
@@ -3740,7 +3743,6 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     end
   end
   if lookoutx.map{|q| q[0]}.include?(skill[0]) || skill[0][0,11]=='Panic Ploy '
-    puts skill[0]
     statskill=lookoutx.find_index{|q| q[0]==skill[0]}
     statskill=lookoutx.find_index{|q| q[0]=='Panic Ploy'} if statskill.nil?
     statskill=lookoutx[statskill]
@@ -9259,10 +9261,21 @@ bot.command([:legendary,:legendaries]) do |event, *args|
       element=x2 if ['Attack','Speed','Defense','Resistance'].include?(x2)
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{element}"}
       x2="#{moji[0].mention} #{x2}" if moji.length>0
+    elsif pri=='Color'
+      x2=p1[i][0][1][0]
+      element='Gold'
+      element=x2 if ['Red','Blue','Green','Colorless'].include?(x2)
+      moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{element}_Unknown"}
+      x2="#{moji[0].mention} #{x2}" if moji.length>0
+    elsif pri=='Movement'
+      x2=p1[i][0][3]
+      element='Unknown'
+      element=x2 if ['Infantry','Flier','Cavalry','Armor'].include?(x2)
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{element}"}
+      x2="#{moji[0].mention} #{x2}" if moji.length>0
+    elsif pri=='Weapon'
+      x2="#{unit_moji(bot,event,-1,p1[i][0][0],false,1)} #{weapon_clss(p1[i][0][1],event,1)}"
     end
-    x2=p1[i][0][1][0] if pri=='Color'
-    x2=weapon_clss(p1[i][0][1],event,1) if pri=='Weapon'
-    x2=p1[i][0][3] if pri=='Movement'
     if sec=='Stat'
       l2=split_list(event,p1[i],['Attack','Speed','Defense','Resistance'],-6)
     elsif sec=='Color'
@@ -9296,10 +9309,21 @@ bot.command([:legendary,:legendaries]) do |event, *args|
         element=x3 if ['Attack','Speed','Defense','Resistance'].include?(x3)
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{element}"}
         x3="#{moji[0].mention} #{x3}" if moji.length>0
+      elsif sec=='Color'
+        x3=p2[j][0][1][0]
+        element='Gold'
+        element=x3 if ['Red','Blue','Green','Colorless'].include?(x3)
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{element}_Unknown"}
+        x3="#{moji[0].mention} #{x3}" if moji.length>0
+      elsif sec=='Movement'
+        x3=p2[j][0][3]
+        element='Unknown'
+        element=x3 if ['Infantry','Flier','Cavalry','Armor'].include?(x3)
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{element}"}
+        x3="#{moji[0].mention} #{x3}" if moji.length>0
+      elsif sec=='Weapon'
+        x3="#{unit_moji(bot,event,-1,p2[j][0][0],false,1)} #{weapon_clss(p2[j][0][1],event,1)}"
       end
-      x3=p2[j][0][1][0] if sec=='Color'
-      x3=weapon_clss(p2[j][0][1],event,1) if sec=='Weapon'
-      x3=p2[j][0][3] if sec=='Movement'
       p2[j]="__*#{x3}*__\n#{p2[j].map{|q| "#{'~~' unless q[13][0].nil?}#{q[0]}#{" - *#{weapon_clss(q[1],event,1) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{'~~' unless q[13][0].nil?}"}.join("\n")}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       p2[j]="*#{x3}*: #{p2[j].map{|q| "#{'~~' unless q[13][0].nil?}#{q[0]}#{" - *#{weapon_clss(q[1],event,1) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{'~~' unless q[13][0].nil?}"}.join(", ")}" if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     end
