@@ -1537,7 +1537,13 @@ def find_group(name,event) # used to find a group's data entry based on their na
   k=0
   k=event.server.id unless event.server.nil?
   groups_load()
-  name='Wedding' if ['brides','grooms'].include?(name.downcase)
+  name='BraveHeroes' if ['braveheroes','brave','cyl'].include?(name.downcase)
+  name='FallenHeroes' if ['fallenheroes','fallen','dark','evil','alter'].include?(name.downcase)
+  name='Winter' if ['winter','holiday'].include?(name.downcase)
+  name='Bunnies' if ['bunnies','bunny','spring'].include?(name.downcase)
+  name="Valentine's" if ['valentines',"valentine's"].include?(name.downcase)
+  name="NewYear's" if ['newyears',"newyear's",'newyear'].include?(name.downcase)
+  name='Wedding' if ['brides','grooms','bride','groom','wedding'].include?(name.downcase)
   name='Falchion_Users' if ['falchionusers'].include?(name.downcase.gsub('-','').gsub('_',''))
   name='Dancers&Singers' if ['dancers','singers'].include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends'].include?(name.downcase)
@@ -1549,7 +1555,13 @@ def find_group(name,event) # used to find a group's data entry based on their na
   end
   return j if j>=0
   # ...then try partial-name matches
-  name='Wedding' if name.length<6 && ['brides','grooms'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='BraveHeroes' if ['braveheroes','brave','cyl'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='FallenHeroes' if ['fallenheroes','fallen','dark','evil','alter'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='Winter' if ['winter','holiday'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='Bunnies' if ['bunnies','bunny','spring'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name="Valentine's" if ['valentines',"valentine's"].map{|q| q[0,name.length]}.include?(name.downcase)
+  name="NewYear's" if ['newyears',"newyear's",'newyear'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='Wedding' if name.length<6 && ['brides','grooms','bride','groom','wedding'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Falchion_Users' if ['falchionusers'].map{|q| q[0,name.gsub('-','').gsub('_','').length]}.include?(name.downcase.gsub('-','').gsub('_',''))
   name='Dancers&Singers' if ['dancers','singers'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends'].map{|q| q[0,name.length]}.include?(name.downcase)
@@ -1580,9 +1592,11 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
         event << "__**#{header.gsub('!','')}**__"
       end
     end
-    event << ''
-    event << text
-    event << '' unless [text[text.length-1,1],text[text.length-2,2]].include?("\n")
+    unless text.length<=0
+      event << ''
+      event << text
+      event << '' unless [text[text.length-1,1],text[text.length-2,2]].include?("\n")
+    end
     unless xfields.nil?
       if mode.zero?
         for i in 0...xfields.length
@@ -4510,6 +4524,33 @@ def get_group(name,event)
       end
     end
     return ['Dancer/Singer',b]
+  elsif ['braveheroes','brave','cyl'].include?(name.downcase)
+    l=untz.reject{|q| !has_any?(g, q[13][0]) || !q[0].include?('(Brave)')}
+    return ['BraveHeroes',l.map{|q| q[0]}]
+  elsif ['fallenheroes','fallen','dark','evil','alter'].include?(name.downcase)
+    l=untz.reject{|q| !has_any?(g, q[13][0]) || !q[0].include?('(Fallen)')}
+    return ['FallenHeroes',l.map{|q| q[0]}]
+  elsif ['valentines',"valentine's"].include?(name.downcase)
+    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Valentines)')}
+    return ["Valentine's",l.map{|q| q[0]}]
+  elsif ['bunnies'].include?(name.downcase)
+    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Spring)')}
+    return ['Bunnies',l.map{|q| q[0]}]
+  elsif ['wedding','bride','brides','groom','grooms'].include?(name.downcase)
+    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !(q[0].include?('(Bride)') || q[0].include?('(Groom)'))}
+    return ['Wedding',l.map{|q| q[0]}]
+  elsif ['summer'].include?(name.downcase)
+    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Summer)')}
+    return ['Summer',l.map{|q| q[0]}]
+  elsif ['halloween'].include?(name.downcase)
+    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Halloween)')}
+    return ['Halloween',l.map{|q| q[0]}]
+  elsif ['winter','holiday'].include?(name.downcase)
+    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Winter)')}
+    return ['Winter',l.map{|q| q[0]}]
+  elsif ['seasonal','seasonals'].include?(name.downcase)
+    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0])}
+    return ['Seasonals',l.map{|q| q[0]}]
   elsif ['legendary','legendaries','legends','legend'].include?(name.downcase)
     l=untz.reject{|q| q[2][0]==' ' || !has_any?(g, q[13][0])}
     return ['Legendaries',l.map{|q| q[0]}]
@@ -10970,14 +11011,14 @@ bot.command(:addgroup) do |event, groupname, *args|
   elsif event.server.nil? && event.user.id != 167657750971547648
     event.respond 'Only my developer is allowed to use this command in PM.'
     return nil
-  elsif ['dancers','dancers&singers','singers','ghb','tempest','daily_rotation','falchionusers','falchion_users',"mathoo'swaifus",'legendary','legendaries','legends','retro-prfs'].include?(groupname.downcase)
-    event.respond 'This group is dynamic, automatically updating when a new unit that fits the criteria appears.'
-    return nil
   elsif ![167657750971547648,208905989619974144,168592191189417984].include?(event.user.id) && !is_mod?(event.user,event.server,event.channel)
     event.respond 'You are not a mod.'
     return nil
   elsif find_group(groupname,event)>-1 && @groups[find_group(groupname,event)][2].nil? && event.user.id != 167657750971547648
     event.respond 'You do not have the privileges to edit this global group.'
+    return nil
+  elsif find_group(groupname,event)>-1 && @groups[find_group(groupname,event)][1].length<=0
+    event.respond 'This group is dynamic, automatically updating when a new unit that fits the criteria appears.'
     return nil
   elsif find_skill(groupname,event,false,true)>=0
     event.respond "This is not allowed as a group name as it's a skill name."
@@ -11056,6 +11097,19 @@ bot.command([:seegroups,:checkgroups,:groups]) do |event|
   groups_load()
   k=0
   k=event.server.id unless event.server.nil?
+  unless safe_to_spam?(event)
+    g1=@groups.reject{|q| !q[2].nil? || q[1].length>0}
+    g1=g1.reject{|q| q[0]=="Mathoo'sWaifus"} unless event.user.id==167657750971547648
+    g2=@groups.reject{|q| !q[2].nil? || q[1].length<=0}
+    g3=@groups.reject{|q| q[2].nil? || !q[2].include?(k)}
+    for i in 0...g1.length
+      g1[i][1]=get_group(g1[i][0],event)[1]
+    end
+    g=[['**Dynamic Global**',g1.map{|q| "#{q[0].gsub('&','/')} (#{q[1].length} members)"}.join("\n")],['**Manually Global**',g2.map{|q| "#{q[0].gsub('&','/')} (#{q[1].length} members)"}.join("\n")]]
+    g.push(['**Server-specific**',g3.map{|q| "#{q[0].gsub('&','/')} (#{q[1].length} members)"}.join("\n")]) if g3.length>0
+    create_embed(event,"__**Available Groups**__",'',0x9400D3,nil,nil,g,2)
+    return nil
+  end
   msg=''
   for i in 0...@groups.length
     if @groups[i][0].downcase=='dancers&singers'
@@ -11102,7 +11156,7 @@ bot.command([:deletegroup,:removegroup]) do |event, name|
     return nil
   end
   j=find_group(name.downcase,event)
-  if ['dancers&singers','ghb','tempest','daily_rotation','falchion_users',"mathoo'swaifus",'legendary','legendaries','legends','retro-prfs'].include?(@groups[j][0].downcase)
+  if @groups[j][1].length<=0 && @groups[j][2].nil?
     event.respond 'This group is dynamic, automatically updating when a new unit that fits the criteria appears.'
     return nil
   end
@@ -11165,7 +11219,7 @@ bot.command([:removemember,:removefromgroup]) do |event, group, unit|
     return nil
   end
   j=find_group(group.downcase,event)
-  if ['dancers&singers','ghb','tempest','daily_rotation','falchion_users',"mathoo'swaifus",'legendary','legendaries','legends','retro-prfs'].include?(@groups[j][0].downcase)
+  if @groups[j][1].length<=0 && @groups[j][2].nil?
     event.respond 'This group is dynamic, automatically updating when a new unit that fits the criteria appears.'
     return nil
   end
@@ -13165,12 +13219,16 @@ bot.command(:snagstats) do |event, f, f2|
     event.channel.send_temporary_message('Calculating data, please wait...',3)
     event << "**There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global groups**, including the following dynamic ones:"
     gg=@groups.reject{|q| !q[2].nil? || q[1].length>0}.map{|q| [q[0],get_group(q[0],event)[1].reject{|q2| all_units.find_index{|q3| q3[0]==q2}.nil?}]}
+    event << "*Brave Heroes* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='BraveHeroes'}][1].length)} current members) - Any unit with the phrase *(Brave)* in their internal name."
     event << "*Daily Rotation* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Daily_Rotation'}][1].length)} current members) - Any unit that can be obtained via the twelve rotating Daily Hero Battle maps."
     event << "*Dancers/Singers* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Dancers&Singers'}][1].length)} current members) - Any unit that can learn the skill Dance or the skill Sing."
     event << "*Falchion Users* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Falchion_Users'}][1].length)} current members) - Any unit that can use one of the three Falchions, or any of their evolutions."
+    event << "*Fallen Heroes* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='FallenHeroes'}][1].length)} current members) - Any unit with the phrase *(Fallen)* in their internal name."
     event << "*GHB* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='GHB'}][1].length)} current members) - Any unit that can obtained via a Grand Hero Battle map."
     event << "*Legendaries* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Legendaries'}][1].length)} current members) - Any unit that gives a Legendary Hero Boost to blessed allies during specific seasons."
     event << "*Retro-Prfs* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro-Prfs'}][1].length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything."
+    event << "*Seasonals* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Seasonals'}][1].length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost."
+    event << "		The following subsets of the Seasonals group are also dynamic: *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Spring* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})"
     event << "*Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can be obtained via a Tempest Trials event."
     display=false
     display=true if event.user.id==167657750971547648
