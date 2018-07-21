@@ -1251,6 +1251,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill('Giga Excalibur',event) if name.downcase.gsub(' ','')=='gigascalibur'
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
   return find_skill('Loptous',event) if name.downcase.gsub(' ','')=='loptyr'
+  return find_skill('Thokk',event) if name.downcase.gsub(' ','')=='sekku'
   return find_skill('Draconic Poleax',event) if name.downcase.gsub(' ','')=='draconicpoleaxe'
   return find_skill("Tannenboom!#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='tanenboom'
   return find_skill("Sack o' Gifts#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='sackofgifts'
@@ -1315,6 +1316,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill("Sack o' Gifts",event) if namex=='sackofgifts'[0,namex.length]
   return find_skill('Giga Excalibur',event) if namex=='gigascalibur'[0,namex.length]
   return find_skill('Loptous',event) if namex=='loptyr'[0,namex.length]
+  return find_skill('Thokk',event) if namex=='sekku'[0,namex.length]
   return find_skill("Killing Edge",event) if ['killersword','killeredge','killingsword'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill("Slaying Edge",event) if ['slayersword','slayeredge','slayingsword'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill(name.downcase.gsub(' ','').gsub('redt','r t'),event) if namex.downcase=='redtome'[0,namex.length]
@@ -1730,6 +1732,14 @@ def reshape_unit_into_multi(name,args3) # used by the find_unit_in_string functi
     if args3.length==1
       if ['eirika','eirik','eiriku','erika'].include?(args3[0].downcase)
         name='Eirika'
+      else
+        name=args3[0]
+      end
+    end
+  elsif name=='Olivia(Launch)' || name=='Olivia(Traveler)'
+    if args3.length==1
+      if ['olivia','olivie','olive'].include?(args3[0].downcase)
+        name='Olivia'
       else
         name=args3[0]
       end
@@ -3422,7 +3432,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       xfooter="Debuff is applied at end of combat if unit attacks, and lasts until the foes' next actions."
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Dagger:443692132683743232>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Dagger\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
     elsif skill[5]=='Staff Users Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}	**Range:** #{skill[3]}#{"\n**Effect:** #{skill[7]}" unless skill[7]=='-'}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
     elsif skill[5]=='Dragons Only'
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
     elsif skill[5]=='Beasts Only'
@@ -4049,7 +4059,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       elsif str[i].include?(' (+) Dazzling Mode') || str[i].include?(' (+) Wrathful Mode')
         str[i]=str[i].split("\n")
         str2.push("#{str[i][0].gsub("#{skill[0]} (+) ",'')} - #{str[i][str[i].length-1]}")
-        str3.push("<:Refine_Unknown:455609031701299220>**All Defaault Refinements**\n#{str[i][1,str[i].length-2].join("\n")}") unless str[i].length<=2 || str3.length>0
+        str3.push("<:Refine_Unknown:455609031701299220>**All Default Refinements**\n#{str[i][1,str[i].length-2].join("\n")}") unless str[i].length<=2 || str3.length>0
       elsif str[i].include?(' (+) Attack Mode') || str[i].include?(' (+) Speed Mode') || str[i].include?(' (+) Defense Mode') || str[i].include?(' (+) Resistance Mode')
         str[i]=str[i].split("\n")
         str2.push("#{str[i][0].gsub("#{skill[0]} (+) ",'')} - #{str[i][1]}")
@@ -4498,6 +4508,7 @@ def splice(str)
 end
 
 def first_sub(master,str1,str2)
+  master=master.gsub('!','')
   posit=master.downcase.index(str1.downcase)
   return master if posit.nil?
   return "#{master[0,posit] if posit>0}#{str2}#{master[posit+str1.length,master.length] if posit+str1.length<master.length}"
@@ -6255,14 +6266,14 @@ def comparison(event,args,bot)
 end
 
 def detect_multi_unit_alias(event,str1,str2,robinmode=0)
-  str1=str1.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
+  str1=str1.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('!','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
   if ['f?','e?','h?'].include?(str1.downcase[0,2]) || ['feh!','feh?'].include?(str1.downcase[0,4])
     s=event.message.text.downcase
     s=s[2,s.length-2] if ['f?','e?','h?'].include?(str1.downcase[0,2])
     s=s[4,s.length-4] if ['feh!','feh?'].include?(str1.downcase[0,4])
     a=s.split(' ')
     a.shift if all_commands(true).include?(a[0])
-    str1=a.join(' ')
+    str1=a.join(' ').gsub('!','')
   end
   nicknames_load()
   for i in 0...@multi_aliases.length
@@ -6276,8 +6287,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
   for i in 0...@aliases.length
     return [str1, [@aliases[i][1]], @aliases[i][0].downcase] if @aliases[i][0].downcase==str1 && (@aliases[i][2].nil? || @aliases[i][2].include?(k))
   end
-  str3=str2.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
-  str2=str2.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
+  str3=str2.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('!','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
+  str2=str2.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('!','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
   if /blu(e(-|)|)cina/ =~ str1 || /bluc(i|y)/ =~ str1
     str='blucina'
     str='bluecina' if str2.include?('bluecina')
@@ -6328,6 +6339,19 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Eirika(Bonds)','Eirika(Memories)'],[str]]
+  elsif /oliv(ia|ie|e)/ =~ str1
+    str='olivia'
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
+      return [str,['Olivia(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch"]]
+    elsif str2.include?('traveler') || str2.include?('travel') || str2.include?('skyhigh') || str2.include?('sky') || str2.include?("#{str}2")
+      return [str,['Olivia(Traveler)'],["traveler#{str}","#{str}traveler","travel#{str}","#{str}travel","skyhigh#{str}","#{str}skyhigh","sky#{str}","#{str}sky","#{str}2"]]
+    elsif str2.include?('performing') || str2.include?('performance') || str2.include?('arts') || str2.include?('pa')
+      return [str,['Olivia(Performing)'],["performing#{str}","#{str}performing","performance#{str}","#{str}performance","arts#{str}","#{str}arts","pa#{str}","#{str}pa"]]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Olivia(Launch)','Olivia(Traveler)'],[str]]
   elsif /hinoka/ =~ str1
     str='hinoka'
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
@@ -6889,10 +6913,10 @@ def weapon_legality(event,name,weapon,refinement='-',recursion=false)
     return weapon_legality(event,name,"Zanbato#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
     return weapon_legality(event,name,"Ridersbane#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
     return weapon_legality(event,name,"Poleaxe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
-  elsif ['Wo Dao','Harmonic Lance','Giant Spoon'].include?(w[0].gsub('+',''))
+  elsif ['Wo Dao','Harmonic Lance','Giant Spoon','Wo Gun'].include?(w[0].gsub('+',''))
     return weapon_legality(event,name,"Wo Dao#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
     return weapon_legality(event,name,"Harmonic Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Giant Spoon#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return weapon_legality(event,name,"Wo Gun#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
   end
   return "~~#{w2}~~"
 end
@@ -7131,6 +7155,165 @@ end
 
 def get_match_in_list(list, str)
   return list[list.find_index{|q| q[0].downcase==str.downcase}] unless list.find_index{|q| q[0].downcase==str.downcase}.nil?
+  return nil
+end
+
+def sort_legendaries(event,bot,mode=0)
+  data_load()
+  nicknames_load()
+  g=get_markers(event)
+  k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || q[2][0]==' ' || q[2].length<3}.uniq
+  c=[]
+  for i in 0...k.length
+    c.push([102,218,250]) if k[i][2][0]=='Water'
+    c.push([222,95,9]) if k[i][2][0]=='Earth'
+    c.push([122,233,112]) if k[i][2][0]=='Wind'
+    c.push([242,70,58]) if k[i][2][0]=='Fire'
+    c.push([64,0,128]) if k[i][2][0]=='Dark'
+    k[i][2][2]=k[i][2][2].split('/').map{|q| q.to_i}.reverse
+    k[i][1][1]=1 if k[i][1][0]=='Red'
+    k[i][1][1]=2 if k[i][1][0]=='Blue'
+    k[i][1][1]=3 if k[i][1][0]=='Green'
+    k[i][1][1]=4 if k[i][1][0]=='Colorless'
+    k[i][1][1]=5 if k[i][1][1].is_a?(String)
+  end
+  k=k.sort{|a,b| ((a[2][2]<=>b[2][2]) == 0 ? ((a[1][1]<=>b[1][1]) == 0 ? a[0]<=>b[0] : a[1][1]<=>b[1][1]) : a[2][2]<=>b[2][2])}
+  for i in 0...k.length
+    m=k[i][2][2].reverse
+    k[i][1][2]=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Orb_#{['','Red','Blue','Green','Colorless','Gold'][k[i][1][1]]}"}[0].mention
+    if m[0]<11
+      m[0]='Early '
+    elsif m[0]<21
+      m[0]='Mid-'
+    else
+      m[0]='Late '
+    end
+    m[1]=['','January','February','March','April','May','June','July','August','September','October','November','December'][m[1]]
+    k[i][2][2]="#{m[0]}#{m[1]} #{m[2]}"
+  end
+  m=0
+  k2=[[k[0][2][2],[[k[0][1][1],"#{k[0][1][2]} - #{k[0][0]}"]]]]
+  for i in 1...k.length
+    if k[i][2][2]==k2[m][0]
+      k2[m][1].push([k[i][1][1],"#{k[i][1][2]} - #{k[i][0]}"])
+    else
+      m+=1
+      k2.push([k[i][2][2],[[k[i][1][1],"#{k[i][1][2]} - #{k[i][0]}"]]])
+    end
+  end
+  for i in 0...k2.length
+    k2[i][1].push([1,'<:Orb_Red:455053002256941056> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=1}.length>0
+    k2[i][1].push([2,'<:Orb_Blue:455053001971859477> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=2}.length>0
+    k2[i][1].push([3,'<:Orb_Green:455053002311467048> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=3}.length>0
+    k2[i][1].push([4,'<:Orb_Colorless:455053002152083457> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=4}.length>0
+    k2[i][1]=k2[i][1].sort{|a,b| a[0]<=>b[0]}.map{|q| q[1]}.join("\n")
+  end
+  t=Time.now
+  timeshift=8
+  t-=60*60*timeshift
+  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  b=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
+      b.push(line.gsub("\n",''))
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    b[i]=b[i].split('\\'[0])
+    b[i][1]=b[i][1].to_i
+    b[i][2]=b[i][2].split(', ')
+    b[i][4]=nil if !b[i][4].nil? && b[i][4].length<=0
+    b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
+  end
+  b.compact!
+  b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm || q[5].nil? || !q[5].split(', ').include?('Legendary')}
+  if b2.length>0
+    m=[]
+    for i in 0...b2.length
+      for j in 0...b2[i][2].length
+        m.push(b2[i][2][j])
+      end
+    end
+    m.uniq!
+    data_load()
+    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || q[2][0]==' ' || q[2].length<2}.uniq
+    m=m.reject{|q| !k.map{|q2| q2[0]}.include?(q)}
+    k=k.reject{|q| !m.include?(q[0])}
+    for i in 0...k.length
+      k[i][1][1]=1 if k[i][1][0]=='Red'
+      k[i][1][1]=2 if k[i][1][0]=='Blue'
+      k[i][1][1]=3 if k[i][1][0]=='Green'
+      k[i][1][1]=4 if k[i][1][0]=='Colorless'
+      k[i][1][1]=5 if k[i][1][1].is_a?(String)
+      k[i][1][2]=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Orb_#{['','Red','Blue','Green','Colorless','Gold'][k[i][1][1]]}"}[0].mention
+    end
+    k=k.sort{|a,b| ((a[1][1]<=>b[1][1]) == 0 ? a[0]<=>b[0] : a[1][1]<=>b[1][1])}.map{|q| "#{q[1][2]} - #{q[0]}"}.join("\n")
+    k2.unshift(['Current banner',k])
+  end
+  if mode==1
+    return k2.map{|q| "*#{q[0]}*: #{q[1].gsub("\n",', ').gsub(' - ','')}"}.join("\n")
+  else
+    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      event.respond k2.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n")
+    else
+      create_embed(event,"__**Legendary Heroes' Appearances**__",'',avg_color(c),nil,nil,k2,2)
+    end
+    if safe_to_spam?(event)
+      b2=b.reject{|q| q[5].nil? || !q[5].split(', ').include?('Legendary')}
+      m=[]
+      for i in 0...b2.length
+        for j in 0...b2[i][2].length
+          m.push(b2[i][2][j])
+        end
+      end
+      m.uniq!
+      data_load()
+      k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || q[9][0]!='5s' || m.include?(q[0])}.uniq
+      m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Pink:466196714513235988>Gold',[]]]
+      for i in 0...k.length
+        m2[0][1].push(k[i][0]) if k[i][1][0]=='Red'
+        m2[1][1].push(k[i][0]) if k[i][1][0]=='Blue'
+        m2[2][1].push(k[i][0]) if k[i][1][0]=='Green'
+        m2[3][1].push(k[i][0]) if k[i][1][0]=='Colorless'
+        m2[4][1].push(k[i][0]) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
+      end
+      m2=m2.reject{|q| q[1].length<=0}
+      j="\n"
+      j=', ' if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      for i in 0...m2.length
+        m2[i][1]=m2[i][1].join(j)
+      end
+      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        event.respond "__**Seasonal units that have not yet been on a Legendary Banner**__\n#{m2.map{|q| "*#{q[0]}*: #{q[1]}"}}"
+      else
+        create_embed(event,"__**Seasonal units that have not yet been on a Legendary Banner**__",'',0x9400D3,nil,nil,m2,2)
+      end
+      data_load()
+      k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || q[9][0]!='5p' || m.include?(q[0])}.uniq
+      m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Gold:455053002911514634>Gold',[]]]
+      for i in 0...k.length
+        m2[0][1].push(k[i][0]) if k[i][1][0]=='Red'
+        m2[1][1].push(k[i][0]) if k[i][1][0]=='Blue'
+        m2[2][1].push(k[i][0]) if k[i][1][0]=='Green'
+        m2[3][1].push(k[i][0]) if k[i][1][0]=='Colorless'
+        m2[4][1].push(k[i][0]) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
+      end
+      m2=m2.reject{|q| q[1].length<=0}
+      j="\n"
+      j=', ' if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      for i in 0...m2.length
+        m2[i][1]=m2[i][1].join(j)
+      end
+      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        event.respond "__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__\n#{m2.map{|q| "*#{q[0]}*: #{q[1]}"}}"
+      else
+        create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__",'',0x9400D3,nil,nil,m2,2)
+      end
+    end
+  end
   return nil
 end
 
@@ -9208,6 +9391,10 @@ bot.command([:legendary,:legendaries]) do |event, *args|
   end
   l.uniq!
   x=[]
+  if has_any?(args,['time','next','future'])
+    sort_legendaries(event,bot)
+    return nil
+  end
   x.push('Element') if has_any?(args,['element','flavor','elements','flavors','affinity','affinities','affinitys'])
   x.push('Stat') if has_any?(args,['stat','boost','stats','boosts'])
   x.push('Weapon') if has_any?(args,['weapon','weapons'])
@@ -12149,8 +12336,9 @@ bot.command([:next,:schedule]) do |event, type|
   idx=7 if ['blessed','blessing','garden','gardens','blessedgarden','blessed_garden','blessedgardens','blessed_gardens','blessinggarden','blessing_garden','blessinggardens','blessing_gardens'].include?(type.downcase)
   idx=8 if ['banners','summoning','summon','banner','summonings','summons'].include?(type.downcase)
   idx=9 if ['event','events'].include?(type.downcase)
+  idx=10 if ['legendary','legendaries','legend','legends'].include?(type.downcase)
   if idx<0 && !safe_to_spam?(event)
-    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nBanner(s), Summon(ing)(s)\nEvent(s)"
+    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)"
     return nil
   end
   t=Time.now
@@ -12317,7 +12505,12 @@ bot.command([:next,:schedule]) do |event, type|
     str2=disp_current_events(-2)
     msg=extend_message(msg,str2,event,2)
   end
-  event.respond msg
+  if [-1].include?(idx)
+    msg=extend_message(msg,"__**Legendary Heroes' Appearances**__\n#{sort_legendaries(event,bot,1)}",event,2)
+  elsif [10].include?(idx)
+    sort_legendaries(event,bot)
+  end
+  event.respond msg unless [10].include?(idx)
 end
 
 bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddualunitalias,:addualunitalias,:multialias,:dualalias,:addmulti], from: 167657750971547648) do |event, multi, *args|
@@ -13087,7 +13280,7 @@ bot.command(:snagstats) do |event, f, f2|
     k.uniq!
     if k.length>0
       event << ''
-      event << "The following characters have alts but not default units in FEH: #{list_lift(k.map{|q| "*#{q}*"},"and")}"
+      event << "The following characters have alts but not default units in FEH: #{list_lift(k.map{|q| "*#{q}*"},"and")}."
     end
     k=legal_units.map{|q| [q[1][0],0]}.uniq
     for i in 0...k.length
@@ -13724,8 +13917,10 @@ def disp_current_events(mode=0)
       c[i][1]='Bound Hero Battle' if c[i][1]=='BHB'
       c[i][1]='Grand Hero Battle' if c[i][1]=='GHB'
       c[i][1]='Legendary Hero Battle' if c[i][1]=='LHB'
+      c[i][1]='Daily Reward Battle' if ['DRM','Daily Reward Maps','DRB'].include?(c[i][1])
       c[i][1]='Grand Conquests' if c[i][1]=='GC'
-      c[i][1]='Tempest Trials' if c[i][1]=='TT' || c[i][1]=='Tempest'
+      c[i][1]='Tempest Trials' if ['TT','Tempest'].include?(c[i][1])
+      c[i][1]='Forging Bonds' if ['FB','Bonds','Bond Trials'].include?(c[i][1])
       c[i][1]='Tap Battle' if c[i][1]=='Illusory Dungeon'
       c[i][1]='Log-In Bonus' if c[i][1]=='Log-In' || c[i][1]=='Login'
       c[i][2]=c[i][2].split(', ')
@@ -13737,9 +13932,9 @@ def disp_current_events(mode=0)
       t2=Time.new(t2[2],t2[1],t2[0])+24*60*60*([0,mode].min+1)
       t2=t2-t
       n=c2[i][0]
-      if ['Voting Gauntlet','Tempest Trials','Quests','Log-In Bonus'].include?(c2[i][1])
+      if ['Voting Gauntlet','Tempest Trials','Forging Bonds','Quests','Log-In Bonus'].include?(c2[i][1])
         n="\"#{n}\" #{c2[i][1]}"
-      elsif ['Bound Hero Battle','Grand Hero Battle','Legendary Hero Battle','Special Maps'].include?(c2[i][1])
+      elsif ['Bound Hero Battle','Grand Hero Battle','Legendary Hero Battle','Daily Reward Battle','Special Maps'].include?(c2[i][1])
         n="#{c2[i][1]}: *#{n}*"
       elsif c2[i][1]=='Grand Conquests'
         n="Grand Conquests"
