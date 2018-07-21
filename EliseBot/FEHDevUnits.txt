@@ -9,7 +9,7 @@ Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
 Brazen Atk/Spd 1\Brazen Atk/Spd 2\Brazen Atk/Spd 3
 Wings of Mercy 1\Wings of Mercy 2\Wings of Mercy 3
-Fortify Def 1\Fortify Def 2\Fortify Def 3
+Breath of Life 1\Breath of Life 2\Breath of Life 3
 Live to Serve 3
 
 Anna
@@ -43,7 +43,7 @@ Hone Atk 1\Hone Atk 2\Hone Atk 3
 Spur Atk 2
 
 Cherche
-5\3\Attack\Speed\-
+5\4\Attack\Speed\-
 Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\Slaying Hammer+ (+) Effect Mode
 Pivot
 New Moon\Luna
@@ -53,7 +53,7 @@ Fortify Def 1\Fortify Def 2\Fortify Def 3
 Attack +2
 
 Cordelia
-5\4\Attack\HP\-
+5\5\Attack\HP\-
 Iron Lance\Steel Lance\Brave Lance\Brave Lance+
 Reposition
 Night Sky\Astra\Galeforce
@@ -72,8 +72,18 @@ Escape Route 1\Escape Route 2\Escape Route 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Speed +2
 
+Cordelia(Summer)
+5\0\Resistance\Speed\-
+Iron Lance\Steel Lance\Shell Lance\Shell Lance+\Shell Lance+ (+) Defense Mode
+Harsh Command
+Glowing Ember\Ignis
+Armored Blow 1\Sturdy Blow 1\Sturdy Blow 2
+Dull Close 1\Dull Close 2\Dull Close 3
+~~none~~
+Attack/Def +2
+
 Est
-4\5\HP\Attack\-
+4\8\Resistance\Attack\-
 Iron Lance\Steel Lance\Brave Lance\Brave Lance+
 Reposition
 Chilling Wind\Glacies
@@ -130,7 +140,7 @@ Dragon Gaze\Draconic Aura
 Steady Stance 1\Steady Stance 2\Steady Breath
 Renewal 1\Renewal 2\Renewal 3
 Spur Atk 1\Drive Atk 1\Drive Atk 2
-Close Def 2
+Close Def 3
 
 Mae
 5\1\Speed\Resistance\-
@@ -203,7 +213,7 @@ Spur Def 1\Spur Def 2\Spur Def 3
 HP +4
 
 Rebecca
-4\8\Speed\Resistance\-
+4\9\Speed\Resistance\-
 Iron Bow\Steel Bow\Silver Bow
 Rally Defense
 Chilling Wind\Iceberg
@@ -230,7 +240,7 @@ Daylight\Noontime
 Darting Blow 1\Darting Blow 2\Darting Blow 3
 Renewal 1\Renewal 2\Renewal 3
 Spur Res 1\Drive Res 1\Drive Res 2
-Deflect Melee 2
+Deflect Melee 3
 
 Tailtiu
 5\2\ \ \-
@@ -243,12 +253,12 @@ Spur Spd 1\Drive Spd 1\Drive Spd 2
 Drive Atk 1
 
 Takumi(Fallen)
-4\0\ \ \-
-Iron Bow\Steel Bow\Silver Bow\~~Skadi~~
-~~none~~
+5\0\ \ \-
+Iron Bow\Steel Bow\Silver Bow\Skadi
+Rally Speed
 Retribution\Vengeance
-~~Close Counter~~
-Vantage 1\~~Vantage 2~~\~~Vantage 3~~
-Spd Smoke 1\Spd Smoke 2\~~Spd Smoke 3~~
+Close Counter
+Vantage 1\Vantage 2\Vantage 3
+Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
 Quick Riposte 2
 

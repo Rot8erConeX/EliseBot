@@ -1,14 +1,23 @@
->Special Heroes<\3\-\5\10/07/2018, 09/08/2018\Seasonal
-Heroes with Luna\3\-\5\06/07/2018, 16/07/2018\SkillBanner
-Hector & Matthew's Battle\3\Hector, Matthew\5\05/07/2018, 11/07/2018\BHB
-Legendary Heroes - Hector: Marquess of Ostia\-8\Elise, Ephraim(Fire), Hector(Marquess), Ike(Brave), Ike(Vanguard), Leif, Lyn(Valentines), Morgan(F), Myrrh, Robin(F)(Fallen), Roy(Valentines), Tharja(Winter)\5\28/06/2018, 04/07/2018\Legendary
+>Special Heroes<\3\-\5\10/08/2018, 06/09/2018\Seasonal, Fall
+Heroes with Fighter skills\3\Effie, Hardin(Fallen), Robin(M)(Fallen)\5\07/08/2018, 17/08/2018\SkillBanner
+Feh's Summer Celebration: Daily Summoning Events\3\Azura, Bartre, Caeda, Cecilia, Corrin(F), Delthea, Effie, Eldigan, Elincia, Ephraim, Gordin, Hana, Hawkeye, Hinata, Hinoka(Launch), Jagen, Jaffar, Karel, Klein, Leo, Lon'qu, Lyn, Minerva, Nephenee, Nino(Launch), Odin, Peri, Tharja, Titania, Raven, Reinhardt(Bonds), Sanaki, Shanna, Sonya, Subaki, Takumi\5\02/08/2018, 16/08/2018\SkillBanner
+Legendary Heroes - >unknown<\-8\-\5\31/07/2018, 06/08/2018\Legendary
+Heroes with Distant Def\3\Celica, Micaiah, Rhajat\5\27/07/2018, 06/08/2018\SkillBanner
+Leo & Elise's Battle\3\Camilla, Elise, Leo\5\22/07/2018, 28/07/2018\BHB
+Ylissian Traveler\3\Libra, Maribelle, Olivia(Traveler), Sumia\5\20/07/2018, 09/08/2018
+New Power (July 2018)\3\Katarina, Nephenee, Titania\5\15/07/2018, 26/07/2018\NewPower
+Sketchy Summer\3\Camilla(Summer), Linde(Summer), Takumi(Summer), Tiki(Young)(Summer)\5\10/07/2018, 09/08/2018\Seasonal, Summer
 Ylissian Summer (June/July 2018 revival)\3\Frederick(Summer), Gaius(Summer), Robin(F)(Summer), Tiki(Adult)(Summer)\5\25/06/2018, 24/07/2018\Seasonal, Summer
 Nohrian Summer (June/July 2018 revival)\3\Corrin(F)(Summer), Elise(Summer), Leo(Summer), Xander(Summer)\5\25/06/2018, 24/07/2018\Seasonal, Summer
-Heroes with Death Blow\3\Delthea, Reinhardt(World), Siegbert\5\23/06/2018, 05/07/2018\SkillBanner
-Summer Arrival\3\Cordelia(Summer), Innes(Summer), Noire(Summer), Tana(Summer)\5\21/06/2018, 24/07/2018\Seasonal
-"Feud of the Fangs" Tempest Trials\3\Jaffar, Karel, Nino(Launch)\5\13/06/2018, 25/06/2018\Tempest
 GHB Units\5\-\543\\GHB
 TT Units\5\-\54\\Tempest
+Heroes with Luna\3\Celica(Fallen), Hinoka(Wings), Mia\5\06/07/2018, 16/07/2018\SkillBanner
+Hector & Matthew's Battle\3\Hector, Matthew, Serra\5\05/07/2018, 11/07/2018\BHB
+Fated Battles\3\Hardin(Fallen), Marth, Sigurd, Zelgius\5\29/6/2018, 07/07/2018\VotingGauntlet
+Heroes with Death Blow (v3)\3\Delthea, Reinhardt(World), Siegbert\5\23/06/2018, 05/07/2018\SkillBanner
+Legendary Heroes - Hector: Marquess of Ostia\-8\Elise, Ephraim(Fire), Hector(Marquess), Ike(Brave), Ike(Vanguard), Leif, Lyn(Valentines), Morgan(F), Myrrh, Robin(F)(Fallen), Roy(Valentines), Tharja(Winter)\5\28/06/2018, 04/07/2018\Legendary
+Summer Arrival\3\Cordelia(Summer), Innes(Summer), Noire(Summer), Tana(Summer)\5\21/06/2018, 24/07/2018\Seasonal
+"Feud of the Fangs" Tempest Trials\3\Jaffar, Karel, Nino(Launch)\5\13/06/2018, 25/06/2018\Tempest
 New Power (June 2018)\3\Linde, Merric, Tiki(Adult), Tiki(Young)\5\10/06/2018, 22/06/2018\NewPower
 Scattered Fangs\3\Karla, Legault, Nino(Fangs)\5\08/06/2018, 20/06/2018
 Seliph & Julia's Battle\3\Deirdre, Julia, Seliph\5\05/06/2018, 11/06/2018\BHB
@@ -32,7 +41,7 @@ Tiki & Nowi's Battle\3\Nowi, Robin(M)(Fallen), Tiki(Adult)\5\\BHB
 Spring Festival (April 2018 revival)\3\Camilla(Spring), Chrom(Spring), Lucina(Spring), Xander(Spring)\5\\Seasonal, Spring, VotingGauntlet
 Heroes with Miracle\3\Delthea, Mist, Sigurd\5\\SkillBanner
 Legendary Heroes - Robin Fell Vessel\-8\Elise(Summer), Fjorm, Gunnthra, Ike, Lucina(Brave), Lute, Lyn(Brave), Nowi(Halloween), Robin(F)(Fallen), Sakura(Halloween), Tiki(Adult)(Summer), Zelgius\5\\Legendary
-"Invisible Ties" Tempest Trials\3\Cherche, Donnel, Olivia\5\\Tempest
+"Invisible Ties" Tempest Trials\3\Cherche, Donnel, Olivia(Launch)\5\\Tempest
 Weapons to Refine III (New Power, Mar 2018)\3\Eirika(Bonds), Leo, Soren\5\\NewPower
 Chrom and Lissa's Battle\3\Chrom(Launch), Lissa, Robin(M)\5\\BHB
 Countering Skills\3\Hector, Ike, Takumi\5\\SkillBanner
@@ -61,14 +70,14 @@ Weapons to Refine II (New Power, December 2017)\3\Eldigan, Jaffar, Minerva\5\\Ne
 Legendary Heroes - Gunnthra\-8\Amelia, Charlotte(Bride), Chrom(Spring), Elise, Fjorm, Gunnthra, Innes, Lucina(Spring), Lyn(Bride), Roy(Brave), Ryoma, Sigurd\5\\Legendary
 Winter's Envoy\3\Chrom(Winter), Lissa(Winter), Robin(M)(Winter), Tharja(Winter)\5\\Seasonal, Christmas
 Tana & Amelia's Battle\3\Amelia, Eirika(Bonds), Tana\5\\BHB
-Weapons to Refine (New Power, November 2018)\3\Ephraim, Lyn, Takumi\5\\NewPower
+Weapons to Refine (New Power, November 2017)\3\Ephraim, Lyn, Takumi\5\\NewPower
 Children of Fate\3\Shiro, Siegbert, Soleil\5
 Unrequitted Love, Block A\3\Faye, Priscilla, Rhajat, Tharja\5\\VotingGauntler
 Unrequitted Love, Block B\3\Catria, Dorcas, Katarina, Seliph\5\\VotingGauntler
 Legendary Heroes - Fjorm\-8\Ayra, Caeda(Bride), Camilla(Spring), Celica, Cordelia(Bride), Deirdre, Fjorm, Genny, Hector, Ike, Lyn(Brave), Xander(Spring)\5\\Legendary
 "Less Than Heroic" Tempest Trials\3\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5\\Tempest, CYL
 Farfetched Heroes\3\Dorcas, Lute, Mia\5\\CYL
-Heroes with Death Blow\3\Delthea, Elincia, Klein\5\\SkillBanner
+Heroes with Death Blow (v2)\3\Delthea, Elincia, Klein\5\\SkillBanner
 Takumi and Hinoka's Battle\3\Hinoka(Launch), Sakura, Takumi\5\\BHB
 Trick or Defeat\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\\Seasonal, Halloween
 Short-Haired Ladies\3\Amelia, Hinoka(Launch), Katarina, Shanna\5\\VotingGauntler
@@ -83,7 +92,7 @@ The Blood of Dragons, Block A\3\Corrin(M), Fae, Ninian, Tiki(Young)\5\\VotingGau
 The Blood of Dragons, Block B\3\Corrin(F), Nowi, Sophia, Tiki(Adult)\5\\VotingGauntlet
 "Moment of Fate" Tempest Trials\3\Ike, Mist, Soren, Titania\5\\Tempest
 Ninian and Hawkeye's Battle\3\Eliwood, Hawkeye, Ninian\5\\BHB
-Heroes with Death Blow\3\Effie, Hawkeye, Klein\5\\SkillBanner
+Heroes with Death Blow (v1)\3\Effie, Hawkeye, Klein\5\\SkillBanner
 Dauntless Crimeans\3\Elincia, Nephenee, Oscar\5
 Ephraim and Eirika's Battle\3\Ephraim, Eirika(Bonds), Seth\5\\BHB
 "To Die on the Battlefield" Tempest Trials Mini\3\Eliwood, Hector, Lyn, Ninian\5\\Tempest
