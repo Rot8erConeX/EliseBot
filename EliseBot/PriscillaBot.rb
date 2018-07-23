@@ -512,7 +512,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['daily','today','todayinfeh','today_in_feh'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Shows the day's in-game daily events.\nIf in PM, will also show tomorrow's.",0xD49F61)
   elsif ['next','schedule'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)Tactics_Drills, Tactic(s), Drill(s)\n\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)",0xD49F61)
   elsif ['deletealias','removealias'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __alias__",'Removes `alias` from the list of aliases, regardless of who it was for.',0xC31C19)
   elsif ['addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti'].include?(command.downcase)
@@ -12242,7 +12242,7 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   str="#{str}\nDays since game release: #{longFormattedNumber(date)}"
   if event.user.id==167657750971547648 && @shardizard==4
     str="#{str}\nDaycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12"
-    str="#{str}\nWeekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - >#{week_from(date,0)+1}<(Thursday)"
+    str="#{str}\nWeekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)"
   end
   str2='__**Today in** ***Fire Emblem Heroes***__'
   str2="#{str2}\nTraining Tower color: #{colors[date%7]}"
@@ -12251,8 +12251,22 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   str2="#{str2}\nSpecial Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][date%5]}"
   str2="#{str2}\nGrand Hero Battle revival: #{ghb[date%7].split(' / ')[0]}"
   str2="#{str2}\nGrand Hero Battle revival 2: #{ghb[date%7].split(' / ')[1]}"
-  str2="#{str2}\nNewest Blessed Gardens addition: #{garden[week_from(date,3)%4]}"
+  if (date)%7==3
+    str2="#{str2}\nNew Blessed Gardens addition: #{garden[week_from(date,3)%4]}"
+  else
+    str2="#{str2}\nNewest Blessed Gardens addition: #{garden[week_from(date,3)%4]}"
+  end
   str2="#{str2}\nRival Domains movement preference: #{rd[week_from(date,2)%4]}"
+  if (date)%7==0
+    str2="#{str2}\nNew Tactics Drills addition: #{['Skill Studies','Grandmaster'][week_from(date,0)%2]}"
+  else
+    str2="#{str2}\nNewest Tactics Drills addition: #{['Skill Studies','Grandmaster'][week_from(date,0)%2]}"
+  end
+  if [10,11].include?(week_from(date,0)%12)
+    str2="#{str2}, 1<:Orb_Rainbow:471001777622351872> reward"
+  else
+    str2="#{str2}, 300<:Hero_Feather:471002465542602753> reward"
+  end
   b=[]
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
     b=[]
@@ -12305,6 +12319,14 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     str2="#{str2}\nGrand Hero Battle revival 2: #{ghb[(date+1)%7].split(' / ')[1]}"
     str2="#{str2}\nNew Blessed Gardens addition: #{garden[week_from(date+1,3)%4]}" if (date+1)%7==3
     str2="#{str2}\nRival Domains movement preference: #{rd[week_from(date+1,2)%4]}" if (date+1)%7==2
+    if (date+1)%7==0
+      str2="#{str2}\nNew Tactics Drills addition: #{['Skill Studies','Grandmaster'][week_from(date+1,0)%2]}"
+      if [10,11].include?(week_from(date+1,0)%12)
+        str2="#{str2}, 1<:Orb_Rainbow:471001777622351872> reward"
+      else
+        str2="#{str2}, 300<:Hero_Feather:471002465542602753> reward"
+      end
+    end
     t3=t+24*60*60
     tm="#{'0' if t3.day<10}#{t3.day}/#{'0' if t3.month<10}#{t3.month}/#{t3.year}"
     b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0]!=tm}
@@ -12337,8 +12359,9 @@ bot.command([:next,:schedule]) do |event, type|
   idx=8 if ['banners','summoning','summon','banner','summonings','summons'].include?(type.downcase)
   idx=9 if ['event','events'].include?(type.downcase)
   idx=10 if ['legendary','legendaries','legend','legends'].include?(type.downcase)
+  idx=11 if ['tactics','tactic','drills','drill','tacticsdrills','tactics_drills','tacticsdrill','tactics_drill','tacticdrills','tactic_drills','tacticdrill','tactic_drill'].include?(type.downcase)
   if idx<0 && !safe_to_spam?(event)
-    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)"
+    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)"
     return nil
   end
   t=Time.now
@@ -12351,7 +12374,7 @@ bot.command([:next,:schedule]) do |event, type|
   msg=extend_message(msg,"Days since game release: #{longFormattedNumber(date)}",event)
   if event.user.id==167657750971547648 && @shardizard==4
     msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
-    msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - >#{week_from(date,0)+1}<(Thursday)",event)
+    msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)",event)
   end
   if [-1,1].include?(idx)
     colors=['Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>',
@@ -12491,6 +12514,44 @@ bot.command([:next,:schedule]) do |event, type|
     t2=t-24*60*60*t.wday+7*24*60*60*4
     t2+=7*24*60*60 if t.wday==0
     msg2="#{msg2}\n#{garden[0]} - 4 weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
+    msg=extend_message(msg,msg2,event,2)
+  end
+  if [-1,11].include?(idx)
+    drill=['Skill Studies','Grandmaster']
+    drill=drill.rotate(week_from(date,0)%2)
+    drill=drill.rotate(-1) if t.wday==4
+    msg2='__**Next Tactics Drills**__'
+    for i in 0...drill.length
+      if i==0
+        t2=t-24*60*60*t.wday+4*24*60*60
+        t2+=7*24*60*60 if t.wday==4
+        msg2="#{msg2}\n#{drill[i]} - This week until #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (Thursday)"
+      else
+        t2=t-24*60*60*t.wday+7*24*60*60*i-72*60*60
+        t2+=7*24*60*60 if t.wday==4
+        msg2="#{msg2}\n#{drill[i]} - #{"#{i} weeks from now" if i>1}#{"Next week" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
+      end
+    end
+    t2=t-24*60*60*t.wday+7*24*60*60*2-72*60*60
+    t2+=7*24*60*60 if t.wday==4
+    msg2="#{msg2}\n#{'__' if idx==-1}#{drill[0]} - 2 weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}#{'__' if idx==-1}#{"\n" if idx==11}"
+    drill=['300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>',
+           '300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>',
+           '300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','1<:Orb_Rainbow:471001777622351872>','1<:Orb_Rainbow:471001777622351872>']
+    drill=drill.rotate(week_from(date,0)%12)
+    drill=drill.rotate(-1) if t.wday==4
+    msg2="#{msg2}\nThis week's reward: #{drill[0]}"
+    drill[0]=''
+    if drill[1]=='1<:Orb_Rainbow:471001777622351872>'
+      t2=t-24*60*60*t.wday+4*24*60*60
+      t2+=7*24*60*60 if t.wday==4
+      msg2="#{msg2}\nNext #{'<:Orb_Rainbow:471001777622351872>' if idx==-1}orb reward: Next week - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (Thursday)"
+    else
+      m=drill.find_index{|q| q=='1<:Orb_Rainbow:471001777622351872>'}
+      t2=t-24*60*60*t.wday+4*24*60*60+7*24*60*60*m
+      t2+=7*24*60*60 if t.wday==4
+      msg2="#{msg2}\nNext #{'<:Orb_Rainbow:471001777622351872>' if idx==-1}orb reward: #{m} weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (Thursday)"
+    end
     msg=extend_message(msg,msg2,event,2)
   end
   if [-1,8].include?(idx)
