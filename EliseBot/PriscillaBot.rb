@@ -2624,8 +2624,8 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   lemote2=''
   dancer=''
   sklz=@skills.map{|q| q}
-  dancer="\n<:Assist_Music:454462054959415296> *Dancer*" if sklz[sklz.find_index{|q| q[0]=='Dance'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
-  dancer="\n<:Assist_Music:454462054959415296> *Singer*" if sklz[sklz.find_index{|q| q[0]=='Sing'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
+  dancer="\n<:Assist_Music:454462054959415296> *Dancer*" if !sklz.find_index{|q| q[0]=='Dance'}.nil? && sklz[sklz.find_index{|q| q[0]=='Dance'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
+  dancer="\n<:Assist_Music:454462054959415296> *Singer*" if !sklz.find_index{|q| q[0]=='Sing'}.nil? && sklz[sklz.find_index{|q| q[0]=='Sing'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   if !jj[2].nil? && jj[2][0]!=' '
     element='Unknown'
     element=jj[2][0] if ['Fire','Water','Wind','Earth','Dark'].include?(jj[2][0])
@@ -2667,8 +2667,8 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0) # used primarilally by the
   dancer=''
   data_load()
   sklz=@skills.map{|q| q}
-  dancer='<:Assist_Music:454462054959415296>' if sklz[sklz.find_index{|q| q[0]=='Dance'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
-  dancer='<:Assist_Music:454462054959415296>' if sklz[sklz.find_index{|q| q[0]=='Sing'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
+  dancer='<:Assist_Music:454462054959415296>' if !sklz.find_index{|q| q[0]=='Dance'}.nil? && sklz[sklz.find_index{|q| q[0]=='Dance'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
+  dancer='<:Assist_Music:454462054959415296>' if !sklz.find_index{|q| q[0]=='Sing'}.nil? && sklz[sklz.find_index{|q| q[0]=='Sing'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   lemote1=''
   lemote2=''
   if !jj[2].nil? && jj[2][0]!=' '
