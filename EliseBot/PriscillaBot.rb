@@ -1149,6 +1149,7 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
   if name.downcase.gsub(' ','').gsub('_','')[0,2]=='<:'
     name=name.split(':')[1] if find_unit(name.split(':')[1],event,ignore,ignore2)>=0
   end
+  untz=@units.map{|q| q}
   unless ignore2
     for i in 0...@aliases.length # replace any unit aliases with the actual unit name, if possible
       unless @aliases[i].nil?
@@ -1159,23 +1160,23 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
   j=-1
   name=name.gsub('!','')
   name=name.gsub('(','').gsub(')','').gsub('_','') unless ignore2
-  for i in 0...@units.length # try exact unit names
-    unless @units[i].nil?
-      m=@units[i][0]
+  for i in 0...untz.length # try exact unit names
+    unless untz[i].nil?
+      m=untz[i][0]
       m=m.gsub('(','').gsub(')','') unless ignore2
       j=i if m.downcase==name.downcase && j<0
     end
   end
-  return j if j>=0 && !@units[j].nil? && has_any?(g, @units[j][13][0])
+  return j if j>=0 && !untz[j].nil? && has_any?(g, untz[j][13][0])
   return -1 if ignore || name.downcase=='blade' || name.downcase=='blad' || name.downcase=='bla'
-  for i in 0...@units.length # try the portion of a exact unit names that is exactly as long as the input string
-    unless @units[i].nil?
-      m=@units[i][0][0,name.length]
+  for i in 0...untz.length # try the portion of a exact unit names that is exactly as long as the input string
+    unless untz[i].nil?
+      m=untz[i][0][0,name.length]
       m=m.gsub('(','').gsub(')','') unless ignore2
       j=i if m.downcase==name.downcase && j<0
     end
   end
-  return j if j>=0 && !@units[j].nil? && has_any?(g, @units[j][13][0])
+  return j if j>=0 && !untz[j].nil? && has_any?(g, untz[j][13][0])
   unless ignore2
     for i in 0...@aliases.length # try the portion of any alias names that is exactly as long as the input string
       unless @aliases[i].nil?
@@ -1183,15 +1184,38 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
       end
     end
   end
-  data_load()
-  for i in 0...@units.length
-    unless @units[i].nil?
-      m=@units[i][0]
+  for i in 0...untz.length
+    unless untz[i].nil?
+      m=untz[i][0]
       m=m.gsub('(','').gsub(')','') unless ignore2
       j=i if m.downcase==name.downcase && j<0
     end
   end
-  return j if j>=0 && !@units[j].nil? && has_any?(g, @units[j][13][0])
+  return j if j>=0 && !untz[j].nil? && has_any?(g, untz[j][13][0])
+  unless ignore2 || !name.downcase.include?('launch')
+    name=name.downcase.gsub('launch','') # if the name includes the word "launch", remove it from consideration
+    for i in 0...untz.length # try exact unit names
+      unless untz[i].nil?
+        m=untz[i][0]
+        j=i if m.downcase==name.downcase && !m.include?('(') && untz[i][9][0].include?('LU') && j<0 # only units without modifiers in their names, and who are marked as launch units, are considered
+      end
+    end
+    return j if j>=0 && !untz[j].nil? && has_any?(g, untz[j][13][0])
+    alz=@aliases.reject{|q| q[1].include?('(') || !q[2].nil?}
+    for i in 0...alz.length
+      unless alz[i].nil?
+        name=alz[i][1] if alz[i][0].downcase==name.downcase && untz.find_index{|q| q[0].downcase==name.downcase}.nil?
+      end
+    end
+    puts name
+    for i in 0...untz.length
+      unless untz[i].nil?
+        m=untz[i][0]
+        j=i if m.downcase==name.downcase && !m.include?('(') && untz[i][9][0].include?('LU') && j<0
+      end
+    end
+    return j if j>=0 && !untz[j].nil? && has_any?(g, untz[j][13][0])
+  end
   return -1
 end
 
