@@ -38,7 +38,7 @@
 ['Blow', ['blow'], 'Passive']
 ['Bond', ['bond', 'bonding', 'bonded', 'bonds'], 'Passive']
 ['Push', ['push', 'pushing', 'pushed', 'pushes'], 'Passive']
-['Stats', ['stats', 'stat'], 'Passive']
+['Stats', ['stats', 'stat','stataffecting','stat_affecting','stat-affecting'], 'Passive']
 ['Counter', ['counter'], 'Passive']
 ['Defense', ['defense', 'defence', 'defensive', 'defencive'], 'Passive']
 ['Defiant', ['defiant'], 'Passive']

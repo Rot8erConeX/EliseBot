@@ -43,7 +43,7 @@ Hone Atk 1\Hone Atk 2\Hone Atk 3
 Spur Atk 2
 
 Cherche
-5\4\Attack\Speed\-
+5\5\Attack\Speed\-
 Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\Slaying Hammer+ (+) Effect Mode
 Pivot
 New Moon\Luna
@@ -79,7 +79,7 @@ Harsh Command
 Glowing Ember\Ignis
 Armored Blow 1\Sturdy Blow 1\Sturdy Blow 2
 Dull Close 1\Dull Close 2\Dull Close 3
-~~none~~
+Breath of Life 1\Breath of Life 2\Breath of Life 3
 Attack/Def +2
 
 Est
