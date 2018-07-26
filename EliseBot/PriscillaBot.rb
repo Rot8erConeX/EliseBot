@@ -52,7 +52,7 @@ bot.gateway.check_heartbeat_acks = false
 @summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,
                  341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,238770788272963585,297459718249512961,283833293894582272,
                  214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,347491426852143109,392557615177007104,295686580528742420,
-                 412303462764773376,442465051371372544,353997181193289728,462100851864109056,337397338823852034,446111983155150875]
+                 412303462764773376,442465051371372544,353997181193289728,462100851864109056,337397338823852034,446111983155150875,295001062790660097]
 @summon_rate=[0,0,3]
 @mods=[[0, 6, 7, 7, 8, 8], # this is a translation of the graphic displayed in the "growths" command.
        [0, 8, 8, 9,10,10],
@@ -284,7 +284,7 @@ def metadata_load() # loads the metadata - users who choose to see plaintext ove
     b=[[],[],[0,0],[[0,0,0,0,0],[0,0,0,0,0]],[0,0,0],[],[]]
   end
   @embedless=b[0]
-  @embedless=[168592191189417984, 235527416901009410] if @embedless.nil?
+  @embedless=[168592191189417984, 256379815601373184] if @embedless.nil?
   @ignored=b[1]
   @ignored=[] if @ignored.nil?
   @summon_rate=b[2]
@@ -414,7 +414,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,'**leaveserver** __server id number__',"Forces me to leave the server with the id `server id`.\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.",0x008b8b)
   elsif command.downcase=='snagstats'
     subcommand='' if subcommand.nil?
-    if ['server','servers','member','members'].include?(subcommand.downcase)
+    if ['server','servers','member','members','shard','shards','users','user'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of servers and unique members each shard reaches.',0x40C0F0)
     elsif ['alts','alt','alternate','alternates','alternative','alternatives'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of units within each type of alt, as well as specifics about characters with the most alts.',0x40C0F0)
@@ -429,7 +429,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     elsif ['code','lines','line','sloc'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the specifics about my code, including number of commands and functions, as well as - if in PM - loops, statements, and conditionals.",0x40C0F0)
     else
-      create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s)\nUnit(s), Character(s), Char(a)(s)\nAlt(s)\nSkill(s)\nAlias(es), Name(s), Nickname(s)\nCode, Line(s), SLOC#{"\n\nAs the bot developer, you can also include a server ID number to snag the shard number, owner, and my nickname in the specified server." if event.user.id==167657750971547648}",0x40C0F0)
+      create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s), Shard(s), User(s)\nUnit(s), Character(s), Char(a)(s)\nAlt(s)\nSkill(s)\nAlias(es), Name(s), Nickname(s)\nCode, Line(s), SLOC#{"\n\nAs the bot developer, you can also include a server ID number to snag the shard number, owner, and my nickname in the specified server." if event.user.id==167657750971547648}",0x40C0F0)
     end
   elsif command.downcase=='shard'
     create_embed(event,'**shard**','Returns the shard that this server is served by.',0x40C0F0)
@@ -1011,11 +1011,13 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
   bnr.push([])
   bnr.push([])
   bnr.push([])
+  data_load()
   u=@units.map{|q| q}
   for i in 0...u.length
-    bnr[2].push(u[i][0]) if u[i][9][0].downcase.include?('g') && bnr[0]=='GHB Units' && u[i][13][0].nil? # the fake GHB Unit banner
-    bnr[2].push(u[i][0]) if u[i][9][0].downcase.include?('t') && bnr[0]=='TT Units' && u[i][13][0].nil?  # the fake Tempest Unit banner
+    bnr[2].push(u[i][0]) if u[i][9][0].downcase.include?('g') && bnr[0][0]=='GHB Units' && u[i][13][0].nil? # the fake GHB Unit banner
+    bnr[2].push(u[i][0]) if u[i][9][0].downcase.include?('t') && bnr[0][0]=='TT Units' && u[i][13][0].nil?  # the fake Tempest Unit banner
   end
+  puts bnr[2].to_s
   if x # 4* Focus Units
     bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
   else
@@ -1207,7 +1209,6 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
         name=alz[i][1] if alz[i][0].downcase==name.downcase && untz.find_index{|q| q[0].downcase==name.downcase}.nil?
       end
     end
-    puts name
     for i in 0...untz.length
       unless untz[i].nil?
         m=untz[i][0]
@@ -1659,6 +1660,36 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
           event << "__**#{last_field_name.gsub('**','')}**__"
           event << last_field
         end
+      elsif mode==-2
+        last_field=xfields[xfields.length-1][1].split("\n").join("\n")
+        last_field_name=xfields[xfields.length-1][0].split("\n").join("\n")
+        emo=last_field.split("\n")[1].split(' ')[0]
+        xfields.pop
+        atk=xfields[0][1].split("\n")[2].split(': ')[0]
+        statnames=['HP: ',"#{atk}: ",'Speed: ','Defense: ','Resistance: ','BST: ']
+        fields=[[],['**<:HP_S:467037520538894336> HP:**'],["**#{emo} #{atk}:**"],['**<:SpeedS:467037520534962186> Speed:**'],['**<:DefenseS:467037520249487372> Defense:**'],['**<:ResistanceS:467037520379641858> Resistance:**'],['**BST:**']]
+        for i in 0...xfields.length
+          fields[0].push(xfields[i][0])
+          flumb=xfields[i][1].split("\n")
+          flumb.shift
+          puts flumb.to_s
+          flumb[5]=nil
+          flumb.compact!
+          for j in 0...flumb.length
+            if i.zero?
+              fields[j+1][0]="#{fields[j+1][0]}	#{flumb[j].gsub(statnames[j],'').gsub('GPT: ','')}"
+            else
+              fields[j+1].push(flumb[j].gsub(statnames[j],'').gsub('GPT: ',''))
+            end
+          end
+        end
+        event << ''
+        for i in 0...fields.length
+          event << fields[i].join(' / ')
+        end
+        event << ''
+        event << "__**#{last_field_name.gsub('**','')}**__"
+        event << last_field
       elsif mode==3
         for i in 0...xfields.length
           event << "__#{xfields[i][0]}:__ #{xfields[i][1].gsub("\n",', ')}"
@@ -2640,7 +2671,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
 end
 
 def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0) # used primarilally by the BST and Alt commands to display a unit's weapon and movement classes as emojis
-  return '' if was_embedless_mentioned?(event)
+  return '' if was_embedless_mentioned?(event) && mode%4<2
   return '' if name.nil? && j<0
   j=@units.find_index{|q| q[0]==name} if j<0
   return '' if j.nil?
@@ -2648,7 +2679,7 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0) # used primarilally by the
   clr='Gold'
   clr=jj[1][0] if ['Red','Blue','Green','Colorless'].include?(jj[1][0])
   clr='Cyan' if name=='Robin (Shared stats)'
-  if mode==1
+  if mode%2==1
     clr='Gold' if ['Dragon','Bow'].include?(jj[1][1])
     clr='Gold' if jj[1][1]=='Healer' && alter_classes(event,'Colored Healers')
     clr='Gold' if jj[1][1]=='Dagger' && alter_classes(event,'Colored Daggers')
@@ -2658,7 +2689,7 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0) # used primarilally by the
   wemote=''
   moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clr}_#{wpn}"}
   wemote=moji[0].mention unless moji.length<=0
-  return wemote if mode==1
+  return wemote if mode%2==1
   mov='Unknown'
   mov=jj[3] if ['Infantry','Armor','Flier','Cavalry'].include?(jj[3])
   moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{mov}"}
@@ -4102,13 +4133,13 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   end
   if skill[0][0,15]=='Wrathful Staff '
     p=''
-    p="\nSince #{bot.user(170070293493186561).distinct} is a fun-sucker, I guess I'll mention other healers.  It's still monsterous to feed Genny to them.  Almost more so, since I'm the healer who does the most attacking." if !event.server.nil? && !bot.user(170070293493186561).on(event.server.id).nil?
-    p="\nSince you're a fun-sucker, I guess I'll mention other healers.  It's still monsterous to feed Genny to them.  Almost more so, since I'm the healer who does the most attacking." if event.user.id==206993446223872002
+    p="\nSince #{bot.user(170070293493186561).distinct} is a fun-sucker, I guess I'll mention other healers.  It's still monsterous to feed Genny to them.  Almost more so, since I'm one of the healers who do the most attacking." if !event.server.nil? && !bot.user(170070293493186561).on(event.server.id).nil?
+    p="\nSince you're a fun-sucker, I guess I'll mention other healers.  It's still monsterous to feed Genny to them.  Almost more so, since I'm one of the healers who do the most attacking." if event.user.id==206993446223872002
     event.respond "#{"#{event.user.mention}\n" unless event.user.id==206993446223872002}Anyone who feeds me a Genny is a monster. <:nobully:443331186618793984> It's not my fault the game mechanics prevent me from protesting!\nHeck, now that the Weapon Refinery exists, you can just give my staff the Wrathful Mode upgrade, it pairs well with my high Magic stat.#{p}"
   elsif skill[0][0,15]=='Dazzling Staff ' && ((event.server.nil? && event.user.id==206993446223872002) || (!event.server.nil? && !bot.user(170070293493186561).on(event.server.id).nil?))
     g=get_markers(event)
     p=unitz.reject{|q| !has_any?(g, q[13][0]) || q[12].gsub('*','').split(', ')[0]!='Lyn'}.uniq
-    event.respond "Go ahead, give the skill to whoever you want.  There's #{p} of her in the game, who would miss one?"
+    event.respond "Go ahead, give the skill to whoever you want.  There's #{p} Lyns in the game, who would miss one?"
   end
 end
 
@@ -6109,7 +6140,7 @@ def comparison(event,args,bot)
       end
       st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
       st[0]=st[0].gsub('Lavatain','Laevatein')
-      b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]} #{name} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0]])
+      b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{unit_moji(bot,event,-1,name,m,2) if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0]])
       c.push(unit_color(event,find_unit(find_name_in_string(event,sever(k[i])),event),nil,1,m))
       atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
       atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
@@ -6189,7 +6220,7 @@ def comparison(event,args,bot)
     end
     dzz[dzz.length-1][1].push("BST of highest stats: #{hstats[1][0]+hstats[2][0]+hstats[3][0]+hstats[4][0]+hstats[5][0]}")
     dzz[dzz.length-1][1]=dzz[dzz.length-1][1].join("\n")
-    create_embed(event,'**Comparing units**','',avg_color(czz),nil,nil,dzz,-1)
+    create_embed(event,'**Comparing units**','',avg_color(czz),nil,nil,dzz,-2)
     return b.length
   end
   stzzz=['','HP','Attack','Speed','Defense','Resistance']
@@ -6285,7 +6316,10 @@ def comparison(event,args,bot)
   d2[2]=nil
   d1.compact!
   d2.compact!
-  create_embed(event,"**Comparing #{names[0]} and #{names[1]}**",'',avg_color([c[0],c[1]]),nil,xpic,[d1,d2,d3],-1)
+  ftr=nil
+  if b[0][0][0]
+  end
+  create_embed(event,"**Comparing #{names[0]} and #{names[1]}**",'',avg_color([c[0],c[1]]),ftr,xpic,[d1,d2,d3],-2)
   return 2
 end
 
@@ -10128,6 +10162,7 @@ bot.command(:summon) do |event, *colors|
     str="**Summoner:** #{event.user.distinct}"
     str="#{str}\n"
     str="#{str}\n**Banner:** #{bnr[0][0]}"
+    puts bnr[0][0]
     unless bnr[0][1].nil? || bnr[0][1].length.zero?
       b=bnr[0][1].split(', ').map{|q| q.split('/')}
       m=['','January','February','March','April','May','June','July','August','September','October','November','December']
@@ -12802,7 +12837,11 @@ bot.command(:leaveserver, from: 167657750971547648) do |event, server_id| # forc
     end
     chn=chnn[0] if chnn.length>0
   end
-  chn.general_channel.send_message("My coder would rather that I not associate with you guys.  I'm sorry.  If you would like me back, please take it up with him.") rescue nil
+  if server_id.to_i==271642342153388034
+    chn.send_message("It is the end of a major era.  I'm sorry.  The cord has been completely severed.  If you would like me back, please take it up with Roman.") rescue nil
+  else
+    chn.send_message("My coder would rather that I not associate with you guys.  I'm sorry.  If you would like me back, please take it up with him.") rescue nil
+  end
   bot.server(server_id.to_i).leave
   return nil
 end
@@ -13312,7 +13351,7 @@ bot.command(:snagstats) do |event, f, f2|
     l=line.gsub(' ','').gsub("\n",'')
     b.push(l) unless l.length<=0
   end
-  if ['servers','server','members','member'].include?(f.downcase)
+  if ['servers','server','members','member','shard','shards','user','users'].include?(f.downcase)
     event << "**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
     event << "The <:Shard_Colorless:443733396921909248> Transparent Shard is in #{longFormattedNumber(@server_data[0][0])} server#{"s" if @server_data[0][0]!=1}, reaching #{longFormattedNumber(@server_data[1][0])} unique members."
     event << "The <:Shard_Red:443733396842348545> Scarlet Shard is in #{longFormattedNumber(@server_data[0][1])} server#{"s" if @server_data[0][1]!=1}, reaching #{longFormattedNumber(@server_data[1][1])} unique members."
