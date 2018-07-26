@@ -2826,8 +2826,8 @@ def display_stars(rarity,merges,support='-') # used to determine which star emoj
   end
   emo='<:Icon_Rarity_S:448266418035621888>' unless support=='-'
   emo='<:Icon_Rarity_Sp10:448272715653054485>' if rarity==5 && merges==@max_rarity_merge[1] && support != '-'
-  return "**#{rarity}-star#{" +#{merges}" unless merges.zero?}**#{"  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}" if rarity>5
-  return "#{emo*rarity}#{"**+#{merges}**" unless merges.zero?}#{"  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}"
+  return "**#{rarity}-star#{" +#{merges}" unless merges.zero?}**#{"  \u00B7  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}" if rarity>5
+  return "#{emo*rarity}#{"**+#{merges}**" unless merges.zero?}#{"  \u00B7  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}"
 end
 
 def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays stats
@@ -3460,7 +3460,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         s='Dark'
         xfooter=xfooter.gsub('Dark','Fire')
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Red_Tome:443172811826003968> **Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Red_Tome:443172811826003968> **Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Blue Tome Users Only'
       s=find_base_skill(skill,event)
@@ -3470,28 +3470,28 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       elsif s=='Light'
         xfooter=xfooter.gsub('Light','Thunder')
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Blue_Tome:467112472394858508> **Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Blue_Tome:467112472394858508> **Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Green Tome Users Only'
       s=find_base_skill(skill,event)
       if s=='Gronn'
         xfooter=nil
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Green_Tome:467122927666593822> **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Green_Tome:467122927666593822> **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Bow Users Only'
       effective.push('<:Icon_Move_Flier:443331186698354698>')
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     elsif skill[5]=='Dagger Users Only'
       skill[7]=skill[7].split(' *** ')
       xfooter="Debuff is applied at end of combat if unit attacks, and lasts until the foes' next actions."
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Dagger:443692132683743232>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Dagger\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Dagger:443692132683743232>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Dagger\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     elsif skill[5]=='Staff Users Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     elsif skill[5]=='Dragons Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     elsif skill[5]=='Beasts Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:443172811608162324> **Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:443172811608162324> **Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     else
       s=skill[5]
       s=s[0,s.length-11]
@@ -3500,7 +3500,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       s='<:Green_Blade:467122927230386207> / Axe (Green Blade)' if s=='Axe'
       s='<:Summon_Gun:453639908968628229> / Summon Gun' if s=='Summon Gun'
       s="<:Gold_Unknown:443172811499110411> / #{s}" unless s.include?(' / ')
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     end
     for i in 0...lookout2.length
       effective.push(lookout2[i][3]) if skill[11].split(', ').include?(lookout2[i][0])
@@ -3508,16 +3508,16 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     str="#{str}\n**Effective against:** #{effective.join('')}" if effective.length>0
     if skill[7].is_a?(Array)
       if skill[7][1].nil?
-        str="#{str}\n**Debuff:**  *None*"
+        str="#{str}\n**Debuff:**  \u00B7  *None*"
       else
         eff=skill[7][1].split(', ')
-        str="#{str}\n**Debuff:**  *Effect:* #{eff[0,eff.length-1].join(', ')}  *Affects:* #{eff[eff.length-1]}"
+        str="#{str}\n**Debuff:**  \u00B7  *Effect:* #{eff[0,eff.length-1].join(', ')}  \u00B7  *Affects:* #{eff[eff.length-1]}"
       end
       unless skill[7][2].nil?
         eff=skill[7][2].split(', ')
-        str="#{str}\n**Buff:**  *Effect:* #{eff[0,eff.length-1].join(', ')}  *Affects:* #{eff[eff.length-1]}"
+        str="#{str}\n**Buff:**  \u00B7  *Effect:* #{eff[0,eff.length-1].join(', ')}  \u00B7  *Affects:* #{eff[eff.length-1]}"
       end
-      str="#{str}\n**Additional Effect:**  #{skill[7][0]}" unless skill[7][0]=='-'
+      str="#{str}\n**Additional Effect:**  \u00B7  #{skill[7][0]}" unless skill[7][0]=='-'
     else
       str="#{str}\n**Effect:** #{skill[7]}" unless skill[7]=='-'
     end
@@ -4070,14 +4070,14 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{find_effect_name(skill,event,2).gsub(' ','_').gsub('/','_')}.png"
         str="#{str} - #{find_effect_name(skill,event)}"
       end
-      str="#{str}\nMight: #{skill[2]+sttz[i][1]}  Range: #{skill[3]}"
-      str="#{str}  HP +#{sttz[i][0]}" if sttz[i][0]>0
+      str="#{str}\nMight: #{skill[2]+sttz[i][1]}  \u00B7  Range: #{skill[3]}"
+      str="#{str}  \u00B7  HP +#{sttz[i][0]}" if sttz[i][0]>0
       atk=mt[1]
       atk+=skill[12][10] if sttz[i][5]=="Effect"
-      str="#{str}  Attack #{'+' if atk>0}#{atk}" if atk != 0
-      str="#{str}  Speed #{'+' if skill[12][2]+sttz[i][2]>0}#{skill[12][2]+sttz[i][2]}" if skill[12][2]+sttz[i][2]!=0
-      str="#{str}  Defense #{'+' if skill[12][3]+sttz[i][3]>0}#{skill[12][3]+sttz[i][3]}" if skill[12][3]+sttz[i][3]!=0
-      str="#{str}  Resistance #{'+' if skill[12][4]+sttz[i][4]>0}#{skill[12][4]+sttz[i][4]}" if skill[12][4]+sttz[i][4]!=0
+      str="#{str}  \u00B7  Attack #{'+' if atk>0}#{atk}" if atk != 0
+      str="#{str}  \u00B7  Speed #{'+' if skill[12][2]+sttz[i][2]>0}#{skill[12][2]+sttz[i][2]}" if skill[12][2]+sttz[i][2]!=0
+      str="#{str}  \u00B7  Defense #{'+' if skill[12][3]+sttz[i][3]>0}#{skill[12][3]+sttz[i][3]}" if skill[12][3]+sttz[i][3]!=0
+      str="#{str}  \u00B7  Resistance #{'+' if skill[12][4]+sttz[i][4]>0}#{skill[12][4]+sttz[i][4]}" if skill[12][4]+sttz[i][4]!=0
       effective=[]
       effective.push('<:Icon_Move_Flier:443331186698354698>') if skill[5]=="Bow Users Only"
       for i2 in 0...lookout2.length
@@ -4088,7 +4088,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="#{str}\n*Effective against*: #{effective.join('')}" if effective.length>0
       unless debuff.nil?
         d=debuff.split(', ')
-        str="#{str}\n*Debuff*:  Effect: #{d[0,d.length-1].join(', ')}  Affects: #{d[d.length-1]}"
+        str="#{str}\n*Debuff*:  \u00B7  Effect: #{d[0,d.length-1].join(', ')}  \u00B7  Affects: #{d[d.length-1]}"
       end
       if outer_skill.nil? || !sttz[i][7].nil?
         str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{skill[7]}" unless skill[7]=='-'
@@ -7855,7 +7855,7 @@ def unit_study(event,name,bot,weapon=nil)
   elsif rardata.include?('-')
     highest_merge=0
   else
-    highest_merge=[@max_rarity_merge[1],rardata.length/2-1].min
+    highest_merge=[@max_rarity_merge[1],rardata.gsub('2y','').length/2-1].min
   end
   r=[]
   for i in 0...@max_rarity_merge[0]
