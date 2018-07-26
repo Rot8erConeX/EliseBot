@@ -930,7 +930,7 @@ def make_stats_string(event,name,rarity,boon='',bane='',hm=@max_rarity_merge[1])
   for i in 0...hm[0]+1
     u=get_stats(event,name,40,rarity,i,boon,bane)
     u=['Kiran',0,0,0,0,0] if u[0]=='Kiran'
-    k="#{k}\n**#{i} merge#{'s' unless i==1}:** #{u[1]} / #{u[2]} / #{u[3]} / #{u[4]} / #{u[5]}		(BST: #{u[1]+u[2]+u[3]+u[4]+u[5]})" if i%5==0 || i==hm[1] || args.include?('full') || args.include?('merges')
+    k="#{k}\n**#{i} merge#{'s' unless i==1}:** #{u[1]} / #{u[2]} / #{u[3]} / #{u[4]} / #{u[5]}    (BST: #{u[1]+u[2]+u[3]+u[4]+u[5]})" if i%5==0 || i==hm[1] || args.include?('full') || args.include?('merges')
   end
   return k
 end
@@ -1645,7 +1645,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
           flumb.compact!
           for j in 0...flumb.length
             if i.zero?
-              fields[j+1][0]="#{fields[j+1][0]}	#{flumb[j].gsub(statnames[j],'').gsub('GPT: ','')}"
+              fields[j+1][0]="#{fields[j+1][0]}  #{flumb[j].gsub(statnames[j],'').gsub('GPT: ','')}"
             else
               fields[j+1].push(flumb[j].gsub(statnames[j],'').gsub('GPT: ',''))
             end
@@ -1677,7 +1677,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
           flumb.compact!
           for j in 0...flumb.length
             if i.zero?
-              fields[j+1][0]="#{fields[j+1][0]}	#{flumb[j].gsub(statnames[j],'').gsub('GPT: ','')}"
+              fields[j+1][0]="#{fields[j+1][0]}  #{flumb[j].gsub(statnames[j],'').gsub('GPT: ','')}"
             else
               fields[j+1].push(flumb[j].gsub(statnames[j],'').gsub('GPT: ',''))
             end
@@ -1734,7 +1734,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
       embed.footer={"text"=>xfooter} unless xfooter.nil?
       unless xfields.nil?
         for i in 0...xfields.length
-          embed.add_field(name: xfields[i][0], value: xfields[i][1], inline: xfields[i][2].nil?)
+          embed.add_field(name: xfields[i][0].gsub('**',''), value: xfields[i][1], inline: xfields[i][2].nil?)
         end
       end
     end
@@ -1745,7 +1745,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
       embed.footer={"text"=>xfooter} unless xfooter.nil?
       unless xfields.nil?
         for i in 0...xfields.length
-          embed.add_field(name: xfields[i][0], value: xfields[i][1], inline: xfields[i][2].nil?)
+          embed.add_field(name: xfields[i][0].gsub('**',''), value: xfields[i][1], inline: xfields[i][2].nil?)
         end
       end
       embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic) unless xpic.nil?
@@ -2826,8 +2826,8 @@ def display_stars(rarity,merges,support='-') # used to determine which star emoj
   end
   emo='<:Icon_Rarity_S:448266418035621888>' unless support=='-'
   emo='<:Icon_Rarity_Sp10:448272715653054485>' if rarity==5 && merges==@max_rarity_merge[1] && support != '-'
-  return "**#{rarity}-star#{" +#{merges}" unless merges.zero?}**#{"	<:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}" if rarity>5
-  return "#{emo*rarity}#{"**+#{merges}**" unless merges.zero?}#{"	<:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}"
+  return "**#{rarity}-star#{" +#{merges}" unless merges.zero?}**#{"  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}" if rarity>5
+  return "#{emo*rarity}#{"**+#{merges}**" unless merges.zero?}#{"  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}"
 end
 
 def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays stats
@@ -3089,7 +3089,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
       flds.push(['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"])
       flds.shift
     end
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0}#{"	\u2764 **#{summoner}**" unless summoner=='-'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),flds,1)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0}#{"  \u2764 **#{summoner}**" unless summoner=='-'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),flds,1)
     return nil
   end
   # units for whom both level 40 and level 1 stats are known
@@ -3460,7 +3460,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         s='Dark'
         xfooter=xfooter.gsub('Dark','Fire')
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Red_Tome:443172811826003968> **Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Red_Tome:443172811826003968> **Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Blue Tome Users Only'
       s=find_base_skill(skill,event)
@@ -3470,28 +3470,28 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       elsif s=='Light'
         xfooter=xfooter.gsub('Light','Thunder')
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Blue_Tome:467112472394858508> **Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Blue_Tome:467112472394858508> **Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Green Tome Users Only'
       s=find_base_skill(skill,event)
       if s=='Gronn'
         xfooter=nil
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Green_Tome:467122927666593822> **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Green_Tome:467122927666593822> **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Bow Users Only'
       effective.push('<:Icon_Move_Flier:443331186698354698>')
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
     elsif skill[5]=='Dagger Users Only'
       skill[7]=skill[7].split(' *** ')
       xfooter="Debuff is applied at end of combat if unit attacks, and lasts until the foes' next actions."
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Dagger:443692132683743232>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Dagger\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Dagger:443692132683743232>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Dagger\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
     elsif skill[5]=='Staff Users Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
     elsif skill[5]=='Dragons Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
     elsif skill[5]=='Beasts Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:443172811608162324> **Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:443172811608162324> **Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
     else
       s=skill[5]
       s=s[0,s.length-11]
@@ -3500,7 +3500,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       s='<:Green_Blade:467122927230386207> / Axe (Green Blade)' if s=='Axe'
       s='<:Summon_Gun:453639908968628229> / Summon Gun' if s=='Summon Gun'
       s="<:Gold_Unknown:443172811499110411> / #{s}" unless s.include?(' / ')
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}	**Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}  **Range:** #{skill[3]}"
     end
     for i in 0...lookout2.length
       effective.push(lookout2[i][3]) if skill[11].split(', ').include?(lookout2[i][0])
@@ -3508,16 +3508,16 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     str="#{str}\n**Effective against:** #{effective.join('')}" if effective.length>0
     if skill[7].is_a?(Array)
       if skill[7][1].nil?
-        str="#{str}\n**Debuff:**	*None*"
+        str="#{str}\n**Debuff:**  *None*"
       else
         eff=skill[7][1].split(', ')
-        str="#{str}\n**Debuff:**	*Effect:* #{eff[0,eff.length-1].join(', ')}	*Affects:* #{eff[eff.length-1]}"
+        str="#{str}\n**Debuff:**  *Effect:* #{eff[0,eff.length-1].join(', ')}  *Affects:* #{eff[eff.length-1]}"
       end
       unless skill[7][2].nil?
         eff=skill[7][2].split(', ')
-        str="#{str}\n**Buff:**	*Effect:* #{eff[0,eff.length-1].join(', ')}	*Affects:* #{eff[eff.length-1]}"
+        str="#{str}\n**Buff:**  *Effect:* #{eff[0,eff.length-1].join(', ')}  *Affects:* #{eff[eff.length-1]}"
       end
-      str="#{str}\n**Additional Effect:**	#{skill[7][0]}" unless skill[7][0]=='-'
+      str="#{str}\n**Additional Effect:**  #{skill[7][0]}" unless skill[7][0]=='-'
     else
       str="#{str}\n**Effect:** #{skill[7]}" unless skill[7]=='-'
     end
@@ -4070,14 +4070,14 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{find_effect_name(skill,event,2).gsub(' ','_').gsub('/','_')}.png"
         str="#{str} - #{find_effect_name(skill,event)}"
       end
-      str="#{str}\nMight: #{skill[2]+sttz[i][1]}	Range: #{skill[3]}"
-      str="#{str}	HP +#{sttz[i][0]}" if sttz[i][0]>0
+      str="#{str}\nMight: #{skill[2]+sttz[i][1]}  Range: #{skill[3]}"
+      str="#{str}  HP +#{sttz[i][0]}" if sttz[i][0]>0
       atk=mt[1]
       atk+=skill[12][10] if sttz[i][5]=="Effect"
-      str="#{str}	Attack #{'+' if atk>0}#{atk}" if atk != 0
-      str="#{str}	Speed #{'+' if skill[12][2]+sttz[i][2]>0}#{skill[12][2]+sttz[i][2]}" if skill[12][2]+sttz[i][2]!=0
-      str="#{str}	Defense #{'+' if skill[12][3]+sttz[i][3]>0}#{skill[12][3]+sttz[i][3]}" if skill[12][3]+sttz[i][3]!=0
-      str="#{str}	Resistance #{'+' if skill[12][4]+sttz[i][4]>0}#{skill[12][4]+sttz[i][4]}" if skill[12][4]+sttz[i][4]!=0
+      str="#{str}  Attack #{'+' if atk>0}#{atk}" if atk != 0
+      str="#{str}  Speed #{'+' if skill[12][2]+sttz[i][2]>0}#{skill[12][2]+sttz[i][2]}" if skill[12][2]+sttz[i][2]!=0
+      str="#{str}  Defense #{'+' if skill[12][3]+sttz[i][3]>0}#{skill[12][3]+sttz[i][3]}" if skill[12][3]+sttz[i][3]!=0
+      str="#{str}  Resistance #{'+' if skill[12][4]+sttz[i][4]>0}#{skill[12][4]+sttz[i][4]}" if skill[12][4]+sttz[i][4]!=0
       effective=[]
       effective.push('<:Icon_Move_Flier:443331186698354698>') if skill[5]=="Bow Users Only"
       for i2 in 0...lookout2.length
@@ -4088,7 +4088,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="#{str}\n*Effective against*: #{effective.join('')}" if effective.length>0
       unless debuff.nil?
         d=debuff.split(', ')
-        str="#{str}\n*Debuff*:	Effect: #{d[0,d.length-1].join(', ')}	Affects: #{d[d.length-1]}"
+        str="#{str}\n*Debuff*:  Effect: #{d[0,d.length-1].join(', ')}  Affects: #{d[d.length-1]}"
       end
       if outer_skill.nil? || !sttz[i][7].nil?
         str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{skill[7]}" unless skill[7]=='-'
@@ -4388,7 +4388,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
     if dv>=0
       mu=true
       rarity=@dev_units[dv][1]
-      txt=display_stars(rarity,@dev_units[dv][2],@dev_units[dv][5]).split('	')[0]
+      txt=display_stars(rarity,@dev_units[dv][2],@dev_units[dv][5]).split('  ')[0]
       sklz2=[@dev_units[dv][6],@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],[@dev_units[dv][12]]]
     elsif @dev_nobodies.include?(@units[j][0])
       event.respond "Mathoo has this character but doesn't care enough about including their skills.  Showing default skills." unless chain
@@ -6174,6 +6174,9 @@ def comparison(event,args,bot)
     hstats=[[0,[]],[0,[]],[0,[]],[0,[]],[0,[]],[0,[]]]
     event.respond "I detect #{b.length} names.\nUnfortunately, due to embed limits, I can only compare ten names\nand due to the formatting of this command, plaintext is not an answer." if b.length>10
     b=b[0,10] if b.length>10
+    data_load()
+    uu=@units.map{|q| q}
+    bse=b.map{|q| uu[uu.find_index{|q2| q2[0]==q[0][0]}][12].split(', ')[0].gsub('*','')}.uniq
     for iz in 0...b.length
       dzz.push(["**#{b[iz][1].gsub('Lavatain','Laevatein')}**",[unit_moji(bot,event,-1,b[iz][0][0].gsub('Laevatein','Lavatain'),b[iz][2])],0])
       czz.push(c[iz])
@@ -6220,7 +6223,12 @@ def comparison(event,args,bot)
     end
     dzz[dzz.length-1][1].push("BST of highest stats: #{hstats[1][0]+hstats[2][0]+hstats[3][0]+hstats[4][0]+hstats[5][0]}")
     dzz[dzz.length-1][1]=dzz[dzz.length-1][1].join("\n")
-    create_embed(event,'**Comparing units**','',avg_color(czz),nil,nil,dzz,-2)
+    ftr=nil
+    if bse.include?('Elise') && bse.include?('Nino') && bse.reject{|q| ['Elise','Nino'].include?(q)}.length<=0
+      metadata_load()
+      ftr="Heyday Coefficient: #{(@server_data[0].inject(0){|sum,x| sum + x }/701.0).round(4)}"
+    end
+    create_embed(event,'**Comparing units**','',avg_color(czz),ftr,nil,dzz,-2)
     return b.length
   end
   stzzz=['','HP','Attack','Speed','Defense','Resistance']
@@ -6317,7 +6325,13 @@ def comparison(event,args,bot)
   d1.compact!
   d2.compact!
   ftr=nil
-  if b[0][0][0]
+  data_load()
+  bse=[]
+  bse.push(@units[@units.find_index{|q| q[0]==b[0][0][0]}][12].split(', ')[0].gsub('*',''))
+  bse.push(@units[@units.find_index{|q| q[0]==b[1][0][0]}][12].split(', ')[0].gsub('*',''))
+  if bse.include?('Elise') && bse.include?('Nino')
+    metadata_load()
+    ftr="Heyday Coefficient: #{(@server_data[0].inject(0){|sum,x| sum + x }/701.0).round(4)}"
   end
   create_embed(event,"**Comparing #{names[0]} and #{names[1]}**",'',avg_color([c[0],c[1]]),ftr,xpic,[d1,d2,d3],-2)
   return 2
@@ -8839,7 +8853,7 @@ def phase_study(event,name,bot,weapon=nil)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(' all')
     event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
-    event.respond "**Displayed stats:**	#{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]}\n**#{"Player Phase" unless ppu40==epu40}#{"In-combat Stats" if ppu40==epu40}:**	#{ppu40[1]} / #{ppu40[2]} / #{ppu40[3]} / #{ppu40[4]} / #{ppu40[5]}  (#{ppu40[16]} BST)#{"\n**Enemy Phase:**	#{epu40[1]} / #{epu40[2]} / #{epu40[3]} / #{epu40[4]} / #{epu40[5]}  (#{epu40[16]} BST)" unless ppu40==epu40}"
+    event.respond "**Displayed stats:**  #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]}\n**#{"Player Phase" unless ppu40==epu40}#{"In-combat Stats" if ppu40==epu40}:**  #{ppu40[1]} / #{ppu40[2]} / #{ppu40[3]} / #{ppu40[4]} / #{ppu40[5]}  (#{ppu40[16]} BST)#{"\n**Enemy Phase:**  #{epu40[1]} / #{epu40[2]} / #{epu40[3]} / #{epu40[4]} / #{epu40[5]}  (#{epu40[16]} BST)" unless ppu40==epu40}"
   elsif ppu40==epu40
     create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}"],["In-combat Stats","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:467037520534962186> Speed: #{ppu40[3]}\n<:DefenseS:467037520249487372> Defense: #{ppu40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
   else
@@ -10180,11 +10194,11 @@ bot.command(:summon) do |event, *colors|
       k[4].push(bnr[2][i]) unless ['Red','Blue','Green','Colorless'].include?(k2)
     end
     str="#{str}\n**Focus Heroes:**"
-    str="#{str}\n<:Orb_Red:455053002256941056> *Red*:	#{k[0].join(', ')}" if k[0].length>0
-    str="#{str}\n<:Orb_Blue:455053001971859477> *Blue*:	#{k[1].join(', ')}" if k[1].length>0
-    str="#{str}\n<:Orb_Green:455053002311467048> *Green*:	#{k[2].join(', ')}" if k[2].length>0
-    str="#{str}\n<:Orb_Colorless:455053002152083457> *Colorless*:	#{k[3].join(', ')}" if k[3].length>0
-    str="#{str}\n<:Orb_Gold:455053002911514634> *Gold*:	#{k[4].join(', ')}" if k[4].length>0
+    str="#{str}\n<:Orb_Red:455053002256941056> *Red*:  #{k[0].join(', ')}" if k[0].length>0
+    str="#{str}\n<:Orb_Blue:455053001971859477> *Blue*:  #{k[1].join(', ')}" if k[1].length>0
+    str="#{str}\n<:Orb_Green:455053002311467048> *Green*:  #{k[2].join(', ')}" if k[2].length>0
+    str="#{str}\n<:Orb_Colorless:455053002152083457> *Colorless*:  #{k[3].join(', ')}" if k[3].length>0
+    str="#{str}\n<:Orb_Gold:455053002911514634> *Gold*:  #{k[4].join(', ')}" if k[4].length>0
     str="#{str}\n"
     str="#{str}\n**Summon rates:**"
     @banner=[[event.user.id,Time.now,event.server.id]]
@@ -10218,57 +10232,57 @@ bot.command(:summon) do |event, *colors|
     end
     fakes=false
     fakes=true if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-    str="#{str}\n5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % focus}%"
-    str="#{str}\nOther 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % five_star}%" unless five_star.zero?
+    str="#{str}\n5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % focus}%"
+    str="#{str}\nOther 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % five_star}%" unless five_star.zero?
     if fakes
       if bnr[8].nil?
-        str="#{str}\n~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % four_star}%" unless four_star.zero?
+        str="#{str}\n~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % four_star}%" unless four_star.zero?
       elsif four_star>0
-        str="#{str}\n~~4\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (four_star/2)}%"
-        str="#{str}\nOther ~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (four_star/2)}%"
+        str="#{str}\n~~4\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (four_star/2)}%"
+        str="#{str}\nOther ~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (four_star/2)}%"
       end
       if bnr[9].nil?
-        str="#{str}\n~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % three_star}%" unless three_star.zero?
+        str="#{str}\n~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % three_star}%" unless three_star.zero?
       elsif three_star>0
-        str="#{str}\n~~3\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (three_star/2)}%"
-        str="#{str}\nOther ~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (three_star/2)}%"
+        str="#{str}\n~~3\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (three_star/2)}%"
+        str="#{str}\nOther ~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (three_star/2)}%"
       end
       if bnr[10].nil?
-        str="#{str}\n~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % two_star}%" unless two_star.zero?
+        str="#{str}\n~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % two_star}%" unless two_star.zero?
       elsif two_star>0
-        str="#{str}\n~~2\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (two_star/2)}%"
-        str="#{str}\nOther ~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (two_star/2)}%"
+        str="#{str}\n~~2\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (two_star/2)}%"
+        str="#{str}\nOther ~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (two_star/2)}%"
       end
       if bnr[11].nil?
-        str="#{str}\n~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:	#{'%.2f' % one_star}%" unless one_star.zero?
+        str="#{str}\n~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % one_star}%" unless one_star.zero?
       elsif two_star>0
-        str="#{str}\n~~1\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:	#{'%.2f' % (one_star/2)}%"
-        str="#{str}\nOther ~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>:	#{'%.2f' % (one_star/2)}%"
+        str="#{str}\n~~1\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (one_star/2)}%"
+        str="#{str}\nOther ~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (one_star/2)}%"
       end
     else
       if bnr[8].nil?
-        str="#{str}\n4<:Icon_Rarity_4:448266418459377684> Unit:	#{'%.2f' % four_star}%" unless four_star.zero?
+        str="#{str}\n4<:Icon_Rarity_4:448266418459377684> Unit:  #{'%.2f' % four_star}%" unless four_star.zero?
       elsif four_star>0
-        str="#{str}\n4<:Icon_Rarity_4p10:448272714210476033> Focus:	#{'%.2f' % (four_star/2)}%"
-        str="#{str}\nOther 4<:Icon_Rarity_4:448266418459377684>:	#{'%.2f' % (four_star/2)}%"
+        str="#{str}\n4<:Icon_Rarity_4p10:448272714210476033> Focus:  #{'%.2f' % (four_star/2)}%"
+        str="#{str}\nOther 4<:Icon_Rarity_4:448266418459377684>:  #{'%.2f' % (four_star/2)}%"
       end
       if bnr[9].nil?
-        str="#{str}\n3<:Icon_Rarity_3:448266417934958592> Unit:	#{'%.2f' % three_star}%" unless three_star.zero?
+        str="#{str}\n3<:Icon_Rarity_3:448266417934958592> Unit:  #{'%.2f' % three_star}%" unless three_star.zero?
       elsif three_star>0
-        str="#{str}\n3<:Icon_Rarity_3p10:448294378293952513> Focus:	#{'%.2f' % (three_star/2)}%"
-        str="#{str}\nOther 3<:Icon_Rarity_3:448266417934958592>:	#{'%.2f' % (three_star/2)}%"
+        str="#{str}\n3<:Icon_Rarity_3p10:448294378293952513> Focus:  #{'%.2f' % (three_star/2)}%"
+        str="#{str}\nOther 3<:Icon_Rarity_3:448266417934958592>:  #{'%.2f' % (three_star/2)}%"
       end
       if bnr[10].nil?
-        str="#{str}\n2<:Icon_Rarity_2:448266417872044032> Unit:	#{'%.2f' % two_star}%" unless two_star.zero?
+        str="#{str}\n2<:Icon_Rarity_2:448266417872044032> Unit:  #{'%.2f' % two_star}%" unless two_star.zero?
       elsif two_star>0
-        str="#{str}\n2<:Icon_Rarity_2p10:448294378205872130> Focus:	#{'%.2f' % (two_star/2)}%"
-        str="#{str}\nOther 2<:Icon_Rarity_2:448266417872044032>:	#{'%.2f' % (two_star/2)}%"
+        str="#{str}\n2<:Icon_Rarity_2p10:448294378205872130> Focus:  #{'%.2f' % (two_star/2)}%"
+        str="#{str}\nOther 2<:Icon_Rarity_2:448266417872044032>:  #{'%.2f' % (two_star/2)}%"
       end
       if bnr[11].nil?
-        str="#{str}\n1<:Icon_Rarity_1:448266417481973781> Unit:	#{'%.2f' % one_star}%" unless one_star.zero?
+        str="#{str}\n1<:Icon_Rarity_1:448266417481973781> Unit:  #{'%.2f' % one_star}%" unless one_star.zero?
       elsif two_star>0
-        str="#{str}\n1<:Icon_Rarity_1p10:448294377878716417> Focus:	#{'%.2f' % (one_star/2)}%"
-        str="#{str}\nOther 1<:Icon_Rarity_1:448266417481973781>:	#{'%.2f' % (one_star/2)}%"
+        str="#{str}\n1<:Icon_Rarity_1p10:448294377878716417> Focus:  #{'%.2f' % (one_star/2)}%"
+        str="#{str}\nOther 1<:Icon_Rarity_1:448266417481973781>:  #{'%.2f' % (one_star/2)}%"
       end
     end
     str="#{str}\n"
@@ -13437,13 +13451,13 @@ bot.command(:snagstats) do |event, f, f2|
     event << "#{filler(legal_units,all_units,2,0,2,2)} legendary units"
     event << "#{filler(legal_units,all_units,9,0,'-',1)} unobtainable units"
     event << ''
-    event << "#{filler(legal_units,all_units,1,0,'Red')} red units, 	with #{filler(legal_units,all_units,[1,9],[0,0],['Red','p'],[0,1])} in the main summon pool"
-    event << "#{filler(legal_units,all_units,1,0,'Blue')} blue units, 	with #{filler(legal_units,all_units,[1,9],[0,0],['Blue','p'],[0,1])} in the main summon pool"
-    event << "#{filler(legal_units,all_units,1,0,'Green')} green units, 	with #{filler(legal_units,all_units,[1,9],[0,0],['Green','p'],[0,1])} in the main summon pool"
-    event << "#{filler(legal_units,all_units,1,0,'Colorless')} colorless units, 	with #{filler(legal_units,all_units,[1,9],[0,0],['Colorless','p'],[0,1])} in the main summon pool"
+    event << "#{filler(legal_units,all_units,1,0,'Red')} red units,   with #{filler(legal_units,all_units,[1,9],[0,0],['Red','p'],[0,1])} in the main summon pool"
+    event << "#{filler(legal_units,all_units,1,0,'Blue')} blue units,   with #{filler(legal_units,all_units,[1,9],[0,0],['Blue','p'],[0,1])} in the main summon pool"
+    event << "#{filler(legal_units,all_units,1,0,'Green')} green units,   with #{filler(legal_units,all_units,[1,9],[0,0],['Green','p'],[0,1])} in the main summon pool"
+    event << "#{filler(legal_units,all_units,1,0,'Colorless')} colorless units,   with #{filler(legal_units,all_units,[1,9],[0,0],['Colorless','p'],[0,1])} in the main summon pool"
     event << ''
-    event << "#{filler(legal_units,all_units,1,1,'Blade')} blade users: 	#{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, and #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes"
-    event << "#{filler(legal_units,all_units,1,1,'Tome')} tome users: 	#{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, and #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green"
+    event << "#{filler(legal_units,all_units,1,1,'Blade')} blade users:   #{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, and #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes"
+    event << "#{filler(legal_units,all_units,1,1,'Tome')} tome users:   #{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, and #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green"
     event << "#{filler(legal_units,all_units,1,1,'Dragon')} dragon units"
     event << "#{filler(legal_units,all_units,1,1,'Bow')} bow users"
     event << "#{filler(legal_units,all_units,1,1,'Dagger')} dagger users"
@@ -13456,23 +13470,23 @@ bot.command(:snagstats) do |event, f, f2|
     event << "#{filler(legal_units,all_units,3,-1,'Armor')} armored units"
     if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
       event << ''
-      event << "#{filler(legal_units,all_units,11,-1,'FE1',1)} units from *FE1*,		#{filler(legal_units,all_units,11,0,'FE1')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE2',1)} units from *FE2*,		#{filler(legal_units,all_units,11,0,'FE2')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE3',1)} units from *FE3*,		#{filler(legal_units,all_units,11,0,'FE3')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE4',1)} units from *FE4*,		#{filler(legal_units,all_units,11,0,'FE4')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE5',1)} units from *FE5*,		#{filler(legal_units,all_units,11,0,'FE5')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE6',1)} units from *FE6*,		#{filler(legal_units,all_units,11,0,'FE6')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE7',1)} units from *FE7*,		#{filler(legal_units,all_units,11,0,'FE7')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE8',1)} units from *FE8*,		#{filler(legal_units,all_units,11,0,'FE8')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE9',1)} units from *FE9*,		#{filler(legal_units,all_units,11,0,'FE9')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE10',1)} units from *FE10*,		#{filler(legal_units,all_units,11,0,'FE10')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE11',1)} units from *FE11*,		#{filler(legal_units,all_units,11,0,'FE11')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE12',1)} units from *FE12*,		#{filler(legal_units,all_units,11,0,'FE12')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE13',1)} units from *FE13*,		#{filler(legal_units,all_units,11,0,'FE13')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,['FE14','FE14B','FE14C','FE14R','FE14g'],4)} units from *FE14*,	#{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],-3)} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE15',1)} units from *FE15*,		#{filler(legal_units,all_units,11,0,'FE15')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE16',1)} units from *FE16*,		#{filler(legal_units,all_units,11,0,'FE16')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FEH',1)} units from *FEH* itself,		#{filler(legal_units,all_units,11,0,'FEH')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE1',1)} units from *FE1*,    #{filler(legal_units,all_units,11,0,'FE1')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE2',1)} units from *FE2*,    #{filler(legal_units,all_units,11,0,'FE2')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE3',1)} units from *FE3*,    #{filler(legal_units,all_units,11,0,'FE3')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE4',1)} units from *FE4*,    #{filler(legal_units,all_units,11,0,'FE4')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE5',1)} units from *FE5*,    #{filler(legal_units,all_units,11,0,'FE5')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE6',1)} units from *FE6*,    #{filler(legal_units,all_units,11,0,'FE6')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE7',1)} units from *FE7*,    #{filler(legal_units,all_units,11,0,'FE7')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE8',1)} units from *FE8*,    #{filler(legal_units,all_units,11,0,'FE8')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE9',1)} units from *FE9*,    #{filler(legal_units,all_units,11,0,'FE9')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE10',1)} units from *FE10*,    #{filler(legal_units,all_units,11,0,'FE10')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE11',1)} units from *FE11*,    #{filler(legal_units,all_units,11,0,'FE11')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE12',1)} units from *FE12*,    #{filler(legal_units,all_units,11,0,'FE12')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE13',1)} units from *FE13*,    #{filler(legal_units,all_units,11,0,'FE13')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,['FE14','FE14B','FE14C','FE14R','FE14g'],4)} units from *FE14*,  #{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],-3)} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE15',1)} units from *FE15*,    #{filler(legal_units,all_units,11,0,'FE15')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FE16',1)} units from *FE16*,    #{filler(legal_units,all_units,11,0,'FE16')} of which are credited"
+      event << "#{filler(legal_units,all_units,11,-1,'FEH',1)} units from *FEH* itself,    #{filler(legal_units,all_units,11,0,'FEH')} of which are credited"
     end
     return nil
   elsif ['skill','skills','weapon','weapons','assist','assists','special','specials','passive','passives'].include?(f.downcase)
@@ -13569,7 +13583,7 @@ bot.command(:snagstats) do |event, f, f2|
     event << "*Legendaries* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Legendaries'}][1].length)} current members) - Any unit that gives a Legendary Hero Boost to blessed allies during specific seasons."
     event << "*Retro-Prfs* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro-Prfs'}][1].length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything."
     event << "*Seasonals* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Seasonals'}][1].length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost."
-    event << "		The following subsets of the Seasonals group are also dynamic: *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Spring* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})"
+    event << "    The following subsets of the Seasonals group are also dynamic: *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Spring* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})"
     event << "*Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can be obtained via a Tempest Trials event."
     display=false
     display=true if event.user.id==167657750971547648
@@ -13704,8 +13718,8 @@ def skill_data(legal_skills,all_skills,event,mode=0)
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
     ls2=legal_skills.reject{|q| q[4]!='Weapon'}
     as2=all_skills.reject{|q| q[4]!='Weapon'}
-    str="#{str}\n#{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades 	#{filler(ls2,as2,5,-1,'Sword Users Only')} swords, #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
-    str="#{str}\n#{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes 	#{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
+    str="#{str}\n#{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades   #{filler(ls2,as2,5,-1,'Sword Users Only')} swords, #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
+    str="#{str}\n#{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes   #{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
     str="#{str}\n#{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
     str="#{str}\n#{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
     str="#{str}\n#{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
@@ -13739,7 +13753,7 @@ def skill_data(legal_skills,all_skills,event,mode=0)
   if mode==2
     str="#{str}\n#{filler(ls2,as2,4,-1,'Seal')} Passive Seals"
   else
-    str="#{str}\n#{filler(ls2,as2,4,-1,'Seal',1)} Passive Seals 	#{filler(ls2,as2,4,-1,'Seal')} of which are exclusive to the Seal slot"
+    str="#{str}\n#{filler(ls2,as2,4,-1,'Seal',1)} Passive Seals   #{filler(ls2,as2,4,-1,'Seal')} of which are exclusive to the Seal slot"
   end
   return str
 end
@@ -13867,7 +13881,7 @@ bot.message do |event|
     s=remove_format(s,'```')              # remove large code blocks
     s=remove_format(s,'`')                # remove small code blocks
     s=remove_format(s,'~~')               # remove crossed-out text
-    s=s.gsub("\n",' ').gsub("	",'')
+    s=s.gsub("\n",' ').gsub("  ",'')
     if s.split(' ').include?('owo') || s.split(' ').include?('OwO')
       k=0
       k=event.server.id unless event.server.nil?
@@ -13884,7 +13898,7 @@ bot.message do |event|
     s=remove_format(s,'```')              # remove large code blocks
     s=remove_format(s,'`')                # remove small code blocks
     s=remove_format(s,'~~')               # remove crossed-out text
-    s=s.gsub("\n",' ').gsub("	",'')
+    s=s.gsub("\n",' ').gsub("  ",'')
     if s.split(' ').include?('0x4')
       canpost=true
       k=0
