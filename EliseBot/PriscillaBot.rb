@@ -3740,7 +3740,11 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       m=skill[10][i].split(', ')
       for i2 in 0...m.length
         m2=unitz[unitz.find_index{|q| q[0]==m[i2].gsub('~~','')}]
-        m3="#{m[i2]} (#{i+1}#{@rarity_stars[i]})"
+        m3=i+1
+        m4=[]
+        m2[9][0].each_char{|q| m4.push(q.to_i)}
+        m3=[m4.reject{|q| q==0}.min,m3].max
+        m3="#{m[i2]} (#{m3}#{@rarity_stars[m3-1]})"
         if m2[9][0].include?('p')
           clrz[0].push(m3) if m2[1][0]=='Red'
           clrz[1].push(m3) if m2[1][0]=='Blue'
@@ -3795,7 +3799,11 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
           m=skill2[10][i2].split(', ')
           for i3 in 0...m.length
             m2=unitz[unitz.find_index{|q| q[0]==m[i3].gsub('~~','')}]
-            m3="#{m[i3]} (#{i2+1}#{@rarity_stars[i2]})"
+            m3=i2+1
+            m4=[]
+            m2[9][0].each_char{|q| m4.push(q.to_i)}
+            m3=[m4.reject{|q| q==0}.min,m3].max
+            m3="#{m[i3]} (#{m3}#{@rarity_stars[m3-1]})"
             if m2[9][0].include?('p')
               clrz[0].push(m3) if m2[1][0]=='Red'
               clrz[1].push(m3) if m2[1][0]=='Blue'
@@ -6407,7 +6415,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
   g=get_markers(event)
   u=@units.reject{|q| !has_any?(g, q[13][0])}
   for i in 0...u.length
-    return [str1, u[i][0], str1] if str1.downcase==u[i][0].downcase.gsub('(','').gsub(')','')
+    return [str1, [u[i][0]], str1] if str1.downcase==u[i][0].downcase.gsub('(','').gsub(')','')
   end
   for i in 0...@aliases.length
     return [str1, [@aliases[i][1]], @aliases[i][0].downcase] if @aliases[i][0].downcase==str1 && (@aliases[i][2].nil? || @aliases[i][2].include?(k))
@@ -11190,6 +11198,7 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
     if !detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1).nil?
       x=detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1)
       unit=x[1]
+      unit=[unit] unless unit.is_a?(Array)
       g=get_markers(event)
       u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
       unit=unit.reject{|q| !u.include?(q)}
