@@ -820,101 +820,138 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # used by m
   else
     f=u[u.find_index{|q| q[0]==name}]
   end
-  # find neutral level 1 stats based on rarity
-  r=f[4].map{|q| q}                                                         # rate numbers
-  m=r.map{|q| @mods[q][5]}                                                  # growth rates
-  u=[f[0]]
-  for i in 0...5
-    u.push(f[5][i]-m[i])                                                    # apply the difference in the step above
+  sttz=['hp','attack','speed','defense','resistance']
+  for i in 0...sttz.length
+    sttz[i]=1 if boon.downcase==sttz[i]
+    sttz[i]=-1 if bane.downcase==sttz[i]
+    sttz[i]=0 if sttz[i].is_a?(String)
   end
-  s=[[u[2],2],[u[3],3],[u[4],4],[u[5],5]]                                   # all non-HP stats
-  s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}  # sort the stats based on amount
-  # apply the level 1 rarity difference between 5* and 1*
-  u[1]-=2
-  u[2]-=2
-  u[3]-=2
-  u[4]-=2
-  u[5]-=2
-  # Every odd rarity increases all stats by 1 compared to the previous odd rarity
-  u[1]+=((rarity-1)/2)
-  u[2]+=((rarity-1)/2)
-  u[3]+=((rarity-1)/2)
-  u[4]+=((rarity-1)/2)
-  u[5]+=((rarity-1)/2)
-  # find level 1 stats based on boon and bane
-  u[1]+=1 if boon.downcase=='hp'
-  u[2]+=1 if boon.downcase=='attack'
-  u[3]+=1 if boon.downcase=='speed'
-  u[4]+=1 if boon.downcase=='defense'
-  u[5]+=1 if boon.downcase=='resistance'
-  u[1]-=1 if bane.downcase=='hp'
-  u[2]-=1 if bane.downcase=='attack'
-  u[3]-=1 if bane.downcase=='speed'
-  u[4]-=1 if bane.downcase=='defense'
-  u[5]-=1 if bane.downcase=='resistance'
-  s2=u.map{|q| q}
-  # if rarity is even, increase the two highest non-HP stats by 1 each
-  if rarity%2==0
-    u[s[0][1]]+=1
-    u[s[1][1]]+=1
-  end
-  # find growth rates based on boon and bane
-  r[0]+=1 if boon.downcase=='hp'
-  r[1]+=1 if boon.downcase=='attack'
-  r[2]+=1 if boon.downcase=='speed'
-  r[3]+=1 if boon.downcase=='defense'
-  r[4]+=1 if boon.downcase=='resistance'
-  r[0]-=1 if bane.downcase=='hp'
-  r[1]-=1 if bane.downcase=='attack'
-  r[2]-=1 if bane.downcase=='speed'
-  r[3]-=1 if bane.downcase=='defense'
-  r[4]-=1 if bane.downcase=='resistance'
-  # find stats based on merges
-  s=[[s2[1],1],[s2[2],2],[s2[3],3],[s2[4],4],[s2[5],5]]                                                        # all stats
-  s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}                                     # sort the stats based on amount
-  s.push(s[0],s[1],s[2],s[3],s[4])                                                                             # loop the list for use with multiple merges
-  s.push(s[0],s[1],s[2],s[3],s[4])
-  s.push(s[0],s[1],s[2],s[3],s[4])
-  if level==40
-    # find level 40 stats based on growth rates and level 1 stats
-    # growth rates
-    if rarity < @mods[0].length && r.max <= @mods.length # difference between stats in level 1 and level 40
-      m=[@mods[r[0]][rarity],@mods[r[1]][rarity],@mods[r[2]][rarity],@mods[r[3]][rarity],@mods[r[4]][rarity]]
+  if rarity<@max_rarity_merge[0]+1 && rarity%2==1 && merges%5==0
+    if level==40
+      u=[f[0]]
+      for i in 0...f[5].length
+        u.push(f[5][i]+sttz[i]-@mods[f[4][i]][5]+@mods[f[4][i]+sttz[i]][rarity]+2*(merges/5)-(5-rarity)/2)
+      end
+      for i in 0...f[4].length
+        u.push(f[4][i]+sttz[i])
+      end
+      for i in 0...f[4].length
+        u.push(@mods[f[4][i]+sttz[i]][5])
+      end
     else
-      m2=[r[0],r[1],r[2],r[3],r[4]]
-      m=[0,0,0,0,0]
-      for i in 0...m.length
-        if m2[i] == 0
-          m[i] = 6 + 2*m2[i] + (rarity/2)
-        elsif m2[i] == 1
-          m[i] = 6 + 2*m2[i] + (rarity/3) + (rarity/4)
-        elsif m2[i] <= 4
-          m[i] = 4 + 2*m2[i] + rarity
-        elsif m2[i] == 5
-          m[i] = 3 + 2*m2[i] + rarity + (rarity/3)
-        elsif m2[i] <= 7
-          m[i] = 9 + 1*m2[i] + rarity + ((rarity-1)/2)
-        elsif m2[i] <= 10
-          m[i] = 1 + 2*m2[i] + 2*rarity - (rarity/4)
-        else
-          m[i] = 2*m2[i] + 2*rarity + (rarity/3)
-        end
+      u=[f[0]]
+      for i in 0...f[5].length
+        u.push(f[5][i]+sttz[i]-@mods[f[4][i]][5]+2*(merges/5)-(5-rarity)/2)
+      end
+      u.push(u[1]+u[2]+u[3]+u[4]+u[5])
+      for i in 0...f[4].length
+        u.push(f[4][i]+sttz[i])
+      end
+      for i in 0...f[4].length
+        u.push(@mods[f[4][i]+sttz[i]][rarity])
       end
     end
-    u=[u[0],u[1]+m[0],u[2]+m[1],u[3]+m[2],u[4]+m[3],u[5]+m[4],r[0],r[1],r[2],r[3],r[4],m[0],m[1],m[2],m[3],m[4]]
-    # apply the difference above
-  end
-  if merges>0                                                                                                  # apply merges, two stats per merge
-    # every five merges results in +2 to each stat
-    u[1]+=2*(merges/5)
-    u[2]+=2*(merges/5)
-    u[3]+=2*(merges/5)
-    u[4]+=2*(merges/5)
-    u[5]+=2*(merges/5)
-    # beyond that, two stats per merge, order determined above
-    if (merges%5)>0
-      for i in 0...2*(merges%5)
-        u[s[i][1]]+=1
+  elsif rarity<@max_rarity_merge[0]+1 && rarity%2==0 && merges%5==0
+    u=[f[0]]
+    for i in 0...f[5].length
+      u.push(f[5][i]+sttz[i]-@mods[f[4][i]][5]+2*(merges/5)-(6-rarity)/2)
+    end
+    s=[[u[2],2],[u[3],3],[u[4],4],[u[5],5]]                                   # all non-HP stats
+    s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}  # sort the stats based on amount
+    u[s[0][1]]+=1
+    u[s[1][1]]+=1
+    u.push(u[1]+u[2]+u[3]+u[4]+u[5]) if level==1
+    for i in 0...f[4].length
+      u.push(f[4][i]+sttz[i])
+    end
+    for i in 0...f[4].length
+      u.push(@mods[f[4][i]+sttz[i]][rarity])
+    end
+    if level==40
+      for i in 0...f[5].length
+        u[i+1]+=@mods[f[4][i]+sttz[i]][rarity]
+      end
+    end
+  else
+    # find neutral level 1 stats based on rarity
+    r=f[4].map{|q| q}                                                         # rate numbers
+    m=r.map{|q| @mods[q][5]}                                                  # growth rates
+    u=[f[0]]
+    for i in 0...5
+      u.push(f[5][i]-m[i])                                                    # apply the difference in the step above
+    end
+    s=[[u[2],2],[u[3],3],[u[4],4],[u[5],5]]                                   # all non-HP stats
+    s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}  # sort the stats based on amount
+    # apply the level 1 rarity difference between 5* and 1*
+    u[1]-=2
+    u[2]-=2
+    u[3]-=2
+    u[4]-=2
+    u[5]-=2
+    # Every odd rarity increases all stats by 1 compared to the previous odd rarity
+    u[1]+=((rarity-1)/2)
+    u[2]+=((rarity-1)/2)
+    u[3]+=((rarity-1)/2)
+    u[4]+=((rarity-1)/2)
+    u[5]+=((rarity-1)/2)
+    # find level 1 stats and growth rates based on boon and bane
+    for i in 0...5
+      u[i+1]+=sttz[i]
+      r[i]+=sttz[i]
+    end
+    s2=u.map{|q| q}
+    # if rarity is even, increase the two highest non-HP stats by 1 each
+    if rarity%2==0
+      u[s[0][1]]+=1
+      u[s[1][1]]+=1
+    end
+    # find stats based on merges
+    s=[[s2[1],1],[s2[2],2],[s2[3],3],[s2[4],4],[s2[5],5]]                                                        # all stats
+    s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}                                     # sort the stats based on amount
+    s.push(s[0],s[1],s[2],s[3],s[4])                                                                             # loop the list for use with multiple merges
+    s.push(s[0],s[1],s[2],s[3],s[4])
+    s.push(s[0],s[1],s[2],s[3],s[4])
+    if level==40
+      # find level 40 stats based on growth rates and level 1 stats
+      # growth rates
+      if rarity < @mods[0].length && r.max <= @mods.length # difference between stats in level 1 and level 40
+        m=r.map{|q| @mods[q][rarity]}
+      else
+        m2=[r[0],r[1],r[2],r[3],r[4]]
+        m=[0,0,0,0,0]
+        for i in 0...m.length
+          if m2[i] == 0
+            m[i] = 6 + 2*m2[i] + (rarity/2)
+          elsif m2[i] == 1
+            m[i] = 6 + 2*m2[i] + (rarity/3) + (rarity/4)
+          elsif m2[i] <= 4
+            m[i] = 4 + 2*m2[i] + rarity
+          elsif m2[i] == 5
+            m[i] = 3 + 2*m2[i] + rarity + (rarity/3)
+          elsif m2[i] <= 7
+            m[i] = 9 + 1*m2[i] + rarity + ((rarity-1)/2)
+          elsif m2[i] <= 10
+            m[i] = 1 + 2*m2[i] + 2*rarity - (rarity/4)
+          else
+            m[i] = 2*m2[i] + 2*rarity + (rarity/3)
+          end
+        end
+      end
+      u=[u[0],u[1]+m[0],u[2]+m[1],u[3]+m[2],u[4]+m[3],u[5]+m[4],r[0],r[1],r[2],r[3],r[4],m[0],m[1],m[2],m[3],m[4]]
+      # apply the difference above
+    end
+    if merges>0                                                                                                  # apply merges, two stats per merge
+      # every five merges results in +2 to each stat
+      u[1]+=2*(merges/5)
+      u[2]+=2*(merges/5)
+      u[3]+=2*(merges/5)
+      u[4]+=2*(merges/5)
+      u[5]+=2*(merges/5)
+      # beyond that, two stats per merge, order determined above
+      if (merges%5)>0
+        for i in 0...2*(merges%5)
+          u[s[i][1]]+=1
+        end
       end
     end
   end
@@ -1017,7 +1054,6 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
     bnr[2].push(u[i][0]) if u[i][9][0].downcase.include?('g') && bnr[0][0]=='GHB Units' && u[i][13][0].nil? # the fake GHB Unit banner
     bnr[2].push(u[i][0]) if u[i][9][0].downcase.include?('t') && bnr[0][0]=='TT Units' && u[i][13][0].nil?  # the fake Tempest Unit banner
   end
-  puts bnr[2].to_s
   if x # 4* Focus Units
     bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
   else
@@ -1672,7 +1708,6 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
           fields[0].push(xfields[i][0])
           flumb=xfields[i][1].split("\n")
           flumb.shift
-          puts flumb.to_s
           flumb[5]=nil
           flumb.compact!
           for j in 0...flumb.length
@@ -1948,7 +1983,7 @@ def stat_modify(x,includerefines=false) # used to find all stat names regardless
   return x
 end
 
-def find_stats_in_string(event,stringx=nil,mode=0) # used to find the rarity, merge count, nature, weapon refinement, and any blessings within the inputs
+def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the rarity, merge count, nature, weapon refinement, and any blessings within the inputs
   stringx=event.message.text if stringx.nil?
   s=stringx
   s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2])
@@ -1956,9 +1991,17 @@ def find_stats_in_string(event,stringx=nil,mode=0) # used to find the rarity, me
   a=s.split(' ')
   s=stringx if all_commands().include?(a[0])
   nicknames_load()
-  s=(first_sub(s,find_name_in_string(event,s,1)[1],'') rescue s) unless @multi_aliases.map{|q| q[0].downcase}.include?(s)
+  if name.nil?
+    s=(first_sub(s,find_name_in_string(event,s,1)[1],'') rescue s) unless @multi_aliases.map{|q| q[0].downcase}.include?(s)
+  else
+    s=(first_sub(s,name,'') rescue s) unless @multi_aliases.map{|q| q[0].downcase}.include?(s)
+  end
   args=sever(s,true).gsub('.','').split(' ')
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  args2=args.reject{ |q| ['feh!','feh?'].include?(q.downcase[0,4]) || ['f?','e?','h?'].include?(q.downcase[0,2]) }
+  unless args2.length<=0
+    args2.shift if ['feh'].include?(args2[0].downcase[0,3]) || ['f?','e?','h?'].include?(args2[0].downcase[0,2])
+  end
   merges=nil
   rarity=nil
   boon=nil
@@ -1966,193 +2009,195 @@ def find_stats_in_string(event,stringx=nil,mode=0) # used to find the rarity, me
   summoner=nil
   refinement=nil
   blessing=[]
-  cornatures=[['HP','Robust','Sickly'],
-              ['Attack','Strong','Weak'],
-              ['Attack','Clever','Dull'],
-              ['Speed','Quick','Sluggish'],
-              ['Defense','Sturdy','Fragile'],
-              ['Resistance','Calm','Excitable']]
-  # first pass through inputs, searching for anything that has self-contained context clues as for what variable it should fill
-  for i in 0...args.length
-    for j in 0...cornatures.length
-      if args[i].downcase==cornatures[j][1].downcase
-        args[i]="+#{cornatures[j][0]}"
-      elsif args[i].downcase==cornatures[j][2].downcase
-        args[i]="-#{cornatures[j][0]}"
-      end
-    end
-    if args[i].gsub('(','').gsub(')','').downcase=='s'
-      summoner='S' if summoner.nil?
-    elsif args[i].gsub('(','').gsub(')','').downcase=='a'
-      summoner='A' if summoner.nil?
-    elsif args[i].gsub('(','').gsub(')','').downcase=='b'
-      summoner='B' if summoner.nil?
-    elsif args[i].gsub('(','').gsub(')','').downcase=='c'
-      summoner='C' if summoner.nil?
-    end
-    if args[i][0,1]=='+'
-      x=args[i].gsub('(','').gsub(')','')[1,args[i].gsub('(','').gsub(')','').length-1]
-      if x.to_i.to_s==x && merges.nil? # numbers preceeded by a plus sign automatically fill the merges variable
-        merges=x.to_i
-        args[i]=nil
-      else # stat names preceeded by a plus sign automatically fill the boon variable
-        x=stat_modify(x)
-        if ['HP','Attack','Speed','Defense','Resistance'].include?(x) && boon.nil?
-          boon=x
-          args[i]=nil
-        end
-      end
-    elsif args[i][0,3]=='(+)' # stat names preceeded by a plus sign in parentheses automatically fill the refinement variable
-      x=stat_modify(args[i][3,args[i].length-3])
-      if ['Attack','Speed','Defense','Resistance'].include?(x)
-        refinement=x if refinement.nil?
-        args[i]=nil
-      end
-    elsif args[i].length>8 && (args[i].gsub('(','').gsub(')','')[0,8].downcase=='blessing' || args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-8,8].downcase=='blessing')
-      x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing',''))
-      if ['Attack','Speed','Defense','Resistance'].include?(x)
-        blessing.push(x)
-        args[i]=nil
-      end
-    elsif args[i][0,1]=='(' && args[i][args[i].length-1,1]==')'
-      x=stat_modify(args[i][1,args[i].length-2],true)
-      if ['Attack','Speed','Defense','Resistance','Effect','Wrathful','Dazzling'].include?(x)
-        refinement=x if refinement.nil?
-        args[i]=nil
-      end
-    elsif args[i].gsub('(','').gsub(')','')[0,1]=='-' # stat names preceeded by a minus sign automatically fill the bane variable
-      x=stat_modify(args[i].gsub('(','').gsub(')','')[1,args[i].gsub('(','').gsub(')','').length-1])
-      if ['HP','Attack','Speed','Defense','Resistance'].include?(x) && bane.nil?
-        bane=x
-        args[i]=nil
-      end
-    elsif args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-1,1]=='*' # numbers followed by an asterisk automatically fill the rarity variable
-      x=args[i].gsub('(','').gsub(')','')[0,args[i].gsub('(','').gsub(')','').length-1]
-      if x.to_i.to_s==x && rarity.nil?
-        rarity=x.to_i
-        args[i]=nil
-      end
-    elsif args[i].gsub('(','').gsub(')','').length>5 && args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-5,5].downcase=='-star' # numbers followed by the word "star" automatically fill the rarity variable
-      x=args[i].gsub('(','').gsub(')','')[0,args[i].gsub('(','').gsub(')','').length-5]
-      if x.to_i.to_s==x && rarity.nil?
-        rarity=x.to_i
-        args[i]=nil
-      end
-    elsif args[i].gsub('(','').gsub(')','').length>4 && args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-4,4].downcase=='star' # numbers followed by the word "star" automatically fill the rarity variable
-      x=args[i].gsub('(','').gsub(')','')[0,args[i].gsub('(','').gsub(')','').length-4]
-      if x.to_i.to_s==x && rarity.nil?
-        rarity=x.to_i
-        args[i]=nil
-      end
-    elsif !find_nature(args[i].gsub('(','').gsub(')','')).nil? && (boon.nil? || bane.nil?) # Certain Pokemon nature names will fill both the boon and bane variables
-      boon=find_nature(args[i].gsub('(','').gsub(')',''))[1] if boon.nil?
-      bane=find_nature(args[i].gsub('(','').gsub(')',''))[2] if bane.nil?
-      args[i]=nil
-    end
-    if i>0 && !args[i-1].nil? && !args[i].nil?
-      x=stat_modify(args[i-1].gsub('(','').gsub(')',''))
-      y=stat_modify(args[i].gsub('(','').gsub(')',''))
-      if args[i].gsub('(','').gsub(')','').downcase=='star' && args[i-1].gsub('(','').gsub(')','').to_i.to_s==args[i-1].gsub('(','').gsub(')','') && rarity.nil?
-        # the word "star", if preceeded by a number, will automatically fill the rarity variable with that number
-        rarity=args[i-1].gsub('(','').gsub(')','').to_i
-        args[i]=nil
-        args[i-1]=nil
-      elsif args[i].gsub('(','').gsub(')','').downcase=='mode' && ['Attack','Speed','Defense','Resistance'].include?(x) && refinement.nil?
-        # the word "mode", if preceeded by a stat name other than HP, will turn that stat into the refinement of the weapon the unit is equipping
-        refinement=x
-        args[i]=nil
-        args[i-1]=nil
-      elsif args[i].gsub('(','').gsub(')','').downcase=='blessing' && ['Attack','Speed','Defense','Resistance'].include?(x)
-        # the word "blessing", if preceeded by a stat name other than HP, will turn that stat into a blessing to be applied to the character
-        blessing.push(x)
-        args[i]=nil
-        args[i-1]=nil
-      elsif args[i-1].gsub('(','').gsub(')','').downcase=='(+)' && ['Attack','Speed','Defense','Resistance'].include?(y) && refinement.nil?
-        # the character arrangement "(+)", if followed by a stat name other than HP, will turn that stat into the refinement of the weapon the unit is equipping
-        refinement=y
-        args[i]=nil
-        args[i-1]=nil
-      elsif args[i-1].gsub('(','').gsub(')','').downcase=='plus' && ['HP','Attack','Speed','Defense','Resistance'].include?(y) && boon.nil?
-        # the word "plus", if followed by a stat name, will turn that stat into the unit's boon
-        boon=y
-        args[i]=nil
-        args[i-1]=nil
-      elsif args[i-1].gsub('(','').gsub(')','').downcase=='minus' && ['HP','Attack','Speed','Defense','Resistance'].include?(y) && bane.nil?
-        # the word "minus", if followed by a stat name, will turn that stat into the unit's bane
-        bane=y
-        args[i]=nil
-        args[i-1]=nil
-      elsif args[i].gsub('(','').gsub(')','').downcase=='boon' && ['HP','Attack','Speed','Defense','Resistance'].include?(x) && boon.nil?
-        # the word "boon", if preceeded by a stat name, will turn that stat into the unit's boon
-        boon=x
-        args[i]=nil
-        args[i-1]=nil
-      elsif args[i].gsub('(','').gsub(')','').downcase=='bane' && ['HP','Attack','Speed','Defense','Resistance'].include?(x) && bane.nil?
-        # the word "minus", if preceeded by a stat name, will turn that stat into the unit's bane
-        bane=x
-        args[i]=nil
-        args[i-1]=nil
-      end
-    end
-    unless args[i].nil?
-      refinement='Effect' if ['effect','special'].include?(args[i].gsub('(','').gsub(')','').downcase) && refinement.nil?
-      refinement='Wrathful' if ['wrazzle','wrathful'].include?(args[i].gsub('(','').gsub(')','').downcase) && refinement.nil?
-      refinement='Dazzling' if ['dazzle','dazzling'].include?(args[i].gsub('(','').gsub(')','').downcase) && refinement.nil?
-    end
-  end
-  args.compact!
-  # second pass through arguments, literally only searching for remaining stats with a plus sign in front of them
-  # applicable moments will fill the refinement variable if empty
-  if refinement.nil?
+  if args2.length>0
+    cornatures=[['HP','Robust','Sickly'],
+                ['Attack','Strong','Weak'],
+                ['Attack','Clever','Dull'],
+                ['Speed','Quick','Sluggish'],
+                ['Defense','Sturdy','Fragile'],
+                ['Resistance','Calm','Excitable']]
+    # first pass through inputs, searching for anything that has self-contained context clues as for what variable it should fill
     for i in 0...args.length
-      if args[i][0,1]=='+'
-        x=stat_modify(args[i].gsub('(','').gsub(')','')[1,args[i].gsub('(','').gsub(')','').length-1])
-        if ['HP','Attack','Speed','Defense','Resistance'].include?(x) && refinement.nil?
-          refinement=x
-          args[i]=nil
+      for j in 0...cornatures.length
+        if args[i].downcase==cornatures[j][1].downcase
+          args[i]="+#{cornatures[j][0]}"
+        elsif args[i].downcase==cornatures[j][2].downcase
+          args[i]="-#{cornatures[j][0]}"
         end
       end
-      if i>0 && !args[i-1].gsub('(','').gsub(')','').nil? && !args[i].gsub('(','').gsub(')','').nil?
+      if args[i].gsub('(','').gsub(')','').downcase=='s'
+        summoner='S' if summoner.nil?
+      elsif args[i].gsub('(','').gsub(')','').downcase=='a'
+        summoner='A' if summoner.nil?
+      elsif args[i].gsub('(','').gsub(')','').downcase=='b'
+        summoner='B' if summoner.nil?
+      elsif args[i].gsub('(','').gsub(')','').downcase=='c'
+        summoner='C' if summoner.nil?
+      end
+      if args[i][0,1]=='+'
+        x=args[i].gsub('(','').gsub(')','')[1,args[i].gsub('(','').gsub(')','').length-1]
+        if x.to_i.to_s==x && merges.nil? # numbers preceeded by a plus sign automatically fill the merges variable
+          merges=x.to_i
+          args[i]=nil
+        else # stat names preceeded by a plus sign automatically fill the boon variable
+          x=stat_modify(x)
+          if ['HP','Attack','Speed','Defense','Resistance'].include?(x) && boon.nil?
+            boon=x
+            args[i]=nil
+          end
+        end
+      elsif args[i][0,3]=='(+)' # stat names preceeded by a plus sign in parentheses automatically fill the refinement variable
+        x=stat_modify(args[i][3,args[i].length-3])
+        if ['Attack','Speed','Defense','Resistance'].include?(x)
+          refinement=x if refinement.nil?
+          args[i]=nil
+        end
+      elsif args[i].length>8 && (args[i].gsub('(','').gsub(')','')[0,8].downcase=='blessing' || args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-8,8].downcase=='blessing')
+        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing',''))
+        if ['Attack','Speed','Defense','Resistance'].include?(x)
+          blessing.push(x)
+          args[i]=nil
+        end
+      elsif args[i][0,1]=='(' && args[i][args[i].length-1,1]==')'
+        x=stat_modify(args[i][1,args[i].length-2],true)
+        if ['Attack','Speed','Defense','Resistance','Effect','Wrathful','Dazzling'].include?(x)
+          refinement=x if refinement.nil?
+          args[i]=nil
+        end
+      elsif args[i].gsub('(','').gsub(')','')[0,1]=='-' # stat names preceeded by a minus sign automatically fill the bane variable
+        x=stat_modify(args[i].gsub('(','').gsub(')','')[1,args[i].gsub('(','').gsub(')','').length-1])
+        if ['HP','Attack','Speed','Defense','Resistance'].include?(x) && bane.nil?
+          bane=x
+          args[i]=nil
+        end
+      elsif args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-1,1]=='*' # numbers followed by an asterisk automatically fill the rarity variable
+        x=args[i].gsub('(','').gsub(')','')[0,args[i].gsub('(','').gsub(')','').length-1]
+        if x.to_i.to_s==x && rarity.nil?
+          rarity=x.to_i
+          args[i]=nil
+        end
+      elsif args[i].gsub('(','').gsub(')','').length>5 && args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-5,5].downcase=='-star' # numbers followed by the word "star" automatically fill the rarity variable
+        x=args[i].gsub('(','').gsub(')','')[0,args[i].gsub('(','').gsub(')','').length-5]
+        if x.to_i.to_s==x && rarity.nil?
+          rarity=x.to_i
+          args[i]=nil
+        end
+      elsif args[i].gsub('(','').gsub(')','').length>4 && args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-4,4].downcase=='star' # numbers followed by the word "star" automatically fill the rarity variable
+        x=args[i].gsub('(','').gsub(')','')[0,args[i].gsub('(','').gsub(')','').length-4]
+        if x.to_i.to_s==x && rarity.nil?
+          rarity=x.to_i
+          args[i]=nil
+        end
+      elsif !find_nature(args[i].gsub('(','').gsub(')','')).nil? && (boon.nil? || bane.nil?) # Certain Pokemon nature names will fill both the boon and bane variables
+        boon=find_nature(args[i].gsub('(','').gsub(')',''))[1] if boon.nil?
+        bane=find_nature(args[i].gsub('(','').gsub(')',''))[2] if bane.nil?
+        args[i]=nil
+      end
+      if i>0 && !args[i-1].nil? && !args[i].nil?
         x=stat_modify(args[i-1].gsub('(','').gsub(')',''))
         y=stat_modify(args[i].gsub('(','').gsub(')',''))
-        if args[i-1].gsub('(','').gsub(')','').downcase=='plus' && ['Attack','Speed','Defense','Resistance'].include?(y) && refinement.nil?
+        if args[i].gsub('(','').gsub(')','').downcase=='star' && args[i-1].gsub('(','').gsub(')','').to_i.to_s==args[i-1].gsub('(','').gsub(')','') && rarity.nil?
+          # the word "star", if preceeded by a number, will automatically fill the rarity variable with that number
+          rarity=args[i-1].gsub('(','').gsub(')','').to_i
+          args[i]=nil
+          args[i-1]=nil
+        elsif args[i].gsub('(','').gsub(')','').downcase=='mode' && ['Attack','Speed','Defense','Resistance'].include?(x) && refinement.nil?
+          # the word "mode", if preceeded by a stat name other than HP, will turn that stat into the refinement of the weapon the unit is equipping
+          refinement=x
+          args[i]=nil
+          args[i-1]=nil
+        elsif args[i].gsub('(','').gsub(')','').downcase=='blessing' && ['Attack','Speed','Defense','Resistance'].include?(x)
+          # the word "blessing", if preceeded by a stat name other than HP, will turn that stat into a blessing to be applied to the character
+          blessing.push(x)
+          args[i]=nil
+          args[i-1]=nil
+        elsif args[i-1].gsub('(','').gsub(')','').downcase=='(+)' && ['Attack','Speed','Defense','Resistance'].include?(y) && refinement.nil?
+          # the character arrangement "(+)", if followed by a stat name other than HP, will turn that stat into the refinement of the weapon the unit is equipping
           refinement=y
+          args[i]=nil
+          args[i-1]=nil
+        elsif args[i-1].gsub('(','').gsub(')','').downcase=='plus' && ['HP','Attack','Speed','Defense','Resistance'].include?(y) && boon.nil?
+          # the word "plus", if followed by a stat name, will turn that stat into the unit's boon
+          boon=y
+          args[i]=nil
+          args[i-1]=nil
+        elsif args[i-1].gsub('(','').gsub(')','').downcase=='minus' && ['HP','Attack','Speed','Defense','Resistance'].include?(y) && bane.nil?
+          # the word "minus", if followed by a stat name, will turn that stat into the unit's bane
+          bane=y
+          args[i]=nil
+          args[i-1]=nil
+        elsif args[i].gsub('(','').gsub(')','').downcase=='boon' && ['HP','Attack','Speed','Defense','Resistance'].include?(x) && boon.nil?
+          # the word "boon", if preceeded by a stat name, will turn that stat into the unit's boon
+          boon=x
+          args[i]=nil
+          args[i-1]=nil
+        elsif args[i].gsub('(','').gsub(')','').downcase=='bane' && ['HP','Attack','Speed','Defense','Resistance'].include?(x) && bane.nil?
+          # the word "minus", if preceeded by a stat name, will turn that stat into the unit's bane
+          bane=x
           args[i]=nil
           args[i-1]=nil
         end
       end
-    end
-  end
-  args.compact!
-  # final pass through inputs, searching for numbers and stat names without self-contained context clues
-  # numbers will prioritize filling the rarity variable if empty, fall back trying to fill the merges variable if empty
-  # stat names will priotitize filling the boon variable if empty, fall back trying to fill the bane variable if empty, double fall back to weapon refinement if applicable
-  for i in 0...args.length
-    x=stat_modify(args[i].gsub('(','').gsub(')',''))
-    if x.to_i.to_s==x
-      x=x.to_i
-      if x<0 || x>@max_rarity_merge[1]
-      elsif rarity.nil? && !x.zero? && x<@max_rarity_merge[0]
-        rarity=x
-        args[i]=nil
-      elsif merges.nil?
-        merges=x
-        args[i]=nil
-      end
-    elsif ['HP','Attack','Speed','Defense','Resistance'].include?(x)
-      if boon.nil?
-        boon=x
-        args[i]=nil
-      elsif bane.nil?
-        bane=x
-        args[i]=nil
-      elsif refinement.nil? && x != 'HP'
-        refinement=x
-        args[i]=nil
+      unless args[i].nil?
+        refinement='Effect' if ['effect','special'].include?(args[i].gsub('(','').gsub(')','').downcase) && refinement.nil?
+        refinement='Wrathful' if ['wrazzle','wrathful'].include?(args[i].gsub('(','').gsub(')','').downcase) && refinement.nil?
+        refinement='Dazzling' if ['dazzle','dazzling'].include?(args[i].gsub('(','').gsub(')','').downcase) && refinement.nil?
       end
     end
+    args.compact!
+    # second pass through arguments, literally only searching for remaining stats with a plus sign in front of them
+    # applicable moments will fill the refinement variable if empty
+    if refinement.nil? && args.length>0
+      for i in 0...args.length
+        if args[i][0,1]=='+'
+          x=stat_modify(args[i].gsub('(','').gsub(')','')[1,args[i].gsub('(','').gsub(')','').length-1])
+          if ['HP','Attack','Speed','Defense','Resistance'].include?(x) && refinement.nil?
+            refinement=x
+            args[i]=nil
+          end
+        end
+        if i>0 && !args[i-1].gsub('(','').gsub(')','').nil? && !args[i].gsub('(','').gsub(')','').nil?
+          x=stat_modify(args[i-1].gsub('(','').gsub(')',''))
+          y=stat_modify(args[i].gsub('(','').gsub(')',''))
+          if args[i-1].gsub('(','').gsub(')','').downcase=='plus' && ['Attack','Speed','Defense','Resistance'].include?(y) && refinement.nil?
+            refinement=y
+            args[i]=nil
+            args[i-1]=nil
+          end
+        end
+      end
+    end
+    args.compact!
+    # final pass through inputs, searching for numbers and stat names without self-contained context clues
+    # numbers will prioritize filling the rarity variable if empty, fall back trying to fill the merges variable if empty
+    # stat names will priotitize filling the boon variable if empty, fall back trying to fill the bane variable if empty, double fall back to weapon refinement if applicable
+    for i in 0...args.length
+      x=stat_modify(args[i].gsub('(','').gsub(')',''))
+      if x.to_i.to_s==x
+        x=x.to_i
+        if x<0 || x>@max_rarity_merge[1]
+        elsif rarity.nil? && !x.zero? && x<@max_rarity_merge[0]
+          rarity=x
+          args[i]=nil
+        elsif merges.nil?
+          merges=x
+          args[i]=nil
+        end
+      elsif ['HP','Attack','Speed','Defense','Resistance'].include?(x)
+        if boon.nil?
+          boon=x
+          args[i]=nil
+        elsif bane.nil?
+          bane=x
+          args[i]=nil
+        elsif refinement.nil? && x != 'HP'
+          refinement=x
+          args[i]=nil
+        end
+      end
+    end
+    args.compact!
   end
-  args.compact!
   unless mode==1
     rarity=5 if rarity.nil?
     merges=0 if merges.nil?
@@ -2233,41 +2278,56 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
     stats[4]+=s2[12][3]+sttz[ks][3]
     stats[5]+=s2[12][4]+sttz[ks][4]
   end
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-    lookout=lookout.reject{|q| !['Stat-Affecting','Stat-Buffing','Stat-Nerfing'].include?(q[3][0,q[3].length-2])}
-  end
   negative=[0,0,0,0,0]
   rally=[0,0,0,0,0]
-  for i in 0...skillls.length
-    statskl=lookout.find_index{|q| q[0]==skillls[i]}
-    unless statskl.nil?
-      if lookout[statskl][3].include?('Stat-Nerfing')
-        statskl=lookout[statskl][4]
-        # only the strongest nerf is applied
-        negative[1]=[negative[1],-statskl[1]].min
-        negative[2]=[negative[2],-statskl[2]].min
-        negative[3]=[negative[3],-statskl[3]].min
-        negative[4]=[negative[4],-statskl[4]].min
-      elsif lookout[statskl][3].include?('Stat-Buffing')
-        statskl=lookout[statskl][4]
-        # only the strongest buff is applied
-        rally[1]=[rally[1],statskl[1]].max
-        rally[2]=[rally[2],statskl[2]].max
-        rally[3]=[rally[3],statskl[3]].max
-        rally[4]=[rally[4],statskl[4]].max
-      else
-        # all stat-affecting skills are applied
-        statskl=lookout[statskl][4]
-        stats[1]+=statskl[0]
-        stats[2]+=statskl[1]
-        stats[3]+=statskl[2]
-        stats[4]+=statskl[3]
-        stats[5]+=statskl[4]
+  if skillls.length>0
+    lookout=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+      lookout=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+        lookout.push(eval line)
+      end
+      lookout=lookout.reject{|q| !['Stat-Affecting','Stat-Buffing','Stat-Nerfing'].include?(q[3][0,q[3].length-2])}
+    end
+    for i in 0...skillls.length
+      statskl=lookout.find_index{|q| q[0]==skillls[i]}
+      unless statskl.nil?
+        if lookout[statskl][3].include?('Stat-Nerfing')
+          statskl=lookout[statskl][4]
+          # only the strongest nerf is applied
+          negative[1]=[negative[1],-statskl[1]].min
+          negative[2]=[negative[2],-statskl[2]].min
+          negative[3]=[negative[3],-statskl[3]].min
+          negative[4]=[negative[4],-statskl[4]].min
+        elsif lookout[statskl][3].include?('Stat-Buffing')
+          statskl=lookout[statskl][4]
+          # only the strongest buff is applied
+          rally[1]=[rally[1],statskl[1]].max
+          rally[2]=[rally[2],statskl[2]].max
+          rally[3]=[rally[3],statskl[3]].max
+          rally[4]=[rally[4],statskl[4]].max
+        else
+          # all stat-affecting skills are applied
+          statskl=lookout[statskl][4]
+          stats[1]+=statskl[0]
+          stats[2]+=statskl[1]
+          stats[3]+=statskl[2]
+          stats[4]+=statskl[3]
+          stats[5]+=statskl[4]
+        end
+      end
+    end
+    # Harsh Command will turn all nerfs into buffs
+    if skillls.include?('Harsh Command')
+      for i in 0...negative.length
+        rally[i]=[rally[i],0-negative[i]].max
+        negative[i]=0
+      end
+    end
+    # Panic Ploy reverses all buffs (negative buffs are not the same as debuffs)
+    if skillls.include?('Panic Ploy')
+      for i in 0...rally.length
+        rally[i]=0-rally[i]
       end
     end
   end
@@ -2298,19 +2358,6 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       stats[4]+=4
     elsif blessing[i]=='Resistance'
       stats[5]+=4
-    end
-  end
-  # Harsh Command will turn all nerfs into buffs
-  if skillls.include?('Harsh Command')
-    for i in 0...negative.length
-      rally[i]=[rally[i],0-negative[i]].max
-      negative[i]=0
-    end
-  end
-  # Panic Ploy reverses all buffs (negative buffs are not the same as debuffs)
-  if skillls.include?('Panic Ploy')
-    for i in 0...rally.length
-      rally[i]=0-rally[i]
     end
   end
   stats[2]+=rally[1]+negative[1]
@@ -2849,18 +2896,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
-  flurp=find_stats_in_string(event)
-  rarity=flurp[0]
-  merges=flurp[1]
-  boon=flurp[2]
-  bane=flurp[3]
-  summoner=flurp[4]
-  refinement=flurp[5]
-  blessing=flurp[6]
-  for i in 0...blessing.length
-    blessing[i]=nil if i>=3
-  end
-  blessing.compact!
   args.compact!
   if name.nil?
     if args.nil? || args.length<1
@@ -2868,6 +2903,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
       return nil
     end
   end
+  untz=@units.map{|q| q}
   unless ignore || (!name.nil? && name != '')
     args2=args.join(' ').split(' ')
     name=args.join('')
@@ -2876,21 +2912,32 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
     if find_unit(name,event)<0
       for i in 0...args.length-1
         args.pop
-        name=@units[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
+        name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
       end
       if find_unit(name,event)<0
         for j in 0...args2.length-1
           args2.shift
           args=args2.join(' ').split(' ')
-          name=@units[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
+          name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
           for i in 0...args.length-1
             args.pop
-            name=@units[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
+            name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
           end
         end
       end
     end
   end
+  flurp=find_stats_in_string(event,nil,0,name)
+  rarity=flurp[0]
+  merges=flurp[1]
+  boon=flurp[2]
+  bane=flurp[3]
+  summoner=flurp[4]
+  refinement=flurp[5]
+  blessing=flurp[6]
+  blessing=blessing[0,8] if blessing.length>8
+  blessing=[] if untz[untz.find_index{|q| q[0]==name}][2][0].length>1
+  blessing.compact!
   stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
   stat_skills_2=make_stat_skill_list_2(name,event,args)
@@ -2924,8 +2971,8 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
     end
   elsif " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
     if name=='Robin'
-      uskl=unit_skills('Robin(M)',event,true)[0].reject{|q| q.include?('~~')}
-      uskl2=unit_skills('Robin(F)',event,true)[0].reject{|q| q.include?('~~')}
+      uskl=unit_skills('Robin(M)',event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
+      uskl2=unit_skills('Robin(F)',event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
       weapon='-'
       weapon2='-'
       weapon=uskl[uskl.length-1] if uskl.length>0
@@ -2934,7 +2981,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
       w22=@skills[find_skill(weapon2,event)]
       diff_num=[w2[2]-w22[2],'M','F']
     else
-      uskl=unit_skills(name,event,true)[0].reject{|q| q.include?('~~')}
+      uskl=unit_skills(name,event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
       weapon='-'
       weapon=uskl[uskl.length-1] if uskl.length>0
     end
@@ -2956,7 +3003,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   end
   refinement=nil if w2[5]!='Staff Users Only' && ['Wrathful','Dazzling'].include?(refinement)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
-  unitz=@units[find_unit(name,event)]
+  unitz=untz[find_unit(name,event)]
   spec_wpn=false
   if name=='Robin'
     if " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
@@ -3008,23 +3055,23 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
       uskl=uskl.map{|q| q[q.length-1]}
       flds.push(['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"])
     end
-    create_embed(event,"__**#{@units[j][0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n",0x9400D3,"Please note that the Attack stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),flds,1)
+    create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n",0x9400D3,"Please note that the Attack stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),flds,1)
     return nil
   elsif unitz[4].nil? || (unitz[4].max.zero? && unitz[5].max.zero?) # unknown stats
     data_load()
     j=find_unit(name,event)
-    xcolor=unit_color(event,j,@units[j][0],0,mu)
-    create_embed(event,"__**#{@units[j][0].gsub('Lavatain','Laevatein')}**__","#{unit_clss(bot,event,j)}",xcolor,'Stats currently unknown',pick_thumbnail(event,j,bot))
-    disp_unit_skills(bot,@units[j][0],event) if skillstoo
+    xcolor=unit_color(event,j,untz[j][0],0,mu)
+    create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{unit_clss(bot,event,j)}",xcolor,'Stats currently unknown',pick_thumbnail(event,j,bot))
+    disp_unit_skills(bot,untz[j][0],event) if skillstoo
     return nil
   elsif unitz[4].max.zero? # level 40 stats are known but not level 1
     data_load()
     merges=0 if merges.nil?
     j=find_unit(name,event)
-    xcolor=unit_color(event,j,@units[j][0],0,mu)
+    xcolor=unit_color(event,j,untz[j][0],0,mu)
     atk='<:StrengthS:467037520484630539> Attack'
-    atk='<:MagicS:467043867611627520> Magic' if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
-    atk='<:StrengthS:467037520484630539> Strength' if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
+    atk='<:MagicS:467043867611627520> Magic' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
+    atk='<:StrengthS:467037520484630539> Strength' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
     zzzl=@skills[find_weapon(weapon,event)]
     if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
       atk='<:FreezeS:467043868148236299> Freeze'
@@ -3036,7 +3083,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
       n=n.join(' / ') if ['<:StrengthS:467037520484630539> Attack','<:FreezeS:467043868148236299> Freeze'].include?(atk)
     end
     atk=atk.gsub(' Freeze',' Attack').gsub(' Strength',' Attack').gsub(' Magic',' Attack') if weapon != '-'
-    u40=[@units[j][0],@units[j][5][0],@units[j][5][1],@units[j][5][2],@units[j][5][3],@units[j][5][4]]
+    u40=[untz[j][0],untz[j][5][0],untz[j][5][1],untz[j][5][2],untz[j][5][3],untz[j][5][4]]
     # find stats based on merges
     s=[[u40[1],1],[u40[2],2],[u40[3],3],[u40[4],4],[u40[5],5]]                # all stats
     s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}  # sort the stats based on amount
@@ -3110,8 +3157,8 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   u1=get_stats(event,name,1,rarity,merges,boon,bane)
   j=find_unit(name,event)
   atk='<:StrengthS:467037520484630539> Attack'
-  atk='<:MagicS:467043867611627520> Magic' if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
-  atk='<:StrengthS:467037520484630539> Strength' if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
+  atk='<:MagicS:467043867611627520> Magic' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
+  atk='<:StrengthS:467037520484630539> Strength' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
   zzzl=@skills[find_weapon(weapon,event)]
   if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
     atk='<:FreezeS:467043868148236299> Freeze'
@@ -3137,8 +3184,8 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing)
   blu40=u40.map{|a| a}
   crblu40=cru40.map{|a| a}
-  blu40=apply_stat_skills(event,stat_skills_2,blu40)
-  crblu40=apply_stat_skills(event,stat_skills_2,crblu40)
+  blu40=apply_stat_skills(event,stat_skills_2,blu40) if stat_skills_2.length<0
+  crblu40=apply_stat_skills(event,stat_skills_2,crblu40) if stat_skills_2.length<0
   u40=make_stat_string_list(u40,blu40)
   cru40=make_stat_string_list(cru40,crblu40)
   u40=make_stat_string_list(u40,cru40,2) if wl.include?('~~')
@@ -3147,8 +3194,8 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   cru1=apply_stat_skills(event,stat_skills,cru1,tempest,summoner,'-','',blessing)
   blu1=u1.map{|a| a}
   crblu1=cru1.map{|a| a}
-  blu1=apply_stat_skills(event,stat_skills_2,blu1)
-  crblu1=apply_stat_skills(event,stat_skills_2,crblu1)
+  blu1=apply_stat_skills(event,stat_skills_2,blu1) if stat_skills_2.length<0
+  crblu1=apply_stat_skills(event,stat_skills_2,crblu1) if stat_skills_2.length<0
   u1=make_stat_string_list(u1,blu1)
   cru1=make_stat_string_list(cru1,crblu1)
   u1=make_stat_string_list(u1,cru1,2) if wl.include?('~~')
@@ -4143,7 +4190,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   end
 end
 
-def unit_skills(name,event,justdefault=false,r=0,ignoretro=false)
+def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=false)
   data_load()
   s=event.message.text
   s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
@@ -4177,39 +4224,42 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false)
   clss='Dragons' if char[1][1]=='Dragon'
   clss='Beasts' if char[1][1]=='Beast'
   retroprf=[]
-  for i in 0...@skills.length
+  skllz=@skills.map{|q| q}
+  skllz=skllz.reject{|q| !q[10].map{|q2| q2.split(', ').include?(char[0]) || q2.split(', ').include?("All #{clss}")}.include?(true)}
+  skllz=skllz.reject{|q| q[4]!='Weapon'} if justweapon
+  for i in 0...skllz.length
     for j in 0...rarity
-      if @skills[i][9][j].split(', ').include?(char[0]) || @skills[i][9][j]=="All #{clss}"
-        box[0].push(@skills[i]) if @skills[i][4]=='Weapon'
-        box[1].push(@skills[i]) if @skills[i][4]=='Assist'
-        box[2].push(@skills[i]) if @skills[i][4]=='Special'
-        box[3].push(@skills[i]) if @skills[i][4].include?('Passive(A)')
-        box[4].push(@skills[i]) if @skills[i][4].include?('Passive(B)')
-        box[5].push(@skills[i]) if @skills[i][4].include?('Passive(C)')
+      if skllz[i][9][j].split(', ').include?(char[0]) || skllz[i][9][j]=="All #{clss}"
+        box[0].push(skllz[i]) if skllz[i][4]=='Weapon'
+        box[1].push(skllz[i]) if skllz[i][4]=='Assist'
+        box[2].push(skllz[i]) if skllz[i][4]=='Special'
+        box[3].push(skllz[i]) if skllz[i][4].include?('Passive(A)')
+        box[4].push(skllz[i]) if skllz[i][4].include?('Passive(B)')
+        box[5].push(skllz[i]) if skllz[i][4].include?('Passive(C)')
       end
     end
     for j in 0...rarity
-      if @skills[i][10][j].split(', ').include?(char[0]) || @skills[i][10][j]=="All #{clss}"
-        sklz[0].push(@skills[i]) if @skills[i][4]=='Weapon'
-        sklz[1].push(@skills[i]) if @skills[i][4]=='Assist'
-        sklz[2].push(@skills[i]) if @skills[i][4]=='Special'
-        sklz[3].push(@skills[i]) if @skills[i][4].include?('Passive(A)')
-        sklz[4].push(@skills[i]) if @skills[i][4].include?('Passive(B)')
-        sklz[5].push(@skills[i]) if @skills[i][4].include?('Passive(C)')
-      elsif @skills[i][10][j].split(', ').include?("[Retro]#{char[0]}") || @skills[i][10][j].split(', ').include?("#{char[0]}[Retro]") || @skills[i][10][j].split(', ').include?("[Retro] #{char[0]}") || @skills[i][10][j].split(', ').include?("#{char[0]} [Retro]")
-        retroprf.push(@skills[i][0])
+      if skllz[i][10][j].split(', ').include?(char[0]) || skllz[i][10][j]=="All #{clss}"
+        sklz[0].push(skllz[i]) if skllz[i][4]=='Weapon'
+        sklz[1].push(skllz[i]) if skllz[i][4]=='Assist'
+        sklz[2].push(skllz[i]) if skllz[i][4]=='Special'
+        sklz[3].push(skllz[i]) if skllz[i][4].include?('Passive(A)')
+        sklz[4].push(skllz[i]) if skllz[i][4].include?('Passive(B)')
+        sklz[5].push(skllz[i]) if skllz[i][4].include?('Passive(C)')
+      elsif skllz[i][10][j].split(', ').include?("[Retro]#{char[0]}") || skllz[i][10][j].split(', ').include?("#{char[0]}[Retro]") || skllz[i][10][j].split(', ').include?("[Retro] #{char[0]}") || skllz[i][10][j].split(', ').include?("#{char[0]} [Retro]")
+        retroprf.push(skllz[i][0])
       end
     end
-    if @skills[i][6].split(', ').include?(char[0]) && rarity>5
-      sklz[0].push(@skills[i]) if @skills[i][4]=='Weapon'
-      sklz[1].push(@skills[i]) if @skills[i][4]=='Assist'
-      sklz[2].push(@skills[i]) if @skills[i][4]=='Special'
-      sklz[3].push(@skills[i]) if @skills[i][4].include?('Passive(A)')
-      sklz[4].push(@skills[i]) if @skills[i][4].include?('Passive(B)')
-      sklz[5].push(@skills[i]) if @skills[i][4].include?('Passive(C)')
-      box[0].push(@skills[i]) if @skills[i][4]=='Weapon'
-      box[1].push(@skills[i]) if @skills[i][4]=='Assist'
-      box[2].push(@skills[i]) if @skills[i][4]=='Special'
+    if skllz[i][6].split(', ').include?(char[0]) && rarity>5
+      sklz[0].push(skllz[i]) if skllz[i][4]=='Weapon'
+      sklz[1].push(skllz[i]) if skllz[i][4]=='Assist'
+      sklz[2].push(skllz[i]) if skllz[i][4]=='Special'
+      sklz[3].push(skllz[i]) if skllz[i][4].include?('Passive(A)')
+      sklz[4].push(skllz[i]) if skllz[i][4].include?('Passive(B)')
+      sklz[5].push(skllz[i]) if skllz[i][4].include?('Passive(C)')
+      box[0].push(skllz[i]) if skllz[i][4]=='Weapon'
+      box[1].push(skllz[i]) if skllz[i][4]=='Assist'
+      box[2].push(skllz[i]) if skllz[i][4]=='Special'
     end
   end
   sklz=sklz.map{|q| q.uniq}
@@ -4266,7 +4316,7 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false)
     box2[i].uniq!
     sklz2[i].uniq!
   end
-  if char[12].split(', ')[0].gsub('*','')=='Hector'
+  if char[12].split(', ')[0].gsub('*','')=='Hector' && !justweapon
     if sklz2[0].length<3
       sklz2[0].push('Silver Axe') if rarity==3
       sklz2[0].push('**Silver Axe**') if rarity>3
@@ -4373,9 +4423,6 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   flurp=find_stats_in_string(event)
   rarity=flurp[0]
-  merges=flurp[1]
-  boon=flurp[2]
-  bane=flurp[3]
   j=find_unit(find_name_in_string(event),event)
   j=find_unit(name,event) unless name.nil? || name.length.zero?
   mu=false
@@ -7628,6 +7675,8 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   flurp=find_stats_in_string(event)
   flurp[5]='' if flurp[5].nil?
+  j=find_unit(name,event)
+  u40x=@units[j]
   rarity=flurp[0]
   merges=flurp[1]
   boon=flurp[2]
@@ -7635,13 +7684,10 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   summoner=flurp[4]
   refinement=flurp[5]
   blessing=flurp[6]
-  for i in 0...blessing.length
-    blessing[i]=nil if i>=3
-  end
+  blessing=blessing[0,8] if blessing.length>8
+  blessing=[] if @units[@units.find_index{|q| q[0]==u40x[0]}][2][0].length>1
   blessing.compact!
   args.compact!
-  j=find_unit(name,event)
-  u40x=@units[j]
   if u40x[4].nil? || (u40x[4].max.zero? && u40x[5].max.zero?)
     unless u40x[0]=='Kiran'
       event.respond "#{u40x[0]} does not have official stats.  I cannot study #{'his' if u40x[10]=='M'}#{'her' if u40x[10]=='F'}#{'their' unless ['M','F'].include?(u40x[10])} effective HP."
@@ -7988,9 +8034,8 @@ def heal_study(event,name,bot,weapon=nil)
   summoner=flurp[4]
   refinement=flurp[5]
   blessing=flurp[6]
-  for i in 0...blessing.length
-    blessing[i]=nil if i>=3
-  end
+  blessing=blessing[0,8] if blessing.length>8
+  blessing=[] if @units[@units.find_index{|q| q[0]==u40x[0]}][2][0].length>1
   blessing.compact!
   args.compact!
   if args.nil? || args.length<1
@@ -8233,9 +8278,8 @@ def proc_study(event,name,bot,weapon=nil)
   summoner=flurp[4]
   refinement=flurp[5]
   blessing=flurp[6]
-  for i in 0...blessing.length
-    blessing[i]=nil if i>=3
-  end
+  blessing=blessing[0,8] if blessing.length>8
+  blessing=[] if @units[@units.find_index{|q| q[0]==u40x[0]}][2][0].length>1
   blessing.compact!
   args.compact!
   if args.nil? || args.length<1
@@ -8567,9 +8611,8 @@ def phase_study(event,name,bot,weapon=nil)
   summoner=flurp[4]
   refinement=flurp[5]
   blessing=flurp[6]
-  for i in 0...blessing.length
-    blessing[i]=nil if i>=3
-  end
+  blessing=blessing[0,8] if blessing.length>8
+  blessing=[] if @units[@units.find_index{|q| q[0]==u40x[0]}][2][0].length>1
   blessing.compact!
   args.compact!
   if args.nil? || args.length<1
@@ -10209,7 +10252,6 @@ bot.command(:summon) do |event, *colors|
     str="**Summoner:** #{event.user.distinct}"
     str="#{str}\n"
     str="#{str}\n**Banner:** #{bnr[0][0]}"
-    puts bnr[0][0]
     unless bnr[0][1].nil? || bnr[0][1].length.zero?
       b=bnr[0][1].split(', ').map{|q| q.split('/')}
       m=['','January','February','March','April','May','June','July','August','September','October','November','December']
