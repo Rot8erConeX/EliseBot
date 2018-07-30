@@ -14,7 +14,7 @@ Live to Serve 3
 
 Anna
 5\0\ \ \-
-Iron Axe\Steel Axe\Silver Axe\Noatun
+Iron Axe\Steel Axe\Silver Axe\Noatun\~~Noatun (+) Effect Mode~~
 Reciprocal Aid
 Retribution\Vengeance
 Fierce Stance 1\Fierce Stance 2\Fierce Stance 3
@@ -143,7 +143,7 @@ Spur Atk 1\Drive Atk 1\Drive Atk 2
 Close Def 3
 
 Mae
-5\1\Speed\Resistance\-
+5\2\Speed\Resistance\-
 Light\Ellight\Blarowl\Blarowl+\Blarowl+ (+) Attack Mode
 Draw Back
 Dragon Gaze\Draconic Aura

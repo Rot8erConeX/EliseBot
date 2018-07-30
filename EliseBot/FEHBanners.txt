@@ -1,16 +1,16 @@
 >Special Heroes<\3\-\5\10/08/2018, 06/09/2018\Seasonal, Fall
 Heroes with Fighter skills\3\Effie, Hardin(Fallen), Robin(M)(Fallen)\5\07/08/2018, 17/08/2018\SkillBanner
-Feh's Summer Celebration: Daily Summoning Events\3\Azura, Bartre, Caeda, Cecilia, Corrin(F), Delthea, Effie, Eldigan, Elincia, Ephraim, Gordin, Hana, Hawkeye, Hinata, Hinoka(Launch), Jagen, Jaffar, Karel, Klein, Leo, Lon'qu, Lyn, Minerva, Nephenee, Nino(Launch), Odin, Peri, Tharja, Titania, Raven, Reinhardt(Bonds), Sanaki, Shanna, Sonya, Subaki, Takumi\5\02/08/2018, 16/08/2018\SkillBanner
-Legendary Heroes - >unknown<\-8\-\5\31/07/2018, 06/08/2018\Legendary
+Feh's Summer Celebration: Daily Summoning Events\3\Azura, Bartre, Caeda, Cecilia, Corrin(F), Delthea, Effie, Eldigan, Elincia, Ephraim, Gordin, Hana, Hawkeye, Hinata, Hinoka(Launch), Jagen, Jaffar, Karel, Klein, Leo, Lon'qu, Lyn, Minerva, Nephenee, Nino(Launch), Odin, Peri, Tharja, Titania, Raven, Reinhardt(Bonds), Sanaki, Shanna, Sonya, Subaki, Takumi\50\02/08/2018, 16/08/2018\SkillBanner
+Legendary Heroes - Lucina, Glorious Archer\-8\Azura, Camilla(Winter), Chrom(Branded), Hinoka(Wings), Ishtar, Lilina(Valentines), Lissa(Winter), Lucina(Glorious), Lyn(Brave), Lyn(Wind), Robin(F)(Fallen), Ryoma(Supreme)\5\31/07/2018, 06/08/2018\Legendary
 Heroes with Distant Def\3\Celica, Micaiah, Rhajat\5\27/07/2018, 06/08/2018\SkillBanner
-Leo & Elise's Battle\3\Camilla, Elise, Leo\5\22/07/2018, 28/07/2018\BHB
 Ylissian Traveler\3\Libra, Maribelle, Olivia(Traveler), Sumia\5\20/07/2018, 09/08/2018
-New Power (July 2018)\3\Katarina, Nephenee, Titania\5\15/07/2018, 26/07/2018\NewPower
 Sketchy Summer\3\Camilla(Summer), Linde(Summer), Takumi(Summer), Tiki(Young)(Summer)\5\10/07/2018, 09/08/2018\Seasonal, Summer
+GHB Units\5\-\543\\Dynamic, GHB
+TT Units\5\-\54\\Dynamic, Tempest
+Leo & Elise's Battle\3\Camilla, Elise, Leo\5\22/07/2018, 28/07/2018\BHB
+New Power (July 2018)\3\Katarina, Nephenee, Titania\5\15/07/2018, 26/07/2018\NewPower
 Ylissian Summer (June/July 2018 revival)\3\Frederick(Summer), Gaius(Summer), Robin(F)(Summer), Tiki(Adult)(Summer)\5\25/06/2018, 24/07/2018\Seasonal, Summer
 Nohrian Summer (June/July 2018 revival)\3\Corrin(F)(Summer), Elise(Summer), Leo(Summer), Xander(Summer)\5\25/06/2018, 24/07/2018\Seasonal, Summer
-GHB Units\5\-\543\\GHB
-TT Units\5\-\54\\Tempest
 Heroes with Luna\3\Celica(Fallen), Hinoka(Wings), Mia\5\06/07/2018, 16/07/2018\SkillBanner
 Hector & Matthew's Battle\3\Hector, Matthew, Serra\5\05/07/2018, 11/07/2018\BHB
 Fated Battles\3\Hardin(Fallen), Marth, Sigurd, Zelgius\5\29/6/2018, 07/07/2018\VotingGauntlet
