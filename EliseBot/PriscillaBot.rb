@@ -8877,14 +8877,19 @@ def phase_study(event,name,bot,weapon=nil)
       epu40[i]+=x3ep[i]
     end
   end
-  close=[0,0,0,0,0,0]
-  distant=[0,0,0,0,0,0]
+  close=[0,0,0,0,0,0,0,0,0,0,0]
+  distant=[0,0,0,0,0,0,0,0,0,0,0]
   for i in 0...stat_skills_3.length
     if stat_skills_3[i]=='Close Spectrum'
       close[2]+=4
       close[3]+=4
       close[4]+=4
       close[5]+=4
+    elsif stat_skills_3[i][0,12]=='Close Guard '
+      close[4]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      close[5]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      close[9]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      close[10]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
     elsif stat_skills_3[i][0,6]=='Close '
       close[2]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Atk')
       close[3]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Spd')
@@ -8896,6 +8901,11 @@ def phase_study(event,name,bot,weapon=nil)
       distant[3]+=4
       distant[4]+=4
       distant[5]+=4
+    elsif stat_skills_3[i][0,14]=='Distant Guard '
+      distant[4]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      distant[5]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      distant[9]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      distant[10]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
     elsif stat_skills_3[i][0,8]=='Distant '
       distant[2]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Atk')
       distant[3]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Spd')
@@ -8905,14 +8915,19 @@ def phase_study(event,name,bot,weapon=nil)
   end
   for i in 1...close.length
     m=[close[i],distant[i]].min
-    epu40xw[i]+=m
+    if i<6
+      epu40xw[i]+=m
+    else
+      ppu40xw[i-5]+=m
+    end
     epu40[i]+=m
     close[i]-=m
     distant[i]-=m
   end
   ppu40xw[16]=ppu40xw[1]+ppu40xw[2]+ppu40xw[3]+ppu40xw[4]+ppu40xw[5]
   epu40xw[16]=epu40xw[1]+epu40xw[2]+epu40xw[3]+epu40xw[4]+epu40xw[5]
-  for i in 1...close.length
+  for i in 1...ppu40xw.length
+    ppu40xw[i]="#{ppu40xw[i]}#{" (+#{close[i+5]} against melee)" if close[i+5]>0}#{" (+#{distant[i+5]} against ranged)" if distant[i+5]>0}"
     epu40xw[i]="#{epu40xw[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
   end
   ppu40[16]=ppu40[1]+ppu40[2]+ppu40[3]+ppu40[4]+ppu40[5]
@@ -8940,7 +8955,11 @@ def phase_study(event,name,bot,weapon=nil)
   end
   for i in 1...close.length
     m=[close[i],distant[i]].min
-    epu40[i]+=m
+    if i<6
+      epu40[i]+=m
+    else
+      ppu40[i-5]+=m
+    end
     close[i]-=m
     distant[i]-=m
   end
@@ -8951,15 +8970,19 @@ def phase_study(event,name,bot,weapon=nil)
     epu40xw[4]=(epu40xw[4]*1.3).to_i
     close[4]=(close[4]*1.3).to_i
     distant[4]=(distant[4]*1.3).to_i
+    close[9]=(close[9]*1.3).to_i
+    distant[9]=(distant[9]*1.3).to_i
     ppu40[5]=(ppu40[5]*1.3).to_i
     epu40[5]=(epu40[5]*1.3).to_i
     ppu40xw[5]=(ppu40xw[5]*1.3).to_i
     epu40xw[5]=(epu40xw[5]*1.3).to_i
     close[5]=(close[5]*1.3).to_i
     distant[5]=(distant[5]*1.3).to_i
+    close[10]=(close[10]*1.3).to_i
+    distant[10]=(distant[10]*1.3).to_i
   end
-  for i in 1...close.length
-    ppu40[i]="#{ppu40[i]}"
+  for i in 1...ppu40.length
+    ppu40[i]="#{ppu40[i]}#{" (+#{close[i+5]} against melee)" if close[i+5]>0}#{" (+#{distant[i+5]} against ranged)" if distant[i+5]>0}"
     epu40[i]="#{epu40[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
   end
   for i in 0...ppu40.length
