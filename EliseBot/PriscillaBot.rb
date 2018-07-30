@@ -8926,7 +8926,7 @@ def phase_study(event,name,bot,weapon=nil)
   end
   ppu40xw[16]=ppu40xw[1]+ppu40xw[2]+ppu40xw[3]+ppu40xw[4]+ppu40xw[5]
   epu40xw[16]=epu40xw[1]+epu40xw[2]+epu40xw[3]+epu40xw[4]+epu40xw[5]
-  for i in 1...ppu40xw.length
+  for i in 1...6
     ppu40xw[i]="#{ppu40xw[i]}#{" (+#{close[i+5]} against melee)" if close[i+5]>0}#{" (+#{distant[i+5]} against ranged)" if distant[i+5]>0}"
     epu40xw[i]="#{epu40xw[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
   end
@@ -8981,7 +8981,7 @@ def phase_study(event,name,bot,weapon=nil)
     close[10]=(close[10]*1.3).to_i
     distant[10]=(distant[10]*1.3).to_i
   end
-  for i in 1...ppu40.length
+  for i in 1...6
     ppu40[i]="#{ppu40[i]}#{" (+#{close[i+5]} against melee)" if close[i+5]>0}#{" (+#{distant[i+5]} against ranged)" if distant[i+5]>0}"
     epu40[i]="#{epu40[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
   end
