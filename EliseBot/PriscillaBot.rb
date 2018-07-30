@@ -466,7 +466,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['summonpool','summon_pool','pool'].include?(command.downcase) || (['summon'].include?(command.downcase) && "#{subcommand}".downcase=='pool')
     create_embed(event,"**#{command.downcase}#{" pool" if command.downcase=='summon'}** __*colors__","Shows the summon pool for the listed color.\n\nIn PM, all colors listed will be displayed, or all colors if none are specified.\nIn servers, only the first color listed will be displayed.",0xD49F61)
   elsif @summon_servers.include?(k) && ['summon'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\nYou can include the word \"current\" or \"now\" to force me to choose a banner that is currently available in-game.\nYou can also include one or more of the words below to force the banner to fit into those categories.\n\n**This command is only available in certain servers**.",0x9E682C)
+    create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\nYou can include the word \"current\" or \"now\" to force me to choose a banner that is currently available in-game.\nThe words \"upcoming\" and \"future\" allow you to force a banner that will be available in the future.\nYou can also include one or more of the words below to force the banner to fit into those categories.\n\n**This command is only available in certain servers**.",0x9E682C)
     lookout=[]
     if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
       lookout=[]
@@ -474,7 +474,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
         lookout.push(eval line)
       end
     end
-    w=lookout.reject{|q| q[2]!='Banner' || q[0]=='Current'}.map{|q| q[0]}.sort
+    w=lookout.reject{|q| q[2]!='Banner' || ['Current','Upcoming'].include?(q[0])}.map{|q| q[0]}.sort
     create_embed(event,'Banner types','',0x40C0F0,nil,nil,triple_finish(w))
   elsif ['effhp','eff_hp'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows the effective HP data for the unit `name`.',0xD49F61)
@@ -1017,7 +1017,7 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
     end
   end
   b2=b.map{|q| q}
-  b2=b2.reject{|q| q[5].nil? || !has_any?(q[5].split(', '),banner_types.reject{|q2| q2=='Current'})} if banner_types.reject{|q2| q2=='Current'}.length>0
+  b2=b2.reject{|q| q[5].nil? || !has_any?(q[5].split(', '),banner_types.reject{|q2| ['Current','Upcoming'].include?(q2)})} if banner_types.reject{|q2| ['Current','Upcoming'].include?(q2)}.length>0
   b2=b.map{|q| q} if b2.length==0
   t=Time.now
   timeshift=8
@@ -1025,6 +1025,8 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
   b3=b2.map{|q| q}
   b3=b2.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm} if banner_types.include?('Current')
+  b3=b2.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm} if banner_types.include?('Upcoming')
+  b3=b2.reject{|q| q[4].nil? || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm} if banner_types.include?('Current') && banner_types.include?('Upcoming')
   b3=b2.map{|q| q} if b2.length==0
   bnr=b3.sample
   data_load()
@@ -6426,7 +6428,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str='blucina'
     str='bluecina' if str2.include?('bluecina')
     return nil if robinmode==2 && str2.downcase != str.downcase
-    return [str,['Lucina(Spring)','Lucina(Brave)'],[str]]
+    return [str,['Lucina(Spring)','Lucina(Brave)','Lucina(Glorious)'],[str]]
   elsif /ax(e|)(-|)(z|)ura/ =~ str1
     str='ax'
     str="#{str}e" if str2.include?('axe')
@@ -6458,6 +6460,17 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       return [str,['Ike(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Ike(Vanguard)','Ike(Brave)'],[str]]
+  elsif /(luc(ina|i|y)|rukina)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
+    str='lucina'
+    str='rukina' if str2.include?('rukina')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('legendary') || str2.include?('glorious') || str2.include?('ga') || str2.include?('archer')
+      return [str,['Lucina(Glorious)'],["legendary#{str}","#{str}legendary","glorious#{str}","#{str}glorious","archer#{str}","#{str}archer","gloriousarcher#{str}","#{str}gloriousarcher","ga#{str}","#{str}ga"]]
+    elsif str2.include?('brave') || str2.include?('cyl') || str2.include?('bh')
+      return [str,['Lucina(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
+    end
+    return [str,['Lucina(Glorious)','Lucina(Brave)'],[str]]
   elsif /(eirika|eirik|eiriku|erika)/ =~ str1
     str='eirik'
     str='eiriku' if str2.include?('eiriku')
@@ -7362,6 +7375,30 @@ def sort_legendaries(event,bot,mode=0)
     b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
   end
   b.compact!
+  b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm || q[5].nil? || !q[5].split(', ').include?('Legendary')}
+  if b2.length>0
+    m=[]
+    for i in 0...b2.length
+      for j in 0...b2[i][2].length
+        m.push(b2[i][2][j])
+      end
+    end
+    m.uniq!
+    data_load()
+    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || q[2][0]==' ' || q[2].length<2}.uniq
+    m=m.reject{|q| !k.map{|q2| q2[0]}.include?(q)}
+    k=k.reject{|q| !m.include?(q[0])}
+    for i in 0...k.length
+      k[i][1][1]=1 if k[i][1][0]=='Red'
+      k[i][1][1]=2 if k[i][1][0]=='Blue'
+      k[i][1][1]=3 if k[i][1][0]=='Green'
+      k[i][1][1]=4 if k[i][1][0]=='Colorless'
+      k[i][1][1]=5 if k[i][1][1].is_a?(String)
+      k[i][1][2]=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Orb_#{['','Red','Blue','Green','Colorless','Gold'][k[i][1][1]]}"}[0].mention
+    end
+    k=k.sort{|a,b| ((a[1][1]<=>b[1][1]) == 0 ? a[0]<=>b[0] : a[1][1]<=>b[1][1])}.map{|q| "#{q[1][2]} - #{q[0]}"}.join("\n")
+    k2.unshift(['Upcoming banner',k])
+  end
   b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm || q[5].nil? || !q[5].split(', ').include?('Legendary')}
   if b2.length>0
     m=[]
@@ -9266,8 +9303,13 @@ def banner_list(event,name,bot,weapon=nil)
           t=b[i][4].split(', ').map{|q| q.split('/').map{|q2| q2.to_i}}
           tm="\n*Duration:* #{t[0][0]} #{mo[t[0][1]]} #{t[0][2]} - #{t[1][0]} #{mo[t[1][1]]} #{t[1][2]}"
         end
-        str="__*#{b[i][0]}*__#{tm}#{"\n*Shared Focus Color:* #{shared_color.join(', ')}" if shared_color.length>0}#{"\n*Other Focus Color:* #{other_color.join(', ')}" if other_color.length>0}\n*Starting Focus Chance:* #{len % percentage}% (5<:Icon_Rarity_5p10:448272715099406336>)#{"\n*Current Focus Chance:* #{len % disperc}% (5<:Icon_Rarity_5p10:448272715099406336>)" if star_buff>0}"
-        if !b[i][3].nil? && b[i][3].include?('4')
+        if !b[i][3].nil? && b[i][3].include?('0')
+          str="__*#{b[i][0]}*__#{tm}\n*Multi-banner hybrid with #{shared_color.length+other_color.length+1} total focus units*\n*Starting Focus Chance:* #{len % percentage}% (5<:Icon_Rarity_5p10:448272715099406336>) each banner#{"\n*Current Focus Chance:* #{len % disperc}% (5<:Icon_Rarity_5p10:448272715099406336>) each banner" if star_buff>0}"
+        else
+          str="__*#{b[i][0]}*__#{tm}#{"\n*Shared Focus Color:* #{shared_color.join(', ')}" if shared_color.length>0}#{"\n*Other Focus Color:* #{other_color.join(', ')}" if other_color.length>0}\n*Starting Focus Chance:* #{len % percentage}% (5<:Icon_Rarity_5p10:448272715099406336>)#{"\n*Current Focus Chance:* #{len % disperc}% (5<:Icon_Rarity_5p10:448272715099406336>)" if star_buff>0}"
+        end
+        if !b[i][3].nil? && b[i][3].include?('0')
+        elsif !b[i][3].nil? && b[i][3].include?('4')
           str="#{str}#{", #{len % (four_star/2)}% (4<:Icon_Rarity_4p10:448272714210476033>)\n*5<:Icon_Rarity_5p10:448272715099406336>#{" Start" unless star_buff>0} Chance:* #{len % (disperc*1.00/(shared_color.length+1))}% (Perceived), #{len % (disperc*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
           str="#{str}#{"\n*4<:Icon_Rarity_4p10:448272714210476033>#{" Start" unless star_buff>0} Chance:* #{len % ((four_star/2)/(shared_color.length+1))}% (Perceived), #{len % ((four_star/2)/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
         else
@@ -10269,7 +10311,7 @@ bot.command(:summon) do |event, *colors|
     k=[[],[],[],[],[]]
     untz=@units.map{|q| q}
     for i in 0...bnr[2].length
-      k2=untz[untz.index{|q| q[0]==bnr[2][i]}][1][0]
+      k2=untz[untz.find_index{|q| q[0]==bnr[2][i]}][1][0]
       k[0].push(bnr[2][i]) if k2=='Red'
       k[1].push(bnr[2][i]) if k2=='Blue'
       k[2].push(bnr[2][i]) if k2=='Green'
