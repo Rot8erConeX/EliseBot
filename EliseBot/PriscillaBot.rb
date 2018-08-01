@@ -3288,6 +3288,260 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays st
   return nil
 end
 
+def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
+  if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
+    for i in 0...name.length
+      disp_tiny_stats(bot,name[i],weapon,event,ignore)
+    end
+    return nil
+  end
+  data_load()
+  weapon='-'
+  s=event.message.text
+  s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
+  s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  a=s.split(' ')
+  s=event.message.text if all_commands().include?(a[0])
+  args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  args.compact!
+  if name.nil?
+    if args.nil? || args.length<1
+      event.respond 'No unit was included' unless ignore
+      return nil
+    end
+  end
+  untz=@units.map{|q| q}
+  unless ignore || (!name.nil? && name != '')
+    args2=args.join(' ').split(' ')
+    name=args.join('')
+    data_load()
+    # Find the most accurate unit name among the remaining inputs
+    if find_unit(name,event)<0
+      for i in 0...args.length-1
+        args.pop
+        name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
+      end
+      if find_unit(name,event)<0
+        for j in 0...args2.length-1
+          args2.shift
+          args=args2.join(' ').split(' ')
+          name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
+          for i in 0...args.length-1
+            args.pop
+            name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
+          end
+        end
+      end
+    end
+  end
+  flurp=find_stats_in_string(event,nil,0,name)
+  rarity=flurp[0]
+  merges=flurp[1]
+  boon=flurp[2]
+  bane=flurp[3]
+  mu=false
+  tempest=get_bonus_type(event)
+  diff_num=[0,'','']
+  if event.message.text.downcase.include?("mathoo's")
+    devunits_load()
+    dv=find_in_dev_units(name)
+    if dv>=0
+      mu=true
+      rarity=@dev_units[dv][1]
+      merges=@dev_units[dv][2]
+      boon=@dev_units[dv][3].gsub(' ','')
+      bane=@dev_units[dv][4].gsub(' ','')
+      weaponz=@dev_units[dv][6].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+      end
+    elsif @dev_nobodies.include?(name)
+      event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
+    elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
+      event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats.'
+    else
+      event.respond 'Mathoo does not have that character.  Showing neutral stats.'
+    end
+  elsif " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
+    if name=='Robin'
+      uskl=unit_skills('Robin(M)',event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
+      uskl2=unit_skills('Robin(F)',event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
+      weapon='-'
+      weapon2='-'
+      weapon=uskl[uskl.length-1] if uskl.length>0
+      weapon2=uskl2[uskl2.length-1] if uskl2.length>0
+      w2=@skills[find_skill(weapon,event)]
+      w22=@skills[find_skill(weapon2,event)]
+      diff_num=[w2[2]-w22[2],'M','F']
+    else
+      uskl=unit_skills(name,event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
+      weapon='-'
+      weapon=uskl[uskl.length-1] if uskl.length>0
+    end
+  end
+  w2=@skills[find_skill(weapon,event)]
+  unitz=untz[find_unit(name,event)]
+  spec_wpn=false
+  if name=='Robin'
+    if " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
+      spec_wpn=true
+      wl=weapon_legality(event,'Robin(M)',weapon)
+      wl2=weapon_legality(event,'Robin(F)',weapon2)
+      wl="#{wl}(M) / #{wl2}(F)"
+    else
+      spec_wpn=true
+      wl=weapon_legality(event,'Robin(M)',weapon)
+      wl2=weapon_legality(event,'Robin(F)',weapon)
+      wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+    end
+  end
+  unless spec_wpn
+    wl=weapon_legality(event,unitz[0],weapon,nil)
+  end
+  if find_unit(name,event)<0
+    event.respond 'No unit was included' unless ignore
+    return nil
+  elsif unitz[0]=='Kiran'
+    data_load()
+    j=find_unit(name,event)
+    merges=@max_rarity_merge[1] if merges>@max_rarity_merge[1]
+    merges=0 if merges<0
+    if merges>10000000
+      event.respond "I can't merge that high"
+      merges=10000000
+    end
+    rarity=@max_rarity_merge[0] if rarity>@max_rarity_merge[0]
+    rarity=1 if rarity<1
+    if rarity>10000000
+      event.respond "I can't do rarities that high"
+      rarity=10000000
+    end
+    n=nature_name(boon,bane)
+    unless n.nil?
+      n=n.join(' / ')
+    end
+    flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: 0\n<:StrengthS:467037520484630539> Attack: 0\n<:SpeedS:467037520534962186> Speed: 0\n<:DefenseS:467037520249487372> Defense: 0\n<:ResistanceS:467037520379641858> Resistance: 0\n\nBST: 0"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: 0\n<:StrengthS:467037520484630539> Attack: 0\n<:SpeedS:467037520534962186> Speed: 0\n<:DefenseS:467037520249487372> Defense: 0\n<:ResistanceS:467037520379641858> Resistance: 0\n\nBST: 0"]]
+    create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n",0x9400D3,"Please note that the Attack stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),flds,1)
+    return nil
+  elsif unitz[4].nil? || (unitz[4].max.zero? && unitz[5].max.zero?) # unknown stats
+    data_load()
+    j=find_unit(name,event)
+    xcolor=unit_color(event,j,untz[j][0],0,mu)
+    create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{unit_clss(bot,event,j)}",xcolor,'Stats currently unknown',pick_thumbnail(event,j,bot))
+    return nil
+  elsif unitz[4].max.zero? # level 40 stats are known but not level 1
+    data_load()
+    merges=0 if merges.nil?
+    j=find_unit(name,event)
+    xcolor=unit_color(event,j,untz[j][0],0,mu)
+    atk='<:StrengthS:467037520484630539>*'
+    atk='<:MagicS:467043867611627520>' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
+    atk='<:StrengthS:467037520484630539>' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
+    zzzl=@skills[find_weapon(weapon,event)]
+    if zzzl[11].split(', ').include?('Frostbite')
+      atk='<:FreezeS:467043868148236299>'
+    end
+    n=nature_name(boon,bane)
+    unless n.nil?
+      n=n[0] if atk=='<:StrengthS:467037520484630539>'
+      n=n[n.length-1] if atk=='<:MagicS:467043867611627520>'
+      n=n.join(' / ') if ['<:StrengthS:467037520484630539>*','<:FreezeS:467043868148236299>'].include?(atk)
+    end
+    atk=atk.gsub('*','')
+    u40=[untz[j][0],untz[j][5][0],untz[j][5][1],untz[j][5][2],untz[j][5][3],untz[j][5][4]]
+    # find stats based on merges
+    s=[[u40[1],1],[u40[2],2],[u40[3],3],[u40[4],4],[u40[5],5]]                # all stats
+    s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}  # sort the stats based on amount
+    s.push(s[0],s[1],s[2],s[3],s[4])                                          # loop the list for use with multiple merges
+    m=merges/5                                                                # apply merges, two stats per merge
+    if m>0
+      for i in 1...6
+        u40[i]+=2*m
+      end
+    end
+    m=merges%5
+    if m>0
+      for i in 0...2*m
+        u40[s[i][1]]+=1
+      end
+    end
+    spec_wpn=false
+    if name=='Robin'
+      spec_wpn=true
+      wl=weapon_legality(event,'Robin(M)',weapon)
+      wl2=weapon_legality(event,'Robin(F)',weapon)
+      wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+    end
+    unless spec_wpn
+      wl=weapon_legality(event,unitz[0],weapon,nil)
+      weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+    end
+    tempest=get_bonus_type(event)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu)}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0}\n*Neutral Nature only so far*\n#{display_stat_skills(j,[],[],nil,'',[],wl) unless wl=='-'}\n**<:HP_S:467037520538894336>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:467037520534962186>#{u40[3]} | <:DefenseS:467037520249487372>#{u40[4]} | <:ResistanceS:467037520379641858>#{u40[5]}**",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
+    return nil
+  end
+  # units for whom both level 40 and level 1 stats are known
+  data_load()
+  merges=@max_rarity_merge[1] if merges>@max_rarity_merge[1]
+  merges=0 if merges<0
+  rarity=@max_rarity_merge[0] if rarity>@max_rarity_merge[0]
+  rarity=1 if rarity<1
+  if merges>10000000
+    event.respond "I can't merge that high"
+    merges=10000000
+  end
+  if rarity>10000000
+    event.respond "I can't do rarities that high"
+    rarity=10000000
+  end
+  u40=get_stats(event,name,40,rarity,merges,boon,bane)
+  u1=get_stats(event,name,1,rarity,merges,boon,bane)
+  j=find_unit(name,event)
+  atk='<:StrengthS:467037520484630539>*'
+  atk='<:MagicS:467043867611627520>' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
+  atk='<:StrengthS:467037520484630539>' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
+  zzzl=@skills[find_weapon(weapon,event)]
+  if zzzl[11].split(', ').include?('Frostbite')
+    atk='<:FreezeS:467043868148236299>'
+  end
+  n=nature_name(boon,bane)
+  unless n.nil?
+    n=n[0] if atk=='<:StrengthS:467037520484630539>'
+    n=n[n.length-1] if atk=='<:MagicS:467043867611627520>'
+    n=n.join(' / ') if ['<:StrengthS:467037520484630539>*','<:FreezeS:467043868148236299>'].include?(atk)
+  end
+  xcolor=unit_color(event,j,u40[0],0,mu)
+  unless spec_wpn
+    wl=weapon_legality(event,u40[0],weapon,nil)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  end
+  flds=[["**Level 1#{" +#{merges}" if merges>0}**",["#{' ' if u1[1]<10}#{u1[1]}","#{' ' if u1[2]<10}#{u1[2]}#{"(#{diff_num[1]})/#{' ' if u1[2]-diff_num[0]<10}#{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","#{' ' if u1[3]<10}#{u1[3]}","#{' ' if u1[4]<10}#{u1[4]}","#{' ' if u1[5]<10}#{u1[5]}"]],["**Level 40#{" +#{merges}" if merges>0}**",["#{u40[1]}","#{u40[2]}#{"(#{diff_num[1]})/#{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","#{u40[3]}","#{u40[4]}","#{u40[5]}"]]]
+  superbaan=["\u00A0","\u00A0","\u00A0","\u00A0","\u00A0","\u00A0"]
+  if boon=="" && bane=="" && !mu
+    for i in 6...11
+      superbaan[i-5]='+' if [1,5,10].include?(u40[i]) && rarity==5
+      superbaan[i-5]='-' if [2,6,11].include?(u40[i]) && rarity==5
+      superbaan[i-5]='+' if [10].include?(u40[i]) && rarity==4
+      superbaan[i-5]='-' if [11].include?(u40[i]) && rarity==4
+    end
+  end
+  for i in 0...5
+    flds[1][1][i]="#{flds[1][1][i]}#{superbaan[i+1]}"
+  end
+  j=find_unit(name,event)
+  img=pick_thumbnail(event,j,bot)
+  img='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
+  xtype=1
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu)}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,[],[],nil,'',[],wl) unless wl=='-'}\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0Stats```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,nil,img,nil)
+  return nil
+end
+
 def make_stat_string_list(a,b,n=1)
   if n==2
     for i in 1...a.length
@@ -4619,8 +4873,8 @@ def splice(str)
   return s
 end
 
-def first_sub(master,str1,str2)
-  master=master.gsub('!','')
+def first_sub(master,str1,str2,mode=0)
+  master=master.gsub('!','') if mode==0
   posit=master.downcase.index(str1.downcase)
   return master if posit.nil?
   return "#{master[0,posit] if posit>0}#{str2}#{master[posit+str1.length,master.length] if posit+str1.length<master.length}"
@@ -11000,6 +11254,42 @@ bot.command([:stats,:stat]) do |event, *args|
     args.shift
     disp_unit_stats_and_skills(event,args,bot)
     return nil
+  elsif ['tiny'].include?(args[0].downcase)
+    args.shift
+    k=find_name_in_string(event,nil,1)
+    if k.nil?
+      w=nil
+      if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
+        event.respond "Steel's waifu is not in the game."
+      elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
+        event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
+      elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+        x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+        k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
+        w=k2[0] unless k2.nil?
+        disp_tiny_stats(bot,x[1],w,event,true)
+      else
+        event.respond 'No matches found.'
+      end
+      return nil
+    end
+    str=k[0]
+    k2=get_weapon(first_sub(args.join(' '),k[1],''),event)
+    w=nil
+    w=k2[0] unless k2.nil?
+    data_load()
+    if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
+      disp_tiny_stats(bot,x[1],w,event,true)
+    elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
+      x=detect_multi_unit_alias(event,str.downcase,str.downcase)
+      disp_tiny_stats(bot,x[1],w,event,true)
+    elsif find_unit(str,event)>=0
+      disp_tiny_stats(bot,str,w,event)
+    else
+      event.respond 'No matches found'
+    end
+    return nil
   elsif ['and','n','&'].include?(args[0].downcase) && ['skill','skills'].include?(args[1].downcase)
     args.shift
     args.shift
@@ -12357,7 +12647,7 @@ bot.command([:bugreport, :suggestion, :feedback]) do |event, *args|
   end
   f=event.message.text.split(' ')
   f="#{f[0]} "
-  bot.user(167657750971547648).pm("#{s}\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{s3}:** #{first_sub(event.message.text,f,'')}")
+  bot.user(167657750971547648).pm("#{s}\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{s3}:** #{first_sub(event.message.text,f,'',1)}")
   s3='Bug' if s3=='Bug Report'
   t=Time.now
   event << "Your #{s3.downcase} has been logged."
