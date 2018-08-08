@@ -2817,7 +2817,6 @@ def alter_classes(event,str) # used to see if weapon classes that didn't exist a
   data_load()
   g=get_markers(event)
   return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Healer'}.map{|q| q[1][0]}.reject{|q| q=='Colorless'}.uniq.length>0 if str=='Colored Healers'
-  return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Dagger'}.map{|q| q[1][0]}.reject{|q| q=='Colorless'}.uniq.length>0 if str=='Colored Daggers'
   return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Blade'}.map{|q| q[1][0]}.reject{|q| q !='Colorless'}.uniq.length>0 if str=='Colorless Blades' || str=='Rods'
   return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Tome'}.map{|q| q[1][0]}.reject{|q| q != 'Colorless'}.uniq.length>0 if str=='Colorless Tomes'
   return @units.reject{|q| !has_any?(g, q[13][0]) || q[1][1]!='Beast'}.map{|q| q[1][0]}.uniq.length>0 if str=='Beasts'
@@ -2842,7 +2841,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   w='Rod' if jj[1][0]=='Colorless' && w=='Blade'
   if jj[1][1]!=w
     w="*#{w}* (#{jj[1][0]} #{jj[1][1]})"
-  elsif ['Tome', 'Dragon', 'Bow'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers')) || (w=='Dagger' && alter_classes(event,'Colored Daggers'))
+  elsif ['Tome', 'Dragon', 'Bow', 'Dagger'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers'))
     w="*#{jj[1][0]} #{jj[1][1]}*"
   elsif jj[1][0]=='Gold'
     w="*#{w}*"
@@ -2890,9 +2889,8 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0) # used primarilally by the
   clr=jj[1][0] if ['Red','Blue','Green','Colorless'].include?(jj[1][0])
   clr='Cyan' if name=='Robin (Shared stats)'
   if mode%2==1
-    clr='Gold' if ['Dragon','Bow'].include?(jj[1][1])
+    clr='Gold' if ['Dragon','Bow','Dagger'].include?(jj[1][1])
     clr='Gold' if jj[1][1]=='Healer' && alter_classes(event,'Colored Healers')
-    clr='Gold' if jj[1][1]=='Dagger' && alter_classes(event,'Colored Daggers')
   end
   wpn='Unknown'
   wpn=jj[1][1].gsub('Healer','Staff') if ['Blade','Tome','Dragon','Beast','Bow','Dagger','Healer'].include?(jj[1][1])
@@ -3026,19 +3024,19 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   end
   stat_skills_3=k.map{|q| "#{q[0]}#{" (x#{q[1]})" if q[1]>1}"}
   str=''
-  str="#{tempest} Bonus unit" if tempest.length>0
-  str="Not a bonus unit" if tempest.length<=0 && expandedmode
-  str="#{str}\nBlessings applied: #{blessing.join(', ')}" if blessing.length>0
-  str="#{str}\nNo Blessings applied" if blessing.length<=0 && expandedmode
-  str="#{str}\nStat-affecting skills: #{stat_skills.join(', ')}" if stat_skills.length>0
-  str="#{str}\nStat-affecting skills: -" if stat_skills.length<=0 && expandedmode
-  str="#{str}\nStat-buffing skills: #{stat_buffers.join(', ')}" if stat_buffers.length>0
-  str="#{str}\nStat-buffing skills: -" if stat_buffers.length<=0 && expandedmode
-  str="#{str}\nStat-nerfing skills: #{stat_nerfers.join(', ')}" if stat_buffers.length>0
-  str="#{str}\nStat-nerfing skills: -" if stat_nerfers.length<=0 && expandedmode
-  str="#{str}\nIn-combat buffs: #{stat_skills_3.join(', ')}" if stat_skills_3.length>0
-  str="#{str}\nIn-combat buffs: -" if stat_skills_3.length<=0 && expandedmode
-  return "#{str}\nEquipped weapon: #{weapon}\n"
+  str="#{tempest} Bonus unit\n" if tempest.length>0
+  str="Not a bonus unit\n" if tempest.length<=0 && expandedmode
+  str="#{str}Blessings applied: #{blessing.join(', ')}\n" if blessing.length>0
+  str="#{str}No Blessings applied\n" if blessing.length<=0 && expandedmode
+  str="#{str}Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0
+  str="#{str}Stat-affecting skills: -\n" if stat_skills.length<=0 && expandedmode
+  str="#{str}Stat-buffing skills: #{stat_buffers.join(', ')}\n" if stat_buffers.length>0
+  str="#{str}Stat-buffing skills: -\n" if stat_buffers.length<=0 && expandedmode
+  str="#{str}Stat-nerfing skills: #{stat_nerfers.join(', ')}\n" if stat_nerfers.length>0
+  str="#{str}Stat-nerfing skills: -\n" if stat_nerfers.length<=0 && expandedmode
+  str="#{str}In-combat buffs: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0
+  str="#{str}In-combat buffs: -\n" if stat_skills_3.length<=0 && expandedmode
+  return "#{str}Equipped weapon: #{weapon}\n"
 end
 
 def display_stars(rarity,merges,support='-',expandedmode=false) # used to determine which star emojis should be used, based on the rarity, merge count, and whether the unit is Summoner Supported
@@ -3388,8 +3386,8 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing)
   blu40=u40.map{|a| a}
   crblu40=cru40.map{|a| a}
-  blu40=apply_stat_skills(event,stat_skills_2,blu40) if stat_skills_2.length<0
-  crblu40=apply_stat_skills(event,stat_skills_2,crblu40) if stat_skills_2.length<0
+  blu40=apply_stat_skills(event,stat_skills_2,blu40) if stat_skills_2.length>0
+  crblu40=apply_stat_skills(event,stat_skills_2,crblu40) if stat_skills_2.length>0
   u40=make_stat_string_list(u40,blu40)
   cru40=make_stat_string_list(cru40,crblu40)
   u40=make_stat_string_list(u40,cru40,2) if wl.include?('~~')
@@ -3398,8 +3396,8 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   cru1=apply_stat_skills(event,stat_skills,cru1,tempest,summoner,'-','',blessing)
   blu1=u1.map{|a| a}
   crblu1=cru1.map{|a| a}
-  blu1=apply_stat_skills(event,stat_skills_2,blu1) if stat_skills_2.length<0
-  crblu1=apply_stat_skills(event,stat_skills_2,crblu1) if stat_skills_2.length<0
+  blu1=apply_stat_skills(event,stat_skills_2,blu1) if stat_skills_2.length>0
+  crblu1=apply_stat_skills(event,stat_skills_2,crblu1) if stat_skills_2.length>0
   u1=make_stat_string_list(u1,blu1)
   cru1=make_stat_string_list(cru1,crblu1)
   u1=make_stat_string_list(u1,cru1,2) if wl.include?('~~')
@@ -4018,9 +4016,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     elsif skill[5]=='Dagger Users Only'
       skill[7]=skill[7].split(' *** ')
       xfooter="Debuff is applied at end of combat if unit attacks, and lasts until the foes' next actions."
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Dagger:443172811461230603>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Dagger:443692132683743232>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Dagger\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dagger:443172811461230603> **Weapon Type:** Dagger\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     elsif skill[5]=='Staff Users Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Daggers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Daggers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     elsif skill[5]=='Dragons Only'
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     elsif skill[5]=='Beasts Only'
@@ -6217,7 +6215,7 @@ def display_units(event, mode)
           h='<:Red_Dagger:443172811490721804> Red Thieves' if wpn1[0]==['Red', 'Dagger']
           h='<:Blue_Dagger:467112472625545217> Blue Thieves' if wpn1[0]==['Blue', 'Dagger']
           h='<:Green_Dagger:467122926655897610> Green Thieves' if wpn1[0]==['Green', 'Dagger']
-          h="<:Colorless_Dagger:443692132683743232> #{'Colorless ' if alter_classes(event,'Colored Daggers')}Thieves" if p1[i].include?('Matthew') || (wpn1[0]==['Colorless', 'Dagger'])
+          h='<:Colorless_Dagger:443692132683743232> Colorless Thieves' if p1[i].include?('Matthew') || (wpn1[0]==['Colorless', 'Dagger'])
           # healer colors
           h='<:Red_Staff:443172812455280640> Red Healers' if wpn1[0]==['Red', 'Healer']
           h='<:Blue_Staff:467112472407703553> Blue Healers' if wpn1[0]==['Blue', 'Healer']
@@ -6311,7 +6309,6 @@ def display_skills(event, mode)
       end
       emotes=['<:Gold_Staff:443172811628871720>','<:Gold_Dagger:443172811461230603>','<:Gold_Dragon:443172811641454592>','<:Gold_Bow:443172812492898314>','<:Gold_Beast:443172811608162324>']
       emotes[0]='<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')
-      emotes[1]='<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')
       emotes=['<:Red_Staff:443172812455280640>','<:Red_Dagger:443172811490721804>','<:Red_Dragon:443172811796774932>','<:Red_Bow:443172812455280641>','<:Red_Beast:443172811599773734>'] if colors.length==1 && colors[0]=='Red'
       emotes=['<:Blue_Staff:467112472407703553>','<:Blue_Dagger:467112472625545217>','<:Blue_Dragon:467112473313542144>','<:Blue_Bow:467112473313542155>','<:Blue_Beast:467112472990580747>'] if colors.length==1 && colors[0]=='Blue'
       emotes=['<:Green_Staff:467122927616262144>','<:Green_Dagger:467122926655897610>','<:Green_Dragon:467122926718550026>','<:Green_Bow:467122927536570380>','<:Green_Beast:467122926630731806>'] if colors.length==1 && colors[0]=='Green'
@@ -7217,7 +7214,6 @@ end
 def weapon_clss(arr,event,mode=0)
   x="#{arr[0]} #{arr[1]}"
   return 'Healer' if x=='Colorless Healer' && !alter_classes(event,'Colored Healers')
-  return 'Dagger' if x=='Colorless Dagger' && !alter_classes(event,'Colored Daggers')
   return 'Sword' if x=='Red Blade'
   return 'Lance' if x=='Blue Blade'
   return 'Axe' if x=='Green Blade'
@@ -10276,7 +10272,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
     if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...dew.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew[i].gsub('~~','').split(' (->) ')[0])}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -10292,7 +10288,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
       end
       if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...stones.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones[i].gsub('~~','').split(' (->) ')[0])}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -10357,7 +10353,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
     if dew2.join("\n").length+stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...dew2.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -10373,7 +10369,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
       end
       if stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...stones2.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -10393,7 +10389,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
     if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...dew.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -10409,7 +10405,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
       end
       if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],["#{'<:Gold_Dagger:443172811461230603>' if alter_classes(event,'Colored Daggers')}#{'<:Colorless_Dagger:443692132683743232>' unless alter_classes(event,'Colored Daggers')} Daggers",[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
         for i in 0...stones.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -10525,15 +10521,10 @@ bot.command([:random,:rand]) do |event, *args|
     end
   end
   if color_weapons.length<=0
-    color_weapons=[['Red', 'Blade'],     ['Red', 'Tome'],     ['Red', 'Breath'],      ['Red', 'Bow'],
-                   ['Blue', 'Blade'],    ['Blue', 'Tome'],    ['Blue', 'Breath'],     ['Blue', 'Bow'],
-                   ['Green', 'Blade'],   ['Green', 'Tome'],   ['Green', 'Breath'],    ['Green', 'Bow'],
+    color_weapons=[['Red', 'Blade'],     ['Red', 'Tome'],     ['Red', 'Breath'],      ['Red', 'Bow'],         ['Red', 'Dagger'],
+                   ['Blue', 'Blade'],    ['Blue', 'Tome'],    ['Blue', 'Breath'],     ['Blue', 'Bow'],        ['Blue', 'Dagger'],
+                   ['Green', 'Blade'],   ['Green', 'Tome'],   ['Green', 'Breath'],    ['Green', 'Bow'],       ['Green', 'Dagger'],
                                                               ['Colorless', 'Breath'],['Colorless', 'Bow'],   ['Colorless', 'Dagger']]
-    if alter_classes(event,'Colored Daggers')
-      color_weapons.push(['Red', 'Dagger'])
-      color_weapons.push(['Blue', 'Dagger'])
-      color_weapons.push(['Green', 'Dagger'])
-    end
     color_weapons.push(['Colorless', 'Blade']) if alter_classes(event,'Colorless Blades')
     color_weapons.push(['Colorless', 'Tome']) if alter_classes(event,'Colorless Tomes')
     unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
@@ -10708,7 +10699,7 @@ bot.command([:random,:rand]) do |event, *args|
   w='Rod' if clazz[0]=='Colorless' && w=='Blade'
   if clazz[1]!=w
     w="*#{w}* (#{clazz[0]} #{clazz[1]})"
-  elsif ['Tome', 'Dragon', 'Bow'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers')) || (w=='Dagger' && alter_classes(event,'Colored Daggers'))
+  elsif ['Tome', 'Dragon', 'Bow', 'Dagger'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers'))
     w="*#{clazz[0]} #{clazz[1]}*"
   elsif clazz[0]=='Gold'
     w="*#{w}*"
@@ -11569,6 +11560,7 @@ bot.command([:stats,:stat]) do |event, *args|
 end
 
 bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstats,:statstiny,:statssmall,:statssmol,:statsmicro,:statssquashed,:statss,:stattiny,:statsmall,:statsmol,:statmicro,:statsquashed,:sstat,:tinystat,:smallstat,:smolstat,:microstat,:squashedstat,:tiny,:small,:micro,:smol,:squashed,:littlestats,:littlestat,:statslittle,:statlittle,:little]) do |event, *args|
+  return nil if overlap_prevent(event)
   k=find_name_in_string(event,nil,1)
   if k.nil?
     w=nil
@@ -11605,6 +11597,7 @@ bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstat
 end
 
 bot.command([:giant,:big,:tol,:macro,:large,:huge,:massive,:giantstats,:bigstats,:tolstats,:macrostats,:largestats,:hugestats,:massivestats,:giantstat,:bigstat,:tolstat,:macrostat,:largestat,:hugestat,:massivestat,:statsgiant,:statsbig,:statstol,:statsmacro,:statslarge,:statshuge,:statsmassive,:statgiant,:statbig,:stattol,:statmacro,:statlarge,:stathuge,:statmassive,:statol]) do |event, *args|
+  return nil if overlap_prevent(event)
   k=find_name_in_string(event,nil,1)
   if k.nil?
     w=nil
