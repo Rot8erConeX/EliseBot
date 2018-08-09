@@ -3931,7 +3931,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     if event.message.text.downcase.include?('psychic')
       event.respond 'No matches found.  Might you be looking for the skill **Physic** or its upgrade **Physic+**?' unless ignore
     else
-      event.respond "No matches found.  If you are looking for data on the skills a character learns, try ```#{first_sub(event.message.text,'skill','skills')}```, with an s." unless ignore
+      event.respond "No matches found.  If you are looking for data on the skills a character learns, try ```#{first_sub(event.message.text,'skill','skills',1)}```, with an s." unless ignore
     end
     return false
   end
@@ -11406,7 +11406,7 @@ bot.command([:skills,:fodder]) do |event, *args|
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       disp_unit_skills(bot,x[1],event)
     elsif s.downcase[0,6]=='skills'
-      event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s."
+      event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill',1)}```, without the s."
     else
       event.respond 'No matches found.  Please note that the `fodder` command is for listing the skills you can fodder a **unit** for, not the units you need to fodder to get a skill.'
     end
