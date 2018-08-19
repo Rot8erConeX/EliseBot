@@ -14,7 +14,7 @@ Live to Serve 3
 
 Anna
 5\0\ \ \-
-Iron Axe\Steel Axe\Silver Axe\Noatun\~~Noatun (+) Effect Mode~~
+Iron Axe\Steel Axe\Silver Axe\Noatun\Noatun (+) Effect Mode
 Reciprocal Aid
 Retribution\Vengeance
 Fierce Stance 1\Fierce Stance 2\Fierce Stance 3
@@ -53,7 +53,7 @@ Fortify Def 1\Fortify Def 2\Fortify Def 3
 Attack +2
 
 Cordelia
-5\5\Attack\HP\-
+5\6\Attack\HP\-
 Iron Lance\Steel Lance\Brave Lance\Brave Lance+
 Reposition
 Night Sky\Astra\Galeforce
@@ -79,7 +79,7 @@ Harsh Command
 Glowing Ember\Ignis
 Armored Blow 1\Sturdy Blow 1\Sturdy Blow 2
 Dull Close 1\Dull Close 2\Dull Close 3
-Breath of Life 1\Breath of Life 2\Breath of Life 3
+Spur Res 1\Spur Def/Res 1\Spur Def/Res 2
 Attack/Def +2
 
 Est
@@ -143,7 +143,7 @@ Spur Atk 1\Drive Atk 1\Drive Atk 2
 Close Def 3
 
 Mae
-5\2\Speed\Resistance\-
+5\3\Attack\Defense\-
 Light\Ellight\Blarowl\Blarowl+\Blarowl+ (+) Attack Mode
 Draw Back
 Dragon Gaze\Draconic Aura
@@ -213,7 +213,7 @@ Spur Def 1\Spur Def 2\Spur Def 3
 HP +4
 
 Rebecca
-4\9\Speed\Resistance\-
+4\10\Speed\Resistance\-
 Iron Bow\Steel Bow\Silver Bow
 Rally Defense
 Chilling Wind\Iceberg
@@ -260,5 +260,5 @@ Retribution\Vengeance
 Close Counter
 Vantage 1\Vantage 2\Vantage 3
 Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
-Quick Riposte 2
+Quick Riposte 3
 
