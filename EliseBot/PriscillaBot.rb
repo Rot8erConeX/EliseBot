@@ -1045,7 +1045,8 @@ end
 
 def is_mod?(user,server,channel) # used by certain commands to determine if a user can use them
   return true if user.id==167657750971547648 # bot developer is always an EliseMod
-  return false if server.nil? # no one is a EliseMmod in PMs
+  return false if server.nil? # no one is a EliseMod in PMs
+  return true if [188781153589657600].include?(event.user.id) # people who donate to the laptop fund will always be EliseMods
   return true if user.id==server.owner.id # server owners are EliseMods by default
   for i in 0...user.roles.length # certain role names will count as EliseMods even if they don't have legitimate mod powers
     return true if ['mod','mods','moderator','moderators','admin','admins','administrator','administrators','owner','owners'].include?(user.roles[i].name.downcase.gsub(' ',''))
@@ -6970,6 +6971,18 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str="#{str}ura"
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Azura(Performing)','Azura(Winter)'],[str]]
+  elsif /(ephr(ai|ia)m|efuramu)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
+    str='ephraim'
+    str='efuramu' if str2.include?('efuramu')
+    str='ephriam' if str2.include?('ephriam')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('legendary') || str2.include?('fire')
+      return [str,['Ephraim(Fire)'],["legendary#{str}","#{str}legendary","fire#{str}","#{str}fire"]]
+    elsif str2.include?('brave') || str2.include?('cyl')
+      return [str,['Ephraim(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
+    end
+    return [str,['Hector(Marquess)','Hector(Brave)'],[str]]
   elsif /(hector|kektor|heckutoru)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
     str='hector'
     str='kektor' if str2.include?('kektor')
