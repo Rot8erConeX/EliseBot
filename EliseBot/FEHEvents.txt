@@ -13,11 +13,12 @@ Weapon Workout\Quests\17/08/2018, 30/08/2018
 Micaiah & Sothe\Bound Hero Battle\20/08/2018, 27/08/2018
 New Heroes\Log-In Bonus\21/08/2018, 04/09/2018
 New Heroes\Forging Bonds\24/08/2018, 06/09/2018
+Robin: Fell Vessel (revival)\Legendary Hero Battle\28/08/2018, 03/09/2018
 >Unknown<\Legendary Hero Battle\28/08/2018, 03/09/2018
 -\Grand Conquests\29/08/2018, 03/09/2018
 Order of Heroes\Quests\31/08/2018, 13/09/2018
 Voting Gauntlet\Log-In Bonus\01/09/2018, 14/09/2018
->Unknown<\Grand Hero Battle\04/09/2018, 11/09/2018
+Jamke (as per datamine)\Grand Hero Battle\04/09/2018, 11/09/2018
 >Unknown<\Voting Gauntlet\05/09/2018, 10/09/2018
 2.9.0 (projected)\Update\05/09/2018, 06/09/2018
 New Heroes\Log-In Bonus\07/09/2018, 20/09/2018
