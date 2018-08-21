@@ -1383,7 +1383,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill('Bladeblade',event) if name.downcase.gsub(' ','')=='laevatein'
   return find_skill('Eckesachs',event) if ['exaccus','exesack','exsack','eggsacks'].include?(name.downcase.gsub(' ',''))
   return find_skill('Uror',event) if name.downcase.gsub(' ','')=='urdr'
-  return find_skill('Hlidskjalf',event) if name.downcase.gsub(' ','')=='hlioskjalf'
+  return find_skill('Hlidskjalf',event) if ['hlioskjalf',"roni'sstick",'ronisstick','staffkatz'].include?(name.downcase.gsub(' ',''))
   return find_skill('Giga Excalibur',event) if name.downcase.gsub(' ','')=='gigascalibur'
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
   return find_skill('Loptous',event) if name.downcase.gsub(' ','')=='loptyr'
@@ -1453,6 +1453,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill('Giga Excalibur',event) if namex=='gigascalibur'[0,namex.length]
   return find_skill('Loptous',event) if namex=='loptyr'[0,namex.length]
   return find_skill('Thokk',event) if namex=='sekku'[0,namex.length]
+  return find_skill('Hlidskjalf',event) if ['hlioskjalf',"roni'sstick",'ronisstick','staffkatz'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill("Killing Edge",event) if ['killersword','killeredge','killingsword'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill("Slaying Edge",event) if ['slayersword','slayeredge','slayingsword'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill(name.downcase.gsub(' ','').gsub('redt','r t'),event) if namex.downcase=='redtome'[0,namex.length]
@@ -1719,7 +1720,7 @@ def was_embedless_mentioned?(event) # used to detect if someone who wishes to se
   return false
 end
 
-def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,mode=0) # used by most commands to display embeds or plaintext, based on the results of the above funtion
+def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,mode=0) # used by most commands to display embeds or plaintext, based on the results of the above function
   ftrlnth=0
   ftrlnth=xfooter.length unless xfooter.nil?
   ch_id=0
