@@ -4620,7 +4620,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     if skill[5]=='Staff Users Only' && (skill[7].include?("This weapon's damage is calculated the same as other weapons.") || skill[7].include?('Damage from staff calculated like other weapons.'))
       xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Dazzling_W.png'
       sttzx=[[0,0,0,0,0,'Dazzling','The foe cannot counterattack.']]
-    elsif skill[5]=='Staff Users Only' && (skill[7].include?('The foe cannot counterattack.'))
+    elsif skill[5]=='Staff Users Only' && (skill[7].include?('The foe cannot counterattack.') || skill[7].include?('Foe cannot counterattack.'))
       xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Wrathful_W.png'
       sttzx=[[0,0,0,0,0,'Wrathful',"This weapon's damage is calculated the same as other weapons."]]
     elsif skill[5]=='Staff Users Only'
