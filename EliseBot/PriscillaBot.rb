@@ -140,9 +140,9 @@ end
 
 def data_load() # loads the character and skill data from the files on my computer
   # UNIT DATA
-  if File.exist?('FEHUnits.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHUnits.txt')
     b=[]
-    File.open('FEHUnits.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHUnits.txt').each_line do |line|
       b.push(line)
     end
   else
@@ -191,9 +191,9 @@ def data_load() # loads the character and skill data from the files on my comput
     @units.push(bob4)
   end
   # SKILL DATA
-  if File.exist?('FEHSkills.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkills.txt')
     b=[]
-    File.open('FEHSkills.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkills.txt').each_line do |line|
       b.push(line)
     end
   else
@@ -217,9 +217,9 @@ def data_load() # loads the character and skill data from the files on my comput
 end
 
 def nicknames_load() # laods the nickname list
-  if File.exist?('FEHNames.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
     b=[]
-    File.open('FEHNames.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt').each_line do |line|
       b.push(eval line)
     end
   else
@@ -227,9 +227,9 @@ def nicknames_load() # laods the nickname list
   end
   @aliases=b.reject{|q| q.nil? || q[1].nil?}.uniq
   if @aliases[@aliases.length-1][1]<'Zephiel'
-    if File.exist?('FEHNames2.txt')
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt')
       b=[]
-      File.open('FEHNames2.txt').each_line do |line|
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt').each_line do |line|
         b.push(eval line)
       end
     else
@@ -238,9 +238,9 @@ def nicknames_load() # laods the nickname list
     nzzzzz=b.reject{|q| q.nil? || q[1].nil?}.uniq
     if nzzzzz[nzzzzz.length-1][1]<'Zephiel'
       puts 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
-      if File.exist?('FEHNames3.txt')
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
         b=[]
-        File.open('FEHNames3.txt').each_line do |line|
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt').each_line do |line|
           b.push(eval line)
         end
       else
@@ -250,16 +250,16 @@ def nicknames_load() # laods the nickname list
     else
       puts 'Last backup of the alias list being used.'
     end
-    open('FEHNames.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
       for i in 0...nzzzzz.length
         f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
       end
     }
     puts 'Alias list has been restored from backup.'
   end
-  if File.exist?('FEHMultiNames.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt')
     b=[]
-    File.open('FEHMultiNames.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt').each_line do |line|
       b.push(eval line)
     end
   else
@@ -269,9 +269,9 @@ def nicknames_load() # laods the nickname list
 end
 
 def groups_load() # loads the groups list
-  if File.exist?('FEHGroups.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt')
     b=[]
-    File.open('FEHGroups.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt').each_line do |line|
       b.push(eval line)
     end
   else
@@ -281,9 +281,9 @@ def groups_load() # loads the groups list
 end
 
 def metadata_load() # loads the metadata - users who choose to see plaintext over embeds, data regarding each shard's server count, number of headpats received, etc.
-  if File.exist?('FEHSave.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSave.txt')
     b=[]
-    File.open('FEHSave.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSave.txt').each_line do |line|
       b.push(eval line)
     end
   else
@@ -306,7 +306,7 @@ end
 
 def metadata_save() # saves the metadata
   x=[@embedless.map{|q| q}, @ignored.map{|q| q}, @summon_rate.map{|q| q}, @server_data.map{|q| q}, @headpats.map{|q| q}, @server_markers.map{|q| q}, @x_markers.map{|q| q}, @spam_channels.map{|q| q}]
-  open('FEHSave.txt', 'w') { |f|
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHSave.txt', 'w') { |f|
     f.puts x[0].to_s
     f.puts x[1].to_s
     f.puts x[2].to_s
@@ -320,9 +320,9 @@ def metadata_save() # saves the metadata
 end
 
 def devunits_load() # loads information regarding the devunits
-  if File.exist?('FEHDevUnits.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt')
     b=[]
-    File.open('FEHDevUnits.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt').each_line do |line|
       b.push(line.gsub("\n",''))
     end
   else
@@ -399,7 +399,7 @@ def devunits_save() # used by the devedit command to save the devunits
   for i in 0...untz.length
     s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\n#{untz[i][6].join('\\'[0])}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12]}"
   end
-  open('FEHDevUnits.txt', 'w') { |f|
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt', 'w') { |f|
     f.puts s
     f.puts "\n"
   }
@@ -485,9 +485,9 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif @summon_servers.include?(k) && ['summon'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\nYou can include the word \"current\" or \"now\" to force me to choose a banner that is currently available in-game.\nThe words \"upcoming\" and \"future\" allow you to force a banner that will be available in the future.\nYou can also include one or more of the words below to force the banner to fit into those categories.\n\n**This command is only available in certain servers**.",0x9E682C)
     lookout=[]
-    if File.exist?('FEHSkillSubsets.txt')
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
       lookout=[]
-      File.open('FEHSkillSubsets.txt').each_line do |line|
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
         lookout.push(eval line)
       end
     end
@@ -575,9 +575,9 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     subcommand='' if subcommand.nil?
     if ['unit','char','character','person','units','chars','charas','chara','people'].include?(subcommand.downcase)
       lookout=[]
-      if File.exist?('FEHGames.txt')
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
         lookout=[]
-        File.open('FEHGames.txt').each_line do |line|
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt').each_line do |line|
           lookout.push(eval line)
         end
       end
@@ -602,9 +602,9 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,3)}#{"\n\nI also have tags for weapon and passive \"flavors\".  Use this command in PM to see them." unless safe_to_spam?(event)}",0xD49F61)
       if safe_to_spam?(event)
         lookout=[]
-        if File.exist?('FEHSkillSubsets.txt')
+        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
           lookout=[]
-          File.open('FEHSkillSubsets.txt').each_line do |line|
+          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
             lookout.push(eval line)
           end
         end
@@ -686,7 +686,7 @@ bot.command(:reboot, from: 167657750971547648) do |event| # reboots Elise
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
   puts 'FEH!reboot'
-  exec "PriscillaBot.rb #{@shardizard}"
+  exec "cd C:/Users/Mini-Matt/Desktop/devkit && PriscillaBot.rb #{@shardizard}"
 end
 
 def attack_icon(event) # this is used by the attaccolor command to display all info
@@ -1056,9 +1056,9 @@ def is_mod?(user,server,channel) # used by certain commands to determine if a us
 end
 
 def make_banner(event) # used by the `summon` command to pick a random banner and choose which units are on it.
-  if File.exist?('FEHBanners.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
     b=[]
-    File.open('FEHBanners.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
       b.push(line.gsub("\n",''))
     end
   else
@@ -1074,9 +1074,9 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
   b=b.reject{|q| q[2].length==0 && !q[0].include?('GHB') && !q[0].include?('TT')}
   args=event.message.text.downcase.gsub("\n",' ').split(' ')
   lookout=[]
-  if File.exist?('FEHSkillSubsets.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
     lookout=[]
-    File.open('FEHSkillSubsets.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
       lookout.push(eval line)
     end
   end
@@ -1383,6 +1383,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill('Bladeblade',event) if name.downcase.gsub(' ','')=='laevatein'
   return find_skill('Eckesachs',event) if ['exaccus','exesack','exsack','eggsacks'].include?(name.downcase.gsub(' ',''))
   return find_skill('Uror',event) if name.downcase.gsub(' ','')=='urdr'
+  return find_skill('Hlidskjalf',event) if name.downcase.gsub(' ','')=='hlioskjalf'
   return find_skill('Giga Excalibur',event) if name.downcase.gsub(' ','')=='gigascalibur'
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
   return find_skill('Loptous',event) if name.downcase.gsub(' ','')=='loptyr'
@@ -2498,9 +2499,9 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
   rally=[0,0,0,0,0]
   if skillls.length>0
     lookout=[]
-    if File.exist?('FEHStatSkills.txt')
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
       lookout=[]
-      File.open('FEHStatSkills.txt').each_line do |line|
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
         lookout.push(eval line)
       end
       lookout=lookout.reject{|q| !['Stat-Affecting','Stat-Buffing','Stat-Nerfing'].include?(q[3][0,q[3].length-2])}
@@ -2597,9 +2598,9 @@ def apply_combat_buffs(event,skillls,stats,phase) # used to apply in-combat buff
   close=[0,0,0,0,0,0]
   distant=[0,0,0,0,0,0]
   lookout=[]
-  if File.exist?('FEHStatSkills.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
     lookout=[]
-    File.open('FEHStatSkills.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
       lookout.push(eval line)
     end
     lookout=lookout.reject{|q| !['Enemy Phase','Player Phase','In-Combat Buffs 1','In-Combat Buffs 2'].include?(q[3])}
@@ -2641,9 +2642,9 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
   args=args.map{|q| q.downcase.gsub('(','').gsub(')','')}
   stat_skills=[]
   lookout=[]
-  if File.exist?('FEHStatSkills.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
     lookout=[]
-    File.open('FEHStatSkills.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
       lookout.push(eval line)
     end
     lookout=lookout.reject{|q| q[3]!='Stat-Affecting 1'}
@@ -2657,9 +2658,9 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
   args=event.message.text.downcase.split(' ') # reobtain args without the reformatting caused by the sever function
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }.map{|q| q.gsub('(','').gsub(')','')} # remove any mentions included in the inputs
   lookout=[]
-  if File.exist?('FEHStatSkills.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
     lookout=[]
-    File.open('FEHStatSkills.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
       lookout.push(eval line)
     end
     lookout=lookout.reject{|q| q[3]!='Stat-Affecting 2'}
@@ -2691,9 +2692,9 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
   args=args.map{|q| q.gsub('(','').gsub(')','').downcase}
   stat_skills_2=[]
   lookout=[]
-  if File.exist?('FEHStatSkills.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
     lookout=[]
-    File.open('FEHStatSkills.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
       lookout.push(eval line)
     end
     lookout=lookout.reject{|q| q[3]!='Stat-Buffing 1' && q[3]!='Stat-Nerfing 1'}
@@ -2722,9 +2723,9 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
   # Only the first eight - was six until Rival Domains was released - Hone/Fortify skills are allowed, as that's the most that can apply to the unit at once.
   # Tactic skills stack with this list's limit, but allow up to fourteen to be applied
   lookout=[]
-  if File.exist?('FEHStatSkills.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
     lookout=[]
-    File.open('FEHStatSkills.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
       lookout.push(eval line)
     end
     lookout=lookout.reject{|q| q[3]!='Stat-Buffing 2' && q[3]!='Stat-Nerfing 2'}
@@ -2748,9 +2749,9 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
   end
   # Rally skills not stacking with themselves is handled in the apply_stat_skills function, so 'unaccepted' duplication is allowed.
   lookout=[]
-  if File.exist?('FEHStatSkills.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
     lookout=[]
-    File.open('FEHStatSkills.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
       lookout.push(eval line)
     end
     lookout=lookout.reject{|q| q[3]!='Stat-Buffing 3' && q[3]!='Stat-Nerfing 3'}
@@ -2770,9 +2771,9 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
   args=args.map{|q| q.gsub('(','').gsub(')','').downcase}
   stat_skills_3=[]
   lookout=[]
-  if File.exist?('FEHStatSkills.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
     lookout=[]
-    File.open('FEHStatSkills.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
       lookout.push(eval line)
     end
     lookout=lookout.reject{|q| q[3]!='Enemy Phase' && q[3]!='Player Phase' && q[3]!='In-Combat Buffs 1'}
@@ -2801,9 +2802,9 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
   # Only the first eight Spur/Goad/Ward skills are allowed, as that's the most that can apply to the unit at once.
   # Tactic skills stack with this list's limit, but allow up to fourteen to be applied
   lookout=[]
-  if File.exist?('FEHStatSkills.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
     lookout=[]
-    File.open('FEHStatSkills.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
       lookout.push(eval line)
     end
     lookout=lookout.reject{|q| q[3]!='In-Combat Buffs 2'}
@@ -3042,9 +3043,9 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   stat_buffers=[]
   stat_nerfers=[]
   lookout=[]
-  if File.exist?('FEHStatSkills.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
     lookout=[]
-    File.open('FEHStatSkills.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
       lookout.push(eval line)
     end
     lookout=lookout.reject{|q| q[3]!='Stat-Buffing 1' && q[3]!='Stat-Nerfing 1'}
@@ -3972,9 +3973,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     end
   end
   lookout=[]
-  if File.exist?('FEHSkillSubsets.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
     lookout=[]
-    File.open('FEHSkillSubsets.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
       lookout.push(eval line)
     end
   end
@@ -3995,7 +3996,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   if skill[4]=='Weapon' && (" #{event.message.text.downcase} ".include?(' refinement ') || " #{event.message.text.downcase} ".include?(' refinements ') || " #{event.message.text.downcase} ".include?(' (w) '))
     if skill[0]=='Falchion'
       disp_skill(bot,'Drive Spectrum',event,ignore)
-      disp_skill(bot,'Double Lion',event,ignore)
+      disp_skill(bot,'Brave Falchion',event,ignore)
       disp_skill(bot,'Spectrum Bond',event,ignore)
       return true
     elsif find_effect_name(skill,event).length>0
@@ -4393,9 +4394,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     str="#{str}\n\n**Gained via Effect Mode on:** #{eff.join(', ')}" if eff.length>0
   end
   lookoutx=[]
-  if File.exist?('FEHStatSkills.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
     lookoutx=[]
-    File.open('FEHStatSkills.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
       lookoutx.push(eval line)
     end
   end
@@ -5605,9 +5606,9 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   games=[]
   supernatures=[]
   lookout=[]
-  if File.exist?('FEHGames.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
     lookout=[]
-    File.open('FEHGames.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt').each_line do |line|
       lookout.push(eval line)
     end
   end
@@ -5928,9 +5929,9 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     passives.push('W') if ['w','wpassives','wpassive','passivew','passivesw','w_passives','w_passive','passive_w','passives_w'].include?(args[i].downcase)
   end
   lookout=[]
-  if File.exist?('FEHSkillSubsets.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
     lookout=[]
-    File.open('FEHSkillSubsets.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
       lookout.push(eval line)
     end
   end
@@ -6631,9 +6632,9 @@ def longFormattedNumber(number,cardinal=false)
 end
 
 def get_bond_name(event)
-  if File.exist?('FEHBondNames.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBondNames.txt')
     b=[]
-    File.open('FEHBondNames.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBondNames.txt').each_line do |line|
       b.push(line)
     end
   else
@@ -6647,9 +6648,9 @@ end
 def get_games_list(arr,includefeh=true)
   g=[]
   lookout=[]
-  if File.exist?('FEHGames.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
     lookout=[]
-    File.open('FEHGames.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt').each_line do |line|
       lookout.push(eval line)
     end
   end
@@ -6971,6 +6972,18 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str="#{str}ura"
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Azura(Performing)','Azura(Winter)'],[str]]
+  elsif /(ephr(ai|ia)m|efuramu)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
+    str='ephraim'
+    str='efuramu' if str2.include?('efuramu')
+    str='ephriam' if str2.include?('ephriam')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('legendary') || str2.include?('fire')
+      return [str,['Ephraim(Fire)'],["legendary#{str}","#{str}legendary","fire#{str}","#{str}fire"]]
+    elsif str2.include?('brave') || str2.include?('cyl')
+      return [str,['Ephraim(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
+    end
+    return [str,['Ephraim(Fire)','Ephraim(Brave)'],[str]]
   elsif /(hector|kektor|heckutoru)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
     str='hector'
     str='kektor' if str2.include?('kektor')
@@ -7892,9 +7905,9 @@ def sort_legendaries(event,bot,mode=0)
   t-=60*60*timeshift
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
   b=[]
-  if File.exist?('FEHBanners.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
     b=[]
-    File.open('FEHBanners.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
       b.push(line.gsub("\n",''))
     end
   else
@@ -9767,9 +9780,9 @@ def banner_list(event,name,bot,weapon=nil)
     return nil
   end
   b=[]
-  if File.exist?('FEHBanners.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
     b=[]
-    File.open('FEHBanners.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
       b.push(line.gsub("\n",''))
     end
   else
@@ -11198,9 +11211,9 @@ bot.command([:bst, :BST]) do |event, *args|
   au=0
   b=[]
   counters=[]
-  if File.exist?('FEHEmblemTeams.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHEmblemTeams.txt')
     counters=[]
-    File.open('FEHEmblemTeams.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHEmblemTeams.txt').each_line do |line|
       counters.push(eval line)
     end
   end
@@ -11877,7 +11890,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   end
   @aliases.uniq!
   nzzz=@aliases.map{|a| a}
-  open('FEHNames.txt', 'w') { |f|
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
     for i in 0...nzzz.length
       f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
     end
@@ -11886,7 +11899,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   nzzz=@aliases.map{|a| a}
   if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][1]>='Zephiel'
     bot.channel(logchn).send_message('Alias list saved.')
-    open('FEHNames2.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...nzzz.length
         f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
       end
@@ -12054,7 +12067,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
   srvname='PM with dev'
   srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
   bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**Alias:** #{name} for #{@units[j][0]}~~ **DELETED**.")
-  open('FEHNames.txt', 'w') { |f|
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
     for i in 0...@aliases.length
       f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
     end
@@ -12064,7 +12077,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
   nzzz=@aliases.map{|a| a}
   if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][1]>="Zephiel"
     bot.channel(logchn).send_message("Alias list saved.")
-    open('FEHNames2.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...nzzz.length
         f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
       end
@@ -12145,7 +12158,7 @@ bot.command(:addgroup) do |event, groupname, *args|
   end
   @groups.uniq!
   @groups.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? (a[2][0] <=> b[2][0]) : (a[0].downcase <=> b[0].downcase)}
-  open('FEHGroups.txt', 'w') { |f|
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt', 'w') { |f|
     for i in 0...@groups.length
       f.puts "#{@groups[i].to_s}#{"\n" if i<@groups.length-1}"
     end
@@ -12159,7 +12172,7 @@ bot.command(:addgroup) do |event, groupname, *args|
   nzzz=@groups.map{|a| a}
   if nzzz[nzzz.length-1].length>0 && nzzz[nzzz.length-1][0]>='Tempest'
     bot.channel(logchn).send_message('Group list saved.')
-    open('FEHGroups2.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups2.txt', 'w') { |f|
       for i in 0...nzzz.length
         f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
       end
@@ -12255,7 +12268,7 @@ bot.command([:deletegroup,:removegroup]) do |event, name|
   srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
   bot.channel(logchn).send_message("**Server:** #{srvname} (#{k})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**Group:** #{name}~~\n**DELETED**")
   @groups.compact!
-  open('FEHGroups.txt', 'w') { |f|
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt', 'w') { |f|
     for i in 0...@groups.length
       f.puts "#{@groups[i].to_s}#{"\n" if i<@groups.length-1}"
     end
@@ -12264,7 +12277,7 @@ bot.command([:deletegroup,:removegroup]) do |event, name|
   nzzz=@groups.map{|a| a}
   if nzzz[nzzz.length-1].length>0 && nzzz[nzzz.length-1][0]>='Tempest'
     bot.channel(logchn).send_message('Group list saved.')
-    open('FEHGroups2.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups2.txt', 'w') { |f|
       for i in 0...nzzz.length
         f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
       end
@@ -12325,7 +12338,7 @@ bot.command([:removemember,:removefromgroup]) do |event, group, unit|
     else
       bot.channel(logchn).send_message("**Server:** #{srvname} (#{k})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Group:** #{@groups[j][0]}\n**Units removed:** #{@units[i][0]}")
     end
-    open('FEHGroups.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt', 'w') { |f|
       for i in 0...@groups.length
         f.puts "#{@groups[i].to_s}#{"\n" if i<@groups.length-1}"
       end
@@ -12334,7 +12347,7 @@ bot.command([:removemember,:removefromgroup]) do |event, group, unit|
     nzzz=@groups.map{|a| a}
     if nzzz[nzzz.length-1].length>0 && nzzz[nzzz.length-1][0]>='Tempest'
       bot.channel(logchn).send_message('Group list saved.')
-      open('FEHGroups2.txt', 'w') { |f|
+      open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups2.txt', 'w') { |f|
         for i in 0...nzzz.length
           f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
         end
@@ -12413,7 +12426,7 @@ bot.command([:sort,:list]) do |event, *args|
     groups_load()
     @groups.uniq!
     @groups.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? (a[2][0] <=> b[2][0]) : (a[0].downcase <=> b[0].downcase)}
-    open('FEHGroups.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt', 'w') { |f|
       for i in 0...@aliases.length
         f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
       end
@@ -12425,14 +12438,14 @@ bot.command([:sort,:list]) do |event, *args|
     nicknames_load()
     @aliases.uniq!
     @aliases.sort! {|a,b| (a[1].downcase <=> b[1].downcase) == 0 ? (a[0].downcase <=> b[0].downcase) : (a[1].downcase <=> b[1].downcase)}
-    open('FEHNames.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
       for i in 0...@aliases.length
         f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
       end
     }
     @multi_aliases.uniq!
     @multi_aliases.sort! {|a,b| (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase}) == 0 ? (a[0].downcase <=> b[0].downcase) : (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase})}
-    open('FEHMultiNames.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt', 'w') { |f|
       for i in 0...@multi_aliases.length
         f.puts "#{@multi_aliases[i].to_s}#{"\n" if i<@multi_aliases.length-1}"
       end
@@ -13134,9 +13147,9 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     str2="#{str2}, 300<:Hero_Feather:471002465542602753> reward"
   end
   b=[]
-  if File.exist?('FEHBanners.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
     b=[]
-    File.open('FEHBanners.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
       b.push(line.gsub("\n",''))
     end
   else
@@ -13151,9 +13164,9 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   end
   b.compact!
   c=[]
-  if File.exist?('FEHEvents.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt')
     c=[]
-    File.open('FEHEvents.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt').each_line do |line|
       c.push(line.gsub("\n",''))
     end
   else
@@ -13498,7 +13511,7 @@ bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddu
   end
   @multi_aliases.uniq!
   @multi_aliases.sort! {|a,b| (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase}) == 0 ? (a[0].downcase <=> b[0].downcase) : (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase})}
-  open('FEHMultiNames.txt', 'w') { |f|
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt', 'w') { |f|
     for i in 0...@multi_aliases.length
       f.puts "#{@multi_aliases[i].to_s}#{"\n" if i<@multi_aliases.length-1}"
     end
@@ -13527,7 +13540,7 @@ bot.command([:deletemultialias,:deletedualalias,:deletemultiunitalias,:deletedua
   bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**Multi-unit alias:** #{multi}~~\n**DELETED**")
   @multi_aliases.uniq!
   @multi_aliases.sort! {|a,b| (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase}) == 0 ? (a[0].downcase <=> b[0].downcase) : (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase})}
-  open('FEHMultiNames.txt', 'w') { |f|
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt', 'w') { |f|
     for i in 0...@multi_aliases.length
       f.puts "#{@multi_aliases[i].to_s}#{"\n" if i<@multi_aliases.length-1}"
     end
@@ -13581,7 +13594,7 @@ bot.command([:removefrommultialias,:removefromdualalias,:removefrommultiunitalia
     end
     @multi_aliases.uniq!
     @multi_aliases.sort! {|a,b| (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase}) == 0 ? (a[0].downcase <=> b[0].downcase) : (a[1].map{|q| q.downcase} <=> b[1].map{|q| q.downcase})}
-    open('FEHMultiNames.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt', 'w') { |f|
       for i in 0...@multi_aliases.length
         f.puts "#{@multi_aliases[i].to_s}#{"\n" if i<@multi_aliases.length-1}"
       end
@@ -13680,7 +13693,7 @@ bot.command(:cleanupaliases, from: 167657750971547648) do |event|
     end
   end
   nmz.compact!
-  open('FEHNames.txt', 'w') { |f|
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
     for i in 0...nmz.length
       f.puts "#{nmz[i].to_s}#{"\n" if i<nmz.length-1}"
     end
@@ -13704,7 +13717,7 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
       return nil
     end
     nzzzzz=@aliases.map{|a| a}
-    open('FEHNames2.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...nzzzzz.length
         f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
       end
@@ -13713,7 +13726,7 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
   elsif ['groups','group'].include?(trigger.downcase)
     groups_load()
     nzzzzz=@groups.map{|a| a}
-    open('FEHGroups2.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups2.txt', 'w') { |f|
       for i in 0...nzzzzz.length
         f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
       end
@@ -13732,9 +13745,9 @@ bot.command(:restore, from: 167657750971547648) do |event, trigger|
   if trigger.nil?
     event.respond 'Restore what?'
   elsif ['aliases','alias'].include?(trigger.downcase)
-    if File.exist?('FEHNames2.txt')
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt')
       b=[]
-      File.open('FEHNames2.txt').each_line do |line|
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt').each_line do |line|
         b.push(eval line)
       end
     else
@@ -13743,9 +13756,9 @@ bot.command(:restore, from: 167657750971547648) do |event, trigger|
     nzzzzz=b.uniq
     if nzzzzz[nzzzzz.length-1][1]<'Zephiel'
       event << 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
-      if File.exist?('FEHNames3.txt')
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
         b=[]
-        File.open('FEHNames3.txt').each_line do |line|
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt').each_line do |line|
           b.push(eval line)
         end
       else
@@ -13755,16 +13768,16 @@ bot.command(:restore, from: 167657750971547648) do |event, trigger|
     else
       event << 'Last backup of the alias list being used.'
     end
-    open('FEHNames.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
       for i in 0...nzzzzz.length
         f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
       end
     }
     event << 'Alias list has been restored from backup.'
   elsif ['groupes','group'].include?(trigger.downcase)
-    if File.exist?('FEHGroups2.txt')
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups2.txt')
       b=[]
-      File.open('FEHGroups2.txt').each_line do |line|
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups2.txt').each_line do |line|
         b.push(eval line)
       end
     else
@@ -13773,9 +13786,9 @@ bot.command(:restore, from: 167657750971547648) do |event, trigger|
     nzzzzz=b.uniq
     if nzzzzz.length<10
       event << 'Last backup of the group list has been corrupted.  Restoring from manually-created backup.'
-      if File.exist?('FEHGroups3.txt')
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups3.txt')
         b=[]
-        File.open('FEHGroups3.txt').each_line do |line|
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups3.txt').each_line do |line|
           b.push(eval line)
         end
       else
@@ -13785,7 +13798,7 @@ bot.command(:restore, from: 167657750971547648) do |event, trigger|
     else
       event << 'Last backup of the group list being used.'
     end
-    open('FEHGroups.txt', 'w') { |f|
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt', 'w') { |f|
       for i in 0...nzzzzz.length
         f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
       end
@@ -14154,7 +14167,7 @@ bot.command(:snagstats) do |event, f, f2|
   all_skills=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
   legal_skills=@skills.reject{|q| !q[13].nil?}
   b=[]
-  File.open('PriscillaBot.rb').each_line do |line|
+  File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
     l=line.gsub(' ','').gsub("\n",'')
     b.push(l) unless l.length<=0
   end
@@ -14396,13 +14409,13 @@ bot.command(:snagstats) do |event, f, f2|
   elsif ['code','lines','line','sloc'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',3)
     b=[[],[]]
-    File.open('PriscillaBot.rb').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
       l=line.gsub("\n",'')
       b[0].push(l)
       l=line.gsub("\n",'').gsub(' ','')
       b[1].push(l) unless l.length<=0
     end
-    event << "**I am #{longFormattedNumber(File.foreach("PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long.**"
+    event << "**I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long.**"
     event << "Of those, #{longFormattedNumber(b[1].length)} are SLOC (non-empty)."
     event << "~~When fully collapsed, I appear to be #{longFormattedNumber(b[0].reject{|q| q.length>0 && (q[0,2]=='  ' || q[0,3]=='end' || q[0,4]=='else')}.length)} lines of code long.~~"
     event << ''
@@ -14480,7 +14493,7 @@ bot.command(:snagstats) do |event, f, f2|
   event << ''
   event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific *groups*."
   event << ''
-  event << "I am #{longFormattedNumber(File.foreach("PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of *code* long."
+  event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of *code* long."
   event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
   return nil
 end
@@ -14591,7 +14604,7 @@ bot.message do |event|
     a=str.split(' ')
     if a[0].downcase=='reboot'
       event.respond 'Becoming Robin.  Please wait approximately ten seconds...'
-      exec 'feindex.rb 4'
+      exec 'cd C:/Users/Mini-Matt/Desktop/devkit && feindex.rb 4'
     else
       event.respond 'I am not Robin right now.  Please use `FE!reboot` to turn me into Robin.'
     end
@@ -14799,9 +14812,9 @@ def disp_current_events(mode=0)
   str2="__**#{'Current' if mode>0}#{'Future' if mode<0} #{['','Banners','Events'][m]}**__"
   if [1,-1].include?(mode) # current/future banners
     b=[]
-    if File.exist?('FEHBanners.txt')
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
       b=[]
-      File.open('FEHBanners.txt').each_line do |line|
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
         b.push(line.gsub("\n",''))
       end
     else
@@ -14834,9 +14847,9 @@ def disp_current_events(mode=0)
   elsif [2,-2].include?(mode) # current/future events
     mode/=2
     c=[]
-    if File.exist?('FEHEvents.txt')
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt')
       c=[]
-      File.open('FEHEvents.txt').each_line do |line|
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt').each_line do |line|
         c.push(line.gsub("\n",''))
       end
     else
@@ -15061,7 +15074,7 @@ def next_holiday(bot,mode=0)
     if k.length==1
       # Only one holiday is today.  Display new avatar, and set another check for midnight
       bot.game=k[0][4]
-      bot.profile.avatar=(File.open("EliseImages/#{k[0][3]}.png",'r')) rescue nil
+      bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[0][3]}.png",'r')) rescue nil
       t2= Time.now + 18*60*60
       t=Time.now
       @scheduler.at "#{t2.year}/#{t2.month}/#{t2.day} 0000" do
@@ -15073,7 +15086,7 @@ def next_holiday(bot,mode=0)
       if t.hour>fcod[0] || (t.hour==fcod[0] && t.min>=fcod[1])
         # in last area of day.  Set avatar to the last one for the day, then set a check for tomorrow at midnight
         bot.game=k[k.length-1][4]
-        bot.profile.avatar=(File.open("EliseImages/#{k[k.length-1][3]}.png",'r')) rescue nil
+        bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[k.length-1][3]}.png",'r')) rescue nil
         t2= Time.now + 18*60*60
         t=Time.now
         @scheduler.at "#{t2.year}/#{t2.month}/#{t2.day} 0000" do
@@ -15089,7 +15102,7 @@ def next_holiday(bot,mode=0)
         end
         # ...set avatar properly and set check for the beginning of the next chunk of the day
         bot.game=k[j][4]
-        bot.profile.avatar=(File.open("EliseImages/#{k[j][3]}.png",'r')) rescue nil
+        bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[j][3]}.png",'r')) rescue nil
         t=Time.now
         t-=60*60*6
         @scheduler.at "#{t.year}/#{t.month}/#{t.day} #{div[k.length][j+1][0].to_s.rjust(2, '0')}#{div[k.length][j+1][1].to_s.rjust(2, '0')}" do
@@ -15102,9 +15115,9 @@ def next_holiday(bot,mode=0)
     t=Time.now
     t-=60*60*6
     if [6,7,8].include?(t.month)
-      bot.profile.avatar=(File.open('Elise(Summer).png','r')) rescue nil
+      bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/Elise(Summer).png','r')) rescue nil
     else
-      bot.profile.avatar=(File.open('BaseElise.jpg','r')) rescue nil
+      bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/BaseElise.jpg','r')) rescue nil
     end
     @scheduler.at "#{k[0][0]}/#{k[0][1]}/#{k[0][2]} 0000" do
       next_holiday(bot,1)
@@ -15124,18 +15137,18 @@ bot.ready do |event|
   system("color 5#{"7CBAE"[@shardizard,1]}")
   system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
   bot.game="Loading, please wait..." if @shardizard.zero?
-  if File.exist?('FEHNames.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
     b=[]
-    File.open('FEHNames.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt').each_line do |line|
       b.push(eval line)
     end
   else
     b=[]
   end
   @aliases=b
-  if File.exist?('FEHGroups.txt')
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt')
     b=[]
-    File.open('FEHGroups.txt').each_line do |line|
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt').each_line do |line|
       b.push(eval line)
     end
   else
@@ -15155,12 +15168,14 @@ bot.ready do |event|
   system("color e#{"04126"[@shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
   bot.game='Fire Emblem Heroes' if [0,4].include?(@shardizard)
-  if @shardizard.zero?
+  if @shardizard<4
+    bot.game="My dev needs your help! https://goo.gl/DkHA9h"
+  elsif @shardizard.zero?
     next_holiday(bot)
     puts 'Avatar loaded'
   elsif @shardizard==4
     bot.user(bot.profile.id).on(285663217261477889).nickname='EliseBot (Debug)'
-    bot.profile.avatar=(File.open('DebugElise.png','r'))
+    bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r'))
   end
 end
 
