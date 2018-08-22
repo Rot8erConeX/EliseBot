@@ -6340,6 +6340,7 @@
 ["BraveVeronika", "Veronica(Brave)"]
 ["CYLVeronica", "Veronica(Brave)"]
 ["CYLVeronika", "Veronica(Brave)"]
+["Veonica", "Veronica(Brave)", [295686580528742420]]
 ["VeronicaAB", "Veronica(Brave)"]
 ["VeronicaBH", "Veronica(Brave)"]
 ["VeronicaBrave", "Veronica(Brave)"]
