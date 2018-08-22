@@ -52,7 +52,8 @@ bot.gateway.check_heartbeat_acks = false
 @summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,
                  341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,238770788272963585,297459718249512961,283833293894582272,
                  214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,347491426852143109,392557615177007104,295686580528742420,
-                 412303462764773376,442465051371372544,353997181193289728,462100851864109056,337397338823852034,446111983155150875,295001062790660097]
+                 412303462764773376,442465051371372544,353997181193289728,462100851864109056,337397338823852034,446111983155150875,295001062790660097,328109510449430529,
+                 305889949574496257]
 @summon_rate=[0,0,3]
 @spam_channels=[]
 @mods=[[0, 6, 7, 7, 8, 8], # this is a translation of the graphic displayed in the "growths" command.
@@ -9125,17 +9126,17 @@ def proc_study(event,name,bot,weapon=nil)
   d="#{atkk*3/10+wdamage}#{" (#{blatkk*3/10+wdamage})" unless atkk*3/10==blatkk*3/10}"
   cd="#{cratkk*3/10+wdamage2}#{" (#{crblatkk*3/10+wdamage2})" unless cratkk*3/10==crblatkk*3/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[6].push("Dragon Gaze - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  staves[6].push("Dragon Gaze - Up to #{d} when against color-neutral, cooldown of #{c}") if event.message.text.downcase.include?(" all")
   c=add_number_to_string(get_match_in_list(procs, 'Draconic Aura')[2],cdwns)
   d="#{atkk*3/10+wdamage}#{" (#{blatkk*3/10+wdamage})" unless atkk*3/10==blatkk*3/10}"
   cd="#{cratkk*3/10+wdamage2}#{" (#{crblatkk*3/10+wdamage2})" unless cratkk*3/10==crblatkk*3/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[6].push("Draconic Aura - #{d}, cooldown of #{c}")
+  staves[6].push("Draconic Aura - Up to and #{d} when against color-neutral, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Dragon Fang')[2],cdwns)
   d="#{atkk/2+wdamage}#{" (#{blatkk/2+wdamage})" unless atkk/2==blatkk/2}"
   cd="#{cratkk/2+wdamage2}#{" (#{crblatkk/2+wdamage2})" unless cratkk/2==crblatkk/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[6].push("Dragon Fang - #{d}, cooldown of #{c}")
+  staves[6].push("Dragon Fang - Up to and #{d} when against color-neutral, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Retribution')[2],cdwns)
   d="#{3*hppp/10+wdamage}#{" (#{3*blhppp/10+wdamage})" if 3*hppp/10!=3*blhppp/10}"
   cd="#{3*crhppp/10+wdamage2}#{" (#{3*crblhppp/10+wdamage2})" if 3*crhppp/10!=3*crblhppp/10}"
@@ -9162,7 +9163,7 @@ def proc_study(event,name,bot,weapon=nil)
     end
     event.respond s
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,[["Star",staves[0].join("\n"),1],["Moon",staves[1].join("\n")],["Sun",staves[2].join("\n")],["Eclipse",staves[3].join("\n"),1],['Fire',staves[4].join("\n")],["Ice",staves[5].join("\n")],["Dragon",staves[6].join("\n"),1],["Darkness",staves[7].join("\n")]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,[["<:Special_Offensive_Star:454473651396542504>Star",staves[0].join("\n"),1],["<:Special_Offensive_Moon:454473651345948683>Moon",staves[1].join("\n")],["<:Special_Offensive_Sun:454473651429965834>Sun",staves[2].join("\n")],["<:Special_Offensive_Eclipse:454473651308199956>Eclipse",staves[3].join("\n"),1],["<:Special_Offensive_Fire:454473651861979156>Fire",staves[4].join("\n")],["<:Special_Offensive_Ice:454473651291422720>Ice",staves[5].join("\n")],["<:Special_Offensive_Dragon:454473651186696192>Dragon",staves[6].join("\n"),1],["<:Special_Offensive_Darkness:454473651010535435>Darkness",staves[7].join("\n")]])
   end
 end
 
