@@ -10848,6 +10848,10 @@ bot.command(:summon) do |event, *colors|
     event.respond 'This command is unavailable in this channel.  Please go to <#377526015939051520>.'
   elsif event.server.id==330850148261298176 && event.channel.id != 330851389104455680
     event.respond 'This command is unavailable in this channel.  Please go to <#330851389104455680>.'
+  elsif event.server.id==328109510449430529 && event.channel.id != 328136987804565504
+    event.respond 'This command is unavailable in this channel.  Please go to <#328136987804565504>.'
+  elsif event.server.id==305889949574496257 && event.channel.id != 460903186773835806
+    event.respond 'This command is unavailable in this channel.  Please go to <#460903186773835806>.'
   elsif event.server.id==271642342153388034 && event.channel.id != 312736133203361792
     event.respond 'This command is unavailable in this channel.  Please go to <#312736133203361792>.'
   else
