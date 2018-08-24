@@ -2836,7 +2836,7 @@ def pick_thumbnail(event,j,bot) # used to choose the thumbnail used by most embe
   data_load()
   d=@units[j]
   return 'http://vignette.wikia.nocookie.net/fireemblem/images/0/04/Kiran.png' if d[0]=='Kiran'
-  return bot.user(d[13][1]).avatar_url if d.length>13 && !d[13].nil? && !d[13][1].nil? && d[13][1].is_a?(Integer)
+  return bot.user(d[13][1]).avatar_url if d.length>13 && !d[13].nil? && !d[13][1].nil? && d[13][1].is_a?(Integer) && !bot.user(d[13][1]).nil?
   return 'https://cdn.discordapp.com/emojis/418140222530912256.png' if d[0]=='Nino(Launch)' && (event.message.text.downcase.include?('face') || rand(100).zero?)
   return 'https://cdn.discordapp.com/emojis/420339780421812227.png' if d[0]=='Amelia' && (event.message.text.downcase.include?('face') || rand(1000).zero?)
   return 'https://cdn.discordapp.com/emojis/420339781524783114.png' if d[0]=='Reinhardt(Bonds)' && (event.message.text.downcase.include?('grin') || rand(100).zero?)
