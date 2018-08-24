@@ -14529,25 +14529,6 @@ bot.command(:reload, from: 167657750971547648) do |event|
   event.respond 'New data loaded.'
 end
 
-bot.command(:floop, from: 167657750971547648) do |event|
-  return nil if overlap_prevent(event)
-  return nil unless event.user.id==167657750971547648
-  event.channel.send_temporary_message('Loading.  Please wait...',3)
-  data_load()
-  skz=@skills.reject{|q| ['Weapon','Assist','Special','Seal','Passive(W)'].include?(q[4])}
-  m=[]
-  for i in 0...skz.length
-    f=skz[i][10][0].split(', ')
-    for i2 in 0...f.length
-      m.push(f[i2])
-    end
-  end
-  g=get_markers(event)
-  matches0=@units.reject{|q| !has_any?(g, q[13][0]) || q[9][0]=='-' || q[1][1]=='Healer' || m.include?(q[0])}.map{|q| q[0]}.uniq
-  puts matches0
-  create_embed(event,'',"Characters without a passive at 1*:",0x40C0F0,nil,nil,triple_finish(matches0))
-end
-
 def skill_data(legal_skills,all_skills,event,mode=0)
   str="**There are #{filler(legal_skills,all_skills,-1)} #{['skills','skill branches','skill trees'][mode]}, including:**"
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
