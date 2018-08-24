@@ -3584,8 +3584,16 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
   args.compact!
   if name.nil?
     if args.nil? || args.length<1
-      event.respond 'No unit was included' unless ignore
-      return nil
+      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        event.respond 'No unit was included' unless ignore
+        return nil
+      else
+        event.channel.send_embed("__**No unit was included.  Have a smol me instead.**__") do |embed|
+          embed.color = 0xD49F61
+          embed.image = Discordrb::Webhooks::EmbedImage.new(url: "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Smol_Elise.jpg")
+          embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: "image source", url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=58900377")
+        end
+      end
     end
   end
   untz=@units.map{|q| q}
@@ -3681,7 +3689,16 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
     wl=weapon_legality(event,unitz[0],weapon,nil)
   end
   if find_unit(name,event)<0
-    event.respond 'No unit was included' unless ignore
+    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      event.respond 'No unit was included' unless ignore
+      return nil
+    else
+      event.channel.send_embed("__**No unit was included.  Have a smol me instead.**__") do |embed|
+        embed.color = 0xD49F61
+        embed.image = Discordrb::Webhooks::EmbedImage.new(url: "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Smol_Elise.jpg")
+        embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: "image source", url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=58900377")
+      end
+    end
     return nil
   elsif unitz[0]=='Kiran'
     data_load()
@@ -11646,6 +11663,12 @@ bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstat
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.nil?
       disp_tiny_stats(bot,x[1],w,event,true)
+    elsif !@embedless.include?(event.user.id) && !was_embedless_mentioned?(event)
+      event.channel.send_embed("__**No matches found.  Have a smol me instead.**__") do |embed|
+        embed.color = 0xD49F61
+        embed.image = Discordrb::Webhooks::EmbedImage.new(url: "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Smol_Elise.jpg")
+        embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: "image source", url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=58900377")
+      end
     else
       event.respond 'No matches found.'
     end
