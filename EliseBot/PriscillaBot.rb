@@ -1048,7 +1048,7 @@ end
 def is_mod?(user,server,channel) # used by certain commands to determine if a user can use them
   return true if user.id==167657750971547648 # bot developer is always an EliseMod
   return false if server.nil? # no one is a EliseMod in PMs
-  return true if [188781153589657600].include?(user.id) # people who donate to the laptop fund will always be EliseMods
+  return true if [188781153589657600,480785838129545217,210900237823246336,175150098357944330].include?(user.id) # people who donate to the laptop fund will always be EliseMods
   return true if user.id==server.owner.id # server owners are EliseMods by default
   for i in 0...user.roles.length # certain role names will count as EliseMods even if they don't have legitimate mod powers
     return true if ['mod','mods','moderator','moderators','admin','admins','administrator','administrators','owner','owners'].include?(user.roles[i].name.downcase.gsub(' ',''))
@@ -1899,7 +1899,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
           end
         end
         i=xfields.length-1
-        event << "**#{xfields[i][0]}:**"
+        str="#{str}\n**#{xfields[i][0]}:**"
         m=xfields[i][1].split("\n\n").map{|q| q.split("\n")}
         for i in 0...m.length
           if m[i].length<=1
@@ -14529,6 +14529,25 @@ bot.command(:reload, from: 167657750971547648) do |event|
   event.respond 'New data loaded.'
 end
 
+bot.command(:floop, from: 167657750971547648) do |event|
+  return nil if overlap_prevent(event)
+  return nil unless event.user.id==167657750971547648
+  event.channel.send_temporary_message('Loading.  Please wait...',3)
+  data_load()
+  skz=@skills.reject{|q| ['Weapon','Assist','Special','Seal','Passive(W)'].include?(q[4])}
+  m=[]
+  for i in 0...skz.length
+    f=skz[i][10][0].split(', ')
+    for i2 in 0...f.length
+      m.push(f[i2])
+    end
+  end
+  g=get_markers(event)
+  matches0=@units.reject{|q| !has_any?(g, q[13][0]) || q[9][0]=='-' || q[1][1]=='Healer' || m.include?(q[0])}.map{|q| q[0]}.uniq
+  puts matches0
+  create_embed(event,'',"Characters without a passive at 1*:",0x40C0F0,nil,nil,triple_finish(matches0))
+end
+
 def skill_data(legal_skills,all_skills,event,mode=0)
   str="**There are #{filler(legal_skills,all_skills,-1)} #{['skills','skill branches','skill trees'][mode]}, including:**"
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
@@ -14787,6 +14806,81 @@ bot.mention do |event|
     data_load()
     disp_skill(bot,a.join(' '),event,false,true)
     k=1
+  elsif ['stats','stat'].include?(a[0].downcase)
+    event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+    k=find_name_in_string(event,nil,1)
+    if k.nil?
+      w=nil
+      if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
+        event.respond "Steel's waifu is not in the game."
+      elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
+        event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
+      elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+        x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+        k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
+        w=k2[0] unless k2.nil?
+        disp_stats(bot,x[1],w,event,true)
+      else
+        event.respond 'No matches found.'
+      end
+      return nil
+    end
+    str=k[0]
+    k2=get_weapon(first_sub(a.join(' '),k[1],''),event)
+    w=nil
+    w=k2[0] unless k2.nil?
+    data_load()
+    if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
+      disp_stats(bot,x[1],w,event,true)
+    elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
+      x=detect_multi_unit_alias(event,str.downcase,str.downcase)
+      disp_stats(bot,x[1],w,event,true)
+    elsif find_unit(str,event)>=0
+      disp_stats(bot,str,w,event)
+    else
+      event.respond 'No matches found'
+    end
+    k=1
+  elsif ['skills','fodder'].include?(a[0].downcase)
+    k=find_name_in_string(event,nil,1)
+    if k.nil?
+      if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
+        event.respond "Steel's waifu is not in the game."
+      elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
+        event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
+      elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+        x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+        disp_unit_skills(bot,x[1],event)
+      elsif s.downcase[0,6]=='skills'
+        event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill',1)}```, without the s."
+      else
+        event.respond 'No matches found.  Please note that the `fodder` command is for listing the skills you can fodder a **unit** for, not the units you need to fodder to get a skill.'
+      end
+      return nil
+    end
+    str=k[0]
+    data_load()
+    if str.nil?
+    elsif !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
+      disp_unit_skills(bot,x[1],event)
+    elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
+      x=detect_multi_unit_alias(event,str.downcase,str.downcase)
+      disp_unit_skills(bot,x[1],event)
+    elsif find_unit(str,event)>=0
+      disp_unit_skills(bot,str,event)
+    elsif event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
+      event.respond "Steel's waifu is not in the game."
+    elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
+      event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
+    else
+      event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s."
+    end
+    k=1
+  elsif ['skill'].include?(a[0].downcase)
+    data_load()
+    disp_skill(bot,a.join(' '),event)
   end
   if k<0
     str=find_name_in_string(event,nil,1)
@@ -15220,9 +15314,7 @@ bot.ready do |event|
   system("color e#{"04126"[@shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
   bot.game='Fire Emblem Heroes' if [0,4].include?(@shardizard)
-  if @shardizard<4
-    bot.game="My dev needs your help! https://goo.gl/DkHA9h"
-  elsif @shardizard.zero?
+  if @shardizard.zero?
     next_holiday(bot)
     puts 'Avatar loaded'
   elsif @shardizard==4
