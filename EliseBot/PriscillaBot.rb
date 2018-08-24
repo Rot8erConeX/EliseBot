@@ -9592,7 +9592,7 @@ def disp_art(event,name,bot,weapon=nil)
   artype='BtlFace_D' if args.include?('damage') || args.include?('damaged') || (args.include?('low') && (args.include?('health') || args.include?('hp'))) || args.include?('lowhealth') || args.include?('lowhp') || args.include?('low_health') || args.include?('low_hp')
   artype='BtlFace_C' if args.include?('critical') || args.include?('special') || args.include?('crit') || args.include?('proc')
   art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{j[0]}/#{artype}.png"
-  if j[0]=='Reinhardt(World)' && (rand(100).zero? || event.message.text.downcase.include?('zelda'))
+  if j[0]=='Reinhardt(World)' && (rand(100).zero? || event.message.text.downcase.include?('zelda') || event.message.text.downcase.include?('link') || event.message.text.downcase.include?('master sword'))
     art='https://i.redd.it/pdeqrncp21r01.png'
     j[6]="u/ZachminSSB (ft. #{j[6]})"
   elsif j[0]=='Arden' && (rand(1000).zero? || event.message.text.downcase.include?('infinity'))
