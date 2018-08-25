@@ -1048,12 +1048,13 @@ end
 def is_mod?(user,server,channel) # used by certain commands to determine if a user can use them
   return true if user.id==167657750971547648 # bot developer is always an EliseMod
   return false if server.nil? # no one is a EliseMod in PMs
-  return true if [188781153589657600,480785838129545217,210900237823246336,175150098357944330].include?(user.id) # people who donate to the laptop fund will always be EliseMods
   return true if user.id==server.owner.id # server owners are EliseMods by default
   for i in 0...user.roles.length # certain role names will count as EliseMods even if they don't have legitimate mod powers
     return true if ['mod','mods','moderator','moderators','admin','admins','administrator','administrators','owner','owners'].include?(user.roles[i].name.downcase.gsub(' ',''))
   end
   return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
+  return false if mode<0
+  return true if [188781153589657600,480785838129545217,210900237823246336,175150098357944330,183976699367522304].include?(user.id) # people who donate to the laptop fund will always be EliseMods
   return false
 end
 
