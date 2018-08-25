@@ -5392,13 +5392,20 @@ def collapse_skill_list(list,mode=0)
             list[skill_include?(list,'Flametongue+')]=nil
             newlist[skill_include?(newlist,'Flametongue+')]=nil if skill_include?(newlist,'Flametongue+')>=0
             list[i][0]='Fire Breath[+]/Flametongue[+]'
+            list[i][1]=300
           else
             list[i][0]='Fire Breath[+]/Flametongue'
+            list[i][1]=200
           end
         elsif list[i][0]=='Fire Breath[+]' && skill_include?(list,'Flametongue[+]')>=0 && (mode/2)%2==1
           list[skill_include?(list,'Flametongue+')]=nil
           newlist[skill_include?(newlist,'Flametongue+')]=nil if skill_include?(newlist,'Flametongue+')>=0
           list[i][0]='Fire Breath[+]/Flametongue[+]'
+          list[i][1]=300
+        elsif list[i][0]=='Fire Breath[+]'
+          list[i][1]=100
+        else
+          list[i][1]=300
         end
       elsif list[i][0].include?('Iron ') && skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")>=0 && (mode/2)%2==1
         list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil
@@ -5411,16 +5418,20 @@ def collapse_skill_list(list,mode=0)
             newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}+")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}+")>=0
             newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}[+]")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}[+]")>=0
             list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel/Silver[+]')}"
+            list[i][1]=300
           else
             list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel/Silver')}"
+            list[i][1]=200
           end
         else
           list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel')}"
+          list[i][1]=100
         end
       elsif skill_include?(list,"El#{list[i][0].downcase}")>=0 && list[i][5].include?('Tome Users Only') && list[i][4]=='Weapon' && (mode/2)%2==1
         list[skill_include?(list,"El#{list[i][0].downcase}")]=nil
         newlist[skill_include?(newlist,"El#{list[i][0].downcase}")]=nil if skill_include?(newlist,"El#{list[i][0].downcase}")
         list[i][0]="[El]#{list[i][0]}"
+        list[i][1]=100
         if list[i][0]=='[El]Fire'
           if skill_include?(list,'Bolganone')>=0
             list[skill_include?(list,'Bolganone')]=nil
@@ -5429,13 +5440,16 @@ def collapse_skill_list(list,mode=0)
               list[skill_include?(list,'Bolganone+')]=nil
               newlist[skill_include?(newlist,'Bolganone+')]=nil if skill_include?(newlist,'Bolganone+')>=0
               list[i][0]='[El]Fire/Bolganone[+]'
+              list[i][1]=300
             else
               list[i][0]='[El]Fire/Bolganone'
+              list[i][1]=200
             end
           elsif skill_include?(list,'Bolganone[+]')>=0
             list[skill_include?(list,'Bolganone[+]')]=nil
             newlist[skill_include?(newlist,'Bolganone[+]')]=nil if skill_include?(newlist,'Bolganone[+]')>=0
             list[i][0]='[El]Fire/Bolganone[+]'
+            list[i][1]=300
           end
         elsif list[i][0]=='[El]Thunder'
           if skill_include?(list,'Thoron')>=0
@@ -5445,13 +5459,16 @@ def collapse_skill_list(list,mode=0)
               list[skill_include?(list,'Thoron+')]=nil
               newlist[skill_include?(newlist,'Thoron+')]=nil if skill_include?(newlist,'Thoron+')>=0
               list[i][0]='[El]Thunder/Thoron[+]'
+              list[i][1]=300
             else
               list[i][0]='[El]Thunder/Thoron'
+              list[i][1]=200
             end
           elsif skill_include?(list,'Thoron[+]')>=0
             list[skill_include?(list,'Thoron[+]')]=nil
             newlist[skill_include?(newlist,'Thoron[+]')]=nil if skill_include?(newlist,'Thoron[+]')>=0
             list[i][0]='[El]Thunder/Thoron[+]'
+            list[i][1]=300
           end
         elsif list[i][0]=='[El]Light'
           if skill_include?(list,'Shine')>=0
@@ -5461,13 +5478,16 @@ def collapse_skill_list(list,mode=0)
               list[skill_include?(list,'Shine+')]=nil
               newlist[skill_include?(newlist,'Shine+')]=nil if skill_include?(newlist,'Shine+')>=0
               list[i][0]='[El]Light/Shine[+]'
+              list[i][1]=300
             else
               list[i][0]='[El]Light/Shine'
+              list[i][1]=200
             end
           elsif skill_include?(list,'Shine[+]')>=0
             list[skill_include?(list,'Shine[+]')]=nil
             newlist[skill_include?(newlist,'Shine[+]')]=nil if skill_include?(newlist,'Shine[+]')>=0
             list[i][0]='[El]Light/Shine[+]'
+            list[i][1]=300
           end
         elsif list[i][0]=='[El]Wind'
           if skill_include?(list,'Rexcalibur')>=0
@@ -5477,13 +5497,16 @@ def collapse_skill_list(list,mode=0)
               list[skill_include?(list,'Rexcalibur+')]=nil
               newlist[skill_include?(newlist,'Rexcalibur+')]=nil if skill_include?(newlist,'Rexcalibur+')>=0
               list[i][0]='[El]Wind/Rexcalibur[+]'
+              list[i][1]=300
             else
               list[i][0]='[El]Wind/Rexcalibur'
+              list[i][1]=200
             end
           elsif skill_include?(list,'Rexcalibur[+]')>=0
             list[skill_include?(list,'Rexcalibur[+]')]=nil
             newlist[skill_include?(newlist,'Rexcalibur[+]')]=nil if skill_include?(newlist,'Rexcalibur[+]')>=0
             list[i][0]='[El]Wind/Rexcalibur[+]'
+            list[i][1]=300
           end
         end
       elsif list[i][0]=='Flux' && skill_include?(list,'Ruin')>=0 && (mode/2)%2==1
@@ -5496,36 +5519,75 @@ def collapse_skill_list(list,mode=0)
             list[skill_include?(list,'Fenrir+')]=nil
             newlist[skill_include?(newlist,'Fenrir+')]=nil if skill_include?(newlist,'Fenrir+')>=0
             list[i][0]='Flux/Ruin/Fenrir[+]'
+            list[i][1]=300
           else
             list[i][0]='Flux/Ruin/Fenrir'
+            list[i][1]=200
           end
         elsif skill_include?(list,'Fenrir[+]')>=0
           list[skill_include?(list,'Fenrir[+]')]=nil
           newlist[skill_include?(newlist,'Fenrir[+]')]=nil if skill_include?(newlist,'Fenrir[+]')>=0
           list[i][0]='Flux/Ruin/Fenrir[+]'
+          list[i][1]=300
         else
           list[i][0]='Flux/Ruin'
+          list[i][1]=100
         end
       elsif list[i][0][list[i][0].length-1,1].to_i.to_s==list[i][0][list[i][0].length-1,1]
-        v=list[i][0][list[i][0].length-1,1].to_i
-        if skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+1}")>=0
-          list[skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+1}")]=nil
-          if skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+2}")>=0
-            list[skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+2}")]=nil
-            if skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+3}")>=0
-              list[skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+3}")]=nil
-              if skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+4}")>=0
-                list[skill_include?(list,"#{list[i][0][0,list[i][0].length-1]}#{v+4}")]=nil
-                list[i][0]="#{list[i][0][0,list[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}"
+        v=list[i][0].gsub(list[i][0].scan(/([[:alpha:]]| |\+)+?/).join,"").to_i
+        v2=list[i][0].scan(/([[:alpha:]]| |\+)+?/).join
+        if skill_include?(list,"#{v2}#{v+1}")>=0
+          if skill_include?(list,"#{v2}#{v+2}")>=0
+            if skill_include?(list,"#{v2}#{v+3}")>=0
+              if skill_include?(list,"#{v2}#{v+4}")>=0
+                if skill_include?(list,"#{v2}#{v+5}")>=0
+                  if skill_include?(list,"#{v2}#{v+6}")>=0
+                    if skill_include?(list,"#{v2}#{v+7}")>=0
+                      if skill_include?(list,"#{v2}#{v+8}")>=0
+                        if skill_include?(list,"#{v2}#{v+9}")>=0
+                          list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}/#{v+8}/#{v+9}"
+                          list[i][1]=list[skill_include?(list,"#{v2}#{v+9}")][1]*1
+                          list[skill_include?(list,"#{v2}#{v+9}")]=nil
+                        else
+                          list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}/#{v+8}"
+                          list[i][1]=list[skill_include?(list,"#{v2}#{v+8}")][1]*1
+                        end
+                        list[skill_include?(list,"#{v2}#{v+8}")]=nil
+                      else
+                        list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}"
+                        list[i][1]=list[skill_include?(list,"#{v2}#{v+7}")][1]*1
+                      end
+                      list[skill_include?(list,"#{v2}#{v+7}")]=nil
+                    else
+                      list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}"
+                      list[i][1]=list[skill_include?(list,"#{v2}#{v+6}")][1]*1
+                    end
+                    list[skill_include?(list,"#{v2}#{v+6}")]=nil
+                  else
+                    list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}"
+                    list[i][1]=list[skill_include?(list,"#{v2}#{v+5}")][1]*1
+                  end
+                  list[skill_include?(list,"#{v2}#{v+5}")]=nil
+                else
+                  list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}"
+                  list[i][1]=list[skill_include?(list,"#{v2}#{v+4}")][1]*1
+                end
+                list[skill_include?(list,"#{v2}#{v+4}")]=nil
               else
-                list[i][0]="#{list[i][0][0,list[i][0].length-1]}#{v}/#{v+1}/#{v+2}/#{v+3}"
+                list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}"
+                list[i][1]=list[skill_include?(list,"#{v2}#{v+3}")][1]*1
               end
+              list[skill_include?(list,"#{v2}#{v+3}")]=nil
             else
-              list[i][0]="#{list[i][0][0,list[i][0].length-1]}#{v}/#{v+1}/#{v+2}"
+              list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}"
+              list[i][1]=list[skill_include?(list,"#{v2}#{v+2}")][1]*1
             end
+            list[skill_include?(list,"#{v2}#{v+2}")]=nil
           else
-            list[i][0]="#{list[i][0][0,list[i][0].length-1]}#{v}/#{v+1}"
+            list[i][0]="#{v2}#{v}/#{v+1}"
+            list[i][1]=list[skill_include?(list,"#{v2}#{v+1}")][1]*1
           end
+          list[skill_include?(list,"#{v2}#{v+1}")]=nil
         end
       end
       newlist.push(list[i].map{|q| q})
