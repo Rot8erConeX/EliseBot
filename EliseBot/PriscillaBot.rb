@@ -6869,71 +6869,74 @@ def sort_skills(bot,event,args=[])
   event.channel.send_temporary_message('Calculating data, please wait...',5)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   k=find_in_skills(event, 2, false)
-  for i in 0...k.length
-    if k[i][15].nil? || !k[i][15].is_a?(String) || k[i][15].length.zero?
-      k[i][15]=0
-    elsif k[i][6]=='-' || k[i][6].split(', ').length.zero?
-      k[i][15]=350
-    else
-      k[i][15]=400
+  if k.is_a?(Array)
+    k=k.reject{|q| q[0][0,14]=='Initiate Seal ' || q[0][0,10]=='Squad Ace '}
+    for i in 0...k.length
+      if k[i][15].nil? || !k[i][15].is_a?(String) || k[i][15].length.zero?
+        k[i][15]=0
+      elsif k[i][6]=='-' || k[i][6].split(', ').length.zero?
+        k[i][15]=350
+      else
+        k[i][15]=400
+      end
+      if k[i][0].include?("*(+) Effect*") || k[i][0].include?("*(+) All*")
+        k[i][1]=k[i][15]*1
+        k[i][15]=0
+      end
     end
-    if k[i][0].include?("*(+) Effect*") || k[i][0].include?("*(+) All*")
-      k[i][1]=k[i][15]*1
-      k[i][15]=0
+    k.sort! {|b,a| ((a[1] <=> b[1]) == 0 ? ((a[15] <=> b[15]) == 0 ? (b[0] <=> a[0]) : (a[15] <=> b[15])) : (a[1] <=> b[1]))}
+    str="All SP costs are without accounting for increased inheritance costs (1.5x the SP costs listed below)"
+    for i in 0...k.length
+      k[i][0]="**#{k[i][0]}** "
+      if k[i][4]=='Weapon'
+        k[i][0]="#{k[i][0]}<:Skill_Weapon:444078171114045450>"
+        k[i][0]="#{k[i][0]}<:Red_Blade:443172811830198282>" if k[i][5]=='Sword Users Only'
+        k[i][0]="#{k[i][0]}<:Blue_Blade:467112472768151562>" if k[i][5]=='Lance Users Only'
+        k[i][0]="#{k[i][0]}<:Green_Blade:467122927230386207>" if k[i][5]=='Axe Users Only'
+        k[i][0]="#{k[i][0]}<:Red_Tome:443172811826003968>" if k[i][5]=='Red Tome Users Only'
+        k[i][0]="#{k[i][0]}<:Blue_Tome:467112472394858508>" if k[i][5]=='Blue Tome Users Only'
+        k[i][0]="#{k[i][0]}<:Green_Tome:467122927666593822>" if k[i][5]=='Green Tome Users Only'
+        k[i][0]="#{k[i][0]}<:Gold_Dragon:443172811641454592>" if k[i][5]=='Dragons Only'
+        k[i][0]="#{k[i][0]}<:Gold_Bow:443172812492898314>" if k[i][5]=='Bow Users Only'
+        k[i][0]="#{k[i][0]}<:Gold_Dagger:443172811461230603>" if k[i][5]=='Dagger Users Only'
+        k[i][0]="#{k[i][0]}<:Gold_Staff:443172811628871720>" if k[i][5]=='Staff Users Only' && alter_classes(event,'Colored Healers')
+        k[i][0]="#{k[i][0]}<:Colorless_Staff:443692132323295243>" if k[i][5]=='Staff Users Only' && !alter_classes(event,'Colored Healers')
+        k[i][0]="#{k[i][0]}<:Gold_Beast:443172811608162324>" if k[i][5]=='Beasts Only'
+      elsif k[i][4]=='Assist'
+        k[i][0]="#{k[i][0]}<:Skill_Assist:444078171025965066>"
+        k[i][0]="#{k[i][0]}<:Assist_Music:454462054959415296>" if k[i][11].split(', ').include?('Music')
+        k[i][0]="#{k[i][0]}<:Assist_Rally:454462054619807747>" if k[i][11].split(', ').include?('Rally')
+        k[i][0]="#{k[i][0]}<:Assist_Staff:454451496831025162>" if k[i][5]=='Staff Users Only'
+      elsif k[i][4]=='Special'
+        k[i][0]="#{k[i][0]}<:Skill_Special:444078170665254929>"
+        k[i][0]="#{k[i][0]}<:Special_Offensive:454460020793278475>" if k[i][11].split(', ').include?('Offensive')
+        k[i][0]="#{k[i][0]}<:Special_Defensive:454460020591951884>" if k[i][11].split(', ').include?('Defensive')
+        k[i][0]="#{k[i][0]}<:Special_AoE:454460021665693696>" if k[i][11].split(', ').include?('AoE')
+        k[i][0]="#{k[i][0]}<:Special_Healer:454451451805040640>" if k[i][5]=='Staff Users Only'
+      else
+        k[i][0]="#{k[i][0]}<:Passive_A:443677024192823327>" if k[i][4].split(', ').include?('Passive(A)')
+        k[i][0]="#{k[i][0]}<:Passive_B:443677023257493506>" if k[i][4].split(', ').include?('Passive(B)')
+        k[i][0]="#{k[i][0]}<:Passive_C:443677023555026954>" if k[i][4].split(', ').include?('Passive(C)')
+        k[i][0]="#{k[i][0]}<:Passive_S:443677023626330122>" if k[i][4].split(', ').include?('Passive(S)') || k[i][4].split(', ').include?('Seal')
+        k[i][0]="#{k[i][0]}<:Passive_W:443677023706152960>" if k[i][4].split(', ').include?('Passive(W)')
+      end
+      k[i][0]="#{k[i][0]} - #{k[i][1]} SP"
+      if k[i][15]>k[i][1] && k[i][1]>0 && k[i][4]=='Weapon'
+        k[i][0]="#{k[i][0]} (#{k[i][15]} SP when refined)"
+      elsif k[i][15]==k[i][1] && k[i][1]>0 && k[i][4]=='Weapon'
+        k[i][0]="#{k[i][0]} (refinement possible)"
+      end
+      k[i][0]="#{k[i][0]} - Prf to #{k[i][6]}" unless k[i][6]=='-' || k[i][6].split(', ').length.zero?
     end
-  end
-  k.sort! {|b,a| ((a[1] <=> b[1]) == 0 ? ((a[15] <=> b[15]) == 0 ? (b[0] <=> a[0]) : (a[15] <=> b[15])) : (a[1] <=> b[1]))}
-  str="All SP costs are without accounting for increased inheritance costs (1.5x the SP costs listed below)"
-  for i in 0...k.length
-    k[i][0]="**#{k[i][0]}** "
-    if k[i][4]=='Weapon'
-      k[i][0]="#{k[i][0]}<:Skill_Weapon:444078171114045450>"
-      k[i][0]="#{k[i][0]}<:Red_Blade:443172811830198282>" if k[i][5]=='Sword Users Only'
-      k[i][0]="#{k[i][0]}<:Blue_Blade:467112472768151562>" if k[i][5]=='Lance Users Only'
-      k[i][0]="#{k[i][0]}<:Green_Blade:467122927230386207>" if k[i][5]=='Axe Users Only'
-      k[i][0]="#{k[i][0]}<:Red_Tome:443172811826003968>" if k[i][5]=='Red Tome Users Only'
-      k[i][0]="#{k[i][0]}<:Blue_Tome:467112472394858508>" if k[i][5]=='Blue Tome Users Only'
-      k[i][0]="#{k[i][0]}<:Green_Tome:467122927666593822>" if k[i][5]=='Green Tome Users Only'
-      k[i][0]="#{k[i][0]}<:Gold_Dragon:443172811641454592>" if k[i][5]=='Dragons Only'
-      k[i][0]="#{k[i][0]}<:Gold_Bow:443172812492898314>" if k[i][5]=='Bow Users Only'
-      k[i][0]="#{k[i][0]}<:Gold_Dagger:443172811461230603>" if k[i][5]=='Dagger Users Only'
-      k[i][0]="#{k[i][0]}<:Gold_Staff:443172811628871720>" if k[i][5]=='Staff Users Only' && alter_classes(event,'Colored Healers')
-      k[i][0]="#{k[i][0]}<:Colorless_Staff:443692132323295243>" if k[i][5]=='Staff Users Only' && !alter_classes(event,'Colored Healers')
-      k[i][0]="#{k[i][0]}<:Gold_Beast:443172811608162324>" if k[i][5]=='Beasts Only'
-    elsif k[i][4]=='Assist'
-      k[i][0]="#{k[i][0]}<:Skill_Assist:444078171025965066>"
-      k[i][0]="#{k[i][0]}<:Assist_Music:454462054959415296>" if k[i][11].split(', ').include?('Music')
-      k[i][0]="#{k[i][0]}<:Assist_Rally:454462054619807747>" if k[i][11].split(', ').include?('Rally')
-      k[i][0]="#{k[i][0]}<:Assist_Staff:454451496831025162>" if k[i][5]=='Staff Users Only'
-    elsif k[i][4]=='Special'
-      k[i][0]="#{k[i][0]}<:Skill_Special:444078170665254929>"
-      k[i][0]="#{k[i][0]}<:Special_Offensive:454460020793278475>" if k[i][11].split(', ').include?('Offensive')
-      k[i][0]="#{k[i][0]}<:Special_Defensive:454460020591951884>" if k[i][11].split(', ').include?('Defensive')
-      k[i][0]="#{k[i][0]}<:Special_AoE:454460021665693696>" if k[i][11].split(', ').include?('AoE')
-      k[i][0]="#{k[i][0]}<:Special_Healer:454451451805040640>" if k[i][5]=='Staff Users Only'
-    else
-      k[i][0]="#{k[i][0]}<:Passive_A:443677024192823327>" if k[i][4].split(', ').include?('Passive(A)')
-      k[i][0]="#{k[i][0]}<:Passive_B:443677023257493506>" if k[i][4].split(', ').include?('Passive(B)')
-      k[i][0]="#{k[i][0]}<:Passive_C:443677023555026954>" if k[i][4].split(', ').include?('Passive(C)')
-      k[i][0]="#{k[i][0]}<:Passive_S:443677023626330122>" if k[i][4].split(', ').include?('Passive(S)') || k[i][4].split(', ').include?('Seal')
-      k[i][0]="#{k[i][0]}<:Passive_W:443677023706152960>" if k[i][4].split(', ').include?('Passive(W)')
+    if k.map{|q| q[0]}.join("\n").length+str.length>1950 && !safe_to_spam?(event)
+      event.respond "There are too many skills to list.  Please try this command in PM."
+      return nil
     end
-    k[i][0]="#{k[i][0]} - #{k[i][1]} SP"
-    if k[i][15]>k[i][1] && k[i][1]>0 && k[i][4]=='Weapon'
-      k[i][0]="#{k[i][0]} (#{k[i][15]} SP when refined)"
-    elsif k[i][15]==k[i][1] && k[i][1]>0 && k[i][4]=='Weapon'
-      k[i][0]="#{k[i][0]} (refinement possible)"
+    for i in 0...k.length
+      str=extend_message(str,"#{"\n" if i==0}#{k[i][0]}",event)
     end
-    k[i][0]="#{k[i][0]} - Prf to #{k[i][6]}" unless k[i][6]=='-' || k[i][6].split(', ').length.zero?
+    event.respond str
   end
-  if k.map{|q| q[0]}.join("\n").length+str.length>1950 && !safe_to_spam?(event)
-    event.respond "There are too many skills to list.  Please try this command in PM."
-    return nil
-  end
-  for i in 0...k.length
-    str=extend_message(str,"#{"\n" if i==0}#{k[i][0]}",event)
-  end
-  event.respond str
 end
 
 def supersort(a,b,m,n=nil)
