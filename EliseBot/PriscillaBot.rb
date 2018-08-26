@@ -124,7 +124,9 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'squashedstat','tiny','small','micro','smol','squashed','littlestats','littlestat','statslittle','statlittle','little','giantstats','bigstats','tolstats','macrostats',
      'largestats','hugestats','massivestats','giantstat','bigstat','tolstat','macrostat','largestat','hugestat','massivestat','statsgiant','statsbig','statstol','statsmacro',
      'statslarge','statshuge','statsmassive','statgiant','statbig','stattol','statmacro','statlarge','stathuge','statmassive','statol','giant','big','tol','macro','large','huge',
-     'massive','safe','spam','safetospam','safe2spam','long','longreplies']
+     'massive','safe','spam','safetospam','safe2spam','long','longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills',
+     'skillslist','sortstats','statssort','sortstat','statsort','liststats','statslist','statlist','liststat','sortunits','unitssort','sortunit','unitsort','listunits','unitslist',
+     'unitlist','listunit']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -655,14 +657,22 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     else
       create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the devunits.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new devunit\n`FEH!#{command.downcase} promote` - promotes an existing devunit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a devunit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a devunit's nature (*also `ivs`*)\n`FEH!#{command.downcase} teach` - teaches a new skill to a devunit (*also `learn`*)\n\n`FEH!#{command.downcase} new_waifu` - adds a dev waifu (*also `add_waifu`*)\n`FEH!#{command.downcase} new_somebody` - adds a dev \"somebody\" (*also `add_somebody`*)\n`FEH!#{command.downcase} new_nobody` - adds a dev \"nobody\" (*also `add_nobody`*)\n\n`FEH!#{command.downcase} send_home` - removes the unit from either the devunits or the \"nobodies\" list (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     end
-  elsif ['sort'].include?(command.downcase)
+  elsif ['sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list in order based on their SP cost.\n\n#{disp_more_info(event,3)}",0xD49F61)
+  elsif ['sortstats','statssort','sortstat','statsort','liststats','statslist','statlist','liststat','sortunits','unitssort','sortunit','unitsort','listunits','unitslist','unitlist','listunit'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list in order based on the stats you include.\n\n#{disp_more_info(event,2)}",0xD49F61)
+  elsif ['sort','list'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['groups','group'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Sorts the groups list alphabetically by group name.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['alias','aliases'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Sorts the alias list alphabetically by unit the alias is for.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+    elsif ['stat','stats','unit','units'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list in order based on the stats you include.\n\n#{disp_more_info(event,2)}",0xD49F61)
+    elsif ['skills','skill'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list in order based on their SP cost.\n\n#{disp_more_info(event,3)}",0xD49F61)
     else
-      create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units which match your defined filters, includes any units you name that don't fit into those filters, then displays the resulting list in order based on the stats you include.\n\n#{disp_more_info(event,2)}",0xD49F61)
+      create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list in order based on the stats you include.\n\n#{disp_more_info(event,2)}\n\n\nIn addition, you can use `FEH!sort skill` to sort skills by their SP cost.",0xD49F61)
     end
   else
     x=0
@@ -769,6 +779,19 @@ def safe_to_spam?(event) # determines whether or not it is safe to send extremel
   return false
 end
 
+def is_mod?(user,server,channel,mode=0) # used by certain commands to determine if a user can use them
+  return true if user.id==167657750971547648 # bot developer is always an EliseMod
+  return false if server.nil? # no one is a EliseMod in PMs
+  return true if user.id==server.owner.id # server owners are EliseMods by default
+  for i in 0...user.roles.length # certain role names will count as EliseMods even if they don't have legitimate mod powers
+    return true if ['mod','mods','moderator','moderators','admin','admins','administrator','administrators','owner','owners'].include?(user.roles[i].name.downcase.gsub(' ',''))
+  end
+  return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
+  return false if mode>0
+  return true if [188781153589657600,480785838129545217,210900237823246336,175150098357944330,183976699367522304].include?(user.id) # people who donate to the laptop fund will always be EliseMods
+  return false
+end
+
 bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, f|
   return nil if overlap_prevent(event)
   f='' if f.nil?
@@ -799,7 +822,7 @@ bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, 
       event << ''
       event << 'If you wish to change that, ask a server mod to type `FEH!spam off` in this channel.'
     end
-  elsif is_mod?(event.user,event.server,event.channel) && ['on','yes','true'].include?(f.downcase)
+  elsif is_mod?(event.user,event.server,event.channel,1) && ['on','yes','true'].include?(f.downcase)
     metadata_load()
     @spam_channels.push(event.channel.id)
     metadata_save()
@@ -1043,19 +1066,6 @@ def make_stats_string(event,name,rarity,boon='',bane='',hm=@max_rarity_merge[1])
     k="#{k}\n**#{i} merge#{'s' unless i==1}:** #{u[1]} / #{u[2]} / #{u[3]} / #{u[4]} / #{u[5]}    (BST: #{u[1]+u[2]+u[3]+u[4]+u[5]})" if i%5==0 || i==hm[1] || args.include?('full') || args.include?('merges')
   end
   return k
-end
-
-def is_mod?(user,server,channel) # used by certain commands to determine if a user can use them
-  return true if user.id==167657750971547648 # bot developer is always an EliseMod
-  return false if server.nil? # no one is a EliseMod in PMs
-  return true if user.id==server.owner.id # server owners are EliseMods by default
-  for i in 0...user.roles.length # certain role names will count as EliseMods even if they don't have legitimate mod powers
-    return true if ['mod','mods','moderator','moderators','admin','admins','administrator','administrators','owner','owners'].include?(user.roles[i].name.downcase.gsub(' ',''))
-  end
-  return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
-  return false if mode<0
-  return true if [188781153589657600,480785838129545217,210900237823246336,175150098357944330,183976699367522304].include?(user.id) # people who donate to the laptop fund will always be EliseMods
-  return false
 end
 
 def make_banner(event) # used by the `summon` command to pick a random banner and choose which units are on it.
@@ -4234,10 +4244,15 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     for i2 in 0...p.length
       p[i2]="~~#{p[i2]}~~" unless p[i2]=='Laevatein' || sklz[sklz.find_index{|q2| q2[0]==p[i2]}][13].nil? || !skill[13].nil?
     end
+    puts skill[4]
     if p.length>8 && skill[4]=='Weapon' && !event.message.text.downcase.split(' ').include?('expanded')
       xfooter='If you would like to include the Prfs and units who have them, include the word "expanded" when retrying this command.'
       p2=p.reject{|q| q.gsub('~~','')=='Laevatein' || sklz[sklz.find_index{|q2| q2[0]==q.gsub('~~','')}][6]!='-'}
-      p="#{p2.map{|q| "*#{q}*"}.join(', ')}, and #{p.length-p2.length} Prf weapons" unless p==p2
+      if p==p2
+        p=list_lift(p.map{|q| "*#{q}*"},"or")
+      else
+        p="#{p2.map{|q| "*#{q}*"}.join(', ')}, and #{p.length-p2.length} Prf weapons"
+      end
       p3=p2.map{|q| sklz[sklz.find_index{|q2| q2[0]==q.gsub('~~','')}][10].reject{|q2| q2=='-'}.join(', ')}.join(', ').split(', ').uniq
     elsif skill[4]=='Weapon'
       p2=p.reject{|q| q.gsub('~~','')=='Laevatein' || sklz[sklz.find_index{|q2| q2[0]==q.gsub('~~','')}][6]!='-'}
@@ -5384,156 +5399,177 @@ def collapse_skill_list(list,mode=0)
   for i in 0...list.length
     unless list[i].nil? || (list[i][0][0,10]=='Falchion (' && skill_include?(list,'Falchion')>0)
       if skill_include?(list,"#{list[i][0]}+")>=0
-        list[skill_include?(list,"#{list[i][0]}+")]=nil
         list[i][0]="#{list[i][0]}[+]"
         if list[i][0]=='Fire Breath[+]' && skill_include?(list,'Flametongue')>=0 && (mode/2)%2==1
-          list[skill_include?(list,'Flametongue')]=nil
-          newlist[skill_include?(newlist,'Flametongue')]=nil if skill_include?(newlist,'Flametongue')>=0
           if skill_include?(list,'Flametongue+')>=0
-            list[skill_include?(list,'Flametongue+')]=nil
-            newlist[skill_include?(newlist,'Flametongue+')]=nil if skill_include?(newlist,'Flametongue+')>=0
             list[i][0]='Fire Breath[+]/Flametongue[+]'
             list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Flametongue+')][15]
+            list[skill_include?(list,'Flametongue+')]=nil
+            newlist[skill_include?(newlist,'Flametongue+')]=nil if skill_include?(newlist,'Flametongue+')>=0
           else
             list[i][0]='Fire Breath[+]/Flametongue'
             list[i][1]=200
           end
+          list[skill_include?(list,'Flametongue')]=nil
+          newlist[skill_include?(newlist,'Flametongue')]=nil if skill_include?(newlist,'Flametongue')>=0
         elsif list[i][0]=='Fire Breath[+]' && skill_include?(list,'Flametongue[+]')>=0 && (mode/2)%2==1
-          list[skill_include?(list,'Flametongue+')]=nil
-          newlist[skill_include?(newlist,'Flametongue+')]=nil if skill_include?(newlist,'Flametongue+')>=0
           list[i][0]='Fire Breath[+]/Flametongue[+]'
           list[i][1]=300
+          list[i][15]=list[skill_include?(list,'Flametongue+')][15]
+          list[skill_include?(list,'Flametongue+')]=nil
+          newlist[skill_include?(newlist,'Flametongue+')]=nil if skill_include?(newlist,'Flametongue+')>=0
         elsif list[i][0]=='Fire Breath[+]'
           list[i][1]=100
         else
           list[i][1]=300
+          list[i][15]=list[skill_include?(list,"#{list[i][0].gsub('[+]','')}+")][15]
         end
+        list[skill_include?(list,"#{list[i][0].gsub('[+]','')}+")]=nil
       elsif list[i][0].include?('Iron ') && skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")>=0 && (mode/2)%2==1
-        list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil
-        newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
         if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")>=0
-          list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")]=nil
-          newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")>=0
           if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")>=0
+            list[i][1]=300
+            list[i][15]=list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")][15]
+            list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil
+            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
+            list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")]=nil
+            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")>=0
             list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")]=nil
             newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}+")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}+")>=0
             newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}[+]")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}[+]")>=0
             list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel/Silver[+]')}"
-            list[i][1]=300
           else
+            list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil
+            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
+            list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")]=nil
+            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")>=0
             list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel/Silver')}"
             list[i][1]=200
           end
         else
+          list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil
+          newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
           list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel')}"
           list[i][1]=100
         end
       elsif skill_include?(list,"El#{list[i][0].downcase}")>=0 && list[i][5].include?('Tome Users Only') && list[i][4]=='Weapon' && (mode/2)%2==1
-        list[skill_include?(list,"El#{list[i][0].downcase}")]=nil
-        newlist[skill_include?(newlist,"El#{list[i][0].downcase}")]=nil if skill_include?(newlist,"El#{list[i][0].downcase}")
+        v2=list[i][0].downcase
         list[i][0]="[El]#{list[i][0]}"
         list[i][1]=100
         if list[i][0]=='[El]Fire'
           if skill_include?(list,'Bolganone')>=0
-            list[skill_include?(list,'Bolganone')]=nil
-            newlist[skill_include?(newlist,'Bolganone')]=nil if skill_include?(newlist,'Bolganone')>=0
             if skill_include?(list,'Bolganone+')>=0
-              list[skill_include?(list,'Bolganone+')]=nil
-              newlist[skill_include?(newlist,'Bolganone+')]=nil if skill_include?(newlist,'Bolganone+')>=0
               list[i][0]='[El]Fire/Bolganone[+]'
               list[i][1]=300
+              list[i][15]=list[skill_include?(list,'Bolganone+')][15]
+              list[skill_include?(list,'Bolganone+')]=nil
+              newlist[skill_include?(newlist,'Bolganone+')]=nil if skill_include?(newlist,'Bolganone+')>=0
             else
               list[i][0]='[El]Fire/Bolganone'
               list[i][1]=200
             end
+            list[skill_include?(list,'Bolganone')]=nil
+            newlist[skill_include?(newlist,'Bolganone')]=nil if skill_include?(newlist,'Bolganone')>=0
           elsif skill_include?(list,'Bolganone[+]')>=0
-            list[skill_include?(list,'Bolganone[+]')]=nil
-            newlist[skill_include?(newlist,'Bolganone[+]')]=nil if skill_include?(newlist,'Bolganone[+]')>=0
             list[i][0]='[El]Fire/Bolganone[+]'
             list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Bolganone[+]')][15]
+            list[skill_include?(list,'Bolganone[+]')]=nil
+            newlist[skill_include?(newlist,'Bolganone[+]')]=nil if skill_include?(newlist,'Bolganone[+]')>=0
           end
         elsif list[i][0]=='[El]Thunder'
           if skill_include?(list,'Thoron')>=0
-            list[skill_include?(list,'Thoron')]=nil
-            newlist[skill_include?(newlist,'Thoron')]=nil if skill_include?(newlist,'Thoron')>=0
             if skill_include?(list,'Thoron+')>=0
-              list[skill_include?(list,'Thoron+')]=nil
-              newlist[skill_include?(newlist,'Thoron+')]=nil if skill_include?(newlist,'Thoron+')>=0
               list[i][0]='[El]Thunder/Thoron[+]'
               list[i][1]=300
+              list[i][15]=list[skill_include?(list,'Thoron+')][15]
+              list[skill_include?(list,'Thoron+')]=nil
+              newlist[skill_include?(newlist,'Thoron+')]=nil if skill_include?(newlist,'Thoron+')>=0
             else
               list[i][0]='[El]Thunder/Thoron'
               list[i][1]=200
             end
+            list[skill_include?(list,'Thoron')]=nil
+            newlist[skill_include?(newlist,'Thoron')]=nil if skill_include?(newlist,'Thoron')>=0
           elsif skill_include?(list,'Thoron[+]')>=0
-            list[skill_include?(list,'Thoron[+]')]=nil
-            newlist[skill_include?(newlist,'Thoron[+]')]=nil if skill_include?(newlist,'Thoron[+]')>=0
             list[i][0]='[El]Thunder/Thoron[+]'
             list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Thoron[+]')][15]
+            list[skill_include?(list,'Thoron[+]')]=nil
+            newlist[skill_include?(newlist,'Thoron[+]')]=nil if skill_include?(newlist,'Thoron[+]')>=0
           end
         elsif list[i][0]=='[El]Light'
           if skill_include?(list,'Shine')>=0
-            list[skill_include?(list,'Shine')]=nil
-            newlist[skill_include?(newlist,'Shine')]=nil if skill_include?(newlist,'Shine')>=0
             if skill_include?(list,'Shine+')>=0
-              list[skill_include?(list,'Shine+')]=nil
-              newlist[skill_include?(newlist,'Shine+')]=nil if skill_include?(newlist,'Shine+')>=0
               list[i][0]='[El]Light/Shine[+]'
               list[i][1]=300
+              list[i][15]=list[skill_include?(list,'Shine+')][15]
+              list[skill_include?(list,'Shine+')]=nil
+              newlist[skill_include?(newlist,'Shine+')]=nil if skill_include?(newlist,'Shine+')>=0
             else
               list[i][0]='[El]Light/Shine'
               list[i][1]=200
             end
+            list[skill_include?(list,'Shine')]=nil
+            newlist[skill_include?(newlist,'Shine')]=nil if skill_include?(newlist,'Shine')>=0
           elsif skill_include?(list,'Shine[+]')>=0
-            list[skill_include?(list,'Shine[+]')]=nil
-            newlist[skill_include?(newlist,'Shine[+]')]=nil if skill_include?(newlist,'Shine[+]')>=0
             list[i][0]='[El]Light/Shine[+]'
             list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Shine[+]')][15]
+            list[skill_include?(list,'Shine[+]')]=nil
+            newlist[skill_include?(newlist,'Shine[+]')]=nil if skill_include?(newlist,'Shine[+]')>=0
           end
         elsif list[i][0]=='[El]Wind'
           if skill_include?(list,'Rexcalibur')>=0
-            list[skill_include?(list,'Rexcalibur')]=nil
-            newlist[skill_include?(newlist,'Rexcalibur')]=nil if skill_include?(newlist,'Rexcalibur')>=0
             if skill_include?(list,'Rexcalibur+')>=0
-              list[skill_include?(list,'Rexcalibur+')]=nil
-              newlist[skill_include?(newlist,'Rexcalibur+')]=nil if skill_include?(newlist,'Rexcalibur+')>=0
               list[i][0]='[El]Wind/Rexcalibur[+]'
               list[i][1]=300
+              list[i][15]=list[skill_include?(list,'Rexcalibur+')][15]
+              list[skill_include?(list,'Rexcalibur+')]=nil
+              newlist[skill_include?(newlist,'Rexcalibur+')]=nil if skill_include?(newlist,'Rexcalibur+')>=0
             else
               list[i][0]='[El]Wind/Rexcalibur'
               list[i][1]=200
             end
+            list[skill_include?(list,'Rexcalibur')]=nil
+            newlist[skill_include?(newlist,'Rexcalibur')]=nil if skill_include?(newlist,'Rexcalibur')>=0
           elsif skill_include?(list,'Rexcalibur[+]')>=0
-            list[skill_include?(list,'Rexcalibur[+]')]=nil
-            newlist[skill_include?(newlist,'Rexcalibur[+]')]=nil if skill_include?(newlist,'Rexcalibur[+]')>=0
             list[i][0]='[El]Wind/Rexcalibur[+]'
             list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Rexcalibur[+]')][15]
+            list[skill_include?(list,'Rexcalibur[+]')]=nil
+            newlist[skill_include?(newlist,'Rexcalibur[+]')]=nil if skill_include?(newlist,'Rexcalibur[+]')>=0
           end
         end
+        list[skill_include?(list,"El#{v2}")]=nil
+        newlist[skill_include?(newlist,"El#{v2}")]=nil if skill_include?(newlist,"El#{v2}")
       elsif list[i][0]=='Flux' && skill_include?(list,'Ruin')>=0 && (mode/2)%2==1
-        list[skill_include?(list,'Ruin')]=nil
-        newlist[skill_include?(newlist,'Ruin')]=nil if skill_include?(newlist,'Ruin')>=0
         if skill_include?(list,'Fenrir')>=0
-          list[skill_include?(list,'Fenrir')]=nil
-          newlist[skill_include?(newlist,'Fenrir')]=nil if skill_include?(newlist,'Fenrir')>=0
           if skill_include?(list,'Fenrir+')>=0
-            list[skill_include?(list,'Fenrir+')]=nil
-            newlist[skill_include?(newlist,'Fenrir+')]=nil if skill_include?(newlist,'Fenrir+')>=0
             list[i][0]='Flux/Ruin/Fenrir[+]'
             list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Fenrir+')][15]
+            list[skill_include?(list,'Fenrir+')]=nil
+            newlist[skill_include?(newlist,'Fenrir+')]=nil if skill_include?(newlist,'Fenrir+')>=0
           else
             list[i][0]='Flux/Ruin/Fenrir'
             list[i][1]=200
           end
+          list[skill_include?(list,'Fenrir')]=nil
+          newlist[skill_include?(newlist,'Fenrir')]=nil if skill_include?(newlist,'Fenrir')>=0
         elsif skill_include?(list,'Fenrir[+]')>=0
-          list[skill_include?(list,'Fenrir[+]')]=nil
-          newlist[skill_include?(newlist,'Fenrir[+]')]=nil if skill_include?(newlist,'Fenrir[+]')>=0
           list[i][0]='Flux/Ruin/Fenrir[+]'
           list[i][1]=300
+          list[i][15]=list[skill_include?(list,'Fenrir[+]')][15]
+          list[skill_include?(list,'Fenrir[+]')]=nil
+          newlist[skill_include?(newlist,'Fenrir[+]')]=nil if skill_include?(newlist,'Fenrir[+]')>=0
         else
           list[i][0]='Flux/Ruin'
           list[i][1]=100
         end
+        list[skill_include?(list,'Ruin')]=nil
+        newlist[skill_include?(newlist,'Ruin')]=nil if skill_include?(newlist,'Ruin')>=0
       elsif list[i][0][list[i][0].length-1,1].to_i.to_s==list[i][0][list[i][0].length-1,1]
         v=list[i][0].gsub(list[i][0].scan(/([[:alpha:]]| |\+)+?/).join,"").to_i
         v2=list[i][0].scan(/([[:alpha:]]| |\+)+?/).join
@@ -6051,6 +6087,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     tmp[i][4]='Passive(W)'
     all_skills.push(tmp[i])
   end
+  skill_types.push('Weapon') if (!colors.length.zero? || !weapons.length.zero? || !color_weapons.length.zero?) && assists.length.zero? && specials.length.zero? && passives.length.zero? && weapon_subsets.length.zero? && passive_subsets.length.zero?
   if skill_types.length.zero? && colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && assists.length.zero? && specials.length.zero? && passives.length.zero? && weapon_subsets.length.zero? && passive_subsets.length.zero?
     matches3=all_skills.map{|q| q}.uniq
   else
@@ -6205,7 +6242,8 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   g=get_markers(event)
   matches4=collapse_skill_list(matches3.reject{|q| !has_any?(g, q[13])},3)
   skill_types=skill_types.reject{|q| q.include?('*')}
-  if skill_types.length<=0 && weapons==['Staff'] && assists==['Staff'] && specials==['Staff']
+  if mode==2
+  elsif skill_types.length<=0 && weapons==['Staff'] && assists==['Staff'] && specials==['Staff']
     # Staff skills are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Weapons','Assists','Specials','Passives'],4)
   elsif (weapons==['Blade'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.length>0 && color_weapons.map{|q| q[1]}.reject{|q| q=='Blade'}.length<=0 && weapons.length<=0 && colors.length<=0)
@@ -6276,6 +6314,8 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   elsif mode==1
     f=matches4.map{|k| k[0].gsub('Bladeblade','Laevatein')}
     return f
+  elsif mode==2
+    return matches4
   else
     event.respond '\* \* \*' if !brk.is_a?(Array)
     t=matches4[0][0]
@@ -6622,6 +6662,242 @@ def display_skills(event, mode)
     end
     event.respond t
   end
+end
+
+def sort_units(bot,event,args=[])
+  args=event.message.text.downcase.split(' ') if args.nil? || args.length.zero?
+  event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  f=[0,0,0,0,0,0,0,0,0]
+  supernatures=[]
+  for i in 0...args.length # find stat names, retain the order in which they're listed.
+    supernatures.push('+HP') if ['hpboon','healthboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Atk') if ['atkboon','attboon','attackboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Spd') if ['spdboon','speedboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Def') if ['defboon','defenseboon','defenceboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('+Res') if ['resboon','resistanceboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-HP') if ['hpbane','healthbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Atk') if ['atkbane','attbane','attackbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Spd') if ['spdbane','speedbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Def') if ['defbane','defensebane','defencebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    supernatures.push('-Res') if ['resbane','resistancebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    v=0
+    v=1 if ['hp','health'].include?(args[i].downcase)
+    v=2 if ['str','strength','strong','mag','magic','atk','att','attack'].include?(args[i].downcase)
+    v=3 if ['spd','speed'].include?(args[i].downcase)
+    v=4 if ['def','defense','defence','defensive','defencive'].include?(args[i].downcase)
+    v=5 if ['res','resistance'].include?(args[i].downcase)
+    v=6 if ['bst','base','total'].include?(args[i].downcase)
+    v=7 if ['chill','frostbite','freeze','cold','frz','antifreeze','antifrz','frzprotect','lower','lowerdefres','lowerdefenseresistance','lowerdefenceresistance','lowerdef','lowerres','loweres'].include?(args[i].downcase)
+    v=8 if ['photon','light','shine','defresdifference','defenseresistancedifference','defenceresistancedifference','defresdiff','defenseresistancediff','defenceresistancediff'].include?(args[i].downcase)
+    if v>0 && !f.include?(v)
+      v2=0
+      for i2 in 0...f.length
+        if f[i2].zero? && v2.zero? && !f.include?(v)
+          f[i2]=v
+          v2=i2
+        end
+      end
+    end
+  end
+  if supernatures.include?('+HP') || supernatures.include?('-HP')
+    f.push(1) unless f.include?(1)
+  end
+  if supernatures.include?('+Atk') || supernatures.include?('-Atk')
+    f.push(2) unless f.include?(2)
+  end
+  if supernatures.include?('+Spd') || supernatures.include?('-Spd')
+    f.push(3) unless f.include?(3)
+  end
+  if supernatures.include?('+Def') || supernatures.include?('-Def')
+    f.push(4) unless f.include?(4)
+  end
+  if supernatures.include?('+Res') || supernatures.include?('-Res')
+    f.push(5) unless f.include?(5)
+  end
+  if args.map{|q| q.downcase}.include?('stats')
+    f.push(1) unless f.include?(1)
+    f.push(2) unless f.include?(2)
+    f.push(3) unless f.include?(3)
+    f.push(4) unless f.include?(4)
+    f.push(5) unless f.include?(5)
+  end
+  k2=find_in_units(event,3,false,true) # Narrow the list of units down based on the defined parameters
+  event.channel.send_temporary_message('Units found, sorting now...',3)
+  g=get_markers(event)
+  u=@units.map{|q| q}
+  k=k2.reject{|q| !has_any?(g, q[13][0])}.uniq if k2.is_a?(Array)
+  k=u.reject{|q| !has_any?(g, q[13][0])}.sort{|a,b| a[0]<=>b[0]}.uniq unless k2.is_a?(Array)
+  if k.length>=u.reject{|q| !has_any?(g, q[13][0])}.length && !safe_to_spam?(event)
+    event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
+    return nil
+  end
+  for i in 0...k.length # remove any units who don't have known stats yet
+    k[i]=nil if k[i][5].nil? || k[i][5].max.zero?
+  end
+  s=['','HP','Attack','Speed','Defense','Resistance','BST','FrzProtect','Photon Points']
+  k.compact!
+  k=k.reject {|q| find_unit(q[0],event)<0}
+  if f.include?(6) || f.include?(7) || f.include?(8)
+    for i in 0...k.length
+      k[i][5][5]=k[i][5][0]+k[i][5][1]+k[i][5][2]+k[i][5][3]+k[i][5][4]
+      k[i][5][6]=[k[i][5][3],k[i][5][4]].min
+      k[i][5][7]=k[i][5][3]-k[i][5][4]
+    end
+  end
+  t=0
+  b=0
+  for i in 0...args.length
+    if args[i].downcase[0,3]=='top' && t.zero?
+      t=[args[i][3,args[i].length-3].to_i,k.length].min
+    elsif args[i].downcase[0,6]=='bottom' && b.zero?
+      b=[args[i][6,args[i].length-6].to_i,k.length].min
+    end
+  end
+  k=k.reject{|q| !q[13][0].nil?} if t>0 || b>0
+  k.sort! {|b,a| (supersort(a,b,5,f[0]-1)) == 0 ? ((supersort(a,b,5,f[1]-1)) == 0 ? ((supersort(a,b,5,f[2]-1)) == 0 ? ((supersort(a,b,5,f[3]-1)) == 0 ? ((supersort(a,b,5,f[4]-1)) == 0 ? ((supersort(a,b,5,f[5]-1)) == 0 ? ((supersort(a,b,5,f[6]-1)) == 0 ? ((supersort(a,b,5,f[7]-1)) == 0 ? (supersort(a,b,0)) : (supersort(a,b,5,f[7]-1))) : (supersort(a,b,5,f[6]-1))) : (supersort(a,b,5,f[5]-1))) : (supersort(a,b,5,f[4]-1))) : (supersort(a,b,5,f[3]-1))) : (supersort(a,b,5,f[2]-1))) : (supersort(a,b,5,f[1]-1))) : (supersort(a,b,5,f[0]-1))}
+  m="Please note that the stats listed are for neutral-nature units without stat-affecting skills.\n"
+  if f.include?(2)
+    m="#{m}The Strength/Magic stat also does not account for weapon might.\n"
+  end
+  display=[0,k.length]
+  if t>0
+    display=[0,t]
+  elsif b>0
+    display=[k.length-b,k.length]
+  end
+  if safe_to_spam?(event)
+  elsif k2==-1 && display[0].zero? && display[1]==k.length
+    event.respond "Sorry, but you must specify filters.  I will not sort the entire roster as that would be spam.\nInstead, have the stats of the character whose name in Japanese means \"sort\"."
+    disp_stats(bot,'Stahl',nil,event,true)
+    return false
+  elsif !k2.is_a?(Array) && display[0].zero? && display[1]==k.length
+    return false
+  end
+  m2=[]
+  for i in display[0]...display[1]
+    ls=[]
+    for j in 0...f.length
+      sf=s[f[j]]
+      if f[j]==2 # give the proper attack stat name
+        if ['Healer','Tome'].include?(k[i][1][1])
+          sf='Magic'
+        elsif ['Dragon'].include?(k[i][1][1])
+          sf='Magic'
+        elsif ['Blade','Dagger','Bow'].include?(k[i][1][1])
+          sf='Strength'
+        end
+      end
+      sfn=''
+      if f[j]<6 && !(k[i][4].nil? || k[i][4].max.zero?)
+        sfn='(+) ' if [1,5,10].include?(k[i][4][f[j]-1])
+        sfn='(-) ' if [2,6,11].include?(k[i][4][f[j]-1])
+      end
+      if k[i][5][f[j]-1]<0 && sf.length>0
+        k[i][5][f[j]-1]=0-k[i][5][f[j]-1]
+        sf="Anti#{sf[0,1].downcase}#{sf[1,sf.length-1]}"
+        ls.push("#{k[i][5][f[j]-1]} #{sfn}#{sf}")
+      elsif f[j]==8 && k[i][5][f[j]-1]>=5
+        ls.push("*#{k[i][5][f[j]-1]} #{sfn}#{sf}*") if sf.length>0
+      else
+        ls.push("#{k[i][5][f[j]-1]} #{sfn}#{sf}") if sf.length>0
+      end
+    end
+    m2.push("#{'~~' if !k[i][13][0].nil?}**#{k[i][0]}**#{unit_moji(bot,event,-1,k[i][0])} - #{ls.join(', ')}#{'~~' if !k[i][13][0].nil?}")
+  end
+  if (f.include?(1) || f.include?(2) || f.include?(3) || f.include?(4) || f.include?(5)) && m2.join("\n").include?("(+)") && m2.join("\n").include?("(-)")
+    m="#{m}\n(+) and (-) mark units for whom a nature would increase or decrease a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.\n"
+  elsif (f.include?(1) || f.include?(2) || f.include?(3) || f.include?(4) || f.include?(5)) && m2.join("\n").include?("(+)")
+    m="#{m}\n(+) marks units for whom a boon would increase a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.\n"
+  elsif (f.include?(1) || f.include?(2) || f.include?(3) || f.include?(4) || f.include?(5)) && m2.join("\n").include?("(-)")
+    m="#{m}\n(-) marks units for whom a bane would decrease a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.\n"
+  end
+  if f.include?(7) || f.include?(8)
+    m="#{m}\nFrzProtect is the lower of the units' Defense and Resistance stats, used by dragonstones when attacking ranged units and by Felicia's Plate all the time." if f.include?(7)
+    m="#{m}\nLight Brand deals +7 damage to units with at least 5 Photon Points." if f.include?(8)
+    m="#{m}\nThe order of units listed here can be affected by natures that affect a unit's Defense and/or Resistance.\n"
+  end
+  if "#{m}\n#{m2.join("\n")}".length>2000 && !safe_to_spam?(event)
+    event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
+    return nil
+  end
+  for i in 0...m2.length
+    m=extend_message(m,m2[i],event)
+  end
+  event.respond m
+  return nil
+end
+
+def sort_skills(bot,event,args=[])
+  args=event.message.text.downcase.split(' ') if args.nil? || args.length.zero?
+  event.channel.send_temporary_message('Calculating data, please wait...',5)
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  k=find_in_skills(event, 2, false)
+  for i in 0...k.length
+    if k[i][15].nil? || !k[i][15].is_a?(String) || k[i][15].length.zero?
+      k[i][15]=0
+    elsif k[i][6]=='-' || k[i][6].split(', ').length.zero?
+      k[i][15]=350
+    else
+      k[i][15]=400
+    end
+    if k[i][0].include?("*(+) Effect*") || k[i][0].include?("*(+) All*")
+      k[i][1]=k[i][15]*1
+      k[i][15]=0
+    end
+  end
+  k.sort! {|b,a| ((a[1] <=> b[1]) == 0 ? ((a[15] <=> b[15]) == 0 ? (b[0] <=> a[0]) : (a[15] <=> b[15])) : (a[1] <=> b[1]))}
+  str="All SP costs are without accounting for increased inheritance costs (1.5x the SP costs listed below)"
+  for i in 0...k.length
+    k[i][0]="**#{k[i][0]}** "
+    if k[i][4]=='Weapon'
+      k[i][0]="#{k[i][0]}<:Skill_Weapon:444078171114045450>"
+      k[i][0]="#{k[i][0]}<:Red_Blade:443172811830198282>" if k[i][5]=='Sword Users Only'
+      k[i][0]="#{k[i][0]}<:Blue_Blade:467112472768151562>" if k[i][5]=='Lance Users Only'
+      k[i][0]="#{k[i][0]}<:Green_Blade:467122927230386207>" if k[i][5]=='Axe Users Only'
+      k[i][0]="#{k[i][0]}<:Red_Tome:443172811826003968>" if k[i][5]=='Red Tome Users Only'
+      k[i][0]="#{k[i][0]}<:Blue_Tome:467112472394858508>" if k[i][5]=='Blue Tome Users Only'
+      k[i][0]="#{k[i][0]}<:Green_Tome:467122927666593822>" if k[i][5]=='Green Tome Users Only'
+      k[i][0]="#{k[i][0]}<:Gold_Dragon:443172811641454592>" if k[i][5]=='Dragons Only'
+      k[i][0]="#{k[i][0]}<:Gold_Bow:443172812492898314>" if k[i][5]=='Bow Users Only'
+      k[i][0]="#{k[i][0]}<:Gold_Dagger:443172811461230603>" if k[i][5]=='Dagger Users Only'
+      k[i][0]="#{k[i][0]}<:Gold_Staff:443172811628871720>" if k[i][5]=='Staff Users Only' && alter_classes(event,'Colored Healers')
+      k[i][0]="#{k[i][0]}<:Colorless_Staff:443692132323295243>" if k[i][5]=='Staff Users Only' && !alter_classes(event,'Colored Healers')
+      k[i][0]="#{k[i][0]}<:Gold_Beast:443172811608162324>" if k[i][5]=='Beasts Only'
+    elsif k[i][4]=='Assist'
+      k[i][0]="#{k[i][0]}<:Skill_Assist:444078171025965066>"
+      k[i][0]="#{k[i][0]}<:Assist_Music:454462054959415296>" if k[i][11].split(', ').include?('Music')
+      k[i][0]="#{k[i][0]}<:Assist_Rally:454462054619807747>" if k[i][11].split(', ').include?('Rally')
+      k[i][0]="#{k[i][0]}<:Assist_Staff:454451496831025162>" if k[i][5]=='Staff Users Only'
+    elsif k[i][4]=='Special'
+      k[i][0]="#{k[i][0]}<:Skill_Special:444078170665254929>"
+      k[i][0]="#{k[i][0]}<:Special_Offensive:454460020793278475>" if k[i][11].split(', ').include?('Offensive')
+      k[i][0]="#{k[i][0]}<:Special_Defensive:454460020591951884>" if k[i][11].split(', ').include?('Defensive')
+      k[i][0]="#{k[i][0]}<:Special_AoE:454460021665693696>" if k[i][11].split(', ').include?('AoE')
+      k[i][0]="#{k[i][0]}<:Special_Healer:454451451805040640>" if k[i][5]=='Staff Users Only'
+    else
+      k[i][0]="#{k[i][0]}<:Passive_A:443677024192823327>" if k[i][4].split(', ').include?('Passive(A)')
+      k[i][0]="#{k[i][0]}<:Passive_B:443677023257493506>" if k[i][4].split(', ').include?('Passive(B)')
+      k[i][0]="#{k[i][0]}<:Passive_C:443677023555026954>" if k[i][4].split(', ').include?('Passive(C)')
+      k[i][0]="#{k[i][0]}<:Passive_S:443677023626330122>" if k[i][4].split(', ').include?('Passive(S)') || k[i][3].split(', ').include?('Seak')
+      k[i][0]="#{k[i][0]}<:Passive_W:443677023706152960>" if k[i][4].split(', ').include?('Passive(W)')
+    end
+    k[i][0]="#{k[i][0]} - #{k[i][1]} SP"
+    if k[i][15]>k[i][1]
+      k[i][0]="#{k[i][0]} (#{k[i][15]} SP when refined)"
+    elsif k[i][15]==k[i][1]
+      k[i][0]="#{k[i][0]} (refinement possible)"
+    end
+    k[i][0]="#{k[i][0]} - Prf to #{k[i][6]}" unless k[i][6]=='-' || k[i][6].split(', ').length.zero?
+  end
+  if k.map{|q| q[0]}.join("\n").length+str.length>1950 && !safe_to_spam?(event)
+    event.respond "There are too many skills to list.  Please try this command in PM."
+    return nil
+  end
+  for i in 0...k.length
+    str=extend_message(str,"#{"\n" if i==0}#{k[i][0]}",event)
+  end
+  event.respond str
 end
 
 def supersort(a,b,m,n=nil)
@@ -11509,6 +11785,10 @@ bot.command(:skill) do |event, *args|
     data_load()
     disp_skill(bot,args.join(' '),event,false,true)
     return nil
+  elsif ['sort','list'].include?(args[0].downcase)
+    args.shift
+    sort_skills(bot,event,args)
+    return nil
   end
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   data_load()
@@ -11547,6 +11827,10 @@ bot.command([:skills,:fodder]) do |event, *args|
       args.shift
       k=parse_function(:learnable_skills,event,args,bot,true)
       return nil unless k<0
+    elsif ['sort','list'].include?(args[0].downcase)
+      args.shift
+      sort_skills(bot,event,args)
+      return nil
     end
   end
   k=find_name_in_string(event,nil,1)
@@ -11673,6 +11957,10 @@ bot.command([:stats,:stat]) do |event, *args|
     args.shift
     args.shift
     disp_unit_stats_and_skills(event,args,bot)
+    return nil
+  elsif ['sort','list'].include?(args[0].downcase)
+    args.shift
+    sort_units(bot,event,args)
     return nil
   end
   event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -11834,6 +12122,10 @@ bot.command([:unit, :data, :statsskills, :statskills, :stats_skills, :stat_skill
     args.shift
     k=parse_function(:proc_study,event,args,bot)
     return nil unless k<0
+  elsif ['sort','list'].include?(args[0].downcase)
+    args.shift
+    sort_units(bot,event,args)
+    return nil
   end
   disp_unit_stats_and_skills(event,args,bot)
 end
@@ -12548,167 +12840,22 @@ bot.command([:sort,:list]) do |event, *args|
     }
     event.respond 'The alias list has been sorted alphabetically'
     return nil
-  end
-  event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
-  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
-  f=[0,0,0,0,0,0,0,0,0]
-  supernatures=[]
-  for i in 0...args.length # find stat names, retain the order in which they're listed.
-    supernatures.push('+HP') if ['hpboon','healthboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
-    supernatures.push('+Atk') if ['atkboon','attboon','attackboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
-    supernatures.push('+Spd') if ['spdboon','speedboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
-    supernatures.push('+Def') if ['defboon','defenseboon','defenceboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
-    supernatures.push('+Res') if ['resboon','resistanceboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
-    supernatures.push('-HP') if ['hpbane','healthbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
-    supernatures.push('-Atk') if ['atkbane','attbane','attackbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
-    supernatures.push('-Spd') if ['spdbane','speedbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
-    supernatures.push('-Def') if ['defbane','defensebane','defencebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
-    supernatures.push('-Res') if ['resbane','resistancebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
-    v=0
-    v=1 if ['hp','health'].include?(args[i].downcase)
-    v=2 if ['str','strength','strong','mag','magic','atk','att','attack'].include?(args[i].downcase)
-    v=3 if ['spd','speed'].include?(args[i].downcase)
-    v=4 if ['def','defense','defence','defensive','defencive'].include?(args[i].downcase)
-    v=5 if ['res','resistance'].include?(args[i].downcase)
-    v=6 if ['bst','base','total'].include?(args[i].downcase)
-    v=7 if ['chill','frostbite','freeze','cold','frz','antifreeze','antifrz','frzprotect','lower','lowerdefres','lowerdefenseresistance','lowerdefenceresistance','lowerdef','lowerres','loweres'].include?(args[i].downcase)
-    v=8 if ['photon','light','shine','defresdifference','defenseresistancedifference','defenceresistancedifference','defresdiff','defenseresistancediff','defenceresistancediff'].include?(args[i].downcase)
-    if v>0 && !f.include?(v)
-      v2=0
-      for i2 in 0...f.length
-        if f[i2].zero? && v2.zero? && !f.include?(v)
-          f[i2]=v
-          v2=i2
-        end
-      end
-    end
-  end
-  if supernatures.include?('+HP') || supernatures.include?('-HP')
-    f.push(1) unless f.include?(1)
-  end
-  if supernatures.include?('+Atk') || supernatures.include?('-Atk')
-    f.push(2) unless f.include?(2)
-  end
-  if supernatures.include?('+Spd') || supernatures.include?('-Spd')
-    f.push(3) unless f.include?(3)
-  end
-  if supernatures.include?('+Def') || supernatures.include?('-Def')
-    f.push(4) unless f.include?(4)
-  end
-  if supernatures.include?('+Res') || supernatures.include?('-Res')
-    f.push(5) unless f.include?(5)
-  end
-  if args.map{|q| q.downcase}.include?('stats')
-    f.push(1) unless f.include?(1)
-    f.push(2) unless f.include?(2)
-    f.push(3) unless f.include?(3)
-    f.push(4) unless f.include?(4)
-    f.push(5) unless f.include?(5)
-  end
-  k2=find_in_units(event,3,false,true) # Narrow the list of units down based on the defined parameters
-  event.channel.send_temporary_message('Units found, sorting now...',3)
-  g=get_markers(event)
-  u=@units.map{|q| q}
-  k=k2.reject{|q| !has_any?(g, q[13][0])}.uniq if k2.is_a?(Array)
-  k=u.reject{|q| !has_any?(g, q[13][0])}.sort{|a,b| a[0]<=>b[0]}.uniq unless k2.is_a?(Array)
-  if k.length>=u.reject{|q| !has_any?(g, q[13][0])}.length && !safe_to_spam?(event)
-    event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
+  elsif ['skill','skills'].include?(args[0].downcase)
+    args.shift
+    sort_skills(bot,event,args)
     return nil
   end
-  for i in 0...k.length # remove any units who don't have known stats yet
-    k[i]=nil if k[i][5].nil? || k[i][5].max.zero?
-  end
-  s=['','HP','Attack','Speed','Defense','Resistance','BST','FrzProtect','Photon Points']
-  k.compact!
-  k=k.reject {|q| find_unit(q[0],event)<0}
-  if f.include?(6) || f.include?(7) || f.include?(8)
-    for i in 0...k.length
-      k[i][5][5]=k[i][5][0]+k[i][5][1]+k[i][5][2]+k[i][5][3]+k[i][5][4]
-      k[i][5][6]=[k[i][5][3],k[i][5][4]].min
-      k[i][5][7]=k[i][5][3]-k[i][5][4]
-    end
-  end
-  t=0
-  b=0
-  for i in 0...args.length
-    if args[i].downcase[0,3]=='top' && t.zero?
-      t=[args[i][3,args[i].length-3].to_i,k.length].min
-    elsif args[i].downcase[0,6]=='bottom' && b.zero?
-      b=[args[i][6,args[i].length-6].to_i,k.length].min
-    end
-  end
-  k=k.reject{|q| !q[13][0].nil?} if t>0 || b>0
-  k.sort! {|b,a| (supersort(a,b,5,f[0]-1)) == 0 ? ((supersort(a,b,5,f[1]-1)) == 0 ? ((supersort(a,b,5,f[2]-1)) == 0 ? ((supersort(a,b,5,f[3]-1)) == 0 ? ((supersort(a,b,5,f[4]-1)) == 0 ? ((supersort(a,b,5,f[5]-1)) == 0 ? ((supersort(a,b,5,f[6]-1)) == 0 ? ((supersort(a,b,5,f[7]-1)) == 0 ? (supersort(a,b,0)) : (supersort(a,b,5,f[7]-1))) : (supersort(a,b,5,f[6]-1))) : (supersort(a,b,5,f[5]-1))) : (supersort(a,b,5,f[4]-1))) : (supersort(a,b,5,f[3]-1))) : (supersort(a,b,5,f[2]-1))) : (supersort(a,b,5,f[1]-1))) : (supersort(a,b,5,f[0]-1))}
-  m="Please note that the stats listed are for neutral-nature units without stat-affecting skills.\n"
-  if f.include?(2)
-    m="#{m}The Strength/Magic stat also does not account for weapon might.\n"
-  end
-  display=[0,k.length]
-  if t>0
-    display=[0,t]
-  elsif b>0
-    display=[k.length-b,k.length]
-  end
-  if safe_to_spam?(event)
-  elsif k2==-1 && display[0].zero? && display[1]==k.length
-    event.respond "Sorry, but you must specify filters.  I will not sort the entire roster as that would be spam.\nInstead, have the stats of the character whose name in Japanese means \"sort\"."
-    disp_stats(bot,'Stahl',nil,event,true)
-    return false
-  elsif !k2.is_a?(Array) && display[0].zero? && display[1]==k.length
-    return false
-  end
-  m2=[]
-  for i in display[0]...display[1]
-    ls=[]
-    for j in 0...f.length
-      sf=s[f[j]]
-      if f[j]==2 # give the proper attack stat name
-        if ['Healer','Tome'].include?(k[i][1][1])
-          sf='Magic'
-        elsif ['Dragon'].include?(k[i][1][1])
-          sf='Magic'
-        elsif ['Blade','Dagger','Bow'].include?(k[i][1][1])
-          sf='Strength'
-        end
-      end
-      sfn=''
-      if f[j]<6 && !(k[i][4].nil? || k[i][4].max.zero?)
-        sfn='(+) ' if [1,5,10].include?(k[i][4][f[j]-1])
-        sfn='(-) ' if [2,6,11].include?(k[i][4][f[j]-1])
-      end
-      if k[i][5][f[j]-1]<0 && sf.length>0
-        k[i][5][f[j]-1]=0-k[i][5][f[j]-1]
-        sf="Anti#{sf[0,1].downcase}#{sf[1,sf.length-1]}"
-        ls.push("#{k[i][5][f[j]-1]} #{sfn}#{sf}")
-      elsif f[j]==8 && k[i][5][f[j]-1]>=5
-        ls.push("*#{k[i][5][f[j]-1]} #{sfn}#{sf}*") if sf.length>0
-      else
-        ls.push("#{k[i][5][f[j]-1]} #{sfn}#{sf}") if sf.length>0
-      end
-    end
-    m2.push("#{'~~' if !k[i][13][0].nil?}**#{k[i][0]}**#{unit_moji(bot,event,-1,k[i][0])} - #{ls.join(', ')}#{'~~' if !k[i][13][0].nil?}")
-  end
-  if (f.include?(1) || f.include?(2) || f.include?(3) || f.include?(4) || f.include?(5)) && m2.join("\n").include?("(+)") && m2.join("\n").include?("(-)")
-    m="#{m}\n(+) and (-) mark units for whom a nature would increase or decrease a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.\n"
-  elsif (f.include?(1) || f.include?(2) || f.include?(3) || f.include?(4) || f.include?(5)) && m2.join("\n").include?("(+)")
-    m="#{m}\n(+) marks units for whom a boon would increase a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.\n"
-  elsif (f.include?(1) || f.include?(2) || f.include?(3) || f.include?(4) || f.include?(5)) && m2.join("\n").include?("(-)")
-    m="#{m}\n(-) marks units for whom a bane would decrease a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.\n"
-  end
-  if f.include?(7) || f.include?(8)
-    m="#{m}\nFrzProtect is the lower of the units' Defense and Resistance stats, used by dragonstones when attacking ranged units and by Felicia's Plate all the time." if f.include?(7)
-    m="#{m}\nLight Brand deals +7 damage to units with at least 5 Photon Points." if f.include?(8)
-    m="#{m}\nThe order of units listed here can be affected by natures that affect a unit's Defense and/or Resistance.\n"
-  end
-  if "#{m}\n#{m2.join("\n")}".length>2000 && !safe_to_spam?(event)
-    event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
-    return nil
-  end
-  for i in 0...m2.length
-    m=extend_message(m,m2[i],event)
-  end
-  event.respond m
-  return nil
+  sort_units(bot,event,args)
+end
+
+bot.command([:sortskill, :skillsort, :sortskills, :skillssort, :listskill, :skillist, :skillist, :listskills, :skillslist]) do |event, *args|
+  return nil if overlap_prevent(event)
+  sort_skills(bot,event,args)
+end
+
+bot.command([:sortstats, :statssort, :sortstat, :statsort, :liststats, :statslist, :statlist, :liststat, :sortunits, :unitssort, :sortunit, :unitsort, :listunits, :unitslist, :unitlist, :listunit]) do |event, *args|
+  return nil if overlap_prevent(event)
+  sort_units(bot,event,args)
 end
 
 bot.command([:average,:mean]) do |event, *args|
@@ -14874,80 +15021,111 @@ bot.mention do |event|
     disp_skill(bot,a.join(' '),event,false,true)
     k=1
   elsif ['stats','stat'].include?(a[0].downcase)
-    event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
-    k=find_name_in_string(event,nil,1)
-    if k.nil?
-      w=nil
-      if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-        event.respond "Steel's waifu is not in the game."
-      elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-        event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-      elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
-        x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
-        k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
-        w=k2[0] unless k2.nil?
-        disp_stats(bot,x[1],w,event,true)
-      else
-        event.respond 'No matches found.'
-      end
-      return nil
-    end
-    str=k[0]
-    k2=get_weapon(first_sub(a.join(' '),k[1],''),event)
-    w=nil
-    w=k2[0] unless k2.nil?
-    data_load()
-    if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
-      x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
-      disp_stats(bot,x[1],w,event,true)
-    elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
-      x=detect_multi_unit_alias(event,str.downcase,str.downcase)
-      disp_stats(bot,x[1],w,event,true)
-    elsif find_unit(str,event)>=0
-      disp_stats(bot,str,w,event)
+    a.shift
+    if ['sort','list'].include?(a[0].downcase)
+      a.shift
+      sort_units(bot,event,a)
     else
-      event.respond 'No matches found'
+      event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+      k=find_name_in_string(event,nil,1)
+      k23=0
+      if k.nil?
+        w=nil
+        if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
+          event.respond "Steel's waifu is not in the game."
+        elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
+          event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
+        elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+          x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+          k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
+          w=k2[0] unless k2.nil?
+          disp_stats(bot,x[1],w,event,true)
+        else
+          event.respond 'No matches found.'
+        end
+        k23=1
+      end
+      str=k[0]
+      k2=get_weapon(first_sub(a.join(' '),k[1],''),event)
+      w=nil
+      w=k2[0] unless k2.nil?
+      data_load()
+      if k23>0
+      elsif !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
+        x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
+        disp_stats(bot,x[1],w,event,true)
+      elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
+        x=detect_multi_unit_alias(event,str.downcase,str.downcase)
+        disp_stats(bot,x[1],w,event,true)
+      elsif find_unit(str,event)>=0
+        disp_stats(bot,str,w,event)
+      else
+        event.respond 'No matches found'
+      end
     end
     k=1
   elsif ['skills','fodder'].include?(a[0].downcase)
-    k=find_name_in_string(event,nil,1)
-    if k.nil?
-      if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
+    a.shift
+    if ['sort','list'].include?(a[0].downcase)
+      a.shift
+      sort_skills(bot,event,a)
+    else
+      k=find_name_in_string(event,nil,1)
+      k2=0
+      if k.nil?
+        if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
+          event.respond "Steel's waifu is not in the game."
+        elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
+          event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
+        elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+          x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+          disp_unit_skills(bot,x[1],event)
+        elsif s.downcase[0,6]=='skills'
+          event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill',1)}```, without the s."
+        else
+          event.respond 'No matches found.  Please note that the `fodder` command is for listing the skills you can fodder a **unit** for, not the units you need to fodder to get a skill.'
+        end
+        k2=1
+      end
+      str=k[0]
+      data_load()
+      if str.nil? || k2>0
+      elsif !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
+        x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
+        disp_unit_skills(bot,x[1],event)
+      elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
+        x=detect_multi_unit_alias(event,str.downcase,str.downcase)
+        disp_unit_skills(bot,x[1],event)
+      elsif find_unit(str,event)>=0
+        disp_unit_skills(bot,str,event)
+      elsif event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
         event.respond "Steel's waifu is not in the game."
       elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
         event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-      elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
-        x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
-        disp_unit_skills(bot,x[1],event)
-      elsif s.downcase[0,6]=='skills'
-        event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill',1)}```, without the s."
       else
-        event.respond 'No matches found.  Please note that the `fodder` command is for listing the skills you can fodder a **unit** for, not the units you need to fodder to get a skill.'
+        event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s."
       end
-      return nil
-    end
-    str=k[0]
-    data_load()
-    if str.nil?
-    elsif !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
-      x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
-      disp_unit_skills(bot,x[1],event)
-    elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
-      x=detect_multi_unit_alias(event,str.downcase,str.downcase)
-      disp_unit_skills(bot,x[1],event)
-    elsif find_unit(str,event)>=0
-      disp_unit_skills(bot,str,event)
-    elsif event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-      event.respond "Steel's waifu is not in the game."
-    elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-      event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-    else
-      event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s."
     end
     k=1
   elsif ['skill'].include?(a[0].downcase)
-    data_load()
-    disp_skill(bot,a.join(' '),event)
+    a.shift
+    if ['sort','list'].include?(a[0].downcase)
+      a.shift
+      sort_skills(bot,event,a)
+    else
+      data_load()
+      disp_skill(bot,a.join(' '),event)
+    end
+    k=1
+  elsif ['sort','list'].include?(a[0].downcase)
+    a.shift
+    if ['skill','skills'].include?(a[0].downcase)
+      a.shift
+      sort_skills(bot,event,a)
+    else
+      sort_units(bot,event,a)
+    end
+    k=1
   end
   if k<0
     str=find_name_in_string(event,nil,1)
