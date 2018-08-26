@@ -659,6 +659,24 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     end
   elsif ['sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list in order based on their SP cost.\n\n#{disp_more_info(event,3)}",0xD49F61)
+    if safe_to_spam?(event)
+      lookout=[]
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
+        lookout=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
+          lookout.push(eval line)
+        end
+      end
+      w=lookout.reject{|q| q[2]!='Weapon' || !q[4].nil?}.map{|q| q[0]}.sort
+      p=lookout.reject{|q| q[2]!='Passive' || !q[4].nil?}.map{|q| q[0]}.sort
+      w=w.reject{|q| q=='Hogtome'} unless !event.server.nil? && event.server.id==330850148261298176
+      if w.join("\n").length+p.join("\n").length>=1950 || !safe_to_spam?(event)
+        create_embed(event,'Weapon Flavors','',0x40C0F0,nil,nil,triple_finish(w))
+        create_embed(event,'Passive Flavors','',0x40C0F0,nil,nil,triple_finish(p))
+      else
+        create_embed(event,'','',0x40C0F0,nil,nil,[['Weapon Flavors',w.join("\n")],['Passive Flavors',p.join("\n")]])
+      end
+    end
   elsif ['sortstats','statssort','sortstat','statsort','liststats','statslist','statlist','liststat','sortunits','unitssort','sortunit','unitsort','listunits','unitslist','unitlist','listunit'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list in order based on the stats you include.\n\n#{disp_more_info(event,2)}",0xD49F61)
   elsif ['sort','list'].include?(command.downcase)
@@ -671,6 +689,24 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list in order based on the stats you include.\n\n#{disp_more_info(event,2)}",0xD49F61)
     elsif ['skills','skill'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list in order based on their SP cost.\n\n#{disp_more_info(event,3)}",0xD49F61)
+      if safe_to_spam?(event)
+        lookout=[]
+        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
+          lookout=[]
+          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
+            lookout.push(eval line)
+          end
+        end
+        w=lookout.reject{|q| q[2]!='Weapon' || !q[4].nil?}.map{|q| q[0]}.sort
+        p=lookout.reject{|q| q[2]!='Passive' || !q[4].nil?}.map{|q| q[0]}.sort
+        w=w.reject{|q| q=='Hogtome'} unless !event.server.nil? && event.server.id==330850148261298176
+        if w.join("\n").length+p.join("\n").length>=1950 || !safe_to_spam?(event)
+          create_embed(event,'Weapon Flavors','',0x40C0F0,nil,nil,triple_finish(w))
+          create_embed(event,'Passive Flavors','',0x40C0F0,nil,nil,triple_finish(p))
+        else
+          create_embed(event,'','',0x40C0F0,nil,nil,[['Weapon Flavors',w.join("\n")],['Passive Flavors',p.join("\n")]])
+        end
+      end
     else
       create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list in order based on the stats you include.\n\n#{disp_more_info(event,2)}\n\n\nIn addition, you can use `FEH!sort skill` to sort skills by their SP cost.",0xD49F61)
     end
@@ -5571,8 +5607,8 @@ def collapse_skill_list(list,mode=0)
         list[skill_include?(list,'Ruin')]=nil
         newlist[skill_include?(newlist,'Ruin')]=nil if skill_include?(newlist,'Ruin')>=0
       elsif list[i][0][list[i][0].length-1,1].to_i.to_s==list[i][0][list[i][0].length-1,1]
-        v=list[i][0].gsub(list[i][0].scan(/([[:alpha:]]| |\+)+?/).join,"").to_i
-        v2=list[i][0].scan(/([[:alpha:]]| |\+)+?/).join
+        v=list[i][0].gsub(list[i][0].scan(/([[:alpha:]]| |\+|\/)+?/).join,"").to_i
+        v2=list[i][0].scan(/([[:alpha:]]| |\+|\/)+?/).join
         if skill_include?(list,"#{v2}#{v+1}")>=0
           if skill_include?(list,"#{v2}#{v+2}")>=0
             if skill_include?(list,"#{v2}#{v+3}")>=0
@@ -6879,13 +6915,13 @@ def sort_skills(bot,event,args=[])
       k[i][0]="#{k[i][0]}<:Passive_A:443677024192823327>" if k[i][4].split(', ').include?('Passive(A)')
       k[i][0]="#{k[i][0]}<:Passive_B:443677023257493506>" if k[i][4].split(', ').include?('Passive(B)')
       k[i][0]="#{k[i][0]}<:Passive_C:443677023555026954>" if k[i][4].split(', ').include?('Passive(C)')
-      k[i][0]="#{k[i][0]}<:Passive_S:443677023626330122>" if k[i][4].split(', ').include?('Passive(S)') || k[i][3].split(', ').include?('Seak')
+      k[i][0]="#{k[i][0]}<:Passive_S:443677023626330122>" if k[i][4].split(', ').include?('Passive(S)') || k[i][4].split(', ').include?('Seal')
       k[i][0]="#{k[i][0]}<:Passive_W:443677023706152960>" if k[i][4].split(', ').include?('Passive(W)')
     end
     k[i][0]="#{k[i][0]} - #{k[i][1]} SP"
-    if k[i][15]>k[i][1]
+    if k[i][15]>k[i][1] && k[i][1]>0 && k[i][4]=='Weapon'
       k[i][0]="#{k[i][0]} (#{k[i][15]} SP when refined)"
-    elsif k[i][15]==k[i][1]
+    elsif k[i][15]==k[i][1] && k[i][1]>0 && k[i][4]=='Weapon'
       k[i][0]="#{k[i][0]} (refinement possible)"
     end
     k[i][0]="#{k[i][0]} - Prf to #{k[i][6]}" unless k[i][6]=='-' || k[i][6].split(', ').length.zero?
@@ -15125,6 +15161,14 @@ bot.mention do |event|
     else
       sort_units(bot,event,a)
     end
+    k=1
+  elsif ['sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist'].include?(a[0].downcase)
+    a.shift
+    sort_skills(bot,event,a)
+    k=1
+  elsif ['sortstats','statssort','sortstat','statsort','liststats','statslist','statlist','liststat','sortunits','unitssort','sortunit','unitsort','listunits','unitslist','unitlist','listunit'].include?(a[0].downcase)
+    a.shift
+    sort_units(bot,event,a)
     k=1
   end
   if k<0
