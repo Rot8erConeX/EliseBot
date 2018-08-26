@@ -5607,8 +5607,8 @@ def collapse_skill_list(list,mode=0)
         list[skill_include?(list,'Ruin')]=nil
         newlist[skill_include?(newlist,'Ruin')]=nil if skill_include?(newlist,'Ruin')>=0
       elsif list[i][0][list[i][0].length-1,1].to_i.to_s==list[i][0][list[i][0].length-1,1]
-        v=list[i][0].gsub(list[i][0].scan(/([[:alpha:]]| |\+|\/)+?/).join,"").to_i
-        v2=list[i][0].scan(/([[:alpha:]]| |\+|\/)+?/).join
+        v=list[i][0].gsub(list[i][0].scan(^[[:digit:]])+?/).join,"").to_i
+        v2=list[i][0].scan(/(^[[:digit:]])+?/).join
         if skill_include?(list,"#{v2}#{v+1}")>=0
           if skill_include?(list,"#{v2}#{v+2}")>=0
             if skill_include?(list,"#{v2}#{v+3}")>=0
