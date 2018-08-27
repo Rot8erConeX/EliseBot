@@ -9441,6 +9441,11 @@ def proc_study(event,name,bot,weapon=nil)
   cd="#{crspdd*2/5+wdamage2}#{" (#{crblspdd*2/5+wdamage2})" unless crspdd*4/5==crblspdd*4/5}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[0].push("**Regnal Astra - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Regnal Astra')[6].split(', ').include?(u40[0])
+  c=add_number_to_string(get_match_in_list(procs, 'Fire Emblem')[2],cdwns)
+  d="#{spdd*3/10+wdamage}#{" (#{blspdd*3/10+wdamage})" unless spdd*3/10==blspdd*3/10}"
+  cd="#{crspdd*3/10+wdamage2}#{" (#{crblspdd*3/10+wdamage2})" unless crspdd*3/10==crblspdd*3/10}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[0].push("**Fire Emblem - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Fire Emblem')[6].split(', ').include?(u40[0])
   c=add_number_to_string(get_match_in_list(procs, 'Glimmer')[2],cdwns)
   d="`dmg /2#{" +#{wdamage}" if wdamage>0}`"
   d2="`dmg /2#{" +#{wdamage2}" if wdamage2>0}`"
