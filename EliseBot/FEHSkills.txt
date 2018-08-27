@@ -1,7 +1,7 @@
 Breidablik\0\0\0\Weapon\Summon Gun Users Only\Kiran\Fires Heroes\-\Kiran; -; -; -; -\Kiran; -; -; -; -\Weapon, Purple, Prf\0,0,0,0,0\\Chill Breidablik\
 Chill Breidablik\0\0\0\Weapon\Summon Gun Users Only\Kiran\Fires Heroes, Guides user to where they are needed most.  Counters Surtr's shields\-\-; -; -; -; -\-; -; -; -; -\Weapon, Purple, Prf\0,0,0,0,0\\\
 Alondite\400\16\1\Weapon\Sword Users Only\Black_Knight, Zelgius\Enables counterattack regardless of distance if this unit is attacked.\*Silver Sword*\-; -; -; -; Black_Knight, Zelgius\-; -; -; -; Black_Knight, Zelgius\Weapon, Red, Blade, Prf, DC\0,16,0,0,0\\\
-Amiti\300\11\1\Weapon\Sword Users Only\Elincia\Spd-2. Attack twice when initiating combat.\*Silver Sword*\-; -; -; -; Elincia\-; -; -; -; Elincia\Weapon, Red, Blade, Prf, Brave\0,11,-2,0,0\\\
+Amiti\400\11\1\Weapon\Sword Users Only\Elincia\Spd-2. Attack twice when initiating combat.\*Silver Sword*\-; -; -; -; Elincia\-; -; -; -; Elincia\Weapon, Red, Blade, Prf, Brave\0,11,-2,0,0\\\
 Armorslayer\200\8\1\Weapon\Sword Users Only\-\-\*Steel Sword*\-; -; -; Caeda, Hana, Selena, Tobin; -\-; -; Caeda, Hana, Selena, Tobin; -; -\Weapon, Red, Blade, Armor-killer\0,8,0,0,0\\\
 Armorslayer+\300\12\1\Weapon\Sword Users Only\-\-\*Armorslayer*\-; -; -; -; Caeda, Hana, Selena, Tobin\-; -; -; -; Caeda, Hana, Selena, Tobin\Weapon, Red, Blade, Armor-killer\0,12,0,0,0\\Armorsmasher+\
 Armorsmasher\200\10\1\Weapon\Sword Users Only\-\-\*Steel Sword*\-; -; -; Ooocast; -\-; -; Ooocast; -; -\Weapon, Red, Blade, Armor-killer\0,10,0,0,0\\\
@@ -423,8 +423,8 @@ Candlelight\150\7\2\Weapon\Staff Users Only\-\After combat, if unit attacked, in
 Candlelight+\300\11\2\Weapon\Staff Users Only\-\After combat, if unit attacked, inflicts status on target and foes within 2 spaces of target preventing counterattacks through their next actions.\*Candlelight*\-; -; -; -; -\-; -; -; -; Lyn(Bride)\Weapon, Colorless, Staff, Seasonal, Bride\0,11,0,0,0\\\y
 Disable\150\7\2\Weapon\Staff Users Only\-\After combat, if unit attacked, inflicts Atk/Spd-4 on foe through its next action.\*Assault*\-; -; -; -; -\-; -; Thomasawesome55; -; -\Weapon, Colorless, Staff\0,7,0,0,0\Y\\
 Disable+\300\11\2\Weapon\Staff Users Only\-\After combat, if unit attacked, inflicts Atk/Spd-5 on target and foes within 2 spaces of target through their next actions.\*Disable*\-; -; -; -; -\-; -; -; -; Thomasawesome55\Weapon, Colorless, Staff\0,11,0,0,0\Y\\y
-Fear\150\5\2\Weapon\Staff Users Only\-\After combat, if unit attacked, inflicts Atk-6 on foe through its next action.\*Assault*\-; -; -; -; -\-; -; Sakura, Clarine; -; -\Weapon, Colorless, Staff\0,5,0,0,0\\\
-Fear+\300\12\2\Weapon\Staff Users Only\-\After combat, if unit attacked, inflicts Atk-7 on target and foes within 2 spaces of target through their next actions.\*Fear*\-; -; -; -; -\-; -; -; -; Clarine, Sakura\Weapon, Colorless, Staff\0,12,0,0,0\\\y
+Fear\150\5\2\Weapon\Staff Users Only\-\After combat, if unit attacked, inflicts Atk-6 on foe through its next action.\*Assault*\-; -; -; -; -\-; -; Sakura, Clarine; -; -\Weapon, Colorless, Staff, Silver\0,5,0,0,0\\\
+Fear+\300\12\2\Weapon\Staff Users Only\-\After combat, if unit attacked, inflicts Atk-7 on target and foes within 2 spaces of target through their next actions.\*Fear*\-; -; -; -; -\-; -; -; -; Clarine, Sakura\Weapon, Colorless, Staff, Silver\0,12,0,0,0\\\y
 Gravity\150\6\2\Weapon\Staff Users Only\-\After combat, if unit attacked, prevents foe from moving more than 1 space through its next action.\*Assault*\-; -; -; Loki; -\-; -; Lissa, Loki; -; Elise, Genny\Weapon, Colorless, Staff\0,6,0,0,0\\\
 Gravity+\300\10\2\Weapon\Staff Users Only\-\After combat, if unit attacked, prevents target and foes within 1 space of target from moving more than 1 space through their next actions.\*Gravity*\-; -; -; -; -\-; -; -; -; Elise, Genny, Lissa\Weapon, Colorless, Staff\0,10,0,0,0\\\y
 Hlidskjalf\400\14\2\Weapon\Staff Users Only\Veronica(Brave)\Foe cannot counterattack.  After combat, if unit attacked, inflicts Atk/Spd/Def/Res-4 on target and foes within 2 spaces of target through their next actions, and grants Atk/Spd/Def/Res+4 to unit and allies within 2 spaces for 1 turn.\*Assault*\-; -; -; -; -\-; -; -; -; Veronica(Brave)\Weapon, Colorless, Staff, Prf\0,14,0,0,0\\\
@@ -847,7 +847,7 @@ Poison Strike 2\120\-\Azure 60 200 50\Passive(B), Seal\Excludes Staff Users\-\In
 Poison Strike 3\240\-\Azure 400 1000 100\Passive(B), Seal\Excludes Staff Users\-\Inflicts 10 damage to foe after any combat this unit initiates.\*Poison Strike 2*\-; -; -; -; -\-; -; -; Clarisse, Saizo; Kaze, Matthew\Passive, B, Seal, Damage\\\\
 Pursuit W\200\-\-\Passive(B), Passive(W)\Everyone\-\If unit initiates combat and unit's HP __>__ 75%, unit makes a guaranteed follow-up attack.\-\-; -; -; -; -\-; -; -; -; -\Passive, B, W, Follow-up\Siegmund\\\
 Pursuit W2\100\-\-\Passive(B), Passive(W)\Everyone\-\If unit initiates combat and unit's HP __>__ 90%, unit makes a guaranteed follow-up attack.\-\-; -; -; -; -\-; -; -; -; -\Passive, B, W, Follow-up\Siegmud\Y\\
-Quickened Pulse\0\-\Transparent 20 100 20\Passive(B), Seal\Everyone\-\Special cooldown count -1 at start of Turn 1.\-\-; -; -; -; -\-; -; -; -; -\Passive, B, Seal, Cooldown\\\\
+Quickened Pulse\100\-\Transparent 20 100 20\Passive(B), Seal\Everyone\-\Special cooldown count -1 at start of Turn 1.\-\-; -; -; -; -\-; -; -; -; -\Passive, B, Seal, Cooldown\\\\
 Quick Riposte 1\60\-\Scarlet 40 100 20\Passive(B), Seal\Everyone\-\Unit automatically makes a follow-up attack if attacked at HP __>__ 90%.\-\-; -; -; -; -\Ace(C137), Deirdre, Draco(Gates), Joq, Leo, Moosie, Xander(Festival); -; Dorcas, Klein, Oregano, Subaki; -; -\Passive, B, Seal, Follow-up\\\\
 Quick Riposte 2\120\-\Scarlet 60 200 50\Passive(B), Seal\Everyone\-\Unit automatically makes a follow-up attack if attacked at HP __>__ 80%.\*Quick Riposte 1*\-; -; -; -; -\-; Ace(C137), Deirdre, Draco(Gates), Joq, Leo, Moosie, Xander(Festival); -; Dorcas, Klein, Oregano, Subaki; -\Passive, B, Seal, Follow-up\\\\
 Quick Riposte 3\240\-\Scarlet 400 1000 100\Passive(B), Seal\Everyone\-\Unit automatically makes a follow-up attack if attacked at HP __>__ 70%.\*Quick Riposte 2*\-; -; -; -; -\-; -; -; Ace(C137), Deirdre, Draco(Gates), Joq, Leo, Moosie, Xander(Festival); Dorcas, Klein, Oregano, Subaki\Passive, B, Seal, Follow-up\\\\
@@ -1141,84 +1141,84 @@ Ward Armor\200\-\-\Passive(C)\Armor Only\-\Grants armored allies within 2 spaces
 Ward Cavalry\200\-\-\Passive(C)\Cavalry Only\-\Grants cavalry allies within 2 spaces Def/Res+4 during combat.\*Spur Def 2* or *Spur Res 2*\-; -; -; -; -\-; -; -; Berkut, Eliwood; Olwen(Bonds)\Passive, C, Spur\\\\
 Ward Dragons\200\-\-\Passive(C)\Dragons Only\-\Grants dragon allies within 2 spaces Def/Res+4 during combat.\*Spur Def 2* or *Spur Res 2*\-; -; -; -; -\-; -; -; Robin(M)(Fallen); -\Passive, C, Spur\\\\
 Ward Fliers\200\-\-\Passive(C)\Fliers Only\-\Grants flying allies within 2 spaces Def/Res+4 during combat.\*Spur Def 2* or *Spur Res 2*\-; -; -; -; -\-; -; -; Camilla(Winter), Minerva, Shigure; -\Passive, C, Spur\\\\
-Armored Boots\0\-\Transparent 20 100 40\Seal\Armor Only\-\If unit's HP = 100% at start of turn, unit can move 1 extra space. (That turn only; does not stack.)\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Move\\\\
-Deflect Magic 1\0\-\Verdant 20 100 50\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a tome, damage from second attack onward reduced by 30%.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
-Deflect Magic 2\0\-\Verdant 60 200 50\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a tome, damage from second attack onward reduced by 50%.\*Deflect Magic 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
-Deflect Magic 3\0\-\Verdant 400 1000 100\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a tome, damage from second attack onward reduced by 80%.\*Deflect Magic 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
-Deflect Melee 1\0\-\Scarlet 20 100 50\Seal\Melee Weapon Users Only\-\If unit receives consecutive attacks from a foe using a sword, lance, or axe, damage from second attack onward reduced by 30%.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
-Deflect Melee 2\0\-\Scarlet 60 200 50\Seal\Melee Weapon Users Only\-\If unit receives consecutive attacks from a foe using a sword, lance, or axe, damage from second attack onward reduced by 50%.\*Deflect Melee 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
-Deflect Melee 3\0\-\Scarlet 400 1000 100\Seal\Melee Weapon Users Only\-\If unit receives consecutive attacks from a foe using a sword, lance, or axe, damage from second attack onward reduced by 80%.\*Deflect Melee 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
-Deflect Missile 1\0\-\Azure 20 100 50\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a bow or dagger, damage from second attack onward reduced by 30%.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
-Deflect Missile 2\0\-\Azure 60 200 50\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a bow or dagger, damage from second attack onward reduced by 50%.\*Deflect Missile 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
-Deflect Missile 3\0\-\Azure 400 1000 100\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a bow or dagger, damage from second attack onward reduced by 80%.\*Deflect Missile 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
+Armored Boots\100\-\Transparent 20 100 40\Seal\Armor Only\-\If unit's HP = 100% at start of turn, unit can move 1 extra space. (That turn only; does not stack.)\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Move\\\\
+Deflect Magic 1\50\-\Verdant 20 100 50\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a tome, damage from second attack onward reduced by 30%.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
+Deflect Magic 2\100\-\Verdant 60 200 50\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a tome, damage from second attack onward reduced by 50%.\*Deflect Magic 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
+Deflect Magic 3\200\-\Verdant 400 1000 100\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a tome, damage from second attack onward reduced by 80%.\*Deflect Magic 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
+Deflect Melee 1\50\-\Scarlet 20 100 50\Seal\Melee Weapon Users Only\-\If unit receives consecutive attacks from a foe using a sword, lance, or axe, damage from second attack onward reduced by 30%.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
+Deflect Melee 2\100\-\Scarlet 60 200 50\Seal\Melee Weapon Users Only\-\If unit receives consecutive attacks from a foe using a sword, lance, or axe, damage from second attack onward reduced by 50%.\*Deflect Melee 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
+Deflect Melee 3\200\-\Scarlet 400 1000 100\Seal\Melee Weapon Users Only\-\If unit receives consecutive attacks from a foe using a sword, lance, or axe, damage from second attack onward reduced by 80%.\*Deflect Melee 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
+Deflect Missile 1\50\-\Azure 20 100 50\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a bow or dagger, damage from second attack onward reduced by 30%.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
+Deflect Missile 2\100\-\Azure 60 200 50\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a bow or dagger, damage from second attack onward reduced by 50%.\*Deflect Missile 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
+Deflect Missile 3\200\-\Azure 400 1000 100\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a bow or dagger, damage from second attack onward reduced by 80%.\*Deflect Missile 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
 Embla's Ward\0\-\Gold 20 100 1000\Seal\No one\-\Unit receives 0 damage.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Enemy\\\\
-Hardy Bearing 1\0\-\Transparent 20 100 40\Seal\Everyone\-\Disables skills that change unit's attack priority. If unit has 100% HP at start of battle, enemy skills that change attack priority are also disabled.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Priority\\\\
-Hardy Bearing 2\0\-\Transparent 60 200 50\Seal\Everyone\-\Disables skills that change unit's attack priority. If unit has __<__50% HP at start of battle, enemy skills that change attack priority are also disabled.\*Hardy Bearing 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Priority\\\\
-Hardy Bearing 3\0\-\Transparent 400 1000 100\Seal\Everyone\-\Disables skills that change unit's attack priority. Enemy skills that change attack priority are also disabled.\*Hardy Bearing 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Priority\\\\
-Initiate Seal Atk 1\0\-\scarlet\Seal\Everyone\-\Grants Atk+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal Atk 2\0\-\Scarlet 60 200 50\Seal\Everyone\-\Grants Atk+2.\*Initiate Seal Atk 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal Atk 3\0\-\Scarlet 400 1000 100\Seal\Everyone\-\Grants Atk+3.\*Initiate Seal Atk 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal Def 1\0\-\verdant\Seal\Everyone\-\Grants Def+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal Def 2\0\-\Verdant 60 200 50\Seal\Everyone\-\Grants Def+2.\*Initiate Seal Def 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal Def 3\0\-\Verdant 400 1000 100\Seal\Everyone\-\Grants Def+3.\*Initiate Seal Def 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal HP 1\0\-\transparent\Seal\Everyone\-\Grants HP+3.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal HP 2\0\-\Transparent 60 200 50\Seal\Everyone\-\Grants HP+4.\*Initiate Seal HP 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal HP 3\0\-\Transparent 400 1000 100\Seal\Everyone\-\Grants HP+5.\*Initiate Seal HP 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal Res 1\0\-\transparent\Seal\Everyone\-\Grants Res+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal Res 2\0\-\Transparent 60 200 50\Seal\Everyone\-\Grants Res+2.\*Initiate Seal Res 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal Res 3\0\-\Transparent 400 1000 100\Seal\Everyone\-\Grants Res+3.\*Initiate Seal Res 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal Spd 1\0\-\azure\Seal\Everyone\-\Grants Spd+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal Spd 2\0\-\Azure 60 200 50\Seal\Everyone\-\Grants Spd+2.\*Initiate Seal Spd 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Initiate Seal Spd 3\0\-\Azure 400 1000 100\Seal\Everyone\-\Grants Spd+3.\*Initiate Seal Spd 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Hardy Bearing 1\50\-\Transparent 20 100 40\Seal\Everyone\-\Disables skills that change unit's attack priority. If unit has 100% HP at start of battle, enemy skills that change attack priority are also disabled.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Priority\\\\
+Hardy Bearing 2\100\-\Transparent 60 200 50\Seal\Everyone\-\Disables skills that change unit's attack priority. If unit has __<__50% HP at start of battle, enemy skills that change attack priority are also disabled.\*Hardy Bearing 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Priority\\\\
+Hardy Bearing 3\200\-\Transparent 400 1000 100\Seal\Everyone\-\Disables skills that change unit's attack priority. Enemy skills that change attack priority are also disabled.\*Hardy Bearing 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Priority\\\\
+Initiate Seal Atk 1\30\-\scarlet\Seal\Everyone\-\Grants Atk+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal Atk 2\60\-\Scarlet 60 200 50\Seal\Everyone\-\Grants Atk+2.\*Initiate Seal Atk 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal Atk 3\120\-\Scarlet 400 1000 100\Seal\Everyone\-\Grants Atk+3.\*Initiate Seal Atk 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal Def 1\30\-\verdant\Seal\Everyone\-\Grants Def+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal Def 2\60\-\Verdant 60 200 50\Seal\Everyone\-\Grants Def+2.\*Initiate Seal Def 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal Def 3\120\-\Verdant 400 1000 100\Seal\Everyone\-\Grants Def+3.\*Initiate Seal Def 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal HP 1\30\-\transparent\Seal\Everyone\-\Grants HP+3.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal HP 2\60\-\Transparent 60 200 50\Seal\Everyone\-\Grants HP+4.\*Initiate Seal HP 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal HP 3\120\-\Transparent 400 1000 100\Seal\Everyone\-\Grants HP+5.\*Initiate Seal HP 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal Res 1\30\-\transparent\Seal\Everyone\-\Grants Res+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal Res 2\60\-\Transparent 60 200 50\Seal\Everyone\-\Grants Res+2.\*Initiate Seal Res 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal Res 3\120\-\Transparent 400 1000 100\Seal\Everyone\-\Grants Res+3.\*Initiate Seal Res 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal Spd 1\30\-\azure\Seal\Everyone\-\Grants Spd+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal Spd 2\60\-\Azure 60 200 50\Seal\Everyone\-\Grants Spd+2.\*Initiate Seal Spd 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Initiate Seal Spd 3\120\-\Azure 400 1000 100\Seal\Everyone\-\Grants Spd+3.\*Initiate Seal Spd 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
 Muspellflame\0\-\Gold 20 100 1000\Seal\No one\-\Unit receives 0 damage.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Enemy\\\\
-Phantom Spd 1\0\-\Azure 20 100 40\Seal\Everyone\-\When any skill compares this unit's Spd stat to another unit's, this unit's Spd stat is counted as +5 over actual value.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Phantom Spd 2\0\-\Azure 60 200 50\Seal\Everyone\-\When any skill compares this unit's Spd stat to another unit's, this unit's Spd stat is counted as +8 over actual value.\*Phantom Spd 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Phantom Spd 3\0\-\Azure 400 1000 100\Seal\Everyone\-\When any skill compares this unit's Spd stat to another unit's, this unit's Spd stat is counted as +10 over actual value.\*Phantom Spd 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace A 1\0\-\transparent\Seal\Everyone\-\Grants HP+3.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace A 2\0\-\Transparent 60 200 50\Seal\Everyone\-\Grants HP+4.\*Squad Ace A 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace A 3\0\-\Transparent 400 1000 100\Seal\Everyone\-\Grants HP+5.\*Squad Ace A 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace B 1\0\-\verdant\Seal\Everyone\-\Grants Defense+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace B 2\0\-\Verdant 60 200 50\Seal\Everyone\-\Grants Defense+2.\*Squad Ace B 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace B 3\0\-\Verdant 400 1000 100\Seal\Everyone\-\Grants Defense+3.\*Squad Ace B 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace C 1\0\-\transparent\Seal\Everyone\-\Grants Resistance+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace C 2\0\-\Transparent 60 200 50\Seal\Everyone\-\Grants Resistance+2.\*Squad Ace C 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace C 3\0\-\Transparent 400 1000 100\Seal\Everyone\-\Grants Resistance+3.\*Squad Ace C 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace D 1\0\-\azure\Seal\Everyone\-\Grants Speed+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace D 2\0\-\Azure 60 200 50\Seal\Everyone\-\Grants Speed+2.\*Squad Ace D 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace D 3\0\-\Azure 400 1000 100\Seal\Everyone\-\Grants Speed+3.\*Squad Ace D 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace E 1\0\-\scarlet\Seal\Everyone\-\Grants Attack+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace E 2\0\-\Scarlet 60 200 50\Seal\Everyone\-\Grants Attack+2.\*Squad Ace E1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace E 3\0\-\Scarlet 400 1000 100\Seal\Everyone\-\Grants Attack+3.\*Squad Ace E 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace F 1\0\-\transparent\Seal\Everyone\-\Grants HP+3.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace F 2\0\-\Transparent 60 200 50\Seal\Everyone\-\Grants HP+4.\*Squad Ace F 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace F 3\0\-\Transparent 400 1000 100\Seal\Everyone\-\Grants HP+5.\*Squad Ace F 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace G 1\0\-\verdant\Seal\Everyone\-\Grants Defense+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace G 2\0\-\Verdant 60 200 50\Seal\Everyone\-\Grants Defense+2.\*Squad Ace G 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace G 3\0\-\Verdant 400 1000 100\Seal\Everyone\-\Grants Defense+3.\*Squad Ace G 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace H 1\0\-\transparent\Seal\Everyone\-\Grants Resistance+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace H 2\0\-\Transparent 60 200 50\Seal\Everyone\-\Grants Resistance+2.\*Squad Ace H 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace H 3\0\-\Transparent 400 1000 100\Seal\Everyone\-\Grants Resistance+3.\*Squad Ace H 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace I 1\0\-\azure\Seal\Everyone\-\Grants Speed+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace I 2\0\-\Azure 60 200 50\Seal\Everyone\-\Grants Speed+2.\*Squad Ace I 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace I 3\0\-\Azure 400 1000 100\Seal\Everyone\-\Grants Speed+3.\*Squad Ace I 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace J 1\0\-\scarlet\Seal\Everyone\-\Grants Attack+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace J 2\0\-\Scarlet 60 200 50\Seal\Everyone\-\Grants Attack+2.\*Squad Ace J 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace J 3\0\-\Scarlet 400 1000 100\Seal\Everyone\-\Grants Attack+3.\*Squad Ace J 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace K 1\0\-\transparent\Seal\Everyone\-\Grants HP+3.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace K 2\0\-\Transparent 60 200 50\Seal\Everyone\-\Grants HP+4.\*Squad Ace K 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace K 3\0\-\Transparent 400 1000 100\Seal\Everyone\-\Grants HP+5.\*Squad Ace K 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace L 1\0\-\verdant\Seal\Everyone\-\Grants Defense+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace L 2\0\-\Verdant 60 200 50\Seal\Everyone\-\Grants Defense+2.\*Squad Ace L 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace L 3\0\-\Verdant 400 1000 100\Seal\Everyone\-\Grants Defense+3.\*Squad Ace L 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace M 1\0\-\transparent\Seal\Everyone\-\Grants Resistance+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace M 2\0\-\Transparent 60 200 50\Seal\Everyone\-\Grants Resistance+2.\*Squad Ace M 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace M 3\0\-\Transparent 400 1000 100\Seal\Everyone\-\Grants Resistance+3.\*Squad Ace M 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace N 1\0\-\azure\Seal\Everyone\-\Grants Speed+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace N 2\0\-\Azure 60 200 50\Seal\Everyone\-\Grants Speed+2.\*Squad Ace N 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace N 3\0\-\Azure 400 1000 100\Seal\Everyone\-\Grants Speed+3.\*Squad Ace N 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace O 1\0\-\scarlet\Seal\Everyone\-\Grants Attack+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace O 2\0\-\Scarlet 60 200 50\Seal\Everyone\-\Grants Attack+2.\*Squad Ace O 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
-Squad Ace O 3\0\-\Scarlet 400 1000 100\Seal\Everyone\-\Grants Attack+3.\*Squad Ace O 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Phantom Spd 1\50\-\Azure 20 100 40\Seal\Everyone\-\When any skill compares this unit's Spd stat to another unit's, this unit's Spd stat is counted as +5 over actual value.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Phantom Spd 2\100\-\Azure 60 200 50\Seal\Everyone\-\When any skill compares this unit's Spd stat to another unit's, this unit's Spd stat is counted as +8 over actual value.\*Phantom Spd 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Phantom Spd 3\200\-\Azure 400 1000 100\Seal\Everyone\-\When any skill compares this unit's Spd stat to another unit's, this unit's Spd stat is counted as +10 over actual value.\*Phantom Spd 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace A 1\30\-\transparent\Seal\Everyone\-\Grants HP+3.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace A 2\60\-\Transparent 60 200 50\Seal\Everyone\-\Grants HP+4.\*Squad Ace A 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace A 3\120\-\Transparent 400 1000 100\Seal\Everyone\-\Grants HP+5.\*Squad Ace A 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace B 1\30\-\verdant\Seal\Everyone\-\Grants Defense+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace B 2\60\-\Verdant 60 200 50\Seal\Everyone\-\Grants Defense+2.\*Squad Ace B 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace B 3\120\-\Verdant 400 1000 100\Seal\Everyone\-\Grants Defense+3.\*Squad Ace B 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace C 1\30\-\transparent\Seal\Everyone\-\Grants Resistance+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace C 2\60\-\Transparent 60 200 50\Seal\Everyone\-\Grants Resistance+2.\*Squad Ace C 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace C 3\120\-\Transparent 400 1000 100\Seal\Everyone\-\Grants Resistance+3.\*Squad Ace C 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace D 1\30\-\azure\Seal\Everyone\-\Grants Speed+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace D 2\60\-\Azure 60 200 50\Seal\Everyone\-\Grants Speed+2.\*Squad Ace D 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace D 3\120\-\Azure 400 1000 100\Seal\Everyone\-\Grants Speed+3.\*Squad Ace D 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace E 1\30\-\scarlet\Seal\Everyone\-\Grants Attack+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace E 2\60\-\Scarlet 60 200 50\Seal\Everyone\-\Grants Attack+2.\*Squad Ace E1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace E 3\120\-\Scarlet 400 1000 100\Seal\Everyone\-\Grants Attack+3.\*Squad Ace E 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace F 1\30\-\transparent\Seal\Everyone\-\Grants HP+3.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace F 2\60\-\Transparent 60 200 50\Seal\Everyone\-\Grants HP+4.\*Squad Ace F 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace F 3\120\-\Transparent 400 1000 100\Seal\Everyone\-\Grants HP+5.\*Squad Ace F 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace G 1\30\-\verdant\Seal\Everyone\-\Grants Defense+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace G 2\60\-\Verdant 60 200 50\Seal\Everyone\-\Grants Defense+2.\*Squad Ace G 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace G 3\120\-\Verdant 400 1000 100\Seal\Everyone\-\Grants Defense+3.\*Squad Ace G 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace H 1\30\-\transparent\Seal\Everyone\-\Grants Resistance+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace H 2\60\-\Transparent 60 200 50\Seal\Everyone\-\Grants Resistance+2.\*Squad Ace H 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace H 3\120\-\Transparent 400 1000 100\Seal\Everyone\-\Grants Resistance+3.\*Squad Ace H 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace I 1\30\-\azure\Seal\Everyone\-\Grants Speed+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace I 2\60\-\Azure 60 200 50\Seal\Everyone\-\Grants Speed+2.\*Squad Ace I 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace I 3\120\-\Azure 400 1000 100\Seal\Everyone\-\Grants Speed+3.\*Squad Ace I 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace J 1\30\-\scarlet\Seal\Everyone\-\Grants Attack+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace J 2\60\-\Scarlet 60 200 50\Seal\Everyone\-\Grants Attack+2.\*Squad Ace J 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace J 3\120\-\Scarlet 400 1000 100\Seal\Everyone\-\Grants Attack+3.\*Squad Ace J 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace K 1\30\-\transparent\Seal\Everyone\-\Grants HP+3.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace K 2\60\-\Transparent 60 200 50\Seal\Everyone\-\Grants HP+4.\*Squad Ace K 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace K 3\120\-\Transparent 400 1000 100\Seal\Everyone\-\Grants HP+5.\*Squad Ace K 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace L 1\30\-\verdant\Seal\Everyone\-\Grants Defense+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace L 2\60\-\Verdant 60 200 50\Seal\Everyone\-\Grants Defense+2.\*Squad Ace L 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace L 3\120\-\Verdant 400 1000 100\Seal\Everyone\-\Grants Defense+3.\*Squad Ace L 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace M 1\30\-\transparent\Seal\Everyone\-\Grants Resistance+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace M 2\60\-\Transparent 60 200 50\Seal\Everyone\-\Grants Resistance+2.\*Squad Ace M 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace M 3\120\-\Transparent 400 1000 100\Seal\Everyone\-\Grants Resistance+3.\*Squad Ace M 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace N 1\30\-\azure\Seal\Everyone\-\Grants Speed+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace N 2\60\-\Azure 60 200 50\Seal\Everyone\-\Grants Speed+2.\*Squad Ace N 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace N 3\120\-\Azure 400 1000 100\Seal\Everyone\-\Grants Speed+3.\*Squad Ace N 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace O 1\30\-\scarlet\Seal\Everyone\-\Grants Attack+1.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace O 2\60\-\Scarlet 60 200 50\Seal\Everyone\-\Grants Attack+2.\*Squad Ace O 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
+Squad Ace O 3\120\-\Scarlet 400 1000 100\Seal\Everyone\-\Grants Attack+3.\*Squad Ace O 2*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Stats\\\\
 Enhanced Sharing\0\-\-\Passive(W)\Everyone\-\During combat, grants bonus to Atk/Spd/Def/Res = highest bonus on allies within 2 spaces. Each stat bonus calculated independently.\-\-; -; -; -; -\-; -; -; -; -\Passive, W\Sieglinde\\\
 Enchanted Slash\0\-\-\Passive(W)\Melee Weapon Users Only\-\If foe's Range = 1, damage calculated using the lower of foe's Def or Res.\-\-; -; -; -; -\-; -; -; -; -\Passive, W\Maid's Plate+\Y\\
 Magic Absorption\0\-\-\Passive(W)\Excludes Tome Users\-\Grants Special cooldown charge +1 if foe uses magic (only highest bonus applied.)\-\-; -; -; -; -\-; -; -; -; -\Passive, W\Felicia's Plate\\\
