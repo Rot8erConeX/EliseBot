@@ -15463,6 +15463,7 @@ def next_holiday(bot,mode=0)
   holidays=[[0,1,1,'Tiki(Young)','as Babby New Year',"New Year's Day"],
             [0,2,2,'Feh','the best gacha game ever!','Game Release Anniversary'],
             [0,2,14,'Cordelia(Bride)','with your heartstrings.',"Valentine's Day"],
+            [0,3,28,'Faye','in recognition of MiniMytch#0155',"Donator's birthday"],
             [0,4,1,'Priscilla','tribute to Xander for making this possible.',"April Fool's Day"],
             [0,4,24,'Sakura(BDay)','dressup as my best friend.',"Coder's birthday"],
             [0,7,4,'Arthur','for freedom and justice.','Independance Day'],
