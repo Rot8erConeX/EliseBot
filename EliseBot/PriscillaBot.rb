@@ -9738,8 +9738,8 @@ def phase_study(event,name,bot,weapon=nil)
   if zzzl[11].split(', ').include?('BuffStuffer') || (zzzl[11].split(', ').include?('(R)BuffStuffer') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)BuffStuffer') && refinement=='Effect')
     m=apply_stat_skills(event,stat_skills_2,[u40[0],0,0,0,0,0])
     for i in 2...6
-      ppu40[i]+=m[i]
-      epu40[i]+=m[i]
+      ppu40[i]+=m[i] if m[i]>0
+      epu40[i]+=m[i] if m[i]>0
     end
   end
   unless weapon.nil? || weapon=='-'
