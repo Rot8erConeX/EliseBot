@@ -824,7 +824,7 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
   end
   return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
   return false if mode>0
-  return true if [188781153589657600,480785838129545217,210900237823246336,175150098357944330,183976699367522304].include?(user.id) # people who donate to the laptop fund will always be EliseMods
+  return true if [188781153589657600,480785838129545217,210900237823246336,175150098357944330,183976699367522304,193956706223521793,185935665152786432].include?(user.id) # people who donate to the laptop fund will always be EliseMods
   return false
 end
 
@@ -8323,7 +8323,8 @@ def sort_legendaries(event,bot,mode=0)
     b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
   end
   b.compact!
-  b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm || q[5].nil? || !q[5].split(', ').include?('Legendary') || q[3]=='-' || q[5].split(', ').length<4}
+  b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm || q[5].nil? || !q[5].split(', ').include?('Legendary') || q[2][0]=='-' || q[2].length<4}
+  puts b2.to_s
   if b2.length>0
     m=[]
     for i in 0...b2.length
@@ -8345,7 +8346,7 @@ def sort_legendaries(event,bot,mode=0)
       k[i][1][2]=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Orb_#{['','Red','Blue','Green','Colorless','Gold'][k[i][1][1]]}"}[0].mention
     end
     k=k.sort{|a,b| ((a[1][1]<=>b[1][1]) == 0 ? a[0]<=>b[0] : a[1][1]<=>b[1][1])}.map{|q| "#{q[1][2]} - #{q[0]}"}.join("\n")
-    k2.unshift(['Upcoming banner',k])
+    k2.unshift(['Upcoming banner',k]) unless k==k2[0][1]
   end
   b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm || q[5].nil? || !q[5].split(', ').include?('Legendary')}
   if b2.length>0
@@ -9668,7 +9669,6 @@ def phase_study(event,name,bot,weapon=nil)
   elsif w2[0,1]=='-' && w2[15][1,1].to_i.to_s==w2[15][1,1] && refinement=='Effect'
     refinement=nil if w2[15][2,1]=='*'
   end
-   
   refinement=nil if w2[5]!='Staff Users Only' && ['Wrathful','Dazzling'].include?(refinement)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
   atk='<:StrengthS:467037520484630539> Attack'
@@ -9730,6 +9730,13 @@ def phase_study(event,name,bot,weapon=nil)
   ppu40xw=apply_combat_buffs(event,stat_skills_3,ppu40xw,'Player')
   epu40xw=crblu40.map{|q| q}
   epu40xw=apply_combat_buffs(event,stat_skills_3,epu40xw,'Enemy')
+  if zzzl[11].split(', ').include?('BuffStuffer') || (zzzl[11].split(', ').include?('(R)BuffStuffer') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)BuffStuffer') && refinement=='Effect')
+    m=apply_stat_skills(event,stat_skills_2,[u40[0],0,0,0,0,0])
+    for i in 2...6
+      ppu40[i]+=m[i]
+      epu40[i]+=m[i]
+    end
+  end
   unless weapon.nil? || weapon=='-'
     desc = /((((I|i)f|(w|W)hen) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (attack|combat)))|during combat(| (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat))))), |)((G|g)rants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d ((if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (attack|combat)))|during combat(| (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat)))))/
     desc2 = /((G|g)rants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d during combat (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat)))/
