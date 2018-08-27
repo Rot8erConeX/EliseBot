@@ -171,6 +171,7 @@ Maribelle\Colorless, Healer\\Cavalry\4, 8, 7, 2, 6\34, 35, 33, 16, 27\Kousei Hor
 Marisa\Red, Blade\ \Infantry\9, 6, 8, 7, 3\46, 30, 36, 30, 21\Fujikawa Akira\Connor Kelley\Nakahara Mai\4t5t\F\FE8\Marisa
 Marth\Red, Blade\ \Infantry\6, 7, 8, 6, 4\41, 31, 34, 29, 23\Wada Sachiko\Yuri Lowenthal\Midorikawa Hikaru\3p4pLU\M\FE3, FE1, SSBM, SSBB, FE11, FE12, SSBProM, SSB4, FEW, (a)FE14, (a)FE15, (a)STEAM, SSBU\Marth
 Marth(Groom)\Green, Blade\ \Cavalry\6, 7, 8, 7, 3\40, 31, 36, 30, 20\Mayo\Yuri Lowenthal\Midorikawa Hikaru\4t5t0s\M\FE3, FE1, SSBM, SSBB, FE11, FE12, SSBProM, SSB4, FEW, (a)FE14, (a)FE15, (a)STEAM, SSBU\Marth
+Marth(King)\Red, Blade\Fire, Resistance, 21/08/2018\Infantry\0, 0, 0, 0, 0\0, 0, 0, 0, 0\Daisuke Izuka\Yuri Lowenthal\Midorikawa Hikaru\5s\M\FE3, FE1, SSBM, SSBB, FE11, FE12, SSBProM, SSB4, FEW, (a)FE14, (a)FE15, (a)STEAM, SSBU\Marth
 Marth(Masked)\Red, Blade\ \Infantry\7, 8, 8, 5, 3\43, 34, 36, 25, 19\Maiponpon\Alexis Tipton\Kobayashi Yuu\4t5t4t5t4t5t4t5t4t\F\FE13, SSB4, FEW, PXZ2, (a)FE14, (a)FE15, (a)STEAM, SSBU\*Lucina
 Mathilda\Blue, Blade\ \Cavalry\5, 6, 7, 4, 8\35, 29, 32, 24, 34\Okaya\Caitlin Glass\Kaida Yuko\3p4p\F\FE15, FE2\Mathilda
 Matthew\Colorless, Dagger\ \Infantry\7, 5, 7, 7, 2\41, 25, 34, 30, 18\Okaya\Ben Diskin\Hoshi Souichirou\3p4p1f4f3qLU\M\FE7\Matthew
