@@ -9437,8 +9437,8 @@ def proc_study(event,name,bot,weapon=nil)
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[0].push("Astra - #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Regnal Astra')[2],cdwns)
-  d="#{spdd*2/5+wdamage}#{" (#{blspdd*2/5+wdamage})" unless spdd*4/5==blspdd*4/5}"
-  cd="#{crspdd*2/5+wdamage2}#{" (#{crblspdd*2/5+wdamage2})" unless crspdd*4/5==crblspdd*4/5}"
+  d="#{spdd*2/5+wdamage}#{" (#{blspdd*2/5+wdamage})" unless spdd*2/5==blspdd*2/5}"
+  cd="#{crspdd*2/5+wdamage2}#{" (#{crblspdd*2/5+wdamage2})" unless crspdd*2/5==crblspdd*2/5}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[0].push("**Regnal Astra - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Regnal Astra')[6].split(', ').include?(u40[0])
   c=add_number_to_string(get_match_in_list(procs, 'Fire Emblem')[2],cdwns)
