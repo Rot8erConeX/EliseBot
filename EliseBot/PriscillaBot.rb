@@ -12166,7 +12166,7 @@ bot.command([:unit, :data, :statsskills, :statskills, :stats_skills, :stat_skill
     args.shift
     k=parse_function(:calculate_effective_HP,event,args,bot)
     return nil unless k<0
-  elsif ['phase_study','phasestudy','studyphase','study_phase','phase'].include?(a[0].downcase)
+  elsif ['phase_study','phasestudy','studyphase','study_phase','phase'].include?(args[0].downcase)
     a.shift
     k=parse_function(:phase_study,event,a,bot,true)
   elsif ['heal_study','healstudy','studyheal','study_heal'].include?(args[0].downcase)
