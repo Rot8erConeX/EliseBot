@@ -37,3 +37,4 @@
 ['Cordelia', 0, 0, ['Cordelia', 'Cordelia(Bride)', 'Cordelia(Summer)']]
 ['Olivia', 0, 0, ['Olivia(Launch)', 'Olivia(Performing)', 'Olivia(Traveler)']]
 ['Ryoma', 0, 0, ['Ryoma', 'Ryoma(Supreme)', 'Ryoma(Festival)']]
+['Marth', 0, 0, ['Marth', 'Marth(Masked)', 'Marth(Groom)', 'Marth(King)']]
