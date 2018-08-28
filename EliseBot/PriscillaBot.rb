@@ -9532,7 +9532,7 @@ def proc_study(event,name,bot,weapon=nil)
   d="#{atkk*3/10+wdamage}#{" (#{blatkk*3/10+wdamage})" unless atkk*3/10==blatkk*3/10}"
   cd="#{cratkk*3/10+wdamage2}#{" (#{crblatkk*3/10+wdamage2})" unless cratkk*3/10==crblatkk*3/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[6].push("Draconic Aura - Up to and #{d} when against color-neutral, cooldown of #{c}")
+  staves[6].push("Draconic Aura - Up to #{d} when against color-neutral, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Fire Emblem')[2],cdwns)
   d="#{spdd*3/10+wdamage}#{" (#{blspdd*3/10+wdamage})" unless spdd*3/10==blspdd*3/10}"
   cd="#{crspdd*3/10+wdamage2}#{" (#{crblspdd*3/10+wdamage2})" unless crspdd*3/10==crblspdd*3/10}"
@@ -9542,7 +9542,7 @@ def proc_study(event,name,bot,weapon=nil)
   d="#{atkk/2+wdamage}#{" (#{blatkk/2+wdamage})" unless atkk/2==blatkk/2}"
   cd="#{cratkk/2+wdamage2}#{" (#{crblatkk/2+wdamage2})" unless cratkk/2==crblatkk/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[6].push("Dragon Fang - Up to and #{d} when against color-neutral, cooldown of #{c}")
+  staves[6].push("Dragon Fang - Up to #{d} when against color-neutral, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Retribution')[2],cdwns)
   d="#{3*hppp/10+wdamage}#{" (#{3*blhppp/10+wdamage})" if 3*hppp/10!=3*blhppp/10}"
   cd="#{3*crhppp/10+wdamage2}#{" (#{3*crblhppp/10+wdamage2})" if 3*crhppp/10!=3*crblhppp/10}"
