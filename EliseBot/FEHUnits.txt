@@ -179,7 +179,7 @@ Matthew\Colorless, Dagger\ \Infantry\7, 5, 7, 7, 2\41, 25, 34, 30, 18\Okaya\Ben 
 Merric\Green, Tome, Wind\ \Infantry\7, 5, 7, 6, 3\43, 26, 32, 28, 19\Mizuno Kana\Yuri Lowenthal\Hoshi Souichirou\3p4pLU\M\FE3, FE1, FE11, FE12\Merric
 Mia\Red, Blade\ \Infantry\6, 7, 9, 6, 5\38, 32, 40, 28, 25\Yoneyama Mai\Sarah Williams\Asakawa Yuu\5p\F\FE9, FE10\Mia
 Micaiah\Blue, Tome, Light\ \Infantry\5, 8, 6, 2, 8\35, 35, 28, 18, 35\Chiko\Veronica Taylor\Kuwatani Natsuko\5p\F\FE10\Micaiah
-Micaiah(Festival)\Red, Tome, Fire\\Infantry\5, 8, 3, 3, 9\33, 34, 20, 18, 34\Chiko\Veronica Taylor\Kuwatani Natsuko\5p\F\FE10\Micaiah
+Micaiah(Festival)\Red, Tome, Fire\\Infantry\5, 8, 3, 3, 9\33, 34, 20, 18, 34\Chiko\Veronica Taylor\Kuwatani Natsuko\5s\F\FE10\Micaiah
 Michalis\Green, Blade\ \Flier\7, 8, 5, 8, 3\43, 34, 26, 35, 19\Daisuke Izuka\David Vincent\Fukushima Jun\3g4g3q4q\M\FE3, FE1, FE11, FE12\Michalis
 Minerva\Green, Blade\ \Flier\6, 7, 7, 7, 4\40, 31, 33, 32, 22\Daisuke Izuka\Cindy Robinson\Sakura Ayane\5pLU\F\FE3, FE1, FE11, FE12, FEW\Minerva
 Mist\Colorless, Healer\ \Infantry\6, 5, 6, 3, 8\39, 27, 28, 20, 34\Miwabe Sakura\Sarah Williams\Enomoto Atsuko\5p\F\FE9, FE10\Mist
