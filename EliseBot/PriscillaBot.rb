@@ -15380,13 +15380,13 @@ def disp_current_events(mode=0)
           str2="#{str2} - waiting until Battle #{t4/2+1}"
         elsif t2/(60*60)>1
           str2="#{str2} - #{(t2/(60*60)).floor} hours remain in Battle #{t4/2+1}"
-          str2="#{str2} (Round #{(22-(t2/(60*60)).floor/2).floor} currently ongoing)"
+          str2="#{str2} (Round #{(11-(t2/(60*60)).floor/4).floor} currently ongoing)"
         elsif t2/60>1
           str2="#{str2} - #{(t2/60).floor} minutes remain in Battle #{t4/2+1}"
-          str2="#{str2} (Round #{(22-(t2/(60*60)).floor/2).floor} currently ongoing)"
+          str2="#{str2} (Round #{(11-(t2/(60*60)).floor/4).floor} currently ongoing)"
         elsif t2>1
           str2="#{str2} - #{t2.floor} seconds remain in Battle #{t4/2+1}"
-          str2="#{str2} (Round #{(22-(t2/(60*60)).floor/2).floor} currently ongoing)"
+          str2="#{str2} (Round #{(11-(t2/(60*60)).floor/4).floor} currently ongoing)"
         elsif t2.floor<=0
           str2="#{str2} - waiting until Battle #{t4/2+2}"
         end
