@@ -15467,6 +15467,7 @@ def next_holiday(bot,mode=0)
             [0,4,1,'Priscilla','tribute to Xander for making this possible.',"April Fool's Day"],
             [0,4,24,'Sakura(BDay)','dressup as my best friend.',"Coder's birthday"],
             [0,7,4,'Arthur','for freedom and justice.','Independance Day'],
+            [0,7,22,'Nowi(Halloween)','in recognition of Shaq#7647',"Donator's birthday"],
             [0,8,6,'Zelgius','in recognition of DullahansXMark#9036',"Donator's birthday"],
             [0,9,16,'Genny','in recognition of Straynine#3480',"Donator's birthday"],
             [0,10,31,'Henry(Halloween)','with a dead Emblian. Nyahaha!','Halloween'],
