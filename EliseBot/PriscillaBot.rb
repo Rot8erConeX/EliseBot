@@ -8577,10 +8577,14 @@ def list_unit_aliases(event,args,bot,mode=0)
   m=@multi_aliases.map{|a| a}
   h=''
   if unit.nil?
-    if safe_to_spam?(event)
+    if safe_to_spam?(event) || mode==1
       n=n.reject{|q| q[2].nil?} if mode==1
       unless event.server.nil?
         n=n.reject{|q| !q[2].nil? && !q[2].include?(event.server.id)}
+        if n.length>25
+          event.respond "There are so many aliases that I don't want to spam the server.  Please use the command in PM."
+          return nil
+        end
         msg=''
         for i in 0...n.length
           msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
