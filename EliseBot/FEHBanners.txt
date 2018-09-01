@@ -1,8 +1,9 @@
 >New Heroes<\3\-\5\07/09/2018, 20/09/2018
 Heroes with Fury\3\-\5\06/09/2018, 20/09/2018\SkillBanner
+"The Chosen Ones" Voting Gauntlet\3\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5\01/09/2018, 10/09/2018\CYL, VotingGauntlet
 Legendary Heroes - Marth, Hero King\-8\Alfonse(Spring), Faye, Fjorm, Gunnthra, Hector(Valentines), Kagero(Spring), Lene, Lucina(Brave), Marth(King), Nephenee, Reinhardt(World), Robin(F)(Fallen)\5\28/08/2018, 03/09/2018\Legendary
 Heroes with Healing Skills\3\Leif, L'Arachel, Micaiah\5\26/08/2018, 05/09/2018\SkillBanner
-Arrival of the Brave\3\Celica(Brave), Ephraim(Brave), Hector(Brave), Veronica(Brave)\5\21/08/2018, 13/09/2018
+Arrival of the Brave\3\Celica(Brave), Ephraim(Brave), Hector(Brave), Veronica(Brave)\5\21/08/2018, 13/09/2018\CYL
 Festival in Hoshido\3\Elincia(Festival), Micaiah(Festival), Ryoma(Festival), Xander(Festival)\5\10/08/2018, 06/09/2018\Seasonal, Fall
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
