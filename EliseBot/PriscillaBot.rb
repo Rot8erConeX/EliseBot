@@ -44,6 +44,7 @@ bot.gateway.check_heartbeat_acks = false
 @dev_somebodies=[]
 @dev_nobodies=[]
 @dev_units=[]
+@avvie_info=['Elise','*Fire Emblem Heroes*','N/A']
 @stored_event=nil
 @zero_by_four=[0,0,0,'']
 @headpats=[0,0,0]
@@ -126,7 +127,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'statslarge','statshuge','statsmassive','statgiant','statbig','stattol','statmacro','statlarge','stathuge','statmassive','statol','giant','big','tol','macro','large','huge',
      'massive','safe','spam','safetospam','safe2spam','long','longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills',
      'skillslist','sortstats','statssort','sortstat','statsort','liststats','statslist','statlist','liststat','sortunits','unitssort','sortunit','unitsort','listunits','unitslist',
-     'unitlist','listunit','serveraliases','saliases']
+     'unitlist','listunit','serveraliases','saliases','avvie','avatar']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -135,7 +136,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
     k=['reboot','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti','deletemultialias',
        'deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias','removedualalias','removemultiunitalias','removedualunitalias','removemulti',
        'removefrommultialias','removefromdualalias','removefrommultiunitalias','removefromdualunitalias','removefrommulti','sendpm','ignoreuser','sendmessage','leaveserver',
-       'cleanupaliases','backup','restore','devedit','dev_edit','status','setmarker','snagchannels','reload']
+       'cleanupaliases','backup','restore','devedit','dev_edit','setmarker','snagchannels','reload']
   end
   k.unshift(nil) if include_nil
   return k
@@ -632,8 +633,8 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}** __item__","Restores the the alias list or the group list, depending on the word used as `item`, from last backup.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['reload'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Reloads the unit and skill data, based on the remote entries stored on GitHub.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
-  elsif ['status'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __\*message__","Sets my status message to `message`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+  elsif ['status','avatar','avvie'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}**","Shows my current avatar, status, and reason for such.\n\nWhen used by my developer with a message following it, sets my status to that message.",0xD49F61)
   elsif ['devedit','dev_edit'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['create'].include?(subcommand.downcase)
@@ -718,7 +719,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
       command=''
     end
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
-    create_embed([event,x],"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit/Character Data**__\n\n`data` __unit__ - shows both stats and skills (*also `unit`*)\n`stats` __unit__ - shows only the stats\n`smolstats` __unit__ - shows ths stats in a condensed format (*also `tinystats` and `microstats`*)\n`skills` __unit__ - shows only the skills (*also `fodder`*)\n`study` __unit__ - for a study of the unit at multiple rarities and merges\n`effHP` __unit__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __unit__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __unit__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`banners` __unit__ - for a list of banners the unit has been a focus unit on\n`art` __unit__ __art type__ - for the character's art\n`learnable` __unit__ - for a list of all learnable skills (*also `inheritable`*)\n\n`games` __character__ - for a list of games the character is in\n`alts` __character__ - for a list of all units this character has",0xD49F61)
+    create_embed([event,x],"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit/Character Data**__\n\n`data` __unit__ - shows both stats and skills (*also `unit`*)\n`stats` __unit__ - shows only the stats\n`smolstats` __unit__ - shows ths stats in a condensed format (*also `tinystats` and `microstats`*)\n`skills` __unit__ - shows only the skills (*also `fodder`*)\n`study` __unit__ - for a study of the unit at multiple rarities and merges\n`effHP` __unit__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __unit__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`serveraliases` __unit__ - show server-specific aliases for the unit\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __unit__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`banners` __unit__ - for a list of banners the unit has been a focus unit on\n`art` __unit__ __art type__ - for the character's art\n`learnable` __unit__ - for a list of all learnable skills (*also `inheritable`*)\n\n`games` __character__ - for a list of games the character is in\n`alts` __character__ - for a list of all units this character has",0xD49F61)
     create_embed([event,x],"","__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
     create_embed([event,x],"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`daily` - shows the current day's in-game daily events (*also `today` or `todayInFEH`*)\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)\n\n__**Developer Information**__\n`bugreport` __\\*message__ - to send my developer a bug report\n`suggestion` __\\*message__ - to send my developer a feature suggestion\n`feedback` __\\*message__ - to send my developer other kinds of feedback\n~~the above three commands are actually identical, merely given unique entries to help people find them~~\n`donation` (*also `donate`*) - for information on how to donate to my developer\n`whyelise` - for an explanation as to how Elise was chosen as the face of the bot\n`skillrarity` (*also `skill_rarity`*)\n`attackcolor` - for a reason for multiple Atk icons (*also `attackicon`*)\n`snagstats` __type__ - to receive relevant bot stats\n`spam` - to determine if the current location is safe for me to send long replies to (*also `safetospam` or `safe2spam`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed([event,x],"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
@@ -13771,6 +13772,32 @@ bot.command([:next,:schedule]) do |event, type|
   event.respond msg unless [10].include?(idx)
 end
 
+bot.command([:status, :avatar, :avvie]) do |event, *args|
+  return nil if overlap_prevent(event)
+  t=Time.now
+  timeshift=6
+  t-=60*60*timeshift
+  if event.user.id==167657750971547648 && !args.nil? && args.length>0 # only work when used by the developer
+    bot.game=args.join(' ')
+    event.respond 'Status set.'
+    return nil
+  end
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    event << "Current avatar: #{bot.user(312451658908958721).avatar_url}"
+    event << "Unit in avatar: #{@avvie_info[0]}"
+    event << ''
+    event << "Current status:"
+    event << "[Playing] #{@avvie_info[1]}"
+    event << ''
+    event << "Reason: #{@avvie_info[2]}" unless @avvie_info[2].length.zero?
+    event << ''
+    event << "Dev's timezone: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]}) | #{'0' if t.hour<10}#{t.hour}:#{'0' if t.min<10}#{t.min}"
+  else
+    create_embed(event,'',"Unit in avatar: #{@avvie_info[0]}\n\nCurrent status:\n[Playing] #{@avvie_info[1]}#{"\n\nReason: #{@avvie_info[2]}" unless @avvie_info[2].length.zero?}",(t.day*7+t.month*21*256+(t.year-2000)*10*256*256),"Dev's timezone: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]}) | #{'0' if t.hour<10}#{t.hour}:#{'0' if t.min<10}#{t.min}",bot.user(312451658908958721).avatar_url)
+  end
+  return nil
+end
+
 bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddualunitalias,:addualunitalias,:multialias,:dualalias,:addmulti], from: 167657750971547648) do |event, multi, *args|
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
@@ -14397,13 +14424,6 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
     event.respond 'Edit mode was not specified.'
   end
   return nil
-end
-
-bot.command(:status, from: 167657750971547648) do |event, *args|
-  return nil if overlap_prevent(event)
-  return nil unless event.user.id==167657750971547648 # only work when used by the developer
-  bot.game=args.join(' ')
-  event.respond 'Status set.'
 end
 
 bot.command(:setmarker, from: 167657750971547648) do |event, letter|
@@ -15581,8 +15601,11 @@ def next_holiday(bot,mode=0)
   if t.year==k[0][0] && t.month==k[0][1] && t.day==k[0][2]
     if k.length==1
       # Only one holiday is today.  Display new avatar, and set another check for midnight
-      bot.game=k[0][4]
-      bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[0][3]}.png",'r')) rescue nil
+      if @shardizard.zero?
+        bot.game=k[0][4]
+        bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[0][3]}.png",'r')) rescue nil
+      end
+      @avvie_data=[k[0][3],k[0][4],k[0][5]]
       t2= Time.now + 18*60*60
       t=Time.now
       @scheduler.at "#{t2.year}/#{t2.month}/#{t2.day} 0000" do
@@ -15593,8 +15616,11 @@ def next_holiday(bot,mode=0)
       fcod=div[k.length][k.length-1]
       if t.hour>fcod[0] || (t.hour==fcod[0] && t.min>=fcod[1])
         # in last area of day.  Set avatar to the last one for the day, then set a check for tomorrow at midnight
-        bot.game=k[k.length-1][4]
-        bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[k.length-1][3]}.png",'r')) rescue nil
+        if @shardizard.zero?
+          bot.game=k[k.length-1][4]
+          bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[k.length-1][3]}.png",'r')) rescue nil
+        end
+        @avvie_data=[k[k.length-1][3],k[k.length-1][4],k[k.length-1][5]]
         t2= Time.now + 18*60*60
         t=Time.now
         @scheduler.at "#{t2.year}/#{t2.month}/#{t2.day} 0000" do
@@ -15609,8 +15635,11 @@ def next_holiday(bot,mode=0)
           j=i if t.hour<div[k.length][i+1][0] || (t.hour==div[k.length][i+1][0] && t.min<div[k.length][i+1][1])
         end
         # ...set avatar properly and set check for the beginning of the next chunk of the day
-        bot.game=k[j][4]
-        bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[j][3]}.png",'r')) rescue nil
+        if @shardizard.zero?
+          bot.game=k[j][4]
+          bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[j][3]}.png",'r')) rescue nil
+        end
+        @avvie_data=[k[j][3],k[j][4],k[j][5]]
         t=Time.now
         t-=60*60*6
         @scheduler.at "#{t.year}/#{t.month}/#{t.day} #{div[k.length][j+1][0].to_s.rjust(2, '0')}#{div[k.length][j+1][1].to_s.rjust(2, '0')}" do
@@ -15619,13 +15648,15 @@ def next_holiday(bot,mode=0)
       end
     end
   else
-    bot.game='Fire Emblem Heroes'
     t=Time.now
     t-=60*60*6
+    bot.game='Fire Emblem Heroes' if @shardizard.zero?
     if [6,7,8].include?(t.month)
-      bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/Elise(Summer).png','r')) rescue nil
+      bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/Elise(Summer).png','r')) rescue nil if @shardizard.zero?
+      @avvie_info=['Elise(Summer)','*Fire Emblem Heroes*','']
     else
-      bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/BaseElise.jpg','r')) rescue nil
+      bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/BaseElise.jpg','r')) rescue nil if @shardizard.zero?
+      @avvie_info=['Elise','*Fire Emblem Heroes*','']
     end
     @scheduler.at "#{k[0][0]}/#{k[0][1]}/#{k[0][2]} 0000" do
       next_holiday(bot,1)
@@ -15676,12 +15707,12 @@ bot.ready do |event|
   system("color e#{"04126"[@shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
   bot.game='Fire Emblem Heroes' if [0,4].include?(@shardizard)
-  if @shardizard.zero?
-    next_holiday(bot)
-    puts 'Avatar loaded'
-  elsif @shardizard==4
+  if @shardizard==4
     bot.user(bot.profile.id).on(285663217261477889).nickname='EliseBot (Debug)'
     bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r'))
+  else
+    next_holiday(bot)
+    puts 'Avatar loaded' if @shardizard.zero?
   end
 end
 
