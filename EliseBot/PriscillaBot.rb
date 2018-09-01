@@ -1311,8 +1311,7 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
     buff=name.split(':')[1]
     buff=buff[3,buff.length-3] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,3].downcase=='gp_'
     buff=buff[2,buff.length-2] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,2].downcase=='gp'
-    name=buff if find_unit(buff,event,ignore,ignore2)>=0
-    name='Reinhardt(Bonds)' if buff=='rein'
+    name=buff if find_unit(buff,event,ignore)>=0
   end
   untz=@units.map{|q| q}
   unless ignore2
@@ -2886,6 +2885,7 @@ end
 def pick_thumbnail(event,j,bot) # used to choose the thumbnail used by most embeds involving units
   data_load()
   d=@units[j]
+  return nil if d.nil?
   return 'http://vignette.wikia.nocookie.net/fireemblem/images/0/04/Kiran.png' if d[0]=='Kiran'
   return bot.user(d[13][1]).avatar_url if d.length>13 && !d[13].nil? && !d[13][1].nil? && d[13][1].is_a?(Integer) && !bot.user(d[13][1]).nil?
   return 'https://cdn.discordapp.com/emojis/418140222530912256.png' if d[0]=='Nino(Launch)' && (event.message.text.downcase.include?('face') || rand(100).zero?)
@@ -4284,7 +4284,6 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     for i2 in 0...p.length
       p[i2]="~~#{p[i2]}~~" unless p[i2]=='Laevatein' || sklz[sklz.find_index{|q2| q2[0]==p[i2]}][13].nil? || !skill[13].nil?
     end
-    puts skill[4]
     if p.length>8 && skill[4]=='Weapon' && !event.message.text.downcase.split(' ').include?('expanded')
       xfooter='If you would like to include the Prfs and units who have them, include the word "expanded" when retrying this command.'
       p2=p.reject{|q| q.gsub('~~','')=='Laevatein' || sklz[sklz.find_index{|q2| q2[0]==q.gsub('~~','')}][6]!='-'}
