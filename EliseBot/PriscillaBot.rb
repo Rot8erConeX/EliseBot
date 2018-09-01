@@ -825,7 +825,7 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
   end
   return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
   return false if mode>0
-  return true if [188781153589657600,238644800994279424,210900237823246336,175150098357944330,183976699367522304,193956706223521793,185935665152786432,323487356172763137,256659145107701760].include?(user.id) # people who donate to the laptop fund will always be EliseMods
+  return true if [188781153589657600,238644800994279424,210900237823246336,175150098357944330,183976699367522304,193956706223521793,185935665152786432,323487356172763137,256659145107701760,78649866577780736].include?(user.id) # people who donate to the laptop fund will always be EliseMods
   return false
 end
 
@@ -15530,6 +15530,7 @@ def next_holiday(bot,mode=0)
   holidays=[[0,1,1,'Tiki(Young)','as Babby New Year',"New Year's Day"],
             [0,2,2,'Feh','the best gacha game ever!','Game Release Anniversary'],
             [0,2,14,'Cordelia(Bride)','with your heartstrings.',"Valentine's Day"],
+            [0,3,17,'Ephraim','in recognition of AcePower#1000',"Donator's birthday"],
             [0,3,28,'Faye','in recognition of MiniMytch#0155',"Donator's birthday"],
             [0,4,1,'Priscilla','tribute to Xander for making this possible.',"April Fool's Day"],
             [0,4,24,'Sakura(BDay)','dressup as my best friend.',"Coder's birthday"],
