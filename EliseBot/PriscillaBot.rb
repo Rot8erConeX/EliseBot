@@ -1308,9 +1308,10 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
   nicknames_load()
   name=normalize(name.gsub('!',''))
   if name.downcase.gsub(' ','').gsub('_','')[0,2]=='<:'
-    name=name.split(':')[1] if find_unit(name.split(':')[1],event,ignore,ignore2)>=0
-    name=name[3,name.length-3] if !event.server.nil? && event.server.id==350067448583553024 && name[0,3].downcase=='gp_'
-    name=name[2,name.length-2] if !event.server.nil? && event.server.id==350067448583553024 && name[0,2].downcase=='gp'
+    buff=name.split(':')[1]
+    buff=buff[3,buff.length-3] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,3].downcase=='gp_'
+    buff=buff[2,buff.length-2] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,2].downcase=='gp'
+    name=buff if find_unit(buff,event,ignore,ignore2)>=0
   end
   untz=@units.map{|q| q}
   unless ignore2
