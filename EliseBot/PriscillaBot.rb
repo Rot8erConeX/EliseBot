@@ -1312,6 +1312,7 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
     buff=buff[3,buff.length-3] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,3].downcase=='gp_'
     buff=buff[2,buff.length-2] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,2].downcase=='gp'
     name=buff if find_unit(buff,event,ignore,ignore2)>=0
+    name='Reinhardt(Bonds)' if buff=='rein'
   end
   untz=@units.map{|q| q}
   unless ignore2
