@@ -15513,12 +15513,14 @@ def next_holiday(bot,mode=0)
             [0,3,28,'Faye','in recognition of MiniMytch#0155',"Donator's birthday"],
             [0,4,1,'Priscilla','tribute to Xander for making this possible.',"April Fool's Day"],
             [0,4,24,'Sakura(BDay)','dressup as my best friend.',"Coder's birthday"],
+            [0,4,29,'Anna',"with all the money you're giving me",'Golden Week'],
             [0,7,4,'Arthur','for freedom and justice.','Independance Day'],
             [0,7,22,'Nowi(Halloween)','in recognition of Shaq#7647',"Donator's birthday"],
             [0,8,6,'Zelgius','in recognition of DullahansXMark#9036',"Donator's birthday"],
             [0,9,16,'Genny','in recognition of Straynine#3480',"Donator's birthday"],
             [0,10,31,'Henry(Halloween)','with a dead Emblian. Nyahaha!','Halloween'],
             [0,12,6,'Lilina','in recognition of TimDiamond#6094',"Donator's birthday"],
+            [0,12,12,'Soleil','in recognition of DeepDarkDad#2070',"Donator's birthday"],
             [0,12,25,'Robin(M)(Winter)','as Santa Claus for Askr.','Christmas'],
             [0,12,31,'Tiki(Adult)','as Mother Time',"New Year's Eve"]]
   for i in 0...holidays.length
