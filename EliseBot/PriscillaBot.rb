@@ -10936,7 +10936,7 @@ bot.command([:banners, :banner]) do |event, *args|
     t=Time.now
     timeshift=8
     t-=60*60*timeshift
-    msg="Date assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
+    msg="No unit was included.  Showing current and upcoming banners.\n\nDate assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
     t2=Time.new(2017,2,2)-60*60
     t2=t-t2
     date=(((t2.to_i/60)/60)/24)
@@ -15142,7 +15142,7 @@ bot.mention do |event|
       t=Time.now
       timeshift=8
       t-=60*60*timeshift
-      msg="Date assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
+      msg="No unit was included.  Showing current and upcoming banners.\n\nDate assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
       t2=Time.new(2017,2,2)-60*60
       t2=t-t2
       date=(((t2.to_i/60)/60)/24)
@@ -15818,7 +15818,10 @@ bot.ready do |event|
   system("color e#{"04126"[@shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
   bot.game='Fire Emblem Heroes' if [0,4].include?(@shardizard)
-  if @shardizard==4
+  if @shardizard<4
+    bot.game="We did it! https://goo.gl/DkHA9h"
+    @avvie_info=['Elise',"We did it! https://goo.gl/DkHA9h",'']
+  elsif @shardizard==4
     bot.user(bot.profile.id).on(285663217261477889).nickname='EliseBot (Debug)'
     bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r'))
   else
