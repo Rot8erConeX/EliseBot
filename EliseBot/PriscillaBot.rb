@@ -8439,6 +8439,277 @@ def sort_legendaries(event,bot,mode=0)
   return nil
 end
 
+def generate_random_unit(event,args,bot)
+  colors=[]
+  weapons=[]
+  movement=[]
+  clazzez=[]
+  color_weapons=[]
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  for i in 0...args.length
+    colors.push('Red') if ['red','reds'].include?(args[i].downcase)
+    colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
+    colors.push('Green') if ['green','greens'].include?(args[i].downcase)
+    colors.push('Colorless') if ['colorless','colourless','clear','clears'].include?(args[i].downcase)
+    weapons.push('Blade') if ['physical','blade','blades'].include?(args[i].downcase)
+    weapons.push('Tome') if ['tome','mage','magic','spell','tomes','mages','spells'].include?(args[i].downcase)
+    weapons.push('Breath') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
+    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
+    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves'].include?(args[i].downcase)
+    weapons.push('Healer') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
+    weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase) && event.server.id==256291408598663168
+    color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
+    color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
+    color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
+    color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
+    color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
+    color_weapons.push(['Green','Tome']) if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
+    movement.push('Flier') if ['flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi'].include?(args[i].downcase)
+    movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers'].include?(args[i].downcase)
+    movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
+    movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
+    clazzez.push('Trainee') if ['trainee','villager','young'].include?(args[i].downcase)
+    clazzez.push('Veteran') if ['veteran','vet','elder','jagen'].include?(args[i].downcase)
+    clazzez.push('Standard') if ['standard'].include?(args[i].downcase)
+  end
+  colors=['Red', 'Blue', 'Green', 'Colorless'] if colors.length<=0 && weapons.length>0
+  if colors.length>0 && weapons.length<=0
+    weapons=['Blade', 'Tome', 'Breath', 'Bow', 'Dagger']
+    weapons.push('Healer') unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
+  end
+  for i in 0...colors.length
+    for j in 0...weapons.length
+      if colors[i]=='Colorless'
+        color_weapons.push([colors[i],weapons[j]]) unless (weapons[j]=='Blade' && !alter_classes(event,'Colorless Blades')) || (weapons[j]=='Tome' && !alter_classes(event,'Colorless Tomes'))
+      elsif weapons[j]=='Healer' && !alter_classes(event,'Colored Healers')
+      else
+        color_weapons.push([colors[i],weapons[j]])
+      end
+    end
+  end
+  if color_weapons.length<=0
+    color_weapons=[['Red', 'Blade'],     ['Red', 'Tome'],     ['Red', 'Breath'],      ['Red', 'Bow'],         ['Red', 'Dagger'],
+                   ['Blue', 'Blade'],    ['Blue', 'Tome'],    ['Blue', 'Breath'],     ['Blue', 'Bow'],        ['Blue', 'Dagger'],
+                   ['Green', 'Blade'],   ['Green', 'Tome'],   ['Green', 'Breath'],    ['Green', 'Bow'],       ['Green', 'Dagger'],
+                                                              ['Colorless', 'Breath'],['Colorless', 'Bow'],   ['Colorless', 'Dagger']]
+    color_weapons.push(['Colorless', 'Blade']) if alter_classes(event,'Colorless Blades')
+    color_weapons.push(['Colorless', 'Tome']) if alter_classes(event,'Colorless Tomes')
+    unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
+      color_weapons.push(['Red', 'Healer']) if alter_classes(event,'Colored Healers')
+      color_weapons.push(['Blue', 'Healer']) if alter_classes(event,'Colored Healers')
+      color_weapons.push(['Green', 'Healer']) if alter_classes(event,'Colored Healers')
+      color_weapons.push(['Colorless', 'Healer'])
+    end
+    unless event.server.nil?
+      color_weapons.push(['Gold', 'Beast']) if event.server.id==256291408598663168
+    end
+    color_weapons=color_weapons.reject{|q| !colors.include?(q[0])} unless colors.length<=0
+    color_weapons=color_weapons.reject{|q| !weapons.include?(q[1])} unless weapons.length<=0
+  end
+  color_weapons.uniq!
+  clazz=color_weapons.sample
+  movement=['Infantry', 'Flier', 'Cavalry', 'Armor'] if movement.length<=0
+  movement.uniq!
+  mov=movement.sample
+  l1_total=47
+  gp_total=31
+  if ['Tome', 'Bow', 'Dagger', 'Healer'].include?(clazz[1])
+    l1_total-=3
+    gp_total-=3
+  end
+  if mov=='Cavalry'
+    l1_total-=1
+    gp_total-=1
+  elsif mov=='Armor'
+    l1_total+=7
+    gp_total+=6
+  end
+  clazzez=['Trainee','Veteran','Standard','Standard','Standard','Standard','Standard','Standard','Standard','Standard'] if clazzez.length<=0
+  clazz2=[]
+  zzz=clazzez.sample
+  if zzz=='Trainee'
+    clazz2.push('Trainee')
+    l1_total-=8
+    gp_total+=6
+  elsif zzz=='Veteran'
+    clazz2.push('Veteran')
+    l1_total+=8
+    gp_total-=6
+  end
+  if event.message.text.downcase.split(' ').include?('singer')
+    clazz2.push('Singer')
+    l1_total-=8
+  elsif event.message.text.downcase.split(' ').include?('dancer')
+    clazz2.push('Dancer')
+    l1_total-=8
+  elsif event.message.text.downcase.split(' ').include?('music') || event.message.text.downcase.split(' ').include?('musical')
+    clazz2.push(['Dancer','Singer'].sample)
+    l1_total-=8
+  elsif event.message.text.downcase.split(' ').include?('nonmusical')
+  elsif event.message.text.downcase.split(' ').include?('non-musical')
+  elsif clazz[1]!='Healer' && rand(10).zero?
+    clazz2.push(['Dancer','Singer'].sample)
+    l1_total-=8
+  end
+  zzz=rand(100)
+  zzz=rand(1000) if clazz2.include?('Trainee') || clazz2.include?('Veteran')
+  if args.include?('+1/2')
+    clazz2.push('+1/2')
+    l1_total+=1
+    gp_total+=2
+  elsif args.include?('+1/1')
+    clazz2.push('+1/1')
+    l1_total+=1
+    gp_total+=1
+  elsif args.include?('+0/2') || event.message.text.downcase.split(' ').include?('cyl')
+    clazz2.push('+0/2')
+    gp_total+=2
+  elsif args.include?('+0/1')
+    clazz2.push('+0/1')
+    gp_total+=1
+  elsif event.message.text.downcase.split(' ').include?('starter')
+  elsif zzz<5
+    clazz2.push('+1/2')
+    l1_total+=1
+    gp_total+=2
+  elsif zzz<8
+    clazz2.push('+1/1')
+    l1_total+=1
+    gp_total+=1
+  elsif zzz<10
+    clazz2.push('+0/2')
+    gp_total+=2
+  elsif zzz<11
+    clazz2.push('+0/1')
+    gp_total+=1
+  end
+  name=get_bond_name(event)
+  stats=[0,0,0,0,0]
+  gps=[0,0,0,0,0]
+  stats[0]=10+rand(16)
+  gps[0]=1+rand(@mods.length-1)
+  l1_total-=stats[0]
+  gp_total-=gps[0]
+  min_possible=[l1_total-40,2].max
+  max_possible=[l1_total-8,14].min
+  if max_possible<=min_possible
+    stats[1]=min_possible
+  else
+    stats[1]=min_possible+rand(max_possible-min_possible+1)
+  end
+  min_possible=[gp_total-3*(@mods.length-2),1].max
+  max_possible=[gp_total-3,(@mods.length-2)].min
+  if max_possible<=min_possible
+    gps[1]=min_possible
+  else
+    gps[1]=min_possible+rand(max_possible-min_possible+1)
+  end
+  l1_total-=stats[1]
+  gp_total-=gps[1]
+  min_possible=[l1_total-26,2].max
+  max_possible=[l1_total-6,14].min
+  if max_possible<=min_possible
+    stats[2]=min_possible
+  else
+    stats[2]=min_possible+rand(max_possible-min_possible+1)
+  end
+  min_possible=[gp_total-2*(@mods.length-2),1].max
+  max_possible=[gp_total-2,(@mods.length-2)].min
+  if max_possible<=min_possible
+    gps[2]=min_possible
+  else
+    gps[2]=min_possible+rand(max_possible-min_possible+1)
+  end
+  l1_total-=stats[2]
+  gp_total-=gps[2]
+  min_possible=[l1_total-13,3].max
+  max_possible=[l1_total-3,13].min
+  if max_possible<=min_possible
+    stats[3]=min_possible
+  else
+    stats[3]=min_possible+rand(max_possible-min_possible+1)
+  end
+  min_possible=[gp_total-(@mods.length-2),1].max
+  max_possible=[gp_total-1,(@mods.length-2)].min
+  if max_possible<=min_possible
+    gps[3]=min_possible
+  else
+    gps[3]=min_possible+rand(max_possible-min_possible+1)
+  end
+  l1_total-=stats[3]
+  gp_total-=gps[3]
+  stats[4]=l1_total
+  gps[4]=gp_total
+  stats.push(stats[0]+@mods[gps[0]][5])
+  stats.push(stats[1]+@mods[gps[1]][5])
+  stats.push(stats[2]+@mods[gps[2]][5])
+  stats.push(stats[3]+@mods[gps[3]][5])
+  stats.push(stats[4]+@mods[gps[4]][5])
+  stats.push(stats[0]+stats[1]+stats[2]+stats[3]+stats[4])
+  stats.push(stats[5]+stats[6]+stats[7]+stats[8]+stats[9])
+  stat_names=['HP','Attack','Speed','Defense','Resistance']
+  for i in 0...5
+    stats[i+5]=stats[i+5].to_s
+    stats[i+5]="#{stats[i+5]} (+)" if [1,5,10].include?(gps[i])
+    stats[i+5]="#{stats[i+5]} (-)" if [2,6,11].include?(gps[i])
+  end
+  xcolor=0xFFD800
+  xcolor=0xE22141 if clazz[0]=='Red'
+  xcolor=0x2764DE if clazz[0]=='Blue'
+  xcolor=0x09AA24 if clazz[0]=='Green'
+  xcolor=0x64757D if clazz[0]=='Colorless'
+  clazz[1]=clazz[1].gsub('Breath','Dragon')
+  w=clazz[1]
+  w='Sword' if clazz[0]=='Red' && w=='Blade'
+  w='Lance' if clazz[0]=='Blue' && w=='Blade'
+  w='Axe' if clazz[0]=='Green' && w=='Blade'
+  w='Rod' if clazz[0]=='Colorless' && w=='Blade'
+  if clazz[1]!=w
+    w="*#{w}* (#{clazz[0]} #{clazz[1]})"
+  elsif ['Tome', 'Dragon', 'Bow', 'Dagger'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers'))
+    w="*#{clazz[0]} #{clazz[1]}*"
+  elsif clazz[0]=='Gold'
+    w="*#{w}*"
+  else
+    w="*#{w}* (#{clazz[0]})"
+  end
+  if w=='*Red Tome*'
+    w="*#{['Fire','Dark'].sample} Mage* (Red Tome)"
+  elsif w=='*Green Tome*'
+    w="*#{['Wind'].sample} Mage* (Green Tome)"
+  elsif w=='*Blue Tome*'
+    w="*#{['Thunder','Light'].sample} Mage* (Blue Tome)"
+  end
+  atk='<:GenericAttackS:467065089598423051> Attack'
+  atk='<:MagicS:467043867611627520> Magic' if ['Tome','Healer'].include?(clazz[1])
+  atk='<:FreezeS:467043868148236299> Magic' if ['Dragon'].include?(clazz[1])
+  atk='<:StrengthS:467037520484630539> Strength' if ['Blade','Bow','Dagger','Beast'].include?(clazz[1])
+  r='<:Icon_Rarity_5:448266417553539104>'*5
+  flds=[['**Level 1**',"<:HP_S:467037520538894336> HP: #{stats[0]}\n#{atk}: #{stats[1]}\n<:SpeedS:467037520534962186> Speed: #{stats[2]}\n<:DefenseS:467037520249487372> Defense: #{stats[3]}\n<:ResistanceS:467037520379641858> Resistance: #{stats[4]}\n\nBST: #{stats[10]}"]]
+  args=args.map{|q| q.downcase}
+  if args.include?('gps') || args.include?('gp') || args.include?('growths') || args.include?('growth')
+    flds.push(['**Growth Points**',"<:HP_S:467037520538894336> HP: #{gps[0]}\n#{atk}: #{gps[1]}\n<:SpeedS:467037520534962186> Speed: #{gps[2]}\n<:DefenseS:467037520249487372> Defense: #{gps[3]}\n<:ResistanceS:467037520379641858> Resistance: #{gps[4]}\n\nGPT: #{gps[0]+gps[1]+gps[2]+gps[3]+gps[4]}"])
+  end
+  flds.push(['**Level 40**',"<:HP_S:467037520538894336> HP: #{stats[5]}\n#{atk}: #{stats[6]}\n<:SpeedS:467037520534962186> Speed: #{stats[7]}\n<:DefenseS:467037520249487372> Defense: #{stats[8]}\n<:ResistanceS:467037520379641858> Resistance: #{stats[9]}\n\nBST: #{stats[11]}"])
+  img=nil
+  ftr=nil
+  unless event.server.nil?
+    imgx=event.server.users.sample
+    imgx=event.user if rand(100).zero? && event.server.users.length>100
+    img=imgx.avatar_url
+    ftr="Unit profile provided by #{imgx.distinct}"
+  end
+  wemote=''
+  moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clazz[0]}_#{clazz[1].gsub('Healer','Staff')}"}
+  wemote=moji[0].mention unless moji.length<=0
+  memote=''
+  moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{mov}"}
+  memote=moji[0].mention unless moji.length<=0
+  clazz3=clazz2.reject{|q| ['Dancer','Singer'].include?(q)}
+  create_embed(event,"__**#{name}**__","#{r}\nNeutral nature\n#{wemote} #{w}\n#{memote} *#{mov}*#{"\n<:Assist_Music:454462054959415296> *Dancer*" if clazz2.include?('Dancer')}#{"\n<:Assist_Music:454462054959415296> *Singer*" if clazz2.include?('Singer')}\n#{"Additional Modifier#{'s' if clazz3.length>1}: #{clazz3.map{|q| "*#{q}*"}.join(', ')}" if clazz3.length>0}",xcolor,ftr,img,flds,1)
+  return nil
+end
+
 def parse_function_alts(callback,event,args,bot)
   event.channel.send_temporary_message('Calculating data, please wait...',3)
   k=find_name_in_string(event,nil,1)
@@ -10642,8 +10913,24 @@ end
 
 bot.command([:banners, :banner]) do |event, *args|
   return nil if overlap_prevent(event)
-  if args.nil? || args.length<1
-    event.respond 'No unit was included'
+  if args.nil? || args.length<1 || ['next','schedule'].include?(args[0].downcase)
+    t=Time.now
+    timeshift=8
+    t-=60*60*timeshift
+    msg="Date assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
+    t2=Time.new(2017,2,2)-60*60
+    t2=t-t2
+    date=(((t2.to_i/60)/60)/24)
+    msg=extend_message(msg,"Days since game release: #{longFormattedNumber(date)}",event)
+    if event.user.id==167657750971547648 && @shardizard==4
+      msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
+      msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)",event)
+    end
+    str2=disp_current_events(1)
+    msg=extend_message(msg,str2,event,2)
+    str2=disp_current_events(-1)
+    msg=extend_message(msg,str2,event,2)
+    event.respond msg
     return nil
   end
   parse_function(:banner_list,event,args,bot)
@@ -11076,273 +11363,7 @@ end
 
 bot.command([:random,:rand]) do |event, *args|
   return nil if overlap_prevent(event)
-  colors=[]
-  weapons=[]
-  movement=[]
-  clazzez=[]
-  color_weapons=[]
-  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
-  for i in 0...args.length
-    colors.push('Red') if ['red','reds'].include?(args[i].downcase)
-    colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
-    colors.push('Green') if ['green','greens'].include?(args[i].downcase)
-    colors.push('Colorless') if ['colorless','colourless','clear','clears'].include?(args[i].downcase)
-    weapons.push('Blade') if ['physical','blade','blades'].include?(args[i].downcase)
-    weapons.push('Tome') if ['tome','mage','magic','spell','tomes','mages','spells'].include?(args[i].downcase)
-    weapons.push('Breath') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
-    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
-    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves'].include?(args[i].downcase)
-    weapons.push('Healer') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
-    weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase) && event.server.id==256291408598663168
-    color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
-    color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
-    color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
-    color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
-    color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
-    color_weapons.push(['Green','Tome']) if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
-    movement.push('Flier') if ['flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi'].include?(args[i].downcase)
-    movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers'].include?(args[i].downcase)
-    movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
-    movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
-    clazzez.push('Trainee') if ['trainee','villager','young'].include?(args[i].downcase)
-    clazzez.push('Veteran') if ['veteran','vet','elder','jagen'].include?(args[i].downcase)
-    clazzez.push('Standard') if ['standard'].include?(args[i].downcase)
-  end
-  colors=['Red', 'Blue', 'Green', 'Colorless'] if colors.length<=0 && weapons.length>0
-  if colors.length>0 && weapons.length<=0
-    weapons=['Blade', 'Tome', 'Breath', 'Bow', 'Dagger']
-    weapons.push('Healer') unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
-  end
-  for i in 0...colors.length
-    for j in 0...weapons.length
-      if colors[i]=='Colorless'
-        color_weapons.push([colors[i],weapons[j]]) unless (weapons[j]=='Blade' && !alter_classes(event,'Colorless Blades')) || (weapons[j]=='Tome' && !alter_classes(event,'Colorless Tomes'))
-      elsif weapons[j]=='Healer' && !alter_classes(event,'Colored Healers')
-      else
-        color_weapons.push([colors[i],weapons[j]])
-      end
-    end
-  end
-  if color_weapons.length<=0
-    color_weapons=[['Red', 'Blade'],     ['Red', 'Tome'],     ['Red', 'Breath'],      ['Red', 'Bow'],         ['Red', 'Dagger'],
-                   ['Blue', 'Blade'],    ['Blue', 'Tome'],    ['Blue', 'Breath'],     ['Blue', 'Bow'],        ['Blue', 'Dagger'],
-                   ['Green', 'Blade'],   ['Green', 'Tome'],   ['Green', 'Breath'],    ['Green', 'Bow'],       ['Green', 'Dagger'],
-                                                              ['Colorless', 'Breath'],['Colorless', 'Bow'],   ['Colorless', 'Dagger']]
-    color_weapons.push(['Colorless', 'Blade']) if alter_classes(event,'Colorless Blades')
-    color_weapons.push(['Colorless', 'Tome']) if alter_classes(event,'Colorless Tomes')
-    unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
-      color_weapons.push(['Red', 'Healer']) if alter_classes(event,'Colored Healers')
-      color_weapons.push(['Blue', 'Healer']) if alter_classes(event,'Colored Healers')
-      color_weapons.push(['Green', 'Healer']) if alter_classes(event,'Colored Healers')
-      color_weapons.push(['Colorless', 'Healer'])
-    end
-    unless event.server.nil?
-      color_weapons.push(['Gold', 'Beast']) if event.server.id==256291408598663168
-    end
-    color_weapons=color_weapons.reject{|q| !colors.include?(q[0])} unless colors.length<=0
-    color_weapons=color_weapons.reject{|q| !weapons.include?(q[1])} unless weapons.length<=0
-  end
-  color_weapons.uniq!
-  clazz=color_weapons.sample
-  movement=['Infantry', 'Flier', 'Cavalry', 'Armor'] if movement.length<=0
-  movement.uniq!
-  mov=movement.sample
-  l1_total=47
-  gp_total=31
-  if ['Tome', 'Bow', 'Dagger', 'Healer'].include?(clazz[1])
-    l1_total-=3
-    gp_total-=3
-  end
-  if mov=='Cavalry'
-    l1_total-=1
-    gp_total-=1
-  elsif mov=='Armor'
-    l1_total+=7
-    gp_total+=6
-  end
-  clazzez=['Trainee','Veteran','Standard','Standard','Standard','Standard','Standard','Standard','Standard','Standard'] if clazzez.length<=0
-  clazz2=[]
-  zzz=clazzez.sample
-  if zzz=='Trainee'
-    clazz2.push('Trainee')
-    l1_total-=8
-    gp_total+=6
-  elsif zzz=='Veteran'
-    clazz2.push('Veteran')
-    l1_total+=8
-    gp_total-=6
-  end
-  if event.message.text.downcase.split(' ').include?('singer')
-    clazz2.push('Singer')
-    l1_total-=8
-  elsif event.message.text.downcase.split(' ').include?('dancer')
-    clazz2.push('Dancer')
-    l1_total-=8
-  elsif event.message.text.downcase.split(' ').include?('music') || event.message.text.downcase.split(' ').include?('musical')
-    clazz2.push(['Dancer','Singer'].sample)
-    l1_total-=8
-  elsif event.message.text.downcase.split(' ').include?('nonmusical')
-  elsif event.message.text.downcase.split(' ').include?('non-musical')
-  elsif clazz[1]!='Healer' && rand(10).zero?
-    clazz2.push(['Dancer','Singer'].sample)
-    l1_total-=8
-  end
-  zzz=rand(100)
-  zzz=rand(1000) if clazz2.include?('Trainee') || clazz2.include?('Veteran')
-  if args.include?('+1/2')
-    clazz2.push('+1/2')
-    l1_total+=1
-    gp_total+=2
-  elsif args.include?('+1/1')
-    clazz2.push('+1/1')
-    l1_total+=1
-    gp_total+=1
-  elsif args.include?('+0/2') || event.message.text.downcase.split(' ').include?('cyl')
-    clazz2.push('+0/2')
-    gp_total+=2
-  elsif args.include?('+0/1')
-    clazz2.push('+0/1')
-    gp_total+=1
-  elsif event.message.text.downcase.split(' ').include?('starter')
-  elsif zzz<5
-    clazz2.push('+1/2')
-    l1_total+=1
-    gp_total+=2
-  elsif zzz<8
-    clazz2.push('+1/1')
-    l1_total+=1
-    gp_total+=1
-  elsif zzz<10
-    clazz2.push('+0/2')
-    gp_total+=2
-  elsif zzz<11
-    clazz2.push('+0/1')
-    gp_total+=1
-  end
-  name=get_bond_name(event)
-  stats=[0,0,0,0,0]
-  gps=[0,0,0,0,0]
-  stats[0]=10+rand(16)
-  gps[0]=1+rand(@mods.length-1)
-  l1_total-=stats[0]
-  gp_total-=gps[0]
-  min_possible=[l1_total-40,2].max
-  max_possible=[l1_total-8,14].min
-  if max_possible<=min_possible
-    stats[1]=min_possible
-  else
-    stats[1]=min_possible+rand(max_possible-min_possible+1)
-  end
-  min_possible=[gp_total-3*(@mods.length-2),1].max
-  max_possible=[gp_total-3,(@mods.length-2)].min
-  if max_possible<=min_possible
-    gps[1]=min_possible
-  else
-    gps[1]=min_possible+rand(max_possible-min_possible+1)
-  end
-  l1_total-=stats[1]
-  gp_total-=gps[1]
-  min_possible=[l1_total-26,2].max
-  max_possible=[l1_total-6,14].min
-  if max_possible<=min_possible
-    stats[2]=min_possible
-  else
-    stats[2]=min_possible+rand(max_possible-min_possible+1)
-  end
-  min_possible=[gp_total-2*(@mods.length-2),1].max
-  max_possible=[gp_total-2,(@mods.length-2)].min
-  if max_possible<=min_possible
-    gps[2]=min_possible
-  else
-    gps[2]=min_possible+rand(max_possible-min_possible+1)
-  end
-  l1_total-=stats[2]
-  gp_total-=gps[2]
-  min_possible=[l1_total-13,3].max
-  max_possible=[l1_total-3,13].min
-  if max_possible<=min_possible
-    stats[3]=min_possible
-  else
-    stats[3]=min_possible+rand(max_possible-min_possible+1)
-  end
-  min_possible=[gp_total-(@mods.length-2),1].max
-  max_possible=[gp_total-1,(@mods.length-2)].min
-  if max_possible<=min_possible
-    gps[3]=min_possible
-  else
-    gps[3]=min_possible+rand(max_possible-min_possible+1)
-  end
-  l1_total-=stats[3]
-  gp_total-=gps[3]
-  stats[4]=l1_total
-  gps[4]=gp_total
-  stats.push(stats[0]+@mods[gps[0]][5])
-  stats.push(stats[1]+@mods[gps[1]][5])
-  stats.push(stats[2]+@mods[gps[2]][5])
-  stats.push(stats[3]+@mods[gps[3]][5])
-  stats.push(stats[4]+@mods[gps[4]][5])
-  stats.push(stats[0]+stats[1]+stats[2]+stats[3]+stats[4])
-  stats.push(stats[5]+stats[6]+stats[7]+stats[8]+stats[9])
-  stat_names=['HP','Attack','Speed','Defense','Resistance']
-  for i in 0...5
-    stats[i+5]=stats[i+5].to_s
-    stats[i+5]="#{stats[i+5]} (+)" if [1,5,10].include?(gps[i])
-    stats[i+5]="#{stats[i+5]} (-)" if [2,6,11].include?(gps[i])
-  end
-  xcolor=0xFFD800
-  xcolor=0xE22141 if clazz[0]=='Red'
-  xcolor=0x2764DE if clazz[0]=='Blue'
-  xcolor=0x09AA24 if clazz[0]=='Green'
-  xcolor=0x64757D if clazz[0]=='Colorless'
-  clazz[1]=clazz[1].gsub('Breath','Dragon')
-  w=clazz[1]
-  w='Sword' if clazz[0]=='Red' && w=='Blade'
-  w='Lance' if clazz[0]=='Blue' && w=='Blade'
-  w='Axe' if clazz[0]=='Green' && w=='Blade'
-  w='Rod' if clazz[0]=='Colorless' && w=='Blade'
-  if clazz[1]!=w
-    w="*#{w}* (#{clazz[0]} #{clazz[1]})"
-  elsif ['Tome', 'Dragon', 'Bow', 'Dagger'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers'))
-    w="*#{clazz[0]} #{clazz[1]}*"
-  elsif clazz[0]=='Gold'
-    w="*#{w}*"
-  else
-    w="*#{w}* (#{clazz[0]})"
-  end
-  if w=='*Red Tome*'
-    w="*#{['Fire','Dark'].sample} Mage* (Red Tome)"
-  elsif w=='*Green Tome*'
-    w="*#{['Wind'].sample} Mage* (Green Tome)"
-  elsif w=='*Blue Tome*'
-    w="*#{['Thunder','Light'].sample} Mage* (Blue Tome)"
-  end
-  atk='<:GenericAttackS:467065089598423051> Attack'
-  atk='<:MagicS:467043867611627520> Magic' if ['Tome','Healer'].include?(clazz[1])
-  atk='<:FreezeS:467043868148236299> Magic' if ['Dragon'].include?(clazz[1])
-  atk='<:StrengthS:467037520484630539> Strength' if ['Blade','Bow','Dagger','Beast'].include?(clazz[1])
-  r='<:Icon_Rarity_5:448266417553539104>'*5
-  flds=[['**Level 1**',"<:HP_S:467037520538894336> HP: #{stats[0]}\n#{atk}: #{stats[1]}\n<:SpeedS:467037520534962186> Speed: #{stats[2]}\n<:DefenseS:467037520249487372> Defense: #{stats[3]}\n<:ResistanceS:467037520379641858> Resistance: #{stats[4]}\n\nBST: #{stats[10]}"]]
-  args=args.map{|q| q.downcase}
-  if args.include?('gps') || args.include?('gp') || args.include?('growths') || args.include?('growth')
-    flds.push(['**Growth Points**',"<:HP_S:467037520538894336> HP: #{gps[0]}\n#{atk}: #{gps[1]}\n<:SpeedS:467037520534962186> Speed: #{gps[2]}\n<:DefenseS:467037520249487372> Defense: #{gps[3]}\n<:ResistanceS:467037520379641858> Resistance: #{gps[4]}\n\nGPT: #{gps[0]+gps[1]+gps[2]+gps[3]+gps[4]}"])
-  end
-  flds.push(['**Level 40**',"<:HP_S:467037520538894336> HP: #{stats[5]}\n#{atk}: #{stats[6]}\n<:SpeedS:467037520534962186> Speed: #{stats[7]}\n<:DefenseS:467037520249487372> Defense: #{stats[8]}\n<:ResistanceS:467037520379641858> Resistance: #{stats[9]}\n\nBST: #{stats[11]}"])
-  img=nil
-  ftr=nil
-  unless event.server.nil?
-    imgx=event.server.users.sample
-    imgx=event.user if rand(100).zero? && event.server.users.length>100
-    img=imgx.avatar_url
-    ftr="Unit profile provided by #{imgx.distinct}"
-  end
-  wemote=''
-  moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clazz[0]}_#{clazz[1].gsub('Healer','Staff')}"}
-  wemote=moji[0].mention unless moji.length<=0
-  memote=''
-  moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{mov}"}
-  memote=moji[0].mention unless moji.length<=0
-  clazz3=clazz2.reject{|q| ['Dancer','Singer'].include?(q)}
-  create_embed(event,"__**#{name}**__","#{r}\nNeutral nature\n#{wemote} #{w}\n#{memote} *#{mov}*#{"\n<:Assist_Music:454462054959415296> *Dancer*" if clazz2.include?('Dancer')}#{"\n<:Assist_Music:454462054959415296> *Singer*" if clazz2.include?('Singer')}\n#{"Additional Modifier#{'s' if clazz3.length>1}: #{clazz3.map{|q| "*#{q}*"}.join(', ')}" if clazz3.length>0}",xcolor,ftr,img,flds,1)
+  generate_random_unit(event,args,bot)
   return nil
 end
 
@@ -15077,6 +15098,9 @@ bot.mention do |event|
     disp_stats(bot,'Lavatain',nil,event,true,true)
     disp_skill(bot,'Bladeblade',event,true)
     k=3
+  elsif ['random','rand'].include?(a[0].downcase)
+    generate_random_unit(event,a,bot)
+    k=1
   elsif ['compare','comparison'].include?(a[0].downcase)
     a.shift
     k=comparison(event,a,bot)
@@ -15095,7 +15119,27 @@ bot.mention do |event|
     k=1
   elsif ['banners','banner'].include?(a[0].downcase)
     a.shift
-    k=parse_function(:banner_list,event,a,bot)
+    if a.length.zero? || ['next','schedule'].include?(a[0].downcase)
+      t=Time.now
+      timeshift=8
+      t-=60*60*timeshift
+      msg="Date assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
+      t2=Time.new(2017,2,2)-60*60
+      t2=t-t2
+      date=(((t2.to_i/60)/60)/24)
+      msg=extend_message(msg,"Days since game release: #{longFormattedNumber(date)}",event)
+      if event.user.id==167657750971547648 && @shardizard==4
+        msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
+        msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)",event)
+      end
+      str2=disp_current_events(1)
+      msg=extend_message(msg,str2,event,2)
+      str2=disp_current_events(-1)
+      msg=extend_message(msg,str2,event,2)
+      event.respond msg
+    else
+      k=parse_function(:banner_list,event,a,bot)
+    end
     k=1
   elsif ['art'].include?(a[0].downcase)
     a.shift
@@ -15251,6 +15295,53 @@ bot.mention do |event|
   elsif ['sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist'].include?(a[0].downcase)
     a.shift
     sort_skills(bot,event,a)
+    k=1
+  elsif ['smol','small','tiny','little','squashed'].include?(a[0].downcase)
+    a.shift
+    k=find_name_in_string(event,nil,1)
+    if k.nil?
+      w=nil
+      if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
+        event.respond "Steel's waifu is not in the game."
+      elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
+        event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
+      elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+        x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+        k2=get_weapon(first_sub(a.join(' '),x[0],''),event)
+        w=k2[0] unless k2.nil?
+        disp_tiny_stats(bot,x[1],w,event,true)
+      elsif !@embedless.include?(event.user.id) && !was_embedless_mentioned?(event)
+        event.channel.send_embed("__**No matches found.  Have a smol me instead.**__") do |embed|
+          embed.color = 0xD49F61
+          embed.image = Discordrb::Webhooks::EmbedImage.new(url: "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Smol_Elise.jpg")
+          embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: "image source", url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=58900377")
+        end
+      else
+        event.respond 'No matches found.'
+      end
+    end
+    str=k[0]
+    k2=get_weapon(first_sub(a.join(' '),k[1],''),event)
+    w=nil
+    w=k2[0] unless k2.nil?
+    data_load()
+    if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
+      disp_tiny_stats(bot,x[1],w,event,true)
+    elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
+      x=detect_multi_unit_alias(event,str.downcase,str.downcase)
+      disp_tiny_stats(bot,x[1],w,event,true)
+    elsif find_unit(str,event)>=0
+      disp_tiny_stats(bot,str,w,event)
+    elsif !@embedless.include?(event.user.id) && !was_embedless_mentioned?(event)
+      event.channel.send_embed("__**No matches found.  Have a smol me instead.**__") do |embed|
+        embed.color = 0xD49F61
+        embed.image = Discordrb::Webhooks::EmbedImage.new(url: "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Smol_Elise.jpg")
+        embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: "image source", url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=58900377")
+      end
+    else
+      event.respond 'No matches found'
+    end
     k=1
   elsif ['sortstats','statssort','sortstat','statsort','liststats','statslist','statlist','liststat','sortunits','unitssort','sortunit','unitsort','listunits','unitslist','unitlist','listunit'].include?(a[0].downcase)
     a.shift
