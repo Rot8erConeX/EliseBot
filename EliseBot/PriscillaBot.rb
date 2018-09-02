@@ -8975,6 +8975,25 @@ def parse_function(callback,event,args,bot,healers=nil)
       end
       method(callback).call(event,xx,bot,weapon) if xx.length>0
       return 0
+    elsif callback==:banner_list
+      t=Time.now
+      timeshift=8
+      t-=60*60*timeshift
+      msg="No unit was included.  Showing current and upcoming banners.\n\nDate assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
+      t2=Time.new(2017,2,2)-60*60
+      t2=t-t2
+      date=(((t2.to_i/60)/60)/24)
+      msg=extend_message(msg,"Days since game release: #{longFormattedNumber(date)}",event)
+      if event.user.id==167657750971547648 && @shardizard==4
+        msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
+        msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)",event)
+      end
+      str2=disp_current_events(1)
+      msg=extend_message(msg,str2,event,2)
+      str2=disp_current_events(-1)
+      msg=extend_message(msg,str2,event,2)
+      event.respond msg
+      return -1
     else
       event.respond 'No unit was included'
       return -1
