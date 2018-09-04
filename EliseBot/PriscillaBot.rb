@@ -11429,8 +11429,6 @@ bot.command(:summon) do |event, *colors|
     event.respond 'This command is unavailable in this channel.  Please go to <#460903186773835806>.'
   elsif event.server.id==271642342153388034 && event.channel.id != 312736133203361792
     event.respond 'This command is unavailable in this channel.  Please go to <#312736133203361792>.'
-  elsif event.server.id==238770788272963585
-    event.respond 'This command is unavailable in this server.  If you wish to fix that, take it up with the mod team.'
   else
     if !@banner[0].nil?
       post=Time.now
