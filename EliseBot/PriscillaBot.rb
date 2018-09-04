@@ -51,10 +51,10 @@ bot.gateway.check_heartbeat_acks = false
 @rarity_stars=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>',
                '<:Icon_Rarity_5:448266417553539104>','<:Icon_Rarity_5:448266417553539104>']
 @summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,
-                 341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,238770788272963585,297459718249512961,283833293894582272,
+                 341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,297459718249512961,283833293894582272,305889949574496257,
                  214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,347491426852143109,392557615177007104,295686580528742420,
                  412303462764773376,442465051371372544,353997181193289728,462100851864109056,337397338823852034,446111983155150875,295001062790660097,328109510449430529,
-                 305889949574496257,483437489021911051]
+                 483437489021911051]
 @summon_rate=[0,0,3]
 @spam_channels=[]
 @mods=[[0, 6, 7, 7, 8, 8], # this is a translation of the graphic displayed in the "growths" command.
@@ -11429,6 +11429,8 @@ bot.command(:summon) do |event, *colors|
     event.respond 'This command is unavailable in this channel.  Please go to <#460903186773835806>.'
   elsif event.server.id==271642342153388034 && event.channel.id != 312736133203361792
     event.respond 'This command is unavailable in this channel.  Please go to <#312736133203361792>.'
+  elsif event.server.id==238770788272963585
+    event.respond 'This command is unavailable in this server.  If you wish to fix that, take it up with the mod team.'
   else
     if !@banner[0].nil?
       post=Time.now
@@ -15711,8 +15713,8 @@ def next_holiday(bot,mode=0)
   if t.year==k[0][0] && t.month==k[0][1] && t.day==k[0][2]
     if k.length==1
       # Only one holiday is today.  Display new avatar, and set another check for midnight
+      bot.game=k[0][4]
       if @shardizard.zero?
-        bot.game=k[0][4]
         bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[0][3]}.png",'r')) rescue nil
       end
       @avvie_data=[k[0][3],k[0][4],k[0][5]]
@@ -15726,8 +15728,8 @@ def next_holiday(bot,mode=0)
       fcod=div[k.length][k.length-1]
       if t.hour>fcod[0] || (t.hour==fcod[0] && t.min>=fcod[1])
         # in last area of day.  Set avatar to the last one for the day, then set a check for tomorrow at midnight
+        bot.game=k[k.length-1][4]
         if @shardizard.zero?
-          bot.game=k[k.length-1][4]
           bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[k.length-1][3]}.png",'r')) rescue nil
         end
         @avvie_data=[k[k.length-1][3],k[k.length-1][4],k[k.length-1][5]]
@@ -15745,8 +15747,8 @@ def next_holiday(bot,mode=0)
           j=i if t.hour<div[k.length][i+1][0] || (t.hour==div[k.length][i+1][0] && t.min<div[k.length][i+1][1])
         end
         # ...set avatar properly and set check for the beginning of the next chunk of the day
+        bot.game=k[j][4]
         if @shardizard.zero?
-          bot.game=k[j][4]
           bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[j][3]}.png",'r')) rescue nil
         end
         @avvie_data=[k[j][3],k[j][4],k[j][5]]
@@ -15760,7 +15762,7 @@ def next_holiday(bot,mode=0)
   else
     t=Time.now
     t-=60*60*6
-    bot.game='Fire Emblem Heroes' if @shardizard.zero?
+    bot.game='Fire Emblem Heroes'
     if [6,7,8].include?(t.month)
       bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/Elise(Summer).png','r')) rescue nil if @shardizard.zero?
       @avvie_info=['Elise(Summer)','*Fire Emblem Heroes*','']
@@ -15817,10 +15819,7 @@ bot.ready do |event|
   system("color e#{"04126"[@shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
   bot.game='Fire Emblem Heroes' if [0,4].include?(@shardizard)
-  if @shardizard<4
-    bot.game="We did it! https://goo.gl/DkHA9h"
-    @avvie_info=['Elise',"We did it! https://goo.gl/DkHA9h",'']
-  elsif @shardizard==4
+  if @shardizard==4
     bot.user(bot.profile.id).on(285663217261477889).nickname='EliseBot (Debug)'
     bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r'))
   else
