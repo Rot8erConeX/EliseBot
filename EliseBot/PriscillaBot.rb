@@ -48,29 +48,36 @@ bot.gateway.check_heartbeat_acks = false
 @stored_event=nil
 @zero_by_four=[0,0,0,'']
 @headpats=[0,0,0]
-@rarity_stars=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4:448266418459377684>',
-               '<:Icon_Rarity_5:448266417553539104>','<:Icon_Rarity_5:448266417553539104>']
-@summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,
-                 341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,297459718249512961,283833293894582272,305889949574496257,
-                 214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,347491426852143109,392557615177007104,295686580528742420,
-                 412303462764773376,442465051371372544,353997181193289728,462100851864109056,337397338823852034,446111983155150875,295001062790660097,328109510449430529,
-                 483437489021911051]
+@rarity_stars=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>',
+               '<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>','<:Icon_Rarity_5:448266417553539104>']
+@summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,
+                 393775173095915521,341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,297459718249512961,
+                 283833293894582272,305889949574496257,214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,
+                 347491426852143109,392557615177007104,295686580528742420,412303462764773376,442465051371372544,353997181193289728,462100851864109056,
+                 337397338823852034,446111983155150875,295001062790660097,328109510449430529,483437489021911051]
 @summon_rate=[0,0,3]
 @spam_channels=[]
-@mods=[[0, 6, 7, 7, 8, 8], # this is a translation of the graphic displayed in the "growths" command.
-       [0, 8, 8, 9,10,10],
-       [0, 9,10,11,12,13],
-       [0,11,12,13,14,15],
-       [0,13,14,15,16,17],
-       [0,14,15,17,18,19],
-       [0,16,17,19,20,22],
-       [0,18,19,21,22,24],
-       [0,19,21,23,24,26],
-       [0,21,23,25,26,28],
-       [0,23,25,27,28,30],
-       [0,24,26,29,31,33],
-       [0,26,28,31,33,35],
-       [0,28,30,33,35,37]]
+@mods=[[ 0, 0, 0, 0, 0, 0],
+       [ 1, 1, 1, 1, 1, 1],
+       [ 2, 3, 3, 3, 3, 4],
+       [ 4, 4, 5, 5, 6, 6],
+       [ 5, 6, 7, 7, 8, 8], # this is a translation of the graphic displayed in the "growths" command.
+       [ 7, 8, 8, 9,10,10],
+       [ 8, 9,10,11,12,13],
+       [10,11,12,13,14,15],
+       [12,13,14,15,16,17],
+       [13,14,15,17,18,19],
+       [15,16,17,19,20,22],
+       [16,18,19,21,22,24],
+       [18,19,21,23,24,26],
+       [19,21,23,25,26,28],
+       [21,23,25,27,28,30],
+       [23,24,26,29,31,33],
+       [24,26,28,31,33,35],
+       [26,28,30,33,35,37],
+       [27,30,32,35,37,39],
+       [29,31,34,37,39,42],
+       [30,33,36,39,41,44]]
 @natures=[['Gentle','Resistance','Defense'], # this is a list of all the nature names that can be displayed, with the affected stats
           ['Bold','Defense','Attack'],
           ['Timid','Speed','Attack'],
@@ -101,42 +108,45 @@ bot.gateway.check_heartbeat_acks = false
           ["`\u22C1`Excitable",'HP','Resistance',true]]
 
 def all_commands(include_nil=false,permissions=-1) # a list of all the command names.  Used by Nino Mode to ignore messages that are commands, so responses do not double up.
-  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','next','effect','commands',
-     'sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','deletegroup','commandlist','command_list',
-     'removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','leaveserver','snagstats','reboot','stats','today_in_feh','todayinfeh',
-     'devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','eff_HP','refine','refinery','average','mean','tools','compare','comparison','today','daily',
-     'fodder','status','growths','growth','gps','gp','bulk','whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','studystat','studystats',
-     'restore','higheststats','worstamong','worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','rand','feedback','statstudy','dualalias',
-     'suggestion','legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','snagchannels','removemulti',
-     'stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','removedualunitalias','addmulti',
-     'stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','study_phase','compareskills','removemultiunitalias',
-     'compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','removedualalias',
-     'skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','removemultialias',
-     'commonskills','common_skills','locate','locateshard','links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','deletemulti',
-     'skill_rarity','one_star','two_star','three_star','four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit','deletedualunitalias','multialias',
-     'allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','deletemultiunitalias','addualunitalias',
-     'skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','deletedualalias','adddualunitalias',
-     'inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','deletemultialias','addmultiunitalias',
-     'skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','addualalias','adddualalias',
-     'skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','addmultialias','schedule',
-     'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','banners','banner',
-     'skillearnable','alts','alt','reload','colors','color','colours','colour','tinystats','smallstats','smolstats','microstats','squashedstats','sstats','statstiny','statssmall',
-     'statssmol','statsmicro','statssquashed','statss','stattiny','statsmall','statsmol','statmicro','statsquashed','sstat','tinystat','smallstat','smolstat','microstat',
-     'squashedstat','tiny','small','micro','smol','squashed','littlestats','littlestat','statslittle','statlittle','little','giantstats','bigstats','tolstats','macrostats',
-     'largestats','hugestats','massivestats','giantstat','bigstat','tolstat','macrostat','largestat','hugestat','massivestat','statsgiant','statsbig','statstol','statsmacro',
-     'statslarge','statshuge','statsmassive','statgiant','statbig','stattol','statmacro','statlarge','stathuge','statmassive','statol','giant','big','tol','macro','large','huge',
-     'massive','safe','spam','safetospam','safe2spam','long','longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills',
-     'skillslist','sortstats','statssort','sortstat','statsort','liststats','statslist','statlist','liststat','sortunits','unitssort','sortunit','unitsort','listunits','unitslist',
-     'unitlist','listunit','serveraliases','saliases','avvie','avatar']
+  k=['stat','unit','sort','data','find','wiki','tier','help','addalias','skill','aliases','flowers','seealiases','checkaliases','sendmessage','addgroup','next',
+     'effect','commands','sendpm','search','bugreport','skills','stats','flowers','flower','deletealias','removealias','seegroups','checkgroups','groups','long',
+     'deletegroup','commandlist','command_list','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','gp',
+     'leaveserver','snagstats','reboot','stats','today_in_feh','todayinfeh','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','bulk',
+     'eff_HP','refine','refinery','average','mean','tools','compare','comparison','today','daily','fodder','status','growths','growth','gps','serveraliases',
+     'whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','studystat','studystats','restore','higheststats','worstamong',
+     'worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','feedback','statstudy','dualalias','suggestion','statlist',
+     'legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','snagchannels','color',
+     'removemulti','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill',
+     'removedualunitalias','addmulti','stat_and_skill','shard','procstudy','studyproc','proc_study','study_proc','phasestudy','studyphase','phase_study','huge',
+     'study_phase','compareskills','removemultiunitalias','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison',
+     'skillscomparison','compare_skills','compare_skill','removedualalias','skill_compare','skills_compare','comparison_skills','comparison_skill','listunit',
+     'skill_comparison','skills_comparison','skillsincommon','skills_in_common','removemultialias','commonskills','common_skills','locate','locateshard','big',
+     'links','art','skillrarity','onestar','twostar','threestar','fourstar','fivestar','deletemulti','skill_rarity','one_star','two_star','three_star','colors',
+     'four_star','five_star','summonpool','summon_pool','pool','allinheritance','allinherit','deletedualunitalias','multialias','allinheritable','avatar','safe',
+     'skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','deletemultiunitalias','avvie','tol',
+     'addualunitalias','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill',
+     'deletedualalias','adddualunitalias','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','sortunit',
+     'all_inherit','all_inheritable','deletemultialias','addmultiunitalias','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','unitlist',
+     'skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','addualalias','adddualalias','skills_learn','skills_learnable','saliases',
+     'inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','addmultialias','schedule','inherit_skills',
+     'inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','banners','banner','unitsort',
+     'skillearnable','alts','alt','reload','colours','colour','tinystats','smallstats','smolstats','microstats','squashedstats','sstats','unitslist','macro',
+     'statstiny','statssmall','statssmol','statsmicro','statssquashed','statss','stattiny','statsmall','statsmol','statmicro','statsquashed','sstat','tinystat',
+     'smallstat','smolstat','microstat','squashedstat','tiny','small','micro','smol','squashed','littlestats','littlestat','statslittle','statlittle','little',
+     'giantstats','bigstats','tolstats','macrostats','largestats','hugestats','massivestats','giantstat','bigstat','tolstat','macrostat','largestat','hugestat',
+     'massivestat','statsgiant','statsbig','statstol','statsmacro','statslarge','statshuge','statsmassive','statgiant','statbig','stattol','statmacro','large',
+     'statlarge','stathuge','statmassive','statol','giant','massive','spam','safetospam','safe2spam','listunits','sortunits','unitssort','liststat','rand',
+     'longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort',
+     'sortstat','statsort','liststats','statslist']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
     k=['addalias','deletealias','removealias','addgroup','deletegroup','removegroup','removemember','removefromgroup']
   elsif permissions==2
-    k=['reboot','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti','deletemultialias',
-       'deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias','removedualalias','removemultiunitalias','removedualunitalias','removemulti',
-       'removefrommultialias','removefromdualalias','removefrommultiunitalias','removefromdualunitalias','removefrommulti','sendpm','ignoreuser','sendmessage','leaveserver',
-       'cleanupaliases','backup','restore','devedit','dev_edit','setmarker','snagchannels','reload']
+    k=['reboot','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti',
+       'deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias','removedualalias','dev_edit','devedit',
+       'removemultiunitalias','removedualunitalias','removemulti','removefrommultialias','removefromdualalias','removefrommultiunitalias','restore','backup',
+       'removefromdualunitalias','removefrommulti','sendpm','ignoreuser','sendmessage','leaveserver','cleanupaliases','setmarker','snagchannels','reload']
   end
   k.unshift(nil) if include_nil
   return k
@@ -963,31 +973,31 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # used by m
     if level==40
       u=[f[0]]
       for i in 0...f[5].length
-        u.push(f[5][i]+sttz[i]-@mods[f[4][i]][5]+@mods[f[4][i]+sttz[i]][rarity]+2*(merges/5)-(5-rarity)/2)
+        u.push(f[5][i]+sttz[i]-@mods[f[4][i]+4][5]+@mods[f[4][i]+sttz[i]+4][rarity]+2*(merges/5)-(5-rarity)/2)
       end
       for i in 0...f[4].length
         u.push(f[4][i]+sttz[i])
       end
       for i in 0...f[4].length
-        u.push(@mods[f[4][i]+sttz[i]][5])
+        u.push(@mods[f[4][i]+sttz[i]+4][5])
       end
     else
       u=[f[0]]
       for i in 0...f[5].length
-        u.push(f[5][i]+sttz[i]-@mods[f[4][i]][5]+2*(merges/5)-(5-rarity)/2)
+        u.push(f[5][i]+sttz[i]-@mods[f[4][i]+4][5]+2*(merges/5)-(5-rarity)/2)
       end
       u.push(u[1]+u[2]+u[3]+u[4]+u[5])
       for i in 0...f[4].length
         u.push(f[4][i]+sttz[i])
       end
       for i in 0...f[4].length
-        u.push(@mods[f[4][i]+sttz[i]][rarity])
+        u.push(@mods[f[4][i]+sttz[i]+4][rarity])
       end
     end
   elsif rarity<@max_rarity_merge[0]+1 && rarity%2==0 && merges%5==0
     u=[f[0]]
     for i in 0...f[5].length
-      u.push(f[5][i]+sttz[i]-@mods[f[4][i]][5]+2*(merges/5)-(6-rarity)/2)
+      u.push(f[5][i]+sttz[i]-@mods[f[4][i]+4][5]+2*(merges/5)-(6-rarity)/2)
     end
     s=[[u[2],2],[u[3],3],[u[4],4],[u[5],5]]                                   # all non-HP stats
     s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}  # sort the stats based on amount
@@ -998,17 +1008,17 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # used by m
       u.push(f[4][i]+sttz[i])
     end
     for i in 0...f[4].length
-      u.push(@mods[f[4][i]+sttz[i]][rarity])
+      u.push(@mods[f[4][i]+sttz[i]+4][rarity])
     end
     if level==40
       for i in 0...f[5].length
-        u[i+1]+=@mods[f[4][i]+sttz[i]][rarity]
+        u[i+1]+=@mods[f[4][i]+sttz[i]+4][rarity]
       end
     end
   else
     # find neutral level 1 stats based on rarity
     r=f[4].map{|q| q}                                                         # rate numbers
-    m=r.map{|q| @mods[q][5]}                                                  # growth rates
+    m=r.map{|q| @mods[q+4][5]}                                                  # growth rates
     u=[f[0]]
     for i in 0...5
       u.push(f[5][i]-m[i])                                                    # apply the difference in the step above
@@ -1047,27 +1057,13 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # used by m
     if level==40
       # find level 40 stats based on growth rates and level 1 stats
       # growth rates
-      if rarity < @mods[0].length && r.max <= @mods.length # difference between stats in level 1 and level 40
-        m=r.map{|q| @mods[q][rarity]}
+      if rarity < @mods[0].length && r.max <= @mods.length-4 # difference between stats in level 1 and level 40
+        m=r.map{|q| @mods[q+4][rarity]}
       else
         m2=[r[0],r[1],r[2],r[3],r[4]]
         m=[0,0,0,0,0]
         for i in 0...m.length
-          if m2[i] == 0
-            m[i] = 6 + 2*m2[i] + (rarity/2)
-          elsif m2[i] == 1
-            m[i] = 6 + 2*m2[i] + (rarity/3) + (rarity/4)
-          elsif m2[i] <= 4
-            m[i] = 4 + 2*m2[i] + rarity
-          elsif m2[i] == 5
-            m[i] = 3 + 2*m2[i] + rarity + (rarity/3)
-          elsif m2[i] <= 7
-            m[i] = 9 + 1*m2[i] + rarity + ((rarity-1)/2)
-          elsif m2[i] <= 10
-            m[i] = 1 + 2*m2[i] + 2*rarity - (rarity/4)
-          else
-            m[i] = 2*m2[i] + 2*rarity + (rarity/3)
-          end
+          m[i]=(0.39*(((m2[i]*5+20)*(0.79+(0.07*rarity))).to_i)).to_i # official growth formula, changed to account for old growth point system
         end
       end
       u=[u[0],u[1]+m[0],u[2]+m[1],u[3]+m[2],u[4]+m[3],u[5]+m[4],r[0],r[1],r[2],r[3],r[4],m[0],m[1],m[2],m[3],m[4]]
@@ -3162,6 +3158,13 @@ def display_stars(rarity,merges,support='-',expandedmode=false) # used to determ
   return "#{emo*rarity}#{"**+#{merges}**" unless merges.zero? && !expandedmode}#{"  \u00B7  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}#{"\nNo Summoner Support" if support =='-' && expandedmode}"
 end
 
+def micronumber(n)
+  m=["\u2080","\u2081","\u2082","\u2083","\u2084","\u2085","\u2086","\u2087","\u2088","\u2089"]
+  return "\uFE63#{micronumber(0-n)}" if n<0
+  return "#{micronumber(n/10)}#{m[n%10]}" if n>9
+  return m[n]
+end
+
 def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=nil) # displays stats
   expandedmode=false if expandedmode.nil?
   if " #{event.message.text.downcase} ".include?(' tiny ') || " #{event.message.text.downcase} ".include?(' small ') || " #{event.message.text.downcase} ".include?(' smol ') || " #{event.message.text.downcase} ".include?(' micro ') || " #{event.message.text.downcase} ".include?(' little ')
@@ -3520,16 +3523,16 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   end
   flds=[["**Level 1#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u1[3]}","<:DefenseS:467037520249487372> Defense: #{u1[4]}","<:ResistanceS:467037520379641858> Resistance: #{u1[5]}","","BST: #{u1[6]}"]]]
   if args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth') || expandedmode
-    flds.push(["**Growth Points**",["<:HP_S:467037520538894336> HP: #{u40[6]}","#{atk}: #{u40[7]}","<:SpeedS:467037520534962186> Speed: #{u40[8]}","<:DefenseS:467037520249487372> Defense: #{u40[9]}","<:ResistanceS:467037520379641858> Resistance: #{u40[10]}","","GPT: #{u40[6]+u40[7]+u40[8]+u40[9]+u40[10]}"]])
+    flds.push(["**Growth Rates**",["<:HP_S:467037520538894336> HP: #{micronumber(u40[6])} / #{u40[6]*5+20}%","#{atk}: #{micronumber(u40[7])} / #{u40[7]*5+20}%","<:SpeedS:467037520534962186> Speed: #{micronumber(u40[8])} / #{u40[8]*5+20}%","<:DefenseS:467037520249487372> Defense: #{micronumber(u40[9])} / #{u40[9]*5+20}%","<:ResistanceS:467037520379641858> Resistance: #{micronumber(u40[10])} / #{u40[10]*5+20}%","","\u0262\u1D18\u1D1B #{micronumber(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])} / GRT: #{(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])*5+100}%"]])
   end
   flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u40[3]}","<:DefenseS:467037520249487372> Defense: #{u40[4]}","<:ResistanceS:467037520379641858> Resistance: #{u40[5]}","","BST: #{u40[16]}"]])
   superbaan=['','','','','','']
   if boon=="" && bane=="" && !mu && ((stat_skills_2.length<=0 && !wl.include?('~~')) || flds.length==3)
     for i in 6...11
-      superbaan[i-5]='(+)' if [1,5,10].include?(u40[i]) && rarity==5
-      superbaan[i-5]='(-)' if [2,6,11].include?(u40[i]) && rarity==5
-      superbaan[i-5]='(+)' if [10].include?(u40[i]) && rarity==4
-      superbaan[i-5]='(-)' if [11].include?(u40[i]) && rarity==4
+      superbaan[i-5]='(+)' if [-3,1,5,10,14].include?(u40[i]) && rarity==5
+      superbaan[i-5]='(-)' if [-2,2,6,11,15].include?(u40[i]) && rarity==5
+      superbaan[i-5]='(+)' if [-2,10].include?(u40[i]) && rarity==4
+      superbaan[i-5]='(-)' if [-1,11].include?(u40[i]) && rarity==4
     end
     if superbaan.include?('(+)') || superbaan.include?('(-)')
       if ftr.nil?
@@ -3541,10 +3544,10 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   elsif (stat_skills_2.length<=0 && !wl.include?('~~')) || flds.length==3
     x=['','HP','Attack','Speed','Defense','Resistance']
     for i in 1...6
-      superbaan[i]='(Superboon)' if boon==x[i] && [2,6,11].include?(u40[i+5]) && rarity==5
-      superbaan[i]='(Superbane)' if bane==x[i] && [1,5,10].include?(u40[i+5]) && rarity==5
-      superbaan[i]='(Superboon)' if boon==x[i] && [11].include?(u40[i+5]) && rarity==4
-      superbaan[i]='(Superbane)' if bane==x[i] && [10].include?(u40[i+5]) && rarity==4
+      superbaan[i]='(Superboon)' if boon==x[i] && [-2,2,6,11,15].include?(u40[i+5]) && rarity==5
+      superbaan[i]='(Superbane)' if bane==x[i] && [-3,1,5,10,14].include?(u40[i+5]) && rarity==5
+      superbaan[i]='(Superboon)' if boon==x[i] && [-1,11].include?(u40[i+5]) && rarity==4
+      superbaan[i]='(Superbane)' if bane==x[i] && [-2,10].include?(u40[i+5]) && rarity==4
     end
   end
   for i in 0...5
@@ -3878,10 +3881,10 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
   superbaan=["\u00A0","\u00A0","\u00A0","\u00A0","\u00A0","\u00A0"]
   if boon=="" && bane=="" && !mu
     for i in 6...11
-      superbaan[i-5]='+' if [1,5,10].include?(u40[i]) && rarity==5
-      superbaan[i-5]='-' if [2,6,11].include?(u40[i]) && rarity==5
-      superbaan[i-5]='+' if [10].include?(u40[i]) && rarity==4
-      superbaan[i-5]='-' if [11].include?(u40[i]) && rarity==4
+      superbaan[i-5]='+' if [-3,1,5,10,14].include?(u40[i]) && rarity==5
+      superbaan[i-5]='-' if [-2,2,6,11,15].include?(u40[i]) && rarity==5
+      superbaan[i-5]='+' if [-2,10].include?(u40[i]) && rarity==4
+      superbaan[i-5]='-' if [-1,11].include?(u40[i]) && rarity==4
     end
   end
   for i in 0...5
@@ -5195,6 +5198,9 @@ def sever(str,sklz=false)
       if k[i-1][0,5].downcase=='rally'
         k[i-1]="#{k[i-1]}#{k[i]}"
         k[i]=nil
+      elsif ['HP','Attack','Speed','Defense','Resistance'].map{|q| q.downcase}.include?(k[i-1].downcase) && i==k.length-1
+        k[i-1]="#{k[i-1]}#{k[i]}"
+        k[i]=nil
       elsif !sklz
       elsif ['HP','Attack','Speed','Defense','Resistance'].include?(k[i-1]) || ['attackspeed','atkspeed','attspeed','attackspd','atkspd','attspd','speedattack','speedatk','speedatt','spdattack','spdatk','spdatt','attackdefense','atkdefense','attdefense','attackdefence','atkdefence','attdefence','attackdef','atkdef','attdef','defenseattack','defenseatk','defenseatt','defenceattack','defenceatk','defenceatt','defattack','defatk','defatt','attackresistance','atkresistance','attresistance','attackres','atkres','attres','resistanceattack','resistanceatk','resistanceatt','resattack','resatk','resatt','speeddefense','spddefense','speeddefence','spddefence','speeddef','spddef','defensespeed','defensespd','defencespeed','defencespd','defspeed','defspd','speedresistance','spdresistance','speedres','spdres','resistancespeed','resistancespd','resspeed','resspd','defenseresistance','defenceresistance','defresistance','defenseres','defenceres','defres','resistancedefense','resistancedefence','resistancedef','resdefense','resdefence','resdef'].include?(k[i-1].downcase)
         k[i-1]="#{k[i-1]}#{k[i]}"
@@ -5848,39 +5854,39 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     matches5=matches0.map{|q| q}.sort {|a,b| a[0].downcase <=> b[0].downcase}.uniq
   else
     if supernatures.include?('+HP') && supernatures.include?('-HP')
-      matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][0])}
+      matches0=matches0.reject{|q| ![-3,-2,1,5,10,2,6,11].include?(q[4][0])}
     elsif supernatures.include?('+HP')
-      matches0=matches0.reject{|q| ![1,5,10].include?(q[4][0])}
+      matches0=matches0.reject{|q| ![-3,1,5,10,14].include?(q[4][0])}
     elsif supernatures.include?('-HP')
-      matches0=matches0.reject{|q| ![2,6,11].include?(q[4][0])}
+      matches0=matches0.reject{|q| ![-2,2,6,11,15].include?(q[4][0])}
     end
     if supernatures.include?('+Atk') && supernatures.include?('-Atk')
-      matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][1])}
+      matches0=matches0.reject{|q| ![-3,-2,1,5,10,2,6,11].include?(q[4][1])}
     elsif supernatures.include?('+Atk')
-      matches0=matches0.reject{|q| ![1,5,10].include?(q[4][1])}
+      matches0=matches0.reject{|q| ![-3,1,5,10,14].include?(q[4][1])}
     elsif supernatures.include?('-Atk')
-      matches0=matches0.reject{|q| ![2,6,11].include?(q[4][1])}
+      matches0=matches0.reject{|q| ![-2,2,6,11,15].include?(q[4][1])}
     end
     if supernatures.include?('+Spd') && supernatures.include?('-Spd')
-      matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][2])}
+      matches0=matches0.reject{|q| ![-3,-2,1,5,10,2,6,11].include?(q[4][2])}
     elsif supernatures.include?('+Spd')
-      matches0=matches0.reject{|q| ![1,5,10].include?(q[4][2])}
+      matches0=matches0.reject{|q| ![-3,1,5,10,14].include?(q[4][2])}
     elsif supernatures.include?('-Spd')
-      matches0=matches0.reject{|q| ![2,6,11].include?(q[4][2])}
+      matches0=matches0.reject{|q| ![-2,2,6,11,15].include?(q[4][2])}
     end
     if supernatures.include?('+Def') && supernatures.include?('-Def')
-      matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][3])}
+      matches0=matches0.reject{|q| ![-3,-2,1,5,10,2,6,11].include?(q[4][3])}
     elsif supernatures.include?('+Def')
-      matches0=matches0.reject{|q| ![1,5,10].include?(q[4][3])}
+      matches0=matches0.reject{|q| ![-3,1,5,10,14].include?(q[4][3])}
     elsif supernatures.include?('-Def')
-      matches0=matches0.reject{|q| ![2,6,11].include?(q[4][3])}
+      matches0=matches0.reject{|q| ![-2,2,6,11,15].include?(q[4][3])}
     end
     if supernatures.include?('+Res') && supernatures.include?('-Res')
-      matches0=matches0.reject{|q| ![1,5,10,2,6,11].include?(q[4][4])}
+      matches0=matches0.reject{|q| ![-3,-2,1,5,10,2,6,11].include?(q[4][4])}
     elsif supernatures.include?('+Res')
-      matches0=matches0.reject{|q| ![1,5,10].include?(q[4][4])}
+      matches0=matches0.reject{|q| ![-3,1,5,10,14].include?(q[4][4])}
     elsif supernatures.include?('-Res')
-      matches0=matches0.reject{|q| ![2,6,11].include?(q[4][4])}
+      matches0=matches0.reject{|q| ![-2,2,6,11,15].include?(q[4][4])}
     end
     if colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && movement.length.zero? && genders.length.zero? && games.length.zero? && group.length.zero?
       return matches0.map{|q| q}.uniq if mode==3
@@ -6847,8 +6853,8 @@ def sort_units(bot,event,args=[])
       end
       sfn=''
       if f[j]<6 && !(k[i][4].nil? || k[i][4].max.zero?)
-        sfn='(+) ' if [1,5,10].include?(k[i][4][f[j]-1])
-        sfn='(-) ' if [2,6,11].include?(k[i][4][f[j]-1])
+        sfn='(+) ' if [-3,1,5,10,14].include?(k[i][4][f[j]-1])
+        sfn='(-) ' if [-2,2,6,11,15].include?(k[i][4][f[j]-1])
       end
       if k[i][5][f[j]-1]<0 && sf.length>0
         k[i][5][f[j]-1]=0-k[i][5][f[j]-1]
@@ -7195,10 +7201,10 @@ def comparison(event,args,bot)
         stz=b[iz][0][jz]
         dzz[iz][2]+=stz
         s=''
-        s=' (+)' if [1,5,10].include?(b[iz][0][jz+5]) && b[iz][3]==5
-        s=' (-)' if [2,6,11].include?(b[iz][0][jz+5]) && b[iz][3]==5
-        s=' (+)' if [10].include?(b[iz][0][jz+5]) && b[iz][3]==4
-        s=' (-)' if [11].include?(b[iz][0][jz+5]) && b[iz][3]==4
+        s=' (+)' if [-3,1,5,10,14].include?(b[iz][0][jz+5]) && b[iz][3]==5
+        s=' (-)' if [-2,2,6,11,15].include?(b[iz][0][jz+5]) && b[iz][3]==5
+        s=' (+)' if [-2,10].include?(b[iz][0][jz+5]) && b[iz][3]==4
+        s=' (-)' if [-1,11].include?(b[iz][0][jz+5]) && b[iz][3]==4
         s='' unless b.reject{|q| q[1][q[1].length-10,10]==' (neutral)'}.length<=0
         dzz[iz][1].push("#{stzzz[jz]}: #{stz}#{s}")
         if stz>hstats[jz][0]
@@ -7289,17 +7295,17 @@ def comparison(event,args,bot)
   end
   for i in 1...6
     s=''
-    s=' (+)' if [1,5,10].include?(b[0][0][i+5]) && b[0][3]==5
-    s=' (-)' if [2,6,11].include?(b[0][0][i+5]) && b[0][3]==5
-    s=' (+)' if [10].include?(b[0][0][i+5]) && b[0][3]==4
-    s=' (-)' if [11].include?(b[0][0][i+5]) && b[0][3]==4
+    s=' (+)' if [-3,1,5,10,14].include?(b[0][0][i+5]) && b[0][3]==5
+    s=' (-)' if [-2,2,6,11,15].include?(b[0][0][i+5]) && b[0][3]==5
+    s=' (+)' if [-2,10].include?(b[0][0][i+5]) && b[0][3]==4
+    s=' (-)' if [-1,11].include?(b[0][0][i+5]) && b[0][3]==4
     s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)' && !names[0].include?("Mathoo's ")
     d1[1].push("#{stzzz[i]}: #{b[0][0][i]}#{s}")
     s=''
-    s=' (+)' if [1,5,10].include?(b[1][0][i+5]) && b[1][3]==5
-    s=' (-)' if [2,6,11].include?(b[1][0][i+5]) && b[1][3]==5
-    s=' (+)' if [10].include?(b[1][0][i+5]) && b[1][3]==4
-    s=' (-)' if [11].include?(b[1][0][i+5]) && b[1][3]==4
+    s=' (+)' if [-3,1,5,10,14].include?(b[1][0][i+5]) && b[1][3]==5
+    s=' (-)' if [-2,2,6,11,15].include?(b[1][0][i+5]) && b[1][3]==5
+    s=' (+)' if [-2,10].include?(b[1][0][i+5]) && b[1][3]==4
+    s=' (-)' if [-1,11].include?(b[1][0][i+5]) && b[1][3]==4
     s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)' && !names[1].include?("Mathoo's ")
     d2[1].push("#{stzzz[i]}: #{b[1][0][i]}#{s}")
     d1[2]+=b[0][0][i]
@@ -8570,41 +8576,34 @@ def generate_random_unit(event,args,bot)
   end
   zzz=rand(100)
   zzz=rand(1000) if clazz2.include?('Trainee') || clazz2.include?('Veteran')
-  if args.include?('+1/2')
-    clazz2.push('+1/2')
+  if args.include?('Gen2')
+    clazz2.push('Gen 2')
     l1_total+=1
+    l1_total-=1 if ['Cavalry','Flier'].include?(mov)
+    l1_total-=1 if ['Dancer','Singer'].include?(clazz2) && 'Flier'!=mov
     gp_total+=2
-  elsif args.include?('+1/1')
-    clazz2.push('+1/1')
+    gp_total-=1 if ['Cavalry'].include?(mov)
+    gp_total-=1 if ['Tome', 'Bow', 'Dagger', 'Healer'].include?(clazz[1]) && 'Armor'!=mov
+    gp_total-=2 if ['Dancer','Singer'].include?(clazz2)
+  elsif args.include?('Gen1')
+  elsif zzz<50
+    clazz2.push('Gen 2')
     l1_total+=1
-    gp_total+=1
-  elsif args.include?('+0/2') || event.message.text.downcase.split(' ').include?('cyl')
-    clazz2.push('+0/2')
+    l1_total-=1 if ['Cavalry','Flier'].include?(mov)
+    l1_total-=1 if ['Dancer','Singer'].include?(clazz2) && 'Flier'!=mov
     gp_total+=2
-  elsif args.include?('+0/1')
-    clazz2.push('+0/1')
-    gp_total+=1
-  elsif event.message.text.downcase.split(' ').include?('starter')
-  elsif zzz<5
-    clazz2.push('+1/2')
-    l1_total+=1
-    gp_total+=2
-  elsif zzz<8
-    clazz2.push('+1/1')
-    l1_total+=1
-    gp_total+=1
-  elsif zzz<10
-    clazz2.push('+0/2')
-    gp_total+=2
-  elsif zzz<11
-    clazz2.push('+0/1')
-    gp_total+=1
+    gp_total-=1 if ['Cavalry'].include?(mov)
+    gp_total-=1 if ['Tome', 'Bow', 'Dagger', 'Healer'].include?(clazz[1]) && 'Armor'!=mov
+    gp_total-=2 if ['Dancer','Singer'].include?(clazz2)
   end
+  gp_total+=15
   name=get_bond_name(event)
   stats=[0,0,0,0,0]
   gps=[0,0,0,0,0]
   stats[0]=10+rand(16)
-  gps[0]=1+rand(@mods.length-1)
+  gps[0]=rand(@mods.length-3)+1
+  gps[0]=rand(@mods.length-3)+1 if gps[0]<2 || gps[0]>14
+  gps[0]=rand(@mods.length-3)+1 if gps[0]<2 || gps[0]>14
   l1_total-=stats[0]
   gp_total-=gps[0]
   min_possible=[l1_total-40,2].max
@@ -8614,12 +8613,14 @@ def generate_random_unit(event,args,bot)
   else
     stats[1]=min_possible+rand(max_possible-min_possible+1)
   end
-  min_possible=[gp_total-3*(@mods.length-2),1].max
-  max_possible=[gp_total-3,(@mods.length-2)].min
+  min_possible=[gp_total-3*(@mods.length-3),1].max
+  max_possible=[gp_total-3,(@mods.length-3)].min
   if max_possible<=min_possible
     gps[1]=min_possible
   else
     gps[1]=min_possible+rand(max_possible-min_possible+1)
+    gps[1]=min_possible+rand(max_possible-min_possible+1) if gps[1]<2 || gps[1]>14
+    gps[1]=min_possible+rand(max_possible-min_possible+1) if gps[1]<2 || gps[1]>14
   end
   l1_total-=stats[1]
   gp_total-=gps[1]
@@ -8630,12 +8631,14 @@ def generate_random_unit(event,args,bot)
   else
     stats[2]=min_possible+rand(max_possible-min_possible+1)
   end
-  min_possible=[gp_total-2*(@mods.length-2),1].max
-  max_possible=[gp_total-2,(@mods.length-2)].min
+  min_possible=[gp_total-2*(@mods.length-3),1].max
+  max_possible=[gp_total-2,(@mods.length-3)].min
   if max_possible<=min_possible
     gps[2]=min_possible
   else
     gps[2]=min_possible+rand(max_possible-min_possible+1)
+    gps[2]=min_possible+rand(max_possible-min_possible+1) if gps[2]<2 || gps[2]>14
+    gps[2]=min_possible+rand(max_possible-min_possible+1) if gps[2]<2 || gps[2]>14
   end
   l1_total-=stats[2]
   gp_total-=gps[2]
@@ -8646,12 +8649,14 @@ def generate_random_unit(event,args,bot)
   else
     stats[3]=min_possible+rand(max_possible-min_possible+1)
   end
-  min_possible=[gp_total-(@mods.length-2),1].max
-  max_possible=[gp_total-1,(@mods.length-2)].min
+  min_possible=[gp_total-(@mods.length-3),1].max
+  max_possible=[gp_total-1,(@mods.length-3)].min
   if max_possible<=min_possible
     gps[3]=min_possible
   else
     gps[3]=min_possible+rand(max_possible-min_possible+1)
+    gps[3]=min_possible+rand(max_possible-min_possible+1) if gps[3]<2 || gps[3]>14
+    gps[3]=min_possible+rand(max_possible-min_possible+1) if gps[3]<2 || gps[3]>14
   end
   l1_total-=stats[3]
   gp_total-=gps[3]
@@ -8662,13 +8667,16 @@ def generate_random_unit(event,args,bot)
   stats.push(stats[2]+@mods[gps[2]][5])
   stats.push(stats[3]+@mods[gps[3]][5])
   stats.push(stats[4]+@mods[gps[4]][5])
+  for i in 0...gps.length
+    gps[i]-=2
+  end
   stats.push(stats[0]+stats[1]+stats[2]+stats[3]+stats[4])
   stats.push(stats[5]+stats[6]+stats[7]+stats[8]+stats[9])
   stat_names=['HP','Attack','Speed','Defense','Resistance']
   for i in 0...5
     stats[i+5]=stats[i+5].to_s
-    stats[i+5]="#{stats[i+5]} (+)" if [1,5,10].include?(gps[i])
-    stats[i+5]="#{stats[i+5]} (-)" if [2,6,11].include?(gps[i])
+    stats[i+5]="#{stats[i+5]} (+)" if [-3,1,5,10,14].include?(gps[i])
+    stats[i+5]="#{stats[i+5]} (-)" if [-2,2,6,11,15].include?(gps[i])
   end
   xcolor=0xFFD800
   xcolor=0xE22141 if clazz[0]=='Red'
@@ -8705,7 +8713,7 @@ def generate_random_unit(event,args,bot)
   flds=[['**Level 1**',"<:HP_S:467037520538894336> HP: #{stats[0]}\n#{atk}: #{stats[1]}\n<:SpeedS:467037520534962186> Speed: #{stats[2]}\n<:DefenseS:467037520249487372> Defense: #{stats[3]}\n<:ResistanceS:467037520379641858> Resistance: #{stats[4]}\n\nBST: #{stats[10]}"]]
   args=args.map{|q| q.downcase}
   if args.include?('gps') || args.include?('gp') || args.include?('growths') || args.include?('growth')
-    flds.push(['**Growth Points**',"<:HP_S:467037520538894336> HP: #{gps[0]}\n#{atk}: #{gps[1]}\n<:SpeedS:467037520534962186> Speed: #{gps[2]}\n<:DefenseS:467037520249487372> Defense: #{gps[3]}\n<:ResistanceS:467037520379641858> Resistance: #{gps[4]}\n\nGPT: #{gps[0]+gps[1]+gps[2]+gps[3]+gps[4]}"])
+    flds.push(['**Growth Rates**',"<:HP_S:467037520538894336> HP: #{micronumber(gps[0])} / #{gps[0]*5+20}%\n#{atk}: #{micronumber(gps[1])} / #{gps[1]*5+20}%\n<:SpeedS:467037520534962186> Speed: #{micronumber(gps[2])} / #{gps[2]*5+20}%\n<:DefenseS:467037520249487372> Defense: #{micronumber(gps[3])} / #{gps[3]*5+20}%\n<:ResistanceS:467037520379641858> Resistance: #{micronumber(gps[4])} / #{gps[4]*5+20}%\n\n\u0262\u1D18\u1D1B #{micronumber(gps[0]+gps[1]+gps[2]+gps[3]+gps[4])} / GRT: #{(gps[0]+gps[1]+gps[2]+gps[3]+gps[4])*5+100}%"])
   end
   flds.push(['**Level 40**',"<:HP_S:467037520538894336> HP: #{stats[5]}\n#{atk}: #{stats[6]}\n<:SpeedS:467037520534962186> Speed: #{stats[7]}\n<:DefenseS:467037520249487372> Defense: #{stats[8]}\n<:ResistanceS:467037520379641858> Resistance: #{stats[9]}\n\nBST: #{stats[11]}"])
   img=nil
@@ -11464,8 +11472,8 @@ bot.command(:summon) do |event, *colors|
     end
     metadata_load()
     bnr=make_banner(event)
-    n=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP','+Def -Atk','+Def -Spd',
-       '+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral']
+    n=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP',
+       '+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral']
     n=['Neutral'] if bnr[0][0]=='TT Units' || bnr[0][0]=='GHB Units'
     str="**Summoner:** #{event.user.distinct}"
     str="#{str}\n"
@@ -11588,8 +11596,8 @@ bot.command(:summon) do |event, *colors|
       elsif k<focus*100+five_star*100
         hx=bnr[3].sample
         rx='5<:Icon_Rarity_5:448266417553539104>'
-        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP','+Def -Atk',
-            '+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
+        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res',
+            '+Def -HP','+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
       elsif !bnr[8].nil? && k<focus*100+five_star*100+four_star*50
         hx=bnr[8].sample
         rx='4<:Icon_Rarity_4p10:448272714210476033>'
@@ -11599,8 +11607,8 @@ bot.command(:summon) do |event, *colors|
         hx=bnr[4].sample
         rx='4<:Icon_Rarity_4:448266418459377684>'
         rx='~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP','+Def -Atk',
-            '+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
+        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res',
+            '+Def -HP','+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
       elsif !bnr[9].nil? && k<focus*100+five_star*100+four_star*100+three_star*50
         hx=bnr[9].sample
         rx='3<:Icon_Rarity_3p10:448294378293952513>'
@@ -11610,8 +11618,8 @@ bot.command(:summon) do |event, *colors|
         hx=bnr[5].sample
         rx='3<:Icon_Rarity_3:448266417934958592>'
         rx='~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP','+Def -Atk',
-            '+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
+        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res',
+            '+Def -HP','+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
       elsif !bnr[10].nil? && k<focus*100+five_star*100+four_star*100+three_star*100+two_star*50
         hx=bnr[10].sample
         rx='2<:Icon_Rarity_2p10:448294378205872130>'
@@ -11621,8 +11629,8 @@ bot.command(:summon) do |event, *colors|
         hx=bnr[6].sample
         rx='2<:Icon_Rarity_2:448266417872044032>'
         rx='~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP','+Def -Atk',
-            '+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
+        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res',
+            '+Def -HP','+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
       elsif !bnr[11].nil? && k<focus*100+five_star*100+four_star*100+three_star*100+two_star*100+one_star*50
         hx=bnr[11].sample
         rx='1<:Icon_Rarity_1p10:448294377878716417>'
@@ -11632,8 +11640,8 @@ bot.command(:summon) do |event, *colors|
         hx=bnr[7].sample
         rx='1<:Icon_Rarity_1:448266417481973781>'
         rx='~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP','+Def -Atk',
-            '+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
+        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res',
+            '+Def -HP','+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
       end
       @banner.push([rx,hx,nr])
     end
@@ -13336,7 +13344,7 @@ bot.command([:growths, :gps, :growth, :gp]) do |event|
   event << '6.) If 1<:Icon_Rarity_1:448266417481973781>-2<:Icon_Rarity_2:448266417872044032> units could get natures, then they would have the possibility for "microboons" and "microbanes", where a stat increases or decreases by 2 instead of the usual 3.'
   event << '- These are marked by the thin blue and red arrows.'
   event << ''
-  event << 'https://orig00.deviantart.net/2212/f/2017/356/2/c/gps_by_rot8erconex-dbwvkcx.png'
+  event << 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Growths.png'
 end
 
 bot.command(:merges) do |event|
