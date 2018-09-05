@@ -1438,6 +1438,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill('Uror',event) if name.downcase.gsub(' ','')=='urdr'
   return find_skill('Hlidskjalf',event) if ['hlioskjalf',"roni'sstick",'ronisstick','staffkatz'].include?(name.downcase.gsub(' ',''))
   return find_skill('Giga Excalibur',event) if name.downcase.gsub(' ','')=='gigascalibur'
+  return find_skill('Gae Bolg',event) if name.downcase.gsub(' ','')=='gayborg'
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
   return find_skill('Loptous',event) if name.downcase.gsub(' ','')=='loptyr'
   return find_skill('Thokk',event) if name.downcase.gsub(' ','')=='sekku'
@@ -1504,6 +1505,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill('Eckesachs',event) if ['exaccus','exesack','exsack','eggsacks'].map{|q| q[0,namex.length]}.include?(name.downcase.gsub(' ',''))
   return find_skill("Sack o' Gifts",event) if namex=='sackofgifts'[0,namex.length]
   return find_skill('Giga Excalibur',event) if namex=='gigascalibur'[0,namex.length]
+  return find_skill('Gae Bolg',event) if namex=='gayborg'[0,namex.length]
   return find_skill('Loptous',event) if namex=='loptyr'[0,namex.length]
   return find_skill('Thokk',event) if namex=='sekku'[0,namex.length]
   return find_skill('Hlidskjalf',event) if ['hlioskjalf',"roni'sstick",'ronisstick','staffkatz'].map{|q| q[0,namex.length]}.include?(namex)
@@ -5177,28 +5179,39 @@ def sever(str,sklz=false)
   end
   str=k.join(' ')
   str=str.gsub('(``)','(+)')
-  if sklz
-    k=str.split(' ')
-    for i in 1...k.length
-      if k[i]=='+'
-      elsif i>1 && !k[i-1].nil? && k[i][0,1]=='+' && k[i][1,k[i].length-1].to_i.to_s==k[i][1,k[i].length-1]
-        k[i-1]=stat_modify(k[i-1].downcase)
-        if ['HP','Attack','Speed','Defense','Resistance'].include?(k[i-1]) || ['attackspeed','atkspeed','attspeed','attackspd','atkspd','attspd','speedattack','speedatk','speedatt','spdattack','spdatk','spdatt','attackdefense','atkdefense','attdefense','attackdefence','atkdefence','attdefence','attackdef','atkdef','attdef','defenseattack','defenseatk','defenseatt','defenceattack','defenceatk','defenceatt','defattack','defatk','defatt','attackresistance','atkresistance','attresistance','attackres','atkres','attres','resistanceattack','resistanceatk','resistanceatt','resattack','resatk','resatt','speeddefense','spddefense','speeddefence','spddefence','speeddef','spddef','defensespeed','defensespd','defencespeed','defencespd','defspeed','defspd','speedresistance','spdresistance','speedres','spdres','resistancespeed','resistancespd','resspeed','resspd','defenseresistance','defenceresistance','defresistance','defenseres','defenceres','defres','resistancedefense','resistancedefence','resistancedef','resdefense','resdefence','resdef'].include?(k[i-1].downcase)
-          k[i-1]="#{k[i-1]}#{k[i]}"
-          k[i]=nil
-        end
-      elsif k[i]=='(+)'
-      elsif k[i-1]=='(+)'
-        k[i]=stat_modify(k[i].downcase)
-        if ['HP','Attack','Speed','Defense','Resistance'].include?(k[i])
-          k[i-1]="#{k[i-1]}#{k[i]}"
-          k[i]=nil
-        end
+  k=str.split(' ')
+  for i in 1...k.length
+    if k[i]=='+'
+      if i==0
+      elsif k[i-1][0,5].downcase=='rally'
+        k[i-1]="#{k[i-1]}#{k[i]}"
+        k[i]=nil
+      elsif ['HP','Attack','Speed','Defense','Resistance'].map{|q| q.downcase}.include?(k[i-1].downcase) && i==k.length-1
+        k[i-1]="#{k[i-1]}#{k[i]}"
+        k[i]=nil
+      end
+    elsif i>1 && !k[i-1].nil? && k[i][0,1]=='+' && k[i][1,k[i].length-1].to_i.to_s==k[i][1,k[i].length-1]
+      k[i-1]=stat_modify(k[i-1].downcase)
+      if k[i-1][0,5].downcase=='rally'
+        k[i-1]="#{k[i-1]}#{k[i]}"
+        k[i]=nil
+      elsif !sklz
+      elsif ['HP','Attack','Speed','Defense','Resistance'].include?(k[i-1]) || ['attackspeed','atkspeed','attspeed','attackspd','atkspd','attspd','speedattack','speedatk','speedatt','spdattack','spdatk','spdatt','attackdefense','atkdefense','attdefense','attackdefence','atkdefence','attdefence','attackdef','atkdef','attdef','defenseattack','defenseatk','defenseatt','defenceattack','defenceatk','defenceatt','defattack','defatk','defatt','attackresistance','atkresistance','attresistance','attackres','atkres','attres','resistanceattack','resistanceatk','resistanceatt','resattack','resatk','resatt','speeddefense','spddefense','speeddefence','spddefence','speeddef','spddef','defensespeed','defensespd','defencespeed','defencespd','defspeed','defspd','speedresistance','spdresistance','speedres','spdres','resistancespeed','resistancespd','resspeed','resspd','defenseresistance','defenceresistance','defresistance','defenseres','defenceres','defres','resistancedefense','resistancedefence','resistancedef','resdefense','resdefence','resdef'].include?(k[i-1].downcase)
+        k[i-1]="#{k[i-1]}#{k[i]}"
+        k[i]=nil
+      end
+    elsif !sklz
+    elsif k[i]=='(+)'
+    elsif k[i-1]=='(+)'
+      k[i]=stat_modify(k[i].downcase)
+      if ['HP','Attack','Speed','Defense','Resistance'].include?(k[i])
+        k[i-1]="#{k[i-1]}#{k[i]}"
+        k[i]=nil
       end
     end
-    k.compact!
-    str=k.join(' ')
   end
+  k.compact!
+  str=k.join(' ')
   str=str.gsub('-star','``star')
   k=str.split('-')
   for i in 1...k.length
@@ -7662,7 +7675,9 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str='rindisu' if str2.include?('rindisu')
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
-    if str2.include?("bb#{str}") || str2.include?("#{str}bb") || str2.include?('bride') || str2.include?('bridal') || str2.include?('wedding')
+    if str2.include?('ethlyn')
+      return [str,['Ethlyn'],[str]]
+    elsif str2.include?("bb#{str}") || str2.include?("#{str}bb") || str2.include?('bride') || str2.include?('bridal') || str2.include?('wedding')
       return [str,['Lyn(Bride)'],["bb#{str}","#{str}bb","#{str}bride","#{str}bridal","#{str}wedding","bride#{str}","bridal#{str}","wedding#{str}"]]
     elsif str2.include?('brave') || str2.include?('cyl') || str2.include?('nomad') || str2.include?("bh#{str}") || str2.include?("#{str}bh")
       return [str,['Lyn(Brave)'],["brave#{str}","nomad#{str}","cyl#{str}","bh#{str}","#{str}nomad","#{str}brave","#{str}cyl","#{str}bh"]]
@@ -7676,6 +7691,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       return [str,['Lyn(Brave)','Lyn(Wind)'],["#{str}bow","#{str}archer","bow#{str}","archer#{str}"]]
     elsif str2.include?("b#{str}") || str2.include?("br#{str}")
       return [str,['Lyn(Bride)','Lyn(Brave)'],["b#{str}","br#{str}"]]
+    elsif str2.include?('eth')
+      return [str,['Ethlyn'],[str]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Lyn'],[str]]
@@ -11417,6 +11434,8 @@ bot.command(:summon) do |event, *colors|
   end
   if event.server.nil?
     event.respond 'This command in unavailable in PM.'
+  elsif event.server.id==238770788272963585
+    event.respond 'This command is unavailable in this server.  If you wish to fix that, take it up with the mod team.'
   elsif !@summon_servers.include?(event.server.id)
     event.respond 'This command is unavailable in this server.'
   elsif event.server.id==238770788272963585 && event.channel.id != 377526015939051520
