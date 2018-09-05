@@ -10479,8 +10479,12 @@ def disp_art(event,name,bot,weapon=nil)
     flds.push(['Same Artist',charsx[0].join("\n"),1]) if charsx[0].length>0
     flds.push(['Same VA (English)',charsx[1].join("\n")]) if charsx[1].length>0
     flds.push(['Same VA (Japanese)',charsx[2].join("\n")]) if charsx[2].length>0
-    flds[0][2]=nil if flds.length<3
-    flds[0].compact!
+    if flds.length.zero?
+      flds=nil
+    else
+      flds[0][2]=nil if flds.length<3
+      flds[0].compact!
+    end
     event.channel.send_embed("__**#{j[0].gsub('Lavatain','Laevatein')}**__") do |embed|
       embed.description=disp
       embed.color=unit_color(event,find_unit(j[0],event),j[0],0)
