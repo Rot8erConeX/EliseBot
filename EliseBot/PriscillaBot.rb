@@ -969,7 +969,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # used by m
     sttz[i]=-1 if bane.downcase==sttz[i]
     sttz[i]=0 if sttz[i].is_a?(String)
   end
-  if rarity<@max_rarity_merge[0]+1 && rarity%2==1 && merges%5==0
+  if rarity<@max_rarity_merge[0]+1 && rarity%2==1 && merges%5==0 && f[4].reject{|q| q==q.to_i}.length.zero?
     if level==40
       u=[f[0]]
       for i in 0...f[5].length
@@ -994,7 +994,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # used by m
         u.push(@mods[f[4][i]+sttz[i]+4][rarity])
       end
     end
-  elsif rarity<@max_rarity_merge[0]+1 && rarity%2==0 && merges%5==0
+  elsif rarity<@max_rarity_merge[0]+1 && rarity%2==0 && merges%5==0 && f[4].reject{|q| q==q.to_i}.length.zero?
     u=[f[0]]
     for i in 0...f[5].length
       u.push(f[5][i]+sttz[i]-@mods[f[4][i]+4][5]+2*(merges/5)-(6-rarity)/2)
@@ -1018,7 +1018,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # used by m
   else
     # find neutral level 1 stats based on rarity
     r=f[4].map{|q| q}                                                         # rate numbers
-    m=r.map{|q| @mods[q+4][5]}                                                  # growth rates
+    m=r.map{|q| (0.39*(((q*5+20)*(0.79+(0.07*5))).to_i)).to_i}                # growth rates
     u=[f[0]]
     for i in 0...5
       u.push(f[5][i]-m[i])                                                    # apply the difference in the step above
@@ -1057,15 +1057,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # used by m
     if level==40
       # find level 40 stats based on growth rates and level 1 stats
       # growth rates
-      if rarity < @mods[0].length && r.max <= @mods.length-4 # difference between stats in level 1 and level 40
-        m=r.map{|q| @mods[q+4][rarity]}
-      else
-        m2=[r[0],r[1],r[2],r[3],r[4]]
-        m=[0,0,0,0,0]
-        for i in 0...m.length
-          m[i]=(0.39*(((m2[i]*5+20)*(0.79+(0.07*rarity))).to_i)).to_i # official growth formula, changed to account for old growth point system
-        end
-      end
+      m=r.map{|q| (0.39*(((q*5+20)*(0.79+(0.07*rarity))).to_i)).to_i}
       u=[u[0],u[1]+m[0],u[2]+m[1],u[3]+m[2],u[4]+m[3],u[5]+m[4],r[0],r[1],r[2],r[3],r[4],m[0],m[1],m[2],m[3],m[4]]
       # apply the difference above
     end
