@@ -5102,6 +5102,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   j=find_unit(name,event) unless name.nil? || name.length.zero?
   mu=false
   txt="#{@rarity_stars[rarity.to_i-1]*rarity.to_i}"
+  sklz2[0]=sklz2[0].reject {|a| ['Falchion','**Falchion**'].include?(a)}
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     namehere=str
@@ -5119,11 +5120,36 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
     else
       event.respond 'Mathoo does not have that character.  Showing default skills.' unless chain
     end
+  else
+    sklz=@skills.map{|q| q}
+    for mmm in 0...6
+      unless sklz2[mmm][0]=='~~none~~'
+        for i in 0...sklz2[mmm].length
+          tmp=sklz2[mmm][i].gsub('~~','').gsub('*','').gsub('__','')
+          tmp2=sklz[sklz.find_index{|q| q[0]==tmp}]
+          tmp=tmp2[10]
+          moji=''
+          for i2 in 0...tmp.length
+            if tmp[i2].split(', ').include?(@units[j][0]) || (!tmp[i2].include?(', ') && tmp[i2][0,4]=='All ')
+              moji="#{moji}#{@rarity_stars[i2]}"
+            end
+          end
+          sklz2[mmm][i]="#{sklz2[mmm][i]}  \u00B7  #{moji}" if moji.length>0
+          tmp=tmp2[9]
+          moji=''
+          for i2 in 0...tmp.length
+            if tmp[i2].split(', ').include?(@units[j][0]) || (!tmp[i2].include?(', ') && tmp[i2][0,4]=='All ')
+              moji="#{moji}#{@rarity_stars[i2]}"
+            end
+          end
+          sklz2[mmm][i]="#{sklz2[mmm][i]}  \u00B7  d#{moji}" if moji.length>0 && !(was_embedless_mentioned?(event) || @embedless.include?(event.user.id))
+        end
+      end
+    end
   end
   xcolor=unit_color(event,j,@units[j][0],0,mu,chain)
   f=chain
   f=false if doubleunit
-  sklz2[0]=sklz2[0].reject {|a| ['Falchion','**Falchion**'].include?(a)}
   txt="#{txt}\n#{unit_clss(bot,event,j)}\n"
   txt=' ' if f
   flds=[["<:Skill_Weapon:444078171114045450> **Weapons**",sklz2[0].join("\n")],["<:Skill_Assist:444078171025965066> **Assists**",sklz2[1].join("\n")],["<:Skill_Special:444078170665254929> **Specials**",sklz2[2].join("\n")],["<:Passive_A:443677024192823327> **A Passives**",sklz2[3].join("\n")],["<:Passive_B:443677023257493506> **B Passives**",sklz2[4].join("\n")],["<:Passive_C:443677023555026954> **C Passives**",sklz2[5].join("\n")]]
