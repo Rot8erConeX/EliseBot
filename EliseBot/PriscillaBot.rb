@@ -2504,6 +2504,28 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
           inner_skill='y' if inner_skill.nil? || inner_skill.length<1
         end
       end
+      overides=[[0,0,0,0,0,0,'e'],[0,0,0,0,0,0,'a'],[0,0,0,0,0,0,'s'],[0,0,0,0,0,0,'d'],[0,0,0,0,0,0,'r']]
+      for i in 0...overides.length
+        if inner_skill[0,3]=="(#{overides[i][6]})"
+          inner_skill=inner_skill[3,inner_skill.length-3]
+          for i2 in 0...6
+            if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
+              overides[i][i2]+=inner_skill[0,1].to_i
+              inner_skill=inner_skill[1,inner_skill.length-1]
+              inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+            elsif inner_skill[0,1]=='-' && inner_skill.length>1
+              overides[i][i2]-=inner_skill[1,1].to_i
+              inner_skill=inner_skill[2,inner_skill.length-2]
+              inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+            end
+          end
+        end
+      end
+      overides[0][6]='Effect'
+      overides[1][6]='Attack'
+      overides[2][6]='Speed'
+      overides[3][6]='Defense'
+      overides[4][6]='Resistance'
       if s2[5].include?('Tome Users Only') || ['Bow Users Only','Dagger Users Only'].include?(s2[5])
         sttz.push([0,0,0,0,0,'Effect']) if inner_skill.length>1
         sttzx=[[2,1,0,0,0,'Attack'],[2,0,2,0,0,'Speed'],[2,0,0,3,0,'Defense'],[2,0,0,0,3,'Resistance']]
@@ -2515,10 +2537,12 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
         sttz.push(sttzx[i])
       end
       for i in 0...sttz.length
-        sttz[i][1]+=mt[1]
-        sttz[i][2]+=mt[2]
-        sttz[i][3]+=mt[3]
-        sttz[i][4]+=mt[4]
+        k=overides[overides.find_index{|q| q[6]==sttz[i][5]}]
+        sttz[i][0]+=k[1]
+        sttz[i][1]+=mt[1]+k[0]+k[2]
+        sttz[i][2]+=mt[2]+k[3]
+        sttz[i][3]+=mt[3]+k[4]
+        sttz[i][4]+=mt[4]+k[5]
       end
       sttz.push([0,0,0,0,0,'unrefined'])
       ks=sttz.length-1
@@ -3051,7 +3075,7 @@ def get_bonus_type(event) # used to determine if the embed header should say Tem
   return ''
 end
 
-def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,weapon='-',expandedmode=false) # used by the stats command and any derivitives to display which skills are affecting the stats being displayed
+def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,weapon='-',expandedmode=false) # used by the stats command and any derivatives to display which skills are affecting the stats being displayed
   blessing=[] if blessing.nil?
   stat_skills=[] if stat_skills.nil?
   k=[]
@@ -4600,6 +4624,34 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         inner_skill='y' if inner_skill.nil? || inner_skill.length<1
       end
     end
+    overides=[[0,0,0,0,0,0,'e'],[0,0,0,0,0,0,'a'],[0,0,0,0,0,0,'s'],[0,0,0,0,0,0,'d'],[0,0,0,0,0,0,'r']]
+    overides=[[0,0,0,0,0,0,'e'],[0,0,0,0,0,0,'w'],[0,0,0,0,0,0,'d']] if skill[5]=='Staff Users Only'
+    for i in 0...overides.length
+      if inner_skill[0,3]=="(#{overides[i][6]})"
+        inner_skill=inner_skill[3,inner_skill.length-3]
+        for i2 in 0...6
+          if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
+            overides[i][i2]+=inner_skill[0,1].to_i
+            inner_skill=inner_skill[1,inner_skill.length-1]
+            inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+          elsif inner_skill[0,1]=='-' && inner_skill.length>1
+            overides[i][i2]-=inner_skill[1,1].to_i
+            inner_skill=inner_skill[2,inner_skill.length-2]
+            inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+          end
+        end
+      end
+    end
+    overides[0][6]='Effect'
+    if skill[5]=='Staff Users Only'
+      overides[1][6]='Wrathful'
+      overides[2][6]='Dazzling'
+    else
+      overides[1][6]='Attack'
+      overides[2][6]='Speed'
+      overides[3][6]='Defense'
+      overides[4][6]='Resistance'
+    end
     outer_skill=nil
     if inner_skill[0,1]=='*'
       outer_skill=inner_skill[1,inner_skill.length-1]
@@ -4716,6 +4768,10 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     for i in 0...sttz.length
       k=sttz[i][5].split(' (+) ')
       k=k[k.length-1].gsub(' Mode','')
+      k=k.split('**')[0]
+      k='Effect' if ['Full Metal','Shadow'].include?(k)
+      k2=overides[overides.find_index{|q| q[6]==k}]
+      puts k2.to_s
       emo='<:EffectMode:450002917269831701>'
       if k=='Attack'
         emo='<:StrengthW:449999580948463617>'
@@ -4736,14 +4792,14 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{find_effect_name(skill,event,2).gsub(' ','_').gsub('/','_')}.png"
         str="#{str} - #{find_effect_name(skill,event)}"
       end
-      str="#{str}\nMight: #{skill[2]+sttz[i][1]}  \u00B7  Range: #{skill[3]}"
-      str="#{str}  \u00B7  HP +#{sttz[i][0]}" if sttz[i][0]>0
-      atk=mt[1]
+      str="#{str}\nMight: #{skill[2]+sttz[i][1]+k2[0]}  \u00B7  Range: #{skill[3]}"
+      str="#{str}  \u00B7  HP +#{sttz[i][0]+k2[1]}" if sttz[i][0]+k2[1]>0
+      atk=mt[1]+k2[2]
       atk+=skill[12][10] if sttz[i][5]=="Effect"
       str="#{str}  \u00B7  Attack #{'+' if atk>0}#{atk}" if atk != 0
-      str="#{str}  \u00B7  Speed #{'+' if skill[12][2]+sttz[i][2]>0}#{skill[12][2]+sttz[i][2]}" if skill[12][2]+sttz[i][2]!=0
-      str="#{str}  \u00B7  Defense #{'+' if skill[12][3]+sttz[i][3]>0}#{skill[12][3]+sttz[i][3]}" if skill[12][3]+sttz[i][3]!=0
-      str="#{str}  \u00B7  Resistance #{'+' if skill[12][4]+sttz[i][4]>0}#{skill[12][4]+sttz[i][4]}" if skill[12][4]+sttz[i][4]!=0
+      str="#{str}  \u00B7  Speed #{'+' if skill[12][2]+sttz[i][2]+k2[3]>0}#{skill[12][2]+sttz[i][2]+k2[3]}" if skill[12][2]+sttz[i][2]+k2[3]!=0
+      str="#{str}  \u00B7  Defense #{'+' if skill[12][3]+sttz[i][3]+k2[4]>0}#{skill[12][3]+sttz[i][3]+k2[4]}" if skill[12][3]+sttz[i][3]+k2[4]!=0
+      str="#{str}  \u00B7  Resistance #{'+' if skill[12][4]+sttz[i][4]+k2[5]>0}#{skill[12][4]+sttz[i][4]+k2[5]}" if skill[12][4]+sttz[i][4]+k2[5]!=0
       effective=[]
       effective.push('<:Icon_Move_Flier:443331186698354698>') if skill[5]=="Bow Users Only"
       for i2 in 0...lookout2.length
