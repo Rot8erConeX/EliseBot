@@ -71,7 +71,7 @@ Eliwood(Valentines)\Blue, Blade\ \Armor\7, 9, 7, 6, 6\47, 38, 32, 29, 29\Ito Mis
 Ephraim\Blue, Blade\ \Infantry\8, 8, 5, 7, 3\45, 35, 25, 32, 20\Asatani Tomoyo\Greg Chun\Yashiro Taku\5p\M\FE8\Ephraim
 Ephraim(Brave)\Green, Blade\ \Armor\7, 9, 6, 8, 5\46, 38, 27, 37, 26\Wada Sachiko\Greg Chun\Yashiro Taku\5p\M\FE8\Ephraim
 Ephraim(Fire)\Blue, Blade\Fire, Defense, 21/10/2018\Cavalry\7, 8, 6, 7, 3\43, 36, 27, 33, 18\Asatani Tomoyo\Greg Chun\Yashiro Taku\5s\M\FE8\Ephraim
-Ethlyn\Colorless, Healer\\Cavalry\0, 0, 0, 0, 0\0, 0, 0, 0, 0\\\\4t5t\F\FE4\Ethlyn
+Ethlyn\Colorless, Healer\\Cavalry\6, 6, 7, 6, 2\38, 28, 34, 26, 20\kaya8\Allegra Clarke\\4t5t\F\FE4\Ethlyn
 Est\Blue, Blade\ \Flier\5, 8, 6, 5, 7\36, 35, 30, 24, 32\Miwabe Sakura\Brianna Knickerbocker\Murakawa Rie\3p4p3qLU\F\FE3, FE1, FE2, FE11, FE12, FE15\Est
 Fae\Green, Dragon\ \Infantry\10, 9, 7, 5, 6\46, 33, 28, 25, 30\Himukai Yuji\Sarah Blandy\Ozawa Ari\3p4pLU\F\FE6, FE7\Fae
 Faye\Colorless, Bow\ \Infantry\8, 7, 6, 6, 7\42, 30, 25, 26, 31\Konfuzi Kokon\Amber Connor\Tanezaki Atsumi\5p\F\FE15\Faye
@@ -142,7 +142,7 @@ Lene\Red, Blade\ \Infantry\5, 6, 9, 5, 6\35, 28, 35, 23, 28\Yoshiku\Faye Mata\Ta
 Leo\Red, Tome, Dark\ \Cavalry\6, 6, 4, 5, 6\39, 29, 22, 25, 30\Hino Shinnosuke\Max Mittelman\Miyano Mamoru\5pLU\M\FE14C, FEW\Leo
 Leo(Summer)\Red, Tome, Dark\ \Infantry\5, 7, 6, 1, 9\37, 32, 27, 16, 35\Tobi\Max Mittelman\Miyano Mamoru\5s\M\FE14C, FEW\Leo
 Leon\Colorless, Bow\ \Infantry\6, 8, 7, 6, 1\39, 34, 30, 30, 15\Miyajima Haru\Lucien Dodge\Takahashi Koji\3p4p\M\FE15, FE2\Leon
-Lewyn\Green, Tome, Wind\ \Infantry\0, 0, 0, 0, 0\0, 0, 0, 0, 0\Suda Ayuka\Steve Staley\\5p\M\FE4\Lewyn
+Lewyn\Green, Tome, Wind\ \Infantry\6, 8, 8, 2, 5\38, 34, 37, 17, 25\Suda Ayuka\Steve Staley\\5p\M\FE4\Lewyn
 Libra\Green, Blade\\Infantry\6, 8, 7, 6, 6\40, 35, 32, 28, 29\Miyajima Haru\Cindy Robinson\\4p5p\M\FE13\Libra
 Lilina\Red, Tome, Fire\ \Infantry\5, 9, 5, 3, 6\35, 37, 25, 19, 31\BUNBUN\Julie Kliewer\Ozawa Ari\3p4pLU\F\FE6\Lilina
 Lilina(Valentines)\Green, Tome, Wind\ \Cavalry\4, 8, 6, 3, 6\34, 35, 30, 20, 26\BUNBUN\Julie Kliewer\Ozawa Ari\5s\F\FE6\Lilina
@@ -213,7 +213,7 @@ Oscar\Blue, Blade\ \Cavalry\6, 8, 8, 5, 3\40, 33, 34, 26, 21\Ichiiro Hako\Bryce 
 Palla\Red, Blade\ \Flier\7, 7, 6, 6, 5\42, 31, 31, 28, 26\cuboon\Laura Bailey\Taneda Risa\3p4p3qLU\F\FE3, FE1, FE2, FE11, FE12, FE15\Palla
 Peri\Blue, Blade\ \Cavalry\5, 7, 7, 4, 7\35, 33, 33, 23, 30\Takagi Masafumi\Cindy Robinson\Takahashi Minami\3p4pLU\F\FE14C\Peri
 Priscilla\Colorless, Healer\ \Cavalry\5, 6, 6, 3, 7\36, 29, 29, 19, 32\kaya8\Marcella Lentz-Pope\Hashimoto Chinami\3p4p\F\FE7\Priscilla
-Quan\Blue, Blade\ \Cavalry\0, 0, 0, 0, 0\0, 0, 0, 0, 0\Aoji\Chris Hackney\\5p\M\FE4\Quan
+Quan\Blue, Blade\ \Cavalry\7, 8, 7, 7, 2\44, 37, 29, 31, 16\Aoji\Chris Hackney\\5p\M\FE4\Quan
 Raigh\Red, Tome, Dark\ \Infantry\5, 7, 6, 4, 6\36, 32, 29, 22, 29\Himukai Yuji\Sam Regal\Fujiwara Natsumi\3p4p1f4f3qLU\M\FE6\Raigh
 Raven\Green, Blade\ \Infantry\6, 8, 8, 5, 4\41, 34, 35, 25, 22\AKIRA\Bryce Papenbrook\Umehara Yuuichirou\3p4pLU\M\FE7\Raven
 Rebecca\Colorless, Bow\ \Infantry\5, 6, 8, 3, 6\37, 29, 34, 21, 27\Hoshino Lily\Hunter MacKenzie Austin\Hashimoto Chinami\3p4p\F\FE7\Rebecca
@@ -254,7 +254,7 @@ Shigure(Performing)\Blue, Tome, Thunder\ \Infantry\5, 7, 7, 4, 5\34, 31, 29, 21,
 Shiro\Blue, Blade\ \Infantry\6, 8, 7, 8, 4\41, 35, 30, 35, 22\Arai Teruko\Kaiji Tang\Takumi Yasuaki\5p\M\FE14B\Shiro
 Siegbert\Red, Blade\ \Cavalry\6, 8, 8, 7, 2\41, 34, 35, 31, 16\Arai Teruko\Todd Haberkorn\Kawanishi Kengo\5p\M\FE14C\Siegbert
 Sigurd\Red, Blade\ \Cavalry\6, 8, 7, 9, 2\41, 35, 32, 34, 17\Sata\Grant George\Morikawa Toshiyuki\5p\M\FE4\Sigurd
-Silvia\Red, Blade\ \Infantry\0, 0, 0, 0, 0\0, 0, 0, 0, 0\Chiko\Laura Post\\5p\S\FE4\Silvia
+Silvia\Red, Blade\ \Infantry\7, 6, 9, 2, 7\40, 27, 36, 17, 30\Chiko\Laura Post\\5p\S\FE4\Silvia
 Soleil\Red, Blade\ \Infantry\5, 9, 8, 6, 5\37, 38, 35, 28, 24\Enkyo Yuichiro\Michelle Ruff\Suzuki Eri\4p5p\F\FE14C\Soleil
 Sonya\Green, Tome, Wind\ \Infantry\5, 8, 7, 1, 7\36, 33, 31, 15, 32\Yura\Tara Sands\Shimoda Rei\5p\F\FE15, FE2\Sonya
 Sophia\Red, Tome, Dark\ \Infantry\6, 7, 3, 6, 6\40, 33, 19, 28, 29\Zaza\Wendee Lee\Oonishi Saori\1d2d3p4p3qLU\F\FE6, FE7\Sophia

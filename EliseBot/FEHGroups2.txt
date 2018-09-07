@@ -1,4 +1,4 @@
-["2hu", ["Arvis", "Gunnthra", "Ayra", "Micaiah", "Faye"], [253987325539909634]]
+["2hu", ["Arvis", "Gunnthra", "Ayra", "Micaiah", "Faye", "Micaiah(Festival)"], [253987325539909634]]
 ["Askr", ["Anna", "Alfonse", "Sharena"]]
 ["BraveHeroes", []]
 ["Bunnies", []]
