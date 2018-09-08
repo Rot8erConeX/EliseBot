@@ -5350,9 +5350,10 @@ def get_group(name,event)
       end
       u2=k2[10][i].split(', ')
       for j in 0...u2.length
-        b.push(u2[j].gsub('Lavatain','Laevatein')) unless b.include?(u2[j]) || u2[j].include?('-') || !has_any?(g, untz[untz.find_index{|q| q[0]==u[j]}][13][0])
+        b.push(u2[j].gsub('Lavatain','Laevatein')) unless b.include?(u2[j]) || u2[j].include?('-') || !has_any?(g, untz[untz.find_index{|q| q[0]==u2[j]}][13][0])
       end
     end
+    puts b
     return ['Dancer/Singer',b]
   elsif ['braveheroes','brave','cyl'].include?(name.downcase)
     l=untz.reject{|q| !has_any?(g, q[13][0]) || !q[0].include?('(Brave)')}
