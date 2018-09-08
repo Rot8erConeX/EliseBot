@@ -4771,7 +4771,6 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       k=k.split('**')[0]
       k='Effect' if ['Full Metal','Shadow'].include?(k)
       k2=overides[overides.find_index{|q| q[6]==k}]
-      puts k2.to_s
       emo='<:EffectMode:450002917269831701>'
       if k=='Attack'
         emo='<:StrengthW:449999580948463617>'
@@ -5415,7 +5414,9 @@ def get_group(name,event)
         end
       end
     end
-    return ['Falchion_Users',k2.map{|q| q[10]}.join(', ').split(', ').reject{|q| q=='-' || !has_any?(g, untz[untz.find_index{|q2| q2[0]==q}][13][0])}.uniq.sort]
+    falusrs=k2.map{|q| q[10]}.join(', ').split(', ').reject{|q| q=='-' || !has_any?(g, untz[untz.find_index{|q2| q2[0]==q}][13][0])}.uniq.sort
+    k=sklz.reject{|q| !has_any?(q[6].split(', '), falusrs) || q[4]!='Weapon'}
+    return ['Falchion_Users',k.map{|q| q[6].split(', ')}.join(', ').split(', ').uniq.sort]
   elsif name.downcase=="mathoo'swaifus"
     metadata_load()
     return ["Mathoo'sWaifus",@dev_waifus]
@@ -12475,6 +12476,9 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     return nil
   elsif newname.include?('"') || newname.include?("\n")
     event.respond 'Full stop.  " is not allowed in an alias.'
+    return nil
+  elsif event.server.id==363917126978764801
+    event.respond "You guys revoked your permission to add aliases when you refused to listen to me regarding the Erk alias for Serra."
     return nil
   elsif find_unit(newname,event)>=0
     if find_unit(unit,event)>=0
