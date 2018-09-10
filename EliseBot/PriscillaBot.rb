@@ -136,8 +136,8 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'giantstats','bigstats','tolstats','macrostats','largestats','hugestats','massivestats','giantstat','bigstat','tolstat','macrostat','largestat','hugestat',
      'massivestat','statsgiant','statsbig','statstol','statsmacro','statslarge','statshuge','statsmassive','statgiant','statbig','stattol','statmacro','large',
      'statlarge','stathuge','statmassive','statol','giant','massive','spam','safetospam','safe2spam','listunits','sortunits','unitssort','liststat','rand',
-     'longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort',
-     'sortstat','statsort','liststats','statslist']
+     'longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort','worst',
+     'sortstat','statsort','liststats','statslist','highest','best','highestamong','highestin','lowest','lowestamong','lowestin']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -581,9 +581,9 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then calculates their average in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
   elsif ['art'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __unit__ __art type__","Displays `unit`'s character art.  Defaults to their normal portrait, but can be adjusted to other portraits with the following words:\n*Default Attacking Image:* Battle/Battling, Attack/Atk/Att\n*Special Proc Image:* Critical/Crit, Special, Proc\n*Damaged Art:* Damage/Damaged, LowHP/LowHealth",0xD49F61)
-  elsif ['bestamong','bestin','beststats','higheststats'].include?(command.downcase)
+  elsif ['bestamong','bestin','beststats','higheststats','highest','best','highestamong','highestin'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then finds the unit(s) with the best in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
-  elsif ['worstamong','worstin','worststats','loweststats'].include?(command.downcase)
+  elsif ['worstamong','worstin','worststats','loweststats','lowest','lowestamong','lowestin','worst'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then finds the unit(s) with the worst in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
   elsif ['find','search'].include?(command.downcase)
     subcommand='' if subcommand.nil?
@@ -3372,14 +3372,14 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     end
     create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,'-',expandedmode)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n",0x9400D3,"Please note that the Attack stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),flds,1)
     return nil
-  elsif unitz[4].nil? || (unitz[4].max.zero? && unitz[5].max.zero?) # unknown stats
+  elsif unitz[4].nil? || (unitz[4].max<=0 && unitz[5].max<=0) # unknown stats
     data_load()
     j=find_unit(name,event)
     xcolor=unit_color(event,j,untz[j][0],0,mu)
     create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{unit_clss(bot,event,j)}",xcolor,'Stats currently unknown',pick_thumbnail(event,j,bot))
     disp_unit_skills(bot,untz[j][0],event) if skillstoo || Expandedmode
     return nil
-  elsif unitz[4].max.zero? # level 40 stats are known but not level 1
+  elsif unitz[4].max<=0 # level 40 stats are known but not level 1
     data_load()
     merges=0 if merges.nil?
     j=find_unit(name,event)
@@ -3794,13 +3794,13 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
     end
     create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n**<:HP_S:467037520538894336>0 | <:StrengthS:467037520484630539>0 | <:SpeedS:467037520534962186>0 | <:DefenseS:467037520249487372>0 | <:ResistanceS:467037520379641858>0**",0x9400D3,nil,pick_thumbnail(event,j,bot),nil,1)
     return nil
-  elsif unitz[4].nil? || (unitz[4].max.zero? && unitz[5].max.zero?) # unknown stats
+  elsif unitz[4].nil? || (unitz[4].max<=0 && unitz[5].max<=0) # unknown stats
     data_load()
     j=find_unit(name,event)
     xcolor=unit_color(event,j,untz[j][0],0,mu)
     create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{unit_clss(bot,event,j)}",xcolor,'Stats currently unknown',pick_thumbnail(event,j,bot))
     return nil
-  elsif unitz[4].max.zero? # level 40 stats are known but not level 1
+  elsif unitz[4].max<=0 # level 40 stats are known but not level 1
     data_load()
     merges=0 if merges.nil?
     j=find_unit(name,event)
@@ -6872,7 +6872,7 @@ def sort_units(bot,event,args=[])
     return nil
   end
   for i in 0...k.length # remove any units who don't have known stats yet
-    k[i]=nil if k[i][5].nil? || k[i][5].max.zero?
+    k[i]=nil if k[i][5].nil? || k[i][5].max<=0
   end
   s=['','HP','Attack','Speed','Defense','Resistance','BST','FrzProtect','Photon Points']
   k.compact!
@@ -6928,7 +6928,7 @@ def sort_units(bot,event,args=[])
         end
       end
       sfn=''
-      if f[j]<6 && !(k[i][4].nil? || k[i][4].max.zero?)
+      if f[j]<6 && !(k[i][4].nil? || k[i][4].max<=0)
         sfn='(+) ' if [-3,1,5,10,14].include?(k[i][4][f[j]-1])
         sfn='(-) ' if [-2,2,6,11,15].include?(k[i][4][f[j]-1])
       end
@@ -8678,8 +8678,8 @@ def generate_random_unit(event,args,bot)
   gps=[0,0,0,0,0]
   stats[0]=10+rand(16)
   gps[0]=rand(@mods.length-3)+1
-  gps[0]=rand(@mods.length-3)+1 if gps[0]<2 || gps[0]>14
-  gps[0]=rand(@mods.length-3)+1 if gps[0]<2 || gps[0]>14
+  gps[0]=rand(@mods.length-3)+1 if gps[0]<3 || gps[0]>14
+  gps[0]=rand(@mods.length-3)+1 if gps[0]<3 || gps[0]>14
   l1_total-=stats[0]
   gp_total-=gps[0]
   min_possible=[l1_total-40,2].max
@@ -8695,8 +8695,8 @@ def generate_random_unit(event,args,bot)
     gps[1]=min_possible
   else
     gps[1]=min_possible+rand(max_possible-min_possible+1)
-    gps[1]=min_possible+rand(max_possible-min_possible+1) if gps[1]<2 || gps[1]>14
-    gps[1]=min_possible+rand(max_possible-min_possible+1) if gps[1]<2 || gps[1]>14
+    gps[1]=min_possible+rand(max_possible-min_possible+1) if gps[1]<3 || gps[1]>14
+    gps[1]=min_possible+rand(max_possible-min_possible+1) if gps[1]<3 || gps[1]>14
   end
   l1_total-=stats[1]
   gp_total-=gps[1]
@@ -8713,8 +8713,8 @@ def generate_random_unit(event,args,bot)
     gps[2]=min_possible
   else
     gps[2]=min_possible+rand(max_possible-min_possible+1)
-    gps[2]=min_possible+rand(max_possible-min_possible+1) if gps[2]<2 || gps[2]>14
-    gps[2]=min_possible+rand(max_possible-min_possible+1) if gps[2]<2 || gps[2]>14
+    gps[2]=min_possible+rand(max_possible-min_possible+1) if gps[2]<3 || gps[2]>14
+    gps[2]=min_possible+rand(max_possible-min_possible+1) if gps[2]<3 || gps[2]>14
   end
   l1_total-=stats[2]
   gp_total-=gps[2]
@@ -8731,8 +8731,8 @@ def generate_random_unit(event,args,bot)
     gps[3]=min_possible
   else
     gps[3]=min_possible+rand(max_possible-min_possible+1)
-    gps[3]=min_possible+rand(max_possible-min_possible+1) if gps[3]<2 || gps[3]>14
-    gps[3]=min_possible+rand(max_possible-min_possible+1) if gps[3]<2 || gps[3]>14
+    gps[3]=min_possible+rand(max_possible-min_possible+1) if gps[3]<3 || gps[3]>14
+    gps[3]=min_possible+rand(max_possible-min_possible+1) if gps[3]<3 || gps[3]>14
   end
   l1_total-=stats[3]
   gp_total-=gps[3]
@@ -8744,7 +8744,7 @@ def generate_random_unit(event,args,bot)
   stats.push(stats[3]+@mods[gps[3]][5])
   stats.push(stats[4]+@mods[gps[4]][5])
   for i in 0...gps.length
-    gps[i]-=2
+    gps[i]-=3
   end
   stats.push(stats[0]+stats[1]+stats[2]+stats[3]+stats[4])
   stats.push(stats[5]+stats[6]+stats[7]+stats[8]+stats[9])
@@ -9196,7 +9196,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   blessing=[] if @units[@units.find_index{|q| q[0]==u40x[0]}][2][0].length>1
   blessing.compact!
   args.compact!
-  if u40x[4].nil? || (u40x[4].max.zero? && u40x[5].max.zero?)
+  if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
     unless u40x[0]=='Kiran'
       event.respond "#{u40x[0]} does not have official stats.  I cannot study #{'his' if u40x[10]=='M'}#{'her' if u40x[10]=='F'}#{'their' unless ['M','F'].include?(u40x[10])} effective HP."
       return nil
@@ -9383,7 +9383,7 @@ def unit_study(event,name,bot,weapon=nil)
   end
   j=find_unit(name,event)
   u40x=@units[j]
-  if u40x[4].nil? || (u40x[4].max.zero? && u40x[5].max.zero?)
+  if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
     unless u40x[0]=='Kiran'
       event.respond "#{u40x[0]} does not have official stats.  I cannot study #{'him' if u40x[10]=='M'}#{'her' if u40x[10]=='F'}#{'them' unless ['M','F'].include?(u40x[10])} at multiple rarities."
       return nil
@@ -9518,7 +9518,7 @@ def heal_study(event,name,bot,weapon=nil)
   name=find_name_in_string(event) if name.nil?
   j=find_unit(name,event)
   u40x=@units[j]
-  if u40x[4].nil? || (u40x[4].max.zero? && u40x[5].max.zero?)
+  if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
     unless u40x[0]=='Kiran'
       event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[10]=='M'}#{'she does' if u40x[10]=='F'}#{'they do' unless ['M','F'].include?(u40x[10])} with each healing staff."
       return nil
@@ -9762,7 +9762,7 @@ def proc_study(event,name,bot,weapon=nil)
   name=find_name_in_string(event) if name.nil?
   j=find_unit(name,event)
   u40x=@units[j]
-  if u40x[4].nil? || (u40x[4].max.zero? && u40x[5].max.zero?)
+  if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
     unless u40x[0]=='Kiran'
       event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[10]=='M'}#{'she does' if u40x[10]=='F'}#{'they do' unless ['M','F'].include?(u40x[10])} with each proc skill."
       return nil
@@ -10100,7 +10100,7 @@ def phase_study(event,name,bot,weapon=nil)
   name=find_name_in_string(event) if name.nil?
   j=find_unit(name,event)
   u40x=@units[j]
-  if u40x[4].nil? || (u40x[4].max.zero? && u40x[5].max.zero?)
+  if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
     unless u40x[0]=='Kiran'
       event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[10]=='M'}#{'she does' if u40x[10]=='F'}#{'they do' unless ['M','F'].include?(u40x[10])} in each phase."
       return nil
@@ -13127,7 +13127,7 @@ bot.command([:average,:mean]) do |event, *args|
   return nil
 end
 
-bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
+bot.command([:bestamong,:bestin,:beststats,:higheststats,:highest,:best,:highestamong,:highestin]) do |event, *args|
   return nil if overlap_prevent(event)
   event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
@@ -13185,7 +13185,7 @@ bot.command([:bestamong,:bestin,:beststats,:higheststats]) do |event, *args|
   return nil
 end
 
-bot.command([:worstamong,:worstin,:worststats,:loweststats]) do |event, *args|
+bot.command([:worstamong,:worstin,:worststats,:loweststats,:lowest,:worst,:lowestamong,:lowestin]) do |event, *args|
   return nil if overlap_prevent(event)
   event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
