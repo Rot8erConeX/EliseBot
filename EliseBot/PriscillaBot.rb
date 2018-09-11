@@ -479,7 +479,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['tinystats','smallstats','smolstats','microstats','squashedstats','sstats','statstiny','statssmall','statssmol','statsmicro','statssquashed','statss','stattiny','statsmall','statsmol','statmicro','statsquashed','sstat','tinystat','smallstat','smolstat','microstat','squashedstat','tiny','small','micro','smol','squashed','littlestats','littlestat','statslittle','statlittle','little'].include?(command.downcase) || (['stat','stats'].include?(command.downcase) && ['tiny','small','micro','smol','squashed','little'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['stat','stats'].include?(command.downcase)}** __name__","Shows `name`'s stats.",0xD49F61)
     disp_more_info(event,-2) if safe_to_spam?(event)
-  elsif ['giant','big','tol','macro','large','huge','massive','giantstats','bigstats','tolstats','macrostats','largestats','hugestats','massivestats','giantstat','bigstat','tolstat','macrostat','largestat','hugestat','massivestat','statsgiant','statsbig','statstol','statsmacro','statslarge','statshuge','statsmassive','statgiant','statbig','stattol','statmacro','statlarge','stathuge','statmassive','statol'].include?(command.downcase) || (['stat','stats'].include?(command.downcase) && ['giant','big','tol','macro','large','huge','massive'].include?("#{subcommand}".downcase))
+  elsif ['big','tol','macro','large','huge','massive','giantstats','bigstats','tolstats','macrostats','largestats','hugestats','massivestats','giantstat','bigstat','tolstat','macrostat','largestat','hugestat','massivestat','statsgiant','statsbig','statstol','statsmacro','statslarge','statshuge','statsmassive','statgiant','statbig','stattol','statmacro','statlarge','stathuge','statmassive','statol'].include?(command.downcase) || (['stat','stats'].include?(command.downcase) && ['giant','big','tol','macro','large','huge','massive'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['stat','stats'].include?(command.downcase)}** __name__","Shows `name`'s weapon color/type, movement type, stats, skills, and all possible modifiers.",0xD49F61)
     disp_more_info(event) if safe_to_spam?(event)
   elsif ['stats','stat'].include?(command.downcase)
@@ -3183,10 +3183,11 @@ end
 
 def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=nil) # displays stats
   expandedmode=false if expandedmode.nil?
-  if " #{event.message.text.downcase} ".include?(' tiny ') || " #{event.message.text.downcase} ".include?(' small ') || " #{event.message.text.downcase} ".include?(' smol ') || " #{event.message.text.downcase} ".include?(' micro ') || " #{event.message.text.downcase} ".include?(' little ')
+  dispstr=" #{event.message.text.downcase} "
+  if dispstr.include?(' tiny ') || dispstr.include?(' small ') || dispstr.include?(' smol ') || dispstr.include?(' micro ') || dispstr.include?(' little ')
     disp_tiny_stats(bot,name,weapon,event,ignore)
     return nil
-  elsif " #{event.message.text.downcase} ".include?(' giant ') || " #{event.message.text.downcase} ".include?(' big ') || " #{event.message.text.downcase} ".include?(' tol ') || " #{event.message.text.downcase} ".include?(' macro ') || " #{event.message.text.downcase} ".include?(' large ') || " #{event.message.text.downcase} ".include?(' huge ') || " #{event.message.text.downcase} ".include?(' massive ')
+  elsif dispstr.include?(' big ') || dispstr.include?(' tol ') || dispstr.include?(' macro ') || dispstr.include?(' large ') || dispstr.include?(' huge ') || dispstr.include?(' massive ')
     expandedmode=true
   end
   if expandedmode && !safe_to_spam?(event)
@@ -12368,7 +12369,7 @@ bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstat
   end
 end
 
-bot.command([:giant,:big,:tol,:macro,:large,:huge,:massive,:giantstats,:bigstats,:tolstats,:macrostats,:largestats,:hugestats,:massivestats,:giantstat,:bigstat,:tolstat,:macrostat,:largestat,:hugestat,:massivestat,:statsgiant,:statsbig,:statstol,:statsmacro,:statslarge,:statshuge,:statsmassive,:statgiant,:statbig,:stattol,:statmacro,:statlarge,:stathuge,:statmassive,:statol]) do |event, *args|
+bot.command([:big,:tol,:macro,:large,:huge,:massive,:giantstats,:bigstats,:tolstats,:macrostats,:largestats,:hugestats,:massivestats,:giantstat,:bigstat,:tolstat,:macrostat,:largestat,:hugestat,:massivestat,:statsgiant,:statsbig,:statstol,:statsmacro,:statslarge,:statshuge,:statsmassive,:statgiant,:statbig,:stattol,:statmacro,:statlarge,:stathuge,:statmassive,:statol]) do |event, *args|
   return nil if overlap_prevent(event)
   k=find_name_in_string(event,nil,1)
   if k.nil?
