@@ -137,7 +137,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'massivestat','statsgiant','statsbig','statstol','statsmacro','statslarge','statshuge','statsmassive','statgiant','statbig','stattol','statmacro','large',
      'statlarge','stathuge','statmassive','statol','giant','massive','spam','safetospam','safe2spam','listunits','sortunits','unitssort','liststat','rand',
      'longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort','worst',
-     'sortstat','statsort','liststats','statslist','highest','best','highestamong','highestin','lowest','lowestamong','lowestin']
+     'sortstat','statsort','liststats','statslist','highest','best','highestamong','highestin','lowest','lowestamong','lowestin','manual','book','combatmanual']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -526,7 +526,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}**",'Responds with a list of links useful to players of *Fire Emblem Heroes*.',0xD49F61)
   elsif ['alts','alt'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Responds with a list of alts that the character has in *Fire Emblem Heroes*.',0xD49F61)
-  elsif ['skills','fodder'].include?(command.downcase)
+  elsif ['skills','fodder','manual','book','combatmanual'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and skills.\nYou can also include a rarity to show the skills that the unit learns at that rarity.",0xD49F61)
   elsif ['embed','embeds'].include?(command.downcase)
     event << '**embed**'
@@ -3075,7 +3075,7 @@ def get_bonus_type(event) # used to determine if the embed header should say Tem
   return ''
 end
 
-def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,weapon='-',expandedmode=false) # used by the stats command and any derivatives to display which skills are affecting the stats being displayed
+def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,weapon='-',expandedmode=false,modemode=false) # used by the stats command and any derivatives to display which skills are affecting the stats being displayed
   blessing=[] if blessing.nil?
   stat_skills=[] if stat_skills.nil?
   k=[]
@@ -3159,6 +3159,7 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   str="#{str}Stat-nerfing skills: -\n" if stat_nerfers.length<=0 && expandedmode
   str="#{str}In-combat buffs: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0
   str="#{str}In-combat buffs: -\n" if stat_skills_3.length<=0 && expandedmode
+  return "#{str}" if modemode && (weapon=='-' || weapon.include?('~~'))
   return "#{str}Equipped weapon: #{weapon}\n"
 end
 
@@ -3179,6 +3180,22 @@ def micronumber(n)
   return "\uFE63#{micronumber(0-n)}" if n<0
   return "#{micronumber(n/10)}#{m[n%10]}" if n>9
   return m[n]
+end
+
+def get_unit_prf(name)
+  if name=='Robin'
+    return [get_unit_prf('Robin(M)')[0],get_unit_prf('Robin(F)')[0]]
+  end
+  prfs=@skills.reject{|q| !q[6].split(', ').include?(name) || q[4]!='Weapon' || q[0]=='Falchion'}
+  if prfs.length>1 
+    prfs2=prfs.reject{|q| q[9].reject{|q2| !q2.split(', ').include?(name)}.length<=0}
+    prfs2=prfs.reject{|q| q[10].reject{|q2| !q2.split(', ').include?(name)}.length<=0} if prfs2.length<=0
+    prfs=[prfs2[0]]
+  elsif prfs.length<=0 
+    # include the same code as the summoned modifier
+  end
+  return [prfs[0][0]] if prfs.length>0
+  return ['-']
 end
 
 def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=nil) # displays stats
@@ -3306,6 +3323,23 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     stat_skills=[]
     stat_skills_2=[]
     refinement=nil
+  elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
+    weapon=get_unit_prf(name)
+    weapon2=weapon[1] unless weapon[1].nil?
+    weapon=weapon[0]
+    unless weapon2.nil?
+      if weapon=='-'
+        w2=['-',0,0]
+      else
+        w2=@skills[find_skill(weapon,event)]
+      end
+      if weapon2=='-'
+        w22=['-',0,0]
+      else
+        w22=@skills[find_skill(weapon2,event)]
+      end
+      diff_num=[w2[2]-w22[2],'M','F']
+    end
   end
   w2=@skills[find_skill(weapon,event)]
   if w2[15].nil?
@@ -3322,7 +3356,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   unitz=untz[find_unit(name,event)]
   spec_wpn=false
   if name=='Robin'
-    if " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
+    if (" #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned') || " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')) && !weapon2.nil?
       spec_wpn=true
       wl=weapon_legality(event,'Robin(M)',weapon)
       wl2=weapon_legality(event,'Robin(F)',weapon2)
@@ -3647,7 +3681,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
     return nil
   end
   data_load()
-  weapon='-'
+  weapon='-' if weapon.nil?
   s=event.message.text
   s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
   s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
@@ -3699,10 +3733,16 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
   merges=flurp[1]
   boon=flurp[2]
   bane=flurp[3]
+  summoner=flurp[4]
+  refinement=flurp[5]
+  blessing=flurp[6]
+  blessing=blessing[0,8] if blessing.length>8
+  blessing=[] if name != 'Robin' && untz[untz.find_index{|q| q[0]==name}][2][0].length>1
+  blessing.compact!
+  stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
   tempest=get_bonus_type(event)
   diff_num=[0,'','']
-  summoner='-'
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
@@ -3718,6 +3758,9 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
       if weapon.include?(' (+) ')
         w=weapon.split(' (+) ')
         weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
       end
     elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
@@ -3742,12 +3785,29 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
       weapon='-'
       weapon=uskl[uskl.length-1] if uskl.length>0
     end
+  elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
+    weapon=get_unit_prf(name)
+    weapon2=weapon[1] unless weapon[1].nil?
+    weapon=weapon[0]
+    unless weapon2.nil?
+      if weapon=='-'
+        w2=['-',0,0]
+      else
+        w2=@skills[find_skill(weapon,event)]
+      end
+      if weapon2=='-'
+        w22=['-',0,0]
+      else
+        w22=@skills[find_skill(weapon2,event)]
+      end
+      diff_num=[w2[2]-w22[2],'M','F']
+    end
   end
   w2=@skills[find_skill(weapon,event)]
   unitz=untz[find_unit(name,event)]
   spec_wpn=false
   if name=='Robin'
-    if " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
+    if (" #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned') || " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')) && !weapon2.nil?
       spec_wpn=true
       wl=weapon_legality(event,'Robin(M)',weapon)
       wl2=weapon_legality(event,'Robin(F)',weapon2)
@@ -3760,7 +3820,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
     end
   end
   unless spec_wpn
-    wl=weapon_legality(event,unitz[0],weapon,nil)
+    wl=weapon_legality(event,unitz[0],weapon,refinement)
   end
   if find_unit(name,event)<0
     if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
@@ -3848,8 +3908,8 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
       wl=weapon_legality(event,unitz[0],weapon,nil)
       weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
     end
-    u40=apply_stat_skills(event,[],u40,'',summoner,weapon)
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(5,merges,summoner)}\n*Neutral Nature only so far*\n#{display_stat_skills(j,[],[],nil,'',[],wl) unless wl=='-'}\n**<:HP_S:467037520538894336>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:467037520534962186>#{u40[3]} | <:DefenseS:467037520249487372>#{u40[4]} | <:ResistanceS:467037520379641858>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST)",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
+    u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(5,merges,summoner)}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n**<:HP_S:467037520538894336>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:467037520534962186>#{u40[3]} | <:DefenseS:467037520249487372>#{u40[4]} | <:ResistanceS:467037520379641858>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST)",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
     return nil
   end
   # units for whom both level 40 and level 1 stats are known
@@ -3867,9 +3927,9 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
     rarity=10000000
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
-  u40=apply_stat_skills(event,[],u40,'',summoner,weapon)
+  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
   u1=get_stats(event,name,1,rarity,merges,boon,bane)
-  u1=apply_stat_skills(event,[],u1,'',summoner,weapon)
+  u1=apply_stat_skills(event,stat_skills,u1,tempest,summoner,weapon,refinement,blessing)
   j=find_unit(name,event)
   atk='<:StrengthS:467037520484630539>*'
   atk='<:MagicS:467043867611627520>' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
@@ -3891,9 +3951,10 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
   end
   xcolor=unit_color(event,j,u40[0],0,mu)
   unless spec_wpn
-    wl=weapon_legality(event,u40[0],weapon,nil)
+    wl=weapon_legality(event,u40[0],weapon,refinement)
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
+  w1='-' if wl.include?('~~')
   flds=[["**Level 1#{" +#{merges}" if merges>0}**",["#{' ' if u1[1]<10}#{u1[1]}","#{' ' if u1[2]<10}#{u1[2]}","#{' ' if u1[3]<10}#{u1[3]}","#{' ' if u1[4]<10}#{u1[4]}","#{' ' if u1[5]<10}#{u1[5]}"]],["**Level 40#{" +#{merges}" if merges>0}**",["#{u40[1]}","#{u40[2]}","#{u40[3]}","#{u40[4]}","#{u40[5]}"]]]
   superbaan=["\u00A0","\u00A0","\u00A0","\u00A0","\u00A0","\u00A0"]
   if boon=="" && bane=="" && !mu
@@ -3914,7 +3975,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
   ftr=nil
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{diff_num[0]} point#{'s' unless diff_num[0]==1} lower." if !diff_num.nil? && diff_num[0]>0
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{0-diff_num[0]} point#{'s' unless diff_num[0]==-1} higher." if !diff_num.nil? && diff_num[0]<0
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,[],[],nil,'',[],wl) unless wl=='-'}\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,ftr,img,nil)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,ftr,img,nil)
   return nil
 end
 
@@ -7808,11 +7869,7 @@ def disp_unit_stats_and_skills(event,args,bot)
   k=find_name_in_string(event,nil,1)
   w=nil
   if k.nil?
-    if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-      event.respond "Steel's waifu is not in the game."
-    elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-      event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-    elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+    if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.nil?
@@ -9231,6 +9288,23 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     else
       event.respond 'Mathoo does not have that character.  Showing neutral stats.'
     end
+  elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
+    weapon=get_unit_prf(name)
+    weapon2=weapon[1] unless weapon[1].nil?
+    weapon=weapon[0]
+    unless weapon2.nil?
+      if weapon=='-'
+        w2=['-',0,0]
+      else
+        w2=@skills[find_skill(weapon,event)]
+      end
+      if weapon2=='-'
+        w22=['-',0,0]
+      else
+        w22=@skills[find_skill(weapon2,event)]
+      end
+      diff_num=[w2[2]-w22[2],'M','F']
+    end
   end
   sklz=@skills.map{|q| q}
   tempest=get_bonus_type(event)
@@ -9580,6 +9654,23 @@ def heal_study(event,name,bot,weapon=nil)
     else
       event.respond 'Mathoo does not have that character.  Showing neutral stats.'
     end
+  elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
+    weapon=get_unit_prf(name)
+    weapon2=weapon[1] unless weapon[1].nil?
+    weapon=weapon[0]
+    unless weapon2.nil?
+      if weapon=='-'
+        w2=['-',0,0]
+      else
+        w2=@skills[find_skill(weapon,event)]
+      end
+      if weapon2=='-'
+        w22=['-',0,0]
+      else
+        w22=@skills[find_skill(weapon2,event)]
+      end
+      diff_num=[w2[2]-w22[2],'M','F']
+    end
   end
   sklz=@skills.map{|q| q}
   tempest=get_bonus_type(event)
@@ -9823,6 +9914,23 @@ def proc_study(event,name,bot,weapon=nil)
       event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats.'
     else
       event.respond 'Mathoo does not have that character.  Showing neutral stats.'
+    end
+  elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
+    weapon=get_unit_prf(name)
+    weapon2=weapon[1] unless weapon[1].nil?
+    weapon=weapon[0]
+    unless weapon2.nil?
+      if weapon=='-'
+        w2=['-',0,0]
+      else
+        w2=@skills[find_skill(weapon,event)]
+      end
+      if weapon2=='-'
+        w22=['-',0,0]
+      else
+        w22=@skills[find_skill(weapon2,event)]
+      end
+      diff_num=[w2[2]-w22[2],'M','F']
     end
   end
   sklz=@skills.map{|q| q}
@@ -10161,6 +10269,23 @@ def phase_study(event,name,bot,weapon=nil)
       event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats.'
     else
       event.respond 'Mathoo does not have that character.  Showing neutral stats.'
+    end
+  elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
+    weapon=get_unit_prf(name)
+    weapon2=weapon[1] unless weapon[1].nil?
+    weapon=weapon[0]
+    unless weapon2.nil?
+      if weapon=='-'
+        w2=['-',0,0]
+      else
+        w2=@skills[find_skill(weapon,event)]
+      end
+      if weapon2=='-'
+        w22=['-',0,0]
+      else
+        w22=@skills[find_skill(weapon2,event)]
+      end
+      diff_num=[w2[2]-w22[2],'M','F']
     end
   end
   sklz=@skills.map{|q| q}
@@ -12130,7 +12255,7 @@ bot.command([:colors,:color,:colours,:colour]) do |event, *args|
   return nil
 end
 
-bot.command([:skills,:fodder]) do |event, *args|
+bot.command([:skills,:fodder,:manual,:book,:combatmanual]) do |event, *args|
   return nil if overlap_prevent(event)
   s=event.message.text
   s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
@@ -12161,11 +12286,7 @@ bot.command([:skills,:fodder]) do |event, *args|
   end
   k=find_name_in_string(event,nil,1)
   if k.nil?
-    if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-      event.respond "Steel's waifu is not in the game."
-    elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-      event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-    elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+    if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       disp_unit_skills(bot,x[1],event)
     elsif s.downcase[0,6]=='skills'
@@ -12186,12 +12307,8 @@ bot.command([:skills,:fodder]) do |event, *args|
     disp_unit_skills(bot,x[1],event)
   elsif find_unit(str,event)>=0
     disp_unit_skills(bot,str,event)
-  elsif event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-    event.respond "Steel's waifu is not in the game."
-  elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-    event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
   else
-    event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s."
+    event.respond "No matches found.  #{"If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s." if s[0,6]=='skills'}"
   end
   return nil
 end
@@ -12248,11 +12365,7 @@ bot.command([:stats,:stat]) do |event, *args|
     k=find_name_in_string(event,nil,1)
     if k.nil?
       w=nil
-      if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-        event.respond "Steel's waifu is not in the game."
-      elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-        event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-      elsif !detect_multi_unit_alias(event,event.message.text.downcase.gsub(sze.downcase,''),event.message.text.downcase.gsub(sze.downcase,'')).nil?
+      if !detect_multi_unit_alias(event,event.message.text.downcase.gsub(sze.downcase,''),event.message.text.downcase.gsub(sze.downcase,'')).nil?
         x=detect_multi_unit_alias(event,event.message.text.downcase.gsub(sze.downcase,''),event.message.text.downcase.gsub(sze.downcase,''))
         k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
         w=k2[0] unless k2.nil?
@@ -12293,11 +12406,7 @@ bot.command([:stats,:stat]) do |event, *args|
   k=find_name_in_string(event,nil,1)
   if k.nil?
     w=nil
-    if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-      event.respond "Steel's waifu is not in the game."
-    elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-      event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-    elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+    if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.nil?
@@ -12331,11 +12440,7 @@ bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstat
   k=find_name_in_string(event,nil,1)
   if k.nil?
     w=nil
-    if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-      event.respond "Steel's waifu is not in the game."
-    elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-      event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-    elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+    if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.nil?
@@ -12374,11 +12479,7 @@ bot.command([:big,:tol,:macro,:large,:huge,:massive,:giantstats,:bigstats,:tolst
   k=find_name_in_string(event,nil,1)
   if k.nil?
     w=nil
-    if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-      event.respond "Steel's waifu is not in the game."
-    elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-      event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-    elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+    if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.nil?
@@ -15323,11 +15424,7 @@ bot.mention do |event|
       k23=0
       if k.nil?
         w=nil
-        if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-          event.respond "Steel's waifu is not in the game."
-        elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-          event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-        elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+        if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
           x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
           k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
           w=k2[0] unless k2.nil?
@@ -15356,7 +15453,8 @@ bot.mention do |event|
       end
     end
     k=1
-  elsif ['skills','fodder'].include?(a[0].downcase)
+  elsif ['skills','fodder','manual','book','combatmanual'].include?(a[0].downcase)
+    aa=a[0].downcase
     a.shift
     if ['sort','list'].include?(a[0].downcase)
       a.shift
@@ -15365,11 +15463,7 @@ bot.mention do |event|
       k=find_name_in_string(event,nil,1)
       k2=0
       if k.nil?
-        if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-          event.respond "Steel's waifu is not in the game."
-        elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-          event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-        elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+        if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
           x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
           disp_unit_skills(bot,x[1],event)
         elsif s.downcase[0,6]=='skills'
@@ -15390,12 +15484,8 @@ bot.mention do |event|
         disp_unit_skills(bot,x[1],event)
       elsif find_unit(str,event)>=0
         disp_unit_skills(bot,str,event)
-      elsif event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-        event.respond "Steel's waifu is not in the game."
-      elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-        event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
       else
-        event.respond "No matches found.  If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s."
+        event.respond "No matches found.  #{"If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s." if aa=='skills'}"
       end
     end
     k=1
@@ -15430,11 +15520,7 @@ bot.mention do |event|
     k=find_name_in_string(event,nil,1)
     if k.nil?
       w=nil
-      if event.message.text.downcase.include?('flora') && ((event.server.nil? && event.user.id==170070293493186561) || !bot.user(170070293493186561).on(event.server.id).nil?)
-        event.respond "Steel's waifu is not in the game."
-      elsif event.message.text.downcase.include?('flora') && !event.server.nil? && event.server.id==332249772180111360
-        event.respond 'If I may borrow from my summer self...**Oooh, hot!**  Too hot for me to see stats.'
-      elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+      if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
         x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
         k2=get_weapon(first_sub(a.join(' '),x[0],''),event)
         w=k2[0] unless k2.nil?
