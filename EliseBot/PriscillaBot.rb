@@ -10523,6 +10523,35 @@ def phase_study(event,name,bot,weapon=nil)
       distant[5]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Def')
     end
   end
+  unless weapon.nil? || weapon=='-'
+    tags=zzzl[11].split(', ')
+    puts tags
+    for i in 0...tags.length
+      if tags[i][0,1]=='(' && tags[i][3,1]==')'
+        if tags[i][1,2]=='cP'
+          close[7]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Atk'
+          close[8]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Spd'
+          close[9]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Def'
+          close[10]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Res'
+        elsif tags[i][1,2]=='dP'
+          distant[7]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Atk'
+          distant[8]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Spd'
+          distant[9]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Def'
+          distant[10]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Res'
+        elsif tags[i][1,2]=='cE'
+          close[2]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Atk'
+          close[3]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Spd'
+          close[4]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Def'
+          close[5]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Res'
+        elsif tags[i][1,2]=='dE'
+          distant[2]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Atk'
+          distant[3]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Spd'
+          distant[4]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Def'
+          distant[5]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Res'
+        end
+      end
+    end
+  end
   for i in 1...close.length
     m=[close[i],distant[i]].min
     if i<6
@@ -10608,8 +10637,6 @@ def phase_study(event,name,bot,weapon=nil)
     event.respond "**Displayed stats:**  #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]}\n**#{"Player Phase" unless ppu40==epu40}#{"In-combat Stats" if ppu40==epu40}:**  #{ppu40[1]} / #{ppu40[2]} / #{ppu40[3]} / #{ppu40[4]} / #{ppu40[5]}  (#{ppu40[16]} BST)#{"\n**Enemy Phase:**  #{epu40[1]} / #{epu40[2]} / #{epu40[3]} / #{epu40[4]} / #{epu40[5]}  (#{epu40[16]} BST)" unless ppu40==epu40}"
   elsif ppu40==epu40
     create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense TIle\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}"],["In-combat Stats","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:467037520534962186> Speed: #{ppu40[3]}\n<:DefenseS:467037520249487372> Defense: #{ppu40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
-  elsif event.user.id==167657750971547648
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense TIle\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}"],["Player Phase","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n<:Death_Blow:472211986625593345> Attack: #{ppu40[2]}\n<:Darting_Blow:472211986705547264> Speed: #{ppu40[3]}\n<:Armored_Blow:472211986688638976> Defense: #{ppu40[4]}\n<:Warding_Blow:472211986822856705> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","<:HP_S:467037520538894336> HP: #{epu40[1]}\n<:Fierce_Stance:472211986621661195> Attack: #{epu40[2]}\n<:Darting_Stance:472211986772393994> Speed: #{epu40[3]}\n<:Steady_Stance:472211986642501633> Defense: #{epu40[4]}\n<:Warding_Stance:472211986651021333> Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
   else
     create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense TIle\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}",1],["Player Phase","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n<:Death_Blow:472211986625593345> Attack: #{ppu40[2]}\n<:Darting_Blow:472211986705547264> Speed: #{ppu40[3]}\n<:Armored_Blow:472211986688638976> Defense: #{ppu40[4]}\n<:Warding_Blow:472211986822856705> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","<:HP_S:467037520538894336> HP: #{epu40[1]}\n<:Fierce_Stance:472211986621661195> Attack: #{epu40[2]}\n<:Darting_Stance:472211986772393994> Speed: #{epu40[3]}\n<:Steady_Stance:472211986642501633> Defense: #{epu40[4]}\n<:Warding_Stance:472211986651021333> Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
   end
