@@ -2,7 +2,7 @@
 ["Askr", ["Anna", "Alfonse", "Sharena"]]
 ["BraveHeroes", []]
 ["Bunnies", []]
-["C137ers", ["Ace(C137)", "Declan", "Gar", "Mathoo", "Matt(C137)", "Mex", "Micaiah(C137)", "Mint", "Moony", "Moosie", "Nebby", "Nixx(C137)", "Ooocast", "Oxorsid", "Rin(Maid)", "Liz(C137)", "Sage", "Saku", "Thomasawesome55", "Tuna"], [330850148261298176]]
+["C137ers", ["Ace(C137)", "Declan", "Gar", "Mathoo", "Matt(C137)", "Mex", "Micaiah(C137)", "Mint", "Moony", "Moosie", "Nebby", "Nixx(C137)", "Ooocast", "Oxorsid", "Rin(Maid)", "Liz(C137)", "Sage", "Saku", "Skittles", "Thomasawesome55", "Tuna", "FrozenHelm"], [330850148261298176]]
 ["Christmas", ["Chrom(Winter)", "Lissa(Winter)", "Robin(M)(Winter)", "Tharja(Winter)"]]
 ["Daily_Rotation", []]
 ["Dancers&Singers", []]

@@ -102,6 +102,16 @@ Renewal 1\Renewal 2\Renewal 3
 Def Ploy 1\Def Ploy 2\Def Ploy 3
 Iote's Shield
 
+Ethlyn
+4\0\ \ \-
+Assault\Fear\~~Fear+~~
+Heal\Mend\Physic\~~Physic+~~
+Imbue\Heavenly Light
+Spd/Def Bond 1\Spd/Def Bond 2\~~Spd/Def Bond 3~~
+Live to Serve 1\Live to Serve 2\Live to Serve 3
+Spur Res 1\Spur Res 2
+Spur Spd 3
+
 Felicia
 4\10\Resistance\HP\-
 Iron Dagger\Steel Dagger\Silver Dagger\__Silver Dagger+__\Felicia's Plate\Felicia's Plate (+) Effect Mode
@@ -260,7 +270,7 @@ Chilling Wind\Glacies
 Attack +1\Attack/Res +1\Attack/Res +2
 Desperation 1\Desperation 2\Desperation 3
 Spur Spd 1\Drive Spd 1\Drive Spd 2
-Drive Atk 1
+Drive Atk 2
 
 Takumi(Fallen)
 5\0\ \ \-
