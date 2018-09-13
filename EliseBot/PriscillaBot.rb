@@ -1431,6 +1431,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill('Loptous',event) if name.downcase.gsub(' ','')=='loptyr'
   return find_skill('Thokk',event) if name.downcase.gsub(' ','')=='sekku'
   return find_skill('Draconic Poleax',event) if name.downcase.gsub(' ','')=='draconicpoleaxe'
+  return find_skill("Shining Bow#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='shinybow'
   return find_skill("Tannenboom!#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='tanenboom'
   return find_skill("Sack o' Gifts#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='sackofgifts'
   return find_skill("Killing Edge#{'+' if name.include?('+')}",event) if ['killersword','killeredge','killingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
@@ -1497,6 +1498,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill('Loptous',event) if namex=='loptyr'[0,namex.length]
   return find_skill('Thokk',event) if namex=='sekku'[0,namex.length]
   return find_skill('Hlidskjalf',event) if ['hlioskjalf',"roni'sstick",'ronisstick','staffkatz'].map{|q| q[0,namex.length]}.include?(namex)
+  return find_skill("Shining Bow",event) if ['shinybow'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill("Killing Edge",event) if ['killersword','killeredge','killingsword'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill("Slaying Edge",event) if ['slayersword','slayeredge','slayingsword'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill(name.downcase.gsub(' ','').gsub('redt','r t'),event) if namex.downcase=='redtome'[0,namex.length]
@@ -5187,23 +5189,25 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
       unless sklz2[mmm][0]=='~~none~~'
         for i in 0...sklz2[mmm].length
           tmp=sklz2[mmm][i].gsub('~~','').gsub('*','').gsub('__','')
-          tmp2=sklz[sklz.find_index{|q| q[0]==tmp}]
-          tmp=tmp2[10]
-          moji=''
-          for i2 in 0...tmp.length
-            if tmp[i2].split(', ').include?(@units[j][0]) || (!tmp[i2].include?(', ') && tmp[i2][0,4]=='All ')
-              moji="#{moji}#{@rarity_stars[i2]}"
+          unless tmp.downcase=='unknown base'
+            tmp2=sklz[sklz.find_index{|q| q[0]==tmp}]
+            tmp=tmp2[10]
+            moji=''
+            for i2 in 0...tmp.length
+              if tmp[i2].split(', ').include?(@units[j][0]) || (!tmp[i2].include?(', ') && tmp[i2][0,4]=='All ')
+                moji="#{moji}#{@rarity_stars[i2]}"
+              end
             end
-          end
-          sklz2[mmm][i]="#{sklz2[mmm][i]}  \u00B7  #{moji}" if moji.length>0
-          tmp=tmp2[9]
-          moji=''
-          for i2 in 0...tmp.length
-            if tmp[i2].split(', ').include?(@units[j][0]) || (!tmp[i2].include?(', ') && tmp[i2][0,4]=='All ')
-              moji="#{moji}#{@rarity_stars[i2]}"
+            sklz2[mmm][i]="#{sklz2[mmm][i]}  \u00B7  #{moji}" if moji.length>0
+            tmp=tmp2[9]
+            moji=''
+            for i2 in 0...tmp.length
+              if tmp[i2].split(', ').include?(@units[j][0]) || (!tmp[i2].include?(', ') && tmp[i2][0,4]=='All ')
+                moji="#{moji}#{@rarity_stars[i2]}"
+              end
             end
+            sklz2[mmm][i]="#{sklz2[mmm][i]}  \u00B7  d#{moji}" if moji.length>0 && !(was_embedless_mentioned?(event) || @embedless.include?(event.user.id))
           end
-          sklz2[mmm][i]="#{sklz2[mmm][i]}  \u00B7  d#{moji}" if moji.length>0 && !(was_embedless_mentioned?(event) || @embedless.include?(event.user.id))
         end
       end
     end
@@ -5296,7 +5300,7 @@ def remove_format(s,format)
 end
 
 def sever(str,sklz=false)
-  str=str.split('/').join(' / ')
+  str="#{str.split('/').join(' / ')} ``"
   s=str.split(' ').join(' ')
   k=str.split('*')
   k2=1
@@ -5321,6 +5325,9 @@ def sever(str,sklz=false)
   for i in 1...k.length
     if k[i]=='+'
       if i==0
+      elsif k[i-1][0,7].downcase=='rallyup'
+        k[i-1]="#{k[i-1]}#{k[i]}"
+        k[i]=nil
       elsif k[i-1][0,5].downcase=='rally'
         k[i-1]="#{k[i-1]}#{k[i]}"
         k[i]=nil
@@ -5330,7 +5337,10 @@ def sever(str,sklz=false)
       end
     elsif i>1 && !k[i-1].nil? && k[i][0,1]=='+' && k[i][1,k[i].length-1].to_i.to_s==k[i][1,k[i].length-1]
       k[i-1]=stat_modify(k[i-1].downcase)
-      if k[i-1][0,5].downcase=='rally'
+      if k[i-1][0,7].downcase=='rallyup'
+        k[i-1]="#{k[i-1]}#{k[i]}"
+        k[i]=nil
+      elsif k[i-1][0,5].downcase=='rally'
         k[i-1]="#{k[i-1]}#{k[i]}"
         k[i]=nil
       elsif ['HP','Attack','Speed','Defense','Resistance'].map{|q| q.downcase}.include?(k[i-1].downcase) && i==k.length-1
