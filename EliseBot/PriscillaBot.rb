@@ -5203,7 +5203,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
             moji=''
             for i2 in 0...tmp.length
               if tmp[i2].split(', ').include?(@units[j][0]) || (!tmp[i2].include?(', ') && tmp[i2][0,4]=='All ')
-                moji="#{moji}#{@rarity_stars[i2]}"
+                moji="#{moji}#{@rarity_stars[i2]}" if i2<=rarity-1
               end
             end
             sklz2[mmm][i]="#{sklz2[mmm][i]}  \u00B7  d#{moji}" if moji.length>0 && !(was_embedless_mentioned?(event) || @embedless.include?(event.user.id))
@@ -7341,7 +7341,7 @@ def comparison(event,args,bot)
     b=b[0,10] if b.length>10
     data_load()
     uu=@units.map{|q| q}
-    bse=b.map{|q| uu[uu.find_index{|q2| q2[0]==q[0][0]}][12].split(', ')[0].gsub('*','')}.uniq
+    bse=b.map{|q| uu[uu.find_index{|q2| q2[0].gsub('Lavatain','Laevatein')==q[0][0]}][12].split(', ')[0].gsub('*','')}.uniq
     for iz in 0...b.length
       dzz.push(["**#{b[iz][1].gsub('Lavatain','Laevatein')}**",[unit_moji(bot,event,-1,b[iz][0][0].gsub('Laevatein','Lavatain'),b[iz][2])],0])
       czz.push(c[iz])
@@ -7492,8 +7492,8 @@ def comparison(event,args,bot)
   ftr=nil
   data_load()
   bse=[]
-  bse.push(@units[@units.find_index{|q| q[0]==b[0][0][0]}][12].split(', ')[0].gsub('*',''))
-  bse.push(@units[@units.find_index{|q| q[0]==b[1][0][0]}][12].split(', ')[0].gsub('*',''))
+  bse.push(@units[@units.find_index{|q| q[0].gsub('Lavatain','Laevatein')==b[0][0][0]}][12].split(', ')[0].gsub('*',''))
+  bse.push(@units[@units.find_index{|q| q[0].gsub('Lavatain','Laevatein')==b[1][0][0]}][12].split(', ')[0].gsub('*',''))
   if bse.include?('Elise') && bse.include?('Nino')
     metadata_load()
     ftr="Heyday Coefficient: #{(@server_data[0].inject(0){|sum,x| sum + x }/701.0).round(4)}"
