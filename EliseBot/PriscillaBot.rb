@@ -1302,6 +1302,7 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
     buff=buff[2,buff.length-2] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,2].downcase=='gp'
     name=buff if find_unit(buff,event,ignore)>=0
   end
+  return find_unit('Lavatain',event,ignore,true) if name.downcase=='laevatein'
   untz=@units.map{|q| q}
   unless ignore2
     for i in 0...@aliases.length # replace any unit aliases with the actual unit name, if possible
@@ -1329,6 +1330,7 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
       j=i if m.downcase==name.downcase && j<0
     end
   end
+  return find_unit('Lavatain',event,ignore,true) if name.downcase=='laevatein'[0,name.length] && name.length>4
   return j if j>=0 && !untz[j].nil? && has_any?(g, untz[j][13][0])
   unless ignore2
     for i in 0...@aliases.length # try the portion of any alias names that is exactly as long as the input string
@@ -3162,7 +3164,7 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   str="#{str}In-combat buffs: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0
   str="#{str}In-combat buffs: -\n" if stat_skills_3.length<=0 && expandedmode
   return "#{str}" if modemode && (weapon=='-' || weapon.include?('~~'))
-  return "#{str}Equipped weapon: #{weapon}\n"
+  return "#{str}Equipped weapon: #{weapon.gsub('Bladeblade','Laevatein')}\n"
 end
 
 def display_stars(rarity,merges,support='-',expandedmode=false) # used to determine which star emojis should be used, based on the rarity, merge count, and whether the unit is Summoner Supported
@@ -5190,7 +5192,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
         for i in 0...sklz2[mmm].length
           tmp=sklz2[mmm][i].gsub('~~','').gsub('*','').gsub('__','')
           unless tmp.downcase=='unknown base'
-            tmp2=sklz[sklz.find_index{|q| q[0]==tmp}]
+            tmp2=sklz[sklz.find_index{|q| q[0].gsub('Bladeblade','Laevatein')==tmp}]
             tmp=tmp2[10]
             moji=''
             for i2 in 0...tmp.length
@@ -5219,7 +5221,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   txt=' ' if f
   flds=[["<:Skill_Weapon:444078171114045450> **Weapons**",sklz2[0].join("\n")],["<:Skill_Assist:444078171025965066> **Assists**",sklz2[1].join("\n")],["<:Skill_Special:444078170665254929> **Specials**",sklz2[2].join("\n")],["<:Passive_A:443677024192823327> **A Passives**",sklz2[3].join("\n")],["<:Passive_B:443677023257493506> **B Passives**",sklz2[4].join("\n")],["<:Passive_C:443677023555026954> **C Passives**",sklz2[5].join("\n")]]
   flds.push(["<:Passive_S:443677023626330122> **Sacred Seal**",sklz2[6][0]]) unless sklz2[6].nil? || sklz2[6][0].length.zero? || sklz2[6][0]==" "
-  create_embed(event,"#{"__#{"Mathoo's " if mu}**#{@units[j][0]}**__" unless f}",txt,xcolor,nil,pick_thumbnail(event,j,bot),flds)
+  create_embed(event,"#{"__#{"Mathoo's " if mu}**#{@units[j][0].gsub('Lavatain','Laevatein')}**__" unless f}",txt,xcolor,nil,pick_thumbnail(event,j,bot),flds)
 end
 
 def extend_message(msg1,msg2,event,enters=1,sym="\n")
@@ -7504,12 +7506,20 @@ end
 
 def detect_multi_unit_alias(event,str1,str2,robinmode=0)
   str1=str1.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('!','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
+  s=event.message.text.downcase
   if ['f?','e?','h?'].include?(str1.downcase[0,2]) || ['feh!','feh?'].include?(str1.downcase[0,4])
-    s=event.message.text.downcase
     s=s[2,s.length-2] if ['f?','e?','h?'].include?(str1.downcase[0,2])
     s=s[4,s.length-4] if ['feh!','feh?'].include?(str1.downcase[0,4])
+    puts s
     a=s.split(' ')
-    a.shift if all_commands(true).include?(a[0])
+    a.shift if all_commands(true).include?(a[0]) || (['f?','e?','h?'].include?(a[0].downcase[0,2]) && all_commands(true).include?(a[0][2,a[0].length-2])) || (['feh?','feh!'].include?(a[0].downcase[0,4]) && all_commands(true).include?(a[0][4,a[0].length-4]))
+    str1=a.join(' ').gsub('!','')
+  elsif ['f','e','h'].include?(str1.downcase[0,1]) || ['feh!','feh?'].include?(str1.downcase[0,3])
+    s=s[1,s.length-1] if ['f','e','h'].include?(str1.downcase[0,1])
+    s=s[3,s.length-3] if ['feh','feh'].include?(str1.downcase[0,3])
+    puts s
+    a=s.split(' ')
+    a.shift if all_commands(true).include?(a[0]) || (['f','e','h'].include?(a[0].downcase[0,1]) && all_commands(true).include?(a[0][1,a[0].length-1])) || (['feh','feh'].include?(a[0].downcase[0,3]) && all_commands(true).include?(a[0][3,a[0].length-3]))
     str1=a.join(' ').gsub('!','')
   end
   nicknames_load()
@@ -7518,6 +7528,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     m=['Robin'] if m==['Robin(M)', 'Robin(F)'] || m==['Robin(F)', 'Robin(M)']
     return [str1, m, @multi_aliases[i][0].downcase] if @multi_aliases[i][0].downcase==str1
   end
+  return ['laevatein', ['Lavatain'], 'laevatein'] if /laevatein/ =~ str1
   return nil if robinmode==3 # only allow actual multi-unit aliases without context clues
   k=0
   k=event.server.id unless event.server.nil?
