@@ -783,7 +783,7 @@ def skill_rarity(event) # this is used by the skillrarity command to display all
     xcolor=0xDC3461
   end
   if " #{event.message.text.downcase} ".include?(' progression ')
-    create_embed(event,"__**Non-healers**__","",xcolor,"Most non-healer units have at least one Scenario X passive and at least one Scenario Y passive",nil,[["__<:Skill_Weapon:444078171114045450> **Weapons**__","Tier 1 (*Iron, basic magic*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Steel, El- magic, Fire Breath+*) - Default at 2<:Icon_Rarity_2:448266417872044032>\nTier 3 (*Silver, super magic*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Kana(M) has his unavailable until 4\\*~~, default at 4<:Icon_Rarity_4:448266418459377684>\nTier 4 (*+ weapons other than Fire Breath+, Prf weapons*) - default at 5<:Icon_Rarity_5:448266417553539104>\nRetro-Prfs (*Felicia's Plate*) - Available at 5<:Icon_Rarity_5:448266417553539104>, promotes from nothing",1],["__<:Skill_Assist:444078171025965066> **Assists**__","Tier 1 (*Rallies, Dance/Sing, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Sharena has hers default at 2\\*~~\nTier 2 (*Double Rallies*) - Available at 4<:Icon_Rarity_4:448266418459377684>\nPrf Assists (*Sacrifice*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Skill_Special:444078170665254929> **Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Daylight, New Moon, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Alfonse and Anna have theirs default at 2\\*~~\nTier 2 (*Sol, Luna, etc.*) - Available at 4<:Icon_Rarity_4:448266418459377684> ~~Jaffar and Saber have theirs also default at 5\\*~~\nTier 3 (*Galeforce, Aether, Prf Specials*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1]],2)
+    create_embed(event,"__**Non-healers**__","",xcolor,"Most non-healer units have at least one Scenario X passive and at least one Scenario Y passive",nil,[["__<:Skill_Weapon:444078171114045450> **Weapons**__","Tier 1 (*Iron, basic magic*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Steel, El- magic, Fire Breath+*) - Available at 2<:Icon_Rarity_2:448266417872044032>, Default at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 (*Silver, super magic*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Kana(M) has his unavailable until 4\\*~~, default at 4<:Icon_Rarity_4:448266418459377684>\nTier 4 (*+ weapons other than Fire Breath+, Prf weapons*) - default at 5<:Icon_Rarity_5:448266417553539104>\nRetro-Prfs (*Felicia's Plate*) - Available at 5<:Icon_Rarity_5:448266417553539104>, promotes from nothing",1],["__<:Skill_Assist:444078171025965066> **Assists**__","Tier 1 (*Rallies, Dance/Sing, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Sharena has hers default at 2\\*~~\nTier 2 (*Double Rallies*) - Available at 4<:Icon_Rarity_4:448266418459377684>\nPrf Assists (*Sacrifice*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Skill_Special:444078170665254929> **Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Daylight, New Moon, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Alfonse and Anna have theirs default at 2\\*~~\nTier 2 (*Sol, Luna, etc.*) - Available at 4<:Icon_Rarity_4:448266418459377684> ~~Jaffar and Saber have theirs also default at 5\\*~~\nTier 3 (*Galeforce, Aether, Prf Specials*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1]],2)
     create_embed(event,"__**Healers**__","",0x64757D,"Most healers have a Scenario Y passive",nil,[["__#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')}#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')} **Damaging Staves**__","Tier 1 (*only Assault*) - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*non-plus staves*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Lyn(Bride) has hers default when summoned~~\nTier 3 (*+ staves, Prf weapons*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Assist_Staff:454451496831025162> **Healing Staves**__","Tier 1 (*Heal*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Mend, Reconcile*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 (*all other non-plus staves*) - Available at 4<:Icon_Rarity_4:448266418459377684>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 4 (*+ staves, Prf staves if healers got them*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Special_Healer:454451451805040640> **Healer Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Imbue*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 (*single-stat Balms, Heavenly Light*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 3 (*double-stat Balms*) - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 4 (*+ Balms*) - Available at 5<:Icon_Rarity_5:448266417553539104>\nPrf Specials (*no examples yet, but they may come*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1]],2)
     create_embed(event,"__**Passives**__","",0x245265,nil,nil,[["__<:Passive_X:444078170900135936> **Scenario X**__","Tier 1 - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 - Available at 2<:Icon_Rarity_2:448266417872044032> or 3<:Icon_Rarity_3:448266417934958592>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>"],["__<:Passive_Y:444078171113914368> **Scenario Y**__","Tier 1 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 3 - Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Prf:444078170887553024> **Prf Passives**__","Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Z:481922026903437312> **Scenario Z**__","Tier 1 - Available at 2<:Icon_Rarity_2:448266417872044032>\nTier 2 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 4 - Available at 5<:Icon_Rarity_5:448266417553539104>"]],2)
   else
@@ -1223,7 +1223,7 @@ def crack_orbs(bot,event,e,user,list) # used by the `summon` command to wait for
 end
 
 def normalize(str) # used by the majority of commands that accept input, to replace all non-ASCII characters with their ASCII counterparts
-  str=str.gsub(/\s+/,' ').gsub(/[[:space:]]+/,' ').gsub(/[[:cntrl:]]/,' ')
+  str=str.gsub(/\s+/,' ').gsub(/[[:space:]]+/,' ').gsub(/[[:cntrl:]]/,' ').gsub('``','')
   str=str.gsub("\u2019","'").gsub("`","'").gsub("\u2018","'")
   str=str.gsub("\u{1F1E6}","A").gsub("\u{1F1E7}","B").gsub("\u{1F1E8}","C").gsub("\u{1F1E9}","D").gsub("\u{1F1EA}","E").gsub("\u{1F1EB}","F").gsub("\u{1F1EC}","G").gsub("\u{1F1ED}","H").gsub("\u{1F1EE}","I").gsub("\u{1F1EF}","J").gsub("\u{1F1F0}","K").gsub("\u{1F1F1}","L").gsub("\u{1F1F2}","M").gsub("\u{1F1F3}","N").gsub("\u{1F1F4}","O").gsub("\u{1F1F5}","P").gsub("\u{1F1F6}","Q").gsub("\u{1F1F7}","R").gsub("\u{1F1F8}","S").gsub("\u{1F1F9}","T").gsub("\u{1F1FA}","U").gsub("\u{1F1FB}","V").gsub("\u{1F1FC}","W").gsub("\u{1F1FD}","X").gsub("\u{1F1FE}","Y").gsub("\u{1F1FF}","Z")
   str=str.gsub("\u{1F170}",'A').gsub("\u{1F171}",'B').gsub("\u{1F18E}",'AB').gsub("\u{1F191}",'CL').gsub("\u2B55",'O').gsub("\u{1F17E}",'O').gsub("\u{1F198}",'SOS')
@@ -1302,7 +1302,6 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
     buff=buff[2,buff.length-2] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,2].downcase=='gp'
     name=buff if find_unit(buff,event,ignore)>=0
   end
-  return find_unit('Lavatain',event,ignore,true) if name.downcase=='laevatein'
   untz=@units.map{|q| q}
   unless ignore2
     for i in 0...@aliases.length # replace any unit aliases with the actual unit name, if possible
@@ -1330,7 +1329,6 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
       j=i if m.downcase==name.downcase && j<0
     end
   end
-  return find_unit('Lavatain',event,ignore,true) if name.downcase=='laevatein'[0,name.length] && name.length>4
   return j if j>=0 && !untz[j].nil? && has_any?(g, untz[j][13][0])
   unless ignore2
     for i in 0...@aliases.length # try the portion of any alias names that is exactly as long as the input string
@@ -1348,7 +1346,7 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
   end
   return j if j>=0 && !untz[j].nil? && has_any?(g, untz[j][13][0])
   unless ignore2 || !name.downcase.include?('launch')
-    name=name.downcase.gsub('launch','') # if the name includes the word "launch", remove it from consideration
+    name=name.downcase.gsub('launch','') # if the name includes the word "launch", remove it from consideration\
     for i in 0...untz.length # try exact unit names
       unless untz[i].nil?
         m=untz[i][0]
@@ -4389,7 +4387,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       p=list_lift(p.map{|q| "*#{q}*"},"or")
     end
   end
-  str="#{str}#{"\n**Restrictions on inheritance:** #{skill[5]}" if skill[6]=='-' && skill[4]!='Weapon'}#{"\n**Exclusive to:** #{skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[6]=='-'}#{"\n**Promotes from:** #{skill[8]}" unless skill[8]=='-'}#{"\n**Promotes into:** #{p}" unless p.nil?}"
+  str="#{str}#{"\n**Restrictions on inheritance:** #{skill[5]}" if skill[6]=='-' && skill[4]!='Weapon'}#{"\n**<:Prf_Sparkle:490307608973148180>Prf to:** #{skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[6]=='-'}#{"\n**Promotes from:** #{skill[8]}" unless skill[8]=='-'}#{"\n**Promotes into:** #{p}" unless p.nil?}"
   if !skill[14].nil? && skill[14].length>0 && skill[4]=='Weapon'
     prm=skill[14].split(', ')
     for i in 0...prm.length
@@ -5167,6 +5165,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   j=find_unit(name,event) unless name.nil? || name.length.zero?
   mu=false
   txt="#{@rarity_stars[rarity.to_i-1]*rarity.to_i}"
+  ftrtoggles=[false,false,false]
   sklz2[0]=sklz2[0].reject {|a| ['Falchion','**Falchion**'].include?(a)}
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
@@ -5186,6 +5185,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
       event.respond 'Mathoo does not have that character.  Showing default skills.' unless chain
     end
   else
+    untz=@units.map{|q| q}
     sklz=@skills.map{|q| q}
     for mmm in 0...6
       unless sklz2[mmm][0]=='~~none~~'
@@ -5193,6 +5193,22 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
           tmp=sklz2[mmm][i].gsub('~~','').gsub('*','').gsub('__','')
           unless tmp.downcase=='unknown base'
             tmp2=sklz[sklz.find_index{|q| q[0].gsub('Bladeblade','Laevatein')==tmp}]
+            if tmp2[6]!='-' && tmp2[6].split(', ').include?(@units[j][0])
+              sklz2[mmm][i]="#{sklz2[mmm][i]}<:Prf_Sparkle:490307608973148180>"
+              ftrtoggles[0]=true
+            else
+              tmtmp=tmp2[10].reject{|q| q=='-' || q[0,4]=='All '}.join(', ').split(', ').reject{|q| untz[untz.find_index{|q2| q2[0]==q}][13][0]!=nil}
+              if tmtmp[0]==@units[j][0] && tmtmp.length==1
+                sklz2[mmm][i]="#{sklz2[mmm][i]}<:Arena_Crown:490334177124810772>"
+                ftrtoggles[1]=true
+              else
+                tmtmp=tmtmp.reject{|q| !untz[untz.find_index{|q2| q2[0]==q}][9][0].include?('p')}
+                if tmtmp[0]==@units[j][0] && tmtmp.length==1
+                  sklz2[mmm][i]="#{sklz2[mmm][i]}<:Orb_Rainbow:471001777622351872>"
+                  ftrtoggles[2]=true
+                end
+              end
+            end
             tmp=tmp2[10]
             moji=''
             for i2 in 0...tmp.length
@@ -5201,14 +5217,6 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
               end
             end
             sklz2[mmm][i]="#{sklz2[mmm][i]}  \u00B7  #{moji}" if moji.length>0
-            tmp=tmp2[9]
-            moji=''
-            for i2 in 0...tmp.length
-              if tmp[i2].split(', ').include?(@units[j][0]) || (!tmp[i2].include?(', ') && tmp[i2][0,4]=='All ')
-                moji="#{moji}#{@rarity_stars[i2]}" if i2<=rarity-1
-              end
-            end
-            sklz2[mmm][i]="#{sklz2[mmm][i]}  \u00B7  d#{moji}" if moji.length>0 && !(was_embedless_mentioned?(event) || @embedless.include?(event.user.id))
           end
         end
       end
@@ -5219,9 +5227,16 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   f=false if doubleunit
   txt="#{txt}\n#{unit_clss(bot,event,j)}\n"
   txt=' ' if f
+  ftr=nil
+  ftr='Purple sparkles mark skills Prf to this unit.' if ftrtoggles[0]
+  ftr='Crowns mark inheritable skills only this unit has.' if ftrtoggles[1]
+  ftr='Purple sparkles mark Prf skills.  Crowns mark unique inheritable skills.' if ftrtoggles[0] && ftrtoggles[1]
+  ftr='Orbs mark inheritable skills that within the main summon pool, only this unit has.' if ftrtoggles[2]
+  ftr='Purple sparkles mark Prf skills.  Orbs mark semi-unique inheritable skills.' if ftrtoggles[0] && ftrtoggles[2]
+  ftr='Unique inheritable skills:  Crown = overall,   Orb = within main summon pool.' if ftrtoggles[1] && ftrtoggles[2]
   flds=[["<:Skill_Weapon:444078171114045450> **Weapons**",sklz2[0].join("\n")],["<:Skill_Assist:444078171025965066> **Assists**",sklz2[1].join("\n")],["<:Skill_Special:444078170665254929> **Specials**",sklz2[2].join("\n")],["<:Passive_A:443677024192823327> **A Passives**",sklz2[3].join("\n")],["<:Passive_B:443677023257493506> **B Passives**",sklz2[4].join("\n")],["<:Passive_C:443677023555026954> **C Passives**",sklz2[5].join("\n")]]
   flds.push(["<:Passive_S:443677023626330122> **Sacred Seal**",sklz2[6][0]]) unless sklz2[6].nil? || sklz2[6][0].length.zero? || sklz2[6][0]==" "
-  create_embed(event,"#{"__#{"Mathoo's " if mu}**#{@units[j][0].gsub('Lavatain','Laevatein')}**__" unless f}",txt,xcolor,nil,pick_thumbnail(event,j,bot),flds)
+  create_embed(event,"#{"__#{"Mathoo's " if mu}**#{@units[j][0].gsub('Lavatain','Laevatein')}**__" unless f}",txt,xcolor,ftr,pick_thumbnail(event,j,bot),flds)
 end
 
 def extend_message(msg1,msg2,event,enters=1,sym="\n")
