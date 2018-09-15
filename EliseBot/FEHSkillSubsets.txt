@@ -40,6 +40,7 @@
 ['Bond', ['bond', 'bonding', 'bonded', 'bonds'], 'Passive']
 ['Solo', ['solo', 'alone', 'lone', 'loner', 'lonely', 'antibond', 'antibonding', 'antibonded', 'antibonds', 'anti-bond', 'anti-bonding', 'anti-bonded', 'anti-bonds', 'unbond', 'unbonding', 'unbonded', 'unbonds', 'un-bond', 'un-bonding', 'un-bonded', 'un-bonds'], 'Passive']
 ['Push', ['push', 'pushing', 'pushed', 'pushes'], 'Passive']
+['Duel', ['duel', 'bst', 'dual'], 'Passive']
 ['Stats', ['stats', 'stat','stataffecting','stat_affecting','stat-affecting'], 'Passive']
 ['Counter', ['counter'], 'Passive']
 ['Defense', ['defense', 'defence', 'defensive', 'defencive'], 'Passive']
