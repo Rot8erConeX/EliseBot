@@ -5199,7 +5199,17 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
             elsif !@units[j][13][0].nil?
             else
               tmtmp=tmp2[10].reject{|q| q=='-' || q[0,4]=='All '}.join(', ').split(', ').reject{|q| untz[untz.find_index{|q2| q2[0]==q}][13][0]!=nil}
-              if tmtmp[0]==@units[j][0] && tmtmp.length==1
+              if tmp2[4]=='Weapon' && tmtmp.length>0 && find_prevolutions(@skills.find_index{|q| q[0]==tmp2[0]},event).length>0
+                kxd=find_prevolutions(@skills.find_index{|q| q[0]==tmp2[0]},event)
+                for i2 in 0...kxd.length
+                  tmtmp2=kxd[i2][0][10].reject{|q| q=='-' || q[0,4]=='All '}.join(', ').split(', ').reject{|q| untz[untz.find_index{|q2| q2[0]==q}][13][0]!=nil}
+                  tmtmp="#{tmtmp.join(', ')}, #{tmtmp2.join(', ')}".split(', ')
+                end
+              end
+              if tmtmp.length==0 && sklz2[mmm][i-1].include?('<')
+                sklz2[mmm][i]="#{sklz2[mmm][i]}<#{sklz2[mmm][i-1].split('<')[1].gsub("  \u00B7  ",'')}"
+              elsif tmtmp.length==0
+              elsif tmtmp[0]==@units[j][0] && tmtmp.length==1
                 sklz2[mmm][i]="#{sklz2[mmm][i]}<:Arena_Crown:490334177124810772>"
                 ftrtoggles[1]=true
               else
