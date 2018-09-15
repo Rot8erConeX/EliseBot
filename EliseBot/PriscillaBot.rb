@@ -1223,7 +1223,7 @@ def crack_orbs(bot,event,e,user,list) # used by the `summon` command to wait for
 end
 
 def normalize(str) # used by the majority of commands that accept input, to replace all non-ASCII characters with their ASCII counterparts
-  str=str.gsub(/\s+/,' ').gsub(/[[:space:]]+/,' ').gsub(/[[:cntrl:]]/,' ').gsub('``','')
+  str=str.gsub(/\s+/,' ').gsub(/[[:space:]]+/,' ').gsub(/[[:cntrl:]]/,' ').gsub("``",'')
   str=str.gsub("\u2019","'").gsub("`","'").gsub("\u2018","'")
   str=str.gsub("\u{1F1E6}","A").gsub("\u{1F1E7}","B").gsub("\u{1F1E8}","C").gsub("\u{1F1E9}","D").gsub("\u{1F1EA}","E").gsub("\u{1F1EB}","F").gsub("\u{1F1EC}","G").gsub("\u{1F1ED}","H").gsub("\u{1F1EE}","I").gsub("\u{1F1EF}","J").gsub("\u{1F1F0}","K").gsub("\u{1F1F1}","L").gsub("\u{1F1F2}","M").gsub("\u{1F1F3}","N").gsub("\u{1F1F4}","O").gsub("\u{1F1F5}","P").gsub("\u{1F1F6}","Q").gsub("\u{1F1F7}","R").gsub("\u{1F1F8}","S").gsub("\u{1F1F9}","T").gsub("\u{1F1FA}","U").gsub("\u{1F1FB}","V").gsub("\u{1F1FC}","W").gsub("\u{1F1FD}","X").gsub("\u{1F1FE}","Y").gsub("\u{1F1FF}","Z")
   str=str.gsub("\u{1F170}",'A').gsub("\u{1F171}",'B').gsub("\u{1F18E}",'AB').gsub("\u{1F191}",'CL').gsub("\u2B55",'O').gsub("\u{1F17E}",'O').gsub("\u{1F198}",'SOS')
@@ -5196,6 +5196,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
             if tmp2[6]!='-' && tmp2[6].split(', ').include?(@units[j][0])
               sklz2[mmm][i]="#{sklz2[mmm][i]}<:Prf_Sparkle:490307608973148180>"
               ftrtoggles[0]=true
+            elsif !@units[j][13][0].nil?
             else
               tmtmp=tmp2[10].reject{|q| q=='-' || q[0,4]=='All '}.join(', ').split(', ').reject{|q| untz[untz.find_index{|q2| q2[0]==q}][13][0]!=nil}
               if tmtmp[0]==@units[j][0] && tmtmp.length==1
@@ -5317,7 +5318,7 @@ def remove_format(s,format)
 end
 
 def sever(str,sklz=false)
-  str="#{str.split('/').join(' / ')} ``"
+  str="#{str.split('/').join(' / ')}#{" ``" if ['+','-','*'].include?(str[str.length-1,1])}"
   s=str.split(' ').join(' ')
   k=str.split('*')
   k2=1
@@ -5441,7 +5442,6 @@ def get_group(name,event)
         b.push(u2[j].gsub('Lavatain','Laevatein')) unless b.include?(u2[j]) || u2[j].include?('-') || !has_any?(g, untz[untz.find_index{|q| q[0]==u2[j]}][13][0])
       end
     end
-    puts b
     return ['Dancer/Singer',b]
   elsif ['braveheroes','brave','cyl'].include?(name.downcase)
     l=untz.reject{|q| !has_any?(g, q[13][0]) || !q[0].include?('(Brave)')}
@@ -7525,14 +7525,12 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
   if ['f?','e?','h?'].include?(str1.downcase[0,2]) || ['feh!','feh?'].include?(str1.downcase[0,4])
     s=s[2,s.length-2] if ['f?','e?','h?'].include?(str1.downcase[0,2])
     s=s[4,s.length-4] if ['feh!','feh?'].include?(str1.downcase[0,4])
-    puts s
     a=s.split(' ')
     a.shift if all_commands(true).include?(a[0]) || (['f?','e?','h?'].include?(a[0].downcase[0,2]) && all_commands(true).include?(a[0][2,a[0].length-2])) || (['feh?','feh!'].include?(a[0].downcase[0,4]) && all_commands(true).include?(a[0][4,a[0].length-4]))
     str1=a.join(' ').gsub('!','')
   elsif ['f','e','h'].include?(str1.downcase[0,1]) || ['feh!','feh?'].include?(str1.downcase[0,3])
     s=s[1,s.length-1] if ['f','e','h'].include?(str1.downcase[0,1])
     s=s[3,s.length-3] if ['feh','feh'].include?(str1.downcase[0,3])
-    puts s
     a=s.split(' ')
     a.shift if all_commands(true).include?(a[0]) || (['f','e','h'].include?(a[0].downcase[0,1]) && all_commands(true).include?(a[0][1,a[0].length-1])) || (['feh','feh'].include?(a[0].downcase[0,3]) && all_commands(true).include?(a[0][3,a[0].length-3]))
     str1=a.join(' ').gsub('!','')
@@ -10551,7 +10549,6 @@ def phase_study(event,name,bot,weapon=nil)
   end
   unless weapon.nil? || weapon=='-'
     tags=zzzl[11].split(', ')
-    puts tags
     for i in 0...tags.length
       if tags[i][0,1]=='(' && tags[i][3,1]==')'
         if tags[i][1,2]=='cP'
