@@ -5207,7 +5207,15 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
                 end
               end
               if tmtmp.length==0 && sklz2[mmm][i-1].include?('<')
-                sklz2[mmm][i]="#{sklz2[mmm][i]}<#{sklz2[mmm][i-1].split('<')[1].gsub("  \u00B7  ",'')}"
+                tmtmp2=tmp2[10].reject{|q| q=='-'}.join(', ').split(', ')
+                for i2 in 0...tmtmp2.length
+                  if tmtmp2[i2][0,4]=='All '
+                  elsif untz[untz.find_index{|q2| q2[0]==tmtmp2[i2]}][13][0]!=nil
+                    tmtmp2[i2]=nil
+                  end
+                end
+                tmtmp2.compact!
+                sklz2[mmm][i]="#{sklz2[mmm][i]}<#{sklz2[mmm][i-1].split('<')[1].gsub("  \u00B7  ",'')}" if tmtmp2.length==0
               elsif tmtmp.length==0
               elsif tmtmp[0]==@units[j][0] && tmtmp.length==1
                 sklz2[mmm][i]="#{sklz2[mmm][i]}<:Arena_Crown:490334177124810772>"
