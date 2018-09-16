@@ -4916,16 +4916,6 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       create_embed(event,'',str[i],0x688C68) unless i==0
     end
   end
-  if skill[0][0,15]=='Wrathful Staff '
-    p=''
-    p="\nSince #{bot.user(170070293493186561).distinct} is a fun-sucker, I guess I'll mention other healers.  It's still monsterous to feed Genny to them.  Almost more so, since I'm one of the healers who do the most attacking." if !event.server.nil? && !bot.user(170070293493186561).on(event.server.id).nil?
-    p="\nSince you're a fun-sucker, I guess I'll mention other healers.  It's still monsterous to feed Genny to them.  Almost more so, since I'm one of the healers who do the most attacking." if event.user.id==206993446223872002
-    event.respond "#{"#{event.user.mention}\n" unless event.user.id==206993446223872002}Anyone who feeds me a Genny is a monster. <:nobully:443331186618793984> It's not my fault the game mechanics prevent me from protesting!\nHeck, now that the Weapon Refinery exists, you can just give my staff the Wrathful Mode upgrade, it pairs well with my high Magic stat.\nOf course, if you *must* give me the B skill, getting rid of Veronica is the better option.  She *is* our enemy, after all.  She *says* she's from a different Outrealm, but does that really make a difference?#{p}"
-  elsif skill[0][0,15]=='Dazzling Staff ' && ((event.server.nil? && event.user.id==206993446223872002) || (!event.server.nil? && !bot.user(170070293493186561).on(event.server.id).nil?))
-    g=get_markers(event)
-    p=unitz.reject{|q| !has_any?(g, q[13][0]) || q[12].gsub('*','').split(', ')[0]!='Lyn'}.uniq
-    event.respond "Go ahead, give the skill to whoever you want.  There's #{p} Lyns in the game, who would miss one?"
-  end
 end
 
 def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=false)
