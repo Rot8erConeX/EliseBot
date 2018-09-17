@@ -127,7 +127,7 @@ Kagero(Spring)\Colorless, Dagger\ \Flier\5, 8, 8, 2, 6\36, 35, 34, 18, 27\cuboon
 Kana(F)\Green, Dragon\ \Infantry\6, 6, 8, 8, 5\40, 30, 34, 33, 26\Miwabe Sakura\Eden Riegel as Claudia Lenz\Satou Satomi\5p\F\FE14\*Kana, F
 Kana(M)\Blue, Dragon\ \Infantry\6, 6, 8, 7, 6\40, 31, 33, 31, 29\kawasumi\Sandy Fox\Shimazaki Nobunaga\3g4g4g\M\FE14\*Kana, M
 Karel\Red, Blade\ \Infantry\9, 6, 8, 5, 3\47, 30, 35, 25, 20\Kita Senri\Bryce Papenbrook\Majima Junji\5p\M\FE7, FE6\Karel
-Karla\Red, Blade\ \Infantry\7, 9, 10, 4, 3\42, 35, 40, 23, 22\Kita Senri\Allegra Clarke\\5p\F\FE7\Karla
+Karla\Red, Blade\ \Infantry\7, 9, 10, 4, 3\42, 35, 40, 23, 22\Kita Senri\Allegra Clark\\5p\F\FE7\Karla
 Katarina\Red, Tome, Fire\ \Infantry\4, 8, 8, 1, 7\34, 32, 34, 15, 32\kaya8\Kira Buckland\Yuuki Kana\5p\F\FE12\Katarina
 Kaze\Colorless, Dagger\ \Infantry\4, 7, 8, 2, 8\34, 30, 36, 17, 34\Lack\Xander Mobus\Ono Daisuke\3q4q3p4p3q, Scattered Fangs\M\FE14\Kaze
 Kiran\Purple, Summon Gun\ \Summoning Gates\0, 0, 0, 0, 0\0, 0, 0, 0, 0\\>Player<\>Player<\1y\P\FEH\Kiran

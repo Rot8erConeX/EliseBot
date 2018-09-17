@@ -1,6 +1,6 @@
 Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
 Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu
-Alfonse\Arden\Black_Knight\Lissa\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
+Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
 5\10\Resistance\Defense\S
@@ -23,11 +23,11 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Breath of Life 3
 
 Celica
-5\0\HP\Speed\-
+5\1\HP\Resistance\-
 Fire\Elfire\Bolganone\Ragnarok\~~Ragnarok (+) Effect Mode~~
 Draw Back
 Chilling Wind\Iceberg
-Death Blow 1\Death Blow 2\Death Blow 3
+Death Blow 1\Swift Sparrow 1\Swift Sparrow 2
 Renewal 1\Renewal 2\Renewal 3
 Spur Def 1\Spur Def 2\Spur Def 3
 Hardy Bearing 3
@@ -103,11 +103,11 @@ Def Ploy 1\Def Ploy 2\Def Ploy 3
 Iote's Shield
 
 Ethlyn
-4\0\ \ \-
-Assault\Fear\~~Fear+~~
-Heal\Mend\Physic\~~Physic+~~
+5\1\ \ \-
+Assault\Fear\Fear+\~~Fear+ (+) Dazzling Mode~~
+Heal\Mend\Physic\Physic+
 Imbue\Heavenly Light
-Spd/Def Bond 1\Spd/Def Bond 2\~~Spd/Def Bond 3~~
+Spd/Def Bond 1\Spd/Def Bond 2\Spd/Def Bond 3
 Live to Serve 1\Live to Serve 2\Live to Serve 3
 Spur Res 1\Spur Res 2
 Spur Spd 3
