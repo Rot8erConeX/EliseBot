@@ -3271,6 +3271,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
+  puts name
   blessing=[] if name != 'Robin' && untz[untz.find_index{|q| q[0]==name}][2][0].length>1
   blessing.compact!
   stat_skills=make_stat_skill_list_1(name,event,args)
@@ -7623,17 +7624,18 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       return [str,['Lucina(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Lucina(Glorious)','Lucina(Brave)'],[str]]
-  elsif /(eirika|eirik|eiriku|erika)/ =~ str1
+  elsif /(eirika|eirik|eiriku|erika|eirica)/ =~ str1
     str='eirik'
     str='eiriku' if str2.include?('eiriku')
     str='eirika' if str2.include?('eirika')
+    str='eirica' if str2.include?('eirica')
     str='erika' if str2.include?('erika')
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?('bonds') || str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?("#{str}b") || str2.include?("b#{str}") || str2.include?("fb")
       return [str,['Eirika(Bonds)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","bonds#{str}","b#{str}","fb#{str}","#{str}bonds","#{str}b","#{str}fb"]]
-    elsif str2.include?('memories') || str2.include?("#{str}m") || str2.include?("m#{str}") || str2.include?("sm") || str2.include?("mage#{str}") || str2.include?("#{str}mage") || str2.include?("#{str}2")
-      return [str,['Eirika(Memories)'],["memories#{str}","mage#{str}","m#{str}","sm#{str}","#{str}memories","#{str}mage","#{str}m","#{str}sm","#{str}2"]]
+    elsif str2.include?('memories') || str2.include?("#{str}m") || str2.include?("m#{str}") || str2.include?("sm") || str2.include?("mage#{str}") || str2.include?("#{str}mage") || str2.include?("#{str}2") || str2.include?('eiricav')
+      return [str,['Eirika(Memories)'],["memories#{str}","mage#{str}","m#{str}","sm#{str}","#{str}memories","#{str}mage","#{str}m","#{str}sm","#{str}2",'eiricav']]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Eirika(Bonds)','Eirika(Memories)'],[str]]
