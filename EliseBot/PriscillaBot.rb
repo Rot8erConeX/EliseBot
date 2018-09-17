@@ -4599,7 +4599,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     else
       str="#{str}\n\n**This skill can be applied to units in the `stats` command and any derivatives.**\nInclude the word \"#{statskill[0].gsub('/','').gsub(' ','')}\" in your message\n*Skill type:* #{statskill[3]}"
     end
-    for i4 in 0...statskill[4].length
+    for i4 in 0...5
       if statskill[4][i4]==0
       elsif statskill[3]=='Stat-Nerfing'
         statskill[4][i4]="-#{statskill[4][i4]}"
@@ -4607,7 +4607,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         statskill[4][i4]="+#{statskill[4][i4]}"
       end
     end
-    statskill[4]=statskill[4][0,5].join('/')
+    statskill[4]="#{statskill[4][0,5].join('/')}#{"\nBin adjusted to ##{statskill[4][5]/5} (BST range #{statskill[4][5]}-#{statskill[4][5]+4}) minimum" if statskill[4].length>5}"
     if statskill[4]=='0/0/0/0/0'
       str="#{str}\n~~*Stat alterations*~~ *Complex interactions with other skills*"
     else
