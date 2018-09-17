@@ -7265,8 +7265,8 @@ end
 def comparison(event,args,bot)
   event.channel.send_temporary_message('Calculating data, please wait...',3)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
-  s1=args.join(' ').gsub(',','').gsub('/','')
-  s2=args.join(' ').gsub(',','').gsub('/','')
+  s1=args.join(' ').gsub(',','').gsub('/','').downcase.gsub('laevatein','lavatain')
+  s2=args.join(' ').gsub(',','').gsub('/','').downcase.gsub('laevatein','lavatain')
   for i in 0...args.length
     unless s1.split(' ').nil? || s1.gsub(' ','').length<=0
       k=find_name_in_string(event,s1,1)
@@ -12076,8 +12076,8 @@ bot.command([:bst, :BST]) do |event, *args|
   return nil if overlap_prevent(event)
   event.channel.send_temporary_message('Calculating data, please wait...',8)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
-  s1=args.join(' ').gsub(',','').gsub('/','')
-  s2=args.join(' ').gsub(',','').gsub('/','')
+  s1=args.join(' ').gsub(',','').gsub('/','').downcase.gsub('laevatein','lavatain')
+  s2=args.join(' ').gsub(',','').gsub('/','').downcase.gsub('laevatein','lavatain')
   for i in 0...args.length
     unless s1.split(' ').nil? || s1.gsub(' ','').length<=0
       k=find_name_in_string(event,s1,1)
