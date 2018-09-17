@@ -3051,7 +3051,7 @@ end
 def skill_tier(name,event) # used by the "used a non-plus version of a weapon that has a + form" tooltip in the stats command to figure out the tier of the weapon
   data_load()
   s=@skills.map{|q| q}
-  j=s[s.find_index{|q| q[0]==name}]
+  j=s[s.find_index{|q| q[0]==name.gsub('Laevatein','Bladeblade')}]
   return 1 if j[8]=='-'
   return 1+skill_tier(j[8].gsub('*','').split(' or ')[0],event) if j[8].include?(' or ')
   return 1+skill_tier(j[8].gsub('*','').split(', ')[0],event) if j[8].include?(', ')
@@ -8052,7 +8052,7 @@ end
 def weapon_legality(event,name,weapon,refinement='-',recursion=false)
   return '-' if weapon=='-'
   u=@units[@units.find_index{|q| q[0]==name}]
-  w=@skills[@skills.find_index{|q| q[0]==weapon}]
+  w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
   if weapon=='Falchion'
     if ['FE13'].include?(u[11][0])
       weapon='Falchion (Awakening)'
@@ -15980,7 +15980,7 @@ def next_holiday(bot,mode=0)
       if @shardizard.zero?
         bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[0][3]}.png",'r')) rescue nil
       end
-      @avvie_data=[k[0][3],k[0][4],k[0][5]]
+      @avvie_info=[k[0][3],k[0][4],k[0][5]]
       t2= Time.now + 18*60*60
       t=Time.now
       @scheduler.at "#{t2.year}/#{t2.month}/#{t2.day} 0000" do
@@ -15995,7 +15995,7 @@ def next_holiday(bot,mode=0)
         if @shardizard.zero?
           bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[k.length-1][3]}.png",'r')) rescue nil
         end
-        @avvie_data=[k[k.length-1][3],k[k.length-1][4],k[k.length-1][5]]
+        @avvie_info=[k[k.length-1][3],k[k.length-1][4],k[k.length-1][5]]
         t2= Time.now + 18*60*60
         t=Time.now
         @scheduler.at "#{t2.year}/#{t2.month}/#{t2.day} 0000" do
@@ -16014,7 +16014,7 @@ def next_holiday(bot,mode=0)
         if @shardizard.zero?
           bot.profile.avatar=(File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{k[j][3]}.png",'r')) rescue nil
         end
-        @avvie_data=[k[j][3],k[j][4],k[j][5]]
+        @avvie_info=[k[j][3],k[j][4],k[j][5]]
         t=Time.now
         t-=60*60*6
         @scheduler.at "#{t.year}/#{t.month}/#{t.day} #{div[k.length][j+1][0].to_s.rjust(2, '0')}#{div[k.length][j+1][1].to_s.rjust(2, '0')}" do
@@ -16083,6 +16083,7 @@ bot.ready do |event|
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
   bot.game='Fire Emblem Heroes' if [0,4].include?(@shardizard)
   if @shardizard==4
+    next_holiday(bot)
     bot.user(bot.profile.id).on(285663217261477889).nickname='EliseBot (Debug)'
     bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/DebugElise.png','r'))
   else
