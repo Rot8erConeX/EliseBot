@@ -3080,6 +3080,15 @@ end
 def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,weapon='-',expandedmode=false,modemode=false) # used by the stats command and any derivatives to display which skills are affecting the stats being displayed
   blessing=[] if blessing.nil?
   stat_skills=[] if stat_skills.nil?
+  for i in 0...stat_skills.length
+    if stat_skills[i][0,20]=='Color Duel Movement '
+      if @units[j][1][0]=='Gold'
+        stat_skills[i]=stat_skills[i].gsub('Color',@units[j][1][0][0,2]).gsub('Movement',@units[j][3].gsub('Flier','Flying'))
+      else
+        stat_skills[i]=stat_skills[i].gsub('Color',@units[j][1][0][0,1]).gsub('Movement',@units[j][3].gsub('Flier','Flying'))
+      end
+    end
+  end
   k=[]
   for i in 0...stat_skills.length
     k2=-1
@@ -3271,7 +3280,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
-  puts name
   blessing=[] if name != 'Robin' && untz[untz.find_index{|q| q[0]==name}][2][0].length>1
   blessing.compact!
   stat_skills=make_stat_skill_list_1(name,event,args)
@@ -3524,6 +3532,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     rarity=10000000
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
+  u40x2=get_stats(event,name,40,rarity,0,boon,bane)
   u1=get_stats(event,name,1,rarity,merges,boon,bane)
   j=find_unit(name,event)
   atk='<:StrengthS:467037520484630539> Attack'
@@ -3579,7 +3588,23 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   if args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth') || expandedmode
     flds.push(["**Growth Rates**",["<:HP_S:467037520538894336> HP: #{micronumber(u40[6])} / #{u40[6]*5+20}%","#{atk}: #{micronumber(u40[7])} / #{u40[7]*5+20}%","<:SpeedS:467037520534962186> Speed: #{micronumber(u40[8])} / #{u40[8]*5+20}%","<:DefenseS:467037520249487372> Defense: #{micronumber(u40[9])} / #{u40[9]*5+20}%","<:ResistanceS:467037520379641858> Resistance: #{micronumber(u40[10])} / #{u40[10]*5+20}%","","\u0262\u1D18\u1D1B #{micronumber(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])} / GRT: #{(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])*5+100}%"]])
   end
-  flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u40[3]}","<:DefenseS:467037520249487372> Defense: #{u40[4]}","<:ResistanceS:467037520379641858> Resistance: #{u40[5]}","","BST: #{u40[16]}"]])
+  bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5)*5
+  if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
+    lookout=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+      lookout=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+        lookout.push(eval line)
+      end
+      lookout=lookout.reject{|q| !['Stat-Affecting'].include?(q[3][0,q[3].length-2])}
+    end
+    for i in 0...stat_skills.length
+      unless lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5].nil?
+        bin=[bin,lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5]].max
+      end
+    end
+  end
+  flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u40[3]}","<:DefenseS:467037520249487372> Defense: #{u40[4]}","<:ResistanceS:467037520379641858> Resistance: #{u40[5]}","","BST: #{u40[16]}","Bin: #{bin}-#{bin+4}"]])
   superbaan=['','','','','','']
   if boon=="" && bane=="" && !mu && ((stat_skills_2.length<=0 && !wl.include?('~~')) || flds.length==3)
     for i in 6...11
@@ -4582,7 +4607,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         statskill[4][i4]="+#{statskill[4][i4]}"
       end
     end
-    statskill[4]=statskill[4].join('/')
+    statskill[4]=statskill[4][0,5].join('/')
     if statskill[4]=='0/0/0/0/0'
       str="#{str}\n~~*Stat alterations*~~ *Complex interactions with other skills*"
     else
@@ -9059,7 +9084,7 @@ def list_unit_aliases(event,args,bot,mode=0)
       n=n.reject{|q| q[2].nil?} if mode==1
       unless event.server.nil?
         n=n.reject{|q| !q[2].nil? && !q[2].include?(event.server.id)}
-        if n.length>25
+        if n.length>25 && !safe_to_spam?(event)
           event.respond "There are so many aliases that I don't want to spam the server.  Please use the command in PM."
           return nil
         end
