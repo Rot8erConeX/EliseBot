@@ -21,7 +21,7 @@ ENV['TZ'] = 'America/Chicago'
 
 # The bot's token is basically their password, so is censored for obvious reasons
 if @shardizard==4
-  bot = Discordrb::Commands::CommandBot.new token: '>Debug Token<', client_id: >Debug ID<, prefix: @prefix
+  bot = Discordrb::Commands::CommandBot.new token: '>Debug Token<', client_id: 431895561193390090, prefix: @prefix
 else
   bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: @shardizard, num_shards: 4, client_id: 312451658908958721, prefix: @prefix
 end
