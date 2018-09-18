@@ -6991,7 +6991,16 @@ def sort_units(bot,event,args=[])
   u=@units.map{|q| q}
   k=k2.reject{|q| !has_any?(g, q[13][0])}.uniq if k2.is_a?(Array)
   k=u.reject{|q| !has_any?(g, q[13][0])}.sort{|a,b| a[0]<=>b[0]}.uniq unless k2.is_a?(Array)
-  if k.length>=u.reject{|q| !has_any?(g, q[13][0])}.length && !safe_to_spam?(event)
+  t=0
+  b=0
+  for i in 0...args.length
+    if args[i].downcase[0,3]=='top' && t.zero?
+      t=[args[i][3,args[i].length-3].to_i,k.length].min
+    elsif args[i].downcase[0,6]=='bottom' && b.zero?
+      b=[args[i][6,args[i].length-6].to_i,k.length].min
+    end
+  end
+  if k.length>=u.reject{|q| !has_any?(g, q[13][0])}.length && !safe_to_spam?(event) && t==0 && b==0
     event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
     return nil
   end
@@ -7006,15 +7015,6 @@ def sort_units(bot,event,args=[])
       k[i][5][5]=k[i][5][0]+k[i][5][1]+k[i][5][2]+k[i][5][3]+k[i][5][4]
       k[i][5][6]=[k[i][5][3],k[i][5][4]].min
       k[i][5][7]=k[i][5][3]-k[i][5][4]
-    end
-  end
-  t=0
-  b=0
-  for i in 0...args.length
-    if args[i].downcase[0,3]=='top' && t.zero?
-      t=[args[i][3,args[i].length-3].to_i,k.length].min
-    elsif args[i].downcase[0,6]=='bottom' && b.zero?
-      b=[args[i][6,args[i].length-6].to_i,k.length].min
     end
   end
   k=k.reject{|q| !q[13][0].nil?} if t>0 || b>0
