@@ -49,7 +49,7 @@ bot.gateway.check_heartbeat_acks = false
 @zero_by_four=[0,0,0,'']
 @headpats=[0,0,0]
 @rarity_stars=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>',
-               '<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>','<:Icon_Rarity_5:448266417553539104>']
+               '<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>','<:Icon_Rarity_6:491487784650145812>']
 @summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,
                  393775173095915521,341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,297459718249512961,
                  283833293894582272,305889949574496257,214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,
@@ -57,27 +57,27 @@ bot.gateway.check_heartbeat_acks = false
                  337397338823852034,446111983155150875,295001062790660097,328109510449430529,483437489021911051]
 @summon_rate=[0,0,3]
 @spam_channels=[]
-@mods=[[ 0, 0, 0, 0, 0, 0],
-       [ 1, 1, 1, 1, 1, 1],
-       [ 2, 3, 3, 3, 3, 4],
-       [ 4, 4, 5, 5, 6, 6],
-       [ 5, 6, 7, 7, 8, 8], # this is a translation of the graphic displayed in the "growths" command.
-       [ 7, 8, 8, 9,10,10],
-       [ 8, 9,10,11,12,13],
-       [10,11,12,13,14,15],
-       [12,13,14,15,16,17],
-       [13,14,15,17,18,19],
-       [15,16,17,19,20,22],
-       [16,18,19,21,22,24],
-       [18,19,21,23,24,26],
-       [19,21,23,25,26,28],
-       [21,23,25,27,28,30],
-       [23,24,26,29,31,33],
-       [24,26,28,31,33,35],
-       [26,28,30,33,35,37],
-       [27,30,32,35,37,39],
-       [29,31,34,37,39,42],
-       [30,33,36,39,41,44]]
+@mods=[[ 0, 0, 0, 0, 0, 0, 0],
+       [ 1, 1, 1, 1, 1, 1, 2],
+       [ 2, 3, 3, 3, 3, 4, 4],
+       [ 4, 4, 5, 5, 6, 6, 7],
+       [ 5, 6, 7, 7, 8, 8, 9], # this is a translation of the graphic displayed in the "growths" command.
+       [ 7, 8, 8, 9,10,10,11],
+       [ 8, 9,10,11,12,13,14],
+       [10,11,12,13,14,15,16],
+       [12,13,14,15,16,17,18],
+       [13,14,15,17,18,19,21],
+       [15,16,17,19,20,22,23],
+       [16,18,19,21,22,24,25],
+       [18,19,21,23,24,26,28],
+       [19,21,23,25,26,28,30],
+       [21,23,25,27,28,30,32],
+       [23,24,26,29,31,33,35],
+       [24,26,28,31,33,35,37],
+       [26,28,30,33,35,37,39],
+       [27,30,32,35,37,39,42],
+       [29,31,34,37,39,42,44],
+       [30,33,36,39,41,44,47]]
 @natures=[['Gentle','Resistance','Defense'], # this is a list of all the nature names that can be displayed, with the affected stats
           ['Bold','Defense','Attack'],
           ['Timid','Speed','Attack'],
@@ -969,6 +969,11 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # used by m
     sttz[i]=1 if boon.downcase==sttz[i]
     sttz[i]=-1 if bane.downcase==sttz[i]
     sttz[i]=0 if sttz[i].is_a?(String)
+  end
+  if rarity>=@mods[0].length
+    for i in 0...@mods.length
+      @mods[i][rarity]=(0.39*((((i-4)*5+20)*(0.79+(0.07*rarity))).to_i)).to_i
+    end
   end
   if rarity<@max_rarity_merge[0]+1 && rarity%2==1 && merges%5==0 && f[4].reject{|q| q==q.to_i}.length.zero?
     if level==40
@@ -3180,10 +3185,11 @@ def display_stars(rarity,merges,support='-',expandedmode=false) # used to determ
   if merges==@max_rarity_merge[1]
     emo='<:Icon_Rarity_4p10:448272714210476033>' if rarity==4
     emo='<:Icon_Rarity_5p10:448272715099406336>' if rarity==5
+    emo='<:Icon_Rarity_6p10:491487784822112256>' if rarity>5
   end
   emo='<:Icon_Rarity_S:448266418035621888>' unless support=='-'
-  emo='<:Icon_Rarity_Sp10:448272715653054485>' if rarity==5 && merges==@max_rarity_merge[1] && support != '-'
-  return "**#{rarity}-star#{" +#{merges}" unless merges.zero? && !expandedmode}**#{"  \u00B7  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}#{"\nNo Summoner Support" if support =='-' && expandedmode}" if rarity>@rarity_stars.length-1
+  emo='<:Icon_Rarity_Sp10:448272715653054485>' if rarity>=5 && merges==@max_rarity_merge[1] && support != '-'
+  return "**#{rarity}-star#{" +#{merges}" unless merges.zero? && !expandedmode}**#{"  \u00B7  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}#{"\nNo Summoner Support" if support =='-' && expandedmode}" if rarity>@rarity_stars.length
   return "#{emo*rarity}#{"**+#{merges}**" unless merges.zero? && !expandedmode}#{"  \u00B7  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}#{"\nNo Summoner Support" if support =='-' && expandedmode}"
 end
 
@@ -8289,13 +8295,13 @@ def add_number_to_string(a,b)
 end
 
 def create_summon_list(clr)
-  p=[['1<:Icon_Rarity_1:448266417481973781> exclusive',[]],['1<:Icon_Rarity_1:448266417481973781>-2<:Icon_Rarity_2:448266417872044032>',[]],['2<:Icon_Rarity_2:448266417872044032> exclusive',[]],['2<:Icon_Rarity_2:448266417872044032>-3<:Icon_Rarity_3:448266417934958592>',[]],['3<:Icon_Rarity_3:448266417934958592> exclusive',[]],['3<:Icon_Rarity_3:448266417934958592>-4<:Icon_Rarity_4:448266418459377684>',[]],['4<:Icon_Rarity_4:448266418459377684> exclusive',[]],['4<:Icon_Rarity_4:448266418459377684>-5<:Icon_Rarity_5:448266417553539104>',[]],['5<:Icon_Rarity_5:448266417553539104> exclusive',[]],['Other',[]]]
+  p=[['1<:Icon_Rarity_1:448266417481973781> exclusive',[]],['1<:Icon_Rarity_1:448266417481973781>-2<:Icon_Rarity_2:448266417872044032>',[]],['2<:Icon_Rarity_2:448266417872044032> exclusive',[]],['2<:Icon_Rarity_2:448266417872044032>-3<:Icon_Rarity_3:448266417934958592>',[]],['3<:Icon_Rarity_3:448266417934958592> exclusive',[]],['3<:Icon_Rarity_3:448266417934958592>-4<:Icon_Rarity_4:448266418459377684>',[]],['4<:Icon_Rarity_4:448266418459377684> exclusive',[]],['4<:Icon_Rarity_4:448266418459377684>-5<:Icon_Rarity_5:448266417553539104>',[]],['5<:Icon_Rarity_5:448266417553539104> exclusive',[]],['5<:Icon_Rarity_5:448266417553539104>-6<:Icon_Rarity_6:491487784650145812>',[]],['6<:Icon_Rarity_6:491487784650145812> exclusive',[]],['Other',[]]]
   for i in 0...clr.length
     if clr[i][9][0].include?('1p')
       if clr[i][9][0].include?('2p')
         p[1][1].push(clr[i][0])
       elsif clr[i][9][0].include?('3p') || clr[i][9][0].include?('4p') || clr[i][9][0].include?('5p')
-        p[9][0][1].push("#{clr[i][0]} - 1#{'/3' if clr[i][9][0].include?('3p')}#{'/4' if clr[i][9][0].include?('4p')}#{'/5' if clr[i][9][0].include?('5p')}<:Icon_Rarity_S:448266418035621888>")
+        p[11][0][1].push("#{clr[i][0]} - 1#{'/3' if clr[i][9][0].include?('3p')}#{'/4' if clr[i][9][0].include?('4p')}#{'/5' if clr[i][9][0].include?('5p')}#{'/6' if clr[i][9][0].include?('6p')}<:Icon_Rarity_S:448266418035621888>")
       else
         p[0][1].push(clr[i][0])
       end
@@ -8303,26 +8309,34 @@ def create_summon_list(clr)
       if clr[i][9][0].include?('3p')
         p[3][1].push(clr[i][0])
       elsif clr[i][9][0].include?('4p') || clr[i][9][0].include?('5p')
-        p[9][0][1].push("#{clr[i][0]} - 2#{'/4' if clr[i][9][0].include?('4p')}#{'/5' if clr[i][9][0].include?('5p')}<:Icon_Rarity_S:448266418035621888>")
+        p[11][0][1].push("#{clr[i][0]} - 2#{'/4' if clr[i][9][0].include?('4p')}#{'/5' if clr[i][9][0].include?('5p')}#{'/6' if clr[i][9][0].include?('6p')}<:Icon_Rarity_S:448266418035621888>")
       else
         p[2][1].push(clr[i][0])
       end
     elsif clr[i][9][0].include?('3p')
       if clr[i][9][0].include?('4p')
         p[5][1].push(clr[i][0])
-      elsif clr[i][9][0].include?('5p')
-        p[9][0][1].push("#{clr[i][0]} - 3/5<:Icon_Rarity_S:448266418035621888>")
+      elsif clr[i][9][0].include?('5p') || clr[i][9][0].include?('6p')
+        p[11][0][1].push("#{clr[i][0]} - 3#{'/5' if clr[i][9][0].include?('5p')}#{'/6' if clr[i][9][0].include?('6p')}<:Icon_Rarity_S:448266418035621888>")
       else
         p[4][1].push(clr[i][0])
       end
     elsif clr[i][9][0].include?('4p')
       if clr[i][9][0].include?('5p')
         p[7][1].push(clr[i][0])
+      elsif clr[i][9][0].include?('6p')
+        p[11][0][1].push("#{clr[i][0]} - 4#{'/6' if clr[i][9][0].include?('6p')}<:Icon_Rarity_S:448266418035621888>")
       else
         p[6][1].push(clr[i][0])
       end
     elsif clr[i][9][0].include?('5p')
-      p[8][1].push(clr[i][0])
+      if clr[i][9][0].include?('6p')
+        p[9][1].push(clr[i][0])
+      else
+        p[8][1].push(clr[i][0])
+      end
+    elsif clr[i][9][0].include?('6p')
+      p[10][1].push(clr[i][0])
     else
       p[9][0][1].push("#{clr[i][0]} - weird")
     end
@@ -9642,7 +9656,7 @@ def unit_study(event,name,bot,weapon=nil)
   rar=[]
   for i in 0...@max_rarity_merge[0]
     rx=@rarity_stars[i]*(i+1)
-    rx="#{i+1}-star" if i>4
+    rx="#{i+1}-star" if i>@rarity_stars.length-1
     rar.push([rx,r[i]]) if (lowest_rarity<=i+1 && ((boon=="" && bane=="") || i>=3)) || args.include?('full') || args.include?('rarities') || i==@max_rarity_merge[0]-1
   end
   pic=pick_thumbnail(event,j,bot)
