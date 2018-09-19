@@ -7862,7 +7862,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     return [str,['Kamui'],[str]] if str=='kamui' && find_unit('Kamui',event,true)>-1
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Corrin(M)','Corrin(F)'],[str]]
-  elsif /(morgan|marc|linfan)/ =~ str1
+  elsif /(morgan|marc)/ =~ str1 || (/linfan/ =~ str1 && !(/duelinfantry/ =~ str1))
     str='morgan'
     str='marc' if str2.include?('marc')
     str='linfan' if str2.include?('linfan')
