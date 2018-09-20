@@ -8087,6 +8087,7 @@ def weapon_legality(event,name,weapon,refinement='-',recursion=false)
   return '-' if weapon=='-'
   u=@units[@units.find_index{|q| q[0]==name}]
   w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
+  return '-' if w[0][0,u[0].length].downcase==u[0].downcase && count_in(event.message.text.downcase.split(' '),u[0].downcase)<=1
   if weapon=='Falchion'
     if ['FE13'].include?(u[11][0])
       weapon='Falchion (Awakening)'
