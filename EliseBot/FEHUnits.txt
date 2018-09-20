@@ -100,7 +100,7 @@ Hector\Green, Blade\ \Armor\9, 8, 5, 8, 3\52, 36, 24, 37, 19\AKIRA\Patrick Seitz
 Hector(Brave)\Blue, Blade\ \Armor\7, 8, 4, 10, 6\48, 37, 22, 39, 28\Kita Senri\Patrick Seitz\Toriumi Kousuke\5p\M\FE7, FE6\Hector
 Hector(Marquess)\Green, Blade\Fire, Attack, 21/09/2018\Armor\7, 10, 4, 8, 6\47, 40, 23, 38, 26\Wada Sachiko\Patrick Seitz\Toriumi Kousuke\5s\M\FE7, FE6\Hector
 Hector(Valentines)\Green, Blade\ \Armor\8, 10, 4, 9, 4\50, 38, 21, 40, 24\Suekane Kumiko\Patrick Seitz\Toriumi Kousuke\5s\M\FE7, FE6\Hector
-Helbindi\Green, Blade\ \Infantry\8, 8, 2, 8, 7\44, 35, 18, 35, 31\Maeshima Shigeki\Raymond K. Essel\Nakai Kazuya\-\M\FEH\Helbindi
+Helbindi\Green, Blade\ \Infantry\8, 8, 2, 8, 7\44, 35, 18, 35, 31\Maeshima Shigeki\Raymond K. Essel\Nakai Kazuya\5p\M\FEH\Helbindi
 Henry\Red, Tome, Dark\ \Infantry\8, 4, 4, 7, 5\45, 23, 22, 32, 25\Kusugi Toku\Bryce Papenbrook\Okamura Akemi\3p4p3qLU\M\FE13\Henry
 Henry(Halloween)\Green, Tome, Wind\ \Armor\5, 7, 7, 6, 7\36, 33, 34, 26, 36\Kusugi Toku\Bryce Papenbrook\Okamura Akemi\5s\M\FE13\Henry
 Hinata\Red, Blade\ \Infantry\8, 7, 5, 8, 3\47, 32, 24, 36, 18\Ueda Yumehito\Cam Clarke as Delem Donaldson\Ichiki Mitsuhiro\3p4p3qLU\M\FE14B\Hinata
@@ -133,9 +133,9 @@ Kaze\Colorless, Dagger\ \Infantry\4, 7, 8, 2, 8\34, 30, 36, 17, 34\Lack\Xander M
 Kiran\Purple, Summon Gun\ \Summoning Gates\0, 0, 0, 0, 0\0, 0, 0, 0, 0\\>Player<\>Player<\1y\P\FEH\Kiran
 Klein\Colorless, Bow\ \Infantry\6, 6, 8, 3, 5\40, 31, 33, 20, 24\Tobi\Edward Bosco\Yuusuke Oota\3p4p\M\FE6\Klein
 Lachesis\Colorless, Healer\ \Infantry\6, 8, 4, 4, 6\39, 32, 25, 22, 30\Miwabe Sakura\Cristina Valenzuela\Oonishi Saori\3p4p\F\FE4\Lachesis
-Laegjarn\Red, Blade\ \Flier\7, 7, 8, 9, 2\41, 32, 36, 36, 17\Maeshima Shigeki\Alicia Stratten\Tamura Yukari\-\F\FEH\Laegjarn
+Laegjarn\Red, Blade\ \Flier\7, 7, 8, 9, 2\41, 32, 36, 36, 17\Maeshima Shigeki\Alicia Stratten\Tamura Yukari\5p\F\FEH\Laegjarn
 L'Arachel\Blue, Tome, Light\ \Cavalry\4, 7, 7, 2, 7\33, 33, 31, 17, 31\Konfuzi Kokon\Carrie Keranen\Nabatame Hitomi\4p5p\F\FE8\L'Arachel
-Lavatain\Red, Blade\ \Infantry\6, 8, 7, 8, 4\39, 37, 31, 34, 22\Maeshima Shigeki\Sarah Williams\Kugimiya Rie\-\F\FEH\Lavatain
+Lavatain\Red, Blade\ \Infantry\6, 8, 7, 8, 4\39, 37, 31, 34, 22\Maeshima Shigeki\Sarah Williams\Kugimiya Rie\5p\F\FEH\Lavatain
 Laslow\Red, Blade\ \Infantry\7, 8, 5, 7, 4\44, 35, 26, 30, 22\Suekane Kumiko\Mick Wingert\Kijima Ryuichi\3p4p3qLU\M\FE14C\Laslow
 Legault\Colorless, Dagger\ \Infantry\6, 7, 9, 4, 3\39, 31, 38, 24, 19\PenekoR\Christopher Bevins\\4p5p\M\FE7\Legault
 Legion\Green, Blade\ \Infantry\8, 8, 8, 4, 3\46, 36, 35, 22, 18\Nabe\Chris Smith\Tanzawa Teruyuki\3g4g4g3q4q\M\FE12\Legion
