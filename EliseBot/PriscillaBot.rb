@@ -10412,8 +10412,9 @@ def phase_study(event,name,bot,weapon=nil)
   unless n.nil?
     n=n[0] if atk=='<:StrengthS:467037520484630539> Strength'
     n=n[n.length-1] if atk=='<:MagicS:467043867611627520> Magic'
-    n=n.join(' / ') if ['<:StrengthS:467037520484630539> Attack','Freeze'].include?(atk)
+    n=n.join(' / ') if ['<:StrengthS:467037520484630539> Attack','<:FreezeS:467043868148236299> Freeze'].include?(atk)
   end
+  puts n.to_s
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
   spec_wpn=false
   if name=='Robin'
