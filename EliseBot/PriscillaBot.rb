@@ -6937,7 +6937,7 @@ def sort_units(bot,event,args=[])
   args=event.message.text.downcase.split(' ') if args.nil? || args.length.zero?
   event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
-  f=[0,0,0,0,0,0,0,0,0]
+  f=[0,0,0,0,0,0,0,0,0,0]
   supernatures=[]
   for i in 0...args.length # find stat names, retain the order in which they're listed.
     supernatures.push('+HP') if ['hpboon','healthboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
@@ -6959,6 +6959,7 @@ def sort_units(bot,event,args=[])
     v=6 if ['bst','base','total'].include?(args[i].downcase)
     v=7 if ['chill','frostbite','freeze','cold','frz','antifreeze','antifrz','frzprotect','lower','lowerdefres','lowerdefenseresistance','lowerdefenceresistance','lowerdef','lowerres','loweres'].include?(args[i].downcase)
     v=8 if ['photon','light','shine','defresdifference','defenseresistancedifference','defenceresistancedifference','defresdiff','defenseresistancediff','defenceresistancediff'].include?(args[i].downcase)
+    v=9 if ['bin','score','arena'].include?(args[i].downcase)
     if v>0 && !f.include?(v)
       v2=0
       for i2 in 0...f.length
@@ -7013,18 +7014,19 @@ def sort_units(bot,event,args=[])
   for i in 0...k.length # remove any units who don't have known stats yet
     k[i]=nil if k[i][5].nil? || k[i][5].max<=0
   end
-  s=['','HP','Attack','Speed','Defense','Resistance','BST','FrzProtect','Photon Points']
+  s=['','HP','Attack','Speed','Defense','Resistance','BST','FrzProtect','Photon Points','Bin']
   k.compact!
   k=k.reject {|q| find_unit(q[0],event)<0}
-  if f.include?(6) || f.include?(7) || f.include?(8)
+  if f.include?(6) || f.include?(7) || f.include?(8) || f.include?(9)
     for i in 0...k.length
       k[i][5][5]=k[i][5][0]+k[i][5][1]+k[i][5][2]+k[i][5][3]+k[i][5][4]
       k[i][5][6]=[k[i][5][3],k[i][5][4]].min
       k[i][5][7]=k[i][5][3]-k[i][5][4]
+      k[i][5][8]=k[i][5][5]/5
     end
   end
   k=k.reject{|q| !q[13][0].nil?} if t>0 || b>0
-  k.sort! {|b,a| (supersort(a,b,5,f[0]-1)) == 0 ? ((supersort(a,b,5,f[1]-1)) == 0 ? ((supersort(a,b,5,f[2]-1)) == 0 ? ((supersort(a,b,5,f[3]-1)) == 0 ? ((supersort(a,b,5,f[4]-1)) == 0 ? ((supersort(a,b,5,f[5]-1)) == 0 ? ((supersort(a,b,5,f[6]-1)) == 0 ? ((supersort(a,b,5,f[7]-1)) == 0 ? (supersort(a,b,0)) : (supersort(a,b,5,f[7]-1))) : (supersort(a,b,5,f[6]-1))) : (supersort(a,b,5,f[5]-1))) : (supersort(a,b,5,f[4]-1))) : (supersort(a,b,5,f[3]-1))) : (supersort(a,b,5,f[2]-1))) : (supersort(a,b,5,f[1]-1))) : (supersort(a,b,5,f[0]-1))}
+  k.sort! {|b,a| (supersort(a,b,5,f[0]-1)) == 0 ? ((supersort(a,b,5,f[1]-1)) == 0 ? ((supersort(a,b,5,f[2]-1)) == 0 ? ((supersort(a,b,5,f[3]-1)) == 0 ? ((supersort(a,b,5,f[4]-1)) == 0 ? ((supersort(a,b,5,f[5]-1)) == 0 ? ((supersort(a,b,5,f[6]-1)) == 0 ? ((supersort(a,b,5,f[7]-1)) == 0 ? (((supersort(a,b,5,f[8]-1)) == 0 ? (supersort(a,b,0)) : (supersort(a,b,5,f[8]-1)))) : (supersort(a,b,5,f[7]-1))) : (supersort(a,b,5,f[6]-1))) : (supersort(a,b,5,f[5]-1))) : (supersort(a,b,5,f[4]-1))) : (supersort(a,b,5,f[3]-1))) : (supersort(a,b,5,f[2]-1))) : (supersort(a,b,5,f[1]-1))) : (supersort(a,b,5,f[0]-1))}
   m="Please note that the stats listed are for neutral-nature units without stat-affecting skills.\n"
   if f.include?(2)
     m="#{m}The Strength/Magic stat also does not account for weapon might.\n"
@@ -7066,6 +7068,8 @@ def sort_units(bot,event,args=[])
         k[i][5][f[j]-1]=0-k[i][5][f[j]-1]
         sf="Anti#{sf[0,1].downcase}#{sf[1,sf.length-1]}"
         ls.push("#{k[i][5][f[j]-1]} #{sfn}#{sf}")
+      elsif f[j]==9
+        ls.push("#{sf} ##{k[i][5][f[j]-1]} (#{k[i][5][f[j]-1]*5}-#{k[i][5][f[j]-1]*5+4})")
       elsif f[j]==8 && k[i][5][f[j]-1]>=5
         ls.push("*#{k[i][5][f[j]-1]} #{sfn}#{sf}*") if sf.length>0
       else
@@ -7081,10 +7085,10 @@ def sort_units(bot,event,args=[])
   elsif (f.include?(1) || f.include?(2) || f.include?(3) || f.include?(4) || f.include?(5)) && m2.join("\n").include?("(-)")
     m="#{m}\n(-) marks units for whom a bane would decrease a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.\n"
   end
-  if f.include?(7) || f.include?(8)
+  if f.include?(7) || f.include?(8) || f.include?(9)
     m="#{m}\nFrzProtect is the lower of the units' Defense and Resistance stats, used by dragonstones when attacking ranged units and by Felicia's Plate all the time." if f.include?(7)
     m="#{m}\nLight Brand deals +7 damage to units with at least 5 Photon Points." if f.include?(8)
-    m="#{m}\nThe order of units listed here can be affected by natures that affect a unit's Defense and/or Resistance.\n"
+    m="#{m}\nThe order of units listed here can be affected by natures#{" that affect a unit's Defense and/or Resistance" unless f.include?(9)}.\n"
   end
   if "#{m}\n#{m2.join("\n")}".length>2000 && !safe_to_spam?(event)
     event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
