@@ -138,7 +138,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'statlarge','stathuge','statmassive','statol','giant','massive','spam','safetospam','safe2spam','listunits','sortunits','unitssort','liststat','rand',
      'longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort','worst',
      'sortstat','statsort','liststats','statslist','highest','best','highestamong','highestin','lowest','lowestamong','lowestin','manual','book','combatmanual',
-     'headpat','pat','patpat']
+     'headpat','pat','patpat','randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -454,6 +454,31 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the specifics about my code, including number of commands and functions, as well as - if in PM - loops, statements, and conditionals.",0x40C0F0)
     else
       create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s), Shard(s), User(s)\nUnit(s), Character(s), Char(a)(s)\nAlt(s)\nSkill(s)\nAlias(es), Name(s), Nickname(s)\nCode, Line(s), SLOC#{"\n\nAs the bot developer, you can also include a server ID number to snag the shard number, owner, and my nickname in the specified server." if event.user.id==167657750971547648}",0x40C0F0)
+    end
+  elsif ['randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats'].include?(command.downcase) || (['random','rand'].include?(command.downcase) && ['unit','stats'].include?("#{subcommand}".downcase)) || (['unit','stats'].include?(command.downcase) && ['random','rand'].include?("#{subcommand}".downcase))
+    lookout=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
+      lookout=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt').each_line do |line|
+        lookout.push(eval line)
+      end
+    end
+    lookout=lookout.reject{|q| q[0].length>4 && q[0][0,4]=='FE14'}
+    d=[]
+    for i in 0...lookout.length
+      d.push("**#{lookout[i][2].gsub("#{lookout[i][0]} - ",'').gsub(" (All paths)",'')}**\n#{lookout[i][1].join(', ')}")
+    end
+    if d.join("\n\n").length>=1900 || !safe_to_spam?(event)
+      d=lookout.map{|q| q[0]}
+      if d.length>50 && !safe_to_spam?(event)
+        create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['random','rand','unit','stats'].include?(command.downcase)}** __\*filters__","Picks a random unit within the desired group, and displays that unit's stats and skills.\n\n#{disp_more_info(event,2)}\n\nYou can also group units by gender.\nYou can group by game as well, and game options can be displayed if you use this command in PM.",0xD49F61)
+      else
+        create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['random','rand','unit','stats'].include?(command.downcase)}** __\*filters__","Picks a random unit within the desired group, and displays that unit's stats and skills.\n\n#{disp_more_info(event,2)}\n\nYou can also group units by gender.\nYou can group by game as well, by using the words below.",0xD49F61)
+        create_embed(event,'Games','',0x40C0F0,nil,nil,triple_finish(d))
+      end
+    else
+      create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['random','rand','unit','stats'].include?(command.downcase)}** __\*filters__","Picks a random unit within the desired group, and displays that unit's stats and skills.\n\n#{disp_more_info(event,2)}\n\nYou can also group units by gender.\nYou can group by game as well, by using the words below.",0xD49F61)
+      create_embed(event,'Games',d.join("\n\n"),0x40C0F0)
     end
   elsif command.downcase=='shard'
     create_embed(event,'**shard**','Returns the shard that this server is served by.',0x40C0F0)
@@ -836,7 +861,7 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
   end
   return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
   return false if mode>0
-  return true if [188781153589657600,238644800994279424,210900237823246336,175150098357944330,183976699367522304,193956706223521793,185935665152786432,323487356172763137,256659145107701760,78649866577780736,189235935563481088].include?(user.id) # people who donate to the laptop fund will always be EliseMods
+  return true if [188781153589657600,238644800994279424,210900237823246336,175150098357944330,183976699367522304,193956706223521793,185935665152786432,323487356172763137,256659145107701760,78649866577780736,189235935563481088,244073468981805056].include?(user.id) # people who donate to the laptop fund will always be EliseMods
   return false
 end
 
@@ -3523,6 +3548,9 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     end
     create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0 || expandedmode}#{"  \u2764 **#{summoner}**" unless summoner=='-'}#{"\nNo Summoner Support" if summoner =='-' && expandedmode}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl,expandedmode)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),flds,1)
     return nil
+  elsif skillstoo && !wl.include?('~~') && stat_skills_2.length<=0 && !expandedmode && !(args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth'))
+    disp_tiny_stats(bot,name,weapon,event,ignore,true)
+    return nil
   end
   # units for whom both level 40 and level 1 stats are known
   data_load()
@@ -3705,7 +3733,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   return nil
 end
 
-def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
+def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays stats
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
@@ -3990,7 +4018,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   w1='-' if wl.include?('~~')
-  flds=[["**Level 1#{" +#{merges}" if merges>0}**",["#{' ' if u1[1]<10}#{u1[1]}","#{' ' if u1[2]<10}#{u1[2]}","#{' ' if u1[3]<10}#{u1[3]}","#{' ' if u1[4]<10}#{u1[4]}","#{' ' if u1[5]<10}#{u1[5]}"]],["**Level 40#{" +#{merges}" if merges>0}**",["#{u40[1]}","#{u40[2]}","#{u40[3]}","#{u40[4]}","#{u40[5]}"]]]
+  flds=[["**Level 1#{" +#{merges}" if merges>0}**",["#{' ' if u1[1]<10}#{u1[1]}","#{' ' if u1[2]<10}#{u1[2]}","#{' ' if u1[3]<10}#{u1[3]}","#{' ' if u1[4]<10}#{u1[4]}","#{' ' if u1[5]<10}#{u1[5]}"]],["**Level 40#{" +#{merges}" if merges>0}**",["#{' ' if u40[1]<10}#{u40[1]}","#{' ' if u40[2]<10}#{u40[2]}","#{' ' if u40[3]<10}#{u40[3]}","#{' ' if u40[4]<10}#{u40[4]}","#{' ' if u40[5]<10}#{u40[5]}"]]]
   superbaan=["\u00A0","\u00A0","\u00A0","\u00A0","\u00A0","\u00A0"]
   if boon=="" && bane=="" && !mu
     for i in 6...11
@@ -4010,7 +4038,42 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false) # displays stats
   ftr=nil
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{diff_num[0]} point#{'s' unless diff_num[0]==1} lower." if !diff_num.nil? && diff_num[0]>0
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{0-diff_num[0]} point#{'s' unless diff_num[0]==-1} higher." if !diff_num.nil? && diff_num[0]<0
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,ftr,img,nil)
+  realflds=nil
+  if skillstoo && u40[0]!='Robin (Shared stats)' # when invoked any way except the main stats command, will also display the unit's top level skills
+    uskl=unit_skills(name,event)
+    for i in 0...3
+      if uskl[i][0].include?('**') && uskl[i]!=uskl[i].reject{|q| !q.include?('**')}
+        uskl[i][-1]="#{uskl[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{uskl[i][-1]}"
+      end
+    end
+    uskl=uskl.map{|q| q[q.length-1]}
+    if event.message.text.downcase.include?("mathoo's")
+      devunits_load()
+      dv=find_in_dev_units(name)
+      if dv>=0
+        mu=true
+        sklz2=[@dev_units[dv][6],@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],[@dev_units[dv][12]]]
+        uskl=sklz2.map{|q| q.reject{|q2| q2.include?('~~')}}.map{|q| q[q.length-1]}
+      end
+    end
+    realflds=[['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"]]
+  end
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,ftr,img,realflds)
+  if skillstoo && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
+    usklm=unit_skills('Robin(M)',event)
+    usklf=unit_skills('Robin(F)',event)
+    for i in 0...3
+      if usklm[i][0].include?('**') && usklm[i]!=usklm[i].reject{|q| !q.include?('**')}
+        usklm[i][-1]="#{usklm[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{usklm[i][-1]}"
+      end
+      if usklf[i][0].include?('**') && usklf[i]!=usklf[i].reject{|q| !q.include?('**')}
+        usklf[i][-1]="#{usklf[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{usklf[i][-1]}"
+      end
+    end
+    usklm=usklm.map{|q| q[q.length-1]}
+    usklf=usklf.map{|q| q[q.length-1]}
+    create_embed(event,'','',xcolor,nil,img,[['Robin(M)<:Blue_Tome:467112472394858508><:Icon_Move_Infantry:443331187579289601>',"<:Skill_Weapon:444078171114045450> #{usklm[0]}\n<:Skill_Assist:444078171025965066> #{usklm[1]}\n<:Skill_Special:444078170665254929> #{usklm[2]}\n<:Passive_A:443677024192823327> #{usklm[3]}\n<:Passive_B:443677023257493506> #{usklm[4]}\n<:Passive_C:443677023555026954> #{usklm[5]}"],['Robin(F)<:Green_Tome:467122927666593822><:Icon_Move_Infantry:443331187579289601>',"<:Skill_Weapon:444078171114045450> #{usklf[0]}\n<:Skill_Assist:444078171025965066> #{usklf[1]}\n<:Skill_Special:444078170665254929> #{usklf[2]}\n<:Passive_A:443677024192823327> #{usklf[3]}\n<:Passive_B:443677023257493506> #{usklf[4]}\n<:Passive_C:443677023555026954> #{usklf[5]}"]])
+  end
   return nil
 end
 
@@ -8958,6 +9021,47 @@ def generate_random_unit(event,args,bot)
   return nil
 end
 
+def pick_random_unit(event,args,bot)
+  event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  k22=find_in_units(event,3) # Narrow the list of units down based on the defined parameters
+  g=get_markers(event)
+  data_load()
+  k222=k22.reject{|q| !has_any?(g, q[13][0]) || q[5][0].nil? || q[5][0].to_i.zero?} if k22.is_a?(Array)
+  k222=@units.reject{|q| !has_any?(g, q[13][0]) || q[5][0].nil? || q[5][0].to_i.zero?} unless k22.is_a?(Array)
+  k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
+  k222.compact!
+  unt=k222.sample
+  atk='<:StrengthS:467037520484630539>*'
+  atk='<:MagicS:467043867611627520>' if ['Tome','Dragon','Healer'].include?(unt[1][1])
+  atk='<:StrengthS:467037520484630539>' if ['Blade','Bow','Dagger'].include?(unt[1][1])
+  u40=get_stats(event,unt[0],40)
+  u1=get_stats(event,unt[0],1)
+  superbaan=["\u00A0","\u00A0","\u00A0","\u00A0","\u00A0","\u00A0"]
+  for i in 6...11
+    superbaan[i-5]='+' if [-3,1,5,10,14].include?(u40[i])
+    superbaan[i-5]='-' if [-2,2,6,11,15].include?(u40[i])
+  end
+  flds=[["**Level 1**",["#{' ' if u1[1]<10}#{u1[1]}","#{' ' if u1[2]<10}#{u1[2]}","#{' ' if u1[3]<10}#{u1[3]}","#{' ' if u1[4]<10}#{u1[4]}","#{' ' if u1[5]<10}#{u1[5]}"]],["**Level 40**",["#{' ' if u40[1]<10}#{u40[1]}","#{' ' if u40[2]<10}#{u40[2]}","#{' ' if u40[3]<10}#{u40[3]}","#{' ' if u40[4]<10}#{u40[4]}","#{' ' if u40[5]<10}#{u40[5]}"]]]
+  for i in 0...5
+    flds[1][1][i]="#{flds[1][1][i]}#{superbaan[i+1]}"
+  end
+  j=@units.find_index{|q| q[0]==unt[0]}
+  img=pick_thumbnail(event,j,bot)
+  xcolor=unit_color(event,j,u40[0],0)
+  uskl=unit_skills(unt[0],event)
+  for i in 0...3
+    if uskl[i][0].include?('**') && uskl[i]!=uskl[i].reject{|q| !q.include?('**')}
+      uskl[i][-1]="#{uskl[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{uskl[i][-1]}"
+    end
+  end
+  uskl=uskl.map{|q| q[q.length-1]}
+  create_embed(event,"__**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],false,2)}**__","#{display_stars(5,0)}\n\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,nil,img,[['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}"]])
+end
+
+def pick_random_skill(event,args,bot)
+end
+
 def parse_function_alts(callback,event,args,bot)
   event.channel.send_temporary_message('Calculating data, please wait...',3)
   k=find_name_in_string(event,nil,1)
@@ -11729,7 +11833,17 @@ end
 
 bot.command([:random,:rand]) do |event, *args|
   return nil if overlap_prevent(event)
+  if ['unit','real'].include?(args[0].downcase)
+    pick_random_unit(event,args,bot)
+    return nil
+  end
   generate_random_unit(event,args,bot)
+  return nil
+end
+
+bot.command([:randomunit,:randunit,:unitrandom,:unitrand,:randomstats,:statsrand,:statsrandom,:randstats]) do |event, *args|
+  return nil if overlap_prevent(event)
+  pick_random_unit(event,args,bot)
   return nil
 end
 
@@ -12435,6 +12549,9 @@ bot.command([:stats,:stat]) do |event, *args|
     args.shift
     k=comparison(event,args,bot)
     return nil unless k<1
+  elsif ['rand','random'].include?(args[0].downcase)
+    pick_random_unit(event,args,bot)
+    return nil
   elsif ['study'].include?(args[0].downcase)
     args.shift
     if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
@@ -12629,6 +12746,9 @@ bot.command([:unit, :data, :statsskills, :statskills, :stats_skills, :stat_skill
     args.shift
     k=comparison(event,args,bot)
     return nil unless k<1
+  elsif ['rand','random'].include?(args[0].downcase)
+    pick_random_unit(event,args,bot)
+    return nil
   elsif ['study'].include?(args[0].downcase)
     args.shift
     if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
@@ -15445,7 +15565,12 @@ bot.mention do |event|
     disp_skill(bot,'Bladeblade',event,true)
     k=3
   elsif ['random','rand'].include?(a[0].downcase)
-    generate_random_unit(event,a,bot)
+    a.shift
+    if ['unit','real'].include?(a[0].downcase)
+      pick_random_unit(event,a,bot)
+    else
+      generate_random_unit(event,a,bot)
+    end
     k=1
   elsif ['compare','comparison'].include?(a[0].downcase)
     a.shift
@@ -16099,7 +16224,7 @@ bot.ready do |event|
   end
   system("color 5#{"7CBAE"[@shardizard,1]}")
   system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
-  bot.game="Loading, please wait..." if @shardizard.zero?
+  bot.game="Loading, please wait..."
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt').each_line do |line|
