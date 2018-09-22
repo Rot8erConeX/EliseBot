@@ -231,7 +231,7 @@ def data_load() # loads the character and skill data from the files on my comput
   end
 end
 
-def nicknames_load() # laods the nickname list
+def nicknames_load() # loads the nickname list
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt').each_line do |line|
@@ -3243,25 +3243,30 @@ def get_unit_prf(name)
   return ['-']
 end
 
-def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=nil) # displays stats
+def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=nil,expandedmodex=nil) # displays stats
   expandedmode=false if expandedmode.nil?
+  expandedmodex=!(!expandedmode) if expandedmodex.nil?
   dispstr=" #{event.message.text.downcase} "
   if dispstr.include?(' tiny ') || dispstr.include?(' small ') || dispstr.include?(' smol ') || dispstr.include?(' micro ') || dispstr.include?(' little ')
     disp_tiny_stats(bot,name,weapon,event,ignore)
     return nil
-  elsif dispstr.include?(' big ') || dispstr.include?(' tol ') || dispstr.include?(' macro ') || dispstr.include?(' large ') || dispstr.include?(' huge ') || dispstr.include?(' massive ')
+  elsif dispstr.include?(' big ') || dispstr.include?(' tol ') || dispstr.include?(' macro ') || dispstr.include?(' large ')
+    expandedmodex=true
+  elsif dispstr.include?(' huge ') || dispstr.include?(' massive ')
     expandedmode=true
+    expandedmodex=true
   end
   if expandedmode && !safe_to_spam?(event)
     event.respond "I will not wipe the chat completely clean.  Please use this command in PM.\nIn the meantime, I will show the standard form of this command."
     expandedmode=false
+    expandedmodex=true
   end
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
     name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
     for i in 0...name.length
-      disp_stats(bot,name[i],weapon,event,ignore,skillstoo,expandedmode)
+      disp_stats(bot,name[i],weapon,event,ignore,skillstoo,expandedmode,expandedmodex)
     end
     return nil
   end
@@ -3427,7 +3432,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{unit_clss(bot,event,j)}",xcolor,'Stats currently unknown',pick_thumbnail(event,j,bot))
     disp_unit_skills(bot,untz[j][0],event) if skillstoo || expandedmode
     return nil
-  elsif !wl.include?('~~') && (stat_skills_2.length<=0 || unitz[0]=='Kiran') && !expandedmode && !(args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth'))
+  elsif !wl.include?('~~') && (stat_skills_2.length<=0 || unitz[0]=='Kiran') && !expandedmodex && !(args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth')) && !(event.server.nil? || event.server.id==238059616028590080)
     disp_tiny_stats(bot,name,weapon,event,ignore,skillstoo)
     return nil
   elsif unitz[0]=='Kiran'
@@ -12749,7 +12754,40 @@ bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstat
   end
 end
 
-bot.command([:big,:tol,:macro,:large,:huge,:massive,:giantstats,:bigstats,:tolstats,:macrostats,:largestats,:hugestats,:massivestats,:giantstat,:bigstat,:tolstat,:macrostat,:largestat,:hugestat,:massivestat,:statsgiant,:statsbig,:statstol,:statsmacro,:statslarge,:statshuge,:statsmassive,:statgiant,:statbig,:stattol,:statmacro,:statlarge,:stathuge,:statmassive,:statol]) do |event, *args|
+bot.command([:big,:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:largestats,:bigstat,:tolstat,:macrostat,:largestat,:statsbig,:statstol,:statsmacro,:statslarge,:statbig,:stattol,:statmacro,:statlarge,:statol]) do |event, *args|
+  return nil if overlap_prevent(event)
+  k=find_name_in_string(event,nil,1)
+  if k.nil?
+    w=nil
+    if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
+      x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+      k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
+      w=k2[0] unless k2.nil?
+      disp_stats(bot,x[1],w,event,true,false,false,true)
+    else
+      event.respond 'No matches found.'
+    end
+    return nil
+  end
+  str=k[0]
+  k2=get_weapon(first_sub(args.join(' '),k[1],''),event)
+  w=nil
+  w=k2[0] unless k2.nil?
+  data_load()
+  if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
+    x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
+    disp_stats(bot,x[1],w,event,true,false,false,true)
+  elsif !detect_multi_unit_alias(event,str.downcase,str.downcase).nil?
+    x=detect_multi_unit_alias(event,str.downcase,str.downcase)
+    disp_stats(bot,x[1],w,event,true,false,false,true)
+  elsif find_unit(str,event)>=0
+    disp_stats(bot,str,w,event,false,false,false,true)
+  else
+    event.respond 'No matches found'
+  end
+end
+
+bot.command([:huge,:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hugestat,:massivestat,:statsgiant,:statshuge,:statsmassive,:statgiant,:stathuge,:statmassive]) do |event, *args|
   return nil if overlap_prevent(event)
   k=find_name_in_string(event,nil,1)
   if k.nil?
