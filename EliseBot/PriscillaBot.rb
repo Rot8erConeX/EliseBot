@@ -7397,76 +7397,108 @@ def comparison(event,args,bot)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   s1=args.join(' ').gsub(',','').gsub('/','').downcase.gsub('laevatein','lavatain')
   s2=args.join(' ').gsub(',','').gsub('/','').downcase.gsub('laevatein','lavatain')
-  for i in 0...args.length
-    unless s1.split(' ').nil? || s1.gsub(' ','').length<=0
-      k=find_name_in_string(event,s1,1)
-      unless k.nil?
-        s1=first_sub(s1,k[1],'')
-        s2=first_sub(s2,k[1],k[0])
+  if s1.include?('|')
+    f=s1.gsub(' |','|').gsub('| ','|').split('|')
+    b=[]
+    c=[]
+    atkstat=[]
+    for i in 0...f.length
+      if find_name_in_string(event,f[i])!=nil
+        name=find_name_in_string(event,f[i])
+        r=find_stats_in_string(event,f[i])
+        u=@units[find_unit(find_name_in_string(event,f[i]),event)]
+        m=false
+        if f[i].downcase.split(' ').include?("mathoo's") && find_in_dev_units(name)>=0
+          m=true
+          dv=@dev_units[find_in_dev_units(name)]
+          r[0]=dv[1]
+          r[1]=dv[2]
+          r[2]=dv[3].gsub(' ','')
+          r[3]=dv[4].gsub(' ','')
+          r[2]='' if r[2].nil?
+          r[3]='' if r[3].nil?
+        end
+        st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
+        st[0]=st[0].gsub('Lavatain','Laevatein')
+        b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{unit_moji(bot,event,-1,name,m,2) if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0]])
+        c.push(unit_color(event,find_unit(find_name_in_string(event,f[i]),event),nil,1,m))
+        atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
+        atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
+        atkstat.push('Freeze') if ['Dragon'].include?(u[1][1])
       end
     end
-  end
-  k=splice(s2)
-  k2=[]
-  for i in 0...k.length
-    x=detect_multi_unit_alias(event,k[i],k[i],1)
-    str=k[i]
-    if k[i].downcase=="mathoo's"
-      k2.push(str)
-    elsif !x.nil? && x[1].is_a?(Array) && x[1].length>1
-      if (i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?) || (i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?) || (i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?) || !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
-        if i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?
-          x=detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1)
-        elsif i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?
-          x=detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1)
-        elsif i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?
-          x=detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1)
-        elsif !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
-          x=detect_multi_unit_alias(event,k[i],"#{k[i]}",1)
+  else
+    for i in 0...args.length
+      unless s1.split(' ').nil? || s1.gsub(' ','').length<=0
+        k=find_name_in_string(event,s1,1)
+        unless k.nil?
+          s1=first_sub(s1,k[1],'')
+          s2=first_sub(s2,k[1],k[0])
         end
-        if x[1].is_a?(Array) && x[1].length>1
-          for i in 0...x[1].length
-            k2.push(str.downcase.gsub(x[0],x[1][i]))
+      end
+    end
+    k=splice(s2)
+    k2=[]
+    for i in 0...k.length
+      x=detect_multi_unit_alias(event,k[i],k[i],1)
+      str=k[i]
+      if k[i].downcase=="mathoo's"
+        k2.push(str)
+      elsif !x.nil? && x[1].is_a?(Array) && x[1].length>1
+        if (i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?) || (i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?) || (i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?) || !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
+          if i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?
+            x=detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1)
+          elsif i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?
+            x=detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1)
+          elsif i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?
+            x=detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1)
+          elsif !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
+            x=detect_multi_unit_alias(event,k[i],"#{k[i]}",1)
           end
-        else
-          k2.push(str.downcase.gsub(x[0],x[1][0]))
+          if x[1].is_a?(Array) && x[1].length>1
+            for i in 0...x[1].length
+              k2.push(str.downcase.gsub(x[0],x[1][i]))
+            end
+          else
+            k2.push(str.downcase.gsub(x[0],x[1][0]))
+          end
         end
+      elsif find_name_in_string(event,sever(k[i]))!=nil
+        x=find_name_in_string(event,sever(str),1)
+        k2.push(str)
+      elsif !x.nil? && !x[1].is_a?(Array)
+        k2.push(str)
       end
-    elsif find_name_in_string(event,sever(k[i]))!=nil
-      x=find_name_in_string(event,sever(str),1)
-      k2.push(str)
-    elsif !x.nil? && !x[1].is_a?(Array)
-      k2.push(str)
     end
-  end
-  k=k2.map{|q| q}
-  b=[]
-  c=[]
-  atkstat=[]
-  m=false
-  for i in 0...k.length
-    if find_name_in_string(event,sever(k[i]))!=nil
-      r=find_stats_in_string(event,sever(k[i]))
-      u=@units[find_unit(find_name_in_string(event,sever(k[i])),event)]
-      name=u[0]
-      if m && find_in_dev_units(name)>=0
-        dv=@dev_units[find_in_dev_units(name)]
-        r[0]=dv[1]
-        r[1]=dv[2]
-        r[2]=dv[3].gsub(' ','')
-        r[3]=dv[4].gsub(' ','')
-        r[2]='' if r[2].nil?
-        r[3]='' if r[3].nil?
+    k=k2.map{|q| q}
+    b=[]
+    c=[]
+    atkstat=[]
+    m=false
+    for i in 0...k.length
+      if find_name_in_string(event,sever(k[i]))!=nil
+        r=find_stats_in_string(event,sever(k[i]))
+        u=@units[find_unit(find_name_in_string(event,sever(k[i])),event)]
+        name=u[0]
+        if m && find_in_dev_units(name)>=0
+          dv=@dev_units[find_in_dev_units(name)]
+          r[0]=dv[1]
+          r[1]=dv[2]
+          r[2]=dv[3].gsub(' ','')
+          r[3]=dv[4].gsub(' ','')
+          r[2]='' if r[2].nil?
+          r[3]='' if r[3].nil?
+        end
+        st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
+        st[0]=st[0].gsub('Lavatain','Laevatein')
+        b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{unit_moji(bot,event,-1,name,m,2) if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0]])
+        c.push(unit_color(event,find_unit(find_name_in_string(event,sever(k[i])),event),nil,1,m))
+        atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
+        atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
+        atkstat.push('Freeze') if ['Dragon'].include?(u[1][1])
+      elsif k[i].downcase=="mathoo's"
+        m=true
       end
-      st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
-      st[0]=st[0].gsub('Lavatain','Laevatein')
-      b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{unit_moji(bot,event,-1,name,m,2) if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0]])
-      c.push(unit_color(event,find_unit(find_name_in_string(event,sever(k[i])),event),nil,1,m))
-      atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
-      atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
-      atkstat.push('Freeze') if ['Dragon'].include?(u[1][1])
-    elsif k[i].downcase=="mathoo's"
-      m=true
     end
   end
   if b.uniq.length != b.length
