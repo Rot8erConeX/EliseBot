@@ -9040,6 +9040,12 @@ def generate_random_unit(event,args,bot)
     img=imgx.avatar_url
     ftr="Unit profile provided by #{imgx.distinct}"
   end
+  if event.message.mentions.length>0 && rand(100)<[event.message.mentions.length*10,50].min
+    imgx=event.message.mentions.sample
+    img=imgx.avatar_url
+    ftr="Unit profile provided by #{imgx.distinct}"
+  end
+  puts ftr
   wemote=''
   moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clazz[0]}_#{clazz[1].gsub('Healer','Staff')}"}
   wemote=moji[0].mention unless moji.length<=0
