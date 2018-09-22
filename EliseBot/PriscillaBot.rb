@@ -1116,10 +1116,12 @@ def make_stats_string(event,name,rarity,boon='',bane='',hm=@max_rarity_merge[1])
   args=sever(event.message.text.downcase).split(' ')
   hm[0]=@max_rarity_merge[1] if hm[0]<0 || args.include?('full') || args.include?('merges')
   hm[1]=0-hm[1] if hm[1]<0
+  u=get_stats(event,name,40,5,0,boon,bane)
+  u2=(u[1]+u[2]+u[3]+u[4]+u[5])/5
   for i in 0...hm[0]+1
     u=get_stats(event,name,40,rarity,i,boon,bane)
     u=['Kiran',0,0,0,0,0] if u[0]=='Kiran'
-    k="#{k}\n**#{i} merge#{'s' unless i==1}:** #{u[1]} / #{u[2]} / #{u[3]} / #{u[4]} / #{u[5]}    (BST: #{u[1]+u[2]+u[3]+u[4]+u[5]})" if i%5==0 || i==hm[1] || args.include?('full') || args.include?('merges')
+    k="#{k}\n**#{i} merge#{'s' unless i==1}:** #{u[1]} / #{u[2]} / #{u[3]} / #{u[4]} / #{u[5]}  \u00B7  BST: #{u[1]+u[2]+u[3]+u[4]+u[5]}  \u00B7  Score: #{u2+rarity*5+i*2+90}" if i%5==0 || i==hm[1] || args.include?('full') || args.include?('merges')
   end
   return k
 end
@@ -1997,9 +1999,9 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
           k="\n#{xfields[i][0]}\n#{xfields[i][1]}"
           if str.length+k.length>=1900
             if ch_id==1
-              event.user.pm(str)
+              event.user.pm(str.gsub("```\n\n","```"))
             else
-              event.channel.send_message(str)
+              event.channel.send_message(str.gsub("```\n\n","```"))
             end
             str=k
           else
@@ -2012,16 +2014,16 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
     k="\n#{xfooter}" unless xfooter.nil?
     if str.length+k.length>=1900
       if ch_id==1
-        event.user.pm(str)
-        event.user.pm(k)
+        event.user.pm(str.gsub("```\n\n","```"))
+        event.user.pm(k.gsub("```\n\n","```"))
       else
-        event.channel.send_message(str)
-        event.channel.send_message(k)
+        event.channel.send_message(str.gsub("```\n\n","```"))
+        event.channel.send_message(k.gsub("```\n\n","```"))
       end
     elsif ch_id==1
-      event.user.pm("#{str}\n#{k}")
+      event.user.pm("#{str}\n#{k}".gsub("```\n\n","```"))
     else
-      event.channel.send_message("#{str}\n#{k}")
+      event.channel.send_message("#{str}\n#{k}".gsub("```\n\n","```"))
     end
   elsif !xfields.nil? && ftrlnth+header.length+text.length+xfields.map{|q| "#{q[0]}\n\n#{q[1]}"}.length>=1950 && ch_id==1
     event.user.pm.send_embed(header) do |embed|
@@ -3418,6 +3420,16 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   if find_unit(name,event)<0
     event.respond 'No unit was included' unless ignore
     return nil
+  elsif (unitz[4].nil? || (unitz[4].max<=0 && unitz[5].max<=0)) && unitz[0]!='Kiran' # unknown stats
+    data_load()
+    j=find_unit(name,event)
+    xcolor=unit_color(event,j,untz[j][0],0,mu)
+    create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{unit_clss(bot,event,j)}",xcolor,'Stats currently unknown',pick_thumbnail(event,j,bot))
+    disp_unit_skills(bot,untz[j][0],event) if skillstoo || expandedmode
+    return nil
+  elsif !wl.include?('~~') && (stat_skills_2.length<=0 || unitz[0]=='Kiran') && !expandedmode && !(args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth'))
+    disp_tiny_stats(bot,name,weapon,event,ignore,skillstoo)
+    return nil
   elsif unitz[0]=='Kiran'
     data_load()
     j=find_unit(name,event)
@@ -3449,13 +3461,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       flds.push(['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"])
     end
     create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,'-',expandedmode)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n",0x9400D3,"Please note that the Attack stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),flds,1)
-    return nil
-  elsif unitz[4].nil? || (unitz[4].max<=0 && unitz[5].max<=0) # unknown stats
-    data_load()
-    j=find_unit(name,event)
-    xcolor=unit_color(event,j,untz[j][0],0,mu)
-    create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{unit_clss(bot,event,j)}",xcolor,'Stats currently unknown',pick_thumbnail(event,j,bot))
-    disp_unit_skills(bot,untz[j][0],event) if skillstoo || Expandedmode
     return nil
   elsif unitz[4].max<=0 # level 40 stats are known but not level 1
     data_load()
@@ -3548,9 +3553,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     end
     create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0 || expandedmode}#{"  \u2764 **#{summoner}**" unless summoner=='-'}#{"\nNo Summoner Support" if summoner =='-' && expandedmode}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl,expandedmode)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),flds,1)
     return nil
-  elsif skillstoo && !wl.include?('~~') && stat_skills_2.length<=0 && !expandedmode && !(args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth'))
-    disp_tiny_stats(bot,name,weapon,event,ignore,true)
-    return nil
   end
   # units for whom both level 40 and level 1 stats are known
   data_load()
@@ -3567,7 +3569,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     rarity=10000000
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
-  u40x2=get_stats(event,name,40,rarity,0,boon,bane)
+  u40x2=get_stats(event,name,40,5,0,boon,bane)
   u1=get_stats(event,name,1,rarity,merges,boon,bane)
   j=find_unit(name,event)
   atk='<:StrengthS:467037520484630539> Attack'
@@ -3610,6 +3612,9 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   crblu1=cru1.map{|a| a}
   blu1=apply_stat_skills(event,stat_skills_2,blu1) if stat_skills_2.length>0
   crblu1=apply_stat_skills(event,stat_skills_2,crblu1) if stat_skills_2.length>0
+  blu1[6]=blu1[1]+blu1[2]+blu1[3]+blu1[4]+blu1[5]
+  cru1[6]=cru1[1]+cru1[2]+cru1[3]+cru1[4]+cru1[5]
+  crblu1[6]=crblu1[1]+crblu1[2]+crblu1[3]+crblu1[4]+crblu1[5]
   u1=make_stat_string_list(u1,blu1)
   cru1=make_stat_string_list(cru1,crblu1)
   u1=make_stat_string_list(u1,cru1,2) if wl.include?('~~')
@@ -3618,10 +3623,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     ftr=nil
     tr=skill_tier(weapon,event)
     ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ")
-  end
-  flds=[["**Level 1#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u1[3]}","<:DefenseS:467037520249487372> Defense: #{u1[4]}","<:ResistanceS:467037520379641858> Resistance: #{u1[5]}","","BST: #{u1[6]}"]]]
-  if args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth') || expandedmode
-    flds.push(["**Growth Rates**",["<:HP_S:467037520538894336> HP: #{micronumber(u40[6])} / #{u40[6]*5+20}%","#{atk}: #{micronumber(u40[7])} / #{u40[7]*5+20}%","<:SpeedS:467037520534962186> Speed: #{micronumber(u40[8])} / #{u40[8]*5+20}%","<:DefenseS:467037520249487372> Defense: #{micronumber(u40[9])} / #{u40[9]*5+20}%","<:ResistanceS:467037520379641858> Resistance: #{micronumber(u40[10])} / #{u40[10]*5+20}%","","\u0262\u1D18\u1D1B #{micronumber(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])} / GRT: #{(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])*5+100}%"]])
   end
   bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5)*5
   if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
@@ -3639,7 +3640,11 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       end
     end
   end
-  flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u40[3]}","<:DefenseS:467037520249487372> Defense: #{u40[4]}","<:ResistanceS:467037520379641858> Resistance: #{u40[5]}","","BST: #{u40[16]}","Bin ##{bin/5} (range #{bin}-#{bin+4})"]])
+  flds=[["**Level 1#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u1[3]}","<:DefenseS:467037520249487372> Defense: #{u1[4]}","<:ResistanceS:467037520379641858> Resistance: #{u1[5]}","","BST: #{u1[6]}","Score: #{bin/5+merges*2+rarity*5+2}+`SP`/100"]]]
+  if args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth') || expandedmode
+    flds.push(["**Growth Rates**",["<:HP_S:467037520538894336> HP: #{micronumber(u40[6])} / #{u40[6]*5+20}%","#{atk}: #{micronumber(u40[7])} / #{u40[7]*5+20}%","<:SpeedS:467037520534962186> Speed: #{micronumber(u40[8])} / #{u40[8]*5+20}%","<:DefenseS:467037520249487372> Defense: #{micronumber(u40[9])} / #{u40[9]*5+20}%","<:ResistanceS:467037520379641858> Resistance: #{micronumber(u40[10])} / #{u40[10]*5+20}%","","\u0262\u1D18\u1D1B #{micronumber(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])} / GRT: #{(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])*5+100}%"]])
+  end
+  flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u40[3]}","<:DefenseS:467037520249487372> Defense: #{u40[4]}","<:ResistanceS:467037520379641858> Resistance: #{u40[5]}","","BST: #{u40[16]}","Score: #{bin/5+merges*2+rarity*5+90}+`SP`/100"]])
   superbaan=['','','','','','']
   if boon=="" && bane=="" && !mu && ((stat_skills_2.length<=0 && !wl.include?('~~')) || flds.length==3)
     for i in 6...11
@@ -3916,7 +3921,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
     unless n.nil?
       n=n.join(' / ')
     end
-    create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n**<:HP_S:467037520538894336>0 | <:StrengthS:467037520484630539>0 | <:SpeedS:467037520534962186>0 | <:DefenseS:467037520249487372>0 | <:ResistanceS:467037520379641858>0**",0x9400D3,nil,pick_thumbnail(event,j,bot),nil,1)
+    create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,untz[0],mu,2)}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n**<:HP_S:467037520538894336>0 | <:StrengthS:467037520484630539>0 | <:SpeedS:467037520534962186>0 | <:DefenseS:467037520249487372>0 | <:ResistanceS:467037520379641858>0** (0 BST, Bin #0)",0x9400D3,nil,pick_thumbnail(event,j,bot),nil,1)
     return nil
   elsif unitz[4].nil? || (unitz[4].max<=0 && unitz[5].max<=0) # unknown stats
     data_load()
@@ -3944,6 +3949,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
     end
     atk=atk.gsub('*','')
     u40=[untz[j][0],untz[j][5][0],untz[j][5][1],untz[j][5][2],untz[j][5][3],untz[j][5][4]]
+    u40x2=u40.map{|q| q}
     # find stats based on merges
     s=[[u40[1],1],[u40[2],2],[u40[3],3],[u40[4],4],[u40[5],5]]                # all stats
     s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}  # sort the stats based on amount
@@ -3972,7 +3978,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
       weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
     end
     u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(5,merges,summoner)}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n**<:HP_S:467037520538894336>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:467037520534962186>#{u40[3]} | <:DefenseS:467037520249487372>#{u40[4]} | <:ResistanceS:467037520379641858>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST)",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(5,merges,summoner)}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n**<:HP_S:467037520538894336>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:467037520534962186>#{u40[3]} | <:DefenseS:467037520249487372>#{u40[4]} | <:ResistanceS:467037520379641858>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Bin #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5})",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
     return nil
   end
   # units for whom both level 40 and level 1 stats are known
@@ -3990,6 +3996,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
     rarity=10000000
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
+  u40x2=get_stats(event,name,40,5,0,boon,bane)
   u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
   u1=get_stats(event,name,1,rarity,merges,boon,bane)
   u1=apply_stat_skills(event,stat_skills,u1,tempest,summoner,weapon,refinement,blessing)
@@ -4035,7 +4042,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
   img=pick_thumbnail(event,j,bot)
   img='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   xtype=1
-  ftr=nil
+  ftr='Score does not include SP from skills'
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{diff_num[0]} point#{'s' unless diff_num[0]==1} lower." if !diff_num.nil? && diff_num[0]>0
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{0-diff_num[0]} point#{'s' unless diff_num[0]==-1} higher." if !diff_num.nil? && diff_num[0]<0
   realflds=nil
@@ -4058,7 +4065,25 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
     end
     realflds=[['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"]]
   end
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,ftr,img,realflds)
+  bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5)*5
+  if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
+    lookout=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+      lookout=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+        lookout.push(eval line)
+      end
+      lookout=lookout.reject{|q| !['Stat-Affecting'].include?(q[3][0,q[3].length-2])}
+    end
+    for i in 0...stat_skills.length
+      unless lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5].nil?
+        bin=[bin,lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5]].max
+      end
+    end
+  end
+  xtype=1
+  xtype=6 if skillstoo && u40[0]!='Robin (Shared stats)'
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u00B7\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+90}```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,ftr,img,realflds,xtype)
   if skillstoo && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
@@ -10524,6 +10549,7 @@ def phase_study(event,name,bot,weapon=nil)
   end
   puts n.to_s
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
+  u40x2=get_stats(event,name,40,5,0,boon,bane)
   spec_wpn=false
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
@@ -10813,15 +10839,31 @@ def phase_study(event,name,bot,weapon=nil)
   for i in 0...epu40.length
     epu40[i]="~~#{epu40[i]}~~ #{epu40xw[i]}" if epu40[i]!=epu40xw[i] && wl.include?('~~')
   end
+  bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5)*5
+  if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
+    lookout=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+      lookout=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+        lookout.push(eval line)
+      end
+      lookout=lookout.reject{|q| !['Stat-Affecting'].include?(q[3][0,q[3].length-2])}
+    end
+    for i in 0...stat_skills.length
+      unless lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5].nil?
+        bin=[bin,lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5]].max
+      end
+    end
+  end
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(' all')
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
-    event.respond "**Displayed stats:**  #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]}\n**#{"Player Phase" unless ppu40==epu40}#{"In-combat Stats" if ppu40==epu40}:**  #{ppu40[1]} / #{ppu40[2]} / #{ppu40[3]} / #{ppu40[4]} / #{ppu40[5]}  (#{ppu40[16]} BST)#{"\n**Enemy Phase:**  #{epu40[1]} / #{epu40[2]} / #{epu40[3]} / #{epu40[4]} / #{epu40[5]}  (#{epu40[16]} BST)" unless ppu40==epu40}"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
+    event.respond "**Displayed stats:**  #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]} - Score: #{bin/5+merges*2+rarity*5+90}+`SP`/100\n**#{"Player Phase" unless ppu40==epu40}#{"In-combat Stats" if ppu40==epu40}:**  #{ppu40[1]} / #{ppu40[2]} / #{ppu40[3]} / #{ppu40[4]} / #{ppu40[5]}  (#{ppu40[16]} BST)#{"\n**Enemy Phase:**  #{epu40[1]} / #{epu40[2]} / #{epu40[3]} / #{epu40[4]} / #{epu40[5]}  (#{epu40[16]} BST)" unless ppu40==epu40}"
   elsif ppu40==epu40
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense TIle\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}"],["In-combat Stats","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:467037520534962186> Speed: #{ppu40[3]}\n<:DefenseS:467037520249487372> Defense: #{ppu40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+90}+`SP`/100"],["In-combat Stats","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:467037520534962186> Speed: #{ppu40[3]}\n<:DefenseS:467037520249487372> Defense: #{ppu40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense TIle\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}",1],["Player Phase","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n<:Death_Blow:472211986625593345> Attack: #{ppu40[2]}\n<:Darting_Blow:472211986705547264> Speed: #{ppu40[3]}\n<:Armored_Blow:472211986688638976> Defense: #{ppu40[4]}\n<:Warding_Blow:472211986822856705> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","<:HP_S:467037520538894336> HP: #{epu40[1]}\n<:Fierce_Stance:472211986621661195> Attack: #{epu40[2]}\n<:Darting_Stance:472211986772393994> Speed: #{epu40[3]}\n<:Steady_Stance:472211986642501633> Defense: #{epu40[4]}\n<:Warding_Stance:472211986651021333> Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+90}+`SP`/100",1],["Player Phase","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n<:Death_Blow:472211986625593345> Attack: #{ppu40[2]}\n<:Darting_Blow:472211986705547264> Speed: #{ppu40[3]}\n<:Armored_Blow:472211986688638976> Defense: #{ppu40[4]}\n<:Warding_Blow:472211986822856705> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","<:HP_S:467037520538894336> HP: #{epu40[1]}\n<:Fierce_Stance:472211986621661195> Attack: #{epu40[2]}\n<:Darting_Stance:472211986772393994> Speed: #{epu40[3]}\n<:Steady_Stance:472211986642501633> Defense: #{epu40[4]}\n<:Warding_Stance:472211986651021333> Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
   end
 end
 
