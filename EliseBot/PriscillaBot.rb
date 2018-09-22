@@ -11880,7 +11880,8 @@ end
 
 bot.command([:random,:rand]) do |event, *args|
   return nil if overlap_prevent(event)
-  if ['unit','real'].include?(args[0].downcase)
+  if args.nil? || args.length.zero?
+  elsif ['unit','real'].include?(args[0].downcase)
     pick_random_unit(event,args,bot)
     return nil
   end
