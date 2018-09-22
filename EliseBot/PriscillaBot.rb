@@ -13956,7 +13956,8 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
        'Narcian <:Green_Blade:467122927230386207><:Icon_Move_Flier:443331186698354698> / Zephiel <:Red_Blade:443172811830198282><:Icon_Move_Armor:443331186316673025>',
        'Navarre <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601> / Camus <:Blue_Blade:467112472768151562><:Icon_Move_Cavalry:443331186530451466>',
        'Robin(F) <:Green_Tome:467122927666593822><:Icon_Move_Infantry:443331187579289601> / Legion <:Green_Blade:467122927230386207><:Icon_Move_Infantry:443331187579289601>']
-  rd=['Cavalry <:Icon_Move_Cavalry:443331186530451466>',
+  rd=['','',
+      'Cavalry <:Icon_Move_Cavalry:443331186530451466>',
       'Flying <:Icon_Move_Flier:443331186698354698>',
       'Infantry <:Icon_Move_Infantry:443331187579289601>',
       'Armored <:Icon_Move_Armor:443331186316673025>']
@@ -13969,21 +13970,25 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   str="#{str}\nDays since game release: #{longFormattedNumber(date)}"
   if event.user.id==167657750971547648 && @shardizard==4
     str="#{str}\nDaycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12"
-    str="#{str}\nWeekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)"
+    str="#{str}\nWeekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)"
   end
   str2='__**Today in** ***Fire Emblem Heroes***__'
-  str2="#{str2}\nTraining Tower color: #{colors[date%7]}"
-  str2="#{str2}\nDaily Hero Battle: #{dhb[date%12]}"
+  str2="#{str2}\nTraining Tower color: #{colors[date%colors.length]}"
+  str2="#{str2}\nDaily Hero Battle: #{dhb[date%dhb.length]}"
   str2="#{str2}\nWeekend SP bonus!" if [1,2].include?(date%7)
   str2="#{str2}\nSpecial Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][date%5]}"
-  str2="#{str2}\nGrand Hero Battle revival: #{ghb[date%7].split(' / ')[0]}"
-  str2="#{str2}\nGrand Hero Battle revival 2: #{ghb[date%7].split(' / ')[1]}"
+  str2="#{str2}\nGrand Hero Battle revival: #{ghb[date%ghb.length].split(' / ')[0]}"
+  str2="#{str2}\nGrand Hero Battle revival 2: #{ghb[date%ghb.length].split(' / ')[1]}"
   if (date)%7==3
-    str2="#{str2}\nNew Blessed Gardens addition: #{garden[week_from(date,3)%4]}"
+    str2="#{str2}\nNew Blessed Gardens addition: #{garden[week_from(date,3)%garden.length]}"
   else
-    str2="#{str2}\nNewest Blessed Gardens addition: #{garden[week_from(date,3)%4]}"
+    str2="#{str2}\nNewest Blessed Gardens addition: #{garden[week_from(date,3)%garden.length]}"
   end
-  str2="#{str2}\nRival Domains movement preference: #{rd[week_from(date,2)%4]}"
+  if rd[week_from(date,2)%rd.length]==''
+    str2="#{str2}\n~~Rival Domains~~ Relay Defense"
+  else
+    str2="#{str2}\nRival Domains movement preference: #{rd[week_from(date,2)%rd.length]}"
+  end
   if (date)%7==0
     str2="#{str2}\nNew Tactics Drills addition: #{['Skill Studies','Grandmaster'][week_from(date,0)%2]}"
   else
@@ -14038,14 +14043,20 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     str2=disp_current_events(2)
     str=extend_message(str,str2,event,2)
     str2='__**Tomorrow in** ***Fire Emblem Heroes***__'
-    str2="#{str2}\nTraining Tower color: #{colors[(date+1)%7]}"
-    str2="#{str2}\nDaily Hero Battle: #{dhb[(date+1)%12]}"
+    str2="#{str2}\nTraining Tower color: #{colors[(date+1)%colors.length]}"
+    str2="#{str2}\nDaily Hero Battle: #{dhb[(date+1)%dhb.length]}"
     str2="#{str2}\nWeekend SP bonus!" if [1,2].include?((date+1)%7)
     str2="#{str2}\nSpecial Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][(date+1)%5]}"
-    str2="#{str2}\nGrand Hero Battle revival: #{ghb[(date+1)%7].split(' / ')[0]}"
-    str2="#{str2}\nGrand Hero Battle revival 2: #{ghb[(date+1)%7].split(' / ')[1]}"
-    str2="#{str2}\nNew Blessed Gardens addition: #{garden[week_from(date+1,3)%4]}" if (date+1)%7==3
-    str2="#{str2}\nRival Domains movement preference: #{rd[week_from(date+1,2)%4]}" if (date+1)%7==2
+    str2="#{str2}\nGrand Hero Battle revival: #{ghb[(date+1)%ghb.length].split(' / ')[0]}"
+    str2="#{str2}\nGrand Hero Battle revival 2: #{ghb[(date+1)%ghb.length].split(' / ')[1]}"
+    str2="#{str2}\nNew Blessed Gardens addition: #{garden[week_from(date+1,3)%garden.length]}" if (date+1)%7==3
+    if (date+1)%7==2 && rd[week_from(date+1,2)%rd.length]!=rd[week_from(date,2)%rd.length]
+      if rd[week_from(date+1,2)%rd.length]==''
+        str2="#{str2}\nRival Domains will be replaced with Relay Defense"
+      else
+        str2="#{str2}\nRival Domains movement preference: #{rd[week_from(date+1,2)%rd.length]}"
+      end
+    end
     if (date+1)%7==0
       str2="#{str2}\nNew Tactics Drills addition: #{['Skill Studies','Grandmaster'][week_from(date+1,0)%2]}"
       if [10,11].include?(week_from(date+1,0)%12)
@@ -14101,7 +14112,7 @@ bot.command([:next,:schedule]) do |event, type|
   msg=extend_message(msg,"Days since game release: #{longFormattedNumber(date)}",event)
   if event.user.id==167657750971547648 && @shardizard==4
     msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
-    msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)",event)
+    msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)",event)
   end
   if [-1,1].include?(idx)
     colors=['Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>',
@@ -14111,7 +14122,7 @@ bot.command([:next,:schedule]) do |event, type|
             'Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>',
             'Red <:Shard_Red:443733396842348545><:Crystal_Scarlet:445510676350500897><:Badge_Scarlet:445510676060962816><:Great_Badge_Scarlet:443704781001850910>',
             'Blue <:Shard_Blue:443733396741554181><:Crystal_Azure:445510676434124800><:Badge_Azure:445510675352125441><:Great_Badge_Azure:443704780783616016>']
-    colors=colors.rotate(date%7)
+    colors=colors.rotate(date%colors.length)
     msg2='__**Training Tower colors**__'
     for i in 0...colors.length
       if i==0
@@ -14122,8 +14133,8 @@ bot.command([:next,:schedule]) do |event, type|
       end
     end
     unless colors[0]==colors[colors.length-1]
-      t2=t+24*60*60*7
-      msg2="#{msg2}\n#{colors[0]} - 7 days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+      t2=t+24*60*60*colors.length
+      msg2="#{msg2}\n#{colors[0]} - #{colors.length} days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
     end
     msg=extend_message(msg,msg2,event,2)
   end
@@ -14140,7 +14151,7 @@ bot.command([:next,:schedule]) do |event, type|
          'Wrys <:Colorless_Staff:443692132323295243><:Icon_Move_Infantry:443331187579289601>',
          'Olivia <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601>',
          'Stahl <:Red_Blade:443172811830198282><:Icon_Move_Cavalry:443331186530451466>']
-    dhb=dhb.rotate(date%12)
+    dhb=dhb.rotate(date%dhb.length)
     msg2='__**Daily Hero Battles**__'
     for i in 0...dhb.length
       if i==0
@@ -14150,12 +14161,13 @@ bot.command([:next,:schedule]) do |event, type|
         msg2="#{msg2}\n#{dhb[i]} - #{"#{i} days from now" if i>1}#{"Tomorrow" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
       end
     end
-    t2=t+24*60*60*12
-    msg2="#{msg2}\n#{dhb[0]} - 12 days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+    t2=t+24*60*60*dhb.length
+    msg2="#{msg2}\n#{dhb[0]} - #{dhb.length} days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
     msg=extend_message(msg,msg2,event,2)
   end
   if [-1,3].include?(idx)
-    spec=['Magic','The Workout','Melee','Ranged','Bows'].rotate(date%5)
+    spec=['Magic','The Workout','Melee','Ranged','Bows']
+    spec=spec.rotate(date%spec.length)
     msg2="__**Special Training Maps**__"
     for i in 0...spec.length
       if i==0
@@ -14165,8 +14177,8 @@ bot.command([:next,:schedule]) do |event, type|
         msg2="#{msg2}\n#{spec[i]} - #{"#{i} days from now" if i>1}#{"Tomorrow" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
       end
     end
-    t2=t+24*60*60*5
-    msg2="#{msg2}\n#{spec[0]} - 5 days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+    t2=t+24*60*60*spec.length
+    msg2="#{msg2}\n#{spec[0]} - #{spec.length} days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
     msg=extend_message(msg,msg2,event,2)
   end
   ghb=['Ursula <:Blue_Tome:467112472394858508><:Icon_Move_Cavalry:443331186530451466> / Clarisse <:Colorless_Bow:443692132616896512><:Icon_Move_Infantry:443331187579289601>',
@@ -14176,7 +14188,7 @@ bot.command([:next,:schedule]) do |event, type|
        'Narcian <:Green_Blade:467122927230386207><:Icon_Move_Flier:443331186698354698> / Zephiel <:Red_Blade:443172811830198282><:Icon_Move_Armor:443331186316673025>',
        'Navarre <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601> / Camus <:Blue_Blade:467112472768151562><:Icon_Move_Cavalry:443331186530451466>',
        'Robin(F) <:Green_Tome:467122927666593822><:Icon_Move_Infantry:443331187579289601> / Legion <:Green_Blade:467122927230386207><:Icon_Move_Infantry:443331187579289601>']
-  ghb=ghb.rotate(date%7)
+  ghb=ghb.rotate(date%ghb.length)
   msg2='__**GHB Revival**__'
   msg3='__**GHB Revival 2**__'
   for i in 0...ghb.length
@@ -14189,18 +14201,20 @@ bot.command([:next,:schedule]) do |event, type|
       msg3="#{msg3}\n#{ghb[i].split(' / ')[1]} - #{"#{i} days from now" if i>1}#{"Tomorrow" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
     end
   end
-  t2=t+24*60*60*7
-  msg2="#{msg2}\n#{ghb[0].split(' / ')[0]} - 7 days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
-  msg3="#{msg3}\n#{ghb[0].split(' / ')[1]} - 7 days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+  t2=t+24*60*60*ghb.length
+  msg2="#{msg2}\n#{ghb[0].split(' / ')[0]} - #{ghb.length} days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
+  msg3="#{msg3}\n#{ghb[0].split(' / ')[1]} - #{ghb.length} days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
   msg=extend_message(msg,msg2,event,2) if [-1,4].include?(idx)
   msg=extend_message(msg,msg3,event,2) if [-1,5].include?(idx)
   msg=extend_message(msg,"Try the command again with \"GHB2\" if you're looking for the second set of Grand Hero Battles.\nYou may also want to try \"Events\" if you're looking for non-cyclical GHBs.",event,2) if [4].include?(idx)
   if [-1,6].include?(idx)
-    rd=['Flying <:Icon_Move_Flier:443331186698354698>',
+    rd=['Relay Defense',
+        'Cavalry <:Icon_Move_Cavalry:443331186530451466>',
+        'Flying <:Icon_Move_Flier:443331186698354698>',
         'Infantry <:Icon_Move_Infantry:443331187579289601>',
         'Armored <:Icon_Move_Armor:443331186316673025>',
-        'Cavalry <:Icon_Move_Cavalry:443331186530451466>']
-    rd=rd.rotate(week_from(date,2)%4)
+        'Relay Defense']
+    rd=rd.rotate(week_from(date,2)%6)
     rd=rd.rotate(-1) if t.wday==6
     msg2='__**Rival Domains Prefered Movement Type**__'
     for i in 0...rd.length
@@ -14208,15 +14222,18 @@ bot.command([:next,:schedule]) do |event, type|
         t2=t-24*60*60*t.wday+6*24*60*60
         t2+=7*24*60*60 if t.wday==6
         msg2="#{msg2}\n#{rd[i]} - This week until #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (Saturday)"
+      elsif rd[i]==rd[i-1]
       else
         t2=t-24*60*60*t.wday+7*24*60*60*i-24*60*60
         t2+=7*24*60*60 if t.wday==6
         msg2="#{msg2}\n#{rd[i]} - #{"#{i} weeks from now" if i>1}#{"Next week" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
       end
     end
-    t2=t-24*60*60*t.wday+7*24*60*60*4-24*60*60
-    t2+=7*24*60*60 if t.wday==6
-    msg2="#{msg2}\n#{rd[0]} - 4 weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
+    unless rd[0]==rd[rd.length-1]
+      t2=t-24*60*60*t.wday+7*24*60*60*rd.length-24*60*60
+      t2+=7*24*60*60 if t.wday==6
+      msg2="#{msg2}\n#{rd[0]} - #{rd.length} weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
+    end
     msg=extend_message(msg,msg2,event,2)
   end
   if [-1,7].include?(idx)
@@ -14224,7 +14241,7 @@ bot.command([:next,:schedule]) do |event, type|
             'Fire <:Legendary_Effect_Fire:443331186480119808>',
             'Water <:Legendary_Effect_Water:443331186534776832>',
             'Wind <:Legendary_Effect_Wind:443331186467536896>']
-    garden=garden.rotate(week_from(date,3)%4)
+    garden=garden.rotate(week_from(date,3)%garden.length)
     garden=garden.rotate(-1) if t.wday==0
     msg2='__**Next Blessed Gardens**__'
     for i in 0...garden.length
@@ -14238,9 +14255,9 @@ bot.command([:next,:schedule]) do |event, type|
         msg2="#{msg2}\n#{garden[i]} - #{"#{i} weeks from now" if i>1}#{"Next week" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
       end
     end
-    t2=t-24*60*60*t.wday+7*24*60*60*4
+    t2=t-24*60*60*t.wday+7*24*60*60*garden.length
     t2+=7*24*60*60 if t.wday==0
-    msg2="#{msg2}\n#{garden[0]} - 4 weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
+    msg2="#{msg2}\n#{garden[0]} - #{garden.length} weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
     msg=extend_message(msg,msg2,event,2)
   end
   if [-1,11].include?(idx)
@@ -14259,13 +14276,14 @@ bot.command([:next,:schedule]) do |event, type|
         msg2="#{msg2}\n#{drill[i]} - #{"#{i} weeks from now" if i>1}#{"Next week" if i==1} - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}"
       end
     end
-    t2=t-24*60*60*t.wday+7*24*60*60*2-72*60*60
+    t2=t-24*60*60*t.wday+7*24*60*60*drill.length-72*60*60
     t2+=7*24*60*60 if t.wday==4
-    msg2="#{msg2}\n#{'__' if idx==-1}#{drill[0]} - 2 weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}#{'__' if idx==-1}#{"\n" if idx==11}"
-    drill=['300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>',
-           '300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>',
-           '300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','1<:Orb_Rainbow:471001777622351872>','1<:Orb_Rainbow:471001777622351872>']
-    drill=drill.rotate(week_from(date,0)%12)
+    msg2="#{msg2}\n#{'__' if idx==-1}#{drill[0]} - #{drill.length} weeks from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year}#{'__' if idx==-1}#{"\n" if idx==11}"
+    drill=['300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>',
+           '300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>',
+           '300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>','300<:Hero_Feather:471002465542602753>',
+           '300<:Hero_Feather:471002465542602753>','1<:Orb_Rainbow:471001777622351872>','1<:Orb_Rainbow:471001777622351872>']
+    drill=drill.rotate(week_from(date,0)%drill.length)
     drill=drill.rotate(-1) if t.wday==4
     msg2="#{msg2}\nThis week's reward: #{drill[0]}"
     drill[0]=''
