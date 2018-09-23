@@ -8331,7 +8331,6 @@ def skill_comparison(event,args,bot)
   b2=[[],[],[],[],[],[]]
   b[1][0]=b[1][0].map{|q| q.map{|q2| q2.gsub('__','')}}
   b[0][0]=b[0][0].map{|q| q.map{|q2| q2.gsub('__','')}}
-  puts b.map{|q| q.to_s}
   for i in 0...b[0][0].length
     if b[0][0][i]==b[1][0][i]
       b2[i]=b[0][0][i]
