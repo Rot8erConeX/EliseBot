@@ -861,53 +861,56 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
   end
   return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
   return false if mode>0
-  return true if [188781153589657600,238644800994279424,210900237823246336,175150098357944330,183976699367522304,193956706223521793,185935665152786432,323487356172763137,256659145107701760,78649866577780736,189235935563481088,244073468981805056].include?(user.id) # people who donate to the laptop fund will always be EliseMods
+  return true if [188781153589657600,238644800994279424,210900237823246336,175150098357944330,183976699367522304,193956706223521793,185935665152786432,323487356172763137,256659145107701760,78649866577780736,189235935563481088,244073468981805056,270372601107447808].include?(user.id) # people who donate to the laptop fund will always be EliseMods
   return false
 end
 
-bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, f|
-  return nil if overlap_prevent(event)
-  f='' if f.nil?
-  if event.server.nil?
-    event.respond 'It is safe for me to send long replies here because this is my PMs with you.'
-  elsif [443172595580534784,443181099494146068,443704357335203840,449988713330769920].include?(event.server.id)
-    event.respond 'It is safe for me to send long replies here because this is one of my emoji servers.'
-  elsif @shardizard==4
-    event.respond 'It is safe for me to send long replies here because this is my debug mode.'
-  elsif ['bots','bot'].include?(event.channel.name.downcase)
-    event.respond "It is safe for me to send long replies here because the channel is named `#{event.channel.name.downcase}`."
-  elsif event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam')
-    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "spam".'
-  elsif event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('command')
-    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "command".'
-  elsif event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('channel')
-    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "channel".'
-  elsif event.channel.name.downcase.include?('elisebot') || event.channel.name.downcase.include?('elise-bot') || event.channel.name.downcase.include?('elise_bot')
-    event.respond 'It is safe for me to send long replies here because the channel name specifically calls attention to the fact that it is made for me.'
-  elsif @spam_channels.include?(event.channel.id)
-    if is_mod?(event.user,event.server,event.channel) && ['off','no','false'].include?(f.downcase)
-      metadata_load()
-      @spam_channels.delete(event.channel.id)
-      metadata_save()
-      event.respond 'This channel is no longer marked as safe for me to send long replies to.'
-    else
-      event << 'This channel has been specifically designated for me to be safe to send long replies to.'
-      event << ''
-      event << 'If you wish to change that, ask a server mod to type `FEH!spam off` in this channel.'
+def donate_trigger_word(event,str=nil)
+  str=event.message.text if str.nil?
+  str=str.downcase
+  d=Dir["C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/*.txt"]
+  f=[]
+  for i in 0...d.length
+    b=[]
+    File.open(d[i]).each_line do |line|
+      b.push(line.gsub("\n",''))
     end
-  elsif is_mod?(event.user,event.server,event.channel,1) && ['on','yes','true'].include?(f.downcase)
-    metadata_load()
-    @spam_channels.push(event.channel.id)
-    metadata_save()
-    event.respond 'This channel is now marked as safe for me to send long replies to.'
-  else
-    event << 'It is not safe for me to send long replies here.'
-    event << ''
-    event << 'If you wish to change that, try one of the following:'
-    event << '- Change the channel name to "bots".'
-    event << '- Change the channel name to include the word "bot" and one of the following words: "spam", "command(s)", "channel".'
-    event << '- Have a server mod type `FEH!spam on` in this channel.'
+    f.push([b[0],d[i].gsub("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/",'').gsub('.txt','').to_i])
   end
+  for i in 0...f.length
+    return f[i][1] if str.split(' ').include?("#{f[i][0].downcase}'s")
+  end
+  return -1
+end
+
+def donor_unit_list(event,uid)
+  return [] unless File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+  b=[]
+  File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
+    b.push(line.gsub("\n",''))
+  end
+  b.shift
+  b.shift
+  untz=[]
+  return untz if b.length<10
+  for i in 0...b.length/10
+    untz[i]=[]
+    untz[i].push(b[i*10])
+    k=b[i*10+1].split('\\'[0])
+    untz[i].push(k[0].to_i)
+    untz[i].push(k[1].to_i)
+    untz[i].push(k[2])
+    untz[i].push(k[3])
+    untz[i].push(k[4])
+    untz[i].push(b[i*10+2].split('\\'[0]))
+    untz[i].push(b[i*10+3].split('\\'[0]))
+    untz[i].push(b[i*10+4].split('\\'[0]))
+    untz[i].push(b[i*10+5].split('\\'[0]))
+    untz[i].push(b[i*10+6].split('\\'[0]))
+    untz[i].push(b[i*10+7].split('\\'[0]))
+    untz[i].push(b[i*10+8])
+  end
+  return untz
 end
 
 def overlap_prevent(event) # used to prevent servers with both Elise and her debug form from receiving two replies
@@ -2785,6 +2788,17 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
         stat_skills.push(x[i]) if lokoout.include?(x[i])
       end
     end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(event,uid)
+    x2=x.find_index{|q| q[0]==name}
+    return stat_skills if x2.nil?
+    a=x[x2][9].reject{|q| q.include?('~~')}
+    xa=[a[a.length-1],x[x2][12]]
+    stat_skills=[]
+    for i in 0...xa.length
+      stat_skills.push(xa[i]) if lokoout.include?(xa[i])
+    end
   end
   return stat_skills
 end
@@ -2896,6 +2910,18 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
       x=[a[a.length-1],@dev_units[dv][12]]
       for i in 0...x.length
         stat_skills_3.push(x[i]) if lokoout.include?(x[i])
+      end
+    end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(event,uid)
+    x2=x.find_index{|q| q[0]==name}
+    unless x2.nil?
+      a=x[x2][9].reject{|q| q.include?('~~')}
+      xa=[a[a.length-1],x[x2][12]]
+      stat_skills_3=[]
+      for i in 0...xa.length
+        stat_skills_3.push(xa[i]) if lokoout.include?(xa[i])
       end
     end
   end
@@ -3352,6 +3378,28 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     else
       event.respond 'Mathoo does not have that character.  Showing neutral stats.'
     end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(event,uid)
+    x2=x.find_index{|q| q[0]==name}
+    if x2.nil?
+      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+    else
+      rarity=x[x2][1]
+      merges=x[x2][2]
+      boon=x[x2][3].gsub(' ','')
+      bane=x[x2][4].gsub(' ','')
+      summoner=x[x2][5]
+      weaponz=x[x2][6].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
+    end
   elsif " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
     if name=='Robin'
       uskl=unit_skills('Robin(M)',event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
@@ -3432,7 +3480,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}**__","#{unit_clss(bot,event,j)}",xcolor,'Stats currently unknown',pick_thumbnail(event,j,bot))
     disp_unit_skills(bot,untz[j][0],event) if skillstoo || expandedmode
     return nil
-  elsif !wl.include?('~~') && (stat_skills_2.length<=0 || unitz[0]=='Kiran') && !expandedmodex && !(args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth')) && !(event.server.nil? || event.server.id==238059616028590080)
+  elsif !wl.include?('~~') && (stat_skills_2.length<=0 || unitz[0]=='Kiran') && !expandedmodex && !(args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth')) && !(event.server.nil? || event.server.id==238059616028590080) && event.channel.id != 362017071862775810
     disp_tiny_stats(bot,name,weapon,event,ignore,skillstoo)
     return nil
   elsif unitz[0]=='Kiran'
@@ -3696,6 +3744,14 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
         sklz2=[@dev_units[dv][6],@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],[@dev_units[dv][12]]]
         uskl=sklz2.map{|q| q.reject{|q2| q2.include?('~~')}}.map{|q| q[q.length-1]}
       end
+    elsif donate_trigger_word(event)>0
+      uid=donate_trigger_word(event)
+      x=donor_unit_list(event,uid)
+      x2=x.find_index{|q| q[0]==name}
+      unless x2.nil?
+        sklz2=[x[x2][6],x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],[x[x2][12]]]
+        uskl=sklz2.map{|q| q.reject{|q2| q2.include?('~~')}}.map{|q| q[q.length-1]}
+      end
     end
     flds.push(['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"])
   elsif expandedmode && u40[0]!='Robin (Shared stats)'
@@ -3706,6 +3762,13 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       if dv>=0
         mu=true
         uskl=[@dev_units[dv][6],@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],[@dev_units[dv][12]]]
+      end
+    elsif donate_trigger_word(event)>0
+      uid=donate_trigger_word(event)
+      x=donor_unit_list(event,uid)
+      x2=x.find_index{|q| q[0]==name}
+      unless x2.nil?
+        uskl=[x[x2][6],x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],[x[x2][12]]]
       end
     end
     flds.push(["<:Skill_Weapon:444078171114045450> **Weapons**",uskl[0].reject{|q| ['Falchion','**Falchion**'].include?(q)}.join("\n")])
@@ -3841,6 +3904,28 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
       event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats.'
     else
       event.respond 'Mathoo does not have that character.  Showing neutral stats.'
+    end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(event,uid)
+    x2=x.find_index{|q| q[0]==name}
+    if x2.nil?
+      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+    else
+      rarity=x[x2][1]
+      merges=x[x2][2]
+      boon=x[x2][3].gsub(' ','')
+      bane=x[x2][4].gsub(' ','')
+      summoner=x[x2][5]
+      weaponz=x[x2][6].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
     end
   elsif " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
     if name=='Robin'
@@ -4065,6 +4150,14 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
       if dv>=0
         mu=true
         sklz2=[@dev_units[dv][6],@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],[@dev_units[dv][12]]]
+        uskl=sklz2.map{|q| q.reject{|q2| q2.include?('~~')}}.map{|q| q[q.length-1]}
+      end
+    elsif donate_trigger_word(event)>0
+      uid=donate_trigger_word(event)
+      x=donor_unit_list(event,uid)
+      x2=x.find_index{|q| q[0]==name}
+      unless x2.nil?
+        sklz2=[x[x2][6],x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],[x[x2][12]]]
         uskl=sklz2.map{|q| q.reject{|q2| q2.include?('~~')}}.map{|q| q[q.length-1]}
       end
     end
@@ -5299,6 +5392,17 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
       event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing default skills.' unless chain
     else
       event.respond 'Mathoo does not have that character.  Showing default skills.' unless chain
+    end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(event,uid)
+    x2=x.find_index{|q| q[0]==name}
+    if x2.nil?
+      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+    else
+      rarity=x[x2][1]
+      txt=display_stars(rarity,x[x2][2],x[x2][5]).split('  ')[0]
+      sklz2=[x[x2][6],x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],[x[x2][12]]]
     end
   else
     untz=@units.map{|q| q}
@@ -7432,6 +7536,18 @@ def comparison(event,args,bot)
           r[3]=dv[4].gsub(' ','')
           r[2]='' if r[2].nil?
           r[3]='' if r[3].nil?
+        elsif donate_trigger_word(event,f[i])>0
+          uid=donate_trigger_word(event,f[i])
+          x=donor_unit_list(event,uid)
+          x2=x.find_index{|q| q[0]==name}
+          unless x2.nil?
+            r[0]=x[x2][1]
+            r[1]=x[x2][2]
+            r[2]=x[x2][3].gsub(' ','')
+            r[3]=x[x2][4].gsub(' ','')
+            r[2]='' if r[2].nil?
+            r[3]='' if r[3].nil?
+          end
         end
         st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
         st[0]=st[0].gsub('Lavatain','Laevatein')
@@ -7457,7 +7573,7 @@ def comparison(event,args,bot)
     for i in 0...k.length
       x=detect_multi_unit_alias(event,k[i],k[i],1)
       str=k[i]
-      if k[i].downcase=="mathoo's"
+      if k[i].downcase=="mathoo's" || donate_trigger_word(event,k[i])>0
         k2.push(str)
       elsif !x.nil? && x[1].is_a?(Array) && x[1].length>1
         if (i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?) || (i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?) || (i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?) || !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
@@ -7490,6 +7606,7 @@ def comparison(event,args,bot)
     c=[]
     atkstat=[]
     m=false
+    did=-1
     for i in 0...k.length
       if find_name_in_string(event,sever(k[i]))!=nil
         r=find_stats_in_string(event,sever(k[i]))
@@ -7503,6 +7620,17 @@ def comparison(event,args,bot)
           r[3]=dv[4].gsub(' ','')
           r[2]='' if r[2].nil?
           r[3]='' if r[3].nil?
+        elsif did>0
+          x=donor_unit_list(event,did)
+          x2=x.find_index{|q| q[0]==name}
+          unless x2.nil?
+            r[0]=x[x2][1]
+            r[1]=x[x2][2]
+            r[2]=x[x2][3].gsub(' ','')
+            r[3]=x[x2][4].gsub(' ','')
+            r[2]='' if r[2].nil?
+            r[3]='' if r[3].nil?
+          end
         end
         st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
         st[0]=st[0].gsub('Lavatain','Laevatein')
@@ -7513,6 +7641,8 @@ def comparison(event,args,bot)
         atkstat.push('Freeze') if ['Dragon'].include?(u[1][1])
       elsif k[i].downcase=="mathoo's"
         m=true
+      elsif donate_trigger_word(event,k[i])>0
+        did=donate_trigger_word(event,k[i])
       end
     end
   end
@@ -8148,7 +8278,7 @@ def skill_comparison(event,args,bot)
     elsif find_name_in_string(event,sever(str),1)!=nil
       x=find_name_in_string(event,sever(str),1)
       k2.push(str)
-    elsif k[i].downcase=="mathoo's"
+    elsif k[i].downcase=="mathoo's" || donate_trigger_word(event,k[i])>0
       k2.push(str)
     end
   end
@@ -8156,6 +8286,7 @@ def skill_comparison(event,args,bot)
   b=[]
   c=[]
   m=false
+  did=-1
   for i in 0...k.length
     if find_name_in_string(event,sever(k[i]))!=nil
       r=find_stats_in_string(event,sever(k[i]))
@@ -8164,13 +8295,31 @@ def skill_comparison(event,args,bot)
       if m && find_in_dev_units(name)>=0
         dv=@dev_units[find_in_dev_units(name)]
         r[0]=dv[1]
+      elsif did>0
+        x=donor_unit_list(event,did)
+        x2=x.find_index{|q| q[0]==name}
+        unless x2.nil?
+          r[0]=x[x2][1]
+        end
       end
       st=[]
-      st=unit_skills(name,event,false,r[0]) if i<=1
+      st=unit_skills(name,event,false,r[0])
+      if m && find_in_dev_units(name)>=0
+        dv=@dev_units[find_in_dev_units(name)]
+        st=[dv[6],dv[7],dv[8],dv[9],dv[10],dv[11]]
+      elsif did>0
+        x=donor_unit_list(event,did)
+        x2=x.find_index{|q| q[0]==name}
+        unless x2.nil?
+          st=[x[x2][6],x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11]]
+        end
+      end
       b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]} #{name} #{unit_moji(bot,event,-1,name,m)}",name])
       c.push(unit_color(event,find_unit(find_name_in_string(event,sever(k[i])),event),nil,1,m))
     elsif k[i].downcase=="mathoo's"
       m=true
+    elsif donate_trigger_word(event,k[i])>0
+      did=donate_trigger_word(event,k[i])
     end
   end
   if b.length<2
@@ -8182,6 +8331,7 @@ def skill_comparison(event,args,bot)
   b2=[[],[],[],[],[],[]]
   b[1][0]=b[1][0].map{|q| q.map{|q2| q2.gsub('__','')}}
   b[0][0]=b[0][0].map{|q| q.map{|q2| q2.gsub('__','')}}
+  puts b.map{|q| q.to_s}
   for i in 0...b[0][0].length
     if b[0][0][i]==b[1][0][i]
       b2[i]=b[0][0][i]
@@ -9564,6 +9714,28 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     else
       event.respond 'Mathoo does not have that character.  Showing neutral stats.'
     end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(event,uid)
+    x2=x.find_index{|q| q[0]==name}
+    if x2.nil?
+      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+    else
+      rarity=x[x2][1]
+      merges=x[x2][2]
+      boon=x[x2][3].gsub(' ','')
+      bane=x[x2][4].gsub(' ','')
+      summoner=x[x2][5]
+      weaponz=x[x2][6].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
+    end
   elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
     weapon=get_unit_prf(name)
     weapon2=weapon[1] unless weapon[1].nil?
@@ -9758,6 +9930,14 @@ def unit_study(event,name,bot,weapon=nil)
       boon=@dev_units[dv][3].gsub(' ','')
       bane=@dev_units[dv][4].gsub(' ','')
     end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(event,uid)
+    x2=x.find_index{|q| q[0]==name}
+    unless x2.nil?
+      boon=x[x2][3].gsub(' ','')
+      bane=x[x2][4].gsub(' ','')
+    end
   end
   rardata=u40x[9][0].downcase.gsub('0s','')
   highest_merge=0
@@ -9929,6 +10109,28 @@ def heal_study(event,name,bot,weapon=nil)
       event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats.'
     else
       event.respond 'Mathoo does not have that character.  Showing neutral stats.'
+    end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(event,uid)
+    x2=x.find_index{|q| q[0]==name}
+    if x2.nil?
+      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+    else
+      rarity=x[x2][1]
+      merges=x[x2][2]
+      boon=x[x2][3].gsub(' ','')
+      bane=x[x2][4].gsub(' ','')
+      summoner=x[x2][5]
+      weaponz=x[x2][6].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
     end
   elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
     weapon=get_unit_prf(name)
@@ -10190,6 +10392,28 @@ def proc_study(event,name,bot,weapon=nil)
       event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats.'
     else
       event.respond 'Mathoo does not have that character.  Showing neutral stats.'
+    end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(event,uid)
+    x2=x.find_index{|q| q[0]==name}
+    if x2.nil?
+      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+    else
+      rarity=x[x2][1]
+      merges=x[x2][2]
+      boon=x[x2][3].gsub(' ','')
+      bane=x[x2][4].gsub(' ','')
+      summoner=x[x2][5]
+      weaponz=x[x2][6].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
     end
   elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
     weapon=get_unit_prf(name)
@@ -10545,6 +10769,28 @@ def phase_study(event,name,bot,weapon=nil)
       event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats.'
     else
       event.respond 'Mathoo does not have that character.  Showing neutral stats.'
+    end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(event,uid)
+    x2=x.find_index{|q| q[0]==name}
+    if x2.nil?
+      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+    else
+      rarity=x[x2][1]
+      merges=x[x2][2]
+      boon=x[x2][3].gsub(' ','')
+      bane=x[x2][4].gsub(' ','')
+      summoner=x[x2][5]
+      weaponz=x[x2][6].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
     end
   elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
     weapon=get_unit_prf(name)
@@ -11471,6 +11717,51 @@ def games_list(event,name,bot,weapon=nil)
   create_embed(event,"__#{"Mathoo's " if mu}**#{name}**__","#{"**Credit in FEH**\n" unless g2=="No games"}#{g2}#{"\n\n**Other games**\n#{g.join("\n")}" unless g.length<1}#{"\n\n**#{"Male a" if ["Robin(F)","Robin(M)"].include?(untz[j][0])}#{"A" unless ["Robin(F)","Robin(M)"].include?(untz[j][0])}lso appears via Amiibo functionality in**\n#{ga.join("\n")}" unless ga.length<1}",xcolor,nil,pic)
 end
 
+bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, f|
+  return nil if overlap_prevent(event)
+  f='' if f.nil?
+  if event.server.nil?
+    event.respond 'It is safe for me to send long replies here because this is my PMs with you.'
+  elsif [443172595580534784,443181099494146068,443704357335203840,449988713330769920].include?(event.server.id)
+    event.respond 'It is safe for me to send long replies here because this is one of my emoji servers.'
+  elsif @shardizard==4
+    event.respond 'It is safe for me to send long replies here because this is my debug mode.'
+  elsif ['bots','bot'].include?(event.channel.name.downcase)
+    event.respond "It is safe for me to send long replies here because the channel is named `#{event.channel.name.downcase}`."
+  elsif event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam')
+    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "spam".'
+  elsif event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('command')
+    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "command".'
+  elsif event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('channel')
+    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "channel".'
+  elsif event.channel.name.downcase.include?('elisebot') || event.channel.name.downcase.include?('elise-bot') || event.channel.name.downcase.include?('elise_bot')
+    event.respond 'It is safe for me to send long replies here because the channel name specifically calls attention to the fact that it is made for me.'
+  elsif @spam_channels.include?(event.channel.id)
+    if is_mod?(event.user,event.server,event.channel) && ['off','no','false'].include?(f.downcase)
+      metadata_load()
+      @spam_channels.delete(event.channel.id)
+      metadata_save()
+      event.respond 'This channel is no longer marked as safe for me to send long replies to.'
+    else
+      event << 'This channel has been specifically designated for me to be safe to send long replies to.'
+      event << ''
+      event << 'If you wish to change that, ask a server mod to type `FEH!spam off` in this channel.'
+    end
+  elsif is_mod?(event.user,event.server,event.channel,1) && ['on','yes','true'].include?(f.downcase)
+    metadata_load()
+    @spam_channels.push(event.channel.id)
+    metadata_save()
+    event.respond 'This channel is now marked as safe for me to send long replies to.'
+  else
+    event << 'It is not safe for me to send long replies here.'
+    event << ''
+    event << 'If you wish to change that, try one of the following:'
+    event << '- Change the channel name to "bots".'
+    event << '- Change the channel name to include the word "bot" and one of the following words: "spam", "command(s)", "channel".'
+    event << '- Have a server mod type `FEH!spam on` in this channel.'
+  end
+end
+
 bot.command([:alts,:alt]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
@@ -12363,6 +12654,18 @@ bot.command([:bst, :BST]) do |event, *args|
           r[3]=dv[4].gsub(' ','')
           r[2]='' if r[2].nil?
           r[3]='' if r[3].nil?
+        elsif donate_trigger_word(event,f[i])>0
+          uid=donate_trigger_word(event,f[i])
+          x=donor_unit_list(event,uid)
+          x2=x.find_index{|q| q[0]==name}
+          unless x2.nil?
+            r[0]=x[x2][1]
+            r[1]=x[x2][2]
+            r[2]=x[x2][3].gsub(' ','')
+            r[3]=x[x2][4].gsub(' ','')
+            r[2]='' if r[2].nil?
+            r[3]='' if r[3].nil?
+          end
         end
         k.push("#{r[0]}*#{u[0]}+#{r[1]}#{"+#{r[2]}" if r[2].length>0}#{"-#{r[3]}" if r[3].length>0}")
       end
@@ -12400,11 +12703,14 @@ bot.command([:bst, :BST]) do |event, *args|
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0],[0,0]]
   m=false
+  did=-1
   for i in 0...k.length
     x=detect_multi_unit_alias(event,k[i],k[i],1)
     name=nil
     if k[i].downcase=="mathoo's"
       m=true
+    elsif donate_trigger_word(event,k[i])>0
+      did=donate_trigger_word(event,k[i])
     elsif !x.nil? && x[1].is_a?(Array) && x[1].length>1
       if (i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?) || (i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?) || (i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?) || !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
         if i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?
@@ -12489,6 +12795,15 @@ bot.command([:bst, :BST]) do |event, *args|
         r[1]=dv[2]
         r[2]=dv[3].gsub(' ','')
         r[3]=dv[4].gsub(' ','')
+      elsif did>0
+        x=donor_unit_list(event,did)
+        x2=x.find_index{|q| q[0]==name}
+        unless x2.nil?
+          r[0]=x[x2][1]
+          r[1]=x[x2][2]
+          r[2]=x[x2][3].gsub(' ','')
+          r[3]=x[x2][4].gsub(' ','')
+        end
       end
       st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
       b.push(st[1]+st[2]+st[3]+st[4]+st[5])
@@ -16265,6 +16580,7 @@ def next_holiday(bot,mode=0)
             [0,6,30,'Nowi','in recognition of Ooocast#4613',"Donator's birthday"],
             [0,7,4,'Arthur','for freedom and justice.','Independance Day'],
             [0,7,22,'Nowi(Halloween)','in recognition of Shaq#7647',"Donator's birthday"],
+            [0,8,3,'Elise(Moosie)','in recognition of Moosie G#3585',"Donator's birthday"],
             [0,8,6,'Zelgius','in recognition of DullahansXMark#9036',"Donator's birthday"],
             [0,9,16,'Genny','in recognition of Straynine#3480',"Donator's day"],
             [0,10,31,'Henry(Halloween)','with a dead Emblian. Nyahaha!','Halloween'],
