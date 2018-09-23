@@ -12627,7 +12627,7 @@ end
 
 bot.command([:bst, :BST]) do |event, *args|
   return nil if overlap_prevent(event)
-  event.channel.send_temporary_message('Calculating data, please wait...',8)
+  event.channel.send_temporary_message('Parsing message, please wait...',8)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   s1=args.join(' ').gsub(',','').gsub('/','').downcase.gsub('laevatein','lavatain')
   s2=args.join(' ').gsub(',','').gsub('/','').downcase.gsub('laevatein','lavatain')
@@ -12685,6 +12685,7 @@ bot.command([:bst, :BST]) do |event, *args|
   n=0
   au=0
   b=[]
+  scr=[]
   counters=[]
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHEmblemTeams.txt')
     counters=[]
@@ -12703,6 +12704,8 @@ bot.command([:bst, :BST]) do |event, *args|
   braves=[[],[0,0],[0,0]]
   m=false
   did=-1
+  msg=""
+  event.channel.send_temporary_message("Message parsed, calculating units...",2)
   for i in 0...k.length
     x=detect_multi_unit_alias(event,k[i],k[i],1)
     name=nil
@@ -12723,14 +12726,14 @@ bot.command([:bst, :BST]) do |event, *args|
         end
         if x[1].is_a?(Array) && x[1].length>1
           au+=1
-          event << "Ambiguous Unit #{au}: #{x[0]} - #{list_lift(x[1].map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"},'or')}"
+          msg=extend_message(msg,"Ambiguous Unit #{au}: #{x[0]} - #{list_lift(x[1].map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"},'or')}",event)
         else
           name=@units[find_unit(find_name_in_string(event,x[1][0]),event)][0]
           summon_type=@units[find_unit(find_name_in_string(event,x[1][0]),event)][9][0].downcase
         end
       else
         au+=1
-        event << "Ambiguous Unit #{au}: #{x[0]} - #{list_lift(x[1].map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"},'or')}"
+        msg=extend_message(msg,"Ambiguous Unit #{au}: #{x[0]} - #{list_lift(x[1].map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"},'or')}",event)
       end
     elsif find_name_in_string(event,sever(k[i]))!=nil
       name=@units[find_unit(find_name_in_string(event,sever(k[i])),event)][0]
@@ -12745,7 +12748,7 @@ bot.command([:bst, :BST]) do |event, *args|
       elsif i<k.length-1 && !detect_multi_unit_alias(event,k[i+1],"#{k[i]} #{k[i+1]}",1).nil?
       else
         n+=1
-        event << "Nonsense term #{n}: #{k[i]}"
+        msg=extend_message(msg,"Nonsense term #{n}: #{k[i]}",event)
       end
     end
     if !name.nil?
@@ -12806,9 +12809,12 @@ bot.command([:bst, :BST]) do |event, *args|
       end
       st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
       b.push(st[1]+st[2]+st[3]+st[4]+st[5])
-      event << "Unit #{u}: #{r[0]}#{@rarity_stars[r[0]-1]} #{name.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,name,m)} +#{r[1]} #{"(+#{r[2]}, -#{r[3]})" if !['',' '].include?(r[2]) || !['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}     BST: #{b[b.length-1]}"
+      st=get_stats(event,name,40,5,0,r[2],r[3])
+      scr.push(((st[1]+st[2]+st[3]+st[4]+st[5])/5)+r[0]*5+r[1]*2+90)
+      msg=extend_message(msg,"Unit #{u}: #{r[0]}#{@rarity_stars[r[0]-1]} #{name.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,name,m)} +#{r[1]} #{"(+#{r[2]}, -#{r[3]})" if !['',' '].include?(r[2]) || !['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}  \u00B7  BST: #{b[b.length-1]}  \u00B7  Score: #{scr[scr.length-1]}+`SP`/100",event)
     end
   end
+  event.channel.send_temporary_message("#{event.user.mention} Units found, calculating BST and arena score...",8)
   if braves[1].max==1
     counters[14][1]+=braves[1][1]+braves[1][0]
     counters[14][0][1]='Pseudo-F2P'
@@ -12849,23 +12855,26 @@ bot.command([:bst, :BST]) do |event, *args|
       end
     end
     b2=b.inject(0){|sum,x| sum + x }
-    if b.length==1
-    elsif b.length<=4
+    s2=scr.inject(0){|sum,x| sum + x }
+    xy=[155,2]
+    if b.length<=4
       if emblem_name[1].length>0
-        event << "**#{emblem_name[1]} team BST: #{b2}**"
+        msg2="__**#{emblem_name[1]} team**__"
       else
-        event << "**Team BST: #{b2}**"
+        msg2="__**Team**__"
       end
+      msg2="#{msg2}\n**BST: #{b2}**\n**Advanced Arena Score: #{(s2*1.0/b.length+7*b.length+xy[0])}+`SP`/400**, #{(s2*1.0/b.length+7*b.length+xy[0])*2}+`SP`/200 with bonus"
+      msg=extend_message(msg,msg2,event,2)
     elsif b.length<=8
-      event << "**Team BST of first four listed#{", which constitutes a #{emblem_name[1]} team" if emblem_name[1].length>0}: #{b[0]+b[1]+b[2]+b[3]}**"
-      event << "*Team BST of all listed units#{", which constitutes a #{emblem_name[2]} team" if emblem_name[2].length>0}: #{b[0]+b[1]+b[2]+b[3]+b[4]+b[5]+b[6]+b[7]}*"
+      msg=extend_message(msg,"__**First four listed#{", which constitutes a #{emblem_name[1]} team" if emblem_name[1].length>0}**__\n**BST: #{b[0]+b[1]+b[2]+b[3]}**\n**Advanced Arena Score: #{((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])}+`SP`/400**, #{((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])*2}+`SP`/200 with bonus",event,2)
+      msg=extend_message(msg,"__*All listed units#{", which constitutes a #{emblem_name[2]} team" if emblem_name[2].length>0}*__\n*BST: #{b2}*\n*Advanced (pseudo)Arena Score: #{(s2*1.0/b.length+7*b.length+xy[0])}+`SP`/400*, #{(s2*1.0/b.length+7*b.length+xy[0])*2}+`SP`/200 with bonus",event,2)
     else
-      event << "**Team BST of first four listed#{", which constitutes a #{emblem_name[1]} team" if emblem_name[1].length>0}: #{b[0]+b[1]+b[2]+b[3]}**"
-      event << "*Team BST of first eight listed#{", which constitutes a #{emblem_name[2]} team" if emblem_name[2].length>0}: #{b[0]+b[1]+b[2]+b[3]+b[4]+b[5]+b[6]+b[7]}*"
-      event << "Total BST of all listed units: #{b2}"
+      msg=extend_message(msg,"__**First four listed#{", which constitutes a #{emblem_name[1]} team" if emblem_name[1].length>0}**__\n**BST: #{b[0]+b[1]+b[2]+b[3]}**\n**Advanced Arena Score: #{((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])}+`SP`/400**, #{((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])*2}+`SP`/200 with bonus",event,2)
+      msg=extend_message(msg,"__*First eight listed#{", which constitutes a #{emblem_name[2]} team" if emblem_name[2].length>0}*__\n*BST: #{b[0]+b[1]+b[2]+b[3]+b[4]+b[5]+b[6]+b[7]}*\n*Advanced (pseudo)Arena Score: #{((scr[0]+scr[1]+scr[2]+scr[3]+scr[4]+scr[5]+scr[6]+scr[7])/8.0+56+xy[0])}+`SP`/400*, #{((scr[0]+scr[1]+scr[2]+scr[3]+scr[4]+scr[5]+scr[6]+scr[7])/8.0+56+xy[0])*2}+`SP`/200 with bonus",event,2)
+      msg=extend_message(msg,"__All listed units__\nBST: #{b2}\nAdvanced (pseudo)Arena Score: #{(s2*1.0/b.length+7*b.length+xy[0])}+`SP`/400, #{(s2*1.0/b.length+7*b.length+xy[0])*2}+`SP`/200 with bonus",event,2)
     end
   end
-  event << ""
+  event.respond msg
 end
 
 bot.command([:compare, :comparison]) do |event, *args|
