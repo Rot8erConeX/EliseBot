@@ -1,0 +1,12 @@
+Moosie
+
+Elise
+5\2\Attack\Defense\S
+Assault\Panic\Panic+\Panic+ (+) Wrathful Mode
+Heal\Mend\Recover\Recover+
+Miracle
+Brazen Atk/Spd 1\Brazen Atk/Spd 2\Brazen Atk/Spd 3
+Dazzling Staff 1\Dazzling Staff 2\Dazzling Staff 3
+Savage Blow 1\Savage Blow 2\Savage Blow 3
+Savage Blow 3
+

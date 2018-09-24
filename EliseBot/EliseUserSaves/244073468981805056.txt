@@ -1,0 +1,12 @@
+Ooocast
+
+Nowi
+5\10\Speed\Resistance\S
+Fire Breath\Fire Breath+\Lightning Breath\Lightning Breath+\Lightning Breath+ (+) Speed Mode
+Swap
+Daylight\Sol\Aether
+Warding Stance 1\Warding Stance 2\Warding Breath
+Guard 1\Guard 2\Guard 3
+Panic Ploy 1\Panic Ploy 2\Panic Ploy 3
+Quick Riposte 3
+
