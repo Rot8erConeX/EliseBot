@@ -852,6 +852,27 @@ def safe_to_spam?(event) # determines whether or not it is safe to send extremel
   return false
 end
 
+def get_donor_list()
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHDonorList.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHDonorList.txt').each_line do |line|
+      b.push(line.gsub("\n",'').split('\\'[0]))
+    end
+    for i in 0...b.length
+      b[i][0]=b[i][0].to_i
+      b[i][2]=b[i][2].to_i
+      b[i][3]=b[i][3].split('/').map{|q| q.to_i} unless b[i][3].nil?
+    end
+  else
+    b=[]
+  end
+  return b
+end
+
+bot.command(:boop) do |event|
+  event.respond get_donor_list().map{|q| q.to_s}.join("\n")
+end
+
 def is_mod?(user,server,channel,mode=0) # used by certain commands to determine if a user can use them
   return true if user.id==167657750971547648 # bot developer is always an EliseMod
   return false if server.nil? # no one is a EliseMod in PMs
@@ -861,7 +882,7 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
   end
   return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
   return false if mode>0
-  return true if [188781153589657600,238644800994279424,210900237823246336,175150098357944330,183976699367522304,193956706223521793,185935665152786432,323487356172763137,256659145107701760,78649866577780736,189235935563481088,244073468981805056,270372601107447808,103926672939581440].include?(user.id) # people who donate to the laptop fund will always be EliseMods
+  return true if get_donor_list().map{|q| q[0]}.include?(user.id) # people who donate to the laptop fund will always be EliseMods
   return false
 end
 
@@ -16673,22 +16694,19 @@ def next_holiday(bot,mode=0)
   holidays=[[0,1,1,'Tiki(Young)','as Babby New Year',"New Year's Day"],
             [0,2,2,'Feh','the best gacha game ever!','Game Release Anniversary'],
             [0,2,14,'Cordelia(Bride)','with your heartstrings.',"Valentine's Day"],
-            [0,3,17,'Ephraim','in recognition of AcePower#1000',"Donator's birthday"],
-            [0,3,28,'Faye','in recognition of MiniMytch#0155',"Donator's birthday"],
             [0,4,1,'Priscilla','tribute to Xander for making this possible.',"April Fool's Day"],
             [0,4,24,'Sakura(BDay)','dressup as my best friend.',"Coder's birthday"],
             [0,4,29,'Anna',"with all the money you're giving me",'Golden Week'],
-            [0,6,30,'Nowi','in recognition of Ooocast#4613',"Donator's birthday"],
             [0,7,4,'Arthur','for freedom and justice.','Independance Day'],
-            [0,7,22,'Nowi(Halloween)','in recognition of Shaq#7647',"Donator's birthday"],
-            [0,8,3,'Elise(Moosie)','in recognition of Moosie G#3585',"Donator's birthday"],
-            [0,8,6,'Zelgius','in recognition of DullahansXMark#9036',"Donator's birthday"],
-            [0,9,16,'Genny','in recognition of Straynine#3480',"Donator's day"],
             [0,10,31,'Henry(Halloween)','with a dead Emblian. Nyahaha!','Halloween'],
-            [0,12,6,'Lilina','in recognition of TimDiamond#6094',"Donator's birthday"],
-            [0,12,12,'Soleil','in recognition of DeepDarkDad#2070',"Donator's birthday"],
             [0,12,25,'Robin(M)(Winter)','as Santa Claus for Askr.','Christmas'],
             [0,12,31,'Tiki(Adult)','as Mother Time',"New Year's Eve"]]
+  d=get_donor_list()
+  d=d.reject{|q| q[2]<2}
+  for i in 0...d.length
+    holidays.push([0,d[i][3][0],d[i][3][1],d[i][4],"in recognition of #{bot.user(d[i][0]).distinct}","Donator's birthday"])
+    holidays[-1][5]="Donator's Day" if d[i][0]==189235935563481088
+  end
   for i in 0...holidays.length
     if t.month>holidays[i][1] || (t.month==holidays[i][1] && t.day>holidays[i][2])
       holidays[i][0]=t.year+1
@@ -16804,7 +16822,8 @@ def next_holiday(bot,mode=0)
       bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/BaseElise.jpg','r')) rescue nil if @shardizard.zero?
       @avvie_info=['Elise','*Fire Emblem Heroes*','']
     end
-    @scheduler.at "#{k[0][0]}/#{k[0][1]}/#{k[0][2]} 0000" do
+    t+=24*60*60
+    @scheduler.at "#{t.year}/#{t.month}/#{t.day} 0000" do
       next_holiday(bot,1)
     end
   end
