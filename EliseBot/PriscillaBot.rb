@@ -869,10 +869,6 @@ def get_donor_list()
   return b
 end
 
-bot.command(:boop) do |event|
-  event.respond get_donor_list().map{|q| q.to_s}.join("\n")
-end
-
 def is_mod?(user,server,channel,mode=0) # used by certain commands to determine if a user can use them
   return true if user.id==167657750971547648 # bot developer is always an EliseMod
   return false if server.nil? # no one is a EliseMod in PMs
@@ -882,7 +878,7 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
   end
   return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
   return false if mode>0
-  return true if get_donor_list().map{|q| q[0]}.include?(user.id) # people who donate to the laptop fund will always be EliseMods
+  return true if get_donor_list().reject{|q| q[2]<1}.map{|q| q[0]}.include?(user.id) # people who donate to the laptop fund will always be EliseMods
   return false
 end
 
@@ -904,7 +900,7 @@ def donate_trigger_word(event,str=nil)
   return -1
 end
 
-def donor_unit_list(event,uid)
+def donor_unit_list(uid)
   return [] unless File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
   b=[]
   File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
@@ -932,6 +928,38 @@ def donor_unit_list(event,uid)
     untz[i].push(b[i*10+8])
   end
   return untz
+end
+
+def donor_unit_save(uid,table) # used by the edit command to save the donorunits
+  return nil unless File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+  # snag the username
+  b=[]
+  File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
+    b.push(line.gsub("\n",''))
+  end
+  # sort the unit list alphabetically
+  k=table.map{|q| q}
+  k.compact!
+  k=k.sort{|a,b| a[0]<=>b[0]}
+  untz=[]
+  for i in 0...k.length
+    untz.push(k[i].map{|q| q})
+  end
+  s="#{b[0]}"
+  for i in 0...untz.length
+    s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\n#{untz[i][6].join('\\'[0])}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12]}"
+  end
+  open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt", 'w') { |f|
+    f.puts s
+    f.puts "\n"
+  }
+  return nil
+end
+
+bot.command(:boop) do |event|
+  t=donor_unit_list(244073468981805056)
+  donor_unit_save(244073468981805056,t)
+  event.respond "reloaded"
 end
 
 def overlap_prevent(event) # used to prevent servers with both Elise and her debug form from receiving two replies
@@ -2204,6 +2232,7 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
   s=stringx
   s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2])
   s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4])
+  s=s[0,s.length-2] if ["``"].include?(stringx.downcase[stringx.length-2,2])
   a=s.gsub('.','').split(' ')
   s=stringx if all_commands().include?(a[0])
   args=sever(s,true).split(' ')
@@ -2215,6 +2244,7 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
   args=args.reject{ |a| a[0,a.length-1].to_i.to_s==a[0,a.length-1] && a[a.length-1,1]=='*'}
   args=args.reject{ |a| a.to_i.to_s==a}
   args=args.reject{ |a| find_skill(a,event,true)>-1 }
+  args=args.reject{ |a| a=="``"}
   args.compact!
   s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2])
   s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4])
@@ -2811,7 +2841,7 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
     end
   elsif donate_trigger_word(event)>0
     uid=donate_trigger_word(event)
-    x=donor_unit_list(event,uid)
+    x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     return stat_skills if x2.nil?
     a=x[x2][9].reject{|q| q.include?('~~')}
@@ -2935,7 +2965,7 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
     end
   elsif donate_trigger_word(event)>0
     uid=donate_trigger_word(event)
-    x=donor_unit_list(event,uid)
+    x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     unless x2.nil?
       a=x[x2][9].reject{|q| q.include?('~~')}
@@ -3401,7 +3431,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     end
   elsif donate_trigger_word(event)>0
     uid=donate_trigger_word(event)
-    x=donor_unit_list(event,uid)
+    x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
       event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
@@ -3767,7 +3797,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       end
     elsif donate_trigger_word(event)>0
       uid=donate_trigger_word(event)
-      x=donor_unit_list(event,uid)
+      x=donor_unit_list(uid)
       x2=x.find_index{|q| q[0]==name}
       unless x2.nil?
         sklz2=[x[x2][6],x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],[x[x2][12]]]
@@ -3786,7 +3816,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       end
     elsif donate_trigger_word(event)>0
       uid=donate_trigger_word(event)
-      x=donor_unit_list(event,uid)
+      x=donor_unit_list(uid)
       x2=x.find_index{|q| q[0]==name}
       unless x2.nil?
         uskl=[x[x2][6],x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],[x[x2][12]]]
@@ -3928,7 +3958,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
     end
   elsif donate_trigger_word(event)>0
     uid=donate_trigger_word(event)
-    x=donor_unit_list(event,uid)
+    x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
       event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
@@ -4175,7 +4205,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
       end
     elsif donate_trigger_word(event)>0
       uid=donate_trigger_word(event)
-      x=donor_unit_list(event,uid)
+      x=donor_unit_list(uid)
       x2=x.find_index{|q| q[0]==name}
       unless x2.nil?
         sklz2=[x[x2][6],x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],[x[x2][12]]]
@@ -5416,7 +5446,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
     end
   elsif donate_trigger_word(event)>0
     uid=donate_trigger_word(event)
-    x=donor_unit_list(event,uid)
+    x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
       event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
@@ -7559,7 +7589,7 @@ def comparison(event,args,bot)
           r[3]='' if r[3].nil?
         elsif donate_trigger_word(event,f[i])>0
           uid=donate_trigger_word(event,f[i])
-          x=donor_unit_list(event,uid)
+          x=donor_unit_list(uid)
           x2=x.find_index{|q| q[0]==name}
           unless x2.nil?
             r[0]=x[x2][1]
@@ -7642,7 +7672,7 @@ def comparison(event,args,bot)
           r[2]='' if r[2].nil?
           r[3]='' if r[3].nil?
         elsif did>0
-          x=donor_unit_list(event,did)
+          x=donor_unit_list(did)
           x2=x.find_index{|q| q[0]==name}
           unless x2.nil?
             r[0]=x[x2][1]
@@ -8317,7 +8347,7 @@ def skill_comparison(event,args,bot)
         dv=@dev_units[find_in_dev_units(name)]
         r[0]=dv[1]
       elsif did>0
-        x=donor_unit_list(event,did)
+        x=donor_unit_list(did)
         x2=x.find_index{|q| q[0]==name}
         unless x2.nil?
           r[0]=x[x2][1]
@@ -8329,7 +8359,7 @@ def skill_comparison(event,args,bot)
         dv=@dev_units[find_in_dev_units(name)]
         st=[dv[6],dv[7],dv[8],dv[9],dv[10],dv[11]]
       elsif did>0
-        x=donor_unit_list(event,did)
+        x=donor_unit_list(did)
         x2=x.find_index{|q| q[0]==name}
         unless x2.nil?
           st=[x[x2][6],x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11]]
@@ -9736,7 +9766,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     end
   elsif donate_trigger_word(event)>0
     uid=donate_trigger_word(event)
-    x=donor_unit_list(event,uid)
+    x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
       event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
@@ -9952,7 +9982,7 @@ def unit_study(event,name,bot,weapon=nil)
     end
   elsif donate_trigger_word(event)>0
     uid=donate_trigger_word(event)
-    x=donor_unit_list(event,uid)
+    x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     unless x2.nil?
       boon=x[x2][3].gsub(' ','')
@@ -10132,7 +10162,7 @@ def heal_study(event,name,bot,weapon=nil)
     end
   elsif donate_trigger_word(event)>0
     uid=donate_trigger_word(event)
-    x=donor_unit_list(event,uid)
+    x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
       event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
@@ -10415,7 +10445,7 @@ def proc_study(event,name,bot,weapon=nil)
     end
   elsif donate_trigger_word(event)>0
     uid=donate_trigger_word(event)
-    x=donor_unit_list(event,uid)
+    x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
       event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
@@ -10881,7 +10911,7 @@ def phase_study(event,name,bot,weapon=nil)
     end
   elsif donate_trigger_word(event)>0
     uid=donate_trigger_word(event)
-    x=donor_unit_list(event,uid)
+    x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
       event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
@@ -12769,7 +12799,7 @@ bot.command([:bst, :BST]) do |event, *args|
           r[3]='' if r[3].nil?
         elsif donate_trigger_word(event,f[i])>0
           uid=donate_trigger_word(event,f[i])
-          x=donor_unit_list(event,uid)
+          x=donor_unit_list(uid)
           x2=x.find_index{|q| q[0]==name}
           unless x2.nil?
             r[0]=x[x2][1]
@@ -12912,7 +12942,7 @@ bot.command([:bst, :BST]) do |event, *args|
         r[2]=dv[3].gsub(' ','')
         r[3]=dv[4].gsub(' ','')
       elsif did>0
-        x=donor_unit_list(event,did)
+        x=donor_unit_list(did)
         x2=x.find_index{|q| q[0]==name}
         unless x2.nil?
           r[0]=x[x2][1]
