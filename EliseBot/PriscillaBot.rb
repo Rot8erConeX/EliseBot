@@ -606,7 +606,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['average','mean'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then calculates their average in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
   elsif ['art'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __unit__ __art type__","Displays `unit`'s character art.  Defaults to their normal portrait, but can be adjusted to other portraits with the following words:\n*Default Attacking Image:* Battle/Battling, Attack/Atk/Att\n*Special Proc Image:* Critical/Crit, Special, Proc\n*Damaged Art:* Damage/Damaged, LowHP/LowHealth",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __unit__ __art type__","Displays `unit`'s character art.  Defaults to their normal portrait, but can be adjusted to other portraits with the following words:\n*Default Attacking Image:* Battle/Battling, Attack/Atk/Att\n*Special Proc Image:* Critical/Crit, Special, Proc\n*Damaged Art:* Damage/Damaged, LowHP/LowHealth, Injured",0xD49F61)
   elsif ['bestamong','bestin','beststats','higheststats','highest','best','highestamong','highestin'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then finds the unit(s) with the best in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
   elsif ['worstamong','worstin','worststats','loweststats','lowest','lowestamong','lowestin','worst'].include?(command.downcase)
@@ -861,7 +861,7 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
   end
   return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
   return false if mode>0
-  return true if [188781153589657600,238644800994279424,210900237823246336,175150098357944330,183976699367522304,193956706223521793,185935665152786432,323487356172763137,256659145107701760,78649866577780736,189235935563481088,244073468981805056,270372601107447808].include?(user.id) # people who donate to the laptop fund will always be EliseMods
+  return true if [188781153589657600,238644800994279424,210900237823246336,175150098357944330,183976699367522304,193956706223521793,185935665152786432,323487356172763137,256659145107701760,78649866577780736,189235935563481088,244073468981805056,270372601107447808,103926672939581440].include?(user.id) # people who donate to the laptop fund will always be EliseMods
   return false
 end
 
@@ -10545,141 +10545,221 @@ def proc_study(event,name,bot,weapon=nil)
   cdwn2=cdwn unless wl.include?('~~')
   cdwns=cdwn
   cdwns="~~#{cdwn}~~ #{cdwn2}" unless cdwn2==cdwn
-  staves=[[],[],[],[],[],[],[],[]]
+  staves=[[],[],[],[],[],[],[],[],[]]
   g=get_markers(event) 
   procs=@skills.reject{|q| !has_any?(g, q[13]) || q[4]!='Special'}
+  czz=0
+  czz2=0
+  czz+=10 if tags.include?('WoDao_Star')
+  czz2+=10 if tags.include?('WoDao_Star') && !wl.include?('~~')
+  czz+=10 if tags.include?('(R)WoDao_Star') && !refinement.nil? && refinement.length>0
+  czz2+=10 if tags.include?('(R)WoDao_Star') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
+  czz+=10 if tags.include?('(E)WoDao_Star') && refinement=='Effect'
+  czz2+=10 if tags.include?('(E)WoDao_Star') && refinement=='Effect' && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Night Sky')[2],cdwns)
-  d="`dmg /2#{" +#{wdamage}" if wdamage>0}`"
-  d2="`dmg /2#{" +#{wdamage2}" if wdamage2>0}`"
+  d="`dmg /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`dmg /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[0].push("Night Sky - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
   c=add_number_to_string(get_match_in_list(procs, 'Astra')[2],cdwns)
-  d="`3* dmg /2#{" +#{wdamage}" if wdamage>0}`"
-  d2="`3* dmg /2#{" +#{wdamage2}" if wdamage2>0}`"
+  d="`3* dmg /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`3* dmg /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[0].push("Astra - #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Regnal Astra')[2],cdwns)
-  d="#{spdd*2/5+wdamage}#{" (#{blspdd*2/5+wdamage})" unless spdd*2/5==blspdd*2/5}"
-  cd="#{crspdd*2/5+wdamage2}#{" (#{crblspdd*2/5+wdamage2})" unless crspdd*2/5==crblspdd*2/5}"
+  d="#{spdd*2/5+wdamage+czz}#{" (#{blspdd*2/5+wdamage+czz})" unless spdd*2/5==blspdd*2/5}"
+  cd="#{crspdd*2/5+wdamage2+czz2}#{" (#{crblspdd*2/5+wdamage2+czz2})" unless crspdd*2/5==crblspdd*2/5}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[0].push("**Regnal Astra - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Regnal Astra')[6].split(', ').include?(u40[0])
   c=add_number_to_string(get_match_in_list(procs, 'Glimmer')[2],cdwns)
-  d="`dmg /2#{" +#{wdamage}" if wdamage>0}`"
-  d2="`dmg /2#{" +#{wdamage2}" if wdamage2>0}`"
+  d="`dmg /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`dmg /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[0].push("Glimmer - #{d}, cooldown of #{c}")
+  czz=0
+  czz2=0
+  czz+=10 if tags.include?('WoDao_Moon')
+  czz2+=10 if tags.include?('WoDao_Moon') && !wl.include?('~~')
+  czz+=10 if tags.include?('(R)WoDao_Moon') && !refinement.nil? && refinement.length>0
+  czz2+=10 if tags.include?('(R)WoDao_Moon') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
+  czz+=10 if tags.include?('(E)WoDao_Moon') && refinement=='Effect'
+  czz2+=10 if tags.include?('(E)WoDao_Moon') && refinement=='Effect' && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'New Moon')[2],cdwns)
-  d="`3* eDR /10#{" +#{wdamage}" if wdamage>0}`"
-  d2="`3* eDR /10#{" +#{wdamage2}" if wdamage2>0}`"
+  d="`3* eDR /10#{" +#{wdamage+czz}" if wdamage+czz2>0}`"
+  d2="`3* eDR /10#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[1].push("New Moon - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
   c=add_number_to_string(get_match_in_list(procs, 'Luna')[2],cdwns)
-  d="`eDR /2#{" +#{wdamage}" if wdamage>0}`"
-  d2="`eDR /2#{" +#{wdamage2}" if wdamage2>0}`"
+  d="`eDR /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`eDR /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[1].push("Luna - #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Black Luna')[2],cdwns)
-  d="`4* eDR /5#{" +#{wdamage}" if wdamage>0}`"
-  d2="`4* eDR /5#{" +#{wdamage2}" if wdamage2>0}`"
+  d="`4* eDR /5#{" +#{wdamage+czz}" if wdamage+czz2>0}`"
+  d2="`4* eDR /5#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[1].push("**Black Luna - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Black Luna')[6].split(', ').include?(u40[0])
   c=add_number_to_string(get_match_in_list(procs, 'Moonbow')[2],cdwns)
-  d="`3* eDR /10#{" +#{wdamage}" if wdamage>0}`"
-  d2="`3* eDR /10#{" +#{wdamage2}" if wdamage2>0}`"
+  d="`3* eDR /10#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`3* eDR /10#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[1].push("Moonbow - #{d}, cooldown of #{c}")
   wd="#{"#{wdamage}, " if wdamage>0}"
   wd="~~#{wdamage}~~ #{wdamage2}, " unless wdamage==wdamage2
+  czz=0
+  czz2=0
+  czz+=10 if tags.include?('WoDao_Sun')
+  czz2+=10 if tags.include?('WoDao_Sun') && !wl.include?('~~')
+  czz+=10 if tags.include?('(R)WoDao_Sun') && !refinement.nil? && refinement.length>0
+  czz2+=10 if tags.include?('(R)WoDao_Sun') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
+  czz+=10 if tags.include?('(E)WoDao_Sun') && refinement=='Effect'
+  czz2+=10 if tags.include?('(E)WoDao_Sun') && refinement=='Effect' && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Daylight')[2],cdwns)
-  d="`3* #{"(" if wdamage>0}dmg#{" +#{wdamage})" if wdamage>0} /10`"
-  d2="`3* #{"(" if wdamage2>0}dmg#{" +#{wdamage2})" if wdamage2>0} /10`"
+  d="`3* #{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /10`"
+  d2="`3* #{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /10`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[2].push("Daylight - #{wd}heals for #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
   c=add_number_to_string(get_match_in_list(procs, 'Noontime')[2],cdwns)
-  d="`3* #{"(" if wdamage>0}dmg#{" +#{wdamage})" if wdamage>0} /10`"
-  d2="`3* #{"(" if wdamage2>0}dmg#{" +#{wdamage2})" if wdamage2>0} /10`"
+  d="`3* #{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /10`"
+  d2="`3* #{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /10`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[2].push("Noontime - #{wd}heals for #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Sol')[2],cdwns)
-  d="`#{"(" if wdamage>0}dmg#{" +#{wdamage})" if wdamage>0} /2`"
-  d2="`#{"(" if wdamage2>0}dmg#{" +#{wdamage2})" if wdamage2>0} /2`"
+  d="`#{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /2`"
+  d2="`#{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /2`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[2].push("Sol - #{wd}heals for #{d}, cooldown of #{c}")
+  czz=0
+  czz2=0
+  czz+=10 if tags.include?('WoDao_Sun') || tags.include?('WoDao_Moon') || tags.include?('WoDao_Eclipse')
+  czz2+=10 if (tags.include?('WoDao_Sun') || tags.include?('WoDao_Moon') || tags.include?('WoDao_Eclipse')) && !wl.include?('~~')
+  czz+=10 if (tags.include?('(R)WoDao_Sun') || tags.include?('(R)WoDao_Moon') || tags.include?('(R)WoDao_Eclipse')) && !refinement.nil? && refinement.length>0
+  czz2+=10 if (tags.include?('(R)WoDao_Sun') || tags.include?('(R)WoDao_Moon') || tags.include?('(R)WoDao_Eclipse')) && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
+  czz+=10 if (tags.include?('(E)WoDao_Sun') || tags.include?('(E)WoDao_Moon') || tags.include?('(E)WoDao_Eclipse')) && refinement=='Effect'
+  czz2+=10 if (tags.include?('(E)WoDao_Sun') || tags.include?('(E)WoDao_Moon') || tags.include?('(E)WoDao_Eclipse')) && refinement=='Effect' && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Aether')[2],cdwns)
-  d="`eDR /2#{" +#{wdamage}" if wdamage>0}`"
-  d2="`eDR /2#{" +#{wdamage2}" if wdamage2>0}`"
+  d="`eDR /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`eDR /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
   d="~~#{d}~~ #{d2}" unless d==d2
-  h="`#{"(" if wdamage>0}dmg#{" +#{wdamage})" if wdamage>0} /2 + eDR /4`"
-  h2="`#{"(" if wdamage2>0}dmg#{" +#{wdamage2})" if wdamage2>0} /2 + eDR /4`"
+  h="`#{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /2 + eDR /4`"
+  h2="`#{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /2 + eDR /4`"
   h="~~#{h}~~ #{h2}" unless h==h2
   staves[3].push("Aether - #{d}, heals for #{h}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Radiant Aether')[2],cdwns)
   staves[3].push("**Radiant Aether - `#{d}, heals for #{h}, cooldown of #{c}**") if get_match_in_list(procs, 'Radiant Aether')[6].split(', ').include?(u40[0])
+  czz=0
+  czz2=0
+  czz+=10 if tags.include?('WoDao_Fire')
+  czz2+=10 if tags.include?('WoDao_Fire') && !wl.include?('~~')
+  czz+=10 if tags.include?('(R)WoDao_Fire') && !refinement.nil? && refinement.length>0
+  czz2+=10 if tags.include?('(R)WoDao_Fire') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
+  czz+=10 if tags.include?('(E)WoDao_Fire') && refinement=='Effect'
+  czz2+=10 if tags.include?('(E)WoDao_Fire') && refinement=='Effect' && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Glowing Ember')[2],cdwns)
-  d="#{deff/2+wdamage}#{" (#{bldeff/2+wdamage})" unless deff/2==bldeff/2}"
-  cd="#{crdeff/2+wdamage2}#{" (#{crbldeff/2+wdamage2})" unless crdeff/2==crbldeff/2}"
+  d="#{deff/2+wdamage+czz}#{" (#{bldeff/2+wdamage+czz})" unless deff/2==bldeff/2}"
+  cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[4].push("Glowing Ember - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
   c=add_number_to_string(get_match_in_list(procs, 'Bonfire')[2],cdwns)
-  d="#{deff/2+wdamage}#{" (#{bldeff/2+wdamage})" unless deff/2==bldeff/2}"
-  cd="#{crdeff/2+wdamage2}#{" (#{crbldeff/2+wdamage2})" unless crdeff/2==crbldeff/2}"
+  d="#{deff/2+wdamage+czz}#{" (#{bldeff/2+wdamage+czz})" unless deff/2==bldeff/2}"
+  cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[4].push("Bonfire - #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Ignis')[2],cdwns)
-  d="#{deff*4/5+wdamage}#{" (#{bldeff*4/5+wdamage})" unless deff*4/5==bldeff*4/5}"
-  cd="#{crdeff*4/5+wdamage2}#{" (#{crbldeff*4/5+wdamage2})" unless crdeff*4/5==crbldeff*4/5}"
+  d="#{deff*4/5+wdamage+czz}#{" (#{bldeff*4/5+wdamage+czz})" unless deff*4/5==bldeff*4/5}"
+  cd="#{crdeff*4/5+wdamage2+czz2}#{" (#{crbldeff*4/5+wdamage2+czz2})" unless crdeff*4/5==crbldeff*4/5}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[4].push("Ignis - #{d}, cooldown of #{c}")
+  czz=0
+  czz2=0
+  czz+=10 if tags.include?('WoDao_Ice')
+  czz2+=10 if tags.include?('WoDao_Ice') && !wl.include?('~~')
+  czz+=10 if tags.include?('(R)WoDao_Ice') && !refinement.nil? && refinement.length>0
+  czz2+=10 if tags.include?('(R)WoDao_Ice') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
+  czz+=10 if tags.include?('(E)WoDao_Ice') && refinement=='Effect'
+  czz2+=10 if tags.include?('(E)WoDao_Ice') && refinement=='Effect' && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Chilling Wind')[2],cdwns)
-  d="#{ress/2+wdamage}#{" (#{blress/2+wdamage})" unless ress/2==blress/2}"
-  cd="#{crress/2+wdamage2}#{" (#{crblress/2+wdamage2})" unless crress/2==crblress/2}"
+  d="#{ress/2+wdamage+czz}#{" (#{blress/2+wdamage+czz})" unless ress/2==blress/2}"
+  cd="#{crress/2+wdamage2+czz2}#{" (#{crblress/2+wdamage2+czz2})" unless crress/2==crblress/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[5].push("Chilling Wind - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
   c=add_number_to_string(get_match_in_list(procs, 'Glacies')[2],cdwns)
-  d="#{ress*4/5+wdamage}#{" (#{blress*4/5+wdamage})" unless ress*4/5==blress*4/5}"
-  cd="#{crress*4/5+wdamage2}#{" (#{crblress*4/5+wdamage2})" unless crress*4/5==crblress*4/5}"
+  d="#{ress*4/5+wdamage+czz}#{" (#{blress*4/5+wdamage+czz})" unless ress*4/5==blress*4/5}"
+  cd="#{crress*4/5+wdamage2+czz2}#{" (#{crblress*4/5+wdamage2+czz2})" unless crress*4/5==crblress*4/5}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[5].push("Glacies - #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Iceberg')[2],cdwns)
-  d="#{ress/2+wdamage}#{" (#{blress/2+wdamage})" unless ress/2==blress/2}"
-  cd="#{crress/2+wdamage2}#{" (#{crblress/2+wdamage2})" unless crress/2==crblress/2}"
+  d="#{ress/2+wdamage+czz}#{" (#{blress/2+wdamage+czz})" unless ress/2==blress/2}"
+  cd="#{crress/2+wdamage2+czz2}#{" (#{crblress/2+wdamage2+czz2})" unless crress/2==crblress/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[5].push("Iceberg - #{d}, cooldown of #{c}")
+  czz=0
+  czz2=0
+  czz+=10 if tags.include?('WoDao_Fire') || tags.include?('WoDao_Ice') || tags.include?('WoDao_Frezzeflame')
+  czz2+=10 if (tags.include?('WoDao_Fire') || tags.include?('WoDao_Ice') || tags.include?('WoDao_Frezzeflame')) && !wl.include?('~~')
+  czz+=10 if (tags.include?('(R)WoDao_Fire') || tags.include?('(R)WoDao_Ice') || tags.include?('(R)WoDao_Frezzeflame')) && !refinement.nil? && refinement.length>0
+  czz2+=10 if (tags.include?('(R)WoDao_Fire') || tags.include?('(R)WoDao_Ice') || tags.include?('(R)WoDao_Frezzeflame')) && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
+  czz+=10 if (tags.include?('(E)WoDao_Fire') || tags.include?('(E)WoDao_Ice') || tags.include?('(E)WoDao_Frezzeflame')) && refinement=='Effect'
+  czz2+=10 if (tags.include?('(E)WoDao_Fire') || tags.include?('(E)WoDao_Ice') || tags.include?('(E)WoDao_Frezzeflame')) && refinement=='Effect' && !wl.include?('~~')
+  if procs.map{|q| q[0]}.include?('Freezeflame')
+    c=add_number_to_string(get_match_in_list(procs, 'Freezeflame')[2],cdwns)
+    d="#{deff/2+ress/2+wdamage+czz}#{" (#{bldeff/2+blress/2+wdamage+czz})" unless ress/2==blress/2}"
+    cd="#{crdeff/2+crress/2+wdamage2+czz2}#{" (#{crbldeff/2+crblress/2+wdamage2+czz2})" unless crress/2==crblress/2}"
+    d="~~#{d}~~ #{cd}" unless d==cd
+    staves[6].push("Freezeflame - #{d}, cooldown of #{c}") if get_match_in_list(procs, 'Freezeflame')[6].split(', ').include?(u40[0])
+  end
+  czz=0
+  czz2=0
+  czz+=10 if tags.include?('WoDao_Dragon')
+  czz2+=10 if tags.include?('WoDao_Dragon') && !wl.include?('~~')
+  czz+=10 if tags.include?('(R)WoDao_Dragon') && !refinement.nil? && refinement.length>0
+  czz2+=10 if tags.include?('(R)WoDao_Dragon') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
+  czz+=10 if tags.include?('(E)WoDao_Dragon') && refinement=='Effect'
+  czz2+=10 if tags.include?('(E)WoDao_Dragon') && refinement=='Effect' && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Dragon Gaze')[2],cdwns)
-  d="#{atkk*3/10+wdamage}#{" (#{blatkk*3/10+wdamage})" unless atkk*3/10==blatkk*3/10}"
-  cd="#{cratkk*3/10+wdamage2}#{" (#{crblatkk*3/10+wdamage2})" unless cratkk*3/10==crblatkk*3/10}"
+  d="#{atkk*3/10+wdamage+czz}#{" (#{blatkk*3/10+wdamage+czz})" unless atkk*3/10==blatkk*3/10}"
+  cd="#{cratkk*3/10+wdamage2+czz2}#{" (#{crblatkk*3/10+wdamage2+czz2})" unless cratkk*3/10==crblatkk*3/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[6].push("Dragon Gaze - Up to #{d} when against color-neutral, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  staves[7].push("Dragon Gaze - Up to #{d} when against color-neutral, cooldown of #{c}") if event.message.text.downcase.include?(" all")
   c=add_number_to_string(get_match_in_list(procs, 'Draconic Aura')[2],cdwns)
-  d="#{atkk*3/10+wdamage}#{" (#{blatkk*3/10+wdamage})" unless atkk*3/10==blatkk*3/10}"
-  cd="#{cratkk*3/10+wdamage2}#{" (#{crblatkk*3/10+wdamage2})" unless cratkk*3/10==crblatkk*3/10}"
+  d="#{atkk*3/10+wdamage+czz}#{" (#{blatkk*3/10+wdamage+czz})" unless atkk*3/10==blatkk*3/10}"
+  cd="#{cratkk*3/10+wdamage2+czz2}#{" (#{crblatkk*3/10+wdamage2+czz2})" unless cratkk*3/10==crblatkk*3/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[6].push("Draconic Aura - Up to #{d} when against color-neutral, cooldown of #{c}")
+  staves[7].push("Draconic Aura - Up to #{d} when against color-neutral, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Fire Emblem')[2],cdwns)
-  d="#{spdd*3/10+wdamage}#{" (#{blspdd*3/10+wdamage})" unless spdd*3/10==blspdd*3/10}"
-  cd="#{crspdd*3/10+wdamage2}#{" (#{crblspdd*3/10+wdamage2})" unless crspdd*3/10==crblspdd*3/10}"
+  d="#{spdd*3/10+wdamage+czz}#{" (#{blspdd*3/10+wdamage+czz})" unless spdd*3/10==blspdd*3/10}"
+  cd="#{crspdd*3/10+wdamage2+czz2}#{" (#{crblspdd*3/10+wdamage2+czz2})" unless crspdd*3/10==crblspdd*3/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[6].push("**Fire Emblem - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Fire Emblem')[6].split(', ').include?(u40[0])
+  staves[7].push("**Fire Emblem - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Fire Emblem')[6].split(', ').include?(u40[0])
   c=add_number_to_string(get_match_in_list(procs, 'Dragon Fang')[2],cdwns)
-  d="#{atkk/2+wdamage}#{" (#{blatkk/2+wdamage})" unless atkk/2==blatkk/2}"
-  cd="#{cratkk/2+wdamage2}#{" (#{crblatkk/2+wdamage2})" unless cratkk/2==crblatkk/2}"
+  d="#{atkk/2+wdamage+czz}#{" (#{blatkk/2+wdamage+czz})" unless atkk/2==blatkk/2}"
+  cd="#{cratkk/2+wdamage2+czz2}#{" (#{crblatkk/2+wdamage2+czz2})" unless cratkk/2==crblatkk/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[6].push("Dragon Fang - Up to #{d} when against color-neutral, cooldown of #{c}")
+  staves[7].push("Dragon Fang - Up to #{d} when against color-neutral, cooldown of #{c}")
+  czz=0
+  czz2=0
+  czz+=10 if tags.include?('WoDao_Darkness')
+  czz2+=10 if tags.include?('WoDao_Darkness') && !wl.include?('~~')
+  czz+=10 if tags.include?('(R)WoDao_Darkness') && !refinement.nil? && refinement.length>0
+  czz2+=10 if tags.include?('(R)WoDao_Darkness') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
+  czz+=10 if tags.include?('(E)WoDao_Darkness') && refinement=='Effect'
+  czz2+=10 if tags.include?('(E)WoDao_Darkness') && refinement=='Effect' && !wl.include?('~~')
+  c=add_number_to_string(get_match_in_list(procs, 'Dragon Gaze')[2],cdwns)
   c=add_number_to_string(get_match_in_list(procs, 'Retribution')[2],cdwns)
-  d="#{3*hppp/10+wdamage}#{" (#{3*blhppp/10+wdamage})" if 3*hppp/10!=3*blhppp/10}"
-  cd="#{3*crhppp/10+wdamage2}#{" (#{3*crblhppp/10+wdamage2})" if 3*crhppp/10!=3*crblhppp/10}"
+  d="#{3*hppp/10+wdamage+czz}#{" (#{3*blhppp/10+wdamage+czz})" if 3*hppp/10!=3*blhppp/10}"
+  cd="#{3*crhppp/10+wdamage2+czz2}#{" (#{3*crblhppp/10+wdamage2+czz2})" if 3*crhppp/10!=3*crblhppp/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[7].push("Retribution - Up to #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  staves[8].push("Retribution - Up to #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
   c=add_number_to_string(get_match_in_list(procs, 'Reprisal')[2],cdwns)
-  d="#{3*hppp/10+wdamage}#{" (#{3*blhppp/10+wdamage})" if 3*hppp/10!=3*blhppp/10}"
-  cd="#{3*crhppp/10+wdamage2}#{" (#{3*crblhppp/10+wdamage2})" if 3*crhppp/10!=3*crblhppp/10}"
+  d="#{3*hppp/10+wdamage+czz}#{" (#{3*blhppp/10+wdamage+czz})" if 3*hppp/10!=3*blhppp/10}"
+  cd="#{3*crhppp/10+wdamage2+czz2}#{" (#{3*crblhppp/10+wdamage2+czz2})" if 3*crhppp/10!=3*crblhppp/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[7].push("Reprisal - Up to #{d}, cooldown of #{c}")
+  staves[8].push("Reprisal - Up to #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Vengeance')[2],cdwns)
-  d="#{hppp/2+wdamage}#{" (#{blhppp/2+wdamage})" if hppp/2!=blhppp/2}"
-  cd="#{crhppp/2+wdamage2}#{" (#{crblhppp/2+wdamage2})" if crhppp/2!=crblhppp/2}"
+  d="#{hppp/2+wdamage+czz}#{" (#{blhppp/2+wdamage+czz})" if hppp/2!=blhppp/2}"
+  cd="#{crhppp/2+wdamage2+czz2}#{" (#{crblhppp/2+wdamage2+czz2})" if crhppp/2!=crblhppp/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[7].push("Vengeance - Up to #{d}, cooldown of #{c}")
+  staves[8].push("Vengeance - Up to #{d}, cooldown of #{c}")
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
@@ -10687,11 +10767,20 @@ def proc_study(event,name,bot,weapon=nil)
     event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
     s=""
     for i in 0...staves.length
-      s=extend_message(s,staves[i].join("\n"),event,2)
+      s=extend_message(s,staves[i].join("\n"),event,2) unless staves[i].length.zero?
     end
     event.respond s
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,[["<:Special_Offensive_Star:454473651396542504>Star",staves[0].join("\n"),1],["<:Special_Offensive_Moon:454473651345948683>Moon",staves[1].join("\n")],["<:Special_Offensive_Sun:454473651429965834>Sun",staves[2].join("\n")],["<:Special_Offensive_Eclipse:454473651308199956>Eclipse",staves[3].join("\n"),1],["<:Special_Offensive_Fire:454473651861979156>Fire",staves[4].join("\n")],["<:Special_Offensive_Ice:454473651291422720>Ice",staves[5].join("\n")],["<:Special_Offensive_Dragon:454473651186696192>Dragon",staves[6].join("\n"),1],["<:Special_Offensive_Darkness:454473651010535435>Darkness",staves[7].join("\n")]])
+    flds=[["<:Special_Offensive_Star:454473651396542504>Star",staves[0],1],["<:Special_Offensive_Moon:454473651345948683>Moon",staves[1]],["<:Special_Offensive_Sun:454473651429965834>Sun",staves[2]],["<:Special_Offensive_Eclipse:454473651308199956>Eclipse",staves[3],1],["<:Special_Offensive_Fire:454473651861979156>Fire",staves[4]],["<:Special_Offensive_Ice:454473651291422720>Ice",staves[5]],["<:Special_Offensive_Fire:454473651861979156><:Special_Offensive_Ice:454473651291422720>Freezeflame",staves[6]],["<:Special_Offensive_Dragon:454473651186696192>Dragon",staves[7],1],["<:Special_Offensive_Darkness:454473651010535435>Darkness",staves[8]]]
+    for i in 0...flds.length
+      if flds[i][1].length.zero?
+        flds[i]=nil
+      else
+        flds[i][1]=flds[i][1].join("\n")
+      end
+    end
+    flds.compact!
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,flds)
   end
 end
 
@@ -11188,60 +11277,64 @@ def disp_art(event,name,bot,weapon=nil)
   args=event.message.text.downcase.split(' ')
   artype='Face'
   artype='BtlFace' if args.include?('battle') || args.include?('attack') || args.include?('att') || args.include?('atk') || args.include?('attacking')
-  artype='BtlFace_D' if args.include?('damage') || args.include?('damaged') || (args.include?('low') && (args.include?('health') || args.include?('hp'))) || args.include?('lowhealth') || args.include?('lowhp') || args.include?('low_health') || args.include?('low_hp')
+  artype='BtlFace_D' if args.include?('damage') || args.include?('damaged') || (args.include?('low') && (args.include?('health') || args.include?('hp'))) || args.include?('lowhealth') || args.include?('lowhp') || args.include?('low_health') || args.include?('low_hp') || args.include?('injured')
   artype='BtlFace_C' if args.include?('critical') || args.include?('special') || args.include?('crit') || args.include?('proc')
   art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{j[0]}/#{artype}.png"
-  if j[0]=='Reinhardt(World)' && (rand(100).zero? || event.message.text.downcase.include?('zelda') || event.message.text.downcase.include?('link') || event.message.text.downcase.include?('master sword'))
-    art='https://i.redd.it/pdeqrncp21r01.png'
-    j[6]="u/ZachminSSB (ft. #{j[6]})"
-  elsif j[0]=='Arden' && (rand(1000).zero? || event.message.text.downcase.include?('infinity'))
-    art='https://pbs.twimg.com/media/DcEh5jRWsAAYofz.png'
-    j[6]='@_DJSaturn (twitter)'
-  end
-  disp=''
-  nammes=['','','']
-  unless j[6].nil? || j[6].length<=0
-    m=j[6].split(' as ')
-    nammes[0]=m[0]
-    disp="#{disp}\n**Artist:** #{m[m.length-1]}"
-  end
-  unless j[7].nil? || j[7].length<=0
-    m=j[7].split(' as ')
-    nammes[1]=m[0]
-    disp="#{disp}\n**VA (English):** #{m[m.length-1]}"
-  end
-  unless j[8].nil? || j[8].length<=0
-    m=j[8].split(' as ')
-    nammes[2]=m[0]
-    disp="#{disp}\n**VA (Japanese):** #{m[m.length-1]}"
-  end
-  g=get_markers(event)
-  chars=untz.reject{|q| q[0]==j[0] || !has_any?(g, q[13][0]) || ((q[6].nil? || q[6].length<=0) && (q[7].nil? || q[7].length<=0) && (q[8].nil? || q[8].length<=0))}
-  charsx=[[],[],[]]
-  for i in 0...chars.length
-    x=chars[i]
-    unless x[6].nil? || x[6].length<=0
-      m=x[6].split(' as ')
-      charsx[0].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[0]
+  if args.include?('just') || args.include?('justart') || args.include?('blank') || args.include?('noinfo')
+    charsx=[[],[],[]]
+    disp=''
+  else
+    if j[0]=='Reinhardt(World)' && (rand(100).zero? || event.message.text.downcase.include?('zelda') || event.message.text.downcase.include?('link') || event.message.text.downcase.include?('master sword'))
+      art='https://i.redd.it/pdeqrncp21r01.png'
+      j[6]="u/ZachminSSB (ft. #{j[6]})"
+    elsif j[0]=='Arden' && (rand(1000).zero? || event.message.text.downcase.include?('infinity'))
+      art='https://pbs.twimg.com/media/DcEh5jRWsAAYofz.png'
+      j[6]='@_DJSaturn (twitter)'
     end
-    unless x[7].nil? || x[7].length<=0
-      m=x[7].split(' as ')
-      charsx[1].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[1]
+    disp=''
+    nammes=['','','']
+    unless j[6].nil? || j[6].length<=0
+      m=j[6].split(' as ')
+      nammes[0]=m[0]
+      disp="#{disp}\n**Artist:** #{m[m.length-1]}"
     end
-    unless x[8].nil? || x[8].length<=0
-      m=x[8].split(' as ')
-      charsx[2].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[2]
+    unless j[7].nil? || j[7].length<=0
+      m=j[7].split(' as ')
+      nammes[1]=m[0]
+      disp="#{disp}\n**VA (English):** #{m[m.length-1]}"
     end
+    unless j[8].nil? || j[8].length<=0
+      m=j[8].split(' as ')
+      nammes[2]=m[0]
+      disp="#{disp}\n**VA (Japanese):** #{m[m.length-1]}"
+    end
+    g=get_markers(event)
+    chars=untz.reject{|q| q[0]==j[0] || !has_any?(g, q[13][0]) || ((q[6].nil? || q[6].length<=0) && (q[7].nil? || q[7].length<=0) && (q[8].nil? || q[8].length<=0))}
+    charsx=[[],[],[]]
+    for i in 0...chars.length
+      x=chars[i]
+      unless x[6].nil? || x[6].length<=0
+        m=x[6].split(' as ')
+        charsx[0].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[0]
+      end
+      unless x[7].nil? || x[7].length<=0
+        m=x[7].split(' as ')
+        charsx[1].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[1]
+      end
+      unless x[8].nil? || x[8].length<=0
+        m=x[8].split(' as ')
+        charsx[2].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[2]
+      end
+    end
+    disp='>No information<' if disp.length<=0
   end
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     disp="#{disp}\n" if charsx.map{|q| q.length}.max>0
     disp="#{disp}\n**Same artist:** #{charsx[0].join(', ')}" if charsx[0].length>0
     disp="#{disp}\n**Same VA(EN):** #{charsx[1].join(', ')}" if charsx[1].length>0
     disp="#{disp}\n**Same VA(JP):** #{charsx[2].join(', ')}" if charsx[2].length>0
-    disp='>No information<' if disp.length<=0
     event.respond "#{disp}\n\n#{art}"
   else
-    disp='>No information<' if disp.length<=0
     flds=[]
     flds.push(['Same Artist',charsx[0].join("\n"),1]) if charsx[0].length>0
     flds.push(['Same VA (English)',charsx[1].join("\n")]) if charsx[1].length>0
@@ -12212,10 +12305,10 @@ bot.command([:donation, :donate]) do |event|
   return nil if overlap_prevent(event)
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
     event.respond "__A word from my developer__\nI made EliseBot, as she is now, as a free service.  During development, I never once considered making people pay to add her to their servers, or anything of the sort.  The creation of Elise's core functionality, the `stats` function, was mainly a way for me to better understand the mechanics behind FEH's growths, because how games work is one of my interests.\n\nDespite this, people in at least two servers have asked me about possibly creating a Patreon or Paypal donation button to allow users to show their support.  I am humbled to know that EliseBot's information-dump-and-stat-calculation functionality is something people are willing to pay for, especially considering there are many other methods users can obtain this data.\n\nConsidering how adamant some people were about wanting to support me, it seems almost rude not to start a Patreon...but I, unfortunately, must toss the idea aside.  Due to certain insurance regulations regarding places like the one I live in, I would only be allowed to keep a small portion of any secondary income I receive.  Starting a Patreon only to have only a third or even less reach my hands seems dishonest to my supporters, and that is something I do not wish to have hanging over my head.  Since they were spending that money with the intention of supporting the development of EliseBot, they may not wish to have their money go to a corporation that may or may not spend that money to increase my quality of life."
-    event.respond "However, there is a roundabout solution for those who wish to support me: Gift cards - such as those for the Nintendo eShop or Google Play - do not count as secondary income, and as such I get to keep the full amount of any I receive.  As such, if you wish to support me, and only if you really wish to support me, the best way to do so is acquire a gift card and email the code to **rot8er.conex@gmail.com**.  There is also, if there are items on it, my Amazon wish list, linked below.  I recently learned that I can have items purchased from that list delivered to me without giving out my address.\n\n~~Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.~~\n\nhttp://a.co/0p3sBec"
+    event.respond "However, there is a roundabout solution for those who wish to support me: Gift cards - such as those for the Nintendo eShop or Google Play - do not count as secondary income, and as such I get to keep the full amount of any I receive.  As such, if you wish to support me, and only if you really wish to support me, the best way to do so is acquire a gift card and email the code to **rot8er.conex@gmail.com**.  There is also, if there are items on it, my Amazon wish list, linked below.  I recently learned that I can have items purchased from that list delivered to me without giving out my address.\n\n~~Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.~~\n\nhttp://a.co/0p3sBec\n\nDonor list: <https://goo.gl/ds1LHA>"
   else
     create_embed(event,"__A word from my developer__","I made EliseBot, as she is now, as a free service.  During development, I never once considered making people pay to add her to their servers, or anything of the sort.  The creation of Elise's core functionality, the `stats` function, was mainly a way for me to better understand the mechanics behind FEH's growths, because how games work is one of my interests.\n\nDespite this, people in at least two servers have asked me about possibly creating a Patreon or Paypal donation button to allow users to show their support.  I am humbled to know that EliseBot's information-dump-and-stat-calculation functionality is something people are willing to pay for, especially considering there are many other methods users can obtain this data.\n\nConsidering how adamant some people were about wanting to support me, it seems almost rude not to start a Patreon...but I, unfortunately, must toss the idea aside.  Due to certain insurance regulations regarding places like the one I live in, I would only be allowed to keep a small portion of any secondary income I receive.  Starting a Patreon only to have only a third or even less reach my hands seems dishonest to my supporters, and that is something I do not wish to have hanging over my head.  Since they were spending that money with the intention of supporting the development of EliseBot, they may not wish to have their money go to a corporation that may or may not spend that money to increase my quality of life.",0x008b8b)
-    create_embed(event,"","\n\nHowever, there is a roundabout solution for those who wish to support me: Gift cards - such as those for the Nintendo eShop or Google Play - do not count as secondary income, and as such I get to keep the full amount of any I receive.  As such, if you wish to support me, and only if you really wish to support me, the best way to do so is acquire a gift card and email the code to **rot8er.conex@gmail.com**.  There is also, if there are items on it, [my Amazon wish list](http://a.co/0p3sBec).  I recently learned that I can have items purchased from that list delivered to me without giving out my address.",0x008b8b,"Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.")
+    create_embed(event,"","\n\nHowever, there is a roundabout solution for those who wish to support me: Gift cards - such as those for the Nintendo eShop or Google Play - do not count as secondary income, and as such I get to keep the full amount of any I receive.  As such, if you wish to support me, and only if you really wish to support me, the best way to do so is acquire a gift card and email the code to **rot8er.conex@gmail.com**.  There is also, if there are items on it, [my Amazon wish list](http://a.co/0p3sBec).  I recently learned that I can have items purchased from that list delivered to me without giving out my address.\n\n[Donor List and perks](https://goo.gl/ds1LHA)",0x008b8b,"Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.")
     event.respond "If you are on a mobile device and cannot click the links in the embed above, type `FEH!donate mobile` to receive this message as plaintext."
   end
   return nil
@@ -14783,7 +14876,7 @@ bot.command([:status, :avatar, :avvie]) do |event, *args|
     event << ''
     event << "Dev's timezone: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]}) | #{'0' if t.hour<10}#{t.hour}:#{'0' if t.min<10}#{t.min}"
   else
-    create_embed(event,'',"Unit in avatar: #{@avvie_info[0]}\n\nCurrent status:\n[Playing] #{@avvie_info[1]}#{"\n\nReason: #{@avvie_info[2]}" unless @avvie_info[2].length.zero?}",(t.day*7+t.month*21*256+(t.year-2000)*10*256*256),"Dev's timezone: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]}) | #{'0' if t.hour<10}#{t.hour}:#{'0' if t.min<10}#{t.min}",bot.user(312451658908958721).avatar_url)
+    create_embed(event,'',"Unit in avatar: #{@avvie_info[0]}\n\nCurrent status:\n[Playing] #{@avvie_info[1]}#{"\n\nReason: #{@avvie_info[2]}" unless @avvie_info[2].length.zero?}\n\n[For a full calendar of avatars, click here](https://docs.google.com/spreadsheets/d/1j-tdpotMO_DcppRLNnT8DN8Ftau-rdQ-ZmZh5rZkZP0/edit?usp=sharing)",(t.day*7+t.month*21*256+(t.year-2000)*10*256*256),"Dev's timezone: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]}) | #{'0' if t.hour<10}#{t.hour}:#{'0' if t.min<10}#{t.min}",bot.user(312451658908958721).avatar_url)
   end
   return nil
 end
