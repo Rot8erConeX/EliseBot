@@ -138,7 +138,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'statlarge','stathuge','statmassive','statol','giant','massive','spam','safetospam','safe2spam','listunits','sortunits','unitssort','liststat','rand',
      'longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort','worst',
      'sortstat','statsort','liststats','statslist','highest','best','highestamong','highestin','lowest','lowestamong','lowestin','manual','book','combatmanual',
-     'headpat','pat','patpat','randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats']
+     'headpat','pat','patpat','randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats','edit']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -671,6 +671,21 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}**","Reloads the unit and skill data, based on the remote entries stored on GitHub.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['status','avatar','avvie'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Shows my current avatar, status, and reason for such.\n\nWhen used by my developer with a message following it, sets my status to that message.",0xD49F61)
+  elsif ['edit'].include?(command.downcase)
+    subcommand='' if subcommand.nil?
+    if ['create'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*stats__","Allows me to create a new donor unit with the character `unit` and stats described in `stats`.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['promote','rarity','feathers'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","Causes me to promote the donor unit with the name `unit`.\n\nIf `number` is defined, I will promote the donor unit that many times.\nIf not, I will promote them once.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['remove','delete','send_home','sendhome','fodder'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Removes a unit from the donor units attached to the invoker.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['merge','combine'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","Causes me to merge the donor unit with the name `unit`.\n\nIf `number` is defined, I will merge the donor unit that many times.\nIf not, I will merge them once.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['nature','ivs'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*effects__","Causes me to change the nature of the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    else
+      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new donor unit\n`FEH!#{command.downcase} promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a donor unit's nature (*also `ivs`*)\n\n`FEH!#{command.downcase} send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    end
   elsif ['devedit','dev_edit'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['create'].include?(subcommand.downcase)
@@ -954,12 +969,6 @@ def donor_unit_save(uid,table) # used by the edit command to save the donorunits
     f.puts "\n"
   }
   return nil
-end
-
-bot.command(:boop) do |event|
-  t=donor_unit_list(244073468981805056)
-  donor_unit_save(244073468981805056,t)
-  event.respond "reloaded"
 end
 
 def overlap_prevent(event) # used to prevent servers with both Elise and her debug form from receiving two replies
@@ -3443,7 +3452,9 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       summoner=x[x2][5]
       weaponz=x[x2][6].reject{|q| q.include?('~~')}
       weapon=weaponz[weaponz.length-1]
-      if weapon.include?(' (+) ')
+      if weapon.nil?
+        weapon='-'
+      elsif weapon.include?(' (+) ')
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
@@ -3970,7 +3981,9 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
       summoner=x[x2][5]
       weaponz=x[x2][6].reject{|q| q.include?('~~')}
       weapon=weaponz[weaponz.length-1]
-      if weapon.include?(' (+) ')
+      if weapon.nil?
+        weapon='-'
+      elsif weapon.include?(' (+) ')
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
@@ -5636,6 +5649,12 @@ def sever(str,sklz=false)
         k[i-1]="#{k[i-1]}#{k[i]}"
         k[i]=nil
       elsif k[i-1][0,5].downcase=='rally'
+        k[i-1]="#{k[i-1]}#{k[i]}"
+        k[i]=nil
+      elsif k[i-1][k[i-1].length-4,4].downcase=='balm'
+        k[i-1]="#{k[i-1]}#{k[i]}"
+        k[i]=nil
+      elsif ['windfire','earthwater','firewater','earthfire','earthwind','waterwind','waterearth','windearth','windwater','waterearth','waterfire'].include?(k[i-1].downcase.gsub('-',''))
         k[i-1]="#{k[i-1]}#{k[i]}"
         k[i]=nil
       elsif ['HP','Attack','Speed','Defense','Resistance'].map{|q| q.downcase}.include?(k[i-1].downcase) && i==k.length-1
@@ -8700,6 +8719,7 @@ end
 def disp_summon_pool(event,args)
   data_load()
   k=@units.reject{|q| !q[9][0].include?('p') || !q[13][0].nil?}
+  k=k.reject{|q| !q[9][0].include?('LU')} if event.message.text.downcase.split(' ').include?('launch')
   colors=[]
   for i in 0...args.length
     args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
@@ -9778,7 +9798,9 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
       summoner=x[x2][5]
       weaponz=x[x2][6].reject{|q| q.include?('~~')}
       weapon=weaponz[weaponz.length-1]
-      if weapon.include?(' (+) ')
+      if weapon.nil?
+        weapon='-'
+      elsif weapon.include?(' (+) ')
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
@@ -10174,7 +10196,9 @@ def heal_study(event,name,bot,weapon=nil)
       summoner=x[x2][5]
       weaponz=x[x2][6].reject{|q| q.include?('~~')}
       weapon=weaponz[weaponz.length-1]
-      if weapon.include?(' (+) ')
+      if weapon.nil?
+        weapon='-'
+      elsif weapon.include?(' (+) ')
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
@@ -10457,7 +10481,9 @@ def proc_study(event,name,bot,weapon=nil)
       summoner=x[x2][5]
       weaponz=x[x2][6].reject{|q| q.include?('~~')}
       weapon=weaponz[weaponz.length-1]
-      if weapon.include?(' (+) ')
+      if weapon.nil?
+        weapon='-'
+      elsif weapon.include?(' (+) ')
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
@@ -10923,7 +10949,9 @@ def phase_study(event,name,bot,weapon=nil)
       summoner=x[x2][5]
       weaponz=x[x2][6].reject{|q| q.include?('~~')}
       weapon=weaponz[weaponz.length-1]
-      if weapon.include?(' (+) ')
+      if weapon.nil?
+        weapon='-'
+      elsif weapon.include?(' (+) ')
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
@@ -14932,6 +14960,135 @@ bot.command([:status, :avatar, :avvie]) do |event, *args|
   return nil
 end
 
+bot.command(:edit) do |event, cmd, *args|
+  return nil if overlap_prevent(event)
+  uid=event.user.id
+  if uid==167657750971547648
+    uid=244073468981805056
+  elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+    if get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(uid)
+      event.respond "Please wait until my developer makes your storage file."
+    else
+      event.respond "You do not have permission to use this command."
+    end
+    return nil
+  end
+  str=find_name_in_string(event)
+  data_load()
+  j=find_unit(str,event)
+  if j<0
+    event.respond 'There is no unit by that name.'
+    return nil
+  end
+  donor_units=donor_unit_list(uid)
+  j2=donor_units.find_index{|q| q[0]==@units[j][0]}
+  if j2.nil?
+    args=event.message.text.downcase.split(' ')
+    if cmd.downcase=='create'
+      jn=@units[find_unit(find_name_in_string(event),event)][0]
+      sklz2=unit_skills(jn,event,true)
+      flurp=find_stats_in_string(event)
+      donor_units=donor_unit_list(uid)
+      donor_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
+      donor_unit_save(uid,donor_units)
+      event.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection."
+    elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
+      event.respond 'You never had that unit in the first place.'
+      return nil
+    else
+      @stored_event=event
+      event.respond "You do not have this unit.  Do you wish to add them to your collection?\nYes/No"
+      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+        if e.message.text.downcase.include?('no')
+          e.respond 'Okay.'
+        else
+          jn=@units[find_unit(find_name_in_string(@stored_event),@stored_event)][0]
+          sklz2=unit_skills(jn,@stored_event,true)
+          flurp=find_stats_in_string(e)
+          donor_units=donor_unit_list(uid)
+          donor_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
+          donor_unit_save(uid,donor_units)
+          event.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection."
+        end
+      end
+    end
+  elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
+    @stored_event=event
+    event.respond "I have a unit stored for your #{donor_units[j2][0]}.  Do you wish me to delete this build?\nYes/No"
+    event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+      if e.message.text.downcase.include?('no')
+        e.respond 'Okay.'
+      else
+        jn=@units[find_unit(find_name_in_string(@stored_event),@stored_event)][0]
+        donor_units=donor_unit_list(uid)
+        donor_units=donor_units.reject{|q| q[0]==jn}
+        donor_unit_save(uid,donor_units)
+        e.respond "#{jn} has been removed from your collection."
+      end
+    end
+  elsif cmd.downcase=='create'
+    event.respond "You already have a #{donor_units[j2][0]}."
+    return nil
+  elsif ['promote','rarity','feathers'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    donor_units[j2][1]=flurp[0] unless flurp[0].nil?
+    donor_units[j2][1]+=1 if flurp[0].nil?
+    donor_units[j2][1]=[donor_units[j2][1],5].min
+    donor_units[j2][2]=0
+    donor_unit_save(uid,donor_units)
+    event.respond "You have promoted your #{donor_units[j2][0]} to #{donor_units[j2][1]}#{@rarity_stars[donor_units[j2][1]-1]}!"
+  elsif ['merge','combine'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    donor_units[j2][2]+=flurp[1] unless flurp[1].nil?
+    donor_units[j2][2]+=1 if flurp[1].nil?
+    donor_units[j2][2]=[donor_units[j2][2],@max_rarity_merge[1]].min
+    donor_unit_save(uid,donor_units)
+    event.respond "You have merged your #{donor_units[j2][0]} to +#{donor_units[j2][2]}!"
+  elsif ['nature','ivs'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    n=''
+    if flurp[2].nil? && flurp[3].nil?
+      donor_units[j2][3]=' '
+      donor_units[j2][4]=' '
+      donor_unit_save(uid,donor_units)
+      event.respond "You have changed your #{donor_units[j2][0]}'s nature to neutral!"
+    elsif flurp[2].nil? || flurp[3].nil?
+      @stored_event=event
+      event.respond "You cannot have a boon without a bane.  Set stats to neutral?\nYes/No" if flurp[3].nil?
+      event.respond "You cannot have a bane without a boon.  Set stats to neutral?\nYes/No" if flurp[2].nil?
+      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+        if e.message.text.downcase.include?('no')
+          e.respond 'Okay.'
+        else
+          j2=@units[find_unit(find_name_in_string(@stored_event),@stored_event)][0]
+          j2=donor_units.find_index{|q| q[0]==@units[j2][0]}
+          donor_units[j2][3]=' '
+          donor_units[j2][4]=' '
+          donor_unit_save(uid,donor_units)
+          event.respond "You have changed your #{donor_units[j2][0]}'s nature to neutral!"
+        end
+      end
+    else
+      donor_units[j2][3]=flurp[2]
+      donor_units[j2][4]=flurp[3]
+      atk='Attack'
+      atk='Magic' if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
+      atk='Strength' if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
+      n=nature_name(flurp[2],flurp[3])
+      unless n.nil?
+        n=n[0] if atk=='Strength'
+        n=n[n.length-1] if atk=='Magic'
+        n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
+      end
+      donor_unit_save(uid,donor_units)
+      event.respond "You have changed your #{donor_units[j2][0]}'s nature to +#{flurp[2]}, -#{flurp[3]} (#{n})!"
+    end
+  else
+    event.respond 'Edit mode was not specified.'
+  end
+  return nil
+end
+
 bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddualunitalias,:addualunitalias,:multialias,:dualalias,:addmulti], from: 167657750971547648) do |event, multi, *args|
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
@@ -16728,6 +16885,7 @@ def next_holiday(bot,mode=0)
             [0,4,24,'Sakura(BDay)','dressup as my best friend.',"Coder's birthday"],
             [0,4,29,'Anna',"with all the money you're giving me",'Golden Week'],
             [0,7,4,'Arthur','for freedom and justice.','Independance Day'],
+            [0,7,20,'Celica(Fallen)',''],
             [0,10,31,'Henry(Halloween)','with a dead Emblian. Nyahaha!','Halloween'],
             [0,12,25,'Robin(M)(Winter)','as Santa Claus for Askr.','Christmas'],
             [0,12,31,'Tiki(Adult)','as Mother Time',"New Year's Eve"]]
