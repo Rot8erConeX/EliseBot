@@ -16885,7 +16885,7 @@ def next_holiday(bot,mode=0)
             [0,4,24,'Sakura(BDay)','dressup as my best friend.',"Coder's birthday"],
             [0,4,29,'Anna',"with all the money you're giving me",'Golden Week'],
             [0,7,4,'Arthur','for freedom and justice.','Independance Day'],
-            [0,7,20,'Celica(Fallen)',''],
+            [0,7,20,'Celica(Fallen)','in the darkest timeline',"...let's just say that this is a sad day for my dev"],
             [0,10,31,'Henry(Halloween)','with a dead Emblian. Nyahaha!','Halloween'],
             [0,12,25,'Robin(M)(Winter)','as Santa Claus for Askr.','Christmas'],
             [0,12,31,'Tiki(Adult)','as Mother Time',"New Year's Eve"]]
