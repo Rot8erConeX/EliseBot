@@ -10,3 +10,23 @@ Dazzling Staff 1\Dazzling Staff 2\Dazzling Staff 3
 Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
+Elise(Summer)
+5\3\Speed\Attack\-
+Wind\Elwind\Gronnblade\Gronnblade+
+Draw Back
+Night Sky\Glimmer
+Life and Death 1\Life and Death 2\Life and Death 3
+Desperation 1\Destperation 2\Desperation 3
+Hone Spd 1\Hone Spd 2\Hone Spd 3
+Speed +3
+
+Myrrh
+5\3\Attack\Speed\-
+Fire Breath\Fire Breath+\Flametongue\Great Flame
+Reposition
+Glowing Ember\Bonfire
+Distant Counter
+Quick Riposte 1\Quick Riposte 2\Quick Riposte 3
+Hone Atk 1\Hone Atk 2\Hone Dragons
+Iote's Shield
+
