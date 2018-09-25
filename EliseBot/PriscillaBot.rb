@@ -683,8 +683,16 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","Causes me to merge the donor unit with the name `unit`.\n\nIf `number` is defined, I will merge the donor unit that many times.\nIf not, I will merge them once.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['nature','ivs'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*effects__","Causes me to change the nature of the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['equip','skill'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*skill name__","Equips the skill `skill name` on the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['seal'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*skill name__","Equips the skill seal `skill name` on the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['refine','refinery','refinement'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*refinement__","Refines the weapon equipped by the donor unit with the name `unit`, using the refinement `refinement`\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['support','marry'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to change the support rank of the donor unit with the name `unit`.  If the donor unit has no rank, will wipe the other donor unit that has support.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     else
-      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new donor unit\n`FEH!#{command.downcase} promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a donor unit's nature (*also `ivs`*)\n\n`FEH!#{command.downcase} send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
+      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new donor unit\n`FEH!#{command.downcase} promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a donor unit's nature (*also `ivs`*)\n`FEH!#{command.downcase} support` - causes me to change support ranks of donor units (*also `marry`*)\n\n`FEH!#{command.downcase} equip` - equip skill (*also `skill`*)\n`FEH!#{command.downcase} seal` - equip seal\n`FEH!#{command.downcase} refine` - refine weapon\n\n`FEH!#{command.downcase} send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
     end
   elsif ['devedit','dev_edit'].include?(command.downcase)
     subcommand='' if subcommand.nil?
@@ -1686,12 +1694,13 @@ def find_effect_name(x,event,shorten=0) # used to find the name of the Effect Mo
   return f
 end
 
-def find_weapon(name,event,ignore=false,ignore2=false) # used by the `get_weapon` function
-  sklz=@skills.reject{|q| q[4]!='Weapon'}
+def find_weapon(name,event,ignore=false,ignore2=false,mode=0) # used by the `get_weapon` function
+  sklz=@skills.map{|q| q}
+  sklz=@skills.reject{|q| q[4]!='Weapon'} unless mode==0
   return x_find_skill(name,event,sklz,ignore,ignore2)
 end
 
-def get_weapon(str,event) # used by the `stats` command and many derivations to find a weapon's name in the inputs that remain after the unit is decided
+def get_weapon(str,event,mode=0) # used by the `stats` command and many derivations to find a weapon's name in the inputs that remain after the unit is decided
   return nil if str.gsub(' ','').length<=0
   skz=@skills.map{|q| q}
   args=str.gsub('(','').gsub(')','').split(' ')
@@ -1701,27 +1710,27 @@ def get_weapon(str,event) # used by the `stats` command and many derivations to 
   name=args.join(' ')
   args3=args.join(' ').split(' ')
   # try full-name matches first...
-  if find_weapon(name,event)<0
+  if find_weapon(name,event,false,false,mode)<0
     for i in 0...args.length-1
       args.pop
-      if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event,true)>=0
+      if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,true,false,mode)>=0
         args3=args.join(' ').split(' ') 
-        name=skz[find_weapon(args.join('').downcase,event,true)][0]
+        name=skz[find_weapon(args.join('').downcase,event,true,false,mode)][0]
       end
     end
-    if find_weapon(name,event)<0
+    if find_weapon(name,event,false,false,mode)<0
       for j in 0...args2.length-1
         args2.shift
         args=args2.join(' ').split(' ')
-        if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event,true)>=0
+        if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,true,false,mode)>=0
           args3=args.join(' ').split(' ') 
-          name=skz[find_weapon(args.join('').downcase,event,true)][0]
+          name=skz[find_weapon(args.join('').downcase,event,true,false,mode)][0]
         end
         for i in 0...args.length-1
           args.pop
-          if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event,true)>=0
+          if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,true,false,mode)>=0
             args3=args.join(' ').split(' ') 
-            name=skz[find_weapon(args.join('').downcase,event,true)][0]
+            name=skz[find_weapon(args.join('').downcase,event,true,false,mode)][0]
           end
         end
       end
@@ -1729,27 +1738,27 @@ def get_weapon(str,event) # used by the `stats` command and many derivations to 
   end
   args2=args4.join(' ').split(' ')
   # ...then try partial name matches
-  if find_weapon(name,event)<0
+  if find_weapon(name,event,false,false,mode)<0
     for i in 0...args.length-1
       args.pop
-      if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event)>=0
+      if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,false,false,mode)>=0
         args3=args.join(' ').split(' ') 
-        name=skz[find_weapon(args.join('').downcase,event)][0]
+        name=skz[find_weapon(args.join('').downcase,event,false,false,mode)][0]
       end
     end
-    if find_weapon(name,event)<0
+    if find_weapon(name,event,false,false,mode)<0
       for j in 0...args2.length-1
         args2.shift
         args=args2.join(' ').split(' ')
-        if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event)>=0
+        if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,false,false,mode)>=0
           args3=args.join(' ').split(' ') 
-          name=skz[find_weapon(args.join('').downcase,event)][0]
+          name=skz[find_weapon(args.join('').downcase,event,false,false,mode)][0]
         end
         for i in 0...args.length-1
           args.pop
-          if find_weapon(name,event)<0 && find_weapon(args.join('').downcase,event)>=0
+          if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,false,false,mode)>=0
             args3=args.join(' ').split(' ') 
-            name=skz[find_weapon(args.join('').downcase,event)][0]
+            name=skz[find_weapon(args.join('').downcase,event,false,false,mode)][0]
           end
         end
       end
@@ -4430,6 +4439,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     return false
   end
   skill=@skills[f]
+  puts skill[0]
   sklz=@skills.map{|q| q}
   g=get_markers(event)
   unitz=@units.reject{|q| !has_any?(g, q[13][0])}
@@ -8055,8 +8065,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str='kuromu' if str2.include?('kuromu')
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
-    if str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.include?('we')
-      return [str,['Chrom(Winter)'],["winter#{str}","#{str}winter","christmas#{str}","#{str}christmas","holiday#{str}","#{str}holiday","we#{str}","#{str}we"]]
+    if str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.include?('we') || str2.include?('santa')
+      return [str,['Chrom(Winter)'],["winter#{str}","#{str}winter","christmas#{str}","#{str}christmas","holiday#{str}","#{str}holiday","we#{str}","#{str}we","santa#{str}","#{str}santa"]]
     elsif str2.include?('bunny') || str2.include?('spring') || str2.include?('easter') || str2.include?('sf')
       return [str,['Chrom(Spring)'],["bunny#{str}","#{str}bunny","spring#{str}","#{str}spring","easter#{str}","#{str}easter","sf#{str}","#{str}sf"]]
     elsif str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch') || str2.include?('prince')
@@ -14964,7 +14974,7 @@ bot.command(:edit) do |event, cmd, *args|
   return nil if overlap_prevent(event)
   uid=event.user.id
   if uid==167657750971547648
-    uid=244073468981805056
+    uid=270372601107447808
   elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
     if get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(uid)
       event.respond "Please wait until my developer makes your storage file."
@@ -15012,6 +15022,32 @@ bot.command(:edit) do |event, cmd, *args|
         end
       end
     end
+  elsif ['support','marry'].include?(cmd.downcase)
+    donor_units=donor_unit_list(uid)
+    if donor_units[j2][5]=='S'
+      event.respond "You've already married #{donor_units[j2][0]}."
+    elsif donor_units[j2][5]=='A'
+      donor_units[j2][5]='S'
+      donor_unit_save(uid,donor_units)
+      event.respond "You've married #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
+    elsif donor_units[j2][5]=='B'
+      donor_units[j2][5]='A'
+      donor_unit_save(uid,donor_units)
+      event.respond "You've proposed to #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
+    elsif donor_units[j2][5]=='C'
+      donor_units[j2][5]='B'
+      donor_unit_save(uid,donor_units)
+      event.respond "You've started dating #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
+    elsif donor_units[j2][5]=='-'
+      d=''
+      for i in 0...donor_units.length
+        d="#{donor_units[i][0]}" unless donor_units[i][5]=='-'
+        donor_units[i][5]='-'
+      end
+      donor_units[j2][5]='C'
+      donor_unit_save(uid,donor_units)
+      event.respond "You've #{"divorced #{d} and " unless d==''}befriended #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
+    end
   elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
     @stored_event=event
     event.respond "I have a unit stored for your #{donor_units[j2][0]}.  Do you wish me to delete this build?\nYes/No"
@@ -15026,6 +15062,55 @@ bot.command(:edit) do |event, cmd, *args|
         e.respond "#{jn} has been removed from your collection."
       end
     end
+  elsif ['refine','refinement','refinery'].include?(cmd.downcase)
+    event.respond "This sub-command hasn't been coded yet.  Please be patient."
+    return nil
+  elsif ['seal'].include?(cmd.downcase)
+    jn=@units[find_unit(find_name_in_string(event),event)][0]
+    sklzz=@skills.map{|q| q}
+    k2=get_weapon(first_sub(args.join(' '),jn,''),event,1)
+    unless k2[0][k2[0].length-1,1]!=k2[0][k2[0].length-1,1].to_i.to_s || k2[1][k2[1].length-1,1]==k2[1][k2[1].length-1,1].to_i.to_s
+      skls=sklzz.reject{|q| q[0][0,q[0].length-1]!=k2[0][0,k2[0].length-1]}.map{|q| q[0]}.sort!
+      k2[0]=skls[-1]
+    end
+    js=sklzz.find_index{|q| q[0]==k2[0]}
+    unless sklzz[js][4].split(', ').include?('Passive(S)') || sklzz[js][4].split(', ').include?('Seal')
+      event.respond "#{sklzz[js][0]} cannot be equipped in the Seal slot.  Please use the `FEH!edit equip` command to equip this skill."
+      return nil
+    end
+    donor_units[j2][12]=sklzz[js][0]
+    donor_unit_save(uid,donor_units)
+    event.respond "The #{sklzz[js][0]} seal has been given to your #{donor_units[j2][0]}!"
+  elsif ['equip','skill'].include?(cmd.downcase)
+    jn=@units[find_unit(find_name_in_string(event),event)][0]
+    sklzz=@skills.map{|q| q}
+    k2=get_weapon(first_sub(args.join(' '),jn,''),event,1)
+    unless k2[0][k2[0].length-1,1]!=k2[0][k2[0].length-1,1].to_i.to_s || k2[1][k2[1].length-1,1]==k2[1][k2[1].length-1,1].to_i.to_s
+      skls=sklzz.reject{|q| q[0][0,q[0].length-1]!=k2[0][0,k2[0].length-1]}.map{|q| q[0]}.sort!
+      k2[0]=skls[-1]
+    end
+    js=sklzz.find_index{|q| q[0]==k2[0]}
+    x=backwards_skill_tree(js)
+    m=0
+    if sklzz[js][4]=='Weapon'
+      m=6
+    elsif sklzz[js][4]=='Assist'
+      m=7
+    elsif sklzz[js][4]=='Special'
+      m=8
+    elsif sklzz[js][4].split(', ').include?('Passive(A)')
+      m=9
+    elsif sklzz[js][4].split(', ').include?('Passive(B)')
+      m=10
+    elsif sklzz[js][4].split(', ').include?('Passive(C)')
+      m=11
+    else
+      event.respond "#{sklzz[js][0]} cannot be equipped.#{"\nUse the `FEH!edit seal` command to equip a seal." if sklzz[js][4].split(', ').include?('Passive(S)') || sklzz[js][4].split(', ').include?('Seal')}"
+      return nil
+    end
+    donor_units[j2][m]=x.map{|q| q}
+    donor_unit_save(uid,donor_units)
+    event.respond "#{sklzz[js][0]} has been given to your #{donor_units[j2][0]}!#{"\nPlease use the `FEH!edit refine` command to refine the weapon." if sklzz[js][4]=='Weapon'}"
   elsif cmd.downcase=='create'
     event.respond "You already have a #{donor_units[j2][0]}."
     return nil
@@ -15087,6 +15172,24 @@ bot.command(:edit) do |event, cmd, *args|
     event.respond 'Edit mode was not specified.'
   end
   return nil
+end
+
+def backwards_skill_tree(j, sklz=nil)
+  if sklz.nil?
+    data_load()
+    sklz=@skills.map{|q| q}
+  end
+  s=sklz[j]
+  if s[8]=='-'
+    return [s[0]]
+  elsif s[8].gsub(',','').include?("* or *")
+    return ['~~Unknown base~~',s[0]]
+  else
+    j2=sklz.find_index{|q| q[0]==s[8].gsub('*','')}
+    p2=backwards_skill_tree(j2, sklz)
+    p2.push(s[0])
+    return p2
+  end
 end
 
 bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddualunitalias,:addualunitalias,:multialias,:dualalias,:addmulti], from: 167657750971547648) do |event, multi, *args|
