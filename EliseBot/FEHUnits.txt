@@ -95,7 +95,7 @@ Gunter\Green, Blade\ \Cavalry\6, 6, 4, 6, 2\43, 32, 24, 33, 18\Yamada Akihiro\DC
 Gwendolyn\Blue, Blade\ \Armor\8, 6, 5, 8, 6\49, 30, 24, 38, 28\Masao Tsubasa\Cherami Leigh\Yukinari Toa\3p4p3qLU\F\FE6\Gwendolyn
 Hana\Red, Blade\ \Infantry\5, 8, 8, 4, 6\37, 35, 36, 23, 26\Fuzichoco\Karen Strassman\Sugaya Yayoi\1d2d3p4p3qLU\F\FE14B\Hana
 Hardin(Fallen)\Blue, Blade\ \Armor\6, 8, 6, 8, 7\45, 34, 28, 36, 32\Daisuke Izuka\Richard Epcar\Nakaya Kazuhiro\5p\M\FE3, FE12\*Hardin
-Hawkeye\Green, Blade\ \Infantry\7, 7, 4, 6, 7\45, 33, 22, 28, 30\HACCAN\Taylor Henry\Tanzawa Teruyuki\3p4p\M\FE7\Hawkeye
+Hawkeye\Green, Blade\ \Infantry\7, 7, 4, 6, 7\45, 33, 22, 28, 30\HACCAN\Taylor Henry\Tanzawa Teruyuki\3p4pLU\M\FE7\Hawkeye
 Hector\Green, Blade\ \Armor\9, 8, 5, 8, 3\52, 36, 24, 37, 19\AKIRA\Patrick Seitz\Toriumi Kousuke\5pLU\M\FE7, FE6\Hector
 Hector(Brave)\Blue, Blade\ \Armor\7, 8, 4, 10, 6\48, 37, 22, 39, 28\Kita Senri\Patrick Seitz\Toriumi Kousuke\5p\M\FE7, FE6\Hector
 Hector(Marquess)\Green, Blade\Fire, Attack, 21/09/2018\Armor\7, 10, 4, 8, 6\47, 40, 23, 38, 26\Wada Sachiko\Patrick Seitz\Toriumi Kousuke\5s\M\FE7, FE6\Hector
@@ -212,7 +212,7 @@ Olivia(Performing)\Colorless, Dagger\ \Infantry\5, 6, 8, 2, 7\34, 28, 34, 16, 28
 Olivia(Traveler)\Red, Blade\ \Flier\5, 7, 8, 6, 5\36, 30, 34, 26, 23\AKIRA\Karen Strassman\Matsuzaki Rei\5p\F\FE13, FEW\Olivia
 Olwen(Bonds)\Blue, Tome, Thunder\ \Cavalry\4, 5, 8, 3, 7\34, 26, 34, 20, 30\cuboon\Erin Fitzgerald\Takahashi Mikako\5p\F\FE5\Olwen*
 Olwen(World)\Green, Tome, Wind\ \Cavalry\4, 6, 8, 3, 6\34, 30, 35, 19, 27\cuboon\Tara Sands\Takahashi Mikako\5p\F\FE5\Olwen
-Ophelia\Blue, Tome, Light\ \Infantry\6, 10, 7, 3, 3\38, 37, 33, 20, 23\Umiu Ceso\Angela Maria Volne\\5p\F\FE14C\Ophelia
+Ophelia\Blue, Tome, Light\ \Infantry\6, 10, 7, 3, 3\38, 37, 33, 20, 23\Umiu Geso\Angela Maria Volne\\5p\F\FE14C\Ophelia
 Oscar\Blue, Blade\ \Cavalry\6, 8, 8, 5, 3\40, 33, 34, 26, 21\Ichiiro Hako\Bryce Papenbrook\Majima Junji\3p4p\M\FE9, FE10\Oscar
 Palla\Red, Blade\ \Flier\7, 7, 6, 6, 5\42, 31, 31, 28, 26\cuboon\Laura Bailey\Taneda Risa\3p4p3qLU\F\FE3, FE1, FE2, FE11, FE12, FE15\Palla
 Peri\Blue, Blade\ \Cavalry\5, 7, 7, 4, 7\35, 33, 33, 23, 30\Takagi Masafumi\Cindy Robinson\Takahashi Minami\3p4pLU\F\FE14C\Peri
@@ -259,7 +259,7 @@ Shiro\Blue, Blade\ \Infantry\6, 8, 7, 8, 4\41, 35, 30, 35, 22\Arai Teruko\Kaiji 
 Siegbert\Red, Blade\ \Cavalry\6, 8, 8, 7, 2\41, 34, 35, 31, 16\Arai Teruko\Todd Haberkorn\Kawanishi Kengo\5p\M\FE14C\Siegbert
 Sigurd\Red, Blade\ \Cavalry\6, 8, 7, 9, 2\41, 35, 32, 34, 17\Sata\Grant George\Morikawa Toshiyuki\5p\M\FE4\Sigurd
 Silas\Blue, Blade\ \Cavalry\6, 8, 5, 8, 4\40, 35, 24, 36, 21\Meka\Dark Pit\\5p\M\FE14\Silas
-Silvia\Red, Blade\ \Infantry\7, 6, 9, 2, 7\40, 27, 36, 17, 30\Chiko\Laura Post\\5p\S\FE4\Silvia
+Silvia\Red, Blade\ \Infantry\7, 6, 9, 2, 7\40, 27, 36, 17, 30\Chiko\Laura Post\\4p5p\S\FE4\Silvia
 Soleil\Red, Blade\ \Infantry\5, 9, 8, 6, 5\37, 38, 35, 28, 24\Enkyo Yuichiro\Michelle Ruff\Suzuki Eri\4p5p\F\FE14C\Soleil
 Sonya\Green, Tome, Wind\ \Infantry\5, 8, 7, 1, 7\36, 33, 31, 15, 32\Yura\Tara Sands\Shimoda Rei\5p\F\FE15, FE2\Sonya
 Sophia\Red, Tome, Dark\ \Infantry\6, 7, 3, 6, 6\40, 33, 19, 28, 29\Zaza\Wendee Lee\Oonishi Saori\1d2d3p4p3qLU\F\FE6, FE7\Sophia
@@ -317,6 +317,7 @@ Matt(C137)\Colorless, Bow\ \Flier\5, 7, 10, 2, 6\32, 31, 39, 16, 27\\\\4p5p\M\\M
 Mex\Blue, Tome, Thunder\ \Infantry\9, 7, 12, 4, 4\42, 34, 39, 21, 21\\\\4p5p\M\\Mex\Y184841080242438144
 Micaiah(C137)\Green, Tome, Wind\ \Infantry\5, 6, 9, 5, 9\33, 28, 35, 22, 34\\\\5p\F\\Micaiah\YH166307944235794432
 Mint\Colorless, Bow\ \Flier\5, 8, 9, 6, 6\29, 35, 38, 24, 27\\\\5p\F\\Mint\Y282258540444254219
+Mintz\Blue, Tome, Light\ \Infantry\6, 6, 5, 5, 7\34, 30, 26, 28, 33\\\\3p4p\M\\Mintz\Y103926672939581440
 Minus\Red, Blade\ \Infantry\6, 8, 9, 4, 6\37, 35, 41, 21, 29\\\\5p\M\\Minus\Y193452332359352321
 Moony\Green, Blade\ \Cavalry\7, 9, 8, 4, 10\38, 37, 33, 21, 35\\\\5p\M\\Moony\Y240495532378816513
 Moosie\Blue, Blade\ \Infantry\10, 6, 4, 6, 7\45, 30, 22, 31, 34\\\\4p5p\M\\Moosie\Y270372601107447808

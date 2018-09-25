@@ -24,7 +24,7 @@ Breath of Life 3
 
 Celica
 5\1\HP\Resistance\-
-Fire\Elfire\Bolganone\Ragnarok\~~Ragnarok (+) Effect Mode~~
+Fire\Elfire\Bolganone\Ragnarok\Ragnarok (+) Effect Mode
 Draw Back
 Chilling Wind\Iceberg
 Death Blow 1\Swift Sparrow 1\Swift Sparrow 2
@@ -104,8 +104,8 @@ Iote's Shield
 
 Ethlyn
 5\1\ \ \-
-Assault\Fear\Fear+\~~Fear+ (+) Dazzling Mode~~
-Heal\Mend\Physic\Physic+
+Assault\Fear\Fear+\Fear+ (+) Dazzling Mode
+Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
 Spd/Def Bond 1\Spd/Def Bond 2\Spd/Def Bond 3
 Live to Serve 1\Live to Serve 2\Live to Serve 3
