@@ -2,7 +2,7 @@ Moosie
 
 Elise
 5\2\Attack\Defense\S
-Assault\Panic\Panic+\Panic+ (+) Wrathful Mode
+Assault\Pain\Pain+\Pain+ (+) Wrathful Mode
 Heal\Mend\Recover\Recover+
 Miracle
 Brazen Atk/Spd 1\Brazen Atk/Spd 2\Brazen Atk/Spd 3
