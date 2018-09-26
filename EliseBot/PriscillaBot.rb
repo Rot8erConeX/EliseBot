@@ -688,7 +688,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     elsif ['seal'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*skill name__","Equips the skill seal `skill name` on the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['refine','refinery','refinement'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*refinement__","Refines the weapon equipped by the donor unit with the name `unit`, using the refinement `refinement`\n\n**This command is only able to be used by certain people**.",0x9E682C)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*refinement__","Refines the weapon equipped by the donor unit with the name `unit`, using the refinement `refinement`\n\nIf no refinement is defined and the equipped weapon has an Effect Mode, defaults to that.\nOtherwise, throws an error message if no refinement is defined.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['support','marry'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to change the support rank of the donor unit with the name `unit`.  If the donor unit has no rank, will wipe the other donor unit that has support.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     else
@@ -906,7 +906,12 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
 end
 
 def donate_trigger_word(event,str=nil)
-  str=event.message.text if str.nil?
+  if str.nil?
+    str=event.message.text
+    str=str.downcase
+    str=str[2,str.length-2] if ['f?','e?','h?'].include?(str[0,2])
+    str=str[4,str.length-4] if ['feh?','feh!'].include?(str[0,4])
+  end
   str=str.downcase
   d=Dir["C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/*.txt"]
   f=[]
@@ -2344,7 +2349,7 @@ def stat_modify(x,includerefines=false) # used to find all stat names regardless
   x='Defense' if ['defense','def','defence'].include?(x.downcase)
   x='Resistance' if ['res','resistance'].include?(x.downcase)
   if includerefines
-    x='Effect' if ['effect','special'].include?(x.downcase)
+    x='Effect' if ['effect','special','eff'].include?(x.downcase)
     x='Wrathful' if ['wrazzle','wrathful'].include?(x.downcase)
     x='Dazzling' if ['dazzle','dazzling'].include?(x.downcase)
   end
@@ -2507,7 +2512,7 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
         end
       end
       unless args[i].nil?
-        refinement='Effect' if ['effect','special'].include?(args[i].gsub('(','').gsub(')','').downcase) && refinement.nil?
+        refinement='Effect' if ['effect','special','eff'].include?(args[i].gsub('(','').gsub(')','').downcase) && refinement.nil?
         refinement='Wrathful' if ['wrazzle','wrathful'].include?(args[i].gsub('(','').gsub(')','').downcase) && refinement.nil?
         refinement='Dazzling' if ['dazzle','dazzling'].include?(args[i].gsub('(','').gsub(')','').downcase) && refinement.nil?
       end
@@ -4439,7 +4444,6 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     return false
   end
   skill=@skills[f]
-  puts skill[0]
   sklz=@skills.map{|q| q}
   g=get_markers(event)
   unitz=@units.reject{|q| !has_any?(g, q[13][0])}
@@ -8458,7 +8462,7 @@ end
 
 def weapon_legality(event,name,weapon,refinement='-',recursion=false)
   return '-' if weapon=='-'
-  u=@units[@units.find_index{|q| q[0]==name}]
+  u=@units[@units.find_index{|q| q[0]==name.gsub('Laevatein','Lavatain')}]
   w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
   return '-' if w[0][0,u[0].length].downcase==u[0].downcase && count_in(event.message.text.downcase.split(' '),u[0].downcase)<=1
   if weapon=='Falchion'
@@ -8624,6 +8628,73 @@ def weapon_legality(event,name,weapon,refinement='-',recursion=false)
     return weapon_legality(event,name,"Wo Gun#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
   end
   return "~~#{w2}~~"
+end
+
+def skill_legality(event,unit,skill)
+  u=@units[@units.find_index{|q| q[0]==unit.gsub('Laevatein','Lavatain')}]
+  s=@skills[@skills.find_index{|q| q[0]==skill.gsub('Laevatein','Bladeblade')}]
+  k3=true
+  k22=s[5].split(', ')
+  for i2 in 0...k22.length
+    k3=false if k22[i2]=='No one'
+    if k22[i2].include?('Excludes')
+      k4=true
+      if k22[i2].include?('Weapon Users')
+        k4=false if k22[i2].include?(u[1][0])
+      elsif k22[i2].include?('Users')
+        k4=false if k22[i2].include?('Excludes Tome') && u[1][1]=='Tome'
+        k4=false if k22[i2].include?('and Tome') && u[1][1]=='Tome'
+        k4=false if k22[i2].include?('Excludes Bow') && u[1][1]=='Bow'
+        k4=false if k22[i2].include?('and Bow') && u[1][1]=='Bow'
+        k4=false if k22[i2].include?('Excludes Dagger') && u[1][1]=='Dagger'
+        k4=false if k22[i2].include?('and Dagger') && u[1][1]=='Dagger'
+        k4=false if k22[i2].include?(weapon_clss(u[1],event).gsub('Healer','Staff'))
+      else
+        k4=false if k22[i2].include?('Dragons') && u[1][1]=='Dragon'
+        k4=false if k22[i2].include?('Beasts') && u[1][1]=='Beast'
+        k4=false if k22[i2].include?(u[3].gsub('Flier','Fliers')) || k22[i2].include?(u[3].gsub('Armor','Armored'))
+      end
+      k3=(k3 && k4)
+    end
+    if k22[i2].include?('Only')
+      k4=false
+      k4=true if k22[i2]=='Dragons Only' && u[1][1]=='Dragon'
+      k4=true if k22[i2]=='Beasts Only' && u[1][1]=='Beast'
+      k4=true if k22[i2]=='Tome Users Only' && u[1][1]=='Tome'
+      k4=true if k22[i2]=='Bow Users Only' && u[1][1]=='Bow'
+      k4=true if k22[i2]=='Dagger Users Only' && u[1][1]=='Dagger'
+      k4=true if k22[i2]=='Melee Weapon Users Only' && ['Blade','Dragon','Beast'].include?(u[1][1])
+      k4=true if k22[i2]=='Ranged Weapon Users Only' && ['Tome','Bow','Dagger','Healer'].include?(u[1][1])
+      k4=true if k22[i2].include?(u[3].gsub('Flier','Fliers')) || k22[i2].include?(u[3].gsub('Armor','Armored'))
+      k4=true if k22[i2]=="#{weapon_clss(u[1],event).gsub('Healer','Staff')} Users Only"
+      k4=true if k22[i2]=="#{u[1][0]} Weapon Users Only"
+      k4=true if k22[i2]=='Summon Gun Users Only' && u[0]=='Kiran'
+      if k22[i2].include?('Dancers')
+        u2=sklz[sklz.find_index{|q| q[0]=='Dance'}]
+        b=[]
+        for i3 in 0...@max_rarity_merge[0]
+          u=u2[9][i3].split(', ')
+          for j2 in 0...u.length
+            b.push(u[j2].gsub('Lavatain','Laevatein')) unless b.include?(u[j2]) || u[j2].include?('-')
+          end
+        end
+        k4=true if b.include?(u[0])
+      end
+      if k22[i2].include?('Singers')
+        u2=sklz[sklz.find_index{|q| q[0]=='Sing'}]
+        b=[]
+        for i3 in 0...@max_rarity_merge[0]
+          u=u2[9][i3].split(', ')
+          for j2 in 0...u.length
+            b.push(u[j2].gsub('Lavatain','Laevatein')) unless b.include?(u[j2]) || u[j2].include?('-')
+          end
+        end
+        k4=true if b.include?(u[0])
+      end
+      k3=(k3 && k4)
+    end
+  end
+  return k3
 end
 
 def add_number_to_string(a,b)
@@ -9322,7 +9393,6 @@ def generate_random_unit(event,args,bot)
     img=imgx.avatar_url
     ftr="Unit profile provided by #{imgx.distinct}"
   end
-  puts ftr
   wemote=''
   moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clazz[0]}_#{clazz[1].gsub('Healer','Staff')}"}
   wemote=moji[0].mention unless moji.length<=0
@@ -11028,7 +11098,6 @@ def phase_study(event,name,bot,weapon=nil)
     n=n[n.length-1] if atk=='<:MagicS:467043867611627520> Magic'
     n=n.join(' / ') if ['<:StrengthS:467037520484630539> Attack','<:FreezeS:467043868148236299> Freeze'].include?(atk)
   end
-  puts n.to_s
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
   u40x2=get_stats(event,name,40,5,0,boon,bane)
   spec_wpn=false
@@ -14974,13 +15043,17 @@ bot.command(:edit) do |event, cmd, *args|
   return nil if overlap_prevent(event)
   uid=event.user.id
   if uid==167657750971547648
-    uid=270372601107447808
+    event.respond "This command is for the donors.  Your version of the command is `FEH!devedit`."
+    return nil
   elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
     if get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(uid)
       event.respond "Please wait until my developer makes your storage file."
     else
       event.respond "You do not have permission to use this command."
     end
+    return nil
+  elsif (cmd.nil? || cmd.length.zero?) && (args.nil? || args.length.zero?)
+    create_embed(event,"**edit** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!edit create` - creates a new donor unit\n`FEH!edit promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!edit merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!edit nature` - changes a donor unit's nature (*also `ivs`*)\n`FEH!edit support` - causes me to change support ranks of donor units (*also `marry`*)\n\n`FEH!edit equip` - equip skill (*also `skill`*)\n`FEH!edit seal` - equip seal\n`FEH!edit refine` - refine weapon\n\n`FEH!edit send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
     return nil
   end
   str=find_name_in_string(event)
@@ -15063,8 +15136,81 @@ bot.command(:edit) do |event, cmd, *args|
       end
     end
   elsif ['refine','refinement','refinery'].include?(cmd.downcase)
-    event.respond "This sub-command hasn't been coded yet.  Please be patient."
-    return nil
+    jn=@units[find_unit(find_name_in_string(event),event)][0]
+    sklzz=@skills.map{|q| q}
+    m=donor_units[j2][6]
+    m.pop if m[m.length-1].include?(' (+) ')
+    w=sklzz[sklzz.index{|q| q[0]==m[m.length-1]}]
+    if w[15].nil?
+      event.respond "#{m[m.length-1]} cannot be refined."
+      return nil
+    end
+    inner_skill=w[15]
+    if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
+      inner_skill=inner_skill[1,inner_skill.length-1]
+      inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+    elsif inner_skill[0,1]=='-' && inner_skill.length>1
+      inner_skill=inner_skill[2,inner_skill.length-2]
+      inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+    end
+    for i in 0...5
+      if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
+        inner_skill=inner_skill[1,inner_skill.length-1]
+        inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+      elsif inner_skill[0,1]=='-' && inner_skill.length>1
+        inner_skill=inner_skill[2,inner_skill.length-2]
+        inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+      end
+    end
+    overides=['e','a','s','d','r']
+    overides=['e','w','d'] if w[5]=='Staff Users Only'
+    for i in 0...overides.length
+      if inner_skill[0,3]=="(#{overides[i]})"
+        inner_skill=inner_skill[3,inner_skill.length-3]
+        for i2 in 0...6
+          if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
+            inner_skill=inner_skill[1,inner_skill.length-1]
+            inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+          elsif inner_skill[0,1]=='-' && inner_skill.length>1
+            inner_skill=inner_skill[2,inner_skill.length-2]
+            inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+          end
+        end
+      end
+    end
+    words=[]
+    words.push('Effect') unless inner_skill=='y'
+    if w[5]=='Staff Users Only'
+      words.push('Wrathful') unless w[7].include?("This weapon's damage is calculated the same as other weapons.") || w[7].include?('Damage from staff calculated like other weapons.')
+      words.push('Dazzling') unless w[7].include?('The foe cannot counterattack.') || w[7].include?('Foe cannot counterattack.')
+    else
+      words.push('Attack')
+      words.push('Speed')
+      words.push('Defense')
+      words.push('Resistance')
+    end
+    refine=''
+    for i in 0...args.length
+      if refine.length.zero?
+        refine='Effect' if ['effect','special','eff'].include?(args[i].downcase) && words.include?('Effect')
+        refine='Wrathful' if ['wrazzle','wrathful'].include?(args[i].downcase) && words.include?('Wrathful')
+        refine='Dazzling' if ['dazzle','dazzling'].include?(args[i].downcase) && words.include?('Dazzling')
+        refine='Attack' if ['attack','atk','att','strength','str','magic','mag'].include?(args[i].downcase) && words.include?('Attack')
+        refine='Speed' if ['spd','speed'].include?(args[i].downcase) && words.include?('Speed')
+        refine='Defense' if ['defense','def','defence'].include?(args[i].downcase) && words.include?('Defense')
+        refine='Resistance' if ['res','resistance'].include?(args[i].downcase) && words.include?('Resistance')
+      end
+    end
+    refine='Effect' if refine.length.zero? && words.include?('Effect')
+    refine=words[0] if refine.length.zero? && words.length==1
+    if refine.length.zero?
+      event.respond "No refinement was defined.  Your options are:\n#{words.join("\n")}"
+      return nil
+    end
+    m.push("#{m[m.length-1]} (+) #{refine} Mode")
+    donor_units[j2][6]=m
+    donor_unit_save(uid,donor_units)
+    event.respond "Your #{donor_units[j2][0]}'s #{m[m.length-2]} has been given the #{refine} Mode refinement!"
   elsif ['seal'].include?(cmd.downcase)
     jn=@units[find_unit(find_name_in_string(event),event)][0]
     sklzz=@skills.map{|q| q}
@@ -15074,8 +15220,11 @@ bot.command(:edit) do |event, cmd, *args|
       k2[0]=skls[-1]
     end
     js=sklzz.find_index{|q| q[0]==k2[0]}
-    unless sklzz[js][4].split(', ').include?('Passive(S)') || sklzz[js][4].split(', ').include?('Seal')
+    if !sklzz[js][4].split(', ').include?('Passive(S)') && !sklzz[js][4].split(', ').include?('Seal')
       event.respond "#{sklzz[js][0]} cannot be equipped in the Seal slot.  Please use the `FEH!edit equip` command to equip this skill."
+      return nil
+    elsif !skill_legality(event,donor_units[j2][0],sklzz[js][0])
+      event.respond "#{donor_units[j2][0]} cannot equip the #{sklzz[js][0]} seal."
       return nil
     end
     donor_units[j2][12]=sklzz[js][0]
@@ -15092,7 +15241,18 @@ bot.command(:edit) do |event, cmd, *args|
     js=sklzz.find_index{|q| q[0]==k2[0]}
     x=backwards_skill_tree(js)
     m=0
+    if sklzz[js][4]!='Weapon' && !skill_legality(event,donor_units[j2][0],sklzz[js][0])
+      event.respond "#{donor_units[j2][0]} cannot equip #{sklzz[js][0]}."
+      return nil
+    end
     if sklzz[js][4]=='Weapon'
+      w=weapon_legality(event,donor_units[j2][0],sklzz[js][0])
+      if w.include?('~~')
+        event.respond "#{donor_units[j2][0]} cannot equip #{sklzz[js][0]}."
+        return nil
+      end
+      js=sklzz.find_index{|q| q[0]==w}
+      x=backwards_skill_tree(js)
       m=6
     elsif sklzz[js][4]=='Assist'
       m=7
@@ -15550,6 +15710,9 @@ end
 
 bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *args|
   return nil if overlap_prevent(event)
+  if File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{event.user.id}.txt")
+    event.respond "This command is to allow the developer to edit his units.  Your version of the command is `FEH!edit`"
+  end
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
   str=find_name_in_string(event)
   data_load()
