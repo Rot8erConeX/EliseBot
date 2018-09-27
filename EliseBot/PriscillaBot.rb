@@ -8129,6 +8129,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
         return [m[i],['Tiki(Adult)(Summer)','Tiki(Young)(Summer)'],m] if event.message.text.downcase.include?(m[i])
       end
       return [str,['Tiki(Adult)(Summer)','Tiki(Young)(Summer)'],m]
+    elsif str2.include?('legendary') || str2.include?('legend')
+	  return [str,['Tiki(Young)(Earth)'],["legendary#{str}","#{str}legendary"]]
     end
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?("#{str}ys") || str2.include?("ys#{str}")
