@@ -22,7 +22,7 @@
 ['Robin', 0, 0, ['Robin(M)', 'Robin(F)', 'Robin(F)(Summer)', 'Robin(M)(Winter)', 'Robin(M)(Fallen)', 'Robin(F)(Fallen)', 'Tobin']]
 ['Corrin', 0, 0, ['Corrin(M)', 'Corrin(F)', 'Corrin(F)(Summer)', 'Corrin(M)(Winter)', 'Kamui']]
 ['Xander', 0, 0, ['Xander', 'Xander(Spring)', 'Xander(Summer)', 'Xander(Festival)']]
-['Tiki', 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)']]
+['Tiki', 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)']]
 ['Lyn', 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)']]
 ['Chrom', 0, 0, ['Chrom(Launch)', 'Chrom(Spring)', 'Chrom(Winter)', 'Chrom(Branded)']]
 ['Azura', 0, 0, ['Azura', 'Azura(Performing)', 'Azura(Winter)']]

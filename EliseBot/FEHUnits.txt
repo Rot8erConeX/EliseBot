@@ -283,6 +283,7 @@ Tharja(Winter)\Red, Tome, Dark\ \Armor\7, 7, 2, 8, 8\43, 34, 18, 34, 36\Washimot
 Tiki(Adult)\Red, Dragon\ \Infantry\6, 9, 4, 8, 4\40, 35, 23, 35, 24\Ito Noizi\Mela Lee\Ohtani Ikue\3p4pLU\F\FE13, PXZ2\*Tiki, Adult
 Tiki(Adult)(Summer)\Green, Blade\ \Infantry\4, 9, 7, 7, 4\35, 36, 30, 32, 24\Okaya\Mela Lee\Ohtani Ikue\5s\F\FE13, PXZ2\Tiki, Adult
 Tiki(Young)\Red, Dragon\ \Infantry\8, 8, 8, 7, 6\41, 31, 30, 32, 29\Ito Noizi\Mela Lee\Morohoshi Sumire\5pLU\F\FE3, FE1, FE11, FE12, FEW\*Tiki, Young
+Tiki(Young)(Earth)\Blue, Dragon\Earth, Defense, 21/09/2018\Armor\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Enkyo Yuichiro\Mela Lee\Morohoshi Sumire\5s\F\FE3, FE1, FE11, FE12, FEW\Tiki, Young
 Tiki(Young)(Summer)\Red, Dragon\ \Flier\7, 8, 11, 7, 6\40, 33, 37, 32, 26\Gaou\Mela Lee\Morohoshi Sumire\5s\F\FE3, FE1, FE11, FE12, FEW\Tiki, Young
 Titania\Green, Blade\ \Cavalry\5, 6, 8, 5, 6\37, 28, 34, 25, 30\Wada Sachiko\Misty Lee\Miyagawa Miho\3p4p\F\FE9, FE10\Titania
 Tobin\Red, Blade\ \Infantry\9, 7, 6, 9, 6\46, 31, 27, 33, 26\kaya8\Robbie Daymond\Abe Atsushi\4t5t4t\M\FE15, FE2\Tobin

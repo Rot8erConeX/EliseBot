@@ -169,7 +169,7 @@ Draw Back
 Dragon Gaze\Draconic Aura
 Defiant Atk 1\Defiant Atk 2\Defiant Atk 3
 Desperation 1\Desperation 2\Desperation 3
-B Tome Exp. 1\B Tome Exp. 2\B Tome Exp. 3
+Threaten Atk 1\Threaten Atk 2\Threaten Atk 3
 Brash Assault 2
 
 Maria
