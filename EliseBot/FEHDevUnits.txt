@@ -285,10 +285,10 @@ Quick Riposte 3
 Tiki(Young)(Earth)
 5\0\Resistance\HP\-
 Fire Breath\Fire Breath+\Flametongue\Divine Mist
-~~none~~
+~~Reposition~~
 New Moon\Moonbow
 Fierce Stance 1\Fierce Stance 2\Fierce Breath
 Bold Fighter 1\Bold Fighter 2\~~Bold Fighter 3~~
 With Everyone!
- 
+Armored Boots
 
