@@ -1196,7 +1196,7 @@ Ward Armor\200\-\-\Passive(C)\Armor Only\-\Grants armored allies within 2 spaces
 Ward Cavalry\200\-\-\Passive(C)\Cavalry Only\-\Grants cavalry allies within 2 spaces Def/Res+4 during combat.\*Spur Def 2* or *Spur Res 2*\-; -; -; -; -\-; -; -; Berkut, Eliwood; Olwen(Bonds)\Passive, C, Spur\\\\
 Ward Dragons\200\-\-\Passive(C)\Dragons Only\-\Grants dragon allies within 2 spaces Def/Res+4 during combat.\*Spur Def 2* or *Spur Res 2*\-; -; -; -; -\-; -; -; Robin(M)(Fallen); -\Passive, C, Spur\\\\
 Ward Fliers\200\-\-\Passive(C)\Fliers Only\-\Grants flying allies within 2 spaces Def/Res+4 during combat.\*Spur Def 2* or *Spur Res 2*\-; -; -; -; -\-; -; -; Camilla(Winter), Minerva, Shigure; -\Passive, C, Spur\\\\
-With Everyone!\300\-\-\Passive(C)\Everyone\Tiki(Young)(Earth)\At start of turn, if unit is adjacent to ally, grants Def/Res+5 to unit and allies for 1 turn.\-\-; -; -; -; -\-; -; -; -; Tiki(Young)(Earth)\Passive, C, Hone/Fortify\\\\
+With Everyone!\300\-\-\Passive(C)\Everyone\Tiki(Young)(Earth)\At start of turn, if unit is adjacent to ally, grants Def/Res+5 to unit and allies for 1 turn.\-\-; -; -; -; -\-; -; -; -; Tiki(Young)(Earth)\Passive, C, Hone/Fortify, Blessing\\\\
 Armored Boots\100\-\Transparent 20 100 40\Seal\Armor Only\-\If unit's HP = 100% at start of turn, unit can move 1 extra space. (That turn only; does not stack.)\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Move\\\\
 Deflect Magic 1\50\-\Verdant 20 100 50\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a tome, damage from second attack onward reduced by 30%.\-\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
 Deflect Magic 2\100\-\Verdant 60 200 50\Seal\Everyone\-\If unit receives consecutive attacks from a foe using a tome, damage from second attack onward reduced by 50%.\*Deflect Magic 1*\-; -; -; -; -\-; -; -; -; -\Passive, Seal, Deflect\\\\
@@ -1280,8 +1280,8 @@ Enchanted Slash\0\-\-\Passive(W)\Melee Weapon Users Only\-\If foe's Range = 1, d
 Magic Absorption\0\-\-\Passive(W)\Excludes Tome Users\-\Grants Special cooldown charge +1 if foe uses magic (only highest bonus applied.)\-\-; -; -; -; -\-; -; -; -; -\Passive, W\Felicia's Plate\\\
 Magic Suppression\0\-\-\Passive(W)\Excludes Tome Users\-\Foe using a tome cannot counterattack.\-\-; -; -; -; -\-; -; -; -; -\Passive, W\Deathly Dagger\\\
 Mila's Blessing\0\-\-\Passive(W)\Everyone\-\On maps with turn limits, ignore foes' Sacred Seals.\-\-; -; -; -; -\-; -; -; -; -\Passive, W, Blessing\Blessed Lance\Y\\
-Rose's Thorns\0\-\-\Passive(W)\Fliers Only\-\Grants Atk/Spd+3 to cavalry and flying allies within 2 spaces during combat\-\-; -; -; -; -\-; -; -; -; -\Passive, W, Spur\Camilla's Axe\\\
+Rose's Thorns\0\-\-\Passive(W)\Fliers Only\Camilla\Grants Atk/Spd+3 to cavalry and flying allies within 2 spaces during combat\-\-; -; -; -; -\-; -; -; -; -\Passive, W, Spur\Camilla's Axe\\\
 Special Damage\0\-\-\Passive(W)\Excludes Staff Users\-\Grants +10 to damage when Special triggers.\-\-; -; -; -; -\-; -; -; -; -\Passive, W, Cooldown\Hauteclere, Nameless Blade\\\
-Supportive\0\-\-\Passive(W)\Everyone\-\If unit is within 2 spaces of support partner, grants Atk/Spd/Def/Res+4 to that ally during combat.\-\-; -; -; -; -\-; -; -; -; -\Passive, W, Spur\Yato\\\
+Supportive\0\-\-\Passive(W)\Everyone\Corrin(F), Corrin(M)\If unit is within 2 spaces of support partner, grants Atk/Spd/Def/Res+4 to that ally during combat.\-\-; -; -; -; -\-; -; -; -; -\Passive, W, Spur\Yato\\\
 Undazzle\0\-\-\Passive(W)\Excludes Staff Users\-\If unit is attacked by foe using sword, axe, lance, or dragonstone, unit can counterattack regardless of foe's skills or unit's status.\-\-; -; -; -; -\-; -; -; -; -\Passive, W\Lolipop Stick\Y\\
 Wary Ranged\0\-\-\Passive(W)\Everyone\-\If foe uses bow, dagger, magic, or staff and unit's Def __>__ foe's Def+1, foe cannot make a follow-up attack.\-\-; -; -; -; -\-; -; -; -; -\Passive, W, Follow-up\Brynhildr\\\

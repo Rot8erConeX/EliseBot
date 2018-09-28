@@ -109,7 +109,7 @@ Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
 Spd/Def Bond 1\Spd/Def Bond 2\Spd/Def Bond 3
 Live to Serve 1\Live to Serve 2\Live to Serve 3
-Spur Res 1\Spur Res 2
+Spur Def 1\Drive Def 1\Drive Def 2
 Spur Spd 3
 
 Felicia
