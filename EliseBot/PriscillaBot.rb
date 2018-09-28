@@ -3332,8 +3332,9 @@ def get_unit_prf(name)
     return [get_unit_prf('Robin(M)')[0],get_unit_prf('Robin(F)')[0]]
   end
   prfs=@skills.reject{|q| !q[6].split(', ').include?(name) || q[4]!='Weapon' || q[0]=='Falchion'}
-  if prfs.length>1 
-    prfs2=prfs.reject{|q| q[9].reject{|q2| !q2.split(', ').include?(name)}.length<=0}
+  if prfs.length>1
+    prfs2=prfs.reject{|q| q[8]!='-'}
+    prfs2=prfs.reject{|q| q[9].reject{|q2| !q2.split(', ').include?(name)}.length<=0} if prfs2.length<=0
     prfs2=prfs.reject{|q| q[10].reject{|q2| !q2.split(', ').include?(name)}.length<=0} if prfs2.length<=0
     prfs=[prfs2[0]]
   elsif prfs.length<=0 
@@ -5849,6 +5850,38 @@ def get_group(name,event)
       b.push(untz[i][0].gsub('Lavatain','Laevatein')) if untz[i][9][0].downcase.include?('d') && has_any?(g, untz[i][13][0])
     end
     return ['Daily_Rotation',b]
+  elsif name.downcase=='bannerless'
+    b=[]
+    b2=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
+      b2=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
+        b2.push(line.gsub("\n",''))
+      end
+    else
+      b2=[]
+    end
+    for i in 0...b2.length
+      b2[i]=b2[i].split('\\'[0])
+      b2[i][1]=b2[i][1].to_i
+      b2[i][2]=b2[i][2].split(', ')
+      b2[i][4]=nil if !b2[i][4].nil? && b2[i][4].length<=0
+      b2[i]=nil if b2[i][2][0]=='-' && b2[i][4].nil?
+    end
+    b2.compact!
+    if b2.length>0
+      m=[]
+      for i in 0...b2.length
+        for j in 0...b2[i][2].length
+          m.push(b2[i][2][j])
+        end
+      end
+      m.uniq!
+      puts m.to_s
+      data_load()
+      k=@units.reject{|q| !(q[13].nil? || q[13][0].nil? || q[13][0].length.zero?) || !q[9][0].include?('p') || m.include?(q[0])}.uniq
+    end
+    return ['Bannerless',k.map{|q| q[0]}]
   elsif find_group(name,event)>0
     f=@groups[find_group(name,event)]
     f2=[]
