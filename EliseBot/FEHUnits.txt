@@ -98,7 +98,7 @@ Hardin(Fallen)\Blue, Blade\ \Armor\6, 8, 6, 8, 7\45, 34, 28, 36, 32\Daisuke Izuk
 Hawkeye\Green, Blade\ \Infantry\7, 7, 4, 6, 7\45, 33, 22, 28, 30\HACCAN\Taylor Henry\Tanzawa Teruyuki\3p4pLU\M\FE7\Hawkeye
 Hector\Green, Blade\ \Armor\9, 8, 5, 8, 3\52, 36, 24, 37, 19\AKIRA\Patrick Seitz\Toriumi Kousuke\5pLU\M\FE7, FE6\Hector
 Hector(Brave)\Blue, Blade\ \Armor\7, 8, 4, 10, 6\48, 37, 22, 39, 28\Kita Senri\Patrick Seitz\Toriumi Kousuke\5p\M\FE7, FE6\Hector
-Hector(Marquess)\Green, Blade\Fire, Attack, 21/09/2018\Armor\7, 10, 4, 8, 6\47, 40, 23, 38, 26\Wada Sachiko\Patrick Seitz\Toriumi Kousuke\5s\M\FE7, FE6\Hector
+Hector(Marquess)\Green, Blade\Fire, Attack, 21/12/2018\Armor\7, 10, 4, 8, 6\47, 40, 23, 38, 26\Wada Sachiko\Patrick Seitz\Toriumi Kousuke\5s\M\FE7, FE6\Hector
 Hector(Valentines)\Green, Blade\ \Armor\8, 10, 4, 9, 4\50, 38, 21, 40, 24\Suekane Kumiko\Patrick Seitz\Toriumi Kousuke\5s\M\FE7, FE6\Hector
 Helbindi\Green, Blade\ \Infantry\8, 8, 2, 8, 7\44, 35, 18, 35, 31\Maeshima Shigeki\Raymond K. Essel\Nakai Kazuya\5p\M\FEH\Helbindi
 Henry\Red, Tome, Dark\ \Infantry\8, 4, 4, 7, 5\45, 23, 22, 32, 25\Kusugi Toku\Bryce Papenbrook\Okamura Akemi\3p4p3qLU\M\FE13\Henry
@@ -108,7 +108,7 @@ Hinoka(Launch)\Blue, Blade\ \Flier\6, 9, 7, 5, 4\41, 35, 32, 25, 24\HACCAN\Cindy
 Hinoka(Wings)\Colorless, Bow\ \Flier\5, 8, 8, 2, 6\37, 32, 35, 17, 29\Chiko\Cindy Robinson\Nazuka Kaori\5p\F\FE14B, FEW\Hinoka
 Ike\Red, Blade\ \Infantry\7, 8, 7, 7, 2\42, 35, 31, 32, 18\Meka\Greg Chun\Hagi Michihiko\5p\M\FE9, FE10, SSBB, SSBProM, SSB4, (a)FE14, (a)FE15, (a)STEAM, SSBU\Ike
 Ike(Brave)\Green, Blade\ \Infantry\8, 8, 6, 8, 3\43, 36, 28, 35, 20\Kita Senri\Greg Chun\Hagi Michihiko\5p\M\FE9, FE10, SSBB, SSBProM, SSB4, (a)FE14, (a)FE15, (a)STEAM, SSBU\Ike
-Ike(Vanguard)\Red, Blade\Earth, Attack, 21/09/2018\Infantry\6, 8, 7, 8, 4\41, 36, 30, 35, 21\Kita Senri\Greg Chun\Hagi Michihiko\5s5y\M\FE10, FE9, SSBB, SSBProM, SSB4, (a)FE14, (a)FE15, (a)STEAM, SSBU\*Ike
+Ike(Vanguard)\Red, Blade\Earth, Attack, 21/01/2019\Infantry\6, 8, 7, 8, 4\41, 36, 30, 35, 21\Kita Senri\Greg Chun\Hagi Michihiko\5s5y\M\FE10, FE9, SSBB, SSBProM, SSB4, (a)FE14, (a)FE15, (a)STEAM, SSBU\*Ike
 Inigo(Performing)\Green, Tome, Wind\ \Infantry\6, 6, 8, 4, 4\37, 28, 33, 22, 20\Suekane Kumiko\Mick Wingert\Kijima Ryuichi\5s\M\FE13\Inigo
 Innes\Colorless, Bow\ \Infantry\5, 7, 8, 1, 7\35, 33, 34, 14, 31\Teita\Xander Mobus\Fukuyama Jun\5p\M\FE8\Innes
 Innes(Summer)\Green, Blade\ \Flier\7, 7, 9, 7, 3\42, 33, 37, 30, 20\Asatani Tomoyo\Xander Mobus\Fukuyama Jun\5s\M\FE8\Innes
@@ -225,7 +225,7 @@ Reinhardt(Bonds)\Blue, Tome, Thunder\ \Cavalry\6, 7, 4, 6, 4\38, 32, 23, 27, 25\
 Reinhardt(World)\Red, Blade\ \Cavalry\6, 8, 4, 7, 6\40, 35, 23, 31, 28\cuboon\Chris Smith\Tone Kentarou\5p\M\FE5\Reinhardt
 Rhajat\Green, Tome, Wind\ \Infantry\5, 8, 8, 4, 4\36, 35, 34, 21, 24\Kusakihara Toshiyuki\Stephanie Sheh\Takada Yuuki\5p\F\FE14B\Rhajat
 Robin(F)\Green, Tome, Wind\ \Infantry\6, 6, 6, 6, 4\40, 29, 29, 29, 22\Ueda Yumehito\Lauren Landa\Sawashiro Miyuki\2g3g4g4g2q3q4q\F\FE13, SSB4, FEW, SSBU\*Robin, F
-Robin(F)(Fallen)\Colorless, Dragon\Earth, Speed, 21/09/2018\Flier\7, 7, 8, 6, 5\40, 32, 35, 30, 25\Chiko\Lauren Landa\Sawashiro Miyuki\5s\F\FE13, FE15\Robin, F
+Robin(F)(Fallen)\Colorless, Dragon\Earth, Speed, 21/10/2018\Flier\7, 7, 8, 6, 5\40, 32, 35, 30, 25\Chiko\Lauren Landa\Sawashiro Miyuki\5s\F\FE13, FE15\Robin, F
 Robin(F)(Summer)\Blue, Blade\ \Infantry\4, 7, 8, 6, 6\35, 32, 34, 28, 29\Mayo\Lauren Landa\Sawashiro Miyuki\5s\F\FE13, SSB4, FEW, SSBU\Robin, F
 Robin(M)\Blue, Tome, Thunder\ \Infantry\6, 6, 6, 6, 4\40, 29, 29, 29, 22\Fujiwara Ryo\David Vincent\Hosoya Yoshimasa\3p4p3qLU\M\FE13, SSB4, FEW, (a)FE14, (a)FE15, (a)STEAM, SSBU\*Robin, M
 Robin(M)(Fallen)\Green, Dragon\ \Armor\7, 10, 4, 8, 6\48, 40, 24, 35, 27\Okuma Yugo\David Vincent\Hosoya Yoshimasa\5p\M\FE13, FE15\Robin, M
@@ -283,7 +283,7 @@ Tharja(Winter)\Red, Tome, Dark\ \Armor\7, 7, 2, 8, 8\43, 34, 18, 34, 36\Washimot
 Tiki(Adult)\Red, Dragon\ \Infantry\6, 9, 4, 8, 4\40, 35, 23, 35, 24\Ito Noizi\Mela Lee\Ohtani Ikue\3p4pLU\F\FE13, PXZ2\*Tiki, Adult
 Tiki(Adult)(Summer)\Green, Blade\ \Infantry\4, 9, 7, 7, 4\35, 36, 30, 32, 24\Okaya\Mela Lee\Ohtani Ikue\5s\F\FE13, PXZ2\Tiki, Adult
 Tiki(Young)\Red, Dragon\ \Infantry\8, 8, 8, 7, 6\41, 31, 30, 32, 29\Ito Noizi\Mela Lee\Morohoshi Sumire\5pLU\F\FE3, FE1, FE11, FE12, FEW\*Tiki, Young
-Tiki(Young)(Earth)\Blue, Dragon\Earth, Defense, 21/09/2018\Armor\9, 7, 7, 11, 7\45, 34, 35, 37, 29\Enkyo Yuichiro\Mela Lee\Morohoshi Sumire\5s\F\FE3, FE1, FE11, FE12, FEW\Tiki, Young
+Tiki(Young)(Earth)\Blue, Dragon\Earth, Defense, 21/01/2019\Armor\9, 7, 7, 11, 7\45, 34, 35, 37, 29\Enkyo Yuichiro\Mela Lee\Morohoshi Sumire\5s\F\FE3, FE1, FE11, FE12, FEW\Tiki, Young
 Tiki(Young)(Summer)\Red, Dragon\ \Flier\7, 8, 11, 7, 6\40, 33, 37, 32, 26\Gaou\Mela Lee\Morohoshi Sumire\5s\F\FE3, FE1, FE11, FE12, FEW\Tiki, Young
 Titania\Green, Blade\ \Cavalry\5, 6, 8, 5, 6\37, 28, 34, 25, 30\Wada Sachiko\Misty Lee\Miyagawa Miho\3p4p\F\FE9, FE10\Titania
 Tobin\Red, Blade\ \Infantry\9, 7, 6, 9, 6\46, 31, 27, 33, 26\kaya8\Robbie Daymond\Abe Atsushi\4t5t4t\M\FE15, FE2\Tobin
