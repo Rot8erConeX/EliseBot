@@ -15287,7 +15287,6 @@ bot.command(:edit) do |event, cmd, *args|
         return nil
       end
       js=sklzz.find_index{|q| q[0]==w}
-      x=backwards_skill_tree(js)
       m=6
     elsif sklzz[js][4]=='Assist'
       m=7
@@ -15303,9 +15302,15 @@ bot.command(:edit) do |event, cmd, *args|
       event.respond "#{sklzz[js][0]} cannot be equipped.#{"\nUse the `FEH!edit seal` command to equip a seal." if sklzz[js][4].split(', ').include?('Passive(S)') || sklzz[js][4].split(', ').include?('Seal')}"
       return nil
     end
-    donor_units[j2][m]=x.map{|q| q}
+    x=backwards_skill_tree(js, nil, donor_units[j2][m])
+    donor_units[j2][m]=x[0].map{|q| q}
     donor_unit_save(uid,donor_units)
-    event.respond "#{sklzz[js][0]} has been given to your #{donor_units[j2][0]}!#{"\nPlease use the `FEH!edit refine` command to refine the weapon." if sklzz[js][4]=='Weapon'}"
+    dispstr=''
+    unless x[1].nil?
+      dispstr="#{x[1]} has been used as the base because your #{donor_units[j2][0]} already knows it."
+      dispstr="#{donor_units[j2][0]} doesn't officially know any of the prerequisites so I marked it as \"Unknown base\"." if dispstr.include?('~~')
+    end
+    event.respond "#{sklzz[js][0]} has been given to your #{donor_units[j2][0]}!#{"\n#{dispstr}" unless dispstr.length.zero?}#{"\nPlease use the `FEH!edit refine` command to refine the weapon." if sklzz[js][4]=='Weapon'}"
   elsif cmd.downcase=='create'
     event.respond "You already have a #{donor_units[j2][0]}."
     return nil
@@ -15369,21 +15374,32 @@ bot.command(:edit) do |event, cmd, *args|
   return nil
 end
 
-def backwards_skill_tree(j, sklz=nil)
+def backwards_skill_tree(j, sklz=nil, table=nil)
   if sklz.nil?
     data_load()
     sklz=@skills.map{|q| q}
   end
   s=sklz[j]
   if s[8]=='-'
-    return [s[0]]
+    return [[s[0]]]
   elsif s[8].gsub(',','').include?("* or *")
-    return ['~~Unknown base~~',s[0]]
+    m=s[8].gsub('*, *','* or *').split('* or *').map{|q| q.gsub('*','')}
+    unless table.nil?
+      for i in 0...m.length
+        if table.include?(m[i])
+          j2=sklz.find_index{|q| q[0]==m[i]}
+          p2=backwards_skill_tree(j2, sklz, table)
+          p2.push(s[0])
+          return [p2,m[i]]
+        end
+      end
+    end
+    return [['~~Unknown base~~',s[0]],'~~Unknown base~~']
   else
     j2=sklz.find_index{|q| q[0]==s[8].gsub('*','')}
     p2=backwards_skill_tree(j2, sklz)
     p2.push(s[0])
-    return p2
+    return [p2]
   end
 end
 
