@@ -2589,7 +2589,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
   if weapon.nil? || weapon=='' || weapon==' ' || weapon=='-'
   else # this is the weapon's stat effect
     s2=@skills[find_skill(weapon,event)]
-    if !s2.nil? && !s2[15].nil? && !refinement.nil? && refinement.length>0 && (s2[5]!='Staff Users Only' || refinement=='Effect')
+    if !s2.nil? && s2[4]=='Weapon' && !s2[15].nil? && !refinement.nil? && refinement.length>0 && (s2[5]!='Staff Users Only' || refinement=='Effect')
       # weapon refinement...
       skillls.push(find_effect_name(s2,event,1)) if refinement=='Effect' && find_effect_name(s2,event,1).length>0 # ...including any stat-based Effect Modes
       sttz=[]
@@ -2668,7 +2668,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       ks=0
     end
     s2=@skills[find_skill(weapon,event)]
-    s2[12]=[0,0,0,0,0] if s2[12].nil?
+    s2[12]=[0,0,0,0,0] if s2[12].nil? || !s2.is_a?(Array) || s2[12].length<=0
     stats[1]+=sttz[ks][0]
     stats[2]+=s2[12][1]+sttz[ks][1]
     stats[3]+=s2[12][2]+sttz[ks][2]
@@ -8500,6 +8500,7 @@ def weapon_legality(event,name,weapon,refinement='-',recursion=false)
   u=@units[@units.find_index{|q| q[0]==name.gsub('Laevatein','Lavatain')}]
   w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
   return '-' if w[0][0,u[0].length].downcase==u[0].downcase && count_in(event.message.text.downcase.split(' '),u[0].downcase)<=1
+  return '-' if w[4]!='Weapon'
   if weapon=='Falchion'
     if ['FE13'].include?(u[11][0])
       weapon='Falchion (Awakening)'
@@ -10709,12 +10710,17 @@ def proc_study(event,name,bot,weapon=nil)
   crblress=crblu40[5]
   wdamage=0
   wdamage2=0
-  if event.message.text.downcase.gsub('wrathful','').include?(' wrath')
+  if event.message.text.downcase.split(' ').include?('wrath')
     wdamage+=10
     wdamage2+=10
     stat_skills.push('Wrath')
   end
-  if event.message.text.downcase.include?(' bushido') && u40[0]=='Ryoma(Supreme)'
+  if count_in(event.message.text.downcase.split(' '),'wrath')>=2
+    wdamage+=10
+    wdamage2+=10
+    stat_skills.push('Wrath')
+  end
+  if event.message.text.downcase.split(' ').include?('bushido') && u40[0]=='Ryoma(Supreme)'
     wdamage+=10
     wdamage2+=10
     stat_skills.push('Bushido')
