@@ -3429,6 +3429,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   stat_skills_2=make_stat_skill_list_2(name,event,args)
   tempest=get_bonus_type(event)
   diff_num=[0,'','']
+  sp=0
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
@@ -3445,9 +3446,18 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
+        sp=350
       else
         refinement=nil
+        sp=300
       end
+      sp=400 unless @skills[@skills.find_index{|q| q[0]==weapon}][6]=='-'
+      for i in 7...12
+        zzzzz=@dev_units[dv][i].reject{|q| q.include?('~~')}[-1]
+        sp+=@skills[@skills.find_index{|q| q[0]==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| q[0]==zzzzz}.nil?
+      end
+      zzzzz=@dev_units[dv][12]
+      sp+=@skills[@skills.find_index{|q| q[0]==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| q[0]==zzzzz}.nil?
     elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
     elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
@@ -3475,9 +3485,19 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
+        sp=350
+        sp=400 unless @skills[@skills.find_index{|q| q[0]==weapon}][6]=='-'
       else
         refinement=nil
+        sp=300
+        sp=400 unless @skills[@skills.find_index{|q| q[0]==weapon}][6]=='-'
       end
+      for i in 7...12
+        zzzzz=x[x2][i].reject{|q| q.include?('~~')}[-1]
+        sp+=@skills[@skills.find_index{|q| q[0]==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| q[0]==zzzzz}.nil?
+      end
+      zzzzz=x[x2][12]
+      sp+=@skills[@skills.find_index{|q| q[0]==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| q[0]==zzzzz}.nil?
     end
   elsif " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
     if name=='Robin'
@@ -3744,6 +3764,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   crblu1=cru1.map{|a| a}
   blu1=apply_stat_skills(event,stat_skills_2,blu1) if stat_skills_2.length>0
   crblu1=apply_stat_skills(event,stat_skills_2,crblu1) if stat_skills_2.length>0
+  u1[6]=u1[1]+u1[2]+u1[3]+u1[4]+u1[5]
   blu1[6]=blu1[1]+blu1[2]+blu1[3]+blu1[4]+blu1[5]
   cru1[6]=cru1[1]+cru1[2]+cru1[3]+cru1[4]+cru1[5]
   crblu1[6]=crblu1[1]+crblu1[2]+crblu1[3]+crblu1[4]+crblu1[5]
@@ -3772,11 +3793,11 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       end
     end
   end
-  flds=[["**Level 1#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u1[3]}","<:DefenseS:467037520249487372> Defense: #{u1[4]}","<:ResistanceS:467037520379641858> Resistance: #{u1[5]}","","BST: #{u1[6]}","Score: #{bin/5+merges*2+rarity*5+blessing.length*4+2}+`SP`/100"]]]
+  flds=[["**Level 1#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u1[3]}","<:DefenseS:467037520249487372> Defense: #{u1[4]}","<:ResistanceS:467037520379641858> Resistance: #{u1[5]}","","BST: #{u1[6]}","Score: #{bin/5+merges*2+rarity*5+blessing.length*4+2+sp/100}#{"+`SP`/100" unless sp>0}"]]]
   if args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth') || expandedmode
     flds.push(["**Growth Rates**",["<:HP_S:467037520538894336> HP: #{micronumber(u40[6])} / #{u40[6]*5+20}%","#{atk}: #{micronumber(u40[7])} / #{u40[7]*5+20}%","<:SpeedS:467037520534962186> Speed: #{micronumber(u40[8])} / #{u40[8]*5+20}%","<:DefenseS:467037520249487372> Defense: #{micronumber(u40[9])} / #{u40[9]*5+20}%","<:ResistanceS:467037520379641858> Resistance: #{micronumber(u40[10])} / #{u40[10]*5+20}%","","\u0262\u1D18\u1D1B #{micronumber(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])} / GRT: #{(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])*5+100}%"]])
   end
-  flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u40[3]}","<:DefenseS:467037520249487372> Defense: #{u40[4]}","<:ResistanceS:467037520379641858> Resistance: #{u40[5]}","","BST: #{u40[16]}","Score: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100"]])
+  flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u40[3]}","<:DefenseS:467037520249487372> Defense: #{u40[4]}","<:ResistanceS:467037520379641858> Resistance: #{u40[5]}","","BST: #{u40[16]}","Score: #{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}#{"+`SP`/100" unless sp>0}"]])
   superbaan=['','','','','','']
   if boon=="" && bane=="" && !mu && ((stat_skills_2.length<=0 && !wl.include?('~~')) || flds.length==3)
     for i in 6...11
@@ -3958,6 +3979,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
   mu=false
   tempest=get_bonus_type(event)
   diff_num=[0,'','']
+  sp=0
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
@@ -3974,9 +3996,18 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
+        sp=350
       else
         refinement=nil
+        sp=300
       end
+      sp=400 unless @skills[@skills.find_index{|q| q[0]==weapon}][6]=='-'
+      for i in 7...12
+        zzzzz=@dev_units[dv][i].reject{|q| q.include?('~~')}[-1]
+        sp+=@skills[@skills.find_index{|q| q[0]==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| q[0]==zzzzz}.nil?
+      end
+      zzzzz=@dev_units[dv][12]
+      sp+=@skills[@skills.find_index{|q| q[0]==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| q[0]==zzzzz}.nil?
     elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
     elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
@@ -4004,9 +4035,19 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
+        sp=350
+        sp=400 unless @skills[@skills.find_index{|q| q[0]==weapon}][6]=='-'
       else
         refinement=nil
+        sp=300
+        sp=400 unless @skills[@skills.find_index{|q| q[0]==weapon}][6]=='-'
       end
+      for i in 7...12
+        zzzzz=x[x2][i].reject{|q| q.include?('~~')}[-1]
+        sp+=@skills[@skills.find_index{|q| q[0]==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| q[0]==zzzzz}.nil?
+      end
+      zzzzz=x[x2][12]
+      sp+=@skills[@skills.find_index{|q| q[0]==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| q[0]==zzzzz}.nil?
     end
   elsif " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
     if name=='Robin'
@@ -4149,7 +4190,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
       weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
     end
     u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(5,merges,summoner)}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n**<:HP_S:467037520538894336>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:467037520534962186>#{u40[3]} | <:DefenseS:467037520249487372>#{u40[4]} | <:ResistanceS:467037520379641858>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Bin #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5})",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(5,merges,summoner)}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n**<:HP_S:467037520538894336>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:467037520534962186>#{u40[3]} | <:DefenseS:467037520249487372>#{u40[4]} | <:ResistanceS:467037520379641858>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Score: #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5+25+merges*2+90+blessing.length*4})",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
     return nil
   end
   # units for whom both level 40 and level 1 stats are known
@@ -4213,7 +4254,8 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
   img=pick_thumbnail(event,j,bot)
   img='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   xtype=1
-  ftr='Score does not include SP from skills'
+  ftr=''
+  ftr='Score does not include SP from skills' unless sp>0
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{diff_num[0]} point#{'s' unless diff_num[0]==1} lower." if !diff_num.nil? && diff_num[0]>0
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{0-diff_num[0]} point#{'s' unless diff_num[0]==-1} higher." if !diff_num.nil? && diff_num[0]<0
   realflds=nil
@@ -4262,7 +4304,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
   end
   xtype=1
   xtype=6 if skillstoo && u40[0]!='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u00B7\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+blessing.length*4+90}```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,ftr,img,realflds,xtype)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u00B7\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,ftr,img,realflds,xtype)
   if skillstoo && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
