@@ -928,12 +928,13 @@ def donate_trigger_word(event,str=nil)
   return -1
 end
 
-def donor_unit_list(uid)
+def donor_unit_list(uid, mode=0)
   return [] unless File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
   b=[]
   File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
     b.push(line.gsub("\n",''))
   end
+  m=b[0]
   b.shift
   b.shift
   untz=[]
@@ -955,6 +956,7 @@ def donor_unit_list(uid)
     untz[i].push(b[i*10+7].split('\\'[0]))
     untz[i].push(b[i*10+8])
   end
+  untz.unshift(m) if mode==1
   return untz
 end
 
@@ -3458,7 +3460,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
-      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+      event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
     else
       rarity=x[x2][1]
       merges=x[x2][2]
@@ -3987,7 +3989,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
     x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
-      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+      event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
     else
       rarity=x[x2][1]
       merges=x[x2][2]
@@ -5477,7 +5479,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
     x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
-      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+      event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
     else
       rarity=x[x2][1]
       txt=display_stars(rarity,x[x2][2],x[x2][5]).split('  ')[0]
@@ -9905,7 +9907,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
-      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+      event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
     else
       rarity=x[x2][1]
       merges=x[x2][2]
@@ -10303,7 +10305,7 @@ def heal_study(event,name,bot,weapon=nil)
     x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
-      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+      event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
     else
       rarity=x[x2][1]
       merges=x[x2][2]
@@ -10557,11 +10559,18 @@ def proc_study(event,name,bot,weapon=nil)
   weapon='-' if weapon.nil?
   stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
+  wrathcount=0
+  wrathcount+=1 if has_any?(event.message.text.downcase.split(' '),['wrath','wrath1','wrath2','wrath3'])
+  wrathcount+=1 if count_in(event.message.text.downcase.split(' '),['wrath','wrath1','wrath2','wrath3'])>=2
+  wrathsub=''
+  wrathsub='Bushido' if event.message.text.downcase.split(' ').include?('bushido') && u40[0]=='Ryoma(Supreme)'
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
     if dv>=0
       mu=true
+      wrathcount=0
+      wrathsub=''
       rarity=@dev_units[dv][1]
       merges=@dev_units[dv][2]
       boon=@dev_units[dv][3].gsub(' ','')
@@ -10576,6 +10585,9 @@ def proc_study(event,name,bot,weapon=nil)
       else
         refinement=nil
       end
+      wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(@dev_units[dv][10][-1])
+      wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(@dev_units[dv][12])
+      wrathsub='Bushido' if 'Bushido'==@dev_units[dv][10][-1]
     elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
     elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
@@ -10588,8 +10600,9 @@ def proc_study(event,name,bot,weapon=nil)
     x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
-      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+      event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
     else
+      wrathcount=0
       rarity=x[x2][1]
       merges=x[x2][2]
       boon=x[x2][3].gsub(' ','')
@@ -10606,6 +10619,9 @@ def proc_study(event,name,bot,weapon=nil)
       else
         refinement=nil
       end
+      wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(x[x2][10][-1])
+      wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(x[x2][12])
+      wrathsub='Bushido' if 'Bushido'==x[x2][10][-1]
     end
   elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
     weapon=get_unit_prf(name)
@@ -10710,20 +10726,20 @@ def proc_study(event,name,bot,weapon=nil)
   crblress=crblu40[5]
   wdamage=0
   wdamage2=0
-  if event.message.text.downcase.split(' ').include?('wrath')
+  if wrathcount>=1
     wdamage+=10
     wdamage2+=10
     stat_skills.push('Wrath')
   end
-  if count_in(event.message.text.downcase.split(' '),'wrath')>=2
+  if wrathcount>=2
     wdamage+=10
     wdamage2+=10
     stat_skills.push('Wrath')
   end
-  if event.message.text.downcase.split(' ').include?('bushido') && u40[0]=='Ryoma(Supreme)'
+  if wrathsub.length>0
     wdamage+=10
     wdamage2+=10
-    stat_skills.push('Bushido')
+    stat_skills.push(wrathsub)
   end
   tags=sklz[ww2][11].split(', ')
   wdamage+=10 if tags.include?('WoDao')
@@ -11061,7 +11077,7 @@ def phase_study(event,name,bot,weapon=nil)
     x=donor_unit_list(uid)
     x2=x.find_index{|q| q[0]==name}
     if x2.nil?
-      event.respond "#{0} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+      event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
     else
       rarity=x[x2][1]
       merges=x[x2][2]
@@ -12497,19 +12513,6 @@ end
 bot.command([:attackicon, :attackcolor, :attackcolors, :attackcolour, :attackcolours, :atkicon, :atkcolor, :atkcolors, :atkcolour, :atkcolours, :atticon, :attcolor, :attcolors, :attcolour, :attcolours, :staticon, :statcolor, :statcolors, :statcolour, :statcolours, :iconcolor, :iconcolors, :iconcolour, :iconcolours]) do |event|
   return nil if overlap_prevent(event)
   attack_icon(event)
-  return nil
-end
-
-bot.command([:donation, :donate]) do |event|
-  return nil if overlap_prevent(event)
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
-    event.respond "__A word from my developer__\nI made EliseBot, as she is now, as a free service.  During development, I never once considered making people pay to add her to their servers, or anything of the sort.  The creation of Elise's core functionality, the `stats` function, was mainly a way for me to better understand the mechanics behind FEH's growths, because how games work is one of my interests.\n\nDespite this, people in at least two servers have asked me about possibly creating a Patreon or Paypal donation button to allow users to show their support.  I am humbled to know that EliseBot's information-dump-and-stat-calculation functionality is something people are willing to pay for, especially considering there are many other methods users can obtain this data.\n\nConsidering how adamant some people were about wanting to support me, it seems almost rude not to start a Patreon...but I, unfortunately, must toss the idea aside.  Due to certain insurance regulations regarding places like the one I live in, I would only be allowed to keep a small portion of any secondary income I receive.  Starting a Patreon only to have only a third or even less reach my hands seems dishonest to my supporters, and that is something I do not wish to have hanging over my head.  Since they were spending that money with the intention of supporting the development of EliseBot, they may not wish to have their money go to a corporation that may or may not spend that money to increase my quality of life."
-    event.respond "However, there is a roundabout solution for those who wish to support me: Gift cards - such as those for the Nintendo eShop or Google Play - do not count as secondary income, and as such I get to keep the full amount of any I receive.  As such, if you wish to support me, and only if you really wish to support me, the best way to do so is acquire a gift card and email the code to **rot8er.conex@gmail.com**.  There is also, if there are items on it, my Amazon wish list, linked below.  I recently learned that I can have items purchased from that list delivered to me without giving out my address.\n\n~~Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.~~\n\nhttp://a.co/0p3sBec\n\nDonor list: <https://goo.gl/ds1LHA>"
-  else
-    create_embed(event,"__A word from my developer__","I made EliseBot, as she is now, as a free service.  During development, I never once considered making people pay to add her to their servers, or anything of the sort.  The creation of Elise's core functionality, the `stats` function, was mainly a way for me to better understand the mechanics behind FEH's growths, because how games work is one of my interests.\n\nDespite this, people in at least two servers have asked me about possibly creating a Patreon or Paypal donation button to allow users to show their support.  I am humbled to know that EliseBot's information-dump-and-stat-calculation functionality is something people are willing to pay for, especially considering there are many other methods users can obtain this data.\n\nConsidering how adamant some people were about wanting to support me, it seems almost rude not to start a Patreon...but I, unfortunately, must toss the idea aside.  Due to certain insurance regulations regarding places like the one I live in, I would only be allowed to keep a small portion of any secondary income I receive.  Starting a Patreon only to have only a third or even less reach my hands seems dishonest to my supporters, and that is something I do not wish to have hanging over my head.  Since they were spending that money with the intention of supporting the development of EliseBot, they may not wish to have their money go to a corporation that may or may not spend that money to increase my quality of life.",0x008b8b)
-    create_embed(event,"","\n\nHowever, there is a roundabout solution for those who wish to support me: Gift cards - such as those for the Nintendo eShop or Google Play - do not count as secondary income, and as such I get to keep the full amount of any I receive.  As such, if you wish to support me, and only if you really wish to support me, the best way to do so is acquire a gift card and email the code to **rot8er.conex@gmail.com**.  There is also, if there are items on it, [my Amazon wish list](http://a.co/0p3sBec).  I recently learned that I can have items purchased from that list delivered to me without giving out my address.\n\n[Donor List and perks](https://goo.gl/ds1LHA)",0x008b8b,"Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.")
-    event.respond "If you are on a mobile device and cannot click the links in the embed above, type `FEH!donate mobile` to receive this message as plaintext."
-  end
   return nil
 end
 
@@ -15080,6 +15083,94 @@ bot.command([:status, :avatar, :avvie]) do |event, *args|
   return nil
 end
 
+bot.command([:donation, :donate]) do |event, uid|
+  return nil if overlap_prevent(event)
+  uid="#{event.user.id}" if uid.nil? || uid.length.zero?
+  if /<@!?(?:\d+)>/ =~ uid
+    uid=event.message.mentions[0].id
+  else
+    uid=uid.to_i
+    uid=event.user.id if uid==0
+  end
+  g=get_donor_list()
+  if uid==167657750971547648
+    n=["#{bot.user(uid).distinct} is","He"]
+    n=["You are","You"] if uid==event.user.id
+    n4=bot.user(uid).name
+    n4=n4[0,[3,n4.length].min]
+    n4=" #{n4}" if n4.length<2
+    n2=n4.downcase
+    n3=[]
+    for i in 0...n2.length
+      if "abcdefghijklmnopqrstuvwxyz".include?(n2[i])
+        n3.push(9*("abcdefghijklmnopqrstuvwxyz".split(n2[i])[0].length)+25)
+        n3[i]+=5 if n4[i]!=n2[i]
+      elsif n2[i].to_i.to_s==n2[i]
+        n3.push(n2[i].to_i*2+1)
+      else
+        n3.push(0)
+      end
+    end
+    color=n3[0]*256*256+n3[1]*256+n3[2]
+    create_embed(event,"#{n[0]} my developer.","#{n[1]} can have whatever permissions #{n[1].downcase} want#{'s' unless uid==event.user.id} to have.",color)
+  elsif g.map{|q| q[0]}.include?(uid)
+    n="#{bot.user(uid).distinct} is"
+    n="You are" if uid==event.user.id
+    g=g[g.find_index{|q| q[0]==uid}]
+    str=""
+    str="**Tier 1:** Ability to give server-specific aliases in any server\n\u2713 Given" if g[2]>=1
+    if g[2]>=2
+      if g[3].nil? || g[3].length.zero? || g[4].nil? || g[4].length.zero?
+        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
+      else
+        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2713 Given\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4]}"
+      end
+    end
+    if g[2]>=3
+      if !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+        str="#{str}\n\n**Tier 3:** Unit tracking\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
+      else
+        str="#{str}\n\n**Tier 3:** Unit tracking\n\u2713 Given\n*Trigger word:* #{donor_unit_list(uid,1)[0]}'s"
+      end
+    end
+    n4=bot.user(uid).name
+    n4=n4[0,[3,n4.length].min]
+    n4=" #{n4}" if n4.length<2
+    n2=n4.downcase
+    n3=[]
+    for i in 0...n2.length
+      if "abcdefghijklmnopqrstuvwxyz".include?(n2[i])
+        n3.push(9*("abcdefghijklmnopqrstuvwxyz".split(n2[i])[0].length)+25)
+        n3[i]+=5 if n4[i]!=n2[i]
+      elsif n2[i].to_i.to_s==n2[i]
+        n3.push(n2[i].to_i*2+1)
+      else
+        n3.push(0)
+      end
+    end
+    color=n3[0]*256*256+n3[1]*256+n3[2]
+    puts n3.to_s
+    create_embed(event,"__**#{n} a Tier #{g[2]} donor.**__",str,color)
+  end
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
+    event << '__**If you wish to donate to me:** A word from my developer__'
+    event << ''
+    event << 'Due to income regulations within the building where I live, I cannot accept donations in the form of PayPal, Patreon, or other forms of direct payment.  Only a small percentage of any such donations would actually reach me and the rest would end up in the hands of the owners of my building.'
+    event << ''
+    event << 'However, there are other options:'
+    event << "- My Amazon wish list: http://a.co/0p3sBec (Items purchased from this list will be delivered to me)"
+    event << '- You can also purchase an Amazon gift card and have it delivered via email to **rot8er.conex@gmail.com**.'
+    event << ''
+    event << '~~Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.~~'
+    event << ''
+    event << "Donor List and perks: <https://goo.gl/ds1LHA>"
+  else
+    create_embed(event,"__**If you wish to donate to me:** A word from my developer__","Due to income regulations within the building where I live, I cannot accept donations in the form of PayPal, Patreon, or other forms of direct payment.  Only a small percentage of any such donations would actually reach me and the rest would end up in the hands of the owners of my building.\n\nHowever, there are other options:\n- You can purchase items from [this list](http://a.co/0p3sBec) and they will be delivered to me.\n- You can also purchase an Amazon gift card and have it delivered via email to **rot8er.conex@gmail.com**.\n\n[Donor List and perks](https://goo.gl/ds1LHA)",0x008b8b,"Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.")
+    event.respond "If you are on a mobile device and cannot click the links in the embed above, type `FEH!donate mobile` to receive this message as plaintext."
+  end
+  return nil
+end
+
 bot.command(:edit) do |event, cmd, *args|
   return nil if overlap_prevent(event)
   uid=event.user.id
@@ -17258,7 +17349,7 @@ def next_holiday(bot,mode=0)
     md=fsim+14
   end
   holidays.push([y8,5,md,'Deirdre','favorites.',"Mother's Day"])
-  holidays.sort! {|a,b| supersort(a,b,0) == 0 ? (supersort(a,b,1) == 0 ? (supersort(a,b,2) == 0 ? supersort(a,b,6) : supersort(a,b,2)) : supersort(a,b,1)) : supersort(a,b,0)}
+  holidays.sort! {|a,b| supersort(a,b,0) == 0 ? (supersort(a,b,1) == 0 ? (supersort(a,b,2) == 0 ? (supersort(a,b,6) == 0 ? supersort(a,b,4) : supersort(a,b,6)) : supersort(a,b,2)) : supersort(a,b,1)) : supersort(a,b,0)}
   k=[]
   for i in 0...holidays.length
     k.push(holidays[i]) if holidays[i][0]==holidays[0][0] && holidays[i][1]==holidays[0][1] && holidays[i][2]==holidays[0][2]
