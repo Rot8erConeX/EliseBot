@@ -1,5 +1,5 @@
 Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
-Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu
+Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
@@ -114,7 +114,7 @@ Spur Spd 3
 
 Felicia
 4\10\Resistance\HP\-
-Iron Dagger\Steel Dagger\Silver Dagger\__Silver Dagger+__\Felicia's Plate\Felicia's Plate (+) Effect Mode
+Iron Dagger\Steel Dagger\Silver Dagger\Silver Dagger+\__Silver Dagger+ (+) Resistance Mode__\Felicia's Plate\Felicia's Plate (+) Effect Mode
 Rally Speed
 Chilling Wind\Glacies
 Warding Blow 1\Warding Blow 2\Warding Blow 3
@@ -227,7 +227,7 @@ Priscilla
 Assault\Panic\Panic+\Panic+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
-HP +3\HP +4\HP +5
+Brazen Atk/Def 1\Brazen Atk/Def 2\Brazen Atk/Def 3
 Live to Serve 1\Live to Serve 2\Live to Serve 3
 Spur Def 1\Spur Def 2\Spur Def 3
 HP +4
@@ -285,10 +285,10 @@ Quick Riposte 3
 Tiki(Young)(Earth)
 5\0\Resistance\HP\-
 Fire Breath\Fire Breath+\Flametongue\Divine Mist
-~~Reposition~~
+Reposition
 New Moon\Moonbow
 Fierce Stance 1\Fierce Stance 2\Fierce Breath
-Bold Fighter 1\Bold Fighter 2\~~Bold Fighter 3~~
+Bold Fighter 1\Bold Fighter 2\Bold Fighter 3
 With Everyone!
 Armored Boots
 
