@@ -5661,7 +5661,7 @@ def sever(str,sklz=false)
   k=str.split(' ')
   for i in 1...k.length
     if k[i]=='+'
-      if i==0
+      if i==0 || k[i-1].length<2
       elsif k[i-1][0,7].downcase=='rallyup'
         k[i-1]="#{k[i-1]}#{k[i]}"
         k[i]=nil
@@ -15149,7 +15149,6 @@ bot.command([:donation, :donate]) do |event, uid|
       end
     end
     color=n3[0]*256*256+n3[1]*256+n3[2]
-    puts n3.to_s
     create_embed(event,"__**#{n} a Tier #{g[2]} donor.**__",str,color)
   end
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
