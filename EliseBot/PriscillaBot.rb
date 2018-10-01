@@ -6826,6 +6826,8 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
                 matches3.push(matches2[i]) unless matches2[i][11].split(', ').include?('Prf')
               elsif matches2[i][4]=='Weapon' && weapon_subsets[j]=='Pega-killer' && !weapon_subsets.include?('Effective')
                 matches3.push(matches2[i]) if matches2[i][5]=='Bow Users Only' || matches2[i][11].split(', ').include?(weapon_subsets[j])
+              elsif matches2[i][4]=='Weapon' && weapon_subsets[j]=='Retro-Prf'
+                matches3.push(matches2[i]) if matches2[i][11].split(', ').include?('Prf') && matches2[i][8]=='-'
               elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?(weapon_subsets[j])
                 matches3.push(matches2[i])
               elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(R)#{weapon_subsets[j]}")
