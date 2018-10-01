@@ -43,7 +43,7 @@ Chrom(Launch)\Red, Blade\ \Infantry\8, 9, 5, 7, 2\47, 37, 25, 31, 17\Ebila\Matt 
 Chrom(Spring)\Green, Blade\ \Infantry\7, 8, 7, 6, 3\43, 35, 32, 28, 20\Ebila\Matt Mercer\Sugita Tomokazu\5s\M\FE13, FEW, PXZ2, SSBU\Chrom
 Chrom(Winter)\Green, Blade\ \Armor\8, 9, 3, 8, 7\51, 40, 19, 35, 29\Ebila\Matt Mercer\Sugita Tomokazu\5s\M\FE13, FEW, PXZ2, SSBU\Chrom
 Clair\Blue, Blade\ \Flier\5, 5, 9, 5, 7\37, 26, 36, 24, 33\Takagi Masafumi\Alexis Tipton\Endo Aya\3p4p\F\FE15, FE2\Clair
-Clarine\Colorless, Healer\ \Cavalry\5, 5, 7, 4, 6\35, 25, 33, 22, 29\Amagaitaro\Hunter MacKenzie Austin\Onodera Runa\3p4pLU\F\FE6\Clarine
+Clarine\Colorless, Healer\ \Cavalry\5, 5, 7, 4, 6\35, 25, 33, 22, 29\Amagaitaro\Hunter MacKenzie Austin\Onodera Runa\3p4p3qLU\F\FE6\Clarine
 Clarisse\Colorless, Bow\ \Infantry\5, 7, 8, 5, 3\37, 31, 34, 25, 20\Yura\Cassandra Lee Morris\Fujiwara Natsumi\3g4g4g3q4q\F\FE12\Clarisse
 Clive\Blue, Blade\ \Cavalry\8, 7, 5, 7, 3\45, 33, 25, 32, 19\Tobi\Grant George\Kamiya Hiroshi\4t5t4t\M\FE15, FE2\Clive
 Cordelia\Blue, Blade\ \Flier\6, 8, 8, 4, 5\40, 35, 35, 22, 25\Ueda Yumehito\Julie Ann Taylor\Okada Eimi\3p4pLU\F\FE13, FEW\Cordelia
@@ -204,7 +204,7 @@ Noire(Summer)\Colorless, Bow\ \Infantry\5, 7, 8, 6, 3\36, 32, 36, 27, 20\Kusakih
 Nowi\Blue, Dragon\ \Infantry\9, 9, 6, 7, 6\45, 34, 27, 30, 27\Lack\Hunter MacKenzie Austin\Tanaka Kumi\3p4pLU\F\FE13\Nowi
 Nowi(Halloween)\Red, Tome, Dark\ \Flier\4, 8, 8, 3, 5\34, 34, 32, 20, 27\Enkyo Yuichiro\Hunter MacKenzie Austin\Tanaka Kumi\5s\F\FE13\Nowi
 Oboro\Blue, Blade\ \Infantry\6, 7, 5, 8, 5\40, 32, 26, 35, 24\Ueda Yumehito\Marisha Ray\Sasaki Nozomi\3p4p3qLU\F\FE14B, FEW\Oboro
-Odin\Blue, Tome, Thunder\ \Infantry\7, 4, 7, 5, 5\43, 22, 32, 25, 25\Suekane Kumiko\Kaiji Tang\Takahashi Hidenori\3p4pLU\M\FE14C\Odin
+Odin\Blue, Tome, Thunder\ \Infantry\7, 4, 7, 5, 5\43, 22, 32, 25, 25\Suekane Kumiko\Kaiji Tang\Takahashi Hidenori\3p4p3qLU\M\FE14C\Odin
 Ogma\Red, Blade\ \Infantry\8, 9, 7, 6, 1\47, 35, 34, 28, 13\Yamada Akihiro\Travis Willingham\Kosugi Juurouta\3p4p\M\FE3, FE1, FE11, FE12\Ogma
 Oliver\Blue, Tome, Light\ \Infantry\7, 7, 3, 4, 8\42, 32, 20, 23, 34\Homazo\Richard Epcar\Sugita Tomokazu\3g4g4g\M\FE10, FE9\Oliver
 Olivia(Launch)\Red, Blade\ \Infantry\5, 6, 8, 6, 6\36, 28, 33, 27, 26\AKIRA\Karen Strassman\Matsuzaki Rei\1d2d3p4pLU\F\FE13, FEW\Olivia*
@@ -280,7 +280,7 @@ Tana(Summer)\Red, Tome, Fire\ \Flier\5, 8, 8, 3, 5\35, 33, 36, 20, 25\cuboon\Mel
 Tharja\Red, Tome, Dark\ \Infantry\6, 7, 8, 4, 3\39, 32, 34, 23, 20\ZIS\Stephanie Sheh\Takada Yuuki\3p4pLU\F\FE13, FEW\Tharja
 Tharja(Bride)\Red, Tome, Fire\ \Infantry\6, 8, 8, 3, 4\39, 35, 35, 21, 21\Sencha\Stephanie Sheh\Takada Yuuki\5s\F\FE13, FEW\Tharja
 Tharja(Winter)\Red, Tome, Dark\ \Armor\7, 7, 2, 8, 8\43, 34, 18, 34, 36\Washimoto\Stephanie Sheh\Takada Yuuki\5s\F\FE13, FEW\Tharja
-Tiki(Adult)\Red, Dragon\ \Infantry\6, 9, 4, 8, 4\40, 35, 23, 35, 24\Ito Noizi\Mela Lee\Ohtani Ikue\3p4pLU\F\FE13, PXZ2\*Tiki, Adult
+Tiki(Adult)\Red, Dragon\ \Infantry\6, 9, 4, 8, 4\40, 35, 23, 35, 24\Ito Noizi\Mela Lee\Ohtani Ikue\3p4p3qLU\F\FE13, PXZ2\*Tiki, Adult
 Tiki(Adult)(Summer)\Green, Blade\ \Infantry\4, 9, 7, 7, 4\35, 36, 30, 32, 24\Okaya\Mela Lee\Ohtani Ikue\5s\F\FE13, PXZ2\Tiki, Adult
 Tiki(Young)\Red, Dragon\ \Infantry\8, 8, 8, 7, 6\41, 31, 30, 32, 29\Ito Noizi\Mela Lee\Morohoshi Sumire\5pLU\F\FE3, FE1, FE11, FE12, FEW\*Tiki, Young
 Tiki(Young)(Earth)\Blue, Dragon\Earth, Defense, 21/01/2019\Armor\9, 7, 7, 11, 7\45, 34, 35, 37, 29\Enkyo Yuichiro\Mela Lee\Morohoshi Sumire\5s\F\FE3, FE1, FE11, FE12, FEW\Tiki, Young
