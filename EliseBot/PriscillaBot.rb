@@ -6370,13 +6370,13 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
     color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
     color_weapons.push(['Green','Tome']) if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
-    weapons.push('Blade') if ['physical','blade','blades'].include?(args[i].downcase)
-    weapons.push('Tome') if ['tome','mage','spell','tomes','mages','spells'].include?(args[i].downcase)
-    weapons.push('Dragon') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
-    weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase)
-    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
-    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves'].include?(args[i].downcase)
-    weapons.push('Healer') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
+    weapons.push('Blade') if ['physical','blade','blades','close','closerange'].include?(args[i].downcase)
+    weapons.push('Tome') if ['tome','mage','spell','tomes','mages','spells','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Dragon') if ['dragon','dragons','breath','manakete','manaketes','close','closerange'].include?(args[i].downcase)
+    weapons.push('Beast') if ['beast','beasts','laguz','close','closerange'].include?(args[i].downcase)
+    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Healer') if ['healer','staff','cleric','healers','clerics','staves','range','ranged','distance','distant'].include?(args[i].downcase)
     movement.push('Flier') if ['flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi'].include?(args[i].downcase)
     movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs'].include?(args[i].downcase)
     movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
@@ -6653,13 +6653,13 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     skill_types.push('Assist') if ['assist','assists'].include?(args[i].downcase)
     skill_types.push('Special') if ['special','specials'].include?(args[i].downcase)
     skill_types.push('Passive') if ['passive','passives','apassives','apassive','passivea','passivesa','a_passives','a_passive','passive_a','passives_a','bpassives','bpassive','passiveb','passivesb','b_passives','b_passive','passive_b','passives_b','cpassives','cpassive','passivec','passivesc','c_passives','c_passive','passive_c','passives_c','spassives','spassive','passives','passivess','s_passives','s_passive','passive_s','passives_s','sealpassives','sealpassive','passiveseal','passivesseal','seal_passives','seal_passive','passive_seal','passives_seal','sealspassives','sealspassive','passiveseals','passivesseals','seals_passives','seals_passive','passive_seals','passives_seals','wpassives','wpassive','passivew','passivesw','w_passives','w_passive','passive_w','passives_w'].include?(args[i].downcase)
-    weapons.push('Blade') if ['physical','blade','blades'].include?(args[i].downcase)
-    weapons.push('Tome') if ['tome','mage','magic','spell','tomes','mages','spells'].include?(args[i].downcase)
-    weapons.push('Breath') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
-    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
-    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves'].include?(args[i].downcase)
-    weapons.push('Staff') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
-    weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase)
+    weapons.push('Blade') if ['physical','blade','blades','close','closerange'].include?(args[i].downcase)
+    weapons.push('Tome') if ['tome','mage','magic','spell','tomes','mages','spells','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Breath') if ['dragon','dragons','breath','manakete','manaketes','close','closerange'].include?(args[i].downcase)
+    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers','close','closerange'].include?(args[i].downcase)
+    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Staff') if ['healer','staff','cleric','healers','clerics','staves','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Beast') if ['beast','beasts','laguz','close','closerange','range','ranged','distance','distant'].include?(args[i].downcase)
     assists.push('Health') if ['health','hp'].include?(args[i].downcase)
     assists.push('Move') if ['move','movement','moving','arrangement','positioning','positions','position'].include?(args[i].downcase)
     assists.push('Staff') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
@@ -7050,7 +7050,7 @@ def display_units(event, mode)
         end
         p1[i]=[h,p1[i]]
       end
-      if p1.map{|q| q[0]}.uniq.length<=1
+      if p1.map{|q| q[0]}.uniq.length<=1 || p1.map{|q| q[0]}.length>p1.map{|q| q[0]}.uniq.length
         for i in 0...p1.length
           mov=p1[i][1].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','').gsub('*','')}][3]}.uniq
           if mov.length<=1
@@ -9218,13 +9218,13 @@ def generate_random_unit(event,args,bot)
     colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
     colors.push('Green') if ['green','greens'].include?(args[i].downcase)
     colors.push('Colorless') if ['colorless','colourless','clear','clears'].include?(args[i].downcase)
-    weapons.push('Blade') if ['physical','blade','blades'].include?(args[i].downcase)
-    weapons.push('Tome') if ['tome','mage','magic','spell','tomes','mages','spells'].include?(args[i].downcase)
-    weapons.push('Breath') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
-    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
-    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves'].include?(args[i].downcase)
-    weapons.push('Healer') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
-    weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase) && event.server.id==256291408598663168
+    weapons.push('Blade') if ['physical','blade','blades','close','closerange','melee'].include?(args[i].downcase)
+    weapons.push('Tome') if ['tome','mage','magic','spell','tomes','mages','spells','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Breath') if ['dragon','dragons','breath','manakete','manaketes','close','closerange','melee'].include?(args[i].downcase)
+    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Healer') if ['healer','staff','cleric','healers','clerics','staves','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Beast') if ['beast','beasts','laguz','close','closerange','melee'].include?(args[i].downcase) && event.server.id==256291408598663168
     color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
     color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
     color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
@@ -14636,7 +14636,16 @@ bot.command([:bugreport, :suggestion, :feedback]) do |event, *args|
   s3='Bug Report'
   s3='Suggestion' if a[0]=='suggestion'
   s3='Feedback' if a[0]=='feedback'
-  if event.server.nil?
+  if args.nil? || args.length.zero?
+    event.respond "You did not include a description of your #{s3.downcase}.  Please retry the command like this:\n```#{event.message.text} here is where you type the description of yout #{s3.downcase}```"
+    if event.server.nil?
+      s="**#{s3} sent by PM**"
+    else
+      s="**Server:** #{event.server.name} (#{event.server.id}) - #{["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant"][(event.server.id >> 22) % 4]} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})"
+    end
+    bot.user(167657750971547648).pm("#{s}\n#{event.user.distinct} (#{event.user.id}) just tried to use the #{s3.downcase} command but gave no arguments.")
+    return nil
+  elsif event.server.nil?
     s="**#{s3} sent by PM**"
   else
     s="**Server:** #{event.server.name} (#{event.server.id}) - #{["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant"][(event.server.id >> 22) % 4]} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})"
