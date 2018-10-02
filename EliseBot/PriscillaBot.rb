@@ -15547,8 +15547,8 @@ def backwards_skill_tree(j, sklz=nil, table=nil)
   else
     j2=sklz.find_index{|q| q[0]==s[8].gsub('*','')}
     p2=backwards_skill_tree(j2, sklz)
-    p2.push(s[0])
-    return [p2]
+    p2[0].push(s[0])
+    return p2
   end
 end
 
