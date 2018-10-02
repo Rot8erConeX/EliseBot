@@ -15538,8 +15538,8 @@ def backwards_skill_tree(j, sklz=nil, table=nil)
         if table.include?(m[i])
           j2=sklz.find_index{|q| q[0]==m[i]}
           p2=backwards_skill_tree(j2, sklz, table)
-          p2.push(s[0])
-          return [p2,m[i]]
+          p2[0].push(s[0])
+          return [p2[0],m[i]]
         end
       end
     end
