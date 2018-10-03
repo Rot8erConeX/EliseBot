@@ -2809,12 +2809,13 @@ def apply_combat_buffs(event,skillls,stats,phase) # used to apply in-combat buff
   return stats
 end
 
-def count_in(arr,str) # used to count the number of times a skill is mentioned
+def count_in(arr,str,mode=0) # used to count the number of times a skill is mentioned
   if str.is_a?(Array)
     return arr.count{|x| str.map{|y| y.downcase}.include?(x.downcase)}
   elsif arr.is_a?(String)
     return arr.chars.count{|x| x.downcase==str.downcase}
   end
+  return arr.count{|x| x[0,str.length].downcase==str.downcase} if mode==1
   return arr.count{|x| x.downcase==str.downcase}
 end
 
@@ -3430,11 +3431,13 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   tempest=get_bonus_type(event)
   diff_num=[0,'','']
   sp=0
+  spec_wpn=false
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
     if dv>=0
       mu=true
+      spec_wpn=true
       rarity=@dev_units[dv][1]
       merges=@dev_units[dv][2]
       boon=@dev_units[dv][3].gsub(' ','')
@@ -3482,12 +3485,14 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       if weapon.nil?
         weapon='-'
       elsif weapon.include?(' (+) ')
+        spec_wpn=true
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
         sp=350
         sp=400 unless @skills[@skills.find_index{|q| q[0]==weapon}][6]=='-'
       else
+        spec_wpn=true
         refinement=nil
         sp=300
         sp=400 unless @skills[@skills.find_index{|q| q[0]==weapon}][6]=='-'
@@ -3513,8 +3518,10 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     else
       uskl=unit_skills(name,event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
       weapon='-'
+      spec_wpn=true if uskl.length>0
       weapon=uskl[uskl.length-1] if uskl.length>0
     end
+    spec_wpn=true
     summoner='-'
     tempest=''
     stat_skills=[]
@@ -3528,16 +3535,19 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       if weapon=='-'
         w2=['-',0,0]
       else
+        spec_wpn=true
         w2=@skills[find_skill(weapon,event)]
       end
       if weapon2=='-'
         w22=['-',0,0]
       else
+        spec_wpn=true
         w22=@skills[find_skill(weapon2,event)]
       end
       diff_num=[w2[2]-w22[2],'M','F']
     end
   end
+  puts weapon
   w2=@skills[find_skill(weapon,event)]
   if w2[15].nil?
     refinement=nil
@@ -3551,7 +3561,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   refinement=nil if w2[5]!='Staff Users Only' && ['Wrathful','Dazzling'].include?(refinement)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
   unitz=untz[find_unit(name,event)]
-  spec_wpn=false
   if name=='Robin'
     if (" #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned') || " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')) && !weapon2.nil?
       spec_wpn=true
@@ -3565,10 +3574,15 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
     end
   end
-  unless spec_wpn
+  if !spec_wpn
     wl=weapon_legality(event,unitz[0],weapon,refinement)
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  elsif !refinement.nil? && refinement.length>0
+    wl="#{weapon} (+) #{refinement} Mode"
+  else
+    wl=weapon
   end
+  puts weapon
   if find_unit(name,event)<0
     event.respond 'No unit was included' unless ignore
     return nil
@@ -3980,10 +3994,12 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
   tempest=get_bonus_type(event)
   diff_num=[0,'','']
   sp=0
+  spec_wpn=false
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
     if dv>=0
+      spec_wpn=true
       mu=true
       rarity=@dev_units[dv][1]
       merges=@dev_units[dv][2]
@@ -4032,12 +4048,14 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
       if weapon.nil?
         weapon='-'
       elsif weapon.include?(' (+) ')
+        spec_wpn=true
         w=weapon.split(' (+) ')
         weapon=w[0]
         refinement=w[1].gsub(' Mode','')
         sp=350
         sp=400 unless @skills[@skills.find_index{|q| q[0]==weapon}][6]=='-'
       else
+        spec_wpn=true
         refinement=nil
         sp=300
         sp=400 unless @skills[@skills.find_index{|q| q[0]==weapon}][6]=='-'
@@ -4063,6 +4081,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
     else
       uskl=unit_skills(name,event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
       weapon='-'
+      spec_wpn=true if uskl.length>0
       weapon=uskl[uskl.length-1] if uskl.length>0
     end
   elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
@@ -4073,11 +4092,13 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
       if weapon=='-'
         w2=['-',0,0]
       else
+        spec_wpn=true
         w2=@skills[find_skill(weapon,event)]
       end
       if weapon2=='-'
         w22=['-',0,0]
       else
+        spec_wpn=true
         w22=@skills[find_skill(weapon2,event)]
       end
       diff_num=[w2[2]-w22[2],'M','F']
@@ -4085,7 +4106,6 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
   end
   w2=@skills[find_skill(weapon,event)]
   unitz=untz[find_unit(name,event)]
-  spec_wpn=false
   if name=='Robin'
     if (" #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned') || " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')) && !weapon2.nil?
       spec_wpn=true
@@ -4099,8 +4119,12 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
       wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
     end
   end
-  unless spec_wpn
+  if !spec_wpn
     wl=weapon_legality(event,unitz[0],weapon,refinement)
+  elsif !refinement.nil? && refinement.length>0
+    wl="#{weapon} (+) #{refinement} Mode"
+  else
+    wl=weapon
   end
   if find_unit(name,event)<0
     if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
@@ -8545,7 +8569,9 @@ def weapon_legality(event,name,weapon,refinement='-',recursion=false)
   return '-' if weapon=='-'
   u=@units[@units.find_index{|q| q[0]==name.gsub('Laevatein','Lavatain')}]
   w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
-  return '-' if w[0][0,u[0].length].downcase==u[0].downcase && count_in(event.message.text.downcase.split(' '),u[0].downcase)<=1
+  unless w[0].split(' ')[0].length>u[0].length
+    return '-' if w[0][0,u[0].length].downcase==u[0].downcase && count_in(event.message.text.downcase.split(' '),u[0].downcase,1)<=1
+  end
   return '-' if w[4]!='Weapon'
   if weapon=='Falchion'
     if ['FE13'].include?(u[11][0])
