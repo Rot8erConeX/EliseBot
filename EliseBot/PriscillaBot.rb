@@ -3547,7 +3547,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       diff_num=[w2[2]-w22[2],'M','F']
     end
   end
-  puts weapon
   w2=@skills[find_skill(weapon,event)]
   if w2[15].nil?
     refinement=nil
@@ -3582,7 +3581,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   else
     wl=weapon
   end
-  puts weapon
   if find_unit(name,event)<0
     event.respond 'No unit was included' unless ignore
     return nil
@@ -3594,7 +3592,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     disp_unit_skills(bot,untz[j][0],event) if skillstoo || expandedmode
     return nil
   elsif !wl.include?('~~') && (stat_skills_2.length<=0 || unitz[0]=='Kiran') && !expandedmodex && !(args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth')) && !(event.server.nil? || event.server.id==238059616028590080) && event.channel.id != 362017071862775810
-    disp_tiny_stats(bot,name,weapon,event,ignore,skillstoo)
+    disp_tiny_stats(bot,name,weapon,event,ignore,skillstoo,true)
     return nil
   elsif unitz[0]=='Kiran'
     data_load()
@@ -3920,7 +3918,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   return nil
 end
 
-def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displays stats
+def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=false) # displays stats
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
@@ -4067,6 +4065,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false) # displa
       zzzzz=x[x2][12]
       sp+=@skills[@skills.find_index{|q| q[0]==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| q[0]==zzzzz}.nil?
     end
+  elsif loaded
   elsif " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
     if name=='Robin'
       uskl=unit_skills('Robin(M)',event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
