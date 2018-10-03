@@ -3787,7 +3787,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   if weapon != '-'
     ftr=nil
     tr=skill_tier(weapon,event)
-    ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ")
+    ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ") || donate_trigger_word(event)>0
   end
   bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5)*5
   if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
@@ -4279,6 +4279,12 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   xtype=1
   ftr=''
   ftr='Score does not include SP from skills' unless sp>0
+  if weapon != '-'
+    ftr=nil
+    ftr='Score does not include SP from skills' unless sp>0
+    tr=skill_tier(weapon,event)
+    ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ") || donate_trigger_word(event)>0
+  end
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{diff_num[0]} point#{'s' unless diff_num[0]==1} lower." if !diff_num.nil? && diff_num[0]>0
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{0-diff_num[0]} point#{'s' unless diff_num[0]==-1} higher." if !diff_num.nil? && diff_num[0]<0
   realflds=nil
