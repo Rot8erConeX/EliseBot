@@ -15242,13 +15242,13 @@ bot.command([:donation, :donate]) do |event, uid|
     event << ''
     event << 'However, there are other options:'
     event << "- My Amazon wish list: http://a.co/0p3sBec (Items purchased from this list will be delivered to me)"
-    event << '- You can also purchase an Amazon gift card and have it delivered via email to **rot8er.conex@gmail.com**.'
+    event << '- You can also purchase an Amazon gift card and have it delivered via email to **rot8er.conex@gmail.com**.  (Quicklink: <https://goo.gl/femEcw>)'
     event << ''
     event << '~~Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.~~'
     event << ''
     event << "Donor List and perks: <https://goo.gl/ds1LHA>"
   else
-    create_embed(event,"__**If you wish to donate to me:** A word from my developer__","Due to income regulations within the building where I live, I cannot accept donations in the form of PayPal, Patreon, or other forms of direct payment.  Only a small percentage of any such donations would actually reach me and the rest would end up in the hands of the owners of my building.\n\nHowever, there are other options:\n- You can purchase items from [this list](http://a.co/0p3sBec) and they will be delivered to me.\n- You can also purchase an Amazon gift card and have it delivered via email to **rot8er.conex@gmail.com**.\n\n[Donor List and perks](https://goo.gl/ds1LHA)",0x008b8b,"Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.")
+    create_embed(event,"__**If you wish to donate to me:** A word from my developer__","Due to income regulations within the building where I live, I cannot accept donations in the form of PayPal, Patreon, or other forms of direct payment.  Only a small percentage of any such donations would actually reach me and the rest would end up in the hands of the owners of my building.\n\nHowever, there are other options:\n- You can purchase items from [this list](http://a.co/0p3sBec) and they will be delivered to me.\n- You can also [purchase an Amazon gift card](https://goo.gl/femEcw) and have it delivered via email to **rot8er.conex@gmail.com**.\n\n[Donor List and perks](https://goo.gl/ds1LHA)",0x008b8b,"Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.")
     event.respond "If you are on a mobile device and cannot click the links in the embed above, type `FEH!donate mobile` to receive this message as plaintext."
   end
   return nil
