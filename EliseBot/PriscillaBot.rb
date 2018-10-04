@@ -905,7 +905,7 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
   return false
 end
 
-def donate_trigger_word(event,str=nil)
+def donate_trigger_word(event,str=nil,mode=0)
   if str.nil?
     str=event.message.text
     str=str.downcase
@@ -920,9 +920,18 @@ def donate_trigger_word(event,str=nil)
     File.open(d[i]).each_line do |line|
       b.push(line.gsub("\n",''))
     end
-    f.push([b[0],d[i].gsub("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/",'').gsub('.txt','').to_i])
+    f.push([b[0].split('\\'[0])[0],d[i].gsub("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/",'').gsub('.txt','').to_i,b[0].split('\\'[0])[1]])
+    f[-1][2]=f[-1][2].hex unless f[-1][2].nil?
+    if !get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(f[-1][1])
+      f[-1]=nil
+      f.compact!
+    elsif !get_donor_list().reject{|q| q[2]<4}.map{|q| q[0]}.include?(f[-1][1])
+      f[-1][2]=nil
+      f[-1].compact!
+    end
   end
   for i in 0...f.length
+    return f[i][2] if str.split(' ').include?("#{f[i][0].downcase}'s") && mode==1
     return f[i][1] if str.split(' ').include?("#{f[i][0].downcase}'s")
   end
   return -1
@@ -3067,9 +3076,19 @@ def unit_color(event,j,name=nil,mode=0,m=false,chain=false) # used to choose the
     xcolor=0x5000A0 if jj[2][0]=='Dark'
   end
   # Special colors
+  xcolor=0x00DAFA if m && find_in_dev_units(jj[0])>0
   xcolor=0xFFABAF if jj[0]=='Sakura' && m
   xcolor=0x9400D3 if jj[0]=='Kiran'
   xcolor=avg_color([[39,100,222],[9,170,36]]) if name=='Robin' || name=='Robin (Shared stats)'
+  if donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(uid)
+    x2=x.find_index{|q| q[0]==jj[0]}
+    unless x2.nil?
+      x=donate_trigger_word(event,nil,1)
+      xcolor=x unless x.nil? || x<0
+    end
+  end
   return [xcolor/256/256, (xcolor/256)%256, xcolor%256] if mode==1 # in mode 1, return as three single-channel numbers - used when averaging colors
   return xcolor
 end
@@ -15202,21 +15221,6 @@ bot.command([:donation, :donate]) do |event, uid|
     n="You are" if uid==event.user.id
     g=g[g.find_index{|q| q[0]==uid}]
     str=""
-    str="**Tier 1:** Ability to give server-specific aliases in any server\n\u2713 Given" if g[2]>=1
-    if g[2]>=2
-      if g[3].nil? || g[3].length.zero? || g[4].nil? || g[4].length.zero?
-        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
-      else
-        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2713 Given\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4]}"
-      end
-    end
-    if g[2]>=3
-      if !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
-        str="#{str}\n\n**Tier 3:** Unit tracking\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
-      else
-        str="#{str}\n\n**Tier 3:** Unit tracking\n\u2713 Given\n*Trigger word:* #{donor_unit_list(uid,1)[0]}'s"
-      end
-    end
     n4=bot.user(uid).name
     n4=n4[0,[3,n4.length].min]
     n4=" #{n4}" if n4.length<2
@@ -15233,6 +15237,31 @@ bot.command([:donation, :donate]) do |event, uid|
       end
     end
     color=n3[0]*256*256+n3[1]*256+n3[2]
+    str="**Tier 1:** Ability to give server-specific aliases in any server\n\u2713 Given" if g[2]>=1
+    if g[2]>=2
+      if g[3].nil? || g[3].length.zero? || g[4].nil? || g[4].length.zero?
+        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
+      else
+        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2713 Given\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4]}"
+      end
+    end
+    if g[2]>=3
+      if !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+        str="#{str}\n\n**Tier 3:** Unit tracking\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
+      else
+        str="#{str}\n\n**Tier 3:** Unit tracking\n\u2713 Given\n*Trigger word:* #{donor_unit_list(uid,1)[0].split('\\'[0])[0]}'s"
+      end
+    end
+    if g[2]>=4
+      if !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+        str="#{str}\n\n**Tier 4:** __*Colored*__ unit tracking\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
+      elsif donor_unit_list(uid,1)[0].split('\\'[0])[1].nil?
+        str="#{str}\n\n**Tier 4:** __*Colored*__ unit tracking\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
+      else
+        str="#{str}\n\n**Tier 4:** __*Colored*__ unit tracking\n\u2713 Given\n*Color of choice:* #{donor_unit_list(uid,1)[0].split('\\'[0])[1]}"
+        color=donor_unit_list(uid,1)[0].split('\\'[0])[1].hex
+      end
+    end
     create_embed(event,"__**#{n} a Tier #{g[2]} donor.**__",str,color)
   end
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
