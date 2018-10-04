@@ -1319,7 +1319,7 @@ def crack_orbs(bot,event,e,user,list) # used by the `summon` command to wait for
   five_star=false
   for i in 1...6
     if list.include?(i)
-      e << "Orb ##{i} contained a #{@banner[i][0]} **#{@banner[i][1]}**#{unit_moji(bot,event,-1,@banner[i][1])} (*#{@banner[i][2]}*)"
+      e << "Orb ##{i} contained a #{@banner[i][0]} **#{@banner[i][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,@banner[i][1])} (*#{@banner[i][2]}*)"
       summons+=1
       five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5:448266417553539104>')
       five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
@@ -12704,11 +12704,11 @@ bot.command(:summon) do |event, *colors|
     untz=@units.map{|q| q}
     for i in 0...bnr[2].length
       k2=untz[untz.find_index{|q| q[0]==bnr[2][i]}][1][0]
-      k[0].push(bnr[2][i]) if k2=='Red'
-      k[1].push(bnr[2][i]) if k2=='Blue'
-      k[2].push(bnr[2][i]) if k2=='Green'
-      k[3].push(bnr[2][i]) if k2=='Colorless'
-      k[4].push(bnr[2][i]) unless ['Red','Blue','Green','Colorless'].include?(k2)
+      k[0].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Red'
+      k[1].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Blue'
+      k[2].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Green'
+      k[3].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Colorless'
+      k[4].push(bnr[2][i].gsub('Lavatain','Laevatein')) unless ['Red','Blue','Green','Colorless'].include?(k2)
     end
     str="#{str}\n**Focus Heroes:**"
     str="#{str}\n<:Orb_Red:455053002256941056> *Red*:  #{k[0].join(', ')}" if k[0].length>0
@@ -12886,7 +12886,7 @@ bot.command(:summon) do |event, *colors|
       five_star=false
       str="#{str}\n**Summoning Results:**"
       for i in 0...cracked_orbs.length
-        str="#{str}\nOrb ##{cracked_orbs[i][1]} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1]}**#{unit_moji(bot,event,-1,cracked_orbs[i][0][1])} (*#{cracked_orbs[i][0][2]}*)"
+        str="#{str}\nOrb ##{cracked_orbs[i][1]} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,cracked_orbs[i][0][1])} (*#{cracked_orbs[i][0][2]}*)"
         summons+=1
         five_star=true if cracked_orbs[i][0][0].include?('5<:Icon_Rarity_5:448266417553539104>')
         five_star=true if cracked_orbs[i][0][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
@@ -15199,23 +15199,7 @@ bot.command([:donation, :donate]) do |event, uid|
   if uid==167657750971547648
     n=["#{bot.user(uid).distinct} is","He"]
     n=["You are","You"] if uid==event.user.id
-    n4=bot.user(uid).name
-    n4=n4[0,[3,n4.length].min]
-    n4=" #{n4}" if n4.length<2
-    n2=n4.downcase
-    n3=[]
-    for i in 0...n2.length
-      if "abcdefghijklmnopqrstuvwxyz".include?(n2[i])
-        n3.push(9*("abcdefghijklmnopqrstuvwxyz".split(n2[i])[0].length)+25)
-        n3[i]+=5 if n4[i]!=n2[i]
-      elsif n2[i].to_i.to_s==n2[i]
-        n3.push(n2[i].to_i*2+1)
-      else
-        n3.push(0)
-      end
-    end
-    color=n3[0]*256*256+n3[1]*256+n3[2]
-    create_embed(event,"#{n[0]} my developer.","#{n[1]} can have whatever permissions #{n[1].downcase} want#{'s' unless uid==event.user.id} to have.",color)
+    create_embed(event,"#{n[0]} my developer.","#{n[1]} can have whatever permissions #{n[1].downcase} want#{'s' unless uid==event.user.id} to have.",0x00DAFA)
   elsif g.map{|q| q[0]}.include?(uid)
     n="#{bot.user(uid).distinct} is"
     n="You are" if uid==event.user.id
