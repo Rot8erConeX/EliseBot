@@ -2391,7 +2391,11 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
   else
     s=(first_sub(s,name,'') rescue s) unless @multi_aliases.map{|q| q[0].downcase}.include?(s)
   end
-  args=sever(s,true).gsub('.','').split(' ')
+  if s.gsub(' ','').length.zero?
+    args=[]
+  else
+    args=sever(s,true).gsub('.','').split(' ')
+  end
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   args2=args.reject{ |q| ['feh!','feh?'].include?(q.downcase[0,4]) || ['f?','e?','h?'].include?(q.downcase[0,2]) }
   unless args2.length<=0
