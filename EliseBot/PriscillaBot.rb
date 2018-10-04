@@ -862,7 +862,7 @@ end
 
 def safe_to_spam?(event) # determines whether or not it is safe to send extremely long messages
   return true if event.server.nil? # it is safe to spam in PM
-  return true if [443172595580534784,443181099494146068,443704357335203840,449988713330769920].include?(event.server.id) # it is safe to spam in the emoji servers
+  return true if [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504].include?(event.server.id) # it is safe to spam in the emoji servers
   return true if @shardizard==4 # it is safe to spam during debugging
   return true if ['bots','bot'].include?(event.channel.name.downcase) # channels named "bots" are safe to spam in
   return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam') # it is safe to spam in any bot spam channel
@@ -906,32 +906,43 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
 end
 
 def donate_trigger_word(event,str=nil,mode=0)
-  if str.nil?
-    str=event.message.text
-    str=str.downcase
-    str=str[2,str.length-2] if ['f?','e?','h?'].include?(str[0,2])
-    str=str[4,str.length-4] if ['feh?','feh!'].include?(str[0,4])
-  end
-  str=str.downcase
-  d=Dir["C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/*.txt"]
-  f=[]
-  for i in 0...d.length
+  if !str.is_a?(String) && File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{str}.txt")
     b=[]
-    File.open(d[i]).each_line do |line|
+    File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{str}.txt").each_line do |line|
       b.push(line.gsub("\n",''))
     end
-    f.push([b[0].split('\\'[0])[0],d[i].gsub("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/",'').gsub('.txt','').to_i,b[0].split('\\'[0])[1]])
-    f[-1][2]=f[-1][2].hex unless f[-1][2].nil?
-    if !get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(f[-1][1])
-      f[-1]=nil
-      f.compact!
-    elsif !get_donor_list().reject{|q| q[2]<4}.map{|q| q[0]}.include?(f[-1][1])
-      f[-1][2]=nil
-      f[-1].compact!
+    f=[b[0].split('\\'[0])[0],str,b[0].split('\\'[0])[1],b[0].split('\\'[0])[2]]
+    return f[mode+1]
+  else
+    if str.nil?
+      str=event.message.text
+      str=str.downcase
+      str=str[2,str.length-2] if ['f?','e?','h?'].include?(str[0,2])
+      str=str[4,str.length-4] if ['feh?','feh!'].include?(str[0,4])
+    end
+    str=str.downcase
+    d=Dir["C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/*.txt"]
+    f=[]
+    for i in 0...d.length
+      b=[]
+      File.open(d[i]).each_line do |line|
+        b.push(line.gsub("\n",''))
+      end
+      f.push([b[0].split('\\'[0])[0],d[i].gsub("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/",'').gsub('.txt','').to_i,b[0].split('\\'[0])[1],b[0].split('\\'[0])[2]])
+      f[-1][2]=f[-1][2].hex unless f[-1][2].nil?
+      if !get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(f[-1][1])
+        f[-1]=nil
+        f.compact!
+      elsif !get_donor_list().reject{|q| q[2]<4}.map{|q| q[0]}.include?(f[-1][1])
+        f[-1][2]=nil
+        f[-1][3]=nil
+        f[-1].compact!
+      end
     end
   end
   for i in 0...f.length
     return f[i][2] if str.split(' ').include?("#{f[i][0].downcase}'s") && mode==1
+    return f[i][3] if str.split(' ').include?("#{f[i][0].downcase}'s") && mode==2
     return f[i][1] if str.split(' ').include?("#{f[i][0].downcase}'s")
   end
   return -1
@@ -998,9 +1009,9 @@ end
 def overlap_prevent(event) # used to prevent servers with both Elise and her debug form from receiving two replies
   if event.server.nil? # failsafe code catching PMs as not a server
     return false
-  elsif event.message.text.downcase.split(' ').include?('debug') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920].include?(event.server.id)
+  elsif event.message.text.downcase.split(' ').include?('debug') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504].include?(event.server.id)
     return @shardizard != 4 # the debug bot can be forced to be used in the emoji servers by including the word "debug" in your message
-  elsif [443172595580534784,443704357335203840,443181099494146068,449988713330769920].include?(event.server.id) # emoji servers will use default Elise otherwise
+  elsif [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504].include?(event.server.id) # emoji servers will use default Elise otherwise
     return @shardizard == 4
   elsif event.server.id==332249772180111360 # two identical commands cannot be used in the same minute in the FEHKeeper server
     canpost=true
@@ -3159,7 +3170,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   return "#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* Legendary Hero" unless jj[2][0]==" "}"
 end
 
-def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0) # used primarilally by the BST and Alt commands to display a unit's weapon and movement classes as emojis
+def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily by the BST and Alt commands to display a unit's weapon and movement classes as emojis
   return '' if was_embedless_mentioned?(event) && mode%4<2
   return '' if name.nil? && j<0
   j=@units.find_index{|q| q[0]==name} if j<0
@@ -3200,7 +3211,28 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0) # used primarilally by the
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{stat}"}
     lemote2=moji[0].mention unless moji.length<=0
   end
-  return "#{wemote}#{memote}#{dancer}#{lemote1}#{lemote2}#{'<:Icon_Support:448293527642701824>' if jj[0]=='Sakura' && m}"
+  semote=''
+  semote='<:Icon_Support_Cyan:497430896249405450>' if m && find_in_dev_units(jj[0])>0
+  semote="<:Icon_Support_Cyan:497430896249405450><:Icon_Support:448293527642701824>" if jj[0]=='Sakura' && m
+  if donate_trigger_word(event)>0 || uuid>-1
+    uid=donate_trigger_word(event)
+    if uuid.is_a?(String)
+      uid=donate_trigger_word(event,uuid)
+    elsif uuid<=0
+      uuid=nil
+    else
+      uid=uuid unless uuid.nil? || uuid<=0
+    end
+    x=donor_unit_list(uid)
+    x2=x.find_index{|q| q[0]==jj[0]}
+    unless x2.nil?
+      x=donate_trigger_word(event,uuid,2)
+      moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "Icon_Support_#{x}"}
+      semote=moji[0].mention unless moji.length<=0
+      semote="#{semote}<:Icon_Support:448293527642701824>" unless donor_unit_list(uid)[x2][5]=='-'
+    end
+  end
+  return "#{wemote}#{memote}#{dancer}#{lemote1}#{lemote2}#{semote}"
 end
 
 def skill_tier(name,event) # used by the "used a non-plus version of a weapon that has a + form" tooltip in the stats command to figure out the tier of the weapon
@@ -4041,6 +4073,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
       end
       zzzzz=@dev_units[dv][12]
       sp+=@skills[@skills.find_index{|q| q[0]==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| q[0]==zzzzz}.nil?
+    elsif loaded
     elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
     elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
@@ -7727,7 +7760,8 @@ def comparison(event,args,bot)
           st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
           st[0]=st[0].gsub('Lavatain','Laevatein')
           m=false
-          b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{unit_moji(bot,event,-1,name,m,2) if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0]])
+          uemoji=unit_moji(bot,event,-1,name,m,2,f[i])
+          b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{uemoji if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0],uemoji])
           c.push(unit_color(event,find_unit(name,event),nil,1,m))
           atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
           atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
@@ -7762,7 +7796,8 @@ def comparison(event,args,bot)
         end
         st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
         st[0]=st[0].gsub('Lavatain','Laevatein')
-        b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{unit_moji(bot,event,-1,name,m,2) if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0]])
+        uemoji=unit_moji(bot,event,-1,name,m,2,f[i])
+        b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{uemoji if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0],uemoji])
         c.push(unit_color(event,find_unit(find_name_in_string(event,f[i]),event),nil,1,m))
         atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
         atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
@@ -7845,7 +7880,8 @@ def comparison(event,args,bot)
         end
         st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
         st[0]=st[0].gsub('Lavatain','Laevatein')
-        b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{unit_moji(bot,event,-1,name,m,2) if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0]])
+        uemoji=unit_moji(bot,event,-1,name.gsub('Laevatein','Lavatain'),m,2,did)
+        b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{uemoji if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0],uemoji])
         c.push(unit_color(event,find_unit(find_name_in_string(event,sever(k[i])),event),nil,1,m))
         atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
         atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
@@ -7886,7 +7922,7 @@ def comparison(event,args,bot)
     uu=@units.map{|q| q}
     bse=b.map{|q| uu[uu.find_index{|q2| q2[0].gsub('Lavatain','Laevatein')==q[0][0]}][12].split(', ')[0].gsub('*','')}.uniq
     for iz in 0...b.length
-      dzz.push(["**#{b[iz][1].gsub('Lavatain','Laevatein')}**",[unit_moji(bot,event,-1,b[iz][0][0].gsub('Laevatein','Lavatain'),b[iz][2])],0])
+      dzz.push(["**#{b[iz][1].gsub('Lavatain','Laevatein')}**",[b[iz][4]],0])
       czz.push(c[iz])
       for jz in 1...6
         stz=b[iz][0][jz]
@@ -7946,8 +7982,8 @@ def comparison(event,args,bot)
     stemoji[2]='<:MagicS:467043867611627520>' if atkstat.uniq[0]=='Magic'
     stemoji[2]='<:FreezeS:467043868148236299>' if atkstat.uniq[0]=='Freeze'
   end
-  d1=[b[0][1].gsub('Lavatain','Laevatein'),[unit_moji(bot,event,-1,b[0][0][0].gsub('Laevatein','Lavatain'),b[0][2])],0]
-  d2=[b[1][1].gsub('Lavatain','Laevatein'),[unit_moji(bot,event,-1,b[1][0][0].gsub('Laevatein','Lavatain'),b[1][2])],0]
+  d1=[b[0][1].gsub('Lavatain','Laevatein'),[b[0][4]],0]
+  d2=[b[1][1].gsub('Lavatain','Laevatein'),[b[1][4]],0]
   d3=['<:Ally_Boost_Spectrum:443337604054646804> Analysis',[]]
   names=["#{b[0][0][0]}","#{b[1][0][0]}"]
   xpic=nil
@@ -8527,7 +8563,7 @@ def skill_comparison(event,args,bot)
           st=[x[x2][6],x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11]]
         end
       end
-      b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]} #{name} #{unit_moji(bot,event,-1,name,m)}",name])
+      b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]} #{name} #{unit_moji(bot,event,-1,name,m,0,did)}",name])
       c.push(unit_color(event,find_unit(find_name_in_string(event,sever(k[i])),event),nil,1,m))
     elsif k[i].downcase=="mathoo's"
       m=true
@@ -12123,7 +12159,7 @@ bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, 
   f='' if f.nil?
   if event.server.nil?
     event.respond 'It is safe for me to send long replies here because this is my PMs with you.'
-  elsif [443172595580534784,443181099494146068,443704357335203840,449988713330769920].include?(event.server.id)
+  elsif [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504].include?(event.server.id)
     event.respond 'It is safe for me to send long replies here because this is one of my emoji servers.'
   elsif @shardizard==4
     event.respond 'It is safe for me to send long replies here because this is my debug mode.'
@@ -15774,7 +15810,7 @@ end
 
 bot.command(:sendmessage, from: 167657750971547648) do |event, channel_id, *args| # sends a message to a specific channel
   return nil if overlap_prevent(event)
-  return nil unless event.server.nil? || [443172595580534784,443181099494146068,443704357335203840,449988713330769920].include?(event.server.id)
+  return nil unless event.server.nil? || [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504].include?(event.server.id)
   if event.user.id==167657750971547648
   else
     event.respond 'Are you trying to use the `bugreport`, `suggestion`, or `feedback` command?'
@@ -16295,7 +16331,7 @@ bot.command(:snagstats) do |event, f, f2|
   f2='' if f2.nil?
   bot.servers.values(&:members)
   k=bot.servers.length
-  k=1 if @shardizard==4 # Debug shard shares the three emote servers with the main account
+  k=1 if @shardizard==4 # Debug shard shares the five emote servers with the main account
   @server_data[0][@shardizard]=k
   @server_data[1][@shardizard]=bot.users.size
   metadata_save()
@@ -16713,7 +16749,7 @@ bot.server_create do |event|
     end
     chn=chnn[0] if chnn.length>0
   end
-  if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920].include?(event.server.id) && @shardizard==4
+  if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504].include?(event.server.id) && @shardizard==4
     (chn.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/HEuQK2>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/v3ADBG>") rescue nil)
     event.server.leave
   else
@@ -17531,7 +17567,7 @@ end
 bot.ready do |event|
   if @shardizard==4
     for i in 0...bot.servers.values.length
-      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920].include?(bot.servers.values[i].id)
+      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504].include?(bot.servers.values[i].id)
         bot.servers.values[i].general_channel.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/Hf9RNj>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/f1wSGd>") rescue nil
         bot.servers.values[i].leave
       end
