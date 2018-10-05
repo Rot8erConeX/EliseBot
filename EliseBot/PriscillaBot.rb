@@ -13292,17 +13292,18 @@ bot.command([:bst, :BST]) do |event, *args|
       else
         msg2="__**Team**__"
       end
-      msg2="#{msg2}\n**BST: #{b2}**\n**Advanced Arena Score: #{(s2*1.0/b.length+7*b.length+xy[0])}+`SP`/400**, #{(s2*1.0/b.length+7*b.length+xy[0])*2}+`SP`/200 with bonus"
+      msg2="#{msg2}\n**BST: #{b2}**\n**Advanced Arena Score: #{'%.1f' % (s2*1.0/b.length+7*b.length+xy[0])}+`SP`/#{b.length*100}**, #{'%.1f' % ((s2*1.0/b.length+7*b.length+xy[0])*2)}+`SP`/#{b.length*50} with bonus"
       msg=extend_message(msg,msg2,event,2)
     elsif b.length<=8
-      msg=extend_message(msg,"__**First four listed#{", which constitutes a #{emblem_name[1]} team" if emblem_name[1].length>0}**__\n**BST: #{b[0]+b[1]+b[2]+b[3]}**\n**Advanced Arena Score: #{((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])}+`SP`/400**, #{((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])*2}+`SP`/200 with bonus",event,2)
-      msg=extend_message(msg,"__*All listed units#{", which constitutes a #{emblem_name[2]} team" if emblem_name[2].length>0}*__\n*BST: #{b2}*\n*Advanced (pseudo)Arena Score: #{(s2*1.0/b.length+7*b.length+xy[0])}+`SP`/400*, #{(s2*1.0/b.length+7*b.length+xy[0])*2}+`SP`/200 with bonus",event,2)
+      msg=extend_message(msg,"__**First four listed#{", which constitutes a #{emblem_name[1]} team" if emblem_name[1].length>0}**__\n**BST: #{(b[0]+b[1]+b[2]+b[3])}**\n**Advanced Arena Score: #{'%.1f' % ((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])}+`SP`/400**, #{'%.1f' % (((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])*2)}+`SP`/200 with bonus",event,2)
+      msg=extend_message(msg,"__*All listed units#{", which constitutes a #{emblem_name[2]} team" if emblem_name[2].length>0}*__\n*BST: #{b2}*\n*Advanced (pseudo)Arena Score: #{'%.1f' % (s2*1.0/b.length+7*b.length+xy[0])}+`SP`/#{b.length*100}*, #{'%.1f' % ((s2*1.0/b.length+7*b.length+xy[0])*2)}+`SP`/#{b.length*50} with bonus",event,2)
     else
-      msg=extend_message(msg,"__**First four listed#{", which constitutes a #{emblem_name[1]} team" if emblem_name[1].length>0}**__\n**BST: #{b[0]+b[1]+b[2]+b[3]}**\n**Advanced Arena Score: #{((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])}+`SP`/400**, #{((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])*2}+`SP`/200 with bonus",event,2)
-      msg=extend_message(msg,"__*First eight listed#{", which constitutes a #{emblem_name[2]} team" if emblem_name[2].length>0}*__\n*BST: #{b[0]+b[1]+b[2]+b[3]+b[4]+b[5]+b[6]+b[7]}*\n*Advanced (pseudo)Arena Score: #{((scr[0]+scr[1]+scr[2]+scr[3]+scr[4]+scr[5]+scr[6]+scr[7])/8.0+56+xy[0])}+`SP`/400*, #{((scr[0]+scr[1]+scr[2]+scr[3]+scr[4]+scr[5]+scr[6]+scr[7])/8.0+56+xy[0])*2}+`SP`/200 with bonus",event,2)
-      msg=extend_message(msg,"__All listed units__\nBST: #{b2}\nAdvanced (pseudo)Arena Score: #{(s2*1.0/b.length+7*b.length+xy[0])}+`SP`/400, #{(s2*1.0/b.length+7*b.length+xy[0])*2}+`SP`/200 with bonus",event,2)
+      msg=extend_message(msg,"__**First four listed#{", which constitutes a #{emblem_name[1]} team" if emblem_name[1].length>0}**__\n**BST: #{b[0]+b[1]+b[2]+b[3]}**\n**Advanced Arena Score: #{'%.1f' % ((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])}+`SP`/400**, #{'%.1f' % (((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])*2)}+`SP`/200 with bonus",event,2)
+      msg=extend_message(msg,"__*First eight listed#{", which constitutes a #{emblem_name[2]} team" if emblem_name[2].length>0}*__\n*BST: #{b[0]+b[1]+b[2]+b[3]+b[4]+b[5]+b[6]+b[7]}*\n*Advanced (pseudo)Arena Score: #{'%.1f' % ((scr[0]+scr[1]+scr[2]+scr[3]+scr[4]+scr[5]+scr[6]+scr[7])/8.0+56+xy[0])}+`SP`/800*, #{'%.1f' % (((scr[0]+scr[1]+scr[2]+scr[3]+scr[4]+scr[5]+scr[6]+scr[7])/8.0+56+xy[0])*2)}+`SP`/400 with bonus",event,2)
+      msg=extend_message(msg,"__All listed units__\nBST: #{b2}\nAdvanced (pseudo)Arena Score: #{'%.1f' % (s2*1.0/b.length+7*b.length+xy[0])}+`SP`/#{b.length*100}, #{'%.1f' % ((s2*1.0/b.length+7*b.length+xy[0])*2)}+`SP`/#{b.length*50} with bonus",event,2)
     end
   end
+  msg=extend_message(msg,"Please note that activated blessings will add 2 points to this score, or 4 points with bonus.",event,2)
   event.respond msg
 end
 
