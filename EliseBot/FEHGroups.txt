@@ -3,7 +3,7 @@
 ["Bannerless", []]
 ["BraveHeroes", []]
 ["Bunnies", []]
-["C137ers", ["Ace(C137)", "Declan", "Gar", "Mathoo", "Matt(C137)", "Mex", "Micaiah(C137)", "Mint", "Mintz", "Moony", "Moosie", "Nebby", "Nixx(C137)", "Ooocast", "Oxorsid", "Rin(Maid)", "Liz(C137)", "Sage", "Saku", "Skittles", "Thomasawesome55", "Tuna", "FrozenHelm"], [330850148261298176]]
+["C137ers", ["Ace(C137)", "Declan", "Gar", "Mathoo", "Matt(C137)", "Mex", "Micaiah(C137)", "Mint", "Mintz", "Moony", "Moosie", "Nebby", "Nixx(C137)", "Ooocast", "Oxorsid", "Rin(Maid)", "Liz(C137)", "Sage", "Saku", "Skittles", "Thomasawesome55", "Tuna", "FrozenHelm", "Equals11"], [330850148261298176]]
 ["Christmas", ["Chrom(Winter)", "Lissa(Winter)", "Robin(M)(Winter)", "Tharja(Winter)"]]
 ["Dad'sWaifus", ["Soleil", "Ophelia", "Azura(Winter)", "Effie", "Cordelia", "Cordelia(Bride)", "Cordelia(Summer)", "Sakura", "Sakura(Halloween)", "Ninian", "Ninian(Bride)", "Lucina", "Lucina(Spring)", "Lucina(Brave)", "Micaiah", "Micaiah(Festival)", "Linde", "Linde(Summer)", "Tiki(Adult)", "Tiki(Adult)(Summer)", "Corrin(F)", "Corrin(F)(Summer)", "Camilla", "Camilla(Spring)", "Camilla(Winter)", "Robin(F)", "Robin(F)(Summer)", "Kagero", "Kagero(Spring)", "Tana", "Tana(Summer)", "Eirika(Bonds)", "Eirika(Memories)", "Ethlyn", "Mae", "Catria", "Catria(Spring)", "Camilla(Summer)"], [393775173095915521]]
 ["Daily_Rotation", []]

@@ -53,12 +53,12 @@ Hone Atk 1\Hone Atk 2\Hone Atk 3
 Spur Atk 2
 
 Cherche
-5\5\Attack\Speed\-
+5\6\Attack\Speed\-
 Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\__Slaying Hammer+ (+) Effect Mode__\Cherche's Axe\~~Cherche's Axe (+) Effect Mode~~
 Pivot
 New Moon\Luna
 Attack +1\Attack +2\Attack +3
-Desperation 1\Desperation 2
+Desperation 1\Desperation 2\Desperation 3
 Fortify Def 1\Fortify Def 2\Fortify Def 3
 Attack +2
 
@@ -155,7 +155,7 @@ Atk Ploy 2
 Kana(F)
 5\0\Attack\Defense\-
 Fire Breath\Fire Breath+\Lightning Breath\Lightning Breath+\Lightning Breath (+) Resistance Mode
-~~none~~
+Harsh Command
 Dragon Gaze\Draconic Aura
 Steady Stance 1\Steady Stance 2\Steady Breath
 Renewal 1\Renewal 2\Renewal 3
@@ -170,7 +170,7 @@ Dragon Gaze\Draconic Aura
 Defiant Atk 1\Defiant Atk 2\Defiant Atk 3
 Desperation 1\Desperation 2\Desperation 3
 Threaten Atk 1\Threaten Atk 2\Threaten Atk 3
-Brash Assault 2
+Brash Assault 3
 
 Maria
 4\10\ \ \-
@@ -179,7 +179,7 @@ Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
 HP +3\HP +4\HP +5
 Live to Serve 1\Live to Serve 2\Live to Serve 3
-Fortify Res 1\Fortify Res 2
+Fortify Res 1\Fortify Res 2\Fortify Res 3
 Fortify Def 2
 
 Marisa
@@ -188,7 +188,7 @@ Iron Sword\Steel Sword\Wo Dao\Wo Dao+\Wo Dao+ (+) Speed Mode
 Shove
 Night Sky\Glimmer
 HP +3\HP Def 1\HP Def 2
-Vantage 1\Vantage 2
+Vantage 1\Vantage 2\Vantage 3
 Infantry Pulse 1\Infantry Pulse 2\Infantry Pulse 3
 Heavy Blade 2
 
@@ -210,7 +210,7 @@ Nightshade\Earthly Shade
 HP +3\HP +4\HP +5
 Live to Serve 1\Live to Serve 2\Live to Serve 3
 Savage Blow 1\Savage Blow 2\Savage Blow 3
-Savage Blow 2
+Savage Blow 3
 
 Olivia(Performing)
 5\0\Defense\Resistance\-
