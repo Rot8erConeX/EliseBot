@@ -44,6 +44,7 @@ bot.gateway.check_heartbeat_acks = false
 @dev_somebodies=[]
 @dev_nobodies=[]
 @dev_units=[]
+@bonus_units=[]
 @avvie_info=['Elise','*Fire Emblem Heroes*','N/A']
 @stored_event=nil
 @zero_by_four=[0,0,0,'']
@@ -138,7 +139,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'statlarge','stathuge','statmassive','statol','giant','massive','spam','safetospam','safe2spam','listunits','sortunits','unitssort','liststat','rand',
      'longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort','worst',
      'sortstat','statsort','liststats','statslist','highest','best','highestamong','highestin','lowest','lowestamong','lowestin','manual','book','combatmanual',
-     'headpat','pat','patpat','randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats','edit']
+     'headpat','pat','patpat','randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats','edit','bonus']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -421,6 +422,24 @@ def devunits_save() # used by the devedit command to save the devunits
   return nil
 end
 
+def bonus_load()
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHArenaTempest.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHArenaTempest.txt').each_line do |line|
+      b.push(line.gsub("\n",''))
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    b[i]=b[i].split('\\'[0])
+    b[i][0]=b[i][0].split(', ')
+    b[i][2]=b[i][2].split(', ')
+    b[i][3]=b[i][3].split(', ') unless b[i][3].nil?
+  end
+  @bonus_units=b.map{|q| q}
+end
+
 bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, subcommand| # used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
   return nil if overlap_prevent(event)
   command='' if command.nil?
@@ -569,7 +588,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
   elsif ['daily','today','todayinfeh','today_in_feh'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Shows the day's in-game daily events.\nIf in PM, will also show tomorrow's.",0xD49F61)
   elsif ['next','schedule'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nBonus",0xD49F61)
   elsif ['deletealias','removealias'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __alias__",'Removes `alias` from the list of aliases, regardless of who it was for.',0xC31C19)
   elsif ['addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti'].include?(command.downcase)
@@ -1222,6 +1241,22 @@ def make_stats_string(event,name,rarity,boon='',bane='',hm=@max_rarity_merge[1])
   return k
 end
 
+def get_bonus_units(type='Arena',mode=0)
+  bonus_load()
+  t=Time.now
+  timeshift=8
+  t-=60*60*timeshift
+  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  b=@bonus_units.map{|q| q}
+  b=b.reject{|q| q[1]!=type} if type.length>0
+  return [] if b.length<=0
+  b=b.reject{|q| q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm} if mode==0
+  b=b.reject{|q| q[2][0].split('/').reverse.join('').to_i<=tm} if mode>=1
+  return [] if b.length<=0
+  return b[mode-1][0] if mode>=1
+  return b.map{|q| q[0]}.join(', ').split(', ')
+end
+
 def make_banner(event) # used by the `summon` command to pick a random banner and choose which units are on it.
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
     b=[]
@@ -1330,7 +1365,7 @@ def crack_orbs(bot,event,e,user,list) # used by the `summon` command to wait for
   five_star=false
   for i in 1...6
     if list.include?(i)
-      e << "Orb ##{i} contained a #{@banner[i][0]} **#{@banner[i][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,@banner[i][1])} (*#{@banner[i][2]}*)"
+      e << "Orb ##{i} contained a #{@banner[i][0]} **#{@banner[i][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,@banner[i][1],false,4)} (*#{@banner[i][2]}*)"
       summons+=1
       five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5:448266417553539104>')
       five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
@@ -3171,7 +3206,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{stat}"}
     lemote2=moji[0].mention unless moji.length<=0
   end
-  return "#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* Legendary Hero" unless jj[2][0]==" "}"
+  return "#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* Legendary Hero" unless jj[2][0]==" "}#{"\n<:Current_Arena_Bonus:498797967042412544> Current Arena Bonus unit" if get_bonus_units('Arena').include?(jj[0])}#{"\n<:Current_Tempest_Bonus:498797966740422656> Current Tempest Bonus unit" if get_bonus_units('Tempest').include?(jj[0])}"
 end
 
 def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily by the BST and Alt commands to display a unit's weapon and movement classes as emojis
@@ -3236,7 +3271,7 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily b
       semote="#{semote}<:Icon_Support:448293527642701824>" unless donor_unit_list(uid)[x2][5]=='-'
     end
   end
-  return "#{wemote}#{memote}#{dancer}#{lemote1}#{lemote2}#{semote}"
+  return "#{wemote}#{memote}#{dancer}#{lemote1}#{lemote2}#{"<:Current_Arena_Bonus:498797967042412544>" if get_bonus_units('Arena').include?(jj[0]) && mode%8<4}#{"<:Current_Tempest_Bonus:498797966740422656>" if get_bonus_units('Tempest').include?(jj[0]) && mode%8<4}#{semote}"
 end
 
 def skill_tier(name,event) # used by the "used a non-plus version of a weapon that has a + form" tooltip in the stats command to figure out the tier of the weapon
@@ -3839,8 +3874,14 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   cru1=make_stat_string_list(cru1,crblu1)
   u1=make_stat_string_list(u1,cru1,2) if wl.include?('~~')
   ftr="Please note that the #{atk.split('> ')[1]} stat displayed here does not include weapon might.  The Attack stat in-game does."
+  ggg=''
+  ggg='Arena' if get_bonus_units('Arena').include?(u40[0])
+  ggg='Tempest' if get_bonus_units('Tempest').include?(u40[0])
+  ggg='Bonus' if get_bonus_units('Tempest').include?(u40[0]) && get_bonus_units('Arena').include?(u40[0])
+  ggg='' if tempest.length>0
+  ftr="Include the word \"#{ggg}\" to apply bonus unit buffs" if ggg.length>0
   if weapon != '-'
-    ftr=nil
+    ftr=nil if ftr[0,6]=='Please'
     tr=skill_tier(weapon,event)
     ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ") || donate_trigger_word(event)>0
   end
@@ -3873,7 +3914,8 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       superbaan[i-5]='(+)' if [-2,10].include?(u40[i]) && rarity==4
       superbaan[i-5]='(-)' if [-1,11].include?(u40[i]) && rarity==4
     end
-    if superbaan.include?('(+)') || superbaan.include?('(-)')
+    if ggg.length>0
+    elsif superbaan.include?('(+)') || superbaan.include?('(-)')
       if ftr.nil?
         ftr='Please note that stats marked with (+)/(-) increase/decrease by 4, not the usual 3, with a boon/bane.'
       elsif weapon == '-'
@@ -4335,9 +4377,13 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   xtype=1
   ftr=''
   ftr='Score does not include SP from skills' unless sp>0
+  ggg=''
+  ggg='Arena' if get_bonus_units('Arena').include?(u40[0])
+  ggg='Tempest' if get_bonus_units('Tempest').include?(u40[0])
+  ggg='Bonus' if get_bonus_units('Tempest').include?(u40[0]) && get_bonus_units('Arena').include?(u40[0])
+  ggg='' if tempest.length>0
+  ftr="Include the word \"#{ggg}\" to apply bonus unit buffs" if ggg.length>0 && (sp>0 || rand(2)==0)
   if weapon != '-'
-    ftr=nil
-    ftr='Score does not include SP from skills' unless sp>0
     tr=skill_tier(weapon,event)
     ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ") || donate_trigger_word(event)>0
   end
@@ -9617,6 +9663,94 @@ end
 def pick_random_skill(event,args,bot)
 end
 
+def show_bonus_units(event,args='',bot)
+  bonus_load()
+  data_load()
+  t=Time.now
+  timeshift=8
+  t-=60*60*timeshift
+  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  unless args=='Tempest'
+    b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      event.respond "There are no known quantities about Arena."
+    else
+      s=[0,1]
+      m=[]
+      k=[]
+      flds=[]
+      for i in 0...b.length
+        if b[i][0]!=k
+          unless i==0
+            ss="Season #{s[0]}"
+            ss="Current Season" if s[0]==1
+            ss="Next Season" if s[0]==2
+            if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+              event.respond "__**#{ss}**__\n\n#{m.join("\n")}" unless s[0]>2
+            else
+              flds.push([ss,m.join("\n")])
+            end
+          end
+          k=b[i][0].map{|q| q}
+          m=[]
+          m.push(b[i][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}.join("\n"))
+          m.push('')
+          s[0]+=1
+          s[1]=1
+        end
+        element=b[i][3][0]
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+        element=b[i][3][1]
+        moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        if i==0
+          m.push("Current week: #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}")
+        elsif i==1
+          m.push("Next week: #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}")
+        elsif m[0,1]=='-' && s[1]>10
+        else
+          m.push("Week #{s[1]}: #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}")
+        end
+        s[1]+=1
+      end
+      ss="Season #{s[0]}"
+      ss="Current Season" if s[0]==1
+      ss="Next Season" if s[0]==2
+      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        event.respond "__**#{ss}**__\n\n#{m.join("\n")}" unless s[0]>2
+      else
+        flds.push([ss,m.join("\n")])
+        if safe_to_spam?(event)
+          for i in 0...flds.length
+            create_embed(event,"__**#{flds[i][0]}**__",flds[i][1],0x002837)
+          end
+        else
+          create_embed(event,"__**Arena Bonus Units**__",'',0x002837,nil,nil,flds[0,2])
+        end
+      end
+    end
+  end
+  unless args=='Arena'
+    b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      event.respond "There are no known quantities about Tempest."
+    else
+      flds=[]
+      k=b[0][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
+      if b[0][2][0].split('/').reverse.join('').to_i<tm || b.length>1
+        msg2="Current"
+      else
+        msg2="Future"
+      end
+      flds.push([msg2,k.join("\n")])
+      if b.length>1
+        k=b[1][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
+        flds.push(['Future',k.join("\n")])
+      end
+      create_embed(event,"__**Tempest Trials Bonus Units**__",'',0x5ED0CF,nil,nil,flds)
+    end
+  end
+end
+
 def parse_function_alts(callback,event,args,bot)
   event.channel.send_temporary_message('Calculating data, please wait...',3)
   k=find_name_in_string(event,nil,1)
@@ -9702,7 +9836,7 @@ def find_alts(event,name,bot)
       k2=k.reject{|q| q[12].gsub('*','').split(', ')[0]!=k[i][12].gsub('*','').split(', ')[0] || q[0]==k[i][0] || !(q[0]==q[12].split(', ')[0] || q[12].split(', ')[0].include?('*'))}
       n='x' if k2.length<=0
     end
-    untz2.push(["#{k[i][0]}#{unit_moji(bot,event,-1,k[i][0])} - #{m.uniq.join(', ')}",k[i][12].gsub('*','').split(', '),k[i][13]])
+    untz2.push(["#{k[i][0]}#{unit_moji(bot,event,-1,k[i][0],false,4)} - #{m.uniq.join(', ')}",k[i][12].gsub('*','').split(', '),k[i][13]])
   end
   if color.length.zero?
     color=0xFFD800
@@ -9810,7 +9944,7 @@ def list_unit_aliases(event,args,bot,mode=0)
     for i1 in 0...unit.length
       u=@units[find_unit(unit[i1],event)][0]
       m=m.reject{|q| !q[1].include?(u)}
-      f.push("#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u.gsub('Lavatain','Laevatein')}**#{"'s server-specific aliases__" if mode==1}")
+      f.push("#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,u,false,4)}**#{"'s server-specific aliases__" if mode==1}")
       f.push(u) if u=='Lavatain'
       f.push(u.gsub('(','').gsub(')','')) if u.include?('(') || u.include?(')')
       for i in 0...n.length
@@ -12926,7 +13060,7 @@ bot.command(:summon) do |event, *colors|
       five_star=false
       str="#{str}\n**Summoning Results:**"
       for i in 0...cracked_orbs.length
-        str="#{str}\nOrb ##{cracked_orbs[i][1]} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,cracked_orbs[i][0][1])} (*#{cracked_orbs[i][0][2]}*)"
+        str="#{str}\nOrb ##{cracked_orbs[i][1]} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,cracked_orbs[i][0][1],false,4)} (*#{cracked_orbs[i][0][2]}*)"
         summons+=1
         five_star=true if cracked_orbs[i][0][0].include?('5<:Icon_Rarity_5:448266417553539104>')
         five_star=true if cracked_orbs[i][0][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
@@ -13305,6 +13439,12 @@ bot.command([:bst, :BST]) do |event, *args|
   end
   msg=extend_message(msg,"Please note that activated blessings will add 2 points to this score, or 4 points with bonus.",event,2)
   event.respond msg
+end
+
+bot.command(:bonus) do |event|
+  return nil if overlap_prevent(event)
+  show_bonus_units(event,'',bot)
+  return nil
 end
 
 bot.command([:compare, :comparison]) do |event, *args|
@@ -14924,6 +15064,21 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     str=extend_message(str,str2,event,2)
     str2=disp_current_events(2)
     str=extend_message(str,str2,event,2)
+    bonus_load()
+    tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+    b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      str2"\nThere are no known quantities about Arena."
+    else
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      m=k.length%2
+      element=b[0][3][0]
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+      element=b[0][3][1]
+      moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      str2="__**Current Arena Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Elemental season:* #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+    end
+    str=extend_message(str,str2,event,2)
     str2='__**Tomorrow in** ***Fire Emblem Heroes***__'
     str2="#{str2}\nTraining Tower color: #{colors[(date+1)%colors.length]}"
     str2="#{str2}\nDaily Hero Battle: #{dhb[(date+1)%dhb.length]}"
@@ -14960,8 +15115,21 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
     str="#{str}\nCurrent Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}"
     str="#{str}\nCurrent Events: #{c2.map{|q| "*#{q[0]} (#{q[1]})*"}.join('; ')}"
+    bonus_load()
+    b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      str"#{str}\nThere are no known quantities about Arena."
+    else
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      m=k.length%2
+      element=b[0][3][0]
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+      element=b[0][3][1]
+      moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      str="#{str}\nCurrent Arena Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nElemental season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+    end
   end
-  str=extend_message(str,"Please note that I cannot predict the following: Arena/Tempest bonus heroes, Elemental season",event,2)
+  str=extend_message(str,"Please note that I cannot predict the following...yet: Tempest bonus heroes",event,2)
   event.respond str
 end
 
@@ -14980,8 +15148,10 @@ bot.command([:next,:schedule]) do |event, type|
   idx=9 if ['event','events'].include?(type.downcase)
   idx=10 if ['legendary','legendaries','legend','legends'].include?(type.downcase)
   idx=11 if ['tactics','tactic','drills','drill','tacticsdrills','tactics_drills','tacticsdrill','tactics_drill','tacticdrills','tactic_drills','tacticdrill','tactic_drill'].include?(type.downcase)
+  idx=12 if ['arena','bonus','arenabonus','arena_bonus'].include?(type.downcase)
+  idx=13 if ['tempest','tempestbonus','tempest_bonus'].include?(type.downcase)
   if idx<0 && !safe_to_spam?(event)
-    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)"
+    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nBonus"
     return nil
   end
   t=Time.now
@@ -15198,7 +15368,80 @@ bot.command([:next,:schedule]) do |event, type|
   elsif [10].include?(idx)
     sort_legendaries(event,bot)
   end
-  event.respond msg unless [10].include?(idx)
+  if idx==12
+    show_bonus_units(event,'Arena',bot)
+  elsif idx==-1
+    bonus_load()
+    data_load()
+    t=Time.now
+    timeshift=8
+    t-=60*60*timeshift
+    tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+    b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      msg=extend_message(msg,"There are no known quantities about Arena.",event,2)
+    else
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      m=k.length%2
+      element=b[0][3][0]
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+      element=b[0][3][1]
+      moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      msg=extend_message(msg,"__**Current Arena Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Elemental season:* #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}",event,2)
+      if b.length>1
+        k2=b[1][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        m=k2.length%2
+        element=b[1][3][0]
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+        element=b[1][3][1]
+        moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        d=b[1][2][0].split('/').map{|q| q.to_i}
+        msg=extend_message(msg,"__**Next Arena Season** (starting #{d[0]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][d[1]]} #{d[2]})__\n*Bonus Units:*#{"\n#{k2[0,k2.length/2+m].join(', ')}\n#{k2[k2.length/2+m,k2.length/2].join(', ')}" unless k2==k}#{'(same as current)' if k2==k}\n*Elemental season:* #{moji[0].mention}#{b[1][3][0]}, #{moji2[0].mention}#{b[1][3][1]}",event,2)
+        if b.length>2
+          msg2="__**Future Elemental Seasons**__"
+          for i in 2...[b.length,12].min
+            element=b[i][3][0]
+            moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+            element=b[i][3][1]
+            moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+            d=b[i][2][0].split('/').map{|q| q.to_i}
+            msg2="#{msg2}\n*Starting #{d[0]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][d[1]]} #{d[2]}:* #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}"
+          end
+          msg=extend_message(msg,msg2,event,2)
+        end
+      end
+    end
+  end
+  idx=13 if ['bonus'].include?(type.downcase)
+  if idx==13
+    show_bonus_units(event,'Tempest',bot)
+  elsif idx==-1
+    bonus_load()
+    data_load()
+    t=Time.now
+    timeshift=8
+    t-=60*60*timeshift
+    tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+    b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      msg=extend_message(msg,"There are no known quantities about Tempest Trials+.",event,2)
+    else
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      if b[0][2][0].split('/').reverse.join('').to_i<tm || b.length>1
+        msg2="__**Current Tempest Trials+ Bonus Units**__"
+      else
+        msg2="__**Future Tempest Trials+ Bonus Units**__"
+      end
+      m=k.length%2
+      msg=extend_message(msg,"#{msg2}\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}",event,2)
+      if b.length>1
+        k=b[1][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        m=k.length%2
+        msg=extend_message(msg,"__**Future Tempest Trials+ Bonus Units**__\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}",event,2)
+      end
+    end
+  end
+  event.respond msg unless [10,12,13].include?(idx)
 end
 
 bot.command([:status, :avatar, :avvie]) do |event, *args|
@@ -15314,12 +15557,11 @@ bot.command(:edit) do |event, cmd, *args|
   if uid==167657750971547648
     event.respond "This command is for the donors.  Your version of the command is `FEH!devedit`."
     return nil
+  elsif get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(user.id)
+    event.respond "You do not have permission to use this command."
+    return nil
   elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
-    if get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(uid)
-      event.respond "Please wait until my developer makes your storage file."
-    else
-      event.respond "You do not have permission to use this command."
-    end
+    event.respond "Please wait until my developer makes your storage file."
     return nil
   elsif (cmd.nil? || cmd.length.zero?) && (args.nil? || args.length.zero?)
     create_embed(event,"**edit** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!edit create` - creates a new donor unit\n`FEH!edit promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!edit merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!edit nature` - changes a donor unit's nature (*also `ivs`*)\n`FEH!edit support` - causes me to change support ranks of donor units (*also `marry`*)\n\n`FEH!edit equip` - equip skill (*also `skill`*)\n`FEH!edit seal` - equip seal\n`FEH!edit refine` - refine weapon\n\n`FEH!edit send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
@@ -17616,6 +17858,7 @@ bot.ready do |event|
   metadata_save()
   metadata_load()
   devunits_load()
+  bonus_load()
   system("color e#{"04126"[@shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
   bot.game='Fire Emblem Heroes' if [0,4].include?(@shardizard)
