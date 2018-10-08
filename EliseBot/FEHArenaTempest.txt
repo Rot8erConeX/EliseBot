@@ -1,0 +1,25 @@
+Flora, Nina, Ophelia, Silas, Ethlyn, Garon, Lavatain, Laegjarn, Helbindi, Fjorm\Arena\02/10/2018, 08/10/2018\Earth, Water
+Flora, Nina, Ophelia, Silas, Ethlyn, Garon, Lavatain, Laegjarn, Helbindi, Fjorm\Arena\09/10/2018, 15/10/2018\Earth, Fire
+Mia(Halloween), Kagero(Halloween), Niles(Halloween), Myrrh(Halloween), Dorcas(Halloween), Alfonse\Arena\16/10/2018, 22/10/2018\Earth, Wind
+Mia(Halloween), Kagero(Halloween), Niles(Halloween), Myrrh(Halloween), Dorcas(Halloween), Alfonse\Arena\23/10/2018, 29/10/2018\Earth, Water
+-\Arena\30/10/2018, 05/11/2018\Water, Fire
+-\Arena\06/11/2018, 12/11/2018\Water, Earth
+-\Arena\13/11/2018, 19/11/2018\Water, Wind
+-\Arena\20/11/2018, 26/11/2018\Water, Fire
+-\Arena\27/11/2018, 03/12/2018\Water, Earth
+-\Arena\04/12/2018, 10/12/2018\Water, Wind
+-\Arena\11/12/2018, 17/12/2018\Water, Fire
+-\Arena\18/12/2018, 24/12/2018\Water, Earth
+-\Arena\25/12/2018, 31/12/2018\Wind, Water
+-\Arena\01/01/2019, 07/01/2019\Wind, Fire
+-\Arena\08/01/2019, 14/01/2019\Wind, Earth
+-\Arena\15/01/2019, 21/01/2019\Wind, Water
+-\Arena\22/01/2019, 28/01/2019\Wind, Fire
+-\Arena\29/01/2019, 04/02/2019\Wind, Earth
+-\Arena\05/02/2019, 11/02/2019\Wind, Water
+-\Arena\12/02/2019, 18/02/2019\Wind, Fire
+-\Arena\19/02/2019, 25/02/2019\Wind, Earth
+-\Arena\26/02/2019, 04/03/2019\Fire, Wind
+-\Arena\05/03/2019, 11/03/2019\Fire, Water
+-\Arena\12/03/2019, 18/03/2019\Fire, Earth
+-\Arena\19/03/2019, 25/03/2019\Fire, Wind
