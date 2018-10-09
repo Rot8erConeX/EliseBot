@@ -139,7 +139,9 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'statlarge','stathuge','statmassive','statol','giant','massive','spam','safetospam','safe2spam','listunits','sortunits','unitssort','liststat','rand',
      'longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort','worst',
      'sortstat','statsort','liststats','statslist','highest','best','highestamong','highestin','lowest','lowestamong','lowestin','manual','book','combatmanual',
-     'headpat','pat','patpat','randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats','edit','bonus']
+     'headpat','pat','patpat','randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats','edit','bonus','arena','tt',
+     'arenabonus','arena_bonus','bonusarena','bonus_arena','tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','ttbonus','tt_bonus',
+     'bonustt','bonus_tt']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -515,6 +517,12 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats, and skills.",0xD49F61)
   elsif ['attackicon','attackcolor','attackcolors','attackcolour','attackcolours','atkicon','atkcolor','atkcolors','atkcolour','atkcolours','atticon','attcolor','attcolors','attcolour','attcolours','staticon','statcolor','statcolors','statcolour','statcolours','iconcolor','iconcolors','iconcolour','iconcolours'].include?(command.downcase) || (['stats','stat'].include?(command.downcase) && ['color','colors','colour','colours'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['color','colors','colour','colours'].include?("#{subcommand}".downcase)}**","Explains the reasoning behind the multiple Attack stat icons - <:StrengthS:467037520484630539> <:MagicS:467043867611627520> <:FreezeS:467043868148236299>",0xD49F61)
+  elsif ['arena','arenabonus','arena_bonus','bonusarena','bonus_arena'].include?(command.downcase) || (['bonus'].include?(command.downcase) && ['arena'].include?("#{subcommand}".downcase))
+    create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['arena'].include?("#{subcommand}".downcase)}**",'Displays current and future Arena Bonus Units',0xD49F61)
+  elsif ['tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','tt','ttbonus','tt_bonus','bonustt','bonus_tt'].include?(command.downcase) || (['bonus'].include?(command.downcase) && ['tempest','tt'].include?("#{subcommand}".downcase))
+    create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['tempest','tt'].include?("#{subcommand}".downcase)}**",'Displays current and future Tempest Trials Bonus Units',0xD49F61)
+  elsif ['bonus'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}**",'Displays current and future Bonus Units for both Arena and Tempest Trials.',0xD49F61)
   elsif ['skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['rarity','rarities'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['rarity','rarities'].include?("#{subcommand}".downcase)}**",'Explains why some units have skills listed at lower rarities than they are available at.',0xD49F61)
   elsif ['color','colors','colour','colours'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['color','colors','colour','colours'].include?("#{subcommand}".downcase))
@@ -798,7 +806,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     end
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
     create_embed([event,x],"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit/Character Data**__\n\n`data` __unit__ - shows both stats and skills (*also `unit`*)\n`stats` __unit__ - shows only the stats\n`smolstats` __unit__ - shows ths stats in a condensed format (*also `tinystats` and `microstats`*)\n`skills` __unit__ - shows only the skills (*also `fodder`*)\n`study` __unit__ - for a study of the unit at multiple rarities and merges\n`effHP` __unit__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __unit__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`serveraliases` __unit__ - show server-specific aliases for the unit\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __unit__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`banners` __unit__ - for a list of banners the unit has been a focus unit on\n`art` __unit__ __art type__ - for the character's art\n`learnable` __unit__ - for a list of all learnable skills (*also `inheritable`*)\n\n`games` __character__ - for a list of games the character is in\n`alts` __character__ - for a list of all units this character has",0xD49F61)
-    create_embed([event,x],"","__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
+    create_embed([event,x],"","__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`bonus` - used to list all Arena and TT bonus units (*also `arena` and `tt`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
     create_embed([event,x],"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`daily` - shows the current day's in-game daily events (*also `today` or `todayInFEH`*)\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)\n\n__**Developer Information**__\n`avatar` - to see why my avatar is different from the norm\n\n`bugreport` __\\*message__ - to send my developer a bug report\n`suggestion` __\\*message__ - to send my developer a feature suggestion\n`feedback` __\\*message__ - to send my developer other kinds of feedback\n~~the above three commands are actually identical, merely given unique entries to help people find them~~\n\n`donation` (*also `donate`*) - for information on how to donate to my developer\n`whyelise` - for an explanation as to how Elise was chosen as the face of the bot\n`skillrarity` (*also `skill_rarity`*)\n`attackcolor` - for a reason for multiple Atk icons (*also `attackicon`*)\n`snagstats` __type__ - to receive relevant bot stats\n`spam` - to determine if the current location is safe for me to send long replies to (*also `safetospam` or `safe2spam`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed([event,x],"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
     create_embed([event,x],"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**Mjolnr, the Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n\n__**Meta Data Storage**__\n`reload` - reloads the unit and skill data\n`backup` __item__ - backs up the (alias/group) list\n`restore` __item__ - restores the (alias/group) list from last backup\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
@@ -1598,6 +1606,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill("Shining Bow#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='shinybow'
   return find_skill("Tannenboom!#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='tanenboom'
   return find_skill("Sack o' Gifts#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='sackofgifts'
+  return find_skill("Hack-o'-Lantern#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='hackolantern'
   return find_skill("Killing Edge#{'+' if name.include?('+')}",event) if ['killersword','killeredge','killingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
   return find_skill("Slaying Edge#{'+' if name.include?('+')}",event) if ['slayersword','slayeredge','slayingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
   return find_skill(name.downcase.gsub(' ','').gsub('redtome','r tome'),event) if name.downcase.gsub(' ','').include?('redtome')
@@ -1657,6 +1666,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill('Bladeblade',event) if namex=='laevatein'[0,namex.length]
   return find_skill('Eckesachs',event) if ['exaccus','exesack','exsack','eggsacks'].map{|q| q[0,namex.length]}.include?(name.downcase.gsub(' ',''))
   return find_skill("Sack o' Gifts",event) if namex=='sackofgifts'[0,namex.length]
+  return find_skill("Hack-o'-Lantern",event) if namex=='hackolantern'[0,namex.length]
   return find_skill('Giga Excalibur',event) if namex=='gigascalibur'[0,namex.length]
   return find_skill('Gae Bolg',event) if namex=='gayborg'[0,namex.length]
   return find_skill('Loptous',event) if namex=='loptyr'[0,namex.length]
@@ -11101,16 +11111,16 @@ def proc_study(event,name,bot,weapon=nil)
   d2="`3* #{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /10`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[2].push("Daylight - #{wd}heals for #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
-  c=add_number_to_string(get_match_in_list(procs, 'Noontime')[2],cdwns)
-  d="`3* #{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /10`"
-  d2="`3* #{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /10`"
-  d="~~#{d}~~ #{d2}" unless d==d2
-  staves[2].push("Noontime - #{wd}heals for #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Sol')[2],cdwns)
   d="`#{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /2`"
   d2="`#{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /2`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[2].push("Sol - #{wd}heals for #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Noontime')[2],cdwns)
+  d="`3* #{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /10`"
+  d2="`3* #{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /10`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[2].push("Noontime - #{wd}heals for #{d}, cooldown of #{c}")
   czz=0
   czz2=0
   czz+=10 if tags.include?('WoDao_Sun') || tags.include?('WoDao_Moon') || tags.include?('WoDao_Eclipse')
@@ -11142,16 +11152,16 @@ def proc_study(event,name,bot,weapon=nil)
   cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[4].push("Glowing Ember - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
-  c=add_number_to_string(get_match_in_list(procs, 'Bonfire')[2],cdwns)
-  d="#{deff/2+wdamage+czz}#{" (#{bldeff/2+wdamage+czz})" unless deff/2==bldeff/2}"
-  cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
-  d="~~#{d}~~ #{cd}" unless d==cd
-  staves[4].push("Bonfire - #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Ignis')[2],cdwns)
   d="#{deff*4/5+wdamage+czz}#{" (#{bldeff*4/5+wdamage+czz})" unless deff*4/5==bldeff*4/5}"
   cd="#{crdeff*4/5+wdamage2+czz2}#{" (#{crbldeff*4/5+wdamage2+czz2})" unless crdeff*4/5==crbldeff*4/5}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[4].push("Ignis - #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Bonfire')[2],cdwns)
+  d="#{deff/2+wdamage+czz}#{" (#{bldeff/2+wdamage+czz})" unless deff/2==bldeff/2}"
+  cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[4].push("Bonfire - #{d}, cooldown of #{c}")
   czz=0
   czz2=0
   czz+=10 if tags.include?('WoDao_Ice')
@@ -11202,22 +11212,22 @@ def proc_study(event,name,bot,weapon=nil)
   d="#{atkk*3/10+wdamage+czz}#{" (#{blatkk*3/10+wdamage+czz})" unless atkk*3/10==blatkk*3/10}"
   cd="#{cratkk*3/10+wdamage2+czz2}#{" (#{crblatkk*3/10+wdamage2+czz2})" unless cratkk*3/10==crblatkk*3/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[7].push("Dragon Gaze - Up to #{d} when against color-neutral, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  staves[7].push("Dragon Gaze - Up to #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  c=add_number_to_string(get_match_in_list(procs, 'Dragon Fang')[2],cdwns)
+  d="#{atkk/2+wdamage+czz}#{" (#{blatkk/2+wdamage+czz})" unless atkk/2==blatkk/2}"
+  cd="#{cratkk/2+wdamage2+czz2}#{" (#{crblatkk/2+wdamage2+czz2})" unless cratkk/2==crblatkk/2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[7].push("Dragon Fang - Up to #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Draconic Aura')[2],cdwns)
   d="#{atkk*3/10+wdamage+czz}#{" (#{blatkk*3/10+wdamage+czz})" unless atkk*3/10==blatkk*3/10}"
   cd="#{cratkk*3/10+wdamage2+czz2}#{" (#{crblatkk*3/10+wdamage2+czz2})" unless cratkk*3/10==crblatkk*3/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[7].push("Draconic Aura - Up to #{d} when against color-neutral, cooldown of #{c}")
+  staves[7].push("Draconic Aura - Up to #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Fire Emblem')[2],cdwns)
   d="#{spdd*3/10+wdamage+czz}#{" (#{blspdd*3/10+wdamage+czz})" unless spdd*3/10==blspdd*3/10}"
   cd="#{crspdd*3/10+wdamage2+czz2}#{" (#{crblspdd*3/10+wdamage2+czz2})" unless crspdd*3/10==crblspdd*3/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[7].push("**Fire Emblem - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Fire Emblem')[6].split(', ').include?(u40[0])
-  c=add_number_to_string(get_match_in_list(procs, 'Dragon Fang')[2],cdwns)
-  d="#{atkk/2+wdamage+czz}#{" (#{blatkk/2+wdamage+czz})" unless atkk/2==blatkk/2}"
-  cd="#{cratkk/2+wdamage2+czz2}#{" (#{crblatkk/2+wdamage2+czz2})" unless cratkk/2==crblatkk/2}"
-  d="~~#{d}~~ #{cd}" unless d==cd
-  staves[7].push("Dragon Fang - Up to #{d} when against color-neutral, cooldown of #{c}")
   czz=0
   czz2=0
   czz+=10 if tags.include?('WoDao_Darkness')
@@ -11232,16 +11242,16 @@ def proc_study(event,name,bot,weapon=nil)
   cd="#{3*crhppp/10+wdamage2+czz2}#{" (#{3*crblhppp/10+wdamage2+czz2})" if 3*crhppp/10!=3*crblhppp/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[8].push("Retribution - Up to #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
-  c=add_number_to_string(get_match_in_list(procs, 'Reprisal')[2],cdwns)
-  d="#{3*hppp/10+wdamage+czz}#{" (#{3*blhppp/10+wdamage+czz})" if 3*hppp/10!=3*blhppp/10}"
-  cd="#{3*crhppp/10+wdamage2+czz2}#{" (#{3*crblhppp/10+wdamage2+czz2})" if 3*crhppp/10!=3*crblhppp/10}"
-  d="~~#{d}~~ #{cd}" unless d==cd
-  staves[8].push("Reprisal - Up to #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Vengeance')[2],cdwns)
   d="#{hppp/2+wdamage+czz}#{" (#{blhppp/2+wdamage+czz})" if hppp/2!=blhppp/2}"
   cd="#{crhppp/2+wdamage2+czz2}#{" (#{crblhppp/2+wdamage2+czz2})" if crhppp/2!=crblhppp/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[8].push("Vengeance - Up to #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Reprisal')[2],cdwns)
+  d="#{3*hppp/10+wdamage+czz}#{" (#{3*blhppp/10+wdamage+czz})" if 3*hppp/10!=3*blhppp/10}"
+  cd="#{3*crhppp/10+wdamage2+czz2}#{" (#{3*crblhppp/10+wdamage2+czz2})" if 3*crhppp/10!=3*crblhppp/10}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[8].push("Reprisal - Up to #{d}, cooldown of #{c}")
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
@@ -13443,7 +13453,27 @@ end
 
 bot.command(:bonus) do |event|
   return nil if overlap_prevent(event)
-  show_bonus_units(event,'',bot)
+  if event.message.text.downcase.split(' ').include?('arena') && (event.message.text.downcase.split(' ').include?('tempest') || event.message.text.downcase.split(' ').include?('tt'))
+    show_bonus_units(event,'',bot)
+  elsif event.message.text.downcase.split(' ').include?('arena')
+    show_bonus_units(event,'Arena',bot)
+  elsif event.message.text.downcase.split(' ').include?('tempest') || event.message.text.downcase.split(' ').include?('tt')
+    show_bonus_units(event,'Tempest',bot)
+  else
+    show_bonus_units(event,'',bot)
+  end
+  return nil
+end
+
+bot.command([:arena,:arenabonus,:arena_bonus,:bonusarena,:bonus_arena]) do |event|
+  return nil if overlap_prevent(event)
+  show_bonus_units(event,'Arena',bot)
+  return nil
+end
+
+bot.command([:tempest,:tempestbonus,:tempest_bonus,:bonustempest,:bonus_tempest,:tt,:ttbonus,:tt_bonus,:bonustt,:bonus_tt]) do |event|
+  return nil if overlap_prevent(event)
+  show_bonus_units(event,'Tempest',bot)
   return nil
 end
 
@@ -15068,7 +15098,7 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
     b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][1].split('/').reverse.join('').to_i<tm}
     if b.length<=0
-      str2"\nThere are no known quantities about Arena."
+      str2"There are no known quantities about Arena."
     else
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
       m=k.length%2
@@ -15077,6 +15107,15 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
       element=b[0][3][1]
       moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
       str2="__**Current Arena Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Elemental season:* #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+    end
+    str=extend_message(str,str2,event,2)
+    b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      str2="There are no Tempest Trials events going on."
+    else
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      m=k.length%2
+      str2="__**Current Tempest Trials+ Bonus Units**__\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}"
     end
     str=extend_message(str,str2,event,2)
     str2='__**Tomorrow in** ***Fire Emblem Heroes***__'
@@ -15108,6 +15147,23 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     c2=c.reject{|q| q[2].nil? || q[2][0]!=tm}
     str2="#{str2}\nNew Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}" if b2.length>0
     str2="#{str2}\nNew Events: #{c2.map{|q| "*#{q[0]} (#{q[1]})*"}.join('; ')}" if c2.length>0
+    tm="#{t3.year}#{'0' if t3.month<10}#{t3.month}#{'0' if t3.day<10}#{t3.day}".to_i
+    bonus_load()
+    b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][0].split('/').reverse.join('').to_i != tm}
+    unless b.length<=0
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      m=k.length%2
+      element=b[0][3][0]
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+      element=b[0][3][1]
+      moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      str2="#{str2}\nTomorrow's Arena Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nElemental season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+    end
+    b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][0].split('/').reverse.join('').to_i != tm}
+    unless b.length<=0
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      str2="#{str2}\nTomorrow's Tempest Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}"
+    end
     str=extend_message(str,str2,event,2)
   else
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
@@ -15121,15 +15177,20 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
       str"#{str}\nThere are no known quantities about Arena."
     else
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
-      m=k.length%2
       element=b[0][3][0]
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
       element=b[0][3][1]
       moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
       str="#{str}\nCurrent Arena Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nElemental season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
     end
+    b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      str"#{str}\nThere are no Tempest Trials events going on."
+    else
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      str="#{str}\nCurrent Tempest Trials+ Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}"
+    end
   end
-  str=extend_message(str,"Please note that I cannot predict the following...yet: Tempest bonus heroes",event,2)
   event.respond str
 end
 
