@@ -57,7 +57,7 @@ Deirdre\Green, Tome, Wind\ \Infantry\5, 7, 6, 2, 8\36, 33, 28, 16, 35\Haimura Ki
 Delthea\Blue, Tome, Thunder\ \Infantry\4, 8, 8, 1, 7\33, 36, 34, 13, 31\Miwabe Sakura\Christine Marie Cabanos\Suzuki Eri\5p\F\FE15, FE2\Delthea
 Donnel\Blue, Blade\ \Infantry\8, 9, 7, 8, 5\43, 35, 29, 32, 23\Okaya\Sam Regal\Ichiki Mitsuhiro\1d2d3p4p3qLU\M\FE13\Donnel
 Dorcas\Green, Blade\ \Infantry\8, 8, 4, 8, 5\45, 35, 23, 35, 24\Soeda Ippei\Kirk Thornton\Kitamura Kenji\5p\M\FE7\Dorcas
-Dorcas(Halloween)\Gold, Unknown\ \Unknown\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\Kirk Thornton\Kitamura Kenji\4t5t0s\M\FE7\Dorcas
+Dorcas(Halloween)\Green, Blade\ \Armor\8, 10, 5, 9, 3\49, 41, 25, 37, 21\Soeda Ippei\Kirk Thornton\Kitamura Kenji\4t5t0s\M\FE7\Dorcas
 Draug\Red, Blade\ \Armor\8, 6, 8, 8, 3\50, 30, 32, 39, 18\Itagaki Hako\Patrick Seitz\Takeuchi Ryouta\3p4p2q3qLU\M\FE3, FE1, FE11, FE12\Draug
 Effie\Blue, Blade\ \Armor\9, 9, 4, 6, 5\50, 40, 22, 33, 23\HACCAN\Marisha Ray\Kuwahara Yuuki\3p4pLU\F\FE14C\Effie
 Eirika(Bonds)\Red, Blade\ \Infantry\7, 5, 8, 5, 6\42, 26, 35, 26, 28\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\3p4p\F\FE8\Eirika*
@@ -124,7 +124,7 @@ Joshua\Red, Blade\ \Infantry\6, 7, 8, 6, 6\40, 31, 35, 30, 28\Fujiwara Ryo\Todd 
 Julia\Green, Tome, Wind\ \Infantry\6, 8, 5, 2, 7\38, 35, 26, 17, 32\Haimura Kiyotaka\Cassandra Lee Morris\Sakura Ayane\5p\F\FE4\Julia
 Julius\Red, Tome, Dark\ \Infantry\6, 8, 5, 2, 8\38, 35, 27, 16, 35\sachie\Griffin Burns\Sakurai Takahiro\3g4g4g\M\FE4, FE5\Julius
 Kagero\Colorless, Dagger\ \Infantry\3, 8, 7, 4, 6\31, 35, 32, 22, 28\Lack\Sarah Blandy\Murakawa Rie\3p4pLU\F\FE14B\Kagero
-Kagero(Halloween)\Green, Dagger\ \Armor\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\cuboon\Sarah Blandy\Murakawa Rie\5s\F\\Kagero
+Kagero(Halloween)\Green, Dagger\ \Armor\6, 8, 4, 7, 7\41, 38, 21, 32, 33\cuboon\Sarah Blandy\Murakawa Rie\5s\F\\Kagero
 Kagero(Spring)\Colorless, Dagger\ \Flier\5, 8, 8, 2, 6\36, 35, 34, 18, 27\cuboon\Sarah Blandy\Murakawa Rie\5s\F\FE14B\Kagero
 Kana(F)\Green, Dragon\ \Infantry\6, 6, 8, 8, 5\40, 30, 34, 33, 26\Miwabe Sakura\Eden Riegel as Claudia Lenz\Satou Satomi\5p\F\FE14\*Kana, F
 Kana(M)\Blue, Dragon\ \Infantry\6, 6, 8, 7, 6\40, 31, 33, 31, 29\kawasumi\Sandy Fox\Shimazaki Nobunaga\3g4g4g\M\FE14\*Kana, M
@@ -183,8 +183,8 @@ Marth(Masked)\Red, Blade\ \Infantry\7, 8, 8, 5, 3\43, 34, 36, 25, 19\Maiponpon\A
 Mathilda\Blue, Blade\ \Cavalry\5, 6, 7, 4, 8\35, 29, 32, 24, 34\Okaya\Caitlin Glass\Kaida Yuko\3p4p\F\FE15, FE2\Mathilda
 Matthew\Colorless, Dagger\ \Infantry\7, 5, 7, 7, 2\41, 25, 34, 30, 18\Okaya\Ben Diskin\Hoshi Souichirou\3p4p1f4f3qLU\M\FE7\Matthew
 Merric\Green, Tome, Wind\ \Infantry\7, 5, 7, 6, 3\43, 26, 32, 28, 19\Mizuno Kana\Yuri Lowenthal\Hoshi Souichirou\3p4pLU\M\FE3, FE1, FE11, FE12\Merric
-Mia\Red, Blade\ \Infantry\6, 7, 9, 6, 5\38, 32, 40, 28, 25\Yoneyama Mai\Sarah Williams\Asakawa Yuu\5p\F\FE9, FE10\Mia
-Mia(Halloween)\Colorless, Healer\ \Flier\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Yoneyama Mai\Lani Minella\Asakawa Yuu\5s\F\FE9, FE10\Mia
+Mia\Red, Blade\ \Infantry\6, 7, 9, 6, 5\38, 32, 40, 28, 25\Yoneyama Mai\Lani Minella\Asakawa Yuu\5p\F\FE9, FE10\Mia
+Mia(Halloween)\Colorless, Healer\ \Flier\5, 7, 7, 4, 6\36, 30, 34, 22, 28\Yoneyama Mai\Lani Minella\Asakawa Yuu\5s\F\FE9, FE10\Mia
 Micaiah\Blue, Tome, Light\ \Infantry\5, 8, 6, 2, 8\35, 35, 28, 18, 35\Chiko\Veronica Taylor\Kuwatani Natsuko\5p\F\FE10\Micaiah
 Micaiah(Festival)\Red, Tome, Fire\ \Infantry\5, 8, 3, 3, 9\33, 34, 20, 18, 34\Chiko\Veronica Taylor\Kuwatani Natsuko\5s\F\FE10\Micaiah
 Michalis\Green, Blade\ \Flier\7, 8, 5, 8, 3\43, 34, 26, 35, 19\Daisuke Izuka\David Vincent\Fukushima Jun\3g4g3q4q\M\FE3, FE1, FE11, FE12\Michalis
@@ -193,13 +193,13 @@ Mist\Colorless, Healer\ \Infantry\6, 5, 6, 3, 8\39, 27, 28, 20, 34\Miwabe Sakura
 Morgan(F)\Blue, Tome, Thunder\ \Flier\5, 8, 7, 2, 7\37, 34, 30, 16, 33\Tobi\Nicole Balick\Sawashiro Miyuki\5p\F\FE13\*Morgan, F
 Morgan(M)\Red, Tome, Dark\ \Infantry\5, 8, 8, 3, 5\37, 33, 34, 20, 26\Tobi\Todd Haberkorn\Hosoya Yoshimasa\4p5p\M\FE13\*Morgan, M
 Myrrh\Green, Dragon\ \Flier\8, 8, 5, 11, 7\42, 33, 25, 36, 31\Amagaitaro\Erica Lindbeck\Kadowaki Mai\5p\F\FE8\Myrrh
-Myrrh(Halloween)\Red, Dragon\ \Armor\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Amagaitaro\Erica Lindbeck\Kadowaki Mai\5s\F\FE8\Myrrh
+Myrrh(Halloween)\Red, Dragon\ \Armor\8, 10, 5, 11, 7\46, 38, 23, 40, 32\Amagaitaro\Erica Lindbeck\Kadowaki Mai\5s\F\FE8\Myrrh
 Nanna\Colorless, Healer\ \Cavalry\5, 6, 8, 3, 5\36, 27, 34, 21, 26\Konfuzi Kokon\Alicia Stratten\Nazuka Kaori\4p5p\F\FE5, FE4\Nanna
 Narcian\Green, Blade\ \Flier\7, 6, 6, 7, 5\42, 29, 29, 32, 26\Yamada Kotaro\Kaiji Tang\Toriumi Kousuke\2g3g4g2q3q4q4f\M\FE6\Narcian
 Navarre\Red, Blade\ \Infantry\7, 7, 8, 4, 5\42, 31, 37, 23, 24\Yura\T. Axelrod\Koyasu Takehito\3g4g4g3q4q3q4q\M\FE3, FE1, FE11, FE12, FEW\Navarre
 Nephenee\Blue, Blade\ \Infantry\5, 7, 8, 8, 3\37, 31, 35, 34, 20\HACCAN\Julie Ann Taylor\Ohmoto Makiko\5p\F\FE9, FE10\Nephenee
 Niles\Colorless, Bow\ \Infantry\5, 5, 8, 2, 8\37, 25, 34, 17, 34\Yura\Michael Sinterniklaas\Koyasu Takehito\3p4p3qLU\M\FE14C, FEW\Niles
-Niles(Halloween)\Blue, Bow\ \Armor\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Yura\Michael Sinterniklaas\Koyasu Takehito\5s\M\FE14C, FEW\Niles
+Niles(Halloween)\Blue, Bow\ \Armor\5, 7, 9, 5, 6\37, 34, 39, 25, 29\Yura\Michael Sinterniklaas\Koyasu Takehito\5s\M\FE14C, FEW\Niles
 Nina\Colorless, Bow\ \Infantry\5, 7, 8, 2, 7\35, 32, 37, 16, 31\Mikuro\Liv Strander\\5p\F\FE14C\Nina
 Ninian\Blue, Dragon\ \Infantry\8, 5, 8, 4, 6\42, 24, 33, 23, 27\Kippu\Brianna Knickerbocker\Suzaki Aya\5p\F\FE7\Ninian
 Ninian(Bride)\Blue, Tome, Light\ \Flier\5, 6, 8, 3, 6\34, 28, 33, 18, 27\Enkyo Yuichiro\Brianna Knickerbocker\Suzaki Aya\5s\F\FE7\Ninian

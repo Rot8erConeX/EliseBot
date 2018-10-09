@@ -1,7 +1,8 @@
 Flora, Nina, Ophelia, Silas, Ethlyn, Garon, Lavatain, Laegjarn, Helbindi, Fjorm\Arena\02/10/2018, 08/10/2018\Earth, Water
 Flora, Nina, Ophelia, Silas, Ethlyn, Garon, Lavatain, Laegjarn, Helbindi, Fjorm\Arena\09/10/2018, 15/10/2018\Earth, Fire
-Mia(Halloween), Kagero(Halloween), Niles(Halloween), Myrrh(Halloween), Dorcas(Halloween), Alfonse\Arena\16/10/2018, 22/10/2018\Earth, Wind
-Mia(Halloween), Kagero(Halloween), Niles(Halloween), Myrrh(Halloween), Dorcas(Halloween), Alfonse\Arena\23/10/2018, 29/10/2018\Earth, Water
+Myrrh(Halloween), Kagero(Halloween), Niles(Halloween), Mia(Halloween), Dorcas(Halloween), Myrrh, Mia, Dorcas\Tempest\14/10/2018, 23/10/2018
+Tiki(Young)(Earth), Kagero(Halloween), Myrrh(Halloween), Mia(Halloween), Niles(Halloween), Dorcas(Halloween), Saias, Legion, Lon'qu, Alfone\Arena\16/10/2018, 22/10/2018\Earth, Wind
+Tiki(Young)(Earth), Kagero(Halloween), Myrrh(Halloween), Mia(Halloween), Niles(Halloween), Dorcas(Halloween), Saias, Legion, Lon'qu, Alfone\Arena\23/10/2018, 29/10/2018\Earth, Water
 -\Arena\30/10/2018, 05/11/2018\Water, Fire
 -\Arena\06/11/2018, 12/11/2018\Water, Earth
 -\Arena\13/11/2018, 19/11/2018\Water, Wind
