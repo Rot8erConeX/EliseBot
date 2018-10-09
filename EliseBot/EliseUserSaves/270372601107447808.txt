@@ -1,4 +1,4 @@
-Moosie
+Moosie\0xFF00B9\Magenta
 
 Elise
 5\2\Attack\Defense\S
@@ -27,6 +27,6 @@ Reposition
 Glowing Ember\Bonfire
 Distant Counter
 Quick Riposte 1\Quick Riposte 2\Quick Riposte 3
-Hone Atk 1\Hone Atk 2\Hone Dragons
+Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Iote's Shield
 

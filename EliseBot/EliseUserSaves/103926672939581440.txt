@@ -1,0 +1,12 @@
+Mintz\0xFFA500\Orange
+
+Oscar
+5\10\Attack\Defense\S
+Iron Lance\Steel Lance\Slaying Lance\Slaying Lance+\Slaying Lance+ (+) Speed Mode
+Rally Speed\Rally Spd/Def
+Daylight\Sol\Aether
+Darting Blow\Swift Sparrow 1\Swift Sparrow 2
+Renewal 1\Renewal 2\Renewal 3
+Spur Def 1\Spur Spd/Def 1\Spur Spd/Def 2
+Heavy Blade 3
+
