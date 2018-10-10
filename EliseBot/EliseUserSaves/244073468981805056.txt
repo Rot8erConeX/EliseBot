@@ -10,3 +10,13 @@ Guard 1\Guard 2\Guard 3
 Panic Ploy 1\Panic Ploy 2\Panic Ploy 3
 Quick Riposte 3
 
+Ooocast
+5\0\\\-
+Iron Sword\Steel Sword\Armorsmasher\Mana Cat
+~~none~~
+Glowing Ember\Ignis
+Defiant Def 1\Defiant Def 2\Defiant Def 3
+Seal Res 1\Seal Res 2\Seal Res 3
+~~none~~
+ 
+
