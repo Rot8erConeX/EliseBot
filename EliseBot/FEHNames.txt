@@ -854,7 +854,7 @@
 ["FallenCelica", "Celica(Fallen)"]
 ["FallenCellica", "Celica(Fallen)"]
 ["fcelica", "Celica(Fallen)", [368051228325969921, 356477178289848320]]
-["Fellica", "Celica(Fallen)", [397884783222325269]]
+["Fellica", "Celica(Fallen)", [397884783222325269, 393775173095915521]]
 ["FHAnteze", "Celica(Fallen)"]
 ["FHAnthesis", "Celica(Fallen)"]
 ["FHAnthiese", "Celica(Fallen)"]

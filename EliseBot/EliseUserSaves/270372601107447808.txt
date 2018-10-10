@@ -30,3 +30,13 @@ Quick Riposte 1\Quick Riposte 2\Quick Riposte 3
 Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Iote's Shield
 
+Myrrh(Halloween)
+5\0\Attack\HP\-
+Fire Breath\Fire Breath+\Flametongue\Spirit Breath
+~~none~~
+Glowing Ember\Bonfire
+Defense +1\Def/Res +1\Def/Res +2
+Vengeful Fighter 1\Vengeful Fighter 2\Vengeful Fighter 3
+Armor March 1\Armor March 2\Armor March 3
+ 
+
