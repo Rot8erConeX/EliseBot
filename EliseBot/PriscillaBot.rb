@@ -15618,7 +15618,7 @@ bot.command(:edit) do |event, cmd, *args|
   if uid==167657750971547648
     event.respond "This command is for the donors.  Your version of the command is `FEH!devedit`."
     return nil
-  elsif get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(user.id)
+  elsif !get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(uid)
     event.respond "You do not have permission to use this command."
     return nil
   elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
