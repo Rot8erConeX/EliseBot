@@ -3289,6 +3289,7 @@ def skill_tier(name,event) # used by the "used a non-plus version of a weapon th
   s=@skills.map{|q| q}
   j=s[s.find_index{|q| q[0]==name.gsub('Laevatein','Bladeblade')}]
   return 1 if j[8]=='-'
+  return 1+skill_tier(j[8].gsub(' or ',' ').gsub('*','').split(', ')[0],event) if j[8].include?(', or ')
   return 1+skill_tier(j[8].gsub('*','').split(' or ')[0],event) if j[8].include?(' or ')
   return 1+skill_tier(j[8].gsub('*','').split(', ')[0],event) if j[8].include?(', ')
   return 1+skill_tier(j[8].gsub('*',''),event)
@@ -15624,8 +15625,31 @@ bot.command(:edit) do |event, cmd, *args|
   elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
     event.respond "Please wait until my developer makes your storage file."
     return nil
-  elsif (cmd.nil? || cmd.length.zero?) && (args.nil? || args.length.zero?)
-    create_embed(event,"**edit** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!edit create` - creates a new donor unit\n`FEH!edit promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!edit merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!edit nature` - changes a donor unit's nature (*also `ivs`*)\n`FEH!edit support` - causes me to change support ranks of donor units (*also `marry`*)\n\n`FEH!edit equip` - equip skill (*also `skill`*)\n`FEH!edit seal` - equip seal\n`FEH!edit refine` - refine weapon\n\n`FEH!edit send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
+  elsif cmd.downcase=='help' || ((cmd.nil? || cmd.length.zero?) && (args.nil? || args.length.zero?))
+    subcommand=nil
+    subcommand=args[0] unless args.nil? || args.length.zero?
+    subcommand='' if subcommand.nil?
+    if ['create'].include?(subcommand.downcase)
+      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __\*stats__","Allows me to create a new donor unit with the character `unit` and stats described in `stats`.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['promote','rarity','feathers'].include?(subcommand.downcase)
+      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __number__","Causes me to promote the donor unit with the name `unit`.\n\nIf `number` is defined, I will promote the donor unit that many times.\nIf not, I will promote them once.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['remove','delete','send_home','sendhome','fodder'].include?(subcommand.downcase)
+      create_embed(event,"**edit #{subcommand.downcase}** __unit__","Removes a unit from the donor units attached to the invoker.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['merge','combine'].include?(subcommand.downcase)
+      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __number__","Causes me to merge the donor unit with the name `unit`.\n\nIf `number` is defined, I will merge the donor unit that many times.\nIf not, I will merge them once.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['nature','ivs'].include?(subcommand.downcase)
+      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __\*effects__","Causes me to change the nature of the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['equip','skill'].include?(subcommand.downcase)
+      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __\*skill name__","Equips the skill `skill name` on the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['seal'].include?(subcommand.downcase)
+      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __\*skill name__","Equips the skill seal `skill name` on the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['refine','refinery','refinement'].include?(subcommand.downcase)
+      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __\*refinement__","Refines the weapon equipped by the donor unit with the name `unit`, using the refinement `refinement`\n\nIf no refinement is defined and the equipped weapon has an Effect Mode, defaults to that.\nOtherwise, throws an error message if no refinement is defined.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['support','marry'].include?(subcommand.downcase)
+      create_embed(event,"**edit #{subcommand.downcase}** __unit__","Causes me to change the support rank of the donor unit with the name `unit`.  If the donor unit has no rank, will wipe the other donor unit that has support.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    else
+      create_embed(event,"**edit** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!edit create` - creates a new donor unit\n`FEH!edit promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!edit merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!edit nature` - changes a donor unit's nature (*also `ivs`*)\n`FEH!edit support` - causes me to change support ranks of donor units (*also `marry`*)\n\n`FEH!edit equip` - equip skill (*also `skill`*)\n`FEH!edit seal` - equip seal\n`FEH!edit refine` - refine weapon\n\n`FEH!edit send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    end
     return nil
   end
   str=find_name_in_string(event)
