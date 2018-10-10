@@ -335,6 +335,7 @@ Oxorsid\Red, Blade\ \Infantry\7, 6, 9, 8, 7\35, 28, 36, 34, 30\\\\5p\M\\Oxorsid\
 Rin(Maid)\Colorless, Dagger\ \Infantry\5, 6, 8, 1, 8\30, 30, 37, 15, 35\\\\3p4p\F\\Rin(Maid)\Y390152501208285188
 Sage\Blue, Tome, Thunder\ \Infantry\6, 7, 6, 2, 8\40, 33, 29, 16, 34\\\\3p4p\M\\Sage\Y239973891626237952
 Saku\Red, Blade\ \Infantry\5, 10, 6, 10, 2\37, 39, 28, 40, 18\\\\4p5p\M\\Saku\Y197414161435590667
+Shylock\Blue, Dagger\ \Infantry\4, 10, 10, 4, 1\27, 42, 42, 27, 11\\\\5p\M\\Shylock\Y198201016984797184
 Skittles\Red, Blade\ \Infantry\10, 12, 4, 9, 4\40, 47, 19, 39, 22\\\\5p\M\\Skittles\Y457427191714807808
 Teestoo\Green, Blade\ \Cavalry\7, 8, 4, 7, 5\42, 36, 20, 34, 24\\\\1d2d4p5p\M\\Teestoo\Y256659145107701760
 Thomasawesome55\Colorless, Healer\ \Infantry\4, 9, 8, 8, 5\28, 37, 33, 32, 22\\\\3p4p\M\\Thomasawesome55\Y230157846652780556

@@ -360,7 +360,7 @@
 ['Fortify Fliers', [], 1, 'Stat-Buffing 2', [0, 0, 0, 6, 6]]
 ['Fortify Cavalry', [], 1, 'Stat-Buffing 2', [0, 0, 0, 6, 6]]
 ['Fortify Dragons', ['fortifydragons', 'fortifywyrms', 'fortifydragon', 'fortifyserpents', 'fortifywyrm', 'fortifyserpent', 'fortifymanaketes', 'fortifydrakes', 'fortifymanakete', 'fortifydrake', 'fortifydragon'], 1, 'Stat-Buffing 2', [0, 0, 0, 6, 6], true]
-['With Everyone!', ['witheveryone', 'with_everyone', 'weveryone', 'w_everyone', 'withevery1', 'with_every1', 'wevery1', 'w_every1', 'fortifyeveryone', 'fortifyevery1'], 1, 'Stat-Buffing 2', [0, 0, 0, 5, 5], true]
+['With Everyone!', ['witheveryone!', 'with_everyone!', 'witheveryone', 'with_everyone', 'weveryone', 'w_everyone', 'withevery1', 'with_every1', 'wevery1', 'w_every1', 'fortifyeveryone', 'fortifyevery1'], 1, 'Stat-Buffing 2', [0, 0, 0, 5, 5], true]
 ['Atk Tactic 3', ['attacktactic', 'atktactic', 'atttactic', 'attacktactic3', 'atktactic3', 'atttactic3','attacktactic','attacktic','attactic','atttactic','attactic','atktactic','attacktactic3','attacktic3','attactic3','atttactic3','attactic3','atktactic3'], 2, 'Stat-Buffing 2', [0, 6, 0, 0, 0]]
 ['Atk Tactic 2', ['attacktactic2', 'atktactic2', 'atttactic2','attacktactic2','attacktic2','attactic2','atttactic2','attactic2','atktactic2'], 2, 'Stat-Buffing 2', [0, 4, 0, 0, 0]]
 ['Atk Tactic 1', ['attacktactic1', 'atktactic1', 'atttactic1','attacktactic1','attacktic1','attactic1','atttactic1','attactic1','atktactic1'], 2, 'Stat-Buffing 2', [0, 2, 0, 0, 0]]
