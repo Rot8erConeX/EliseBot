@@ -4694,7 +4694,10 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         s='Dark'
         xfooter=xfooter.gsub('Dark','Fire')
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Red_Tome:443172811826003968> **Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      emote='<:Red_Tome:443172811826003968>'
+      moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
+      emote=moji[0].mention unless moji.length<=0
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{emote} **Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Blue Tome Users Only'
       s=find_base_skill(skill,event)
@@ -4704,14 +4707,20 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       elsif s=='Light'
         xfooter=xfooter.gsub('Light','Thunder')
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Blue_Tome:467112472394858508> **Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      emote='<:Blue_Tome:467112472394858508>'
+      moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
+      emote=moji[0].mention unless moji.length<=0
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{emote} **Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Green Tome Users Only'
       s=find_base_skill(skill,event)
       if s=='Gronn'
         xfooter=nil
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Green_Tome:467122927666593822> **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      emote='<:Green_Tome:467122927666593822>'
+      moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
+      emote=moji[0].mention unless moji.length<=0
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{emote} **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Bow Users Only'
       effective.push('<:Icon_Move_Flier:443331186698354698>')
@@ -7153,8 +7162,8 @@ def display_units(event, mode)
           h='<:Colorless_Blade:443692132310712322> Rods' if wpn1[0]==['Colorless', 'Blade']
           # Magic types
           h='<:Fire_Tome:499760605826252800> Fire Mages' if p1[i].include?('Lilina') || (wpn1[0]==['Red', 'Tome', 'Fire'])
-          h='<:Dark_Tome:499760605759143946> Dark Mages' if p1[i].include?('Raigh') || (wpn1[0]==['Red', 'Tome', 'Dark'])
-          h='<:Thunder_Tome:499760605469736981> Thunder Mages' if p1[i].include?('Odin') || (wpn1[0]==['Red', 'Tome', 'Thunder'])
+          h='<:Dark_Tome:499771522630680576> Dark Mages' if p1[i].include?('Raigh') || (wpn1[0]==['Red', 'Tome', 'Dark'])
+          h='<:Thunder_Tome:499790911178539009> Thunder Mages' if p1[i].include?('Odin') || (wpn1[0]==['Red', 'Tome', 'Thunder'])
           h='<:Light_Tome:499760605381787650> Light Mages' if p1[i].include?('Micaiah') || (wpn1[0]==['Red', 'Tome', 'Light'])
           h='<:Wind_Tome:499760605713137664> Wind Mages' if p1[i].include?('Cecilia') || (wpn1[0]==['Green', 'Tome', 'Wind'])
           # Dragon colors
@@ -7379,9 +7388,9 @@ def display_skills(event, mode)
             h='<:Green_Blade:467122927230386207> Axes' if p1[i].include?('Iron Axe') || p1[i].include?('Iron/Steel Axe') || p1[i].include?('Iron/Steel/Silver Axe') || p1[i].include?('Iron/Steel/Silver[+] Axe') || types[0][1]=='Axe Users Only'
             # tome type
             h='<:Fire_Tome:499760605826252800> Fire Magic' if p1[i].include?('Fire') || p1[i].include?('[El]Fire') || p1[i].include?('[El]Fire/Bolganone') || p1[i].include?('[El]Fire/Bolganone[+]') || types[0][2]=='Fire'
-            h='<:Dark_Tome:499760605759143946> Dark Magic' if p1[i].include?('Flux') || p1[i].include?('Flux/Ruin') || p1[i].include?('Flux/Ruin/Fenrir') || p1[i].include?('Flux/Ruin/Fenrir[+]') || types[0][2]=='Flux'
+            h='<:Dark_Tome:499771522630680576> Dark Magic' if p1[i].include?('Flux') || p1[i].include?('Flux/Ruin') || p1[i].include?('Flux/Ruin/Fenrir') || p1[i].include?('Flux/Ruin/Fenrir[+]') || types[0][2]=='Flux'
             h="<:Red_Tome:443172811826003968> Rau\u00F0r Magic" if p1[i].include?('Raudrblade[+]') || types[0][2]=="Rau\u00F0r"
-            h='<:Thunder_Tome:499760605469736981> Thunder Magic' if p1[i].include?('Thunder') || p1[i].include?('[El]Thunder') || p1[i].include?('[El]Thunder/Thoron') || p1[i].include?('[El]Thunder/Thoron[+]') || types[0][2]=='Thunder'
+            h='<:Thunder_Tome:499790911178539009> Thunder Magic' if p1[i].include?('Thunder') || p1[i].include?('[El]Thunder') || p1[i].include?('[El]Thunder/Thoron') || p1[i].include?('[El]Thunder/Thoron[+]') || types[0][2]=='Thunder'
             h='<:Light_Tome:499760605381787650> Light Magic' if p1[i].include?('Light') || p1[i].include?('[El]Light') || p1[i].include?('[El]Light/Shine') || p1[i].include?('[El]Light/Shine[+]') || types[0][2]=='Light'
             h="<:Blue_Tome:467112472394858508> Bl\u00E1r Magic" if p1[i].include?('Blarblade[+]') || types[0][2]=="Bl\u00E1r"
             h='<:Wind_Tome:499760605713137664> Wind Magic' if p1[i].include?('Wind') || p1[i].include?('[El]Wind') || p1[i].include?('[El]Wind/Rexcalibur') || p1[i].include?('[El]Wind/Rexcalibur[+]') || types[0][2]=='Wind'
