@@ -9608,12 +9608,16 @@ def generate_random_unit(event,args,bot)
   else
     w="*#{w}* (#{clazz[0]})"
   end
+  wx=nil
   if w=='*Red Tome*'
-    w="*#{['Fire','Dark'].sample} Mage* (Red Tome)"
+    wx=['Fire','Dark'].sample
+    w="*#{wx} Mage* (Red Tome)"
   elsif w=='*Green Tome*'
-    w="*#{['Wind'].sample} Mage* (Green Tome)"
+    wx=['Wind'].sample
+    w="*#{wx} Mage* (Green Tome)"
   elsif w=='*Blue Tome*'
-    w="*#{['Thunder','Light'].sample} Mage* (Blue Tome)"
+    wx=['Thunder','Light'].sample
+    w="*#{wx} Mage* (Blue Tome)"
   end
   atk='<:GenericAttackS:467065089598423051> Attack'
   atk='<:MagicS:467043867611627520> Magic' if ['Tome','Healer'].include?(clazz[1])
@@ -9642,6 +9646,10 @@ def generate_random_unit(event,args,bot)
   wemote=''
   moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clazz[0]}_#{clazz[1].gsub('Healer','Staff')}"}
   wemote=moji[0].mention unless moji.length<=0
+  unless wx.nil?
+    moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{wx}_#{clazz[1].gsub('Healer','Staff')}"}
+    wemote=moji[0].mention unless moji.length<=0
+  end
   memote=''
   moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{mov}"}
   memote=moji[0].mention unless moji.length<=0
