@@ -7162,7 +7162,7 @@ def display_units(event, mode)
           h='<:Colorless_Blade:443692132310712322> Rods' if wpn1[0]==['Colorless', 'Blade']
           # Magic types
           h='<:Fire_Tome:499760605826252800> Fire Mages' if p1[i].include?('Lilina') || (wpn1[0]==['Red', 'Tome', 'Fire'])
-          h='<:Dark_Tome:499771522630680576> Dark Mages' if p1[i].include?('Raigh') || (wpn1[0]==['Red', 'Tome', 'Dark'])
+          h='<:Dark_Tome:499958772073103380> Dark Mages' if p1[i].include?('Raigh') || (wpn1[0]==['Red', 'Tome', 'Dark'])
           h='<:Thunder_Tome:499790911178539009> Thunder Mages' if p1[i].include?('Odin') || (wpn1[0]==['Red', 'Tome', 'Thunder'])
           h='<:Light_Tome:499760605381787650> Light Mages' if p1[i].include?('Micaiah') || (wpn1[0]==['Red', 'Tome', 'Light'])
           h='<:Wind_Tome:499760605713137664> Wind Mages' if p1[i].include?('Cecilia') || (wpn1[0]==['Green', 'Tome', 'Wind'])
@@ -7388,7 +7388,7 @@ def display_skills(event, mode)
             h='<:Green_Blade:467122927230386207> Axes' if p1[i].include?('Iron Axe') || p1[i].include?('Iron/Steel Axe') || p1[i].include?('Iron/Steel/Silver Axe') || p1[i].include?('Iron/Steel/Silver[+] Axe') || types[0][1]=='Axe Users Only'
             # tome type
             h='<:Fire_Tome:499760605826252800> Fire Magic' if p1[i].include?('Fire') || p1[i].include?('[El]Fire') || p1[i].include?('[El]Fire/Bolganone') || p1[i].include?('[El]Fire/Bolganone[+]') || types[0][2]=='Fire'
-            h='<:Dark_Tome:499771522630680576> Dark Magic' if p1[i].include?('Flux') || p1[i].include?('Flux/Ruin') || p1[i].include?('Flux/Ruin/Fenrir') || p1[i].include?('Flux/Ruin/Fenrir[+]') || types[0][2]=='Flux'
+            h='<:Dark_Tome:499958772073103380> Dark Magic' if p1[i].include?('Flux') || p1[i].include?('Flux/Ruin') || p1[i].include?('Flux/Ruin/Fenrir') || p1[i].include?('Flux/Ruin/Fenrir[+]') || types[0][2]=='Flux'
             h="<:Red_Tome:443172811826003968> Rau\u00F0r Magic" if p1[i].include?('Raudrblade[+]') || types[0][2]=="Rau\u00F0r"
             h='<:Thunder_Tome:499790911178539009> Thunder Magic' if p1[i].include?('Thunder') || p1[i].include?('[El]Thunder') || p1[i].include?('[El]Thunder/Thoron') || p1[i].include?('[El]Thunder/Thoron[+]') || types[0][2]=='Thunder'
             h='<:Light_Tome:499760605381787650> Light Magic' if p1[i].include?('Light') || p1[i].include?('[El]Light') || p1[i].include?('[El]Light/Shine') || p1[i].include?('[El]Light/Shine[+]') || types[0][2]=='Light'
