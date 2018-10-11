@@ -15901,7 +15901,8 @@ bot.command(:edit) do |event, cmd, *args|
   elsif ['seal'].include?(cmd.downcase)
     jn=@units[find_unit(find_name_in_string(event),event)][0]
     sklzz=@skills.map{|q| q}
-    k2=get_weapon(first_sub(args.join(' '),jn,''),event,1)
+    k222=find_name_in_string(event,nil,1)
+    k2=get_weapon(first_sub(args.join(' '),k222[1],''),event,1)
     unless k2[0][k2[0].length-1,1]!=k2[0][k2[0].length-1,1].to_i.to_s || k2[1][k2[1].length-1,1]==k2[1][k2[1].length-1,1].to_i.to_s
       skls=sklzz.reject{|q| q[0][0,q[0].length-1]!=k2[0][0,k2[0].length-1]}.map{|q| q[0]}.sort!
       k2[0]=skls[-1]
@@ -15919,8 +15920,9 @@ bot.command(:edit) do |event, cmd, *args|
     event.respond "The #{sklzz[js][0]} seal has been given to your #{donor_units[j2][0]}!"
   elsif ['equip','skill'].include?(cmd.downcase)
     jn=@units[find_unit(find_name_in_string(event),event)][0]
+    k222=find_name_in_string(event,nil,1)
     sklzz=@skills.map{|q| q}
-    k2=get_weapon(first_sub(args.join(' '),jn,''),event,1)
+    k2=get_weapon(first_sub(args.join(' '),k222[1],''),event,1)
     unless k2[0][k2[0].length-1,1]!=k2[0][k2[0].length-1,1].to_i.to_s || k2[1][k2[1].length-1,1]==k2[1][k2[1].length-1,1].to_i.to_s
       skls=sklzz.reject{|q| q[0][0,q[0].length-1]!=k2[0][0,k2[0].length-1]}.map{|q| q[0]}.sort!
       k2[0]=skls[-1]
