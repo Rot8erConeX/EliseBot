@@ -1639,6 +1639,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill(name.downcase.gsub('slaying','slayer'),event,true) if name.downcase.include?('slaying') && find_skill(name.downcase.gsub('slaying','slayer'),event,true)>=0
   return find_skill(name.downcase.gsub('slayer','slaying'),event,true) if name.downcase.include?('slayer') && find_skill(name.downcase.gsub('slayer','slaying'),event,true)>=0
   return find_skill(name.downcase.gsub('angery','fury'),event,true) if name.downcase.include?('angery') && find_skill(name.downcase.gsub('angery','fury'),event,true)>=0
+  return find_skill(name.downcase.gsub('snek','serpent'),event,true) if name.downcase.include?('snek') && find_skill(name.downcase.gsub('snek','serpent'),event,true)>=0
   return find_skill(name.downcase.gsub('lnd','lifeanddeath'),event,true) if name.downcase.include?('lnd') && find_skill(name.downcase.gsub('lnd','lifeanddeath'),event,true)>=0
   return find_skill(name.downcase.gsub('l&d','lifeanddeath'),event,true) if name.downcase.include?('lnd') && find_skill(name.downcase.gsub('l&d','lifeanddeath'),event,true)>=0
   return find_skill(name.downcase.gsub('berserker','berserk'),event,true) if name.downcase.include?('berserker') && find_skill(name.downcase.gsub('berserker','berserk'),event,true)>=0
@@ -11832,37 +11833,102 @@ def disp_art(event,name,bot,weapon=nil)
     charsx=[[],[],[]]
     for i in 0...chars.length
       x=chars[i]
+      unless x[6].nil? || x[6].length<=0 || x[7].nil? || x[7].length<=0 || x[8].nil? || x[8].length<=0
+        m=x[6].split(' as ')
+        m2=x[7].split(' as ')
+        m3=x[8].split(' as ')
+        charsx[2].push("#{x[0].gsub('Lavatain','Laevatein')}") if m[0]==nammes[0] && m2[0]==nammes[1] && m3[0]==nammes[2]
+      end
       unless x[6].nil? || x[6].length<=0
         m=x[6].split(' as ')
-        charsx[0].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[0]
+        charsx[0].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[0] && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
+      end
+      unless x[7].nil? || x[7].length<=0 || x[8].nil? || x[8].length<=0
+        m=x[7].split(' as ')
+        m2=x[8].split(' as ')
+        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") if m[0]==nammes[1] && m2[0]==nammes[2] && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
       end
       unless x[7].nil? || x[7].length<=0
         m=x[7].split(' as ')
-        charsx[1].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[1]
+        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
       end
       unless x[8].nil? || x[8].length<=0
         m=x[8].split(' as ')
-        charsx[2].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[2]
+        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
       end
     end
     disp='>No information<' if disp.length<=0
   end
+  dispx="#{disp}"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     disp="#{disp}\n" if charsx.map{|q| q.length}.max>0
     disp="#{disp}\n**Same artist:** #{charsx[0].join(', ')}" if charsx[0].length>0
-    disp="#{disp}\n**Same VA(EN):** #{charsx[1].join(', ')}" if charsx[1].length>0
-    disp="#{disp}\n**Same VA(JP):** #{charsx[2].join(', ')}" if charsx[2].length>0
+    if charsx[1].length>0
+      disp="#{disp}\n**Same VA:**"
+      disp2=""
+      c=charsx[1].reject{|q| !q.include?('*[English]*')}.map{|q| q.gsub(' *[English]*','')}
+      disp2="#{disp2}\n*English only:* #{c.join(', ')}" if c.length>0
+      c=charsx[1].reject{|q| !q.include?('*[Japanese]*')}.map{|q| q.gsub(' *[Japanese]*','')}
+      disp2="#{disp2}\n*Japanese only:* #{c.join(', ')}" if c.length>0
+      c=charsx[1].reject{|q| !q.include?('*[Both]*')}.map{|q| q.gsub(' *[Both]*','')}
+      disp2="#{disp2}\n*Both languages:* #{c.join(', ')}" if c.length>0
+      disp2=disp2[1,disp2.length-1]
+      if disp2.include?("\n")
+        disp="#{disp}\n#{disp2}"
+      else
+        disp="#{disp} #{disp2}"
+      end
+    end
+    disp="#{disp}\n**Same __everything__:** #{charsx[2].join(', ')}" if charsx[2].length>0
+    disp=dispx if disp.length>=1900
     event.respond "#{disp}\n\n#{art}"
   else
     flds=[]
-    flds.push(['Same Artist',charsx[0].join("\n"),1]) if charsx[0].length>0
-    flds.push(['Same VA (English)',charsx[1].join("\n")]) if charsx[1].length>0
-    flds.push(['Same VA (Japanese)',charsx[2].join("\n")]) if charsx[2].length>0
+    flds.push(['Same Artist',charsx[0].join("\n")]) if charsx[0].length>0
+    if charsx[1].length>0
+      if charsx[1].length==charsx[1].reject{|q| !q.include?('*[English]*')}.length
+        flds.push(['Same VA (English)',charsx[1].map{|q| q.gsub(' *[English]*','')}.join("\n")])
+      elsif charsx[1].length==charsx[1].reject{|q| !q.include?('*[Japanese]*')}.length
+        flds.push(['Same VA (Japanese)',charsx[1].map{|q| q.gsub(' *[Japanese]*','')}.join("\n")])
+      elsif charsx[1].length==charsx[1].reject{|q| !q.include?('*[Both]*')}.length
+        flds.push(['Same VA (Both)',charsx[1].map{|q| q.gsub(' *[Both]*','')}.join("\n")])
+      else
+        flds.push(['Same VA',charsx[1].join("\n")])
+      end
+    end
+    flds.push(['Same everything',charsx[2].join("\n"),1]) if charsx[2].length>0
     if flds.length.zero?
       flds=nil
+    elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1500 && safe_to_spam?(event)
+      event.channel.send_embed("__**#{j[0].gsub('Lavatain','Laevatein')}**__") do |embed|
+        embed.description=disp
+        embed.color=unit_color(event,find_unit(j[0],event),j[0],0)
+        embed.image = Discordrb::Webhooks::EmbedImage.new(url: art)
+      end
+      if flds.map{|q| q.join("\n")}.join("\n\n").length>=1900
+        for i in 0...flds.length
+          event.channel.send_embed('') do |embed|
+            embed.color=unit_color(event,find_unit(j[0],event),j[0],0)
+            embed.add_field(name: flds[i][0], value: flds[i][1], inline: true)
+          end
+        end
+      else
+        event.channel.send_embed('') do |embed|
+          embed.color=unit_color(event,find_unit(j[0],event),j[0],0)
+          unless flds.nil?
+            for i in 0...flds.length
+              embed.add_field(name: flds[i][0], value: flds[i][1], inline: true)
+            end
+          end
+        end
+      end
+      return nil
+    elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1800
+      disp="#{disp}\nThe list of units with the same artist and/or VA is so long that I cannot fit it into a single embed. Please use this command in PM."
+      flds=nil
     else
-      flds[0][2]=nil if flds.length<3
-      flds[0].compact!
+      flds[-1][2]=nil if flds.length<3
+      flds[-1].compact!
     end
     event.channel.send_embed("__**#{j[0].gsub('Lavatain','Laevatein')}**__") do |embed|
       embed.description=disp
