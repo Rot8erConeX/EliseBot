@@ -15805,13 +15805,13 @@ bot.command(:edit) do |event, cmd, *args|
     refine=''
     for i in 0...args.length
       if refine.length.zero?
-        refine='Effect' if ['effect','special','eff'].include?(args[i].downcase) && words.include?('Effect')
-        refine='Wrathful' if ['wrazzle','wrathful'].include?(args[i].downcase) && words.include?('Wrathful')
-        refine='Dazzling' if ['dazzle','dazzling'].include?(args[i].downcase) && words.include?('Dazzling')
-        refine='Attack' if ['attack','atk','att','strength','str','magic','mag'].include?(args[i].downcase) && words.include?('Attack')
-        refine='Speed' if ['spd','speed'].include?(args[i].downcase) && words.include?('Speed')
-        refine='Defense' if ['defense','def','defence'].include?(args[i].downcase) && words.include?('Defense')
-        refine='Resistance' if ['res','resistance'].include?(args[i].downcase) && words.include?('Resistance')
+        refine='Effect' if ['effect','special','eff','+effect','+special','+eff'].include?(args[i].downcase) && words.include?('Effect')
+        refine='Wrathful' if ['wrazzle','wrathful','+wrazzle','+wrathful','=w'].include?(args[i].downcase) && words.include?('Wrathful')
+        refine='Dazzling' if ['dazzle','dazzling','+dazzle','+dazzling','+d'].include?(args[i].downcase) && words.include?('Dazzling')
+        refine='Attack' if ['attack','atk','att','strength','str','magic','mag','+attack','+atk','+att','+strength','+str','+magic','+mag'].include?(args[i].downcase) && words.include?('Attack')
+        refine='Speed' if ['spd','speed','+spd','+speed'].include?(args[i].downcase) && words.include?('Speed')
+        refine='Defense' if ['defense','def','defence','+defense','+def','+defence'].include?(args[i].downcase) && words.include?('Defense')
+        refine='Resistance' if ['res','resistance','+res','+resistance'].include?(args[i].downcase) && words.include?('Resistance')
       end
     end
     refine='Effect' if refine.length.zero? && words.include?('Effect')
