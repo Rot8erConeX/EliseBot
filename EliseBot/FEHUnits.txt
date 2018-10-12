@@ -263,7 +263,7 @@ Shigure(Performing)\Blue, Tome, Thunder\ \Infantry\5, 7, 7, 4, 5\34, 31, 29, 21,
 Shiro\Blue, Blade\ \Infantry\6, 8, 7, 8, 4\41, 35, 30, 35, 22\Arai Teruko\Kaiji Tang\Takumi Yasuaki\5p\M\FE14B\Shiro
 Siegbert\Red, Blade\ \Cavalry\6, 8, 8, 7, 2\41, 34, 35, 31, 16\Arai Teruko\Todd Haberkorn\Kawanishi Kengo\5p\M\FE14C\Siegbert
 Sigurd\Red, Blade\ \Cavalry\6, 8, 7, 9, 2\41, 35, 32, 34, 17\Sata\Grant George\Morikawa Toshiyuki\5p\M\FE4\Sigurd
-Silas\Blue, Blade\ \Cavalry\6, 8, 5, 8, 4\40, 35, 24, 36, 21\Meka\Dark Pit\\5p\M\FE14\Silas
+Silas\Blue, Blade\ \Cavalry\6, 8, 5, 8, 4\40, 35, 24, 36, 21\Meka\Dark Pit\\4p5p\M\FE14\Silas
 Silvia\Red, Blade\ \Infantry\7, 6, 9, 2, 7\40, 27, 36, 17, 30\Chiko\Laura Post\\4p5p\S\FE4\Silvia
 Soleil\Red, Blade\ \Infantry\5, 9, 8, 6, 5\37, 38, 35, 28, 24\Enkyo Yuichiro\Michelle Ruff\Suzuki Eri\4p5p\F\FE14C\Soleil
 Sonya\Green, Tome, Wind\ \Infantry\5, 8, 7, 1, 7\36, 33, 31, 15, 32\Yura\Tara Sands\Shimoda Rei\5p\F\FE15, FE2\Sonya

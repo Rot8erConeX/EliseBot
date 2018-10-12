@@ -10,6 +10,16 @@ Guard 1\Guard 2\Guard 3
 Panic Ploy 1\Panic Ploy 2\Panic Ploy 3
 Quick Riposte 3
 
+Nowi(Halloween)
+5\1\Speed\Defense\-
+Flux\Ruin\Fenrir\Grimoire
+Reposition
+Dragon Gaze\Draconic Aura
+Life and Death 1\Life and Death 2\Life and Death 3
+Desperation 1\Desperation 2\Desperation 3
+Atk Tactic 1\Atk Tactic 2\Atk Tactic 3
+Guidance 3
+
 Ooocast
 5\0\\\-
 Iron Sword\Steel Sword\Armorsmasher\Mana Cat
@@ -19,4 +29,14 @@ Defiant Def 1\Defiant Def 2\Defiant Def 3
 Seal Res 1\Seal Res 2\Seal Res 3
 ~~none~~
  
+
+Tharja
+5\5\Attack\Defense\-
+Flux\Ruin\Fenrir\Fenrir+\Fenrir+ (+) Speed Mode
+Draw Back
+Dragon Gaze\Dragon Fang
+Life and Death 1\Life and Death 2\Life and Death 3
+Desperation 1\Desperation 2\Desperation 3
+Hone Atk 1\Hone Atk 2\Hone Atk 3
+Attack +3
 

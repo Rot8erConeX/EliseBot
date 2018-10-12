@@ -1,0 +1,42 @@
+Ace\0x9D2A2F\Red
+
+Ephraim
+5\1\Attack\HP\S
+Iron Lance\Steel Lance\Heavy Spear\Siegmund\Flame Siegmund
+Rally Defense\Rally Def/Res
+Daylight\Sol\Aether
+Steady Stance 1\Steady Stance 2\Steady Breath
+Wrath 1\Wrath 2\Wrath 3
+Res Tactic 1\Res Tactic 2\Res Tactic 3
+Def Tactic 3
+
+Ephraim(Brave)
+5\2\Attack\HP\-
+Iron Axe\Steel Axe\Silver Axe\Garm
+Rally Resistance\Rally Def/Res
+Daylight\Sol\Aether
+Close Def 1\Close Def 2\Close Def 3
+Special Fighter 1\Special Fighter 2\Special Fighter 3
+Atk Tactic 1\Atk Tactic 2\Atk Tactic 3
+Close Def 3
+
+Felicia
+5\10\Attack\HP\-
+Iron Dagger\Steel Dagger\Kagami Mochi\Kagami Mochi+\__Kagami Mochi+ (+) Resistance Mode__\Felicia's Plate\Felicia's Plate (+) Effect Mode
+Rally Defense\Rally Atk/Def
+Daylight\Sol\Aether
+Death Blow 1\Swift Sparrow 1\Swift Sparrow 2
+Desperation 1\Desperation 2\Desperation 3
+Def Ploy 1\Def Ploy 2\Def Ploy 3
+Res Ploy 3
+
+Myrrh
+5\1\Resistance\Speed\-
+Fire Breath\Fire Breath+\Flametongue\Great Flame
+Rally Defense\Rally Spd/Def\Rally Spd/Def+
+Daylight\Sol\Aether
+Distant Counter
+Quick Riposte 1\Quick Riposte 2\Quick Riposte 3
+Guidance 1\Guidance 2\Guidance 3
+Iote's Shield
+
