@@ -15662,6 +15662,8 @@ bot.command([:donation, :donate]) do |event, uid|
     if g[2]>=2
       if g[3].nil? || g[3].length.zero? || g[4].nil? || g[4].length.zero?
         str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
+      elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{g[4]}.png")
+        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected.\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4]}"
       else
         str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2713 Given\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4]}"
       end
@@ -15710,6 +15712,7 @@ bot.command(:edit) do |event, cmd, *args|
   if uid==167657750971547648
     event.respond "This command is for the donors.  Your version of the command is `FEH!devedit`."
     return nil
+    uid=244073468981805056
   elsif !get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(uid)
     event.respond "You do not have permission to use this command."
     return nil
