@@ -9212,6 +9212,7 @@ def sort_legendaries(event,bot,mode=0)
   k=k.sort{|a,b| ((a[2][2]<=>b[2][2]) == 0 ? ((a[1][1]<=>b[1][1]) == 0 ? a[0]<=>b[0] : a[1][1]<=>b[1][1]) : a[2][2]<=>b[2][2])}
   for i in 0...k.length
     m=k[i][2][2].reverse
+    k[i][2][3]=k[i][2][2].map{|q| q}
     k[i][1][2]=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Orb_#{['','Red','Blue','Green','Colorless','Gold'][k[i][1][1]]}"}[0].mention
     if m[0]<11
       m[0]='Early '
@@ -9224,13 +9225,13 @@ def sort_legendaries(event,bot,mode=0)
     k[i][2][2]="#{m[0]}#{m[1]} #{m[2]}"
   end
   m=0
-  k2=[[k[0][2][2],[[k[0][1][1],"#{k[0][1][2]} - #{k[0][0]}"]]]]
+  k2=[[k[0][2][2],[[k[0][1][1],"#{k[0][1][2]} - #{k[0][0]}"]],k[0][2][3]]]
   for i in 1...k.length
     if k[i][2][2]==k2[m][0]
       k2[m][1].push([k[i][1][1],"#{k[i][1][2]} - #{k[i][0]}"])
     else
       m+=1
-      k2.push([k[i][2][2],[[k[i][1][1],"#{k[i][1][2]} - #{k[i][0]}"]]])
+      k2.push([k[i][2][2],[[k[i][1][1],"#{k[i][1][2]} - #{k[i][0]}"]],k[i][2][3]])
     end
   end
   for i in 0...k2.length
@@ -9239,6 +9240,28 @@ def sort_legendaries(event,bot,mode=0)
     k2[i][1].push([3,'<:Orb_Green:455053002311467048> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=3}.length>0
     k2[i][1].push([4,'<:Orb_Colorless:455053002152083457> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=4}.length>0
     k2[i][1]=k2[i][1].sort{|a,b| a[0]<=>b[0]}.map{|q| q[1]}.join("\n")
+  end
+  bonus_load()
+  bx=@bonus_units.reject{|q| q[1]!='Arena'}
+  for i in 0...k2.length
+    unless k2[i][2].nil?
+      t2=Time.new(k2[i][2][0],k2[i][2][1],k2[i][2][2])
+      t2+=(9-t2.wday)*24*60*60
+      tm="#{t2.year}#{'0' if t2.month<10}#{t2.month}#{'0' if t2.day<10}#{t2.day}".to_i
+      b2=bx.reject{|q| q[2].nil? || q[2][0].split(', ')[0].split('/').reverse.join('').to_i<=tm}
+      if b2.length>0
+        lemoji1=''
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{b2[0][3][0]}"}
+        lemoji1=moji[0].mention unless moji.length<=0
+        if count_in(k2[i][1].split("\n").map{|q| q.split('>')[1]}," - *unknown*")>1
+          k2[i][0]="#{k2[i][0]} #{lemoji1}"
+        else
+          k2[i][1]=k2[i][1].gsub(' - *unknown*',"#{lemoji1} - *unknown*")
+        end
+      end
+      k2[i][2]=nil
+      k2[i].compact!
+    end
   end
   t=Time.now
   timeshift=8
@@ -9313,7 +9336,17 @@ def sort_legendaries(event,bot,mode=0)
     return k2.map{|q| "*#{q[0]}*: #{q[1].gsub("\n",', ').gsub(' - ','')}"}.join("\n")
   else
     if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      event.respond k2.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n")
+      msg="__#{k2[0][0]}__\n#{k2[0][1]}"
+      for i in 1...k2.length
+        msg=extend_message(msg,"__#{k2[i][0]}__\n#{k2[i][1]}",event,2)
+      end
+      event.respond msg
+    elsif k2.length>5 || k2.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n").length>1500
+      for i in 0...k2.length/3+1
+        x=''
+        x="__**Legendary Heroes' Appearances**__" if i==0
+        create_embed(event,x,'',avg_color(c),nil,nil,k2[3*i,[3,k2.length-3*i].min],2)
+      end
     else
       create_embed(event,"__**Legendary Heroes' Appearances**__",'',avg_color(c),nil,nil,k2,2)
     end
@@ -9343,7 +9376,41 @@ def sort_legendaries(event,bot,mode=0)
         m2[i][1]=m2[i][1].join(j)
       end
       if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-        event.respond "__**Seasonal units that have not yet been on a Legendary Banner**__\n#{m2.map{|q| "*#{q[0]}*: #{q[1]}"}}"
+        msg="__**Seasonal units that have not yet been on a Legendary Banner**__"
+        tolongs=[]
+        for i in 0...m2.length
+          if m2[i][1].length>1900
+            tolongs.push(m2[i][0].split('>')[1])
+          else
+            msg=extend_message(msg,"*#{m2[i][0]}*: #{m2[i][1]}",event)
+          end
+        end
+        msg=extend_message(msg,"There are too many seasonal #{list_lift(tolongs,'and')} heroes to display.",event) if tolongs.length>0
+        event.respond msg
+      elsif m2.map{|q| "*#{q[0]}*: #{q[1]}"}.join("\n\n").length>1700
+        tolongs=[]
+        if m2[0][1].length>1900
+          event.respond "__**Seasonal units that have not yet been on a Legendary Banner**__"
+          tolongs.push('Red')
+        else
+          create_embed(event,"__**Seasonal units that have not yet been on a Legendary Banner**__",'',0xE22141,nil,nil,triple_finish(m2[0][1].split("\n")),2)
+        end
+        if m2[1][1].length>1900
+          tolongs.push('Blue')
+        else
+          create_embed(event,'','',0x2764DE,nil,nil,triple_finish(m2[1][1].split("\n")),2)
+        end
+        if m2[2][1].length>1900
+          tolongs.push('Green')
+        else
+          create_embed(event,'','',0x09AA24,nil,nil,triple_finish(m2[2][1].split("\n")),2)
+        end
+        if m2[3][1].length>1900
+          tolongs.push('Colorless')
+        else
+          create_embed(event,'','',0x64757D,nil,nil,triple_finish(m2[3][1].split("\n")),2)
+        end
+        event.respond "There are too many seasonal #{list_lift(tolongs,'and')} heroes to display." if tolongs.length>0
       else
         create_embed(event,"__**Seasonal units that have not yet been on a Legendary Banner**__",'',0x9400D3,nil,nil,m2,2)
       end
@@ -9364,7 +9431,41 @@ def sort_legendaries(event,bot,mode=0)
         m2[i][1]=m2[i][1].join(j)
       end
       if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-        event.respond "__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__\n#{m2.map{|q| "*#{q[0]}*: #{q[1]}"}}"
+        msg="__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__"
+        tolongs=[]
+        for i in 0...m2.length
+          if m2[i][1].length>1900
+            tolongs.push(m2[i][0].split('>')[1])
+          else
+            msg=extend_message(msg,"*#{m2[i][0]}*: #{m2[i][1]}",event)
+          end
+        end
+        msg=extend_message(msg,"There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes to display.",event) if tolongs.length>0
+        event.respond msg
+      elsif m2.map{|q| "*#{q[0]}*: #{q[1]}"}.join("\n\n").length>1700
+        tolongs=[]
+        if m2[0][1].length>1900
+          event.respond "__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__"
+          tolongs.push('Red')
+        else
+          create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__",'',0xE22141,nil,nil,triple_finish(m2[0][1].split("\n")),2)
+        end
+        if m2[1][1].length>1900
+          tolongs.push('Blue')
+        else
+          create_embed(event,'','',0x2764DE,nil,nil,triple_finish(m2[1][1].split("\n")),2)
+        end
+        if m2[2][1].length>1900
+          tolongs.push('Green')
+        else
+          create_embed(event,'','',0x09AA24,nil,nil,triple_finish(m2[2][1].split("\n")),2)
+        end
+        if m2[3][1].length>1900
+          tolongs.push('Colorless')
+        else
+          create_embed(event,'','',0x64757D,nil,nil,triple_finish(m2[3][1].split("\n")),2)
+        end
+        event.respond "There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes to display." if tolongs.length>0
       else
         create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__",'',0x9400D3,nil,nil,m2,2)
       end
@@ -12054,17 +12155,20 @@ def learnable_skills(event,name,bot,weapon=nil)
   end
   if !safe_to_spam?(event)
     event.respond 'For the passive skills this unit can learn, please use this command in PM.'
+    event.respond 'Any undisplayed skill categories have too many applicable skills to display.' if p1.map{|q| q.gsub("\n",', ').length}.max>1900
     return nil
   elsif p1[3].length+p1[4].length+p1[5].length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     msg=''
-    msg=extend_message(msg,"<:Passive_A:443677024192823327> *Passives(A):* #{p1[3].gsub("\n",', ')}",event,2)
-    msg=extend_message(msg,"<:Passive_B:443677023257493506> *Passives(B):* #{p1[4].gsub("\n",', ')}",event,2)
-    msg=extend_message(msg,"<:Passive_C:443677023555026954> *Passives(C):* #{p1[5].gsub("\n",', ')}",event,2)
-    msg=extend_message(msg,"<:Passive_S:443677023626330122> *Passives(S):* #{p1[6].gsub("\n",', ')}",event,2) unless p1[6].nil?
+    msg=extend_message(msg,"<:Passive_A:443677024192823327> *Passives(A):* #{p1[3].gsub("\n",', ')}",event,2) unless p1[3].gsub("\n",', ').length>1900
+    msg=extend_message(msg,"<:Passive_B:443677023257493506> *Passives(B):* #{p1[4].gsub("\n",', ')}",event,2) unless p1[4].gsub("\n",', ').length>1900
+    msg=extend_message(msg,"<:Passive_C:443677023555026954> *Passives(C):* #{p1[5].gsub("\n",', ')}",event,2) unless p1[5].gsub("\n",', ').length>1900
+    msg=extend_message(msg,"<:Passive_S:443677023626330122> *Passives(S):* #{p1[6].gsub("\n",', ')}",event,2) unless p1[6].nil? || p1[6].gsub("\n",', ').length>1900
+    msg=extend_message(msg,'Any undisplayed skill categories have too many applicable skills to display.',event,2) if p1.map{|q| q.gsub("\n",', ').length}.max>1900
     event.respond msg
   else
     create_embed(event,'','',unit_color(event,j),nil,nil,[['<:Passive_A:443677024192823327> Passives(A)',p1[3]],['<:Passive_B:443677023257493506> Passives(B)',p1[4]],['<:Passive_C:443677023555026954> Passives(C)',p1[5]]],4)
-    create_embed(event,"__<:Passive_S:443677023626330122> Seals **#{untz[j][0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,j)} can equip__",'',unit_color(event,j),nil,nil,triple_finish(p1[6].split("\n")),4)
+    create_embed(event,"__<:Passive_S:443677023626330122> Seals **#{untz[j][0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,j)} can equip__",'',unit_color(event,j),nil,nil,triple_finish(p1[6].split("\n")),4) unless p1[6].nil?
+    event.respond 'Any undisplayed skill categories have too many applicable skills to display.' if p1.map{|q| q.gsub("\n",', ').length}.max>1900
   end
   return nil
 end
@@ -12213,27 +12317,32 @@ def banner_list(event,name,bot,weapon=nil)
   non_focus=[[],[]]
   if j[9][0].include?('5p')
     k=untz.reject{|q| !q[9][0].include?('5p') || !q[13][0].nil?}
+    k.push(j) unless k.include?(j)
     non_focus[0].push("5<:Icon_Rarity_5:448266417553539104> Non-Focus - #{len % (five_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[0]/k.length)}% (Actual)") unless five_star[0]<=0
       non_focus[1].push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Hero Fest only) - #{len % (five_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[1]/k.length)}% (Actual)") unless five_star[1]<=0
     end
   if j[9][0].include?('4p')
     k=untz.reject{|q| !q[9][0].include?('4p') || !q[13][0].nil?}
+    k.push(j) unless k.include?(j)
     non_focus[0].push("4<:Icon_Rarity_4:448266418459377684> (standard banner) - #{len % (four_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (four_star[0]/k.length)}% (Actual)") unless four_star[0]<=0
     non_focus[0].push("4<:Icon_Rarity_4:448266418459377684> Non-Focus - #{len % ((four_star[0]/2)/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % ((four_star[0]/2)/k.length)}% (Actual)") unless four_star[0]<=0
     non_focus[1].push("4<:Icon_Rarity_4:448266418459377684> all the time - #{len % (four_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (four_star[1]/k.length)}% (Actual)") unless four_star[1]<=0
   end
   if j[9][0].include?('3p')
     k=untz.reject{|q| !q[9][0].include?('3p') || !q[13][0].nil?}
+    k.push(j) unless k.include?(j)
     non_focus[0].push("3<:Icon_Rarity_3:448266417934958592> all the time - #{len % (three_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (three_star[0]/k.length)}% (Actual)") unless three_star[0]<=0
     non_focus[1].push("3<:Icon_Rarity_3:448266417934958592> all the time - #{len % (three_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (three_star[1]/k.length)}% (Actual)") unless three_star[1]<=0
   end
   if j[9][0].include?('2p')
     k=untz.reject{|q| !q[9][0].include?('2p') || !q[13][0].nil?}
+    k.push(j) unless k.include?(j)
     non_focus[0].push("2<:Icon_Rarity_2:448266417872044032> all the time - #{len % (two_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (two_star[0]/k.length)}% (Actual)") unless two_star[0]<=0
     non_focus[1].push("2<:Icon_Rarity_2:448266417872044032> all the time - #{len % (two_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (two_star[1]/k.length)}% (Actual)") unless two_star[1]<=0
   end
   if j[9][0].include?('1p')
     k=untz.reject{|q| !q[9][0].include?('1p') || !q[13][0].nil?}
+    k.push(j) unless k.include?(j)
     non_focus[0].push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % (one_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (one_star[0]/k.length)}% (Actual)") unless one_star[0]<=0
     non_focus[1].push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % (one_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (one_star[1]/k.length)}% (Actual)") unless one_star[1]<=0
   end
