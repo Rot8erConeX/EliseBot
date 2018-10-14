@@ -9415,7 +9415,7 @@ def sort_legendaries(event,bot,mode=0)
         create_embed(event,"__**Seasonal units that have not yet been on a Legendary Banner**__",'',0x9400D3,nil,nil,m2,2)
       end
       data_load()
-      k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || q[9][0]!='5p' || m.include?(q[0])}.uniq
+      k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('p') || q[9][0].include?('4p') || q[9][0].include?('3p') || q[9][0].include?('2p') || q[9][0].include?('1p') || m.include?(q[0])}.uniq
       m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Gold:455053002911514634>Gold',[]]]
       for i in 0...k.length
         m2[0][1].push(k[i][0]) if k[i][1][0]=='Red'
