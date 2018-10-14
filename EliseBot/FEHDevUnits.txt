@@ -53,7 +53,7 @@ Hone Atk 1\Hone Atk 2\Hone Atk 3
 Spur Atk 2
 
 Cherche
-5\6\Attack\Speed\-
+5\7\Attack\Speed\-
 Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\__Slaying Hammer+ (+) Effect Mode__\Cherche's Axe\~~Cherche's Axe (+) Effect Mode~~
 Pivot
 New Moon\Luna
@@ -150,7 +150,7 @@ Chilling Wind\Glacies
 Darting Blow 1\Darting Blow 2\Darting Blow 3
 Chilling Seal
 Res Ploy 1\Res Ploy 2\Res Ploy 3
-Atk Ploy 2
+Darting Stance 2
 
 Kana(F)
 5\0\Attack\Defense\-
@@ -190,7 +190,7 @@ Night Sky\Glimmer
 HP +3\HP Def 1\HP Def 2
 Vantage 1\Vantage 2\Vantage 3
 Infantry Pulse 1\Infantry Pulse 2\Infantry Pulse 3
-Heavy Blade 2
+Heavy Blade 3
 
 Matthew
 4\10\Resistance\Speed\-
