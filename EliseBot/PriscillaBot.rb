@@ -4222,6 +4222,15 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
     end
   end
   w2=@skills[find_skill(weapon,event)]
+  if w2[15].nil?
+    refinement=nil
+  elsif w2[15].length<2 && refinement=='Effect'
+    refinement=nil
+  elsif w2[15][0,1].to_i.to_s==w2[15][0,1] && refinement=='Effect'
+    refinement=nil if w2[15][1,1]=='*'
+  elsif w2[0,1]=='-' && w2[15][1,1].to_i.to_s==w2[15][1,1] && refinement=='Effect'
+    refinement=nil if w2[15][2,1]=='*'
+  end
   unitz=untz[find_unit(name,event)]
   if name=='Robin'
     if (" #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned') || " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')) && !weapon2.nil?
