@@ -100,8 +100,8 @@ Winter's Envoy\3\Chrom(Winter), Lissa(Winter), Robin(M)(Winter), Tharja(Winter)\
 Tana & Amelia's Battle\3\Amelia, Eirika(Bonds), Tana\5\14/12/2017, 23/12/2017\BHB
 Weapons to Refine (New Power, November 2017)\3\Ephraim, Lyn, Takumi\5\07/12/2017, 21/12/2017\NewPower
 Children of Fate\3\Shiro, Siegbert, Soleil\5\04/12/2017, 18/12/2017
-Unrequitted Love, Block A\3\Faye, Priscilla, Rhajat, Tharja\5\02/12/2017, 12/12/2017\VotingGauntler
-Unrequitted Love, Block B\3\Catria, Dorcas, Katarina, Seliph\5\02/12/2017, 12/12/2017\VotingGauntler
+Unrequited Love, Block A\3\Faye, Priscilla, Rhajat, Tharja\5\02/12/2017, 12/12/2017\VotingGauntler
+Unrequited Love, Block B\3\Catria, Dorcas, Katarina, Sigurd\5\02/12/2017, 12/12/2017\VotingGauntler
 Legendary Heroes - Fjorm\-8\Ayra, Caeda(Bride), Camilla(Spring), Celica, Cordelia(Bride), Deirdre, Fjorm, Genny, Hector, Ike, Lyn(Brave), Xander(Spring)\5\28/11/2017, 04/12/2017\Legendary
 Heroes with Powerful Specials\3\Karel, Nephenee, Sonya\5\23/11/2017, 07/12/2017\SkillBanner
 "Less Than Heroic" Tempest Trials\3\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5\18/11/2017, 05/12/2017\Tempest, CYL

@@ -71,7 +71,7 @@ Eliwood\Red, Blade\ \Cavalry\6, 7, 6, 4, 7\39, 31, 30, 23, 32\Miyuu\Yuri Lowenth
 Eliwood(Valentines)\Blue, Blade\ \Armor\7, 9, 7, 6, 6\47, 38, 32, 29, 29\Ito Misei\Yuri Lowenthal\Sakurai Takahiro\4t5t0s\M\FE7, FE6\Eliwood
 Ephraim\Blue, Blade\ \Infantry\8, 8, 5, 7, 3\45, 35, 25, 32, 20\Asatani Tomoyo\Greg Chun\Yashiro Taku\5p\M\FE8\Ephraim
 Ephraim(Brave)\Green, Blade\ \Armor\7, 9, 6, 8, 5\46, 38, 27, 37, 26\Wada Sachiko\Greg Chun\Yashiro Taku\5p\M\FE8\Ephraim
-Ephraim(Fire)\Blue, Blade\Fire, Defense, 21/10/2018\Cavalry\7, 8, 6, 7, 3\43, 36, 27, 33, 18\Asatani Tomoyo\Greg Chun\Yashiro Taku\5s\M\FE8\Ephraim
+Ephraim(Fire)\Blue, Blade\Fire, Defense, 31/10/2018\Cavalry\7, 8, 6, 7, 3\43, 36, 27, 33, 18\Asatani Tomoyo\Greg Chun\Yashiro Taku\5s\M\FE8\Ephraim
 Ethlyn\Colorless, Healer\ \Cavalry\6, 6, 7, 6, 2\38, 28, 34, 26, 20\kaya8\Allegra Clarke\\4t5t\F\FE4\Ethlyn
 Est\Blue, Blade\ \Flier\5, 8, 6, 5, 7\36, 35, 30, 24, 32\Miwabe Sakura\Brianna Knickerbocker\Murakawa Rie\3p4p3qLU\F\FE3, FE1, FE2, FE11, FE12, FE15\Est
 Fae\Green, Dragon\ \Infantry\10, 9, 7, 5, 6\46, 33, 28, 25, 30\Himukai Yuji\Sarah Blandy\Ozawa Ari\3p4pLU\F\FE6, FE7\Fae
@@ -104,7 +104,7 @@ Hector(Valentines)\Green, Blade\ \Armor\8, 10, 4, 9, 4\50, 38, 21, 40, 24\Suekan
 Helbindi\Green, Blade\ \Infantry\8, 8, 2, 8, 7\44, 35, 18, 35, 31\Maeshima Shigeki\Raymond K. Essel\Nakai Kazuya\5p\M\FEH\Helbindi
 Henry\Red, Tome, Dark\ \Infantry\8, 4, 4, 7, 5\45, 23, 22, 32, 25\Kusugi Toku\Bryce Papenbrook\Okamura Akemi\3p4p3qLU\M\FE13\Henry
 Henry(Halloween)\Green, Tome, Wind\ \Armor\5, 7, 7, 6, 7\36, 33, 34, 26, 36\Kusugi Toku\Bryce Papenbrook\Okamura Akemi\5s\M\FE13\Henry
-Hinata\Red, Blade\ \Infantry\8, 7, 5, 8, 3\47, 32, 24, 36, 18\Ueda Yumehito\Cam Clarke as Delem Donaldson\Ichiki Mitsuhiro\3p4p3qLU\M\FE14B\Hinata
+Hinata\Red, Blade\ \Infantry\8, 7, 5, 8, 3\47, 32, 24, 36, 18\Ueda Yumehito\Cam Clarke as Delem Donaldson\Ichiki Mitsuhiro\3p4p3q4fLU\M\FE14B\Hinata
 Hinoka(Launch)\Blue, Blade\ \Flier\6, 9, 7, 5, 4\41, 35, 32, 25, 24\HACCAN\Cindy Robinson\Nazuka Kaori\5pLU\F\FE14B, FEW\Hinoka*
 Hinoka(Wings)\Colorless, Bow\ \Flier\5, 8, 8, 2, 6\37, 32, 35, 17, 29\Chiko\Cindy Robinson\Nazuka Kaori\5p\F\FE14B, FEW\Hinoka
 Ike\Red, Blade\ \Infantry\7, 8, 7, 7, 2\42, 35, 31, 32, 18\Meka\Greg Chun\Hagi Michihiko\5p\M\FE9, FE10, SSBB, SSBProM, SSB4, (a)FE14, (a)FE15, (a)STEAM, SSBU\Ike
@@ -170,7 +170,7 @@ Lyn\Red, Blade\ \Infantry\5, 6, 8, 5, 7\37, 28, 37, 26, 29\Yamada Kotaro\Wendee 
 Lyn(Brave)\Colorless, Bow\ \Cavalry\5, 8, 8, 2, 6\35, 33, 35, 18, 28\Yamada Kotaro\Wendee Lee\Ohmoto Makiko\5p\F\FE7, SSBProM, FEW\Lyn
 Lyn(Bride)\Colorless, Healer\ \Infantry\6, 6, 7, 4, 5\39, 28, 34, 23, 24\Yamada Kotaro\Wendee Lee\Ohmoto Makiko\5s\F\FE7, SSBProM, FEW\Lyn
 Lyn(Valentines)\Blue, Tome, Light\ \Armor\5, 6, 8, 6, 7\37, 31, 36, 27, 34\Wada Sachiko\Wendee Lee\Ohmoto Makiko\5s\F\FE7, SSBProM, FEW\Lyn
-Lyn(Wind)\Green, Bow\Wind, Attack, 21/10/2018\Infantry\5, 6, 8, 4, 6\36, 31, 36, 21, 27\Wada Sachiko\Wendee Lee\Ohmoto Makiko\5s\F\FE7, SSBProM, FEW\Lyn
+Lyn(Wind)\Green, Bow\Wind, Attack, 31/10/2018\Infantry\5, 6, 8, 4, 6\36, 31, 36, 21, 27\Wada Sachiko\Wendee Lee\Ohmoto Makiko\5s\F\FE7, SSBProM, FEW\Lyn
 Lyon\Red, Tome, Dark\ \Infantry\6, 7, 4, 6, 6\41, 34, 21, 26, 30\Miyajima Haru\Mark P. Whitten\Nakamura Yuichi\3g4g4g\M\FE8\Lyon
 Mae\Blue, Tome, Thunder\ \Infantry\5, 8, 7, 2, 6\35, 36, 31, 16, 30\Gaou\Cherami Leigh\Inagawa Eri\3p4p\F\FE15, FE2\Mae
 Maria\Colorless, Healer\ \Infantry\5, 6, 8, 3, 6\36, 27, 34, 19, 32\kaya8\Wendee Lee\Suzaki Aya\3p4pLU\F\FE3, FE1, FE11, FE12\Maria
@@ -230,7 +230,7 @@ Reinhardt(Bonds)\Blue, Tome, Thunder\ \Cavalry\6, 7, 4, 6, 4\38, 32, 23, 27, 25\
 Reinhardt(World)\Red, Blade\ \Cavalry\6, 8, 4, 7, 6\40, 35, 23, 31, 28\cuboon\Chris Smith\Tone Kentarou\5p\M\FE5\Reinhardt
 Rhajat\Green, Tome, Wind\ \Infantry\5, 8, 8, 4, 4\36, 35, 34, 21, 24\Kusakihara Toshiyuki\Stephanie Sheh\Takada Yuuki\5p\F\FE14B\Rhajat
 Robin(F)\Green, Tome, Wind\ \Infantry\6, 6, 6, 6, 4\40, 29, 29, 29, 22\Ueda Yumehito\Lauren Landa\Sawashiro Miyuki\2g3g4g4g2q3q4q\F\FE13, SSB4, FEW, SSBU\*Robin, F
-Robin(F)(Fallen)\Colorless, Dragon\Earth, Speed, 21/10/2018\Flier\7, 7, 8, 6, 5\40, 32, 35, 30, 25\Chiko\Lauren Landa\Sawashiro Miyuki\5s\F\FE13, FE15\Robin, F
+Robin(F)(Fallen)\Colorless, Dragon\Earth, Speed, 31/10/2018\Flier\7, 7, 8, 6, 5\40, 32, 35, 30, 25\Chiko\Lauren Landa\Sawashiro Miyuki\5s\F\FE13, FE15\Robin, F
 Robin(F)(Summer)\Blue, Blade\ \Infantry\4, 7, 8, 6, 6\35, 32, 34, 28, 29\Mayo\Lauren Landa\Sawashiro Miyuki\5s\F\FE13, SSB4, FEW, SSBU\Robin, F
 Robin(M)\Blue, Tome, Thunder\ \Infantry\6, 6, 6, 6, 4\40, 29, 29, 29, 22\Fujiwara Ryo\David Vincent\Hosoya Yoshimasa\3p4p3qLU\M\FE13, SSB4, FEW, (a)FE14, (a)FE15, (a)STEAM, SSBU\*Robin, M
 Robin(M)(Fallen)\Green, Dragon\ \Armor\7, 10, 4, 8, 6\48, 40, 24, 35, 27\Okuma Yugo\David Vincent\Hosoya Yoshimasa\5p\M\FE13, FE15\Robin, M
@@ -344,7 +344,7 @@ Balder\Red, Blade\ \Armor\5, 12, 1, 12, 1\44, 49, 15, 48, 15\\\\4p5p\M\\Balder\B
 Meta\Blue, Dragon\ \Infantry\7, 6, 4, 8, 6\44, 30, 22, 35, 27\\\\5p\M\\Meta\B266883003425226752
 Bluezie\Green, Bow\Earth, Speed\Infantry\5, 7, 8, 6, 2\35, 33, 35, 30, 15\\\\5s\F\FE14g\Bluezie\GT256502173788143626
 Dizzy\Blue, Tome, Thunder\ \Cavalry\7, 8, 1, 8, 6\34, 35, 14, 34, 29\\\\3p4p\F\FE14g\Dizzy\G154429061693833218
-Draco(Gates)\Gold, Beast\ \Infantry\5, 9, 10, 7, 6\32, 37, 39, 28, 26\\\\3p4p\M\FE14g\Draco(Gates)\GT203335514470875137
+Draco(Gates)\Blue, Beast\ \Infantry\5, 9, 10, 7, 6\32, 37, 39, 28, 26\\\\3p4p\M\FE14g\Draco(Gates)\GT203335514470875137
 Dwight(Gates)\Colorless, Bow\ \Armor\7, 5, 4, 7, 7\45, 25, 22, 33, 33\\\\2g3g4g4g\M\FE14g\Dwight(Gates)\G
 Erich\Red, Tome, Dark\ \Cavalry\3, 8, 1, 8, 7\30, 35, 14, 33, 32\\\\3p4p\M\FE14g\Erich\G225724044241010688
 Gray(Gates)\Red, Blade\ \Infantry\7, 9, 7, 6, 2\46, 37, 31, 27, 17\\\\3p4p\M\FE14g\Gray(Gates)\G185540673968013313
@@ -354,4 +354,4 @@ Rudyard\Colorless, Dagger\ \Infantry\5, 6, 8, 3, 6\37, 29, 35, 19, 28\\\\3g4g4g\
 Sheldon(Gates)\Green, Blade\ \Flier\5, 8, 7, 5, 6\38, 34, 33, 24, 28\\\\4t5t\M\FE14g\Sheldon(Gates)\G284786055083720704
 Steel\Red, Blade\ \Cavalry\5, 8, 9, 4, 4\38, 34, 36, 23, 22\\\\4p5p\M\FE14g\Steel\G170070293493186561
 Elentil\Green, Blade\ \Flier\4, 8, 5, 6, 8\30, 35, 26, 31, 35\\\\4p5p\M\FE14g\Elentil\gt
-Oregano\Gold, Beast\ \Infantry\5, 12, 12, 4, 4\31, 45, 44, 21, 21\BluechanXD (dA)\\\4p5p\F\FE14g\Oregano\gt
+Oregano\Green, Beast\ \Infantry\5, 12, 12, 4, 4\31, 45, 44, 21, 21\BluechanXD (dA)\\\4p5p\F\FE14g\Oregano\gt
