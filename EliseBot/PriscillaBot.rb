@@ -9850,7 +9850,10 @@ def show_bonus_units(event,args='',bot)
         element=b[i][3][1]
         moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
         if i==0
-          m.push("Current week: #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}")
+          t2=Time.new(2017,2,2)-60*60
+          t2=t-t2
+          date=(((t2.to_i/60)/60)/24)
+          m.push("Current week: #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}") if date%7 != 4 || 15-t.hour>=0
         elsif i==1
           m.push("Next week: #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}")
         elsif m[0,1]=='-' && s[1]>10
@@ -9865,13 +9868,14 @@ def show_bonus_units(event,args='',bot)
       if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         event.respond "__**#{ss}**__\n\n#{m.join("\n")}" unless s[0]>2
       else
-        flds.push([ss,m.join("\n")])
         if safe_to_spam?(event)
+          flds.push([ss,m.join("\n")])
           for i in 0...flds.length
             create_embed(event,"__**#{flds[i][0]}**__",flds[i][1],0x002837)
           end
         else
-          create_embed(event,"__**Arena Bonus Units**__",'',0x002837,nil,nil,flds[0,2])
+          puts flds.map{|q| q.to_s}
+          create_embed(event,"__**Arena Bonus Units**__",'',0x002837,nil,nil,flds[0,[2,flds.length].min])
         end
       end
     end
