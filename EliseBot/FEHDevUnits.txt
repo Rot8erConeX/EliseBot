@@ -28,9 +28,9 @@ Fire\Elfire\Bolganone\Ragnarok\Ragnarok (+) Effect Mode
 Draw Back
 Chilling Wind\Iceberg
 Death Blow 1\Swift Sparrow 1\Swift Sparrow 2
-Renewal 1\Renewal 2\Renewal 3
+Escape Route 1\Escape Route 2\Escape Route 3
 Spur Def 1\Spur Def 2\Spur Def 3
-Hardy Bearing 3
+Brazen Atk/Res 2
 
 Celica(Brave)
 5\0\Defense\Speed\-
@@ -54,7 +54,7 @@ Spur Atk 2
 
 Cherche
 5\7\Attack\Speed\-
-Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\__Slaying Hammer+ (+) Effect Mode__\Cherche's Axe\~~Cherche's Axe (+) Effect Mode~~
+Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\__Slaying Hammer+ (+) Effect Mode__\Cherche's Axe\Cherche's Axe (+) Effect Mode
 Pivot
 New Moon\Luna
 Attack +1\Attack +2\Attack +3
