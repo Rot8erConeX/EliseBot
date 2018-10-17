@@ -140,9 +140,10 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort','worst',
      'sortstat','statsort','liststats','statslist','highest','best','highestamong','highestin','lowest','lowestamong','lowestin','manual','book','combatmanual',
      'headpat','pat','patpat','randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats','edit','bonus','arena','tt',
-     'arenabonus','arena_bonus','bonusarena','bonus_arena','tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','ttbonus','tt_bonus',
-     'bonustt','bonus_tt','oregano','whoisoregano','statsskils','statskils','stats_skils','stat_skils','statsandskils','statandskils','stats_and_skils',
-     'stat_and_skils','statsskil','statskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil']
+     'arenabonus','arena_bonus','bonusarena','bonus_arena','tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','ttbonus','tt_bonus','skils',
+     'bonustt','bonus_tt','oregano','whoisoregano','statsskils','statskils','stats_skils','stat_skils','statsandskils','statandskils','stats_and_skils','skil',
+     'stat_and_skils','statsskil','statskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil','sortskil','skilsort',
+     'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -872,8 +873,12 @@ def skill_rarity(event) # this is used by the skillrarity command to display all
 end
 
 def oregano_explain(event,bot)
-  create_embed(event,'A word from my developer',"**Q1.) Who is Oregano?**\nA.) The first Discord server I ever joined was for a group of friends who were planning a *Fates* AU RP in a world where Corrin decided to leave the world entirely - yes, to join Smash.  This RP never happened (our Dungeon Master had real-life issues to take care of and the project died in his absence), but the group of friends remains together.\nOregano happens to be the in-universe daughter for one of the members of this group.\n\n**Q2.) What is she doing in Elise's data?**\nA.) When I was learning how stats were calculated in FEH - growth points, BST and GPT limits based on class, etc. - the members of this server took the opportunity to translate their units to FEH mechanics.  In order to help them visualize how their units actually were, I made entries for them in Elise's data.\nI, for example, am an Infantry Sword user with 45/29/24/25/39 as my stats, with a superbane in Atk and superboons in both defenses.  My biggest uses are for my prf assist skill - which is effectively Rally Special Cooldown - and the fact that I would give Wrath as a 4<:Icon_Rarity_4:448266418459377684> inheritable skill...yes, I am skill fodder.\n\n**Q3.) Doesn't having fake units in the data alter the results for commands like `sort` and `bestamong`/`worstamong`/`average`?**\nA.) Fake units, and the skills they can learn but no one else can, are exclusive to the server in which they were created, and even in that server, the commands mentioned above will only include the fake units if you type the word \"all\" in your message.  Except `sort`, in which those units will appear but be crossed out.",0x759371,nil,'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/Oregano/Face_FC.png')
-  create_embed(event,'',"**Q4.) Wait...\"exclusive to the server in which they were created\"?  Then how did I see Oregano in the first place?**\nA.) This answer gets a little technical.\nFirst off, Oregano is at the bottom of Elise's unit list.  She is, of Penumbra's second generation - or more specifically, those that had FEH units made - the alphabetically last character.\nWhen looking for an entry number within a list, I wrote code so that the function returns `-1` if no matching entries were found, and use `>=0` to make sure that I am looking at an entry.\n__However__, sometimes, interference of some kind causes either the `-1` to pass the check, or for a number that legitimately passed the check to __become__ -1 after the check.  I generally refer to this as a \"typewriter jam\" error, and it doesn't always become -1 - sometimes it will become the number for another entry, which is how you can look up Anna and get her stats but Abel's picture displays, for example.\nWhen the typewriter jam results in a legitimized -1, Ruby - the programming language Elise is written in - interprets that as \"read the last entry in the list\", which for the unit list is Oregano.\n\n**Q5.) What does her real-world father think of this?**\nA.) IRL, Draco is a memelord, and he loves the fact that his daughter - who he designed to be a glass cannon to the utmost extreme - is legitimately \"breaking everything\" to the point that she is breaking my code and appearing places she shouldn't be.#{"\n\n**Q6.) That thumbnail, who I presume is Oregano, is adorable.  Where do I find it?**\nMy friend BluechanXD, from the same server, made it based on Draco's description.  [Here's a link](https://www.deviantart.com/bluechanxd/art/FE-OC-Oregano-V2-765406579)." unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}",0x759371)
+  if safe_to_spam?(event) && @shardizard != 4
+    create_embed(event,'A word from my developer',"**Q1.) Who is Oregano?**\nA.) The first Discord server I ever joined was for a group of friends who were planning a *Fates* AU RP in a world where Corrin decided to leave the world entirely - yes, to join Smash.  This RP never happened (our Dungeon Master had real-life issues to take care of and the project died in his absence), but the group of friends remains together.\nOregano happens to be the in-universe daughter for one of the members of this group.\n\n**Q2.) What is she doing in Elise's data?**\nA.) When I was learning how stats were calculated in FEH - growth points, BST and GPT limits based on class, etc. - the members of this server took the opportunity to translate their units to FEH mechanics.  In order to help them visualize how their units actually were, I made entries for them in Elise's data.\nI, for example, am an Infantry Sword user with 45/29/24/25/39 as my stats, with a superbane in Atk and superboons in both defenses.  My biggest uses are for my prf assist skill - which is effectively Rally Special Cooldown - and the fact that I would give Wrath as a 4<:Icon_Rarity_4:448266418459377684> inheritable skill...yes, I am skill fodder.\n\n**Q3.) Doesn't having fake units in the data alter the results for commands like `sort` and `bestamong`/`worstamong`/`average`?**\nA.) Fake units, and the skills they can learn but no one else can, are exclusive to the server in which they were created, and even in that server, the commands mentioned above will only include the fake units if you type the word \"all\" in your message.  Except `sort`, in which those units will appear but be crossed out.",0x759371,nil,'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/Oregano/Face_FC.png')
+    create_embed(event,'',"**Q4.) Wait...\"exclusive to the server in which they were created\"?  Then how did I see Oregano in the first place?**\nA.) This answer gets a little technical.\nFirst off, Oregano is at the bottom of Elise's unit list.  She is, of Penumbra's second generation - or more specifically, those that had FEH units made - the alphabetically last character.\nWhen looking for an entry number within a list, I wrote code so that the function returns `-1` if no matching entries were found, and use `>=0` to make sure that I am looking at an entry.\n__However__, sometimes, interference of some kind causes either the `-1` to pass the check, or for a number that legitimately passed the check to __become__ -1 after the check.  I generally refer to this as a \"typewriter jam\" error, and it doesn't always become -1 - sometimes it will become the number for another entry, which is how you can look up Anna and get her stats but Abel's picture displays, for example.\nWhen the typewriter jam results in a legitimized -1, Ruby - the programming language Elise is written in - interprets that as \"read the last entry in the list\", which for the unit list is Oregano.\n\n**Q5.) What does her real-world father think of this?**\nA.) IRL, Draco is a memelord, and he loves the fact that his daughter - who he designed to be a glass cannon to the utmost extreme - is legitimately \"breaking everything\" to the point that she is breaking my code and appearing places she shouldn't be.#{"\n\n**Q6.) That thumbnail, who I presume is Oregano, is adorable.  Where do I find it?**\nMy friend BluechanXD, from the same server, made it based on Draco's description.  [Here's a link](https://www.deviantart.com/bluechanxd/art/FE-OC-Oregano-V2-765406579)." unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}",0x759371)
+  else
+    create_embed(event,'A word from my developer',"**Q1.) Who is Oregano?**\nA.) A friend's fictitious daughter from a *Fates* AU RP.\n\n**Q2.) What is she doing in Elise's data?**\nA.) The server that was going to do this RP translated their units into FEH mechanics, and I made them server-specific units to help visualize how the stats they chose actually worked in-game.\n\n**Q3.) \"Server-specific\", eh?  Then how did I see her?**\nA.) Non-technical answer: a weird quirk of the programming language I coded Elise in, combined with how I store the unit data, sometimes means that the last listed unit in Elise's unit list is shown in other servers.\nIt is related to the same bug that causes, when you look up one unit, the unit color or profile image to be a different character.",0x759371,'For more detailed answers, use this command in PM.','https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/Oregano/Face_FC.png')
+  end
 end
 
 def triple_finish(list,forcetwo=false) # used to split a list into three roughly-equal parts for use in embeds
@@ -17644,7 +17649,7 @@ bot.mention do |event|
       end
     end
     k=1
-  elsif ['skills','fodder','manual','book','combatmanual'].include?(a[0].downcase)
+  elsif ['skills','skils','fodder','manual','book','combatmanual'].include?(a[0].downcase)
     aa=a[0].downcase
     a.shift
     if ['sort','list'].include?(a[0].downcase)
@@ -17680,7 +17685,7 @@ bot.mention do |event|
       end
     end
     k=1
-  elsif ['skill'].include?(a[0].downcase)
+  elsif ['skill','skil'].include?(a[0].downcase)
     a.shift
     if ['sort','list'].include?(a[0].downcase)
       a.shift
@@ -17695,14 +17700,14 @@ bot.mention do |event|
     k=1
   elsif ['sort','list'].include?(a[0].downcase)
     a.shift
-    if ['skill','skills'].include?(a[0].downcase)
+    if ['skill','skil','skills','skils'].include?(a[0].downcase)
       a.shift
       sort_skills(bot,event,a)
     else
       sort_units(bot,event,a)
     end
     k=1
-  elsif ['sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist'].include?(a[0].downcase)
+  elsif ['sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortskil','skilsort','sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist'].include?(a[0].downcase)
     a.shift
     sort_skills(bot,event,a)
     k=1
