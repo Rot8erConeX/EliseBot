@@ -2663,7 +2663,18 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
     s2=@skills[find_skill(weapon,event)]
     if !s2.nil? && s2[4]=='Weapon' && !s2[15].nil? && !refinement.nil? && refinement.length>0 && (s2[5]!='Staff Users Only' || refinement=='Effect')
       # weapon refinement...
-      skillls.push(find_effect_name(s2,event,1)) if refinement=='Effect' && find_effect_name(s2,event,1).length>0 # ...including any stat-based Effect Modes
+      if find_effect_name(s2,event).length>0
+        zzz2=find_effect_name(s2,event,1)
+        lookout=[]
+        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+          lookout=[]
+          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+            lookout.push(eval line)
+          end
+          lookout=lookout.reject{|q| !['Stat-Affecting 1','Stat-Affecting 2'].include?(q[3])}
+        end
+        skillls.push(find_effect_name(s2,event,1)) if refinement=='Effect' && find_effect_name(s2,event,1).length>0 && lookout.include?(zzz2) # ...including any stat-based Effect Modes
+      end
       sttz=[]
       inner_skill=s2[15]
       mt=[0,0,0,0,0]
@@ -5260,7 +5271,16 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       zzz=[skill[0],3,0,0,0,0]
       zzz=[skill[0],0,0,0,0,0] if skill[5].include?('Tome Users Only') || ['Staff Users Only','Bow Users Only','Dagger Users Only'].include?(skill[5])
       if find_effect_name(skill,event).length>0
-        zzz=apply_stat_skills(event,[find_effect_name(skill,event,1)],zzz,'','-','','',[],true)
+        zzz2=find_effect_name(skill,event,1)
+        lookout=[]
+        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+          lookout=[]
+          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+            lookout.push(eval line)
+          end
+          lookout=lookout.reject{|q| !['Stat-Affecting 1','Stat-Affecting 2'].include?(q[3])}
+        end
+        zzz=apply_stat_skills(event,[find_effect_name(skill,event,1)],zzz,'','-','','',[],true) if lookout.include?(zzz2)
       end
       skill[12][10]=zzz[2]
       sttz.push([zzz[1],0,zzz[3],zzz[4],zzz[5],'Effect'])
@@ -6090,7 +6110,6 @@ def get_group(name,event)
         end
       end
       m.uniq!
-      puts m.to_s
       data_load()
       k=@units.reject{|q| !(q[13].nil? || q[13][0].nil? || q[13][0].length.zero?) || !q[9][0].include?('p') || m.include?(q[0])}.uniq
     end
@@ -9874,7 +9893,6 @@ def show_bonus_units(event,args='',bot)
             create_embed(event,"__**#{flds[i][0]}**__",flds[i][1],0x002837)
           end
         else
-          puts flds.map{|q| q.to_s}
           create_embed(event,"__**Arena Bonus Units**__",'',0x002837,nil,nil,flds[0,[2,flds.length].min])
         end
       end
