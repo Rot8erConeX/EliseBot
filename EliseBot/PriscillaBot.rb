@@ -15105,7 +15105,7 @@ bot.command([:oregano, :Oregano]) do |event|
   oregano_explain(event,bot)
 end
 
-bot.command(:whoisoregano) do |event|
+bot.command([:whoisoregano, :whoIsOregano, :whoisOregano]) do |event|
   oregano_explain(event,bot)
 end
 
