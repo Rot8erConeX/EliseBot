@@ -141,7 +141,8 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'sortstat','statsort','liststats','statslist','highest','best','highestamong','highestin','lowest','lowestamong','lowestin','manual','book','combatmanual',
      'headpat','pat','patpat','randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats','edit','bonus','arena','tt',
      'arenabonus','arena_bonus','bonusarena','bonus_arena','tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','ttbonus','tt_bonus',
-     'bonustt','bonus_tt']
+     'bonustt','bonus_tt','oregano','whoisoregano','statsskils','statskils','stats_skils','stat_skils','statsandskils','statandskils','stats_and_skils',
+     'stat_and_skils','statsskil','statskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -523,11 +524,11 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['tempest','tt'].include?("#{subcommand}".downcase)}**",'Displays current and future Tempest Trials Bonus Units',0xD49F61)
   elsif ['bonus'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**",'Displays current and future Bonus Units for both Arena and Tempest Trials.',0xD49F61)
-  elsif ['skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['rarity','rarities'].include?("#{subcommand}".downcase))
+  elsif ['skillrarity','skilrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['rarity','rarities'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['rarity','rarities'].include?("#{subcommand}".downcase)}**",'Explains why some units have skills listed at lower rarities than they are available at.',0xD49F61)
   elsif ['color','colors','colour','colours'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['color','colors','colour','colours'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['color','colors','colour','colours'].include?("#{subcommand}".downcase)}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.\n\nThis version of the command causes the display to sort the units by color instead of rarity, allowing users to see what color they should summon when looking for a particular skill.",0xD49F61)
-  elsif ['skill'].include?(command.downcase)
+  elsif ['skill','skil'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.\n\nFollowing the command with the word \"colo(u)rs\" will cause the display to sort the units by color instead of rarity, allowing users to see what color they should summon when looking for a particular skill.",0xD49F61)
   elsif ['tinystats','smallstats','smolstats','microstats','squashedstats','sstats','statstiny','statssmall','statssmol','statsmicro','statssquashed','statss','stattiny','statsmall','statsmol','statmicro','statsquashed','sstat','tinystat','smallstat','smolstat','microstat','squashedstat','tiny','small','micro','smol','squashed','littlestats','littlestat','statslittle','statlittle','little'].include?(command.downcase) || (['stat','stats'].include?(command.downcase) && ['tiny','small','micro','smol','squashed','little'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['stat','stats'].include?(command.downcase)}** __name__","Shows `name`'s stats.",0xD49F61)
@@ -579,7 +580,7 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}**",'Responds with a list of links useful to players of *Fire Emblem Heroes*.',0xD49F61)
   elsif ['alts','alt'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Responds with a list of alts that the character has in *Fire Emblem Heroes*.',0xD49F61)
-  elsif ['skills','fodder','manual','book','combatmanual'].include?(command.downcase)
+  elsif ['skills','skils','fodder','manual','book','combatmanual'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and skills.\nYou can also include a rarity to show the skills that the unit learns at that rarity.",0xD49F61)
   elsif ['embed','embeds'].include?(command.downcase)
     event << '**embed**'
@@ -866,6 +867,11 @@ def skill_rarity(event) # this is used by the skillrarity command to display all
     create_embed(event,"**Supposed Bug: X character, despite not being available at #{r}, has skills listed for #{r.gsub('Y','that')} in the `skill` command.**\n\nA word from my developer","By observing the skill lists of the Daily Hero Battle units - the only units we have available at 1\\* - I have learned that there is a set progression for which characters learn skills.  Only six units directly contradict this observation - and three of those units are the Askrians, who were likely given their Assists and Tier 1 Specials (depending on the character) at 2\\* in order to make them useable in the early story maps when the player has limited orbs and therefore limited unit choices.  One is Lyn(Bride), who as the only seasonal healer so far, may be the start of a new pattern.  The other two are Jaffar and Saber, who - for unknown reasons - have their respective Tier 2 Specials available right out of the box as 5\\*s.\n\nThe information as it is is not useless.  In fact, as seen quite recently as of the time of this writing, IntSys is willing to demote some units out of the 4-5\\* pool into the 3-4\\* one. This information allows us to predict which skills the new 3\\* versions of these characters will have.\n\nAs for units unlikely to demote, Paralogue maps will have lower-rarity versions of units with their base kits.  Training Tower and Tempest Trials attempt to build units according to recorded trends in Arena, but will use default base kits at lower difficulties.  Obviously you can't fodder a 4* Siegbert for Death Blow 3, but you can still encounter him in Tempest.",xcolor)
     event.respond "To see the progression I have discovered, please use the command `FEH!skillrarity progression`."
   end
+end
+
+def oregano_explain(event,bot)
+  create_embed(event,'A word from my developer',"**Q1.) Who is Oregano?**\nA.) The first Discord server I ever joined was for a group of friends who were planning a *Fates* AU RP in a world where Corrin decided to leave the world entirely - yes, to join Smash.  This RP never happened (our Dungeon Master had real-life issues to take care of and the project died in his absence), but the group of friends remains together.\nOregano happens to be the in-universe daughter for one of the members of this group.\n\n**Q2.) What is she doing in Elise's data?**\nA.) When I was learning how stats were calculated in FEH - growth points, BST and GPT limits based on class, etc. - the members of this server took the opportunity to translate their units to FEH mechanics.  In order to help them visualize how their units actually were, I made entries for them in Elise's data.\nI, for example, am an Infantry Sword user with 45/29/24/25/39 as my stats, with a superbane in Atk and superboons in both defenses.  My biggest uses are for my prf assist skill - which is effectively Rally Special Cooldown - and the fact that I would give Wrath as a 4<:Icon_Rarity_4:448266418459377684> inheritable skill...yes, I am skill fodder.\n\n**Q3.) Doesn't having fake units in the data alter the results for commands like `sort` and `bestamong`/`worstamong`/`average`?**\nA.) Fake units, and the skills they can learn but no one else can, are exclusive to the server in which they were created, and even in that server, the commands mentioned above will only include the fake units if you type the word \"all\" in your message.  Except `sort`, in which those units will appear but be crossed out.",0x759371,nil,'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/Oregano/Face_FC.png')
+  create_embed(event,'',"**Q4.) Wait...\"exclusive to the server in which they were created\"?  Then how did I see Oregano in the first place?**\nA.) This answer gets a little technical.\nFirst off, Oregano is at the bottom of Elise's unit list.  She is, of Penumbra's second generation - or more specifically, those that had FEH units made - the alphabetically last character.\nWhen looking for an entry number within a list, I wrote code so that the function returns `-1` if no matching entries were found, and use `>=0` to make sure that I am looking at an entry.\n__However__, sometimes, interference of some kind causes either the `-1` to pass the check, or for a number that legitimately passed the check to __become__ -1 after the check.  I generally refer to this as a \"typewriter jam\" error, and it doesn't always become -1 - sometimes it will become the number for another entry, which is how you can look up Anna and get her stats but Abel's picture displays, for example.\nWhen the typewriter jam results in a legitimized -1, Ruby - the programming language Elise is written in - interprets that as \"read the last entry in the list\", which for the unit list is Oregano.\n\n**Q5.) What does her real-world father think of this?**\nA.) IRL, Draco is a memelord, and he loves the fact that his daughter - who he designed to be a glass cannon to the utmost extreme - is legitimately \"breaking everything\" to the point that she is breaking my code and appearing places she shouldn't be.#{"\n\n**Q6.) That thumbnail, who I presume is Oregano, is adorable.  Where do I find it?**\nMy friend BluechanXD, from the same server, made it based on Draco's description.  [Here's a link](https://www.deviantart.com/bluechanxd/art/FE-OC-Oregano-V2-765406579)." unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}",0x759371)
 end
 
 def triple_finish(list,forcetwo=false) # used to split a list into three roughly-equal parts for use in embeds
@@ -13726,7 +13732,7 @@ bot.command([:compareskills,:compareskill,:skillcompare,:skillscompare,:comparis
   return nil
 end
 
-bot.command(:skill) do |event, *args|
+bot.command([:skill,:skil]) do |event, *args|
   return nil if overlap_prevent(event)
   if ['stat','stats'].include?(args[0].downcase)
     args.shift
@@ -13769,7 +13775,7 @@ bot.command([:colors,:color,:colours,:colour]) do |event, *args|
   return nil
 end
 
-bot.command([:skills,:fodder,:manual,:book,:combatmanual]) do |event, *args|
+bot.command([:skills,:skils,:fodder,:manual,:book,:combatmanual]) do |event, *args|
   return nil if overlap_prevent(event)
   s=event.message.text
   s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
@@ -13872,7 +13878,7 @@ bot.command([:stats,:stat]) do |event, *args|
   elsif ['icon','color','colors'].include?(args[0].downcase)
     attack_icon(event)
     return nil
-  elsif ['skill','skills'].include?(args[0].downcase)
+  elsif ['skill','skills','skil','skils'].include?(args[0].downcase)
     args.shift
     disp_unit_stats_and_skills(event,args,bot)
     return nil
@@ -14057,7 +14063,7 @@ bot.command([:huge,:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hug
   end
 end
 
-bot.command([:unit, :data, :statsskills, :statskills, :stats_skills, :stat_skills, :statsandskills, :statandskills, :stats_and_skills, :stat_and_skills, :statsskill, :statskill, :stats_skill, :stat_skill, :statsandskill, :statandskill, :stats_and_skill, :stat_and_skill]) do |event, *args|
+bot.command([:unit, :data, :statsskills, :statskills, :stats_skills, :stat_skills, :statsandskills, :statandskills, :stats_and_skills, :stat_and_skills, :statsskill, :statskill, :stats_skill, :stat_skill, :statsandskill, :statandskill, :stats_and_skill, :stat_and_skill, :statsskils, :statskils, :stats_skils, :stat_skils, :statsandskils, :statandskils, :stats_and_skils, :stat_and_skils, :statsskil, :statskil, :stats_skil, :stat_skil, :statsandskil, :statandskil, :stats_and_skil, :stat_and_skil]) do |event, *args|
   return nil if overlap_prevent(event)
   if ['compare','comparison'].include?(args[0].downcase)
     args.shift
@@ -15083,6 +15089,22 @@ bot.command([:growths, :gps, :growth, :gp]) do |event|
   event << '- These are marked by the thin blue and red arrows.'
   event << ''
   event << 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Growths.png'
+end
+
+bot.command([:oregano, :Oregano]) do |event|
+  if event.server.nil?
+  elsif [256291408598663168,462100851864109056].include?(event.server.id)
+    k2=get_weapon(event.message.text.downcase.gsub('feh!oregano','').gsub('feh?oregano','').gsub('f?oregano','').gsub('e?oregano','').gsub('h?oregano',''),event)
+    w=nil
+    w=k2[0] unless k2.nil?
+    disp_stats(bot,'Oregano',w,event,false,true)
+    return nil
+  end
+  oregano_explain(event,bot)
+end
+
+bot.command(:whoisoregano) do |event|
+  oregano_explain(event,bot)
 end
 
 bot.command(:merges) do |event|
