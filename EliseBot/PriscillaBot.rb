@@ -16429,7 +16429,7 @@ bot.command(:leaveserver, from: 167657750971547648) do |event, server_id| # forc
   if chn.nil?
     chnn=[]
     for i in 0...bot.server(server_id.to_i).channels.length
-      chnn.push(bot.server(server_id.to_i).channels[i]) if bot.user(bot.profile.id).on(event.server.id).permission?(:send_messages,bot.server(server_id.to_i).channels[i]) && bot.server(server_id.to_i).channels[i].type.zero?
+      chnn.push(bot.server(server_id.to_i).channels[i]) if bot.user(bot.profile.id).on(server_id.to_i).permission?(:send_messages,bot.server(server_id.to_i).channels[i]) && bot.server(server_id.to_i).channels[i].type.zero?
     end
     chn=chnn[0] if chnn.length>0
   end
