@@ -1710,7 +1710,7 @@ def find_promotions(j,event) # finds the promotions of a given skill.  Input is 
     end
   end
   p=p.sort{|a,b| a.downcase <=> b.downcase}
-  p=p.reject{|q| q[0,10]=='Falchion ('}
+  p=p.reject{|q| q[0,10]=='Falchion (' || q[0,14]=='Missiletainn ('}
   return p
 end
 
@@ -3468,7 +3468,7 @@ def get_unit_prf(name)
   if name=='Robin'
     return [get_unit_prf('Robin(M)')[0],get_unit_prf('Robin(F)')[0]]
   end
-  prfs=@skills.reject{|q| !q[6].split(', ').include?(name) || q[4]!='Weapon' || q[0]=='Falchion'}
+  prfs=@skills.reject{|q| !q[6].split(', ').include?(name) || q[4]!='Weapon' || q[0]=='Falchion' || q[0]=='Missiletainn'}
   if prfs.length>1
     prfs2=prfs.reject{|q| q[8]!='-'}
     prfs2=prfs.reject{|q| q[9].reject{|q2| !q2.split(', ').include?(name)}.length<=0} if prfs2.length<=0
@@ -3841,7 +3841,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
           uskl=[@dev_units[dv][6],@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],[@dev_units[dv][12]]]
         end
       end
-      flds.push(["<:Skill_Weapon:444078171114045450> **Weapons**",uskl[0].reject{|q| ['Falchion','**Falchion**'].include?(q)}.join("\n")])
+      flds.push(["<:Skill_Weapon:444078171114045450> **Weapons**",uskl[0].reject{|q| ['Falchion','**Falchion**','Missiletainn','**Missiletainn**'].include?(q)}.join("\n")])
       flds.push(["<:Skill_Assist:444078171025965066> **Assists**",uskl[1].join("\n")])
       flds.push(["<:Skill_Special:444078170665254929> **Specials**",uskl[2].join("\n")])
       flds.push(["<:Passive_A:443677024192823327> **A Passives**",uskl[3].join("\n")])
@@ -4024,7 +4024,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
         uskl=[x[x2][6],x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],[x[x2][12]]]
       end
     end
-    flds.push(["<:Skill_Weapon:444078171114045450> **Weapons**",uskl[0].reject{|q| ['Falchion','**Falchion**'].include?(q)}.join("\n")])
+    flds.push(["<:Skill_Weapon:444078171114045450> **Weapons**",uskl[0].reject{|q| ['Falchion','**Falchion**','Missiletainn','**Missiletainn**'].include?(q)}.join("\n")])
     flds.push(["<:Skill_Assist:444078171025965066> **Assists**",uskl[1].join("\n")])
     flds.push(["<:Skill_Special:444078170665254929> **Specials**",uskl[2].join("\n")])
     flds.push(["<:Passive_A:443677024192823327> **A Passives**",uskl[3].join("\n")])
@@ -4682,6 +4682,13 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       disp_skill(bot,'Brave Falchion',event,ignore)
       disp_skill(bot,'Spectrum Bond',event,ignore)
       return true
+    elsif skill[0]=='Missiletainn'
+      k=@skills[@skills.find_index{|q| q[0]=='Missiletainn (Dark)'}]
+      k2=@skills[@skills.find_index{|q| q[0]=='Missiletainn (Dusk)'}]
+      disp_skill(bot,find_effect_name(k,event),event,ignore) unless k[15].nil?
+      disp_skill(bot,find_effect_name(k2,event),event,ignore) unless k2[15].nil?
+      event.respond "#{skill[0]} does not have an Effect Mode.  Showing #{skill[0]}'s default data." if !k[15].nil? && !k2[15].nil?
+      return true if !k[15].nil? && !k2[15].nil?
     elsif find_effect_name(skill,event).length>0
       disp_skill(bot,find_effect_name(skill,event),event,ignore)
       return true
@@ -4769,6 +4776,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     elsif skill[5]=='Beasts Only'
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:443172811608162324> **Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+    elsif skill[0]=='Missiletainn'
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n\n__**Missiletainn (Dark)**__\n<:Red_Blade:443172811830198282> **Weapon Type:** Sword (Red Blade)\n**Might:** #{skill[2]+1}  \u00B7  **Range:** 1\n**Effect:** #{skill[7].split(' *** ')[0]}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Owain\n**Promotes from:** *Silver Sword*\n\n__**Missiletainn (Dusk)**__\n<:Light_Tome:499760605381787650> **Weapon Type:** Light Magic (Blue Tome)\n**Might:** #{skill[2]-1}  \u00B7  **Range:** 2"
+      skill[7]=skill[7].split(' *** ')[1]
     else
       s=skill[5]
       s=s[0,s.length-11]
@@ -4798,7 +4808,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     else
       str="#{str}\n**Effect:** #{skill[7]}" unless skill[7]=='-'
     end
-    str="#{str}\n**Stats affected:** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}"
+    str="#{str}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Ophelia\n**Promotes from:** *Shine*" if skill[0]=='Missiletainn'
+    str="#{str}\n**Stats affected:** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}" unless skill[0]=='Missiletainn'
     sklslt=['Weapon']
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
     cumul=cumulative_sp_cost(skill,event)
@@ -4922,7 +4933,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       p=list_lift(p.map{|q| "*#{q}*"},"or")
     end
   end
-  str="#{str}#{"\n**Restrictions on inheritance:** #{skill[5]}" if skill[6]=='-' && skill[4]!='Weapon'}#{"\n**<:Prf_Sparkle:490307608973148180>Prf to:** #{skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[6]=='-' || skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.length.zero?}#{"\n**Promotes from:** #{skill[8]}" unless skill[8]=='-'}#{"\n**Promotes into:** #{p}" unless p.nil?}"
+  str="#{str}#{"\n**Restrictions on inheritance:** #{skill[5]}" if skill[6]=='-' && skill[4]!='Weapon'}#{"\n**<:Prf_Sparkle:490307608973148180>Prf to:** #{skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[0]=='Missiletainn' || skill[6]=='-' || skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.length.zero?}#{"\n**Promotes from:** #{skill[8]}" unless skill[0]=='Missiletainn' || skill[8]=='-'}#{"\n**Promotes into:** #{p}" unless p.nil?}"
   if !skill[14].nil? && skill[14].length>0 && skill[4]=='Weapon'
     prm=skill[14].split(', ')
     for i in 0...prm.length
@@ -4943,6 +4954,11 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     str="#{str}\n**Falchion(Mystery) evolves into:** #{list_lift(sk1[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk1[14].nil? && sk1[14].length>0 && sk1[4]=='Weapon'
     str="#{str}\n**Falchion(Valentia) evolves into:** #{list_lift(sk2[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk2[14].nil? && sk2[14].length>0 && sk2[4]=='Weapon'
     str="#{str}\n**Falchion(Awakening) evolves into:** #{list_lift(sk3[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk3[14].nil? && sk3[14].length>0 && sk3[4]=='Weapon'
+  elsif skill[0]=='Missiletainn'
+    sk1=sklz[find_skill('Missiletainn (Dark)',event,true,true)]
+    sk2=sklz[find_skill('Missiletainn (Dusk)',event,true,true)]
+    str="#{str}\n**Missiletainn(Dark) evolves into:** #{list_lift(sk1[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk1[14].nil? && sk1[14].length>0 && sk1[4]=='Weapon'
+    str="#{str}\n**Missiletainn(Dusk) evolves into:** #{list_lift(sk2[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk2[14].nil? && sk2[14].length>0 && sk2[4]=='Weapon'
   end
   x=false
   can_also=true
@@ -4958,8 +4974,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         str2="#{str2}\n*#{i+1}#{@rarity_stars[i]}:* #{skill[9][i]}"
       end
     end
-    str="#{str}#{"\n" unless x}\n#{str2}" unless str2=='**Heroes who know it out of the box:**'
-    x=true unless str2=='**Heroes who know it out of the box:**'
+    str="#{str}#{"\n" unless x}\n#{str2}" unless str2=='**Heroes who know it out of the box:**' || skill[0]=='Missiletainn'
+    x=true unless str2=='**Heroes who know it out of the box:**' || skill[0]=='Missiletainn'
   end
   str2='**Heroes who can learn without inheritance:**'
   clrz=[[],[],[],[],[],[],[],[],[],[],[]]
@@ -5012,10 +5028,10 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   str2="#{str2}\n*<:Orb_Pink:466196714513235988> Free units:* #{clrz[10].join(', ')}" unless clrz[10].length<=0
   clrz=[[],[],[],[],[],[],[],[],[],[],[]]
   unitz=@units.map{|q| q}
-  str="#{str}#{"\n" unless x}\n#{str2}" unless str2=='**Heroes who can learn without inheritance:**'
-  x=true unless str2=='**Heroes who can learn without inheritance:**'
+  str="#{str}#{"\n" unless x}\n#{str2}" unless str2=='**Heroes who can learn without inheritance:**' || skill[0]=='Missiletainn'
+  x=true unless str2=='**Heroes who can learn without inheritance:**' || skill[0]=='Missiletainn'
   prev=find_prevolutions(f,event)
-  if prev.length>0
+  if prev.length>0 && skill[0]!='Missiletainn'
     for i in 0...prev.length
       skill2=prev[i][0]
       for i2 in 0...@max_rarity_merge[0]
@@ -5297,6 +5313,44 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       end
       skill[12][10]=zzz[2]
       sttz.push([zzz[1],0,zzz[3],zzz[4],zzz[5],'Effect'])
+    elsif skill[0]=='Missiletainn'
+      sk1=sklz[find_skill('Missiletainn (Dark)',event,true,true)]
+      sk2=sklz[find_skill('Missiletainn (Dusk)',event,true,true)]
+      refinements=[]
+      refinements.push(['Dark',sk1[15],nil,0]) unless sk1[15].nil?
+      refinements.push(['Dusk',sk2[15],nil,0]) unless sk2[15].nil?
+      for i in 0...refinements.length
+        if refinements[i][1][0,1].to_i.to_s==refinements[i][1][0,1]
+          refinements[i][3]+=refinements[i][1][0,1].to_i
+          refinements[i][1]=refinements[i][1,refinements[i][1].length-1]
+          refinements[i][1]=nil if refinements[i][1].nil? || refinements[i][1].length<1
+        elsif refinements[i][1][0,1]=='-' && refinements[i][1].length>1
+          refinements[i][3]-=refinements[i][1][1,1].to_i
+          refinements[i][1]=refinements[i][1][2,refinements[i][1].length-2]
+          refinements[i][1]=nil if refinements[i][1].nil? || refinements[i][1].length<1
+        end
+        if refinements[i][1][0,1]=='*'
+          refinements[i][2]=refinements[i][1][1,refinements[i][1].length-1]
+          refinements[i][1]=nil
+        elsif refinements[i][1].include?(' ** ')
+          x=refinements[i][1].split(' ** ')
+          refinements[i][1]=x[0]
+          refinements[i][2]=x[1]
+        end
+      end
+      if refinements[0][2]==refinements[1][2]
+        outer_skill=refinements[0][2]
+      elsif !refinements[0][1].nil? || !refinements[1][1].nil? || !refinements[2][1].nil?
+        sksk=[]
+        sksk.push("*Dark:* #{refinements[0][1]}") unless refinements[0][1].nil?
+        sksk.push("*Dusk:* #{refinements[1][1]}") unless refinements[1][1].nil?
+        for i in 0...refinements.length
+          refinements[i][1]="#{refinements[i][1]}\n#{refinements[i][2]}" unless refinements[i][2].nil?
+        end
+        outer_skill=sksk.join("\n")
+      end
+      sttz.push([3,refinements[0][3],0,0,0,"**Missiletainn(Dark) (+) Effect Mode**#{" - #{find_effect_name(sk1,event)}" unless find_effect_name(sk1,event).length<=0}",refinements[0][1]]) unless refinements[0][1].nil?
+      sttz.push([3,refinements[1][3],0,0,0,"**Missiletainn(Dark) (+) Effect Mode**#{" - #{find_effect_name(sk2,event)}" unless find_effect_name(sk2,event).length<=0}",refinements[1][1]]) unless refinements[1][1].nil?
     elsif skill[0]=='Falchion'
       sk1=sklz[find_skill('Falchion (Mystery)',event,true,true)]
       sk2=sklz[find_skill('Falchion (Valentia)',event,true,true)]
@@ -5432,6 +5486,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     ftr='All refinements cost: 400 SP, 500<:Arena_Medal:453618312446738472> 200<:Divine_Dew:453618312434417691>' if skill[6]!='-'
     str="#{str}\n\n#{ftr}"
     xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Falchion_Refines.png' if skill[0]=='Falchion'
+    xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Missiletainn_Refines.png' if skill[0]=='Missiletainn'
     str=str.split("\n\n")
     str.shift if str[0].nil? || str[0].length.zero?
     str1=[]
@@ -5700,7 +5755,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   mu=false
   txt="#{@rarity_stars[rarity.to_i-1]*rarity.to_i}"
   ftrtoggles=[false,false,false]
-  sklz2[0]=sklz2[0].reject {|a| ['Falchion','**Falchion**'].include?(a)}
+  sklz2[0]=sklz2[0].reject {|a| ['Falchion','**Falchion**','Missiletainn','**Missiletainn**'].include?(a)}
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     namehere=str
@@ -6221,7 +6276,7 @@ def collapse_skill_list(list,mode=0)
   list=list.uniq
   newlist=[]
   for i in 0...list.length
-    unless list[i].nil? || (list[i][0][0,10]=='Falchion (' && skill_include?(list,'Falchion')>0)
+    unless list[i].nil? || (list[i][0][0,10]=='Falchion (' && skill_include?(list,'Falchion')>0) || (list[i][0][0,14]=='Missiletainn (' && skill_include?(list,'Missiletainn')>0)
       if skill_include?(list,"#{list[i][0]}+")>=0
         list[i][0]="#{list[i][0]}[+]"
         if list[i][0]=='Fire Breath[+]' && skill_include?(list,'Flametongue')>=0 && (mode/2)%2==1
@@ -8769,6 +8824,25 @@ def weapon_legality(event,name,weapon,refinement='-',recursion=false)
     elsif u[11].map{|q| q[0,4]}.include?('FE14')
       weapon='Falchion (Awakening)'
     end
+  elsif weapon=='Missiletainn'
+    if ['FE14'].include?(u[11][0][0,4])
+      weapon='Missiletainn (Dusk)'
+    elsif ['FE13'].include?(u[11][0])
+      weapon='Missiletainn (Dark)'
+    elsif ['Red Blade'].include?("#{u[1][0]} #{u[1][1]}")
+      weapon='Missiletainn (Dusk)'
+    elsif ['Blue Tome'].include?("#{u[1][0]} #{u[1][1]}")
+      weapon='Missiletainn (Dusk)'
+    elsif u[11].map{|q| q[0,4]}.include?('FE14')
+      weapon='Missiletainn (Dusk)'
+    elsif u[11].include?('FE13')
+      weapon='Missiletainn (Dark)'
+    elsif ['Blade','Dragon','Beast'].include?(u[1][1])
+      weapon='Missiletainn (Dusk)'
+    elsif ['Tome','Bow','Dagger','Healer'].include?(u[1][1])
+      weapon='Missiletainn (Dusk)'
+    end
+    w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
   end
   w2="#{weapon}"
   w2="#{weapon} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
@@ -12825,7 +12899,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
   stones=[]
   dew=[]
   g=get_markers(event)
-  skkz=@skills.map{|q| q}.reject{|q| q[0]=='Falchion' || q[0]=='Breidablik' || q[4]!='Weapon' || !has_any?(g, q[13])}
+  skkz=@skills.map{|q| q}.reject{|q| q[0]=='Falchion' || q[0]=='Missiletainn' || q[0]=='Breidablik' || q[4]!='Weapon' || !has_any?(g, q[13])}
   if event.message.text.downcase.include?('effect')
     for i in 0...skkz.length
       eff=false
