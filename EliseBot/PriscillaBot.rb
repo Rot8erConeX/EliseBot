@@ -1615,6 +1615,9 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
   return find_skill('Loptous',event) if name.downcase.gsub(' ','')=='loptyr'
   return find_skill('Thokk',event) if name.downcase.gsub(' ','')=='sekku'
+  return find_skill('Fort. Def/Res 3',event) if ['fortressdefenseresistance', 'fortressdefenceresistance', 'fortressdefresistance', 'fortressdefenseres', 'fortressdefenceres', 'fortressdefres', 'fortressresistancedefense', 'fortressresistancedefence', 'fortressresistancedef', 'fortressresdefense', 'fortressresdefence', 'fortressresdef', 'fortdefenseresistance', 'fortdefenceresistance', 'fortdefresistance', 'fortdefenseres', 'fortdefenceres', 'fortdefres', 'fortresistancedefense', 'fortresistancedefence', 'fortresistancedef', 'fortresdefense', 'fortresdefence', 'fortresdef', 'fortressdefenseresistance3', 'fortressdefenceresistance3', 'fortressdefresistance3', 'fortressdefenseres3', 'fortressdefenceres3', 'fortressdefres3', 'fortressresistancedefense3', 'fortressresistancedefence3', 'fortressresistancedef3', 'fortressresdefense3', 'fortressresdefence3', 'fortressresdef3', 'fortdefenseresistance3', 'fortdefenceresistance3', 'fortdefresistance3', 'fortdefenseres3', 'fortdefenceres3', 'fortdefres3', 'fortresistancedefense3', 'fortresistancedefence3', 'fortresistancedef3', 'fortresdefense3', 'fortresdefence3', 'fortresdef3'].include?(name.downcase.gsub(' ',''))
+  return find_skill('Fort. Def/Res 2',event) if ['fortressdefenseresistance2', 'fortressdefenceresistance2', 'fortressdefresistance2', 'fortressdefenseres2', 'fortressdefenceres2', 'fortressdefres2', 'fortressresistancedefense2', 'fortressresistancedefence2', 'fortressresistancedef2', 'fortressresdefense2', 'fortressresdefence2', 'fortressresdef2', 'fortdefenseresistance2', 'fortdefenceresistance2', 'fortdefresistance2', 'fortdefenseres2', 'fortdefenceres2', 'fortdefres2', 'fortresistancedefense2', 'fortresistancedefence2', 'fortresistancedef2', 'fortresdefense2', 'fortresdefence2', 'fortresdef2'].include?(name.downcase.gsub(' ',''))
+  return find_skill('Fort. Def/Res 1',event) if ['fortressdefenseresistance1', 'fortressdefenceresistance1', 'fortressdefresistance1', 'fortressdefenseres1', 'fortressdefenceres1', 'fortressdefres1', 'fortressresistancedefense1', 'fortressresistancedefence1', 'fortressresistancedef1', 'fortressresdefense1', 'fortressresdefence1', 'fortressresdef1', 'fortdefenseresistance1', 'fortdefenceresistance1', 'fortdefresistance1', 'fortdefenseres1', 'fortdefenceres1', 'fortdefres1', 'fortresistancedefense1', 'fortresistancedefence1', 'fortresistancedef1', 'fortresdefense1', 'fortresdefence1', 'fortresdef1'].include?(name.downcase.gsub(' ',''))
   return find_skill('Draconic Poleax',event) if name.downcase.gsub(' ','')=='draconicpoleaxe'
   return find_skill("Shining Bow#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='shinybow'
   return find_skill("Tannenboom!#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='tanenboom'
@@ -1689,6 +1692,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill("Shining Bow",event) if ['shinybow'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill("Killing Edge",event) if ['killersword','killeredge','killingsword'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill("Slaying Edge",event) if ['slayersword','slayeredge','slayingsword'].map{|q| q[0,namex.length]}.include?(namex)
+  return find_skill('Fort. Def/Res 3',event) if ['fortressdefenseresistance', 'fortressdefenceresistance', 'fortressdefresistance', 'fortressdefenseres', 'fortressdefenceres', 'fortressdefres', 'fortressresistancedefense', 'fortressresistancedefence', 'fortressresistancedef', 'fortressresdefense', 'fortressresdefence', 'fortressresdef', 'fortdefenseresistance', 'fortdefenceresistance', 'fortdefresistance', 'fortdefenseres', 'fortdefenceres', 'fortdefres', 'fortresistancedefense', 'fortresistancedefence', 'fortresistancedef', 'fortresdefense', 'fortresdefence', 'fortresdef'].map{|q| q[0,namex.length]}.include?(namex)
   return find_skill(name.downcase.gsub(' ','').gsub('redt','r t'),event) if namex.downcase=='redtome'[0,namex.length]
   return find_skill(name.downcase.gsub(' ','').gsub('bluet','b t'),event) if namex=='bluetome'[0,namex.length]
   return find_skill(name.downcase.gsub(' ','').gsub('greent','g t'),event) if namex=='greentome'[0,namex.length]
@@ -4725,7 +4729,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   if skill[4]=='Weapon'
     xcolor=0xF4728C
     effective=[]
-    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Weapons/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
+    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Weapons/#{skill[0].gsub(' ','_').gsub('.','').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
     if skill[5]=='Red Tome Users Only'
       s=find_base_skill(skill,event)
       xfooter='Dark Mages can still learn this skill, it just takes more SP.'
@@ -4825,7 +4829,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   elsif skill[4]=='Assist'
     sklslt=['Assist']
     xcolor=0x07DFBB
-    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Assists/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
+    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Assists/#{skill[0].gsub(' ','_').gsub('/','_').gsub('.','').gsub('+','').gsub('!','')}.png?raw=true"
     str="<:Skill_Assist:444078171025965066> **Skill Slot:** #{skill[4]}\n**Range:** #{skill[3]}\n**Effect:** #{skill[7]}"
     str="#{str}\n**Heals:** #{skill[14]}" if skill[5]=="Staff Users Only"
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
@@ -4838,14 +4842,14 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   elsif skill[4]=='Special'
     sklslt=['Special']
     xcolor=0xF67EF8
-    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Specials/#{skill[0].gsub(' ','_').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
+    xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Specials/#{skill[0].gsub(' ','_').gsub('/','_').gsub('.','').gsub('+','').gsub('!','')}.png?raw=true"
     str="<:Skill_Special:444078170665254929> **Skill Slot:** #{skill[4]}\n**Cooldown:** #{skill[2]}\n**Effect:** #{skill[7]}#{"\n**Range:** ```\n#{skill[3].gsub("n","\n")}```" if skill[3]!="-"}"
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
     cumul=cumulative_sp_cost(skill,event)
     str="#{str}\n**Cumulative SP Cost:** #{cumul} #{"(#{cumul+skill[1]/2}-#{cumul*3/2} when inherited)" if skill[6]=='-'}" unless cumul==skill[1]
   else
     xcolor=0xFDDC7E
-    sklimg=skill[0].gsub(' ','_').gsub('/','_').gsub('!','')
+    sklimg=skill[0].gsub(' ','_').gsub('/','_').gsub('!','').gsub('.','')
     sklimg="Squad_Ace_#{"ABCDE"["ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(skill[0][10,1])[0].length%5,1]}_#{skill[0][12,skill[0].length-12]}" if skill[0][0,10]=='Squad Ace '
     xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/skills/#{sklimg}.png?raw=true"
     if " #{event.message.text.downcase} ".include?(' refinement ') || " #{event.message.text.downcase} ".include?(' refinements ') || " #{event.message.text.downcase} ".include?(' (w) ')
