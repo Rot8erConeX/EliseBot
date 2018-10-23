@@ -14261,17 +14261,9 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nOne need look no farther than BLucina and BLyn to understand why single-letter alias differentiation is a bad idea."
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Single-letter differentiation.")
     return nil
-  elsif unt[0]=="Odin" && checkstr.downcase.include?("owain")
-    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nYes, the two are the same character, but eventually Swordmaster Owain will join the game, and this alias will conflict."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Pre-emptive confusion prevention.")
-    return nil
   elsif ["Lyn(Wind)","Lyn(Valentines)","Lyn(Bride)","Lyn(Brave)"].include?(unt[0]) && ['llyn','lynl'].include?(checkstr.downcase)
     event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\n\"L\" could stand for \"Love\", which describes both Lyn(Bride) and Lyn(Valentines); or it could stand for \"Legend\", which not only applies to the Legendary Hero Lyn(Wind), but Lyn(Brave) as well, since she was the result of Lyn winning the Choose Your *Legends* poll for 2017."
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Confusion prevention.")
-    return nil
-  elsif unt[0]=="Laslow" && checkstr.downcase.include?("inigo")
-    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nYes, the two are the same character, but eventually Inigo will join the game, and this alias will conflict."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Pre-emptive confusion prevention.")
     return nil
   elsif unt[0]=="Selena" && checkstr.downcase.include?("severa")
     event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nYes, the two are the same character, but eventually Severa will join the game, and this alias will conflict."
@@ -14279,10 +14271,6 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     return nil
   elsif unt[0]=="Charlotte(Bride)" && checkstr.downcase.include?("charlotte")
     event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nYes, she is Charlotte, but eventually, she will join the game as a non-seaonal unit."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Pre-emptive confusion prevention.")
-    return nil
-  elsif unt[0]=="Inigo(Performing)" && checkstr.downcase.include?("inigo")
-    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nYes, he is #{unt[0].gsub('(performing)','')}, but eventually, he will join the game as a non-seaonal unit."
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Pre-emptive confusion prevention.")
     return nil
   elsif !detect_multi_unit_alias(event,checkstr.downcase,checkstr.downcase,2).nil?
