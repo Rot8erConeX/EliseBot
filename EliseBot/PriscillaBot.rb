@@ -2690,7 +2690,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
           end
           lookout=lookout.reject{|q| !['Stat-Affecting 1','Stat-Affecting 2'].include?(q[3])}
         end
-        skillls.push(find_effect_name(s2,event,1)) if refinement=='Effect' && find_effect_name(s2,event,1).length>0 && lookout.include?(zzz2) # ...including any stat-based Effect Modes
+        skillls.push(find_effect_name(s2,event,1)) if refinement=='Effect' && find_effect_name(s2,event,1).length>0 && lookout.map{|q| q[0]}.include?(zzz2) # ...including any stat-based Effect Modes
       end
       sttz=[]
       inner_skill=s2[15]
@@ -5313,7 +5313,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
           end
           lookout=lookout.reject{|q| !['Stat-Affecting 1','Stat-Affecting 2'].include?(q[3])}
         end
-        zzz=apply_stat_skills(event,[find_effect_name(skill,event,1)],zzz,'','-','','',[],true) if lookout.include?(zzz2)
+        zzz=apply_stat_skills(event,[find_effect_name(skill,event,1)],zzz,'','-','','',[],true) if lookout.map{|q| q[0]}.include?(zzz2)
       end
       skill[12][10]=zzz[2]
       sttz.push([zzz[1],0,zzz[3],zzz[4],zzz[5],'Effect'])
@@ -11412,6 +11412,15 @@ def proc_study(event,name,bot,weapon=nil)
   cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[4].push("Bonfire - #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Blue Flame')[2],cdwns)
+  d="#{wdamage+czz}-#{10+wdamage+czz}"
+  cd="#{wdamage2+czz2}-#{10+wdamage2+czz2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  dx="#{d}"
+  d="#{wdamage+czz}-#{25+wdamage+czz}"
+  cd="#{wdamage2+czz2}-#{25+wdamage2+czz2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[4].push("Blue Flame - #{dx} (#{d} when adjacent to an ally), cooldown of #{c}")
   czz=0
   czz2=0
   czz+=10 if tags.include?('WoDao_Ice')
@@ -11488,20 +11497,20 @@ def proc_study(event,name,bot,weapon=nil)
   czz2+=10 if tags.include?('(E)WoDao_Darkness') && refinement=='Effect' && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Dragon Gaze')[2],cdwns)
   c=add_number_to_string(get_match_in_list(procs, 'Retribution')[2],cdwns)
-  d="#{3*hppp/10+wdamage+czz}#{" (#{3*blhppp/10+wdamage+czz})" if 3*hppp/10!=3*blhppp/10}"
-  cd="#{3*crhppp/10+wdamage2+czz2}#{" (#{3*crblhppp/10+wdamage2+czz2})" if 3*crhppp/10!=3*crblhppp/10}"
+  d="#{wdamage+czz}-#{3*hppp/10+wdamage+czz}#{" (#{wdamage+czz}-#{3*blhppp/10+wdamage+czz}) based on HP lost" if 3*hppp/10!=3*blhppp/10}"
+  cd="#{wdamage2+czz2}-#{3*crhppp/10+wdamage2+czz2}#{" (#{wdamage2+czz2}-#{3*crblhppp/10+wdamage2+czz2}) based on HP lost" if 3*crhppp/10!=3*crblhppp/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[8].push("Retribution - Up to #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  staves[8].push("Retribution - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
   c=add_number_to_string(get_match_in_list(procs, 'Vengeance')[2],cdwns)
-  d="#{hppp/2+wdamage+czz}#{" (#{blhppp/2+wdamage+czz})" if hppp/2!=blhppp/2}"
-  cd="#{crhppp/2+wdamage2+czz2}#{" (#{crblhppp/2+wdamage2+czz2})" if crhppp/2!=crblhppp/2}"
+  d="#{wdamage+czz}-#{hppp/2+wdamage+czz}#{" (#{wdamage+czz}-#{blhppp/2+wdamage+czz}) based on HP lost" if hppp/2!=blhppp/2}"
+  cd="#{wdamage2+czz2}-#{crhppp/2+wdamage2+czz2}#{" (#{wdamage2+czz2}-#{crblhppp/2+wdamage2+czz2}) based on HP lost" if crhppp/2!=crblhppp/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[8].push("Vengeance - Up to #{d}, cooldown of #{c}")
+  staves[8].push("Vengeance - #{d}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Reprisal')[2],cdwns)
-  d="#{3*hppp/10+wdamage+czz}#{" (#{3*blhppp/10+wdamage+czz})" if 3*hppp/10!=3*blhppp/10}"
-  cd="#{3*crhppp/10+wdamage2+czz2}#{" (#{3*crblhppp/10+wdamage2+czz2})" if 3*crhppp/10!=3*crblhppp/10}"
+  d="#{wdamage+czz}-#{3*hppp/10+wdamage+czz}#{" (#{wdamage+czz}-#{3*blhppp/10+wdamage+czz}) based on HP lost" if 3*hppp/10!=3*blhppp/10}"
+  cd="#{wdamage2+czz2}-#{3*crhppp/10+wdamage2+czz2}#{" (#{wdamage2+czz2}-#{3*crblhppp/10+wdamage2+czz2}) based on HP lost" if 3*crhppp/10!=3*crblhppp/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
-  staves[8].push("Reprisal - Up to #{d}, cooldown of #{c}")
+  staves[8].push("Reprisal - #{d}, cooldown of #{c}")
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
@@ -16555,7 +16564,7 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
     if @aliases[@aliases.length-1].length<=1 || @aliases[@aliases.length-1][1]<'Zephiel'
       event.respond 'Alias list has __***NOT***__ been backed up, as alias list has been corrupted.'
       bot.gateway.check_heartbeat_acks = true
-      event.respond 'FEH!restorealiases'
+      event.respond 'FEH!restore aliases'
       return nil
     end
     nzzzzz=@aliases.map{|a| a}
