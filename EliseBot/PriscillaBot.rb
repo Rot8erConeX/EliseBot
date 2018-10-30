@@ -8611,8 +8611,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       return [str,['Lyn(Wind)'],["wind#{str}","#{str}wind","bladelord#{str}","#{str}bladelord","#{str}legendary","legendary#{str}","lh#{str}","#{str}lh"]]
     elsif str2.include?('love')
       return [str,['Lyn(Bride)','Lyn(Valentines)'],["love#{str}","#{str}love"]]
-    elsif str2.include?('bow') || str2.include?('archer')
-      return [str,['Lyn(Brave)','Lyn(Wind)'],["#{str}bow","#{str}archer","bow#{str}","archer#{str}"]]
+    elsif str2.include?('bow') || str2.include?('archer') || str2.include?('legend')
+      return [str,['Lyn(Brave)','Lyn(Wind)'],["#{str}bow","#{str}archer","bow#{str}","archer#{str}","#{str}legend","legend#{str}"]]
     elsif str2.include?("b#{str}") || str2.include?("br#{str}")
       return [str,['Lyn(Bride)','Lyn(Brave)'],["b#{str}","br#{str}"]]
     elsif str2.include?('eth')
