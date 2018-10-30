@@ -13,6 +13,8 @@
 ["Eirika", ["Eirika(Bonds)", "Eirika(Memories)"]]
 ["Eiriku", ["Eirika(Bonds)", "Eirika(Memories)"]]
 ["Erika", ["Eirika(Bonds)", "Eirika(Memories)"]]
+["Eiricav", ["Eirika(Memories)", "Eirika(Graceful)"]]
+["Eirikav", ["Eirika(Memories)", "Eirika(Graceful)"]]
 ["EfuramuLegend", ["Ephraim(Fire)", "Ephraim(Brave)"]]
 ["EphraimLegend", ["Ephraim(Fire)", "Ephraim(Brave)"]]
 ["EphriamLegend", ["Ephraim(Fire)", "Ephraim(Brave)"]]

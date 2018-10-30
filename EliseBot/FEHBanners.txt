@@ -1,19 +1,22 @@
 >New Heroes<\3\-\5\09/11/2018, 20/11/2018
 Heroes with Drive Atk\3\-\5\06/11/2018, 13/11/2018\SkillBanner
-Legendary Heroes: >unknown<\3\Ephraim(Fire), Lyn(Wind), Robin(F)(Fallen)\5\31/10/2018, 06/11/2018\Legendary
-Heroes with Smoke Skills\3\-\5\29/10/2018, 07/11/2018\SkillBanner
+Legendary Heroes: Eirika: Graceful Resolve\3\Eirika(Graceful), Ephraim(Fire), Genny, Innes, Lyn(Wind), Ninian(Bride), Olivia(Traveler), Robin(F)(Fallen), Robin(M)(Fallen), Sanaki(Bride), Sumia, Tana(Summer)\5\31/10/2018, 06/11/2018\Legendary
+Heroes with Smoke Skills\3\Kaze, Nino(Fangs), Sigurd\5\29/10/2018, 07/11/2018\SkillBanner
+Clashing Thunderers (II)\3\Ishtar, Linde, Olwen(Bonds), Ophelia\5\28/10/2018, 07/11/2018\VotingGauntlet
+Clashing Thunderers (I)\3\Delthea, Odin, Reinhardt(Bonds, Tailtiu\5\28/10/2018, 07/11/2018\VotingGauntlet
 Brave Redux\3\Kliff, Loki, Owain\5\23/10/2018, 08/11/2018\CYL
-Ephraim & Myrrh's Battle\3\Eirika(Memories), Ephraim, Myrrh\5\18/10/2018, 23/10/2018\BHB
 New Power (October 2018)\3\Innes, Lon'qu, Tana\5\17/10/2018, 27/10/2018\NewPower
+Trick or Defeat (October 2018 rerun))\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\15/10/2017, 08/11/2018\Seasonal, Halloween
 "Familiar Faces" Tempest Trials+\3\Dorcas, Mia, Myrrh\5\11/10/2018, 22/10/2018\Tempest
 The Land's Bounty\3\Kagero(Halloween), Mia(Halloween), Myrrh(Halloween), Niles(Halloween)\5\10/10/2018, 08/11/2018\Seasonal, Halloween
+GHB Units\5\-\543\\Dynamic, GHB
+TT Units\5\-\54\\Dynamic, Tempest
+Ephraim & Myrrh's Battle\3\Eirika(Memories), Ephraim, Myrrh\5\18/10/2018, 23/10/2018\BHB
 Heroes with Ploy Skills\3\Deirdre, Lute, Sonya\5\06/10/2018, 16/10/2018\SkillBanner
 Ishtar & Reinhardt's Battle\3\Ishtar, Reinhardt(Bonds), Reinhardt(World)\5\04/10/2018, 12/10/2018\BHB
 Heroes with Swift Sparrow\3\Eirika(Memories), Katarina, Nino(Fangs)\5\25/09/2018, 05/10/2018\SkillBanner
-Muspell\3\Helbindi, Lavatain, Laegjarn\5\21/09/2018, 22/10/2018\CYL
+Generals of Muspell\3\Helbindi, Lavatain, Laegjarn\5\21/09/2018, 22/10/2018\CYL
 Performing Arts (September 2018 revival)\3\Azura(Performing), Inigo(Performing), Olivia(Performing), Shigure(Performing)\5\19/09/2018, 19/10/2018\Seasonal, Fall
-GHB Units\5\-\543\\Dynamic, GHB
-TT Units\5\-\54\\Dynamic, Tempest
 Fathers\3\Hector, Niles, Robin(M)\5\29/09/2018, 07/10/2018\VotingGauntlet
 Daughters\3\Julia, Lilina, Morgan(F)\5\29/09/2018, 07/10/2018\VotingGauntlet
 Legendary Heroes: Tiki, Legendary Dragon\-8\Catria(Spring), Hector(Marquess), Ike(Brave), Ike(Vanguard), Jaffar, Karla, Maribelle, Micaiah, Robin(F)(Fallen), Sharena(Spring), Tharja(Bride), Tiki(Young)(Earth)\5\28/09/2018, 04/10/2018\Legendary

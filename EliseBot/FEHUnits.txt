@@ -62,6 +62,7 @@ Dorcas(Halloween)\Green, Blade\ \Armor\8, 10, 5, 9, 3\49, 41, 25, 37, 21\Soeda I
 Draug\Red, Blade\ \Armor\8, 6, 8, 8, 3\50, 30, 32, 39, 18\Itagaki Hako\Patrick Seitz\Takeuchi Ryouta\3p4p2q3qLU\M\FE3, FE1, FE11, FE12\Draug
 Effie\Blue, Blade\ \Armor\9, 9, 4, 6, 5\50, 40, 22, 33, 23\HACCAN\Marisha Ray\Kuwahara Yuuki\3p4pLU\F\FE14C\Effie
 Eirika(Bonds)\Red, Blade\ \Infantry\7, 5, 8, 5, 6\42, 26, 35, 26, 28\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\3p4p\F\FE8\Eirika*
+Eirika(Graceful)\Red, Blade\Water, Attack\Cavalry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\5s\F\FE8\Eirika
 Eirika(Memories)\Red, Tome, Dark\ \Cavalry\5, 7, 8, 3, 4\36, 31, 35, 20, 22\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\5p\F\FE8\Eirika
 Eldigan\Red, Blade\ \Cavalry\8, 7, 5, 8, 2\45, 32, 24, 34, 19\PenekoR\Greg Chun\Majima Junji\5p\M\FE4\Eldigan
 Elincia\Red, Blade\ \Flier\5, 8, 8, 5, 5\35, 34, 36, 24, 27\Kippu\Amanda Miller\Takita Juri\5p\F\FE9, FE10\Elincia

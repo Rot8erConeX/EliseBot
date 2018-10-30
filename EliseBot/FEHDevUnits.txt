@@ -53,7 +53,7 @@ Hone Atk 1\Hone Atk 2\Hone Atk 3
 Spur Atk 2
 
 Cherche
-5\8\Attack\Speed\-
+5\9\Attack\Speed\-
 Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\__Slaying Hammer+ (+) Effect Mode__\Cherche's Axe\Cherche's Axe (+) Effect Mode
 Pivot
 New Moon\Luna
@@ -183,7 +183,7 @@ Fortify Res 1\Fortify Res 2\Fortify Res 3
 Fortify Def 2
 
 Marisa
-5\1\ \ \-
+5\2\ \ \-
 Iron Sword\Steel Sword\Wo Dao\Wo Dao+\Wo Dao+ (+) Speed Mode
 Shove
 Night Sky\Glimmer
