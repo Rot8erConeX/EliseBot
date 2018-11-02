@@ -26,11 +26,11 @@ Celica
 5\1\HP\Resistance\-
 Fire\Elfire\Bolganone\Ragnarok\Ragnarok (+) Effect Mode
 Draw Back
-Chilling Wind\Iceberg
+Dragon Gaze\Draconic Aura
 Death Blow 1\Swift Sparrow 1\Swift Sparrow 2
 Escape Route 1\Escape Route 2\Escape Route 3
 Spur Def 1\Spur Def 2\Spur Def 3
-Brazen Atk/Res 2
+Brazen Atk/Res 3
 
 Celica(Brave)
 5\0\Defense\Speed\-
