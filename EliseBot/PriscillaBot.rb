@@ -1924,6 +1924,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='Falchion_Users' if ['falchionusers'].include?(name.downcase.gsub('-','').gsub('_',''))
   name='Dancers&Singers' if ['dancers','singers'].include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends'].include?(name.downcase)
+  name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','f2prfs','f2prf','retroprfs','retro-prfs'].include?(name.downcase)
   j=-1
   # try full-name matches first...
   g=@groups.map{|q| q}
@@ -1942,6 +1943,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='Falchion_Users' if ['falchionusers'].map{|q| q[0,name.gsub('-','').gsub('_','').length]}.include?(name.downcase.gsub('-','').gsub('_',''))
   name='Dancers&Singers' if ['dancers','singers'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','f2prfs','f2prf','retroprfs','retro-prfs'].map{|q| q[0,name.length]}.include?(name.downcase)
   for i in 0...g.length
     j=i if g[i][0][0,name.length].downcase==name.downcase && (g[i][2].nil? || g[i][2].include?(k))
   end
@@ -17590,7 +17592,9 @@ bot.mention do |event|
   a=a.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   s=a.join(' ')
   k=-1
-  if ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  k=1 if event.user.bot_account?
+  if k>0
+  elsif ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4])
     k=3
   elsif s.gsub(' ','').downcase=='laevatein'
     disp_stats(bot,'Lavatain',nil,event,true,true)
