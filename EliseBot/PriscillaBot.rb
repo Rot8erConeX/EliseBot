@@ -13700,12 +13700,14 @@ bot.command([:bst, :BST]) do |event, *args|
           colors[i2][4]+=1 unless ['Red','Blue','Green','Colorless'].include?(j[1][0])
         end
       end
+      sup='-'
       if m && find_in_dev_units(name)>=0
         dv=@dev_units[find_in_dev_units(name)]
         r[0]=dv[1]
         r[1]=dv[2]
         r[2]=dv[3].gsub(' ','')
         r[3]=dv[4].gsub(' ','')
+        sup=dv[5]
       elsif did>0
         x=donor_unit_list(did)
         x2=x.find_index{|q| q[0]==name}
@@ -13714,13 +13716,18 @@ bot.command([:bst, :BST]) do |event, *args|
           r[1]=x[x2][2]
           r[2]=x[x2][3].gsub(' ','')
           r[3]=x[x2][4].gsub(' ','')
+          sup=x[x2][5]
         end
       end
       st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
       b.push(st[1]+st[2]+st[3]+st[4]+st[5])
       st=get_stats(event,name,40,5,0,r[2],r[3])
       scr.push(((st[1]+st[2]+st[3]+st[4]+st[5])/5)+r[0]*5+r[1]*2+90)
-      msg=extend_message(msg,"Unit #{u}: #{r[0]}#{@rarity_stars[r[0]-1]} #{name.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,name,m)} +#{r[1]} #{"(+#{r[2]}, -#{r[3]})" if !['',' '].include?(r[2]) || !['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}  \u00B7  BST: #{b[b.length-1]}  \u00B7  Score: #{scr[scr.length-1]}+`SP`/100",event)
+      rstar=@rarity_stars[r[0]-1]
+      rstar=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4p10:448272714210476033>','<:Icon_Rarity_5p10:448272715099406336>','<:Icon_Rarity_6p10:491487784822112256>'][r[0]-1] if r[1]>=10
+      rstar='<:Icon_Rarity_S:448266418035621888>' unless sup=='-'
+      rstar='<:Icon_Rarity_Sp10:448272715653054485>' if sup != '-' && r[1]>=10
+      msg=extend_message(msg,"Unit #{u}: #{r[0]}#{rstar} #{name.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,name,m)} +#{r[1]} #{"(+#{r[2]}, -#{r[3]})" if !['',' '].include?(r[2]) || !['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}  \u00B7  BST: #{b[b.length-1]}  \u00B7  Score: #{scr[scr.length-1]}+`SP`/100",event)
     end
   end
   event.channel.send_temporary_message("#{event.user.mention} Units found, calculating BST and arena score...",8)
@@ -15662,11 +15669,11 @@ bot.command([:next,:schedule]) do |event, type|
   msg=extend_message(msg,"Try the command again with \"GHB2\" if you're looking for the second set of Grand Hero Battles.\nYou may also want to try \"Events\" if you're looking for non-cyclical GHBs.",event,2) if [4].include?(idx)
   if [-1,6].include?(idx)
     rd=['Relay Defense',
+        'Relay Defense',
         'Cavalry <:Icon_Move_Cavalry:443331186530451466>',
         'Flying <:Icon_Move_Flier:443331186698354698>',
         'Infantry <:Icon_Move_Infantry:443331187579289601>',
-        'Armored <:Icon_Move_Armor:443331186316673025>',
-        'Relay Defense']
+        'Armored <:Icon_Move_Armor:443331186316673025>']
     rd=rd.rotate(week_from(date,2)%6)
     rd=rd.rotate(-1) if t.wday==6
     msg2='__**Rival Domains Prefered Movement Type**__'
