@@ -12093,6 +12093,25 @@ def disp_art(event,name,bot,weapon=nil)
         charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
       end
     end
+    if (event.server.nil? || bot.user(502288364838322176).on(event.server.id).nil?) || @shardizard==4
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FGOServants.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FGOServants.txt').each_line do |line|
+          b.push(line)
+        end
+      else
+        b=[]
+      end
+      for i in 0...b.length
+        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        unless nammes[0].nil? || nammes[0].length<=0 || b[i][24].nil? || b[i][24].length<=0
+          charsx[0].push("FGO #{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][24]==nammes[0]
+        end
+        unless nammes[2].nil? || nammes[2].length<=0 || b[i][25].nil? || b[i][25].length<=0
+          charsx[1].push("FGO #{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} *[Japanese]*") if b[i][25]==nammes[2]
+        end
+      end
+    end
     disp='>No information<' if disp.length<=0
   end
   dispx="#{disp}"
