@@ -12171,7 +12171,7 @@ def disp_art(event,name,bot,weapon=nil)
         charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
       end
     end
-    if event.server.nil? || bot.user(502288364838322176).on(event.server.id).nil?
+    if event.server.nil? || !bot.user(502288364838322176).on(event.server.id).nil? || @shardizard==4
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FGOServants.txt')
         b=[]
         File.open('C:/Users/Mini-Matt/Desktop/devkit/FGOServants.txt').each_line do |line|
