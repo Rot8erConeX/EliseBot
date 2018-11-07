@@ -2292,6 +2292,14 @@ def reshape_unit_into_multi(name,args3) # used by the find_unit_in_string functi
         name=args3[0]
       end
     end
+  elsif name=='Camilla(Launch)' || name=='Camilla(Adrift)'
+    if args3.length==1
+      if ['camilla'].include?(args3[0].downcase)
+        name='Camilla'
+      else
+        name=args3[0]
+      end
+    end
   elsif name=='Hinoka(Launch)' || name=='Hinoka(Wings)'
     if args3.length==1
       if ['hinoka'].include?(args3[0].downcase)
@@ -8358,6 +8366,23 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       return [str,['Lucina(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Lucina(Glorious)','Lucina(Brave)'],[str]]
+  elsif /(camil(|l)a|kamira)/ =~ str1
+    str='camilla'
+    str='camila' if str2.include?('camila')
+    str='kamira' if str2.include?('kamira')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
+      return [str,['Camilla(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch"]]
+    elsif str2.include?('bunny') || str2.include?('spring') || str2.include?('easter') || str2.include?('sf')
+      return [str,['Camilla(Spring)'],["bunny#{str}","#{str}bunny","spring#{str}","#{str}spring","easter#{str}","#{str}easter","sf#{str}","#{str}sf"]]
+    elsif str2.include?('winter') || str2.include?('newyear') || str2.include?('holiday') || str2.include?('ny')
+      return [str,['Camilla(Winter)'],["winter#{str}","#{str}winter","newyear#{str}","#{str}newyear","holiday#{str}","#{str}holiday","ny#{str}","#{str}ny"]]
+    elsif str2.include?('adrift') || str2.include?('dream') || str2.include?('valla') || str2.include?('vallite') || str2.include?('dreamy') || str2.include?('dreamer') || str2.include?('dreaming') || str2.include?('dreams') || str2.include?('fauxzura') || str2.include?('fauxura') || str2.include?('revelation') || str2.include?('rev')
+      return [str,['Camilla(Adrift)'],["adrift#{str}","#{str}adrift","dream#{str}","#{str}dream","valla#{str}","#{str}valla","vallite#{str}","#{str}vallite","dreamy#{str}","#{str}dreamy","dreamer#{str}","#{str}dreamer","dreaming#{str}","#{str}dreaming","dreams#{str}","#{str}dreams","fauxzura#{str}","#{str}fauxzura","fauxura#{str}","#{str}fauxura","revelation#{str}","#{str}revelation","revelations#{str}","#{str}revelations","rev#{str}","#{str}rev"]]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Camilla(Launch)','Camilla(Adrift)'],[str]]
   elsif /(eirika|eirik|eiriku|erika|eirica)/ =~ str1
     str='eirik'
     str='eiriku' if str2.include?('eiriku')
@@ -8558,16 +8583,69 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       return [str,['Corrin(F)(Summer)']]
     elsif str2.include?('winter') || str2.include?('newyear') || str2.include?('holiday') || str2.include?('ny')
       return [str,['Corrin(M)(Winter)']]
+    elsif str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
+      strx='default'
+      strx='vanilla' if str2.include?('vanilla')
+      strx='og' if str2.include?('og')
+      strx='launch' if str2.include?('launch')
+      str2=str3.gsub(strx,'').gsub("#{str} ",str).gsub(" #{str}",str)
+      m=["#{strx}#{str}","#{str}#{strx}","#{strx} #{str}","#{str} #{strx}"]
+      if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("#{str}f") || str2.include?("f#{str}")
+        for i in 0...m.length
+          return [m[i],['Corrin(F)(Launch)'],m] if event.message.text.downcase.include?(m[i])
+        end
+        return [str,['Corrin(F)(Launch)'],m]
+      elsif str2.include?("male#{str}") || str2.include?("#{str}male") || str2.include?("#{str}m") || str2.include?("m#{str}")
+        for i in 0...m.length
+          return [m[i],['Corrin(M)(Launch)'],m] if event.message.text.downcase.include?(m[i])
+        end
+        return [str,['Corrin(M)(Launch)'],m]
+      end
+      for i in 0...m.length
+        return [m[i],['Corrin(M)(Launch)','Corrin(F)(Launch)'],m] if event.message.text.downcase.include?(m[i])
+      end
+      return [str,['Corrin(M)(Launch)','Corrin(F)(Launch)'],m]
+    elsif str2.include?('adrift') || str2.include?('dream') || str2.include?('valla') || str2.include?('vallite') || str2.include?('dreamy') || str2.include?('dreamer') || str2.include?('dreaming') || str2.include?('dreams') || str2.include?('fauxzura') || str2.include?('fauxura') || str2.include?('revelation') || str2.include?('rev') || str2.include?('revelations')
+      strx='adrift'
+      strx='dream' if str2.include?('dream')
+      strx='dreamy' if str2.include?('dreamy')
+      strx='dreams' if str2.include?('dreams')
+      strx='dreamer' if str2.include?('dreamer')
+      strx='dreaming' if str2.include?('dreaming')
+      strx='valla' if str2.include?('valla')
+      strx='vallite' if str2.include?('vallite')
+      strx='fauxzura' if str2.include?('fauxzura')
+      strx='fauxura' if str2.include?('fauxura')
+      strx='rev' if str2.include?('rev')
+      strx='revelation' if str2.include?('revelation')
+      strx='revelations' if str2.include?('revelations')
+      str2=str3.gsub(strx,'').gsub("#{str} ",str).gsub(" #{str}",str)
+      m=["#{strx}#{str}","#{str}#{strx}","#{strx} #{str}","#{str} #{strx}"]
+      if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("#{str}f") || str2.include?("f#{str}")
+        for i in 0...m.length
+          return [m[i],['Corrin(F)(Adrift)'],m] if event.message.text.downcase.include?(m[i])
+        end
+        return [str,['Corrin(F)(Adrift)'],m]
+      elsif str2.include?("male#{str}") || str2.include?("#{str}male") || str2.include?("#{str}m") || str2.include?("m#{str}")
+        for i in 0...m.length
+          return [m[i],['Corrin(M)(Adrift)'],m] if event.message.text.downcase.include?(m[i])
+        end
+        return [str,['Corrin(M)(Adrift)'],m]
+      end
+      for i in 0...m.length
+        return [m[i],['Corrin(M)(Adrift)','Corrin(F)(Adrift)'],m] if event.message.text.downcase.include?(m[i])
+      end
+      return [str,['Corrin(M)(Adrift)','Corrin(F)(Adrift)'],m]
     end
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?('female') || str2.include?("#{str}f") || str2.include?("f#{str}")
-      return [str,['Corrin(F)'],["female#{str}","f#{str}","#{str}female","#{str}f"]]
+      return [str,['Corrin(F)(Launch)'],["female#{str}","f#{str}","#{str}female","#{str}f"]]
     elsif str2.include?('male') || str2.include?("#{str}m") || str2.include?("m#{str}")
-      return [str,['Corrin(M)'],["male#{str}","m#{str}","#{str}male","#{str}m"]]
+      return [str,['Corrin(M)(Launch)'],["male#{str}","m#{str}","#{str}male","#{str}m"]]
     end
     return [str,['Kamui'],[str]] if str=='kamui' && find_unit('Kamui',event,true)>-1
     return nil if robinmode==2 && str2.downcase != str.downcase
-    return [str,['Corrin(M)','Corrin(F)'],[str]]
+    return [str,['Corrin(M)(Launch)','Corrin(F)(Launch)'],[str]]
   elsif /(morgan|marc)/ =~ str1 || (/linfan/ =~ str1 && !(/duelinfantry/ =~ str1))
     str='morgan'
     str='marc' if str2.include?('marc')
