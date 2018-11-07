@@ -1,5 +1,5 @@
 ['Prf', ['legendary', 'legend', 'prf'], 'Weapon']
-['Retro-Prf', ['retroprf', 'retro-prf', 'retroactive'], 'Weapon']
+['Retro-Prf', ['retroprf', 'retro-prf', 'retroactive', 'f2prfs', 'f2prf', 'retroprfs', 'retro-prfs'], 'Weapon']
 ['Inheritable', ['inheritable', 'non-prf', 'non-legend', 'normal', 'non-legendary', 'inherit', 'nonlegend', 'nonprf', 'nonlegendary'], 'Weapon']
 ['DC', ['dc', 'distantcounter', 'distant-counter', 'distant_counter', 'counter'], 'Weapon']
 ['CC', ['cc', 'closecounter', 'close-counter', 'close_counter', 'counter'], 'Weapon']

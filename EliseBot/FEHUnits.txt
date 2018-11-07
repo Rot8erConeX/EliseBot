@@ -9,10 +9,11 @@ Ares\Red, Blade\ \Cavalry\6, 9, 6, 8, 2\40, 36, 30, 33, 18\PenekoR\Robbie Daymon
 Arthur\Green, Blade\ \Infantry\7, 7, 6, 6, 5\43, 32, 29, 30, 24\Mendako\Cam Clarke\Kitazawa Riki\3p4p3qLU\M\FE14C\Arthur
 Arvis\Red, Tome, Fire\ \Infantry\3, 8, 7, 2, 8\33, 34, 31, 17, 33\Teita\Xander Mobus\Hayami Sho\3g4g3q3q4q\M\FE4\Arvis
 Athena\Red, Blade\ \Infantry\5, 7, 9, 5, 5\36, 31, 38, 27, 24\Miyuu\Cristina Valenzuela\Hikasa Yoko\3p4p\F\FE12, FE11\Athena
-Aversa\Red, Tome, Dark\ \Flier\7, 8, 8, 2, 4\42, 33, 34, 17, 24\\\\3g4g4g\F\FE13\Aversa
+Aversa\Red, Tome, Dark\ \Flier\7, 8, 8, 2, 4\42, 33, 34, 17, 24\PenekoR\Cindy Robinson\\3g4g4g\F\FE13\Aversa
 Ayra\Red, Blade\ \Infantry\6, 8, 8, 7, 4\41, 33, 37, 31, 21\Asatani Tomoyo\Brina Palencia\Orikasa Ai\5p\F\FE4\Ayra
 Azama\Colorless, Healer\ \Infantry\7, 4, 5, 7, 5\43, 21, 26, 32, 25\Okaya\Matt Mercer\Hamada Kenji\3p4pLU\M\FE14B\Azama
 Azura\Blue, Blade\ \Infantry\5, 8, 8, 4, 6\36, 31, 33, 21, 28\kaya8\Rena Strober\Lynn\5pLU\F\FE14, FEW\Azura
+Azura(Adrift)\Gold, Unknown\ \Unknown\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\Rena Strober\Lynn\4t5t\F\FE14, FEW\Azura
 Azura(Performing)\Green, Blade\ \Infantry\5, 8, 8, 4, 6\35, 32, 34, 20, 28\kaya8\Rena Strober\Lynn\5s\F\FE14, FEW\*Azura
 Azura(Winter)\Green, Blade\ \Flier\6, 7, 8, 4, 6\37, 30, 35, 22, 26\kaya8\Rena Strober\Lynn\5s\F\FE14, FEW\Azura
 Barst\Green, Blade\ \Infantry\8, 7, 7, 7, 2\46, 33, 32, 30, 17\Wada Sachiko\DC Douglas\Hamano Daiki\3p4p3q3qLU\M\FE3, FE1, FE11, FE12\Barst
@@ -25,7 +26,8 @@ Bruno\Blue, Tome, Thunder\ \Cavalry\4, 6, 8, 4, 5\33, 29, 35, 22, 25\Kozaki Yusu
 Caeda\Red, Blade\ \Flier\5, 5, 9, 5, 7\36, 25, 37, 24, 34\HAKO\Cherami Leigh\Hayami Saori\3p4pLU\F\FE3, FE1, FE11, FE12, FEW\Caeda
 Caeda(Bride)\Blue, Tome, Thunder\ \Infantry\4, 6, 9, 3, 6\33, 29, 37, 19, 30\Yoshiku\Cherami Leigh\Hayami Saori\5s\F\FE3, FE1, FE11, FE12, FEW\Caeda
 Cain\Red, Blade\ \Cavalry\7, 7, 8, 5, 3\42, 32, 32, 27, 21\Meka\T. Axelrod\Masuda Toshiki\3p4pLU\M\FE3, FE1, FE11, FE12\Cain
-Camilla\Green, Blade\ \Flier\5, 6, 7, 6, 7\37, 30, 32, 28, 31\Maeshima Shigeki\Misty Lee\Sawashiro Miyuki\3p4pLU\F\FE14C, FEW\Camilla
+Camilla(Adrift)\Red, Tome, Dark\ \Flier\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Mikuro\Misty Lee\Sawashiro Miyuki\5p\F\FE14C, FEW\Camilla
+Camilla(Launch)\Green, Blade\ \Flier\5, 6, 7, 6, 7\37, 30, 32, 28, 31\Maeshima Shigeki\Misty Lee\Sawashiro Miyuki\3p4pLU\F\FE14C, FEW\Camilla*
 Camilla(Spring)\Green, Tome, Wind\ \Flier\6, 8, 5, 6, 3\39, 35, 25, 30, 19\Maeshima Shigeki\Misty Lee\Sawashiro Miyuki\5s\F\FE14C, FEW\Camilla
 Camilla(Summer)\Blue, Tome, Thunder\ \Flier\6, 8, 8, 4, 3\39, 33, 36, 23, 19\Mikuro\Misty Lee\Sawashiro Miyuki\5s\F\FE14C, FEW\Camilla
 Camilla(Winter)\Red, Blade\ \Flier\6, 7, 8, 7, 5\40, 33, 35, 31, 23\Mikuro\Misty Lee\Sawashiro Miyuki\5s\F\FE14C, FEW\Camilla
@@ -50,9 +52,11 @@ Clive\Blue, Blade\ \Cavalry\8, 7, 5, 7, 3\45, 33, 25, 32, 19\Tobi\Grant George\K
 Cordelia\Blue, Blade\ \Flier\6, 8, 8, 4, 5\40, 35, 35, 22, 25\Ueda Yumehito\Julie Ann Taylor\Okada Eimi\3p4pLU\F\FE13, FEW\Cordelia
 Cordelia(Bride)\Colorless, Bow\ \Infantry\5, 8, 8, 3, 4\36, 35, 35, 19, 22\Mayo\Julie Ann Taylor\Okada Eimi\5s\F\FE13, FEW\Cordelia
 Cordelia(Summer)\Blue, Blade\ \Cavalry\7, 7, 9, 6, 2\41, 32, 38, 28, 18\Mayo\Julie Ann Taylor\Okada Eimi\5s\F\FE13, FEW\Cordelia
-Corrin(F)\Blue, Dragon\ \Infantry\6, 5, 9, 8, 3\41, 27, 34, 34, 21\Bthx\Marcella Lentz-Pope\Satou Satomi\3p4p4fLU\F\FE14, SSB4, (a)FE15, FEW, SSBU\*Corrin, F
+Corrin(F)(Adrift)\Green, Dragon\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Sencha\Marcella Lentz-Pope\Satou Satomi\5p\F\FE14, SSB4, (a)FE15, FEW, SSBU\Corrin, F
+Corrin(F)(Launch)\Blue, Dragon\ \Infantry\6, 5, 9, 8, 3\41, 27, 34, 34, 21\Bthx\Marcella Lentz-Pope\Satou Satomi\3p4p4fLU\F\FE14, SSB4, (a)FE15, FEW, SSBU\*Corrin, F
 Corrin(F)(Summer)\Blue, Tome, Thunder\ \Flier\4, 7, 8, 4, 5\34, 31, 34, 22, 26\Sencha\Marcella Lentz-Pope\Satou Satomi\5s\F\FE14, SSB4, (a)FE15, FEW, SSBU\Corrin, F
-Corrin(M)\Red, Blade\ \Infantry\6, 7, 7, 6, 5\42, 32, 32, 28, 24\Maiponpon\Cam Clarke\Shimazaki Nobunaga\3p4pLU\M\FE14, SSB4, (a)FE15, FEW, SSBU\*Corrin, M
+Corrin(M)(Adrift)\Blue, Dragon\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Maiponpon\Cam Clarke\Shimazaki Nobunaga\5p\M\FE14, SSB4, (a)FE15, FEW, SSBU\Corrin, M
+Corrin(M)(Launch)\Red, Blade\ \Infantry\6, 7, 7, 6, 5\42, 32, 32, 28, 24\Maiponpon\Cam Clarke\Shimazaki Nobunaga\3p4pLU\M\FE14, SSB4, (a)FE15, FEW, SSBU\*Corrin, M
 Corrin(M)(Winter)\Colorless, Bow\ \Infantry\5, 7, 6, 9, 2\37, 32, 30, 34, 18\Maiponpon\Cam Clarke\Shimazaki Nobunaga\4t5t0s\M\FE14, SSB4, (a)FE15, FEW, SSBU\Corrin, M
 Deirdre\Green, Tome, Wind\ \Infantry\5, 7, 6, 2, 8\36, 33, 28, 16, 35\Haimura Kiyotaka\Erica Mendez\Inoue Kikuko\5p\F\FE4\Deirdre
 Delthea\Blue, Tome, Thunder\ \Infantry\4, 8, 8, 1, 7\33, 36, 34, 13, 31\Miwabe Sakura\Christine Marie Cabanos\Suzuki Eri\5p\F\FE15, FE2\Delthea
@@ -191,6 +195,7 @@ Mia(Halloween)\Colorless, Healer\ \Flier\5, 7, 7, 4, 6\36, 30, 34, 22, 28\Yoneya
 Micaiah\Blue, Tome, Light\ \Infantry\5, 8, 6, 2, 8\35, 35, 28, 18, 35\Chiko\Veronica Taylor\Kuwatani Natsuko\5p\F\FE10\Micaiah
 Micaiah(Festival)\Red, Tome, Fire\ \Infantry\5, 8, 3, 3, 9\33, 34, 20, 18, 34\Chiko\Veronica Taylor\Kuwatani Natsuko\5s\F\FE10\Micaiah
 Michalis\Green, Blade\ \Flier\7, 8, 5, 8, 3\43, 34, 26, 35, 19\Daisuke Izuka\David Vincent\Fukushima Jun\3g4g3q4q\M\FE3, FE1, FE11, FE12\Michalis
+Mikoto\Colorless, Healer\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Ito Misei\Marisha Ray\\5s\F\FE13\Mikoto
 Minerva\Green, Blade\ \Flier\6, 7, 7, 7, 4\40, 31, 33, 32, 22\Daisuke Izuka\Cindy Robinson\Sakura Ayane\5pLU\F\FE3, FE1, FE11, FE12, FEW\Minerva
 Mist\Colorless, Healer\ \Infantry\6, 5, 6, 3, 8\39, 27, 28, 20, 34\Miwabe Sakura\Sarah Williams\Enomoto Atsuko\5p\F\FE9, FE10\Mist
 Morgan(F)\Blue, Tome, Thunder\ \Flier\5, 8, 7, 2, 7\37, 34, 30, 16, 33\Tobi\Nicole Balick\Sawashiro Miyuki\5p\F\FE13\*Morgan, F
@@ -252,7 +257,7 @@ Saizo\Colorless, Dagger\ \Infantry\5, 6, 8, 7, 2\36, 29, 34, 33, 16\Lack\Ben Dis
 Sakura\Colorless, Healer\ \Infantry\5, 6, 6, 5, 6\36, 28, 30, 24, 30\Fuzichoco\Brianna Knickerbocker\Kanemoto Hisako\3p4pLU\F\FE14B, FEW\Sakura
 Sakura(Halloween)\Colorless, Dagger\ \Infantry\4, 7, 8, 1, 8\33, 32, 34, 14, 34\Fuzichoco\Brianna Knickerbocker\Kanemoto Hisako\5s\F\FE14B, FEW\Sakura
 Sanaki\Red, Tome, Fire\ \Infantry\4, 9, 5, 2, 8\33, 37, 26, 17, 34\Tomioka Jiro\Erin Fitzgerald\Nakahara Mai\5p\F\FE10, FE9\Sanaki
-Sanaki(Bride)\Green, Tome, Wind\ \Flier\5, 8, 6, 2, 8\35, 36, 30, 16, 33\Tomioka Jiro\Erin Fitzgerald\Nakahara Mai\5s\F\FE9, FE10\Sanaki
+Sanaki(Bride)\Green, Tome, Wind\ \Flier\5, 8, 6, 2, 8\35, 36, 30, 16, 33\Tomioka Jiro\Sara Beth\Nakahara Mai\5s\F\FE9, FE10\Sanaki
 Selena\Red, Blade\ \Infantry\5, 5, 8, 7, 6\37, 25, 35, 32, 28\Zaza\Julie Ann Taylor\Seto Saori\3p4p3qLU\F\FE14C\Selena
 Seliph\Red, Blade\ \Infantry\9, 8, 4, 6, 4\47, 34, 24, 30, 22\Sata\Christian La Monte\Uchida Yuuma\3p4p\M\FE4, FE5\Seliph
 Serra\Colorless, Healer\ \Infantry\4, 7, 6, 4, 7\33, 30, 31, 21, 33\Kusugi Toku\Kate Davis\Ozawa Ari\3p4p3qLU\F\FE7\Serra

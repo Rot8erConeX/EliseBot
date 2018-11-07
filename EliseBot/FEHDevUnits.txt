@@ -53,7 +53,7 @@ Hone Atk 1\Hone Atk 2\Hone Atk 3
 Spur Atk 2
 
 Cherche
-5\9\Attack\Speed\-
+5\10\Attack\Speed\-
 Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\__Slaying Hammer+ (+) Effect Mode__\Cherche's Axe\Cherche's Axe (+) Effect Mode
 Pivot
 New Moon\Luna
@@ -130,7 +130,7 @@ Holy Vestments\Sacred Cowl\Ice Mirror
 Atk/Def Bond 1\Atk/Def Bond 2\Atk/Def Bond 3
 Shield Pulse 1\Shield Pulse 2\Shield Pulse 3
 Spur Atk 1\Drive Atk 1\Drive Atk 2
-Drive Def 1
+Drive Def 2
 
 Genny
 5\0\HP\Defense\-
