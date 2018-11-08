@@ -143,7 +143,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'arenabonus','arena_bonus','bonusarena','bonus_arena','tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','ttbonus','tt_bonus','skils',
      'bonustt','bonus_tt','oregano','whoisoregano','statsskils','statskils','stats_skils','stat_skils','statsandskils','statandskils','stats_and_skils','skil',
      'stat_and_skils','statsskil','statskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil','sortskil','skilsort',
-     'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist']
+     'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -457,6 +457,8 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,'**reboot**',"Reboots this shard of the bot, installing any updates.\n\n**This command is only able to be used by Rot8er_ConeX**",0x008b8b)
   elsif command.downcase=='sendmessage'
     create_embed(event,'**sendmessage** __channel id__ __*message__',"Sends the message `message` to the channel with id `channel`\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.",0x008b8b)
+  elsif command.downcase=='snagchannels'
+    create_embed(event,'**snagchannels** __server id number__',"Gets a list of all channels in `server id`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif command.downcase=='leaveserver'
     create_embed(event,'**leaveserver** __server id number__',"Forces me to leave the server with the id `server id`.\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.",0x008b8b)
   elsif command.downcase=='snagstats'
@@ -900,18 +902,19 @@ def triple_finish(list,forcetwo=false) # used to split a list into three roughly
   return [['.',p1],['.',p2],['.',p3]]
 end
 
-def safe_to_spam?(event) # determines whether or not it is safe to send extremely long messages
+def safe_to_spam?(event,chn=nil) # determines whether or not it is safe to send extremely long messages
   return true if event.server.nil? # it is safe to spam in PM
   return true if [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504].include?(event.server.id) # it is safe to spam in the emoji servers
   return true if @shardizard==4 # it is safe to spam during debugging
-  return true if ['bots','bot'].include?(event.channel.name.downcase) # channels named "bots" are safe to spam in
-  return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam') # it is safe to spam in any bot spam channel
-  return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('command') # it is safe to spam in any bot spam channel
-  return true if event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('channel') # it is safe to spam in any bot spam channel
-  return true if event.channel.name.downcase.include?('elisebot')  # it is safe to spam in channels designed specifically for EliseBot
-  return true if event.channel.name.downcase.include?('elise-bot')
-  return true if event.channel.name.downcase.include?('elise_bot')
-  return true if @spam_channels.include?(event.channel.id)
+  chn=event.channel if chn.nil?
+  return true if ['bots','bot'].include?(chn.name.downcase) # channels named "bots" are safe to spam in
+  return true if chn.name.downcase.include?('bot') && chn.name.downcase.include?('spam') # it is safe to spam in any bot spam channel
+  return true if chn.name.downcase.include?('bot') && chn.name.downcase.include?('command') # it is safe to spam in any bot spam channel
+  return true if chn.name.downcase.include?('bot') && chn.name.downcase.include?('channel') # it is safe to spam in any bot spam channel
+  return true if chn.name.downcase.include?('elisebot')  # it is safe to spam in channels designed specifically for EliseBot
+  return true if chn.name.downcase.include?('elise-bot')
+  return true if chn.name.downcase.include?('elise_bot')
+  return true if @spam_channels.include?(chn.id)
   return false
 end
 
@@ -12780,6 +12783,23 @@ bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, 
   end
 end
 
+bot.command([:channellist,:chanelist,:spamchannels,:spamlist]) do |event|
+  if event.server.nil?
+    event.respond "Yes, it is safe to spam here."
+    return nil
+  end
+  sfe=[[],[]]
+  for i in 0...event.server.channels.length
+    chn=event.server.channels[i]
+    if safe_to_spam?(event,chn)
+      sfe[0].push(chn.mention)
+    end
+  end
+  event << '__**All long replies are safe**__'
+  event << sfe[0].join("\n")
+  event << 'In PM with any user'
+end
+
 bot.command([:alts,:alt]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
@@ -17093,9 +17113,10 @@ bot.command(:snagchannels, from: 167657750971547648) do |event, server_id|
   end
   msg="__**#{bot.server(server_id.to_i).name}**__\n\n__*Text Channels*__"
   srv=bot.server(server_id.to_i)
-  for i in 0...srv.channels.length
-    chn=srv.channels[i]
-    msg=extend_message(msg,"*#{chn.name}* (#{chn.id})#{' - can post' if bot.user(bot.profile.id).on(srv.id).permission?(:send_messages,chn)}",event) if chn.type.zero?
+  k=srv.channels.reject{|q| !bot.user(bot.profile.id).on(srv.id).can_read_messages?(q) || !q.type.zero?}
+  k=k.map{|q| "*#{q.name}*  (#{q.id})#{'  -  can post' if bot.user(bot.profile.id).on(srv.id).can_send_messages?(q)}"}.sort
+  for i in 0...k.length
+    msg=extend_message(msg,k[i],event)
   end
   event.respond msg
 end
