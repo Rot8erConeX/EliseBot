@@ -599,6 +599,8 @@
 ['Distant Spd 3', ['distantspeed', 'distantspd', 'distantspeed3', 'distantspd3'], 2, 'In-Combat Buffs 1', [0, 0, 0, 0, 0]]
 ['Distant Spd 2', ['distantspeed2', 'distantspd2'], 2, 'In-Combat Buffs 1', [0, 0, 0, 0, 0]]
 ['Distant Spd 1', ['distantspeed1', 'distantspd1'], 2, 'In-Combat Buffs 1', [0, 0, 0, 0, 0]]
+['Close Stance', ['closestance'], 2, 'In-Combat Buffs 1', [0, 0, 0, 0, 0]]
+['Distant Stance', ['distantstance', 'distance'], 2, 'In-Combat Buffs 1', [0, 0, 0, 0, 0]]
 ['Close Spectrum', ['closespectrum', 'closeall'], 2, 'In-Combat Buffs 1', [0, 0, 0, 0, 0]]
 ['Distant Spectrum', ['distantspectrum', 'distantall'], 2, 'In-Combat Buffs 1', [0, 0, 0, 0, 0]]
 ['Fire Boost 3', ['fireboost3', 'blazeboost3', 'attackboost3', 'atkboost3', 'attboost3', 'fireboost', 'blazeboost', 'attackboost', 'atkboost', 'attboost'], 2, 'In-Combat Buffs 1', [0, 6, 0, 0, 0]]

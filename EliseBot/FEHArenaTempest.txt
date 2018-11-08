@@ -1,11 +1,9 @@
-Flora, Nina, Ophelia, Silas, Ethlyn, Garon, Lavatain, Laegjarn, Helbindi, Fjorm\Arena\09/10/2018, 15/10/2018\Earth, Fire
-Myrrh(Halloween), Kagero(Halloween), Niles(Halloween), Mia(Halloween), Dorcas(Halloween), Myrrh, Mia, Dorcas\Tempest\14/10/2018, 23/10/2018
-Tiki(Young)(Earth), Kagero(Halloween), Myrrh(Halloween), Mia(Halloween), Niles(Halloween), Dorcas(Halloween), Saias, Legion, Lon'qu, Alfonse\Arena\16/10/2018, 22/10/2018\Earth, Wind
-Tiki(Young)(Earth), Kagero(Halloween), Myrrh(Halloween), Mia(Halloween), Niles(Halloween), Dorcas(Halloween), Saias, Legion, Lon'qu, Alfonse\Arena\23/10/2018, 29/10/2018\Earth, Water
-Kliff, Loki, Owain, Aversa, Kana(M), Camus, Jeorge, Luke, Hawkeye, Sharena\Arena\30/10/2018, 05/11/2018\Water, Fire
 Kliff, Loki, Owain, Aversa, Kana(M), Camus, Jeorge, Luke, Hawkeye, Sharena\Arena\06/11/2018, 12/11/2018\Water, Earth
--\Arena\13/11/2018, 19/11/2018\Water, Wind
--\Arena\20/11/2018, 26/11/2018\Water, Fire
+Loki, Owain, Kliff, Aversa, Narcian, Robin(F), Hinata, Est, Fjorm, Sharena\Aether\09/11/2018, 18/11/2018
+Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Ryoma, Hinoka(Wings), Leo\Tempest\12/11/2018, 21/11/2018
+Eirika(Graceful), Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Julius, Robin(F), Gwendolyn, Anna\Arena\13/11/2018, 19/11/2018\Water, Wind
+Eirika(Graceful), Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Ursula, Michalis, Ike(Vanguard), Sharena\Aether\19/11/2018, 25/11/2018
+Eirika(Graceful), Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Julius, Robin(F), Gwendolyn, Anna\Arena\20/11/2018, 26/11/2018\Water, Fire
 -\Arena\27/11/2018, 03/12/2018\Water, Earth
 -\Arena\04/12/2018, 10/12/2018\Water, Wind
 -\Arena\11/12/2018, 17/12/2018\Water, Fire
