@@ -143,7 +143,9 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'arenabonus','arena_bonus','bonusarena','bonus_arena','tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','ttbonus','tt_bonus','skils',
      'bonustt','bonus_tt','oregano','whoisoregano','statsskils','statskils','stats_skils','stat_skils','statsandskils','statandskils','stats_and_skils','skil',
      'stat_and_skils','statsskil','statskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil','sortskil','skilsort',
-     'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist']
+     'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
+     'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
+     'aether','bonus_raids']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -527,8 +529,10 @@ bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, su
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['arena'].include?("#{subcommand}".downcase)}**",'Displays current and future Arena Bonus Units',0xD49F61)
   elsif ['tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','tt','ttbonus','tt_bonus','bonustt','bonus_tt'].include?(command.downcase) || (['bonus'].include?(command.downcase) && ['tempest','tt'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['tempest','tt'].include?("#{subcommand}".downcase)}**",'Displays current and future Tempest Trials Bonus Units',0xD49F61)
+  elsif ['aetherbonus','aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids','aether','bonus_raids'].include?(command.downcase) || (['bonus'].include?(command.downcase) && ['aether','raid','raids'].include?("#{subcommand}".downcase))
+    create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['aether','raid','raids'].include?("#{subcommand}".downcase)}**",'Displays current and future Aether Raids Bonus Units',0xD49F61)
   elsif ['bonus'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}**",'Displays current and future Bonus Units for both Arena and Tempest Trials.',0xD49F61)
+    create_embed(event,"**#{command.downcase}**",'Displays current and future Bonus Units for Arena, Tempest Trials, and Aether Raids.',0xD49F61)
   elsif ['skillrarity','skilrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['rarity','rarities'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['rarity','rarities'].include?("#{subcommand}".downcase)}**",'Explains why some units have skills listed at lower rarities than they are available at.',0xD49F61)
   elsif ['color','colors','colour','colours'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['color','colors','colour','colours'].include?("#{subcommand}".downcase))
@@ -1269,6 +1273,7 @@ def get_bonus_units(type='Arena',mode=0)
   bonus_load()
   t=Time.now
   timeshift=8
+  timeshift-=1 unless t.dst?
   t-=60*60*timeshift
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
   b=@bonus_units.map{|q| q}
@@ -1319,6 +1324,7 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
   b2=b.map{|q| q} if b2.length==0
   t=Time.now
   timeshift=8
+  timeshift-=1 unless t.dst?
   t-=60*60*timeshift
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
   b3=b2.map{|q| q}
@@ -3262,7 +3268,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{stat}"}
     lemote2=moji[0].mention unless moji.length<=0
   end
-  return "#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* Legendary Hero" unless jj[2][0]==" "}#{"\n<:Current_Arena_Bonus:498797967042412544> Current Arena Bonus unit" if get_bonus_units('Arena').include?(jj[0])}#{"\n<:Current_Tempest_Bonus:498797966740422656> Current Tempest Bonus unit" if get_bonus_units('Tempest').include?(jj[0])}"
+  return "#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* Legendary Hero" unless jj[2][0]==" "}#{"\n<:Current_Arena_Bonus:498797967042412544> Current Arena Bonus unit" if get_bonus_units('Arena').include?(jj[0])}#{"\n<:Current_Tempest_Bonus:498797966740422656> Current Tempest Bonus unit" if get_bonus_units('Tempest').include?(jj[0])}#{"\n<:Current_Aether_Bonus:510022809741950986> Current Aether Bonus unit" if get_bonus_units('Aether').include?(jj[0])}"
 end
 
 def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily by the BST and Alt commands to display a unit's weapon and movement classes as emojis
@@ -3331,7 +3337,7 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily b
       semote="#{semote}<:Icon_Support:448293527642701824>" unless donor_unit_list(uid)[x2][5]=='-'
     end
   end
-  return "#{wemote}#{memote}#{dancer}#{lemote1}#{lemote2}#{"<:Current_Arena_Bonus:498797967042412544>" if get_bonus_units('Arena').include?(jj[0]) && mode%8<4}#{"<:Current_Tempest_Bonus:498797966740422656>" if get_bonus_units('Tempest').include?(jj[0]) && mode%8<4}#{semote}"
+  return "#{wemote}#{memote}#{dancer}#{lemote1}#{lemote2}#{"<:Current_Arena_Bonus:498797967042412544>" if get_bonus_units('Arena').include?(jj[0]) && mode%8<4}#{"<:Current_Tempest_Bonus:498797966740422656>" if get_bonus_units('Tempest').include?(jj[0]) && mode%8<4}#{"<:Current_Aether_Bonus:510022809741950986>" if get_bonus_units('Aether').include?(jj[0]) && mode%8<4}#{semote}"
 end
 
 def skill_tier(name,event) # used by the "used a non-plus version of a weapon that has a + form" tooltip in the stats command to figure out the tier of the weapon
@@ -9469,6 +9475,7 @@ def sort_legendaries(event,bot,mode=0)
   end
   t=Time.now
   timeshift=8
+  timeshift-=1 unless t.dst?
   t-=60*60*timeshift
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
   b=[]
@@ -10010,9 +10017,10 @@ def show_bonus_units(event,args='',bot)
   data_load()
   t=Time.now
   timeshift=8
+  timeshift-=1 unless t.dst?
   t-=60*60*timeshift
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
-  unless args=='Tempest'
+  unless args=='Tempest' || args=='Aether'
     b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][1].split('/').reverse.join('').to_i<tm}
     if b.length<=0
       event.respond "There are no known quantities about Arena."
@@ -10066,7 +10074,7 @@ def show_bonus_units(event,args='',bot)
         if safe_to_spam?(event)
           flds.push([ss,m.join("\n")])
           for i in 0...flds.length
-            create_embed(event,"__**#{flds[i][0]}**__",flds[i][1],0x002837)
+            create_embed(event,"__**Arena: #{flds[i][0]}**__",flds[i][1],0x002837)
           end
         else
           create_embed(event,"__**Arena Bonus Units**__",'',0x002837,nil,nil,flds[0,[2,flds.length].min])
@@ -10074,7 +10082,7 @@ def show_bonus_units(event,args='',bot)
       end
     end
   end
-  unless args=='Arena'
+  unless args=='Arena' || args=='Aether'
     b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][1].split('/').reverse.join('').to_i<tm}
     if b.length<=0
       event.respond "There are no known quantities about Tempest."
@@ -10091,7 +10099,39 @@ def show_bonus_units(event,args='',bot)
         k=b[1][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
         flds.push(['Future',k.join("\n")])
       end
-      create_embed(event,"__**Tempest Trials Bonus Units**__",'',0x5ED0CF,nil,nil,flds)
+      if flds.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length>1500
+        for i in 0...flds.length
+          create_embed(event,"__**Tempest Trials: #{flds[i][0]}**__",flds[i][1],0x5ED0CF)
+        end
+      else
+        create_embed(event,"__**Tempest Trials Bonus Units**__",'',0x5ED0CF,nil,nil,flds)
+      end
+    end
+  end
+  unless args=='Arena' || args=='Tempest'
+    b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      event.respond "There are no known quantities about Aether Raids."
+    else
+      flds=[]
+      k=b[0][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
+      if b[0][2][0].split('/').reverse.join('').to_i<tm || b.length>1
+        msg2="Current"
+      else
+        msg2="Future"
+      end
+      flds.push([msg2,k.join("\n")])
+      if b.length>1
+        k=b[1][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
+        flds.push(['Future',k.join("\n")])
+      end
+      if flds.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length>1500
+        for i in 0...flds.length
+          create_embed(event,"__**Aether Raids: #{flds[i][0]}**__",flds[i][1],0x54C571)
+        end
+      else
+        create_embed(event,"__**Aether Raids Bonus Units**__",'',0x54C571,nil,nil,flds)
+      end
     end
   end
 end
@@ -10364,6 +10404,7 @@ def parse_function(callback,event,args,bot,healers=nil)
     elsif callback==:banner_list
       t=Time.now
       timeshift=8
+      timeshift-=1 unless t.dst?
       t-=60*60*timeshift
       msg="No unit was included.  Showing current and upcoming banners.\n\nDate assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
       t2=Time.new(2017,2,2)-60*60
@@ -10744,7 +10785,7 @@ def unit_study(event,name,bot,weapon=nil)
   end
   rardata=u40x[9][0].downcase.gsub('0s','')
   highest_merge=0
-  if rardata.include?('p') || rardata.include?('s')
+  if rardata.include?('p') || rardata.include?('s') || rardata.include?('r')
     highest_merge=@max_rarity_merge[1]
   elsif rardata.include?('-')
     highest_merge=0
@@ -10768,6 +10809,7 @@ def unit_study(event,name,bot,weapon=nil)
     summon_type[6].push("Seasonal #{m}#{@rarity_stars[m-1]} summon") if rardata.include?("#{m}s")
     summon_type[6].push("Story unit starting at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}y")
     summon_type[6].push("Purchasable at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}b")
+    summon_type[6].push("Grail summon at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}r")
   end
   if summon_type[6].include?('Story unit starting at 2<:Icon_Rarity_2:448266417872044032>') && summon_type[6].include?('Story unit starting at 4<:Icon_Rarity_4:448266418459377684>')
     for i in 0...summon_type[6].length
@@ -11934,6 +11976,11 @@ def phase_study(event,name,bot,weapon=nil)
       close[3]+=4
       close[4]+=4
       close[5]+=4
+    elsif stat_skills_3[i]=='Close Stance'
+      close[2]+=4
+      close[3]+=4
+      close[4]+=4
+      close[5]+=4
     elsif stat_skills_3[i][0,12]=='Close Guard '
       close[4]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
       close[5]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
@@ -11946,6 +11993,11 @@ def phase_study(event,name,bot,weapon=nil)
       close[5]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Def')
     end
     if stat_skills_3[i]=='Distant Spectrum'
+      distant[2]+=4
+      distant[3]+=4
+      distant[4]+=4
+      distant[5]+=4
+    elsif stat_skills_3[i]=='Distant Stance'
       distant[2]+=4
       distant[3]+=4
       distant[4]+=4
@@ -12010,6 +12062,12 @@ def phase_study(event,name,bot,weapon=nil)
   ppu40[16]=ppu40[1]+ppu40[2]+ppu40[3]+ppu40[4]+ppu40[5]
   epu40[16]=epu40[1]+epu40[2]+epu40[3]+epu40[4]+epu40[5]
   zzzl=sklz[ww2]
+  if zzzl[11].split(', ').include?('CloseStance') || (zzzl[11].split(', ').include?('(R)CloseStance') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)CloseStance') && refinement=='Effect')
+    close[2]+=4
+    close[3]+=4
+    close[4]+=4
+    close[5]+=4
+  end
   if zzzl[11].split(', ').include?('CloseDef') || (zzzl[11].split(', ').include?('(R)CloseDef') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)CloseDef') && refinement=='Effect')
     close[4]+=6
     close[5]+=6
@@ -12019,6 +12077,12 @@ def phase_study(event,name,bot,weapon=nil)
   end
   if zzzl[11].split(', ').include?('CloseSpd') || (zzzl[11].split(', ').include?('(R)CloseSpd') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)CloseSpd') && refinement=='Effect')
     close[3]+=6
+  end
+  if zzzl[11].split(', ').include?('DistantStance') || (zzzl[11].split(', ').include?('(R)DistantStance') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)DistantStance') && refinement=='Effect')
+    distant[2]+=4
+    distant[3]+=4
+    distant[4]+=4
+    distant[5]+=4
   end
   if zzzl[11].split(', ').include?('DistantDef') || (zzzl[11].split(', ').include?('(R)DistantDef') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)DistantDef') && refinement=='Effect')
     distant[4]+=6
@@ -12815,6 +12879,7 @@ bot.command([:banners, :banner]) do |event, *args|
   if args.nil? || args.length<1 || ['next','schedule'].include?(args[0].downcase)
     t=Time.now
     timeshift=8
+    timeshift-=1 unless t.dst?
     t-=60*60*timeshift
     msg="No unit was included.  Showing current and upcoming banners.\n\nDate assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
     t2=Time.new(2017,2,2)-60*60
@@ -13913,12 +13978,15 @@ end
 
 bot.command(:bonus) do |event|
   return nil if overlap_prevent(event)
-  if event.message.text.downcase.split(' ').include?('arena') && (event.message.text.downcase.split(' ').include?('tempest') || event.message.text.downcase.split(' ').include?('tt'))
+  x=event.message.text.downcase.split(' ')
+  if x.include?('arena') && (x.include?('tempest') || x.include?('tt')) && (x.include?('aether') || x.include?('raid') || x.include?('raids'))
     show_bonus_units(event,'',bot)
-  elsif event.message.text.downcase.split(' ').include?('arena')
+  elsif x.include?('arena')
     show_bonus_units(event,'Arena',bot)
-  elsif event.message.text.downcase.split(' ').include?('tempest') || event.message.text.downcase.split(' ').include?('tt')
+  elsif x.include?('tempest') || x.include?('tt')
     show_bonus_units(event,'Tempest',bot)
+  elsif x.include?('aether') || x.include?('raid') || x.include?('raids')
+    show_bonus_units(event,'Aether',bot)
   else
     show_bonus_units(event,'',bot)
   end
@@ -13934,6 +14002,12 @@ end
 bot.command([:tempest,:tempestbonus,:tempest_bonus,:bonustempest,:bonus_tempest,:tt,:ttbonus,:tt_bonus,:bonustt,:bonus_tt]) do |event|
   return nil if overlap_prevent(event)
   show_bonus_units(event,'Tempest',bot)
+  return nil
+end
+
+bot.command([:aether,:aetherbonus,:aether_bonus,:aethertempest,:aether_tempest,:raid,:raidbonus,:raid_bonus,:bonusraid,:bonus_raid,:raids,:raidsbonus,:raids_bonus,:bonusraids,:bonus_raids]) do |event|
+  return nil if overlap_prevent(event)
+  show_bonus_units(event,'Aether',bot)
   return nil
 end
 
@@ -15439,6 +15513,7 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   return nil if overlap_prevent(event)
   t=Time.now
   timeshift=8
+  timeshift-=1 unless t.dst?
   t-=60*60*timeshift
   str="Time elapsed since today's reset: #{"#{t.hour} hours, " if t.hour>0}#{"#{'0' if t.min<10}#{t.min} minutes, " if t.hour>0 || t.min>0}#{'0' if t.sec<10}#{t.sec} seconds"
   str="#{str}\nTime until tomorrow's reset: #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds"
@@ -15446,6 +15521,7 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   t2=t-t2
   date=(((t2.to_i/60)/60)/24)
   str="#{str}\nThe Arena season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete your daily Arena-related quests before then!" if date%7==4 && 15-t.hour>=0
+  str="#{str}\nThe Aether Raid season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete any Aether-related quests before then!" if date%7==3 && 15-t.hour>=0 && "#{t.day}#{t.month}#{t.year}".to_i==11112018
   colors=['Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>',
           'Colorless <:Shard_Colorless:443733396921909248><:Crystal_Transparent:445510676295843870><:Badge_Transparent:445510675976945664><:Great_Badge_Transparent:443704781597573120>',
           'Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>',
@@ -15675,12 +15751,14 @@ bot.command([:next,:schedule]) do |event, type|
   idx=11 if ['tactics','tactic','drills','drill','tacticsdrills','tactics_drills','tacticsdrill','tactics_drill','tacticdrills','tactic_drills','tacticdrill','tactic_drill'].include?(type.downcase)
   idx=12 if ['arena','bonus','arenabonus','arena_bonus'].include?(type.downcase)
   idx=13 if ['tempest','tempestbonus','tempest_bonus'].include?(type.downcase)
+  idx=14 if ['aether','aetherbonus','aether_bonus','raid','raidbonus','raid_bonus','raids','raidsbonus','raids_bonus'].include?(type.downcase)
   if idx<0 && !safe_to_spam?(event)
-    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nBonus"
+    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nAether, AetherBonus, Aether_Bonus\nBonus"
     return nil
   end
   t=Time.now
   timeshift=8
+  timeshift-=1 unless t.dst?
   t-=60*60*timeshift
   msg="Date assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
   t2=Time.new(2017,2,2)-60*60
@@ -15900,6 +15978,7 @@ bot.command([:next,:schedule]) do |event, type|
     data_load()
     t=Time.now
     timeshift=8
+    timeshift-=1 unless t.dst?
     t-=60*60*timeshift
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
     b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][1].split('/').reverse.join('').to_i<tm}
@@ -15946,6 +16025,7 @@ bot.command([:next,:schedule]) do |event, type|
     t=Time.now
     timeshift=8
     t-=60*60*timeshift
+    timeshift-=1 unless t.dst?
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
     b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][1].split('/').reverse.join('').to_i<tm}
     if b.length<=0
@@ -15966,13 +16046,44 @@ bot.command([:next,:schedule]) do |event, type|
       end
     end
   end
-  event.respond msg unless [10,12,13].include?(idx)
+  idx=14 if ['bonus'].include?(type.downcase)
+  if idx==14
+    show_bonus_units(event,'Aether',bot)
+  elsif idx==-1
+    bonus_load()
+    data_load()
+    t=Time.now
+    timeshift=8
+    t-=60*60*timeshift
+    timeshift-=1 unless t.dst?
+    tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+    b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      msg=extend_message(msg,"There are no known quantities about Aether Raids.",event,2)
+    else
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      if b[0][2][0].split('/').reverse.join('').to_i<tm || b.length>1
+        msg2="__**Current Aether Raids Bonus Units**__"
+      else
+        msg2="__**Future Aether Raids Bonus Units**__"
+      end
+      m=k.length%2
+      msg=extend_message(msg,"#{msg2}\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}",event,2)
+      if b.length>1
+        k=b[1][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        m=k.length%2
+        msg=extend_message(msg,"__**Future Aether Raids Bonus Units**__\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}",event,2)
+      end
+    end
+  end
+  event.respond msg unless [10,12,13,14].include?(idx)
 end
 
 bot.command([:status, :avatar, :avvie]) do |event, *args|
   return nil if overlap_prevent(event)
   t=Time.now
   timeshift=6
+  timeshift-=1 unless t.dst?
   t-=60*60*timeshift
   if event.user.id==167657750971547648 && !args.nil? && args.length>0 # only work when used by the developer
     bot.game=args.join(' ')
@@ -17754,6 +17865,7 @@ bot.mention do |event|
     if a.length.zero? || ['next','schedule'].include?(a[0].downcase)
       t=Time.now
       timeshift=8
+      timeshift-=1 unless t.dst?
       t-=60*60*timeshift
       msg="No unit was included.  Showing current and upcoming banners.\n\nDate assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
       t2=Time.new(2017,2,2)-60*60
@@ -18032,6 +18144,7 @@ end
 def disp_current_events(mode=0)
   t=Time.now
   timeshift=8
+  timeshift-=1 unless t.dst?
   t-=60*60*timeshift
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
   mdfr='left'
