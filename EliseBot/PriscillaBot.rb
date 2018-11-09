@@ -3352,22 +3352,13 @@ def skill_tier(name,event) # used by the "used a non-plus version of a weapon th
 end
 
 def get_bonus_type(event) # used to determine if the embed header should say Tempest or Arena bonus unit
-  if event.message.text.downcase.split(' ').include?('bonus')
-    if event.message.text.downcase.split(' ').include?('tempest') && !event.message.text.downcase.split(' ').include?('arena')
-      return 'Tempest'
-    elsif event.message.text.downcase.split(' ').include?('arena') && !event.message.text.downcase.split(' ').include?('tempest')
-      return 'Arena'
-    else
-      return 'Tempest/Arena'
-    end
-  elsif event.message.text.downcase.split(' ').include?('tempest') && event.message.text.downcase.split(' ').include?('arena')
-    return 'Tempest/Arena'
-  elsif event.message.text.downcase.split(' ').include?('tempest')
-    return 'Tempest'
-  elsif event.message.text.downcase.split(' ').include?('arena')
-    return 'Arena'
-  end
-  return ''
+  x=event.message.text.downcase.split(' ')
+  x2=[]
+  x2.push('Tempest') if x.include?('tempest')
+  x2.push('Arena') if x.include?('arena')
+  x2.push('Aether') if x.include?('aether') || x.include?('raid')
+  x2.push('Tempest/Arena/Aether') if x.include?('bonus') && x2.length<=0
+  return x2.join('/')
 end
 
 def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,weapon='-',expandedmode=false,modemode=false) # used by the stats command and any derivatives to display which skills are affecting the stats being displayed
@@ -3944,7 +3935,10 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   ggg=''
   ggg='Arena' if get_bonus_units('Arena').include?(u40[0])
   ggg='Tempest' if get_bonus_units('Tempest').include?(u40[0])
+  ggg='Aether' if get_bonus_units('Aether').include?(u40[0])
   ggg='Bonus' if get_bonus_units('Tempest').include?(u40[0]) && get_bonus_units('Arena').include?(u40[0])
+  ggg='Bonus' if get_bonus_units('Tempest').include?(u40[0]) && get_bonus_units('Aether').include?(u40[0])
+  ggg='Bonus' if get_bonus_units('Aether').include?(u40[0]) && get_bonus_units('Arena').include?(u40[0])
   ggg='' if tempest.length>0
   ftr="Include the word \"#{ggg}\" to apply bonus unit buffs" if ggg.length>0
   if weapon != '-'
@@ -4456,7 +4450,10 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   ggg=''
   ggg='Arena' if get_bonus_units('Arena').include?(u40[0])
   ggg='Tempest' if get_bonus_units('Tempest').include?(u40[0])
+  ggg='Aether' if get_bonus_units('Aether').include?(u40[0])
   ggg='Bonus' if get_bonus_units('Tempest').include?(u40[0]) && get_bonus_units('Arena').include?(u40[0])
+  ggg='Bonus' if get_bonus_units('Tempest').include?(u40[0]) && get_bonus_units('Aether').include?(u40[0])
+  ggg='Bonus' if get_bonus_units('Aether').include?(u40[0]) && get_bonus_units('Arena').include?(u40[0])
   ggg='' if tempest.length>0
   ftr="Include the word \"#{ggg}\" to apply bonus unit buffs" if ggg.length>0 && (sp>0 || rand(2)==0)
   if weapon != '-'
@@ -12250,10 +12247,24 @@ def disp_art(event,name,bot,weapon=nil)
       for i in 0...b.length
         b[i]=b[i].gsub("\n",'').split('\\'[0])
         unless nammes[0].nil? || nammes[0].length<=0 || b[i][24].nil? || b[i][24].length<=0
-          charsx[0].push("FGO #{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][24]==nammes[0]
+          charsx[0].push("FGO Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][24]==nammes[0]
         end
         unless nammes[2].nil? || nammes[2].length<=0 || b[i][25].nil? || b[i][25].length<=0
-          charsx[1].push("FGO #{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} *[Japanese]*") if b[i][25].split(' & ').include?(nammes[2])
+          charsx[1].push("FGO Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} *[Japanese]*") if b[i][25].split(' & ').include?(nammes[2])
+        end
+      end
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FGOCraftEssances.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FGOCraftEssances.txt').each_line do |line|
+          b.push(line)
+        end
+      else
+        b=[]
+      end
+      for i in 0...b.length
+        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        unless nammes[0].nil? || nammes[0].length<=0 || b[i][9].nil? || b[i][9].length<=0
+          charsx[0].push("FGO CE-#{b[i][0]}#{".) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][9]==nammes[0]
         end
       end
     end
