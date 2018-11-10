@@ -30,6 +30,7 @@ bot.gateway.check_heartbeat_acks = false
 # initialize global variables
 @units=[]
 @skills=[]
+@structures=[]
 @aliases=[]
 @multi_aliases=[]
 @groups=[]
@@ -145,7 +146,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'stat_and_skils','statsskil','statskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil','sortskil','skilsort',
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
-     'aether','bonus_raids']
+     'aether','bonus_raids','structure','struct']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -236,6 +237,21 @@ def data_load() # loads the character and skill data from the files on my comput
     bob4[15]=nil unless bob4[15].nil? || bob4[15].length>0 # this entry is used by weapons to store their refinement data
     @skills.push(bob4)
   end
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStructures.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStructures.txt').each_line do |line|
+      b.push(line)
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    b[i]=b[i].gsub("\n",'').split('\\'[0])
+    b[i][1]=b[i][1].to_i
+    b[i][5]=b[i][5].split(', ').map{|q| q.to_i}
+    b[i][6]=b[i][6].to_i
+  end
+  @structures=b.map{|q| q}
 end
 
 def nicknames_load() # loads the nickname list
@@ -1707,6 +1723,47 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill(name.downcase.gsub(' ','').gsub('greent','g t'),event) if namex=='greentome'[0,namex.length]
   return find_skill(name.downcase.gsub('_',' '),event) if name.include?('_')
   return -1
+end
+
+def find_structure(name,event,fullname=false)
+  data_load()
+  strct=@structures.map{|q| q}
+  name=name.downcase.gsub('armour','armor').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
+  return [] if name.length<3
+  k=strct.find_index{|q| "#{q[0]} #{q[1]}".downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name}
+  return [k] unless k.nil?
+  s=strct.reject{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')!=name}
+  return s.map{|q| strct.find_index{|q2| q==q2}} if s.length>0
+  return [] if fullname
+  k=strct.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
+  s=[]
+  s=strct.reject{|q| q[0]!=strct[k][0] || q[2]!=strct[k][2]} unless k.nil?
+  return s.map{|q| strct.find_index{|q2| q==q2}} if s.length>0
+  return []
+end
+
+def find_structure_ex(name,event,fullname=false)
+  puts name
+  k=find_structure(name,event,true)
+  return k if k.length>0
+  args=name.split(' ')
+  for i in 0...args.length-1
+    for i2 in 0...args.length-i
+      k=find_structure(args[i,args.length-1-i-i2].join(' '),event,true)
+      return k if k.length>0 && args[i,args.length-1-i-i2].length>0
+    end
+  end
+  return [] if fullname
+  k=find_structure(name,event)
+  return k if k.length>0
+  args=name.split(' ')
+  for i in 0...args.length-1
+    for i2 in 0...args.length-i
+      k=find_structure(args[i,args.length-1-i-i2].join(' '),event)
+      return k if k.length>0 && args[i,args.length-1-i-i2].length>0
+    end
+  end
+  return []
 end
 
 def find_promotions(j,event) # finds the promotions of a given skill.  Input is given in the skill's entry number, not name
@@ -5878,6 +5935,111 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   create_embed(event,"#{"__#{"Mathoo's " if mu}**#{@units[j][0].gsub('Lavatain','Laevatein')}**__" unless f}",txt,xcolor,ftr,pick_thumbnail(event,j,bot),flds)
 end
 
+def disp_struct(bot,name,event,ignore=false)
+  data_load()
+  bonus_load()
+  t=Time.now
+  timeshift=8
+  timeshift-=1 unless t.dst?
+  t-=60*60*timeshift
+  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
+  s=event.message.text
+  s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
+  s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
+  a=s.split(' ').reject{ |q| q.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  if all_commands().include?(a[0])
+    a.shift
+    s=a.join(' ')
+  end
+  args=s.split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  name=args.join(' ') if name.nil?
+  puts args.to_s
+  k=find_structure_ex(args.join(' '),event)
+  if k.length<=0
+    event.respond 'No matches found.' unless ignore
+    return nil
+  end
+  k=k.map{|q| @structures[q]}
+  xcolor=0x54C571
+  text=''
+  x2='Effect'
+  if k[0][2]=='Offensive/Defensive'
+    xcolor=0x8CAA7B
+    text="<:Offensive_Structure:510774545997758464><:Defensive_Structure:510774545108566016>**Type:** Offensive/Defensive"
+  elsif k[0][2]=='Offensive'
+    xcolor=0xF0631E
+    text="<:Offensive_Structure:510774545997758464>**Type:** Offensive"
+  elsif k[0][2]=='Defensive'
+    xcolor=0x27F2D8
+    text="<:Defensive_Structure:510774545108566016>**Type:** Defensive"
+  elsif k[0][2]=='Trap'
+    xcolor=0xB950E9
+    text="<:Trap_Structure:510774545179869194>**Type:** Trap"
+  elsif k[0][2]=='Resources'
+    xcolor=0xD3DADC
+    text="<:Resource_Structure:510774545154572298>**Type:** Resource"
+  elsif k[0][2]=='Ornamant'
+    xcolor=0xFEE257
+    text="<:Ornamental_Structure:510774545150640128>**Type:** Ornament"
+    x2='Description'
+  else
+    text="**Type:** Unknown"
+  end
+  text="#{text}\n**#{x2}:** #{k[0][3]}" if k.map{|q| q[3]}.uniq.length<2
+  text="#{text}\n**This structure is currently a bonus structure for both Offense and Defense**" if b[0][3][0]==k[0][0] && b[0][3][1]==k[0][0]
+  text="#{text}\n**This structure is currently a bonus structure for both Offense**" if b[0][3][0]==k[0][0] && b[0][3][1]!=k[0][0]
+  text="#{text}\n**This structure is currently a bonus structure for both Defense**" if b[0][3][0]!=k[0][0] && b[0][3][1]==k[0][0]
+  if k.length>1
+    for i in 0...k.length
+      x=' '
+      x="\n" if k.map{|q| q[3]}.uniq.length>1 || k.map{|q| q[4]}.uniq.length>1 || k.map{|q| q[7]}.uniq.length>1
+      text="#{text}\n" if k.map{|q| q[3]}.uniq.length>1 || k.map{|q| q[4]}.uniq.length>1 || k.map{|q| q[7]}.uniq.length>1 || i.zero?
+      text="#{text}\n**Level #{k[i][1]}:**"
+      text="#{text}#{x}*Cost:* "
+      text="#{text}#{k[i][5][0]}<:Aether_Stone:510776805746278421>" if k[i][5][0]>0
+      text="#{text}#{k[i][5][1]}<:Heavenly_Dew:510776806396395530>" if k[i][5][1]>0
+      text="#{text} (Requires reaching AR Tier #{k[i][6]})" if k[i][6]>0
+      text="#{text}~~nothing~~" if k[i][6]<=0 && k[i][5].max<=0
+      text="#{text}\n*#{x2}:* #{k[i][3]}" unless k.map{|q| q[3]}.uniq.length<2
+      unless k.map{|q| q[4]}.uniq.length<2
+        if ['yes','no'].include?(k[i][4].downcase)
+          text="#{text}\n*Destructible?:* #{k[i][4]}"
+        elsif k[0][2]=='Trap'
+          text="#{text}\n*Traps are triggered by standing on them*"
+        else
+          text="#{text}\n*Destructible?:* #{k[i][4]}"
+        end
+      end
+      text="#{text}\n*Additional Note:* #{k[i][7]}" unless k.map{|q| q[7]}.uniq.length<2 || k[i][7].nil? || k[i][7].length<=0
+    end
+    text="#{text}\n\n**Cumulative Cost:** "
+    text="#{text}#{k.map{|q| q[5][0]}.inject(0){|sum,x| sum + x }}<:Aether_Stone:510776805746278421>" if k.map{|q| q[5][0]}.inject(0){|sum,x| sum + x }>0
+    text="#{text}#{k.map{|q| q[5][1]}.inject(0){|sum,x| sum + x }}<:Heavenly_Dew:510776806396395530>" if k.map{|q| q[5][1]}.inject(0){|sum,x| sum + x }>0
+    text="#{text} (Requires reaching AR Tier #{k.map{|q| q[6]}.max})" if k.map{|q| q[6]}.max>0
+  else
+    text="#{text}\n\n**Cost:** " if k[0][5].max>0
+    text="#{text}#{k[0][5][0]}<:Aether_Stone:510776805746278421>" if k[0][5][0]>0
+    text="#{text}#{k[0][5][1]}<:Heavenly_Dew:510776806396395530>" if k[0][5][1]>0
+    text="#{text}\n**AR Tier:** #{k[0][6]}" if k[0][6]>0
+  end
+  text="#{text}\n"
+  if k.map{|q| q[4]}.uniq.length<2
+    if ['yes','no'].include?(k[0][4].downcase)
+      text="#{text}\n**Destructible?:** #{k[0][4]}"
+    elsif k[0][2]=='Trap'
+      text="#{text}\n**Traps are triggered by standing on them**"
+    else
+      text="#{text}\n**Destructible?:** #{k[0][4]}"
+    end
+    text="#{text}\n"
+  end
+  xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Structures/#{k[0][0].gsub('False ','').gsub(' ','_').gsub('.','').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
+  text="#{text}\n**Additional Note:** #{k[0][7]}" unless k.map{|q| q[7]}.uniq.length>1 || k[0][7].nil? || k[0][7].length<=0
+  create_embed(event,"__**#{k[0][0]}#{" #{k[0][1]}" unless k.length>1 || k[0][1]=='-'}**__#{'<:Current_Aether_Bonus:510022809741950986>' if b[0][3].include?(k[0][0])}",text,xcolor,nil,xpic)
+end
+
 def extend_message(msg1,msg2,event,enters=1,sym="\n")
   if "#{msg1}#{sym*enters}#{msg2}".length>=2000
     event.respond msg1
@@ -8687,6 +8849,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?('ethlyn')
       return [str,['Ethlyn'],[str]]
+    elsif str2.include?('florina')
+      return [str,['Florina'],[str]]
     elsif str2.include?("bb#{str}") || str2.include?("#{str}bb") || str2.include?('bride') || str2.include?('bridal') || str2.include?('wedding')
       return [str,['Lyn(Bride)'],["bb#{str}","#{str}bb","#{str}bride","#{str}bridal","#{str}wedding","bride#{str}","bridal#{str}","wedding#{str}"]]
     elsif str2.include?('brave') || str2.include?('cyl') || str2.include?('nomad') || str2.include?("bh#{str}") || str2.include?("#{str}bh")
@@ -8703,6 +8867,8 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
       return [str,['Lyn(Bride)','Lyn(Brave)'],["b#{str}","br#{str}"]]
     elsif str2.include?('eth')
       return [str,['Ethlyn'],[str]]
+    elsif str2.include?('flo')
+      return [str,['Florina'],[str]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Lyn'],[str]]
@@ -12811,6 +12977,10 @@ def games_list(event,name,bot,weapon=nil)
   end
   ga=ga.reject{|q| q.downcase=='no games'}
   create_embed(event,"__#{"Mathoo's " if mu}**#{name}**__","#{"**Credit in FEH**\n" unless g2=="No games"}#{g2}#{"\n\n**Other games**\n#{g.join("\n")}" unless g.length<1}#{"\n\n**#{"Male a" if ["Robin(F)","Robin(M)"].include?(untz[j][0])}#{"A" unless ["Robin(F)","Robin(M)"].include?(untz[j][0])}lso appears via Amiibo functionality in**\n#{ga.join("\n")}" unless ga.length<1}",xcolor,nil,pic)
+end
+
+bot.command([:structure,:struct]) do |event, *args|
+  disp_struct(bot,args.join(' '),event)
 end
 
 bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, f|
@@ -17731,9 +17901,13 @@ bot.message do |event|
       data_load()
       if find_skill(s,event,false,true)>=0
         disp_skill(bot,s,event,true)
+      elsif find_structure_ex(s,event,true)
+        disp_struct(bot,s,event,true)
       elsif str.nil?
         if find_skill(s,event)>=0
           disp_skill(bot,s,event,true)
+        elsif find_structure_ex(s,event)
+          disp_struct(bot,s,event,true)
         elsif !detect_multi_unit_alias(event,s.downcase,event.message.text.downcase).nil?
           x=detect_multi_unit_alias(event,s.downcase,event.message.text.downcase)
           event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -17779,6 +17953,8 @@ bot.message do |event|
         disp_stats(bot,str,w,event,event.server.nil?,true)
       elsif find_skill(s,event)>0
         disp_skill(bot,s,event,true)
+      elsif find_structure_ex(s,event)
+        disp_struct(bot,s,event,true)
       elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
         x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -17899,6 +18075,10 @@ bot.mention do |event|
   elsif ['art'].include?(a[0].downcase)
     a.shift
     k=parse_function(:disp_art,event,a,bot)
+    k=1
+  elsif ['struct','structure'].include?(a[0].downcase)
+    a.shift
+    disp_struct(bot,a.join(' '),event)
     k=1
   elsif ['allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable'].include?(a[0].downcase)
     a.shift
@@ -18093,9 +18273,13 @@ bot.mention do |event|
     data_load()
     if find_skill(s,event,false,true)>=0
       disp_skill(bot,s,event,true)
+    elsif find_structure_ex(s,event,true)
+      disp_struct(bot,s,event,true)
     elsif str.nil?
       if find_skill(s,event)>=0
         disp_skill(bot,s,event,true)
+      elsif find_structure_ex(s,event)
+        disp_struct(bot,s,event,true)
       elsif !detect_multi_unit_alias(event,s.downcase,event.message.text.downcase).nil?
         x=detect_multi_unit_alias(event,s.downcase,event.message.text.downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -18148,6 +18332,8 @@ bot.mention do |event|
       w=nil
       w=k2[0] unless k2.nil?
       disp_stats(bot,x[1],w,event,true,true)
+    elsif find_structure_ex(s,event)
+      disp_struct(bot,s,event,true)
     end
   end
 end
@@ -18538,6 +18724,7 @@ bot.ready do |event|
   metadata_save()
   metadata_load()
   devunits_load()
+  data_load()
   bonus_load()
   system("color e#{"04126"[@shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
