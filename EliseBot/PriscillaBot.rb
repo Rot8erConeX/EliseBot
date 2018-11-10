@@ -1745,7 +1745,6 @@ def find_structure(name,event,fullname=false)
 end
 
 def find_structure_ex(name,event,fullname=false)
-  puts name
   k=find_structure(name,event,true)
   return k if k.length>0
   args=name.split(' ')
@@ -5957,7 +5956,6 @@ def disp_struct(bot,name,event,ignore=false)
   args=s.split(' ')
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   name=args.join(' ') if name.nil?
-  puts args.to_s
   k=find_structure_ex(args.join(' '),event)
   if k.length<=0
     event.respond 'No matches found.' unless ignore
