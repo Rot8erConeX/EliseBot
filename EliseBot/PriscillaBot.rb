@@ -247,7 +247,7 @@ def data_load() # loads the character and skill data from the files on my comput
   end
   for i in 0...b.length
     b[i]=b[i].gsub("\n",'').split('\\'[0])
-    b[i][1]=b[i][1].to_i
+    b[i][1]=b[i][1].to_i unless b[i][1]=='-'
     b[i][5]=b[i][5].split(', ').map{|q| q.to_i}
     b[i][6]=b[i][6].to_i
   end
@@ -5982,7 +5982,7 @@ def disp_struct(bot,name,event,ignore=false)
   elsif k[0][2]=='Resources'
     xcolor=0xD3DADC
     text="<:Resource_Structure:510774545154572298>**Type:** Resource"
-  elsif k[0][2]=='Ornamant'
+  elsif k[0][2]=='Ornament'
     xcolor=0xFEE257
     text="<:Ornamental_Structure:510774545150640128>**Type:** Ornament"
     x2='Description'
