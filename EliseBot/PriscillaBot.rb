@@ -15999,7 +15999,6 @@ bot.command([:status, :avatar, :avvie]) do |event, *args|
   return nil if overlap_prevent(event)
   t=Time.now
   timeshift=6
-  timeshift-=1 unless t.dst?
   t-=60*60*timeshift
   if event.user.id==167657750971547648 && !args.nil? && args.length>0 # only work when used by the developer
     bot.game=args.join(' ')
