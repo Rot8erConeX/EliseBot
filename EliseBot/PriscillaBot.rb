@@ -15373,7 +15373,7 @@ end
 
 bot.command([:bugreport, :suggestion, :feedback]) do |event, *args|
   return nil if overlap_prevent(event)
-  bug_report(bot,event,args,4,["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant"],@prefix)
+  bug_report(bot,event,args,4,["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant"],'Shard',@prefix)
 end
 
 bot.command([:tools,:links]) do |event|
@@ -16599,12 +16599,12 @@ end
 
 bot.command(:sendpm, from: 167657750971547648) do |event, user_id, *args| # sends a PM to a specific user
   return nil if overlap_prevent(event)
-  dev_pm(bot,event)
+  dev_pm(bot,event,user_id)
 end
 
 bot.command(:ignoreuser, from: 167657750971547648) do |event, user_id| # causes Elise to ignore the specified user
   return nil if overlap_prevent(event)
-  bliss_mode(bot,event)
+  bliss_mode(bot,event,user_id)
 end
 
 bot.command(:sendmessage, from: 167657750971547648) do |event, channel_id, *args| # sends a message to a specific channel
