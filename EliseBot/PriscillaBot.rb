@@ -462,7 +462,7 @@ def bonus_load()
   @bonus_units=b.map{|q| q}
 end
 
-bot.command([:help,:commands,:command_list,:commandlist]) do |event, command, subcommand| # used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
+bot.command([:help,:commands,:command_list,:commandlist,:Help]) do |event, command, subcommand| # used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
   return nil if overlap_prevent(event)
   command='' if command.nil?
   k=0
@@ -1583,7 +1583,7 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
   return -1
 end
 
-def find_skill(name,event,ignore=false,ignore2=false,m=false) # one of two functions used to find a skill's data entry based on its name
+def find_skill(name,event,ignore=false,ignore2=false,m=false,mode=0) # one of two functions used to find a skill's data entry based on its name
   return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4' # Recover Ring is essentially Renewal 4 so I allow this alias
   data_load()
   sklz=@skills.map{|q| q}
@@ -1619,6 +1619,7 @@ def find_skill(name,event,ignore=false,ignore2=false,m=false) # one of two funct
   end
   # ...and return the one at the end of the list (which is the beginning of the list after the sorting)
   x3=x3.sort{|a,b| b[1]<=>a[1]}
+  return x3.reverse.map{|q| q[0]} if mode==1
   return x3[0][0]
 end
 
@@ -4679,6 +4680,337 @@ def cumulative_sp_cost(x,event,mode=0)
   return x[1]+cumulative_sp_cost(k,event)
 end
 
+def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
+  data_load()
+  s=event.message.text
+  s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
+  s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
+  a=s.split(' ')
+  if all_commands().include?(a[0])
+    a.shift
+    s=a.join(' ')
+  end
+  args=sever(s,true).split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  name=args.join(' ') if name.nil?
+  name=stat_buffs(name,name)
+  k=find_skill(name,event,false,false,true,1)
+  if k.nil? || !k.is_a?(Array)
+    event.respond "No matches found.  If you are looking for data on the skills a character learns, try ```#{first_sub(event.message.text,'skill','skills',1)}```, with an s." unless ignore
+    return false
+  end
+  lookout=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
+    lookout=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
+      lookout.push(eval line)
+    end
+  end
+  lookout2=lookout.reject{|q| q[2]!='Weapon' || q[3].nil?}
+  skill=k.map{|q| @skills[q]}
+  sklz=@skills.map{|q| q}
+  g=get_markers(event)
+  unitz=@units.reject{|q| !has_any?(g, q[13][0])}
+  xcolor=0xFDDC7E
+  sklimg=skill[-1][0].gsub(' ','_').gsub('/','_').gsub('!','').gsub('.','')
+  sklimg="Squad_Ace_#{"ABCDE"["ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(skill[-1][0][10,1])[0].length%5,1]}_#{skill[-1][0][12,skill[0].length-12]}" if skill[-1][0][0,10]=='Squad Ace '
+  xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/skills/#{sklimg}.png?raw=true"
+  sklslt=skill.map{|q| q[4].split(', ')}.join("\n").split("\n").uniq
+  m=false
+  for i in 0...skill.length
+    m=true if !skill[i][12].nil? && skill[i][12]!=''
+  end
+  if m && sklslt.include?('Passive(W)')
+    eff=skill.map{|q| q[12].split(', ')}.join("\n").split("\n").uniq
+    for i in 0...eff.length
+      eff[i]=nil unless find_skill(eff[i],event,true)>1
+    end
+    eff.compact!
+    if eff.length<=0
+      for i in 0...sklslt.length
+        sklslt[i]=nil if sklslt[i]=='Passive(W)'
+      end
+      sklslt.compact!
+    end
+  end
+  emo=[]
+  for i in 0...sklslt.length
+    emo.push('<:Passive_A:443677024192823327>') if sklslt[i]=='Passive(A)'
+    emo.push('<:Passive_B:443677023257493506>') if sklslt[i]=='Passive(B)'
+    emo.push('<:Passive_C:443677023555026954>') if sklslt[i]=='Passive(C)'
+    emo.push('<:Passive_S:443677023626330122>') if sklslt[i]=='Passive(S)' || sklslt[i]=='Seal'
+    emo.push('<:Passive_W:443677023706152960>') if sklslt[i]=='Passive(W)'
+  end
+  str="#{emo.join('')} **Skill Slot:** #{sklslt.join(', ')}"
+  str="#{str}\n**Effect:**"
+  for i in 0...skill.length
+    str="#{str}\n*Level #{i+1}:* #{skill[i][7]}"
+  end
+  if skill[0][0]=='Distant Counter'
+    str="#{str}\n**Secondary effect:** Breaks consecutiveness of enemy mage/bow/dagger/staff attacks"
+  elsif skill[0][0]=='Close Counter'
+    str="#{str}\n**Secondary effect:** Breaks consecutiveness of enemy sword/axe/lance/breath attacks"
+  end
+  str="#{str}\n\n**SP required:** #{skill.map{|q| q[1]}.join('/')} #{"(#{skill.map{|q| q[1]*3/2}.join('/')} when inherited)" if skill[-1][6]=='-'}"
+  str="#{str}\n**Total SP required:** #{skill.map{|q| q[1]}.inject(0){|sum,x| sum + x }} #{"(#{skill.map{|q| q[1]*3/2}.inject(0){|sum,x| sum + x }} when inherited)" if skill[-1][6]=='-'}"
+  cumul=cumulative_sp_cost(skill[-1],event)
+  str="#{str}\n**Cumulative SP Cost:** #{cumul} #{"(#{cumul+skill[-1][1]/2}-#{cumul*3/2} when inherited)" if skill[-1][6]=='-'}" unless cumul==skill[-1][1] || cumul==skill.map{|q| q[1]}.inject(0){|sum,x| sum + x }
+  if skill[-1][4].split(', ').include?('Seal') && skill[3]!="-" && skill[-1][3][0,1].downcase!=skill[-1][3][0,1]
+    floop=[]
+    for i2 in 0...skill.length
+      floop.push(skill[i2][3].split(' '))
+      floop[-1][0]='<:Great_Badge_Transparent:443704781597573120> <:Badge_Transparent:445510675976945664>' if floop[-1][0].downcase=='transparent'
+      floop[-1][0]='<:Great_Badge_Scarlet:443704781001850910> <:Badge_Scarlet:445510676060962816>' if floop[-1][0].downcase=='scarlet'
+      floop[-1][0]='<:Great_Badge_Azure:443704780783616016> <:Badge_Azure:445510675352125441>' if floop[-1][0].downcase=='azure'
+      floop[-1][0]='<:Great_Badge_Verdant:443704780943261707> <:Badge_Verdant:445510676056899594>' if floop[-1][0].downcase=='verdant'
+      for i in 1...floop[-1].length
+        floop[-1][i]=floop[-1][i].to_i
+      end
+    end
+    str="#{str}\n**Seal Cost:** #{floop.map{|q| q[1]}.join('/')}#{floop[0][0].split(' ')[0]} #{floop.map{|q| q[2]}.join('/')}#{floop[0][0].split(' ')[1]} #{floop.map{|q| q[3]}.join('/')}<:Sacred_Coin:453618312996323338>"
+    cumul=cumulative_sp_cost(skill[-1],event,1)
+    str="#{str}\n**Total Seal Cost:** #{cumul[1]}#{floop[-1][0].split(' ')[0]} #{cumul[2]}#{floop[-1][0].split(' ')[1]} #{cumul[3]}<:Sacred_Coin:453618312996323338>" if [cumul[1],cumul[2],cumul[3]]!=[floop[-1][1],floop[-1][2],floop[-1][3]]
+  end
+  p=find_promotions(sklz.find_index{|q| q[0]==skill[-1][0]},event)
+  p=p.uniq
+  if skill[-1][4].include?('Passive') || skill[-1][4]=='Seal'
+    p=p.reject{|q| ['Weapon', 'Assist', 'Special'].include?(sklz[find_skill(q,event,true,true)][4])}
+    p=p.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(A)')} if skill[-1][4].include?('(A)')
+    p=p.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(B)')} if skill[-1][4].include?('(B)')
+    p=p.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(C)')} if skill[-1][4].include?('(C)')
+  else
+    p=p.reject{|q| !has_any?(sklslt, sklz[find_skill(q,event,true,true)][4].split(', '))}
+  end
+  if p.length.zero?
+    p=nil
+  else
+    for i2 in 0...p.length
+      p[i2]="~~#{p[i2]}~~" unless p[i2]=='Laevatein' || sklz[sklz.find_index{|q2| q2[0]==p[i2]}][13].nil? || !skill[-1][13].nil?
+    end
+    p=list_lift(p.map{|q| "*#{q}*"},"or")
+  end
+  p2=[]
+  for i in 0...skill.length-1
+    p3=find_promotions(sklz.find_index{|q| q[0]==skill[i][0]},event)
+    p3=p3.uniq
+    if skill[i][4].include?('Passive') || skill[i][4]=='Seal'
+      p3=p3.reject{|q| ['Weapon', 'Assist', 'Special'].include?(sklz[find_skill(q,event,true,true)][4])}
+      p3=p3.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(A)')} if skill[i][4].include?('(A)')
+      p3=p3.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(B)')} if skill[i][4].include?('(B)')
+      p3=p3.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(C)')} if skill[i][4].include?('(C)')
+    else
+      p3=p3.reject{|q| !has_any?(sklslt, sklz[find_skill(q,event,true,true)][4].split(', '))}
+    end
+    if p3.length.zero?
+      p3=nil
+    else
+      for i2 in 0...p3.length
+        p2.push(p3[i2]) if p3[i2]=='Laevatein' || sklz[sklz.find_index{|q2| q2[0]==p3[i2]}][13].nil? || !skill[i][13].nil?
+        p2.push("~~#{p3[i2]}~~") unless p3[i2]=='Laevatein' || sklz[sklz.find_index{|q2| q2[0]==p3[i2]}][13].nil? || !skill[i][13].nil?
+      end
+    end
+  end
+  p2=p2.reject{|q| skill.map{|q2| q2[0]}.include?(q)}
+  if p2.length<=0
+    p2=nil
+  else
+    p2=list_lift(p2.map{|q| "*#{q}*"},"or")
+  end
+  str="#{str}#{"\n" unless skill[0][8]=='-' && p.nil? && skill[-1][6]!='-'}#{"\n**Restrictions on inheritance:** #{skill[-1][5]}" if skill[-1][6]=='-' && skill[-1][4]!='Weapon'}#{"\n**<:Prf_Sparkle:490307608973148180>Prf to:** #{skill[-1][6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[-1][0]=='Missiletainn' || skill[-1][6]=='-' || skill[-1][6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.length.zero?}#{"\n**Promotes from:** #{skill[0][8]}" unless skill[0][8]=='-'}#{"\n**Branching lines:** #{p2}" unless p2.nil?}#{"\n**Promotes into:** #{p}" unless p.nil?}"
+  usklz=[]
+  for i in 0...skill.length
+    for i2 in 0...skill[i][10].length
+      m=skill[i][10][i2].split(', ').reject{|q| unitz.find_index{|q2| q2[0]==q}.nil?}
+      unless m.length<=0 || m[0]=='-'
+        for i3 in 0...m.length
+          usklz.push([m[i3],i+1,i2+1]) # unit name, skill tier, rarity
+        end
+      end
+    end
+  end
+  usklz=usklz.uniq.sort{|a,b| (supersort(a,b,0)==0 ? (supersort(a,b,1)==0 ? supersort(a,b,2) : supersort(a,b,1)) : supersort(a,b,0))}
+  for i in 0...usklz.length
+    usklz[i][2]="#{usklz[i][2]}#{@rarity_stars[usklz[i][2]-1]}"
+  end
+  usklz2=[]
+  usklz2.push([usklz[0][0],usklz[0][2]]) if usklz[0][1]==1
+  usklz2.push([usklz[0][0],"Otherstart/#{usklz[0][2]}"]) unless usklz[0][1]==1
+  usklz.shift
+  for i in 0...usklz.length
+    if usklz[i][0]==usklz2[-1][0]
+      usklz2[-1][1]="#{usklz2[-1][1].split('<:')[0]}/#{usklz[i][2]}"
+    else
+      usklz2[-1][1]="#{usklz2[-1][1]}/Incomplete" if usklz2[-1][1].split('/').length<skill.length
+      usklz2.push([usklz[i][0],usklz[i][2]]) if usklz[i][1]==1
+      usklz2.push([usklz[i][0],"OStrt#{micronumber(usklz[i][1])} /#{usklz[i][2]}"]) unless usklz[i][1]==1
+    end
+  end
+  usklz2[-1][1]="#{usklz2[-1][1]}/Incomplete" if usklz2[-1][1].split('/').length<skill.length
+  usklz2=usklz2.uniq.sort{|a,b| (supersort(a,b,1)==0 ? -supersort(a,b,0) : -supersort(a,b,1))}
+  usklz=[]
+  usklz.push(usklz2[0].reverse)
+  usklz2.shift
+  for i in 0...usklz2.length
+    if usklz[-1][0]==usklz2[i][1]
+      usklz[-1][1]="#{usklz[-1][1]}, #{usklz2[i][0]}"
+    else
+      usklz.push(usklz2[i].reverse)
+    end
+  end
+  usklz2=[[],[]]
+  for i in 0...usklz.length
+    usklz2[0].push([usklz[i][0].gsub('/Incomplete',''),usklz[i][1]]) if usklz[i][0].include?('/Incomplete')
+    usklz2[1].push(usklz[i]) unless usklz[i][0].include?('/Incomplete')
+  end
+  usklz2[0]=usklz2[0].uniq.sort{|a,b| (supersort(a,b,0)==0 ? -supersort(a,b,1) : -supersort(a,b,0))}
+  for x in 0...2
+    for i in 0...usklz2[x].length
+      m=usklz2[x][i][1].split(', ')
+      for i2 in 0...m.length
+        u=unitz[unitz.find_index{|q| q[0]==m[i2]}]
+        m[i2]="~~#{m[i2]}~~" if !u[13].nil? && !u[13][0].nil? && u[13][0].length>0
+      end
+      usklz2[x][i][1]=m.join(', ')
+    end
+  end
+  if dispcolors
+    for i in 0...usklz2.length
+      clrz=[['<:Orb_Red:455053002256941056> Red Summonables',[]],['<:Orb_Blue:455053001971859477> Blue Summonables',[]],
+            ['<:Orb_Green:455053002311467048> Green Summonables',[]],['<:Orb_Colorless:455053002152083457> Colorless Summonables',[]],
+            ['<:Orb_Gold:455053002911514634> Summonables',[]],['<:Orb_Red:455053002256941056> Red Limited',[]],
+            ['<:Orb_Blue:455053001971859477> Blue Limited',[]],['<:Orb_Green:455053002311467048> Green Limited',[]],
+            ['<:Orb_Colorless:455053002152083457> Colorless Limited',[]],['<:Orb_Gold:455053002911514634> Limited',[]],
+            ['<:Orb_Pink:466196714513235988> Free units',[]]]
+      for i3 in 0...usklz2[i].length
+        unless usklz2[i][i3][1].nil? || usklz2[i][i3][0].nil?
+          k=usklz2[i][i3][1].split(', ')
+          for i2 in 0...k.length
+            u=unitz[unitz.find_index{|q| q[0]==k[i2].gsub('~~','')}]
+            if u[9][0].include?('p')
+              clrz[0][1].push("#{k[i2]} (#{usklz2[i][i3][0]})") if u[1][0]=='Red'
+              clrz[1][1].push("#{k[i2]} (#{usklz2[i][i3][0]})") if u[1][0]=='Blue'
+              clrz[2][1].push("#{k[i2]} (#{usklz2[i][i3][0]})") if u[1][0]=='Green'
+              clrz[3][1].push("#{k[i2]} (#{usklz2[i][i3][0]})") if u[1][0]=='Colorless'
+              clrz[4][1].push("#{k[i2]} (#{usklz2[i][i3][0]})") unless ['Red','Blue','Green','Colorless'].include?(u[1][0])
+            elsif u[9][0].gsub('0s','').include?('s')
+              clrz[5][1].push("#{k[i2]} (#{usklz2[i][i3][0]})") if u[1][0]=='Red'
+              clrz[6][1].push("#{k[i2]} (#{usklz2[i][i3][0]})") if u[1][0]=='Blue'
+              clrz[7][1].push("#{k[i2]} (#{usklz2[i][i3][0]})") if u[1][0]=='Green'
+              clrz[8][1].push("#{k[i2]} (#{usklz2[i][i3][0]})") if u[1][0]=='Colorless'
+              clrz[9][1].push("#{k[i2]} (#{usklz2[i][i3][0]})") unless ['Red','Blue','Green','Colorless'].include?(u[1][0])
+            else
+              clrz[10][1].push("#{k[i2]} (#{usklz2[i][i3][0]})")
+            end
+          end
+        end
+      end
+      for i2 in 0...clrz.length
+        clrz[i2][1]=clrz[i2][1].join(', ')
+        clrz[i2]=nil if clrz[i2][1].length<=0
+      end
+      clrz.compact!
+      usklz2[i]=clrz.map{|q| q}
+    end
+  end
+  str="#{str}\n\n**Heroes who learn part of the line, without inheritance**\n#{usklz2[0].map{|q| "*#{q[0]}:* #{q[1]}"}.join("\n")}" if usklz2[0].length>0
+  str="#{str}\n\n**Heroes who learn the final skill of the line, without inheritance**\n#{usklz2[1].map{|q| "*#{q[0]}:* #{q[1]}"}.join("\n")}" if usklz2[1].length>0
+  m=false
+  for i in 0...skill.length
+    if !skill[i][12].nil? && skill[i][12]!='' && skill[i][4].include?('Passive(W)')
+      eff=skill[i][12].split(', ')
+      for i2 in 0...eff.length
+        eff[i2]=nil unless find_skill(eff[i2],event,true)>1
+      end
+      eff.compact!
+      str="#{str}\n" if eff.length>0 && !m
+      m=true if eff.length>0 && !m
+      str="#{str}\n**Level #{i+1} gained via Effect Mode on:** #{eff.join(', ')}" if eff.length>0
+    end
+  end
+  lookoutx=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+    lookoutx=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+      lookoutx.push(eval line)
+    end
+  end
+  if lookoutx.map{|q| q[0]}.include?(skill[-1][0]) || skill[-1][0][0,11]=='Panic Ploy '
+    statskill=lookoutx.find_index{|q| q[0]==skill[-1][0]}
+    statskill=lookoutx.find_index{|q| q[0]=='Panic Ploy'} if statskill.nil?
+    statskill=lookoutx[statskill]
+    statskill[3]=statskill[3].gsub(' 1','').gsub(' 2','').gsub(' 3','').gsub(' 4','').gsub(' 5','').gsub(' 6','').gsub(' 7','').gsub(' 8','').gsub(' 9','')
+    if ['Enemy Phase','Player Phase'].include?(statskill[3])
+      str="#{str}\n\n**This skill can be applied to units in the `phasestudy` command.**\nInclude the word \"#{statskill[0].gsub(" #{statskill[0].reverse.scan(/\d+/)[0].reverse}",'').gsub('/','').gsub(' ','')}\" in your message\n*Skill type:* #{statskill[3]}"
+    elsif 'In-Combat Buffs'==statskill[3]
+      str="#{str}\n\n**This skill can be applied to units in the `phasestudy` command.**\nInclude the word \"#{statskill[0].gsub(" #{statskill[0].reverse.scan(/\d+/)[0].reverse}",'').gsub('/','').gsub(' ','')}\" in your message\n*Skill type:* In-Combat Buff"
+    else
+      str="#{str}\n\n**This skill can be applied to units in the `stats` command and any derivatives.**\nInclude the word \"#{statskill[0].gsub(" #{statskill[0].reverse.scan(/\d+/)[0].reverse}",'').gsub('/','').gsub(' ','')}\" in your message\n*Skill type:* #{statskill[3]}"
+    end
+    for i4 in 0...5
+      if statskill[4][i4]==0
+      elsif statskill[3]=='Stat-Nerfing'
+        statskill[4][i4]="-#{statskill[4][i4]}"
+      else
+        statskill[4][i4]="+#{statskill[4][i4]}"
+      end
+    end
+    statskill[4]="#{statskill[4][0,5].join('/')}#{"\nBin adjusted to ##{statskill[4][5]/5} (BST range #{statskill[4][5]}-#{statskill[4][5]+4}) minimum" if statskill[4].length>5}"
+    if statskill[4]=='0/0/0/0/0'
+      str="#{str}\n~~*Stat alterations*~~ *Complex interactions with other skills*"
+    else
+      str="#{str}\n*Stat alterations:* #{statskill[4]}"
+    end
+  end
+  xfooter=nil
+  x=0
+  x=xfooter.length unless xfooter.nil?
+  if "__**#{skill[-1][0].gsub('Bladeblade','Laevatein')}**__".length+str.length+x>=1900
+    str=str.split("\n\n")
+    m=str.find_index{|q| q[0,8]=='**Heroes'}
+    str=[str[0,m].join("\n\n"),str[m,str.length-m].join("\n\n")]
+    if "__**#{skill[-1][0].gsub('Bladeblade','Laevatein')}**__".length+str[0].length>=1900
+      str[0]=str[0].split('**Promotes into:**')
+      create_embed(event,"__**#{skill[-1][0].gsub(" #{skill[-1][0].reverse.scan(/\d+/)[0].reverse}",'')}**__","#{str[0][0]}#{"**Promotes into a lot of things**" if str[0].length>0}",xcolor,nil,xpic)
+    else
+      create_embed(event,"__**#{skill[-1][0].gsub(" #{skill[-1][0].reverse.scan(/\d+/)[0].reverse}",'')}**__",str[0],xcolor,nil,xpic)
+    end
+    if str[1].length+x>=1900
+      str=str[1].split("\n\n")
+      str2=[str[0]]
+      if str[0].length>=1900 || str.length==1
+        str2=str[0].split("\n**Heroes")
+        str2[1]="**Heroes#{str2[1]}"
+      end
+      for i in 1...str.length
+        str2.push(str[i])
+      end
+      skipfooter=false
+      skipfooter=true if xfooter.nil?
+      skipfooter=true if !xfooter.nil? && str2[str2.length-1].length+xfooter.length>=1900
+      for i in 0...str2.length
+        create_embed(event,"",str2[i],xcolor) unless i==str2.length-1 && !skipfooter
+        create_embed(event,"",str2[i],xcolor,xfooter) if i==str2.length-1 && !skipfooter
+      end
+      event.respond xfooter if !xfooter.nil? && skipfooter
+    else
+      create_embed(event,"",str[1],xcolor,xfooter)
+    end
+  else
+    create_embed(event,"__**#{skill[-1][0].gsub(" #{skill[-1][0].reverse.scan(/\d+/)[0].reverse}",'')}**__",str,xcolor,xfooter,xpic)
+  end
+  if !['Weapon','Assist','Special'].include?(skill[0][4]) && skill[0][11].split(', ').include?('Link')
+    w=sklz.reject{|q| q[4]!='Assist' || !q[11].split(', ').include?('Move') || q[11].split(', ').include?('Music') || !has_any?(g, q[13])}
+    w=collapse_skill_list(w)
+    w=w.map{|q| "#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}#{q[0]}#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}"}
+    create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[0][0]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
+  elsif !['Weapon','Assist','Special'].include?(skill[0][4]) && skill[0][11].split(', ').include?('Feint')
+    w=sklz.reject{|q| q[4]!='Assist' || !q[11].split(', ').include?('Rally') || !has_any?(g, q[13])}
+    w=collapse_skill_list(w)
+    w=w.map{|q| "#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}#{q[0]}#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}"}
+    create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[0][0]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
+  end
+end
+
 def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   data_load()
   s=event.message.text
@@ -4693,6 +5025,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   name=args.join(' ') if name.nil?
   name=stat_buffs(name,name)
+  return disp_skill_line(bot,name,event,ignore,dispcolors) if find_skill(name,event,false,false,true,1).is_a?(Array)
   unless ignore || find_skill(name,event,false,false,true)>=0
     args2=args.join(' ').split(' ')
     name=args.join('')
@@ -4733,6 +5066,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       end
     end
   end
+  return disp_skill_line(bot,name,event,ignore,dispcolors) if find_skill(name,event,false,false,true,1).is_a?(Array)
   lookout=[]
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
     lookout=[]
@@ -17778,7 +18112,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648
   event.channel.send_temporary_message('Loading.  Please wait 5 seconds...',3)
-  to_reload=['Units','Skills','StatSkills','SkillSubsets','EmblemTeams','Banners','Events','Games']
+  to_reload=['Units','Skills','Structures','StatSkills','SkillSubsets','EmblemTeams','Banners','Events','Games','ArenaTempest']
   for i in 0...to_reload.length
     download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEH#{to_reload[i]}.txt")
     IO.copy_stream(download, "FEHTemp.txt")
