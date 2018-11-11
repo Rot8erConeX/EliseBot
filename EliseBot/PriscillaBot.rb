@@ -9,7 +9,7 @@ require 'certified'
 require 'tzinfo/data'                  # Downloaded with active_support below, but the require must be above active_support's require
 require 'rufus-scheduler'              # Download link: https://github.com/jmettraux/rufus-scheduler
 require 'active_support/core_ext/time' # Download link: https://rubygems.org/gems/activesupport/versions/5.0.0
-require_relative 'rot8er_functs'
+require_relative 'rot8er_functs'       # functions I use commonly in bots
 
 # this is required to get her to change her avatar on certain holidays
 ENV['TZ'] = 'America/Chicago'
