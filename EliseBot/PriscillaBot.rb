@@ -15373,34 +15373,7 @@ end
 
 bot.command([:bugreport, :suggestion, :feedback]) do |event, *args|
   return nil if overlap_prevent(event)
-  s5=event.message.text.downcase
-  s5=s5[2,s5.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
-  s5=s5[4,s5.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
-  a=s5.split(' ')
-  s3='Bug Report'
-  s3='Suggestion' if a[0]=='suggestion'
-  s3='Feedback' if a[0]=='feedback'
-  if args.nil? || args.length.zero?
-    event.respond "You did not include a description of your #{s3.downcase}.  Please retry the command like this:\n```#{event.message.text} here is where you type the description of yout #{s3.downcase}```"
-    if event.server.nil?
-      s="**#{s3} sent by PM**"
-    else
-      s="**Server:** #{event.server.name} (#{event.server.id}) - #{["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant"][(event.server.id >> 22) % 4]} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})"
-    end
-    bot.user(167657750971547648).pm("#{s}\n#{event.user.distinct} (#{event.user.id}) just tried to use the #{s3.downcase} command but gave no arguments.")
-    return nil
-  elsif event.server.nil?
-    s="**#{s3} sent by PM**"
-  else
-    s="**Server:** #{event.server.name} (#{event.server.id}) - #{["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant"][(event.server.id >> 22) % 4]} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})"
-  end
-  f=event.message.text.split(' ')
-  f="#{f[0]} "
-  bot.user(167657750971547648).pm("#{s}\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{s3}:** #{first_sub(event.message.text,f,'',1)}")
-  s3='Bug' if s3=='Bug Report'
-  t=Time.now
-  event << "Your #{s3.downcase} has been logged."
-  return nil
+  bug_report(bot,event,args,4,["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant"],@prefix)
 end
 
 bot.command([:tools,:links]) do |event|
