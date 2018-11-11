@@ -581,7 +581,7 @@ def dev_pm(bot,event)
   event.respond 'Message sent.'
 end
 
-def bliss_mode(bot,event)
+def bliss_mode(bot,event,user_id)
   return nil unless event.server.nil?
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
   metadata_load()
