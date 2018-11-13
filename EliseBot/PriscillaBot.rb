@@ -147,7 +147,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'stat_and_skils','statsskil','statskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil','sortskil','skilsort',
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
-     'aether','bonus_raids','structure','struct']
+     'aether','bonus_raids','structure','struct'].uniq
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -476,8 +476,10 @@ bot.command([:help,:commands,:command_list,:commandlist,:Help]) do |event, comma
     create_embed(event,'**reboot**',"Reboots this shard of the bot, installing any updates.\n\n**This command is only able to be used by Rot8er_ConeX**",0x008b8b)
   elsif command.downcase=='sendmessage'
     create_embed(event,'**sendmessage** __channel id__ __*message__',"Sends the message `message` to the channel with id `channel`\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.",0x008b8b)
-  elsif command.downcase=='snagchannels'
-    create_embed(event,'**snagchannels** __server id number__',"Gets a list of all channels in `server id`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+  elsif command.downcase=='sendpm'
+    create_embed(event,'**sendpm** __user id__ __*message__',"Sends the message `message` to the user with id `user`\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.",0x008b8b)
+  elsif command.downcase=='ignoreuser'
+    create_embed(event,'**ignoreuser** __user id__',"Causes me to ignore the user with id `user`\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.",0x008b8b)
   elsif command.downcase=='leaveserver'
     create_embed(event,'**leaveserver** __server id number__',"Forces me to leave the server with the id `server id`.\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.",0x008b8b)
   elsif command.downcase=='snagstats'
@@ -4289,6 +4291,7 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
   sklimg=skill[-1][0].gsub(' ','_').gsub('/','_').gsub('!','').gsub('.','')
   sklimg="Squad_Ace_#{"ABCDE"["ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(skill[-1][0][10,1])[0].length%5,1]}_#{skill[-1][0][12,skill[0].length-12]}" if skill[-1][0][0,10]=='Squad Ace '
   xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/skills/#{sklimg}.png?raw=true"
+  puts skill.map{|q| q.to_s}
   sklslt=skill.map{|q| q[4].split(', ')}.join("\n").split("\n").uniq
   m=false
   for i in 0...skill.length
@@ -4406,46 +4409,50 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
   for i in 0...usklz.length
     usklz[i][2]="#{usklz[i][2]}#{@rarity_stars[usklz[i][2]-1]}"
   end
-  usklz2=[]
-  usklz2.push([usklz[0][0],usklz[0][2]]) if usklz[0][1]==1
-  usklz2.push([usklz[0][0],"Otherstart/#{usklz[0][2]}"]) unless usklz[0][1]==1
-  usklz.shift
-  for i in 0...usklz.length
-    if usklz[i][0]==usklz2[-1][0]
-      usklz2[-1][1]="#{usklz2[-1][1].split('<:')[0]}/#{usklz[i][2]}"
-    else
-      usklz2[-1][1]="#{usklz2[-1][1]}/Incomplete" if usklz2[-1][1].split('/').length<skill.length
-      usklz2.push([usklz[i][0],usklz[i][2]]) if usklz[i][1]==1
-      usklz2.push([usklz[i][0],"OStrt#{micronumber(usklz[i][1])} /#{usklz[i][2]}"]) unless usklz[i][1]==1
-    end
-  end
-  usklz2[-1][1]="#{usklz2[-1][1]}/Incomplete" if usklz2[-1][1].split('/').length<skill.length
-  usklz2=usklz2.uniq.sort{|a,b| (supersort(a,b,1)==0 ? -supersort(a,b,0) : -supersort(a,b,1))}
-  usklz=[]
-  usklz.push(usklz2[0].reverse)
-  usklz2.shift
-  for i in 0...usklz2.length
-    if usklz[-1][0]==usklz2[i][1]
-      usklz[-1][1]="#{usklz[-1][1]}, #{usklz2[i][0]}"
-    else
-      usklz.push(usklz2[i].reverse)
-    end
-  end
-  usklz2=[[],[]]
-  for i in 0...usklz.length
-    usklz2[0].push([usklz[i][0].gsub('/Incomplete',''),usklz[i][1]]) if usklz[i][0].include?('/Incomplete')
-    usklz2[1].push(usklz[i]) unless usklz[i][0].include?('/Incomplete')
-  end
-  usklz2[0]=usklz2[0].uniq.sort{|a,b| (supersort(a,b,0)==0 ? -supersort(a,b,1) : -supersort(a,b,0))}
-  for x in 0...2
-    for i in 0...usklz2[x].length
-      m=usklz2[x][i][1].split(', ')
-      for i2 in 0...m.length
-        u=unitz[unitz.find_index{|q| q[0]==m[i2]}]
-        m[i2]="~~#{m[i2]}~~" if !u[13].nil? && !u[13][0].nil? && u[13][0].length>0
+  if usklz.length>0
+    usklz2=[]
+    usklz2.push([usklz[0][0],usklz[0][2]]) if usklz[0][1]==1
+    usklz2.push([usklz[0][0],"Otherstart/#{usklz[0][2]}"]) unless usklz[0][1]==1
+    usklz.shift
+    for i in 0...usklz.length
+      if usklz[i][0]==usklz2[-1][0]
+        usklz2[-1][1]="#{usklz2[-1][1].split('<:')[0]}/#{usklz[i][2]}"
+      else
+        usklz2[-1][1]="#{usklz2[-1][1]}/Incomplete" if usklz2[-1][1].split('/').length<skill.length
+        usklz2.push([usklz[i][0],usklz[i][2]]) if usklz[i][1]==1
+        usklz2.push([usklz[i][0],"OStrt#{micronumber(usklz[i][1])} /#{usklz[i][2]}"]) unless usklz[i][1]==1
       end
-      usklz2[x][i][1]=m.join(', ')
     end
+    usklz2[-1][1]="#{usklz2[-1][1]}/Incomplete" if usklz2[-1][1].split('/').length<skill.length
+    usklz2=usklz2.uniq.sort{|a,b| (supersort(a,b,1)==0 ? -supersort(a,b,0) : -supersort(a,b,1))}
+    usklz=[]
+    usklz.push(usklz2[0].reverse)
+    usklz2.shift
+    for i in 0...usklz2.length
+      if usklz[-1][0]==usklz2[i][1]
+        usklz[-1][1]="#{usklz[-1][1]}, #{usklz2[i][0]}"
+      else
+        usklz.push(usklz2[i].reverse)
+      end
+    end
+    usklz2=[[],[]]
+    for i in 0...usklz.length
+      usklz2[0].push([usklz[i][0].gsub('/Incomplete',''),usklz[i][1]]) if usklz[i][0].include?('/Incomplete')
+      usklz2[1].push(usklz[i]) unless usklz[i][0].include?('/Incomplete')
+    end
+    usklz2[0]=usklz2[0].uniq.sort{|a,b| (supersort(a,b,0)==0 ? -supersort(a,b,1) : -supersort(a,b,0))}
+    for x in 0...2
+      for i in 0...usklz2[x].length
+        m=usklz2[x][i][1].split(', ')
+        for i2 in 0...m.length
+          u=unitz[unitz.find_index{|q| q[0]==m[i2]}]
+          m[i2]="~~#{m[i2]}~~" if !u[13].nil? && !u[13][0].nil? && u[13][0].length>0
+        end
+        usklz2[x][i][1]=m.join(', ')
+      end
+    end
+  else
+    usklz2=[[],[]]
   end
   if dispcolors
     for i in 0...usklz2.length
@@ -17336,16 +17343,28 @@ bot.command(:snagstats) do |event, f, f2|
     return nil
   elsif ['code','lines','line','sloc'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',3)
-    b=[[],[]]
+    b=[[],[],[],[],[]]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
       l=line.gsub("\n",'')
       b[0].push(l)
+      b[3].push(l)
       l=line.gsub("\n",'').gsub(' ','')
       b[1].push(l) unless l.length<=0
     end
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/rot8er_functs.rb').each_line do |line|
+      l=line.gsub("\n",'')
+      b[0].push(l)
+      b[4].push(l)
+      l=line.gsub("\n",'').gsub(' ','')
+      b[2].push(l) unless l.length<=0
+    end
     event << "**I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long.**"
     event << "Of those, #{longFormattedNumber(b[1].length)} are SLOC (non-empty)."
-    event << "~~When fully collapsed, I appear to be #{longFormattedNumber(b[0].reject{|q| q.length>0 && (q[0,2]=='  ' || q[0,3]=='end' || q[0,4]=='else')}.length)} lines of code long.~~"
+    event << "~~When fully collapsed, I appear to be #{longFormattedNumber(b[3].reject{|q| q.length>0 && (q[0,2]=='  ' || q[0,3]=='end' || q[0,4]=='else')}.length)} lines of code long.~~"
+    event << ''
+    event << "**I rely on a library that is #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/rot8er_functs.rb").inject(0) {|c, line| c+1})} lines of code long.**"
+    event << "Of those, #{longFormattedNumber(b[2].length)} are SLOC (non-empty)."
+    event << "~~When fully collapsed, it appears to be #{longFormattedNumber(b[4].reject{|q| q.length>0 && (q[0,2]=='  ' || q[0,3]=='end' || q[0,4]=='else')}.length)} lines of code long.~~"
     event << ''
     event << "**There are #{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command('}.length)} commands, invoked with #{longFormattedNumber(all_commands().length)} different phrases.**"
     event << 'This includes:'
