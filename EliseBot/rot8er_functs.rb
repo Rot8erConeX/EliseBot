@@ -572,7 +572,7 @@ def embedless_swap(bot,event)
   metadata_save()
 end
 
-def dev_pm(bot,event)
+def dev_pm(bot,event,user_id)
   return nil unless event.server.nil?
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
   f=event.message.text.split(' ')

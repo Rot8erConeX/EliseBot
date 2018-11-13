@@ -195,7 +195,7 @@ Mia(Halloween)\Colorless, Healer\ \Flier\5, 7, 7, 4, 6\36, 30, 34, 22, 28\Yoneya
 Micaiah\Blue, Tome, Light\ \Infantry\5, 8, 6, 2, 8\35, 35, 28, 18, 35\Chiko\Veronica Taylor\Kuwatani Natsuko\5p\F\FE10\Micaiah
 Micaiah(Festival)\Red, Tome, Fire\ \Infantry\5, 8, 3, 3, 9\33, 34, 20, 18, 34\Chiko\Veronica Taylor\Kuwatani Natsuko\5s\F\FE10\Micaiah
 Michalis\Green, Blade\ \Flier\7, 8, 5, 8, 3\43, 34, 26, 35, 19\Daisuke Izuka\David Vincent\Fukushima Jun\3g4g3q4q4r\M\FE3, FE1, FE11, FE12\Michalis
-Mikoto\Colorless, Healer\ \Infantry\6, 8, 7, 3, 5\38, 35, 32, 20, 26\Ito Misei\Marisha Ray\\5s\F\FE13\Mikoto
+Mikoto\Colorless, Healer\ \Infantry\6, 8, 7, 3, 5\38, 35, 32, 20, 26\Ito Misei\Marisha Ray\\5p\F\FE13\Mikoto
 Minerva\Green, Blade\ \Flier\6, 7, 7, 7, 4\40, 31, 33, 32, 22\Daisuke Izuka\Cindy Robinson\Sakura Ayane\5pLU\F\FE3, FE1, FE11, FE12, FEW\Minerva
 Mist\Colorless, Healer\ \Infantry\6, 5, 6, 3, 8\39, 27, 28, 20, 34\Miwabe Sakura\Sarah Williams\Enomoto Atsuko\5p\F\FE9, FE10\Mist
 Morgan(F)\Blue, Tome, Thunder\ \Flier\5, 8, 7, 2, 7\37, 34, 30, 16, 33\Tobi\Nicole Balick\Sawashiro Miyuki\5p\F\FE13\*Morgan, F

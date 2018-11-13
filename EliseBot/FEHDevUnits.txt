@@ -60,7 +60,7 @@ New Moon\Luna
 Attack +1\Attack +2\Attack +3
 Desperation 1\Desperation 2\Desperation 3
 Fortify Def 1\Fortify Def 2\Fortify Def 3
-Attack +2
+Attack +3
 
 Cordelia
 5\6\Attack\HP\-
@@ -183,7 +183,7 @@ Fortify Res 1\Fortify Res 2\Fortify Res 3
 Fortify Def 2
 
 Marisa
-5\2\ \ \-
+5\3\ \ \-
 Iron Sword\Steel Sword\Wo Dao\Wo Dao+\Wo Dao+ (+) Speed Mode
 Shove
 Night Sky\Glimmer

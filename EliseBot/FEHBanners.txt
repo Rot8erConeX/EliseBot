@@ -1,8 +1,13 @@
-New Power (November 2018)\3\Bartre, Florina, Saber, Shanna\5\\NewPower
-"Before We Met..." Tempest Trials+\3\Hinoka(Wings), Leo, Ryoma\5\10/11/2018, 22/11/2018\Tempest
+Heroes with Ward Skills\3\-\5\02/12/2018, 12/12/2018\SkillBanner
+Legendary Heroes: >Unknown<\8\Gunnthra, Lucina(Glorious), Robin(F)(Fallen), Ryoma(Supreme)\5\28/11/2018, 04/12/2018
+Heroes with Vantage (v2)\3\-\5\24/11/2018, 01/12/2018\SkillBanner
+New Heroes\3\-\5\21/11/2018, 10/12/2018
+Corrin & Kana's Battle\3\Corrin(M)(Launch), Kana(F)\5\16/11/2018, 22/11/2018\BHB
+New Power (November 2018)\3\Bartre, Florina, Saber, Shanna\5\14/11/2018, 23/11/2018\NewPower
+"Before We Met..." Tempest Trials+\3\Hinoka(Wings), Leo, Ryoma\5\10/11/2018, 21/11/2018\Tempest
 Adrift\3\Camilla(Adrift), Corrin(F)(Adrift), Corrin(M)(Adrift), Mikoto\5\09/11/2018, 20/11/2018
 Heroes with Drive Atk\3\-\5\06/11/2018, 13/11/2018\SkillBanner
-Trick or Defeat (October 2018 rerun))\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\15/10/2017, 14/11/2018\Seasonal, Halloween
+Trick or Defeat (October 2018 rerun)\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\15/10/2017, 14/11/2018\Seasonal, Halloween
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
 Brave Redux\3\Kliff, Loki, Owain\5\23/10/2018, 08/11/2018\CYL
@@ -153,7 +158,7 @@ Heroes with Fury (v1)\3\Bartre, Eldigan, Jagen\5\26/06/2017, 10/07/2017\SkillBan
 The War of the Clerics Block A\3\Elise, Lachesis, Maria, Sakura\5\23/06/2017, 03/07/2017\VotingGauntlet
 The War of the Clerics Block B\3\Clarine, Lissa, Mist, Priscilla\5\23/06/2017, 03/07/2017\VotingGauntlet
 Echoes of Mystery\3\Athena, Katarina, Luke, Roderick\5\14/06/2017, 30/06/2017
-Heroes with Vantage\3\Gordin, Lon'qu, Reinhardt(Bonds)\5\12/06/2017, 26/06/2017\SkillBanner
+Heroes with Vantage (v1)\3\Gordin, Lon'qu, Reinhardt(Bonds)\5\12/06/2017, 26/06/2017\SkillBanner
 "Dark Clouds Over Awakening" Tempest Trials\3\Lucina, Nowi, Robin(M), Tharja\5\08/06/2017, 22/06/2017\Tempest
 Battling Camus\3\Fae, Jaffar, Olwen(Bonds), Tiki(Young)\5\02/06/2017, 09/06/2017\GHB
 Bridal Blessings\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)\5\30/05/2017, 14/06/2017\Seasonal, Bride
