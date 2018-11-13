@@ -10064,10 +10064,10 @@ def show_bonus_units(event,args='',bot)
       else
         msg2="Future"
       end
-      flds.push([msg2,k.join("\n")])
+      flds.push([msg2,"#{k.join("\n")}\n\n#{b[0][3][0]} (O)\n#{b[0][3][1]} (D)"])
       if b.length>1
         k=b[1][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
-        flds.push(['Future',k.join("\n")])
+        flds.push(['Future',"#{k.join("\n")}\n\n#{b[1][3][0]} (O)\n#{b[1][3][1]} (D)"])
       end
       if flds.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length>1500
         for i in 0...flds.length
