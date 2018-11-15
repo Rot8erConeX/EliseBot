@@ -17313,7 +17313,6 @@ bot.mention do |event|
   end
   if k<0
     str=find_name_in_string(event,nil,1)
-    puts str.to_s
     data_load()
     if find_skill(s,event,false,true)>=0
       disp_skill(bot,s,event,true)
