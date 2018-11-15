@@ -1,4 +1,5 @@
 def unit_into_multi(name,args3)
+  puts args3.to_s
   if name.include?('(M)') || name.include?('(F)')
     if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
       if ['robin','reflet','daraen'].include?(args3[0].downcase)
@@ -7,6 +8,10 @@ def unit_into_multi(name,args3)
         name='Morgan'
       elsif ['kana','kanna'].include?(args3[0].downcase)
         name='Kana'
+      elsif ['corrin','kamui','corrinlaunch','kamuilaunch','launchcorrin','launchkamui','corrindefault','kamuidefault','defaultcorrin','defaultkamui','corrinvanilla','kamuivanilla','vanillacorrin','vanillakamui','corrinog','kamuiog','ogcorrin','ogkamui'].include?(args3[0].gsub('(','').gsub(')','').downcase)
+        name='Corrin'
+      elsif ['corrinadrift','kamuiadrift','adriftcorrin','adriftkamui','corrindreaming','kamuidreaming','dreamingcorrin','dreamingkamui','corrindreamer','kamuidreamer','dreamercorrin','dreamerkamui','corrindreams','kamuidreams','dreamscorrin','dreamskamui','corrindream','kamuidream','dreamcorrin','dreamkamui','corrinfauxzura','kamuifauxzura','fauxzuracorrin','fauxzurakamui','corrinfauxura','kamuifauxura','fauxuracorrin','fauxurakamui'].include?(args3[0].gsub('(','').gsub(')','').downcase)
+        name='CorrinAdrift'
       else
         name=args3[0]
       end
