@@ -16847,8 +16847,6 @@ bot.command(:snagstats) do |event, f, f2|
       l=line.gsub("\n",'')
       b[0].push(l)
       b[4].push(l)
-      l=line.gsub("\n",'').gsub(' ','')
-      b[2].push(l) unless l.length<=0
     end
     event << "**I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long.**"
     event << "Of those, #{longFormattedNumber(b[1].length)} are SLOC (non-empty)."
