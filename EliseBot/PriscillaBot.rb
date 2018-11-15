@@ -1917,7 +1917,7 @@ def reshape_unit_into_multi(name,args3) # used by the find_unit_in_string functi
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
     @last_multi_reload=t
   end
-  unit_into_multi(name,args3)
+  return unit_into_multi(name,args3)
 end
 
 def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit based on the input string, but also the portion of said input string that matched the unit - name, alias, multi-unit alias, etc.
@@ -1932,7 +1932,7 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
   args=sever(s,true).split(' ')
   args2=sever(s,true).split(' ')
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
-  args=args.reject{ |a| ['+','-'].include?(a[0,1]) &&  ['hp','attack','speed','defense','resistance','atk','att','spd','def','defence','res','health','strength','str','magic','mag'].include?(a[1,a.length-1].downcase)}
+  args=args.reject{ |a| ['+','-'].include?(a[0,1]) && ['hp','attack','speed','defense','resistance','atk','att','spd','def','defence','res','health','strength','str','magic','mag'].include?(a[1,a.length-1].downcase)}
   args=args.reject{ |a| ['hp','attack','speed','defense','resistance','atk','att','spd','def','defence','res','health','strength','str','magic','mag'].include?(a.downcase)}
   args=args.reject{ |a| a[0,1]=='+' && a[1,a.length-1].to_i.to_s==a[1,a.length-1] }
   args=args.reject{ |a| a[0,a.length-1].to_i.to_s==a[0,a.length-1] && a[a.length-1,1]=='*'}
@@ -1948,61 +1948,29 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
   args4=args.join(' ').split(' ')
   name=args.join('')
   data_load()
+  args3=args.join(' ').split(' ')
   # Find the most accurate unit name among the remaining inputs
   if find_unit(name,event)>=0
     args3=args.join(' ').split(' ')
     name=@units[find_unit(name,event)][0]
     name=reshape_unit_into_multi(name,args3)
   else
-    for i in 0...args.length-1
-      args.pop
-      if find_unit(name,event)<0 && find_unit(args.join('').downcase,event,true)>=0
-        args3=args.join(' ').split(' ') 
-        name=@units[find_unit(args.join('').downcase,event,true)][0]
-      end
-    end
-    if find_unit(name,event)<0
-      for j in 0...args2.length-1
-        args2.shift
-        args=args2.join(' ').split(' ')
-        if find_unit(name,event)<0 && find_unit(args.join('').downcase,event,true)>=0
-          args3=args.join(' ').split(' ') 
-          name=@units[find_unit(args.join('').downcase,event,true)][0]
-        end
-        for i in 0...args.length-1
-          args.pop
-          if find_unit(name,event)<0 && find_unit(args.join('').downcase,event,true)>=0
-            args3=args.join(' ').split(' ') 
-            name=@units[find_unit(args.join('').downcase,event,true)][0]
-          end
+    for i in 0...args.length
+      for i2 in 0...args.length-i
+        if find_unit(name,event)<0 && find_unit(args[i,args.length-i-i2].join('').downcase,event,true)>=0
+          args3=args[i,args.length-i-i2]
+          name=@units[find_unit(args[i,args.length-i-i2].join('').downcase,event,true)][0]
         end
       end
     end
     name=reshape_unit_into_multi(name,args3)
   end
-  args2=args4.join(' ').split(' ')
   if find_unit(name,event)<0
-    for i in 0...args.length-1
-      args.pop
-      if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
-        args3=args.join(' ').split(' ') 
-        name=@units[find_unit(args.join('').downcase,event)][0]
-      end
-    end
-    if find_unit(name,event)<0
-      for j in 0...args2.length-1
-        args2.shift
-        args=args2.join(' ').split(' ')
-        if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
-          args3=args.join(' ').split(' ') 
-          name=@units[find_unit(args.join('').downcase,event)][0]
-        end
-        for i in 0...args.length-1
-          args.pop
-          if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
-            args3=args.join(' ').split(' ') 
-            name=@units[find_unit(args.join('').downcase,event)][0]
-          end
+    for i in 0...args.length
+      for i2 in 0...args.length-i
+        if find_unit(name,event)<0 && find_unit(args[i,args.length-i-i2].join('').downcase,event)>=0
+          args3=args[i,args.length-i-i2]
+          name=@units[find_unit(args[i,args.length-i-i2].join('').downcase,event)][0]
         end
       end
     end
@@ -3089,29 +3057,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     end
   end
   untz=@units.map{|q| q}
-  unless ignore || (!name.nil? && name != '')
-    args2=args.join(' ').split(' ')
-    name=args.join('')
-    data_load()
-    # Find the most accurate unit name among the remaining inputs
-    if find_unit(name,event)<0
-      for i in 0...args.length-1
-        args.pop
-        name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
-      end
-      if find_unit(name,event)<0
-        for j in 0...args2.length-1
-          args2.shift
-          args=args2.join(' ').split(' ')
-          name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
-          for i in 0...args.length-1
-            args.pop
-            name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
-          end
-        end
-      end
-    end
-  end
   flurp=find_stats_in_string(event,nil,0,name)
   rarity=flurp[0]
   merges=flurp[1]
@@ -3661,29 +3606,6 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
     end
   end
   untz=@units.map{|q| q}
-  unless ignore || (!name.nil? && name != '')
-    args2=args.join(' ').split(' ')
-    name=args.join('')
-    data_load()
-    # Find the most accurate unit name among the remaining inputs
-    if find_unit(name,event)<0
-      for i in 0...args.length-1
-        args.pop
-        name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
-      end
-      if find_unit(name,event)<0
-        for j in 0...args2.length-1
-          args2.shift
-          args=args2.join(' ').split(' ')
-          name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
-          for i in 0...args.length-1
-            args.pop
-            name=untz[find_unit(args.join('').downcase,event)][0] if find_unit(name,event)<0 && find_unit(args.join('').downcase,event)>=0
-          end
-        end
-      end
-    end
-  end
   flurp=find_stats_in_string(event,nil,0,name)
   rarity=flurp[0]
   merges=flurp[1]
@@ -4521,47 +4443,6 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   name=args.join(' ') if name.nil?
   name=stat_buffs(name,name)
-  return disp_skill_line(bot,name,event,ignore,dispcolors) if find_skill(name,event,false,false,true,1).is_a?(Array)
-  unless ignore || find_skill(name,event,false,false,true)>=0
-    args2=args.join(' ').split(' ')
-    name=args.join('')
-    data_load()
-    # Find the most accurate skill name among the remaining inputs
-    if find_skill(name,event,true)<0
-      for i in 0...args.length-1
-        args.pop
-        name=@skills[find_skill(args.join('').downcase,event,true)][0] if find_skill(name,event,true)<0 && find_skill(args.join('').downcase,event,true)>=0
-      end
-      if find_skill(name,event,true)<0
-        for j in 0...args2.length-1
-          args2.shift
-          args=args2.join(' ').split(' ')
-          name=@skills[find_skill(args.join('').downcase,event,true)][0] if find_skill(name,event,true)<0 && find_skill(args.join('').downcase,event,true)>=0
-          for i in 0...args.length-1
-            args.pop
-            name=@skills[find_skill(args.join('').downcase,event,true)][0] if find_skill(name,event,true)<0 && find_skill(args.join('').downcase,event,true)>=0
-          end
-        end
-      end
-    end
-    if find_skill(name,event)<0
-      for i in 0...args.length-1
-        args.pop
-        name=@skills[find_skill(args.join('').downcase,event)][0] if find_skill(name,event)<0 && find_skill(args.join('').downcase,event)>=0
-      end
-      if find_skill(name,event)<0
-        for j in 0...args2.length-1
-          args2.shift
-          args=args2.join(' ').split(' ')
-          name=@skills[find_skill(args.join('').downcase,event)][0] if find_skill(name,event)<0 && find_skill(args.join('').downcase,event)>=0
-          for i in 0...args.length-1
-            args.pop
-            name=@skills[find_skill(args.join('').downcase,event)][0] if find_skill(name,event)<0 && find_skill(args.join('').downcase,event)>=0
-          end
-        end
-      end
-    end
-  end
   return disp_skill_line(bot,name,event,ignore,dispcolors) if find_skill(name,event,false,false,true,1).is_a?(Array)
   lookout=[]
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
@@ -8152,7 +8033,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
     @last_multi_reload=t
   end
-  multi_for_units(event,str1,str2,robinmode)
+  return multi_for_units(event,str1,str2,robinmode)
 end
 
 def weapon_clss(arr,event,mode=0)
@@ -17063,7 +16944,7 @@ bot.message do |event|
       data_load()
       if find_skill(s,event,false,true)>=0
         disp_skill(bot,s,event,true)
-      elsif find_structure_ex(s,event,true)
+      elsif find_structure_ex(s,event,true).length>0
         disp_struct(bot,s,event,true)
       elsif str.nil?
         if find_skill(s,event)>=0
@@ -17115,7 +16996,7 @@ bot.message do |event|
         disp_stats(bot,str,w,event,event.server.nil?,true)
       elsif find_skill(s,event)>0
         disp_skill(bot,s,event,true)
-      elsif find_structure_ex(s,event)
+      elsif find_structure_ex(s,event).length>0
         disp_struct(bot,s,event,true)
       elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
         x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
@@ -17432,10 +17313,11 @@ bot.mention do |event|
   end
   if k<0
     str=find_name_in_string(event,nil,1)
+    puts str.to_s
     data_load()
     if find_skill(s,event,false,true)>=0
       disp_skill(bot,s,event,true)
-    elsif find_structure_ex(s,event,true)
+    elsif find_structure_ex(s,event,true).length>0
       disp_struct(bot,s,event,true)
     elsif str.nil?
       if find_skill(s,event)>=0
@@ -17494,7 +17376,7 @@ bot.mention do |event|
       w=nil
       w=k2[0] unless k2.nil?
       disp_stats(bot,x[1],w,event,true,true)
-    elsif find_structure_ex(s,event)
+    elsif find_structure_ex(s,event).length>0
       disp_struct(bot,s,event,true)
     end
   end
