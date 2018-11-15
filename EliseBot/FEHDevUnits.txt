@@ -22,6 +22,16 @@ Vantage 1\Vantage 2\Vantage 3
 Savage Blow 1\Savage Blow 2\Savage Blow 3
 Breath of Life 3
 
+Azura(Adrift)
+5\0\ \ \-
+Wind\Elwind\Rexcalibur\Book of Shadows
+Sing
+Night Sky\Glimmer
+Spd/Res Bond 1\Spd/Res Bond 2\Spd/Res Bond 3
+Torrent Dance 1\Torrent Dance 2\Torrent Dance 3
+Spur Def 1\Drive Def 1\Drive Def 2
+Blaze Dance 2
+
 Celica
 5\1\HP\Resistance\-
 Fire\Elfire\Bolganone\Ragnarok\Ragnarok (+) Effect Mode
