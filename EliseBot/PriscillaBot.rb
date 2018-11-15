@@ -1915,7 +1915,7 @@ def reshape_unit_into_multi(name,args3) # used by the find_unit_in_string functi
   if t-@last_multi_reload>5*60 || @shardizard==4
     puts 'reloading EliseMulti1'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
-    @last_multi_reload
+    @last_multi_reload=t
   end
   unit_into_multi(name,args3)
 end
@@ -8150,7 +8150,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
   if t-@last_multi_reload>5*60 || @shardizard==4
     puts 'reloading EliseMulti1'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
-    @last_multi_reload
+    @last_multi_reload=t
   end
   multi_for_units(event,str1,str2,robinmode)
 end
