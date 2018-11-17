@@ -113,7 +113,7 @@ Def Ploy 1\Def Ploy 2\Def Ploy 3
 Iote's Shield
 
 Ethlyn
-5\1\ \ \-
+5\2\ \ \-
 Assault\Fear\Fear+\Fear+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
