@@ -16729,6 +16729,8 @@ bot.command(:snagstats) do |event, f, f2|
     File.open('C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb').each_line do |line|
       l=line.gsub("\n",'')
       b[0].push(l)
+      l=line.gsub("\n",'').gsub(' ','')
+      b[2].push(l) unless l.length<=0
     end
     event << "**I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long.**"
     event << "Of those, #{longFormattedNumber(b[1].length)} are SLOC (non-empty)."
