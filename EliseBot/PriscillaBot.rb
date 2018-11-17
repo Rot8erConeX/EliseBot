@@ -16722,7 +16722,6 @@ bot.command(:snagstats) do |event, f, f2|
     File.open('C:/Users/Mini-Matt/Desktop/devkit/rot8er_functs.rb').each_line do |line|
       l=line.gsub("\n",'')
       b[0].push(l)
-      b[4].push(l)
       l=line.gsub("\n",'').gsub(' ','')
       b[2].push(l) unless l.length<=0
     end
@@ -16738,7 +16737,6 @@ bot.command(:snagstats) do |event, f, f2|
     event << ''
     event << "**I rely on multiple libraries that in total are #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/rot8er_functs.rb").inject(0) {|c, line| c+1}+File.foreach("C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb").inject(0) {|c, line| c+1})} lines of code long.**"
     event << "Of those, #{longFormattedNumber(b[2].length)} are SLOC (non-empty)."
-    event << "~~When fully collapsed, it appears to be #{longFormattedNumber(b[4].reject{|q| q.length>0 && (q[0,2]=='  ' || q[0,3]=='end' || q[0,4]=='else')}.length)} lines of code long.~~"
     event << ''
     event << "**There are #{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command('}.length)} commands, invoked with #{longFormattedNumber(all_commands().length)} different phrases.**"
     event << 'This includes:'
