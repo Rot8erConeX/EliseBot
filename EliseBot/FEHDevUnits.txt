@@ -85,7 +85,7 @@ Quickened Pulse
 Cordelia(Bride)
 5\0\Speed\Defense\-
 Iron Bow\Steel Bow\Brave Bow\Brave Bow+
-Rally Attack\Rally Atk/Spd
+Rally Attack\Rally Atk/Spd\Rally Atk/Spd+
 New Moon\Moonbow
 Death Blow 1\Death Blow 2\Death Blow 3
 Escape Route 1\Escape Route 2\Escape Route 3

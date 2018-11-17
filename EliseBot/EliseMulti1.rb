@@ -1,5 +1,4 @@
 def unit_into_multi(name,args3)
-  puts args3.to_s
   if name.include?('(M)') || name.include?('(F)')
     if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
       if ['robin','reflet','daraen'].include?(args3[0].downcase)
@@ -330,8 +329,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
         return [m[i],['Tiki(Adult)(Summer)','Tiki(Young)(Summer)'],m] if event.message.text.downcase.include?(m[i])
       end
       return [str,['Tiki(Adult)(Summer)','Tiki(Young)(Summer)'],m]
-    elsif str2.include?('legendary') || str2.include?('legend') || str2.include?('caped') || str2.include?('cape') || str2.include?('hood') || str2.include?('hooded') || str2.include?('cloak') || str2.include?('cloaked') || str2.include?('earth')
-      return [str,['Tiki(Young)(Earth)'],["legendary#{str}","#{str}legendary","#{str}legend","legend#{str}","#{str}caped","caped#{str}","#{str}cape","cape#{str}","#{str}hood","hood#{str}","#{str}hooded","hooded#{str}","#{str}cloak","cloak#{str}","#{str}cloaked","cloaked#{str}","#{str}earth","earth#{str}"]]
+    elsif str2.include?('legendary') || str2.include?('legend') || str2.include?('caped') || str2.include?('cape') || str2.include?('hood') || str2.include?('hooded') || str2.include?('cloak') || str2.include?('cloaked') || str2.include?('earth') || str2.include?('leg')
+      return [str,['Tiki(Young)(Earth)'],["legendary#{str}","#{str}legendary","#{str}legend","legend#{str}","#{str}caped","caped#{str}","#{str}cape","cape#{str}","#{str}hood","hood#{str}","#{str}hooded","hooded#{str}","#{str}cloak","cloak#{str}","#{str}cloaked","cloaked#{str}","#{str}earth","earth#{str}","leg#{str}","#{str}leg"]]
     end
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?("#{str}ys") || str2.include?("ys#{str}")
