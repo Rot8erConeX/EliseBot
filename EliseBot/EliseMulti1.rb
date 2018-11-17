@@ -118,7 +118,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
   nicknames_load()
   for i in 0...@multi_aliases.length
     m=@multi_aliases[i][1].map{|q| q}
-    m=['Robin'] if m==['Robin(M)', 'Robin(F)'] || m==['Robin(F)', 'Robin(M)']
+    m=['Robin'] if (m==['Robin(M)', 'Robin(F)'] || m==['Robin(F)', 'Robin(M)']) && robinmode != 1
     return [str1, m, @multi_aliases[i][0].downcase] if @multi_aliases[i][0].downcase==str1
   end
   return ['laevatein', ['Lavatain'], 'laevatein'] if /laevatein/ =~ str1
@@ -389,8 +389,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Robin(M)'],["male#{str}","m#{str}","#{str}male","#{str}m"]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
-    return [str,['Robin'],[str]] if robinmode.zero?
     return [str,['Robin(M)','Robin(F)'],[str]] if robinmode==1
+    return [str,['Robin'],[str]] if robinmode.zero?
   elsif /grima/ =~ str1
     str='grima'
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
