@@ -1965,6 +1965,7 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
     end
     name=reshape_unit_into_multi(name,args3)
   end
+  n="#{name}"
   if find_unit(name,event)<0
     for i in 0...args.length
       for i2 in 0...args.length-i
@@ -1974,9 +1975,10 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
         end
       end
     end
+    n="#{name}"
     name=reshape_unit_into_multi(name,args3)
   end
-  return nil if args3.nil?
+  return nil if args3.nil? || (find_unit(name,event)<0 && n==name)
   return [name,args3.join(' ')] if mode==1
   return name
 end
