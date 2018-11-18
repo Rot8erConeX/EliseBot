@@ -536,3 +536,47 @@ def multi_for_units(event,str1,str2,robinmode=0)
   end
   return nil
 end
+
+def game_adjust(name)
+  name='Robin' if name==['Robin(M)','Robin(F)'] || name==['Robin(F)','Robin(M)']
+  name='Corrin' if name==['Corrin(M)(Launch)','Corrin(F)(Launch)'] || name==['Corrin(F)(Launch)','Corrin(M)(Launch)']
+  name='Corrin' if name==['Corrin(M)(Adrift)','Corrin(F)(Adrift)'] || name==['Corrin(F)(Adrift)','Corrin(M)(Adrift)']
+  name='Azura' if name==['Azura(Performing)','Azura(Winter)']
+  name='Lucina' if name==['Lucina(Spring)','Lucina(Brave)']
+  name='Hector' if name==['Hector(Marquess)','Hector(Brave)']
+  name='Tiki' if name==['Tiki(Young)','Tiki(Adult)']
+  name='Tiki' if name==['Tiki(Adult)(Summer)','Tiki(Young)(Summer)']
+  name='Chrom(Launch)' if name==['Chrom(Launch)','Chrom(Branded)']
+  name='Lyn' if name==['Lyn(Bride)','Lyn(Brave)'] || name==['Lyn(Brave)','Lyn(Wind)'] || name==['Lyn(Bride)','Lyn(Valentines)']
+  name=name[0].gsub('(M)','(F)') if name.is_a?(Array) && name.length==2 && name[0].gsub('(M)','').gsub('(F)','')!=name[0] && name[0].gsub('(M)','').gsub('(F)','')==name[0].gsub('(F)','').gsub('(M)','')
+  return name
+end
+
+def game_hybrid(u,event,bot)
+  args=event.message.text.downcase.split(' ')
+  if ['Robin(F)','Robin(M)'].include?(u)
+    pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png'
+    name='Robin'
+    xcolor=avg_color([[39,100,222],[9,170,36]])
+  elsif ['Morgan(F)','Morgan(M)'].include?(u)
+    pic='https://orig00.deviantart.net/97f6/f/2018/068/a/c/morgan_by_rot8erconex-dc5drdn.png'
+    name='Morgan'
+    xcolor=avg_color([[39,100,222],[226,33,65]])
+  elsif ['Kana(F)','Kana(M)'].include?(u)
+    name='Kana'
+    xcolor=avg_color([[39,100,222],[9,170,36]])
+  elsif ['Robin(F)(Fallen)','Robin(M)(Fallen)'].include?(u)
+    pic='https://orig00.deviantart.net/33ea/f/2018/104/2/7/grimleal_by_rot8erconex-dc8svax.png'
+    name='Grima: Robin(Fallen)'
+    xcolor=avg_color([[9,170,36],[222,95,9]])
+  elsif ['Corrin(F)(Launch)','Corrin(M)(Launch)'].include?(u)
+    pic='https://orig00.deviantart.net/d8ce/f/2018/051/1/a/corrin_by_rot8erconex-dc3tj34.png'
+    name='Corrin'
+    xcolor=avg_color([[226,33,65],[39,100,222]])
+  elsif 'Chrom(Branded)'==u && !args.join('').include?('brand') && !args.join('').include?('exalt') && !args.join('').include?('sealed') && !args.join('').include?('branded') && !args.join('').include?('exalted') && !args.join('').include?('knight')
+    return [pick_thumbnail(event,find_unit('Chrom(Launch)',event),bot),'Chrom(Launch)']
+  else
+    return []
+  end
+  return [pic,name,xcolor]
+end
