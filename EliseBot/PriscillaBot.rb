@@ -6628,10 +6628,10 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
                 for j in 0...games.length
                   if matches3[i][11].map{|q| q.downcase}.include?(games[j].downcase)
                     matches4.push(matches3[i])
-                  elsif t.year*1000000+t.month*10000+t.day*100+t.hour<2018120623 && @shardizard != 4
                   elsif matches3[i][11].map{|q| q.downcase.gsub('(a)','')}.include?(games[j].downcase)
                     matches3[i][0]="#{matches3[i][0]} *[Amiibo]*"
                     matches4.push(matches3[i])
+                  elsif t.year*1000000+t.month*10000+t.day*100+t.hour<2018120623 && @shardizard != 4
                   elsif matches3[i][11].map{|q| q.downcase.gsub('(at)','')}.include?(games[j].downcase)
                     matches3[i][0]="#{matches3[i][0]} *[Assist Trophy]*"
                     matches4.push(matches3[i])
