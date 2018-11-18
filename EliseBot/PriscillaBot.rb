@@ -856,7 +856,7 @@ bot.command(:reboot, from: 167657750971547648) do |event| # reboots Elise
   exec "cd C:/Users/Mini-Matt/Desktop/devkit && PriscillaBot.rb #{@shardizard}"
 end
 
-def attack_icon(event) # this is used by the attaccolor command to display all info
+def attack_icon(event) # this is used by the attackcolor command to display all info
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     event.respond "__**Why are the Attack stat icons colored weird?**__\n\n*1.) The Def/Res icons*\n<:DefenseS:467037520249487372> <:ResistanceS:467037520379641858>\nIf one looks carefully, the icons for Defense and Resistance are the same design, but with different color backgrounds.\n\n*2.) The official Attack icon*\n<:StrengthS:467037520484630539> <:DefenseS:467037520249487372>\nLikewise, the Attack and Defense icons have the same color background.  Defense looks slightly redder, but that's because it has a large swatch of yellow inside it whereas Attack has a slightly smaller swatch of blue-white in it.\n\n*3.) The original patent for FEH's summoning system*\n<:Orb_Red:455053002256941056> <:Orb_Blue:455053001971859477> <:Orb_Green:455053002311467048> <:Orb_Colorless:455053002152083457>\nIf one looks at the original patent for FEH's summoning system, they learn that at some point during FEH's development, units had the possibility for simultaneously having two weapon types.  The patent specifically says that if the two weapon types (refered to as \"character attributes\") are different, the orb used to hide the character (refered to as \"the mask\") would be a hybrid of the two colors, akin to tye-dye or a Yin-Yang symbol."
     event.respond "Taking these three facts into consideration, I believe that at some point in development, units were going to have six stats: <:HP_S:467037520538894336>HP, <:StrengthS:467037520484630539>Strength, <:MagicS:467043867611627520>Magic, <:SpeedS:467037520534962186>Speed, <:DefenseS:467037520249487372>Defense, and <:ResistanceS:467037520379641858>Resistance.\nThat what we now know as the attack icon would be used for Strength and a similar icon with a blue background would be used for Magic.\nThis would mean that when viewing stats, the red swords <:StrengthS:467037520484630539> would attack the enemy's red shield <:DefenseS:467037520249487372>, and the blue swords <:MagicS:467043867611627520> would attack the blue shield <:ResistanceS:467037520379641858>.\nThey then ran into issues with a proper control scheme on phones that allowed for this to be easy to understand for newcomers, so they reduced each character to a single weapon, and thus a single attacking stat.  Said stat was then reduced to a single color to prevent it from conflicting with the gradients of the \"dual stat\" icons.\n\nAll I am doing is acting on this theory and showing icons for each individual type of attacking stat:\n<:StrengthS:467037520484630539> Sword/Lance/Axe users, Archers, and Thieves have Strength\n<:MagicS:467043867611627520> Mages and Healers have Magic\n<:FreezeS:467043868148236299> And Dragons have a stat that is a hybrid of the two (because it attacks the lower defensive stat in certain conditions)\nCertain commands that deal with multiple units also have this symbol <:GenericAttackS:467065089598423051> for use when the units involved have different attacking stats."
@@ -6620,12 +6620,32 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
           else
             matches4=[]
             if games.length>0
+              t=Time.now
+              timeshift=8
+              timeshift-=1 unless t.dst?
+              t-=60*60*timeshift
               for i in 0...matches3.length
                 for j in 0...games.length
                   if matches3[i][11].map{|q| q.downcase}.include?(games[j].downcase)
                     matches4.push(matches3[i])
+                  elsif t.year*1000000+t.month*10000+t.day*100+t.hour<2018120623 && @shardizard != 4
                   elsif matches3[i][11].map{|q| q.downcase.gsub('(a)','')}.include?(games[j].downcase)
                     matches3[i][0]="#{matches3[i][0]} *[Amiibo]*"
+                    matches4.push(matches3[i])
+                  elsif matches3[i][11].map{|q| q.downcase.gsub('(at)','')}.include?(games[j].downcase)
+                    matches3[i][0]="#{matches3[i][0]} *[Assist Trophy]*"
+                    matches4.push(matches3[i])
+                  elsif matches3[i][11].map{|q| q.downcase.gsub('(m)','')}.include?(games[j].downcase)
+                    matches3[i][0]="#{matches3[i][0]} *[Mii Costume]*"
+                    matches4.push(matches3[i])
+                  elsif matches3[i][11].map{|q| q.downcase.gsub('(t)','')}.include?(games[j].downcase)
+                    matches3[i][0]="#{matches3[i][0]} *[Trophy]*"
+                    matches4.push(matches3[i])
+                  elsif matches3[i][11].map{|q| q.downcase.gsub('(s)','')}.include?(games[j].downcase)
+                    matches3[i][0]="#{matches3[i][0]} *[Spirit]*"
+                    matches4.push(matches3[i])
+                  elsif matches3[i][11].map{|q| q.downcase.gsub('(st)','')}.include?(games[j].downcase)
+                    matches3[i][0]="#{matches3[i][0]} *[Sticker]*"
                     matches4.push(matches3[i])
                   end
                 end
@@ -7092,11 +7112,11 @@ def display_units(event, mode)
       m=''
       m='*' if ['Laevatein'].include?(k[i])
       unless ['Laevatein','- - -'].include?(k[i])
-        m2=untz[untz.find_index{|q2| q2[0]==k[i].gsub(' *[Amiibo]*','')}]
+        m2=untz[untz.find_index{|q2| q2[0]==k[i].gsub(' *[Amiibo]*','').gsub(' *[Assist Trophy]*','').gsub(' *[Mii Costume]*','').gsub(' *[Trophy]*','').gsub(' *[Sticker]*','').gsub(' *[Spirit]*','')}]
         m='~~' unless m2[13][0].nil?
         m='*' if m2[9][0].downcase.gsub('0s','')=='-'
       end
-      m='' if m=='*' && k.reject{|q| !q.include?(' *[Amiibo]*')}.length>0
+      m='' if m=='*' && k.reject{|q| q.split(' *[').length>1}.length>0
       k[i]="#{m}#{k[i]}#{m}"
     end
     if k.include?('- - -')
@@ -7111,7 +7131,7 @@ def display_units(event, mode)
         end
       end
       for i in 0...p1.length
-        wpn1=p1[i].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','').gsub('*','')}][1]}
+        wpn1=p1[i].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','').gsub(' *[Assist Trophy]*','').gsub(' *[Mii Costume]*','').gsub(' *[Trophy]*','').gsub(' *[Sticker]*','').gsub(' *[Spirit]*','').gsub('*','')}][1]}
         h='.'
         if wpn1.uniq.length==1
           # blade type
@@ -7164,7 +7184,7 @@ def display_units(event, mode)
         if h=='.' && wpn1[0]=='Tome'
           h=wpn1[0][2]
           for l in 0...p1[i].length
-            h=untz[untz.find_index{|q2| q2[0]==p1[i][l].gsub(' *[Amiibo]*','').gsub('*','')}][1][0] if h != untz[untz.find_index{|q2| q2[0]==p1[i][l]}][1][2]
+            h=untz[untz.find_index{|q2| q2[0]==p1[i][l].gsub(' *[Amiibo]*','').gsub(' *[Assist Trophy]*','').gsub(' *[Mii Costume]*','').gsub(' *[Trophy]*','').gsub(' *[Sticker]*','').gsub(' *[Spirit]*','').gsub('*','')}][1][0] if h != untz[untz.find_index{|q2| q2[0]==p1[i][l]}][1][2]
           end
           h="#{h} Mages"
         end
@@ -7172,7 +7192,7 @@ def display_units(event, mode)
       end
       if p1.map{|q| q[0]}.uniq.length<=1 || p1.map{|q| q[0]}.length>p1.map{|q| q[0]}.uniq.length
         for i in 0...p1.length
-          mov=p1[i][1].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','').gsub('*','')}][3]}.uniq
+          mov=p1[i][1].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','').gsub(' *[Assist Trophy]*','').gsub(' *[Mii Costume]*','').gsub(' *[Trophy]*','').gsub(' *[Sticker]*','').gsub(' *[Spirit]*','').gsub('*','')}][3]}.uniq
           if mov.length<=1
             p1[i][0]='<:Icon_Move_Infantry:443331187579289601> Infantry' if mov[0]=='Infantry'
             p1[i][0]='<:Icon_Move_Armor:443331186316673025> Armor' if mov[0]=='Armor'
@@ -12047,12 +12067,13 @@ def banner_list(event,name,bot,weapon=nil)
 end
 
 def games_list(event,name,bot,weapon=nil)
-  name='Robin' if name==['Robin(M)','Robin(F)'] || name==['Robin(F)','Robin(M)']
-  name='Azura' if name==['Azura(Performing)','Azura(Winter)']
-  name='Lucina' if name==['Lucina(Spring)','Lucina(Brave)']
-  name='Hector' if name==['Hector(Marquess)','Hector(Brave)']
-  name='Lyn' if name==['Lyn(Bride)','Lyn(Brave)'] || name==['Lyn(Brave)','Lyn(Wind)'] || name==['Lyn(Bride)','Lyn(Valentines)']
-  name=name[0].gsub('(M)','(F)') if name.is_a?(Array) && name.length==2 && name[0].gsub('(M)','').gsub('(F)','')!=name[0] && name[0].gsub('(M)','').gsub('(F)','')==name[0].gsub('(F)','').gsub('(M)','')
+  t=Time.now
+  if t-@last_multi_reload>5*60 || @shardizard==4
+    puts 'reloading EliseMulti1'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+    @last_multi_reload=t
+  end
+  name=game_adjust(name)
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
@@ -12067,6 +12088,7 @@ def games_list(event,name,bot,weapon=nil)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   name=find_name_in_string(event)
   name='grima' if name.nil? && event.message.text.downcase.gsub(' ','').include?('grima')
+  name='tiki' if name.nil? && event.message.text.downcase.gsub(' ','').include?('tiki')
   j=find_unit(name,event)
   name='Robin(M)(Fallen)' if name.downcase.include?('grima') && j<0
   j=find_unit(name,event)
@@ -12075,59 +12097,96 @@ def games_list(event,name,bot,weapon=nil)
     return nil
   end
   untz=@units.map{|q| q}
-  rg=untz[j][11].reject{|q| q[0,3]=='(a)'}
+  rg=untz[j][11].reject{|q| ['(a)','(m)','(t)','(t)'].include?(q[0,3]) || ['(at)','(st)'].include?(q[0,4])}
   ag=untz[j][11].reject{|q| q[0,3]!='(a)'}.map{|q| q[3,q.length-3]}
+  mg=untz[j][11].reject{|q| q[0,3]!='(m)'}.map{|q| q[3,q.length-3]}
+  sg=untz[j][11].reject{|q| q[0,3]!='(s)'}.map{|q| q[3,q.length-3]}
+  tg=untz[j][11].reject{|q| q[0,3]!='(t)'}.map{|q| q[3,q.length-3]}
+  atg=untz[j][11].reject{|q| q[0,4]!='(at)'}.map{|q| q[4,q.length-4]}
+  stg=untz[j][11].reject{|q| q[0,4]!='(st)'}.map{|q| q[4,q.length-4]}
   g=get_games_list(rg)
   ga=get_games_list(ag,false)
+  gm=get_games_list(mg,false)
+  gs=get_games_list(sg,false)
+  gt=get_games_list(tg,false)
+  gat=get_games_list(atg,false)
+  gst=get_games_list(stg,false)
   mu=(event.message.text.downcase.include?("mathoo's"))
   xcolor=unit_color(event,j,nil,0,mu)
   pic=pick_thumbnail(event,j,bot)
   g2="#{g[0]}"
   g.shift
   name="#{untz[j][0].gsub('Lavatain','Laevatein')}"
-  if ['Robin(F)','Robin(M)'].include?(untz[j][0])
-    pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png'
-    name='Robin'
-    xcolor=avg_color([[39,100,222],[9,170,36]])
-  elsif ['Morgan(F)','Morgan(M)'].include?(untz[j][0])
-    pic='https://orig00.deviantart.net/97f6/f/2018/068/a/c/morgan_by_rot8erconex-dc5drdn.png'
-    name='Morgan'
-    xcolor=avg_color([[39,100,222],[226,33,65]])
-  elsif ['Kana(F)','Kana(M)'].include?(untz[j][0])
-    name='Kana'
-    xcolor=avg_color([[39,100,222],[9,170,36]])
-  elsif ['Robin(F)(Fallen)','Robin(M)(Fallen)'].include?(untz[j][0])
-    pic='https://orig00.deviantart.net/33ea/f/2018/104/2/7/grimleal_by_rot8erconex-dc8svax.png'
-    name='Grima: Robin(Fallen)'
-    xcolor=avg_color([[9,170,36],[222,95,9]])
-  elsif ['Corrin(F)','Corrin(M)'].include?(untz[j][0])
-    pic='https://orig00.deviantart.net/d8ce/f/2018/051/1/a/corrin_by_rot8erconex-dc3tj34.png'
-    name='Corrin'
-    xcolor=avg_color([[226,33,65],[39,100,222]])
-  elsif 'Chrom(Branded)'==untz[j][0] && !args.join('').downcase.include?('brand') && !args.join('').downcase.include?('exalt') && !args.join('').downcase.include?('sealed') && !args.join('').downcase.include?('branded') && !args.join('').downcase.include?('exalted') && !args.join('').downcase.include?('knight')
-    pic=pick_thumbnail(event,find_unit('Chrom(Launch)',event),bot)
-    name='Chrom(Launch)'
+  if game_hybrid(untz[j][0],event,bot).length>0
+    mmm=game_hybrid(untz[j][0],event,bot)
+    pic=mmm[0]
+    name=mmm[1]
+    xcolor=mmm[2] if mmm.length>2
   elsif 'Tiki(Adult)'==untz[j][0] && !args.join('').downcase.gsub('games','gmes').include?('a')
     pic='https://orig00.deviantart.net/6c50/f/2018/051/9/e/tiki_by_rot8erconex-dc3tkzq.png'
     name='Tiki'
     m=untz[untz.find_index{|q| q[0]=='Tiki(Young)'}]
-    rx=m[11].reject{|q| q[0,3]=='(a)'}
+    rx=m[11].reject{|q| ['(a)','(m)','(t)','(t)'].include?(q[0,3]) || '(at)'==q[0,4]}
     ax=m[11].reject{|q| q[0,3]!='(a)'}.map{|q| q[3,q.length-3]}
+    mx=m[11].reject{|q| q[0,3]!='(m)'}.map{|q| q[3,q.length-3]}
+    sx=m[11].reject{|q| q[0,3]!='(s)'}.map{|q| q[3,q.length-3]}
+    tx=m[11].reject{|q| q[0,3]!='(t)'}.map{|q| q[3,q.length-3]}
+    atx=m[11].reject{|q| q[0,4]!='(at)'}.map{|q| q[3,q.length-3]}
+    stx=m[11].reject{|q| q[0,4]!='(st)'}.map{|q| q[3,q.length-3]}
     x=get_games_list(rx)
     xa=get_games_list(ax,false)
+    xm=get_games_list(mx,false)
+    xs=get_games_list(sx,false)
+    xt=get_games_list(tx,false)
+    xat=get_games_list(atx,false)
+    xst=get_games_list(stx,false)
     g2="#{x[0]}\n#{g2}"
-    x.shifr
+    x.shift
     for i in 0...g.length
       x.push(g[i])
     end
     for i in 0...ga.length
       xa.push(ga[i])
     end
+    for i in 0...gm.length
+      xm.push(gm[i])
+    end
+    for i in 0...gs.length
+      xs.push(gs[i])
+    end
+    for i in 0...gt.length
+      xt.push(gt[i])
+    end
+    for i in 0...gat.length
+      xat.push(gat[i])
+    end
+    for i in 0...gst.length
+      xst.push(gst[i])
+    end
     g=x.uniq
     ga=xa.uniq
+    gm=xm.uniq
+    gt=xt.uniq
+    gat=xat.uniq
   end
   ga=ga.reject{|q| q.downcase=='no games'}
-  create_embed(event,"__#{"Mathoo's " if mu}**#{name}**__","#{"**Credit in FEH**\n" unless g2=="No games"}#{g2}#{"\n\n**Other games**\n#{g.join("\n")}" unless g.length<1}#{"\n\n**#{"Male a" if ["Robin(F)","Robin(M)"].include?(untz[j][0])}#{"A" unless ["Robin(F)","Robin(M)"].include?(untz[j][0])}lso appears via Amiibo functionality in**\n#{ga.join("\n")}" unless ga.length<1}",xcolor,nil,pic)
+  gm=gm.reject{|q| q.downcase=='no games'}
+  gs=gs.reject{|q| q.downcase=='no games'}
+  gt=gt.reject{|q| q.downcase=='no games'}
+  gat=gat.reject{|q| q.downcase=='no games'}
+  gst=gst.reject{|q| q.downcase=='no games'}
+  t=Time.now
+  timeshift=8
+  timeshift-=1 unless t.dst?
+  t-=60*60*timeshift
+  if t.year*1000000+t.month*10000+t.day*100+t.hour<2018120623 && @shardizard != 4
+    gm=[]
+    gs=[]
+    gt=[]
+    gat=[]
+    gst=[]
+  end
+  create_embed(event,"__#{"Mathoo's " if mu}**#{name}**__","#{"**Credit in FEH**\n" unless g2=="No games"}#{g2}#{"\n\n**Other games**\n#{g.join("\n")}" unless g.length<1}#{"\n\n**Also appears via Amiibo functionality in**\n#{ga.join("\n")}" unless ga.length<1}#{"\n\n**Appears as an Assist Trophy in**\n#{gat.join("\n")}" unless gat.length<1}#{"\n\n**Appears as a Mii Costume in**\n#{gm.join("\n")}" unless gm.length<1}#{"\n\n**Appears as a Spirit in**\n#{gs.join("\n")}" unless gs.length<1}#{"\n\n**Appears as a standard Trophy in**\n#{gt.join("\n")}" unless gt.length<1}#{"\n\n**Appears as a Sticker in**\n#{gst.join("\n")}" unless gst.length<1}",xcolor,nil,pic)
 end
 
 bot.command([:structure,:struct]) do |event, *args|
