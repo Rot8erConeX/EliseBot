@@ -5713,6 +5713,7 @@ def disp_struct(bot,name,event,ignore=false)
       text="#{text}#{x}*Cost:* "
       text="#{text}#{k[i][5][0]}<:Aether_Stone:510776805746278421>" if k[i][5][0]>0
       text="#{text}#{k[i][5][1]}<:Heavenly_Dew:510776806396395530>" if k[i][5][1]>0
+      text="#{text}#{k[i][5][2]}<:Aether_Stone_SP:513982883560423425>" if k[i][5][2]>0
       text="#{text} (Requires reaching AR Tier #{k[i][6]})" if k[i][6]>0
       text="#{text}~~nothing~~" if k[i][6]<=0 && k[i][5].max<=0
       text="#{text}\n*#{x2}:* #{k[i][3]}" unless k.map{|q| q[3]}.uniq.length<2
@@ -5730,11 +5731,13 @@ def disp_struct(bot,name,event,ignore=false)
     text="#{text}\n\n**Cumulative Cost:** "
     text="#{text}#{k.map{|q| q[5][0]}.inject(0){|sum,x| sum + x }}<:Aether_Stone:510776805746278421>" if k.map{|q| q[5][0]}.inject(0){|sum,x| sum + x }>0
     text="#{text}#{k.map{|q| q[5][1]}.inject(0){|sum,x| sum + x }}<:Heavenly_Dew:510776806396395530>" if k.map{|q| q[5][1]}.inject(0){|sum,x| sum + x }>0
+    text="#{text}#{k.map{|q| q[5][2]}.inject(0){|sum,x| sum + x }}<:Aether_Stone_SP:513982883560423425>" if k.map{|q| q[5][2]}.inject(0){|sum,x| sum + x }>0
     text="#{text} (Requires reaching AR Tier #{k.map{|q| q[6]}.max})" if k.map{|q| q[6]}.max>0
   else
     text="#{text}\n\n**Cost:** " if k[0][5].max>0
     text="#{text}#{k[0][5][0]}<:Aether_Stone:510776805746278421>" if k[0][5][0]>0
     text="#{text}#{k[0][5][1]}<:Heavenly_Dew:510776806396395530>" if k[0][5][1]>0
+    text="#{text}#{k[0][5][2]}<:Aether_Stone_SP:513982883560423425>" if k[0][5][2]>0
     text="#{text}\n**AR Tier:** #{k[0][6]}" if k[0][6]>0
   end
   text="#{text}\n"
@@ -9447,24 +9450,58 @@ def show_bonus_units(event,args='',bot)
     if b.length<=0
       event.respond "There are no known quantities about Aether Raids."
     else
+      s=[0,1]
+      m=[]
+      k=[]
       flds=[]
-      k=b[0][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
-      if b[0][2][0].split('/').reverse.join('').to_i<tm || b.length>1
-        msg2="Current"
-      else
-        msg2="Future"
-      end
-      flds.push([msg2,"#{k.join("\n")}\n\n#{b[0][3][0]} (O)\n#{b[0][3][1]} (D)"])
-      if b.length>1
-        k=b[1][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
-        flds.push(['Future',"#{k.join("\n")}\n\n#{b[1][3][0]} (O)\n#{b[1][3][1]} (D)"])
-      end
-      if flds.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length>1500
-        for i in 0...flds.length
-          create_embed(event,"__**Aether Raids: #{flds[i][0]}**__",flds[i][1],0x54C571)
+      for i in 0...b.length
+        if b[i][0]!=k
+          unless i==0
+            ss="Season #{s[0]}"
+            ss="Current Season" if s[0]==1
+            ss="Next Season" if s[0]==2
+            if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+              event.respond "__**#{ss}**__\n\n#{m.join("\n")}" unless s[0]>2
+            else
+              flds.push([ss,m.join("\n")])
+            end
+          end
+          k=b[i][0].map{|q| q}
+          m=[]
+          m.push(b[i][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}.join("\n"))
+          m.push('')
+          s[0]+=1
+          s[1]=1
         end
+        mm2="#{b[i][3][0]} (O), #{b[i][3][1]} (D)"
+        mm2="#{b[i][3][0]} (O/D)" if b[i][3][0]==b[i][3][1]
+        if i==0
+          t2=Time.new(2017,2,2)-60*60
+          t2=t-t2
+          date=(((t2.to_i/60)/60)/24)
+          m.push("Current week: #{mm2}") if date%7 != 4 || 15-t.hour>=0
+        elsif i==1
+          m.push("Next week: #{mm2}")
+        elsif m[0,1]=='-' && s[1]>10
+        else
+          m.push("Week #{s[1]}: #{mm2}")
+        end
+        s[1]+=1
+      end
+      ss="Season #{s[0]}"
+      ss="Current Season" if s[0]==1
+      ss="Next Season" if s[0]==2
+      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        event.respond "__**#{ss}**__\n\n#{m.join("\n")}" unless s[0]>2
       else
-        create_embed(event,"__**Aether Raids Bonus Units**__",'',0x54C571,nil,nil,flds)
+        if safe_to_spam?(event)
+          flds.push([ss,m.join("\n")])
+          for i in 0...flds.length
+            create_embed(event,"__**Aether Raids: #{flds[i][0]}**__",flds[i][1],0x54C571)
+          end
+        else
+          create_embed(event,"__**Aether Raids Bonus Units**__",'',0x54C571,nil,nil,flds[0,[2,flds.length].min])
+        end
       end
     end
   end
