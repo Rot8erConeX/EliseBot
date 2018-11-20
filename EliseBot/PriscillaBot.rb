@@ -13372,6 +13372,13 @@ bot.command([:bst, :BST]) do |event, *args|
     event << 'No units listed'
   else
     for i2 in 1...3
+      if counters[0,4].map{|q| q[i2]}.max<=2
+        if emblem_name[i2].length>0
+          emblem_name[i2]="#{emblem_name[i2]} Tactics"
+        else
+          emblem_name[i2]='Tactics'
+        end
+      end
       if colors[i2].max==i2 && b.length>=i2*4
         if emblem_name[i2].length>0
           emblem_name[i2]="Color-balanced #{emblem_name[i2]}"
@@ -14827,7 +14834,7 @@ end
 bot.command(:invite) do |event, user|
   return nil if overlap_prevent(event)
   usr=event.user
-  txt="To invite me to your server: <https://goo.gl/HEuQK2>\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nTo follow my creator's development Twitter and learn of updates: <https://twitter.com/EliseBotDev>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://orig00.deviantart.net/cd2d/f/2018/047/e/0/marketing___elise_by_rot8erconex-dbxj4mq.png"
+  txt="To invite me to your server: <https://goo.gl/HEuQK2>\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nTo follow my creator's development Twitter and learn of updates: <https://twitter.com/EliseBotDev>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/MarketingElise.png"
   user_to_name='you'
   unless user.nil?
     if /<@!?(?:\d+)>/ =~ user
