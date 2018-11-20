@@ -49,6 +49,6 @@ Aether Fountain\1\Resources\Restores 50 Aether to the Aether Keep each day. If d
 Bronze Throne\-\Ornament\A throne suitable only for those who have achieved a rank from 1 to 10000 in Aether Raids.\-\0, 0, 0\21
 Silver Throne\-\Ornament\A throne suitable only for those who have achieved a rank from 1 to 3000 in Aether Raids.\-\0, 0, 0\21
 Golden Throne\-\Ornament\A throne suitable only for those who have achieved a rank from 1 to 1000 in Aether Raids.  From the second time onward, the number of times this feat has been achieved will be inscribed upon it.\-\0, 0, 0\21
-Feh Statue\-\Ornament\An objet d'art produced under the direct supervision of its model. It's an event item.\-\0, 0, 500\0
-Flower Bed\-\Ornament\An arrangement of flowers in vivid colors. It's an event item.\-\0, 0, 500\0
-Streetlamp\-\Ornament\A lamp in an elegant, classic design. It's an event item.\-\0, 0, 500\0
+Feh Statue\-\Ornament\An objet d'art produced under the direct supervision of its model. It's an event item.\Yes\0, 0, 500\0
+Flower Bed\-\Ornament\An arrangement of flowers in vivid colors. It's an event item.\Yes\0, 0, 500\0
+Streetlamp\-\Ornament\A lamp in an elegant, classic design. It's an event item.\Yes\0, 0, 500\0

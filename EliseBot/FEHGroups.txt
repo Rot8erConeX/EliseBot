@@ -22,7 +22,7 @@
 ["Mathoo'sWaifus", []]
 ["Muspell", ["Lavatain", "Laegjarn", "Loki", "Surtr"]]
 ["NewYear's", ["Azura(Winter)", "Camilla(Winter)", "Corrin(M)(Winter)", "Takumi(Winter)"]]
-["Nifl", ["Fjorm", "Gunnthra"]]
+["Nifl", ["Fjorm", "Gunnthra", "Ylgr"]]
 ["Penumbrans", ["Bluezie", "Dizzy", "Draco(Gates)", "Dwight(Gates)", "Elentil", "Erich", "Gray(Gates)", "Mathoo", "Megan(Gates)", "Nitsuagi", "Oregano", "Rudyard", "Sheldon(Gates)", "Steel"], [256291408598663168]]
 ["PKEmblem", ["Hector", "Hector(Marquess)", "Hector(Brave)", "Hector(Valentines)"], [485532538731757588]]
 ["Retro-Prfs", []]
