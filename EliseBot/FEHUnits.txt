@@ -90,11 +90,12 @@ Flora\Red, Dagger\ \Infantry\6, 8, 4, 2, 9\38, 34, 23, 18, 38\HAKO\Julie Ann Tay
 Florina\Blue, Blade\ \Flier\7, 6, 5, 5, 8\42, 29, 27, 25, 34\Zaza\Julie Kliewer\Shiraki Nao\3p4p3qLU\F\FE7\Florina
 Frederick\Green, Blade\ \Cavalry\7, 8, 5, 9, 1\43, 35, 25, 36, 14\Suekane Kumiko\Kyle Hebert\Ono Daisuke\3p4p3qLU\M\FE13, FEW\Frederick
 Frederick(Summer)\Colorless, Dagger\ \Infantry\6, 7, 7, 6, 2\40, 32, 31, 28, 18\Suekane Kumiko\Kyle Hebert\Ono Daisuke\5s\M\FE13, FEW\Frederick
-Garon\Red, Dragon\ \Infantry\8, 7, 4, 7, 7\43, 33, 22, 33, 32\Soeda Ippei\Patrick Seitz\\3g4g4r\M\FE14\Garon
 Gaius\Colorless, Dagger\ \Infantry\7, 6, 8, 4, 3\42, 29, 36, 22, 19\Ichiiro Hako\Ray Chase\Matsumoto Shinobu\3p4p3qLU\M\FE13, (t)SSB4\Gaius
 Gaius(Summer)\Colorless, Bow\ \Infantry\4, 6, 9, 3, 6\34, 30, 37, 19, 28\Ichiiro Hako\Ray Chase\Matsumoto Shinobu\5s\M\FE13\Gaius
+Garon\Red, Dragon\ \Infantry\8, 7, 4, 7, 7\43, 33, 22, 33, 32\Soeda Ippei\Patrick Seitz\\3g4g4r\M\FE14\Garon
 Genny\Colorless, Healer\ \Infantry\3, 8, 5, 4, 8\32, 35, 25, 21, 34\Amagaitaro\Eden Riegel as Claudia Lenz\Horinaka Yuki\5p\F\FE15, FE2\Genny
 Gerome\Green, Blade\ \Flier\8, 9, 5, 8, 3\45, 38, 25, 34, 19\Meka\Orion Acaba\Shingaki Tarusuke\4t5t4r\M\FE13\Gerome
+Gharnef\Red, Tome, Dark\ \Infantry\6, 6, 7, 6, 4\38, 30, 34, 27, 23\HACCAN\DC Douglas\\3g4g4g\M\FE3, FE1, FE10, FE11\Gharnef
 Gordin\Colorless, Bow\ \Infantry\7, 7, 5, 7, 2\43, 31, 25, 32, 17\Itagaki Hako\Max Mittelman\Murase Ayumu\3p4p3qLU\M\FE3, FE1, FE11, FE12\Gordin
 Gray\Red, Blade\ \Infantry\8, 9, 8, 7, 5\43, 35, 32, 30, 22\Kawasumi\Max Mittelman\Taniyama Kisho\5p\M\FE15, FE2\Gray
 Gunnthra\Green, Tome, Wind\Wind, Resistance, 21/11/2018\Cavalry\6, 7, 7, 2, 5\37, 31, 33, 19, 25\Maeshima Shigeki\Carrie Keranen\Kayano Ai\5s\F\FEH\Gunnthra
@@ -283,7 +284,7 @@ Stahl\Red, Blade\ \Cavalry\8, 7, 5, 6, 4\45, 31, 26, 30, 22\Mayo\Sam Regal\Shing
 Subaki\Blue, Blade\ \Flier\6, 5, 8, 8, 4\40, 25, 35, 35, 22\Yura\Walden James\Mogi Takamasa\1d2d3p4p3qLU\M\FE14B\Subaki
 Sully\Blue, Blade\ \Cavalry\7, 5, 8, 4, 6\42, 26, 34, 24, 28\Mayo\Amanda Miller\Ohara Momoko\3p4p3qLU\F\FE13\Sully
 Sumia\Blue, Blade\ \Flier\6, 7, 9, 6, 5\39, 30, 39, 29, 25\Pikomaro\Eden Riegel\Ayano Yamamoto\5p\F\FE13\Sumia
-Surtr\Green, Blade\ \Armor\11, 9, 1, 9, 8\50, 37, 13, 38, 32\Maeshima Shigeki\Kirk Thornton\Genda Tessho\5p\M\FEH\Surtr
+Surtr\Green, Blade\ \Armor\11, 10, 2, 10, 8\50, 39, 17, 40, 33\Maeshima Shigeki\Kirk Thornton\Genda Tessho\5p\M\FEH\Surtr
 Tailtiu\Blue, Tome, Thunder\ \Infantry\6, 7, 8, 2, 5\39, 32, 35, 17, 25\Shioemon\Heather Watson\Kuwashima Houko\4p5p3q\F\FE4\Tailtiu
 Takumi\Colorless, Bow\ \Infantry\6, 7, 8, 5, 2\40, 32, 33, 25, 18\Hino Shinnosuke\Michael Sinterniklaas\Kaji Yuki\4y4f5pLU\M\FE14B, FEW\Takumi
 Takumi(Fallen)\Colorless, Bow\ \Infantry\6, 6, 7, 5, 5\37, 31, 34, 25, 24\Hino Shinnosuke\Michael Sinterniklaas\Kaji Yuki\3g4g4g4r\M\FE14C\Takumi
@@ -312,7 +313,7 @@ Xander\Red, Blade\ \Cavalry\7, 7, 5, 9, 2\44, 32, 24, 37, 17\Maeshima Shigeki\Ge
 Xander(Festival)\Colorless, Dagger\ \Infantry\6, 9, 2, 9, 2\38, 35, 17, 34, 16\PenekoR\George Spelvin\Konishi Katsuyuki\5s\M\FE14C, FEW\Xander
 Xander(Spring)\Blue, Blade\ \Cavalry\6, 5, 6, 8, 5\40, 25, 28, 35, 26\Suekane Kumiko\George Spelvin\Konishi Katsuyuki\5s\M\FE14C, FEW\Xander
 Xander(Summer)\Green, Blade\ \Infantry\7, 7, 7, 9, 1\43, 32, 30, 36, 16\PenekoR\George Spelvin\Konishi Katsuyuki\5s\M\FE14C, FEW\Xander
-Ylgr\Blue, Dagger\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Maeshima Shigeki\Megan Lee\\5p\F\FEH\Ylgr
+Ylgr\Blue, Dagger\ \Infantry\6, 8, 9, 3, 3\38, 33, 38, 22, 20\Maeshima Shigeki\Megan Lee\\5p\F\FEH\Ylgr
 Zelgius\Red, Blade\ \Armor\7, 8, 8, 9, 3\46, 36, 33, 38, 21\Daisuke Izuka\Robert Clotworthy\Majima Junji\5p\M\FE10, FE9\Black_Knight
 Zephiel\Red, Blade\ \Armor\10, 8, 2, 8, 5\55, 35, 16, 38, 24\Yamada Akihiro\Taylor Henry\Matsuda Kenichirou\3g4g4g3q3q4q4r\M\FE6, FE7\Zephiel
 Mathoo\Red, Blade\ \Infantry\8, 6, 4, 5, 10\45, 29, 24, 25, 39\\\\3p4p\M\FE14g\Mathoo\X167657750971547648
