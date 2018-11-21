@@ -325,6 +325,7 @@ Declan\Red, Tome, Dark\ \Infantry\4, 9, 8, 12, 3\27, 33, 32, 41, 22\\\\5p\M\\Dec
 Equals11\Blue, Blade\ \Cavalry\7, 10, 4, 8, 3\38, 39, 22, 34, 25\\\\4p5p\M\\Equals11\Y330054030627700736
 Gar\Colorless, Dagger\ \Infantry\5, 8, 9, 4, 4\35, 34, 38, 23, 22\\\\4p5p\M\\Gar\Y243525860232003595
 Felicia(Gen2)\Colorless, Dagger\Water, Resistance\Infantry\6, 5, 8, 3, 8\37, 25, 37, 18, 36\\\\1d2d3p4p\F\\Felicia\YF
+Fletcher\Blue, Blade\ \Infantry\7, 8, 7, 6, 5\41, 33, 31, 30, 28\\\\4t5t4r\M\\Fletcher\Y226874365503995905
 FrozenHelm\Blue, Blade\ \Infantry\13, 7, 6, 9, 4\55, 31, 26, 36, 20\\\\4p5p\M\\FrozenHelm\Y334906222564081666
 Joq\Colorless, Bow\ \Armor\7, 10, 1, 9, 9\43, 43, 12, 37, 37\\\\3p4p\M\\Joq\Y185711946610376704
 Katarina(C137)\Blue, Tome, Thunder\ \Infantry\2, 10, 10, 1, 5\28, 38, 38, 15, 27\\\\5p\F\\Katarina\YK147491846002704384
@@ -336,6 +337,7 @@ Micaiah(C137)\Green, Tome, Wind\ \Infantry\5, 6, 9, 5, 9\33, 28, 35, 22, 34\\\\5
 Mint\Colorless, Bow\ \Flier\5, 8, 9, 6, 6\29, 35, 38, 24, 27\\\\5p\F\\Mint\Y282258540444254219
 Mintz\Blue, Tome, Light\ \Infantry\6, 6, 5, 5, 7\34, 30, 26, 28, 33\\\\3p4p\M\\Mintz\Y103926672939581440
 Minus\Red, Blade\ \Infantry\6, 8, 9, 4, 6\37, 35, 41, 21, 29\\\\5p\M\\Minus\Y193452332359352321
+M'joe'ra\Colorless, Healer\ \Infantry\11, 5, 0, 9, 4\49, 27, 12, 38, 24\\\\4p5p\M\\M'joe'ra\Y82897855479549952
 Moony\Green, Blade\ \Cavalry\7, 9, 8, 4, 10\38, 37, 33, 21, 35\\\\5p\M\\Moony\Y240495532378816513
 Moosie\Blue, Blade\ \Infantry\10, 6, 4, 6, 7\45, 30, 22, 31, 34\\\\4p5p\M\\Moosie\Y270372601107447808
 Nebby\Blue, Tome, Light\ \Infantry\7, 7, 3, 11, 11\31, 27, 18, 36, 38\\\\3p4p\M\\Nebby\Y251497172003061762
