@@ -545,7 +545,7 @@ bot.command([:help,:commands,:command_list,:commandlist,:Help]) do |event, comma
   elsif ['data','unit'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats, and skills.",0xD49F61)
   elsif ['attackicon','attackcolor','attackcolors','attackcolour','attackcolours','atkicon','atkcolor','atkcolors','atkcolour','atkcolours','atticon','attcolor','attcolors','attcolour','attcolours','staticon','statcolor','statcolors','statcolour','statcolours','iconcolor','iconcolors','iconcolour','iconcolours'].include?(command.downcase) || (['stats','stat'].include?(command.downcase) && ['color','colors','colour','colours'].include?("#{subcommand}".downcase))
-    create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['color','colors','colour','colours'].include?("#{subcommand}".downcase)}**","Explains the reasoning behind the multiple Attack stat icons - <:StrengthS:467037520484630539> <:MagicS:467043867611627520> <:FreezeS:467043868148236299>",0xD49F61)
+    create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['color','colors','colour','colours'].include?("#{subcommand}".downcase)}**","Explains the reasoning behind the multiple Attack stat icons - <:StrengthS:514712248372166666> <:MagicS:514712247289774111> <:FreezeS:514712247474585610>",0xD49F61)
   elsif ['struct','struncture'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows data on the Aether Raid structure named `name`.',0xD49F61)
   elsif ['arena','arenabonus','arena_bonus','bonusarena','bonus_arena'].include?(command.downcase) || (['bonus'].include?(command.downcase) && ['arena'].include?("#{subcommand}".downcase))
@@ -858,11 +858,11 @@ end
 
 def attack_icon(event) # this is used by the attackcolor command to display all info
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    event.respond "__**Why are the Attack stat icons colored weird?**__\n\n*1.) The Def/Res icons*\n<:DefenseS:467037520249487372> <:ResistanceS:467037520379641858>\nIf one looks carefully, the icons for Defense and Resistance are the same design, but with different color backgrounds.\n\n*2.) The official Attack icon*\n<:StrengthS:467037520484630539> <:DefenseS:467037520249487372>\nLikewise, the Attack and Defense icons have the same color background.  Defense looks slightly redder, but that's because it has a large swatch of yellow inside it whereas Attack has a slightly smaller swatch of blue-white in it.\n\n*3.) The original patent for FEH's summoning system*\n<:Orb_Red:455053002256941056> <:Orb_Blue:455053001971859477> <:Orb_Green:455053002311467048> <:Orb_Colorless:455053002152083457>\nIf one looks at the original patent for FEH's summoning system, they learn that at some point during FEH's development, units had the possibility for simultaneously having two weapon types.  The patent specifically says that if the two weapon types (refered to as \"character attributes\") are different, the orb used to hide the character (refered to as \"the mask\") would be a hybrid of the two colors, akin to tye-dye or a Yin-Yang symbol."
-    event.respond "Taking these three facts into consideration, I believe that at some point in development, units were going to have six stats: <:HP_S:467037520538894336>HP, <:StrengthS:467037520484630539>Strength, <:MagicS:467043867611627520>Magic, <:SpeedS:467037520534962186>Speed, <:DefenseS:467037520249487372>Defense, and <:ResistanceS:467037520379641858>Resistance.\nThat what we now know as the attack icon would be used for Strength and a similar icon with a blue background would be used for Magic.\nThis would mean that when viewing stats, the red swords <:StrengthS:467037520484630539> would attack the enemy's red shield <:DefenseS:467037520249487372>, and the blue swords <:MagicS:467043867611627520> would attack the blue shield <:ResistanceS:467037520379641858>.\nThey then ran into issues with a proper control scheme on phones that allowed for this to be easy to understand for newcomers, so they reduced each character to a single weapon, and thus a single attacking stat.  Said stat was then reduced to a single color to prevent it from conflicting with the gradients of the \"dual stat\" icons.\n\nAll I am doing is acting on this theory and showing icons for each individual type of attacking stat:\n<:StrengthS:467037520484630539> Sword/Lance/Axe users, Archers, and Thieves have Strength\n<:MagicS:467043867611627520> Mages and Healers have Magic\n<:FreezeS:467043868148236299> And Dragons have a stat that is a hybrid of the two (because it attacks the lower defensive stat in certain conditions)\nCertain commands that deal with multiple units also have this symbol <:GenericAttackS:467065089598423051> for use when the units involved have different attacking stats."
+    event.respond "__**Why are the Attack stat icons colored weird?**__\n\n*1.) The Def/Res icons*\n<:DefenseS:514712247461871616> <:ResistanceS:514712247574986752>\nIf one looks carefully, the icons for Defense and Resistance are the same design, but with different color backgrounds.\n\n*2.) The official Attack icon*\n<:StrengthS:514712248372166666> <:DefenseS:514712247461871616>\nLikewise, the Attack and Defense icons have the same color background.  Defense looks slightly redder, but that's because it has a large swatch of yellow inside it whereas Attack has a slightly smaller swatch of blue-white in it.\n\n*3.) The original patent for FEH's summoning system*\n<:Orb_Red:455053002256941056> <:Orb_Blue:455053001971859477> <:Orb_Green:455053002311467048> <:Orb_Colorless:455053002152083457>\nIf one looks at the original patent for FEH's summoning system, they learn that at some point during FEH's development, units had the possibility for simultaneously having two weapon types.  The patent specifically says that if the two weapon types (refered to as \"character attributes\") are different, the orb used to hide the character (refered to as \"the mask\") would be a hybrid of the two colors, akin to tye-dye or a Yin-Yang symbol."
+    event.respond "Taking these three facts into consideration, I believe that at some point in development, units were going to have six stats: <:HP_S:514712247503945739>HP, <:StrengthS:514712248372166666>Strength, <:MagicS:514712247289774111>Magic, <:SpeedS:514712247625580555>Speed, <:DefenseS:514712247461871616>Defense, and <:ResistanceS:514712247574986752>Resistance.\nThat what we now know as the attack icon would be used for Strength and a similar icon with a blue background would be used for Magic.\nThis would mean that when viewing stats, the red swords <:StrengthS:514712248372166666> would attack the enemy's red shield <:DefenseS:514712247461871616>, and the blue swords <:MagicS:514712247289774111> would attack the blue shield <:ResistanceS:514712247574986752>.\nThey then ran into issues with a proper control scheme on phones that allowed for this to be easy to understand for newcomers, so they reduced each character to a single weapon, and thus a single attacking stat.  Said stat was then reduced to a single color to prevent it from conflicting with the gradients of the \"dual stat\" icons.\n\nAll I am doing is acting on this theory and showing icons for each individual type of attacking stat:\n<:StrengthS:514712248372166666> Sword/Lance/Axe users, Archers, and Thieves have Strength\n<:MagicS:514712247289774111> Mages and Healers have Magic\n<:FreezeS:514712247474585610> And Dragons have a stat that is a hybrid of the two (because it attacks the lower defensive stat in certain conditions)\nCertain commands that deal with multiple units also have this symbol <:GenericAttackS:514712247587569664> for use when the units involved have different attacking stats."
   else
-    create_embed(event,"__**Why are the Attack stat icons colored weird?**__","**1.) The Def/Res icons**\n<:DefenseS:467037520249487372> <:ResistanceS:467037520379641858>\nIf one looks carefully, the icons for Defense and Resistance are the same design, but with different color backgrounds.\n\n**2.) The official Attack icon**\n<:StrengthS:467037520484630539> <:DefenseS:467037520249487372>\nLikewise, the Attack and Defense icons have the same color background.  Defense looks slightly redder, but that's because it has a large swatch of yellow inside it whereas Attack has a slightly smaller swatch of blue-white in it.\n\n**3.) The original patent for FEH's summoning system**\n<:Orb_Red:455053002256941056> <:Orb_Blue:455053001971859477> <:Orb_Green:455053002311467048> <:Orb_Colorless:455053002152083457>\nIf one looks at the original patent for FEH's summoning system, they learn that at some point during FEH's development, units had the possibility for simultaneously having two weapon types.  The patent specifically says that if the two weapon types (refered to as \"character attributes\") are different, the orb used to hide the character (refered to as \"the mask\") would be a hybrid of the two colors, akin to tye-dye or a Yin-Yang symbol.",0xC9304A)
-    create_embed(event,'',"Taking these three facts into consideration, I believe that at some point in development, units were going to have six stats: <:HP_S:467037520538894336>HP, <:StrengthS:467037520484630539>Strength, <:MagicS:467043867611627520>Magic, <:SpeedS:467037520534962186>Speed, <:DefenseS:467037520249487372>Defense, and <:ResistanceS:467037520379641858>Resistance.\nThat what we now know as the attack icon would be used for Strength and a similar icon with a blue background would be used for Magic.\nThis would mean that when viewing stats, the red swords <:StrengthS:467037520484630539> would attack the enemy's red shield <:DefenseS:467037520249487372>, and the blue swords <:MagicS:467043867611627520> would attack the blue shield <:ResistanceS:467037520379641858>.\nThey then ran into issues with a proper control scheme on phones that allowed for this to be easy to understand for newcomers, so they reduced each character to a single weapon, and thus a single attacking stat.  Said stat was then reduced to a single color to prevent it from conflicting with the gradients of the \"dual stat\" icons.\n\nAll I am doing is acting on this theory and showing icons for each individual type of attacking stat:\n<:StrengthS:467037520484630539> Sword/Lance/Axe users, Archers, and Thieves have Strength\n<:MagicS:467043867611627520> Mages and Healers have Magic\n<:FreezeS:467043868148236299> And Dragons have a stat that is a hybrid of the two (because it attacks the lower defensive stat in certain conditions)\nCertain commands that deal with multiple units also have this symbol <:GenericAttackS:467065089598423051> for use when the units involved have different attacking stats.",0x3B659F)
+    create_embed(event,"__**Why are the Attack stat icons colored weird?**__","**1.) The Def/Res icons**\n<:DefenseS:514712247461871616> <:ResistanceS:514712247574986752>\nIf one looks carefully, the icons for Defense and Resistance are the same design, but with different color backgrounds.\n\n**2.) The official Attack icon**\n<:StrengthS:514712248372166666> <:DefenseS:514712247461871616>\nLikewise, the Attack and Defense icons have the same color background.  Defense looks slightly redder, but that's because it has a large swatch of yellow inside it whereas Attack has a slightly smaller swatch of blue-white in it.\n\n**3.) The original patent for FEH's summoning system**\n<:Orb_Red:455053002256941056> <:Orb_Blue:455053001971859477> <:Orb_Green:455053002311467048> <:Orb_Colorless:455053002152083457>\nIf one looks at the original patent for FEH's summoning system, they learn that at some point during FEH's development, units had the possibility for simultaneously having two weapon types.  The patent specifically says that if the two weapon types (refered to as \"character attributes\") are different, the orb used to hide the character (refered to as \"the mask\") would be a hybrid of the two colors, akin to tye-dye or a Yin-Yang symbol.",0xC9304A)
+    create_embed(event,'',"Taking these three facts into consideration, I believe that at some point in development, units were going to have six stats: <:HP_S:514712247503945739>HP, <:StrengthS:514712248372166666>Strength, <:MagicS:514712247289774111>Magic, <:SpeedS:514712247625580555>Speed, <:DefenseS:514712247461871616>Defense, and <:ResistanceS:514712247574986752>Resistance.\nThat what we now know as the attack icon would be used for Strength and a similar icon with a blue background would be used for Magic.\nThis would mean that when viewing stats, the red swords <:StrengthS:514712248372166666> would attack the enemy's red shield <:DefenseS:514712247461871616>, and the blue swords <:MagicS:514712247289774111> would attack the blue shield <:ResistanceS:514712247574986752>.\nThey then ran into issues with a proper control scheme on phones that allowed for this to be easy to understand for newcomers, so they reduced each character to a single weapon, and thus a single attacking stat.  Said stat was then reduced to a single color to prevent it from conflicting with the gradients of the \"dual stat\" icons.\n\nAll I am doing is acting on this theory and showing icons for each individual type of attacking stat:\n<:StrengthS:514712248372166666> Sword/Lance/Axe users, Archers, and Thieves have Strength\n<:MagicS:514712247289774111> Mages and Healers have Magic\n<:FreezeS:514712247474585610> And Dragons have a stat that is a hybrid of the two (because it attacks the lower defensive stat in certain conditions)\nCertain commands that deal with multiple units also have this symbol <:GenericAttackS:514712247587569664> for use when the units involved have different attacking stats.",0x3B659F)
   end
 end
 
@@ -3258,7 +3258,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     unless n.nil?
       n=n.join(' / ')
     end
-    flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: 0\n<:StrengthS:467037520484630539> Attack: 0\n<:SpeedS:467037520534962186> Speed: 0\n<:DefenseS:467037520249487372> Defense: 0\n<:ResistanceS:467037520379641858> Resistance: 0\n\nBST: 0\nScore: #{27+2*merges}"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: 0\n<:StrengthS:467037520484630539> Attack: 0\n<:SpeedS:467037520534962186> Speed: 0\n<:DefenseS:467037520249487372> Defense: 0\n<:ResistanceS:467037520379641858> Resistance: 0\n\nBST: 0\nScore: #{115+2*merges}"]]
+    flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:514712247503945739> HP: 0\n<:StrengthS:514712248372166666> Attack: 0\n<:SpeedS:514712247625580555> Speed: 0\n<:DefenseS:514712247461871616> Defense: 0\n<:ResistanceS:514712247574986752> Resistance: 0\n\nBST: 0\nScore: #{27+2*merges}"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:514712247503945739> HP: 0\n<:StrengthS:514712248372166666> Attack: 0\n<:SpeedS:514712247625580555> Speed: 0\n<:DefenseS:514712247461871616> Defense: 0\n<:ResistanceS:514712247574986752> Resistance: 0\n\nBST: 0\nScore: #{115+2*merges}"]]
     if skillstoo
       uskl=unit_skills(name,event).map{|q| q.reject{|q2| q2.include?('Unknown base')}}
       for i in 0...3
@@ -3276,18 +3276,18 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     merges=0 if merges.nil?
     j=find_unit(name,event)
     xcolor=unit_color(event,j,untz[j][0],0,mu)
-    atk='<:StrengthS:467037520484630539> Attack'
-    atk='<:MagicS:467043867611627520> Magic' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
-    atk='<:StrengthS:467037520484630539> Strength' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
+    atk='<:StrengthS:514712248372166666> Attack'
+    atk='<:MagicS:514712247289774111> Magic' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
+    atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
     zzzl=@skills[find_weapon(weapon,event)]
     if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
-      atk='<:FreezeS:467043868148236299> Freeze'
+      atk='<:FreezeS:514712247474585610> Freeze'
     end
     n=nature_name(boon,bane)
     unless n.nil?
-      n=n[0] if atk=='<:StrengthS:467037520484630539> Strength'
-      n=n[n.length-1] if atk=='<:MagicS:467043867611627520> Magic'
-      n=n.join(' / ') if ['<:StrengthS:467037520484630539> Attack','<:FreezeS:467043868148236299> Freeze'].include?(atk)
+      n=n[0] if atk=='<:StrengthS:514712248372166666> Strength'
+      n=n[n.length-1] if atk=='<:MagicS:514712247289774111> Magic'
+      n=n.join(' / ') if ['<:StrengthS:514712248372166666> Attack','<:FreezeS:514712247474585610> Freeze'].include?(atk)
     end
     atk=atk.gsub(' Freeze',' Attack').gsub(' Strength',' Attack').gsub(' Magic',' Attack') if weapon != '-'
     u40=[untz[j][0],untz[j][5][0],untz[j][5][1],untz[j][5][2],untz[j][5][3],untz[j][5][4]]
@@ -3331,7 +3331,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     u40=make_stat_string_list(u40,cru40,2) if wl.include?('~~')
     ftr="Please note that the #{atk.split('> ')[1]} stat displayed here does not include weapon might.  The Attack stat in-game does."
     ftr=nil if weapon != '-'
-    flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: unknown\n#{atk}: unknown\n<:SpeedS:467037520534962186> Speed: unknown\n<:DefenseS:467037520249487372> Defense: unknown\n<:ResistanceS:467037520379641858> Resistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}#{"(#{diff_num[1]}) / #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}"]]
+    flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:514712247503945739> HP: unknown\n#{atk}: unknown\n<:SpeedS:514712247625580555> Speed: unknown\n<:DefenseS:514712247461871616> Defense: unknown\n<:ResistanceS:514712247574986752> Resistance: unknown\n\nBST: unknown"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:514712247503945739> HP: #{u40[1]}\n#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}\n<:SpeedS:514712247625580555> Speed: #{u40[3]}\n<:DefenseS:514712247461871616> Defense: #{u40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{u40[5]}\n\nBST: #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}#{"(#{diff_num[1]}) / #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}"]]
     if skillstoo
       uskl=unit_skills(name,event).map{|q| q.reject{|q2| q2.include?('Unknown base')}}
       for i in 0...3
@@ -3381,18 +3381,18 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   u40x2=get_stats(event,name,40,5,0,boon,bane)
   u1=get_stats(event,name,1,rarity,merges,boon,bane)
   j=find_unit(name,event)
-  atk='<:StrengthS:467037520484630539> Attack'
-  atk='<:MagicS:467043867611627520> Magic' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
-  atk='<:StrengthS:467037520484630539> Strength' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
+  atk='<:StrengthS:514712248372166666> Attack'
+  atk='<:MagicS:514712247289774111> Magic' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
+  atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
   zzzl=@skills[find_weapon(weapon,event)]
   if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
-    atk='<:FreezeS:467043868148236299> Freeze'
+    atk='<:FreezeS:514712247474585610> Freeze'
   end
   n=nature_name(boon,bane)
   unless n.nil?
-    n=n[0] if atk=='<:StrengthS:467037520484630539> Strength'
-    n=n[n.length-1] if atk=='<:MagicS:467043867611627520> Magic'
-    n=n.join(' / ') if ['<:StrengthS:467037520484630539> Attack','<:FreezeS:467043868148236299> Freeze'].include?(atk)
+    n=n[0] if atk=='<:StrengthS:514712248372166666> Strength'
+    n=n[n.length-1] if atk=='<:MagicS:514712247289774111> Magic'
+    n=n.join(' / ') if ['<:StrengthS:514712248372166666> Attack','<:FreezeS:514712247474585610> Freeze'].include?(atk)
   end
   atk=atk.gsub(' Freeze',' Attack').gsub(' Strength',' Attack').gsub(' Magic',' Attack') if weapon != '-'
   if name=='Robin'
@@ -3459,11 +3459,11 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       end
     end
   end
-  flds=[["**Level 1#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u1[3]}","<:DefenseS:467037520249487372> Defense: #{u1[4]}","<:ResistanceS:467037520379641858> Resistance: #{u1[5]}","","BST: #{u1[6]}","Score: #{bin/5+merges*2+rarity*5+blessing.length*4+2+sp/100}#{"+`SP`/100" unless sp>0}"]]]
+  flds=[["**Level 1#{" +#{merges}" if merges>0}**",["<:HP_S:514712247503945739> HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:514712247625580555> Speed: #{u1[3]}","<:DefenseS:514712247461871616> Defense: #{u1[4]}","<:ResistanceS:514712247574986752> Resistance: #{u1[5]}","","BST: #{u1[6]}","Score: #{bin/5+merges*2+rarity*5+blessing.length*4+2+sp/100}#{"+`SP`/100" unless sp>0}"]]]
   if args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth') || expandedmode
-    flds.push(["**Growth Rates**",["<:HP_S:467037520538894336> HP: #{micronumber(u40[6])} / #{u40[6]*5+20}%","#{atk}: #{micronumber(u40[7])} / #{u40[7]*5+20}%","<:SpeedS:467037520534962186> Speed: #{micronumber(u40[8])} / #{u40[8]*5+20}%","<:DefenseS:467037520249487372> Defense: #{micronumber(u40[9])} / #{u40[9]*5+20}%","<:ResistanceS:467037520379641858> Resistance: #{micronumber(u40[10])} / #{u40[10]*5+20}%","","\u0262\u1D18\u1D1B #{micronumber(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])} / GRT: #{(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])*5+100}%"]])
+    flds.push(["**Growth Rates**",["<:HP_S:514712247503945739> HP: #{micronumber(u40[6])} / #{u40[6]*5+20}%","#{atk}: #{micronumber(u40[7])} / #{u40[7]*5+20}%","<:SpeedS:514712247625580555> Speed: #{micronumber(u40[8])} / #{u40[8]*5+20}%","<:DefenseS:514712247461871616> Defense: #{micronumber(u40[9])} / #{u40[9]*5+20}%","<:ResistanceS:514712247574986752> Resistance: #{micronumber(u40[10])} / #{u40[10]*5+20}%","","\u0262\u1D18\u1D1B #{micronumber(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])} / GRT: #{(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])*5+100}%"]])
   end
-  flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["<:HP_S:467037520538894336> HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:467037520534962186> Speed: #{u40[3]}","<:DefenseS:467037520249487372> Defense: #{u40[4]}","<:ResistanceS:467037520379641858> Resistance: #{u40[5]}","","BST: #{u40[16]}","Score: #{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}#{"+`SP`/100" unless sp>0}"]])
+  flds.push(["**Level 40#{" +#{merges}" if merges>0}**",["<:HP_S:514712247503945739> HP: #{u40[1]}","#{atk}: #{u40[2]}#{"(#{diff_num[1]}) / #{u40[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:514712247625580555> Speed: #{u40[3]}","<:DefenseS:514712247461871616> Defense: #{u40[4]}","<:ResistanceS:514712247574986752> Resistance: #{u40[5]}","","BST: #{u40[16]}","Score: #{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}#{"+`SP`/100" unless sp>0}"]])
   superbaan=['','','','','','']
   if boon=="" && bane=="" && !mu && ((stat_skills_2.length<=0 && !wl.include?('~~')) || flds.length==3)
     for i in 6...11
@@ -3798,7 +3798,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
     unless n.nil?
       n=n.join(' / ')
     end
-    create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,untz[0],mu,2)}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n**<:HP_S:467037520538894336>0 | <:StrengthS:467037520484630539>0 | <:SpeedS:467037520534962186>0 | <:DefenseS:467037520249487372>0 | <:ResistanceS:467037520379641858>0** (0 BST, Score: #{115+2*merges})",0x9400D3,nil,pick_thumbnail(event,j,bot),nil,1)
+    create_embed(event,"__**#{untz[j][0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,untz[0],mu,2)}**__","#{display_stars(rarity,merges)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n**<:HP_S:514712247503945739>0 | <:StrengthS:514712248372166666>0 | <:SpeedS:514712247625580555>0 | <:DefenseS:514712247461871616>0 | <:ResistanceS:514712247574986752>0** (0 BST, Score: #{115+2*merges})",0x9400D3,nil,pick_thumbnail(event,j,bot),nil,1)
     return nil
   elsif unitz[4].nil? || (unitz[4].max<=0 && unitz[5].max<=0) # unknown stats
     data_load()
@@ -3811,18 +3811,18 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
     merges=0 if merges.nil?
     j=find_unit(name,event)
     xcolor=unit_color(event,j,untz[j][0],0,mu)
-    atk='<:StrengthS:467037520484630539>*'
-    atk='<:MagicS:467043867611627520>' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
-    atk='<:StrengthS:467037520484630539>' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
+    atk='<:StrengthS:514712248372166666>*'
+    atk='<:MagicS:514712247289774111>' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
+    atk='<:StrengthS:514712248372166666>' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
     zzzl=@skills[find_weapon(weapon,event)]
     if zzzl[11].split(', ').include?('Frostbite')
-      atk='<:FreezeS:467043868148236299>'
+      atk='<:FreezeS:514712247474585610>'
     end
     n=nature_name(boon,bane)
     unless n.nil?
-      n=n[0] if atk=='<:StrengthS:467037520484630539>'
-      n=n[n.length-1] if atk=='<:MagicS:467043867611627520>'
-      n=n.join(' / ') if ['<:StrengthS:467037520484630539>*','<:FreezeS:467043868148236299>'].include?(atk)
+      n=n[0] if atk=='<:StrengthS:514712248372166666>'
+      n=n[n.length-1] if atk=='<:MagicS:514712247289774111>'
+      n=n.join(' / ') if ['<:StrengthS:514712248372166666>*','<:FreezeS:514712247474585610>'].include?(atk)
     end
     atk=atk.gsub('*','')
     u40=[untz[j][0],untz[j][5][0],untz[j][5][1],untz[j][5][2],untz[j][5][3],untz[j][5][4]]
@@ -3855,7 +3855,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
       weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
     end
     u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(5,merges,summoner)}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n**<:HP_S:467037520538894336>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:467037520534962186>#{u40[3]} | <:DefenseS:467037520249487372>#{u40[4]} | <:ResistanceS:467037520379641858>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Score: #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5+25+merges*2+90+blessing.length*4})",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(5,merges,summoner)}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n**<:HP_S:514712247503945739>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:514712247625580555>#{u40[3]} | <:DefenseS:514712247461871616>#{u40[4]} | <:ResistanceS:514712247574986752>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Score: #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5+25+merges*2+90+blessing.length*4})",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
     return nil
   end
   # units for whom both level 40 and level 1 stats are known
@@ -3878,18 +3878,18 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   u1=get_stats(event,name,1,rarity,merges,boon,bane)
   u1=apply_stat_skills(event,stat_skills,u1,tempest,summoner,weapon,refinement,blessing)
   j=find_unit(name,event)
-  atk='<:StrengthS:467037520484630539>*'
-  atk='<:MagicS:467043867611627520>' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
-  atk='<:StrengthS:467037520484630539>' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
+  atk='<:StrengthS:514712248372166666>*'
+  atk='<:MagicS:514712247289774111>' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
+  atk='<:StrengthS:514712248372166666>' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
   zzzl=@skills[find_weapon(weapon,event)]
   if zzzl[11].split(', ').include?('Frostbite')
-    atk='<:FreezeS:467043868148236299>'
+    atk='<:FreezeS:514712247474585610>'
   end
   n=nature_name(boon,bane)
   unless n.nil?
-    n=n[0] if atk=='<:StrengthS:467037520484630539>'
-    n=n[n.length-1] if atk=='<:MagicS:467043867611627520>'
-    n=n.join(' / ') if ['<:StrengthS:467037520484630539>*','<:FreezeS:467043868148236299>'].include?(atk)
+    n=n[0] if atk=='<:StrengthS:514712248372166666>'
+    n=n[n.length-1] if atk=='<:MagicS:514712247289774111>'
+    n=n.join(' / ') if ['<:StrengthS:514712248372166666>*','<:FreezeS:514712247474585610>'].include?(atk)
   end
   atk=atk.gsub('*','')
   if name=='Robin'
@@ -3982,7 +3982,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   end
   xtype=1
   xtype=6 if skillstoo && u40[0]!='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u00B7\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,ftr,img,realflds,xtype)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n<:HP_S:514712247503945739>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:514712247625580555>\u00A0\u00B7\u00A0<:DefenseS:514712247461871616>\u00A0\u00B7\u00A0<:ResistanceS:514712247574986752>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u00B7\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,ftr,img,realflds,xtype)
   if skillstoo && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
@@ -4130,7 +4130,6 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
   sklimg=skill[-1][0].gsub(' ','_').gsub('/','_').gsub('!','').gsub('.','')
   sklimg="Squad_Ace_#{"ABCDE"["ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(skill[-1][0][10,1])[0].length%5,1]}_#{skill[-1][0][12,skill[0].length-12]}" if skill[-1][0][0,10]=='Squad Ace '
   xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/skills/#{sklimg}.png?raw=true"
-  puts skill.map{|q| q.to_s}
   sklslt=skill.map{|q| q[4].split(', ')}.join("\n").split("\n").uniq
   m=false
   for i in 0...skill.length
@@ -4232,7 +4231,7 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
   else
     p2=list_lift(p2.map{|q| "*#{q}*"},"or")
   end
-  str="#{str}#{"\n" unless skill[0][8]=='-' && p.nil? && skill[-1][6]!='-'}#{"\n**Restrictions on inheritance:** #{skill[-1][5]}" if skill[-1][6]=='-' && skill[-1][4]!='Weapon'}#{"\n**<:Prf_Sparkle:490307608973148180>Prf to:** #{skill[-1][6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[-1][0]=='Missiletainn' || skill[-1][6]=='-' || skill[-1][6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.length.zero?}#{"\n**Promotes from:** #{skill[0][8]}" unless skill[0][8]=='-'}#{"\n**Branching lines:** #{p2}" unless p2.nil?}#{"\n**Promotes into:** #{p}" unless p.nil?}"
+  str="#{str}#{"\n" unless skill[0][8]=='-' && p.nil? && skill[-1][6]!='-'}#{"\n**Restrictions on inheritance:** #{skill[-1][5].gsub('Excludes Tome Users, Excludes Staff Users, Excludes Dragons','Physical Weapon Users Only')}" if skill[-1][6]=='-' && skill[-1][4]!='Weapon'}#{"\n**<:Prf_Sparkle:490307608973148180>Prf to:** #{skill[-1][6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[-1][0]=='Missiletainn' || skill[-1][6]=='-' || skill[-1][6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.length.zero?}#{"\n**Promotes from:** #{skill[0][8]}" unless skill[0][8]=='-'}#{"\n**Branching lines:** #{p2}" unless p2.nil?}#{"\n**Promotes into:** #{p}" unless p.nil?}"
   usklz=[]
   for i in 0...skill.length
     for i2 in 0...skill[i][10].length
@@ -4724,7 +4723,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       p=list_lift(p.map{|q| "*#{q}*"},"or")
     end
   end
-  str="#{str}#{"\n**Restrictions on inheritance:** #{skill[5]}" if skill[6]=='-' && skill[4]!='Weapon'}#{"\n**<:Prf_Sparkle:490307608973148180>Prf to:** #{skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[0]=='Missiletainn' || skill[6]=='-' || skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.length.zero?}#{"\n**Promotes from:** #{skill[8]}" unless skill[0]=='Missiletainn' || skill[8]=='-'}#{"\n**Promotes into:** #{p}" unless p.nil?}"
+  str="#{str}#{"\n**Restrictions on inheritance:** #{skill[5].gsub('Excludes Tome Users, Excludes Staff Users, Excludes Dragons','Physical Weapon Users Only')}" if skill[6]=='-' && skill[4]!='Weapon'}#{"\n**<:Prf_Sparkle:490307608973148180>Prf to:** #{skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[0]=='Missiletainn' || skill[6]=='-' || skill[6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.length.zero?}#{"\n**Promotes from:** #{skill[8]}" unless skill[0]=='Missiletainn' || skill[8]=='-'}#{"\n**Promotes into:** #{p}" unless p.nil?}"
   if !skill[14].nil? && skill[14].length>0 && skill[4]=='Weapon'
     prm=skill[14].split(', ')
     for i in 0...prm.length
@@ -7877,11 +7876,11 @@ def comparison(event,args,bot)
     return 0
   elsif b.length>2
     stzzz=['BST','HP','Attack','Speed','Defense','Resistance']
-    stemoji=['','<:HP_S:467037520538894336>','<:GenericAttackS:467065089598423051>','<:SpeedS:467037520534962186>','<:DefenseS:467037520249487372>','<:ResistanceS:467037520379641858>']
+    stemoji=['','<:HP_S:514712247503945739>','<:GenericAttackS:514712247587569664>','<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>']
     if atkstat.uniq.length==1
-      stemoji[2]='<:StrengthS:467037520484630539>' if atkstat.uniq[0]=='Strength'
-      stemoji[2]='<:MagicS:467043867611627520>' if atkstat.uniq[0]=='Magic'
-      stemoji[2]='<:FreezeS:467043868148236299>' if atkstat.uniq[0]=='Freeze'
+      stemoji[2]='<:StrengthS:514712248372166666>' if atkstat.uniq[0]=='Strength'
+      stemoji[2]='<:MagicS:514712247289774111>' if atkstat.uniq[0]=='Magic'
+      stemoji[2]='<:FreezeS:514712247474585610>' if atkstat.uniq[0]=='Freeze'
     end
     dzz=[]
     czz=[]
@@ -7946,11 +7945,11 @@ def comparison(event,args,bot)
     return b.length
   end
   stzzz=['','HP','Attack','Speed','Defense','Resistance']
-  stemoji=['','<:HP_S:467037520538894336>','<:GenericAttackS:467065089598423051>','<:SpeedS:467037520534962186>','<:DefenseS:467037520249487372>','<:ResistanceS:467037520379641858>']
+  stemoji=['','<:HP_S:514712247503945739>','<:GenericAttackS:514712247587569664>','<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>']
   if atkstat.uniq.length==1
-    stemoji[2]='<:StrengthS:467037520484630539>' if atkstat.uniq[0]=='Strength'
-    stemoji[2]='<:MagicS:467043867611627520>' if atkstat.uniq[0]=='Magic'
-    stemoji[2]='<:FreezeS:467043868148236299>' if atkstat.uniq[0]=='Freeze'
+    stemoji[2]='<:StrengthS:514712248372166666>' if atkstat.uniq[0]=='Strength'
+    stemoji[2]='<:MagicS:514712247289774111>' if atkstat.uniq[0]=='Magic'
+    stemoji[2]='<:FreezeS:514712247474585610>' if atkstat.uniq[0]=='Freeze'
   end
   d1=[b[0][1].gsub('Lavatain','Laevatein'),[b[0][4]],0]
   d2=[b[1][1].gsub('Lavatain','Laevatein'),[b[1][4]],0]
@@ -9272,17 +9271,17 @@ def generate_random_unit(event,args,bot)
     wx=['Thunder','Light'].sample
     w="*#{wx} Mage* (Blue Tome)"
   end
-  atk='<:GenericAttackS:467065089598423051> Attack'
-  atk='<:MagicS:467043867611627520> Magic' if ['Tome','Healer'].include?(clazz[1])
-  atk='<:FreezeS:467043868148236299> Magic' if ['Dragon'].include?(clazz[1])
-  atk='<:StrengthS:467037520484630539> Strength' if ['Blade','Bow','Dagger','Beast'].include?(clazz[1])
+  atk='<:GenericAttackS:514712247587569664> Attack'
+  atk='<:MagicS:514712247289774111> Magic' if ['Tome','Healer'].include?(clazz[1])
+  atk='<:FreezeS:514712247474585610> Magic' if ['Dragon'].include?(clazz[1])
+  atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(clazz[1])
   r='<:Icon_Rarity_5:448266417553539104>'*5
-  flds=[['**Level 1**',"<:HP_S:467037520538894336> HP: #{stats[0]}\n#{atk}: #{stats[1]}\n<:SpeedS:467037520534962186> Speed: #{stats[2]}\n<:DefenseS:467037520249487372> Defense: #{stats[3]}\n<:ResistanceS:467037520379641858> Resistance: #{stats[4]}\n\nBST: #{stats[10]}"]]
+  flds=[['**Level 1**',"<:HP_S:514712247503945739> HP: #{stats[0]}\n#{atk}: #{stats[1]}\n<:SpeedS:514712247625580555> Speed: #{stats[2]}\n<:DefenseS:514712247461871616> Defense: #{stats[3]}\n<:ResistanceS:514712247574986752> Resistance: #{stats[4]}\n\nBST: #{stats[10]}"]]
   args=args.map{|q| q.downcase}
   if args.include?('gps') || args.include?('gp') || args.include?('growths') || args.include?('growth')
-    flds.push(['**Growth Rates**',"<:HP_S:467037520538894336> HP: #{micronumber(gps[0])} / #{gps[0]*5+20}%\n#{atk}: #{micronumber(gps[1])} / #{gps[1]*5+20}%\n<:SpeedS:467037520534962186> Speed: #{micronumber(gps[2])} / #{gps[2]*5+20}%\n<:DefenseS:467037520249487372> Defense: #{micronumber(gps[3])} / #{gps[3]*5+20}%\n<:ResistanceS:467037520379641858> Resistance: #{micronumber(gps[4])} / #{gps[4]*5+20}%\n\n\u0262\u1D18\u1D1B #{micronumber(gps[0]+gps[1]+gps[2]+gps[3]+gps[4])} / GRT: #{(gps[0]+gps[1]+gps[2]+gps[3]+gps[4])*5+100}%"])
+    flds.push(['**Growth Rates**',"<:HP_S:514712247503945739> HP: #{micronumber(gps[0])} / #{gps[0]*5+20}%\n#{atk}: #{micronumber(gps[1])} / #{gps[1]*5+20}%\n<:SpeedS:514712247625580555> Speed: #{micronumber(gps[2])} / #{gps[2]*5+20}%\n<:DefenseS:514712247461871616> Defense: #{micronumber(gps[3])} / #{gps[3]*5+20}%\n<:ResistanceS:514712247574986752> Resistance: #{micronumber(gps[4])} / #{gps[4]*5+20}%\n\n\u0262\u1D18\u1D1B #{micronumber(gps[0]+gps[1]+gps[2]+gps[3]+gps[4])} / GRT: #{(gps[0]+gps[1]+gps[2]+gps[3]+gps[4])*5+100}%"])
   end
-  flds.push(['**Level 40**',"<:HP_S:467037520538894336> HP: #{stats[5]}\n#{atk}: #{stats[6]}\n<:SpeedS:467037520534962186> Speed: #{stats[7]}\n<:DefenseS:467037520249487372> Defense: #{stats[8]}\n<:ResistanceS:467037520379641858> Resistance: #{stats[9]}\n\nBST: #{stats[11]}"])
+  flds.push(['**Level 40**',"<:HP_S:514712247503945739> HP: #{stats[5]}\n#{atk}: #{stats[6]}\n<:SpeedS:514712247625580555> Speed: #{stats[7]}\n<:DefenseS:514712247461871616> Defense: #{stats[8]}\n<:ResistanceS:514712247574986752> Resistance: #{stats[9]}\n\nBST: #{stats[11]}"])
   img=nil
   ftr=nil
   unless event.server.nil?
@@ -9322,9 +9321,9 @@ def pick_random_unit(event,args,bot)
   k222=k222.reject{|q| !q[13][0].nil?} unless " #{event.message.text.downcase} ".include?(' all ')
   k222.compact!
   unt=k222.sample
-  atk='<:StrengthS:467037520484630539>*'
-  atk='<:MagicS:467043867611627520>' if ['Tome','Dragon','Healer'].include?(unt[1][1])
-  atk='<:StrengthS:467037520484630539>' if ['Blade','Bow','Dagger'].include?(unt[1][1])
+  atk='<:StrengthS:514712248372166666>*'
+  atk='<:MagicS:514712247289774111>' if ['Tome','Dragon','Healer'].include?(unt[1][1])
+  atk='<:StrengthS:514712248372166666>' if ['Blade','Bow','Dagger'].include?(unt[1][1])
   u40=get_stats(event,unt[0],40)
   u1=get_stats(event,unt[0],1)
   superbaan=["\u00A0","\u00A0","\u00A0","\u00A0","\u00A0","\u00A0"]
@@ -9346,7 +9345,7 @@ def pick_random_unit(event,args,bot)
     end
   end
   uskl=uskl.map{|q| q[q.length-1]}
-  create_embed(event,"__**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],false,2)}**__","#{display_stars(5,0)}\n\n<:HP_S:467037520538894336>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:467037520534962186>\u00A0\u00B7\u00A0<:DefenseS:467037520249487372>\u00A0\u00B7\u00A0<:ResistanceS:467037520379641858>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,nil,img,[['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}"]])
+  create_embed(event,"__**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],false,2)}**__","#{display_stars(5,0)}\n\n<:HP_S:514712247503945739>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:514712247625580555>\u00A0\u00B7\u00A0<:DefenseS:514712247461871616>\u00A0\u00B7\u00A0<:ResistanceS:514712247574986752>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,nil,img,[['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}"]])
 end
 
 def show_bonus_units(event,args='',bot)
@@ -9494,8 +9493,8 @@ def show_bonus_units(event,args='',bot)
       if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         event.respond "__**#{ss}**__\n\n#{m.join("\n")}" unless s[0]>2
       else
+        flds.push([ss,m.join("\n")])
         if safe_to_spam?(event)
-          flds.push([ss,m.join("\n")])
           for i in 0...flds.length
             create_embed(event,"__**Aether Raids: #{flds[i][0]}**__",flds[i][1],0x54C571)
           end
@@ -11177,18 +11176,18 @@ def phase_study(event,name,bot,weapon=nil)
   end
   refinement=nil if w2[5]!='Staff Users Only' && ['Wrathful','Dazzling'].include?(refinement)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
-  atk='<:StrengthS:467037520484630539> Attack'
-  atk='<:MagicS:467043867611627520> Magic' if ['Tome','Healer','Dragon'].include?(u40x[1][1])
-  atk='<:StrengthS:467037520484630539> Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
+  atk='<:StrengthS:514712248372166666> Attack'
+  atk='<:MagicS:514712247289774111> Magic' if ['Tome','Healer','Dragon'].include?(u40x[1][1])
+  atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
   zzzl=sklz[ww2]
   if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
-    atk='<:FreezeS:467043868148236299> Freeze'
+    atk='<:FreezeS:514712247474585610> Freeze'
   end
   n=nature_name(boon,bane)
   unless n.nil?
-    n=n[0] if atk=='<:StrengthS:467037520484630539> Strength'
-    n=n[n.length-1] if atk=='<:MagicS:467043867611627520> Magic'
-    n=n.join(' / ') if ['<:StrengthS:467037520484630539> Attack','<:FreezeS:467043868148236299> Freeze'].include?(atk)
+    n=n[0] if atk=='<:StrengthS:514712248372166666> Strength'
+    n=n[n.length-1] if atk=='<:MagicS:514712247289774111> Magic'
+    n=n.join(' / ') if ['<:StrengthS:514712248372166666> Attack','<:FreezeS:514712247474585610> Freeze'].include?(atk)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
   u40x2=get_stats(event,name,40,5,0,boon,bane)
@@ -11525,9 +11524,9 @@ def phase_study(event,name,bot,weapon=nil)
     event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
     event.respond "**Displayed stats:**  #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]} - Score: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100\n**#{"Player Phase" unless ppu40==epu40}#{"In-combat Stats" if ppu40==epu40}:**  #{ppu40[1]} / #{ppu40[2]} / #{ppu40[3]} / #{ppu40[4]} / #{ppu40[5]}  (#{ppu40[16]} BST)#{"\n**Enemy Phase:**  #{epu40[1]} / #{epu40[2]} / #{epu40[3]} / #{epu40[4]} / #{epu40[5]}  (#{epu40[16]} BST)" unless ppu40==epu40}"
   elsif ppu40==epu40
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100"],["In-combat Stats","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:467037520534962186> Speed: #{ppu40[3]}\n<:DefenseS:467037520249487372> Defense: #{ppu40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:514712247503945739> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:514712247625580555> Speed: #{u40[3]}\n<:DefenseS:514712247461871616> Defense: #{u40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100"],["In-combat Stats","<:HP_S:514712247503945739> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:514712247625580555> Speed: #{ppu40[3]}\n<:DefenseS:514712247461871616> Defense: #{ppu40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:467037520538894336> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:467037520534962186> Speed: #{u40[3]}\n<:DefenseS:467037520249487372> Defense: #{u40[4]}\n<:ResistanceS:467037520379641858> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100",1],["Player Phase","<:HP_S:467037520538894336> HP: #{ppu40[1]}\n<:Death_Blow:472211986625593345> Attack: #{ppu40[2]}\n<:Darting_Blow:472211986705547264> Speed: #{ppu40[3]}\n<:Armored_Blow:472211986688638976> Defense: #{ppu40[4]}\n<:Warding_Blow:472211986822856705> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","<:HP_S:467037520538894336> HP: #{epu40[1]}\n<:Fierce_Stance:472211986621661195> Attack: #{epu40[2]}\n<:Darting_Stance:472211986772393994> Speed: #{epu40[3]}\n<:Steady_Stance:472211986642501633> Defense: #{epu40[4]}\n<:Warding_Stance:472211986651021333> Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:514712247503945739> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:514712247625580555> Speed: #{u40[3]}\n<:DefenseS:514712247461871616> Defense: #{u40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100",1],["Player Phase","<:HP_S:514712247503945739> HP: #{ppu40[1]}\n<:Death_Blow:514719899868856340> Attack: #{ppu40[2]}\n<:Darting_Blow:514719899910668298> Speed: #{ppu40[3]}\n<:Armored_Blow:514719899927576578> Defense: #{ppu40[4]}\n<:Warding_Blow:514719900607053824> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","<:HP_S:514712247503945739> HP: #{epu40[1]}\n<:Fierce_Stance:514719899873050624> Attack: #{epu40[2]}\n<:Darting_Stance:514719899919056926> Speed: #{epu40[3]}\n<:Steady_Stance:514719899856273408> Defense: #{epu40[4]}\n<:Warding_Stance:514719899562672138> Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
   end
 end
 
@@ -14497,13 +14496,13 @@ bot.command([:average,:mean]) do |event, *args|
   else
     ccz=avg_color(ccz)
   end
-  atk='<:GenericAttackS:467065089598423051>'
+  atk='<:GenericAttackS:514712247587569664>'
   if atkstat.uniq.length==1
-    atk='<:StrengthS:467037520484630539>' if atkstat.uniq[0]=='Strength'
-    atk='<:MagicS:467043867611627520>' if atkstat.uniq[0]=='Magic'
-    atk='<:FreezeS:467043868148236299>' if atkstat.uniq[0]=='Freeze'
+    atk='<:StrengthS:514712248372166666>' if atkstat.uniq[0]=='Strength'
+    atk='<:MagicS:514712247289774111>' if atkstat.uniq[0]=='Magic'
+    atk='<:FreezeS:514712247474585610>' if atkstat.uniq[0]=='Freeze'
   end
-  create_embed(event,"__**Average among #{k222.length} units**__","<:HP_S:467037520538894336> HP: #{div_100(f2[1]*100/k222.length)}\n#{atk} Attack: #{div_100(f2[2]*100/k222.length)}\n<:SpeedS:467037520534962186> Speed: #{div_100(f2[3]*100/k222.length)}\n<:DefenseS:467037520249487372> Defense: #{div_100(f2[4]*100/k222.length)}\n<:ResistanceS:467037520379641858> Resistance: #{div_100(f2[5]*100/k222.length)}\n\nBST: #{div_100((f2[1]+f2[2]+f2[3]+f2[4]+f2[5])*100/k222.length)}",ccz)
+  create_embed(event,"__**Average among #{k222.length} units**__","<:HP_S:514712247503945739> HP: #{div_100(f2[1]*100/k222.length)}\n#{atk} Attack: #{div_100(f2[2]*100/k222.length)}\n<:SpeedS:514712247625580555> Speed: #{div_100(f2[3]*100/k222.length)}\n<:DefenseS:514712247461871616> Defense: #{div_100(f2[4]*100/k222.length)}\n<:ResistanceS:514712247574986752> Resistance: #{div_100(f2[5]*100/k222.length)}\n\nBST: #{div_100((f2[1]+f2[2]+f2[3]+f2[4]+f2[5])*100/k222.length)}",ccz)
   return nil
 end
 
@@ -14546,11 +14545,11 @@ bot.command([:bestamong,:bestin,:beststats,:higheststats,:highest,:best,:highest
     ccz=avg_color(ccz)
   end
   stzzz=['BST','HP','Attack','Speed','Defense','Resistance']
-  stemoji=['','<:HP_S:467037520538894336>','<:GenericAttackS:467065089598423051>','<:SpeedS:467037520534962186>','<:DefenseS:467037520249487372>','<:ResistanceS:467037520379641858>']
+  stemoji=['','<:HP_S:514712247503945739>','<:GenericAttackS:514712247587569664>','<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>']
   if atkstat.uniq.length==1
-    stemoji[2]='<:StrengthS:467037520484630539>' if atkstat.uniq[0]=='Strength'
-    stemoji[2]='<:MagicS:467043867611627520>' if atkstat.uniq[0]=='Magic'
-    stemoji[2]='<:FreezeS:467043868148236299>' if atkstat.uniq[0]=='Freeze'
+    stemoji[2]='<:StrengthS:514712248372166666>' if atkstat.uniq[0]=='Strength'
+    stemoji[2]='<:MagicS:514712247289774111>' if atkstat.uniq[0]=='Magic'
+    stemoji[2]='<:FreezeS:514712247474585610>' if atkstat.uniq[0]=='Freeze'
   end
   hbst=0
   for iz in 0...hstats.length
@@ -14604,11 +14603,11 @@ bot.command([:worstamong,:worstin,:worststats,:loweststats,:lowest,:worst,:lowes
     ccz=avg_color(ccz)
   end
   stzzz=['BST','HP','Attack','Speed','Defense','Resistance']
-  stemoji=['','<:HP_S:467037520538894336>','<:GenericAttackS:467065089598423051>','<:SpeedS:467037520534962186>','<:DefenseS:467037520249487372>','<:ResistanceS:467037520379641858>']
+  stemoji=['','<:HP_S:514712247503945739>','<:GenericAttackS:514712247587569664>','<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>']
   if atkstat.uniq.length==1
-    stemoji[2]='<:StrengthS:467037520484630539>' if atkstat.uniq[0]=='Strength'
-    stemoji[2]='<:MagicS:467043867611627520>' if atkstat.uniq[0]=='Magic'
-    stemoji[2]='<:FreezeS:467043868148236299>' if atkstat.uniq[0]=='Freeze'
+    stemoji[2]='<:StrengthS:514712248372166666>' if atkstat.uniq[0]=='Strength'
+    stemoji[2]='<:MagicS:514712247289774111>' if atkstat.uniq[0]=='Magic'
+    stemoji[2]='<:FreezeS:514712247474585610>' if atkstat.uniq[0]=='Freeze'
   end
   hbst=0
   for iz in 0...hstats.length
