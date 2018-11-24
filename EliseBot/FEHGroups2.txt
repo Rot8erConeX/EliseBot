@@ -31,6 +31,7 @@
 ["Taco", ["Takumi", "Takumi(Winter)", "Takumi(Fallen)", "Takumi(Summer)"], [358493636033511434]]
 ["Tempest", []]
 ["TheBlazingBuds", ["Eliwood", "Lyn", "Hector"], [412303462764773376]]
+["Tiki\u2019s", [], [425032503535992832]]
 ["Valentine's", []]
 ["Van'sWaifus", ["Tharja", "Tharja(Winter)", "Tharja(Bride)", "Camilla", "Camilla(Spring)", "Camilla(Summer)", "Camilla(Winter)", "Corrin(F)", "Corrin(F)(Summer)", "Tiki(Adult)", "Tiki(Adult)(Summer)", "Cordelia", "Cordelia(Bride)", "Cordelia(Summer)", "Marisa", "Celica", "Felicia", "Cherche", "Genny", "Effie", "Linde", "Linde(Summer)", "Celica(Brave)"], [393775173095915521]]
 ["Waifus", ["Lilina(Valentines)", "Mae", "Minerva"], [356146569239855104]]
