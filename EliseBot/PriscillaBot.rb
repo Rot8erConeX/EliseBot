@@ -9708,9 +9708,11 @@ end
 def parse_function(callback,event,args,bot,healers=nil)
   event.channel.send_temporary_message('Calculating data, please wait...',3)
   k=find_name_in_string(event,nil,1)
+  puts k.to_s
   if k.nil?
     if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
+      puts x.to_s
       k2=get_weapon(first_sub(event.message.text,x[0],''),event)
       weapon='-'
       weapon=k2[0] unless k2.nil?
@@ -9755,10 +9757,14 @@ def parse_function(callback,event,args,bot,healers=nil)
       msg=extend_message(msg,str2,event,2)
       event.respond msg
       return -1
+    elsif callback==:disp_art
+      disp_generic_art(event,'',bot)
     else
       event.respond 'No unit was included'
       return -1
     end
+  elsif ['red','reds','blue','blues','green','greens','grean','greans','colorless','colourless','colorlesses','colourlesses','clear','clears','physical','blade','blades','tome','mage','spell','tomes','mages','spells','dragon','dragons','breath','manakete','manaketes','beast','beasts','laguz','bow','arrow','bows','arrows','archer','archers','dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves','healer','staff','cleric','healers','clerics','staves','sword','swords','katana','lance','lances','spear','spears','naginata','axe','axes','ax','club','clubs','redtome','redtomes','redmage','redmages','bluetome','bluetomes','bluemage','bluemages','greentome','greentomes','greenmage','greenmages','flier','flying','flyer','fly','pegasus','fliers','flyers','pegasi','wyvern','wyverns','cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs','infantry','foot','feet','armor','armour','armors','armours','armored','armoured'].include?(k[1]) && callback==:disp_art
+    disp_generic_art(event,'',bot)
   else
     str=k[0]
     k2=get_weapon(first_sub(event.message.text,k[1],''),event)
@@ -11690,6 +11696,53 @@ def disp_art(event,name,bot,weapon=nil)
     end
   end
   return nil
+end
+
+def disp_generic_art(event,name,bot)
+  args=event.message.text.downcase.split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  colors=[]
+  weapons=[]
+  color_weapons=[]
+  movement=[]
+  for i in 0...args.length
+    args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
+    colors.push('Red') if ['red','reds'].include?(args[i].downcase)
+    colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
+    colors.push('Green') if ['green','greens','grean','greans'].include?(args[i].downcase)
+    colors.push('Colorless') if ['colorless','colourless','colorlesses','colourlesses','clear','clears'].include?(args[i].downcase)
+    weapons.push('Blade') if ['physical','blade','blades'].include?(args[i].downcase)
+    weapons.push('Tome') if ['tome','mage','spell','tomes','mages','spells'].include?(args[i].downcase)
+    weapons.push('Dragon') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
+    weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase)
+    color_weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
+    color_weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves'].include?(args[i].downcase)
+    color_weapons.push('Staff') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
+    color_weapons.push('Sword') if ['sword','swords','katana'].include?(args[i].downcase)
+    color_weapons.push('Lance') if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
+    color_weapons.push('Axe') if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
+    color_weapons.push('Red_Tome') if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
+    color_weapons.push('Blue_Tome') if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
+    color_weapons.push('Green_Tome') if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
+    movement.push('Pegasus') if ['flier','flying','flyer','fly','pegasus','fliers','flyers','pegasi'].include?(args[i].downcase)
+    movement.push('Wyvern') if ['wyvern','wyverns'].include?(args[i].downcase)
+    movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs'].include?(args[i].downcase)
+    movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
+    movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
+  end
+  colors=['Red'] if colors.length<=0
+  weapons=['Tome'] if weapons.length<=0
+  color_weapons=["#{colors[0]}_#{weapons[0]}".gsub('Red_Blade','Sword').gsub('Blue_Blade','Lance').gsub('Green_Blade','Axe')] if color_weapons.length<=0
+  movement=['Infantry'] if movement.length<=0
+  art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/GENERICS/#{color_weapons[0]}_#{movement[0]}/BtlFace.png"
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    event.respond art
+  else
+    event.channel.send_embed("__**#{color_weapons[0]}_#{movement[0]}**__") do |embed|
+      embed.color=0x800000
+      embed.image = Discordrb::Webhooks::EmbedImage.new(url: art)
+    end
+  end
 end
 
 def learnable_skills(event,name,bot,weapon=nil)
