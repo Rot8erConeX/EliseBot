@@ -4086,7 +4086,7 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
     end
   end
   lookout2=lookout.reject{|q| q[2]!='Weapon' || q[3].nil?}
-  skill=k.map{|q| @skills[q]}
+  skill=k.map{|q| @skills[q]}.uniq
   sklz=@skills.map{|q| q}
   g=get_markers(event)
   unitz=@units.reject{|q| !has_any?(g, q[13][0])}
@@ -8722,7 +8722,7 @@ def sort_legendaries(event,bot,mode=0)
     k[i][1][1]=4 if k[i][1][0]=='Colorless'
     k[i][1][1]=5 if k[i][1][1].is_a?(String)
   end
-  k=k.sort{|a,b| ((a[2][2]<=>b[2][2]) == 0 ? ((a[1][1]<=>b[1][1]) == 0 ? a[0]<=>b[0] : a[1][1]<=>b[1][1]) : a[2][2]<=>b[2][2])}
+  k=k.sort{|a,b| ((a[2][2]<=>b[2][2]) == 0 ? ((a[1][1]<=>b[1][1]) == 0 ? b[0]<=>a[0] : a[1][1]<=>b[1][1]) : a[2][2]<=>b[2][2])}
   for i in 0...k.length
     m=k[i][2][2].reverse
     k[i][2][3]=k[i][2][2].map{|q| q}
@@ -8821,6 +8821,7 @@ def sort_legendaries(event,bot,mode=0)
     end
     k=k.sort{|a,b| ((a[1][1]<=>b[1][1]) == 0 ? a[0]<=>b[0] : a[1][1]<=>b[1][1])}.map{|q| "#{q[1][2]} - #{q[0]}"}.join("\n")
     k2.unshift(['Upcoming banner',k]) unless k==k2[0][1]
+    k2[0][0]='Upcoming banner' if k==k2[0][1]
   end
   b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm || q[5].nil? || !q[5].split(', ').include?('Legendary')}
   if b2.length>0
