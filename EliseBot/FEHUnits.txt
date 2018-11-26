@@ -114,6 +114,7 @@ Henry(Halloween)\Green, Tome, Wind\ \Armor\5, 7, 7, 6, 7\36, 33, 34, 26, 36\Kusu
 Hinata\Red, Blade\ \Infantry\8, 7, 5, 8, 3\47, 32, 24, 36, 18\Ueda Yumehito\Cam Clarke as Delem Donaldson\Ichiki Mitsuhiro\3p4p3q4fLU\M\FE14B\Hinata
 Hinoka(Launch)\Blue, Blade\ \Flier\6, 9, 7, 5, 4\41, 35, 32, 25, 24\HACCAN\Cindy Robinson\Nazuka Kaori\5pLU\F\FE14B, FEW, (s)SSBU\Hinoka*
 Hinoka(Wings)\Colorless, Bow\ \Flier\5, 8, 8, 2, 6\37, 32, 35, 17, 29\Chiko\Cindy Robinson\Nazuka Kaori\5p\F\FE14B, FEW\Hinoka
+Hrid\Red, Blade\Wind, Defense, 21/11/2018\Cavalry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Maeshima Shigeki\Mark P. Whitten\\5s\M\FEH\Hrid
 Ike\Red, Blade\ \Infantry\7, 8, 7, 7, 2\42, 35, 31, 32, 18\Meka\Greg Chun\Hagi Michihiko\5p\M\FE9, FE10, SSBB, (st)SSBB, SSBProM, (a)FE14, (a)FE15, (a)STEAM, SSBU, (s)SSBU\Ike
 Ike(Brave)\Green, Blade\ \Infantry\8, 8, 6, 8, 3\43, 36, 28, 35, 20\Kita Senri\Greg Chun\Hagi Michihiko\5p\M\FE9, FE10, (a)FE14, (a)FE15, (a)STEAM\Ike
 Ike(Vanguard)\Red, Blade\Earth, Attack, 21/01/2019\Infantry\6, 8, 7, 8, 4\41, 36, 30, 35, 21\Kita Senri\Greg Chun\Hagi Michihiko\5s5y\M\FE10, FE9, (st)SSBB, SSB4, (a)FE14, (a)FE15, (a)STEAM, SSBU, (s)SSBU\*Ike
@@ -342,6 +343,7 @@ M'joe'ra\Colorless, Healer\ \Infantry\11, 5, 0, 9, 4\49, 27, 12, 38, 24\\\\4p5p\
 Moony\Green, Blade\ \Cavalry\7, 9, 8, 4, 10\38, 37, 33, 21, 35\\\\5p\M\\Moony\Y240495532378816513
 Moosie\Blue, Blade\ \Infantry\10, 6, 4, 6, 7\45, 30, 22, 31, 34\\\\4p5p\M\\Moosie\Y270372601107447808
 Nebby\Blue, Tome, Light\ \Infantry\7, 7, 3, 11, 11\31, 27, 18, 36, 38\\\\3p4p\M\\Nebby\Y251497172003061762
+Nesspeon\Red, Tome, Dark\ \Infantry\5, 11, 10, 2, 8\33, 40, 37, 15, 33\\\\4p5p\M\\Nesspeon\Y152179484991291392
 Nixx(C137)\Colorless, Healer\ \Flier\6, 6, 10, 3, 9\34, 28, 35, 19, 37\\\\4p5p\F\\Nixx(C137)\Y302271226896711682
 Ooocast\Red, Blade\ \Infantry\9, 12, 12, 2, 2\38, 45, 46, 16, 18\\\\3p4p\M\\Ooocast\YA244073468981805056
 Oxorsid\Red, Blade\ \Infantry\7, 6, 9, 8, 7\35, 28, 36, 34, 30\\\\5p\M\\Oxorsid\Y298276809240477696
@@ -353,6 +355,7 @@ Skittles\Red, Blade\ \Infantry\10, 12, 4, 9, 4\40, 47, 19, 39, 22\\\\5p\M\\Skitt
 Teestoo\Green, Blade\ \Cavalry\7, 8, 4, 7, 5\42, 36, 20, 34, 24\\\\1d2d4p5p\M\\Teestoo\Y256659145107701760
 Thomasawesome55\Colorless, Healer\ \Infantry\4, 9, 8, 8, 5\28, 37, 33, 32, 22\\\\3p4p\M\\Thomasawesome55\Y230157846652780556
 Tuna\Green, Blade\ \Armor\9, 6, 4, 9, 9\48, 31, 21, 39, 38\\\\5p\M\\Tuna\Y254483757053116427
+Zegend\Green, Blade\ \Infantry\7, 6, 8, 5, 7\39, 29, 34, 24, 37\\\\5p\M\\Zegend\Y478647302618087425
 Balder\Red, Blade\ \Armor\5, 12, 1, 12, 1\44, 49, 15, 48, 15\\\\4p5p\M\\Balder\B275443547920924673
 Meta\Blue, Dragon\ \Infantry\7, 6, 4, 8, 6\44, 30, 22, 35, 27\\\\5p\M\\Meta\B266883003425226752
 Bluezie\Green, Bow\Earth, Speed\Infantry\5, 7, 8, 6, 2\35, 33, 35, 30, 15\\\\5s\F\FE14g\Bluezie\GT256502173788143626
