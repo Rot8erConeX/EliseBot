@@ -1,8 +1,7 @@
-Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Ryoma, Hinoka(Wings), Leo\Tempest\12/11/2018, 21/11/2018
-Eirika(Graceful), Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Ursula, Michalis, Ike(Vanguard), Sharena\Aether\19/11/2018, 25/11/2018\Tactics Room, Tactics Room
 Eirika(Graceful), Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Julius, Robin(F), Gwendolyn, Anna\Arena\20/11/2018, 26/11/2018\Water, Fire
 Eirika(Graceful), Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Ursula, Michalis, Ike(Vanguard), Sharena\Aether\26/11/2018, 02/12/2018\Healing Tower, Healing Tower
 Eirika(Graceful), Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Julius, Robin(F), Gwendolyn, Anna\Arena\27/11/2018, 03/12/2018\Water, Earth
+Eirika(Graceful), Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Ursula, Michalis, Ike(Vanguard), Sharena\Aether\03/12/2018, 09/12/2018\Panic Room, Panic Room
 -\Arena\04/12/2018, 10/12/2018\Water, Wind
 -\Arena\11/12/2018, 17/12/2018\Water, Fire
 -\Arena\18/12/2018, 24/12/2018\Water, Earth
