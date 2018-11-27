@@ -9710,7 +9710,6 @@ end
 def parse_function(callback,event,args,bot,healers=nil)
   event.channel.send_temporary_message('Calculating data, please wait...',3)
   k=find_name_in_string(event,nil,1)
-  puts k.to_s
   if k.nil?
     if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
