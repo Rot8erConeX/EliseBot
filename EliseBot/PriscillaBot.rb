@@ -7169,7 +7169,7 @@ def display_units(event, mode)
         end
       end
       if mode==1
-        create_embed(event,'Results','',0x9400D3,nil,nil,p1.map{|q| [q[0],q[1].join("\n")]})
+        create_embed(event,"__**Results**__",'',0x9400D3,"#{p1.map{|q| q[1].length}.inject(0){|sum,x| sum + x }} total",nil,p1.map{|q| [q[0],q[1].join("\n")]})
       else
         msg=''
         for i in 0...p1.length
@@ -7179,7 +7179,7 @@ def display_units(event, mode)
       end
     else
       if k.join("\n").length<=1900
-        create_embed(event,'Results','',0x9400D3,nil,nil,triple_finish(k))
+        create_embed(event,"__**Results**__",'',0x9400D3,"#{k.length} total",nil,triple_finish(k))
       elsif !safe_to_spam?(event)
         event.respond 'There are so many unit results that I would prefer that you post this in PM.'
       else
@@ -7365,7 +7365,7 @@ def display_skills(event, mode)
         p1[i]=[h,p1[i].join("\n")]
       end
       if mode==1
-        create_embed(event,'Results','',0x9400D3,nil,nil,p1)
+        create_embed(event,"__**Results**__",'',0x9400D3,"#{p1.map{|q| q[1].length}.inject(0){|sum,x| sum + x }} total",nil,p1)
       else
         msg=''
         for i in 0...p1.length
@@ -7375,7 +7375,7 @@ def display_skills(event, mode)
       end
     else
       if k.join("\n").length<=1900
-        create_embed(event,'Results','',0x9400D3,nil,nil,triple_finish(k))
+        create_embed(event,"__**Results**__",'',0x9400D3,"#{p1.map{|q| q[1].length}.inject(0){|sum,x| sum + x }} total",nil,triple_finish(k))
       else
         t=k[0]
         if k.length>1
@@ -14407,7 +14407,7 @@ bot.command([:find,:search]) do |event, *args|
     elsif !p2.is_a?(Array)
       display_units(event, mode)
     elsif p1.join("\n").length+p2.join("\n").length<=1950
-      create_embed(event,"Results",'',0x9400D3,nil,nil,[['**Units**',p1.join("\n")],['**Skills**',p2.join("\n")]],2)
+      create_embed(event,"__**Results**__",'',0x9400D3,nil,nil,[['**Units**',p1.join("\n")],['**Skills**',p2.join("\n")]],2)
     elsif !safe_to_spam?(event)
       event.respond 'My response would be so long that I would prefer you ask me in PM.'
     else
@@ -15413,7 +15413,7 @@ bot.command([:next,:schedule]) do |event, type|
         element=b[1][3][1]
         moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
         d=b[1][2][0].split('/').map{|q| q.to_i}
-        msg=extend_message(msg,"__**Next Arena Season** (starting #{d[0]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][d[1]]} #{d[2]})__\n*Bonus Units:*#{"\n#{k2[0,k2.length/2+m].join(', ')}\n#{k2[k2.length/2+m,k2.length/2].join(', ')}" unless k2==k}#{'(same as current)' if k2==k}\n*Elemental season:* #{moji[0].mention}#{b[1][3][0]}, #{moji2[0].mention}#{b[1][3][1]}",event,2)
+        msg=extend_message(msg,"__**Next Arena Season** (starting #{d[0]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][d[1]]} #{d[2]})__\n*Bonus Units:*#{"\n#{k2[0,k2.length/2+m].join(', ')}\n#{k2[k2.length/2+m,k2.length/2].join(', ')}" unless k2==k || k2.length<=1}#{'(same as current)' if k2==k}#{'(unknown)' if k2.length<=1}\n*Elemental season:* #{moji[0].mention}#{b[1][3][0]}, #{moji2[0].mention}#{b[1][3][1]}",event,2)
         if b.length>2
           msg2="__**Future Elemental Seasons**__"
           for i in 2...[b.length,12].min
@@ -15475,17 +15475,17 @@ bot.command([:next,:schedule]) do |event, type|
       msg=extend_message(msg,"There are no known quantities about Aether Raids.",event,2)
     else
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
-      if b[0][2][0].split('/').reverse.join('').to_i<tm || b.length>1
-        msg2="__**Current Aether Raids Bonus Units**__"
-      else
-        msg2="__**Future Aether Raids Bonus Units**__"
-      end
       m=k.length%2
-      msg=extend_message(msg,"#{msg2}\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}",event,2)
+      struct="#{b[0][3][0]} (O), #{b[0][3][1]} (D)"
+      struct="#{b[0][3][0]} (O/D)" if b[0][3][0]==b[0][3][1]
+      msg=extend_message(msg,"__**Current Aether Raids Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Elemental season:* #{struct}",event,2)
       if b.length>1
-        k=b[1][0].map{|q| q.gsub('Lavatain','Laevatein')}
-        m=k.length%2
-        msg=extend_message(msg,"__**Future Aether Raids Bonus Units**__\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}",event,2)
+        k2=b[1][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        m=k2.length%2
+        d=b[1][2][0].split('/').map{|q| q.to_i}
+        struct="#{b[1][3][0]} (O), #{b[1][3][1]} (D)"
+        struct="#{b[1][3][0]} (O/D)" if b[1][3][0]==b[1][3][1]
+        msg=extend_message(msg,"__**Next Aether Raids Season** (starting #{d[0]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][d[1]]} #{d[2]})__\n*Bonus Units:*#{"\n#{k2[0,k2.length/2+m].join(', ')}\n#{k2[k2.length/2+m,k2.length/2].join(', ')}" unless k2==k || k2.length<=1}#{'(same as current)' if k2==k}#{'(unknown)' if k2.length<=1}\n*Bonus Structures:* #{struct}",event,2)
       end
     end
   end
