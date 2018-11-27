@@ -1473,7 +1473,8 @@ def find_skill(name,event,ignore=false,ignore2=false,m=false,mode=0) # one of tw
     end
   end
   # ...and return the one at the end of the list (which is the beginning of the list after the sorting)
-  x3=x3.sort{|a,b| b[1]<=>a[1]}
+  g=get_markers(event)
+  x3=x3.reject{|q| !has_any?(g, sklz[q[0]][13])}.sort{|a,b| b[1]<=>a[1]}
   return x3.reverse.map{|q| q[0]} if mode==1
   return x3[0][0]
 end
