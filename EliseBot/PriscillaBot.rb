@@ -6429,9 +6429,9 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   weapons=[]
   color_weapons=[]
   movement=[]
-  tier=[]
   group=[]
   unitz=[]
+  clzz=[]
   genders=[]
   games=[]
   supernatures=[]
@@ -6454,6 +6454,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
     color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
     color_weapons.push(['Green','Tome']) if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
+    clzz.push(['Troubadour', nil, 'Healer', 'Cavalry']) if ['troubadour', 'trobadour', 'troubador', 'trobador'].include?(args[i].downcase)
     weapons.push('Blade') if ['physical','blade','blades','close','closerange'].include?(args[i].downcase)
     weapons.push('Tome') if ['tome','mage','spell','tomes','mages','spells','range','ranged','distance','distant'].include?(args[i].downcase)
     weapons.push('Dragon') if ['dragon','dragons','breath','manakete','manaketes','close','closerange'].include?(args[i].downcase)
@@ -6483,12 +6484,13 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     group.push(@groups[find_group(args[i].downcase,event)]) if find_group(args[i].downcase,event)>=0 && args[i].length>=3
   end
   colors=colors.uniq
+  colors2=colors.map{|q| q}
   weapons=weapons.uniq
   movement=movement.uniq
   genders=genders.uniq
   games=games.uniq
-  tier=tier.uniq
   group=group.uniq
+  clzz=clzz.uniq
   supernatures=supernatures.uniq
   # prune based on inputs
   matches1=[]
@@ -6497,7 +6499,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   for i in 0...matches0.length
     matches0[i][0]=matches0[i][0].gsub('Lavatain','Laevatein')
   end
-  if supernatures.length.zero? && colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && movement.length.zero? && genders.length.zero? && games.length.zero? && group.length.zero?
+  if supernatures.length.zero? && colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && movement.length.zero? && genders.length.zero? && games.length.zero? && group.length.zero? && clzz.length.zero?
     return matches0.map{|q| q}.uniq if mode==3
     matches5=matches0.map{|q| q}.sort {|a,b| a[0].downcase <=> b[0].downcase}.uniq
   else
@@ -6536,7 +6538,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     elsif supernatures.include?('-Res')
       matches0=matches0.reject{|q| ![-2,2,6,11,15].include?(q[4][4])}
     end
-    if colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && movement.length.zero? && genders.length.zero? && games.length.zero? && group.length.zero?
+    if colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && movement.length.zero? && genders.length.zero? && games.length.zero? && group.length.zero? && clzz.length.zero?
       return matches0.map{|q| q}.uniq if mode==3
       matches5=matches0.map{|q| q}.sort {|a,b| a[0].downcase <=> b[0].downcase}.uniq
     else
@@ -6561,7 +6563,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
         colors.push(color_weapons[i][0])
       end
       matches1=matches1.uniq
-      if movement.length.zero? && genders.length.zero? && games.length.zero? && group.length.zero?
+      if movement.length.zero? && genders.length.zero? && games.length.zero? && group.length.zero? && clzz.length.zero?
         return matches1.map{|q| q}.uniq if mode==3
         matches5=matches1.map{|q| q}.sort {|a,b| a[0].downcase <=> b[0].downcase}.uniq
       else
@@ -6570,6 +6572,17 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
           matches2=matches1.reject{|q| !movement.include?(q[3])}
         else
           matches2=matches1.map{|q| q}
+        end
+        if clzz.length>0
+          matches2=[] if matches2==matches0
+          for i in 0...matches0.length
+            for j in 0...clzz.length
+              matches2.push(matches0[i]) if (clzz[j][1].nil? || matches0[i][1][0]==clzz[j][1]) && matches0[i][1][1]==clzz[j][2] && matches0[i][3]==clzz[j][3]
+            end
+          end
+          for i in 0...clzz.length
+            colors.push(clzz[i][1]) unless clzz[i][1].nil?
+          end
         end
         if genders.length.zero? && games.length.zero? && group.length.zero?
           return matches2.map{|q| q} if mode==3
@@ -6692,38 +6705,24 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     return matches5
   elsif mode==1
     f=matches5.map{|k| k[0]}
-    return f
-  else
-    matches5=matches5.uniq
-    if matches5.length.zero?
-      event.respond 'No matches found.'
-      return false
-    elsif matches5.length==1
-      event.respond "#{matches5[0][0]} is your only result."
-      return false
-    else
-      f=[]
-      matches5.reject{|q| q=='- - -'}.sort! {|a,b| a[0] <=> b[0]}
-      for i in 0...matches5.length
-        matches5[i][0]="__**#{matches5[i][0]}**__" if unitz.length>0 && unitz.include?(matches5[i][0])
-        f.push(matches5[i][0])
-      end
-      return f if mode==1
-      t=f[0]
-      c=', '
-      c="\n" if event.server.nil?
-      if f.length>1
-        for i in 1...f.length
-          if "#{t}#{c}#{f[i]}".length>=2000
-            event.respond t
-            t=f[i]
-          else
-            t="#{t}#{c}#{f[i]}"
-          end
-        end
-      end
-      event.respond t
+    m=[]
+    m.push("*Weapon colors:* #{colors2.join(', ')}") if colors2.length>0
+    m.push("*Weapon types:* #{weapons.map{|q| q.gsub('Healer','Staff').gsub('Dragon','Breath')}.join(', ')}") if weapons.length>0
+    for i in 0...color_weapons.length
+      color_weapons[i]=color_weapons[i].join(' ').gsub('Healer','Staff')
+      color_weapons[i]='Sword (Red Blade)' if color_weapons[i]=='Red Blade'
+      color_weapons[i]='Lance (Blue Blade)' if color_weapons[i]=='Blue Blade'
+      color_weapons[i]='Axe (Green Blade)' if color_weapons[i]=='Green Blade'
+      color_weapons[i]='Rod (Colorless Blade)' if color_weapons[i]=='Colorless Blade'
     end
+    m.push("*Complete weapons:* #{color_weapons.join(', ').gsub('Healer','Staff').gsub('Dragon','Breath')}") if color_weapons.length>0
+    m.push("*Movement:* #{movement.join(', ')}") if movement.length>0
+    m.push("*Complete classes:* #{clzz.map{|q| "#{q[0]} (#{q[1,q.length-1].compact.join(' ').gsub('Healer','Staff').gsub('Dragon','Breath')})"}.join(', ')}") if clzz.length>0
+    m.push("*Genders:* #{genders.map{|q| "#{q}#{'ale' if q=='M'}#{'emale' if q=='F'}"}.join(', ')}") if genders.length>0
+    m.push("*Games:* #{games.join(', ')}") if games.length>0
+    m.push("*Groups:* #{group.map{|q| q[0]}.join(', ')}") if group.length>0
+    m.push("*Supernatures:* #{supernatures.map{|q| q[0]}.join(', ')}") if supernatures.length>0
+    return [m,f]
   end
   return 1
 end
@@ -6796,6 +6795,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     passive_subsets.push('Bladeskill') if ['blade'].include?(args[i].downcase) && !skill_types.include?('weapon') && skill_types.length>0
   end
   colors=colors.uniq
+  colors2=colors.map{|q| q}
   weapons=weapons.uniq
   color_weapons=color_weapons.uniq
   skill_types=skill_types.uniq
@@ -7046,32 +7046,35 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     return -2
   elsif mode==1
     f=matches4.map{|k| k[0].gsub('Bladeblade','Laevatein')}
-    return f
+    m=[]
+    m.push("*Skill types:* #{skill_types.join(', ')}") if skill_types.reject{|q| q=='Weapon'}.length>0
+    m.push("*Weapon colors:* #{colors2.join(', ')}") if colors2.length>0
+    m.push("*Weapon types:* #{weapons.map{|q| q.gsub('Healer','Staff')}.join(', ')}") if weapons.length>0
+    for i in 0...color_weapons.length
+      color_weapons[i]=color_weapons[i].join(' ').gsub('Healer','Staff')
+      color_weapons[i]='Sword (Red Blade)' if color_weapons[i]=='Red Blade'
+      color_weapons[i]='Lance (Blue Blade)' if color_weapons[i]=='Blue Blade'
+      color_weapons[i]='Axe (Green Blade)' if color_weapons[i]=='Green Blade'
+      color_weapons[i]='Rod (Colorless Blade)' if color_weapons[i]=='Colorless Blade'
+    end
+    m.push("*Complete weapons:* #{color_weapons.join(', ')}") if color_weapons.length>0
+    m.push("*Weapon subtypes:* #{weapon_subsets.join(', ')}") if weapon_subsets.length>0
+    m.push("*Assist subtypes:* #{assists.join(', ')}") if assists.length>0
+    m.push("*Special subtypes:* #{specials.join(', ')}") if specials.length>0
+    m.push("*Passive subtypes:* #{passive_subsets.join(', ')}") if passive_subsets.length>0
+    return [m,f]
   elsif mode==2
     return matches4
-  else
-    event.respond '\* \* \*' if !brk.is_a?(Array)
-    t=matches4[0][0]
-    matches4=matches4.reject{|q| q=='- - -'}
-    c=', '
-    c="\n" if event.server.nil?
-    if matches4.length>1
-      for i in 1...matches4.length
-        if "#{t}#{c}#{matches4[i][0]}".length>=2000
-          event.respond t
-          t=matches4[i][0].gsub('Bladeblade','Laevatein')
-        else
-          t="#{t}#{c}#{matches4[i][0].gsub('Bladeblade','Laevatein')}"
-        end
-      end
-    end
-    event.respond t
   end
   return 1
 end
 
 def display_units(event, mode)
   k=find_in_units(event,1)
+  if k.is_a?(Array)
+    mk=k[0]
+    k=k[1]
+  end
   if k.is_a?(Array)
     data_load()
     untz=@units.map{|q| q}
@@ -7169,7 +7172,7 @@ def display_units(event, mode)
         end
       end
       if mode==1
-        create_embed(event,"__**Results**__",'',0x9400D3,"#{p1.map{|q| q[1].length}.inject(0){|sum,x| sum + x }} total",nil,p1.map{|q| [q[0],q[1].join("\n")]})
+        create_embed(event,"#{"__**Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__",'',0x9400D3,"#{p1.map{|q| q[1].length}.inject(0){|sum,x| sum + x }} total",nil,p1.map{|q| [q[0],q[1].join("\n")]})
       else
         msg=''
         for i in 0...p1.length
@@ -7178,8 +7181,14 @@ def display_units(event, mode)
         event.respond msg
       end
     else
-      if k.join("\n").length<=1900
-        create_embed(event,"__**Results**__",'',0x9400D3,"#{k.length} total",nil,triple_finish(k))
+      if k.join("\n").length+mk.join("\n").length<=1900
+        if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+          jchar="\n"
+          jchar=', ' if k.length>20 && !safe_to_spam?(event)
+          event.respond "#{"__**Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__\n#{k.join(jchar)}\n\n#{k.length} total"
+        else
+          create_embed(event,"#{"__**Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__",'',0x9400D3,"#{k.length} total",nil,triple_finish(k))
+        end
       elsif !safe_to_spam?(event)
         event.respond 'There are so many unit results that I would prefer that you post this in PM.'
       else
@@ -7197,6 +7206,10 @@ end
 
 def display_skills(event, mode)
   k=find_in_skills(event,1)
+  if k.is_a?(Array)
+    mk=k[0]
+    k=k[1]
+  end
   data_load()
   sklz=@skills.map{|q| q}
   if k.is_a?(Array)
@@ -7365,7 +7378,7 @@ def display_skills(event, mode)
         p1[i]=[h,p1[i].join("\n")]
       end
       if mode==1
-        create_embed(event,"__**Results**__",'',0x9400D3,"#{p1.map{|q| q[1].length}.inject(0){|sum,x| sum + x }} total",nil,p1)
+        create_embed(event,"#{"__**Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__",'',0x9400D3,"#{p1.map{|q| q[1].split("\n")}.join("\n").split("\n").uniq.length} total",nil,p1)
       else
         msg=''
         for i in 0...p1.length
@@ -7375,7 +7388,13 @@ def display_skills(event, mode)
       end
     else
       if k.join("\n").length<=1900
-        create_embed(event,"__**Results**__",'',0x9400D3,"#{p1.map{|q| q[1].length}.inject(0){|sum,x| sum + x }} total",nil,triple_finish(k))
+        if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+          jchar="\n"
+          jchar=', ' if k.length>20 && !safe_to_spam?(event)
+          event.respond "#{"__**Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__\n#{k.join(jchar)}\n\n#{k.length} total"
+        else
+          create_embed(event,"#{"__**Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__",'',0x9400D3,"#{k.length} total",nil,triple_finish(k))
+        end
       else
         t=k[0]
         if k.length>1
@@ -14397,17 +14416,20 @@ bot.command([:find,:search]) do |event, *args|
     display_skills(event, mode)
   else
     event.channel.send_temporary_message('Calculating data, please wait...',(event.message.text.length/30).floor+2)
-    p1=find_in_units(event,mode,true)
-    p1=p1.map{|q| "#{'~~' if !["Laevatein","- - -"].include?(q) && !@units[find_unit(q,event,false,true)][13][0].nil?}#{q}#{'~~' if !["Laevatein","- - -"].include?(q) && !@units[find_unit(q,event,false,true)][13][0].nil?}"}
-    p2=find_in_skills(event,mode,true,p1)
+    p1=find_in_units(event,1,true)
+    m=[p1[0]]
+    p1=p1[1].map{|q| "#{'~~' if !["Laevatein","- - -"].include?(q) && !@units[find_unit(q,event,false,true)][13][0].nil?}#{q}#{'~~' if !["Laevatein","- - -"].include?(q) && !@units[find_unit(q,event,false,true)][13][0].nil?}"}
+    p2=find_in_skills(event,1,true)
+    m.push(p2[0])
+    p2=p2[1]
     if !p1.is_a?(Array) && !p2.is_a?(Array)
       event.respond 'Your request is gibberish.'
     elsif !p1.is_a?(Array)
       display_skills(event, mode)
     elsif !p2.is_a?(Array)
       display_units(event, mode)
-    elsif p1.join("\n").length+p2.join("\n").length<=1950
-      create_embed(event,"__**Results**__",'',0x9400D3,nil,nil,[['**Units**',p1.join("\n")],['**Skills**',p2.join("\n")]],2)
+    elsif p1.join("\n").length+p2.join("\n").length+m.join("\n").length<=1950
+      create_embed(event,"#{"__**Unit search**__\n#{m[0].join("\n")}\n\n" if m[0].length>0}#{"__**Skill search**__\n#{m[1].join("\n")}\n\n" if m[1].length>0}__**Results**__",'',0x9400D3,"Totals: #{p1.reject{|q| q=='- - -'}.uniq.length} units, #{p2.reject{|q| q=='- - -'}.uniq.length} skills",nil,[['**Units**',p1.join("\n")],['**Skills**',p2.join("\n")]],2)
     elsif !safe_to_spam?(event)
       event.respond 'My response would be so long that I would prefer you ask me in PM.'
     else
