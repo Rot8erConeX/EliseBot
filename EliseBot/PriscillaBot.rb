@@ -8735,12 +8735,12 @@ def sort_legendaries(event,bot,mode=0)
   k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || q[2][0]==' ' || q[2].length<3}.uniq
   c=[]
   for i in 0...k.length
-    c.push([249,130,129]) if l[i][2][0]=='Fire'
-    c.push([145,244,255]) if l[i][2][0]=='Water'
-    c.push([152,255,153]) if l[i][2][0]=='Wind'
-    c.push([255,175,126]) if l[i][2][0]=='Earth'
-    c.push([253,243,157]) if l[i][2][0]=='Light'
-    c.push([201,105,254]) if l[i][2][0]=='Dark'
+    c.push([249,130,129]) if k[i][2][0]=='Fire'
+    c.push([145,244,255]) if k[i][2][0]=='Water'
+    c.push([152,255,153]) if k[i][2][0]=='Wind'
+    c.push([255,175,126]) if k[i][2][0]=='Earth'
+    c.push([253,243,157]) if k[i][2][0]=='Light'
+    c.push([201,105,254]) if k[i][2][0]=='Dark'
     k[i][2][2]=k[i][2][2].split('/').map{|q| q.to_i}.reverse
     k[i][1][1]=1 if k[i][1][0]=='Red'
     k[i][1][1]=2 if k[i][1][0]=='Blue'
