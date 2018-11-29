@@ -2669,12 +2669,12 @@ def unit_color(event,j,name=nil,mode=0,m=false,chain=false) # used to choose the
   xcolor=0x64757D if jj[1][0]=='Colorless'
   unless chain
     # Elemental colors - unused after the first embed
-    xcolor=0xFE5B5B if jj[2][0]=='Fire'
-    xcolor=0x46D7F4 if jj[2][0]=='Water'
-    xcolor=0x79FF7A if jj[2][0]=='Wind'
-    xcolor=0xFF874C if jj[2][0]=='Earth'
-    xcolor=0xFDF083 if jj[2][0]=='Light'
-    xcolor=0xB268FE if jj[2][0]=='Dark'
+    xcolor=0xF98281 if jj[2][0]=='Fire'
+    xcolor=0x91F4FF if jj[2][0]=='Water'
+    xcolor=0x97FF99 if jj[2][0]=='Wind'
+    xcolor=0xFFAF7E if jj[2][0]=='Earth'
+    xcolor=0xFDF39D if jj[2][0]=='Light'
+    xcolor=0xC99BFE if jj[2][0]=='Dark'
   end
   # Special colors
   xcolor=0x00DAFA if m && find_in_dev_units(jj[0])>0
@@ -8735,12 +8735,12 @@ def sort_legendaries(event,bot,mode=0)
   k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || q[2][0]==' ' || q[2].length<3}.uniq
   c=[]
   for i in 0...k.length
-    c.push([254,91,91]) if l[i][2][0]=='Fire'
-    c.push([70,215,244]) if l[i][2][0]=='Water'
-    c.push([121,255,122]) if l[i][2][0]=='Wind'
-    c.push([255,135,76]) if l[i][2][0]=='Earth'
-    c.push([253,240,131]) if l[i][2][0]=='Light'
-    c.push([178,104,254]) if l[i][2][0]=='Dark'
+    c.push([249,130,129]) if l[i][2][0]=='Fire'
+    c.push([145,244,255]) if l[i][2][0]=='Water'
+    c.push([152,255,153]) if l[i][2][0]=='Wind'
+    c.push([255,175,126]) if l[i][2][0]=='Earth'
+    c.push([253,243,157]) if l[i][2][0]=='Light'
+    c.push([201,105,254]) if l[i][2][0]=='Dark'
     k[i][2][2]=k[i][2][2].split('/').map{|q| q.to_i}.reverse
     k[i][1][1]=1 if k[i][1][0]=='Red'
     k[i][1][1]=2 if k[i][1][0]=='Blue'
@@ -12408,12 +12408,12 @@ bot.command([:legendary,:legendaries]) do |event, *args|
   l.sort!{|a,b| a[0]<=>b[0]}
   c=[]
   for i in 0...l.length
-    c.push([254,91,91]) if l[i][2][0]=='Fire'
-    c.push([70,215,244]) if l[i][2][0]=='Water'
-    c.push([121,255,122]) if l[i][2][0]=='Wind'
-    c.push([255,135,76]) if l[i][2][0]=='Earth'
-    c.push([253,240,131]) if l[i][2][0]=='Light'
-    c.push([178,104,254]) if l[i][2][0]=='Dark'
+    c.push([249,130,129]) if l[i][2][0]=='Fire'
+    c.push([145,244,255]) if l[i][2][0]=='Water'
+    c.push([152,255,153]) if l[i][2][0]=='Wind'
+    c.push([255,175,126]) if l[i][2][0]=='Earth'
+    c.push([253,243,157]) if l[i][2][0]=='Light'
+    c.push([201,105,254]) if l[i][2][0]=='Dark'
   end
   l.uniq!
   x=[]
