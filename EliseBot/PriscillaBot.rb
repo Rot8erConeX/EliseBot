@@ -2669,11 +2669,12 @@ def unit_color(event,j,name=nil,mode=0,m=false,chain=false) # used to choose the
   xcolor=0x64757D if jj[1][0]=='Colorless'
   unless chain
     # Elemental colors - unused after the first embed
-    xcolor=0xF2463A if jj[2][0]=='Fire'
-    xcolor=0x66DAFA if jj[2][0]=='Water'
-    xcolor=0x7AE970 if jj[2][0]=='Wind'
-    xcolor=0xDE5F09 if jj[2][0]=='Earth'
-    xcolor=0x5000A0 if jj[2][0]=='Dark'
+    xcolor=0xFE5B5B if jj[2][0]=='Fire'
+    xcolor=0x46D7F4 if jj[2][0]=='Water'
+    xcolor=0x79FF7A if jj[2][0]=='Wind'
+    xcolor=0xFF874C if jj[2][0]=='Earth'
+    xcolor=0xFDF083 if jj[2][0]=='Light'
+    xcolor=0xB268FE if jj[2][0]=='Dark'
   end
   # Special colors
   xcolor=0x00DAFA if m && find_in_dev_units(jj[0])>0
@@ -8734,11 +8735,12 @@ def sort_legendaries(event,bot,mode=0)
   k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || q[2][0]==' ' || q[2].length<3}.uniq
   c=[]
   for i in 0...k.length
-    c.push([102,218,250]) if k[i][2][0]=='Water'
-    c.push([222,95,9]) if k[i][2][0]=='Earth'
-    c.push([122,233,112]) if k[i][2][0]=='Wind'
-    c.push([242,70,58]) if k[i][2][0]=='Fire'
-    c.push([64,0,128]) if k[i][2][0]=='Dark'
+    c.push([254,91,91]) if l[i][2][0]=='Fire'
+    c.push([70,215,244]) if l[i][2][0]=='Water'
+    c.push([121,255,122]) if l[i][2][0]=='Wind'
+    c.push([255,135,76]) if l[i][2][0]=='Earth'
+    c.push([253,240,131]) if l[i][2][0]=='Light'
+    c.push([178,104,254]) if l[i][2][0]=='Dark'
     k[i][2][2]=k[i][2][2].split('/').map{|q| q.to_i}.reverse
     k[i][1][1]=1 if k[i][1][0]=='Red'
     k[i][1][1]=2 if k[i][1][0]=='Blue'
@@ -12406,11 +12408,12 @@ bot.command([:legendary,:legendaries]) do |event, *args|
   l.sort!{|a,b| a[0]<=>b[0]}
   c=[]
   for i in 0...l.length
-    c.push([102,218,250]) if l[i][2][0]=='Water'
-    c.push([222,95,9]) if l[i][2][0]=='Earth'
-    c.push([122,233,112]) if l[i][2][0]=='Wind'
-    c.push([242,70,58]) if l[i][2][0]=='Fire'
-    c.push([64,0,128]) if l[i][2][0]=='Dark'
+    c.push([254,91,91]) if l[i][2][0]=='Fire'
+    c.push([70,215,244]) if l[i][2][0]=='Water'
+    c.push([121,255,122]) if l[i][2][0]=='Wind'
+    c.push([255,135,76]) if l[i][2][0]=='Earth'
+    c.push([253,240,131]) if l[i][2][0]=='Light'
+    c.push([178,104,254]) if l[i][2][0]=='Dark'
   end
   l.uniq!
   x=[]
@@ -12437,7 +12440,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
   sec=x[1]
   tri=x[2] if x.length>=3
   if pri=='Element'
-    l2=split_list(event,l,['Fire','Water','Wind','Earth','Dark'],-5)
+    l2=split_list(event,l,['Fire','Water','Wind','Earth','Light','Dark'],-5)
   elsif pri=='Stat'
     l2=split_list(event,l,['Attack','Speed','Defense','Resistance'],-6)
   elsif pri=='Color'
@@ -12462,7 +12465,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
     if pri=='Element'
       x2=p1[i][0][2][0]
       element='Unknown'
-      element=x2 if ['Fire','Water','Wind','Earth','Dark'].include?(x2)
+      element=x2 if ['Fire','Water','Wind','Earth','Light','Dark'].include?(x2)
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
       x2="#{moji[0].mention} #{x2}" if moji.length>0
     elsif pri=='Stat'
@@ -12510,7 +12513,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
       if sec=='Element'
         x3=p2[j][0][2][0]
         element='Unknown'
-        element=x3 if ['Fire','Water','Wind','Earth','Dark'].include?(x3)
+        element=x3 if ['Fire','Water','Wind','Earth','Light','Dark'].include?(x3)
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
         x3="#{moji[0].mention} #{x3}" if moji.length>0
       elsif sec=='Stat'
