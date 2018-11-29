@@ -4334,6 +4334,8 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
       if statskill[4][i4]==0
       elsif statskill[3]=='Stat-Nerfing'
         statskill[4][i4]="-#{statskill[4][i4]}"
+      elsif statskill[4][i4]<0
+        statskill[4][i4]="+#{0-statskill[4][i4]}" if statskill[3]=='Stat-Nerfing'
       else
         statskill[4][i4]="+#{statskill[4][i4]}"
       end
@@ -4883,6 +4885,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       if statskill[4][i4]==0
       elsif statskill[3]=='Stat-Nerfing'
         statskill[4][i4]="-#{statskill[4][i4]}"
+      elsif statskill[4][i4]<0
+        statskill[4][i4]="+#{0-statskill[4][i4]}" if statskill[3]=='Stat-Nerfing'
       else
         statskill[4][i4]="+#{statskill[4][i4]}"
       end
@@ -14007,7 +14011,8 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
         @aliases[i][2].push(srv)
         bot.channel(chn).send_message("The alias #{newname} for #{unit.gsub('Lavatain','Laevatein')} exists in another server already.  Adding this server to those that can use it.")
         event.respond "The alias #{newname} for #{unit.gsub('Lavatain','Laevatein')} exists in another server already.  Adding this server to those that can use it.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-        bot.user(167657750971547648).pm("The alias **#{@aliases[i][0]}** for the character **#{@aliases[i][1]}** is used in quite a few servers.  It might be time to make this global") if @aliases[i][2].length >= bot.servers.length / 20 && @aliases[i][3].nil?
+        metadata_load()
+        bot.user(167657750971547648).pm("The alias **#{@aliases[i][0]}** for the character **#{@aliases[i][1]}** is used in quite a few servers.  It might be time to make this global") if @aliases[i][2].length >= @server_data[0].inject(0){|sum,x| sum + x } / 20 && @aliases[i][3].nil?
         bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit} - gained a new server that supports it.")
         double=true
       end
