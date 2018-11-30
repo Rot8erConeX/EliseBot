@@ -67,13 +67,13 @@ Cherche
 Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\__Slaying Hammer+ (+) Effect Mode__\Cherche's Axe\Cherche's Axe (+) Effect Mode
 Pivot
 New Moon\Luna
-Attack +1\Attack +2\Attack +3
+Death Blow 1\Death Blow 2\Death Blow 3
 Desperation 1\Desperation 2\Desperation 3
 Fortify Def 1\Fortify Def 2\Fortify Def 3
 Attack +3
 
 Cordelia
-5\7\Attack\HP\-
+5\8\Attack\HP\-
 Iron Lance\Steel Lance\Brave Lance\Brave Lance+
 Reposition
 Night Sky\Astra\Galeforce
@@ -207,7 +207,7 @@ Matthew
 Iron Dagger\Steel Dagger\Lethal Carrot\Lethal Carrot+\Lethal Carrot+ (+) Resistance Mode
 Reciprocal Aid
 Chilling Wind\Glacies
-Fortress Def 1\Fortress Def 2\Fortress Def 3
+Fortress Def 1\Fort. Def/Res 1\Fort. Def/Res 2\Fort. Def/Res 3
 Renewal 1\Renewal 2\Renewal 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Phantom Spd 2

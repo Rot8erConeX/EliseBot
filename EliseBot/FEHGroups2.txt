@@ -11,6 +11,7 @@
 ["Embla", ["Veronica", "Bruno"]]
 ["Falchion_Users", []]
 ["FallenHeroes", []]
+["fehspoils", ["Joshua", "Sigurd", "Zelgius", "Sanaki", "Soren", "Eldigan"], [358493636033511434]]
 ["GHB", []]
 ["Gods", ["Wrys", "Jagen", "Tobin"]]
 ["Halloween", []]

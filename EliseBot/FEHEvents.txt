@@ -10,9 +10,9 @@ Arena\Quests\15/11/2018, 28/11/2018
 Corrin(M) & Kana(F)\BHB\16/11/2018, 22/11/2018
 New Heroes\Log-In Bonus\21/11/2018, 04/12/2018
 -\Grand Conquests\22/11/2018, 27/11/2018
->Unknown<\GHB\23/11/2018, 02/12/2018
->Unknown<\Forging Bonds\28/11/2018, 11/12/2018
->Unknown<\LHB\28/11/2018, 04/12/2018
+Gharnef: Dark Pontifax\GHB\23/11/2018, 02/12/2018
+The Sworn Oath\Forging Bonds\28/11/2018, 11/12/2018
+Hrid: Icy Blade\LHB\28/11/2018, 04/12/2018
 Ryoma: Supreme Samurai\LHB\28/11/2018, 04/12/2018
 Lucina: Glorious Archer\LHB\28/11/2018, 04/12/2018
 Robin: Fell Vessel\LHB\28/11/2018, 04/12/2018
