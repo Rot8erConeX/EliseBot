@@ -167,7 +167,7 @@ Battling Lloyd\3\Hinoka(Launch), Klein, Ninian, Raven\5\19/05/2017, 26/05/2017\G
 Rite of Shadows\3\Boey, Celica, Genny, Mae\5\15/05/2017, 30/05/2017
 Male Mages\3\Henry, Leo, Merric, Robin(M)\5\08/05/2017, 18/05/2017\VotingGauntlet
 Female Mages\3\Julia, Linde, Sanaki, Tharja\5\08/05/2017, 18/05/2017\VotingGauntlet
-Battling Xander\3\Arthur, Chrom(Launch), Cordelia, Linde\5\02/05/2017, 08/05/2017\GHB
+Battling Xander\3\Arthur(Fates), Chrom(Launch), Cordelia, Linde\5\02/05/2017, 08/05/2017\GHB
 Hero Fest I\5\Azura, Hector, Ryoma, Takumi\5\28/04/2017, 08/05/2017\HeroFest
 World of Radiance\3\Ike, Mist, Soren, Titania\5\26/04/2017, 15/05/2017
 Battling Zephiel\3\Frederick, Hana, Nowi, Reinhardt(Bonds)\5\20/04/2017, 24/04/2017\GHB
@@ -176,7 +176,7 @@ Battling Navarre\3\Caeda, Effie, Kagero, Sophia\5\04/04/2017, 09/04/2017\GHB
 Pegasus Knights\3\Cordelia, Hinoka(Launch), Subaki, Palla\5\03/04/2017, 11/04/2017\VotingGauntlet
 Wyvern Riders\3\Beruka, Camilla(Launch), Cherche, Minerva\5\03/04/2017, 11/04/2017\VotingGauntlet
 Spring Festival\3\Camilla(Spring), Chrom(Spring), Lucina(Spring), Xander(Spring)\5\30/03/2017, 14/04/2017\Seasonal, Spring
-Battling Michalis\3\Eliwood, Gordin, Minerva, Selena\5\24/03/2017, 28/03/2017\GHB
+Battling Michalis\3\Eliwood, Gordin, Minerva, Selena(Fates)\5\24/03/2017, 28/03/2017\GHB
 Blazing Shadows\3\Jaffar, Karel, Lucius, Ninian, Priscilla, Rebecca\5\14/03/2017, 30/03/2017
 Battling Ursula\3\Effie, Felicia, Nino(Launch), Setsuna\5\10/03/2017, 14/03/2017\GHB
 Princes\3\Chrom(Launch), Ephraim, Leo\5\07/03/2017, 12/03/2017\VotingGauntlet
