@@ -2008,13 +2008,13 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
           args[i]="-#{cornatures[j][0]}"
         end
       end
-      if args[i].gsub('(','').gsub(')','').downcase=='s'
+      if ['s','ssupport','supports','support'].include?(args[i].gsub('(','').gsub(')','').gsub('-','').gsub('_','').downcase)
         summoner='S' if summoner.nil?
-      elsif args[i].gsub('(','').gsub(')','').downcase=='a'
+      elsif ['a','asupport','supporta'].include?(args[i].gsub('(','').gsub(')','').gsub('-','').gsub('_','').downcase)
         summoner='A' if summoner.nil?
-      elsif args[i].gsub('(','').gsub(')','').downcase=='b'
+      elsif ['b','bsupport','supportb'].include?(args[i].gsub('(','').gsub(')','').gsub('-','').gsub('_','').downcase)
         summoner='B' if summoner.nil?
-      elsif args[i].gsub('(','').gsub(')','').downcase=='c'
+      elsif ['c','csupport','supportc'].include?(args[i].gsub('(','').gsub(')','').gsub('-','').gsub('_','').downcase)
         summoner='C' if summoner.nil?
       end
       if args[i][0,1]=='+'
@@ -2674,7 +2674,7 @@ def unit_color(event,j,name=nil,mode=0,m=false,chain=false) # used to choose the
     xcolor=0x97FF99 if jj[2][0]=='Wind'
     xcolor=0xFFAF7E if jj[2][0]=='Earth'
     xcolor=0xFDF39D if jj[2][0]=='Light'
-    xcolor=0xC99BFE if jj[2][0]=='Dark'
+    xcolor=0xBE83FE if jj[2][0]=='Dark'
   end
   # Special colors
   xcolor=0x00DAFA if m && find_in_dev_units(jj[0])>0
@@ -8740,7 +8740,7 @@ def sort_legendaries(event,bot,mode=0)
     c.push([152,255,153]) if k[i][2][0]=='Wind'
     c.push([255,175,126]) if k[i][2][0]=='Earth'
     c.push([253,243,157]) if k[i][2][0]=='Light'
-    c.push([201,105,254]) if k[i][2][0]=='Dark'
+    c.push([190,131,254]) if k[i][2][0]=='Dark'
     k[i][2][2]=k[i][2][2].split('/').map{|q| q.to_i}.reverse
     k[i][1][1]=1 if k[i][1][0]=='Red'
     k[i][1][1]=2 if k[i][1][0]=='Blue'
@@ -12413,7 +12413,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
     c.push([152,255,153]) if l[i][2][0]=='Wind'
     c.push([255,175,126]) if l[i][2][0]=='Earth'
     c.push([253,243,157]) if l[i][2][0]=='Light'
-    c.push([201,105,254]) if l[i][2][0]=='Dark'
+    c.push([190,131,254]) if l[i][2][0]=='Dark'
   end
   l.uniq!
   x=[]
