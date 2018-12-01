@@ -6700,15 +6700,15 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     return -1
   elsif mode==3
     return matches5
-  elsif matches5.length.zero?
+  elsif matches5.length.zero? && mode != 13
     event.respond 'There were no units that matched your request.' unless paired
     return -2
-  elsif matches5.map{|k| k[0]}.join("\n").length>=1900 && !safe_to_spam?(event) && !ignore_limit
+  elsif matches5.map{|k| k[0]}.join("\n").length>=1900 && !safe_to_spam?(event) && !ignore_limit && mode != 13
     event.respond 'There were so many unit matches that I would prefer you use the command in PM.' unless paired
     return -2
   elsif mode==2
     return matches5
-  elsif mode==1
+  elsif mode==1 || mode==13
     f=matches5.map{|k| k[0]}
     m=[]
     m.push("*Weapon colors:* #{colors2.join(', ')}") if colors2.length>0
@@ -6726,7 +6726,8 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     m.push("*Genders:* #{genders.map{|q| "#{q}#{'ale' if q=='M'}#{'emale' if q=='F'}"}.join(', ')}") if genders.length>0
     m.push("*Games:* #{games.join(', ')}") if games.length>0
     m.push("*Groups:* #{group.map{|q| q[0]}.join(', ')}") if group.length>0
-    m.push("*Supernatures:* #{supernatures.map{|q| q[0]}.join(', ')}") if supernatures.length>0
+    m.push("*Supernatures:* #{supernatures.map{|q| "#{q[1,q.length-1]} #{q[0].gsub('+','boon').gsub('-','bane')}"}.join(', ')}") if supernatures.length>0
+    return [m,matches5] if mode==13
     return [m,f]
   end
   return 1
@@ -7039,37 +7040,33 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   g=get_markers(event)
   matches4=matches4.reject{|q| !has_any?(g, q[13])}
   data_load()
+  m=[]
+  m.push("*Skill types:* #{skill_types.join(', ')}") if skill_types.reject{|q| q=='Weapon'}.length>0
+  m.push("*Weapon colors:* #{colors2.join(', ')}") if colors2.length>0
+  m.push("*Weapon types:* #{weapons.map{|q| q.gsub('Healer','Staff')}.join(', ')}") if weapons.length>0
+  for i in 0...color_weapons.length
+    color_weapons[i]=color_weapons[i].join(' ').gsub('Healer','Staff')
+    color_weapons[i]='Sword (Red Blade)' if color_weapons[i]=='Red Blade'
+    color_weapons[i]='Lance (Blue Blade)' if color_weapons[i]=='Blue Blade'
+    color_weapons[i]='Axe (Green Blade)' if color_weapons[i]=='Green Blade'
+    color_weapons[i]='Rod (Colorless Blade)' if color_weapons[i]=='Colorless Blade'
+  end
+  m.push("*Complete weapons:* #{color_weapons.join(', ')}") if color_weapons.length>0
+  m.push("*Weapon subtypes:* #{weapon_subsets.join(', ')}") if weapon_subsets.length>0
+  m.push("*Assist subtypes:* #{assists.join(', ')}") if assists.length>0
+  m.push("*Special subtypes:* #{specials.join(', ')}") if specials.length>0
+  m.push("*Passive subtypes:* #{passive_subsets.join(', ')}") if passive_subsets.length>0
   if matches4.length>=microskills.length && !(args.nil? || args.length.zero?) && !safe_to_spam?(event)
     event.respond 'Your request is gibberish.' if ['skill','skills'].include?(args[0].downcase)
     return -1
   elsif matches4.length.zero?
     event.respond 'There were no skills that matched your request.' unless paired
     return -2
-  elsif matches4.map{|k| k[0]}.join("\n").length>=1900 && !safe_to_spam?(event)
-    event.respond '\* \* \*' if !brk.is_a?(Array)
-    event.respond 'There were so many skill matches that I would prefer you use the command in PM.' unless paired
-    return -2
   elsif mode==1
     f=matches4.map{|k| k[0].gsub('Bladeblade','Laevatein')}
-    m=[]
-    m.push("*Skill types:* #{skill_types.join(', ')}") if skill_types.reject{|q| q=='Weapon'}.length>0
-    m.push("*Weapon colors:* #{colors2.join(', ')}") if colors2.length>0
-    m.push("*Weapon types:* #{weapons.map{|q| q.gsub('Healer','Staff')}.join(', ')}") if weapons.length>0
-    for i in 0...color_weapons.length
-      color_weapons[i]=color_weapons[i].join(' ').gsub('Healer','Staff')
-      color_weapons[i]='Sword (Red Blade)' if color_weapons[i]=='Red Blade'
-      color_weapons[i]='Lance (Blue Blade)' if color_weapons[i]=='Blue Blade'
-      color_weapons[i]='Axe (Green Blade)' if color_weapons[i]=='Green Blade'
-      color_weapons[i]='Rod (Colorless Blade)' if color_weapons[i]=='Colorless Blade'
-    end
-    m.push("*Complete weapons:* #{color_weapons.join(', ')}") if color_weapons.length>0
-    m.push("*Weapon subtypes:* #{weapon_subsets.join(', ')}") if weapon_subsets.length>0
-    m.push("*Assist subtypes:* #{assists.join(', ')}") if assists.length>0
-    m.push("*Special subtypes:* #{specials.join(', ')}") if specials.length>0
-    m.push("*Passive subtypes:* #{passive_subsets.join(', ')}") if passive_subsets.length>0
     return [m,f]
   elsif mode==2
-    return matches4
+    return [m,matches4]
   end
   return 1
 end
@@ -7481,7 +7478,11 @@ def sort_units(bot,event,args=[])
     f.push(4) unless f.include?(4)
     f.push(5) unless f.include?(5)
   end
-  k2=find_in_units(event,3,false,true) # Narrow the list of units down based on the defined parameters
+  k2=find_in_units(event,13,false,true) # Narrow the list of units down based on the defined parameters
+  if k2.is_a?(Array)
+    mk=k2[0]
+    k2=k2[1]
+  end
   event.channel.send_temporary_message('Units found, sorting now...',3)
   g=get_markers(event)
   u=@units.map{|q| q}
@@ -7495,10 +7496,6 @@ def sort_units(bot,event,args=[])
     elsif args[i].downcase[0,6]=='bottom' && b.zero?
       b=[args[i][6,args[i].length-6].to_i,k.length].min
     end
-  end
-  if k.length>=u.reject{|q| !has_any?(g, q[13][0])}.length && !safe_to_spam?(event) && t==0 && b==0
-    event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
-    return nil
   end
   for i in 0...k.length # remove any units who don't have known stats yet
     k[i]=nil if k[i][5].nil? || k[i][5].max<=0
@@ -7516,7 +7513,7 @@ def sort_units(bot,event,args=[])
   end
   k=k.reject{|q| !q[13][0].nil?} if t>0 || b>0
   k.sort! {|b,a| (supersort(a,b,5,f[0]-1)) == 0 ? ((supersort(a,b,5,f[1]-1)) == 0 ? ((supersort(a,b,5,f[2]-1)) == 0 ? ((supersort(a,b,5,f[3]-1)) == 0 ? ((supersort(a,b,5,f[4]-1)) == 0 ? ((supersort(a,b,5,f[5]-1)) == 0 ? ((supersort(a,b,5,f[6]-1)) == 0 ? ((supersort(a,b,5,f[7]-1)) == 0 ? (((supersort(a,b,5,f[8]-1)) == 0 ? (supersort(a,b,0)) : (supersort(a,b,5,f[8]-1)))) : (supersort(a,b,5,f[7]-1))) : (supersort(a,b,5,f[6]-1))) : (supersort(a,b,5,f[5]-1))) : (supersort(a,b,5,f[4]-1))) : (supersort(a,b,5,f[3]-1))) : (supersort(a,b,5,f[2]-1))) : (supersort(a,b,5,f[1]-1))) : (supersort(a,b,5,f[0]-1))}
-  m="Please note that the stats listed are for neutral-nature units without stat-affecting skills.\n"
+  m="#{"__**Search**__\n#{mk.join("\n")}\n\n__**Additional Notes**__\n" if mk.length>0}Please note that the stats listed are for neutral-nature units without stat-affecting skills.\n"
   if f.include?(2)
     m="#{m}The Strength/Magic stat also does not account for weapon might.\n"
   end
@@ -7528,9 +7525,7 @@ def sort_units(bot,event,args=[])
   end
   if safe_to_spam?(event)
   elsif k2==-1 && display[0].zero? && display[1]==k.length
-    event.respond "Sorry, but you must specify filters.  I will not sort the entire roster as that would be spam.\nInstead, have the stats of the character whose name in Japanese means \"sort\"."
-    disp_stats(bot,'Stahl',nil,event,true)
-    return false
+    m="#{m}The Strength/Magic stat also does not account for weapon might.\n"
   elsif !k2.is_a?(Array) && display[0].zero? && display[1]==k.length
     return false
   end
@@ -7580,8 +7575,8 @@ def sort_units(bot,event,args=[])
     m="#{m}\nThe order of units listed here can be affected by natures#{" that affect a unit's Defense and/or Resistance" unless f.include?(9)}.\n"
   end
   if "#{m}\n#{m2.join("\n")}".length>2000 && !safe_to_spam?(event)
-    event.respond "Too much data is trying to be displayed.  Please use this command in PM.\n\nHere is what you typed: ```#{event.message.text}```\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`"
-    return nil
+    m="#{m}\nToo much data is trying to be displayed.  Showing top ten results.\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`\n"
+    m2=m2[0,10]
   end
   for i in 0...m2.length
     m=extend_message(m,m2[i],event)
@@ -7595,6 +7590,10 @@ def sort_skills(bot,event,args=[])
   event.channel.send_temporary_message('Calculating data, please wait...',5)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   k=find_in_skills(event, 2, false)
+  if k.is_a?(Array)
+    mk=k[0]
+    k=k[1]
+  end
   if k.is_a?(Array)
     k=k.reject{|q| q[0][0,14]=='Initiate Seal ' || q[0][0,10]=='Squad Ace '}
     for i in 0...k.length
@@ -7611,7 +7610,7 @@ def sort_skills(bot,event,args=[])
       end
     end
     k.sort! {|b,a| ((a[1] <=> b[1]) == 0 ? ((a[15] <=> b[15]) == 0 ? (b[0] <=> a[0]) : (a[15] <=> b[15])) : (a[1] <=> b[1]))}
-    str="All SP costs are without accounting for increased inheritance costs (1.5x the SP costs listed below)"
+    str="#{"__**Search**__\n#{mk.join("\n")}\n\n__**Additional Notes**__\n" if mk.length>0}All SP costs are without accounting for increased inheritance costs (1.5x the SP costs listed below)"
     for i in 0...k.length
       k[i][0]="**#{k[i][0]}** "
       if k[i][4]=='Weapon'
@@ -7655,8 +7654,8 @@ def sort_skills(bot,event,args=[])
       k[i][0]="#{k[i][0]} - Prf to #{k[i][6]}" unless k[i][6]=='-' || k[i][6].split(', ').length.zero?
     end
     if k.map{|q| q[0]}.join("\n").length+str.length>1950 && !safe_to_spam?(event)
-      event.respond "There are too many skills to list.  Please try this command in PM."
-      return nil
+      str="#{str}\n\nThere are too many skills to list.  Please try this command in PM.\nShowing top ten results."
+      k=k[0,10]
     end
     for i in 0...k.length
       str=extend_message(str,"#{"\n" if i==0}#{k[i][0]}",event)
