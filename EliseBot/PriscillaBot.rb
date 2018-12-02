@@ -1841,6 +1841,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='BraveHeroes' if ['braveheroes','brave','cyl'].include?(name.downcase)
   name='FallenHeroes' if ['fallenheroes','fallen','dark','evil','alter'].include?(name.downcase)
   name='Winter' if ['winter','holiday'].include?(name.downcase)
+  name='WorseThanLiki' if ['worsethanliki','liki'].include?(name.downcase)
   name='Bunnies' if ['bunnies','bunny','spring'].include?(name.downcase)
   name="Valentine's" if ['valentines',"valentine's"].include?(name.downcase)
   name="NewYear's" if ['newyears',"newyear's",'newyear'].include?(name.downcase)
@@ -1860,6 +1861,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='BraveHeroes' if ['braveheroes','brave','cyl'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='FallenHeroes' if ['fallenheroes','fallen','dark','evil','alter'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Winter' if ['winter','holiday'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='WorseThanLiki' if ['worsethanliki','wtl'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Bunnies' if ['bunnies','bunny','spring'].map{|q| q[0,name.length]}.include?(name.downcase)
   name="Valentine's" if ['valentines',"valentine's"].map{|q| q[0,name.length]}.include?(name.downcase)
   name="NewYear's" if ['newyears',"newyear's",'newyear'].map{|q| q[0,name.length]}.include?(name.downcase)
@@ -5924,6 +5926,13 @@ def get_group(name,event)
   elsif ['winter','holiday'].include?(name.downcase)
     l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Winter)')}
     return ['Winter',l.map{|q| q[0]}]
+  elsif ['worsethanliki','wtl'].include?(name.downcase)
+    liki=untz[untz.find_index{|q| q[0]=='Tiki(Young)(Earth)'}]
+    l=untz.reject{|q| q[0]=='Tiki(Young)(Earth)' || q[1][0]=='Purple' || !has_any?(g, q[13][0])}
+    for i in 0...liki[5].length
+      l=l.reject{|q| q[5][i]>liki[5][i]}
+    end
+    return ['WorseThanLiki',l.map{|q| q[0]}]
   elsif ['seasonal','seasonals'].include?(name.downcase)
     l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0])}
     return ['Seasonals',l.map{|q| q[0]}]
@@ -14247,7 +14256,9 @@ bot.command([:seegroups,:checkgroups,:groups]) do |event|
       display=true if event.user.id==167657750971547648
       display=true if !event.server.nil? && !bot.user(167657750971547648).on(event.server.id).nil? && rand(100).zero?
       if display
-        if @groups[i][1].length<=0
+        if get_group(@groups[i][0],event)[1].length>50
+          msg=extend_message(msg,"**#{@groups[i][0]}** (#{get_group(@groups[i][0],event)[1].length} members)",event,2) if event.user.id==167657750971547648 || @groups[i][0].downcase != "mathoo'swaifus"
+        elsif @groups[i][1].length<=0
           msg=extend_message(msg,"**#{@groups[i][0]}**\n#{get_group(@groups[i][0],event)[1].map{|q| q.gsub('Lavatain','Laevatein')}.sort.join(', ')}",event,2) if event.user.id==167657750971547648 || @groups[i][0].downcase != "mathoo'swaifus"
         else
           msg=extend_message(msg,"**#{@groups[i][0]}**\n#{@groups[i][1].map{|q| q.gsub('Lavatain','Laevatein')}.sort.join(', ')}",event,2)
@@ -16845,6 +16856,7 @@ bot.command(:snagstats) do |event, f, f2|
     event << "*Seasonals* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Seasonals'}][1].length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost."
     event << "    The following subsets of the Seasonals group are also dynamic: *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Spring* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})"
     event << "*Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can be obtained via a Tempest Trials event."
+    event << "*Worse Than Liki* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='WorseThanLiki'}][1].length)} current members) - Any unit with every stat equal to or less than the same stat on Tiki(Young)(Earth), excluding Tiki(Young)(Earth) herself."
     display=false
     display=true if event.user.id==167657750971547648
     display=true if !event.server.nil? && !bot.user(167657750971547648).on(event.server.id).nil? && rand(100).zero?
