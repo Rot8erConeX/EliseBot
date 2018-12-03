@@ -149,7 +149,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'stat_and_skils','statsskil','statskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil','sortskil','skilsort',
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
-     'aether','bonus_raids','structure','struct'].uniq
+     'aether','bonus_raids','structure','struct','tool','link','resources','resources'].uniq
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -608,7 +608,7 @@ bot.command([:help,:commands,:command_list,:commandlist,:Help]) do |event, comma
     create_embed(event,"**#{command.downcase}**",'Responds with information regarding potential donations to my developer.',0xD49F61)
   elsif ['headpat'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**",'Causes the invoker to try to headpat me.',0xD49F61)
-  elsif ['tools','links'].include?(command.downcase)
+  elsif ['tools','links','tool','link','resources','resources'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**",'Responds with a list of links useful to players of *Fire Emblem Heroes*.',0xD49F61)
   elsif ['alts','alt'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Responds with a list of alts that the character has in *Fire Emblem Heroes*.',0xD49F61)
@@ -6449,6 +6449,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   genders=[]
   games=[]
   supernatures=[]
+  statlimits=[[-100,100],[-100,100],[-100,100],[-100,100],[-100,100]]
   lookout=[]
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
     lookout=[]
@@ -6495,6 +6496,45 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     supernatures.push('-Spd') if ['spdbane','speedbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     supernatures.push('-Def') if ['defbane','defensebane','defencebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     supernatures.push('-Res') if ['resbane','resistancebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    if ['>','<','='].include?(args[i][0,1]) || ['>','<','='].include?(args[i][args[i].length-1,1])
+    elsif args[i].include?('>=') || args[i].include?('<=') || args[i].include?('>') || args[i].include?('<')
+      spl=[]
+      if args[i].include?('>=')
+        spl=args[i].downcase.split('>=')
+        spl.push('>=')
+      elsif args[i].include?('<=')
+        spl=args[i].downcase.split('<=')
+        spl.push('<=')
+      elsif args[i].include?('>')
+        spl=args[i].downcase.split('>')
+        spl.push('>')
+      elsif args[i].include?('<')
+        spl=args[i].downcase.split('<')
+        spl.push('<')
+      end
+      spl[1]=spl[1].to_i
+      if spl[1]==0 && args[i][args[i].length-1,1]!='0'
+      elsif spl[2]=='>='
+        spl[1]-=1
+        spl[2]='>'
+      elsif spl[2]=='<='
+        spl[1]+=1
+        spl[2]='<'
+      end
+      v=-1
+      v=0 if ['hp','health'].include?(spl[0].downcase)
+      v=1 if ['str','strength','strong','mag','magic','atk','att','attack'].include?(spl[0].downcase)
+      v=2 if ['spd','speed'].include?(spl[0].downcase)
+      v=3 if ['def','defense','defence','defensive','defencive'].include?(spl[0].downcase)
+      v=4 if ['res','resistance'].include?(spl[0].downcase)
+      if spl[1]==0 && args[i][args[i].length-1,1]!='0'
+      elsif v<0
+      elsif spl[2]=='>'
+        statlimits[v][0]=spl[1] unless statlimits[v][0]>spl[1]
+      elsif spl[2]=='<'
+        statlimits[v][1]=spl[1] unless statlimits[v][1]<spl[1]
+      end
+    end
     group.push(@groups[find_group(args[i].downcase,event)]) if find_group(args[i].downcase,event)>=0 && args[i].length>=3
   end
   colors=colors.uniq
@@ -6513,6 +6553,25 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   for i in 0...matches0.length
     matches0[i][0]=matches0[i][0].gsub('Lavatain','Laevatein')
   end
+  stt=['HP','Atk','Spd','Def','Res']
+  for i in 0...statlimits.length
+    matches0=matches0.reject{|q| q[5][i]<=statlimits[i][0] || q[5][i]>=statlimits[i][1]}
+    if statlimits[i][0]>statlimits[i][1]
+      tmp=statlimits[i][0]*1
+      statlimits[i][0]=statlimits[i][1]*1
+      statlimits[i][1]=tmp*1
+    end
+    if statlimits[i][0]>-100 && statlimits[i][1]<100
+      statlimits[i]="#{stt[i]} between #{statlimits[i][0]} and #{statlimits[i][1]}"
+    elsif statlimits[i][0]>-100
+      statlimits[i]="#{stt[i]} above #{statlimits[i][0]}"
+    elsif statlimits[i][1]<100
+      statlimits[i]="#{stt[i]} below #{statlimits[i][1]}"
+    else
+      statlimits[i]=nil
+    end
+  end
+  statlimits.compact!
   if supernatures.length.zero? && colors.length.zero? && weapons.length.zero? && color_weapons.length.zero? && movement.length.zero? && genders.length.zero? && games.length.zero? && group.length.zero? && clzz.length.zero?
     return matches0.map{|q| q}.uniq if mode==3
     matches5=matches0.map{|q| q}.sort {|a,b| a[0].downcase <=> b[0].downcase}.uniq
@@ -6735,6 +6794,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     m.push("*Genders:* #{genders.map{|q| "#{q}#{'ale' if q=='M'}#{'emale' if q=='F'}"}.join(', ')}") if genders.length>0
     m.push("*Games:* #{games.join(', ')}") if games.length>0
     m.push("*Groups:* #{group.map{|q| q[0]}.join(', ')}") if group.length>0
+    m.push("*Stats:* #{statlimits.join(', ')}") if statlimits.length>0
     m.push("*Supernatures:* #{supernatures.map{|q| "#{q[1,q.length-1]} #{q[0].gsub('+','boon').gsub('-','bane')}"}.join(', ')}") if supernatures.length>0
     return [m,matches5] if mode==13
     return [m,f]
@@ -7480,17 +7540,36 @@ def sort_units(bot,event,args=[])
   if supernatures.include?('+Res') || supernatures.include?('-Res')
     f.push(5) unless f.include?(5)
   end
+  k2=find_in_units(event,13,false,true) # Narrow the list of units down based on the defined parameters
+  if k2.is_a?(Array)
+    mk=k2[0]
+    k2=k2[1]
+  end
+  v=mk.find_index{|q| q[0,8]=='*Stats:*'}
+  unless v.nil?
+    v=mk[v]
+    if v.include?('HP')
+      f.push(1) unless f.include?(1)
+    end
+    if v.include?('Atk')
+      f.push(2) unless f.include?(2)
+    end
+    if v.include?('Spd')
+      f.push(3) unless f.include?(3)
+    end
+    if v.include?('Def')
+      f.push(4) unless f.include?(4)
+    end
+    if v.include?('Res')
+      f.push(5) unless f.include?(5)
+    end
+  end
   if args.map{|q| q.downcase}.include?('stats')
     f.push(1) unless f.include?(1)
     f.push(2) unless f.include?(2)
     f.push(3) unless f.include?(3)
     f.push(4) unless f.include?(4)
     f.push(5) unless f.include?(5)
-  end
-  k2=find_in_units(event,13,false,true) # Narrow the list of units down based on the defined parameters
-  if k2.is_a?(Array)
-    mk=k2[0]
-    k2=k2[1]
   end
   event.channel.send_temporary_message('Units found, sorting now...',3)
   g=get_markers(event)
@@ -14913,7 +14992,7 @@ bot.command([:bugreport, :suggestion, :feedback]) do |event, *args|
   bug_report(bot,event,args,4,["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant"],'Shard',@prefix)
 end
 
-bot.command([:tools,:links]) do |event|
+bot.command([:tools,:links,:tool,:link,:resources,:resources]) do |event|
   return nil if overlap_prevent(event)
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
     event << '**Useful tools for players of** ***Fire Emblem Heroes***'
