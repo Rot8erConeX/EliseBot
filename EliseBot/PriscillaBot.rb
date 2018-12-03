@@ -7545,6 +7545,7 @@ def sort_units(bot,event,args=[])
     mk=k2[0]
     k2=k2[1]
   end
+  mk.push("*Sorted by:* #{f[0,10].uniq.map{|q| ['Name','HP','Atk','Spd','Def','Res','BST','FrzProtect','Photon Points',nil][q]}.compact.join(', ')}")
   v=mk.find_index{|q| q[0,8]=='*Stats:*'}
   unless v.nil?
     v=mk[v]
@@ -7663,7 +7664,7 @@ def sort_units(bot,event,args=[])
     m="#{m}\nThe order of units listed here can be affected by natures#{" that affect a unit's Defense and/or Resistance" unless f.include?(9)}.\n"
   end
   if "#{m}\n#{m2.join("\n")}".length>2000 && !safe_to_spam?(event)
-    m="#{m}\nToo much data is trying to be displayed.  Showing top ten results.\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`\n"
+    m="#{m}\nToo much data is trying to be displayed.  Showing top ten results.\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`\nAlternatively, you can narrow by specific stats with words like `#{['HP','Atk','Spd','Def','Res'].sample}#{['>','<'].sample}#{rand(20)+15}`\n"
     m2=m2[0,10]
   end
   for i in 0...m2.length
