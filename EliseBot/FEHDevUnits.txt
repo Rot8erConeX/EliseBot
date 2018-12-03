@@ -1,5 +1,5 @@
 Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
-Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)
+Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
@@ -55,7 +55,7 @@ Flashing Blade 3
 Celica(Fallen)
 5\0\HP\Speed\-
 Iron Sword\Steel Sword\Silver Sword\Beloved Zofia
-Rally Resistance
+Rally Attack\Rally Up Atk\Rally Up Atk+
 New Moon\Luna
 Death Blow 1\Death Blow 2\Death Blow 3
 Chill Spd 1\Chill Spd 2\Chill Spd 3
@@ -301,4 +301,14 @@ Fierce Stance 1\Fierce Stance 2\Fierce Breath
 Bold Fighter 1\Bold Fighter 2\Bold Fighter 3
 With Everyone!
 Armored Boots
+
+Ylgr
+5\0\Defense\Resistance\-
+Iron Dagger\Steel Dagger\Silver Dagger\Sylgr
+~~Rally Defense~~
+Night Sky\Glimmer
+Sorcery Blade 1\Sorcery Blade 2\Sorcery Blade 3
+Chill Spd 1\Chill Spd 2\Chill Spd 3
+Spd Tactic 1\Spd Tactic 2\~~Spd Tactic 3~~
+Atk/Def Bond 2
 

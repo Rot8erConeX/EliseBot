@@ -38,5 +38,6 @@
 ["Wedding", []]
 ["Whitewings", ["Palla", "Catria", "Est", "Narcian"]]
 ["Winter", []]
+["WorseThanLiki", []]
 ["Xanaver", ["Arvis", "Saias"], [295686580528742420]]
 ["Xandy", ["Xander", "Xander(Summer)", "Xander(Spring)"], [358493636033511434]]

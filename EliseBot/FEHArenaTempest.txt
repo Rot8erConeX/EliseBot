@@ -3,9 +3,9 @@ Eirika(Graceful), Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto,
 Eirika(Graceful), Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Julius, Robin(F), Gwendolyn, Anna\Arena\27/11/2018, 03/12/2018\Water, Earth
 Eirika(Graceful), Corrin(M)(Adrift), Corrin(F)(Adrift), Camilla(Adrift), Mikoto, Azura(Adrift), Ursula, Michalis, Ike(Vanguard), Sharena\Aether\03/12/2018, 09/12/2018\Panic Room, Panic Room
 Hrid, Surtr, Laegjarn, Lavatain, Helbindi, Ylgr, Gharnef, Xander, Mist, Fjorm\Arena\04/12/2018, 10/12/2018\Water, Wind
-Hrid, Surtr, Laegjarn, Lavatain, Helbindi, Ylgr, Navarre, Zephiel, Ephraim(Fire), Anna\Aether\10/12/2018, 16/12/2018\Panic Room, Panic Room
+Hrid, Surtr, Laegjarn, Lavatain, Helbindi, Ylgr, Navarre, Zephiel, Ephraim(Fire), Anna\Aether\10/12/2018, 16/12/2018\Catapult, Catapult
 Hrid, Surtr, Laegjarn, Lavatain, Helbindi, Ylgr, Gharnef, Xander, Mist, Fjorm\Arena\11/12/2018, 17/12/2018\Water, Fire
-Hrid, Surtr, Laegjarn, Lavatain, Helbindi, Ylgr, Navarre, Zephiel, Ephraim(Fire), Anna\Aether\17/12/2018, 23/12/2018\Catapult, Catapult
+Hrid, Surtr, Laegjarn, Lavatain, Helbindi, Ylgr, Navarre, Zephiel, Ephraim(Fire), Anna\Aether\17/12/2018, 23/12/2018\Unknown, Unknown
 -\Arena\18/12/2018, 24/12/2018\Water, Earth
 -\Arena\25/12/2018, 31/12/2018\Wind, Water
 -\Arena\01/01/2019, 07/01/2019\Wind, Fire
