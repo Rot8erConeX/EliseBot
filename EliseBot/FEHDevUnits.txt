@@ -305,7 +305,7 @@ Armored Boots
 Ylgr
 5\0\Defense\Resistance\-
 Iron Dagger\Steel Dagger\Silver Dagger\Sylgr
-~~Rally Defense~~
+Rally Defense
 Night Sky\Glimmer
 Sorcery Blade 1\Sorcery Blade 2\Sorcery Blade 3
 Chill Spd 1\Chill Spd 2\Chill Spd 3

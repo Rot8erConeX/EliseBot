@@ -337,18 +337,18 @@ Matt(C137)\Colorless, Bow\ \Flier\5, 7, 10, 2, 6\32, 31, 39, 16, 27\\\\4p5p\M\\M
 Mex\Blue, Tome, Thunder\ \Infantry\9, 7, 12, 4, 4\42, 34, 39, 21, 21\\\\4p5p\M\\Mex\Y184841080242438144
 Micaiah(C137)\Green, Tome, Wind\ \Infantry\5, 6, 9, 5, 9\33, 28, 35, 22, 34\\\\5p\F\\Micaiah\YH166307944235794432
 Mint\Colorless, Bow\ \Flier\5, 8, 9, 6, 6\29, 35, 38, 24, 27\\\\5p\F\\Mint\Y282258540444254219
-Mintz\Blue, Tome, Light\ \Infantry\6, 6, 5, 5, 7\34, 30, 26, 28, 33\\\\3p4p\M\\Mintz\Y103926672939581440
+Mintz\Blue, Tome, Light\ \Infantry\6, 6, 5, 5, 7\34, 30, 26, 28, 33\\\\3p4p\MA\\Mintz\Y103926672939581440
 Minus\Red, Blade\ \Infantry\6, 8, 9, 4, 6\37, 35, 41, 21, 29\\\\5p\M\\Minus\Y193452332359352321
-M'joe'ra\Colorless, Healer\ \Infantry\11, 5, 0, 9, 4\49, 27, 12, 38, 24\\\\4p5p\M\\M'joe'ra\Y82897855479549952
+M'joe'ra\Colorless, Healer\ \Infantry\11, 5, 0, 9, 4\49, 27, 12, 38, 24\\\\4p5p\M\\M'joe'ra\YA82897855479549952
 Moony\Green, Blade\ \Cavalry\7, 9, 8, 4, 10\38, 37, 33, 21, 35\\\\5p\M\\Moony\Y240495532378816513
-Moosie\Blue, Blade\ \Infantry\10, 6, 4, 6, 7\45, 30, 22, 31, 34\\\\4p5p\M\\Moosie\Y270372601107447808
+Moosie\Blue, Blade\ \Infantry\10, 6, 4, 6, 7\45, 30, 22, 31, 34\\\\4p5p\M\\Moosie\YA270372601107447808
 Nebby\Blue, Tome, Light\ \Infantry\7, 7, 3, 11, 11\31, 27, 18, 36, 38\\\\3p4p\M\\Nebby\Y251497172003061762
 Nesspeon\Red, Tome, Dark\ \Infantry\5, 11, 10, 2, 8\33, 40, 37, 15, 33\\\\4p5p\M\\Nesspeon\Y152179484991291392
 Nixx(C137)\Colorless, Healer\ \Flier\6, 6, 10, 3, 9\34, 28, 35, 19, 37\\\\4p5p\F\\Nixx(C137)\Y302271226896711682
 Ooocast\Red, Blade\ \Infantry\9, 12, 12, 2, 2\38, 45, 46, 16, 18\\\\3p4p\M\\Ooocast\YA244073468981805056
 Oxorsid\Red, Blade\ \Infantry\7, 6, 9, 8, 7\35, 28, 36, 34, 30\\\\5p\M\\Oxorsid\Y298276809240477696
 Rin(Maid)\Colorless, Dagger\ \Infantry\5, 6, 8, 1, 8\30, 30, 37, 15, 35\\\\3p4p\F\\Rin(Maid)\Y390152501208285188
-Sage\Blue, Tome, Thunder\ \Infantry\6, 7, 6, 2, 8\40, 33, 29, 16, 34\\\\3p4p\M\\Sage\Y239973891626237952
+Sage\Blue, Tome, Thunder\ \Infantry\6, 7, 6, 2, 8\40, 33, 29, 16, 34\\\\3p4p\M\\Sage\YA239973891626237952
 Saku\Red, Blade\ \Infantry\5, 10, 6, 10, 2\37, 39, 28, 40, 18\\\\4p5p\M\\Saku\Y197414161435590667
 Shylock\Blue, Dagger\ \Infantry\4, 10, 10, 4, 1\27, 42, 42, 27, 11\\\\5p\M\\Shylock\Y198201016984797184
 Skittles\Red, Blade\ \Infantry\10, 12, 4, 9, 4\40, 47, 19, 39, 22\\\\5p\M\\Skittles\Y457427191714807808
@@ -360,7 +360,7 @@ Balder\Red, Blade\ \Armor\5, 12, 1, 12, 1\44, 49, 15, 48, 15\\\\4p5p\M\\Balder\B
 Meta\Blue, Dragon\ \Infantry\7, 6, 4, 8, 6\44, 30, 22, 35, 27\\\\5p\M\\Meta\B266883003425226752
 Bluezie\Green, Bow\Earth, Speed\Infantry\5, 7, 8, 6, 2\35, 33, 35, 30, 15\\\\5s\F\FE14g\Bluezie\GT256502173788143626
 Dizzy\Blue, Tome, Thunder\ \Cavalry\7, 8, 1, 8, 6\34, 35, 14, 34, 29\\\\3p4p\F\FE14g\Dizzy\G154429061693833218
-Draco(Gates)\Blue, Beast\ \Infantry\5, 9, 10, 7, 6\32, 37, 39, 28, 26\\\\3p4p\M\FE14g\Draco(Gates)\GT203335514470875137
+Draco(Gates)\Blue, Beast\ \Infantry\5, 9, 10, 7, 6\32, 37, 39, 28, 26\\\\3p4p\MA\FE14g\Draco(Gates)\GTA203335514470875137
 Dwight(Gates)\Colorless, Bow\ \Armor\7, 5, 4, 7, 7\45, 25, 22, 33, 33\\\\2g3g4g4g\M\FE14g\Dwight(Gates)\G
 Erich\Red, Tome, Dark\ \Cavalry\3, 8, 1, 8, 7\30, 35, 14, 33, 32\\\\3p4p\M\FE14g\Erich\G225724044241010688
 Gray(Gates)\Red, Blade\ \Infantry\7, 9, 7, 6, 2\46, 37, 31, 27, 17\\\\3p4p\M\FE14g\Gray(Gates)\G185540673968013313
@@ -370,4 +370,4 @@ Rudyard\Colorless, Dagger\ \Infantry\5, 6, 8, 3, 6\37, 29, 35, 19, 28\\\\3g4g4g4
 Sheldon(Gates)\Green, Blade\ \Flier\5, 8, 7, 5, 6\38, 34, 33, 24, 28\\\\4t5t\M\FE14g\Sheldon(Gates)\G284786055083720704
 Steel\Red, Blade\ \Cavalry\5, 8, 9, 4, 4\38, 34, 36, 23, 22\\\\4p5p\M\FE14g\Steel\G170070293493186561
 Elentil\Green, Blade\ \Flier\4, 8, 5, 6, 8\30, 35, 26, 31, 35\\\\4p5p\M\FE14g\Elentil\gt
-Oregano\Green, Beast\ \Infantry\5, 12, 12, 4, 4\31, 45, 44, 21, 21\BluechanXD (dA)\\\4p5p\F\FE14g\Oregano\gt
+Oregano\Green, Beast\ \Infantry\5, 12, 12, 4, 4\31, 45, 44, 21, 21\BluechanXD (dA)\\\4p5p\F\FE14g\Oregano\gta
