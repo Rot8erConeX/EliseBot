@@ -118,7 +118,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'deletegroup','commandlist','command_list','removegroup','removemember','removefromgroup','embeds','embed','natures','invite','sendpm','ignoreuser','gp',
      'leaveserver','snagstats','reboot','stats','today_in_feh','todayinfeh','devedit','dev_edit','summon','study','list','bst','effHP','effhp','eff_hp','bulk',
      'eff_HP','refine','refinery','average','mean','tools','compare','comparison','today','daily','fodder','status','growths','growth','gps','serveraliases',
-     'whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','studystat','studystats','higheststats','worstamong',
+     'whyelise','random','bestin','bestamong','bestatats','stat','merges','setmarker','backup','studystat','studystats','higheststats','worstamong','score',
      'worstin','worststats','loweststats','healstudy','studyheal','heal_study','study_heal','games','feedback','statstudy','dualalias','suggestion','statlist',
      'legendary','legendaries','patpat','pat','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','snagchannels','color',
      'removemulti','stats_and_skills','stat_and_skills','statsskill','statskill','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill',
@@ -14393,19 +14393,24 @@ end
 
 bot.command(:merges) do |event|
   return nil if overlap_prevent(event)
-  event << '__**How to predict what stats will increase by a merge**__'
-  event << "1.) Look at the original unit's level 1 stats at 5<:Icon_Rarity_5:448266417553539104>."
-  event << '- The stats must be at 5<:Icon_Rarity_5:448266417553539104> regardless of the rarity of the unit being merged.'
-  event << ''
-  event << '2.) Sort them by value, highest first and lowest last.'
-  event << '- in the case of two stats being equal, the stat listed higher in game goes first'
-  event << '- thus, if all five stats were equal, the order would be HP, Attack, Speed, Defense, Resistance...exactly as displayed in game.'
-  event << ''
-  event << '3.) The resulting list is the order in which stats increase, and each merge increases the next two stats on the list, which loops.'
-  event << ''
-  event << "4.) This does mean that the base unit's nature can affect the order in which stats increase."
-  event << "- For example, Sakura(Halloween)'s level 1 neutral stats are 16/8/8/4/8.  This means under normal circumstances, her stats increase in the following order: HP->Atk->Spd->Res->Def."
-  event << "- However, consider a +Res -Spd Sakura(Halloween); her level 1 stats are 16/8/7/4/9.  This changes the order stats increase to HP->Res->Atk->Spd->Def."
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseText'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
+  end
+  merge_explain(event,bot)
+end
+
+bot.command(:score) do |event|
+  return nil if overlap_prevent(event)
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseText'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
+  end
+  score_explain(event,bot)
 end
 
 bot.command(:invite) do |event, user|
