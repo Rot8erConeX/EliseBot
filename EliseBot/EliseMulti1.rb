@@ -580,3 +580,123 @@ def game_hybrid(u,event,bot)
   end
   return [pic,name,xcolor]
 end
+
+def list_unit_aliases(event,args,bot,mode=0)
+  event.channel.send_temporary_message('Calculating data, please wait...',2)
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  data_load()
+  nicknames_load()
+  unless args.length.zero?
+    unit=@units[find_unit(args.join(''),event)][0]
+    if !detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1).nil?
+      x=detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1)
+      unit=x[1]
+      unit=[unit] unless unit.is_a?(Array)
+      g=get_markers(event)
+      u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+      unit=unit.reject{|q| !u.include?(q)}
+    elsif find_unit(args.join(''),event)==-1
+      event.respond "#{args.join(' ')} is not a unit name or an alias."
+      return nil
+    end
+  end
+  unless unit.nil? || unit.is_a?(Array)
+    unit=nil if find_unit(unit,event)<0
+  end
+  f=[]
+  n=@aliases.map{|a| a}
+  m=@multi_aliases.map{|a| a}
+  h=''
+  if unit.nil?
+    if safe_to_spam?(event) || mode==1
+      n=n.reject{|q| q[2].nil?} if mode==1
+      unless event.server.nil?
+        n=n.reject{|q| !q[2].nil? && !q[2].include?(event.server.id)}
+        if n.length>25 && !safe_to_spam?(event)
+          event.respond "There are so many aliases that I don't want to spam the server.  Please use the command in PM."
+          return nil
+        end
+        msg=''
+        for i in 0...n.length
+          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
+        end
+        unless mode==1
+          msg=extend_message(msg,'**Multi-unit aliases**',event,2)
+          for i in 0...m.length
+            msg=extend_message(msg,"#{m[i][0]} = #{m[i][1].join(', ')}",event)
+          end
+        end
+        event.respond msg
+        return nil
+      end
+      for i in 0...n.length
+        if n[i][2].nil?
+          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+        elsif !event.server.nil? && n[i][2].include?(event.server.id)
+          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}#{" *(in this server only)*" unless mode==1}")
+        else
+          a=[]
+          for j in 0...n[i][2].length
+            srv=(bot.server(n[i][2][j]) rescue nil)
+            unless srv.nil? || bot.user(bot.profile.id).on(srv.id).nil?
+              a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
+            end
+          end
+          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+        end
+      end
+    else
+      event.respond 'Please either specify a unit name or use this command in PM.'
+      return nil
+    end
+  else
+    k=0
+    k=event.server.id unless event.server.nil?
+    unit=[unit] unless unit.is_a?(Array)
+    h=' that contain this unit'
+    h=' that contain both of these units' if unit.length>1
+    h=' that contain all of these units' if unit.length>2
+    for i1 in 0...unit.length
+      u=@units[find_unit(unit[i1],event)][0]
+      m=m.reject{|q| !q[1].include?(u)}
+      f.push("#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,u,false,4)}**#{"'s server-specific aliases__" if mode==1}")
+      f.push(u) if u=='Lavatain'
+      f.push(u.gsub('(','').gsub(')','')) if u.include?('(') || u.include?(')')
+      for i in 0...n.length
+        if n[i][1].downcase==u.downcase
+          if event.server.nil? && !n[i][2].nil?
+            a=[]
+            for j in 0...n[i][2].length
+              srv=(bot.server(n[i][2][j]) rescue nil)
+              unless srv.nil? || bot.user(bot.profile.id).on(srv.id).nil?
+                a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
+              end
+            end
+            f.push("#{n[i][0].gsub('_','\\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          elsif n[i][2].nil?
+            f.push(n[i][0].gsub('_','\\_')) unless mode==1
+          else
+            f.push("#{n[i][0].gsub('_','\\_')}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
+          end
+        end
+      end
+    end
+  end
+  if m.length>0 && mode != 1
+    f.push("\n**Multi-unit aliases#{h}**")
+    for i in 0...m.length
+      f.push("#{m[i][0]}#{" = #{m[i][1].join(', ')}" if unit.nil?}")
+    end
+  end
+  f.uniq!
+  if f.length>50 && !safe_to_spam?(event)
+    event.respond "There are so many aliases that I don't want to spam the server.  Please use the command in PM."
+    return nil
+  end
+  msg=''
+  for i in 0...f.length
+    msg=extend_message(msg,f[i],event)
+  end
+  event.respond msg
+  return nil
+end
