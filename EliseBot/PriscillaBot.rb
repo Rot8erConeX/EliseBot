@@ -952,31 +952,31 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
   untz=@units.map{|q| q}
   k=untz.find_index{|q| q[0].downcase==name.downcase}
   k=untz.find_index{|q| q[0].gsub('(','').gsub(')','').downcase==name.downcase} unless ignore2
-  return k unless k.nil?
+  return k unless k.nil? || !has_any?(g, untz[k][13][0])
   unless ignore2
     alz=@aliases.map{|q| q}
     k=alz.find_index{|q| q[0].downcase==name.downcase && (q[2].nil? || q[2].include?(k))}
-    return untz.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+    return untz.find_index{|q| q[0]==alz[k][1]} unless k.nil? || !has_any?(g, untz[untz.find_index{|q| q[0]==alz[k][1]}][13][0])
   end
   return -1 if ignore || ['blade','blad','bla'].include?(name.downcase)
   untz=@units.map{|q| q}
   k=untz.find_index{|q| q[0][0,name.length].downcase==name.downcase}
   k=untz.find_index{|q| q[0][0,name.length].gsub('(','').gsub(')','').downcase==name.downcase} unless ignore2
-  return k unless k.nil?
+  return k unless k.nil? || !has_any?(g, untz[k][13][0])
   unless ignore2
     alz=@aliases.map{|q| q}
     k=alz.find_index{|q| q[0][0,name.length].downcase==name.downcase && (q[2].nil? || q[2].include?(k))}
-    return untz.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+    return untz.find_index{|q| q[0]==alz[k][1]} unless k.nil? || !has_any?(g, untz[untz.find_index{|q| q[0]==alz[k][1]}][13][0])
   end
   unless ignore2 || !name.downcase.include?('launch')
     name=name.downcase.gsub('launch','') # if the name includes the word "launch", remove it from consideration
     untz=@units.map{|q| q}
     k=untz.find_index{|q| q[0].downcase==name.downcase}
     k=untz.find_index{|q| q[0].downcase==name.downcase && q[9][0].include?('LU')} unless ignore2
-    return k unless k.nil?
+    return k unless k.nil? || !has_any?(g, untz[k][13][0])
     alz=@aliases.reject{|q| q[1].include?('(') || !q[2].nil?}
     k=alz.find_index{|q| q[0][0,name.length].downcase==name.downcase}
-    return untz.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+    return untz.find_index{|q| q[0]==alz[k][1]} unless k.nil? || !has_any?(g, untz[k][13][0])
   end
   return -1
 end
