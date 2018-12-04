@@ -4552,7 +4552,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     for i in 0...lookout2.length
       effective.push(lookout2[i][3]) if skill[11].split(', ').include?(lookout2[i][0])
     end
-    str="#{str}\n**Effective against:** #{effective.join('')}" if effective.length>0
+    str="#{str}\n**Effective against:** #{effective.join('')}" if effective.length>0 && skill[0]!='Mana Cat'
     if skill[7].is_a?(Array)
       if skill[7][1].nil?
         str="#{str}\n**Debuff:**  \u00B7  *None*"
@@ -15054,7 +15054,8 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
   t2=t-t2
   date=(((t2.to_i/60)/60)/24)
   str="#{str}\nThe Arena season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete your daily Arena-related quests before then!" if date%7==4 && 15-t.hour>=0
-  str="#{str}\nThe Aether Raid season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete any Aether-related quests before then!" if date%7==3 && 15-t.hour>=0 && "#{t.day}#{t.month}#{t.year}".to_i==11112018
+  str="#{str}\nThe Aether Raid season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete any Aether-related quests before then!" if date%7==3 && 15-t.hour>=0
+  str="#{str}\nThe monthly quests end in #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete them before then!" if t.month != (t+24*60*60).month
   colors=['Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>',
           'Colorless <:Shard_Colorless:443733396921909248><:Crystal_Transparent:445510676295843870><:Badge_Transparent:445510675976945664><:Great_Badge_Transparent:443704781597573120>',
           'Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>',
@@ -15081,8 +15082,7 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
        'Narcian <:Green_Blade:467122927230386207><:Icon_Move_Flier:443331186698354698> / Zephiel <:Red_Blade:443172811830198282><:Icon_Move_Armor:443331186316673025>',
        'Navarre <:Red_Blade:443172811830198282><:Icon_Move_Infantry:443331187579289601> / Camus <:Blue_Blade:467112472768151562><:Icon_Move_Cavalry:443331186530451466>',
        'Robin(F) <:Green_Tome:467122927666593822><:Icon_Move_Infantry:443331187579289601> / Legion <:Green_Blade:467122927230386207><:Icon_Move_Infantry:443331187579289601>']
-  rd=['','',
-      'Cavalry <:Icon_Move_Cavalry:443331186530451466>',
+  rd=['Cavalry <:Icon_Move_Cavalry:443331186530451466>',
       'Flying <:Icon_Move_Flier:443331186698354698>',
       'Infantry <:Icon_Move_Infantry:443331187579289601>',
       'Armored <:Icon_Move_Armor:443331186316673025>']
@@ -15191,6 +15191,17 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
       str2="__**Current Tempest Trials+ Bonus Units**__\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}"
     end
     str=extend_message(str,str2,event,2)
+    b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      str2"There are no known quantities about Aether Raids."
+    else
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      m2=k.length%2
+      m="#{b[0][3][0]} (O), #{b[0][3][1]} (D)"
+      m="#{b[0][3][0]} (O/D)" if b[0][3][0]==b[0][3][1]
+      str2="__**Current Aether Raids Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m2].join(', ')}\n#{k[k.length/2+m2,k.length/2].join(', ')}\n*Current Bonus Structures:* #{m}"
+    end
+    str=extend_message(str,str2,event,2)
     str2='__**Tomorrow in** ***Fire Emblem Heroes***__'
     str2="#{str2}\nTraining Tower color: #{colors[(date+1)%colors.length]}"
     str2="#{str2}\nDaily Hero Battle: #{dhb[(date+1)%dhb.length]}"
@@ -15237,6 +15248,13 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
       str2="#{str2}\nTomorrow's Tempest Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}"
     end
+    b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][0].split('/').reverse.join('').to_i != tm}
+    unless b.length<=0
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      m="#{b[0][3][0]} (O), #{b[0][3][1]} (D)"
+      m="#{b[0][3][0]} (O/D)" if b[0][3][0]==b[0][3][1]
+      str2="#{str2}\nTomorrow's Aether Raids Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nTomorrow's Aether Raids Bonus Structures: #{m}"
+    end
     str=extend_message(str,str2,event,2)
   else
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
@@ -15247,22 +15265,34 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     bonus_load()
     b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
     if b.length<=0
-      str"#{str}\nThere are no known quantities about Arena."
+      str2="There are no known quantities about Arena."
     else
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
       element=b[0][3][0]
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
       element=b[0][3][1]
       moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
-      str="#{str}\nCurrent Arena Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nElemental season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+      str2="Current Arena Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nElemental season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
     end
+    str=extend_message(str,str2,event)
     b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
     if b.length<=0
-      str"#{str}\nThere are no Tempest Trials events going on."
+      str2="There are no Tempest Trials events going on."
     else
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
-      str="#{str}\nCurrent Tempest Trials+ Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}"
+      str2="Current Tempest Trials+ Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}"
     end
+    str=extend_message(str,str2,event)
+    b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      str2="There are no known quantities about Aether Raids."
+    else
+      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      m="#{b[0][3][0]} (O), #{b[0][3][1]} (D)"
+      m="#{b[0][3][0]} (O/D)" if b[0][3][0]==b[0][3][1]
+      str2="Current Aether Raids Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nCurrent Aether Raids Bonus Structures: #{m}"
+    end
+    str=extend_message(str,str2,event)
   end
   event.respond str
 end
@@ -15396,9 +15426,7 @@ bot.command([:next,:schedule]) do |event, type|
   msg=extend_message(msg,msg3,event,2) if [-1,5].include?(idx)
   msg=extend_message(msg,"Try the command again with \"GHB2\" if you're looking for the second set of Grand Hero Battles.\nYou may also want to try \"Events\" if you're looking for non-cyclical GHBs.",event,2) if [4].include?(idx)
   if [-1,6].include?(idx)
-    rd=['Relay Defense',
-        'Relay Defense',
-        'Cavalry <:Icon_Move_Cavalry:443331186530451466>',
+    rd=['Cavalry <:Icon_Move_Cavalry:443331186530451466>',
         'Flying <:Icon_Move_Flier:443331186698354698>',
         'Infantry <:Icon_Move_Infantry:443331187579289601>',
         'Armored <:Icon_Move_Armor:443331186316673025>']
