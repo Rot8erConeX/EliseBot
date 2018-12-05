@@ -2734,7 +2734,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   elsif !refinement.nil? && refinement.length>0
     wl="#{weapon} (+) #{refinement} Mode"
-  else
+  elsif name != 'Robin'
     wl=weapon
   end
   if find_unit(name,event)<0
@@ -3210,6 +3210,10 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
       sp+=@skills[@skills.find_index{|q| q[0]==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| q[0]==zzzzz}.nil?
     end
   elsif loaded
+    if name=='Robin' && (" #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned') || " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')) && !weapon.nil?
+      wwww=weapon.split(' / ').map{|q| q.split('(')[0]}.map{|q| @skills[@skills.find_index{|q2| q2[0]==q}][2]}
+      diff_num=[wwww[0]-wwww[1],'M','F']
+    end
   elsif " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
     if name=='Robin'
       uskl=unit_skills('Robin(M)',event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
@@ -3264,6 +3268,9 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
       wl=weapon_legality(event,'Robin(M)',weapon)
       wl2=weapon_legality(event,'Robin(F)',weapon2)
       wl="#{wl}(M) / #{wl2}(F)"
+      w2=@skills[find_skill(weapon,event)]
+      w22=@skills[find_skill(weapon2,event)]
+      diff_num=[w2[2]-w22[2],'M','F']
     else
       spec_wpn=true
       wl=weapon_legality(event,'Robin(M)',weapon)
@@ -3275,7 +3282,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
     wl=weapon_legality(event,unitz[0],weapon,refinement)
   elsif !refinement.nil? && refinement.length>0
     wl="#{weapon} (+) #{refinement} Mode"
-  else
+  elsif name != 'Robin'
     wl=weapon
   end
   if find_unit(name,event)<0
@@ -9250,7 +9257,6 @@ def parse_function(callback,event,args,bot,healers=nil)
   if k.nil?
     if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
-      puts x.to_s
       k2=get_weapon(first_sub(event.message.text,x[0],''),event)
       weapon='-'
       weapon=k2[0] unless k2.nil?
