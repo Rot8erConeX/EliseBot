@@ -2748,6 +2748,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     disp_unit_skills(bot,untz[j][0],event) if skillstoo || expandedmode
     return nil
   elsif !wl.include?('~~') && (stat_skills_2.length<=0 || unitz[0]=='Kiran') && !expandedmodex && !(args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth')) && !(event.server.nil? || event.server.id==238059616028590080) && event.channel.id != 362017071862775810
+    weapon=wl if name=='Robin'
     disp_tiny_stats(bot,name,weapon,event,ignore,skillstoo,true)
     return nil
   elsif unitz[0]=='Kiran'
@@ -3211,7 +3212,10 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
     end
   elsif loaded
     if name=='Robin' && (" #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned') || " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')) && !weapon.nil?
-      wwww=weapon.split(' / ').map{|q| q.split('(')[0]}.map{|q| @skills[@skills.find_index{|q2| q2[0]==q}][2]}
+      wwww=weapon.split(' / ').map{|q| q.split('(')[0]}
+      weapon=wwww[0]
+      weapon2=wwww[1]
+      wwww=wwww.map{|q| @skills[@skills.find_index{|q2| q2[0]==q}][2]}
       diff_num=[wwww[0]-wwww[1],'M','F']
     end
   elsif " #{event.message.text.downcase} ".include?(' summoned ') || args.map{|q| q.downcase}.include?('summoned')
