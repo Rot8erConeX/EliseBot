@@ -1023,69 +1023,30 @@ def find_skill(name,event,ignore=false,ignore2=false,m=false,mode=0) # one of tw
 end
 
 def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of two functions used to find a skill's data entry based on its name
-  k=0
-  k=event.server.id unless event.server.nil?
+  ks=0
+  ks=event.server.id unless event.server.nil?
   g=get_markers(event)
   return -1 if name.nil? || name.length<2
   name=normalize(name.gsub('!','').gsub('.','').gsub('?',''))
   if name.downcase.gsub(' ','').gsub('_','')[0,2]=='<:'
     name=name.split(':')[1] if x_find_skill(name.split(':')[1],event,sklz,ignore,ignore2)>=0
   end
-  # certain common skill aliases work
-  return find_skill('Yato',event) if ['yatogami','yatokami','yatonogami','yatonokami'].include?(name.downcase.gsub(' ',''))
-  return find_skill('Bladeblade',event) if name.downcase.gsub(' ','')=='laevatein'
-  return find_skill('Eckesachs',event) if ['exaccus','exesack','exsack','eggsacks'].include?(name.downcase.gsub(' ',''))
-  return find_skill('Uror',event) if name.downcase.gsub(' ','')=='urdr'
-  return find_skill('Hlidskjalf',event) if ['hlioskjalf',"roni'sstick",'ronisstick','staffkatz'].include?(name.downcase.gsub(' ',''))
-  return find_skill('Giga Excalibur',event) if name.downcase.gsub(' ','')=='gigascalibur'
-  return find_skill('Gae Bolg',event) if name.downcase.gsub(' ','')=='gayborg'
-  return find_skill('Recover Ring',event) if name.downcase.gsub(' ','')=='renewal4'
-  return find_skill('Loptous',event) if name.downcase.gsub(' ','')=='loptyr'
-  return find_skill('Thokk',event) if name.downcase.gsub(' ','')=='sekku'
-  return find_skill('Fort. Def/Res 3',event) if ['fortressdefenseresistance', 'fortressdefenceresistance', 'fortressdefresistance', 'fortressdefenseres', 'fortressdefenceres', 'fortressdefres', 'fortressresistancedefense', 'fortressresistancedefence', 'fortressresistancedef', 'fortressresdefense', 'fortressresdefence', 'fortressresdef', 'fortdefenseresistance', 'fortdefenceresistance', 'fortdefresistance', 'fortdefenseres', 'fortdefenceres', 'fortdefres', 'fortresistancedefense', 'fortresistancedefence', 'fortresistancedef', 'fortresdefense', 'fortresdefence', 'fortresdef', 'fortressdefenseresistance3', 'fortressdefenceresistance3', 'fortressdefresistance3', 'fortressdefenseres3', 'fortressdefenceres3', 'fortressdefres3', 'fortressresistancedefense3', 'fortressresistancedefence3', 'fortressresistancedef3', 'fortressresdefense3', 'fortressresdefence3', 'fortressresdef3', 'fortdefenseresistance3', 'fortdefenceresistance3', 'fortdefresistance3', 'fortdefenseres3', 'fortdefenceres3', 'fortdefres3', 'fortresistancedefense3', 'fortresistancedefence3', 'fortresistancedef3', 'fortresdefense3', 'fortresdefence3', 'fortresdef3'].include?(name.downcase.gsub(' ',''))
-  return find_skill('Fort. Def/Res 2',event) if ['fortressdefenseresistance2', 'fortressdefenceresistance2', 'fortressdefresistance2', 'fortressdefenseres2', 'fortressdefenceres2', 'fortressdefres2', 'fortressresistancedefense2', 'fortressresistancedefence2', 'fortressresistancedef2', 'fortressresdefense2', 'fortressresdefence2', 'fortressresdef2', 'fortdefenseresistance2', 'fortdefenceresistance2', 'fortdefresistance2', 'fortdefenseres2', 'fortdefenceres2', 'fortdefres2', 'fortresistancedefense2', 'fortresistancedefence2', 'fortresistancedef2', 'fortresdefense2', 'fortresdefence2', 'fortresdef2'].include?(name.downcase.gsub(' ',''))
-  return find_skill('Fort. Def/Res 1',event) if ['fortressdefenseresistance1', 'fortressdefenceresistance1', 'fortressdefresistance1', 'fortressdefenseres1', 'fortressdefenceres1', 'fortressdefres1', 'fortressresistancedefense1', 'fortressresistancedefence1', 'fortressresistancedef1', 'fortressresdefense1', 'fortressresdefence1', 'fortressresdef1', 'fortdefenseresistance1', 'fortdefenceresistance1', 'fortdefresistance1', 'fortdefenseres1', 'fortdefenceres1', 'fortdefres1', 'fortresistancedefense1', 'fortresistancedefence1', 'fortresistancedef1', 'fortresdefense1', 'fortresdefence1', 'fortresdef1'].include?(name.downcase.gsub(' ',''))
-  return find_skill('Draconic Poleax',event) if name.downcase.gsub(' ','')=='draconicpoleaxe'
-  return find_skill("Shining Bow#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='shinybow'
-  return find_skill("Tannenboom!#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='tanenboom'
-  return find_skill("Sack o' Gifts#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='sackofgifts'
-  return find_skill("Hack-o'-Lantern#{'+' if name.include?('+')}",event) if name.downcase.gsub(' ','').gsub('+','')=='hackolantern'
-  return find_skill("Killing Edge#{'+' if name.include?('+')}",event) if ['killersword','killeredge','killingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
-  return find_skill("Slaying Edge#{'+' if name.include?('+')}",event) if ['slayersword','slayeredge','slayingsword'].include?(name.downcase.gsub(' ','').gsub('+',''))
-  return find_skill(name.downcase.gsub(' ','').gsub('redtome','r tome'),event) if name.downcase.gsub(' ','').include?('redtome')
-  return find_skill(name.downcase.gsub(' ','').gsub('bluetome','b tome'),event) if name.downcase.gsub(' ','').include?('bluetome')
-  return find_skill(name.downcase.gsub(' ','').gsub('greentome','g tome'),event) if name.downcase.gsub(' ','').include?('greentome')
-  return find_skill(name.downcase.gsub('rauor','raudr'),event) if name.downcase.include?('rauor')
-  j=-1
   # use the `stat_buffs` function so that "Atk" and "Attack", for example, are treated the same
   # try with only replacing spaces and underscores first...
   x2=stat_buffs(name.gsub(' ','').gsub('_',''),name,2)
-  for i in 0...sklz.length
-    unless sklz[i].nil?
-      j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!',''),name,2).gsub('?','').gsub(' ','').gsub('_','')==x2 && j<0
-    end
-  end
-  return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][13])
+  k=sklz.find_index{|q| stat_buffs(q[0].gsub('.','').gsub('!',''),name,2).gsub('?','').gsub(' ','').gsub('_','')==x2}
+  return k unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
   # ...if that fails, try removing quotes, slashes, and hyphens as well
   x2=stat_buffs(name.gsub(' ','').gsub('_','').gsub("'",'').gsub('/','').gsub("-",''),name,2)
-  for i in 0...sklz.length
-    unless sklz[i].nil?
-      j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!','').gsub('?','').gsub('/','').gsub("'",'').gsub("-",''),name,2).gsub(' ','').gsub('_','')==x2 && j<0
-    end
-  end
-  return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][13])
+  k=sklz.find_index{|q| stat_buffs(q[0].gsub('.','').gsub('!','').gsub('?','').gsub('/','').gsub("'",'').gsub("-",''),name,2).gsub(' ','').gsub('_','')==x2}
+  return k unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
   return -1 if ignore
-  # more common skill aliases...
-  return find_skill(name.downcase.gsub('spooky','spectral'),event,true) if name.downcase.include?('spooky') && find_skill(name.downcase.gsub('spooky','spectral'),event,true)>=0
-  return find_skill(name.downcase.gsub('killing','killer'),event,true) if name.downcase.include?('killing') && find_skill(name.downcase.gsub('killing','killer'),event,true)>=0
-  return find_skill(name.downcase.gsub('killer','killing'),event,true) if name.downcase.include?('killer') && find_skill(name.downcase.gsub('killer','killing'),event,true)>=0
-  return find_skill(name.downcase.gsub('slaying','slayer'),event,true) if name.downcase.include?('slaying') && find_skill(name.downcase.gsub('slaying','slayer'),event,true)>=0
-  return find_skill(name.downcase.gsub('slayer','slaying'),event,true) if name.downcase.include?('slayer') && find_skill(name.downcase.gsub('slayer','slaying'),event,true)>=0
-  return find_skill(name.downcase.gsub('angery','fury'),event,true) if name.downcase.include?('angery') && find_skill(name.downcase.gsub('angery','fury'),event,true)>=0
-  return find_skill(name.downcase.gsub('snek','serpent'),event,true) if name.downcase.include?('snek') && find_skill(name.downcase.gsub('snek','serpent'),event,true)>=0
-  return find_skill(name.downcase.gsub('lnd','lifeanddeath'),event,true) if name.downcase.include?('lnd') && find_skill(name.downcase.gsub('lnd','lifeanddeath'),event,true)>=0
-  return find_skill(name.downcase.gsub('l&d','lifeanddeath'),event,true) if name.downcase.include?('lnd') && find_skill(name.downcase.gsub('l&d','lifeanddeath'),event,true)>=0
-  return find_skill(name.downcase.gsub('berserker','berserk'),event,true) if name.downcase.include?('berserker') && find_skill(name.downcase.gsub('berserker','berserk'),event,true)>=0
+  # skill aliases...
+  unless ignore2
+    alz=@aliases.reject{|q| q[0]!='Skill'}
+    k=alz.find_index{|q| q[1].downcase==name.downcase && (q[3].nil? || q[3].include?(ks))}
+    return sklz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
+  end
   return find_skill("the#{name.downcase.gsub(' ','')}",event) if find_skill("the#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("the#{name.downcase.gsub(' ','')}",event,true)][0][0,4]=='The '
   return find_skill("a#{name.downcase.gsub(' ','')}",event) if find_skill("a#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("a#{name.downcase.gsub(' ','')}",event,true)][0][0,2]=='A '
   return find_skill("an#{name.downcase.gsub(' ','')}",event) if find_skill("an#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("an#{name.downcase.gsub(' ','')}",event,true)][0][0,3]=='An '
@@ -1096,33 +1057,17 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return -1 if ignore2
   # try everything again, but this time matching the portion of the skill name that is exactly as long as the input string.
   x2=stat_buffs(name.gsub(' ','').gsub('_',''),name,2)
-  for i in 0...sklz.length
-    unless sklz[i].nil?
-      unless sklz[i][0].nil?
-        j=i if stat_buffs(sklz[i][0].gsub('.','').gsub('!','').gsub('?',''),name,2).gsub(' ','').gsub('_','')[0,name.length]==x2 && j<0
-      end
-    end
-  end
-  return j if j>=0 && !sklz[j].nil? && has_any?(g, sklz[j][13])
+  k=sklz.find_index{|q| stat_buffs(q[0].gsub('.','').gsub('!','').gsub('?',''),name,2).gsub(' ','').gsub('_','')[0,name.length]==x2}
+  return k unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
+  k=sklz.find_index{|q| stat_buffs(q[0].gsub('.','').gsub('!','').gsub('?',''),name,2).gsub(' ','').gsub('_','')[0,x2.length]==x2}
+  return k unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
   return -1 if name.length<4
   namex=name.gsub(' ','').downcase
-  return find_skill('Yato',event) if ['yatogami','yatokami','yatonogami','yatonokami'].map{|q| q[0,namex.length]}.include?(namex)
-  return find_skill('Bladeblade',event) if namex=='laevatein'[0,namex.length]
-  return find_skill('Eckesachs',event) if ['exaccus','exesack','exsack','eggsacks'].map{|q| q[0,namex.length]}.include?(name.downcase.gsub(' ',''))
-  return find_skill("Sack o' Gifts",event) if namex=='sackofgifts'[0,namex.length]
-  return find_skill("Hack-o'-Lantern",event) if namex=='hackolantern'[0,namex.length]
-  return find_skill('Giga Excalibur',event) if namex=='gigascalibur'[0,namex.length]
-  return find_skill('Gae Bolg',event) if namex=='gayborg'[0,namex.length]
-  return find_skill('Loptous',event) if namex=='loptyr'[0,namex.length]
-  return find_skill('Thokk',event) if namex=='sekku'[0,namex.length]
-  return find_skill('Hlidskjalf',event) if ['hlioskjalf',"roni'sstick",'ronisstick','staffkatz'].map{|q| q[0,namex.length]}.include?(namex)
-  return find_skill("Shining Bow",event) if ['shinybow'].map{|q| q[0,namex.length]}.include?(namex)
-  return find_skill("Killing Edge",event) if ['killersword','killeredge','killingsword'].map{|q| q[0,namex.length]}.include?(namex)
-  return find_skill("Slaying Edge",event) if ['slayersword','slayeredge','slayingsword'].map{|q| q[0,namex.length]}.include?(namex)
-  return find_skill('Fort. Def/Res 3',event) if ['fortressdefenseresistance', 'fortressdefenceresistance', 'fortressdefresistance', 'fortressdefenseres', 'fortressdefenceres', 'fortressdefres', 'fortressresistancedefense', 'fortressresistancedefence', 'fortressresistancedef', 'fortressresdefense', 'fortressresdefence', 'fortressresdef', 'fortdefenseresistance', 'fortdefenceresistance', 'fortdefresistance', 'fortdefenseres', 'fortdefenceres', 'fortdefres', 'fortresistancedefense', 'fortresistancedefence', 'fortresistancedef', 'fortresdefense', 'fortresdefence', 'fortresdef'].map{|q| q[0,namex.length]}.include?(namex)
-  return find_skill(name.downcase.gsub(' ','').gsub('redt','r t'),event) if namex.downcase=='redtome'[0,namex.length]
-  return find_skill(name.downcase.gsub(' ','').gsub('bluet','b t'),event) if namex=='bluetome'[0,namex.length]
-  return find_skill(name.downcase.gsub(' ','').gsub('greent','g t'),event) if namex=='greentome'[0,namex.length]
+  unless ignore2
+    alz=@aliases.reject{|q| q[0]!='Skill'}
+    k=alz.find_index{|q| q[1][0,namex.length].downcase==namex.downcase && (q[3].nil? || q[3].include?(ks))}
+    return sklz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
+  end
   return find_skill(name.downcase.gsub('_',' '),event) if name.include?('_')
   return -1
 end
@@ -2376,6 +2321,42 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily b
     end
   end
   return "#{wemote}#{memote}#{dancer}#{lemote1}#{lemote2}#{"<:Current_Arena_Bonus:498797967042412544>" if get_bonus_units('Arena').include?(jj[0]) && mode%8<4}#{"<:Current_Tempest_Bonus:498797966740422656>" if get_bonus_units('Tempest').include?(jj[0]) && mode%8<4}#{"<:Current_Aether_Bonus:510022809741950986>" if get_bonus_units('Aether').include?(jj[0]) && mode%8<4}#{semote}"
+end
+
+def skill_moji(k,event)
+  if k[4]=='Weapon'
+    m="#{m}<:Skill_Weapon:444078171114045450>"
+    m="#{m}<:Red_Blade:443172811830198282>" if k[5]=='Sword Users Only'
+    m="#{m}<:Blue_Blade:467112472768151562>" if k[5]=='Lance Users Only'
+    m="#{m}<:Green_Blade:467122927230386207>" if k[5]=='Axe Users Only'
+    m="#{m}<:Red_Tome:443172811826003968>" if k[5]=='Red Tome Users Only'
+    m="#{m}<:Blue_Tome:467112472394858508>" if k[5]=='Blue Tome Users Only'
+    m="#{m}<:Green_Tome:467122927666593822>" if k[5]=='Green Tome Users Only'
+    m="#{m}<:Gold_Dragon:443172811641454592>" if k[5]=='Dragons Only'
+    m="#{m}<:Gold_Bow:443172812492898314>" if k[5]=='Bow Users Only'
+    m="#{m}<:Gold_Dagger:443172811461230603>" if k[5]=='Dagger Users Only'
+    m="#{m}<:Gold_Staff:443172811628871720>" if k[5]=='Staff Users Only' && alter_classes(event,'Colored Healers')
+    m="#{m}<:Colorless_Staff:443692132323295243>" if k[5]=='Staff Users Only' && !alter_classes(event,'Colored Healers')
+    m="#{m}<:Gold_Beast:443172811608162324>" if k[5]=='Beasts Only'
+  elsif k[4]=='Assist'
+    m="#{m}<:Skill_Assist:444078171025965066>"
+    m="#{m}<:Assist_Music:454462054959415296>" if k[11].split(', ').include?('Music')
+    m="#{m}<:Assist_Rally:454462054619807747>" if k[11].split(', ').include?('Rally')
+    m="#{m}<:Assist_Staff:454451496831025162>" if k[5]=='Staff Users Only'
+  elsif k[4]=='Special'
+    m="#{m}<:Skill_Special:444078170665254929>"
+    m="#{m}<:Special_Offensive:454460020793278475>" if k[11].split(', ').include?('Offensive')
+    m="#{m}<:Special_Defensive:454460020591951884>" if k[11].split(', ').include?('Defensive')
+    m="#{m}<:Special_AoE:454460021665693696>" if k[11].split(', ').include?('AoE')
+    m="#{m}<:Special_Healer:454451451805040640>" if k[5]=='Staff Users Only'
+  else
+    m="#{m}<:Passive_A:443677024192823327>" if k[4].split(', ').include?('Passive(A)')
+    m="#{m}<:Passive_B:443677023257493506>" if k[4].split(', ').include?('Passive(B)')
+    m="#{m}<:Passive_C:443677023555026954>" if k[4].split(', ').include?('Passive(C)')
+    m="#{m}<:Passive_S:443677023626330122>" if k[4].split(', ').include?('Passive(S)') || k[4].split(', ').include?('Seal')
+    m="#{m}<:Passive_W:443677023706152960>" if k[4].split(', ').include?('Passive(W)')
+  end
+  return m
 end
 
 def skill_tier(name,event) # used by the "used a non-plus version of a weapon that has a + form" tooltip in the stats command to figure out the tier of the weapon
@@ -7256,39 +7237,7 @@ def sort_skills(bot,event,args=[])
     k.sort! {|b,a| ((a[1] <=> b[1]) == 0 ? ((a[15] <=> b[15]) == 0 ? (b[0] <=> a[0]) : (a[15] <=> b[15])) : (a[1] <=> b[1]))}
     str="#{"__**Search**__\n#{mk.join("\n")}\n\n__**Additional Notes**__\n" if mk.length>0}All SP costs are without accounting for increased inheritance costs (1.5x the SP costs listed below)"
     for i in 0...k.length
-      k[i][0]="**#{k[i][0]}** "
-      if k[i][4]=='Weapon'
-        k[i][0]="#{k[i][0]}<:Skill_Weapon:444078171114045450>"
-        k[i][0]="#{k[i][0]}<:Red_Blade:443172811830198282>" if k[i][5]=='Sword Users Only'
-        k[i][0]="#{k[i][0]}<:Blue_Blade:467112472768151562>" if k[i][5]=='Lance Users Only'
-        k[i][0]="#{k[i][0]}<:Green_Blade:467122927230386207>" if k[i][5]=='Axe Users Only'
-        k[i][0]="#{k[i][0]}<:Red_Tome:443172811826003968>" if k[i][5]=='Red Tome Users Only'
-        k[i][0]="#{k[i][0]}<:Blue_Tome:467112472394858508>" if k[i][5]=='Blue Tome Users Only'
-        k[i][0]="#{k[i][0]}<:Green_Tome:467122927666593822>" if k[i][5]=='Green Tome Users Only'
-        k[i][0]="#{k[i][0]}<:Gold_Dragon:443172811641454592>" if k[i][5]=='Dragons Only'
-        k[i][0]="#{k[i][0]}<:Gold_Bow:443172812492898314>" if k[i][5]=='Bow Users Only'
-        k[i][0]="#{k[i][0]}<:Gold_Dagger:443172811461230603>" if k[i][5]=='Dagger Users Only'
-        k[i][0]="#{k[i][0]}<:Gold_Staff:443172811628871720>" if k[i][5]=='Staff Users Only' && alter_classes(event,'Colored Healers')
-        k[i][0]="#{k[i][0]}<:Colorless_Staff:443692132323295243>" if k[i][5]=='Staff Users Only' && !alter_classes(event,'Colored Healers')
-        k[i][0]="#{k[i][0]}<:Gold_Beast:443172811608162324>" if k[i][5]=='Beasts Only'
-      elsif k[i][4]=='Assist'
-        k[i][0]="#{k[i][0]}<:Skill_Assist:444078171025965066>"
-        k[i][0]="#{k[i][0]}<:Assist_Music:454462054959415296>" if k[i][11].split(', ').include?('Music')
-        k[i][0]="#{k[i][0]}<:Assist_Rally:454462054619807747>" if k[i][11].split(', ').include?('Rally')
-        k[i][0]="#{k[i][0]}<:Assist_Staff:454451496831025162>" if k[i][5]=='Staff Users Only'
-      elsif k[i][4]=='Special'
-        k[i][0]="#{k[i][0]}<:Skill_Special:444078170665254929>"
-        k[i][0]="#{k[i][0]}<:Special_Offensive:454460020793278475>" if k[i][11].split(', ').include?('Offensive')
-        k[i][0]="#{k[i][0]}<:Special_Defensive:454460020591951884>" if k[i][11].split(', ').include?('Defensive')
-        k[i][0]="#{k[i][0]}<:Special_AoE:454460021665693696>" if k[i][11].split(', ').include?('AoE')
-        k[i][0]="#{k[i][0]}<:Special_Healer:454451451805040640>" if k[i][5]=='Staff Users Only'
-      else
-        k[i][0]="#{k[i][0]}<:Passive_A:443677024192823327>" if k[i][4].split(', ').include?('Passive(A)')
-        k[i][0]="#{k[i][0]}<:Passive_B:443677023257493506>" if k[i][4].split(', ').include?('Passive(B)')
-        k[i][0]="#{k[i][0]}<:Passive_C:443677023555026954>" if k[i][4].split(', ').include?('Passive(C)')
-        k[i][0]="#{k[i][0]}<:Passive_S:443677023626330122>" if k[i][4].split(', ').include?('Passive(S)') || k[i][4].split(', ').include?('Seal')
-        k[i][0]="#{k[i][0]}<:Passive_W:443677023706152960>" if k[i][4].split(', ').include?('Passive(W)')
-      end
+      k[i][0]="**#{k[i][0]}** #{skill_moji(k[i],event)}"
       k[i][0]="#{k[i][0]} - #{k[i][1]} SP"
       if k[i][15]>k[i][1] && k[i][1]>0 && k[i][4]=='Weapon'
         k[i][0]="#{k[i][0]} (#{k[i][15]} SP when refined)"
@@ -13555,7 +13504,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   end
   unless double
     @aliases.push(['Unit',newname,unit,m].compact)
-    @aliases.sort! {|a,b| (a[2].downcase <=> b[2].downcase) == 0 ? ((a[1].downcase <=> b[1].downcase) == 0 ? (a[0].downcase <=> b[0].downcase) : (a[1].downcase <=> b[1].downcase)) : (a[2].downcase <=> b[2].downcase)}
+    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (a[0].downcase <=> b[0].downcase)}
     bot.channel(chn).send_message("#{newname} has been added to #{unit}'s aliases#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}.\nPlease test to be sure that the alias stuck.")
     event.respond "#{newname} has been added to #{unit}'s aliases#{" globally" if event.user.id==167657750971547648 && !modifier.nil?}." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
     bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
@@ -13611,11 +13560,17 @@ bot.command([:deletealias,:removealias]) do |event, name|
   elsif !is_mod?(event.user,event.server,event.channel)
     event.respond 'You are not a mod.'
     return nil
-  elsif find_unit(name,event)<0
+  elsif find_unit(name,event)<0 && find_skill(name,event)<0
     event.respond "#{name} is not anyone's alias, silly!"
     return nil
   end
   j=find_unit(name,event)
+  if j<0
+    j=find_skill(name,event)
+    j=@skills[j]
+  else
+    j=@units[j]
+  end
   k=0
   k=event.server.id unless event.server.nil?
   for izzz in 0...@aliases.length
@@ -13642,14 +13597,14 @@ bot.command([:deletealias,:removealias]) do |event, name|
   srv=event.server.id unless event.server.nil?
   srvname='PM with dev'
   srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
-  bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**Alias:** #{name} for #{@units[j][0]}~~ **DELETED**.")
+  bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**Alias:** #{name} for #{j[0]}~~ **DELETED**.")
   open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
     for i in 0...@aliases.length
       f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
     end
   }
   nicknames_load()
-  event.respond "#{name} has been removed from #{@units[j][0].gsub('Lavatain','Laevatein')}'s aliases."
+  event.respond "#{name} has been removed from #{j[0].gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}'s aliases."
   nzzz=@aliases.map{|a| a}
   if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>="Zephiel"
     bot.channel(logchn).send_message("Alias list saved.")
@@ -14018,7 +13973,7 @@ bot.command([:sort,:list]) do |event, *args|
     data_load()
     nicknames_load()
     @aliases.uniq!
-    @aliases.sort! {|a,b| (a[2].downcase <=> b[2].downcase) == 0 ? ((a[1].downcase <=> b[1].downcase) == 0 ? (a[0].downcase <=> b[0].downcase) : (a[1].downcase <=> b[1].downcase)) : (a[2].downcase <=> b[2].downcase)}
+    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (a[0].downcase <=> b[0].downcase)}
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
       for i in 0...@aliases.length
         f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
@@ -15185,7 +15140,7 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
   elsif ['aliases','alias'].include?(trigger.downcase)
     nicknames_load()
     @aliases.uniq!
-    @aliases.sort! {|a,b| (a[2].downcase <=> b[2].downcase) == 0 ? ((a[1].downcase <=> b[1].downcase) == 0 ? (a[0].downcase <=> b[0].downcase) : (a[1].downcase <=> b[1].downcase)) : (a[2].downcase <=> b[2].downcase)}
+    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (a[0].downcase <=> b[0].downcase)}
     if @aliases[@aliases.length-1].length<=1 || @aliases[@aliases.length-1][2]<'Zephiel'
       event.respond 'Alias list has __***NOT***__ been backed up, as alias list has been corrupted.'
       return nil
