@@ -1321,7 +1321,7 @@ def snagstats(event,bot,f=nil,f2=nil)
       m.push('faceted') if untz[i][12].split(', ')[0][0,1]=='*' && untz[i][12].split(', ').length>1
       m.push('sensible') if untz[i][12].split(', ')[0][0,1]=='*' && untz[i][12].split(', ').length<2
       m.push('seasonal') if untz[i][9][0].include?('s') && !(!untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1)
-      m.push('community-voted') if @aliases.reject{|q| q[1]!=untz[i][0] || !q[2].nil?}.map{|q| q[0]}.include?("#{untz[i][0].split('(')[0]}CYL")
+      m.push('community-voted') if @aliases.reject{|q| q[0]!='Unit' || q[2]!=untz[i][0] || !q[3].nil?}.map{|q| q[1]}.include?("#{untz[i][0].split('(')[0]}CYL")
       m.push('Legendary') if !untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1 && !m.include?('default')
       m.push('Fallen') if untz[i][0].include?('(Fallen)')
       m.push('out-of-left-field') if m.length<=0
@@ -1447,8 +1447,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     return nil
   elsif ['alias','aliases','name','names','nickname','nicknames'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',1)
-    glbl=@aliases.reject{|q| !q[2].nil?}
-    srv_spec=@aliases.reject{|q| q[2].nil?}
+    glbl=@aliases.reject{|q| q[0]!='Unit' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    srv_spec=@aliases.reject{|q| q[0]!='Unit' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
     all_units=@units.reject{|q| !has_any?(g, q[13][0])}
     all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
     all_units=all_units.map{|q| [q[0],0,0]}
@@ -1457,49 +1457,47 @@ def snagstats(event,bot,f=nil,f2=nil)
       all_units[j][1]+=glbl.reject{|q| q[1]!=all_units[j][0]}.length
       all_units[j][2]+=srv_spec.reject{|q| q[1]!=all_units[j][0]}.length
     end
-    event << "**There are #{longFormattedNumber(glbl.length)} global single-unit aliases.**"
+    str="**There are #{longFormattedNumber(glbl.length)} global single-unit aliases.**"
     all_units=all_units.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
     k=all_units.reject{|q| q[1]!=all_units[0][1]}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
-    event << "The unit#{"s" unless k.length==1} with the most global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global aliases#{" each" unless k.length==1}."
+    str="#{str}\nThe unit#{"s" unless k.length==1} with the most global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global aliases#{" each" unless k.length==1}."
     k=all_units.reject{|q| q[1]!=0}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
     if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
       if k.length.zero?
         all_units=all_units.sort{|a,b| supersort(a,b,1).zero? ? supersort(b,a,0) : supersort(a,b,1)}
         k=all_units.reject{|q| q[1]!=all_units[0][1]}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
-        event << "The unit#{"s" unless k.length==1} with the fewest global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global alias#{"es" unless all_units[0][1]==1}#{" each" unless k.length==1}."
+        str="#{str}\nThe unit#{"s" unless k.length==1} with the fewest global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global alias#{"es" unless all_units[0][1]==1}#{" each" unless k.length==1}."
       elsif event.server.nil? && event.user.id==167657750971547648
         if k.reject{|q| q.include?('~~')}.length.zero?
-          event << "The following unit#{"s" unless k.length==1} have no global aliases: #{list_lift(k.map{|q| q.gsub('~~','')},"and")}"
+          str="#{str}\nThe following unit#{"s" unless k.length==1} have no global aliases: #{list_lift(k.map{|q| q.gsub('~~','')},"and")}"
         else
-          event << "The following unit#{"s" unless k.reject{|q| q.include?('~~')}.length==1} have no global aliases: #{list_lift(k.reject{|q| q.include?('~~')},"and")}"
-          event << "The following unit#{"s" unless k.reject{|q| !q.include?('~~')}.length==1} are fake: #{list_lift(k.reject{|q| !q.include?('~~')}.map{|q| q.gsub('~~','')},"and")}"
+          str="#{str}\nThe following unit#{"s" unless k.reject{|q| q.include?('~~')}.length==1} have no global aliases: #{list_lift(k.reject{|q| q.include?('~~')},"and")}"
+          str="#{str}\nThe following unit#{"s" unless k.reject{|q| !q.include?('~~')}.length==1} are fake: #{list_lift(k.reject{|q| !q.include?('~~')}.map{|q| q.gsub('~~','')},"and")}"
         end
       else
-        event << "The following unit#{"s" unless k.length==1} have no global aliases: #{list_lift(k,"and")}"
+        str="#{str}\nThe following unit#{"s" unless k.length==1} have no global aliases: #{list_lift(k,"and")}"
       end
     end
-    event << ''
-    event << "**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-unit] aliases.**"
+    str="#{str}\n\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-unit] aliases.**"
     if event.server.nil? && @shardizard==4
-      event << "Due to being the debug version, I cannot show more information."
+      str="#{str}\nDue to being the debug version, I cannot show more information."
     elsif event.server.nil?
-      event << "Servers you and I share account for #{@aliases.reject{|q| q[2].nil? || q[2].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
+      str="#{str}\nServers you and I share account for #{@aliases.reject{|q| q[0]!='Unit' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
     else
-      event << "This server accounts for #{@aliases.reject{|q| q[2].nil? || !q[2].include?(event.server.id)}.length} of those."
+      str="#{str}\nThis server accounts for #{@aliases.reject{|q| q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
     end
     all_units=all_units.sort{|b,a| supersort(a,b,2).zero? ? supersort(a,b,0) : supersort(a,b,2)}
     k=all_units.reject{|q| q[2]!=all_units[0][2]}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
-    event << "The unit#{"s" unless k.length==1} with the most server-specific aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][2]} server-specific aliases#{" each" unless k.length==1}."
+    str="#{str}\nThe unit#{"s" unless k.length==1} with the most server-specific aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][2]} server-specific aliases#{" each" unless k.length==1}."
     for i in 0...srv_spec.length
       srv_spec[i][2]=srv_spec[i][2].length
     end
     srv_spec=srv_spec.sort{|b,a| supersort(a,b,2).zero? ? (supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)) : supersort(a,b,2)}
     k=srv_spec.reject{|q| q[2]!=srv_spec[0][2]}.map{|q| "*#{q[0]} = #{q[1]}*"}
-    event << "The most agreed-upon server-specific alias#{"es are" unless k.length==1}#{" is" if k.length==1} #{list_lift(k,"and")}.  #{srv_spec[0][2]} servers agree on #{"them" unless k.length==1}#{"it" if k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
+    str="#{str}\nThe most agreed-upon server-specific alias#{"es are" unless k.length==1}#{" is" if k.length==1} #{list_lift(k,"and")}.  #{srv_spec[0][2]} servers agree on #{"them" unless k.length==1}#{"it" if k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
     k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
-    event << "Counting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
-    event << ''
-    event << "**There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases, covering #{@multi_aliases.map{|q| q[1]}.uniq.length} groups of units.**"
+    str="#{str}\nCounting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
+    str="#{str}\n\n**There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases, covering #{@multi_aliases.map{|q| q[1]}.uniq.length} groups of units.**"
     m=@multi_aliases.map{|q| [q[1],0]}.uniq
     for i in 0...m.length
       m[i][1]+=@multi_aliases.reject{|q| q[1]!=m[i][0]}.length
@@ -1507,10 +1505,45 @@ def snagstats(event,bot,f=nil,f2=nil)
     end
     m=m.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
     k=m.reject{|q| q[1]!=m[0][1]}.map{|q| "*#{q[0]}*"}
-    event << "#{list_lift(k,"and")} #{"is" if k.length==1}#{"are" unless k.length==1} the group#{"s" unless k.length==1} of units with the most multi-unit aliases, with #{m[0][1]} multi-unit aliases#{" each" unless k.length==1}."
+    str="#{str}\n#{list_lift(k,"and")} #{"is" if k.length==1}#{"are" unless k.length==1} the group#{"s" unless k.length==1} of units with the most multi-unit aliases, with #{m[0][1]} multi-unit aliases#{" each" unless k.length==1}."
     m=m.sort{|a,b| supersort(a,b,1).zero? ? supersort(b,a,0) : supersort(a,b,1)}
     k=m.reject{|q| q[1]!=m[0][1]}.map{|q| "*#{q[0]}*"}
-    event << "#{list_lift(k,"and")} #{"is" if k.length==1}#{"are" unless k.length==1} the group#{"s" unless k.length==1} of units with the fewest multi-unit aliases (among those that have them), with #{m[0][1]} multi-unit alias#{"es" unless m[0][1]==1}#{" each" unless k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
+    str="#{str}\n#{list_lift(k,"and")} #{"is" if k.length==1}#{"are" unless k.length==1} the group#{"s" unless k.length==1} of units with the fewest multi-unit aliases (among those that have them), with #{m[0][1]} multi-unit alias#{"es" unless m[0][1]==1}#{" each" unless k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
+    glbl=@aliases.reject{|q| q[0]!='Skill' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    srv_spec=@aliases.reject{|q| q[0]!='Skill' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    all_units=@skills.reject{|q| !has_any?(g, q[13])}
+    all_units=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
+    all_units=all_units.map{|q| [q[0],0,0]}
+    srv_spec=srv_spec.reject{|q| !all_units.map{|q| q[0]}.include?(q[1])}
+    for j in 0...all_units.length
+      all_units[j][1]+=glbl.reject{|q| q[1]!=all_units[j][0]}.length
+      all_units[j][2]+=srv_spec.reject{|q| q[1]!=all_units[j][0]}.length
+    end
+    str2="**There are #{longFormattedNumber(glbl.length)} global single-skill aliases.**"
+    all_units=all_units.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
+    k=all_units.reject{|q| q[1]!=all_units[0][1]}.map{|q| "*#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}*"}
+    str2="#{str2}\nThe skill#{"s" unless k.length==1} with the most global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global aliases#{" each" unless k.length==1}."
+    str2="#{str2}\n\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-skill] aliases.**"
+    if event.server.nil? && @shardizard==4
+      str2="#{str2}\nDue to being the debug version, I cannot show more information."
+    elsif event.server.nil?
+      str2="#{str2}\nServers you and I share account for #{@aliases.reject{|q| q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
+    else
+      str2="#{str2}\nThis server accounts for #{@aliases.reject{|q| q[0]!='Skill' || q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
+    end
+    all_units=all_units.sort{|b,a| supersort(a,b,2).zero? ? supersort(a,b,0) : supersort(a,b,2)}
+    k=all_units.reject{|q| q[2]!=all_units[0][2]}.map{|q| "*#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}*"}
+    str2="#{str2}\nThe skill#{"s" unless k.length==1} with the most server-specific aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][2]} server-specific aliases#{" each" unless k.length==1}." unless k.length<=0
+    for i in 0...srv_spec.length
+      srv_spec[i][2]=srv_spec[i][2].length
+    end
+    srv_spec=srv_spec.sort{|b,a| supersort(a,b,2).zero? ? (supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)) : supersort(a,b,2)}
+    k=srv_spec.reject{|q| q[2]!=srv_spec[0][2]}.map{|q| "*#{q[0]} = #{q[1]}*"}
+    str="#{str}\nThe most agreed-upon server-specific alias#{"es are" unless k.length==1}#{" is" if k.length==1} #{list_lift(k,"and")}.  #{srv_spec[0][2]} servers agree on #{"them" unless k.length==1}#{"it" if k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
+    k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
+    str2="#{str2}\nCounting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
+    str=extend_message(str,str2,event,3)
+    event.respond str
     return nil
   elsif ['groups','group','groupings','grouping'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',3)
@@ -1641,12 +1674,12 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << "#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
     event << "#{filler(legal_skills,all_skills,4,-1,['Weapon','Assist','Special'],3)} Passives"
   end
-  glbl=@aliases.reject{|q| !q[2].nil?}
-  srv_spec=@aliases.reject{|q| q[2].nil?}
+  glbl=@aliases.reject{|q| q[0]!='Unit' || !q[3].nil?}
+  srv_spec=@aliases.reject{|q| q[0]!='Unit' || q[3].nil?}
   all_units=@units.reject{|q| !has_any?(g, q[13][0])}
   all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
   all_units=all_units.map{|q| q[0]}
-  srv_spec=srv_spec.reject{|q| !all_units.include?(q[1])}
+  srv_spec=srv_spec.reject{|q| !all_units.include?(q[2])}
   event << ''
   event << "There are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-unit] *aliases*."
   event << "There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases."
