@@ -11729,13 +11729,6 @@ def games_list(event,name,bot,weapon=nil)
   timeshift=8
   timeshift-=1 unless t.dst?
   t-=60*60*timeshift
-  if t.year*1000000+t.month*10000+t.day*100+t.hour<2018120623 && @shardizard != 4
-    gm=[]
-    gs=[]
-    gt=[]
-    gat=[]
-    gst=[]
-  end
   create_embed(event,"__#{"Mathoo's " if mu}**#{name}**__","#{"**Credit in FEH**\n" unless g2=="No games"}#{g2}#{"\n\n**Other games**\n#{g.join("\n")}" unless g.length<1}#{"\n\n**Also appears via Amiibo functionality in**\n#{ga.join("\n")}" unless ga.length<1}#{"\n\n**Appears as an Assist Trophy in**\n#{gat.join("\n")}" unless gat.length<1}#{"\n\n**Appears as a Mii Costume in**\n#{gm.join("\n")}" unless gm.length<1}#{"\n\n**Appears as a Spirit in**\n#{gs.join("\n")}" unless gs.length<1}#{"\n\n**Appears as a standard Trophy in**\n#{gt.join("\n")}" unless gt.length<1}#{"\n\n**Appears as a Sticker in**\n#{gst.join("\n")}" unless gst.length<1}",xcolor,nil,pic)
 end
 
