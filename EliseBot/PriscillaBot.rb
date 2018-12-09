@@ -13497,7 +13497,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   end
   unless double
     @aliases.push(['Unit',newname,unit,m].compact)
-    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (a[0].downcase <=> b[0].downcase)}
+    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (b[0].downcase <=> a[0].downcase)}
     bot.channel(chn).send_message("#{newname} has been added to #{unit}'s aliases#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}.\nPlease test to be sure that the alias stuck.")
     event.respond "#{newname} has been added to #{unit}'s aliases#{" globally" if event.user.id==167657750971547648 && !modifier.nil?}." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
     bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
@@ -13966,7 +13966,7 @@ bot.command([:sort,:list]) do |event, *args|
     data_load()
     nicknames_load()
     @aliases.uniq!
-    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (a[0].downcase <=> b[0].downcase)}
+    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (b[0].downcase <=> a[0].downcase)}
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
       for i in 0...@aliases.length
         f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
@@ -15133,7 +15133,7 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
   elsif ['aliases','alias'].include?(trigger.downcase)
     nicknames_load()
     @aliases.uniq!
-    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (a[0].downcase <=> b[0].downcase)}
+    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (b[0].downcase <=> a[0].downcase)}
     if @aliases[@aliases.length-1].length<=1 || @aliases[@aliases.length-1][2]<'Zephiel'
       event.respond 'Alias list has __***NOT***__ been backed up, as alias list has been corrupted.'
       return nil
