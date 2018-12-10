@@ -267,7 +267,9 @@ def nicknames_load() # loads the nickname list
     b=[]
   end
   @aliases=b.reject{|q| q.nil? || q[1].nil?}.uniq
-  if @aliases[@aliases.length-1][2]<'Zephiel'
+  nzzzz=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Unit'}.uniq
+  nzzzz2=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Skill'}.uniq
+  if nzzzz[nzzzz.length-1][2]<'Zephiel' || nzzzz2[nzzzz2.length-1][2]<'Yato'
     if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt')
       b=[]
       File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt').each_line do |line|
@@ -276,8 +278,9 @@ def nicknames_load() # loads the nickname list
     else
       b=[]
     end
-    nzzzzz=b.reject{|q| q.nil? || q[1].nil?}.uniq
-    if nzzzzz[nzzzzz.length-1][2]<'Zephiel'
+    nzzzzz=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Unit'}.uniq
+    nzzzzz2=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Skill'}.uniq
+    if nzzzzz[nzzzzz.length-1][2]<'Zephiel' || nzzzzz2[nzzzzz2.length-1][2]<'Yato'
       puts 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
         b=[]
@@ -293,7 +296,10 @@ def nicknames_load() # loads the nickname list
     end
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
       for i in 0...nzzzzz.length
-        f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
+        f.puts "#{nzzzzz[i].to_s}"
+      end
+      for i in 0...nzzzzz2.length
+        f.puts "#{nzzzzz2[i].to_s}#{"\n" if i<nzzzzz2.length-1}"
       end
     }
     puts 'Alias list has been restored from backup.'
@@ -1040,13 +1046,13 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   x2=stat_buffs(name.gsub(' ','').gsub('_','').gsub("'",'').gsub('/','').gsub("-",''),name,2)
   k=sklz.find_index{|q| stat_buffs(q[0].gsub('.','').gsub('!','').gsub('?','').gsub('/','').gsub("'",'').gsub("-",''),name,2).gsub(' ','').gsub('_','')==x2}
   return k unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
-  return -1 if ignore
   # skill aliases...
   unless ignore2
     alz=@aliases.reject{|q| q[0]!='Skill'}
     k=alz.find_index{|q| q[1].downcase==name.downcase && (q[3].nil? || q[3].include?(ks))}
     return sklz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
   end
+  return -1 if ignore
   return find_skill("the#{name.downcase.gsub(' ','')}",event) if find_skill("the#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("the#{name.downcase.gsub(' ','')}",event,true)][0][0,4]=='The '
   return find_skill("a#{name.downcase.gsub(' ','')}",event) if find_skill("a#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("a#{name.downcase.gsub(' ','')}",event,true)][0][0,2]=='A '
   return find_skill("an#{name.downcase.gsub(' ','')}",event) if find_skill("an#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("an#{name.downcase.gsub(' ','')}",event,true)][0][0,3]=='An '
@@ -1054,7 +1060,6 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill(name.downcase.gsub('defence','defense'),event,true) if name.downcase.include?('defence') && find_skill(name.downcase.gsub('defence','defense'),event,true)>=0
   return find_skill(name.downcase.gsub('armour','armor'),event,true) if name.downcase.include?('armour') && find_skill(name.downcase.gsub('armour','armor'),event,true)>=0
   return find_skill(name.downcase.gsub('honour','honor'),event,true) if name.downcase.include?('honour') && find_skill(name.downcase.gsub('honour','honor'),event,true)>=0
-  return -1 if ignore2
   # try everything again, but this time matching the portion of the skill name that is exactly as long as the input string.
   x2=stat_buffs(name.gsub(' ','').gsub('_',''),name,2)
   k=sklz.find_index{|q| stat_buffs(q[0].gsub('.','').gsub('!','').gsub('?',''),name,2).gsub(' ','').gsub('_','')[0,name.length]==x2}
@@ -13389,19 +13394,62 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   elsif !event.server.nil? && event.server.id==363917126978764801
     event.respond "You guys revoked your permission to add aliases when you refused to listen to me regarding the Erk alias for Serra."
     return nil
+  end
+  type=['Alias','Alias']
+  if find_unit(newname,event,true)>=0
+    type[0]='Unit'
+  elsif find_skill(newname,event,true)>=0
+    type[0]='Skill'
+  elsif find_structure(newname,event,true).length>0
+    type[0]='Structure'
   elsif find_unit(newname,event)>=0
-    if find_unit(unit,event)>=0
-      event.respond "Someone already has the name #{newname}"
-      return nil
-    elsif [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?
-    else
-      x=newname
-      newname=unit
-      unit=x
-    end
-  elsif find_unit(unit,event)<0
-    event.respond "#{unit} is not a unit."
+    type[0]='Unit*'
+  elsif find_skill(newname,event)>=0
+    type[0]='Skill*'
+  elsif find_structure(newname,event).length>0
+    type[0]='Structure*'
+  end
+  if find_unit(unit,event,true)>=0
+    type[1]='Unit'
+  elsif find_skill(unit,event,true)>=0
+    type[1]='Skill'
+  elsif find_structure(unit,event,true).length>0
+    type[1]='Structure'
+  elsif find_unit(unit,event)>=0
+    type[1]='Unit*'
+  elsif find_skill(unit,event)>=0
+    type[1]='Skill*'
+  elsif find_structure(unit,event).length>0
+    type[1]='Structure*'
+  end
+  puts type.to_s
+  cck=nil
+  checkstr=normalize(newname)
+  if type.reject{|q| q != 'Alias'}.length<=0
+    type[0]='Alias' if type[0].include?('*')
+  end
+  if type.reject{|q| q == 'Alias'}.length<=0
+    event.respond "Neither #{newname} nor #{unit} is a pre-defined unit/skill/alias.  Please try again."
     return nil
+  elsif type.reject{|q| q != 'Alias'}.length<=0
+    event.respond "#{newname} is a #{type[0].downcase}\n#{unit} is a #{type[1].downcase}\nPlease try again."
+    return nil
+  elsif type.reject{|q| ['Alias','Structure','Structure*'].include?(q)}.length<=0
+    event.respond "Structures cannot get aliases....yet"
+    return nil
+  end
+  if type[1]=='Alias' && type[0]!='Alias'
+    f="#{newname}"
+    newname="#{unit}"
+    unit="#{f}"
+    type=type.reverse.map{|q| q.gsub('*','')}
+  elsif type[0]=='Alias' && type[1].gsub('*','')=='Unit'
+    unt=@units[find_unit(unit,event)]
+    checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
+    cck=unt[12].split(', ')[1][0,1].downcase if unt[12].split(', ').length>1
+  elsif type[0]=='Alias' && type[1].gsub('*','')=='Skill'
+    unt=@skills[find_skill(unit,event)]
+    checkstr2=unt[0].gsub(' ','').downcase
   end
   logchn=386658080257212417
   logchn=431862993194582036 if @shardizard==4
@@ -13411,49 +13459,28 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   srv=modifier.to_i if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
   srvname='PM with dev'
   srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
-  checkstr=normalize(newname)
   k=event.message.emoji
   for i in 0...k.length
     checkstr=checkstr.gsub("<:#{k[i].name}:#{k[i].id}>",k[i].name)
   end
-  unt=@units[find_unit(unit,event)]
-  checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
-  cck=nil
-  cck=unt[12].split(', ')[1][0,1].downcase if unt[12].split(', ').length>1
-  if find_skill(checkstr,event,false,true)>=0
-    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nThat is the name of a skill, and I do not want confusion when people in this server attempt `FEH!#{newname}`"
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** #{newname} is a skill name.")
-    return nil
-  elsif checkstr2.length<=1 && checkstr2 != cck && event.user.id != 167657750971547648
+  if type[1]=='Unit' && checkstr2.length<=1 && checkstr2 != cck && event.user.id != 167657750971547648
     event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nOne need look no farther than BLucina and BLyn to understand why single-letter alias differentiation is a bad idea."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Single-letter differentiation.")
-    return nil
-  elsif ["Lyn(Wind)","Lyn(Valentines)","Lyn(Bride)","Lyn(Brave)"].include?(unt[0]) && ['llyn','lynl'].include?(checkstr.downcase)
-    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\n\"L\" could stand for \"Love\", which describes both Lyn(Bride) and Lyn(Valentines); or it could stand for \"Legend\", which not only applies to the Legendary Hero Lyn(Wind), but Lyn(Brave) as well, since she was the result of Lyn winning the Choose Your *Legends* poll for 2017."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Confusion prevention.")
-    return nil
-  elsif unt[0]=="Selena" && checkstr.downcase.include?("severa")
-    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nYes, the two are the same character, but eventually Severa will join the game, and this alias will conflict."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Pre-emptive confusion prevention.")
-    return nil
-  elsif unt[0]=="Charlotte(Bride)" && checkstr.downcase.include?("charlotte")
-    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nYes, she is Charlotte, but eventually, she will join the game as a non-seaonal unit."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Pre-emptive confusion prevention.")
+    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1]} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Single-letter differentiation.")
     return nil
   elsif !detect_multi_unit_alias(event,checkstr.downcase,checkstr.downcase,2).nil?
     x=detect_multi_unit_alias(event,checkstr.downcase,checkstr.downcase,2)
     if checkstr.downcase==x[0] || (!x[2].nil? && x[2].include?(checkstr.downcase))
       event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nThis is a multi-unit alias."
-      bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Confusion prevention.")
+      bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1]} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Confusion prevention.")
       return nil
     end
   elsif checkstr.downcase =~ /(7|t)+?h+?(o|0)+?(7|t)+?/
     event.respond "That name has __***NOT***__ been added to #{unt[0]}'s aliases."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Begone, alias.")
+    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1]} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Begone, alias.")
     return nil
   elsif checkstr.downcase =~ /n+?((i|1)+?|(e|3)+?)(b|g|8)+?(a|4|(e|3)+?r+?)+?/
     event.respond "That name has __***NOT***__ been added to #{unt[0]}'s aliases."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** >Censored< for #{unit}~~\n**Reason for rejection:** Begone, alias.")
+    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1]} Alias:** >Censored< for #{unit}~~\n**Reason for rejection:** Begone, alias.")
     return nil
   end
   newname=normalize(newname)
@@ -13474,33 +13501,33 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   unit=unt[0]
   double=false
   for i in 0...@aliases.length
-    if @aliases[i][2].nil?
-    elsif @aliases[i][0].downcase==newname.downcase && @aliases[i][1].downcase==unit.downcase
+    if @aliases[i][3].nil? || @aliases[i][0]!=type[1]
+    elsif @aliases[i][1].downcase==newname.downcase && @aliases[i][2].downcase==unit.downcase
       if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?
         @aliases[i][3]=nil
         @aliases[i][4]=nil
         @aliases[i].compact!
-        bot.channel(chn).send_message("The alias #{newname} for #{unit.gsub('Lavatain','Laevatein')} exists in a server already.  Making it global now.")
-        event.respond "The alias #{newname} for #{unit.gsub('Lavatain','Laevatein')} exists in a server already.  Making it global now.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit} - gone global.")
+        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.")
+        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1]} Alias:** #{newname} for #{unit} - gone global.")
         double=true
       else
         @aliases[i][3].push(srv)
-        bot.channel(chn).send_message("The alias #{newname} for #{unit.gsub('Lavatain','Laevatein')} exists in another server already.  Adding this server to those that can use it.")
-        event.respond "The alias #{newname} for #{unit.gsub('Lavatain','Laevatein')} exists in another server already.  Adding this server to those that can use it.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.")
+        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
         metadata_load()
-        bot.user(167657750971547648).pm("The alias **#{@aliases[i][1]}** for the character **#{@aliases[i][2]}** is used in quite a few servers.  It might be time to make this global") if @aliases[i][3].length >= @server_data[0].inject(0){|sum,x| sum + x } / 20 && @aliases[i][4].nil?
-        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit} - gained a new server that supports it.")
+        bot.user(167657750971547648).pm("The alias **#{@aliases[i][1]}** for the #{type[1].downcase} **#{@aliases[i][2]}** is used in quite a few servers.  It might be time to make this global") if @aliases[i][3].length >= @server_data[0].inject(0){|sum,x| sum + x } / 20 && @aliases[i][4].nil?
+        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1]} Alias:** #{newname} for #{unit} - gained a new server that supports it.")
         double=true
       end
     end
   end
   unless double
-    @aliases.push(['Unit',newname,unit,m].compact)
+    @aliases.push([type[1],newname,unit,m].compact)
     @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (b[0].downcase <=> a[0].downcase)}
-    bot.channel(chn).send_message("#{newname} has been added to #{unit}'s aliases#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}.\nPlease test to be sure that the alias stuck.")
-    event.respond "#{newname} has been added to #{unit}'s aliases#{" globally" if event.user.id==167657750971547648 && !modifier.nil?}." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Alias:** #{newname} for #{unit}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
+    bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].downcase} *#{unit}*.\nPlease test to be sure that the alias stuck.")
+    event.respond "**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].downcase} *#{unit}*." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1]} Alias:** #{newname} for #{unit}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
   end
   @aliases.uniq!
   nzzz=@aliases.map{|a| a}
@@ -13510,12 +13537,16 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     end
   }
   nicknames_load()
-  nzzz=@aliases.map{|a| a}
-  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel'
+  nzzz=@aliases.reject{|q| q[0]!='Unit'}
+  nzzz2=@aliases.reject{|q| q[0]!='Skill'}
+  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato'
     bot.channel(logchn).send_message('Alias list saved.')
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...nzzz.length
-        f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
+        f.puts "#{nzzz[i].to_s}"
+      end
+      for i in 0...nzzz2.length
+        f.puts "#{nzzz2[i].to_s}#{"\n" if i<nzzz2.length-1}"
       end
     }
     bot.channel(logchn).send_message('Alias list has been backed up.')
@@ -13561,8 +13592,10 @@ bot.command([:deletealias,:removealias]) do |event, name|
   if j<0
     j=find_skill(name,event)
     j=@skills[j]
+    jjj='Skill'
   else
     j=@units[j]
+    jjj='Unit'
   end
   k=0
   k=event.server.id unless event.server.nil?
@@ -13590,7 +13623,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
   srv=event.server.id unless event.server.nil?
   srvname='PM with dev'
   srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
-  bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**Alias:** #{name} for #{j[0]}~~ **DELETED**.")
+  bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**#{jjj} Alias:** #{name} for #{j[0]}~~ **DELETED**.")
   open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
     for i in 0...@aliases.length
       f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
@@ -13598,12 +13631,16 @@ bot.command([:deletealias,:removealias]) do |event, name|
   }
   nicknames_load()
   event.respond "#{name} has been removed from #{j[0].gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}'s aliases."
-  nzzz=@aliases.map{|a| a}
-  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>="Zephiel"
+  nzzz=@aliases.reject{|q| q[0]!='Unit'}
+  nzzz2=@aliases.reject{|q| q[0]!='Skill'}
+  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato'
     bot.channel(logchn).send_message("Alias list saved.")
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...nzzz.length
-        f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
+        f.puts "#{nzzz[i].to_s}"
+      end
+      for i in 0...nzzz2.length
+        f.puts "#{nzzz2[i].to_s}#{"\n" if i<nzzz2.length-1}"
       end
     }
     bot.channel(logchn).send_message("Alias list has been backed up.")
@@ -15134,7 +15171,9 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
     nicknames_load()
     @aliases.uniq!
     @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (b[0].downcase <=> a[0].downcase)}
-    if @aliases[@aliases.length-1].length<=1 || @aliases[@aliases.length-1][2]<'Zephiel'
+    zunits=@aliases.reject{|q| q[0]!='Unit'}
+    zskills=@aliases.reject{|q| q[0]!='Unit'}
+    if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<'Zephiel' || zskills[zskills.length-1].length<=1 || zskillz[zskillz.length-1][2]<'Yato'
       event.respond 'Alias list has __***NOT***__ been backed up, as alias list has been corrupted.'
       return nil
     end
@@ -15495,7 +15534,9 @@ bot.command(:reload, from: 167657750971547648) do |event|
         b=[]
       end
       nzzzzz=b.uniq
-      if nzzzzz[nzzzzz.length-1][1]<'Zephiel'
+      zunits=nzzzzz.reject{|q| q[0]!='Unit'}
+      zskills=nzzzzz.reject{|q| q[0]!='Skill'}
+      if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<'Zephiel' || zskills[zskills.length-1].length<=1 || zskillz[zskillz.length-1][2]<'Yato'
         event << 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
         if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
           b=[]
