@@ -7,7 +7,7 @@ Sakura
 Assault\Absorb\Absorb+\Absorb+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
-Brazen Atk/Spd 1\Brazen Atk/Spd 2\Brazen Atk/Spd 3
+C Duel Infantry 1\C Duel Infantry 2\C Duel Infantry 3
 Wings of Mercy 1\Wings of Mercy 2\Wings of Mercy 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Live to Serve 3
@@ -193,7 +193,7 @@ Fortify Res 1\Fortify Res 2\Fortify Res 3
 Fortify Def 2
 
 Marisa
-5\3\ \ \-
+5\4\ \ \-
 Iron Sword\Steel Sword\Wo Dao\Wo Dao+\Wo Dao+ (+) Speed Mode
 Shove
 Night Sky\Glimmer
@@ -309,6 +309,6 @@ Rally Defense
 Night Sky\Glimmer
 Sorcery Blade 1\Sorcery Blade 2\Sorcery Blade 3
 Chill Spd 1\Chill Spd 2\Chill Spd 3
-Spd Tactic 1\Spd Tactic 2\~~Spd Tactic 3~~
-Atk/Def Bond 2
+Spd Tactic 1\Spd Tactic 2\Spd Tactic 3
+Atk/Def Bond 3
 
