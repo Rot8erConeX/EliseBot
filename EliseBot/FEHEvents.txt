@@ -1,12 +1,6 @@
-Labyrinth of Despair\Tap Battle\11/11/2018, 07/12/2018
-New Heroes\Log-In Bonus\21/11/2018, 04/12/2018
-Gharnef: Dark Pontifax\GHB\23/11/2018, 02/12/2018
 The Sworn Oath\Forging Bonds\28/11/2018, 11/12/2018
-Hrid: Icy Blade\LHB\28/11/2018, 04/12/2018
-Ryoma: Supreme Samurai\LHB\28/11/2018, 04/12/2018
-Lucina: Glorious Archer\LHB\28/11/2018, 04/12/2018
-Robin: Fell Vessel\LHB\28/11/2018, 04/12/2018
-Nifl vs. Muspell\Voting Gauntlet\04/12/2018, 09/12/2018
 Voting Gauntlet\Log-In Bonus\30/11/2018, 12/12/2018
 Seliph & Julia (revival)\BHB\03/12/2018, 11/12/2018
 Three Heroes\Quests\06/12/2018, 19/12/2018
+3.0.0 release\Log-In Bonus\11/12/2018, 01/01/2019
+Hero Fest IV\Log-In Bonus\11/12/2018, 18/12/2018

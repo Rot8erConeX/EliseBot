@@ -184,8 +184,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}**",'Lists all weapons that can be refined to obtain an Effect Mode in the weapon refinery.',0xD49F61)
   elsif ['refinery','refine'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Lists all weapons that can be refined or evolved in the weapon refinery, organized by whether they use Divine Dew or Refining Stones.\n\nYou can also include the word \"Effect\" in your message to show only weapons that get Effect Mode refines.",0xD49F61)
-  elsif ['legendary','legendaries'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __\*filters__","Lists all of the legendary heroes, sorted by up to three defined filters.\nBy default, will sort by Legendary __Element__ and then the non-HP __stat__ boost given by the hero.\n\nPossible filters (in order of priority when applied) :\nElement(s), Flavor(s), Affinity/Affinities\nStat(s), Boost(s)\nWeapon(s)\nColo(u)r(s)\nMove(s), Movement(s)\nNext, Time, Future, Month(s)",0xD49F61)
+  elsif ['legendary','legendaries','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __\*filters__","Lists all of the Legendary and Mythic heroes, sorted by up to three defined filters.\nBy default, will sort by __Element__ and then the non-HP __stat__ boost given by the hero.\n\nPossible filters (in order of priority when applied) :\nElement(s), Flavor(s), Affinity/Affinities\nStat(s), Boost(s)\nWeapon(s)\nColo(u)r(s)\nMove(s), Movement(s)\nNext, Time, Future, Month(s)",0xD49F61)
   elsif ['games'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows a list of games that the unit `name` is in.',0xD49F61)
   elsif ['banners','banner'].include?(command.downcase)
@@ -888,6 +888,172 @@ def today_in_feh(event,bot)
   event.respond str
 end
 
+def disp_current_events(mode=0)
+  t=Time.now
+  timeshift=8
+  timeshift-=1 unless t.dst?
+  t-=60*60*timeshift
+  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  mdfr='left'
+  mdfr='from now' if mode<0
+  m=mode*1
+  m=0-m if m<0
+  str2="__**#{'Current' if mode>0}#{'Future' if mode<0} #{['','Banners','Events'][m]}**__"
+  if [1,-1].include?(mode) # current/future banners
+    b=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
+      b=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
+        b.push(line.gsub("\n",''))
+      end
+    else
+      b=[]
+    end
+    for i in 0...b.length
+      b[i]=b[i].split('\\'[0])
+      b[i][1]=b[i][1].to_i
+      b[i][2]=b[i][2].split(', ')
+      b[i][4]=nil if !b[i][4].nil? && b[i][4].length<=0
+      b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
+    end
+    b.compact!
+    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm}
+    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm}.reverse if mode<0
+    for i in 0...b2.length
+      t2=b2[i][4].split(', ')[[mode,0].max].split('/').map{|q| q.to_i}
+      t2=Time.new(t2[2],t2[1],t2[0])+24*60*60*([0,mode].min+1)
+      t2=t2-t
+      if t2/(24*60*60)>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/(24*60*60)).floor} days #{mdfr}"
+      elsif t2/(60*60)>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/(60*60)).floor} hours #{mdfr}"
+      elsif t2/60>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2/60).floor} minutes #{mdfr}"
+      elsif t2>1
+        str2="#{str2}\n#{b2[i][0]} - #{(t2).floor} seconds #{mdfr}"
+      end
+    end
+  elsif [2,-2].include?(mode) # current/future events
+    mode/=2
+    c=[]
+    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt')
+      c=[]
+      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt').each_line do |line|
+        c.push(line.gsub("\n",''))
+      end
+    else
+      c=[]
+    end
+    for i in 0...c.length
+      c[i]=c[i].split('\\'[0])
+      c[i][1]='Voting Gauntlet' if c[i][1]=='VG'
+      c[i][1]='Bound Hero Battle' if c[i][1]=='BHB'
+      c[i][1]='Grand Hero Battle' if c[i][1]=='GHB'
+      c[i][1]='Legendary Hero Battle' if c[i][1]=='LHB'
+      c[i][1]='Daily Reward Battle' if ['DRM','Daily Reward Maps','DRB'].include?(c[i][1])
+      c[i][1]='Grand Conquests' if c[i][1]=='GC'
+      c[i][1]='Tempest Trials' if ['TT','Tempest'].include?(c[i][1])
+      c[i][1]='Forging Bonds' if ['FB','Bonds','Bond Trials'].include?(c[i][1])
+      c[i][1]='Tap Battle' if c[i][1]=='Illusory Dungeon'
+      c[i][1]='Log-In Bonus' if c[i][1]=='Log-In' || c[i][1]=='Login'
+      c[i][2]=c[i][2].split(', ')
+    end
+    c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
+    c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i<=tm} if mode<0
+    for i in 0...c2.length
+      t2=c2[i][2][[mode,0].max].split('/').map{|q| q.to_i}
+      t2=Time.new(t2[2],t2[1],t2[0])+24*60*60*([0,mode].min+1)
+      t2=t2-t
+      n=c2[i][0]
+      if ['Voting Gauntlet','Tempest Trials','Forging Bonds','Quests','Log-In Bonus'].include?(c2[i][1])
+        n="\"#{n}\" #{c2[i][1]}"
+      elsif ['Bound Hero Battle','Grand Hero Battle','Legendary Hero Battle','Daily Reward Battle','Special Maps'].include?(c2[i][1])
+        n="#{c2[i][1]}: *#{n}*"
+      elsif c2[i][1]=='Grand Conquests'
+        n="Grand Conquests"
+      elsif c2[i][1]=='Tap Battle'
+        n="Illusory Dungeon: #{n}"
+      elsif c2[i][1]=='Update'
+        n="#{n} Update"
+      elsif c2[i][1]=='Orb Promo'
+        n="#{c2[i][1]} (#{n})"
+      else
+        n="#{n} (#{c2[i][1]})"
+      end
+      tt2=(t2/(24*60*60)).floor
+      if t2/(24*60*60)>1
+        str2="#{str2}\n#{n} - #{(t2/(24*60*60)).floor} days #{mdfr}"
+      elsif t2/(60*60)>1
+        str2="#{str2}\n#{n} - #{(t2/(60*60)).floor} hours #{mdfr}"
+      elsif t2/60>1
+        str2="#{str2}\n#{n} - #{(t2/60).floor} minutes #{mdfr}"
+      elsif t2>1
+        str2="#{str2}\n#{n} - #{(t2).floor} seconds #{mdfr}"
+      end
+      if c2[i][1]=='Log-In Bonus' && mode>0
+        t2=c2[i][2][0].split('/').map{|q| q.to_i}
+        t2=Time.new(t2[2],t2[1],t2[0])+24*60*60
+        t3=Time.new(t.year,t.month,t.day)+24*60*60
+        t2=t3-t2
+        t2=t2/(24*60*60)
+        if 10-t2>0
+          str2="#{str2} - #{[(10-t2).floor,tt2].min} gifts remain for daily players"
+        else
+          str2="#{str2} - no gifts remain for daily players"
+        end
+      elsif c2[i][1]=='Grand Conquests' && mode>0
+        t4=c2[i][2][0].split('/').map{|q| q.to_i}
+        t4=Time.new(t4[2],t4[1],t4[0])+24*60*60
+        t3=Time.new(t.year,t.month,t.day)+24*60*60
+        t4=t3-t4
+        t4=t4/(24*60*60)
+        t4=t4.floor
+        t2=c2[i][2][0].split('/').map{|q| q.to_i}
+        t2=Time.new(t2[2],t2[1],t2[0])+24*60*60
+        t2+=24*60*60*(2*(t4/2+1)-1)
+        t2=t2-t
+        if t2/(60*60)>44
+          str2="#{str2} - waiting until Battle #{t4/2+1}"
+        elsif t2/(60*60)>1
+          str2="#{str2} - #{(t2/(60*60)).floor} hours remain in Battle #{t4/2+1}"
+          str2="#{str2} (Round #{(11-(t2/(60*60)).floor/4).floor} currently ongoing)"
+        elsif t2/60>1
+          str2="#{str2} - #{(t2/60).floor} minutes remain in Battle #{t4/2+1}"
+          str2="#{str2} (Round #{(11-(t2/(60*60)).floor/4).floor} currently ongoing)"
+        elsif t2>1
+          str2="#{str2} - #{t2.floor} seconds remain in Battle #{t4/2+1}"
+          str2="#{str2} (Round #{(1-(t2/(60*60)).floor/4).floor} currently ongoing)"
+        elsif t2.floor<=0
+          str2="#{str2} - waiting until Battle #{t4/2+2}"
+        end
+      elsif c2[i][1]=='Voting Gauntlet' && mode>0
+        t4=c2[i][2][0].split('/').map{|q| q.to_i}
+        t4=Time.new(t4[2],t4[1],t4[0])+24*60*60
+        t3=Time.new(t.year,t.month,t.day)+24*60*60
+        t4=t3-t4
+        t4=t4/(24*60*60)
+        t4=t4.floor
+        t2=c2[i][2][0].split('/').map{|q| q.to_i}
+        t2=Time.new(t2[2],t2[1],t2[0],21,0)
+        t2+=24*60*60*(2*(t4/2+1)-1)
+        t2=t2-t
+        if t2/(60*60)>1
+          str2="#{str2} - #{(t2/(60*60)).floor} hours remain in Round #{t4/2+1}"
+        elsif t2/60>1
+          str2="#{str2} - #{(t2/60).floor} minutes remain in Round #{t4/2+1}"
+        elsif t2>1
+          str2="#{str2} - #{t2.floor} seconds remain in Round #{t4/2+1}"
+        elsif t4/2<2
+          str2="#{str2} - waiting until Round #{t4/2+2}"
+        else
+          str2="#{str2} - post-gauntlet buffer period"
+        end
+      end
+    end
+  end
+  return str2
+end
+
 def next_events(event,bot,type)
   type='' if type.nil?
   idx=-1
@@ -900,7 +1066,7 @@ def next_events(event,bot,type)
   idx=7 if ['blessed','blessing','garden','gardens','blessedgarden','blessed_garden','blessedgardens','blessed_gardens','blessinggarden','blessing_garden','blessinggardens','blessing_gardens'].include?(type.downcase)
   idx=8 if ['banners','summoning','summon','banner','summonings','summons'].include?(type.downcase)
   idx=9 if ['event','events'].include?(type.downcase)
-  idx=10 if ['legendary','legendaries','legend','legends'].include?(type.downcase)
+  idx=10 if ['legendary','legendaries','legend','legends','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(type.downcase)
   idx=11 if ['tactics','tactic','drills','drill','tacticsdrills','tactics_drills','tacticsdrill','tactics_drill','tacticdrills','tactic_drills','tacticdrill','tactic_drill'].include?(type.downcase)
   idx=12 if ['arena','bonus','arenabonus','arena_bonus'].include?(type.downcase)
   idx=13 if ['tempest','tempestbonus','tempest_bonus'].include?(type.downcase)
@@ -1322,7 +1488,7 @@ def snagstats(event,bot,f=nil,f2=nil)
       m.push('sensible') if untz[i][12].split(', ')[0][0,1]=='*' && untz[i][12].split(', ').length<2
       m.push('seasonal') if untz[i][9][0].include?('s') && !(!untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1)
       m.push('community-voted') if @aliases.reject{|q| q[0]!='Unit' || q[2]!=untz[i][0] || !q[3].nil?}.map{|q| q[1]}.include?("#{untz[i][0].split('(')[0]}CYL")
-      m.push('Legendary') if !untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1 && !m.include?('default')
+      m.push('Legendary/Mythic') if !untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1 && !m.include?('default')
       m.push('Fallen') if untz[i][0].include?('(Fallen)')
       m.push('out-of-left-field') if m.length<=0
       n=''
@@ -1342,7 +1508,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'sensible',1)} sensible alts *(Masked Marth, Dark Azura, etc.)*"
     event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'seasonal',1)} seasonal alts"
     event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'community-voted',1)} community-voted alts *(CYL winners)*"
-    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'Legendary',1)} Legendary alts"
+    event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'Legendary/Mythic',1)} Legendary/Mythic alts"
     event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'Fallen',1)} Fallen alts"
     event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'out-of-left-field',1)} out-of-left-field alts *(Eirika, Reinhardt, Hinoka, etc.)*"
     k=[]
@@ -1539,7 +1705,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     end
     srv_spec=srv_spec.sort{|b,a| supersort(a,b,2).zero? ? (supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)) : supersort(a,b,2)}
     k=srv_spec.reject{|q| q[2]!=srv_spec[0][2]}.map{|q| "*#{q[0]} = #{q[1]}*"}
-    str="#{str}\nThe most agreed-upon server-specific alias#{"es are" unless k.length==1}#{" is" if k.length==1} #{list_lift(k,"and")}.  #{srv_spec[0][2]} servers agree on #{"them" unless k.length==1}#{"it" if k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
+    str2="#{str2}\nThe most agreed-upon server-specific alias#{"es are" unless k.length==1}#{" is" if k.length==1} #{list_lift(k,"and")}.  #{srv_spec[0][2]} servers agree on #{"them" unless k.length==1}#{"it" if k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
     k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
     str2="#{str2}\nCounting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
     str=extend_message(str,str2,event,3)
