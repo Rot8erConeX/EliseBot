@@ -1531,10 +1531,28 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
           refinement=x if refinement.nil?
           args[i]=nil
         end
+      elsif args[i].length>9 && (args[i].gsub('(','').gsub(')','')[0,9].downcase=='blessing2' || args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-9,9].downcase=='blessing2')
+        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing2',''))
+        if ['Attack','Speed','Defense','Resistance'].include?(x)
+          blessing.push("#{x}(Mythical)")
+          args[i]=nil
+        end
+      elsif args[i].length>15 && (['blessingmythical','mythicalblessing'].include?(args[i].gsub('(','').gsub(')','')[0,15].downcase) || ['blessingmythical','mythicalblessing'].include?(args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-15,15].downcase))
+        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing','').gsub('mythical',''))
+        if ['Attack','Speed','Defense','Resistance'].include?(x)
+          blessing.push("#{x}(Mythical)")
+          args[i]=nil
+        end
+      elsif args[i].length>13 && (['blessingmythic','mythicblessing'].include?(args[i].gsub('(','').gsub(')','')[0,13].downcase) || ['blessingmythic','mythicblessing'].include?(args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-13,13].downcase))
+        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing','').gsub('mythic',''))
+        if ['Attack','Speed','Defense','Resistance'].include?(x)
+          blessing.push("#{x}(Mythical)")
+          args[i]=nil
+        end
       elsif args[i].length>8 && (args[i].gsub('(','').gsub(')','')[0,8].downcase=='blessing' || args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-8,8].downcase=='blessing')
         x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing',''))
         if ['Attack','Speed','Defense','Resistance'].include?(x)
-          blessing.push(x)
+          blessing.push("#{x}(Legendary)")
           args[i]=nil
         end
       elsif args[i][0,1]=='(' && args[i][args[i].length-1,1]==')'
@@ -1587,7 +1605,9 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
           args[i-1]=nil
         elsif args[i].gsub('(','').gsub(')','').downcase=='blessing' && ['Attack','Speed','Defense','Resistance'].include?(x)
           # the word "blessing", if preceeded by a stat name other than HP, will turn that stat into a blessing to be applied to the character
-          blessing.push(x)
+          bbb='Legendary'
+          bbb=blessing[0].split('(')[1] if blessing.length>0
+          blessing.push("#{x}(#{bbb}")
           args[i]=nil
           args[i-1]=nil
         elsif args[i-1].gsub('(','').gsub(')','').downcase=='(+)' && ['Attack','Speed','Defense','Resistance'].include?(y) && refinement.nil?
@@ -1677,6 +1697,8 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
     end
     args.compact!
   end
+  blessing=blessing.reject{|q| q.split('(')[1]!=blessing[0].split('(')[1]} if blessing.length>0
+  blessing=[] if blessing.nil?
   unless mode==1
     rarity=5 if rarity.nil?
     merges=0 if merges.nil?
@@ -1864,14 +1886,19 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
   # Blessing buffs
   for i in 0...[blessing.length,7].min
     stats[1]+=3
-    if blessing[i]=='Attack'
+    stats[1]+=2 if blessing[i].include?('Mythical')
+    if blessing[i].include?('Attack')
       stats[2]+=2
-    elsif blessing[i]=='Speed'
+      stats[2]+=1 if blessing[i].include?('Mythical')
+    elsif blessing[i].include?('Speed')
       stats[3]+=3
-    elsif blessing[i]=='Defense'
+      stats[3]+=1 if blessing[i].include?('Mythical')
+    elsif blessing[i].include?('Defense')
       stats[4]+=4
-    elsif blessing[i]=='Resistance'
+      stats[4]+=1 if blessing[i].include?('Mythical')
+    elsif blessing[i].include?('Resistance')
       stats[5]+=4
+      stats[5]+=1 if blessing[i].include?('Mythical')
     end
   end
   stats[2]+=rally[1]+negative[1]
@@ -2251,7 +2278,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   dancer="\n<:Assist_Music:454462054959415296> *Singer*" if !sklz.find_index{|q| q[0]=='Sing'}.nil? && sklz[sklz.find_index{|q| q[0]=='Sing'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   if !jj[2].nil? && jj[2][0]!=' '
     element='Unknown'
-    element=jj[2][0] if ['Fire','Water','Wind','Earth','Dark','Astra','Anima'].include?(jj[2][0])
+    element=jj[2][0] if ['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima'].include?(jj[2][0])
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
     lemote1=moji[0].mention unless moji.length<=0
     stat='Spectrum'
@@ -2259,7 +2286,10 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{stat}"}
     lemote2=moji[0].mention unless moji.length<=0
   end
-  return "#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* Legendary Hero" unless jj[2][0]==" "}#{"\n<:Current_Arena_Bonus:498797967042412544> Current Arena Bonus unit" if get_bonus_units('Arena').include?(jj[0])}#{"\n<:Current_Tempest_Bonus:498797966740422656> Current Tempest Bonus unit" if get_bonus_units('Tempest').include?(jj[0])}#{"\n<:Current_Aether_Bonus:510022809741950986> Current Aether Bonus unit" if get_bonus_units('Aether').include?(jj[0])}"
+  lm='Legendary/Mythic'
+  lm='Legendary' if ['Fire','Water','Wind','Earth'].include?(jj[2][0])
+  lm='Mythic' if ['Light','Dark','Astra','Anima'].include?(jj[2][0])
+  return "#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}*/#{lemote2}*#{jj[2][1]}* #{lm} Hero" unless jj[2][0]==" "}#{"\n<:Current_Arena_Bonus:498797967042412544> Current Arena Bonus unit" if get_bonus_units('Arena').include?(jj[0])}#{"\n<:Current_Tempest_Bonus:498797966740422656> Current Tempest Bonus unit" if get_bonus_units('Tempest').include?(jj[0])}#{"\n<:Current_Aether_Bonus:510022809741950986> Current Aether Bonus unit" if get_bonus_units('Aether').include?(jj[0])}"
 end
 
 def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily by the BST and Alt commands to display a unit's weapon and movement classes as emojis
@@ -2299,7 +2329,7 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily b
   lemote2=''
   if !jj[2].nil? && jj[2][0]!=' '
     element='Unknown'
-    element=jj[2][0] if ['Fire','Water','Wind','Earth','Dark','Astra','Anima'].include?(jj[2][0])
+    element=jj[2][0] if ['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima'].include?(jj[2][0])
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
     lemote1=moji[0].mention unless moji.length<=0
     stat='Spectrum'
@@ -6014,6 +6044,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
     color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
     color_weapons.push(['Green','Tome']) if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
     clzz.push(['Troubadour', nil, 'Healer', 'Cavalry']) if ['troubadour', 'trobadour', 'troubador', 'trobador'].include?(args[i].downcase)
+    clzz.push(["F\u00E1fnir", nil, 'Dragon', 'Flier']) if ['fafnir'].include?(args[i].downcase)
     weapons.push('Blade') if ['physical','blade','blades','close','closerange'].include?(args[i].downcase)
     weapons.push('Tome') if ['tome','mage','spell','tomes','mages','spells','range','ranged','distance','distant'].include?(args[i].downcase)
     weapons.push('Dragon') if ['dragon','dragons','breath','manakete','manaketes','close','closerange'].include?(args[i].downcase)
@@ -9067,7 +9098,7 @@ def show_bonus_units(event,args='',bot)
           s[1]=1
         end
         element=b[i][3][0]
-        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
         element=b[i][3][1]
         moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
         mm2="#{b[i][4][0]} (O), #{b[i][4][1]} (D)"
@@ -11227,9 +11258,9 @@ def disp_generic_art(event,name,bot)
     weapons.push('Tome') if ['tome','mage','spell','tomes','mages','spells'].include?(args[i].downcase)
     weapons.push('Dragon') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
     weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase)
-    color_weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
-    color_weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves'].include?(args[i].downcase)
-    color_weapons.push('Staff') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
+    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
+    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves'].include?(args[i].downcase)
+    weapons.push('Staff') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
     color_weapons.push('Sword') if ['sword','swords','katana'].include?(args[i].downcase)
     color_weapons.push('Lance') if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
     color_weapons.push('Axe') if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
@@ -11242,10 +11273,14 @@ def disp_generic_art(event,name,bot)
     movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
     movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
   end
-  colors=['Red'] if colors.length<=0
+  if colors.length<=0
+    colors=['Red']
+    colors=['Colorless'] if weapons.length>0 && ['Dagger','Staff','Bow'].include?(weapons[0])
+  end
   weapons=['Tome'] if weapons.length<=0
   color_weapons=["#{colors[0]}_#{weapons[0]}".gsub('Red_Blade','Sword').gsub('Blue_Blade','Lance').gsub('Green_Blade','Axe')] if color_weapons.length<=0
   movement=['Infantry'] if movement.length<=0
+  movement[0]='Flier' if color_weapons[0][color_weapons[0].length-6,6]=='Dragon' && ['Pegasus','Wyvern'].include?(movement[0])
   art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/GENERICS/#{color_weapons[0]}_#{movement[0]}/BtlFace.png"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     event.respond art
