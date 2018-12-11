@@ -149,7 +149,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'stat_and_skils','statsskil','statskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil','sortskil','skilsort',
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
-     'aether','bonus_raids','structure','struct','tool','link','resources','resources'].uniq
+     'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics'].uniq
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -467,6 +467,7 @@ def bonus_load()
     b[i][0]=b[i][0].split(', ')
     b[i][2]=b[i][2].split(', ')
     b[i][3]=b[i][3].split(', ') unless b[i][3].nil?
+    b[i][4]=b[i][4].split(', ') unless b[i][4].nil?
   end
   @bonus_units=b.map{|q| q}
 end
@@ -1341,7 +1342,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='Wedding' if ['brides','grooms','bride','groom','wedding'].include?(name.downcase)
   name='Falchion_Users' if ['falchionusers'].include?(name.downcase.gsub('-','').gsub('_',''))
   name='Dancers&Singers' if ['dancers','singers'].include?(name.downcase)
-  name='Legendaries' if ['legendary','legend','legends'].include?(name.downcase)
+  name='Legendaries' if ['legendary','legend','legends','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(name.downcase)
   name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','f2prfs','f2prf','retroprfs','retro-prfs'].include?(name.downcase)
   j=-1
   # try full-name matches first...
@@ -2170,6 +2171,8 @@ def unit_color(event,j,name=nil,mode=0,m=false,chain=false) # used to choose the
     xcolor=0xFFAF7E if jj[2][0]=='Earth'
     xcolor=0xFDF39D if jj[2][0]=='Light'
     xcolor=0xBE83FE if jj[2][0]=='Dark'
+    xcolor=0xF5A4DA if jj[2][0]=='Astra'
+    xcolor=0xE1DACF if jj[2][0]=='Anima'
   end
   # Special colors
   xcolor=0x00DAFA if m && find_in_dev_units(jj[0])>0
@@ -2248,7 +2251,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   dancer="\n<:Assist_Music:454462054959415296> *Singer*" if !sklz.find_index{|q| q[0]=='Sing'}.nil? && sklz[sklz.find_index{|q| q[0]=='Sing'}][9].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   if !jj[2].nil? && jj[2][0]!=' '
     element='Unknown'
-    element=jj[2][0] if ['Fire','Water','Wind','Earth','Dark'].include?(jj[2][0])
+    element=jj[2][0] if ['Fire','Water','Wind','Earth','Dark','Astra','Anima'].include?(jj[2][0])
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
     lemote1=moji[0].mention unless moji.length<=0
     stat='Spectrum'
@@ -2296,7 +2299,7 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily b
   lemote2=''
   if !jj[2].nil? && jj[2][0]!=' '
     element='Unknown'
-    element=jj[2][0] if ['Fire','Water','Wind','Earth','Dark'].include?(jj[2][0])
+    element=jj[2][0] if ['Fire','Water','Wind','Earth','Dark','Astra','Anima'].include?(jj[2][0])
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
     lemote1=moji[0].mention unless moji.length<=0
     stat='Spectrum'
@@ -3546,7 +3549,7 @@ def find_base_skill(x,event)
   end
   return x[0] if x[8]=='-'
   unless x[0].length<5
-    return 'Gronn' if (x[0].include?('Gronn') || (x[11].include?('Seasonal') && !x[11].include?('Legendary'))) && x[8].include?('*Elwind*')
+    return 'Gronn' if (x[0].include?('Gronn') || (x[11].include?('Seasonal') && !x[11].include?('Prf'))) && x[8].include?('*Elwind*')
   end
   if x[8].include?('*, *')
     k=x[8].gsub('*','').split(', ')
@@ -5477,7 +5480,7 @@ def get_group(name,event)
   elsif ['seasonal','seasonals'].include?(name.downcase)
     l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0])}
     return ['Seasonals',l.map{|q| q[0]}]
-  elsif ['legendary','legendaries','legends','legend'].include?(name.downcase)
+  elsif ['legendary','legendaries','legends','legend','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(name.downcase)
     l=untz.reject{|q| q[2][0]==' ' || !has_any?(g, q[13][0])}
     return ['Legendaries',l.map{|q| q[0]}]
   elsif ['retro-prfs'].include?(name.downcase)
@@ -8329,7 +8332,7 @@ def sort_legendaries(event,bot,mode=0)
   data_load()
   nicknames_load()
   g=get_markers(event)
-  k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || q[2][0]==' ' || q[2].length<3}.uniq
+  k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Light','Dark','Astra','Anima'].include?(q[2][0]) || q[2].length<3}.uniq
   c=[]
   for i in 0...k.length
     c.push([249,130,129]) if k[i][2][0]=='Fire'
@@ -8338,6 +8341,8 @@ def sort_legendaries(event,bot,mode=0)
     c.push([255,175,126]) if k[i][2][0]=='Earth'
     c.push([253,243,157]) if k[i][2][0]=='Light'
     c.push([190,131,254]) if k[i][2][0]=='Dark'
+    c.push([245,164,218]) if k[i][2][0]=='Astra'
+    c.push([225,218,207]) if k[i][2][0]=='Anima'
     k[i][2][2]=k[i][2][2].split('/').map{|q| q.to_i}.reverse
     k[i][1][1]=1 if k[i][1][0]=='Red'
     k[i][1][1]=2 if k[i][1][0]=='Blue'
@@ -9039,6 +9044,7 @@ def show_bonus_units(event,args='',bot)
     else
       s=[0,1]
       m=[]
+      m2=[]
       k=[]
       flds=[]
       for i in 0...b.length
@@ -9060,18 +9066,22 @@ def show_bonus_units(event,args='',bot)
           s[0]+=1
           s[1]=1
         end
-        mm2="#{b[i][3][0]} (O), #{b[i][3][1]} (D)"
-        mm2="#{b[i][3][0]} (O/D)" if b[i][3][0]==b[i][3][1]
+        element=b[i][3][0]
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+        element=b[i][3][1]
+        moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        mm2="#{b[i][4][0]} (O), #{b[i][4][1]} (D)"
+        mm2="#{b[i][4][0]} (O/D)" if b[i][4][0]==b[i][4][1]
         if i==0
           t2=Time.new(2017,2,2)-60*60
           t2=t-t2
           date=(((t2.to_i/60)/60)/24)
-          m.push("Current week: #{mm2}") if date%7 != 4 || 15-t.hour>=0
+          m.push("Current week: #{moji[0].mention unless moji[0].nil?}#{b[i][3][0]}, #{moji2[0].mention unless moji2[0].nil?}#{b[i][3][1]}, #{mm2}") if date%7 != 3 || 15-t.hour>=0
         elsif i==1
-          m.push("Next week: #{mm2}")
+          m.push("Next week: #{moji[0].mention unless moji[0].nil?}#{b[i][3][0]}, #{moji2[0].mention unless moji2[0].nil?}#{b[i][3][1]}, #{mm2}")
         elsif m[0,1]=='-' && s[1]>10
         else
-          m.push("Week #{s[1]}: #{mm2}")
+          m.push("Week #{s[1]}: #{moji[0].mention unless moji[0].nil?}#{b[i][3][0]}, #{moji2[0].mention unless moji2[0].nil?}#{b[i][3][1]}, #{mm2}")
         end
         s[1]+=1
       end
@@ -9171,7 +9181,7 @@ def find_alts(event,name,bot)
     m.push('sensible') if k[i][12].split(', ')[0][0,1]=='*' && k[i][12].split(', ').length<2
     m.push('seasonal') if k[i][9][0].include?('s') && !(!k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1)
     m.push('community-voted') if @aliases.reject{|q| q[2]!=k[i][0] || !q[3].nil?}.map{|q| q[1]}.include?("#{k[i][0].split('(')[0]}CYL")
-    m.push('Legendary') if !k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1 && !m.include?('default')
+    m.push('Legendary/Mythic') if !k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1 && !m.include?('default')
     m.push('Fallen') if k[i][0].include?('(Fallen)')
     m.push('out-of-left-field') if m.length<=0
     n=''
@@ -11866,7 +11876,7 @@ bot.command([:art,:artist]) do |event, *args|
   return nil
 end
 
-bot.command([:legendary,:legendaries]) do |event, *args|
+bot.command([:legendary,:legendaries,:mythic,:mythical,:mythics,:mythicals]) do |event, *args|
   return nil if overlap_prevent(event)
   args=[] if args.nil?
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
@@ -11883,6 +11893,8 @@ bot.command([:legendary,:legendaries]) do |event, *args|
     c.push([255,175,126]) if l[i][2][0]=='Earth'
     c.push([253,243,157]) if l[i][2][0]=='Light'
     c.push([190,131,254]) if l[i][2][0]=='Dark'
+    c.push([245,164,218]) if l[i][2][0]=='Astra'
+    c.push([225,218,207]) if l[i][2][0]=='Anima'
   end
   l.uniq!
   x=[]
@@ -11909,7 +11921,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
   sec=x[1]
   tri=x[2] if x.length>=3
   if pri=='Element'
-    l2=split_list(event,l,['Fire','Water','Wind','Earth','Light','Dark'],-5)
+    l2=split_list(event,l,['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima'],-5)
   elsif pri=='Stat'
     l2=split_list(event,l,['Attack','Speed','Defense','Resistance'],-6)
   elsif pri=='Color'
@@ -11934,7 +11946,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
     if pri=='Element'
       x2=p1[i][0][2][0]
       element='Unknown'
-      element=x2 if ['Fire','Water','Wind','Earth','Light','Dark'].include?(x2)
+      element=x2 if ['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima'].include?(x2)
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
       x2="#{moji[0].mention} #{x2}" if moji.length>0
     elsif pri=='Stat'
@@ -11982,7 +11994,7 @@ bot.command([:legendary,:legendaries]) do |event, *args|
       if sec=='Element'
         x3=p2[j][0][2][0]
         element='Unknown'
-        element=x3 if ['Fire','Water','Wind','Earth','Light','Dark'].include?(x3)
+        element=x3 if ['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima'].include?(x3)
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
         x3="#{moji[0].mention} #{x3}" if moji.length>0
       elsif sec=='Stat'
@@ -12013,14 +12025,14 @@ bot.command([:legendary,:legendaries]) do |event, *args|
     p1[i]=[x2,p2.join("\n")] if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
   end
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    event << '__**All Legendary Heroes**__'
+    event << '__**All Legendary and Mythic Heroes**__'
     for i in 0...p1.length
       event << ''
       event << "__*#{p1[i][0]}*__"
       event << p1[i][1]
     end
   else
-    create_embed(event,'__**All Legendary Heroes**__','',avg_color(c),nil,nil,p1)
+    create_embed(event,'__**All Legendary and Mythic Heroes**__','',avg_color(c),nil,nil,p1)
   end
   return nil
 end
