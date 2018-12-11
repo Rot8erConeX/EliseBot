@@ -1342,6 +1342,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='Wedding' if ['brides','grooms','bride','groom','wedding'].include?(name.downcase)
   name='Falchion_Users' if ['falchionusers'].include?(name.downcase.gsub('-','').gsub('_',''))
   name='Dancers&Singers' if ['dancers','singers'].include?(name.downcase)
+  name='Helspawn' if ['hellspawn'].include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(name.downcase)
   name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','f2prfs','f2prf','retroprfs','retro-prfs'].include?(name.downcase)
   j=-1
@@ -1362,6 +1363,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='Wedding' if name.length<6 && ['brides','grooms','bride','groom','wedding'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Falchion_Users' if ['falchionusers'].map{|q| q[0,name.gsub('-','').gsub('_','').length]}.include?(name.downcase.gsub('-','').gsub('_',''))
   name='Dancers&Singers' if ['dancers','singers'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='Helspawn' if ['hellspawn'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','f2prfs','f2prf','retroprfs','retro-prfs'].map{|q| q[0,name.length]}.include?(name.downcase)
   for i in 0...g.length
@@ -9282,6 +9284,11 @@ def parse_function(callback,event,args,bot,healers=nil)
       return 0
     elsif callback==:banner_list
       t=Time.now
+      if t-@last_multi_reload[1]>60*60 || @shardizard==4
+        puts 'reloading EliseText'
+        load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+        @last_multi_reload[1]=t
+      end
       timeshift=8
       timeshift-=1 unless t.dst?
       t-=60*60*timeshift
@@ -11862,6 +11869,11 @@ bot.command([:banners, :banner]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1 || ['next','schedule'].include?(args[0].downcase)
     t=Time.now
+    if t-@last_multi_reload[1]>60*60 || @shardizard==4
+      puts 'reloading EliseText'
+      load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+      @last_multi_reload[1]=t
+    end
     timeshift=8
     timeshift-=1 unless t.dst?
     t-=60*60*timeshift
@@ -15890,6 +15902,11 @@ bot.mention do |event|
     a.shift
     if a.length.zero? || ['next','schedule'].include?(a[0].downcase)
       t=Time.now
+      if t-@last_multi_reload[1]>60*60 || @shardizard==4
+        puts 'reloading EliseText'
+        load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+        @last_multi_reload[1]=t
+      end
       timeshift=8
       timeshift-=1 unless t.dst?
       t-=60*60*timeshift
@@ -16177,213 +16194,12 @@ bot.mention do |event|
   end
 end
 
-def disp_current_events(mode=0)
-  t=Time.now
-  timeshift=8
-  timeshift-=1 unless t.dst?
-  t-=60*60*timeshift
-  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
-  mdfr='left'
-  mdfr='from now' if mode<0
-  m=mode*1
-  m=0-m if m<0
-  str2="__**#{'Current' if mode>0}#{'Future' if mode<0} #{['','Banners','Events'][m]}**__"
-  if [1,-1].include?(mode) # current/future banners
-    b=[]
-    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
-      b=[]
-      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
-        b.push(line.gsub("\n",''))
-      end
-    else
-      b=[]
-    end
-    for i in 0...b.length
-      b[i]=b[i].split('\\'[0])
-      b[i][1]=b[i][1].to_i
-      b[i][2]=b[i][2].split(', ')
-      b[i][4]=nil if !b[i][4].nil? && b[i][4].length<=0
-      b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
-    end
-    b.compact!
-    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm}
-    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm}.reverse if mode<0
-    for i in 0...b2.length
-      t2=b2[i][4].split(', ')[[mode,0].max].split('/').map{|q| q.to_i}
-      t2=Time.new(t2[2],t2[1],t2[0])+24*60*60*([0,mode].min+1)
-      t2=t2-t
-      if t2/(24*60*60)>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/(24*60*60)).floor} days #{mdfr}"
-      elsif t2/(60*60)>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/(60*60)).floor} hours #{mdfr}"
-      elsif t2/60>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2/60).floor} minutes #{mdfr}"
-      elsif t2>1
-        str2="#{str2}\n#{b2[i][0]} - #{(t2).floor} seconds #{mdfr}"
-      end
-    end
-  elsif [2,-2].include?(mode) # current/future events
-    mode/=2
-    c=[]
-    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt')
-      c=[]
-      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt').each_line do |line|
-        c.push(line.gsub("\n",''))
-      end
-    else
-      c=[]
-    end
-    for i in 0...c.length
-      c[i]=c[i].split('\\'[0])
-      c[i][1]='Voting Gauntlet' if c[i][1]=='VG'
-      c[i][1]='Bound Hero Battle' if c[i][1]=='BHB'
-      c[i][1]='Grand Hero Battle' if c[i][1]=='GHB'
-      c[i][1]='Legendary Hero Battle' if c[i][1]=='LHB'
-      c[i][1]='Daily Reward Battle' if ['DRM','Daily Reward Maps','DRB'].include?(c[i][1])
-      c[i][1]='Grand Conquests' if c[i][1]=='GC'
-      c[i][1]='Tempest Trials' if ['TT','Tempest'].include?(c[i][1])
-      c[i][1]='Forging Bonds' if ['FB','Bonds','Bond Trials'].include?(c[i][1])
-      c[i][1]='Tap Battle' if c[i][1]=='Illusory Dungeon'
-      c[i][1]='Log-In Bonus' if c[i][1]=='Log-In' || c[i][1]=='Login'
-      c[i][2]=c[i][2].split(', ')
-    end
-    c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
-    c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i<=tm} if mode<0
-    for i in 0...c2.length
-      t2=c2[i][2][[mode,0].max].split('/').map{|q| q.to_i}
-      t2=Time.new(t2[2],t2[1],t2[0])+24*60*60*([0,mode].min+1)
-      t2=t2-t
-      n=c2[i][0]
-      if ['Voting Gauntlet','Tempest Trials','Forging Bonds','Quests','Log-In Bonus'].include?(c2[i][1])
-        n="\"#{n}\" #{c2[i][1]}"
-      elsif ['Bound Hero Battle','Grand Hero Battle','Legendary Hero Battle','Daily Reward Battle','Special Maps'].include?(c2[i][1])
-        n="#{c2[i][1]}: *#{n}*"
-      elsif c2[i][1]=='Grand Conquests'
-        n="Grand Conquests"
-      elsif c2[i][1]=='Tap Battle'
-        n="Illusory Dungeon: #{n}"
-      elsif c2[i][1]=='Update'
-        n="#{n} Update"
-      elsif c2[i][1]=='Orb Promo'
-        n="#{c2[i][1]} (#{n})"
-      else
-        n="#{n} (#{c2[i][1]})"
-      end
-      if t2/(24*60*60)>1
-        str2="#{str2}\n#{n} - #{(t2/(24*60*60)).floor} days #{mdfr}"
-      elsif t2/(60*60)>1
-        str2="#{str2}\n#{n} - #{(t2/(60*60)).floor} hours #{mdfr}"
-      elsif t2/60>1
-        str2="#{str2}\n#{n} - #{(t2/60).floor} minutes #{mdfr}"
-      elsif t2>1
-        str2="#{str2}\n#{n} - #{(t2).floor} seconds #{mdfr}"
-      end
-      if c2[i][1]=='Log-In Bonus' && mode>0
-        t2=c2[i][2][0].split('/').map{|q| q.to_i}
-        t2=Time.new(t2[2],t2[1],t2[0])+24*60*60
-        t3=Time.new(t.year,t.month,t.day)+24*60*60
-        t2=t3-t2
-        t2=t2/(24*60*60)
-        if 10-t2>0
-          str2="#{str2} - #{(10-t2).floor} gifts remain for daily players"
-        else
-          str2="#{str2} - no gifts remain for daily players"
-        end
-      elsif c2[i][1]=='Grand Conquests' && mode>0
-        t4=c2[i][2][0].split('/').map{|q| q.to_i}
-        t4=Time.new(t4[2],t4[1],t4[0])+24*60*60
-        t3=Time.new(t.year,t.month,t.day)+24*60*60
-        t4=t3-t4
-        t4=t4/(24*60*60)
-        t4=t4.floor
-        t2=c2[i][2][0].split('/').map{|q| q.to_i}
-        t2=Time.new(t2[2],t2[1],t2[0])+24*60*60
-        t2+=24*60*60*(2*(t4/2+1)-1)
-        t2=t2-t
-        if t2/(60*60)>44
-          str2="#{str2} - waiting until Battle #{t4/2+1}"
-        elsif t2/(60*60)>1
-          str2="#{str2} - #{(t2/(60*60)).floor} hours remain in Battle #{t4/2+1}"
-          str2="#{str2} (Round #{(11-(t2/(60*60)).floor/4).floor} currently ongoing)"
-        elsif t2/60>1
-          str2="#{str2} - #{(t2/60).floor} minutes remain in Battle #{t4/2+1}"
-          str2="#{str2} (Round #{(11-(t2/(60*60)).floor/4).floor} currently ongoing)"
-        elsif t2>1
-          str2="#{str2} - #{t2.floor} seconds remain in Battle #{t4/2+1}"
-          str2="#{str2} (Round #{(1-(t2/(60*60)).floor/4).floor} currently ongoing)"
-        elsif t2.floor<=0
-          str2="#{str2} - waiting until Battle #{t4/2+2}"
-        end
-      elsif c2[i][1]=='Voting Gauntlet' && mode>0
-        t4=c2[i][2][0].split('/').map{|q| q.to_i}
-        t4=Time.new(t4[2],t4[1],t4[0])+24*60*60
-        t3=Time.new(t.year,t.month,t.day)+24*60*60
-        t4=t3-t4
-        t4=t4/(24*60*60)
-        t4=t4.floor
-        t2=c2[i][2][0].split('/').map{|q| q.to_i}
-        t2=Time.new(t2[2],t2[1],t2[0],21,0)
-        t2+=24*60*60*(2*(t4/2+1)-1)
-        t2=t2-t
-        if t2/(60*60)>1
-          str2="#{str2} - #{(t2/(60*60)).floor} hours remain in Round #{t4/2+1}"
-        elsif t2/60>1
-          str2="#{str2} - #{(t2/60).floor} minutes remain in Round #{t4/2+1}"
-        elsif t2>1
-          str2="#{str2} - #{t2.floor} seconds remain in Round #{t4/2+1}"
-        elsif t4/2<2
-          str2="#{str2} - waiting until Round #{t4/2+2}"
-        else
-          str2="#{str2} - post-gauntlet buffer period"
-        end
-      end
-    end
-  end
-  return str2
-end
-
-def week_from(d,dow)
-  m=d*1
-  m-=m%7
-  m/=7
-  return m+1 if d%7>=dow
-  return m
-end
-
-def calc_easter()
-  t = Time.now
-  y = t.year
-  c1 = y / 100
-  n1 = y - 19 * (y / 19)
-  k = (c1 - 17) / 25
-  i1 = c1 - c1 / 4 - (c1 - k) / 3 + 19 * n1 + 15
-  i1 = i1 - 30 * (i1 / 30)
-  i1 = i1 - (i1 / 28) * (1 - (i1 / 28) * (29 / (i1 + 1)) * ((21 - n1) / 11))
-  l1 = y + y / 4 + i1 + 2 - c1 + c1 / 4
-  l1 = l1 - 7 * (l1 / 7)
-  l1 = i1 - l1
-  m = 3 + (l1 + 40) / 44
-  d = l1 + 28 - 31 * (m / 4)
-  if t.month>m || (t.month==m && t.day>d)
-    y += 1
-    c1 = y / 100
-    n1 = y - 19 * (y / 19)
-    k = (c1 - 17) / 25
-    i1 = c1 - c1 / 4 - (c1 - k) / 3 + 19 * n1 + 15
-    i1 = i1 - 30 * (i1 / 30)
-    i1 = i1 - (i1 / 28) * (1 - (i1 / 28) * (29 / (i1 + 1)) * ((21 - n1) / 11))
-    l1 = y + y / 4 + i1 + 2 - c1 + c1 / 4
-    l1 = l1 - 7 * (l1 / 7)
-    l1 = i1 - l1
-    m = 3 + (l1 + 40) / 44
-    d = l1 + 28 - 31 * (m / 4)
-  end
-  return [y,m,d]
-end
-
 def next_holiday(bot,mode=0)
   t=Time.now
   t-=60*60*6
+  puts 'reloading EliseText'
+  load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+  @last_multi_reload[1]=t
   holidays=[[0,1,1,'Tiki(Young)','as Babby New Year',"New Year's Day"],
             [0,2,2,'Feh','the best gacha game ever!','Game Release Anniversary'],
             [0,2,14,'Cordelia(Bride)','with your heartstrings.',"Valentine's Day"],
