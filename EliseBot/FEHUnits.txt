@@ -158,6 +158,7 @@ Leo(Summer)\Red, Tome, Dark\ \Infantry\5, 7, 6, 1, 9\37, 32, 27, 16, 35\Tobi\Max
 Leon\Colorless, Bow\ \Infantry\6, 8, 7, 6, 1\39, 34, 30, 30, 15\Miyajima Haru\Lucien Dodge\Takahashi Koji\3p4p\M\FE15, FE2\Leon
 Lewyn\Green, Tome, Wind\ \Infantry\6, 8, 8, 2, 5\38, 34, 37, 17, 25\Suda Ayuka\Steve Staley\\5p\M\FE4\Lewyn
 Libra\Green, Blade\ \Infantry\6, 8, 7, 6, 6\40, 35, 32, 28, 29\Miyajima Haru\Cindy Robinson\\4p5p\M\FE13\Libra
+Lif\Red, Blade\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Kozaki Yusuke\Edward Bosco\\-\M\FEH\Lif
 Lilina\Red, Tome, Fire\ \Infantry\5, 9, 5, 3, 6\35, 37, 25, 19, 31\BUNBUN\Julie Kliewer\Ozawa Ari\3p4pLU\F\FE6, (st)SSBB, (s)SSBU\Lilina
 Lilina(Valentines)\Green, Tome, Wind\ \Cavalry\4, 8, 6, 3, 6\34, 35, 30, 20, 26\BUNBUN\Julie Kliewer\Ozawa Ari\5s\F\FE6\Lilina
 Linde\Blue, Tome, Thunder\ \Infantry\5, 8, 8, 1, 6\35, 35, 36, 14, 27\Kippu\Julie Ann Taylor\Seto Asami\5pLU\F\FE3, FE1, FE11, FE12, FEW, (s)SSBU\Linde
@@ -297,6 +298,7 @@ Tana(Summer)\Red, Tome, Fire\ \Flier\5, 8, 8, 3, 5\35, 33, 36, 20, 25\cuboon\Mel
 Tharja\Red, Tome, Dark\ \Infantry\6, 7, 8, 4, 3\39, 32, 34, 23, 20\ZIS\Stephanie Sheh\Takada Yuuki\3p4pLU\F\FE13, FEW, (s)SSBU\Tharja
 Tharja(Bride)\Red, Tome, Fire\ \Infantry\6, 8, 8, 3, 4\39, 35, 35, 21, 21\Sencha\Stephanie Sheh\Takada Yuuki\5s\F\FE13, FEW\Tharja
 Tharja(Winter)\Red, Tome, Dark\ \Armor\7, 7, 2, 8, 8\43, 34, 18, 34, 36\Washimoto\Stephanie Sheh\Takada Yuuki\5s\F\FE13, FEW\Tharja
+Thrasir\Green, Tome, Wind\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Kozaki Yusuke\Lizzie Freeman\\-\F\FEH\Thrasir
 Tiki(Adult)\Red, Dragon\ \Infantry\6, 9, 4, 8, 4\40, 35, 23, 35, 24\Ito Noizi\Mela Lee\Ohtani Ikue\3p4p3qLU\F\FE13, (t)SSB4, PXZ2, (at)SSBU, (s)SSBU\*Tiki, Adult
 Tiki(Adult)(Summer)\Green, Blade\ \Infantry\4, 9, 7, 7, 4\35, 36, 30, 32, 24\Okaya\Mela Lee\Ohtani Ikue\5s\F\FE13, PXZ2\Tiki, Adult
 Tiki(Young)\Red, Dragon\ \Infantry\8, 8, 8, 7, 6\41, 31, 30, 32, 29\Ito Noizi\Mela Lee\Morohoshi Sumire\5pLU\F\FE3, FE1, FE11, FE12, FEW, (s)SSBU\*Tiki, Young
