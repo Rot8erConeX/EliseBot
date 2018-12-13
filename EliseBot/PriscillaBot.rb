@@ -1957,6 +1957,10 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
   args=sever(event.message.text,true).split(' ') if args.nil?
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   args=args.map{|q| q.downcase.gsub('(','').gsub(')','')}
+  nicknames_load()
+  k=0
+  k=event.server.id unless event.server.nil?
+  alz=@aliases.reject{|q| q[0]!='Skill' || q[3].nil? || !q[3].include?(k)}.map{|q| [q[1],q[2]]}
   stat_skills=[]
   lookout=[]
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
@@ -1967,6 +1971,8 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
     lookout=lookout.reject{|q| q[3]!='Stat-Affecting 1'}
   end
   for i in 0...lookout.length
+    m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
+    lookout[i][1]+=m
     for i2 in 0...lookout[i][2]
       stat_skills.push(lookout[i][0]) if count_in(args,lookout[i][1])>i2
     end
@@ -1984,6 +1990,8 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
   end
   for i in 0...lookout.length
     lokoout.push(lookout[i][0])
+    m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
+    lookout[i][1]+=m
     for i2 in 0...lookout[i][2]
       stat_skills.push(lookout[i][0]) if count_in(args,lookout[i][1])>i2
     end
@@ -2018,6 +2026,10 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
   args=sever(event.message.text,true).split(' ') if args.nil?
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   args=args.map{|q| q.gsub('(','').gsub(')','').downcase}
+  nicknames_load()
+  k=0
+  k=event.server.id unless event.server.nil?
+  alz=@aliases.reject{|q| q[0]!='Skill' || q[3].nil? || !q[3].include?(k)}.map{|q| [q[1],q[2]]}
   stat_skills_2=[]
   lookout=[]
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
@@ -2028,6 +2040,8 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
     lookout=lookout.reject{|q| q[3]!='Stat-Buffing 1' && q[3]!='Stat-Nerfing 1'}
   end
   for i in 0...lookout.length
+    m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
+    lookout[i][1]+=m
     for i2 in 0...lookout[i][2]
       stat_skills_2.push(lookout[i][0]) if count_in(args,lookout[i][1])>i2
     end
@@ -2058,6 +2072,10 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
     end
     lookout=lookout.reject{|q| q[3]!='Stat-Buffing 2' && q[3]!='Stat-Nerfing 2'}
   end
+  for i in 0...lookout.length
+    m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
+    lookout[i][1]+=m
+  end
   for i in 0...args.length
     skl=lookout.find_index{|q| q[1].include?(args[i].downcase)}
     unless skl.nil? || (lookout[skl][5] && @units[j][1][1]!='Dragon')
@@ -2084,6 +2102,10 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
     end
     lookout=lookout.reject{|q| q[3]!='Stat-Buffing 3' && q[3]!='Stat-Nerfing 3'}
   end
+  for i in 0...lookout.length
+    m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
+    lookout[i][1]+=m
+  end
   for i in 0...args.length
     skl=lookout.find_index{|q| q[1].include?(args[i].downcase)}
     unless skl.nil?
@@ -2097,6 +2119,10 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
   args=sever(event.message.text,true).split(' ') if args.nil?
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   args=args.map{|q| q.gsub('(','').gsub(')','').downcase}
+  nicknames_load()
+  k=0
+  k=event.server.id unless event.server.nil?
+  alz=@aliases.reject{|q| q[0]!='Skill' || q[3].nil? || !q[3].include?(k)}.map{|q| [q[1],q[2]]}
   stat_skills_3=[]
   lookout=[]
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
@@ -2107,6 +2133,8 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
     lookout=lookout.reject{|q| q[3]!='Enemy Phase' && q[3]!='Player Phase' && q[3]!='In-Combat Buffs 1'}
   end
   for i in 0...lookout.length
+    m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
+    lookout[i][1]+=m
     for i2 in 0...lookout[i][2]
       stat_skills_3.push(lookout[i][0]) if count_in(args,lookout[i][1])>i2
     end
@@ -2148,6 +2176,10 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
       lookout.push(eval line)
     end
     lookout=lookout.reject{|q| q[3]!='In-Combat Buffs 2'}
+  end
+  for i in 0...lookout.length
+    m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
+    lookout[i][1]+=m
   end
   for i in 0...args.length
     skl=lookout.find_index{|q| q[1].include?(args[i].downcase)}
@@ -13863,7 +13895,7 @@ bot.command([:deletegroup,:removegroup]) do |event, name|
   elsif !is_mod?(event.user,event.server,event.channel)
     event.respond 'You are not a mod.'
     return nil
-  elsif find_group(groupname,event)>-1 && @groups[find_group(groupname,event)][2].nil? && event.user.id != 167657750971547648
+  elsif find_group(name,event)>-1 && @groups[find_group(name,event)][2].nil? && event.user.id != 167657750971547648
     event.respond 'You do not have the privileges to edit this global group.'
     return nil
   end
@@ -15232,7 +15264,7 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
     @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (b[0].downcase <=> a[0].downcase)}
     zunits=@aliases.reject{|q| q[0]!='Unit'}
     zskills=@aliases.reject{|q| q[0]!='Unit'}
-    if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<'Zephiel' || zskills[zskills.length-1].length<=1 || zskillz[zskillz.length-1][2]<'Yato'
+    if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<'Zephiel' || zskills[zskills.length-1].length<=1 || zskills[zskills.length-1][2]<'Yato'
       event.respond 'Alias list has __***NOT***__ been backed up, as alias list has been corrupted.'
       return nil
     end
