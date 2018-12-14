@@ -1387,9 +1387,9 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
   data_load()
   stringx=event.message.text if stringx.nil?
   s=stringx
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4])
-  s=s[0,s.length-2] if ["``"].include?(stringx.downcase[stringx.length-2,2])
+  s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2]) && s.length>1
+  s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4]) && s.length>3
+  s=s[0,s.length-2] if ["``"].include?(stringx.downcase[stringx.length-2,2]) && s.length>1
   a=s.gsub('.','').split(' ')
   s=stringx if all_commands().include?(a[0])
   args=sever(s,true).split(' ')
@@ -1403,8 +1403,8 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
   args=args.reject{ |a| find_skill(a,event,true)>-1 }
   args=args.reject{ |a| a=="``"}
   args.compact!
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4])
+  s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2]) && s.length>1 && ['f?','e?','h?'].include?(s.downcase[0,2])
+  s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4]) && s.length>3 && ['feh!','feh?'].include?(s.downcase[0,2])
   a=s.split(' ')
   args.shift if all_commands().include?(a[0])
   args2=args.join(' ').split(' ')
