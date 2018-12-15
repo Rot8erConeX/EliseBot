@@ -184,7 +184,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}**",'Lists all weapons that can be refined to obtain an Effect Mode in the weapon refinery.',0xD49F61)
   elsif ['refinery','refine'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Lists all weapons that can be refined or evolved in the weapon refinery, organized by whether they use Divine Dew or Refining Stones.\n\nYou can also include the word \"Effect\" in your message to show only weapons that get Effect Mode refines.",0xD49F61)
-  elsif ['legendary','legendaries','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(command.downcase)
+  elsif ['legendary','legendaries','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical','legend','legends','legendarys'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Lists all of the Legendary and Mythic heroes, sorted by up to three defined filters.\nBy default, will sort by __Element__ and then the non-HP __stat__ boost given by the hero.\n\nPossible filters (in order of priority when applied) :\nElement(s), Flavor(s), Affinity/Affinities\nStat(s), Boost(s)\nWeapon(s)\nColo(u)r(s)\nMove(s), Movement(s)\nNext, Time, Future, Month(s)",0xD49F61)
   elsif ['games'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows a list of games that the unit `name` is in.',0xD49F61)
@@ -523,6 +523,475 @@ def skill_rarity(event) # this is used by the skillrarity command to display all
   end
 end
 
+def sort_legendaries(event,bot,mode=0)
+  data_load()
+  nicknames_load()
+  g=get_markers(event)
+  k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' '].include?(q[2][0]) || q[2].length<3}.uniq
+  c=[]
+  for i in 0...k.length
+    c.push([249,130,129]) if k[i][2][0]=='Fire'
+    c.push([145,244,255]) if k[i][2][0]=='Water'
+    c.push([152,255,153]) if k[i][2][0]=='Wind'
+    c.push([255,175,126]) if k[i][2][0]=='Earth'
+    c.push([253,243,157]) if k[i][2][0]=='Light'
+    c.push([190,131,254]) if k[i][2][0]=='Dark'
+    c.push([245,164,218]) if k[i][2][0]=='Astra'
+    c.push([225,218,207]) if k[i][2][0]=='Anima'
+    k[i][2][2]=k[i][2][2].split('/').map{|q| q.to_i}.reverse
+    k[i][1][1]=1 if k[i][1][0]=='Red'
+    k[i][1][1]=2 if k[i][1][0]=='Blue'
+    k[i][1][1]=3 if k[i][1][0]=='Green'
+    k[i][1][1]=4 if k[i][1][0]=='Colorless'
+    k[i][1][1]=5 if k[i][1][1].is_a?(String)
+  end
+  k=k.sort{|a,b| ((a[2][2]<=>b[2][2]) == 0 ? ((a[1][1]<=>b[1][1]) == 0 ? b[0]<=>a[0] : a[1][1]<=>b[1][1]) : a[2][2]<=>b[2][2])}
+  for i in 0...k.length
+    m=k[i][2][2].reverse
+    k[i][2][3]=k[i][2][2].map{|q| q}
+    k[i][1][2]=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Orb_#{['','Red','Blue','Green','Colorless','Gold'][k[i][1][1]]}"}[0].mention
+    if m[0]<11
+      m[0]='Early '
+    elsif m[0]<21
+      m[0]='Mid-'
+    else
+      m[0]='Late '
+    end
+    m[1]=['','January','February','March','April','May','June','July','August','September','October','November','December'][m[1]]
+    k[i][2][2]="#{m[0]}#{m[1]} #{m[2]}"
+  end
+  m=0
+  k2=[[k[0][2][2],[[k[0][1][1],"#{k[0][1][2]} - #{k[0][0]}"]],k[0][2][3]]]
+  for i in 1...k.length
+    if k[i][2][2]==k2[m][0]
+      k2[m][1].push([k[i][1][1],"#{k[i][1][2]} - #{k[i][0]}"])
+    else
+      m+=1
+      k2.push([k[i][2][2],[[k[i][1][1],"#{k[i][1][2]} - #{k[i][0]}"]],k[i][2][3]])
+    end
+  end
+  for i in 0...k2.length
+    k2[i][1].push([1,'<:Orb_Red:455053002256941056> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=1}.length>0
+    k2[i][1].push([2,'<:Orb_Blue:455053001971859477> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=2}.length>0
+    k2[i][1].push([3,'<:Orb_Green:455053002311467048> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=3}.length>0
+    k2[i][1].push([4,'<:Orb_Colorless:455053002152083457> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=4}.length>0
+    k2[i][1]=k2[i][1].sort{|a,b| a[0]<=>b[0]}.map{|q| q[1]}.join("\n")
+  end
+  bonus_load()
+  bx=@bonus_units.reject{|q| q[1]!='Arena'}
+  bx2=@bonus_units.reject{|q| q[1]!='Aether'}
+  for i in 0...k2.length
+    unless k2[i][2].nil?
+      t2=Time.new(k2[i][2][0],k2[i][2][1],k2[i][2][2])
+      t2+=(9-t2.wday)*24*60*60
+      tm="#{t2.year}#{'0' if t2.month<10}#{t2.month}#{'0' if t2.day<10}#{t2.day}".to_i
+      lemoji1='<:Legendary_Effect_Unknown:443337603945857024>'
+      b2=[]
+      puts k2[i][0]
+      if k2[i][0].include?('January') || k2[i][0].include?('March') || k2[i][0].include?('May') || k2[i][0].include?('July') || k2[i][0].include?('September') || k2[i][0].include?('November')
+        puts 'yes'
+        t2+=(8-t2.wday)*24*60*60
+        tm="#{t2.year}#{'0' if t2.month<10}#{t2.month}#{'0' if t2.day<10}#{t2.day}".to_i
+        lemoji1='<:Mythic_Effect_Unknown:523328368079273984>'
+        b2=bx2.reject{|q| q[2].nil? || q[2][0].split(', ')[0].split('/').reverse.join('').to_i<=tm}
+      else
+        puts 'no'
+        b2=bx.reject{|q| q[2].nil? || q[2][0].split(', ')[0].split('/').reverse.join('').to_i<=tm}
+      end
+      moji=[]
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{b2[0][3][0]}"} if b2.length>0
+      lemoji1=moji[0].mention unless moji.length<=0
+      if count_in(k2[i][1].split("\n").map{|q| q.split('>')[1]}," - *unknown*")==1
+        k2[i][1]=k2[i][1].gsub(' - *unknown*',"#{lemoji1} - *unknown*")
+      else
+        k2[i][0]="#{k2[i][0]} #{lemoji1}"
+      end
+      k2[i][2]=nil
+      k2[i].compact!
+    end
+  end
+  t=Time.now
+  timeshift=8
+  timeshift-=1 unless t.dst?
+  t-=60*60*timeshift
+  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  b=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
+      b.push(line.gsub("\n",''))
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    b[i]=b[i].split('\\'[0])
+    b[i][1]=b[i][1].to_i
+    b[i][2]=b[i][2].split(', ')
+    b[i][4]=nil if !b[i][4].nil? && b[i][4].length<=0
+    b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
+  end
+  b.compact!
+  b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm || q[5].nil? || !q[5].split(', ').include?('Legendary') || q[2][0]=='-' || q[2].length<4}
+  if b2.length>0
+    m=[]
+    for i in 0...b2.length
+      for j in 0...b2[i][2].length
+        m.push(b2[i][2][j])
+      end
+    end
+    m.uniq!
+    data_load()
+    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || q[2][0]==' ' || q[2].length<2}.uniq
+    m=m.reject{|q| !k.map{|q2| q2[0]}.include?(q)}
+    k=k.reject{|q| !m.include?(q[0])}
+    for i in 0...k.length
+      k[i][1][1]=1 if k[i][1][0]=='Red'
+      k[i][1][1]=2 if k[i][1][0]=='Blue'
+      k[i][1][1]=3 if k[i][1][0]=='Green'
+      k[i][1][1]=4 if k[i][1][0]=='Colorless'
+      k[i][1][1]=5 if k[i][1][1].is_a?(String)
+      k[i][1][2]=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Orb_#{['','Red','Blue','Green','Colorless','Gold'][k[i][1][1]]}"}[0].mention
+    end
+    k=k.sort{|a,b| ((a[1][1]<=>b[1][1]) == 0 ? a[0]<=>b[0] : a[1][1]<=>b[1][1])}.map{|q| "#{q[1][2]} - #{q[0]}"}.join("\n")
+    k2.unshift(['Upcoming banner',k]) unless k==k2[0][1]
+    k2[0][0]='Upcoming banner' if k==k2[0][1]
+  end
+  b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm || q[5].nil? || !q[5].split(', ').include?('Legendary')}
+  if b2.length>0
+    m=[]
+    for i in 0...b2.length
+      for j in 0...b2[i][2].length
+        m.push(b2[i][2][j])
+      end
+    end
+    m.uniq!
+    data_load()
+    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || q[2][0]==' ' || q[2].length<2}.uniq
+    m=m.reject{|q| !k.map{|q2| q2[0]}.include?(q)}
+    k=k.reject{|q| !m.include?(q[0])}
+    for i in 0...k.length
+      k[i][1][1]=1 if k[i][1][0]=='Red'
+      k[i][1][1]=2 if k[i][1][0]=='Blue'
+      k[i][1][1]=3 if k[i][1][0]=='Green'
+      k[i][1][1]=4 if k[i][1][0]=='Colorless'
+      k[i][1][1]=5 if k[i][1][1].is_a?(String)
+      k[i][1][2]=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Orb_#{['','Red','Blue','Green','Colorless','Gold'][k[i][1][1]]}"}[0].mention
+    end
+    k=k.sort{|a,b| ((a[1][1]<=>b[1][1]) == 0 ? a[0]<=>b[0] : a[1][1]<=>b[1][1])}.map{|q| "#{q[1][2]} - #{q[0]}"}.join("\n")
+    k2.unshift(['Current banner',k])
+  end
+  if mode==1
+    return k2.map{|q| "*#{q[0]}*: #{q[1].gsub("\n",', ').gsub(' - ','')}"}.join("\n")
+  else
+    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      msg="__#{k2[0][0]}__\n#{k2[0][1]}"
+      for i in 1...k2.length
+        msg=extend_message(msg,"__#{k2[i][0]}__\n#{k2[i][1]}",event,2)
+      end
+      event.respond msg
+    elsif k2.length>5 || k2.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n").length>1500
+      for i in 0...k2.length/3+1
+        x=''
+        x="__**Legendary and Mythic Heroes' Appearances**__" if i==0
+        create_embed(event,x,'',avg_color(c),nil,nil,k2[3*i,[3,k2.length-3*i].min],2)
+      end
+    else
+      create_embed(event,"__**Legendary and Mythic Heroes' Appearances**__",'',avg_color(c),nil,nil,k2,2)
+    end
+    if safe_to_spam?(event)
+      b2=b.reject{|q| q[5].nil? || !q[5].split(', ').include?('Legendary')}
+      m=[]
+      for i in 0...b2.length
+        for j in 0...b2[i][2].length
+          m.push(b2[i][2][j])
+        end
+      end
+      m.uniq!
+      data_load()
+      k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || q[9][0]!='5s' || m.include?(q[0])}.uniq
+      m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Pink:466196714513235988>Gold',[]]]
+      for i in 0...k.length
+        m2[0][1].push(k[i][0]) if k[i][1][0]=='Red'
+        m2[1][1].push(k[i][0]) if k[i][1][0]=='Blue'
+        m2[2][1].push(k[i][0]) if k[i][1][0]=='Green'
+        m2[3][1].push(k[i][0]) if k[i][1][0]=='Colorless'
+        m2[4][1].push(k[i][0]) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
+      end
+      m2=m2.reject{|q| q[1].length<=0}
+      j="\n"
+      j=', ' if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      for i in 0...m2.length
+        m2[i][1]=m2[i][1].join(j)
+      end
+      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg="__**Seasonal units that have not yet been on a Legendary or Mythic Banner**__"
+        tolongs=[]
+        for i in 0...m2.length
+          if m2[i][1].length>1900
+            tolongs.push(m2[i][0].split('>')[1])
+          else
+            msg=extend_message(msg,"*#{m2[i][0]}*: #{m2[i][1]}",event)
+          end
+        end
+        msg=extend_message(msg,"There are too many seasonal #{list_lift(tolongs,'and')} heroes to display.",event) if tolongs.length>0
+        event.respond msg
+      elsif m2.map{|q| "*#{q[0]}*: #{q[1]}"}.join("\n\n").length>1700
+        tolongs=[]
+        if m2[0][1].length>1900
+          event.respond "__**Seasonal units that have not yet been on a Legendary or Mythic Banner**__"
+          tolongs.push('Red')
+        else
+          create_embed(event,"__**Seasonal units that have not yet been on a Legendary or Mythic Banner**__",'',0xE22141,nil,nil,triple_finish(m2[0][1].split("\n")),2)
+        end
+        if m2[1][1].length>1900
+          tolongs.push('Blue')
+        else
+          create_embed(event,'','',0x2764DE,nil,nil,triple_finish(m2[1][1].split("\n")),2)
+        end
+        if m2[2][1].length>1900
+          tolongs.push('Green')
+        else
+          create_embed(event,'','',0x09AA24,nil,nil,triple_finish(m2[2][1].split("\n")),2)
+        end
+        if m2[3][1].length>1900
+          tolongs.push('Colorless')
+        else
+          create_embed(event,'','',0x64757D,nil,nil,triple_finish(m2[3][1].split("\n")),2)
+        end
+        event.respond "There are too many seasonal #{list_lift(tolongs,'and')} heroes to display." if tolongs.length>0
+      else
+        create_embed(event,"__**Seasonal units that have not yet been on a Legendary or Mythic Banner**__",'',0x9400D3,nil,nil,m2,2)
+      end
+      data_load()
+      k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('p') || q[9][0].include?('4p') || q[9][0].include?('3p') || q[9][0].include?('2p') || q[9][0].include?('1p') || m.include?(q[0])}.uniq
+      m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Gold:455053002911514634>Gold',[]]]
+      for i in 0...k.length
+        m2[0][1].push(k[i][0]) if k[i][1][0]=='Red'
+        m2[1][1].push(k[i][0]) if k[i][1][0]=='Blue'
+        m2[2][1].push(k[i][0]) if k[i][1][0]=='Green'
+        m2[3][1].push(k[i][0]) if k[i][1][0]=='Colorless'
+        m2[4][1].push(k[i][0]) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
+      end
+      m2=m2.reject{|q| q[1].length<=0}
+      j="\n"
+      j=', ' if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      for i in 0...m2.length
+        m2[i][1]=m2[i][1].join(j)
+      end
+      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg="__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary or Mythic Banner**__"
+        tolongs=[]
+        for i in 0...m2.length
+          if m2[i][1].length>1900
+            tolongs.push(m2[i][0].split('>')[1])
+          else
+            msg=extend_message(msg,"*#{m2[i][0]}*: #{m2[i][1]}",event)
+          end
+        end
+        msg=extend_message(msg,"There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes to display.",event) if tolongs.length>0
+        event.respond msg
+      elsif m2.map{|q| "*#{q[0]}*: #{q[1]}"}.join("\n\n").length>1700
+        tolongs=[]
+        if m2[0][1].length>1900
+          event.respond "__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary or Mythic Banner**__"
+          tolongs.push('Red')
+        else
+          create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary or Mythic Banner**__",'',0xE22141,nil,nil,triple_finish(m2[0][1].split("\n")),2)
+        end
+        if m2[1][1].length>1900
+          tolongs.push('Blue')
+        else
+          create_embed(event,'','',0x2764DE,nil,nil,triple_finish(m2[1][1].split("\n")),2)
+        end
+        if m2[2][1].length>1900
+          tolongs.push('Green')
+        else
+          create_embed(event,'','',0x09AA24,nil,nil,triple_finish(m2[2][1].split("\n")),2)
+        end
+        if m2[3][1].length>1900
+          tolongs.push('Colorless')
+        else
+          create_embed(event,'','',0x64757D,nil,nil,triple_finish(m2[3][1].split("\n")),2)
+        end
+        event.respond "There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes to display." if tolongs.length>0
+      else
+        create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__",'',0x9400D3,nil,nil,m2,2)
+      end
+    end
+  end
+  return nil
+end
+
+def disp_legendary_mythical(event,bot,args=[],dispmode='',forcesplit=false)
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  args=args.map{|q| q.downcase}
+  data_load()
+  g=get_markers(event)
+  l=@units.reject{|q| q[2][0]==' ' || !has_any?(g, q[13][0])}
+  l=@units.reject{|q| [' ','Light','Dark','Astra','Anima'].include?(q[2][0]) || !has_any?(g, q[13][0])} if dispmode=='Legendary' && (!safe_to_spam?(event) || forcesplit)
+  l=@units.reject{|q| [' ','Fire','Water','Wind','Earth'].include?(q[2][0]) || !has_any?(g, q[13][0])} if dispmode=='Mythic' && (!safe_to_spam?(event) || forcesplit)
+  l.sort!{|a,b| a[0]<=>b[0]}
+  c=[]
+  for i in 0...l.length
+    c.push([249,130,129]) if l[i][2][0]=='Fire'
+    c.push([145,244,255]) if l[i][2][0]=='Water'
+    c.push([152,255,153]) if l[i][2][0]=='Wind'
+    c.push([255,175,126]) if l[i][2][0]=='Earth'
+    c.push([253,243,157]) if l[i][2][0]=='Light'
+    c.push([190,131,254]) if l[i][2][0]=='Dark'
+    c.push([245,164,218]) if l[i][2][0]=='Astra'
+    c.push([225,218,207]) if l[i][2][0]=='Anima'
+  end
+  l.uniq!
+  x=[]
+  if has_any?(args,['time','next','future','month','months'])
+    sort_legendaries(event,bot)
+    return nil
+  end
+  x.push('Element') if has_any?(args,['element','flavor','elements','flavors','affinity','affinities','affinitys'])
+  x.push('Stat') if has_any?(args,['stat','boost','stats','boosts'])
+  x.push('Weapon') if has_any?(args,['weapon','weapons'])
+  x.push('Color') if has_any?(args,['color','colour','colors','colours'])
+  x.push('Movement') if has_any?(args,['move','movement','moves','movements'])
+  x.push('Element') if x.length<=1
+  x.push('Stat') if x.length<=1
+  l2=l.map{|q| q}
+  pri=''
+  sec=''
+  tri=''
+  for i in 0...l.length
+    l[i][15]=weapon_clss(l[i][1],event,1)
+  end
+  x=prio(x,['Element','Stat','Color','Weapon','Movement'])
+  pri=x[0]
+  sec=x[1]
+  tri=x[2] if x.length>=3
+  if pri=='Element'
+    l2=split_list(event,l,['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima'],-5)
+  elsif pri=='Stat'
+    l2=split_list(event,l,['Attack','Speed','Defense','Resistance'],-6)
+  elsif pri=='Color'
+    l2=split_list(event,l,['Red','Blue','Green','Colorless'],-2)
+  elsif pri=='Weapon'
+    l2=split_list(event,l,['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Dragon','Bow','Dagger','Healer'],15)
+  elsif pri=='Movement'
+    l2=split_list(event,l,['Infantry','Armor','Cavalry','Flier'],3)
+  end
+  p1=[[]]
+  p2=0
+  for i in 0...l2.length
+    if l2[i][0]=='- - -'
+      p2+=1
+      p1.push([])
+    else
+      p1[p2].push(l2[i])
+    end
+  end
+  for i in 0...p1.length
+    x2='.'
+    if pri=='Element'
+      x2=p1[i][0][2][0]
+      element='Unknown'
+      element=x2 if ['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima'].include?(x2)
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+      x2="#{moji[0].mention} #{x2}" if moji.length>0
+    elsif pri=='Stat'
+      x2=p1[i][0][2][1]
+      element='Spectrum'
+      element=x2 if ['Attack','Speed','Defense','Resistance'].include?(x2)
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{element}"}
+      x2="#{moji[0].mention} #{x2}" if moji.length>0
+    elsif pri=='Color'
+      x2=p1[i][0][1][0]
+      element='Gold'
+      element=x2 if ['Red','Blue','Green','Colorless'].include?(x2)
+      moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{element}_Unknown"}
+      x2="#{moji[0].mention} #{x2}" if moji.length>0
+    elsif pri=='Movement'
+      x2=p1[i][0][3]
+      element='Unknown'
+      element=x2 if ['Infantry','Flier','Cavalry','Armor'].include?(x2)
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{element}"}
+      x2="#{moji[0].mention} #{x2}" if moji.length>0
+    elsif pri=='Weapon'
+      x2="#{unit_moji(bot,event,-1,p1[i][0][0],false,1)} #{weapon_clss(p1[i][0][1],event,1)}"
+    end
+    if sec=='Stat'
+      l2=split_list(event,p1[i],['Attack','Speed','Defense','Resistance'],-6)
+    elsif sec=='Color'
+      l2=split_list(event,p1[i],['Red','Blue','Green','Colorless'],-2)
+    elsif sec=='Weapon'
+      l2=split_list(event,p1[i],['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Dragon','Bow','Dagger','Healer'],15)
+    elsif sec=='Movement'
+      l2=split_list(event,p1[i],['Infantry','Armor','Cavalry','Flier'],3)
+    end
+    p2=[[]]
+    p3=0
+    for j in 0...l2.length
+      if l2[j][0]=='- - -'
+        p3+=1
+        p2.push([])
+      else
+        p2[p3].push(l2[j])
+      end
+    end
+    for j in 0...p2.length
+      x3='.'
+      if sec=='Element'
+        x3=p2[j][0][2][0]
+        element='Unknown'
+        element=x3 if ['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima'].include?(x3)
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+        x3="#{moji[0].mention} #{x3}" if moji.length>0
+      elsif sec=='Stat'
+        x3=p2[j][0][2][1]
+        element='Spectrum'
+        element=x3 if ['Attack','Speed','Defense','Resistance'].include?(x3)
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{element}"}
+        x3="#{moji[0].mention} #{x3}" if moji.length>0
+      elsif sec=='Color'
+        x3=p2[j][0][1][0]
+        element='Gold'
+        element=x3 if ['Red','Blue','Green','Colorless'].include?(x3)
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{element}_Unknown"}
+        x3="#{moji[0].mention} #{x3}" if moji.length>0
+      elsif sec=='Movement'
+        x3=p2[j][0][3]
+        element='Unknown'
+        element=x3 if ['Infantry','Flier','Cavalry','Armor'].include?(x3)
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{element}"}
+        x3="#{moji[0].mention} #{x3}" if moji.length>0
+      elsif sec=='Weapon'
+        x3="#{unit_moji(bot,event,-1,p2[j][0][0],false,1)} #{weapon_clss(p2[j][0][1],event,1)}"
+      end
+      p2[j]="__*#{x3}*__\n#{p2[j].map{|q| "#{'~~' unless q[13][0].nil?}#{q[0]}#{" - *#{weapon_clss(q[1],event,1) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{'~~' unless q[13][0].nil?}"}.join("\n")}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || p2[j].length<=1
+      p2[j]="*#{x3}*: #{p2[j].map{|q| "#{'~~' unless q[13][0].nil?}#{q[0]}#{" - *#{weapon_clss(q[1],event,1) if tri=='Weapon'}#{q[1][0] if tri=='Color'}#{q[3] if tri=='Movement'}*" unless tri==''}#{'~~' unless q[13][0].nil?}"}.join(", ")}" if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || p2[j].length<=1
+    end
+    p1[i]=[x2,p2.join("\n\n")] unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || !p2.join('').include?("\n")
+    p1[i]=[x2,p2.join("\n")] if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || !p2.join('').include?("\n")
+  end
+  if p1.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length>1900 && !forcesplit
+    disp_legendary_mythical(event,bot,args,dispmode,true)
+    if dispmode=='Legendary'
+      disp_legendary_mythical(event,bot,args,'Mythic',true)
+    elsif dispmode=='Mythic'
+      disp_legendary_mythical(event,bot,args,'Legendary',true)
+    end
+    return nil
+  end
+  dispmode='Legendary/Mythic' if p1.length>4
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || p1.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length>1900
+    str="__**All #{dispmode} Heroes**__"
+    for i in 0...p1.length
+      str=extend_message(str,"__*#{p1[i][0]}*__\n#{p1[i][1]}",event,2)
+    end
+    event.respond str
+  else
+    create_embed(event,"__**All #{dispmode} Heroes**__",'',avg_color(c),nil,nil,p1)
+  end
+end
+
 def oregano_explain(event,bot)
   if safe_to_spam?(event)
     str="**Q1.) Who is Oregano?**"
@@ -630,8 +1099,30 @@ def merge_explain(event,bot)
 end
 
 def score_explain(event,bot)
-  disp="Score explanation not yet written."
+  disp="**`5`<:Icon_Rarity_5:448266417553539104>` level 40 BST` / 5, rounded down to the nearest full number**"
+  disp="#{disp}\nEven if the unit is not 5\* or level 40, it is their 5\* level 40 BST that determines their BST bin"
+  disp="#{disp}\n\n**`Rarity` \* 5**"
+  disp="#{disp}\nMost users will be using a team of full 5\*s, so this will usually be 25."
+  disp="#{disp}\n\n**`Merge count` \* 2**"
+  disp="#{disp}\nAt +10, this is 20."
+  disp="#{disp}\n\n**`Level` \* 2.25**"
+  disp="#{disp}\nAt level 40, this is always 90."
+  disp="#{disp}\n\n**`number of legendaries giving their blessing to unit` \* 4**"
+  disp="#{disp}\nIf your unit is Water-blessed and on a team alongside three Fjorms, this is 12 during Water season and 0 during other seasons."
+  disp="#{disp}\nFor Legendary Heroes, this is always 0."
   create_embed(event,"__**How to calculate a unit score**__",disp,0x008b8b)
+  if safe_to_spam?(event)
+    disp="**The average of the units' individual scores**"
+    disp="#{disp}\nUnder most cases, this is the sum divided by 4."
+    disp="#{disp}\n\n**Difficulty modification**"
+    disp="#{disp}\nAssuming Advanced difficulty, this is 155."
+    disp="#{disp}\n\n**`number of units on team` \* 4**"
+    disp="#{disp}\nWith a full team, this is always 28."
+    disp="#{disp}\n\n\n**With a bonus unit, multiply the total of everything above by 2.**"
+    disp="#{disp}\nWithout a bonus unit, just use the total above."
+    disp="#{disp}\n**Round the result to the nearest whole number, than decrease to the nearest even number.**"
+    create_embed(event,"__**How to calculate a team score**__",disp,0x008b8b)
+  end
 end
 
 def today_in_feh(event,bot)

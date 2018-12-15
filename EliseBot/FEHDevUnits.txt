@@ -1,5 +1,5 @@
 Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
-Alm\Kana(F)\Matthew\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
+Alm\Eir\Kana(F)\Matthew\Owain\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
@@ -102,9 +102,19 @@ Dull Close 1\Dull Close 2\Dull Close 3
 Spur Res 1\Spur Def/Res 1\Spur Def/Res 2
 Attack/Def +2
 
+Eir
+5\0\\\-
+Iron Dagger\Steel Dagger\Silver Dagger\Lyfjaberg
+~~Reciprocal Aid~~
+Chilling Wind\Iceberg
+Darting Blow 1\Swift Sparrow 1\Swift Sparrow 2
+Mystic Boost 1\Mystic Boost 2\~~Mystic Boost 3~~
+Sparkling Boost
+Iote's Shield
+
 Est
-4\8\Resistance\Attack\-
-Iron Lance\Steel Lance\Brave Lance\Brave Lance+
+4\9\Resistance\Attack\-
+Iron Lance\Steel Lance\Brave Lance\__Brave Lance+__\Whitewing Spear\~~Whitewing Spear (+) Effect Mode~~
 Reposition
 Chilling Wind\Glacies
 Defiant Resistance 1\Defiant Resistance 2\Defiant Resistance 3
@@ -231,6 +241,16 @@ Distant Def 1\Distant Def 2\Distant Def 3
 Blaze Dance 1\Firestorm Dance 1\Firestorm Dance 2
 Spur Res 1\Spur Res 2\Spur Res 3
 Earth Dance 2
+
+Owain
+5\1\Resistance\HP\-
+Iron Sword\Steel Sword\Silver Sword\Missiletainn\Missiletainn (Dark)
+~~Shove~~
+Glowing Ember\Bonfire\~~Blue Flame~~
+Atk/Def Bond 1\Atk/Def Bond 2\Atk/Def Bond 3
+Wrath 1\Wrath 2\~~Wrath 3~~
+Spur Spd 1\Spur Spd Def 1\~~Spur Spd Def 2~~
+Hardy Bearing 3
 
 Priscilla
 4\10\Resistance\Defense\-

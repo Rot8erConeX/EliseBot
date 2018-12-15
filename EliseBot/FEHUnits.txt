@@ -65,7 +65,7 @@ Dorcas\Green, Blade\ \Infantry\8, 8, 4, 8, 5\45, 35, 23, 35, 24\Soeda Ippei\Kirk
 Dorcas(Halloween)\Green, Blade\ \Armor\8, 10, 5, 9, 3\49, 41, 25, 37, 21\Soeda Ippei\Kirk Thornton\Kitamura Kenji\4t5t0s\M\FE7\Dorcas
 Draug\Red, Blade\ \Armor\8, 6, 8, 8, 3\50, 30, 32, 39, 18\Itagaki Hako\Patrick Seitz\Takeuchi Ryouta\3p4p2q3qLU\M\FE3, FE1, FE11, FE12, (s)SSBU\Draug
 Effie\Blue, Blade\ \Armor\9, 9, 4, 6, 5\50, 40, 22, 33, 23\HACCAN\Marisha Ray\Kuwahara Yuuki\3p4pLU\F\FE14C\Effie
-Eir\Colorless, Dagger\Light, Resistance\Flier\5, 7, 9, 1, 7\35, 32, 37, 14, 31\Kozaki Yusuke\Xanthe Huynh\\5s5y\F\FEH\Eir
+Eir\Colorless, Dagger\Light, Resistance, 21/12/2018\Flier\5, 7, 9, 1, 7\35, 32, 37, 14, 31\Kozaki Yusuke\Xanthe Huynh\\5s5y\F\FEH\Eir
 Eirika(Bonds)\Red, Blade\ \Infantry\7, 5, 8, 5, 6\42, 26, 35, 26, 28\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\3p4p\F\FE8, (st)SSBB, (s)SSBU\Eirika*
 Eirika(Graceful)\Red, Blade\Water, Attack, 21/01/2019\Cavalry\6, 8, 9, 5, 3\38, 31, 39, 27, 21\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\5s\F\FE8\Eirika
 Eirika(Memories)\Red, Tome, Dark\ \Cavalry\5, 7, 8, 3, 4\36, 31, 35, 20, 22\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\5p\F\FE8\Eirika
@@ -206,6 +206,7 @@ Morgan(F)\Blue, Tome, Thunder\ \Flier\5, 8, 7, 2, 7\37, 34, 30, 16, 33\Tobi\Nico
 Morgan(M)\Red, Tome, Dark\ \Infantry\5, 8, 8, 3, 5\37, 33, 34, 20, 26\Tobi\Todd Haberkorn\Hosoya Yoshimasa\4p5p\M\FE13\*Morgan, M
 Myrrh\Green, Dragon\ \Flier\8, 8, 5, 11, 7\42, 33, 25, 36, 31\Amagaitaro\Erica Lindbeck\Kadowaki Mai\5p\F\FE8, (st)SSBB\Myrrh
 Myrrh(Halloween)\Red, Dragon\ \Armor\8, 10, 5, 11, 7\46, 38, 23, 40, 32\Amagaitaro\Erica Lindbeck\Kadowaki Mai\5s\F\FE8\Myrrh
+Nailah\Blue, Beast\ \Unknown\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\\\-\F\FE10\Nailah
 Nanna\Colorless, Healer\ \Cavalry\5, 6, 8, 3, 5\36, 27, 34, 21, 26\Konfuzi Kokon\Alicia Stratten\Nazuka Kaori\4p5p\F\FE5, FE4\Nanna
 Narcian\Green, Blade\ \Flier\7, 6, 6, 7, 5\42, 29, 29, 32, 26\Yamada Kotaro\Kaiji Tang\Toriumi Kousuke\2g3g4g2q3q4q4f4r\M\FE6\Narcian
 Navarre\Red, Blade\ \Infantry\7, 7, 8, 4, 5\42, 31, 37, 23, 24\Yura\T. Axelrod\Koyasu Takehito\3g4g4g3q4q3q4q4r\M\FE3, FE1, FE11, FE12, FEW, (s)SSBU\Navarre
@@ -299,6 +300,7 @@ Tharja\Red, Tome, Dark\ \Infantry\6, 7, 8, 4, 3\39, 32, 34, 23, 20\ZIS\Stephanie
 Tharja(Bride)\Red, Tome, Fire\ \Infantry\6, 8, 8, 3, 4\39, 35, 35, 21, 21\Sencha\Stephanie Sheh\Takada Yuuki\5s\F\FE13, FEW\Tharja
 Tharja(Winter)\Red, Tome, Dark\ \Armor\7, 7, 2, 8, 8\43, 34, 18, 34, 36\Washimoto\Stephanie Sheh\Takada Yuuki\5s\F\FE13, FEW\Tharja
 Thrasir\Green, Tome, Wind\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Kozaki Yusuke\Lizzie Freeman\\-\F\FEH\Thrasir
+Tibarn\Red, Beast\ \Unknown\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\\\-\M\FE10, FE9\Tibarn
 Tiki(Adult)\Red, Dragon\ \Infantry\6, 9, 4, 8, 4\40, 35, 23, 35, 24\Ito Noizi\Mela Lee\Ohtani Ikue\3p4p3qLU\F\FE13, (t)SSB4, PXZ2, (at)SSBU, (s)SSBU\*Tiki, Adult
 Tiki(Adult)(Summer)\Green, Blade\ \Infantry\4, 9, 7, 7, 4\35, 36, 30, 32, 24\Okaya\Mela Lee\Ohtani Ikue\5s\F\FE13, PXZ2\Tiki, Adult
 Tiki(Young)\Red, Dragon\ \Infantry\8, 8, 8, 7, 6\41, 31, 30, 32, 29\Ito Noizi\Mela Lee\Morohoshi Sumire\5pLU\F\FE3, FE1, FE11, FE12, FEW, (s)SSBU\*Tiki, Young
@@ -350,6 +352,7 @@ Nesspeon\Red, Tome, Dark\ \Infantry\5, 11, 10, 2, 8\33, 40, 37, 15, 33\\\\4p5p\M
 Nixx(C137)\Colorless, Healer\ \Flier\6, 6, 10, 3, 9\34, 28, 35, 19, 37\\\\4p5p\F\\Nixx(C137)\Y302271226896711682
 Ooocast\Red, Blade\ \Infantry\9, 12, 12, 2, 2\38, 45, 46, 16, 18\\\\3p4p\M\\Ooocast\YA244073468981805056
 Oxorsid\Red, Blade\ \Infantry\7, 6, 9, 8, 7\35, 28, 36, 34, 30\\\\5p\M\\Oxorsid\Y298276809240477696
+Plum\Red, Tome, Fire\ \Flier\5, 8, 2, 7, 6\36, 33, 20, 32, 27\\\\5p\F\\Plum\Y181221840566353920
 Rin(Maid)\Colorless, Dagger\ \Infantry\5, 6, 8, 1, 8\30, 30, 37, 15, 35\\\\3p4p\F\\Rin(Maid)\Y390152501208285188
 Sage\Blue, Tome, Thunder\ \Infantry\6, 7, 6, 2, 8\40, 33, 29, 16, 34\\\\3p4p\M\\Sage\Y239973891626237952
 Saku\Red, Blade\ \Infantry\5, 10, 6, 10, 2\37, 39, 28, 40, 18\\\\4p5p\M\\Saku\Y197414161435590667
