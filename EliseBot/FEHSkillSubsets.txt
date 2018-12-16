@@ -73,6 +73,7 @@
 ['Damage', ['damage'], 'Passive']
 ['StatDrops', ['stat-drops', 'statdrops'], 'Passive']
 ['Sweep', ['sweep', 'elementsweep'], 'Passive']
+['Opening', ['opening', 'open'], 'Passive']
 ['Ploy', ['ploy'], 'Passive']
 ['Smoke', ['smoke'], 'Passive']
 ['Tactic', ['tactic'], 'Passive']
