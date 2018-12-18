@@ -1545,6 +1545,169 @@ def disp_current_events(mode=0)
   return str2
 end
 
+def show_bonus_units(event,args='',bot)
+  bonus_load()
+  data_load()
+  t=Time.now
+  timeshift=8
+  timeshift-=1 unless t.dst?
+  t-=60*60*timeshift
+  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  unless args=='Tempest' || args=='Aether'
+    b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      event.respond "There are no known quantities about Arena."
+    else
+      s=[0,1]
+      m=[]
+      k=[]
+      flds=[]
+      for i in 0...b.length
+        if b[i][0]!=k
+          unless i==0
+            ss="Season #{s[0]}"
+            ss="Current Season" if s[0]==1
+            ss="Next Season" if s[0]==2
+            if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+              event.respond "__**#{ss}**__\n\n#{m.join("\n")}" unless s[0]>2
+            else
+              flds.push([ss,m.join("\n")])
+            end
+          end
+          k=b[i][0].map{|q| q}
+          m=[]
+          m.push(b[i][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}.join("\n"))
+          m.push('')
+          s[0]+=1
+          s[1]=1
+        end
+        element=b[i][3][0]
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+        element=b[i][3][1]
+        moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        if i==0
+          t2=Time.new(2017,2,2)-60*60
+          t2=t-t2
+          date=(((t2.to_i/60)/60)/24)
+          m.push("Current week: #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}") if date%7 != 4 || 15-t.hour>=0
+        elsif i==1
+          m.push("Next week: #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}")
+        elsif m[0,1]=='-' && s[1]>10
+        else
+          m.push("Week #{s[1]}: #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}")
+        end
+        s[1]+=1
+      end
+      ss="Season #{s[0]}"
+      ss="Current Season" if s[0]==1
+      ss="Next Season" if s[0]==2
+      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        event.respond "__**#{ss}**__\n\n#{m.join("\n")}" unless s[0]>2
+      else
+        if safe_to_spam?(event)
+          flds.push([ss,m.join("\n")])
+          for i in 0...flds.length
+            create_embed(event,"__**Arena: #{flds[i][0]}**__",flds[i][1],0x002837)
+          end
+        else
+          create_embed(event,"__**Arena Bonus Units**__",'',0x002837,nil,nil,flds[0,[2,flds.length].min])
+        end
+      end
+    end
+  end
+  unless args=='Arena' || args=='Aether'
+    b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      event.respond "There are no known quantities about Tempest."
+    else
+      flds=[]
+      k=b[0][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
+      if b[0][2][0].split('/').reverse.join('').to_i<tm || b.length>1
+        msg2="Current"
+      else
+        msg2="Future"
+      end
+      flds.push([msg2,k.join("\n")])
+      if b.length>1
+        k=b[1][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
+        flds.push(['Future',k.join("\n")])
+      end
+      if flds.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length>1500
+        for i in 0...flds.length
+          create_embed(event,"__**Tempest Trials: #{flds[i][0]}**__",flds[i][1],0x5ED0CF)
+        end
+      else
+        create_embed(event,"__**Tempest Trials Bonus Units**__",'',0x5ED0CF,nil,nil,flds)
+      end
+    end
+  end
+  unless args=='Arena' || args=='Tempest'
+    b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][1].split('/').reverse.join('').to_i<tm}
+    if b.length<=0
+      event.respond "There are no known quantities about Aether Raids."
+    else
+      s=[0,1]
+      m=[]
+      m2=[]
+      k=[]
+      flds=[]
+      for i in 0...b.length
+        if b[i][0]!=k
+          unless i==0
+            ss="Season #{s[0]}"
+            ss="Current Season" if s[0]==1
+            ss="Next Season" if s[0]==2
+            if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+              event.respond "__**#{ss}**__\n\n#{m.join("\n")}" unless s[0]>2
+            else
+              flds.push([ss,m.join("\n")])
+            end
+          end
+          k=b[i][0].map{|q| q}
+          m=[]
+          m.push(b[i][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}.join("\n"))
+          m.push('')
+          s[0]+=1
+          s[1]=1
+        end
+        element=b[i][3][0]
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        element=b[i][3][1]
+        moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        mm2="#{b[i][4][0]} (O), #{b[i][4][1]} (D)"
+        mm2="#{b[i][4][0]} (O/D)" if b[i][4][0]==b[i][4][1]
+        if i==0
+          t2=Time.new(2017,2,2)-60*60
+          t2=t-t2
+          date=(((t2.to_i/60)/60)/24)
+          m.push("#{"\n" unless s[1]==1}*Current week*\n#{moji[0].mention unless moji[0].nil?}#{b[i][3][0]}, #{moji2[0].mention unless moji2[0].nil?}#{b[i][3][1]}\n#{mm2}") if date%7 != 3 || 15-t.hour>=0
+        elsif i==1
+          m.push("#{"\n" unless s[1]==1}*Next week*\n#{moji[0].mention unless moji[0].nil?}#{b[i][3][0]}, #{moji2[0].mention unless moji2[0].nil?}#{b[i][3][1]}\n#{mm2}")
+        elsif m[0,1]=='-' && s[1]>10
+        else
+          m.push("#{"\n" unless s[1]==1}*Week #{s[1]}*\n#{moji[0].mention unless moji[0].nil?}#{b[i][3][0]}, #{moji2[0].mention unless moji2[0].nil?}#{b[i][3][1]}\n#{mm2}")
+        end
+        s[1]+=1
+      end
+      ss="Season #{s[0]}"
+      ss="Current Season" if s[0]==1
+      ss="Next Season" if s[0]==2
+      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        event.respond "__**#{ss}**__\n\n#{m.join("\n")}" unless s[0]>2
+      else
+        flds.push([ss,m.join("\n")])
+        if safe_to_spam?(event)
+          for i in 0...flds.length
+            create_embed(event,"__**Aether Raids: #{flds[i][0]}**__",flds[i][1],0x54C571)
+          end
+        else
+          create_embed(event,"__**Aether Raids Bonus Units**__",'',0x54C571,nil,nil,flds[0,[2,flds.length].min])
+        end
+      end
+    end
+  end
+end
+
 def next_events(event,bot,type)
   type='' if type.nil?
   idx=-1

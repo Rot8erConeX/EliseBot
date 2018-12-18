@@ -36,7 +36,7 @@ Canas\Red, Tome, Dark\ \Infantry\5, 6, 7, 4, 7\36, 32, 29, 21, 33\Tobi\Joe Zeija
 Catria\Blue, Blade\ \Flier\6, 7, 7, 6, 5\39, 31, 34, 29, 25\Amagaitaro\Connor Kelley\Nabatame Hitomi\3p4p3qLU\F\FE3, FE1, FE2, FE11, FE12, FE15, (s)SSBU\Catria
 Catria(Spring)\Blue, Tome, Thunder\ \Cavalry\5, 8, 8, 2, 4\36, 32, 35, 18, 23\Amagaitaro\Connor Kelley\Nabatame Hitomi\5s\F\FE3, FE1, FE2, FE11, FE12, FE15\Catria
 Cecilia\Green, Tome, Wind\ \Cavalry\5, 7, 5, 4, 6\36, 32, 25, 22, 29\Kita Senri\Cherami Leigh\Yukinari Toa\1d2d3p4p3qLU\F\FE6\Cecilia
-Cecilia(Winter)\Colorless, Dagger\ \Unknown\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\Cherami Leigh\Yukinari Toa\4t5t0s\F\FE6\Cecilia
+Cecilia(Winter)\Colorless, Dagger\ \Armor\6, 7, 4, 7, 8\41, 35, 23, 30, 36\Kita Senri\Cherami Leigh\Yukinari Toa\4t5t0s\F\FE6\Cecilia
 Celica\Red, Tome, Fire\ \Infantry\6, 7, 8, 4, 3\39, 32, 33, 22, 22\Fujikawa Akira\Erica Lindbeck\Touyama Nao\5p\F\FE15, FE2, FEW, (s)SSBU\Celica
 Celica(Brave)\Red, Blade\ \Infantry\6, 8, 9, 6, 4\38, 33, 39, 29, 24\Hidari\Erica Lindbeck\Touyama Nao\5p\F\FE15, FE2, FEW\*Celica
 Celica(Fallen)\Red, Blade\ \Infantry\6, 8, 8, 6, 5\40, 35, 35, 27, 26\Fujikawa Akira\Erica Lindbeck\Touyama Nao\5p\F\FE15\Celica
@@ -70,7 +70,7 @@ Eir\Colorless, Dagger\Light, Resistance, 21/12/2018\Flier\5, 7, 9, 1, 7\35, 32, 
 Eirika(Bonds)\Red, Blade\ \Infantry\7, 5, 8, 5, 6\42, 26, 35, 26, 28\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\3p4p\F\FE8, (st)SSBB, (s)SSBU\Eirika*
 Eirika(Graceful)\Red, Blade\Water, Attack, 21/01/2019\Cavalry\6, 8, 9, 5, 3\38, 31, 39, 27, 21\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\5s\F\FE8\Eirika
 Eirika(Memories)\Red, Tome, Dark\ \Cavalry\5, 7, 8, 3, 4\36, 31, 35, 20, 22\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\5p\F\FE8\Eirika
-Eirika(Winter)\Colorless, Healer\ \Armor\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\5s\F\FE8\Eirika
+Eirika(Winter)\Colorless, Healer\ \Armor\7, 8, 4, 6, 7\42, 36, 23, 30, 34\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\5s\F\FE8\Eirika
 Eldigan\Red, Blade\ \Cavalry\8, 7, 5, 8, 2\45, 32, 24, 34, 19\PenekoR\Greg Chun\Majima Junji\5p\M\FE4\Eldigan
 Elincia\Red, Blade\ \Flier\5, 8, 8, 5, 5\35, 34, 36, 24, 27\Kippu\Amanda Miller\Takita Juri\5p\F\FE9, FE10, (t)SSBB, (t)SSB4, (s)SSBU\Elincia
 Elincia(Festival)\Green, Dagger\ \Infantry\5, 7, 9, 3, 4\34, 29, 35, 20, 21\Asatani Tomoyo\Amanda Miller\Takita Juri\5s\F\FE10, FE9\Elincia
@@ -81,11 +81,11 @@ Eliwood(Valentines)\Blue, Blade\ \Armor\7, 9, 7, 6, 6\47, 38, 32, 29, 29\Ito Mis
 Ephraim\Blue, Blade\ \Infantry\8, 8, 5, 7, 3\45, 35, 25, 32, 20\Asatani Tomoyo\Greg Chun\Yashiro Taku\5p\M\FE8, (st)SSBB, (s)SSBU\Ephraim
 Ephraim(Brave)\Green, Blade\ \Armor\7, 9, 6, 8, 5\46, 38, 27, 37, 26\Wada Sachiko\Greg Chun\Yashiro Taku\5p\M\FE8\Ephraim
 Ephraim(Fire)\Blue, Blade\Fire, Defense, 21/02/2019\Cavalry\7, 8, 6, 7, 3\43, 36, 27, 33, 18\Asatani Tomoyo\Greg Chun\Yashiro Taku\5s\M\FE8\Ephraim
-Ephraim(Winter)\Blue, Blade\ \Armor\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\Greg Chun\Yashiro Taku\5s\M\FE8\Ephraim
+Ephraim(Winter)\Blue, Blade\ \Armor\7, 10, 4, 8, 6\45, 41, 23, 36, 29\\Greg Chun\Yashiro Taku\5s\M\FE8\Ephraim
 Ethlyn\Colorless, Healer\ \Cavalry\6, 6, 7, 6, 2\38, 28, 34, 26, 20\kaya8\Allegra Clark\\4t5t4r\F\FE4\Ethlyn
 Est\Blue, Blade\ \Flier\5, 8, 6, 5, 7\36, 35, 30, 24, 32\Miwabe Sakura\Brianna Knickerbocker\Murakawa Rie\3p4p3qLU\F\FE3, FE1, FE2, FE11, FE12, FE15, (s)SSBU\Est
 Fae\Green, Dragon\ \Infantry\10, 9, 7, 5, 6\46, 33, 28, 25, 30\Himukai Yuji\Sarah Blandy\Ozawa Ari\3p4pLU\F\FE6, FE7\Fae
-Fae(Winter)\Green, Dragon\ \Armor\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Himukai Yuji\Sarah Blandy\Ozawa Ari\5s\F\FE6, FE7\Fae
+Fae(Winter)\Green, Dragon\ \Armor\9, 8, 6, 7, 11\45, 35, 26, 33, 41\Himukai Yuji\Sarah Blandy\Ozawa Ari\5s\F\FE6, FE7\Fae
 Faye\Colorless, Bow\ \Infantry\8, 7, 6, 6, 7\42, 30, 25, 26, 31\Konfuzi Kokon\Amber Connor\Tanezaki Atsumi\5p\F\FE15\Faye
 Felicia\Colorless, Dagger\ \Infantry\5, 4, 8, 3, 8\34, 23, 37, 18, 35\HAKO\Connor Kelley\Sasaki Nozomi\1d2d3p4p3qLU\F\FE14\Felicia
 Finn\Blue, Blade\ \Cavalry\6, 8, 7, 7, 4\40, 34, 33, 32, 18\Itagaki Hako\Robert Clotworthy\Okiayu Ryotaro\5t4t4r\M\FE5, FE4\Finn

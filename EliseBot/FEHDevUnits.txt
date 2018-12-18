@@ -239,7 +239,7 @@ Dance
 Dragon Gaze\Draconic Aura
 Distant Def 1\Distant Def 2\Distant Def 3
 Blaze Dance 1\Firestorm Dance 1\Firestorm Dance 2
-Spur Res 1\Spur Res 2\Spur Res 3
+Breath of Life 1\Breath of Life 2\Breath of Life 3
 Earth Dance 2
 
 Owain
