@@ -15,6 +15,7 @@ Azama\Colorless, Healer\ \Infantry\7, 4, 5, 7, 5\43, 21, 26, 32, 25\Okaya\Matt M
 Azura\Blue, Blade\ \Infantry\5, 8, 8, 4, 6\36, 31, 33, 21, 28\kaya8\Rena Strober\Lynn\5pLU\F\FE14, FEW, (s)SSBU\Azura
 Azura(Adrift)\Green, Tome, Wind\ \Infantry\6, 8, 7, 2, 5\36, 33, 29, 17, 25\kaya8\Rena Strober\Lynn\4t5t\F\FE14, FEW\Azura
 Azura(Performing)\Green, Blade\ \Infantry\5, 8, 8, 4, 6\35, 32, 34, 20, 28\kaya8\Rena Strober\Lynn\5s\F\FE14, FEW\*Azura
+Azura(Vallite)\Blue, Tome, Light\Water, Resistance, 21/12/2018\Flier\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\kaya8\Rena Strober\Lynn\5s\F\FE14, FEW\Azura
 Azura(Winter)\Green, Blade\ \Flier\6, 7, 8, 4, 6\37, 30, 35, 22, 26\kaya8\Rena Strober\Lynn\5s\F\FE14, FEW\Azura
 Barst\Green, Blade\ \Infantry\8, 7, 7, 7, 2\46, 33, 32, 30, 17\Wada Sachiko\DC Douglas\Hamano Daiki\3p4p3q3qLU\M\FE3, FE1, FE11, FE12, (s)SSBU\Barst
 Bartre\Green, Blade\ \Infantry\9, 8, 5, 8, 1\49, 36, 25, 33, 13\Okaya\Kyle Hebert\Tone Kentarou\3p4p3qLU\M\FE6, FE7\Bartre

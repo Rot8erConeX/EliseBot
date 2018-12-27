@@ -1099,8 +1099,8 @@ def merge_explain(event,bot)
 end
 
 def score_explain(event,bot)
-  disp="**`5`<:Icon_Rarity_5:448266417553539104>` level 40 BST` / 5, rounded down to the nearest full number**"
-  disp="#{disp}\nEven if the unit is not 5\* or level 40, it is their 5\* level 40 BST that determines their BST bin"
+  disp="**`5`<:Icon_Rarity_5:448266417553539104>`+0 level 40 BST` / 5, rounded down to the nearest full number**"
+  disp="#{disp}\nEven if the unit is not 5\* or level 40, or already merged, it is their 5\*+0 level 40 BST that determines their BST bin"
   disp="#{disp}\n\n**`Rarity` \* 5**"
   disp="#{disp}\nMost users will be using a team of full 5\*s, so this will usually be 25."
   disp="#{disp}\n\n**`Merge count` \* 2**"
@@ -1223,6 +1223,7 @@ def today_in_feh(event,bot)
     b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
   end
   b.compact!
+  bx=b.map{|q| q}
   c=[]
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHEvents.txt')
     c=[]
@@ -1279,9 +1280,13 @@ def today_in_feh(event,bot)
     else
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
       m2=k.length%2
-      m="#{b[0][3][0]} (O), #{b[0][3][1]} (D)"
-      m="#{b[0][3][0]} (O/D)" if b[0][3][0]==b[0][3][1]
-      str2="__**Current Aether Raids Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m2].join(', ')}\n#{k[k.length/2+m2,k.length/2].join(', ')}\n*Current Bonus Structures:* #{m}"
+      m="#{b[0][4][0]} (O), #{b[0][4][1]} (D)"
+      m="#{b[0][4][0]} (O/D)" if b[0][4][0]==b[0][4][1]
+      element=b[0][3][0]
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      element=b[0][3][1]
+      moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      str2="__**Current Aether Raids Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m2].join(', ')}\n#{k[k.length/2+m2,k.length/2].join(', ')}\n*Bonus Structures:* #{m}\n*Elemental Season:* #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
     end
     str=extend_message(str,str2,event,2)
     str2='__**Tomorrow in** ***Fire Emblem Heroes***__'
@@ -1309,7 +1314,7 @@ def today_in_feh(event,bot)
     end
     t3=t+24*60*60
     tm="#{'0' if t3.day<10}#{t3.day}/#{'0' if t3.month<10}#{t3.month}/#{t3.year}"
-    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0]!=tm}
+    b2=bx.reject{|q| q[4].nil? || q[4].split(', ')[0]!=tm}
     c2=c.reject{|q| q[2].nil? || q[2][0]!=tm}
     str2="#{str2}\nNew Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}" if b2.length>0
     str2="#{str2}\nNew Events: #{c2.map{|q| "*#{q[0]} (#{q[1]})*"}.join('; ')}" if c2.length>0
@@ -1333,9 +1338,13 @@ def today_in_feh(event,bot)
     b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][0].split('/').reverse.join('').to_i != tm}
     unless b.length<=0
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
-      m="#{b[0][3][0]} (O), #{b[0][3][1]} (D)"
-      m="#{b[0][3][0]} (O/D)" if b[0][3][0]==b[0][3][1]
-      str2="#{str2}\nTomorrow's Aether Raids Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nTomorrow's Aether Raids Bonus Structures: #{m}"
+      m="#{b[0][4][0]} (O), #{b[0][4][1]} (D)"
+      m="#{b[0][4][0]} (O/D)" if b[0][4][0]==b[0][4][1]
+      element=b[0][3][0]
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      element=b[0][3][1]
+      moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      str2="#{str2}\nTomorrow's Aether Raids Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nTomorrow's Aether Raids Bonus Structures: #{m}\nElemental Season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
     end
     str=extend_message(str,str2,event,2)
   else
@@ -1370,9 +1379,13 @@ def today_in_feh(event,bot)
       str2="There are no known quantities about Aether Raids."
     else
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
-      m="#{b[0][3][0]} (O), #{b[0][3][1]} (D)"
-      m="#{b[0][3][0]} (O/D)" if b[0][3][0]==b[0][3][1]
-      str2="Current Aether Raids Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nCurrent Aether Raids Bonus Structures: #{m}"
+      m="#{b[0][4][0]} (O), #{b[0][4][1]} (D)"
+      m="#{b[0][4][0]} (O/D)" if b[0][4][0]==b[0][4][1]
+      element=b[0][3][0]
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      element=b[0][3][1]
+      moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      str2="Current Aether Raids Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nCurrent Aether Raids Bonus Structures: #{m}\nElemental Season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
     end
     str=extend_message(str,str2,event)
   end

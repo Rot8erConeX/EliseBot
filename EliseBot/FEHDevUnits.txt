@@ -114,7 +114,7 @@ Iote's Shield
 
 Est
 4\9\Resistance\Attack\-
-Iron Lance\Steel Lance\Brave Lance\__Brave Lance+__\Whitewing Spear\~~Whitewing Spear (+) Effect Mode~~
+Iron Lance\Steel Lance\Heavy Spear\Heavy Spear+\Slaying Spear+\~~__Slaying Spear+ (+) Effect Mode__~~\Whitewing Spear\~~Whitewing Spear (+) Effect Mode~~
 Reposition
 Chilling Wind\Glacies
 Defiant Resistance 1\Defiant Resistance 2\Defiant Resistance 3
@@ -183,7 +183,7 @@ Spur Atk 1\Drive Atk 1\Drive Atk 2
 Close Def 3
 
 Mae
-5\3\Attack\Defense\-
+5\5\Attack\Defense\-
 Light\Ellight\Blarowl\Blarowl+\Blarowl+ (+) Attack Mode
 Draw Back
 Dragon Gaze\Draconic Aura

@@ -3,10 +3,10 @@ Hrid, Surtr, Laegjarn, Lavatain, Helbindi, Ylgr, Gharnef, Xander, Mist, Fjorm\Ar
 Eirika(Winter), Ephraim(Winter), Fae(Winter), Cecilia(Winter), Chrom(Winter), Robin(M)(Winter), Lissa(Winter), Tharja(Winter)\Tempest\18/12/2018, 27/12/2018
 Hrid, Surtr, Laegjarn, Lavatain, Helbindi, Ylgr, Navarre, Zephiel, Ephraim(Fire), Anna\Aether\24/12/2018, 30/12/2018\Light, Dark\Armor School, Armor School
 Eir, Ephraim(Winter), Eirika(Winter), Fae(Winter), Cecilia(Winter), Clarisse, Navarre, Est, Barst, Alfonse\Arena\25/12/2018, 31/12/2018\Water, Wind
-Eir, Ephraim(Winter), Eirika(Winter), Fae(Winter), Cecilia(Winter), Xander, Lloyd, Gunter, Robin(F)(Fallen), Alfonse\Aether\31/12/2018, 06/01/2019\Astra, Anima\Unknown, Unknown
+Eir, Ephraim(Winter), Eirika(Winter), Fae(Winter), Cecilia(Winter), Xander, Lloyd, Gunter, Robin(F)(Fallen), Alfonse\Aether\31/12/2018, 06/01/2019\Astra, Anima\Cavalry School. Cavalry School
 Eir, Ephraim(Winter), Eirika(Winter), Fae(Winter), Cecilia(Winter), Clarisse, Navarre, Est, Barst, Alfonse\Arena\01/01/2019, 07/01/2019\Wind, Fire
 Camilla(Winter), Azura(Winter), Takumi(Winter), Corrin(M)(Winter)\Tempest\01/01/2019, 10/01/2019
-Eir, Ephraim(Winter), Eirika(Winter), Fae(Winter), Cecilia(Winter), Xander, Lloyd, Gunter, Robin(F)(Fallen), Alfonse\Aether\07/01/2019, 13/01/2019\Light, Dark\Unknown, Unknown
+Eir, Ephraim(Winter), Eirika(Winter), Fae(Winter), Cecilia(Winter), Xander, Lloyd, Gunter, Robin(F)(Fallen), Alfonse\Aether\07/01/2019, 13/01/2019\Light, Dark\Flier School, Flier School
 -\Arena\08/01/2019, 14/01/2019\Wind, Earth
 -\Arena\15/01/2019, 21/01/2019\Wind, Water
 -\Arena\22/01/2019, 28/01/2019\Wind, Fire
