@@ -2677,7 +2677,12 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
-  blessing=[] if name != 'Robin' && untz[untz.find_index{|q| q[0]==name}][2][0].length>1
+  if untz.find_index{|q| q[0]==name}.nil?
+  elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
+  elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
+  end
   blessing.compact!
   stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
@@ -3262,7 +3267,12 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
-  blessing=[] if name != 'Robin' && untz[untz.find_index{|q| q[0]==name}][2][0].length>1
+  if untz.find_index{|q| q[0]==name}.nil?
+  elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
+  elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
+  end
   blessing.compact!
   stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
@@ -9111,7 +9121,12 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
-  blessing=[] if @units[@units.find_index{|q| q[0]==u40x[0]}][2][0].length>1
+  if untz.find_index{|q| q[0]==name}.nil?
+  elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
+  elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
+  end
   blessing.compact!
   args.compact!
   if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
@@ -9517,7 +9532,12 @@ def heal_study(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
-  blessing=[] if @units[@units.find_index{|q| q[0]==u40x[0]}][2][0].length>1
+  if untz.find_index{|q| q[0]==name}.nil?
+  elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
+  elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
+  end
   blessing.compact!
   args.compact!
   if args.nil? || args.length<1
@@ -9802,7 +9822,12 @@ def proc_study(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
-  blessing=[] if @units[@units.find_index{|q| q[0]==u40x[0]}][2][0].length>1
+  if untz.find_index{|q| q[0]==name}.nil?
+  elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
+  elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
+  end
   blessing.compact!
   args.compact!
   if args.nil? || args.length<1
@@ -10298,7 +10323,12 @@ def phase_study(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
-  blessing=[] if @units[@units.find_index{|q| q[0]==u40x[0]}][2][0].length>1
+  if untz.find_index{|q| q[0]==name}.nil?
+  elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
+  elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
+  end
   blessing.compact!
   args.compact!
   if args.nil? || args.length<1
