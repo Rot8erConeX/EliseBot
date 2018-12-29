@@ -1,4 +1,4 @@
-Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
+Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
 Alm\Eir\Kana(F)\Matthew\Owain\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
@@ -283,7 +283,7 @@ Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Def Ploy 2
 
 Soleil
-5\1\Resistance\HP\-
+5\2\Resistance\HP\-
 Iron Sword\Steel Sword\Firesweep Sword\Firesweep Sword+
 Rally Speed
 Daylight\Noontime

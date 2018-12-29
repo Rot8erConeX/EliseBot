@@ -606,7 +606,8 @@ def dev_message(bot,event,channel_id)
   event.respond 'Message sent.'
 end
 
-def donor_embed(bot,event)
+def donor_embed(bot,event,str='')
+  str='' if str.nil?
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
     event << '__**If you wish to donate to me:** A word from my developer__'
     event << ''
@@ -619,8 +620,10 @@ def donor_embed(bot,event)
     event << '~~Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.~~'
     event << ''
     event << "Donor List and perks: <https://goo.gl/ds1LHA>"
+    event << ''
+    event << str
   else
-    create_embed(event,"__**If you wish to donate to me:** A word from my developer__","Due to income regulations within the building where I live, I cannot accept donations in the form of PayPal, Patreon, or other forms of direct payment.  Only a small percentage of any such donations would actually reach me and the rest would end up in the hands of the owners of my building.\n\nHowever, there are other options:\n- You can purchase items from [this list](http://a.co/0p3sBec) and they will be delivered to me.\n- You can also [purchase an Amazon gift card](https://goo.gl/femEcw) and have it delivered via email to **rot8er.conex@gmail.com**.\n\n[Donor List and perks](https://goo.gl/ds1LHA)",0x008b8b,"Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.")
+    create_embed(event,"__**If you wish to donate to me:** A word from my developer__","Due to income regulations within the building where I live, I cannot accept donations in the form of PayPal, Patreon, or other forms of direct payment.  Only a small percentage of any such donations would actually reach me and the rest would end up in the hands of the owners of my building.\n\nHowever, there are other options:\n- You can purchase items from [this list](http://a.co/0p3sBec) and they will be delivered to me.\n- You can also [purchase an Amazon gift card](https://goo.gl/femEcw) and have it delivered via email to **rot8er.conex@gmail.com**.\n\n[Donor List and perks](https://goo.gl/ds1LHA)\n\n#{str}",0x008b8b,"Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.")
     event.respond "If you are on a mobile device and cannot click the links in the embed above, type `FEH!donate mobile` to receive this message as plaintext."
   end
 end
@@ -671,4 +674,43 @@ def bug_report(bot,event,args,shrd_num,shrd_names,shrd_type,pref,echo=nil)
   s3='Bug' if s3=='Bug Report'
   t=Time.now
   event << "Your #{s3.downcase} has been logged."
+end
+
+def week_from(d,dow)
+  m=d*1
+  m-=m%7
+  m/=7
+  return m+1 if d%7>=dow
+  return m
+end
+
+def calc_easter()
+  t = Time.now
+  y = t.year
+  c1 = y / 100
+  n1 = y - 19 * (y / 19)
+  k = (c1 - 17) / 25
+  i1 = c1 - c1 / 4 - (c1 - k) / 3 + 19 * n1 + 15
+  i1 = i1 - 30 * (i1 / 30)
+  i1 = i1 - (i1 / 28) * (1 - (i1 / 28) * (29 / (i1 + 1)) * ((21 - n1) / 11))
+  l1 = y + y / 4 + i1 + 2 - c1 + c1 / 4
+  l1 = l1 - 7 * (l1 / 7)
+  l1 = i1 - l1
+  m = 3 + (l1 + 40) / 44
+  d = l1 + 28 - 31 * (m / 4)
+  if t.month>m || (t.month==m && t.day>d)
+    y += 1
+    c1 = y / 100
+    n1 = y - 19 * (y / 19)
+    k = (c1 - 17) / 25
+    i1 = c1 - c1 / 4 - (c1 - k) / 3 + 19 * n1 + 15
+    i1 = i1 - 30 * (i1 / 30)
+    i1 = i1 - (i1 / 28) * (1 - (i1 / 28) * (29 / (i1 + 1)) * ((21 - n1) / 11))
+    l1 = y + y / 4 + i1 + 2 - c1 + c1 / 4
+    l1 = l1 - 7 * (l1 / 7)
+    l1 = i1 - l1
+    m = 3 + (l1 + 40) / 44
+    d = l1 + 28 - 31 * (m / 4)
+  end
+  return [y,m,d]
 end

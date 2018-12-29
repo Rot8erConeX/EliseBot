@@ -10,14 +10,14 @@ Linus: Mad Dog (revival)\GHB\20/12/2018, 26/12/2018
 Three Princesses\Quests\22/12/2018, 04/01/2019
 Hector & Matthew (revival)\BHB\27/12/2018, 03/01/2019
 -\Grand Conquests\26/12/2018, 31/12/2018
->Unknown<\LHB\28/12/2018, 07/01/2019
+Azura: Vallite Songstress\LHB\28/12/2018, 07/01/2019
 Hector: Marquess of Ostia\LHB\28/12/2018, 07/01/2019
 Marth: Hero King\LHB\28/12/2018, 07/01/2019
 Tempest Trials+\Log-In Bonus\30/12/2018, 10/01/2019
 Voting Gauntlet\Log-In Bonus\31/12/2018, 13/01/2019
 New Year's\Celebration\01/01/2019, 14/01/2019
 An Alliance of Princesses\Tempest Trials\01/01/2019, 10/01/2019
->Unknown<\Voting Gauntlet\03/01/2019, 08/01/2018
+New Year's Showdown\Voting Gauntlet\03/01/2019, 08/01/2018
 Klein & Clarine\BHB\04/01/2019, 11/01/2019
 Light Blessing\Quests\08/01/2019, 21/01/2019
 3.1.0 (projected)\Update\10/01/2019, 10/01/2019
