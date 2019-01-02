@@ -13054,7 +13054,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   data_load()
   nicknames_load()
   if newname.nil? || unit.nil?
-    event.respond 'You must specify both a new alias and a unit to give the alias to.'
+    event.respond 'You must specify both a new alias and a unit/skill to give the alias to.'
     return nil
   elsif event.user.id != 167657750971547648 && event.server.nil?
     event.respond 'Only my developer is allowed to use this command in PM.'
