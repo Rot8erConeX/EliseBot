@@ -59,7 +59,7 @@ bot.gateway.check_heartbeat_acks = false
                  393775173095915521,341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,297459718249512961,
                  283833293894582272,305889949574496257,214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,
                  347491426852143109,392557615177007104,295686580528742420,412303462764773376,442465051371372544,353997181193289728,462100851864109056,
-                 337397338823852034,446111983155150875,295001062790660097,328109510449430529,483437489021911051,513061112896290816]
+                 337397338823852034,446111983155150875,295001062790660097,328109510449430529,483437489021911051,513061112896290816,327599133210705923]
 @summon_rate=[0,0,3]
 @spam_channels=[]
 @mods=[[ 0, 0, 0, 0, 0, 0, 0],
@@ -4186,7 +4186,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     untz=untz.map {|u| u.gsub('Lavatain','Laevatein')}
     untz=untz.sort {|a,b| a.downcase <=> b.downcase}
     for i2 in 0...untz.length
-      untz[i2]="~~#{untz[i2]}~~" unless untz[i2]=='Laevatein' || untz[i2][0,4].downcase=='all ' || untz[i2]=='-' || unitz[unitz.find_index{|q| q[0]==untz[i2]}][13][0].nil? || !skill[13].nil?
+      untz[i2]="~~#{untz[i2]}~~" unless ['Laevatein','Laevatein(Winter)'].include?(untz[i2]) || untz[i2][0,4].downcase=='all ' || untz[i2]=='-' || unitz[unitz.find_index{|q| q[0]==untz[i2]}][13][0].nil? || !skill[13].nil?
     end
     skill[9][i]=untz.join(', ')
     untz=skill[10][i].split(', ')
@@ -4195,7 +4195,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     untz=untz.map {|u| u.gsub('Lavatain','Laevatein')}
     untz=untz.sort {|a,b| a.downcase <=> b.downcase}
     for i2 in 0...untz.length
-      untz[i2]="~~#{untz[i2]}~~" unless untz[i2]=='Laevatein' || untz[i2][0,4].downcase=='all ' || untz[i2]=='-' || unitz[unitz.find_index{|q| q[0]==untz[i2]}][13][0].nil? || !skill[13].nil?
+      untz[i2]="~~#{untz[i2]}~~" unless ['Laevatein','Laevatein(Winter)'].include?(untz[i2]) || untz[i2][0,4].downcase=='all ' || untz[i2]=='-' || unitz[unitz.find_index{|q| q[0]==untz[i2]}][13][0].nil? || !skill[13].nil?
     end
     skill[10][i]=untz.join(', ')
   end
@@ -4397,7 +4397,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     p=nil
   else
     for i2 in 0...p.length
-      p[i2]="~~#{p[i2]}~~" unless p[i2]=='Laevatein' || sklz[sklz.find_index{|q2| q2[0]==p[i2]}][13].nil? || !skill[13].nil?
+      p[i2]="~~#{p[i2]}~~" unless ['Laevatein','Laevatein(Winter)'].include?(p[i2]) || sklz[sklz.find_index{|q2| q2[0]==p[i2]}][13].nil? || !skill[13].nil?
     end
     if p.length>8 && skill[4]=='Weapon' && !event.message.text.downcase.split(' ').include?('expanded')
       xfooter='If you would like to include the Prfs and units who have them, include the word "expanded" when retrying this command.'
@@ -4409,7 +4409,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       end
       p3=p2.map{|q| sklz[sklz.find_index{|q2| q2[0]==q.gsub('~~','')}][10].reject{|q2| q2=='-'}.join(', ')}.join(', ').split(', ').uniq
     elsif skill[4]=='Weapon'
-      p2=p.reject{|q| q.gsub('~~','')=='Laevatein' || sklz[sklz.find_index{|q2| q2[0]==q.gsub('~~','')}][6]!='-'}
+      p2=p.reject{|q| ['Laevatein','Laevatein(Winter)'].include?(q.gsub('~~','')) || sklz[sklz.find_index{|q2| q2[0]==q.gsub('~~','')}][6]!='-'}
       p=list_lift(p.map{|q| "*#{q}*"},"or")
       p3=p2.map{|q| sklz[sklz.find_index{|q2| q2[0]==q.gsub('~~','')}][10].reject{|q2| q2=='-'}.join(', ')}.join(', ').split(', ').uniq
     else
@@ -7517,6 +7517,7 @@ def comparison(event,args,bot)
         r=find_stats_in_string(event,f[i])
         u=@units[find_unit(find_name_in_string(event,f[i]),event)]
         m=false
+        uid=-1
         if f[i].downcase.split(' ').include?("mathoo's") && find_in_dev_units(name)>=0
           m=true
           dv=@dev_units[find_in_dev_units(name)]
@@ -7541,7 +7542,7 @@ def comparison(event,args,bot)
         end
         st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
         st[0]=st[0].gsub('Lavatain','Laevatein')
-        uemoji=unit_moji(bot,event,-1,name,m,2,f[i])
+        uemoji=unit_moji(bot,event,-1,name,m,2,uid)
         b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{uemoji if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0],uemoji])
         c.push(unit_color(event,find_unit(find_name_in_string(event,f[i]),event),nil,1,m))
         atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
@@ -7603,6 +7604,7 @@ def comparison(event,args,bot)
         r=find_stats_in_string(event,sever(k[i]))
         u=@units[find_unit(find_name_in_string(event,sever(k[i])),event)]
         name=u[0]
+        sup='-'
         if m && find_in_dev_units(name)>=0
           dv=@dev_units[find_in_dev_units(name)]
           r[0]=dv[1]
@@ -15339,6 +15341,17 @@ bot.message do |event|
       exec 'cd C:/Users/Mini-Matt/Desktop/devkit && feindex.rb 4'
     else
       event.respond 'I am not Robin right now.  Please use `FE!reboot` to turn me into Robin.'
+    end
+  elsif (['fgo!','fgo?','liz!','liz?'].include?(str[0,4]) || ['fate!','fate?'].include?(str[0,5])) && @shardizard==4
+    s=event.message.text.downcase
+    s=s[5,s.length-5] if ['fate!','fate?'].include?(event.message.text.downcase[0,2])
+    s=s[4,s.length-4] if ['fgo!','fgo?','liz!','liz?'].include?(event.message.text.downcase[0,4])
+    a=s.split(' ')
+    if a[0].downcase=='reboot'
+      event.respond "Becoming Liz.  Please wait approximately ten seconds..."
+      exec "cd C:/Users/Mini-Matt/Desktop/devkit && LizBot.rb 4"
+    else
+      event.respond "I am not Liz right now.  Please use `FGO!reboot` to turn me into Elise."
     end
   elsif overlap_prevent(event)
   elsif ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4])
