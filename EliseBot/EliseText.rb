@@ -2047,16 +2047,24 @@ def next_events(event,bot,type)
     else
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
       m=k.length%2
-      struct="#{b[0][3][0]} (O), #{b[0][3][1]} (D)"
-      struct="#{b[0][3][0]} (O/D)" if b[0][3][0]==b[0][3][1]
-      msg=extend_message(msg,"__**Current Aether Raids Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Elemental season:* #{struct}",event,2)
+      struct="#{b[0][4][0]} (O), #{b[0][4][1]} (D)"
+      struct="#{b[0][4][0]} (O/D)" if b[0][4][0]==b[0][4][1]
+      element=b[0][3][0]
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      element=b[0][3][1]
+      moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+      msg=extend_message(msg,"__**Current Aether Raids Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Bonus Structures:* #{struct}\n*Elemental Season:* #{moji[0].mention unless moji[0].nil?}#{b[0][3][0]}, #{moji2[0].mention unless moji2[0].nil?}#{b[0][3][1]}",event,2)
       if b.length>1
         k2=b[1][0].map{|q| q.gsub('Lavatain','Laevatein')}
         m=k2.length%2
         d=b[1][2][0].split('/').map{|q| q.to_i}
-        struct="#{b[1][3][0]} (O), #{b[1][3][1]} (D)"
-        struct="#{b[1][3][0]} (O/D)" if b[1][3][0]==b[1][3][1]
-        msg=extend_message(msg,"__**Next Aether Raids Season** (starting #{d[0]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][d[1]]} #{d[2]})__\n*Bonus Units:*#{"\n#{k2[0,k2.length/2+m].join(', ')}\n#{k2[k2.length/2+m,k2.length/2].join(', ')}" unless k2==k || k2.length<=1}#{'(same as current)' if k2==k}#{'(unknown)' if k2.length<=1}\n*Bonus Structures:* #{struct}",event,2)
+        struct="#{b[1][4][0]} (O), #{b[1][4][1]} (D)"
+        struct="#{b[1][4][0]} (O/D)" if b[1][4][0]==b[1][4][1]
+        element=b[1][3][0]
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        element=b[1][3][1]
+        moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        msg=extend_message(msg,"__**Next Aether Raids Season** (starting #{d[0]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][d[1]]} #{d[2]})__\n*Bonus Units:*#{"\n#{k2[0,k2.length/2+m].join(', ')}\n#{k2[k2.length/2+m,k2.length/2].join(', ')}" unless k2==k || k2.length<=1}#{'(same as current)' if k2==k}#{'(unknown)' if k2.length<=1}\n*Bonus Structures:* #{struct}\n*Elemental Season:* #{moji[0].mention unless moji[0].nil?}#{b[1][3][0]}, #{moji2[0].mention unless moji2[0].nil?}#{b[1][3][1]}",event,2)
       end
     end
   end

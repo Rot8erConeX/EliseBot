@@ -120,7 +120,7 @@ Chilling Wind\Glacies
 Defiant Resistance 1\Defiant Resistance 2\Defiant Resistance 3
 Renewal 1\Renewal 2\Renewal 3
 Def Ploy 1\Def Ploy 2\Def Ploy 3
-Iote's Shield
+Res Ploy 3
 
 Ethlyn
 5\2\ \ \-
@@ -243,7 +243,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Earth Dance 2
 
 Owain
-5\1\Resistance\HP\-
+5\2\Resistance\HP\-
 Iron Sword\Steel Sword\Silver Sword\Missiletainn\Missiletainn (Dark)
 ~~Shove~~
 Glowing Ember\Bonfire\~~Blue Flame~~
@@ -283,7 +283,7 @@ Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Def Ploy 2
 
 Soleil
-5\2\Resistance\HP\-
+5\4\Speed\Attack\-
 Iron Sword\Steel Sword\Firesweep Sword\Firesweep Sword+
 Rally Speed
 Daylight\Noontime
