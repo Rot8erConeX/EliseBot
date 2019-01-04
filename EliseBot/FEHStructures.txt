@@ -1,7 +1,7 @@
-Armor School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on armored foes within 3 columns centered on structure through their next actions.\Yes\50, 0\0\Only one school can be placed at a time.
-Armor School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on armored foes within 3 columns centered on structure through their next actions.\Yes\150, 0\0\Only one school can be placed at a time.
+Armor School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on armored foes within 3 columns centered on structure through their next actions.\Yes\50, 0, 0\0\Only one school can be placed at a time.
+Armor School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on armored foes within 3 columns centered on structure through their next actions.\Yes\150, 0, 0\0\Only one school can be placed at a time.
 Armor School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on armored foes within 3 columns centered on structure through their next actions.\Yes\250, 0, 0\0\Only one school can be placed at a time.
-Armor School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on armored foes within 3 columns centered on structure through their next actions.\Yes\350, 0\0\Only one school can be placed at a time.
+Armor School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on armored foes within 3 columns centered on structure through their next actions.\Yes\350, 0, 0\0\Only one school can be placed at a time.
 Bolt Tower\1\Offensive/Defensive\At the start of turn 3, deals 10 damage to foes within 7 rows and 3 columns centered on structure.\Yes\100, 0, 0\0
 Bolt Tower\2\Offensive/Defensive\At the start of turn 3, deals 15 damage to foes within 7 rows and 3 columns centered on structure.\Yes\300, 0, 0\0
 Bolt Tower\3\Offensive/Defensive\At the start of turn 3, deals 20 damage to foes within 7 rows and 3 columns centered on structure.\Yes\500, 0, 0\0
@@ -54,6 +54,9 @@ Aether Fountain\1\Resources\Restores 50 Aether to the Aether Keep each day. If d
 Bronze Throne\-\Ornament\A throne suitable only for those who have achieved a rank from 1 to 10000 in Aether Raids.\-\0, 0, 0\21
 Silver Throne\-\Ornament\A throne suitable only for those who have achieved a rank from 1 to 3000 in Aether Raids.\-\0, 0, 0\21
 Golden Throne\-\Ornament\A throne suitable only for those who have achieved a rank from 1 to 1000 in Aether Raids.  From the second time onward, the number of times this feat has been achieved will be inscribed upon it.\-\0, 0, 0\21
-Feh Statue\-\Ornament\An objet d'art produced under the direct supervision of its model. It's an event item.\Yes\0, 0, 500\0
-Flower Bed\-\Ornament\An arrangement of flowers in vivid colors. It's an event item.\Yes\0, 0, 500\0
-Streetlamp\-\Ornament\A lamp in an elegant, classic design. It's an event item.\Yes\0, 0, 500\0
+Feh Statue\-\Ornament\An objet d'art produced under the direct supervision of its model. It's an event item.\Yes\0, 0, 500\0\Aether Raids release celebration
+Flower Bed\-\Ornament\An arrangement of flowers in vivid colors. It's an event item.\Yes\0, 0, 500\0\Aether Raids release celebration
+Streetlamp\-\Ornament\A lamp in an elegant, classic design. It's an event item.\Yes\0, 0, 500\0\Aether Raids release celebration
+Feh Kagami Mochi\-\Ornament\Not the real Feh! It's a decoration that brings good luck for the New Year. It's an event item.\Yes\0, 0, 500\0\New Year's 2019
+Fireplace\-\Ornament\If it's cold where you are, this item should help you feel a little bit warmer. It's an event item.\Yes\0, 0, 500\0\New Year's 2019
+Snow Family\-\Ornament\It seems they're brother and sister. It's an event item.\Yes\0, 0, 500\0\New Year's 2019

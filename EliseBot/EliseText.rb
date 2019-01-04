@@ -67,7 +67,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
   elsif command.downcase=='invite'
     create_embed(event,'**invite**','PMs the invoker with a link to invite me to their server.',0x40C0F0)
   elsif command.downcase=='addalias'
-    create_embed(event,'**addalias** __new alias__ __unit__',"Adds `new alias` to `unit`'s aliases.\nIf the arguments are listed in the opposite order, the command will auto-switch them.\n\nInforms you if the alias already belongs to someone.\nAlso informs you if the unit you wish to give the alias to does not exist.",0xC31C19)
+    create_embed(event,'**addalias** __new alias__ __name__',"Adds `new alias` to `name`'s aliases.\nIf the arguments are listed in the opposite order, the command will auto-switch them.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- ~~[Arena Assault] Items~~\n\nInforms you if the alias already belongs to someone/something.\nAlso informs you if the unit you wish to give the alias to does not exist.\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif ['oregano','whoisoregano'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Answers the question of who Oregano is.",0xD49F61)
   elsif ['allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable'].include?(command.downcase)
@@ -159,25 +159,27 @@ def help_text(event,bot,command=nil,subcommand=nil)
     end
     return nil
   elsif ['aliases','checkaliases','seealiases'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __unit__","Responds with a list of all `unit`'s aliases.\nIf no unit is listed, responds with a list of all aliases and who they are for.\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s aliases.\nIf no name is listed, responds with a list of all aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- ~~[Arena Assault] Items~~\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
+  elsif ['saliases','serveraliases'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s server-specific aliases.\nIf no name is listed, responds with a list of all server-specific aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- ~~[Arena Assault] Items~~\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
   elsif ['daily','today','todayinfeh','today_in_feh'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Shows the day's in-game daily events.\nIf in PM, will also show tomorrow's.",0xD49F61)
   elsif ['next','schedule'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nBonus",0xD49F61)
   elsif ['deletealias','removealias'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __alias__",'Removes `alias` from the list of aliases, regardless of who it was for.',0xC31C19)
+    create_embed(event,"**#{command.downcase}** __alias__","Removes `alias` from the list of aliases, regardless of who/what it was for.\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif ['addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__ __\*members__","If there is already a multi-unit alias named `name`, adds `members` to it.\nIf there is not already a multi-unit alias with the name `name`, makes one and adds `members` to it.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['addgroup'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__ __\*members__","If there is already a group named `name`, adds `members` to it.\nIf there is not already a group with the name `name`, makes one and adds `members` to it.",0xC31C19)
+    create_embed(event,"**#{command.downcase}** __name__ __\*members__","If there is already a group named `name`, adds `members` to it.\nIf there is not already a group with the name `name`, makes one and adds `members` to it.\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif ['seegroups','groups','checkgroups'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**",'Shows all the existing groups, and their members.',0xD49F61)
   elsif ['deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias','removedualalias','removemultiunitalias','removedualunitalias','removemulti'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Removes the multi-unit alias with the name `name`\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
   elsif ['deletegroup','removegroup'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__",'Removes the group with the name `name`',0xC31C19)
+    create_embed(event,"**#{command.downcase}** __name__","Removes the group with the name `name`\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif ['removemember','removefromgroup'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __group__ __unit__","Removes the unit `unit` from the group with the name `group`.\nIf this causes `group` to have no members, it will also delete it.",0xC31C19)
+    create_embed(event,"**#{command.downcase}** __group__ __unit__","Removes the unit `unit` from the group with the name `group`.\nIf this causes `group` to have no members, it will also delete it.\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif ['bst'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __*allies__","Shows the BST of the units listed in `allies`.  If more than four characters are listed, I show both the BST of all those listed and the BST of the first four listed.\n\n#{disp_more_info(event,1)}",0xD49F61)
   elsif ['effect'].include?(command.downcase)
@@ -1100,13 +1102,15 @@ end
 
 def score_explain(event,bot)
   disp="**`5`<:Icon_Rarity_5:448266417553539104>`+0 level 40 BST` / 5, rounded down to the nearest full number**"
-  disp="#{disp}\nEven if the unit is not 5\* or level 40, or already merged, it is their 5\*+0 level 40 BST that determines their BST bin"
+  disp="#{disp}\nEven if the unit is not 5\\* or level 40, or already merged, it is their 5\\*+0 level 40 BST without skills that determines their BST bin."
+  disp="#{disp}\nIf the unit is 5\\* and has a level 3 Duel skill, the lowest this number can be is 34."
   disp="#{disp}\n\n**`Rarity` \* 5**"
   disp="#{disp}\nMost users will be using a team of full 5\*s, so this will usually be 25."
   disp="#{disp}\n\n**`Merge count` \* 2**"
   disp="#{disp}\nAt +10, this is 20."
   disp="#{disp}\n\n**`Level` \* 2.25**"
   disp="#{disp}\nAt level 40, this is always 90."
+  disp="#{disp}\n\n**`Total SP cost of equipped skills` / 100, rounded down to the nearest full number.**"
   disp="#{disp}\n\n**`number of legendaries giving their blessing to unit` \* 4**"
   disp="#{disp}\nIf your unit is Water-blessed and on a team alongside three Fjorms, this is 12 during Water season and 0 during other seasons."
   disp="#{disp}\nFor Legendary Heroes, this is always 0."
@@ -2325,7 +2329,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     elsif event.server.nil?
       str="#{str}\nServers you and I share account for #{@aliases.reject{|q| q[0]!='Unit' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
     else
-      str="#{str}\nThis server accounts for #{@aliases.reject{|q| q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
+      str="#{str}\nThis server accounts for #{@aliases.reject{|q| q[0]!='Unit' || q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
     end
     all_units=all_units.sort{|b,a| supersort(a,b,2).zero? ? supersort(a,b,0) : supersort(a,b,2)}
     k=all_units.reject{|q| q[2]!=all_units[0][2]}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
@@ -2368,7 +2372,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     if event.server.nil? && @shardizard==4
       str2="#{str2}\nDue to being the debug version, I cannot show more information."
     elsif event.server.nil?
-      str2="#{str2}\nServers you and I share account for #{@aliases.reject{|q| q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
+      str2="#{str2}\nServers you and I share account for #{@aliases.reject{|q| q[0]!='Skill' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
     else
       str2="#{str2}\nThis server accounts for #{@aliases.reject{|q| q[0]!='Skill' || q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
     end
@@ -2383,6 +2387,17 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="#{str2}\nThe most agreed-upon server-specific alias#{"es are" unless k.length==1}#{" is" if k.length==1} #{list_lift(k,"and")}.  #{srv_spec[0][2]} servers agree on #{"them" unless k.length==1}#{"it" if k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
     k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
     str2="#{str2}\nCounting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
+    str=extend_message(str,str2,event,3)
+    glbl=@aliases.reject{|q| q[0]!='Structure' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    srv_spec=@aliases.reject{|q| q[0]!='Structure' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    str2="**There are #{longFormattedNumber(glbl.length)} global single-structure aliases.**\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-structure] aliases.**"
+    if event.server.nil? && @shardizard==4
+      str2="#{str2} - Due to being the debug version, I cannot show more information."
+    elsif event.server.nil?
+      str2="#{str2} - Servers you and I share account for #{@aliases.reject{|q| q[0]!='Structure' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
+    else
+      str2="#{str2} - This server accounts for #{@aliases.reject{|q| q[0]!='Structure' || q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
+    end
     str=extend_message(str,str2,event,3)
     event.respond str
     return nil

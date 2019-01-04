@@ -105,10 +105,10 @@ Attack/Def +2
 Eir
 5\0\\\-
 Iron Dagger\Steel Dagger\Silver Dagger\Lyfjaberg
-~~Reciprocal Aid~~
+Reciprocal Aid
 Chilling Wind\Iceberg
 Darting Blow 1\Swift Sparrow 1\Swift Sparrow 2
-Mystic Boost 1\Mystic Boost 2\~~Mystic Boost 3~~
+Mystic Boost 1\Mystic Boost 2\Mystic Boost 3
 Sparkling Boost
 Iote's Shield
 
@@ -203,7 +203,7 @@ Fortify Res 1\Fortify Res 2\Fortify Res 3
 Fortify Def 2
 
 Marisa
-5\4\ \ \-
+5\5\ \ \-
 Iron Sword\Steel Sword\Wo Dao\Wo Dao+\Wo Dao+ (+) Speed Mode
 Shove
 Night Sky\Glimmer
