@@ -270,7 +270,8 @@ def nicknames_load() # loads the nickname list
   @aliases=b.reject{|q| q.nil? || q[1].nil?}.uniq
   nzzzz=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Unit'}.uniq
   nzzzz2=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Skill'}.uniq
-  if nzzzz[nzzzz.length-1][2]<'Zephiel' || nzzzz2[nzzzz2.length-1][2]<'Yato'
+  nzzzz3=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Structure'}.uniq
+  if nzzzz[nzzzz.length-1][2]<'Zephiel' || nzzzz2[nzzzz2.length-1][2]<'Yato' || nzzzz3[nzzzz3.length-1][2]<'Armor School'
     if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt')
       b=[]
       File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt').each_line do |line|
@@ -281,7 +282,8 @@ def nicknames_load() # loads the nickname list
     end
     nzzzzz=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Unit'}.uniq
     nzzzzz2=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Skill'}.uniq
-    if nzzzzz[nzzzzz.length-1][2]<'Zephiel' || nzzzzz2[nzzzzz2.length-1][2]<'Yato'
+    nzzzzz3=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Structure'}.uniq
+    if nzzzzz[nzzzzz.length-1][2]<'Zephiel' || nzzzzz2[nzzzzz2.length-1][2]<'Yato' || nzzzzz3[nzzzzz3.length-1][2]<'Armor School'
       puts 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
         b=[]
@@ -1111,14 +1113,29 @@ end
 def find_structure(name,event,fullname=false)
   data_load()
   strct=@structures.map{|q| q}
-  name=name.downcase.gsub('armour','armor').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
+  name=name.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
   return [] if name.length<3
   k=strct.find_index{|q| "#{q[0]} #{q[1]}".downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name}
   return [k] unless k.nil?
   s=strct.reject{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')!=name}
   return s.map{|q| strct.find_index{|q2| q==q2}} if s.length>0
+  nicknames_load()
+  alz=@aliases.reject{|q| q[0]!='Structure'}.map{|q| [q[1],q[2],q[3]]}
+  g=0
+  g=event.server.id unless event.server.nil?
+  k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
+  unless k.nil?
+    m=strct.find_index{|q| "#{q[0]} #{q[1]}"==alz[k][1]}
+    return [m] unless m.nil?
+    s=strct.reject{|q| q[0]!=alz[k][1]}
+    return s.map{|q| strct.find_index{|q2| q==q2}}
+  end
   return [] if fullname
   k=strct.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
+  s=[]
+  s=strct.reject{|q| q[0]!=strct[k][0] || q[2]!=strct[k][2]} unless k.nil?
+  return s.map{|q| strct.find_index{|q2| q==q2}} if s.length>0
+  k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
   s=[]
   s=strct.reject{|q| q[0]!=strct[k][0] || q[2]!=strct[k][2]} unless k.nil?
   return s.map{|q| strct.find_index{|q2| q==q2}} if s.length>0
@@ -8851,6 +8868,14 @@ def pick_random_unit(event,args,bot)
   create_embed(event,"__**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],false,2)}**__","#{display_stars(event,5,0)}\n\n<:HP_S:514712247503945739>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:514712247625580555>\u00A0\u00B7\u00A0<:DefenseS:514712247461871616>\u00A0\u00B7\u00A0<:ResistanceS:514712247574986752>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,nil,img,[['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}"]])
 end
 
+def spaceship_order(x)
+  return 1 if x=='Unit'
+  return 2 if x=='Skill'
+  return 3 if x=='Structure'
+  return 4 if x=='Item'
+  return 500
+end
+
 def parse_function_alts(callback,event,args,bot)
   event.channel.send_temporary_message('Calculating data, please wait...',3)
   k=find_name_in_string(event,nil,1)
@@ -13100,6 +13125,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   checkstr=normalize(newname)
   if type.reject{|q| q != 'Alias'}.length<=0
     type[0]='Alias' if type[0].include?('*')
+    type[1]='Alias' if type[1].include?('*') && type[0]!='Alias'
   end
   if type.reject{|q| q == 'Alias'}.length<=0
     event.respond "Neither #{newname} nor #{unit} is a pre-defined unit/skill/alias.  Please try again."
@@ -13107,22 +13133,31 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   elsif type.reject{|q| q != 'Alias'}.length<=0
     event.respond "#{newname} is a #{type[0].downcase}\n#{unit} is a #{type[1].downcase}\nPlease try again."
     return nil
-  elsif type.reject{|q| ['Alias','Structure','Structure*'].include?(q)}.length<=0
-    event.respond "Structures cannot get aliases....yet"
-    return nil
   end
   if type[1]=='Alias' && type[0]!='Alias'
     f="#{newname}"
     newname="#{unit}"
     unit="#{f}"
     type=type.reverse.map{|q| q.gsub('*','')}
-  elsif type[0]=='Alias' && type[1].gsub('*','')=='Unit'
+  end
+  if type[0]=='Alias' && type[1].gsub('*','')=='Unit'
     unt=@units[find_unit(unit,event)]
     checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
     cck=unt[12].split(', ')[1][0,1].downcase if unt[12].split(', ').length>1
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Skill'
     unt=@skills[find_skill(unit,event)]
     checkstr2=unt[0].gsub(' ','').downcase
+  elsif type[0]=='Alias' && type[1].gsub('*','')=='Structure'
+    unt=find_structure(unit,event)
+    if unt.is_a?(Array) && unt.length<=1
+      unt=@structures[unt[0]]
+      unt[0]="#{unt[0]} #{unt[1]}"
+    elsif unt.is_a?(Array)
+      unt=@structures[unt[0]]
+    else
+      unt=@structures[unt]
+    end
+    checkstr2="#{unt[0]}"
   end
   logchn=386658080257212417
   logchn=431862993194582036 if @shardizard==4
@@ -13197,7 +13232,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   end
   unless double
     @aliases.push([type[1],newname,unit,m].compact)
-    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (b[0].downcase <=> a[0].downcase)}
+    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
     bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unit}*.\nPlease test to be sure that the alias stuck.")
     event.respond "**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unit}*." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
     bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
@@ -13212,7 +13247,8 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   nicknames_load()
   nzzz=@aliases.reject{|q| q[0]!='Unit'}
   nzzz2=@aliases.reject{|q| q[0]!='Skill'}
-  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato'
+  nzzz3=@aliases.reject{|q| q[0]!='Structure'}
+  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
     bot.channel(logchn).send_message('Alias list saved.')
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...nzzz.length
@@ -13306,7 +13342,8 @@ bot.command([:deletealias,:removealias]) do |event, name|
   event.respond "#{name} has been removed from #{j[0].gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}'s aliases."
   nzzz=@aliases.reject{|q| q[0]!='Unit'}
   nzzz2=@aliases.reject{|q| q[0]!='Skill'}
-  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato'
+  nzzz3=@aliases.reject{|q| q[0]!='Structure'}
+  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
     bot.channel(logchn).send_message("Alias list saved.")
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...nzzz.length
@@ -13676,7 +13713,7 @@ bot.command([:sort,:list]) do |event, *args|
     data_load()
     nicknames_load()
     @aliases.uniq!
-    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (b[0].downcase <=> a[0].downcase)}
+    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
       for i in 0...@aliases.length
         f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
@@ -14843,10 +14880,11 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
   elsif ['aliases','alias'].include?(trigger.downcase)
     nicknames_load()
     @aliases.uniq!
-    @aliases.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (b[0].downcase <=> a[0].downcase)}
+    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
     zunits=@aliases.reject{|q| q[0]!='Unit'}
-    zskills=@aliases.reject{|q| q[0]!='Unit'}
-    if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<'Zephiel' || zskills[zskills.length-1].length<=1 || zskills[zskills.length-1][2]<'Yato'
+    zskills=@aliases.reject{|q| q[0]!='Skill'}
+    zstructs=@aliases.reject{|q| q[0]!='Structure'}
+    if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<'Zephiel' || zskills[zskills.length-1].length<=1 || zskills[zskills.length-1][2]<'Yato' || zstructs[zstructs.length-1].length<=1 || zstructs[zstructs.length-1][2]<'Armor School'
       event.respond 'Alias list has __***NOT***__ been backed up, as alias list has been corrupted.'
       return nil
     end
@@ -15209,7 +15247,8 @@ bot.command(:reload, from: 167657750971547648) do |event|
       nzzzzz=b.uniq
       zunits=nzzzzz.reject{|q| q[0]!='Unit'}
       zskills=nzzzzz.reject{|q| q[0]!='Skill'}
-      if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<'Zephiel' || zskills[zskills.length-1].length<=1 || zskills[zskills.length-1][2]<'Yato'
+      zstructs=nzzzzz.reject{|q| q[0]!='Structure'}
+      if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<'Zephiel' || zskills[zskills.length-1].length<=1 || zskills[zskills.length-1][2]<'Yato' || zstructs[zstructs.length-1].length<=1 || zstructs[zstructs.length-1][2]<'Armor School'
         event << 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
         if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
           b=[]
@@ -15339,7 +15378,7 @@ bot.message do |event|
     if a[0].downcase=='reboot'
       event.respond 'Becoming Robin.  Please wait approximately ten seconds...'
       exec 'cd C:/Users/Mini-Matt/Desktop/devkit && feindex.rb 4'
-    else
+    elsif event.server.nil? || event.server.id==285663217261477889
       event.respond 'I am not Robin right now.  Please use `FE!reboot` to turn me into Robin.'
     end
   elsif (['fgo!','fgo?','liz!','liz?'].include?(str[0,4]) || ['fate!','fate?'].include?(str[0,5])) && @shardizard==4
@@ -15350,7 +15389,7 @@ bot.message do |event|
     if a[0].downcase=='reboot'
       event.respond "Becoming Liz.  Please wait approximately ten seconds..."
       exec "cd C:/Users/Mini-Matt/Desktop/devkit && LizBot.rb 4"
-    else
+    elsif event.server.nil? || event.server.id==285663217261477889
       event.respond "I am not Liz right now.  Please use `FGO!reboot` to turn me into Elise."
     end
   elsif overlap_prevent(event)
