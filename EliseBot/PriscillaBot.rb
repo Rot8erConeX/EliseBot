@@ -4263,7 +4263,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{emote} **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Bow Users Only'
-      effective.push('<:Icon_Move_Flier:443331186698354698>')
+      effective.push('<:Icon_Move_Flier:443331186698354698>') unless skill[11].split(', ').include?('UnBow')
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     elsif skill[5]=='Dagger Users Only'
       skill[7]=skill[7].split(' *** ')
@@ -6746,7 +6746,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
               if matches2[i][4]=='Weapon' && weapon_subsets[j]=='Inheritable'
                 matches3.push(matches2[i]) unless matches2[i][11].split(', ').include?('Prf')
               elsif matches2[i][4]=='Weapon' && weapon_subsets[j]=='Pega-killer' && !weapon_subsets.include?('Effective')
-                matches3.push(matches2[i]) if matches2[i][5]=='Bow Users Only' || matches2[i][11].split(', ').include?(weapon_subsets[j])
+                matches3.push(matches2[i]) if (matches2[i][5]=='Bow Users Only' && !matches2[i][11].split(', ').include?('UnBow')) || matches2[i][11].split(', ').include?(weapon_subsets[j])
               elsif matches2[i][4]=='Weapon' && weapon_subsets[j]=='Retro-Prf'
                 matches3.push(matches2[i]) if matches2[i][11].split(', ').include?('Prf') && matches2[i][8]=='-'
               elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?(weapon_subsets[j])
