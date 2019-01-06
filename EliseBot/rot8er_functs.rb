@@ -504,7 +504,9 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
     end
     event.user.pm.send_embed('') do |embed|
       embed.description=''
-      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic) unless xpic.nil?
+      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic) unless xpic.nil? || xpic.is_a?(Array)
+      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic[0]) unless xpic.nil? || !xpic.is_a?(Array) || xpic[0].nil?
+      embed.image = Discordrb::Webhooks::EmbedImage.new(url: xpic[1]) unless xpic.nil? || !xpic.is_a?(Array) || xpic[1].nil?
       embed.color=xcolor unless xcolor.nil?
       embed.footer={"text"=>xfooter} unless xfooter.nil?
       unless xfields.nil?
@@ -520,7 +522,9 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
     end
     event.channel.send_embed('') do |embed|
       embed.description=''
-      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic) unless xpic.nil?
+      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic) unless xpic.nil? || xpic.is_a?(Array)
+      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic[0]) unless xpic.nil? || !xpic.is_a?(Array) || xpic[0].nil?
+      embed.image = Discordrb::Webhooks::EmbedImage.new(url: xpic[1]) unless xpic.nil? || !xpic.is_a?(Array) || xpic[1].nil?
       embed.color=xcolor unless xcolor.nil?
       embed.footer={"text"=>xfooter} unless xfooter.nil?
       unless xfields.nil?
@@ -539,7 +543,9 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
           embed.add_field(name: xfields[i][0].gsub('**',''), value: xfields[i][1], inline: xfields[i][2].nil?)
         end
       end
-      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic) unless xpic.nil?
+      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic) unless xpic.nil? || xpic.is_a?(Array)
+      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic[0]) unless xpic.nil? || !xpic.is_a?(Array) || xpic[0].nil?
+      embed.image = Discordrb::Webhooks::EmbedImage.new(url: xpic[1]) unless xpic.nil? || !xpic.is_a?(Array) || xpic[1].nil?
     end
   else
     event.channel.send_embed(header) do |embed|
@@ -551,7 +557,9 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
           embed.add_field(name: xfields[i][0].gsub('**',''), value: xfields[i][1], inline: xfields[i][2].nil?)
         end
       end
-      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic) unless xpic.nil?
+      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic) unless xpic.nil? || xpic.is_a?(Array)
+      embed.thumbnail=Discordrb::Webhooks::EmbedThumbnail.new(url: xpic[0]) unless xpic.nil? || !xpic.is_a?(Array) || xpic[0].nil?
+      embed.image = Discordrb::Webhooks::EmbedImage.new(url: xpic[1]) unless xpic.nil? || !xpic.is_a?(Array) || xpic[1].nil?
     end
   end
   return nil
