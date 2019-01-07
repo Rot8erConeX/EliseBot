@@ -21,7 +21,7 @@ Barst\Green, Blade\ \Infantry\8, 7, 7, 7, 2\46, 33, 32, 30, 17\Wada Sachiko\DC D
 Bartre\Green, Blade\ \Infantry\9, 8, 5, 8, 1\49, 36, 25, 33, 13\Okaya\Kyle Hebert\Tone Kentarou\3p4p3qLU\M\FE6, FE7\Bartre
 Berkut\Blue, Blade\ \Cavalry\7, 8, 4, 7, 4\43, 34, 22, 31, 24\Asatani Tomoyo\Ian Sinclair\Suzuki Tatsuhisa\3g4g4g3q4q4f4r\M\FE15\Berkut
 Beruka\Green, Blade\ \Flier\8, 6, 4, 9, 4\46, 29, 23, 37, 22\Lack\Stephanie Sheh\Tazawa Masumi\3p4p3qLU\F\FE14C\Beruka
-Black_Knight\Red, Blade\ \Armor\8, 7, 8, 8, 2\48, 34, 34, 35, 18\Daisuke Izuka\Robert Clotworthy\Majima Junji\4t5t5b5t4r\M\FE9, FE10, (t)SSBB, (st)SSBB, (m)SSB4, (t)SSB4, (at)SSBU, (m)SSBU, (s)SSBU\Black_Knight
+Black Knight\Red, Blade\ \Armor\8, 7, 8, 8, 2\48, 34, 34, 35, 18\Daisuke Izuka\Robert Clotworthy\Majima Junji\4t5t5b5t4r\M\FE9, FE10, (t)SSBB, (st)SSBB, (m)SSB4, (t)SSB4, (at)SSBU, (m)SSBU, (s)SSBU\Black Knight
 Boey\Green, Tome, Wind\ \Infantry\7, 6, 6, 7, 2\43, 29, 27, 32, 18\Aoji\Chris Hackney\Sasaki Takuma\3p4p\M\FE15, FE2\Boey
 Bruno\Blue, Tome, Thunder\ \Cavalry\4, 6, 8, 4, 5\33, 29, 35, 22, 25\Kozaki Yusuke\T. Axelrod\Miki Shinichiro\-\M\FEH\Bruno
 Caeda\Red, Blade\ \Flier\5, 5, 9, 5, 7\36, 25, 37, 24, 34\HAKO\Cherami Leigh\Hayami Saori\3p4pLU\F\FE3, FE1, (st)SSBB, FE11, FE12, FEW, (s)SSBU\Caeda
@@ -330,7 +330,7 @@ Xander(Festival)\Colorless, Dagger\ \Infantry\6, 9, 2, 9, 2\38, 35, 17, 34, 16\P
 Xander(Spring)\Blue, Blade\ \Cavalry\6, 5, 6, 8, 5\40, 25, 28, 35, 26\Suekane Kumiko\George Spelvin\Konishi Katsuyuki\5s\M\FE14C, FEW\Xander
 Xander(Summer)\Green, Blade\ \Infantry\7, 7, 7, 9, 1\43, 32, 30, 36, 16\PenekoR\George Spelvin\Konishi Katsuyuki\5s\M\FE14C, FEW\Xander
 Ylgr\Blue, Dagger\ \Infantry\6, 8, 9, 3, 3\38, 33, 38, 22, 20\Maeshima Shigeki\Megan Lee\\5p\F\FEH\Ylgr
-Zelgius\Red, Blade\ \Armor\7, 8, 8, 9, 3\46, 36, 33, 38, 21\Daisuke Izuka\Robert Clotworthy\Majima Junji\5p\M\FE10, FE9, (s)SSBU\Black_Knight
+Zelgius\Red, Blade\ \Armor\7, 8, 8, 9, 3\46, 36, 33, 38, 21\Daisuke Izuka\Robert Clotworthy\Majima Junji\5p\M\FE10, FE9, (s)SSBU\Black Knight
 Zephiel\Red, Blade\ \Armor\10, 8, 2, 8, 5\55, 35, 16, 38, 24\Yamada Akihiro\Taylor Henry\Matsuda Kenichirou\3g4g4g3q3q4q4r\M\FE6, FE7\Zephiel
 Mathoo\Red, Blade\ \Infantry\8, 6, 4, 5, 10\45, 29, 24, 25, 39\\\\3p4p\M\FE14g\Mathoo\X167657750971547648
 BlueWilliam\Blue, Tome, Light\ \Infantry\4, 11, 4, 2, 3\35, 47, 25, 17, 23\\\\4p5p\M\\BlueWilliam\M241380399048032256

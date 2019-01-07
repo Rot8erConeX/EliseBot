@@ -1,0 +1,76 @@
+Askran Hairpin\Hair\A hair accessory adorned with the emblem of the Kingdom of Askr.\Clear Floors 6-10 in Illusory Dungeon: Legendary Heroes.
+Damsel's Ribbon\Hair\A hair ribbon from Maribelle. It's made from the highest quality fabric.\Forging Bonds: Awakening: Maribelle
+Damsel's Ribbon EX\Hair\A hair ribbon from Maribelle. It's made from the highest quality fabric and is lightly perfumed.\Forging Bonds: Awakening: Maribelle
+Feh Doll\Hair\A doll that looks amazingly similar to Feh, messenger owl for the Order of Heroes. So fluffy!\Enter the Equip Accessories Menu for the first time.
+Flower Fortune Pin\Hair\A hairpin from Sumia. It's made from a flower she used for a flower fortune, with a fresh and lovely scent.\Forging Bonds: Awakening: Sumia
+Flower Fortune Pin EX\Hair\A hairpin from Sumia. It's made from a flower she used for a flower fortune, with a refined and elegant scent.\Forging Bonds: Awakening: Sumia
+Flower Hairpin\Hair\A hair ornament found at Hoshidan festivals. The floral design is adored by many.\Clear floors 6-10 in Illusory Dungeon: Festival of Heroes.
+Frostflower Band\Hair\Gunnthra's frostflower. Translucent and cold to the touch, this bloom will never melt.\Forging Bonds: Nifl: Gunnthra
+Frostflower Band EX\Hair\Gunnthra's frostflower. Though it blossoms only in some regions of Nifl, it will never melt—anywhere.\Forging Bonds: Nifl: Gunnthra
+Gold Askran Hairpin\Hair\Proof of victory over Legendary Tiki.\Beat Tiki(Young)(Earth)'s LHB at Abyssal difficulty.
+Gold Damsel's Ribbon\Hair\Proof of victory over Grand Hero Lloyd.\Beat Lloyd's GHB at Abyssal difficulty
+Gold Feh Doll\Hair\Proof of victory over Legendary Eirika.\Beat Eirika(Graceful)'s LHB at Abyssal difficulty
+Gold Flower Hairpin\Hair\Proof of victory over Legendary Hríd.\Beat Hrid's LHB at Abyssal difficulty
+Gold Hand Towel\Hair\Proof of victory over Grand Hero Robin.\Beat Robin(F)'s GHB at Abyssal difficulty
+Gold Seashell Hairpin\Hair\Proof of victory over Legendary Marth.\Beat Marth(King)'s LHB at Abyssal difficulty
+Gold Summer Mask\Hair\Proof of victory over Legendary Lucina.\Beat Lucina(Glorious)'s LHB at Abyssal difficulty
+Golden Ducky\Hair\Proof of victory over Grand Hero Navarre.\Beat Navarre's GHB at Abyssal difficulty
+Golden Fortune Pin\Hair\Proof of victory over Grand Hero Ursula.\Beat Ursula's GHB at Abyssal difficulty
+Hand Towel\Hair\A hand towel commonly used in hot springs. Make sure to keep it dry!\Clear floors 81-85 in Illusory Dungeon: Summer of Heroes.
+Kagami Mochi\Hair\A favorite of Takumi's. It's a traditional decoration to welcome in the Hoshidan New Year.\Clear floors 81-85 in Illusory Dungeon: Kingdom of Hoshido.
+Peach Ducky\Hair\A duck-shaped toy that floats on water. The way it bobs up and down is very soothing.\Clear floors 6-10 in Illusory Dungeon: Farewells.
+Sacred Stardust\Hair\Ophelia claims this stardust holds great power. (It's really just a hairpin, but you're nice for humoring her.)\Forging Bonds: Ophelia
+Sacred Stardust EX\Hair\According to Ophelia, only the chosen may touch this stardust. (Actually just a hairpin, but don't dash her dreams.)\Forging Bonds: Ophelia
+Seashell Hairpin\Hair\A hair accessory made from a beautiful seashell.\KO an enemy during June 2018 Quest "Yay, Accessories!".
+Star of Nifl\Hair\A good luck charm that belongs to Ylgr. The decoration comes from Nifl's coat of arms.\Forging Bonds: Nifl Ylgr
+Star of Nifl EX\Hair\A good luck charm that belongs to Ylgr. It has been blessed to ensure the safety of its bearer.\Forging Bonds: Nifl Ylgr
+Summer Festival Mask\Hair\A mask found at Hoshidan festivals. The dragon-face motif is pretty cute!\Clear floors 81-85 in Illusory Dungeon: Festival of Heroes.
+Yellow Ducky\Hair\A duck-shaped toy that floats on water. The way it bobs up and down is very relaxing.\Clear floors 6-10 in Illusory Dungeon: Summer of Heroes.
+Armored Helmet\Hat\This helmet from Hector was forged in Ostia. It's pretty heavy, but nothing an armored knight can't handle.\Forging Bonds: Hector(Brave)
+Armored Helmet EX\Hat\The extravagant design of this Ostian helmet contrasts with its battle marks to paint a vivid picture of its history.\Forging Bonds: Hector(Brave)
+Bat Ears\Hat\Aren't they cute?\Clear floors 6-10 in October 2018's Tap Battle.
+Chilly Tiara\Hat\Fjorm's tiara. Though it is of exquisite workmanship, it was damaged in the battle against Surtr.\Forging Bonds: Nifl: Fjorm
+Chilly Tiara EX\Hat\Fjorm's tiara. The gems that decorate it are clear and cold, and they come from Nifl.\Forging Bonds: Nifl: Fjorm
+Crown of Nifl\Hat\Hríd's crown. It's always cold to the touch, and if you place it on your head, your demeanor will remain cool.\Forging Bonds: Nifl: Hrid
+Crown of Nifl EX\Hat\Hríd's crown. It has been passed down in the royal family of Nifl for generations, or so it is said.\Forging Bonds: Nifl: Hrid
+Enigmatic Mask\Hat\A mask that looks an awful lot like one used by a mysterious man. Maybe this was his spare...\Enter the Equip Accessories Menu for the first time.
+Explorer's Hat\Hair\Kliff got this hat in preparation for his journeys into unknown realms.\Forging Bonds: Kliff
+Explorer's Hat EX\Hat\When Kliff was but a boy, his father found this hat in a far-off land during his travels.\Forging Bonds: Kliff
+Gold Armored Helmet\Hat\Proof of victory over Legendary Ryoma.\Beat Ryoma(Supreme)'s LHB at Abyssal difficulty.
+Gold Priest's Miter\Hat\Proof of victory over Grand Hero Xander.\Beat Xander's GHB at Abyssal difficulty.
+Gold Restoration Helm\Hat\Proof of victory over Legendary Azura.\Beat Azura(Vallite)'s LHB at Abyssal difficulty.
+Gold Spring Bunny Hat\Hat\Proof of victory over Legendary Lyn.\Beat Lyn(Wind)'s LHB at Abyssal difficulty.
+Knight Headpiece\Hat\A knight's headpiece from Silas. This gear is given to those who earn the title of knight.\Forging Bonds: Awakening: Silas
+Knight Headpiece EX\Hat\A knight's headpiece from Silas. This special piece of gear is given to those who reach the title of paladin.\Forging Bonds: Awakening: Silas
+Lost Child's Hat\Hat\The hat worn by young Azura.\Clear floors 81-85 in Illusory Dungeon: Labyrinth of Despair.
+Maid Headpiece\Hat\A maid's headpiece from Flora. This is the authentic Nohrian object, straight from Castle Krakenburg.\Forging Bonds: Flora
+Maid Headpiece EX\Hat\A maid's headpiece from Flora. Only the head maid is allowed to wear this superior-quality item.\Forging Bonds: Flora
+Plegian Crown\Hat\A crown said to be worn by members of the Grimleal. Aversa had it in her possession.\Forging Bonds: Aversa
+Plegian Crown EX\Hat\An impressive crown made of pure gold. Aversa had it in her possession.\Forging Bonds: Aversa
+Priest's Miter\Hat\A hat from Libra. Worn in sacred places, it can bring peace of mind.\Forging Bonds: Libra
+Priest's Miter EX\Hat\A hat from Libra. Worn in sacred places, it inspires a sense of solemnity and majesty.\Forging Bonds: Libra
+Princess's Diadem\Hat\This diadem from Celica was largely favored during the age of priestesses. It's of an extremely dainty make.\Forging Bonds: Celica(Brave)
+Princess's Diadem EX\Hat\This was one of Celica's favorites in her younger days. Its well-worn look is testament to how treasured it was.\Forging Bonds: Celica(Brave)
+Reindeer Horns\Hat\Get festive with this holiday accessory.\Clear floors 6-10 in Illusory Dungeon: Kingdom of Hoshido.
+Restoration Helm\Hat\The Restoration King's helmet, gifted by Ephraim. Forged in Renais, it's very solid but surprisingly light.\Forging Bonds: Ephraim(Brave)
+Restoration Helm EX\Hat\The Restoration King's many victories are recounted in the dents and dings that adorn this helmet.\Forging Bonds: Ephraim(Brave)
+Spring Bunny Hat\Hat\A hat once worn by a Hero tempted by sunny spring skies. The bunny's face has a lot of character.\
+Summer Bunny Hat\Hat\A hat once worn by a Hero tempted by blue summer skies. The bunny's face has a lot of character.\
+Tactician's Hat\Hat\Those who wear this hat gain an air that lulls companions into following their orders. It's Loki's.\During Forging Bonds: Brave Redux, reach 1000 points with Loki.
+Tactician's Hat EX\Hat\Those who wear this hat seem to find everyone bending to their whims. It's Loki's.\During Forging Bonds: Brave Redux, reach 2500 points with Loki.
+Dancer's Mask\Mask\A mask from Olivia. A dancer would wear this to project a mystical aura while performing.\Forging Bonds: Awakening: Olivia(Traveler)
+Dancer's Mask EX\Mask\A mask from Olivia. A dancer would wear this to project an alluring aura while performing.\Forging Bonds: Awakening: Olivia(Traveler)
+Devil Horns\Mask\Equip these for a menacing aura.\Clear floors 81-85 in Illusory Dungeon: Heir of Light.
+Gold Dancer's Mask\Mask\Proof of victory over Grand Hero Michalis.\Beat Michalis's GHB at Abyssal difficulty.
+Gold Enigmatic Mask\Mask\Proof of victory over Legendary Hector.\Beat Hector(Marquess)'s LHB at Abyssal difficulty.
+Gold Mysterious Mask\Mask\Proof of victory over Grand Hero Narcian.\Beat Narcian's GHB at Abyssal difficulty.
+Gold Swim Goggles\Mask\Proof of victory over Legendary Robin.\Beat Robin(F)(Fallen)'s LHB at Abyssal difficulty.
+Mysterious Mask\Mask\A mask once worn by a swordsman claiming to be the Hero-King Marth.\Use lance ally to defeat foes level 10 or higher during June 2018 Quest "Yay, Accessories!".
+Reading Glasses\Mask\According to Nina, your eyes won't get tired if you wear these—no matter how much, or what, you read.\Forging Bonds: Nina
+Reading Glasses EX\Mask\Nina says that these glasses will let you keep reading into the dead of night.\Forging Bonds: Nina
+Swim Goggles\Mask\Use these to see clearly underwater. The added snorkel means you can take your time watching sea life.\Clear floors 81-85 in Illusory Dungeon: Summer of Heroes.
+Hoshidan Headpiece\Tiara\This headwear is the exclusive hair ornament of the queen of Hoshido.\Clear floors 6-10 in Illusory Dungeon: Labyrinth of Despair.
+Imperial Tiara\Tiara\This imperial headpiece from Veronica was forged in the Emblian Empire. It's a bit large but is actually quite light.\Forging Bonds: Veronica(Brave)
+Imperial Tiara EX\Tiara\An imperial headpiece from Veronica, forged in the Emblian Empire. Passed down by imperial princesses for ages.\Forging Bonds: Veronica(Brave)
+Wings of Darkness\Tiara\Wings held by Owain. He says they have a unique power useful for fighting the darkness.\Forging Bonds: Owain
+Wings of Darkness EX\Tiara\Wings held by Owain. He says that sacred powers changed them to the purest white.\Forging Bonds: Owain

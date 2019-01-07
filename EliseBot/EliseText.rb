@@ -23,17 +23,23 @@ def help_text(event,bot,command=nil,subcommand=nil)
     elsif ['alts','alt','alternate','alternates','alternative','alternatives'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of units within each type of alt, as well as specifics about characters with the most alts.',0x40C0F0)
     elsif ['unit','char','character','units','chars','charas','chara'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of units sorted in each of the following ways:\nObtainability\nColor\nWeapon type\nMovement type\nGame of origin (in PM)",0x40C0F0)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of units sorted in each of the following ways:\n- Obtainability\n- Color\n- Weapon type\n- Movement type\n- Game of origin (in PM)",0x40C0F0)
     elsif ['skills','skill','weapon','weapons','assist','assists','special','specials','passive','passives'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of skills, as well as numbers condensing them into branches (same name with different number) and trees (all skills that promote into/from each other are a single entry).',0x40C0F0)
+    elsif ['structures','structure','structs','struct'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of structures, as well as the number of structure-levels, in each of the main categories:\n- Offensive\n- Defensive\n- Trap\n- Resource\n- Ornament",0x40C0F0)
+    elsif ['accessories','accessorie','accessorys','accessory'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of accessories, sorted in each of the following ways:\n- Position of placement on units who equip it\n- Methods of obtainment",0x40C0F0)
+    elsif ['item','items'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of items, sorted by type of item.",0x40C0F0)
     elsif ['alias','aliases','name','names','nickname','nicknames'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of aliases in each of the three categories - global single-unit, server-specific [single-unit], and [global] multi-unit.\nAlso returns specifics about the most frequent instances of each category",0x40C0F0)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of aliases in each of the main categories:\n- Unit (global single-unit, server-specific [single], and [global] multi)\n- Skill (global single-skill, server-specific [single], and [global] multi)\n- Structure (global and server-specific)\n- Accessory (global and server-specific)\n- Item (global and server-specific)\n\nAlso returns specifics about the most frequent instances of each category",0x40C0F0)
     elsif ['groups','group','groupings','grouping'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of groups in each of the two categories - global and server-specific.\nAlso returns specifics about the dynamically-created global groups.",0x40C0F0)
     elsif ['code','lines','line','sloc'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the specifics about my code, including number of commands and functions, as well as - if in PM - loops, statements, and conditionals.",0x40C0F0)
     else
-      create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units and skills in the game\n- the numbers of aliases I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s), Shard(s), User(s)\nUnit(s), Character(s), Char(a)(s)\nAlt(s)\nSkill(s)\nAlias(es), Name(s), Nickname(s)\nGroup(s), Grouping(s)\nCode, Line(s), SLOC#{"\n\nAs the bot developer, you can also include a server ID number to snag the shard number, owner, and my nickname in the specified server." if event.user.id==167657750971547648}",0x40C0F0)
+      create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units, skills, structures, accessories, and items in the game\n- the numbers of aliases of each type I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s), Shard(s), User(s)\nUnit(s), Character(s), Char(a)(s)\nAlt(s)\nSkill(s)\nStructure(s), Struct(s)\nAccessory, Accessories\nItem(s)\nAlias(es), Name(s), Nickname(s)\nGroup(s), Grouping(s)\nCode, Line(s), SLOC#{"\n\nAs the bot developer, you can also include a server ID number to snag the shard number, owner, and my nickname in the specified server." if event.user.id==167657750971547648}",0x40C0F0)
     end
   elsif ['randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats'].include?(command.downcase) || (['random','rand'].include?(command.downcase) && ['unit','stats'].include?("#{subcommand}".downcase)) || (['unit','stats'].include?(command.downcase) && ['random','rand'].include?("#{subcommand}".downcase))
     lookout=[]
@@ -67,7 +73,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
   elsif command.downcase=='invite'
     create_embed(event,'**invite**','PMs the invoker with a link to invite me to their server.',0x40C0F0)
   elsif command.downcase=='addalias'
-    create_embed(event,'**addalias** __new alias__ __name__',"Adds `new alias` to `name`'s aliases.\nIf the arguments are listed in the opposite order, the command will auto-switch them.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- ~~[Arena Assault] Items~~\n\nInforms you if the alias already belongs to someone/something.\nAlso informs you if the unit you wish to give the alias to does not exist.\n\n**This command can only be used by server mods.**",0xC31C19)
+    create_embed(event,'**addalias** __new alias__ __name__',"Adds `new alias` to `name`'s aliases.\nIf the arguments are listed in the opposite order, the command will auto-switch them.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nInforms you if the alias already belongs to someone/something.\nAlso informs you if the unit you wish to give the alias to does not exist.\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif ['oregano','whoisoregano'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Answers the question of who Oregano is.",0xD49F61)
   elsif ['allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable'].include?(command.downcase)
@@ -80,6 +86,10 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['color','colors','colour','colours'].include?("#{subcommand}".downcase)}**","Explains the reasoning behind the multiple Attack stat icons - <:StrengthS:514712248372166666> <:MagicS:514712247289774111> <:FreezeS:514712247474585610>",0xD49F61)
   elsif ['struct','struncture'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows data on the Aether Raid structure named `name`.',0xD49F61)
+  elsif ['item'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __name__",'Shows data on the item named `name`.',0xD49F61)
+  elsif ['accessory','acc','accessorie'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __name__",'Shows data on the accessory named `name`.',0xD49F61)
   elsif ['arena','arenabonus','arena_bonus','bonusarena','bonus_arena'].include?(command.downcase) || (['bonus'].include?(command.downcase) && ['arena'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['arena'].include?("#{subcommand}".downcase)}**",'Displays current and future Arena Bonus Units',0xD49F61)
   elsif ['tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','tt','ttbonus','tt_bonus','bonustt','bonus_tt'].include?(command.downcase) || (['bonus'].include?(command.downcase) && ['tempest','tt'].include?("#{subcommand}".downcase))
@@ -159,9 +169,9 @@ def help_text(event,bot,command=nil,subcommand=nil)
     end
     return nil
   elsif ['aliases','checkaliases','seealiases'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s aliases.\nIf no name is listed, responds with a list of all aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- ~~[Arena Assault] Items~~\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s aliases.\nIf no name is listed, responds with a list of all aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
   elsif ['saliases','serveraliases'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s server-specific aliases.\nIf no name is listed, responds with a list of all server-specific aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- ~~[Arena Assault] Items~~\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s server-specific aliases.\nIf no name is listed, responds with a list of all server-specific aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
   elsif ['daily','today','todayinfeh','today_in_feh'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Shows the day's in-game daily events.\nIf in PM, will also show tomorrow's.",0xD49F61)
   elsif ['next','schedule'].include?(command.downcase)
@@ -373,7 +383,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     end
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
     create_embed([event,x],"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit/Character Data**__\n\n`data` __unit__ - shows both stats and skills (*also `unit`*)\n`stats` __unit__ - shows only the stats\n`smolstats` __unit__ - shows ths stats in a condensed format (*also `tinystats` and `microstats`*)\n`skills` __unit__ - shows only the skills (*also `fodder`*)\n`study` __unit__ - for a study of the unit at multiple rarities and merges\n`effHP` __unit__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __unit__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`serveraliases` __unit__ - show server-specific aliases for the unit\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __unit__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`banners` __unit__ - for a list of banners the unit has been a focus unit on\n`art` __unit__ __art type__ - for the character's art\n`learnable` __unit__ - for a list of all learnable skills (*also `inheritable`*)\n\n`games` __character__ - for a list of games the character is in\n`alts` __character__ - for a list of all units this character has",0xD49F61)
-    create_embed([event,x],"","__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`bonus` - used to list all Arena and TT bonus units (*also `arena` and `tt`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`structure` __structure name__ - used to show data on a specific Aether Raid structure\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
+    create_embed([event,x],"","__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`bonus` - used to list all Arena and TT bonus units (*also `arena` and `tt`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`structure` __structure name__ - used to show data on a specific Aether Raid structure\n`accessory` __accessory name__ - used to show data on a specific accessory\n`item` __item name__ - used to show data on a specific item\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
     create_embed([event,x],"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`score` - for help understanding how Arena Score is calculated\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`daily` - shows the current day's in-game daily events (*also `today` or `todayInFEH`*)\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)\n\n__**Developer Information**__\n`avatar` - to see why my avatar is different from the norm\n\n`bugreport` __\\*message__ - to send my developer a bug report\n`suggestion` __\\*message__ - to send my developer a feature suggestion\n`feedback` __\\*message__ - to send my developer other kinds of feedback\n~~the above three commands are actually identical, merely given unique entries to help people find them~~\n\n`donation` (*also `donate`*) - for information on how to donate to my developer\n`whyelise` - for an explanation as to how Elise was chosen as the face of the bot\n`skillrarity` (*also `skill_rarity`*)\n`attackcolor` - for a reason for multiple Atk icons (*also `attackicon`*)\n`snagstats` __type__ - to receive relevant bot stats\n`spam` - to determine if the current location is safe for me to send long replies to (*also `safetospam` or `safe2spam`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed([event,x],"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
     create_embed([event,x],"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**Mjolnr, the Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n\n__**Meta Data Storage**__\n`reload` - reloads the unit and skill data\n`backup` __item__ - backs up the (alias/group) list\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
@@ -2290,6 +2300,59 @@ def snagstats(event,bot,f=nil,f2=nil)
     msg=extend_message(msg,skill_data(legal_skills,all_skills,event,2),event,2)
     event.respond msg
     return nil
+  elsif ['structure','structures','structs','struct'].include?(f.downcase)
+    m=@structures.map{|q| q}
+    str="**There are #{longFormattedNumber(m.length)} structure levels, including:**"
+    str="#{str}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Offensive')}.length)} Offensive structure levels"
+    str="#{str}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Defensive')}.length)} Defensive structure levels"
+    str="#{str}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Trap')}.length)} Trap levels"
+    str="#{str}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Resources')}.length)} Resource structure levels"
+    str="#{str}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Ornament')}.length)} Ornament levels"
+    m=m.map{|q| [q[0],0,q[2]]}.uniq
+    str2="**There are #{longFormattedNumber(m.length)} structures, including:**"
+    str2="#{str2}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Offensive')}.length)} Offensive structures"
+    str2="#{str2}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Defensive')}.length)} Defensive structures"
+    str2="#{str2}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Trap')}.length)} Traps"
+    str2="#{str2}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Resources')}.length)} Resource structures"
+    str2="#{str2}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Ornament')}.length)} Ornaments"
+    str=extend_message(str,str2,event,2)
+    event.respond str
+    return nil
+  elsif ['accessories','accessory','accessorys','accessorie'].include?(f.downcase)
+    str2="**There are #{longFormattedNumber(@accessories.length)} accessories, including:**"
+    m=@accessories.reject{|q| q[1]!='Hair'}
+    str2="#{str2}\n\n#{longFormattedNumber(m.length)} pins and other hair accessories"
+    m=@accessories.reject{|q| q[1]!='Hat'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} hats and other top-of-head accessories"
+    m=@accessories.reject{|q| q[1]!='Mask'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} masks and other face accessories"
+    m=@accessories.reject{|q| q[1]!='Tiara'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} tiaras and other back-of-head accessories"
+    m=@accessories.reject{|q| !q[2].include?('Proof of victory over')}
+    str2="#{str2}\n\n#{longFormattedNumber(m.length)} Golden Accessories"
+    m=@accessories.reject{|q| !q[0].include?(' EX')}
+    str2="#{str2}\n#{longFormattedNumber(m.length*2)} Forging Bonds Accessories (#{longFormattedNumber(m.length)} pairs)"
+    m=@accessories.reject{|q| q[3].nil? || !q[3].include?('Illusory Dungeon')}
+    str2="#{str2}\n#{longFormattedNumber(m.length*2)} Tap Battle Accessories"
+    event.respond str2
+    return nil
+  elsif ['item','items'].include?(f.downcase)
+    str2="**There are #{longFormattedNumber(@itemus.length)} items, including:**"
+    m=@itemus.reject{|q| q[1]!='Main'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} main items"
+    m=@itemus.reject{|q| q[1]!='Implied'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} implied items"
+    m=@itemus.reject{|q| q[1]!='Blessing'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} blessings"
+    m=@itemus.reject{|q| q[1]!='Growth'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} unit growth items"
+    m=@itemus.reject{|q| q[1]!='Assault'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} Arena Assault items"
+    m=@itemus.reject{|q| q[1]!='Event'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} event items"
+    str2="#{str2}\n~~3 thrones which are counted as structures in my data even though FEH counts them as both structures and items~~"
+    event.respond str2
+    return nil
   elsif ['alias','aliases','name','names','nickname','nicknames'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',1)
     glbl=@aliases.reject{|q| q[0]!='Unit' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
@@ -2323,7 +2386,7 @@ def snagstats(event,bot,f=nil,f2=nil)
         str="#{str}\nThe following unit#{"s" unless k.length==1} have no global aliases: #{list_lift(k,"and")}"
       end
     end
-    str="#{str}\n\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-unit] aliases.**"
+    str="#{str}\n\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]unit aliases.**"
     if event.server.nil? && @shardizard==4
       str="#{str}\nDue to being the debug version, I cannot show more information."
     elsif event.server.nil?
@@ -2368,7 +2431,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     all_units=all_units.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
     k=all_units.reject{|q| q[1]!=all_units[0][1]}.map{|q| "*#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}*"}
     str2="#{str2}\nThe skill#{"s" unless k.length==1} with the most global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global aliases#{" each" unless k.length==1}."
-    str2="#{str2}\n\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-skill] aliases.**"
+    str2="#{str2}\n\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]skill aliases.**"
     if event.server.nil? && @shardizard==4
       str2="#{str2}\nDue to being the debug version, I cannot show more information."
     elsif event.server.nil?
@@ -2387,16 +2450,39 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="#{str2}\nThe most agreed-upon server-specific alias#{"es are" unless k.length==1}#{" is" if k.length==1} #{list_lift(k,"and")}.  #{srv_spec[0][2]} servers agree on #{"them" unless k.length==1}#{"it" if k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
     k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
     str2="#{str2}\nCounting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
+    str2="#{str2}\n\n**There are 2 [global] multi-skill aliases.**"
     str=extend_message(str,str2,event,3)
     glbl=@aliases.reject{|q| q[0]!='Structure' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
     srv_spec=@aliases.reject{|q| q[0]!='Structure' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
-    str2="**There are #{longFormattedNumber(glbl.length)} global single-structure aliases.**\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-structure] aliases.**"
+    str2="**There are #{longFormattedNumber(glbl.length)} global [single-]structure aliases.**\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]structure aliases.**"
     if event.server.nil? && @shardizard==4
       str2="#{str2} - Due to being the debug version, I cannot show more information."
     elsif event.server.nil?
       str2="#{str2} - Servers you and I share account for #{@aliases.reject{|q| q[0]!='Structure' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
     else
       str2="#{str2} - This server accounts for #{@aliases.reject{|q| q[0]!='Structure' || q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
+    end
+    str=extend_message(str,str2,event,3)
+    glbl=@aliases.reject{|q| q[0]!='Accessory' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    srv_spec=@aliases.reject{|q| q[0]!='Accessory' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    str2="**There are #{longFormattedNumber(glbl.length)} global [single-]accessory aliases.**\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]accessory aliases.**"
+    if event.server.nil? && @shardizard==4
+      str2="#{str2} - Due to being the debug version, I cannot show more information."
+    elsif event.server.nil?
+      str2="#{str2} - Servers you and I share account for #{@aliases.reject{|q| q[0]!='Accessory' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
+    else
+      str2="#{str2} - This server accounts for #{@aliases.reject{|q| q[0]!='Accessory' || q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
+    end
+    str=extend_message(str,str2,event,3)
+    glbl=@aliases.reject{|q| q[0]!='Item' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    srv_spec=@aliases.reject{|q| q[0]!='Item' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    str2="**There are #{longFormattedNumber(glbl.length)} global [single-]item aliases.**\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]item aliases.**"
+    if event.server.nil? && @shardizard==4
+      str2="#{str2} - Due to being the debug version, I cannot show more information."
+    elsif event.server.nil?
+      str2="#{str2} - Servers you and I share account for #{@aliases.reject{|q| q[0]!='Item' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
+    else
+      str2="#{str2} - This server accounts for #{@aliases.reject{|q| q[0]!='Item' || q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
     end
     str=extend_message(str,str2,event,3)
     event.respond str
@@ -2509,39 +2595,98 @@ def snagstats(event,bot,f=nil,f2=nil)
     event.respond s2
     return nil
   end
+  extln=1
+  extln=2 if safe_to_spam?(event)
+  extln=2 if f.downcase=="all"
   bot.servers.values(&:members)
-  event << "**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} *servers*, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
-  event << "This shard is in #{longFormattedNumber(@server_data[0][@shardizard])} server#{"s" unless @server_data[0][@shardizard]==1}, reaching #{longFormattedNumber(bot.users.size)} unique members."
-  event << ''
-  event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_units,all_units,-1)} *units*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
+  str="**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} *servers*, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
+  str="#{str}\nThis shard is in #{longFormattedNumber(@server_data[0][@shardizard])} server#{"s" unless @server_data[0][@shardizard]==1}, reaching #{longFormattedNumber(bot.users.size)} unique members."
+  str2="#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_units,all_units,-1)} *units*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
   if safe_to_spam?(event) || f.downcase=="all"
-    event << "#{filler(legal_units,all_units,9,0,'p',1)} summonable units"
-    event << "#{filler(legal_units,all_units,9,0,'g',1)} Grand Hero Battle reward units"
-    event << "#{filler(legal_units,all_units,9,0,'t',1)} Tempest Trials reward units"
-    event << "#{filler(legal_units,all_units,[9,2],[0,0],['s',2],[1,-2])} seasonal units"
-    event << "#{filler(legal_units,all_units,2,0,2,2)} legendary units"
-    event << "#{filler(legal_units,all_units,9,0,'-',1)} unobtainable units"
-    event << ''
+    str2="#{str2}\n#{filler(legal_units,all_units,9,0,'p',1)} summonable units"
+    str2="#{str2}\n#{filler(legal_units,all_units,9,0,'g',1)} Grand Hero Battle reward units"
+    str2="#{str2}\n#{filler(legal_units,all_units,9,0,'t',1)} Tempest Trials reward units"
+    str2="#{str2}\n#{filler(legal_units,all_units,[9,2],[0,0],['s',2],[1,-2])} seasonal units"
+    str2="#{str2}\n#{filler(legal_units,all_units,2,0,2,2)} legendary/mythic units"
+    str2="#{str2}\n#{filler(legal_units,all_units,9,0,'-',1)} unobtainable units"
   end
-  event << "#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_skills,all_skills,-1)} *skills*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
+  str=extend_message(str,str2,event,2)
+  str2="#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_skills,all_skills,-1)} *skills*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
   if safe_to_spam?(event) || f.downcase=="all"
-    event << "#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
-    event << "#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
-    event << "#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
-    event << "#{filler(legal_skills,all_skills,4,-1,['Weapon','Assist','Special'],3)} Passives"
+    str2="#{str2}\n#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
+    str2="#{str2}\n#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
+    str2="#{str2}\n#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
+    str2="#{str2}\n#{filler(legal_skills,all_skills,4,-1,['Weapon','Assist','Special'],3)} Passives"
   end
+  str=extend_message(str,str2,event,extln)
+  str2="#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{longFormattedNumber(@structures.map{|q| q[0]}.uniq.length)} *structures* with #{longFormattedNumber(@structures.length)} levels#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
+  if safe_to_spam?(event) || f.downcase=="all"
+    m=@structures.reject{|q| !q[2].include?('Offensive')}
+    str2="#{str2}\n#{longFormattedNumber(m.map{|q| q[0]}.uniq.length)} Offensive structures#{" with #{longFormattedNumber(m.length)} levels" unless m.map{|q| q[0]}.uniq.length==m.length}"
+    m=@structures.reject{|q| !q[2].include?('Defensive')}
+    str2="#{str2}\n#{longFormattedNumber(m.map{|q| q[0]}.uniq.length)} Defensive structures#{" with #{longFormattedNumber(m.length)} levels" unless m.map{|q| q[0]}.uniq.length==m.length}"
+    m=@structures.reject{|q| !q[2].include?('Trap')}
+    str2="#{str2}\n#{longFormattedNumber(m.map{|q| q[0]}.uniq.length)} Traps#{" with #{longFormattedNumber(m.length)} levels" unless m.map{|q| q[0]}.uniq.length==m.length}"
+    m=@structures.reject{|q| !q[2].include?('Resources')}
+    str2="#{str2}\n#{longFormattedNumber(m.map{|q| q[0]}.uniq.length)} Resource structures#{" with #{longFormattedNumber(m.length)} levels" unless m.map{|q| q[0]}.uniq.length==m.length}"
+    m=@structures.reject{|q| !q[2].include?('Ornament')}
+    str2="#{str2}\n#{longFormattedNumber(m.map{|q| q[0]}.uniq.length)} Ornaments#{" with #{longFormattedNumber(m.length)} levels" unless m.map{|q| q[0]}.uniq.length==m.length}"
+  end
+  str=extend_message(str,str2,event,extln)
+  str2="#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{longFormattedNumber(@accessories.length)} *accessories*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
+  if safe_to_spam?(event) || f.downcase=="all"
+    m=@accessories.reject{|q| q[1]!='Hair'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} pins and other hair accessories"
+    m=@accessories.reject{|q| q[1]!='Hat'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} hats and other top-of-head accessories"
+    m=@accessories.reject{|q| q[1]!='Mask'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} masks and other face accessories"
+    m=@accessories.reject{|q| q[1]!='Tiara'}
+    str2="#{str2}\n__#{longFormattedNumber(m.length)} tiaras and other back-of-head accessories__"
+    m=@accessories.reject{|q| !q[2].include?('Proof of victory over')}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} Golden Accessories"
+  end
+  str=extend_message(str,str2,event,extln)
+  str2="#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{longFormattedNumber(@itemus.length)} *items*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
+  if safe_to_spam?(event) || f.downcase=="all"
+    m=@itemus.reject{|q| q[1]!='Main'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} main items"
+    m=@itemus.reject{|q| q[1]!='Implied'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} implied items"
+    m=@itemus.reject{|q| q[1]!='Blessing'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} blessings"
+    m=@itemus.reject{|q| q[1]!='Growth'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} unit growth items"
+    m=@itemus.reject{|q| q[1]!='Assault'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} Arena Assault items"
+    m=@itemus.reject{|q| q[1]!='Event'}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} event items"
+    str2="#{str2}\n~~3 thrones which are counted as structures in my data even though FEH counts them as both structures and items~~"
+  end
+  str=extend_message(str,str2,event,extln)
+  glbl=@aliases.reject{|q| !q[3].nil?}
+  srv_spec=@aliases.reject{|q| q[3].nil?}
+  str2="**There are #{longFormattedNumber(glbl.length+@multi_aliases.length+2)} global and #{longFormattedNumber(srv_spec.length)} server-specific *aliases*.**"
   glbl=@aliases.reject{|q| q[0]!='Unit' || !q[3].nil?}
   srv_spec=@aliases.reject{|q| q[0]!='Unit' || q[3].nil?}
-  all_units=@units.reject{|q| !has_any?(g, q[13][0])}
-  all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
-  all_units=all_units.map{|q| q[0]}
-  srv_spec=srv_spec.reject{|q| !all_units.include?(q[2])}
-  event << ''
-  event << "There are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-unit] *aliases*."
-  event << "There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases."
-  event << ''
-  event << "There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific *groups*."
-  event << ''
-  event << "I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of *code* long."
-  event << "Of those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
+  str2="#{str2}\nThere are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-]unit aliases."
+  str2="#{str2}\nThere are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases."
+  glbl=@aliases.reject{|q| q[0]!='Skill' || !q[3].nil?}
+  srv_spec=@aliases.reject{|q| q[0]!='Skill' || q[3].nil?}
+  str2="#{str2}\nThere are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-]skill aliases.\nThere are 2 global multi-skill aliases."
+  glbl=@aliases.reject{|q| q[0]!='Structure' || !q[3].nil?}
+  srv_spec=@aliases.reject{|q| q[0]!='Structure' || q[3].nil?}
+  str2="#{str2}\nThere are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-]structure aliases."
+  glbl=@aliases.reject{|q| q[0]!='Accessory' || !q[3].nil?}
+  srv_spec=@aliases.reject{|q| q[0]!='Accessory' || q[3].nil?}
+  str2="#{str2}\nThere are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-]accessory aliases."
+  glbl=@aliases.reject{|q| q[0]!='Item' || !q[3].nil?}
+  srv_spec=@aliases.reject{|q| q[0]!='Item' || q[3].nil?}
+  str2="#{str2}\nThere are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-]item aliases."
+  str=extend_message(str,str2,event,2)
+  str=extend_message(str,"**There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global and #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific *groups*.**",event,2)
+  str2="**I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of *code* long.**"
+  str2="#{str2}\nOf those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
+  str=extend_message(str,str2,event,2)
+  event.respond str
 end
