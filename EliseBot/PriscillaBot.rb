@@ -33,6 +33,8 @@ bot.gateway.check_heartbeat_acks = false
 @units=[]
 @skills=[]
 @structures=[]
+@accessories=[]
+@itemus=[]
 @aliases=[]
 @multi_aliases=[]
 @groups=[]
@@ -150,7 +152,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
      'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics','legend',
-     'legends','legendarys'].uniq
+     'legends','legendarys','item','accessory','acc','accessorie'].uniq
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -241,6 +243,7 @@ def data_load() # loads the character and skill data from the files on my comput
     bob4[15]=nil unless bob4[15].nil? || bob4[15].length>0 # this entry is used by weapons to store their refinement data
     @skills.push(bob4)
   end
+  # STRUCTURE DATA
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStructures.txt')
     b=[]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStructures.txt').each_line do |line|
@@ -256,6 +259,33 @@ def data_load() # loads the character and skill data from the files on my comput
     b[i][6]=b[i][6].to_i
   end
   @structures=b.map{|q| q}
+  # ACCESSORY DATA
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHAccessories.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHAccessories.txt').each_line do |line|
+      b.push(line)
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    b[i]=b[i].gsub("\n",'').split('\\'[0])
+  end
+  @accessories=b.map{|q| q}
+  # ITEM DATA
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHItems.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHItems.txt').each_line do |line|
+      b.push(line)
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    b[i]=b[i].gsub("\n",'').split('\\'[0])
+    b[i][2]=longFormattedNumber(b[i][2].to_i) if b[i][2].to_i.to_s==b[i][2]
+  end
+  @itemus=b.map{|q| q}
 end
 
 def nicknames_load() # loads the nickname list
@@ -1163,6 +1193,71 @@ def find_structure_ex(name,event,fullname=false)
     end
   end
   return []
+end
+
+def find_item_feh(name,event,fullname=false)
+  data_load()
+  itmu=@itemus.map{|q| q}
+  name=name.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
+  return [] if name.length<3
+  k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name}
+  return k unless k.nil?
+  nicknames_load()
+  alz=@aliases.reject{|q| q[0]!='Item'}.map{|q| [q[1],q[2],q[3]]}
+  g=0
+  g=event.server.id unless event.server.nil?
+  k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
+  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  return -1 if fullname
+  k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
+  return k unless k.nil?
+  k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
+  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  return -1
+end
+
+def find_accessory(name,event,fullname=false)
+  data_load()
+  itmu=@accessories.map{|q| q}
+  name=name.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
+  return [] if name.length<3
+  k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name}
+  return k unless k.nil?
+  nicknames_load()
+  alz=@aliases.reject{|q| q[0]!='Accessory'}.map{|q| [q[1],q[2],q[3]]}
+  g=0
+  g=event.server.id unless event.server.nil?
+  k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
+  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  return -1 if fullname
+  k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
+  return k unless k.nil?
+  k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
+  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  return -1
+end
+
+def find_data_ex(callback,name,event,fullname=false)
+  k=method(callback).call(name,event,true)
+  return k if k>=0
+  args=name.split(' ')
+  for i in 0...args.length-1
+    for i2 in 0...args.length-i
+      k=method(callback).call(args[i,args.length-1-i-i2].join(' '),event,true)
+      return k if k>=0 && args[i,args.length-1-i-i2].length>0
+    end
+  end
+  return -1 if fullname
+  k=method(callback).call(name,event)
+  return k if k>=0
+  args=name.split(' ')
+  for i in 0...args.length-1
+    for i2 in 0...args.length-i
+      k=method(callback).call(args[i,args.length-1-i-i2].join(' '),event)
+      return k if k>=0 && args[i,args.length-1-i-i2].length>0
+    end
+  end
+  return -1
 end
 
 def find_promotions(j,event) # finds the promotions of a given skill.  Input is given in the skill's entry number, not name
@@ -5468,6 +5563,92 @@ def disp_struct(bot,name,event,ignore=false)
   create_embed(event,"__**#{k[0][0]}#{" #{k[0][1]}" unless k.length>1 || k[0][1]=='-'}**__#{'<:Current_Aether_Bonus:510022809741950986>' if b[0][3].include?(k[0][0])}",text,xcolor,nil,xpic)
 end
 
+def disp_accessory(bot,name,event,ignore=false)
+  data_load()
+  s=event.message.text
+  s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
+  s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
+  a=s.split(' ').reject{ |q| q.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  if all_commands().include?(a[0])
+    a.shift
+    s=a.join(' ')
+  end
+  args=s.split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  name=args.join(' ') if name.nil?
+  k=find_data_ex(:find_accessory,args.join(' '),event)
+  if k<0
+    event.respond 'No matches found.' unless ignore
+    return nil
+  end
+  k=@accessories[k]
+  xcolor=0xFF47FF
+  str=''
+  str="<:Accessory_Type_Hair:531733124741201940>**Accessory Type:** Hair" if k[1]=='Hair'
+  str="<:Accessory_Type_Hat:531733125227741194>**Accessory Type:** Hat" if k[1]=='Hat'
+  str="<:Accessory_Type_Mask:531733125064163329>**Accessory Type:** Mask" if k[1]=='Mask'
+  str="<:Accessory_Type_Tiara:531733130734731284>**Accessory Type:** Tiara" if k[1]=='Tiara'
+  str="#{str}\n\n**Description:** #{k[2]}"
+  str="#{str}\n\n**To obtain:** #{k[3]}" unless k[3].nil?
+  str="#{str}\n\n**Additional Info:** #{k[4]}" unless k[4].nil?
+  xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Accessories/#{k[0].gsub(' ','_')}.png"
+  create_embed(event,"__**#{k[0]}**__",str,xcolor,nil,xpic)
+end
+
+def disp_itemu(bot,name,event,ignore=false)
+  data_load()
+  s=event.message.text
+  s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
+  s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
+  a=s.split(' ').reject{ |q| q.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  if all_commands().include?(a[0])
+    a.shift
+    s=a.join(' ')
+  end
+  args=s.split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  name=args.join(' ') if name.nil?
+  k=find_data_ex(:find_item_feh,args.join(' '),event)
+  if k<0
+    event.respond 'No matches found.' unless ignore
+    return nil
+  end
+  k=@itemus[k]
+  str="**Item Type:** #{k[1]}\n**Maximum:** #{k[2]}"
+  xcolor=0x5BACB9
+  if ['Main','Event'].include?(k[1])
+    str="#{str}\n\n**Effect/Description:** #{k[3]}"
+  elsif k[1]=='Implied'
+    xcolor=0x3B474D
+    str="#{str}\n\n**Effect:** #{k[3]}"
+  elsif k[1]=='Blessing'
+    xcolor=0xF98281 if k[0].include?('Fire')
+    xcolor=0x91F4FF if k[0].include?('Water')
+    xcolor=0x97FF99 if k[0].include?('Wind')
+    xcolor=0xFFAF7E if k[0].include?('Earth')
+    xcolor=0xFDF39D if k[0].include?('Light')
+    xcolor=0xBE83FE if k[0].include?('Dark')
+    xcolor=0xF5A4DA if k[0].include?('Astra')
+    xcolor=0xE1DACF if k[0].include?('Anima')
+    str="#{str}\n\n**Description:** #{k[3]}"
+  elsif k[1]=='Growth'
+    xcolor=0xBD9843
+    xcolor=0xE22141 if k[0].include?('Scarlet')
+    xcolor=0x2764DE if k[0].include?('Azure')
+    xcolor=0x09AA24 if k[0].include?('Verdant')
+    xcolor=0x64757D if k[0].include?('Transparent')
+    str="#{str}\n\n**Description:** #{k[3]}"
+  elsif k[1]=='Assault'
+    xcolor=0x332559
+    str="**Type:** Arena Assault\n**Maximum:** #{k[2]}\n\n**Effect:** #{k[3]}"
+  else
+    str="#{str}\n\n**Effect/Description:** #{k[3]}"
+  end
+  str="#{str}\n\n**Additional Info:** #{k[4]}" unless k[4].nil?
+  xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Items/#{k[0].gsub(' ','_')}.png"
+  create_embed(event,"__**#{k[0]}**__",str,xcolor,nil,xpic)
+end
+
 def reverse_stat(stat)
   return "-#{stat[1,stat.length-1]}" if stat[0,1]=='+'
   return "+#{stat[1,stat.length-1]}" if stat[0,1]=='-'
@@ -8872,8 +9053,9 @@ def spaceship_order(x)
   return 1 if x=='Unit'
   return 2 if x=='Skill'
   return 3 if x=='Structure'
-  return 4 if x=='Item'
-  return 500
+  return 4 if x=='Accessory'
+  return 5 if x=='Item'
+  return 600
 end
 
 def parse_function_alts(callback,event,args,bot)
@@ -9148,6 +9330,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
+  untz=@units.map{|q| q}
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
@@ -9559,6 +9742,7 @@ def heal_study(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
+  untz=@units.map{|q| q}
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
@@ -9849,6 +10033,7 @@ def proc_study(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
+  untz=@units.map{|q| q}
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
@@ -10350,6 +10535,7 @@ def phase_study(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
+  untz=@units.map{|q| q}
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
@@ -11556,6 +11742,14 @@ end
 
 bot.command([:structure,:struct]) do |event, *args|
   disp_struct(bot,args.join(' '),event)
+end
+
+bot.command([:acc,:accessory,:accessorie]) do |event, *args|
+  disp_accessory(bot,args.join(' '),event)
+end
+
+bot.command([:item]) do |event, *args|
+  disp_itemu(bot,args.join(' '),event)
 end
 
 bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, f|
@@ -13101,12 +13295,20 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     type[0]='Skill'
   elsif find_structure(newname,event,true).length>0
     type[0]='Structure'
+  elsif find_accessory(newname,event,true)>=0
+    type[0]='Accessory'
+  elsif find_item_feh(newname,event,true)>=0
+    type[0]='Item'
   elsif find_unit(newname,event)>=0
     type[0]='Unit*'
   elsif find_skill(newname,event)>=0
     type[0]='Skill*'
   elsif find_structure(newname,event).length>0
     type[0]='Structure*'
+  elsif find_accessory(newname,event)>=0
+    type[0]='Accessory*'
+  elsif find_item_feh(newname,event)>=0
+    type[0]='Item*'
   end
   if find_unit(unit,event,true)>=0
     type[1]='Unit'
@@ -13114,12 +13316,20 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     type[1]='Skill'
   elsif find_structure(unit,event,true).length>0
     type[1]='Structure'
+  elsif find_accessory(unit,event,true)>=0
+    type[1]='Accessory'
+  elsif find_item_feh(unit,event,true)>=0
+    type[1]='Item'
   elsif find_unit(unit,event)>=0
     type[1]='Unit*'
   elsif find_skill(unit,event)>=0
     type[1]='Skill*'
   elsif find_structure(unit,event).length>0
     type[1]='Structure*'
+  elsif find_accessory(unit,event)>=0
+    type[1]='Accessory*'
+  elsif find_item_feh(unit,event)>=0
+    type[1]='Item*'
   end
   cck=nil
   checkstr=normalize(newname)
@@ -13131,7 +13341,10 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     event.respond "Neither #{newname} nor #{unit} is a pre-defined unit/skill/alias.  Please try again."
     return nil
   elsif type.reject{|q| q != 'Alias'}.length<=0
-    event.respond "#{newname} is a #{type[0].downcase}\n#{unit} is a #{type[1].downcase}\nPlease try again."
+    x=['a','a']
+    x[0]='an' if ['item','accessory'].include?(type[0].downcase)
+    x[1]='an' if ['item','accessory'].include?(type[1].downcase)
+    event.respond "#{newname} is #{x[0]} #{type[0].downcase}\n#{unit} is #{x[1]} #{type[1].downcase}\nPlease try again."
     return nil
   end
   if type[1]=='Alias' && type[0]!='Alias'
@@ -13157,6 +13370,12 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
     else
       unt=@structures[unt]
     end
+    checkstr2="#{unt[0]}"
+  elsif type[0]=='Alias' && type[1].gsub('*','')=='Accessory'
+    unt=@accessories[find_accessory(unit,event)]
+    checkstr2="#{unt[0]}"
+  elsif type[0]=='Alias' && type[1].gsub('*','')=='Item'
+    unt=@itemus[find_item_feh(unit,event)]
     checkstr2="#{unt[0]}"
   end
   logchn=386658080257212417
@@ -13293,15 +13512,35 @@ bot.command([:deletealias,:removealias]) do |event, name|
   elsif !is_mod?(event.user,event.server,event.channel)
     event.respond 'You are not a mod.'
     return nil
-  elsif find_unit(name,event)<0 && find_skill(name,event)<0
-    event.respond "#{name} is not anyone's alias, silly!"
-    return nil
   end
   j=find_unit(name,event)
   if j<0
     j=find_skill(name,event)
-    j=@skills[j]
-    jjj='Skill'
+    if j<0
+      j=find_structure(name,event)
+      if j.length<=0
+        j=find_accessory(name,event)
+        if j<0
+          j=find_item_feh(name,event)
+          if j<0
+            event.respond "#{name} is not an alias, silly!"
+            return nil
+          else
+            j=@itemus[j]
+            jjj='Item'
+          end
+        else
+          j=@accessories[j]
+          jjj='Accessory'
+        end
+      else
+        j=j[0] if j[0].is_a?(Array)
+        jjj='Structure'
+      end
+    else
+      j=@skills[j]
+      jjj='Skill'
+    end
   else
     j=@units[j]
     jjj='Unit'
@@ -15412,11 +15651,19 @@ bot.message do |event|
         disp_skill(bot,s,event,true)
       elsif find_structure_ex(s,event,true).length>0
         disp_struct(bot,s,event,true)
+      elsif find_data_ex(:find_accessory,s,event,true)>=0
+        disp_accessory(bot,s,event,true)
+      elsif find_data_ex(:find_item_feh,s,event,true)>=0
+        disp_itemu(bot,s,event,true)
       elsif str.nil?
         if find_skill(s,event)>=0
           disp_skill(bot,s,event,true)
-        elsif find_structure_ex(s,event)
+        elsif find_structure_ex(s,event).length>0
           disp_struct(bot,s,event,true)
+        elsif find_data_ex(:find_accessory,s,event)>=0
+          disp_accessory(bot,s,event,true)
+        elsif find_data_ex(:find_item_feh,s,event)>=0
+          disp_itemu(bot,s,event,true)
         elsif !detect_multi_unit_alias(event,s.downcase,event.message.text.downcase).nil?
           x=detect_multi_unit_alias(event,s.downcase,event.message.text.downcase)
           event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -15464,6 +15711,10 @@ bot.message do |event|
         disp_skill(bot,s,event,true)
       elsif find_structure_ex(s,event).length>0
         disp_struct(bot,s,event,true)
+      elsif find_data_ex(:find_accessory,s,event)>=0
+        disp_accessory(bot,s,event,true)
+      elsif find_data_ex(:find_item_feh,s,event)>=0
+        disp_itemu(bot,s,event,true)
       elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
         x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -15599,6 +15850,10 @@ bot.mention do |event|
   elsif ['struct','structure'].include?(a[0].downcase)
     a.shift
     disp_struct(bot,a.join(' '),event)
+    k=1
+  elsif ['item'].include?(a[0].downcase)
+    a.shift
+    disp_itemu(bot,a.join(' '),event)
     k=1
   elsif ['allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable'].include?(a[0].downcase)
     a.shift
@@ -15795,11 +16050,19 @@ bot.mention do |event|
       disp_skill(bot,s,event,true)
     elsif find_structure_ex(s,event,true).length>0
       disp_struct(bot,s,event,true)
+    elsif find_data_ex(:find_accessory,s,event,true)>=0
+      disp_accessory(bot,s,event,true)
+    elsif find_data_ex(:find_item_feh,s,event,true)>=0
+      disp_itemu(bot,s,event,true)
     elsif str.nil?
       if find_skill(s,event)>=0
         disp_skill(bot,s,event,true)
-      elsif find_structure_ex(s,event)
+      elsif find_structure_ex(s,event).length>0
         disp_struct(bot,s,event,true)
+      elsif find_data_ex(:find_accessory,s,event)>=0
+        disp_accessory(bot,s,event,true)
+      elsif find_data_ex(:find_item_feh,s,event)>=0
+        disp_itemu(bot,s,event,true)
       elsif !detect_multi_unit_alias(event,s.downcase,event.message.text.downcase).nil?
         x=detect_multi_unit_alias(event,s.downcase,event.message.text.downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -15854,6 +16117,10 @@ bot.mention do |event|
       disp_stats(bot,x[1],w,event,true,true)
     elsif find_structure_ex(s,event).length>0
       disp_struct(bot,s,event,true)
+    elsif find_data_ex(:find_accessory,s,event)>=0
+      disp_accessory(bot,s,event,true)
+    elsif find_data_ex(:find_item_feh,s,event)>=0
+      disp_itemu(bot,s,event,true)
     end
   end
 end
