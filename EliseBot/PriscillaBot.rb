@@ -526,7 +526,7 @@ end
 
 def safe_to_spam?(event,chn=nil) # determines whether or not it is safe to send extremely long messages
   return true if event.server.nil? # it is safe to spam in PM
-  return true if [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504].include?(event.server.id) # it is safe to spam in the emoji servers
+  return true if [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id) # it is safe to spam in the emoji servers
   return true if @shardizard==4 # it is safe to spam during debugging
   chn=event.channel if chn.nil?
   return true if ['bots','bot'].include?(chn.name.downcase) # channels named "bots" are safe to spam in
@@ -644,9 +644,9 @@ end
 def overlap_prevent(event) # used to prevent servers with both Elise and her debug form from receiving two replies
   if event.server.nil? # failsafe code catching PMs as not a server
     return false
-  elsif event.message.text.downcase.split(' ').include?('debug') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504].include?(event.server.id)
+  elsif event.message.text.downcase.split(' ').include?('debug') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id)
     return @shardizard != 4 # the debug bot can be forced to be used in the emoji servers by including the word "debug" in your message
-  elsif [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504].include?(event.server.id) # emoji servers will use default Elise otherwise
+  elsif [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id) # emoji servers will use default Elise otherwise
     return @shardizard == 4
   elsif event.server.id==332249772180111360 # two identical commands cannot be used in the same minute in the FEHKeeper server
     canpost=true
@@ -848,7 +848,6 @@ def make_stats_string(event,name,rarity,boon='',bane='',hm=@max_rarity_merge[1])
   u2=(u[1]+u[2]+u[3]+u[4]+u[5])/5
   for i in 0...hm[0]+1
     u=get_stats(event,name,40,rarity,i,boon,bane)
-    puts u.to_s
     u=['Kiran',0,0,0,0,0] if u[0]=='Kiran'
     k="#{k}\n**#{i} merge#{'s' unless i==1}:** #{u[1]} / #{u[2]} / #{u[3]} / #{u[4]} / #{u[5]}  \u00B7  BST: #{u[1]+u[2]+u[3]+u[4]+u[5]}  \u00B7  Score: #{u2+rarity*5+i*2+90}" if i%5==0 || i==hm[1] || args.include?('full') || args.include?('merges')
   end
@@ -2220,7 +2219,7 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
   end
   for i in 0...args.length
     skl=lookout.find_index{|q| q[1].include?(args[i].downcase)}
-    unless skl.nil? || (lookout[skl][5] && @units[j][1][1]!='Dragon')
+    unless skl.nil? || (lookout[skl][5] && @units[j][1][1]!=lookout[skl][1].split(' ')[1][0,6].gsub('s',''))
       skl=lookout[skl]
       if skl[2]==1
         hf.push(skl[0])
@@ -2325,7 +2324,7 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
   end
   for i in 0...args.length
     skl=lookout.find_index{|q| q[1].include?(args[i].downcase)}
-    unless skl.nil? || (lookout[skl][5] && @units[j][1][1]!='Dragon')
+    unless skl.nil? || (lookout[skl][5] && @units[j][1][1]!=lookout[skl][1].split(' ')[1][0,6].gsub('s',''))
       skl=lookout[skl]
       if skl[2]==1
         hf.push(skl[0])
@@ -4369,7 +4368,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     elsif skill[5]=='Dragons Only'
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     elsif skill[5]=='Beasts Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:443172811608162324> **Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:443172811608162324> **Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}\n**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form."
     elsif skill[0]=='Missiletainn'
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n\n__**Missiletainn (Dark)**__\n<:Red_Blade:443172811830198282> **Weapon Type:** Sword (Red Blade)\n**Might:** #{skill[2]+1}  \u00B7  **Range:** 1\n**Effect:** #{skill[7].split(' *** ')[0]}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Owain\n**Promotes from:** *Silver Sword*\n\n__**Missiletainn (Dusk)**__\n<:Light_Tome:499760605381787650> **Weapon Type:** Light Magic (Blue Tome)\n**Might:** #{skill[2]-1}  \u00B7  **Range:** 2"
       skill[7]=skill[7].split(' *** ')[1]
@@ -6932,11 +6931,20 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
                 matches3.push(matches2[i]) if matches2[i][11].split(', ').include?('Prf') && matches2[i][8]=='-'
               elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?(weapon_subsets[j])
                 matches3.push(matches2[i])
+              elsif matches2[i][4]=='Weapon' && has_any?(matches2[i][11].split(', '),["(TR)#{weapon_subsets[j]}","(RT)#{weapon_subsets[j]}","(T)(R)#{weapon_subsets[j]}","(R)(T)#{weapon_subsets[j]}"])
+                matches2[i][0]="#{matches2[i][0]} *(+) [Tsfrm]All*"
+                matches3.push(matches2[i])
+              elsif matches2[i][4]=='Weapon' && has_any?(matches2[i][11].split(', '),["(TE)#{weapon_subsets[j]}","(ET)#{weapon_subsets[j]}","(T)(E)#{weapon_subsets[j]}","(E)(T)#{weapon_subsets[j]}"])
+                matches2[i][0]="#{matches2[i][0]} *(+) [Tsfrm]Effect*"
+                matches3.push(matches2[i])
               elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(R)#{weapon_subsets[j]}")
                 matches2[i][0]="#{matches2[i][0]} *(+) All*"
                 matches3.push(matches2[i])
               elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(E)#{weapon_subsets[j]}")
                 matches2[i][0]="#{matches2[i][0]} *(+) Effect*"
+                matches3.push(matches2[i])
+              elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(T)#{weapon_subsets[j]}")
+                matches2[i][0]="#{matches2[i][0]} *- Transformed*"
                 matches3.push(matches2[i])
               end
             end
@@ -6994,18 +7002,18 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     matches4=split_list(event,matches4,['Red Tome','Blue Tome','Green Tome'],5)
   elsif colors==['Red'] && weapons.length<=0 && color_weapons.length<=0
     # Red is the only color requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Sword','Red Tome','Dragon','Bow','Dagger','Staff'],5)
+    matches4=split_list(event,matches4,['Sword','Red Tome','Dragon','Beast','Bow','Dagger','Staff'],5)
   elsif colors==['Blue'] && weapons.length<=0 && color_weapons.length<=0
     # Blue is the only color requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Lance','Blue Tome','Dragon','Bow','Dagger','Staff'],5)
+    matches4=split_list(event,matches4,['Lance','Blue Tome','Dragon','Beast','Bow','Dagger','Staff'],5)
   elsif colors==['Green'] && weapons.length<=0 && color_weapons.length<=0
     # Green is the only color requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Axe','Green Tome','Dragon','Bow','Dagger','Staff'],5)
+    matches4=split_list(event,matches4,['Axe','Green Tome','Dragon','Beast','Bow','Dagger','Staff'],5)
   elsif colors==['Colorless'] && weapons.length<=0 && color_weapons.length<=0
     # Colorless is the only color requested but no other restrictions are given
-    matches4=split_list(event,matches4,['Rod','Colorless Tome','Dragon','Bow','Dagger','Staff'],5)
+    matches4=split_list(event,matches4,['Rod','Colorless Tome','Dragon','Beast','Bow','Dagger','Staff'],5)
   elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[4]}.uniq[0]=='Weapon' && matches4.map{|q| q[11]}.uniq.length>1
-    matches4=split_list(event,matches4,['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Rod','Colorless Tome','Dragon','Bow','Dagger','Staff'],5)
+    matches4=split_list(event,matches4,['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Rod','Colorless Tome','Dragon','Beast','Bow','Dagger','Staff'],5)
   elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[4]}.uniq[0]=='Assist' && matches4.map{|q| q[5]}.uniq.length>1
     matches4=split_list(event,matches4,[['Rally',1],['Move',2],['Music',1],['Health',2],['Staff',1]],11)
   elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[4]}.uniq[0]=='Special'
@@ -7213,7 +7221,7 @@ def display_skills(event, mode)
       typesx=[]
       for i in 0...k.length
         unless k[i]=='- - -'
-          f=k[i].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade').gsub('*','')
+          f=k[i].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub(' *(+) [Tsfrm]All*','').gsub(' *(+) [Tsfrm]Effect*','').gsub(' *- Transformed*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade').gsub('*','')
           f=f.split('/')[0] if sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}.nil?
           typesx.push(sklz[sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}])
         end
@@ -7243,7 +7251,7 @@ def display_skills(event, mode)
         typesx=[]
         for i2 in 0...p1[i].length
           unless p1[i][i2]=='- - -'
-            f=p1[i][i2].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade').gsub('*','')
+            f=p1[i][i2].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub(' *(+) [Tsfrm]All*','').gsub(' *(+) [Tsfrm]Effect*','').gsub(' *- Transformed*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade').gsub('*','')
             f=f.split('/')[0] if sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}.nil?
             typesx.push(sklz[sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}])
           end
@@ -7350,6 +7358,8 @@ def display_skills(event, mode)
             h='<:Green_Tome:467122927666593822> Gronn Magic' if p1[i].include?('Gronnblade[+]') || types[0][2]=='Gronn'
             # Breaths
             h="#{emotes[2]} Dragon Breaths" if p1[i].include?('Fire Breath[+]') || types[0][1]=='Dragons Only'
+            # Beasts
+            h="#{emotes[4]} Beast Damage" if types[0][1]=='Beasts Only'
             # Bows
             h="#{emotes[3]} Bows" if p1[i].include?('Iron Bow') || p1[i].include?('Iron/Steel Bow') || p1[i].include?('Iron/Steel/Silver Bow') || p1[i].include?('Iron/Steel/Silver[+] Bow') || types[0][1]=='Bow Users Only'
             # daggers
@@ -7366,6 +7376,7 @@ def display_skills(event, mode)
           h='<:Blue_Tome:467112472394858508> Blue Tomes' if types[0][1]=='Blue Tome Users Only'
           h='<:Green_Tome:467122927666593822> Green Tomes' if types[0][1]=='Green Tome Users Only'
           h="#{emotes[2]} Dragon Breaths" if p1[i].include?('Fire Breath[+]') || types[0][1]=='Dragons Only'
+          h="#{emotes[4]} Beast Damage" if types[0][1]=='Beasts Only'
           h="#{emotes[3]} Bows" if p1[i].include?('Iron Bow') || p1[i].include?('Iron/Steel Bow') || p1[i].include?('Iron/Steel/Silver Bow') || p1[i].include?('Iron/Steel/Silver[+] Bow') || types[0][1]=='Bow Users Only'
           h="#{emotes[1]} Daggers" if p1[i].include?('Iron Dagger') || p1[i].include?('Iron/Steel Dagger') || p1[i].include?('Iron/Steel/Silver Dagger') || p1[i].include?('Iron/Steel/Silver[+] Dagger') || types[0][1]=='Dagger Users Only'
         end
@@ -11757,7 +11768,7 @@ bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, 
   f='' if f.nil?
   if event.server.nil?
     event.respond 'It is safe for me to send long replies here because this is my PMs with you.'
-  elsif [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504].include?(event.server.id)
+  elsif [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id)
     event.respond 'It is safe for me to send long replies here because this is one of my emoji servers.'
   elsif @shardizard==4
     event.respond 'It is safe for me to send long replies here because this is my debug mode.'
@@ -15585,8 +15596,8 @@ bot.server_create do |event|
     end
     chn=chnn[0] if chnn.length>0
   end
-  if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504].include?(event.server.id) && @shardizard==4
-    (chn.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/HEuQK2>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/v3ADBG>") rescue nil)
+  if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id) && @shardizard==4
+    (chn.send_message(get_debug_leave_message()) rescue nil)
     event.server.leave
   else
     bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(event.server.id >> 22) % 4]} Shards")
@@ -16273,8 +16284,8 @@ end
 bot.ready do |event|
   if @shardizard==4
     for i in 0...bot.servers.values.length
-      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504].include?(bot.servers.values[i].id)
-        bot.servers.values[i].general_channel.send_message("I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my two facets, so I'll drop both their invite links here.\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*\nHere's her invite link: <https://goo.gl/Hf9RNj>\n\n**FEIndex**, also known as **RobinBot**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*.\nHere's her invite link: <https://goo.gl/f1wSGd>") rescue nil
+      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(bot.servers.values[i].id)
+        bot.servers.values[i].general_channel.send_message(get_debug_leave_message()) rescue nil
         bot.servers.values[i].leave
       end
     end
