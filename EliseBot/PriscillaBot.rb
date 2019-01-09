@@ -1631,6 +1631,7 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
   summoner=nil
   refinement=nil
   blessing=[]
+  transformed=false
   if args2.length>0
     cornatures=[['HP','Robust','Sickly'],
                 ['Attack','Strong','Weak'],
@@ -1655,6 +1656,8 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
         summoner='B' if summoner.nil?
       elsif ['c','csupport','supportc'].include?(args[i].gsub('(','').gsub(')','').gsub('-','').gsub('_','').downcase)
         summoner='C' if summoner.nil?
+      elsif ['t','transformed','transform'].include?(args[i].gsub('(','').gsub(')','').gsub('-','').gsub('_','').downcase)
+        transformed=true
       end
       if args[i][0,1]=='+'
         x=args[i].gsub('(','').gsub(')','')[1,args[i].gsub('(','').gsub(')','').length-1]
@@ -1852,10 +1855,10 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
   end
   rarity=@max_rarity_merge[0] if !rarity.nil? && rarity>@max_rarity_merge[0]
   merges=@max_rarity_merge[1] if !merges.nil? && merges>@max_rarity_merge[1]
-  return [rarity,merges,boon,bane,summoner,refinement,blessing]
+  return [rarity,merges,boon,bane,summoner,refinement,blessing,transformed]
 end
 
-def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refinement='',blessing=[],ignoremax=false) # used to add skill stat increases to a unit's stats
+def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refinement='',blessing=[],transformed=false,ignoremax=false) # used to add skill stat increases to a unit's stats
   skillls=skillls.map{|q| q}
   if weapon.nil? || weapon=='' || weapon==' ' || weapon=='-'
   else # this is the weapon's stat effect
@@ -1956,6 +1959,12 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
     stats[3]+=s2[12][2]+sttz[ks][2]
     stats[4]+=s2[12][3]+sttz[ks][3]
     stats[5]+=s2[12][4]+sttz[ks][4]
+    if s2[5].include?('Beasts Only') && transformed
+      stats[2]+=s2[12][6]
+      stats[3]+=s2[12][7]
+      stats[4]+=s2[12][8]
+      stats[5]+=s2[12][9]
+    end
   end
   negative=[0,0,0,0,0]
   rally=[0,0,0,0,0]
@@ -2596,7 +2605,7 @@ def get_bonus_type(event) # used to determine if the embed header should say Tem
   return x2.join('/')
 end
 
-def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,weapon='-',expandedmode=false,modemode=false) # used by the stats command and any derivatives to display which skills are affecting the stats being displayed
+def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,transformed=false,weapon='-',expandedmode=false,modemode=false) # used by the stats command and any derivatives to display which skills are affecting the stats being displayed
   blessing=[] if blessing.nil?
   stat_skills=[] if stat_skills.nil?
   for i in 0...stat_skills.length
@@ -2690,6 +2699,8 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   str="#{str}In-combat buffs: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0
   str="#{str}In-combat buffs: -\n" if stat_skills_3.length<=0 && expandedmode
   return "#{str}" if modemode && (weapon=='-' || weapon.include?('~~'))
+  return "#{str}Equipped weapon: #{weapon.gsub('Bladeblade','Laevatein')}\nForm: Transformed\n" if transformed && @units[j][1][1]=='Beast'
+  return "#{str}Equipped weapon: #{weapon.gsub('Bladeblade','Laevatein')}\nForm: Humanoid\n" if !transformed && @units[j][1][1]=='Beast'
   return "#{str}Equipped weapon: #{weapon.gsub('Bladeblade','Laevatein')}\n"
 end
 
@@ -2727,6 +2738,22 @@ def get_unit_prf(name)
   end
   return [prfs[0][0]] if prfs.length>0
   return ['-']
+end
+
+def has_weapon_tag?(tag,wpn,refinement=nil,transformed=false)
+  return true if wpn[11].split(', ').include?(tag)
+  return true if wpn[11].split(', ').include?("(E)#{tag}") && refinement=='Effect'
+  return true if wpn[11].split(', ').include?("(R)#{tag}") && !refinement.nil? && refinement.length>0
+  return true if wpn[11].split(', ').include?("(T)#{tag}") && transformed
+  return true if wpn[11].split(', ').include?("(TE)#{tag}") && transformed && refinement=='Effect'
+  return true if wpn[11].split(', ').include?("(ET)#{tag}") && transformed && refinement=='Effect'
+  return true if wpn[11].split(', ').include?("(T)(E)#{tag}") && transformed && refinement=='Effect'
+  return true if wpn[11].split(', ').include?("(E)(T)#{tag}") && transformed && refinement=='Effect'
+  return true if wpn[11].split(', ').include?("(TR)#{tag}") && transformed && !refinement.nil? && refinement.length>0
+  return true if wpn[11].split(', ').include?("(RT)#{tag}") && transformed && !refinement.nil? && refinement.length>0
+  return true if wpn[11].split(', ').include?("(T)(R)#{tag}") && transformed && !refinement.nil? && refinement.length>0
+  return true if wpn[11].split(', ').include?("(R)(T)#{tag}") && transformed && !refinement.nil? && refinement.length>0
+  return false
 end
 
 def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=nil,expandedmodex=nil) # displays stats
@@ -2788,6 +2815,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
+  transformed=flurp[7]
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
@@ -2920,6 +2948,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   w2=@skills[find_skill(weapon,event)]
   if w2[15].nil?
     refinement=nil
+    transformed=false
   elsif w2[15].length<2 && refinement=='Effect'
     refinement=nil
   elsif w2[15][0,1].to_i.to_s==w2[15][0,1] && refinement=='Effect'
@@ -3006,9 +3035,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     atk='<:MagicS:514712247289774111> Magic' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
     atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
     zzzl=@skills[find_weapon(weapon,event)]
-    if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
-      atk='<:FreezeS:514712247474585610> Freeze'
-    end
+    atk='<:FreezeS:514712247474585610> Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
     n=nature_name(boon,bane)
     unless n.nil?
       n=n[0] if atk=='<:StrengthS:514712248372166666> Strength'
@@ -3046,8 +3073,8 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     end
     tempest=get_bonus_type(event)
     cru40=u40.map{|a| a}
-    u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
-    cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing)
+    u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
+    cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing,transformed)
     blu40=u40.map{|a| a}
     crblu40=cru40.map{|a| a}
     blu40=apply_stat_skills(event,stat_skills_2,blu40)
@@ -3086,7 +3113,30 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       flds.push(["<:Passive_C:443677023555026954> **C Passives**",uskl[5].join("\n")])
       flds.push(["<:Passive_S:443677023626330122> **Sacred Seal**",uskl[6].join("\n")]) if uskl.length>6
     end
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0 || expandedmode}#{"  \u2764 **#{summoner}**" unless summoner=='-'}#{"\nNo Summoner Support" if summoner =='-' && expandedmode}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl,expandedmode)}\n#{unit_clss(bot,event,j)}",xcolor,ftr,pick_thumbnail(event,j,bot),flds,1)
+    mergetext=''
+    if unitz[1][1]=='Beast' && !transformed && !wl.include?('~~') && !['-','',' '].include?(wl) && !w2.nil?
+      wlr=wl.split(' (+) ')[0]
+      www2=w2[12][5,5]
+      www3=www2.reject{|q| q==0}
+      sttttz=[]
+      if www3.length<=0
+      elsif www3.min==www3.max
+        sttttz.push('HP') unless www2[0]==0
+        sttttz.push('Atk') unless www2[1]==0
+        sttttz.push('Spd') unless www2[2]==0
+        sttttz.push('Def') unless www2[3]==0
+        sttttz.push('Res') unless www2[4]==0
+        mergetext="\n\nWhen transformed: #{'+' if www3[0]>0}#{www3[0]} #{sttttz.join('/')}\nInclude the word \"Transformed\" to apply this directly."
+      else
+        sttttz.push("#{'+' if www2[0]>0}#{www2[0]} HP") unless www2[0]==0
+        sttttz.push("#{'+' if www2[1]>0}#{www2[1]} Atk") unless www2[1]==0
+        sttttz.push("#{'+' if www2[2]>0}#{www2[2]} Spd") unless www2[2]==0
+        sttttz.push("#{'+' if www2[3]>0}#{www2[3]} Def") unless www2[3]==0
+        sttttz.push("#{'+' if www2[4]>0}#{www2[4]} Res") unless www2[4]==0
+        mergetext="\n\nWhen transformed: #{sttttz.join(', ')}\nInclude the word \"Transformed\" to apply this directly."
+      end
+    end
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0 || expandedmode}#{"  \u2764 **#{summoner}**" unless summoner=='-'}#{"\nNo Summoner Support" if summoner =='-' && expandedmode}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,expandedmode)}\n#{unit_clss(bot,event,j)}#{mergetext}",xcolor,ftr,pick_thumbnail(event,j,bot),flds,1)
     return nil
   end
   # units for whom both level 40 and level 1 stats are known
@@ -3111,9 +3161,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   atk='<:MagicS:514712247289774111> Magic' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
   atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
   zzzl=@skills[find_weapon(weapon,event)]
-  if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
-    atk='<:FreezeS:514712247474585610> Freeze'
-  end
+  atk='<:FreezeS:514712247474585610> Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
   unless n.nil?
     n=n[0] if atk=='<:StrengthS:514712248372166666> Strength'
@@ -3131,8 +3179,8 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|a| a}
-  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
-  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing)
+  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
+  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing,transformed)
   blu40=u40.map{|a| a}
   crblu40=cru40.map{|a| a}
   blu40=apply_stat_skills(event,stat_skills_2,blu40) if stat_skills_2.length>0
@@ -3141,8 +3189,8 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   cru40=make_stat_string_list(cru40,crblu40)
   u40=make_stat_string_list(u40,cru40,2) if wl.include?('~~')
   cru1=u1.map{|a| a}
-  u1=apply_stat_skills(event,stat_skills,u1,tempest,summoner,weapon,refinement,blessing)
-  cru1=apply_stat_skills(event,stat_skills,cru1,tempest,summoner,'-','',blessing)
+  u1=apply_stat_skills(event,stat_skills,u1,tempest,summoner,weapon,refinement,blessing,transformed)
+  cru1=apply_stat_skills(event,stat_skills,cru1,tempest,summoner,'-','',blessing,transformed)
   blu1=u1.map{|a| a}
   crblu1=cru1.map{|a| a}
   blu1=apply_stat_skills(event,stat_skills_2,blu1) if stat_skills_2.length>0
@@ -3227,14 +3275,37 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   for i in 0...flds.length
     flds[i][1]=flds[i][1].join("\n")
   end
+  if unitz[1][1]=='Beast' && !transformed && !wl.include?('~~') && !['-','',' '].include?(wl) && !w2.nil?
+    wlr=wl.split(' (+) ')[0]
+    www2=w2[12][5,5]
+    www3=www2.reject{|q| q==0}
+    sttttz=[]
+    if www3.length<=0
+    elsif www3.min==www3.max
+      sttttz.push('HP') unless www2[0]==0
+      sttttz.push('Atk') unless www2[1]==0
+      sttttz.push('Spd') unless www2[2]==0
+      sttttz.push('Def') unless www2[3]==0
+      sttttz.push('Res') unless www2[4]==0
+      mergetext="\n\nWhen transformed: #{'+' if www3[0]>0}#{www3[0]} #{sttttz.join('/')}\nInclude the word \"Transformed\" to apply this directly."
+    else
+      sttttz.push("#{'+' if www2[0]>0}#{www2[0]} HP") unless www2[0]==0
+      sttttz.push("#{'+' if www2[1]>0}#{www2[1]} Atk") unless www2[1]==0
+      sttttz.push("#{'+' if www2[2]>0}#{www2[2]} Spd") unless www2[2]==0
+      sttttz.push("#{'+' if www2[3]>0}#{www2[3]} Def") unless www2[3]==0
+      sttttz.push("#{'+' if www2[4]>0}#{www2[4]} Res") unless www2[4]==0
+      mergetext="\n\nWhen transformed: #{sttttz.join(', ')}\nInclude the word \"Transformed\" to apply this directly."
+    end
+  end
   if merges>0 && newmerge==false
+    mergetextx=''
     if bane=='' && boon==''
       s2=u1.map{|q| q}
       s=[[s2[1],1,'HP'],[s2[2],2,'Atk'],[s2[3],3,'Spd'],[s2[4],4,'Def'],[s2[5],5,'Res']]
       s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}
       s=s[0,3]
       s.sort!{|b,a| b[1] <=> a[1]}
-      mergetext="+1 #{s[0][2]}/#{s[1][2]}/#{s[2][2]}"
+      mergetextx="+1 #{s[0][2]}/#{s[1][2]}/#{s[2][2]}"
     elsif bane != ''
       s=[6,'HP'] if bane=='HP'
       s=[7,'Atk'] if bane=='Attack'
@@ -3246,9 +3317,9 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       baan=4 if [-2,10].include?(u40[s[0]]) && rarity==4
       baan=2 if [0,4,10].include?(u40[s[0]]) && rarity==2
       baan=2 if [-2,1,4,7,10,14].include?(u40[s[0]]) && rarity==1
-      mergetext="+#{baan} #{s[1]}"
+      mergetextx="+#{baan} #{s[1]}"
     end
-    mergetext="\n\nAfter February update: #{mergetext}\nInclude the word \"Feb\" to apply this directly."
+    mergetext="#{mergetext}\n\nAfter February update: #{mergetextx}\nInclude the word \"Feb\" to apply this directly."
   end
   if skillstoo && u40[0]!='Robin (Shared stats)' # when invoked any way except the main stats command, will also display the unit's top level skills
     uskl=unit_skills(name,event)
@@ -3309,7 +3380,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   if skillstoo && mu && flds.length<=3
     flds.shift
   end
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner,expandedmode)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl,expandedmode)}\n#{unit_clss(bot,event,j,u40[0])}#{mergetext}",xcolor,ftr,img,flds,xtype)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner,expandedmode)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,expandedmode)}\n#{unit_clss(bot,event,j,u40[0])}#{mergetext}",xcolor,ftr,img,flds,xtype)
   if (skillstoo || expandedmode) && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
@@ -3378,6 +3449,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
+  transformed=flurp[7]
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     blessing=blessing.map{|q| q.gsub('Legendary','Mythical')}
@@ -3630,8 +3702,31 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
       wl=weapon_legality(event,unitz[0],weapon,nil)
       weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
     end
-    u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(event,5,merges,summoner)}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n**<:HP_S:514712247503945739>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:514712247625580555>#{u40[3]} | <:DefenseS:514712247461871616>#{u40[4]} | <:ResistanceS:514712247574986752>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Score: #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5+25+merges*2+90+blessing.length*4})",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
+    u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
+    mergetext=''
+    if unitz[1][1]=='Beast' && !transformed && !wl.include?('~~') && !['-','',' '].include?(wl) && !w2.nil?
+      wlr=wl.split(' (+) ')[0]
+      www2=w2[12][5,5]
+      www3=www2.reject{|q| q==0}
+      sttttz=[]
+      if www3.length<=0
+      elsif www3.min==www3.max
+        sttttz.push('HP') unless www2[0]==0
+        sttttz.push('Atk') unless www2[1]==0
+        sttttz.push('Spd') unless www2[2]==0
+        sttttz.push('Def') unless www2[3]==0
+        sttttz.push('Res') unless www2[4]==0
+        mergetext="\n\nWhen transformed: #{'+' if www3[0]>0}#{www3[0]} #{sttttz.join('/')}\nInclude the word \"Transformed\" to apply this directly."
+      else
+        sttttz.push("#{'+' if www2[0]>0}#{www2[0]} HP") unless www2[0]==0
+        sttttz.push("#{'+' if www2[1]>0}#{www2[1]} Atk") unless www2[1]==0
+        sttttz.push("#{'+' if www2[2]>0}#{www2[2]} Spd") unless www2[2]==0
+        sttttz.push("#{'+' if www2[3]>0}#{www2[3]} Def") unless www2[3]==0
+        sttttz.push("#{'+' if www2[4]>0}#{www2[4]} Res") unless www2[4]==0
+        mergetext="\n\nWhen transformed: #{sttttz.join(', ')}\nInclude the word \"Transformed\" to apply this directly."
+      end
+    end
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(event,5,merges,summoner)}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,transformed,wl,false,true)}\n**<:HP_S:514712247503945739>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:514712247625580555>#{u40[3]} | <:DefenseS:514712247461871616>#{u40[4]} | <:ResistanceS:514712247574986752>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Score: #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5+25+merges*2+90+blessing.length*4})#{mergetext}",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
     return nil
   end
   # units for whom both level 40 and level 1 stats are known
@@ -3650,9 +3745,9 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane)
   u40x2=get_stats(event,name,40,5,0,boon,bane)
-  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
+  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
   u1=get_stats(event,name,1,rarity,merges,boon,bane)
-  u1=apply_stat_skills(event,stat_skills,u1,tempest,summoner,weapon,refinement,blessing)
+  u1=apply_stat_skills(event,stat_skills,u1,tempest,summoner,weapon,refinement,blessing,transformed)
   j=find_unit(name,event)
   atk='<:StrengthS:514712248372166666>*'
   atk='<:MagicS:514712247289774111>' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
@@ -3689,14 +3784,37 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
       superbaan[i-5]='-' if [-1,11].include?(u40[i]) && rarity==4
     end
   end
+  if unitz[1][1]=='Beast' && !transformed && !wl.include?('~~') && !['-','',' '].include?(wl) && !w2.nil?
+    wlr=wl.split(' (+) ')[0]
+    www2=w2[12][5,5]
+    www3=www2.reject{|q| q==0}
+    sttttz=[]
+    if www3.length<=0
+    elsif www3.min==www3.max
+      sttttz.push('HP') unless www2[0]==0
+      sttttz.push('Atk') unless www2[1]==0
+      sttttz.push('Spd') unless www2[2]==0
+      sttttz.push('Def') unless www2[3]==0
+      sttttz.push('Res') unless www2[4]==0
+      mergetext="\n\nWhen transformed: #{'+' if www3[0]>0}#{www3[0]} #{sttttz.join('/')}\nInclude the word \"Transformed\" to apply this directly."
+    else
+      sttttz.push("#{'+' if www2[0]>0}#{www2[0]} HP") unless www2[0]==0
+      sttttz.push("#{'+' if www2[1]>0}#{www2[1]} Atk") unless www2[1]==0
+      sttttz.push("#{'+' if www2[2]>0}#{www2[2]} Spd") unless www2[2]==0
+      sttttz.push("#{'+' if www2[3]>0}#{www2[3]} Def") unless www2[3]==0
+      sttttz.push("#{'+' if www2[4]>0}#{www2[4]} Res") unless www2[4]==0
+      mergetext="\n\nWhen transformed: #{sttttz.join(', ')}\nInclude the word \"Transformed\" to apply this directly."
+    end
+  end
   if merges>0 && newmerge==false
+    mergetextx=''
     if bane=='' && boon==''
       s2=u1.map{|q| q}
       s=[[s2[1],1,'HP'],[s2[2],2,'Atk'],[s2[3],3,'Spd'],[s2[4],4,'Def'],[s2[5],5,'Res']]
       s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}
       s=s[0,3]
       s.sort!{|b,a| b[1] <=> a[1]}
-      mergetext="+1 #{s[0][2]}/#{s[1][2]}/#{s[2][2]}"
+      mergetextx="+1 #{s[0][2]}/#{s[1][2]}/#{s[2][2]}"
     elsif bane != ''
       s=[6,'HP'] if bane=='HP'
       s=[7,'Atk'] if bane=='Attack'
@@ -3708,9 +3826,9 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
       baan=4 if [-2,10].include?(u40[s[0]]) && rarity==4
       baan=2 if [0,4,10].include?(u40[s[0]]) && rarity==2
       baan=2 if [-2,1,4,7,10,14].include?(u40[s[0]]) && rarity==1
-      mergetext="+#{baan} #{s[1]}"
+      mergetextx="+#{baan} #{s[1]}"
     end
-    mergetext="\nAfter February update: #{mergetext}\nInclude the word \"Feb\" to apply this directly."
+    mergetext="#{mergetext}\n\nAfter February update: #{mergetextx}\nInclude the word \"Feb\" to apply this directly."
   end
   for i in 0...5
     flds[1][1][i]="#{flds[1][1][i]}#{superbaan[i+1]}"
@@ -3783,7 +3901,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   end
   xtype=1
   xtype=6 if skillstoo && u40[0]!='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,wl,false,true)}\n<:HP_S:514712247503945739>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:514712247625580555>\u00A0\u00B7\u00A0<:DefenseS:514712247461871616>\u00A0\u00B7\u00A0<:ResistanceS:514712247574986752>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u00B7\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```#{mergetext}",xcolor,ftr,img,realflds,xtype)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,transformed,wl,false,true)}\n<:HP_S:514712247503945739>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:514712247625580555>\u00A0\u00B7\u00A0<:DefenseS:514712247461871616>\u00A0\u00B7\u00A0<:ResistanceS:514712247574986752>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u00B7\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```#{mergetext}",xcolor,ftr,img,realflds,xtype)
   if skillstoo && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
@@ -4402,7 +4520,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="#{str}\n**Effect:** #{skill[7]}" unless skill[7]=='-'
     end
     str="#{str}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Ophelia\n**Promotes from:** *Shine*" if skill[0]=='Missiletainn'
-    str="#{str}\n**Stats affected:** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}" unless skill[0]=='Missiletainn'
+    str="#{str}\n**Stats affected:** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}" unless skill[0]=='Missiletainn' || skill[5]=='Beasts Only'
+    str="#{str}\n**Stats affected (humanoid):** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}" if skill[5]=='Beasts Only'
+    str="#{str}\n**Stats affected (transformed):** 0/#{'+' if skill[12][1]+skill[12][6]>0}#{skill[12][1]+skill[12][6]}/#{'+' if skill[12][2]+skill[12][7]>0}#{skill[12][2]+skill[12][7]}/#{'+' if skill[12][3]+skill[12][8]>0}#{skill[12][3]+skill[12][8]}/#{'+' if skill[12][4]+skill[12][9]>0}#{skill[12][4]+skill[12][9]}" if skill[5]=='Beasts Only'
     sklslt=['Weapon']
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
     cumul=cumulative_sp_cost(skill,event)
@@ -4905,7 +5025,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
           end
           lookout=lookout.reject{|q| !['Stat-Affecting 1','Stat-Affecting 2'].include?(q[3])}
         end
-        zzz=apply_stat_skills(event,[find_effect_name(skill,event,1)],zzz,'','-','','',[],true) if lookout.map{|q| q[0]}.include?(zzz2)
+        zzz=apply_stat_skills(event,[find_effect_name(skill,event,1)],zzz,'','-','','',[],false,true) if lookout.map{|q| q[0]}.include?(zzz2)
       end
       skill[12][10]=zzz[2]
       sttz.push([zzz[1],0,zzz[3],zzz[4],zzz[5],'Effect'])
@@ -9341,6 +9461,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
+  transformed=flurp[7]
   untz=@units.map{|q| q}
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
@@ -9447,9 +9568,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   atk='Magic' if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
   atk='Strength' if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
   zzzl=sklz[ww2]
-  if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
-    atk='Freeze'
-  end
+  atk='Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
   unless n.nil?
     n=n[0] if atk=='Strength'
@@ -9472,8 +9591,8 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|a| a}
-  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
-  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing)
+  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
+  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing,transformed)
   if u40[0]=='Kiran'
     u40[1]=0
     u40[2]=0
@@ -9563,7 +9682,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   end
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,ftr,pic,x,5)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,ftr,pic,x,5)
 end
 
 def unit_study(event,name,bot,weapon=nil)
@@ -9597,7 +9716,6 @@ def unit_study(event,name,bot,weapon=nil)
   merges=flurp[1]
   boon=flurp[2]
   bane=flurp[3]
-  summoner=flurp[4]
   args.compact!
   mu=false
   if event.message.text.downcase.include?("mathoo's")
@@ -9753,6 +9871,7 @@ def heal_study(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
+  transformed=flurp[7]
   untz=@units.map{|q| q}
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
@@ -9858,9 +9977,7 @@ def heal_study(event,name,bot,weapon=nil)
   atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
   atk='Strength' if ['Blade','Bow','Dagger'].include?(u40x[1][1])
   zzzl=sklz[ww2]
-  if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
-    atk='Freeze'
-  end
+  atk='Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
   unless n.nil?
     n=n[0] if atk=='Strength'
@@ -9883,8 +10000,8 @@ def heal_study(event,name,bot,weapon=nil)
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|q| q}
-  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
-  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing) if wl.include?('~~')
+  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
+  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing,transformed) if wl.include?('~~')
   cru40=u40.map{|q| q} unless wl.include?('~~')
   if u40[0]=='Kiran'
     u40[1]=0
@@ -9997,12 +10114,12 @@ def heal_study(event,name,bot,weapon=nil)
   staves.push("~~How much Rehabilitate[+] heals is based on how much damage the target has taken.~~\n~~If they are above 50% HP, the lower end of the range is how much is healed.~~")
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
+  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.join("\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
     event.respond staves.join("\n")
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
   end
 end
 
@@ -10044,6 +10161,7 @@ def proc_study(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
+  transformed=flurp[7]
   untz=@units.map{|q| q}
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
@@ -10163,9 +10281,7 @@ def proc_study(event,name,bot,weapon=nil)
   atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
   atk='Strength' if ['Blade','Bow','Dagger'].include?(u40x[1][1])
   zzzl=sklz[ww2]
-  if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
-    atk='Freeze'
-  end
+  atk='Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
   unless n.nil?
     n=n[0] if atk=='Strength'
@@ -10188,8 +10304,8 @@ def proc_study(event,name,bot,weapon=nil)
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|q| q}
-  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
-  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing) if wl.include?('~~')
+  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
+  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing,transformed) if wl.include?('~~')
   cru40=u40.map{|q| q} unless wl.include?('~~')
   if u40[0]=='Kiran'
     u40[1]=0
@@ -10242,20 +10358,11 @@ def proc_study(event,name,bot,weapon=nil)
     wdamage2+=10
     stat_skills.push(wrathsub)
   end
-  tags=sklz[ww2][11].split(', ')
-  wdamage+=10 if tags.include?('WoDao')
-  wdamage2+=10 if tags.include?('WoDao') && !wl.include?('~~')
-  wdamage+=10 if tags.include?('(R)WoDao') && !refinement.nil? && refinement.length>0
-  wdamage2+=10 if tags.include?('(R)WoDao') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
-  wdamage+=10 if tags.include?('(E)WoDao') && refinement=='Effect'
-  wdamage2+=10 if tags.include?('(E)WoDao') && refinement=='Effect' && !wl.include?('~~')
+  wdamage+=10 if has_weapon_tag?('WoDao',sklz[ww2],refinement,transformed)
+  wdamage2+=10 if has_weapon_tag?('WoDao',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   cdwn=0
-  cdwn-=1 if tags.include?('Killer')
-  cdwn+=1 if tags.include?('SlowSpecial') || tags.include?('SpecialSlow')
-  cdwn-=1 if tags.include?('(R)Killer') && !refinement.nil? && refinement.length>0
-  cdwn+=1 if (tags.include?('(R)SlowSpecial') || tags.include?('(R)SpecialSlow')) && !refinement.nil? && refinement.length>0
-  cdwn-=1 if tags.include?('(E)Killer') && refinement=='Effect'
-  cdwn+=1 if (tags.include?('(E)SlowSpecial') || tags.include?('(E)SpecialSlow')) && refinement=='Effect'
+  cdwn-=1 if has_weapon_tag?('Killer',sklz[ww2],refinement,transformed)
+  cdwn+=1 if has_weapon_tag?('SlowSpecial',sklz[ww2],refinement,transformed) || has_weapon_tag?('SpecialSlow',sklz[ww2],refinement,transformed)
   cdwn2=0
   cdwn2=cdwn unless wl.include?('~~')
   cdwns=cdwn
@@ -10265,12 +10372,8 @@ def proc_study(event,name,bot,weapon=nil)
   procs=@skills.reject{|q| !has_any?(g, q[13]) || q[4]!='Special'}
   czz=0
   czz2=0
-  czz+=10 if tags.include?('WoDao_Star')
-  czz2+=10 if tags.include?('WoDao_Star') && !wl.include?('~~')
-  czz+=10 if tags.include?('(R)WoDao_Star') && !refinement.nil? && refinement.length>0
-  czz2+=10 if tags.include?('(R)WoDao_Star') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
-  czz+=10 if tags.include?('(E)WoDao_Star') && refinement=='Effect'
-  czz2+=10 if tags.include?('(E)WoDao_Star') && refinement=='Effect' && !wl.include?('~~')
+  czz+=10 if has_weapon_tag?('WoDao_Star',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Star',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Night Sky')[2],cdwns)
   d="`dmg /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
   d2="`dmg /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
@@ -10293,12 +10396,8 @@ def proc_study(event,name,bot,weapon=nil)
   staves[0].push("Glimmer - #{d}, cooldown of #{c}")
   czz=0
   czz2=0
-  czz+=10 if tags.include?('WoDao_Moon')
-  czz2+=10 if tags.include?('WoDao_Moon') && !wl.include?('~~')
-  czz+=10 if tags.include?('(R)WoDao_Moon') && !refinement.nil? && refinement.length>0
-  czz2+=10 if tags.include?('(R)WoDao_Moon') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
-  czz+=10 if tags.include?('(E)WoDao_Moon') && refinement=='Effect'
-  czz2+=10 if tags.include?('(E)WoDao_Moon') && refinement=='Effect' && !wl.include?('~~')
+  czz+=10 if has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'New Moon')[2],cdwns)
   d="`3* eDR /10#{" +#{wdamage+czz}" if wdamage+czz2>0}`"
   d2="`3* eDR /10#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
@@ -10323,12 +10422,8 @@ def proc_study(event,name,bot,weapon=nil)
   wd="~~#{wdamage}~~ #{wdamage2}, " unless wdamage==wdamage2
   czz=0
   czz2=0
-  czz+=10 if tags.include?('WoDao_Sun')
-  czz2+=10 if tags.include?('WoDao_Sun') && !wl.include?('~~')
-  czz+=10 if tags.include?('(R)WoDao_Sun') && !refinement.nil? && refinement.length>0
-  czz2+=10 if tags.include?('(R)WoDao_Sun') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
-  czz+=10 if tags.include?('(E)WoDao_Sun') && refinement=='Effect'
-  czz2+=10 if tags.include?('(E)WoDao_Sun') && refinement=='Effect' && !wl.include?('~~')
+  czz+=10 if has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Daylight')[2],cdwns)
   d="`3* #{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /10`"
   d2="`3* #{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /10`"
@@ -10346,12 +10441,8 @@ def proc_study(event,name,bot,weapon=nil)
   staves[2].push("Noontime - #{wd}heals for #{d}, cooldown of #{c}")
   czz=0
   czz2=0
-  czz+=10 if tags.include?('WoDao_Sun') || tags.include?('WoDao_Moon') || tags.include?('WoDao_Eclipse')
-  czz2+=10 if (tags.include?('WoDao_Sun') || tags.include?('WoDao_Moon') || tags.include?('WoDao_Eclipse')) && !wl.include?('~~')
-  czz+=10 if (tags.include?('(R)WoDao_Sun') || tags.include?('(R)WoDao_Moon') || tags.include?('(R)WoDao_Eclipse')) && !refinement.nil? && refinement.length>0
-  czz2+=10 if (tags.include?('(R)WoDao_Sun') || tags.include?('(R)WoDao_Moon') || tags.include?('(R)WoDao_Eclipse')) && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
-  czz+=10 if (tags.include?('(E)WoDao_Sun') || tags.include?('(E)WoDao_Moon') || tags.include?('(E)WoDao_Eclipse')) && refinement=='Effect'
-  czz2+=10 if (tags.include?('(E)WoDao_Sun') || tags.include?('(E)WoDao_Moon') || tags.include?('(E)WoDao_Eclipse')) && refinement=='Effect' && !wl.include?('~~')
+  czz+=10 if has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Eclipse',sklz[ww2],refinement,transformed)
+  czz2+=10 if (has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Eclipse',sklz[ww2],refinement,transformed)) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Aether')[2],cdwns)
   d="`eDR /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
   d2="`eDR /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
@@ -10364,12 +10455,8 @@ def proc_study(event,name,bot,weapon=nil)
   staves[3].push("**Radiant Aether - `#{d}, heals for #{h}, cooldown of #{c}**") if get_match_in_list(procs, 'Radiant Aether')[6].split(', ').include?(u40[0])
   czz=0
   czz2=0
-  czz+=10 if tags.include?('WoDao_Fire')
-  czz2+=10 if tags.include?('WoDao_Fire') && !wl.include?('~~')
-  czz+=10 if tags.include?('(R)WoDao_Fire') && !refinement.nil? && refinement.length>0
-  czz2+=10 if tags.include?('(R)WoDao_Fire') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
-  czz+=10 if tags.include?('(E)WoDao_Fire') && refinement=='Effect'
-  czz2+=10 if tags.include?('(E)WoDao_Fire') && refinement=='Effect' && !wl.include?('~~')
+  czz+=10 if has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Glowing Ember')[2],cdwns)
   d="#{deff/2+wdamage+czz}#{" (#{bldeff/2+wdamage+czz})" unless deff/2==bldeff/2}"
   cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
@@ -10396,12 +10483,8 @@ def proc_study(event,name,bot,weapon=nil)
   staves[4].push("Blue Flame - #{dx} (#{d} when adjacent to an ally), cooldown of #{c}")
   czz=0
   czz2=0
-  czz+=10 if tags.include?('WoDao_Ice')
-  czz2+=10 if tags.include?('WoDao_Ice') && !wl.include?('~~')
-  czz+=10 if tags.include?('(R)WoDao_Ice') && !refinement.nil? && refinement.length>0
-  czz2+=10 if tags.include?('(R)WoDao_Ice') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
-  czz+=10 if tags.include?('(E)WoDao_Ice') && refinement=='Effect'
-  czz2+=10 if tags.include?('(E)WoDao_Ice') && refinement=='Effect' && !wl.include?('~~')
+  czz+=10 if has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Chilling Wind')[2],cdwns)
   d="#{ress/2+wdamage+czz}#{" (#{blress/2+wdamage+czz})" unless ress/2==blress/2}"
   cd="#{crress/2+wdamage2+czz2}#{" (#{crblress/2+wdamage2+czz2})" unless crress/2==crblress/2}"
@@ -10419,12 +10502,8 @@ def proc_study(event,name,bot,weapon=nil)
   staves[5].push("Iceberg - #{d}, cooldown of #{c}")
   czz=0
   czz2=0
-  czz+=10 if tags.include?('WoDao_Fire') || tags.include?('WoDao_Ice') || tags.include?('WoDao_Frezzeflame')
-  czz2+=10 if (tags.include?('WoDao_Fire') || tags.include?('WoDao_Ice') || tags.include?('WoDao_Frezzeflame')) && !wl.include?('~~')
-  czz+=10 if (tags.include?('(R)WoDao_Fire') || tags.include?('(R)WoDao_Ice') || tags.include?('(R)WoDao_Frezzeflame')) && !refinement.nil? && refinement.length>0
-  czz2+=10 if (tags.include?('(R)WoDao_Fire') || tags.include?('(R)WoDao_Ice') || tags.include?('(R)WoDao_Frezzeflame')) && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
-  czz+=10 if (tags.include?('(E)WoDao_Fire') || tags.include?('(E)WoDao_Ice') || tags.include?('(E)WoDao_Frezzeflame')) && refinement=='Effect'
-  czz2+=10 if (tags.include?('(E)WoDao_Fire') || tags.include?('(E)WoDao_Ice') || tags.include?('(E)WoDao_Frezzeflame')) && refinement=='Effect' && !wl.include?('~~')
+  czz+=10 if has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Freezeflame',sklz[ww2],refinement,transformed)
+  czz2+=10 if (has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Freezeflame',sklz[ww2],refinement,transformed)) && !wl.include?('~~')
   if procs.map{|q| q[0]}.include?('Freezeflame')
     c=add_number_to_string(get_match_in_list(procs, 'Freezeflame')[2],cdwns)
     d="#{deff/2+ress/2+wdamage+czz}#{" (#{bldeff/2+blress/2+wdamage+czz})" unless ress/2==blress/2}"
@@ -10434,12 +10513,8 @@ def proc_study(event,name,bot,weapon=nil)
   end
   czz=0
   czz2=0
-  czz+=10 if tags.include?('WoDao_Dragon')
-  czz2+=10 if tags.include?('WoDao_Dragon') && !wl.include?('~~')
-  czz+=10 if tags.include?('(R)WoDao_Dragon') && !refinement.nil? && refinement.length>0
-  czz2+=10 if tags.include?('(R)WoDao_Dragon') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
-  czz+=10 if tags.include?('(E)WoDao_Dragon') && refinement=='Effect'
-  czz2+=10 if tags.include?('(E)WoDao_Dragon') && refinement=='Effect' && !wl.include?('~~')
+  czz+=10 if has_weapon_tag?('WoDao_Dragon',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Dragon',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Dragon Gaze')[2],cdwns)
   d="#{atkk*3/10+wdamage+czz}#{" (#{blatkk*3/10+wdamage+czz})" unless atkk*3/10==blatkk*3/10}"
   cd="#{cratkk*3/10+wdamage2+czz2}#{" (#{crblatkk*3/10+wdamage2+czz2})" unless cratkk*3/10==crblatkk*3/10}"
@@ -10462,12 +10537,8 @@ def proc_study(event,name,bot,weapon=nil)
   staves[7].push("**Fire Emblem - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Fire Emblem')[6].split(', ').include?(u40[0])
   czz=0
   czz2=0
-  czz+=10 if tags.include?('WoDao_Darkness')
-  czz2+=10 if tags.include?('WoDao_Darkness') && !wl.include?('~~')
-  czz+=10 if tags.include?('(R)WoDao_Darkness') && !refinement.nil? && refinement.length>0
-  czz2+=10 if tags.include?('(R)WoDao_Darkness') && !refinement.nil? && refinement.length>0 && !wl.include?('~~')
-  czz+=10 if tags.include?('(E)WoDao_Darkness') && refinement=='Effect'
-  czz2+=10 if tags.include?('(E)WoDao_Darkness') && refinement=='Effect' && !wl.include?('~~')
+  czz+=10 if has_weapon_tag?('WoDao_Darkness',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Darkness',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Dragon Gaze')[2],cdwns)
   c=add_number_to_string(get_match_in_list(procs, 'Retribution')[2],cdwns)
   d="#{wdamage+czz}-#{3*hppp/10+wdamage+czz}#{" (#{wdamage+czz}-#{3*blhppp/10+wdamage+czz}) based on HP lost" if 3*hppp/10!=3*blhppp/10}"
@@ -10486,9 +10557,9 @@ def proc_study(event,name,bot,weapon=nil)
   staves[8].push("Reprisal - #{d}, cooldown of #{c}")
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.map{|q| q.join("\n")}.join("\n\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
     s=""
     for i in 0...staves.length
       s=extend_message(s,staves[i].join("\n"),event,2) unless staves[i].length.zero?
@@ -10504,7 +10575,7 @@ def proc_study(event,name,bot,weapon=nil)
       end
     end
     flds.compact!
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,flds)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,flds)
   end
 end
 
@@ -10546,6 +10617,7 @@ def phase_study(event,name,bot,weapon=nil)
   refinement=flurp[5]
   blessing=flurp[6]
   blessing=blessing[0,8] if blessing.length>8
+  transformed=flurp[7]
   untz=@units.map{|q| q}
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
@@ -10662,9 +10734,7 @@ def phase_study(event,name,bot,weapon=nil)
   atk='<:MagicS:514712247289774111> Magic' if ['Tome','Healer','Dragon'].include?(u40x[1][1])
   atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
   zzzl=sklz[ww2]
-  if zzzl[11].split(', ').include?('Frostbite') || (zzzl[11].split(', ').include?('(R)Frostbite') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)Frostbite') && refinement=='Effect')
-    atk='<:FreezeS:514712247474585610> Freeze'
-  end
+  atk='<:FreezeS:514712247474585610> Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
   unless n.nil?
     n=n[0] if atk=='<:StrengthS:514712248372166666> Strength'
@@ -10688,8 +10758,8 @@ def phase_study(event,name,bot,weapon=nil)
     weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
   end
   cru40=u40.map{|a| a}
-  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing)
-  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing)
+  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
+  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing,transformed)
   blu40=u40.map{|a| a}
   crblu40=cru40.map{|a| a}
   blu40=apply_stat_skills(event,stat_skills_2,blu40)
@@ -10718,7 +10788,7 @@ def phase_study(event,name,bot,weapon=nil)
   ppu40xw=apply_combat_buffs(event,stat_skills_3,ppu40xw,'Player')
   epu40xw=crblu40.map{|q| q}
   epu40xw=apply_combat_buffs(event,stat_skills_3,epu40xw,'Enemy')
-  if zzzl[11].split(', ').include?('BuffStuffer') || (zzzl[11].split(', ').include?('(R)BuffStuffer') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)BuffStuffer') && refinement=='Effect')
+  if has_weapon_tag?('Buffstuffer',zzzl,refinement,transformed)
     m=apply_stat_skills(event,stat_skills_2,[u40[0],0,0,0,0,0])
     for i in 2...6
       ppu40[i]+=m[i] if m[i]>0
@@ -10914,36 +10984,36 @@ def phase_study(event,name,bot,weapon=nil)
   ppu40[16]=ppu40[1]+ppu40[2]+ppu40[3]+ppu40[4]+ppu40[5]
   epu40[16]=epu40[1]+epu40[2]+epu40[3]+epu40[4]+epu40[5]
   zzzl=sklz[ww2]
-  if zzzl[11].split(', ').include?('CloseStance') || (zzzl[11].split(', ').include?('(R)CloseStance') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)CloseStance') && refinement=='Effect')
+  if has_weapon_tag?('CloseStance',zzzl,refinement,transformed)
     close[2]+=4
     close[3]+=4
     close[4]+=4
     close[5]+=4
   end
-  if zzzl[11].split(', ').include?('CloseDef') || (zzzl[11].split(', ').include?('(R)CloseDef') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)CloseDef') && refinement=='Effect')
+  if has_weapon_tag?('CloseDef',zzzl,refinement,transformed)
     close[4]+=6
     close[5]+=6
   end
-  if zzzl[11].split(', ').include?('CloseAtk') || (zzzl[11].split(', ').include?('(R)CloseAtk') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)CloseAtk') && refinement=='Effect')
+  if has_weapon_tag?('CloseAtk',zzzl,refinement,transformed)
     close[2]+=6
   end
-  if zzzl[11].split(', ').include?('CloseSpd') || (zzzl[11].split(', ').include?('(R)CloseSpd') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)CloseSpd') && refinement=='Effect')
+  if has_weapon_tag?('CloseSpd',zzzl,refinement,transformed)
     close[3]+=6
   end
-  if zzzl[11].split(', ').include?('DistantStance') || (zzzl[11].split(', ').include?('(R)DistantStance') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)DistantStance') && refinement=='Effect')
+  if has_weapon_tag?('DistantStance',zzzl,refinement,transformed)
     distant[2]+=4
     distant[3]+=4
     distant[4]+=4
     distant[5]+=4
   end
-  if zzzl[11].split(', ').include?('DistantDef') || (zzzl[11].split(', ').include?('(R)DistantDef') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)DistantDef') && refinement=='Effect')
+  if has_weapon_tag?('DistantDef',zzzl,refinement,transformed)
     distant[4]+=6
     distant[5]+=6
   end
-  if zzzl[11].split(', ').include?('DistantAtk') || (zzzl[11].split(', ').include?('(R)DistantAtk') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)DistantAtk') && refinement=='Effect')
+  if has_weapon_tag?('DistantAtk',zzzl,refinement,transformed)
     distant[2]+=6
   end
-  if zzzl[11].split(', ').include?('DistantSpd') || (zzzl[11].split(', ').include?('(R)DistantSpd') && !refinement.nil? && refinement.length>0) || (zzzl[11].split(', ').include?('(E)DistantSpd') && refinement=='Effect')
+  if has_weapon_tag?('DistantSpd',zzzl,refinement,transformed)
     distant[3]+=6
   end
   for i in 1...close.length
@@ -11003,12 +11073,12 @@ def phase_study(event,name,bot,weapon=nil)
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(' all')
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}"
     event.respond "**Displayed stats:**  #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]} - Score: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100\n**#{"Player Phase" unless ppu40==epu40}#{"In-combat Stats" if ppu40==epu40}:**  #{ppu40[1]} / #{ppu40[2]} / #{ppu40[3]} / #{ppu40[4]} / #{ppu40[5]}  (#{ppu40[16]} BST)#{"\n**Enemy Phase:**  #{epu40[1]} / #{epu40[2]} / #{epu40[3]} / #{epu40[4]} / #{epu40[5]}  (#{epu40[16]} BST)" unless ppu40==epu40}"
   elsif ppu40==epu40
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:514712247503945739> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:514712247625580555> Speed: #{u40[3]}\n<:DefenseS:514712247461871616> Defense: #{u40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100"],["In-combat Stats","<:HP_S:514712247503945739> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:514712247625580555> Speed: #{ppu40[3]}\n<:DefenseS:514712247461871616> Defense: #{ppu40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:514712247503945739> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:514712247625580555> Speed: #{u40[3]}\n<:DefenseS:514712247461871616> Defense: #{u40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100"],["In-combat Stats","<:HP_S:514712247503945739> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:514712247625580555> Speed: #{ppu40[3]}\n<:DefenseS:514712247461871616> Defense: #{ppu40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:514712247503945739> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:514712247625580555> Speed: #{u40[3]}\n<:DefenseS:514712247461871616> Defense: #{u40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100",1],["Player Phase","<:HP_S:514712247503945739> HP: #{ppu40[1]}\n<:Death_Blow:514719899868856340> Attack: #{ppu40[2]}\n<:Darting_Blow:514719899910668298> Speed: #{ppu40[3]}\n<:Armored_Blow:514719899927576578> Defense: #{ppu40[4]}\n<:Warding_Blow:514719900607053824> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","<:HP_S:514712247503945739> HP: #{epu40[1]}\n<:Fierce_Stance:514719899873050624> Attack: #{epu40[2]}\n<:Darting_Stance:514719899919056926> Speed: #{epu40[3]}\n<:Steady_Stance:514719899856273408> Defense: #{epu40[4]}\n<:Warding_Stance:514719899562672138> Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(j,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:514712247503945739> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:514712247625580555> Speed: #{u40[3]}\n<:DefenseS:514712247461871616> Defense: #{u40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100",1],["Player Phase","<:HP_S:514712247503945739> HP: #{ppu40[1]}\n<:Death_Blow:514719899868856340> Attack: #{ppu40[2]}\n<:Darting_Blow:514719899910668298> Speed: #{ppu40[3]}\n<:Armored_Blow:514719899927576578> Defense: #{ppu40[4]}\n<:Warding_Blow:514719900607053824> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","<:HP_S:514712247503945739> HP: #{epu40[1]}\n<:Fierce_Stance:514719899873050624> Attack: #{epu40[2]}\n<:Darting_Stance:514719899919056926> Speed: #{epu40[3]}\n<:Steady_Stance:514719899856273408> Defense: #{epu40[4]}\n<:Warding_Stance:514719899562672138> Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
   end
 end
 
