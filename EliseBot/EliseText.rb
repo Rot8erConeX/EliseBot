@@ -1139,6 +1139,52 @@ def score_explain(event,bot)
   end
 end
 
+def show_tools(event,bot)
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
+    event << '**Useful tools for players of** ***Fire Emblem Heroes***'
+    event << '__Download the game__'
+    event << 'Google Play: <https://play.google.com/store/apps/details?id=com.nintendo.zaba&hl=en>'
+    event << 'Apple App Store: <https://itunes.apple.com/app/id1181774280>'
+    event << ''
+    event << '__Wikis and Databases__'
+    event << 'Gamepedia FEH wiki: <https://feheroes.gamepedia.com/>'
+    event << 'Gamepress FEH database: <https://fireemblem.gamepress.gg/>'
+    event << ''
+    event << '__Simulators__'
+    event << 'Summon Simulator: <https://feh-stuff.github.io/summon-simulator/>'
+    event << 'Inheritance tracker: <https://arghblargh.github.io/feh-inheritance-tool/>'
+    event << 'Visual unit builder: <https://feh-stuff.github.io/unit-builder/>'
+    event << ''
+    event << '__Damage Calculators__'
+    event << "ASFox's mass duel simulator: <http://arcticsilverfox.com/feh_sim/>"
+    event << "Andu2's mass duel simulator fork: <https://andu2.github.io/FEH-Mass-Simulator/>"
+    event << ''
+    event << 'FEHKeeper: <https://www.fehkeeper.com/>'
+    event << ''
+    event << 'Arena Score Calculator: <http://www.arcticsilverfox.com/score_calc/>'
+    event << ''
+    event << 'Glimmer vs. Moonbow: <https://i.imgur.com/kDKPMp7.png>'
+  else
+    str="__Download the game__"
+    str="#{str}\n[Google Play](https://play.google.com/store/apps/details?id=com.nintendo.zaba&hl=en)"
+    str="#{str}\n[Apple App Store](https://itunes.apple.com/app/id1181774280)"
+    str="#{str}\n\n__Wikis and Databases__\n[Gamepedia FEH wiki](https://feheroes.gamepedia.com/)"
+    str="#{str}\n[Gamepress FEH database](https://fireemblem.gamepress.gg/)"
+    str="#{str}\n\n__Simulators__"
+    str="#{str}\n[Summon Simulator](https://feh-stuff.github.io/summon-simulator/)"
+    str="#{str}\n[Inheritance tracker](https://arghblargh.github.io/feh-inheritance-tool/)"
+    str="#{str}\n[Visual unit builder](https://feh-stuff.github.io/unit-builder/)"
+    str="#{str}\n\n__Damage Calculators__"
+    str="#{str}\n[ASFox's mass duel simulator](http://arcticsilverfox.com/feh_sim/)"
+    str="#{str}\n[Andu2's mass duel simulator fork](https://andu2.github.io/FEH-Mass-Simulator/)"
+    str="#{str}\n\n[FEHKeeper](https://www.fehkeeper.com/)"
+    str="#{str}\n\n[Arena Score Calculator](http://www.arcticsilverfox.com/score_calc/)"
+    str="#{str}\n\n[Glimmer vs. Moonbow](https://i.imgur.com/kDKPMp7.png)"
+    create_embed(event,'**Useful tools for players of** ***Fire Emblem Heroes***',str,0xD49F61,nil,'https://lh3.googleusercontent.com/dVaaoEW7mJA7P34qV58lNovI3X9RDmbxhqVd1nUO886UVQjWJWvc7NDPXfKInk4JplE=s180-rw')
+    event.respond 'If you are on a mobile device and cannot click the links in the embed above, type `FEH!tools mobile` to receive this message as plaintext.'
+  end
+end
+
 def today_in_feh(event,bot)
   t=Time.now
   timeshift=8

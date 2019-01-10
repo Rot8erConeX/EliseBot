@@ -927,7 +927,7 @@ def list_unit_aliases(event,args,bot,mode=0)
       skill=[skill] unless skill.is_a?(Array)
       for i1 in 0...skill.length
         u=@skills[find_skill(skill[i1],event)]
-        f.push("\n#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u[0].gsub('Bladeblade','Laevatein')}#{skill_moji(u,event)}**#{"'s server-specific aliases__" if mode==1}")
+        f.push("\n#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u[0].gsub('Bladeblade','Laevatein')}#{skill_moji(u,event,bot)}**#{"'s server-specific aliases__" if mode==1}")
         u=u[0]
         f.push(u) if u=='Bladeblade'
         f.push(u.gsub('(','').gsub(')','').gsub(' ','')) if u.include?('(') || u.include?(')') || u.include?(' ')
@@ -1080,4 +1080,345 @@ def list_unit_aliases(event,args,bot,mode=0)
   end
   event.respond msg
   return nil
+end
+
+def list_collapse(list,mode=0)
+  list=list.uniq
+  newlist=[]
+  for i in 0...list.length
+    unless list[i].nil? || (list[i][0][0,10]=='Falchion (' && skill_include?(list,'Falchion')>0) || (list[i][0][0,14]=='Missiletainn (' && skill_include?(list,'Missiletainn')>0)
+      if skill_include?(list,"#{list[i][0]}+")>=0
+        list[i][0]="#{list[i][0]}[+]"
+        if list[i][0]=='Fire Breath[+]' && skill_include?(list,'Flametongue')>=0 && (mode/2)%2==1
+          if skill_include?(list,'Flametongue+')>=0
+            list[i][0]='Fire Breath[+]/Flametongue[+]'
+            list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Flametongue+')][15]
+            list[skill_include?(list,'Flametongue+')]=nil if skill_include?(list,'Flametongue+')>=0
+            newlist[skill_include?(newlist,'Flametongue+')]=nil if skill_include?(newlist,'Flametongue+')>=0
+          else
+            list[i][0]='Fire Breath[+]/Flametongue'
+            list[i][1]=200
+          end
+          list[skill_include?(list,'Fire Breath+')]=nil if skill_include?(list,'Fire Breath+')>=0
+          newlist[skill_include?(newlist,'Fire Breath+')]=nil if skill_include?(newlist,'Fire Breath+')>=0
+          list[skill_include?(list,'Flametongue')]=nil if skill_include?(list,'Flametongue')>=0
+          newlist[skill_include?(newlist,'Flametongue')]=nil if skill_include?(newlist,'Flametongue')>=0
+        elsif list[i][0]=='Fire Breath[+]' && skill_include?(list,'Flametongue[+]')>=0 && (mode/2)%2==1
+          list[i][0]='Fire Breath[+]/Flametongue[+]'
+          list[i][1]=300
+          list[i][15]=list[skill_include?(list,'Flametongue+')][15]
+          list[skill_include?(list,'Fire Breath+')]=nil if skill_include?(list,'Fire Breath+')>=0
+          newlist[skill_include?(newlist,'Fire Breath+')]=nil if skill_include?(newlist,'Fire Breath+')>=0
+          list[skill_include?(list,'Flametongue[+]')]=nil if skill_include?(list,'Flametongue[+]')>=0
+          newlist[skill_include?(newlist,'Flametongue[+]')]=nil if skill_include?(newlist,'Flametongue[+]')>=0
+        elsif list[i][0]=='Fire Breath[+]'
+          list[i][1]=100
+        else
+          list[i][1]=300
+          list[i][15]=list[skill_include?(list,"#{list[i][0].gsub('[+]','')}+")][15]
+        end
+        list[skill_include?(list,"#{list[i][0].gsub('[+]','')}+")]=nil if skill_include?(list,"#{list[i][0].gsub('[+]','')}+")>=0
+      elsif list[i][0].include?('Iron ') && skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")>=0 && (mode/2)%2==1
+        if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")>=0
+          if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")>=0
+            list[i][1]=300
+            list[i][15]=list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")][15]
+            list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")>=0
+            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
+            list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")>=0
+            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")>=0
+            list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")>=0
+            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}+")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}+")>=0
+            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}[+]")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}[+]")>=0
+            list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel/Silver[+]')}"
+          else
+            list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil
+            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
+            list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")]=nil
+            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")>=0
+            list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel/Silver')}"
+            list[i][1]=200
+          end
+        else
+          list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")>=0
+          newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
+          list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel')}"
+          list[i][1]=100
+        end
+      elsif skill_include?(list,"El#{list[i][0].downcase}")>=0 && list[i][5].include?('Tome Users Only') && list[i][4]=='Weapon' && (mode/2)%2==1
+        v2=list[i][0].downcase
+        list[i][0]="[El]#{list[i][0]}"
+        list[i][1]=100
+        if list[i][0]=='[El]Fire'
+          if skill_include?(list,'Bolganone')>=0
+            if skill_include?(list,'Bolganone+')>=0
+              list[i][0]='[El]Fire/Bolganone[+]'
+              list[i][1]=300
+              list[i][15]=list[skill_include?(list,'Bolganone+')][15]
+              list[skill_include?(list,'Bolganone+')]=nil if skill_include?(list,'Bolganone+')>=0
+              newlist[skill_include?(newlist,'Bolganone+')]=nil if skill_include?(newlist,'Bolganone+')>=0
+            else
+              list[i][0]='[El]Fire/Bolganone'
+              list[i][1]=200
+            end
+            list[skill_include?(list,'Bolganone')]=nil if skill_include?(list,'Bolganone')>=0
+            newlist[skill_include?(newlist,'Bolganone')]=nil if skill_include?(newlist,'Bolganone')>=0
+          elsif skill_include?(list,'Bolganone[+]')>=0
+            list[i][0]='[El]Fire/Bolganone[+]'
+            list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Bolganone[+]')][15]
+            list[skill_include?(list,'Bolganone[+]')]=nil if skill_include?(list,'Bolganone[+]')>=0
+            newlist[skill_include?(newlist,'Bolganone[+]')]=nil if skill_include?(newlist,'Bolganone[+]')>=0
+          end
+        elsif list[i][0]=='[El]Thunder'
+          if skill_include?(list,'Thoron')>=0
+            if skill_include?(list,'Thoron+')>=0
+              list[i][0]='[El]Thunder/Thoron[+]'
+              list[i][1]=300
+              list[i][15]=list[skill_include?(list,'Thoron+')][15]
+              list[skill_include?(list,'Thoron+')]=nil if skill_include?(list,'Thoron+')>=0
+              newlist[skill_include?(newlist,'Thoron+')]=nil if skill_include?(newlist,'Thoron+')>=0
+            else
+              list[i][0]='[El]Thunder/Thoron'
+              list[i][1]=200
+            end
+            list[skill_include?(list,'Thoron')]=nil if skill_include?(list,'Thoron')>=0
+            newlist[skill_include?(newlist,'Thoron')]=nil if skill_include?(newlist,'Thoron')>=0
+          elsif skill_include?(list,'Thoron[+]')>=0
+            list[i][0]='[El]Thunder/Thoron[+]'
+            list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Thoron[+]')][15]
+            list[skill_include?(list,'Thoron[+]')]=nil if skill_include?(list,'Thoron[+]')>=0
+            newlist[skill_include?(newlist,'Thoron[+]')]=nil if skill_include?(newlist,'Thoron[+]')>=0
+          end
+        elsif list[i][0]=='[El]Light'
+          if skill_include?(list,'Shine')>=0
+            if skill_include?(list,'Shine+')>=0
+              list[i][0]='[El]Light/Shine[+]'
+              list[i][1]=300
+              list[i][15]=list[skill_include?(list,'Shine+')][15]
+              list[skill_include?(list,'Shine+')]=nil if skill_include?(list,'Shine+')>=0
+              newlist[skill_include?(newlist,'Shine+')]=nil if skill_include?(newlist,'Shine+')>=0
+            else
+              list[i][0]='[El]Light/Shine'
+              list[i][1]=200
+            end
+            list[skill_include?(list,'Shine')]=nil if skill_include?(list,'Shine')>=0
+            newlist[skill_include?(newlist,'Shine')]=nil if skill_include?(newlist,'Shine')>=0
+          elsif skill_include?(list,'Shine[+]')>=0
+            list[i][0]='[El]Light/Shine[+]'
+            list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Shine[+]')][15]
+            list[skill_include?(list,'Shine[+]')]=nil if skill_include?(list,'Shine[+]')>=0
+            newlist[skill_include?(newlist,'Shine[+]')]=nil if skill_include?(newlist,'Shine[+]')>=0
+          end
+        elsif list[i][0]=='[El]Wind'
+          if skill_include?(list,'Rexcalibur')>=0
+            if skill_include?(list,'Rexcalibur+')>=0
+              list[i][0]='[El]Wind/Rexcalibur[+]'
+              list[i][1]=300
+              list[i][15]=list[skill_include?(list,'Rexcalibur+')][15]
+              list[skill_include?(list,'Rexcalibur+')]=nil if skill_include?(list,'Rexcalibur+')>=0
+              newlist[skill_include?(newlist,'Rexcalibur+')]=nil if skill_include?(newlist,'Rexcalibur+')>=0
+            else
+              list[i][0]='[El]Wind/Rexcalibur'
+              list[i][1]=200
+            end
+            list[skill_include?(list,'Rexcalibur')]=nil if skill_include?(list,'Rexcalibur')>=0
+            newlist[skill_include?(newlist,'Rexcalibur')]=nil if skill_include?(newlist,'Rexcalibur')>=0
+          elsif skill_include?(list,'Rexcalibur[+]')>=0
+            list[i][0]='[El]Wind/Rexcalibur[+]'
+            list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Rexcalibur[+]')][15]
+            list[skill_include?(list,'Rexcalibur[+]')]=nil if skill_include?(list,'Rexcalibur[+]')>=0
+            newlist[skill_include?(newlist,'Rexcalibur[+]')]=nil if skill_include?(newlist,'Rexcalibur[+]')>=0
+          end
+        end
+        list[skill_include?(list,"El#{v2}")]=nil
+        newlist[skill_include?(newlist,"El#{v2}")]=nil if skill_include?(newlist,"El#{v2}")
+      elsif list[i][0]=='Whelp (Infantry)' && skill_include?(list,'Yearling (Infantry)')>=0 && (mode/2)%2==1
+        if skill_include?(list,'Adult (Infantry)')>=0
+          list[i][0]='Whelp/Yearling/Adult (Infantry)'
+          list[i][1]=200
+          list[skill_include?(list,'Adult (Infantry)')]=nil if skill_include?(list,'Adult (Infantry)')>=0
+          newlist[skill_include?(newlist,'Adult (Infantry)')]=nil if skill_include?(newlist,'Adult (Infantry)')>=0
+        else
+          list[i][0]='Whelp/Yearling (Infantry)'
+          list[i][1]=100
+        end
+        list[skill_include?(list,'Yearling (Infantry)')]=nil
+        newlist[skill_include?(newlist,'Yearling (Infantry)')]=nil if skill_include?(newlist,'Yearling (Infantry)')>=0
+      elsif list[i][0]=='Hatchling (Flier)' && skill_include?(list,'Fledgeling (Flier)')>=0 && (mode/2)%2==1
+        if skill_include?(list,'Adult (Flier)')>=0
+          list[i][0]='Hatchling/Fledgeling/Adult (Flier)'
+          list[i][1]=200
+          list[skill_include?(list,'Adult (Flier)')]=nil if skill_include?(list,'Adult (Flier)')>=0
+          newlist[skill_include?(newlist,'Adult (Flier)')]=nil if skill_include?(newlist,'Adult (Flier)')>=0
+        else
+          list[i][0]='Hatchling/Fledgeling (Flier)'
+          list[i][1]=100
+        end
+        list[skill_include?(list,'Fledgeling (Flier)')]=nil
+        newlist[skill_include?(newlist,'Fledgeling (Flier)')]=nil if skill_include?(newlist,'Fledgeling (Flier)')>=0
+      elsif list[i][0]=='Flux' && skill_include?(list,'Ruin')>=0 && (mode/2)%2==1
+        if skill_include?(list,'Fenrir')>=0
+          if skill_include?(list,'Fenrir+')>=0
+            list[i][0]='Flux/Ruin/Fenrir[+]'
+            list[i][1]=300
+            list[i][15]=list[skill_include?(list,'Fenrir+')][15]
+            list[skill_include?(list,'Fenrir+')]=nil if skill_include?(list,'Fenrir+')>=0
+            newlist[skill_include?(newlist,'Fenrir+')]=nil if skill_include?(newlist,'Fenrir+')>=0
+          else
+            list[i][0]='Flux/Ruin/Fenrir'
+            list[i][1]=200
+          end
+          list[skill_include?(list,'Fenrir')]=nil if skill_include?(list,'Fenrir')>=0
+          newlist[skill_include?(newlist,'Fenrir')]=nil if skill_include?(newlist,'Fenrir')>=0
+        elsif skill_include?(list,'Fenrir[+]')>=0
+          list[i][0]='Flux/Ruin/Fenrir[+]'
+          list[i][1]=300
+          list[i][15]=list[skill_include?(list,'Fenrir[+]')][15]
+          list[skill_include?(list,'Fenrir[+]')]=nil if skill_include?(list,'Fenrir[+]')>=0
+          newlist[skill_include?(newlist,'Fenrir[+]')]=nil if skill_include?(newlist,'Fenrir[+]')>=0
+        else
+          list[i][0]='Flux/Ruin'
+          list[i][1]=100
+        end
+        list[skill_include?(list,'Ruin')]=nil
+        newlist[skill_include?(newlist,'Ruin')]=nil if skill_include?(newlist,'Ruin')>=0
+      elsif list[i][0][list[i][0].length-1,1].to_i.to_s==list[i][0][list[i][0].length-1,1]
+        v=list[i][0].gsub(list[i][0].scan(/([^0-9])+?/).join,"").to_i
+        v2=list[i][0].scan(/([^0-9])+?/).join
+        if skill_include?(list,"#{v2}#{v+1}")>=0
+          if skill_include?(list,"#{v2}#{v+2}")>=0
+            if skill_include?(list,"#{v2}#{v+3}")>=0
+              if skill_include?(list,"#{v2}#{v+4}")>=0
+                if skill_include?(list,"#{v2}#{v+5}")>=0
+                  if skill_include?(list,"#{v2}#{v+6}")>=0
+                    if skill_include?(list,"#{v2}#{v+7}")>=0
+                      if skill_include?(list,"#{v2}#{v+8}")>=0
+                        if skill_include?(list,"#{v2}#{v+9}")>=0
+                          list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}/#{v+8}/#{v+9}"
+                          list[i][1]=list[skill_include?(list,"#{v2}#{v+9}")][1]*1
+                          list[skill_include?(list,"#{v2}#{v+9}")]=nil if skill_include?(list,"#{v2}#{v+9}")>=0
+                        else
+                          list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}/#{v+8}"
+                          list[i][1]=list[skill_include?(list,"#{v2}#{v+8}")][1]*1
+                        end
+                        list[skill_include?(list,"#{v2}#{v+8}")]=nil if skill_include?(list,"#{v2}#{v+8}")>=0
+                      else
+                        list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}"
+                        list[i][1]=list[skill_include?(list,"#{v2}#{v+7}")][1]*1
+                      end
+                      list[skill_include?(list,"#{v2}#{v+7}")]=nil if skill_include?(list,"#{v2}#{v+7}")>=0
+                    else
+                      list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}"
+                      list[i][1]=list[skill_include?(list,"#{v2}#{v+6}")][1]*1
+                    end
+                    list[skill_include?(list,"#{v2}#{v+6}")]=nil if skill_include?(list,"#{v2}#{v+6}")>=0
+                  else
+                    list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}"
+                    list[i][1]=list[skill_include?(list,"#{v2}#{v+5}")][1]*1
+                  end
+                  list[skill_include?(list,"#{v2}#{v+5}")]=nil if skill_include?(list,"#{v2}#{v+5}")>=0
+                else
+                  list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}"
+                  list[i][1]=list[skill_include?(list,"#{v2}#{v+4}")][1]*1
+                end
+                list[skill_include?(list,"#{v2}#{v+4}")]=nil if skill_include?(list,"#{v2}#{v+4}")>=0
+              else
+                list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}"
+                list[i][1]=list[skill_include?(list,"#{v2}#{v+3}")][1]*1
+              end
+              list[skill_include?(list,"#{v2}#{v+3}")]=nil if skill_include?(list,"#{v2}#{v+3}")>=0
+            else
+              list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}"
+              list[i][1]=list[skill_include?(list,"#{v2}#{v+2}")][1]*1
+            end
+            list[skill_include?(list,"#{v2}#{v+2}")]=nil if skill_include?(list,"#{v2}#{v+2}")>=0
+          else
+            list[i][0]="#{v2}#{v}/#{v+1}"
+            list[i][1]=list[skill_include?(list,"#{v2}#{v+1}")][1]*1
+          end
+          list[skill_include?(list,"#{v2}#{v+1}")]=nil if skill_include?(list,"#{v2}#{v+1}")>=0
+        end
+      end
+      newlist.push(list[i].map{|q| q})
+      newlist.push(list[i].map{|q| q}) if list[i][0][0,4]=='[El]'
+    end
+  end
+  newlist.compact!
+  newlist.uniq!
+  unless (mode/4)%2==1
+    data_load()
+    u=@units.map{|q| q}
+    for i in 0...newlist.length
+      newlist[i][0]=newlist[i][0].gsub('Bladeblade','Laevatein')
+      newlist[i][0]="~~#{newlist[i][0]}~~" if !newlist[i][13].nil? && newlist[i][13].length>0 && mode%2==1
+      m=[]
+      if newlist[i][4]=='Weapon' && newlist[i][6]!='-'
+        m=newlist[i][6].split(', ').reject{|q| !u.map{|q2| q2[0]}.include?(q) || u[u.find_index{|q2| q2[0]==q}][9][0]=='-'}
+        newlist[i][0]="*#{newlist[i][0]}*" if m.length==0
+      end
+    end
+  end
+  if (mode/8)%2==1
+    for i in 0...newlist.length
+      if newlist[i][0].include?('Iron/Steel/Silver[+] ')
+        m=newlist[i][0].gsub('Iron/Steel/Silver[+] ','')
+        newlist[i][0]=["Iron #{m}","Steel #{m}","Silver #{m}","Silver #{m}+"]
+      else
+        newlist[i][0]=newlist[i][0].split('/')
+        for i2 in 0...newlist[i][0].length
+          newlist[i][0][i2]="#{newlist[i][0][i2].gsub('[El]','')}/El#{newlist[i][0][i2].gsub('[El]','').downcase}" if newlist[i][0][i2].include?('[El]')
+          newlist[i][0][i2]="#{newlist[i][0][i2].gsub('[+]','')}/#{newlist[i][0][i2].gsub('[+]','')}+" if newlist[i][0][i2].include?('[+]')
+        end
+      end
+      newlist[i][0]=newlist[i][0].join('/').split('/')
+      if !newlist[i][0][1].nil? && newlist[i][0][1].length<=1
+        m=newlist[i][0][0][0,newlist[i][0][0].length-1]
+        for i2 in 1...newlist[i][0].length
+          newlist[i][0][i2]="#{m}#{newlist[i][0][i2]}"
+        end
+      end
+      if newlist[i][8].include?('*, *')
+        newlist[i][8]=newlist[i][8].gsub('*','').split(', ')
+      elsif newlist[i][8].include?('* or *')
+        newlist[i][8]=newlist[i][8].split('* or *').map{|q| q.gsub('*','')}
+      elsif newlist[i][8].include?('*')
+        newlist[i][8]=[newlist[i][8].gsub('*','')]
+      else
+        newlist[i][8]=[]
+      end
+    end
+    for i in 0...newlist.length
+      m=false
+      for i2 in 0...newlist.length
+        if i != i2 && !newlist[i2].nil? && has_any?(newlist[i][8],newlist[i2][0])
+          m=true
+          for i3 in 0...newlist[i][0].length
+            newlist[i2][0].push(newlist[i][0][i3])
+          end
+        end
+      end
+      newlist[i]=nil if m
+    end
+    newlist.compact!
+    for i in 0...newlist.length
+      for i2 in 0...newlist.length
+        if i != i2 && !newlist[i].nil? && !newlist[i2].nil? && has_any?(newlist[i][0],newlist[i2][0])
+          for i3 in 0...newlist[i][0].length
+            newlist[i2][0].push(newlist[i][0][i3])
+          end
+          newlist[i2][0].uniq!
+          newlist[i2][0]=newlist[i2][0].sort{|a,b| a <=> b}
+          newlist[i]=nil
+        end
+      end
+    end
+    newlist.compact!
+  end
+  newlist=newlist.sort {|a,b| a[0].gsub('~~','').gsub('*','').gsub('[El]','').downcase <=> b[0].gsub('~~','').gsub('*','').gsub('[El]','').downcase} unless (mode/8)%2==1
+  return newlist
 end

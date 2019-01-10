@@ -8,6 +8,7 @@ Bolt Tower\3\Offensive/Defensive\At the start of turn 3, deals 20 damage to foes
 Catapult\1\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\100, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\2\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\300, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\3\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\500, 0, 0\0\Opposing fortresses cannot be destroyed
+Catapult\4\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\700, 0, 0\0\Opposing fortresses cannot be destroyed
 Cavalry School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\50, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\150, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\250, 0, 0\0\Only one school can be placed at a time.
@@ -51,6 +52,8 @@ Aether Amphorae\1\Resources\Stores up to 100 Aether.  If destroyed in an attack,
 Aether Amphorae\2\Resources\Stores up to 150 Aether.  If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 100, 0\0\Cannot be removed.
 Aether Amphorae\3\Resources\Stores up to 200 Aether.  If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 300, 0\0\Cannot be removed.
 Aether Fountain\1\Resources\Restores 50 Aether to the Aether Keep each day. If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 0, 0\0\Cannot be removed.
+Aether Fountain\2\Resources\Restores 60 Aether to the Aether Keep each day. If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 100, 0\0\Cannot be removed.
+Aether Fountain\3\Resources\Restores 70 Aether to the Aether Keep each day. If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 300, 0\0\Cannot be removed.
 Bronze Throne\-\Ornament\A throne suitable only for those who have achieved a rank from 1 to 10000 in Aether Raids.\-\0, 0, 0\21
 Silver Throne\-\Ornament\A throne suitable only for those who have achieved a rank from 1 to 3000 in Aether Raids.\-\0, 0, 0\21
 Golden Throne\-\Ornament\A throne suitable only for those who have achieved a rank from 1 to 1000 in Aether Raids.  From the second time onward, the number of times this feat has been achieved will be inscribed upon it.\-\0, 0, 0\21

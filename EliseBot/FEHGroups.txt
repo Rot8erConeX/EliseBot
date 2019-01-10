@@ -22,7 +22,7 @@
 ["Gods", ["Wrys", "Jagen", "Tobin"]]
 ["Goodbois", ["Wrys", "Gharnef", "Lyon"], [396028474621427713]]
 ["Halloween", []]
-["Helspawn", ["Eir", "Hel", "Lif", "Thrasir"]]
+["Helspawn", ["Eir", "Hel", "Lif", "Thrasir", "Hel"]]
 ["KauArena", ["Tana", "Michalis", "Nowi(Halloween)", "Robin(F)(Fallen)"], [416442223828271104]]
 ["Legendaries", []]
 ["Lolis", ["Elise", "Maria", "Genny", "Mist", "Amelia", "Azura(Adrift)", "Clarine", "Delthea", "Fae", "Elise(Summer)", "Kana(F)", "Lilina", "Morgan(F)", "Nowi", "Nowi(Halloween)", "Veronica(Brave)", "Ylgr"], [396028474621427713]]

@@ -240,7 +240,7 @@ Dragon Gaze\Draconic Aura
 Distant Def 1\Distant Def 2\Distant Def 3
 Blaze Dance 1\Firestorm Dance 1\Firestorm Dance 2
 Breath of Life 1\Breath of Life 2\Breath of Life 3
-Earth Dance 2
+Earth Dance 3
 
 Owain
 5\2\Resistance\HP\-
@@ -284,7 +284,7 @@ Def Ploy 2
 
 Soleil
 5\4\Speed\Attack\-
-Iron Sword\Steel Sword\Firesweep Sword\Firesweep Sword+
+Iron Sword\Steel Sword\Slaying Edge\Slaying Edge+\Slaying Edge+ (+) Attack Mode
 Rally Speed
 Daylight\Noontime
 Darting Blow 1\Darting Blow 2\Darting Blow 3
@@ -294,7 +294,7 @@ Deflect Melee 3
 
 Tailtiu
 5\2\ \ \-
-Thunder\Elthunder\Blarblade\Blarblade+
+Thunder\Elthunder\Blarblade\__Blarblade+__\Tome of Thoron\Tome of Thoron (+) Effect Mode
 Rally Resistance\Rally Spd/Res
 Chilling Wind\Glacies
 Attack +1\Attack/Res +1\Attack/Res +2
