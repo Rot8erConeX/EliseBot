@@ -2548,7 +2548,7 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily b
   return "#{wemote}#{memote}#{dancer}#{lemote1}#{lemote2}#{"<:Current_Arena_Bonus:498797967042412544>" if get_bonus_units('Arena').include?(jj[0]) && mode%8<4}#{"<:Current_Tempest_Bonus:498797966740422656>" if get_bonus_units('Tempest').include?(jj[0]) && mode%8<4}#{"<:Current_Aether_Bonus:510022809741950986>" if get_bonus_units('Aether').include?(jj[0]) && mode%8<4}#{semote}"
 end
 
-def skill_moji(k,event)
+def skill_moji(k,event,bot)
   if k[4]=='Weapon'
     m="#{m}<:Skill_Weapon:444078171114045450>"
     m="#{m}<:Red_Blade:443172811830198282>" if k[5]=='Sword Users Only'
@@ -2562,7 +2562,14 @@ def skill_moji(k,event)
     m="#{m}<:Gold_Dagger:443172811461230603>" if k[5]=='Dagger Users Only'
     m="#{m}<:Gold_Staff:443172811628871720>" if k[5]=='Staff Users Only' && alter_classes(event,'Colored Healers')
     m="#{m}<:Colorless_Staff:443692132323295243>" if k[5]=='Staff Users Only' && !alter_classes(event,'Colored Healers')
-    m="#{m}<:Gold_Beast:443172811608162324>" if k[5]=='Beasts Only'
+    if k[5].split(', ')[0]=='Beasts Only'
+      m="#{m}<:Gold_Beast:532854442299752469>"
+      m2=k[5].split(', ')[1].split(' ').map{|q| q.gsub('s','')}.reject{|q| !['Infantry','Armor','Flier','Cavalry'].include?(q)}
+      for i in 0...m2.length
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{m2[i]}"}
+        m="#{m}#{moji[0].mention}" if moji.length>0
+      end
+    end
   elsif k[4]=='Assist'
     m="#{m}<:Skill_Assist:444078171025965066>"
     m="#{m}<:Assist_Music:454462054959415296>" if k[11].split(', ').include?('Music')
@@ -2699,7 +2706,7 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   str="#{str}In-combat buffs: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0
   str="#{str}In-combat buffs: -\n" if stat_skills_3.length<=0 && expandedmode
   return "#{str}" if modemode && (weapon=='-' || weapon.include?('~~'))
-  return "#{str}Equipped weapon: #{weapon.gsub('Bladeblade','Laevatein')}\nForm: Transformed\n" if transformed && @units[j][1][1]=='Beast'
+  return "#{str}Equipped weapon: #{weapon.gsub('Bladeblade','Laevatein')}\nForm: #{@units[j][1][2]} (transformed)\n" if transformed && @units[j][1][1]=='Beast'
   return "#{str}Equipped weapon: #{weapon.gsub('Bladeblade','Laevatein')}\nForm: Humanoid\n" if !transformed && @units[j][1][1]=='Beast'
   return "#{str}Equipped weapon: #{weapon.gsub('Bladeblade','Laevatein')}\n"
 end
@@ -4485,8 +4492,14 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
     elsif skill[5]=='Dragons Only'
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
-    elsif skill[5]=='Beasts Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:443172811608162324> **Weapon Type:** Beaststone (Beasts)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}\n**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form."
+    elsif skill[5].split(', ')[0]=='Beasts Only'
+      m=skill[5].split(', ')[1].split(' ').map{|q| q.gsub('s','')}.reject{|q| !['Infantry','Armor','Flier','Cavalry'].include?(q)}
+      movemoji=''
+      for i in 0...m.length
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{m[i]}"}
+        movemoji="#{movemoji}#{moji[0].mention}" if moji.length>0
+      end
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:532854442299752469> **Weapon Type:** Beast Damage\n#{movemoji} **Movement Type:** #{skill[5].split(', ')[1]}\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}\n**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form."
     elsif skill[0]=='Missiletainn'
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n\n__**Missiletainn (Dark)**__\n<:Red_Blade:443172811830198282> **Weapon Type:** Sword (Red Blade)\n**Might:** #{skill[2]+1}  \u00B7  **Range:** 1\n**Effect:** #{skill[7].split(' *** ')[0]}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Owain\n**Promotes from:** *Silver Sword*\n\n__**Missiletainn (Dusk)**__\n<:Light_Tome:499760605381787650> **Weapon Type:** Light Magic (Blue Tome)\n**Might:** #{skill[2]-1}  \u00B7  **Range:** 2"
       skill[7]=skill[7].split(' *** ')[1]
@@ -4520,9 +4533,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="#{str}\n**Effect:** #{skill[7]}" unless skill[7]=='-'
     end
     str="#{str}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Ophelia\n**Promotes from:** *Shine*" if skill[0]=='Missiletainn'
-    str="#{str}\n**Stats affected:** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}" unless skill[0]=='Missiletainn' || skill[5]=='Beasts Only'
-    str="#{str}\n**Stats affected (humanoid):** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}" if skill[5]=='Beasts Only'
-    str="#{str}\n**Stats affected (transformed):** 0/#{'+' if skill[12][1]+skill[12][6]>0}#{skill[12][1]+skill[12][6]}/#{'+' if skill[12][2]+skill[12][7]>0}#{skill[12][2]+skill[12][7]}/#{'+' if skill[12][3]+skill[12][8]>0}#{skill[12][3]+skill[12][8]}/#{'+' if skill[12][4]+skill[12][9]>0}#{skill[12][4]+skill[12][9]}" if skill[5]=='Beasts Only'
+    str="#{str}\n**Stats affected:** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}" unless skill[0]=='Missiletainn' || skill[5].split(', ')[0]=='Beasts Only'
+    str="#{str}\n**Stats affected (humanoid):** 0/#{'+' if skill[12][1]>0}#{skill[12][1]}/#{'+' if skill[12][2]>0}#{skill[12][2]}/#{'+' if skill[12][3]>0}#{skill[12][3]}/#{'+' if skill[12][4]>0}#{skill[12][4]}" if skill[5].split(', ')[0]=='Beasts Only'
+    str="#{str}\n**Stats affected (transformed):** 0/#{'+' if skill[12][1]+skill[12][6]>0}#{skill[12][1]+skill[12][6]}/#{'+' if skill[12][2]+skill[12][7]>0}#{skill[12][2]+skill[12][7]}/#{'+' if skill[12][3]+skill[12][8]>0}#{skill[12][3]+skill[12][8]}/#{'+' if skill[12][4]+skill[12][9]>0}#{skill[12][4]+skill[12][9]}" if skill[5].split(', ')[0]=='Beasts Only'
     sklslt=['Weapon']
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
     cumul=cumulative_sp_cost(skill,event)
@@ -6124,6 +6137,8 @@ def split_list(event,list,headers,mode=0,x=true)
           spli[j].push(list[i])
         elsif mips==headers[j] || mips=="#{headers[j]} Users Only" || mips=="#{headers[j]}s Only" || mips=="#{headers[j]} Only"
           spli[j].push(list[i])
+        elsif mips.split(', ')[0]=="#{headers[j]} Users Only" || mips.split(', ')[0]=="#{headers[j]}s Only" || mips.split(', ')[0]=="#{headers[j]} Only"
+          spli[j].push(list[i])
         elsif headers[j][headers[j].length-1,1]=='s' && mips==headers[j][0,headers[j].length-1]
           spli[j].push(list[i])
         elsif ['Passive','Passives'].include?(headers[j]) && /Passive\((A|B|C)\)/ =~ mips
@@ -6156,320 +6171,13 @@ def split_list(event,list,headers,mode=0,x=true)
 end
 
 def collapse_skill_list(list,mode=0)
-  list=list.uniq
-  newlist=[]
-  for i in 0...list.length
-    unless list[i].nil? || (list[i][0][0,10]=='Falchion (' && skill_include?(list,'Falchion')>0) || (list[i][0][0,14]=='Missiletainn (' && skill_include?(list,'Missiletainn')>0)
-      if skill_include?(list,"#{list[i][0]}+")>=0
-        list[i][0]="#{list[i][0]}[+]"
-        if list[i][0]=='Fire Breath[+]' && skill_include?(list,'Flametongue')>=0 && (mode/2)%2==1
-          if skill_include?(list,'Flametongue+')>=0
-            list[i][0]='Fire Breath[+]/Flametongue[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Flametongue+')][15]
-            list[skill_include?(list,'Flametongue+')]=nil if skill_include?(list,'Flametongue+')>=0
-            newlist[skill_include?(newlist,'Flametongue+')]=nil if skill_include?(newlist,'Flametongue+')>=0
-          else
-            list[i][0]='Fire Breath[+]/Flametongue'
-            list[i][1]=200
-          end
-          list[skill_include?(list,'Fire Breath+')]=nil if skill_include?(list,'Fire Breath+')>=0
-          newlist[skill_include?(newlist,'Fire Breath+')]=nil if skill_include?(newlist,'Fire Breath+')>=0
-          list[skill_include?(list,'Flametongue')]=nil if skill_include?(list,'Flametongue')>=0
-          newlist[skill_include?(newlist,'Flametongue')]=nil if skill_include?(newlist,'Flametongue')>=0
-        elsif list[i][0]=='Fire Breath[+]' && skill_include?(list,'Flametongue[+]')>=0 && (mode/2)%2==1
-          list[i][0]='Fire Breath[+]/Flametongue[+]'
-          list[i][1]=300
-          list[i][15]=list[skill_include?(list,'Flametongue+')][15]
-          list[skill_include?(list,'Fire Breath+')]=nil if skill_include?(list,'Fire Breath+')>=0
-          newlist[skill_include?(newlist,'Fire Breath+')]=nil if skill_include?(newlist,'Fire Breath+')>=0
-          list[skill_include?(list,'Flametongue[+]')]=nil if skill_include?(list,'Flametongue[+]')>=0
-          newlist[skill_include?(newlist,'Flametongue[+]')]=nil if skill_include?(newlist,'Flametongue[+]')>=0
-        elsif list[i][0]=='Fire Breath[+]'
-          list[i][1]=100
-        else
-          list[i][1]=300
-          list[i][15]=list[skill_include?(list,"#{list[i][0].gsub('[+]','')}+")][15]
-        end
-        list[skill_include?(list,"#{list[i][0].gsub('[+]','')}+")]=nil if skill_include?(list,"#{list[i][0].gsub('[+]','')}+")>=0
-      elsif list[i][0].include?('Iron ') && skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")>=0 && (mode/2)%2==1
-        if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")>=0
-          if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")>=0
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")][15]
-            list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")>=0
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
-            list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")>=0
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")>=0
-            list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")>=0
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}+")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}+")>=0
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}[+]")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}[+]")>=0
-            list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel/Silver[+]')}"
-          else
-            list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
-            list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")]=nil
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")>=0
-            list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel/Silver')}"
-            list[i][1]=200
-          end
-        else
-          list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")>=0
-          newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
-          list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel')}"
-          list[i][1]=100
-        end
-      elsif skill_include?(list,"El#{list[i][0].downcase}")>=0 && list[i][5].include?('Tome Users Only') && list[i][4]=='Weapon' && (mode/2)%2==1
-        v2=list[i][0].downcase
-        list[i][0]="[El]#{list[i][0]}"
-        list[i][1]=100
-        if list[i][0]=='[El]Fire'
-          if skill_include?(list,'Bolganone')>=0
-            if skill_include?(list,'Bolganone+')>=0
-              list[i][0]='[El]Fire/Bolganone[+]'
-              list[i][1]=300
-              list[i][15]=list[skill_include?(list,'Bolganone+')][15]
-              list[skill_include?(list,'Bolganone+')]=nil if skill_include?(list,'Bolganone+')>=0
-              newlist[skill_include?(newlist,'Bolganone+')]=nil if skill_include?(newlist,'Bolganone+')>=0
-            else
-              list[i][0]='[El]Fire/Bolganone'
-              list[i][1]=200
-            end
-            list[skill_include?(list,'Bolganone')]=nil if skill_include?(list,'Bolganone')>=0
-            newlist[skill_include?(newlist,'Bolganone')]=nil if skill_include?(newlist,'Bolganone')>=0
-          elsif skill_include?(list,'Bolganone[+]')>=0
-            list[i][0]='[El]Fire/Bolganone[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Bolganone[+]')][15]
-            list[skill_include?(list,'Bolganone[+]')]=nil if skill_include?(list,'Bolganone[+]')>=0
-            newlist[skill_include?(newlist,'Bolganone[+]')]=nil if skill_include?(newlist,'Bolganone[+]')>=0
-          end
-        elsif list[i][0]=='[El]Thunder'
-          if skill_include?(list,'Thoron')>=0
-            if skill_include?(list,'Thoron+')>=0
-              list[i][0]='[El]Thunder/Thoron[+]'
-              list[i][1]=300
-              list[i][15]=list[skill_include?(list,'Thoron+')][15]
-              list[skill_include?(list,'Thoron+')]=nil if skill_include?(list,'Thoron+')>=0
-              newlist[skill_include?(newlist,'Thoron+')]=nil if skill_include?(newlist,'Thoron+')>=0
-            else
-              list[i][0]='[El]Thunder/Thoron'
-              list[i][1]=200
-            end
-            list[skill_include?(list,'Thoron')]=nil if skill_include?(list,'Thoron')>=0
-            newlist[skill_include?(newlist,'Thoron')]=nil if skill_include?(newlist,'Thoron')>=0
-          elsif skill_include?(list,'Thoron[+]')>=0
-            list[i][0]='[El]Thunder/Thoron[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Thoron[+]')][15]
-            list[skill_include?(list,'Thoron[+]')]=nil if skill_include?(list,'Thoron[+]')>=0
-            newlist[skill_include?(newlist,'Thoron[+]')]=nil if skill_include?(newlist,'Thoron[+]')>=0
-          end
-        elsif list[i][0]=='[El]Light'
-          if skill_include?(list,'Shine')>=0
-            if skill_include?(list,'Shine+')>=0
-              list[i][0]='[El]Light/Shine[+]'
-              list[i][1]=300
-              list[i][15]=list[skill_include?(list,'Shine+')][15]
-              list[skill_include?(list,'Shine+')]=nil if skill_include?(list,'Shine+')>=0
-              newlist[skill_include?(newlist,'Shine+')]=nil if skill_include?(newlist,'Shine+')>=0
-            else
-              list[i][0]='[El]Light/Shine'
-              list[i][1]=200
-            end
-            list[skill_include?(list,'Shine')]=nil if skill_include?(list,'Shine')>=0
-            newlist[skill_include?(newlist,'Shine')]=nil if skill_include?(newlist,'Shine')>=0
-          elsif skill_include?(list,'Shine[+]')>=0
-            list[i][0]='[El]Light/Shine[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Shine[+]')][15]
-            list[skill_include?(list,'Shine[+]')]=nil if skill_include?(list,'Shine[+]')>=0
-            newlist[skill_include?(newlist,'Shine[+]')]=nil if skill_include?(newlist,'Shine[+]')>=0
-          end
-        elsif list[i][0]=='[El]Wind'
-          if skill_include?(list,'Rexcalibur')>=0
-            if skill_include?(list,'Rexcalibur+')>=0
-              list[i][0]='[El]Wind/Rexcalibur[+]'
-              list[i][1]=300
-              list[i][15]=list[skill_include?(list,'Rexcalibur+')][15]
-              list[skill_include?(list,'Rexcalibur+')]=nil if skill_include?(list,'Rexcalibur+')>=0
-              newlist[skill_include?(newlist,'Rexcalibur+')]=nil if skill_include?(newlist,'Rexcalibur+')>=0
-            else
-              list[i][0]='[El]Wind/Rexcalibur'
-              list[i][1]=200
-            end
-            list[skill_include?(list,'Rexcalibur')]=nil if skill_include?(list,'Rexcalibur')>=0
-            newlist[skill_include?(newlist,'Rexcalibur')]=nil if skill_include?(newlist,'Rexcalibur')>=0
-          elsif skill_include?(list,'Rexcalibur[+]')>=0
-            list[i][0]='[El]Wind/Rexcalibur[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Rexcalibur[+]')][15]
-            list[skill_include?(list,'Rexcalibur[+]')]=nil if skill_include?(list,'Rexcalibur[+]')>=0
-            newlist[skill_include?(newlist,'Rexcalibur[+]')]=nil if skill_include?(newlist,'Rexcalibur[+]')>=0
-          end
-        end
-        list[skill_include?(list,"El#{v2}")]=nil
-        newlist[skill_include?(newlist,"El#{v2}")]=nil if skill_include?(newlist,"El#{v2}")
-      elsif list[i][0]=='Flux' && skill_include?(list,'Ruin')>=0 && (mode/2)%2==1
-        if skill_include?(list,'Fenrir')>=0
-          if skill_include?(list,'Fenrir+')>=0
-            list[i][0]='Flux/Ruin/Fenrir[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Fenrir+')][15]
-            list[skill_include?(list,'Fenrir+')]=nil if skill_include?(list,'Fenrir+')>=0
-            newlist[skill_include?(newlist,'Fenrir+')]=nil if skill_include?(newlist,'Fenrir+')>=0
-          else
-            list[i][0]='Flux/Ruin/Fenrir'
-            list[i][1]=200
-          end
-          list[skill_include?(list,'Fenrir')]=nil if skill_include?(list,'Fenrir')>=0
-          newlist[skill_include?(newlist,'Fenrir')]=nil if skill_include?(newlist,'Fenrir')>=0
-        elsif skill_include?(list,'Fenrir[+]')>=0
-          list[i][0]='Flux/Ruin/Fenrir[+]'
-          list[i][1]=300
-          list[i][15]=list[skill_include?(list,'Fenrir[+]')][15]
-          list[skill_include?(list,'Fenrir[+]')]=nil if skill_include?(list,'Fenrir[+]')>=0
-          newlist[skill_include?(newlist,'Fenrir[+]')]=nil if skill_include?(newlist,'Fenrir[+]')>=0
-        else
-          list[i][0]='Flux/Ruin'
-          list[i][1]=100
-        end
-        list[skill_include?(list,'Ruin')]=nil
-        newlist[skill_include?(newlist,'Ruin')]=nil if skill_include?(newlist,'Ruin')>=0
-      elsif list[i][0][list[i][0].length-1,1].to_i.to_s==list[i][0][list[i][0].length-1,1]
-        v=list[i][0].gsub(list[i][0].scan(/([^0-9])+?/).join,"").to_i
-        v2=list[i][0].scan(/([^0-9])+?/).join
-        if skill_include?(list,"#{v2}#{v+1}")>=0
-          if skill_include?(list,"#{v2}#{v+2}")>=0
-            if skill_include?(list,"#{v2}#{v+3}")>=0
-              if skill_include?(list,"#{v2}#{v+4}")>=0
-                if skill_include?(list,"#{v2}#{v+5}")>=0
-                  if skill_include?(list,"#{v2}#{v+6}")>=0
-                    if skill_include?(list,"#{v2}#{v+7}")>=0
-                      if skill_include?(list,"#{v2}#{v+8}")>=0
-                        if skill_include?(list,"#{v2}#{v+9}")>=0
-                          list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}/#{v+8}/#{v+9}"
-                          list[i][1]=list[skill_include?(list,"#{v2}#{v+9}")][1]*1
-                          list[skill_include?(list,"#{v2}#{v+9}")]=nil if skill_include?(list,"#{v2}#{v+9}")>=0
-                        else
-                          list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}/#{v+8}"
-                          list[i][1]=list[skill_include?(list,"#{v2}#{v+8}")][1]*1
-                        end
-                        list[skill_include?(list,"#{v2}#{v+8}")]=nil if skill_include?(list,"#{v2}#{v+8}")>=0
-                      else
-                        list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}"
-                        list[i][1]=list[skill_include?(list,"#{v2}#{v+7}")][1]*1
-                      end
-                      list[skill_include?(list,"#{v2}#{v+7}")]=nil if skill_include?(list,"#{v2}#{v+7}")>=0
-                    else
-                      list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}"
-                      list[i][1]=list[skill_include?(list,"#{v2}#{v+6}")][1]*1
-                    end
-                    list[skill_include?(list,"#{v2}#{v+6}")]=nil if skill_include?(list,"#{v2}#{v+6}")>=0
-                  else
-                    list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}"
-                    list[i][1]=list[skill_include?(list,"#{v2}#{v+5}")][1]*1
-                  end
-                  list[skill_include?(list,"#{v2}#{v+5}")]=nil if skill_include?(list,"#{v2}#{v+5}")>=0
-                else
-                  list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}"
-                  list[i][1]=list[skill_include?(list,"#{v2}#{v+4}")][1]*1
-                end
-                list[skill_include?(list,"#{v2}#{v+4}")]=nil if skill_include?(list,"#{v2}#{v+4}")>=0
-              else
-                list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}"
-                list[i][1]=list[skill_include?(list,"#{v2}#{v+3}")][1]*1
-              end
-              list[skill_include?(list,"#{v2}#{v+3}")]=nil if skill_include?(list,"#{v2}#{v+3}")>=0
-            else
-              list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}"
-              list[i][1]=list[skill_include?(list,"#{v2}#{v+2}")][1]*1
-            end
-            list[skill_include?(list,"#{v2}#{v+2}")]=nil if skill_include?(list,"#{v2}#{v+2}")>=0
-          else
-            list[i][0]="#{v2}#{v}/#{v+1}"
-            list[i][1]=list[skill_include?(list,"#{v2}#{v+1}")][1]*1
-          end
-          list[skill_include?(list,"#{v2}#{v+1}")]=nil if skill_include?(list,"#{v2}#{v+1}")>=0
-        end
-      end
-      newlist.push(list[i].map{|q| q})
-      newlist.push(list[i].map{|q| q}) if list[i][0][0,4]=='[El]'
-    end
+  t=Time.now
+  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+    puts 'reloading EliseMulti1'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+    @last_multi_reload[0]=t
   end
-  newlist.compact!
-  newlist.uniq!
-  unless (mode/4)%2==1
-    data_load()
-    u=@units.map{|q| q}
-    for i in 0...newlist.length
-      newlist[i][0]=newlist[i][0].gsub('Bladeblade','Laevatein')
-      newlist[i][0]="~~#{newlist[i][0]}~~" if !newlist[i][13].nil? && newlist[i][13].length>0 && mode%2==1
-      m=[]
-      if newlist[i][4]=='Weapon' && newlist[i][6]!='-'
-        m=newlist[i][6].split(', ').reject{|q| !u.map{|q2| q2[0]}.include?(q) || u[u.find_index{|q2| q2[0]==q}][9][0]=='-'}
-        newlist[i][0]="*#{newlist[i][0]}*" if m.length==0
-      end
-    end
-  end
-  if (mode/8)%2==1
-    for i in 0...newlist.length
-      if newlist[i][0].include?('Iron/Steel/Silver[+] ')
-        m=newlist[i][0].gsub('Iron/Steel/Silver[+] ','')
-        newlist[i][0]=["Iron #{m}","Steel #{m}","Silver #{m}","Silver #{m}+"]
-      else
-        newlist[i][0]=newlist[i][0].split('/')
-        for i2 in 0...newlist[i][0].length
-          newlist[i][0][i2]="#{newlist[i][0][i2].gsub('[El]','')}/El#{newlist[i][0][i2].gsub('[El]','').downcase}" if newlist[i][0][i2].include?('[El]')
-          newlist[i][0][i2]="#{newlist[i][0][i2].gsub('[+]','')}/#{newlist[i][0][i2].gsub('[+]','')}+" if newlist[i][0][i2].include?('[+]')
-        end
-      end
-      newlist[i][0]=newlist[i][0].join('/').split('/')
-      if !newlist[i][0][1].nil? && newlist[i][0][1].length<=1
-        m=newlist[i][0][0][0,newlist[i][0][0].length-1]
-        for i2 in 1...newlist[i][0].length
-          newlist[i][0][i2]="#{m}#{newlist[i][0][i2]}"
-        end
-      end
-      if newlist[i][8].include?('*, *')
-        newlist[i][8]=newlist[i][8].gsub('*','').split(', ')
-      elsif newlist[i][8].include?('* or *')
-        newlist[i][8]=newlist[i][8].split('* or *').map{|q| q.gsub('*','')}
-      elsif newlist[i][8].include?('*')
-        newlist[i][8]=[newlist[i][8].gsub('*','')]
-      else
-        newlist[i][8]=[]
-      end
-    end
-    for i in 0...newlist.length
-      m=false
-      for i2 in 0...newlist.length
-        if i != i2 && !newlist[i2].nil? && has_any?(newlist[i][8],newlist[i2][0])
-          m=true
-          for i3 in 0...newlist[i][0].length
-            newlist[i2][0].push(newlist[i][0][i3])
-          end
-        end
-      end
-      newlist[i]=nil if m
-    end
-    newlist.compact!
-    for i in 0...newlist.length
-      for i2 in 0...newlist.length
-        if i != i2 && !newlist[i].nil? && !newlist[i2].nil? && has_any?(newlist[i][0],newlist[i2][0])
-          for i3 in 0...newlist[i][0].length
-            newlist[i2][0].push(newlist[i][0][i3])
-          end
-          newlist[i2][0].uniq!
-          newlist[i2][0]=newlist[i2][0].sort{|a,b| a <=> b}
-          newlist[i]=nil
-        end
-      end
-    end
-    newlist.compact!
-  end
-  newlist=newlist.sort {|a,b| a[0].gsub('~~','').gsub('*','').gsub('[El]','').downcase <=> b[0].gsub('~~','').gsub('*','').gsub('[El]','').downcase} unless (mode/8)%2==1
-  return newlist
+  return list_collapse(list,mode)
 end
 
 def find_in_units(event, mode=0, paired=false, ignore_limit=false)
@@ -6879,7 +6587,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers','close','closerange'].include?(args[i].downcase)
     weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves','range','ranged','distance','distant'].include?(args[i].downcase)
     weapons.push('Staff') if ['healer','staff','cleric','healers','clerics','staves','range','ranged','distance','distant'].include?(args[i].downcase)
-    weapons.push('Beast') if ['beast','beasts','laguz','close','closerange','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Beast') if ['beast','beasts','laguz','close','closerange'].include?(args[i].downcase)
     assists.push('Health') if ['health','hp'].include?(args[i].downcase)
     assists.push('Move') if ['move','movement','moving','arrangement','positioning','positions','position'].include?(args[i].downcase)
     assists.push('Staff') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
@@ -7224,6 +6932,7 @@ def display_units(event, mode)
       end
       for i in 0...p1.length
         wpn1=p1[i].map{|q| untz[untz.find_index{|q2| q2[0]==q.gsub('Laevatein','Lavatain').gsub('~~','').gsub(' *[Amiibo]*','').gsub(' *[Assist Trophy]*','').gsub(' *[Mii Costume]*','').gsub(' *[Trophy]*','').gsub(' *[Sticker]*','').gsub(' *[Spirit]*','').gsub('*','')}][1]}
+        wpn1=wpn1.map{|q| [q[0],q[1]]} if wpn1.map{|q| q[1]}.uniq.length==1 && wpn1.map{|q| q[1]}[0]=='Beast'
         h='.'
         if wpn1.uniq.length==1
           # blade type
@@ -7258,10 +6967,10 @@ def display_units(event, mode)
           h='<:Green_Staff:467122927616262144> Green Healers' if wpn1[0]==['Green', 'Healer']
           h="<:Colorless_Staff:443692132323295243> #{'Colorless ' if alter_classes(event,'Colored Healers')}Healers" if p1[i].include?('Sakura') || (wpn1[0]==['Colorless', 'Healer'])
           # Beast colors
-          h='<:Red_Beast:443172811599773734> Red Beasts' if (wpn1[0]==['Red', 'Beast'])
-          h='<:Blue_Beast:467112472990580747> Blue Beasts' if (wpn1[0]==['Blue', 'Beast'])
-          h='<:Green_Beast:467122926630731806> Green Beasts' if (wpn1[0]==['Green', 'Beast'])
-          h='<:Colorless_Beast:443692132423958529> Colorless Beasts' if (wpn1[0]==['Colorless', 'Beast'])
+          h='<:Red_Beast:532853459444170753> Red Beasts' if (wpn1[0]==['Red', 'Beast'])
+          h='<:Blue_Beast:532853459842629642> Blue Beasts' if (wpn1[0]==['Blue', 'Beast'])
+          h='<:Green_Beast:532853459779846154> Green Beasts' if (wpn1[0]==['Green', 'Beast'])
+          h='<:Colorless_Beast:532853459804749844> Colorless Beasts' if (wpn1[0]==['Colorless', 'Beast'])
         elsif wpn1.length>1 && wpn1.map{|q| [q[0],q[1]]}.uniq.length==1
           h='<:Red_Tome:443172811826003968> Red Mages' if (p1[i].include?('Lilina') && p1[i].include?('Raigh')) || (wpn1.map{|q| [q[0],q[1]]}.include?(['Red', 'Tome']))
           h='<:Blue_Tome:467112472394858508> Blue Mages' if (p1[i].include?('Odin') && p1[i].include?('Micaiah')) || (wpn1.map{|q| [q[0],q[1]]}.include?(['Blue', 'Tome']))
@@ -7343,6 +7052,7 @@ def display_skills(event, mode)
         unless k[i]=='- - -'
           f=k[i].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub(' *(+) [Tsfrm]All*','').gsub(' *(+) [Tsfrm]Effect*','').gsub(' *- Transformed*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade').gsub('*','')
           f=f.split('/')[0] if sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}.nil?
+          f=f.split('/')[-1] if sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}.nil?
           typesx.push(sklz[sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}])
         end
       end
@@ -7353,12 +7063,12 @@ def display_skills(event, mode)
         colors.push('Green') if typesx.reject{|q| !q[11].split(', ').include?('Green')}==typesx
         colors.push('Colorless') if typesx.reject{|q| !q[11].split(', ').include?('Colorless')}==typesx
       end
-      emotes=['<:Gold_Staff:443172811628871720>','<:Gold_Dagger:443172811461230603>','<:Gold_Dragon:443172811641454592>','<:Gold_Bow:443172812492898314>','<:Gold_Beast:443172811608162324>']
+      emotes=['<:Gold_Staff:443172811628871720>','<:Gold_Dagger:443172811461230603>','<:Gold_Dragon:443172811641454592>','<:Gold_Bow:443172812492898314>','<:Gold_Beast:532854442299752469>']
       emotes[0]='<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')
-      emotes=['<:Red_Staff:443172812455280640>','<:Red_Dagger:443172811490721804>','<:Red_Dragon:443172811796774932>','<:Red_Bow:443172812455280641>','<:Red_Beast:443172811599773734>'] if colors.length==1 && colors[0]=='Red'
-      emotes=['<:Blue_Staff:467112472407703553>','<:Blue_Dagger:467112472625545217>','<:Blue_Dragon:467112473313542144>','<:Blue_Bow:467112473313542155>','<:Blue_Beast:467112472990580747>'] if colors.length==1 && colors[0]=='Blue'
-      emotes=['<:Green_Staff:467122927616262144>','<:Green_Dagger:467122926655897610>','<:Green_Dragon:467122926718550026>','<:Green_Bow:467122927536570380>','<:Green_Beast:467122926630731806>'] if colors.length==1 && colors[0]=='Green'
-      emotes=['<:Colorless_Staff:443692132323295243>','<:Colorless_Dagger:443692132683743232>','<:Colorless_Dragon:443692132415438849>','<:Colorless_Bow:443692132616896512>','<:Colorless_Beast:443692132423958529>'] if colors.length==1 && colors[0]=='Colorless'
+      emotes=['<:Red_Staff:443172812455280640>','<:Red_Dagger:443172811490721804>','<:Red_Dragon:443172811796774932>','<:Red_Bow:443172812455280641>','<:Red_Beast:532853459444170753>'] if colors.length==1 && colors[0]=='Red'
+      emotes=['<:Blue_Staff:467112472407703553>','<:Blue_Dagger:467112472625545217>','<:Blue_Dragon:467112473313542144>','<:Blue_Bow:467112473313542155>','<:Blue_Beast:532853459842629642>'] if colors.length==1 && colors[0]=='Blue'
+      emotes=['<:Green_Staff:467122927616262144>','<:Green_Dagger:467122926655897610>','<:Green_Dragon:467122926718550026>','<:Green_Bow:467122927536570380>','<:Green_Beast:532853459779846154>'] if colors.length==1 && colors[0]=='Green'
+      emotes=['<:Colorless_Staff:443692132323295243>','<:Colorless_Dagger:443692132683743232>','<:Colorless_Dragon:443692132415438849>','<:Colorless_Bow:443692132616896512>','<:Colorless_Beast:532853459804749844>'] if colors.length==1 && colors[0]=='Colorless'
       for i in 0...k.length
         if k[i]=='- - -'
           p2+=1
@@ -7373,10 +7083,11 @@ def display_skills(event, mode)
           unless p1[i][i2]=='- - -'
             f=p1[i][i2].gsub('~~','').gsub(' *(+) All*','').gsub(' *(+) Effect*','').gsub(' *(+) [Tsfrm]All*','').gsub(' *(+) [Tsfrm]Effect*','').gsub(' *- Transformed*','').gsub('/2','').gsub('/3','').gsub('/4','').gsub('/5','').gsub('/6','').gsub('/7','').gsub('/8','').gsub('/9','').gsub('[El]','').gsub('Flux/Ruin/Fenrir[+]','Flux').gsub('Flux/Ruin/Fenrir','Flux').gsub('Flux/Ruin','Flux').gsub('Iron/Steel/Silver[+]','Iron').gsub('[+]','+').gsub('Iron/Steel/Silver','Iron').gsub('Iron/Steel','Iron').gsub('Laevatein','Bladeblade').gsub('*','')
             f=f.split('/')[0] if sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}.nil?
+            f=f.split('/')[-1] if sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}.nil?
             typesx.push(sklz[sklz.find_index{|q| stat_buffs(q[0])==stat_buffs(f)}])
           end
         end
-        types=typesx.map{|q| [q[4],q[5],find_base_skill(q,event)]}.uniq
+        types=typesx.map{|q| [q[4],q[5].split(', ')[0],find_base_skill(q,event)]}.uniq
         types2=typesx.map{|q| q[4]}.uniq
         types3=typesx.map{|q| q[3].split(' ')[0].downcase}.uniq
         for j in 0...types.length
@@ -7755,7 +7466,7 @@ def sort_skills(bot,event,args=[])
     k.sort! {|b,a| ((a[1] <=> b[1]) == 0 ? ((a[15] <=> b[15]) == 0 ? (b[0] <=> a[0]) : (a[15] <=> b[15])) : (a[1] <=> b[1]))}
     str="#{"__**Search**__\n#{mk.join("\n")}\n\n__**Additional Notes**__\n" if mk.length>0}All SP costs are without accounting for increased inheritance costs (1.5x the SP costs listed below)"
     for i in 0...k.length
-      k[i][0]="**#{k[i][0]}** #{skill_moji(k[i],event)}"
+      k[i][0]="**#{k[i][0]}** #{skill_moji(k[i],event,bot)}"
       k[i][0]="#{k[i][0]} - #{k[i][1]} SP"
       if k[i][15]>k[i][1] && k[i][1]>0 && k[i][4]=='Weapon'
         k[i][0]="#{k[i][0]} (#{k[i][15]} SP when refined)"
@@ -8874,7 +8585,7 @@ def generate_random_unit(event,args,bot)
     weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers','range','ranged','distance','distant'].include?(args[i].downcase)
     weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves','range','ranged','distance','distant'].include?(args[i].downcase)
     weapons.push('Healer') if ['healer','staff','cleric','healers','clerics','staves','range','ranged','distance','distant'].include?(args[i].downcase)
-    weapons.push('Beast') if ['beast','beasts','laguz','close','closerange','melee'].include?(args[i].downcase) && event.server.id==256291408598663168
+    weapons.push('Beast') if ['beast','beasts','laguz','close','closerange','melee'].include?(args[i].downcase)
     color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
     color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
     color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
@@ -8905,10 +8616,10 @@ def generate_random_unit(event,args,bot)
     end
   end
   if color_weapons.length<=0
-    color_weapons=[['Red', 'Blade'],     ['Red', 'Tome'],     ['Red', 'Breath'],      ['Red', 'Bow'],         ['Red', 'Dagger'],
-                   ['Blue', 'Blade'],    ['Blue', 'Tome'],    ['Blue', 'Breath'],     ['Blue', 'Bow'],        ['Blue', 'Dagger'],
-                   ['Green', 'Blade'],   ['Green', 'Tome'],   ['Green', 'Breath'],    ['Green', 'Bow'],       ['Green', 'Dagger'],
-                                                              ['Colorless', 'Breath'],['Colorless', 'Bow'],   ['Colorless', 'Dagger']]
+    color_weapons=[['Red', 'Blade'],  ['Red', 'Tome'],  ['Red', 'Breath'],      ['Red', 'Bow'],      ['Red', 'Dagger'],      ['Red','Beast'],
+                   ['Blue', 'Blade'], ['Blue', 'Tome'], ['Blue', 'Breath'],     ['Blue', 'Bow'],     ['Blue', 'Dagger'],     ['Blue','Beast'],
+                   ['Green', 'Blade'],['Green', 'Tome'],['Green', 'Breath'],    ['Green', 'Bow'],    ['Green', 'Dagger'],    ['Green','Beast'],
+                                                        ['Colorless', 'Breath'],['Colorless', 'Bow'],['Colorless', 'Dagger'],['Colorless','Beast']]
     color_weapons.push(['Colorless', 'Blade']) if alter_classes(event,'Colorless Blades')
     color_weapons.push(['Colorless', 'Tome']) if alter_classes(event,'Colorless Tomes')
     unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
@@ -8916,9 +8627,6 @@ def generate_random_unit(event,args,bot)
       color_weapons.push(['Blue', 'Healer']) if alter_classes(event,'Colored Healers')
       color_weapons.push(['Green', 'Healer']) if alter_classes(event,'Colored Healers')
       color_weapons.push(['Colorless', 'Healer'])
-    end
-    unless event.server.nil?
-      color_weapons.push(['Gold', 'Beast']) if event.server.id==256291408598663168
     end
     color_weapons=color_weapons.reject{|q| !colors.include?(q[0])} unless colors.length<=0
     color_weapons=color_weapons.reject{|q| !weapons.include?(q[1])} unless weapons.length<=0
@@ -10277,6 +9985,35 @@ def proc_study(event,name,bot,weapon=nil)
   end
   refinement=nil if w2[5]!='Staff Users Only' && ['Wrathful','Dazzling'].include?(refinement)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
+  mergetext=''
+  if refinement.nil? || refinement.length==0
+    m=w2[11].split(', ').reject{|q| !['(E)','(R)'].include?(q[0,3])}.reject{|q| q[3,5]!='WoDao' && q[3,6]!='Killer' && !['SlowSpecial','SpecialSlow'].include?(q[3,11])}
+    mx=['Atk','Spd','Def','Res']
+    mx=['Wrathful','Dazzling'] if w2[5]=='Staff Users Only'
+    if m.length<=0
+    elsif m.length==1 && m[0][0,3]=='(R)'
+      mergetext="#{mergetext}\n\n#{w2[0]} has a *#{m[0][3,m[0].length-3]}* effect when refined.  This can affect the proc calculations.\nTo include a refinement, try typing the weapon as \"#{w2[0]} (+) #{mx.sample} Mode\" instead."
+    elsif m.length==1 && m[0][0,3]=='(E)'
+      mergetext="#{mergetext}\n\n#{w2[0]} has a *#{m[0][3,m[0].length-3]}* effect when refined into its Effect Mode.  This can affect the proc calculations.\nTo include a refinement, try typing the weapon as \"#{w2[0]} (+) Effect Mode\" instead."
+    else
+      mx.unshift('Effect')
+      mergetext="#{mergetext}\n\nThe following effects can be applied to #{w2[0]} via Weapon Refinement.  This can affect the proc calculations."
+      m2=m.reject{|q| q[0,3]=='(E)'}.map{|q| q[3,q.length-3]}
+      mergetext="#{mergetext}\nAll refinements: #{m2.join(',')}" if m2.length>0
+      m2=m.reject{|q| q[0,3]=='(R)'}.map{|q| q[3,q.length-3]}
+      mergetext="#{mergetext}\nEffect Mode only: #{m2.join(',')}" if m2.length>0
+      mergetext="#{mergetext}\nTo include a refinement, try typing the weapon as \"#{w2[0]} (+) #{mx.sample} Mode\" instead."
+    end
+  end
+  if w2[5].split(', ')[0]=='Beasts Only' && !transformed
+    m=w2[11].split(', ').reject{|q| q[0,3]!='(T)'}.reject{|q| q[3,5]!='WoDao' && q[3,6]!='Killer' && !['SlowSpecial','SpecialSlow'].include?(q[3,11])}
+    if m.length<=0
+    elsif m.length==1
+      mergetext="#{mergetext}\n\n#{w2[0]} has a *#{m[0][3,m[0].length-3]}* effect when #{u40x[0]} is transformed.\nTo show #{u40x[0]}'s data when transformed, include the word \"Transformed\" in your message."
+    else
+      mergetext="#{mergetext}\n\nWhen #{u40x[0]} is transformed, #{w2[0]} also has the following effects:\n#{m.join(', ')}\nTo show #{u40x[0]}'s data when transformed, include the word \"Transformed\" in your message."
+    end
+  end
   atk='Attack'
   atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
   atk='Strength' if ['Blade','Bow','Dagger'].include?(u40x[1][1])
@@ -10557,9 +10294,9 @@ def proc_study(event,name,bot,weapon=nil)
   staves[8].push("Reprisal - #{d}, cooldown of #{c}")
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+  k="__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.map{|q| q.join("\n")}.join("\n\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__\n\n#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
     s=""
     for i in 0...staves.length
       s=extend_message(s,staves[i].join("\n"),event,2) unless staves[i].length.zero?
@@ -10575,7 +10312,7 @@ def proc_study(event,name,bot,weapon=nil)
       end
     end
     flds.compact!
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,flds)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,j,u40[0])}#{mergetext}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,flds)
   end
 end
 
@@ -12016,7 +11753,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
     if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...dew.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew[i].gsub('~~','').split(' (->) ')[0])}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -12032,7 +11769,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
       end
       if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...stones.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones[i].gsub('~~','').split(' (->) ')[0])}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -12097,7 +11834,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
     if dew2.join("\n").length+stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...dew2.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -12113,7 +11850,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
       end
       if stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...stones2.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -12133,7 +11870,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
     if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...dew.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -12149,7 +11886,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
       end
       if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:443172811608162324> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...stones.length
           k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -14465,35 +14202,13 @@ end
 
 bot.command([:tools,:links,:tool,:link,:resources,:resources]) do |event|
   return nil if overlap_prevent(event)
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
-    event << '**Useful tools for players of** ***Fire Emblem Heroes***'
-    event << '__Download the game__'
-    event << 'Google Play: <https://play.google.com/store/apps/details?id=com.nintendo.zaba&hl=en>'
-    event << 'Apple App Store: <https://itunes.apple.com/app/id1181774280>'
-    event << ''
-    event << '__Wikis and Databases__'
-    event << 'Gamepedia FEH wiki: <https://feheroes.gamepedia.com/>'
-    event << 'Gamepress FEH database: <https://fireemblem.gamepress.gg/>'
-    event << ''
-    event << '__Simulators__'
-    event << 'Summon Simulator: <https://feh-stuff.github.io/summon-simulator/>'
-    event << 'Inheritance tracker: <https://arghblargh.github.io/feh-inheritance-tool/>'
-    event << 'Visual unit builder: <https://feh-stuff.github.io/unit-builder/>'
-    event << ''
-    event << '__Damage Calculators__'
-    event << "ASFox's mass duel simulator: <http://arcticsilverfox.com/feh_sim/>"
-    event << "Andu2's mass duel simulator fork: <https://andu2.github.io/FEH-Mass-Simulator/>"
-    event << ''
-    event << 'FEHKeeper: <https://www.fehkeeper.com/>'
-    event << ''
-    event << 'Arena Score Calculator: <http://www.arcticsilverfox.com/score_calc/>'
-    event << ''
-    event << 'Glimmer vs. Moonbow: <https://i.imgur.com/kDKPMp7.png>'
-  else
-    create_embed(event,'**Useful tools for players of** ***Fire Emblem Heroes***',"__Download the game__\n[Google Play](https://play.google.com/store/apps/details?id=com.nintendo.zaba&hl=en)\n[Apple App Store](https://itunes.apple.com/app/id1181774280)\n\n__Wikis and Databases__\n[Gamepedia FEH wiki](https://feheroes.gamepedia.com/)\n[Gamepress FEH database](https://fireemblem.gamepress.gg/)\n\n__Simulators__\n[Summon Simulator](https://feh-stuff.github.io/summon-simulator/)\n[Inheritance tracker](https://arghblargh.github.io/feh-inheritance-tool/)\n[Visual unit builder](https://feh-stuff.github.io/unit-builder/)\n\n__Damage Calculators__\n[ASFox's mass duel simulator](http://arcticsilverfox.com/feh_sim/)\n[Andu2's mass duel simulator fork](https://andu2.github.io/FEH-Mass-Simulator/)\n\n[FEHKeeper](https://www.fehkeeper.com/)\n\n[Arena Score Calculator](http://www.arcticsilverfox.com/score_calc/)\n\n[Glimmer vs. Moonbow](https://i.imgur.com/kDKPMp7.png)",0xD49F61,nil,'https://lh3.googleusercontent.com/4ziItIIQ0pMqlUigjosG05YC5VkHKNy3ps26F5Hfi2lt0Zs3yB7dyi9bUQ4q1GgEPSE=w300-rw')
-    event.respond 'If you are on a mobile device and cannot click the links in the embed above, type `FEH!tools mobile` to receive this message as plaintext.'
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseText'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
   end
-  event << ''
+  show_tools(event,bot)
 end
 
 bot.command(:shard) do |event, i|
