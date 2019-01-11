@@ -688,7 +688,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='') # used by m
   t=Time.now
   newmerge=true if t.year>2019
   newmerge=true if t.year==2019 && t.month>2
-  newmerge=true if t.year==2019 && t.month==2 && t.day>12
+  newmerge=true if t.year==2019 && t.month==2 && t.day>8
   # find neutral five-star level 40 stats
   u=@units.map{|q| q}
   if name=='Robin'
@@ -2717,7 +2717,7 @@ def display_stars(event,rarity,merges,support='-',expandedmode=false) # used to 
   t=Time.now
   newmerge=nil if t.year>2019
   newmerge=nil if t.year==2019 && t.month>2
-  newmerge=nil if t.year==2019 && t.month==2 && t.day>12
+  newmerge=nil if t.year==2019 && t.month==2 && t.day>8
   emo=@rarity_stars[rarity-1]
   if merges==@max_rarity_merge[1]
     emo='<:Icon_Rarity_4p10:448272714210476033>' if rarity==4
@@ -2769,7 +2769,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   t=Time.now
   newmerge=nil if t.year>2019
   newmerge=nil if t.year==2019 && t.month>2
-  newmerge=nil if t.year==2019 && t.month==2 && t.day>12
+  newmerge=nil if t.year==2019 && t.month==2 && t.day>8
   expandedmode=false if expandedmode.nil?
   expandedmodex=!(!expandedmode) if expandedmodex.nil?
   dispstr=" #{event.message.text.downcase} "
@@ -3412,7 +3412,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   t=Time.now
   newmerge=nil if t.year>2019
   newmerge=nil if t.year==2019 && t.month>2
-  newmerge=nil if t.year==2019 && t.month==2 && t.day>12
+  newmerge=nil if t.year==2019 && t.month==2 && t.day>8
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
@@ -7565,7 +7565,7 @@ def comparison(event,args,bot)
   t=Time.now
   newmerge=nil if t.year>2019
   newmerge=nil if t.year==2019 && t.month>2
-  newmerge=nil if t.year==2019 && t.month==2 && t.day>12
+  newmerge=nil if t.year==2019 && t.month==2 && t.day>8
   event.channel.send_temporary_message('Calculating data, please wait...',3)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   s1=args.join(' ').gsub(',','').gsub('/','').downcase.gsub('laevatein','lavatain')
@@ -9451,7 +9451,7 @@ def unit_study(event,name,bot,weapon=nil)
   t=Time.now
   newmerge=nil if t.year>2019
   newmerge=nil if t.year==2019 && t.month>2
-  newmerge=nil if t.year==2019 && t.month==2 && t.day>12
+  newmerge=nil if t.year==2019 && t.month==2 && t.day>8
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
@@ -10039,7 +10039,9 @@ def proc_study(event,name,bot,weapon=nil)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
   mergetext=''
   if refinement.nil? || refinement.length==0
-    m=w2[11].split(', ').reject{|q| !['(E)','(R)'].include?(q[0,3])}.reject{|q| q[3,5]!='WoDao' && q[3,6]!='Killer' && !['SlowSpecial','SpecialSlow'].include?(q[3,11])}
+    m=w2[11].split(', ')
+    m=m.map{|q| q.gsub(/\(T\)\(E\)|\(TE\)|\(E\)\(T\)|\(ET\)/,'(E)').gsub(/\(T\)\(R\)|\(TR\)|\(R\)\(T\)|\(RT\)/,'(R)')} if w2[5].split(', ')[0]=='Beasts Only' && transformed
+    m=m.reject{|q| !['(E)','(R)'].include?(q[0,3])}.reject{|q| q[3,5]!='WoDao' && q[3,6]!='Killer' && !['SlowSpecial','SpecialSlow'].include?(q[3,11])}
     mx=['Atk','Spd','Def','Res']
     mx=['Wrathful','Dazzling'] if w2[5]=='Staff Users Only'
     if m.length<=0
@@ -10058,7 +10060,12 @@ def proc_study(event,name,bot,weapon=nil)
     end
   end
   if w2[5].split(', ')[0]=='Beasts Only' && !transformed
-    m=w2[11].split(', ').reject{|q| q[0,3]!='(T)'}.reject{|q| q[3,5]!='WoDao' && q[3,6]!='Killer' && !['SlowSpecial','SpecialSlow'].include?(q[3,11])}
+    m=w2[11].split(', ')
+    unless refinement.nil? || refinement.length==0
+      m=m.map{|q| q.gsub(/\(T\)\(R\)|\(TR\)|\(R\)\(T\)|\(RT\)/,'(T)')}
+      m=m.map{|q| q.gsub(/\(T\)\(E\)|\(TE\)|\(E\)\(T\)|\(ET\)/,'(T)')} if refinement=='Effect'
+    end
+    m=m.reject{|q| q[0,3]!='(T)'}.reject{|q| q[3,5]!='WoDao' && q[3,6]!='Killer' && !['SlowSpecial','SpecialSlow'].include?(q[3,11])}
     if m.length<=0
     elsif m.length==1
       mergetext="#{mergetext}\n\n#{w2[0]} has a *#{m[0][3,m[0].length-3]}* effect when #{u40x[0]} is transformed.\nTo show #{u40x[0]}'s data when transformed, include the word \"Transformed\" in your message."
