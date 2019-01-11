@@ -644,7 +644,7 @@ def sort_legendaries(event,bot,mode=0)
     b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
   end
   b.compact!
-  b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm || q[5].nil? || !q[5].split(', ').include?('Legendary') || q[2][0]=='-' || q[2].length<4}
+  b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm || q[5].nil? || !q[5].split(', ').include?('Legendary') || q[2][0]=='-' || q[2].length<5}
   if b2.length>0
     m=[]
     for i in 0...b2.length
@@ -1514,6 +1514,7 @@ def disp_current_events(mode=0)
       c[i][1]='Bound Hero Battle' if c[i][1]=='BHB'
       c[i][1]='Grand Hero Battle' if c[i][1]=='GHB'
       c[i][1]='Legendary Hero Battle' if c[i][1]=='LHB'
+      c[i][1]='Mythic Hero Battle' if c[i][1]=='MHB'
       c[i][1]='Daily Reward Battle' if ['DRM','Daily Reward Maps','DRB'].include?(c[i][1])
       c[i][1]='Grand Conquests' if c[i][1]=='GC'
       c[i][1]='Tempest Trials' if ['TT','Tempest'].include?(c[i][1])
@@ -1531,7 +1532,7 @@ def disp_current_events(mode=0)
       n=c2[i][0]
       if ['Voting Gauntlet','Tempest Trials','Forging Bonds','Quests','Log-In Bonus'].include?(c2[i][1])
         n="\"#{n}\" #{c2[i][1]}"
-      elsif ['Bound Hero Battle','Grand Hero Battle','Legendary Hero Battle','Daily Reward Battle','Special Maps'].include?(c2[i][1])
+      elsif ['Bound Hero Battle','Grand Hero Battle','Legendary Hero Battle','Mythic Hero Battle','Daily Reward Battle','Special Maps'].include?(c2[i][1])
         n="#{c2[i][1]}: *#{n}*"
       elsif c2[i][1]=='Grand Conquests'
         n="Grand Conquests"
@@ -2496,7 +2497,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="#{str2}\nThe most agreed-upon server-specific alias#{"es are" unless k.length==1}#{" is" if k.length==1} #{list_lift(k,"and")}.  #{srv_spec[0][2]} servers agree on #{"them" unless k.length==1}#{"it" if k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
     k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
     str2="#{str2}\nCounting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
-    str2="#{str2}\n\n**There are 2 [global] multi-skill aliases.**"
+    str2="#{str2}\n\n**There are 3 [global] multi-skill aliases.**"
     str=extend_message(str,str2,event,3)
     glbl=@aliases.reject{|q| q[0]!='Structure' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
     srv_spec=@aliases.reject{|q| q[0]!='Structure' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
@@ -2719,7 +2720,7 @@ def snagstats(event,bot,f=nil,f2=nil)
   str2="#{str2}\nThere are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases."
   glbl=@aliases.reject{|q| q[0]!='Skill' || !q[3].nil?}
   srv_spec=@aliases.reject{|q| q[0]!='Skill' || q[3].nil?}
-  str2="#{str2}\nThere are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-]skill aliases.\nThere are 2 global multi-skill aliases."
+  str2="#{str2}\nThere are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-]skill aliases.\nThere are 3 global multi-skill aliases."
   glbl=@aliases.reject{|q| q[0]!='Structure' || !q[3].nil?}
   srv_spec=@aliases.reject{|q| q[0]!='Structure' || q[3].nil?}
   str2="#{str2}\nThere are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-]structure aliases."
