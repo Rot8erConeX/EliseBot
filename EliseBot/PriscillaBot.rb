@@ -11618,14 +11618,17 @@ def games_list(event,name,bot,weapon=nil)
 end
 
 bot.command([:structure,:struct]) do |event, *args|
+  return nil if overlap_prevent(event)
   disp_struct(bot,args.join(' '),event)
 end
 
 bot.command([:acc,:accessory,:accessorie]) do |event, *args|
+  return nil if overlap_prevent(event)
   disp_accessory(bot,args.join(' '),event)
 end
 
 bot.command([:item]) do |event, *args|
+  return nil if overlap_prevent(event)
   disp_itemu(bot,args.join(' '),event)
 end
 
@@ -15479,14 +15482,24 @@ bot.message do |event|
     end
   elsif (['fgo!','fgo?','liz!','liz?'].include?(str[0,4]) || ['fate!','fate?'].include?(str[0,5])) && @shardizard==4
     s=event.message.text.downcase
-    s=s[5,s.length-5] if ['fate!','fate?'].include?(event.message.text.downcase[0,2])
+    s=s[5,s.length-5] if ['fate!','fate?'].include?(event.message.text.downcase[0,5])
     s=s[4,s.length-4] if ['fgo!','fgo?','liz!','liz?'].include?(event.message.text.downcase[0,4])
     a=s.split(' ')
     if a[0].downcase=='reboot'
       event.respond "Becoming Liz.  Please wait approximately ten seconds..."
       exec "cd C:/Users/Mini-Matt/Desktop/devkit && LizBot.rb 4"
     elsif event.server.nil? || event.server.id==285663217261477889
-      event.respond "I am not Liz right now.  Please use `FGO!reboot` to turn me into Elise."
+      event.respond "I am not Liz right now.  Please use `FGO!reboot` to turn me into Liz."
+    end
+  elsif ['dl!','dl?'].include?(str[0,3]) && @shardizard==4
+    s=event.message.text.downcase
+    s=s[3,s.length-3]
+    a=s.split(' ')
+    if a[0].downcase=='reboot'
+      event.respond "Becoming Botan.  Please wait approximately ten seconds..."
+      exec "cd C:/Users/Mini-Matt/Desktop/devkit && BotanBot.rb 4"
+    elsif event.server.nil? || event.server.id==285663217261477889
+      event.respond "I am not Botan right now.  Please use `DL!reboot` to turn me into Botan."
     end
   elsif overlap_prevent(event)
   elsif ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4])
