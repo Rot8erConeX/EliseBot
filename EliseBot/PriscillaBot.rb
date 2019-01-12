@@ -1006,9 +1006,7 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
   ks=event.server.id unless event.server.nil?
   g=get_markers(event)
   return -1 if name.nil?
-  return -1 if name.length<2 && name.downcase != 'bk'
   data_load()
-  nicknames_load()
   name=normalize(name.gsub('!',''))
   if name.downcase.gsub(' ','').gsub('_','')[0,2]=='<:'
     buff=name.split(':')[1]
@@ -1021,11 +1019,13 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
   k=untz.find_index{|q| q[0].downcase==name.downcase}
   k=untz.find_index{|q| q[0].gsub('(','').gsub(')','').downcase==name.downcase} unless ignore2
   return k unless k.nil? || !has_any?(g, untz[k][13][0])
+  nicknames_load()
   unless ignore2
     alz=@aliases.reject{|q| q[0]!='Unit'}
     k=alz.find_index{|q| q[1].downcase==name.downcase && (q[3].nil? || q[3].include?(ks))}
     return untz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, untz[untz.find_index{|q| q[0]==alz[k][2]}][13][0])
   end
+  return -1 if name.length<2
   return -1 if ignore || ['blade','blad','bla'].include?(name.downcase)
   untz=@units.map{|q| q}
   k=untz.find_index{|q| q[0][0,name.length].downcase==name.downcase}
@@ -1094,7 +1094,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   ks=0
   ks=event.server.id unless event.server.nil?
   g=get_markers(event)
-  return -1 if name.nil? || name.length<2
+  return -1 if name.nil?
   name=normalize(name.gsub('!','').gsub('.','').gsub('?',''))
   if name.downcase.gsub(' ','').gsub('_','')[0,2]=='<:'
     name=name.split(':')[1] if x_find_skill(name.split(':')[1],event,sklz,ignore,ignore2)>=0
@@ -1118,10 +1118,7 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   return find_skill("the#{name.downcase.gsub(' ','')}",event) if find_skill("the#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("the#{name.downcase.gsub(' ','')}",event,true)][0][0,4]=='The '
   return find_skill("a#{name.downcase.gsub(' ','')}",event) if find_skill("a#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("a#{name.downcase.gsub(' ','')}",event,true)][0][0,2]=='A '
   return find_skill("an#{name.downcase.gsub(' ','')}",event) if find_skill("an#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("an#{name.downcase.gsub(' ','')}",event,true)][0][0,3]=='An '
-  # ...including non-American spellings of official words
-  return find_skill(name.downcase.gsub('defence','defense'),event,true) if name.downcase.include?('defence') && find_skill(name.downcase.gsub('defence','defense'),event,true)>=0
-  return find_skill(name.downcase.gsub('armour','armor'),event,true) if name.downcase.include?('armour') && find_skill(name.downcase.gsub('armour','armor'),event,true)>=0
-  return find_skill(name.downcase.gsub('honour','honor'),event,true) if name.downcase.include?('honour') && find_skill(name.downcase.gsub('honour','honor'),event,true)>=0
+  return -1 if name.length<2
   # try everything again, but this time matching the portion of the skill name that is exactly as long as the input string.
   x2=stat_buffs(name.gsub(' ','').gsub('_',''),name,2)
   k=sklz.find_index{|q| stat_buffs(q[0].gsub('.','').gsub('!','').gsub('?',''),name,2).gsub(' ','').gsub('_','')[0,name.length]==x2}
@@ -1143,7 +1140,6 @@ def find_structure(name,event,fullname=false)
   data_load()
   strct=@structures.map{|q| q}
   name=name.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
-  return [] if name.length<3
   k=strct.find_index{|q| "#{q[0]} #{q[1]}".downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name}
   return [k] unless k.nil?
   s=strct.reject{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')!=name}
@@ -1160,6 +1156,7 @@ def find_structure(name,event,fullname=false)
     return s.map{|q| strct.find_index{|q2| q==q2}}
   end
   return [] if fullname
+  return [] if name.length<3
   k=strct.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
   s=[]
   s=strct.reject{|q| q[0]!=strct[k][0] || q[2]!=strct[k][2]} unless k.nil?
@@ -1198,7 +1195,6 @@ def find_item_feh(name,event,fullname=false)
   data_load()
   itmu=@itemus.map{|q| q}
   name=name.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
-  return [] if name.length<3
   k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name}
   return k unless k.nil?
   nicknames_load()
@@ -1208,6 +1204,7 @@ def find_item_feh(name,event,fullname=false)
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
   return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
   return -1 if fullname
+  return -1 if name.length<3
   k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
   return k unless k.nil?
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
@@ -1219,7 +1216,6 @@ def find_accessory(name,event,fullname=false)
   data_load()
   itmu=@accessories.map{|q| q}
   name=name.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
-  return [] if name.length<3
   k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name}
   return k unless k.nil?
   nicknames_load()
@@ -1229,6 +1225,7 @@ def find_accessory(name,event,fullname=false)
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
   return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
   return -1 if fullname
+  return -1 if name.length<3
   k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
   return k unless k.nil?
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
