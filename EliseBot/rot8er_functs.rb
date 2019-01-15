@@ -228,6 +228,7 @@ def longFormattedNumber(number,cardinal=false)
     end
     return "#{longFormattedNumber(number,false)}#{k}"
   end
+  return "1,000" if number==1000
   return "#{number}" if number<1000
   if number<1000
     bob="#{number%1000}"

@@ -168,7 +168,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
       event << 'This help window is not in an embed so that people who need this command can see it.'
     end
     return nil
-  elsif ['aliases','checkaliases','seealiases'].include?(command.downcase)
+  elsif ['aliases','checkaliases','seealiases','alias'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s aliases.\nIf no name is listed, responds with a list of all aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
   elsif ['saliases','serveraliases'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s server-specific aliases.\nIf no name is listed, responds with a list of all server-specific aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
@@ -416,13 +416,18 @@ def disp_more_info(event, mode=0) # used by the `help` command to display info t
       str="#{str}\n\n**Weapon**"
       str="#{str}\nProper format: Silver Dagger+ ~~just the weapon's name~~"
       str="#{str}\nDefault: No weapon"
-      str="#{str}\n\n**Arena/Tempest Bonus Unit Buff**"
+      str="#{str}\n\n**Arena/Aether Raids/Tempest Trials+ Bonus Unit Buff**"
       str="#{str}\nProper format: Bonus"
-      str="#{str}\nSecondary format: Tempest, Arena"
+      str="#{str}\nSecondary format: Arena, Aether, Tempest"
       str="#{str}\nDefault: Not applied"
       str="#{str}\n\n**Summoner Support**"
       str="#{str}\nProper format: #{['C','B','A','S'].sample} ~~Just a single letter~~"
       str="#{str}\nDefault: No support"
+      str="#{str}\n\n**Beast transformation**"
+      str="#{str}\nBeast units, when equipped with a weapon, can take two forms."
+      str="#{str}\nProper format: transformed ~~just include the word~~"
+      str="#{str}\nSecondary format: (T)"
+      str="#{str}\nDefault: Not applied, resulting in humanoid form"
       create_embed(event,"",str,0x40C0F0)
       str="**Refined Weapon**"
       str="#{str}\nProper format: Falchion (+) #{['Atk','Spd','Def','Res','Effect'].sample}"
@@ -454,6 +459,11 @@ def disp_more_info(event, mode=0) # used by the `help` command to display info t
       str="#{str}\nProper format: #{['Atk','Spd','Def','Res'].sample} Blessing ~~following the stat buffed by the word \"blessing\"~~"
       str="#{str}\nSecondary format: #{['Atk','Spd','Def','Res'].sample}Blessing ~~no space~~, Blessing#{['Atk','Spd','Def','Res'].sample}"
       str="#{str}\nDefault: No blessings applied"
+      str="#{str}\n**Stat buffs from Mythic Hero/Blessing interaction**"
+      str="#{str}\nProper format: #{['Atk','Spd','Def','Res'].sample} Blessing2 ~~following the stat buffed by the word \"blessing\"~~"
+      str="#{str}\nSecondary format: #{['Atk','Spd','Def','Res'].sample}Blessing2 ~~no space~~, Blessing#{['Atk','Spd','Def','Res'].sample}2"
+      str="#{str}\nDefault: No blessings applied"
+      str="#{str}\n**The above two cannot be applied simultaneously.  All blessings will convert to whichever type is the first one listed in your message.**"
       str="#{str}\n\nThese can be listed in any order."
     end
     create_embed(event,"",str,0x40C0F0)
@@ -599,15 +609,12 @@ def sort_legendaries(event,bot,mode=0)
       tm="#{t2.year}#{'0' if t2.month<10}#{t2.month}#{'0' if t2.day<10}#{t2.day}".to_i
       lemoji1='<:Legendary_Effect_Unknown:443337603945857024>'
       b2=[]
-      puts k2[i][0]
       if k2[i][0].include?('January') || k2[i][0].include?('March') || k2[i][0].include?('May') || k2[i][0].include?('July') || k2[i][0].include?('September') || k2[i][0].include?('November')
-        puts 'yes'
         t2+=(8-t2.wday)*24*60*60
         tm="#{t2.year}#{'0' if t2.month<10}#{t2.month}#{'0' if t2.day<10}#{t2.day}".to_i
         lemoji1='<:Mythic_Effect_Unknown:523328368079273984>'
         b2=bx2.reject{|q| q[2].nil? || q[2][0].split(', ')[0].split('/').reverse.join('').to_i<=tm}
       else
-        puts 'no'
         b2=bx.reject{|q| q[2].nil? || q[2][0].split(', ')[0].split('/').reverse.join('').to_i<=tm}
       end
       moji=[]
@@ -721,14 +728,14 @@ def sort_legendaries(event,bot,mode=0)
       end
       m.uniq!
       data_load()
-      k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || q[9][0]!='5s' || m.include?(q[0])}.uniq
+      k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('5s') || m.include?(q[0])}.uniq
       m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Pink:466196714513235988>Gold',[]]]
       for i in 0...k.length
-        m2[0][1].push(k[i][0]) if k[i][1][0]=='Red'
-        m2[1][1].push(k[i][0]) if k[i][1][0]=='Blue'
-        m2[2][1].push(k[i][0]) if k[i][1][0]=='Green'
-        m2[3][1].push(k[i][0]) if k[i][1][0]=='Colorless'
-        m2[4][1].push(k[i][0]) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
+        m2[0][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Red'
+        m2[1][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Blue'
+        m2[2][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Green'
+        m2[3][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Colorless'
+        m2[4][1].push(k[i][0].gsub('Lavatain','Laevatein')) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
       end
       m2=m2.reject{|q| q[1].length<=0}
       j="\n"
@@ -779,11 +786,11 @@ def sort_legendaries(event,bot,mode=0)
       k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('p') || q[9][0].include?('4p') || q[9][0].include?('3p') || q[9][0].include?('2p') || q[9][0].include?('1p') || m.include?(q[0])}.uniq
       m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Gold:455053002911514634>Gold',[]]]
       for i in 0...k.length
-        m2[0][1].push(k[i][0]) if k[i][1][0]=='Red'
-        m2[1][1].push(k[i][0]) if k[i][1][0]=='Blue'
-        m2[2][1].push(k[i][0]) if k[i][1][0]=='Green'
-        m2[3][1].push(k[i][0]) if k[i][1][0]=='Colorless'
-        m2[4][1].push(k[i][0]) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
+        m2[0][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Red'
+        m2[1][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Blue'
+        m2[2][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Green'
+        m2[3][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Colorless'
+        m2[4][1].push(k[i][0].gsub('Lavatain','Laevatein')) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
       end
       m2=m2.reject{|q| q[1].length<=0}
       j="\n"

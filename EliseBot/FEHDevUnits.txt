@@ -33,7 +33,7 @@ Spur Def 1\Drive Def 1\Drive Def 2
 Blaze Dance 2
 
 Celica
-5\1\HP\Resistance\-
+5\2\Speed\Resistance\-
 Fire\Elfire\Bolganone\Ragnarok\Ragnarok (+) Effect Mode
 Draw Back
 Dragon Gaze\Draconic Aura
@@ -286,7 +286,7 @@ Soleil
 5\4\Speed\Attack\-
 Iron Sword\Steel Sword\Slaying Edge\Slaying Edge+\Slaying Edge+ (+) Attack Mode
 Rally Speed
-Daylight\Noontime
+New Moon\Luna\Aether
 Darting Blow 1\Darting Blow 2\Darting Blow 3
 Renewal 1\Renewal 2\Renewal 3
 Spur Res 1\Drive Res 1\Drive Res 2

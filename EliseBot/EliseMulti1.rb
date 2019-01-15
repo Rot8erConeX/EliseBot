@@ -1082,6 +1082,237 @@ def list_unit_aliases(event,args,bot,mode=0)
   return nil
 end
 
+def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode=0)
+  data_load()
+  nicknames_load()
+  err=false
+  str=''
+  if newname.nil? || unit.nil?
+    str="The alias system can cover:\n- Units\n- Skills (Weapons, Assists, Specials, Passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nYou must specify both:\n- one of the above\n- an alias you wish to give that object"
+    err=true
+  elsif event.user.id != 167657750971547648 && event.server.nil?
+    str='Only my developer is allowed to use this command in PM.'
+    err=true
+  elsif !is_mod?(event.user,event.server,event.channel) && ![368976843883151362,195303206933233665].include?(event.user.id)
+    str='You are not a mod.'
+    err=true
+  elsif newname.include?('"') || newname.include?("\n")
+    str='Full stop.  " is not allowed in an alias.'
+    err=true
+  elsif !event.server.nil? && event.server.id==363917126978764801
+    str="You guys revoked your permission to add aliases when you refused to listen to me regarding the Erk alias for Serra."
+    err=true
+  end
+  if err
+    event.respond str if str.length>0 && mode==0
+    args=event.message.text.downcase.split(' ')
+    args.shift
+    list_unit_aliases(event,args,bot) if mode==1
+    return nil
+  end
+  type=['Alias','Alias']
+  if find_unit(newname,event,true)>=0
+    type[0]='Unit'
+  elsif find_skill(newname,event,true)>=0
+    type[0]='Skill'
+  elsif find_structure(newname,event,true).length>0
+    type[0]='Structure'
+  elsif find_accessory(newname,event,true)>=0
+    type[0]='Accessory'
+  elsif find_item_feh(newname,event,true)>=0
+    type[0]='Item'
+  elsif find_unit(newname,event)>=0
+    type[0]='Unit*'
+  elsif find_skill(newname,event)>=0
+    type[0]='Skill*'
+  elsif find_structure(newname,event).length>0
+    type[0]='Structure*'
+  elsif find_accessory(newname,event)>=0
+    type[0]='Accessory*'
+  elsif find_item_feh(newname,event)>=0
+    type[0]='Item*'
+  end
+  type[0]='Skill' if newname.downcase=='adult'
+  if find_unit(unit,event,true)>=0
+    type[1]='Unit'
+  elsif find_skill(unit,event,true)>=0
+    type[1]='Skill'
+  elsif find_structure(unit,event,true).length>0
+    type[1]='Structure'
+  elsif find_accessory(unit,event,true)>=0
+    type[1]='Accessory'
+  elsif find_item_feh(unit,event,true)>=0
+    type[1]='Item'
+  elsif find_unit(unit,event)>=0
+    type[1]='Unit*'
+  elsif find_skill(unit,event)>=0
+    type[1]='Skill*'
+  elsif find_structure(unit,event).length>0
+    type[1]='Structure*'
+  elsif find_accessory(unit,event)>=0
+    type[1]='Accessory*'
+  elsif find_item_feh(unit,event)>=0
+    type[1]='Item*'
+  end
+  type[1]='Skill' if unit.downcase=='adult'
+  cck=nil
+  checkstr=normalize(newname)
+  if type.reject{|q| q != 'Alias'}.length<=0
+    type[0]='Alias' if type[0].include?('*')
+    type[1]='Alias' if type[1].include?('*') && type[0]!='Alias'
+  end
+  if type.reject{|q| q == 'Alias'}.length<=0
+    str="The alias system can cover:\n- Units\n- Skills (Weapons, Assists, Specials, Passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nNeither #{newname} nor #{unit} is any of the above."
+    err=true
+  elsif type.reject{|q| q != 'Alias'}.length<=0
+    x=['a','a']
+    x[0]='an' if ['item','accessory'].include?(type[0].downcase)
+    x[1]='an' if ['item','accessory'].include?(type[1].downcase)
+    str="#{newname} is #{x[0]} #{type[0].downcase}\n#{unit} is #{x[1]} #{type[1].downcase}"
+    err=true
+  end
+  if err
+    str=["#{str}\nPlease try again.","#{str}\nTrying to list aliases instead."][mode]
+    event.respond str if str.length>0
+    args=event.message.text.downcase.split(' ')
+    args.shift
+    list_unit_aliases(event,args,bot) if mode==1
+    return nil
+  end
+  if type[1]=='Alias' && type[0]!='Alias'
+    f="#{newname}"
+    newname="#{unit}"
+    unit="#{f}"
+    type=type.reverse.map{|q| q.gsub('*','')}
+  end
+  if type[0]=='Alias' && type[1].gsub('*','')=='Unit'
+    unt=@units[find_unit(unit,event)]
+    checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
+    cck=unt[12].split(', ')[1][0,1].downcase if unt[12].split(', ').length>1
+  elsif type[0]=='Alias' && type[1].gsub('*','')=='Skill'
+    unt=@skills[find_skill(unit,event)]
+    checkstr2=unt[0].gsub(' ','').downcase
+  elsif type[0]=='Alias' && type[1].gsub('*','')=='Structure'
+    unt=find_structure(unit,event)
+    if unt.is_a?(Array) && unt.length<=1
+      unt=@structures[unt[0]]
+      unt[0]="#{unt[0]} #{unt[1]}"
+    elsif unt.is_a?(Array)
+      unt=@structures[unt[0]]
+    else
+      unt=@structures[unt]
+    end
+    checkstr2="#{unt[0]}"
+  elsif type[0]=='Alias' && type[1].gsub('*','')=='Accessory'
+    unt=@accessories[find_accessory(unit,event)]
+    checkstr2="#{unt[0]}"
+  elsif type[0]=='Alias' && type[1].gsub('*','')=='Item'
+    unt=@itemus[find_item_feh(unit,event)]
+    checkstr2="#{unt[0]}"
+  end
+  logchn=386658080257212417
+  logchn=431862993194582036 if @shardizard==4
+  newname=newname.gsub('!','').gsub('(','').gsub(')','').gsub('_','')
+  srv=0
+  srv=event.server.id unless event.server.nil?
+  srv=modifier.to_i if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
+  srvname='PM with dev'
+  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
+  k=event.message.emoji
+  for i in 0...k.length
+    checkstr=checkstr.gsub("<:#{k[i].name}:#{k[i].id}>",k[i].name)
+  end
+  if type[1]=='Unit' && checkstr2.length<=1 && checkstr2 != cck && event.user.id != 167657750971547648
+    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nOne need look no farther than BLucina and BLyn to understand why single-letter alias differentiation is a bad idea."
+    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Single-letter differentiation.")
+    return nil
+  elsif !detect_multi_unit_alias(event,checkstr.downcase,checkstr.downcase,2).nil?
+    x=detect_multi_unit_alias(event,checkstr.downcase,checkstr.downcase,2)
+    if checkstr.downcase==x[0] || (!x[2].nil? && x[2].include?(checkstr.downcase))
+      event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nThis is a multi-unit alias."
+      bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Confusion prevention.")
+      return nil
+    end
+  elsif checkstr.downcase =~ /(7|t)+?h+?(o|0)+?(7|t)+?/
+    event.respond "That name has __***NOT***__ been added to #{unt[0]}'s aliases."
+    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Begone, alias.")
+    return nil
+  elsif checkstr.downcase =~ /n+?((i|1)+?|(e|3)+?)(b|g|8)+?(a|4|(e|3)+?r+?)+?/
+    event.respond "That name has __***NOT***__ been added to #{unt[0]}'s aliases."
+    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** >Censored< for #{unit}~~\n**Reason for rejection:** Begone, alias.")
+    return nil
+  end
+  newname=normalize(newname)
+  m=nil
+  m=[event.server.id] unless event.server.nil?
+  srv=0
+  srv=event.server.id unless event.server.nil?
+  srv=modifier.to_i if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
+  srvname='PM with dev'
+  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
+  if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
+    m=[modifier.to_i]
+    modifier=nil
+  end
+  chn=event.channel.id
+  chn=modifier2.to_i if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+  m=nil if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?
+  unit=unt[0]
+  double=false
+  for i in 0...@aliases.length
+    if @aliases[i][3].nil? || @aliases[i][0]!=type[1]
+    elsif @aliases[i][1].downcase==newname.downcase && @aliases[i][2].downcase==unit.downcase
+      if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?
+        @aliases[i][3]=nil
+        @aliases[i][4]=nil
+        @aliases[i].compact!
+        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.")
+        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit} - gone global.")
+        double=true
+      else
+        @aliases[i][3].push(srv)
+        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.")
+        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+        metadata_load()
+        bot.user(167657750971547648).pm("The alias **#{@aliases[i][1]}** for the #{type[1].downcase} **#{@aliases[i][2]}** is used in quite a few servers.  It might be time to make this global") if @aliases[i][3].length >= @server_data[0].inject(0){|sum,x| sum + x } / 20 && @aliases[i][4].nil?
+        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit} - gained a new server that supports it.")
+        double=true
+      end
+    end
+  end
+  unless double
+    @aliases.push([type[1].gsub('*',''),newname,unit,m].compact)
+    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
+    bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unit}*.\nPlease test to be sure that the alias stuck.")
+    event.respond "**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unit}*." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
+  end
+  @aliases.uniq!
+  nzzz=@aliases.map{|a| a}
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
+    for i in 0...nzzz.length
+      f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
+    end
+  }
+  nicknames_load()
+  nzzz=@aliases.reject{|q| q[0]!='Unit'}
+  nzzz2=@aliases.reject{|q| q[0]!='Skill'}
+  nzzz3=@aliases.reject{|q| q[0]!='Structure'}
+  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
+    bot.channel(logchn).send_message('Alias list saved.')
+    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
+      for i in 0...nzzz.length
+        f.puts "#{nzzz[i].to_s}"
+      end
+      for i in 0...nzzz2.length
+        f.puts "#{nzzz2[i].to_s}#{"\n" if i<nzzz2.length-1}"
+      end
+    }
+    bot.channel(logchn).send_message('Alias list has been backed up.')
+  end
+end
+
 def list_collapse(list,mode=0)
   list=list.uniq
   newlist=[]
