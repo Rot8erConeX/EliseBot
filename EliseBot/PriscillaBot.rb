@@ -152,7 +152,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
      'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics','legend',
-     'legends','legendarys','item','accessory','acc','accessorie'].uniq
+     'legends','legendarys','item','accessory','acc','accessorie','alias'].uniq
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -849,7 +849,7 @@ def make_stats_string(event,name,rarity,boon='',bane='',hm=@max_rarity_merge[1])
   for i in 0...hm[0]+1
     u=get_stats(event,name,40,rarity,i,boon,bane)
     u=['Kiran',0,0,0,0,0] if u[0]=='Kiran'
-    k="#{k}\n**#{i} merge#{'s' unless i==1}:** #{u[1]} / #{u[2]} / #{u[3]} / #{u[4]} / #{u[5]}  \u00B7  BST: #{u[1]+u[2]+u[3]+u[4]+u[5]}  \u00B7  Score: #{u2+rarity*5+i*2+90}" if i%5==0 || i==hm[1] || args.include?('full') || args.include?('merges')
+    k="#{k}\n**#{i} merge#{'s' unless i==1}:** #{u[1]} / #{u[2]} / #{u[3]} / #{u[4]} / #{u[5]}  \u200B  \u200B  BST: #{u[1]+u[2]+u[3]+u[4]+u[5]}  \u200B  \u200B  Score: #{u2+rarity*5+i*2+90}" if i%5==0 || i==hm[1] || args.include?('full') || args.include?('merges')
   end
   return k
 end
@@ -3905,7 +3905,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   end
   xtype=1
   xtype=6 if skillstoo && u40[0]!='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,transformed,wl,false,true)}\n<:HP_S:514712247503945739>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:514712247625580555>\u00A0\u00B7\u00A0<:DefenseS:514712247461871616>\u00A0\u00B7\u00A0<:ResistanceS:514712247574986752>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u00B7\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```#{mergetext}",xcolor,ftr,img,realflds,xtype)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(event,rarity,merges,summoner)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,transformed,wl,false,true)}\n\u200B\u00A0<:HP_S:514712247503945739>\u00A0\u200B\u00A0\u200B\u00A0#{atk}\u00A0\u200B\u00A0\u200B\u00A0<:SpeedS:514712247625580555>\u00A0\u200B\u00A0\u200B\u00A0<:DefenseS:514712247461871616>\u00A0\u200B\u00A0\u200B\u00A0<:ResistanceS:514712247574986752>\u00A0\u200B\u00A0\u200B\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u200B\u00A0\u200B\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```#{mergetext}",xcolor,ftr,img,realflds,xtype)
   if skillstoo && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
@@ -4453,7 +4453,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       emote='<:Red_Tome:443172811826003968>'
       moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
       emote=moji[0].mention unless moji.length<=0
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{emote} **Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{emote} **Weapon Type:** #{s} Magic (Red Tome)\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Blue Tome Users Only'
       s=find_base_skill(skill,event)
@@ -4466,7 +4466,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       emote='<:Blue_Tome:467112472394858508>'
       moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
       emote=moji[0].mention unless moji.length<=0
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{emote} **Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{emote} **Weapon Type:** #{s} Magic (Blue Tome)\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Green Tome Users Only'
       s=find_base_skill(skill,event)
@@ -4476,21 +4476,21 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       emote='<:Green_Tome:467122927666593822>'
       moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
       emote=moji[0].mention unless moji.length<=0
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{emote} **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{emote} **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Bow Users Only'
       effective.push('<:Icon_Move_Flier:443331186698354698>') unless skill[11].split(', ').include?('UnBow')
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}"
     elsif skill[5]=='Dagger Users Only'
       skill[7]=skill[7].split(' *** ')
       xfooter="Debuff is applied at end of combat if unit attacks, and lasts until the foes' next actions."
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dagger:443172811461230603> **Weapon Type:** Dagger\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dagger:443172811461230603> **Weapon Type:** Dagger\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}"
     elsif skill[5]=='Staff Users Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')} **Weapon Type:** Staff\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}"
     elsif skill[5]=='Dragons Only'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592> **Weapon Type:** Breath (Dragons)\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}"
     elsif skill[0]=='Adult (All)'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:532854442299752469> **Weapon Type:** Beast Damage\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}\n**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form."
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:532854442299752469> **Weapon Type:** Beast Damage\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}\n**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form."
       skzz=sklz.reject{|q| q[0]=='Adult (All)' || q[0][0,7]!='Adult ('}
       for i in 0...skzz.length
         m=skzz[i][5].split(', ')[1].split(' ').map{|q| q.gsub('s','')}.reject{|q| !['Infantry','Armor','Flier','Cavalry'].include?(q)}
@@ -4534,9 +4534,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{m[i]}"}
         movemoji="#{movemoji}#{moji[0].mention}" if moji.length>0
       end
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:532854442299752469> **Weapon Type:** Beast Damage\n#{movemoji} **Movement Type:** #{skill[5].split(', ')[1]}\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}\n**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form."
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Beast:532854442299752469> **Weapon Type:** Beast Damage\n#{movemoji} **Movement Type:** #{skill[5].split(', ')[1]}\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}\n**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form."
     elsif skill[0]=='Missiletainn'
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n\n__**Missiletainn (Dark)**__\n<:Red_Blade:443172811830198282> **Weapon Type:** Sword (Red Blade)\n**Might:** #{skill[2]+1}  \u00B7  **Range:** 1\n**Effect:** #{skill[7].split(' *** ')[0]}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Owain\n**Promotes from:** *Silver Sword*\n\n__**Missiletainn (Dusk)**__\n<:Light_Tome:499760605381787650> **Weapon Type:** Light Magic (Blue Tome)\n**Might:** #{skill[2]-1}  \u00B7  **Range:** 2"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n\n__**Missiletainn (Dark)**__\n<:Red_Blade:443172811830198282> **Weapon Type:** Sword (Red Blade)\n**Might:** #{skill[2]+1}  \u200B  \u200B  \u200B  **Range:** 1\n**Effect:** #{skill[7].split(' *** ')[0]}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Owain\n**Promotes from:** *Silver Sword*\n\n__**Missiletainn (Dusk)**__\n<:Light_Tome:499760605381787650> **Weapon Type:** Light Magic (Blue Tome)\n**Might:** #{skill[2]-1}  \u200B  \u200B  \u200B  **Range:** 2"
       skill[7]=skill[7].split(' *** ')[1]
     else
       s=skill[5]
@@ -4546,7 +4546,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       s='<:Green_Blade:467122927230386207> / Axe (Green Blade)' if s=='Axe'
       s='<:Summon_Gun:453639908968628229> / Summon Gun' if s=='Summon Gun'
       s="<:Gold_Unknown:443172811499110411> / #{s}" unless s.include?(' / ')
-      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}  \u00B7  **Range:** #{skill[3]}"
+      str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}"
     end
     for i in 0...lookout2.length
       effective.push(lookout2[i][3]) if skill[11].split(', ').include?(lookout2[i][0])
@@ -4554,16 +4554,16 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     str="#{str}\n**Effective against:** #{effective.join('')}" if effective.length>0 && skill[0]!='Mana Cat'
     if skill[7].is_a?(Array)
       if skill[7][1].nil?
-        str="#{str}\n**Debuff:**  \u00B7  *None*"
+        str="#{str}\n**Debuff:**  \u200B  \u200B  \u200B  *None*"
       else
         eff=skill[7][1].split(', ')
-        str="#{str}\n**Debuff:**  \u00B7  *Effect:* #{eff[0,eff.length-1].join(', ')}  \u00B7  *Affects:* #{eff[eff.length-1]}"
+        str="#{str}\n**Debuff:**  \u200B  \u200B  \u200B  *Effect:* #{eff[0,eff.length-1].join(', ')}  \u200B  \u200B  \u200B  *Affects:* #{eff[eff.length-1]}"
       end
       unless skill[7][2].nil?
         eff=skill[7][2].split(', ')
-        str="#{str}\n**Buff:**  \u00B7  *Effect:* #{eff[0,eff.length-1].join(', ')}  \u00B7  *Affects:* #{eff[eff.length-1]}"
+        str="#{str}\n**Buff:**  \u200B  \u200B  \u200B  *Effect:* #{eff[0,eff.length-1].join(', ')}  \u200B  \u200B  \u200B  *Affects:* #{eff[eff.length-1]}"
       end
-      str="#{str}\n**Additional Effect:**  \u00B7  #{skill[7][0]}" unless skill[7][0]=='-'
+      str="#{str}\n**Additional Effect:**  \u200B  \u200B  \u200B  #{skill[7][0]}" unless skill[7][0]=='-'
     elsif skill[0]=='Adult (All)'
     else
       str="#{str}\n**Effect:** #{skill[7]}" unless skill[7]=='-'
@@ -5218,14 +5218,14 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{find_effect_name(skill,event,2).gsub(' ','_').gsub('/','_')}.png"
         str="#{str} - #{find_effect_name(skill,event)}"
       end
-      str="#{str}\nMight: #{skill[2]+sttz[i][1]+k2[0]}  \u00B7  Range: #{skill[3]}"
-      str="#{str}  \u00B7  HP +#{sttz[i][0]+k2[1]}" if sttz[i][0]+k2[1]>0
+      str="#{str}\nMight: #{skill[2]+sttz[i][1]+k2[0]}  \u200B  \u200B  \u200B  Range: #{skill[3]}"
+      str="#{str}  \u200B  \u200B  \u200B  HP +#{sttz[i][0]+k2[1]}" if sttz[i][0]+k2[1]>0
       atk=mt[1]+k2[2]
       atk+=skill[12][10] if sttz[i][5]=="Effect"
-      str="#{str}  \u00B7  Attack #{'+' if atk>0}#{atk}" if atk != 0
-      str="#{str}  \u00B7  Speed #{'+' if skill[12][2]+sttz[i][2]+k2[3]>0}#{skill[12][2]+sttz[i][2]+k2[3]}" if skill[12][2]+sttz[i][2]+k2[3]!=0
-      str="#{str}  \u00B7  Defense #{'+' if skill[12][3]+sttz[i][3]+k2[4]>0}#{skill[12][3]+sttz[i][3]+k2[4]}" if skill[12][3]+sttz[i][3]+k2[4]!=0
-      str="#{str}  \u00B7  Resistance #{'+' if skill[12][4]+sttz[i][4]+k2[5]>0}#{skill[12][4]+sttz[i][4]+k2[5]}" if skill[12][4]+sttz[i][4]+k2[5]!=0
+      str="#{str}  \u200B  \u200B  \u200B  Attack #{'+' if atk>0}#{atk}" if atk != 0
+      str="#{str}  \u200B  \u200B  \u200B  Speed #{'+' if skill[12][2]+sttz[i][2]+k2[3]>0}#{skill[12][2]+sttz[i][2]+k2[3]}" if skill[12][2]+sttz[i][2]+k2[3]!=0
+      str="#{str}  \u200B  \u200B  \u200B  Defense #{'+' if skill[12][3]+sttz[i][3]+k2[4]>0}#{skill[12][3]+sttz[i][3]+k2[4]}" if skill[12][3]+sttz[i][3]+k2[4]!=0
+      str="#{str}  \u200B  \u200B  \u200B  Resistance #{'+' if skill[12][4]+sttz[i][4]+k2[5]>0}#{skill[12][4]+sttz[i][4]+k2[5]}" if skill[12][4]+sttz[i][4]+k2[5]!=0
       effective=[]
       effective.push('<:Icon_Move_Flier:443331186698354698>') if skill[5]=="Bow Users Only"
       for i2 in 0...lookout2.length
@@ -5236,7 +5236,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="#{str}\n*Effective against*: #{effective.join('')}" if effective.length>0
       unless debuff.nil?
         d=debuff.split(', ')
-        str="#{str}\n*Debuff*:  \u00B7  Effect: #{d[0,d.length-1].join(', ')}  \u00B7  Affects: #{d[d.length-1]}"
+        str="#{str}\n*Debuff*:  \u200B  \u200B  \u200B  Effect: #{d[0,d.length-1].join(', ')}  \u200B  \u200B  \u200B  Affects: #{d[d.length-1]}"
       end
       if outer_skill.nil? || !sttz[i][7].nil?
         str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{skill[7]}" unless skill[7]=='-'
@@ -5581,7 +5581,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
                   end
                 end
                 tmtmp2.compact!
-                sklz2[mmm][i]="#{sklz2[mmm][i]}<#{sklz2[mmm][i-1].split('<')[1].gsub("  \u00B7  ",'')}" if tmtmp2.length==0
+                sklz2[mmm][i]="#{sklz2[mmm][i]}<#{sklz2[mmm][i-1].split('<')[1].gsub("  \u200B  ",'')}" if tmtmp2.length==0
               elsif tmtmp.length==0
               elsif tmtmp[0]==@units[j][0] && tmtmp.length==1
                 sklz2[mmm][i]="#{sklz2[mmm][i]}<:Arena_Crown:490334177124810772>"
@@ -5601,7 +5601,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
                 moji="#{moji}#{@rarity_stars[i2]}"
               end
             end
-            sklz2[mmm][i]="#{sklz2[mmm][i]}  \u00B7  #{moji}" if moji.length>0
+            sklz2[mmm][i]="#{sklz2[mmm][i]}  \u200B  #{moji}" if moji.length>0
           end
         end
       end
@@ -8934,7 +8934,7 @@ def pick_random_unit(event,args,bot)
     end
   end
   uskl=uskl.map{|q| q[q.length-1]}
-  create_embed(event,"__**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],false,2)}**__","#{display_stars(event,5,0)}\n\n<:HP_S:514712247503945739>\u00A0\u00B7\u00A0#{atk}\u00A0\u00B7\u00A0<:SpeedS:514712247625580555>\u00A0\u00B7\u00A0<:DefenseS:514712247461871616>\u00A0\u00B7\u00A0<:ResistanceS:514712247574986752>\u00A0\u00B7\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,nil,img,[['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}"]])
+  create_embed(event,"__**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],false,2)}**__","#{display_stars(event,5,0)}\n\n<:HP_S:514712247503945739>\u00A0\u200B\u00A0\u200B\u00A0#{atk}\u00A0\u200B\u00A0\u200B\u00A0<:SpeedS:514712247625580555>\u00A0\u200B\u00A0\u200B\u00A0<:DefenseS:514712247461871616>\u00A0\u200B\u00A0\u200B\u00A0<:ResistanceS:514712247574986752>\u00A0\u200B\u00A0\u200B\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,nil,img,[['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}"]])
 end
 
 def spaceship_order(x)
@@ -12599,7 +12599,7 @@ bot.command([:bst, :BST]) do |event, *args|
       rstar=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4p10:448272714210476033>','<:Icon_Rarity_5p10:448272715099406336>','<:Icon_Rarity_6p10:491487784822112256>'][r[0]-1] if r[1]>=10
       rstar='<:Icon_Rarity_S:448266418035621888>' unless sup=='-'
       rstar='<:Icon_Rarity_Sp10:448272715653054485>' if sup != '-' && r[1]>=10
-      msg=extend_message(msg,"Unit #{u}: #{r[0]}#{rstar} #{name.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,name,m)} +#{r[1]} #{"(+#{r[2]}, -#{r[3]})" if !['',' '].include?(r[2]) || !['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}  \u00B7  BST: #{b[b.length-1]}  \u00B7  Score: #{scr[scr.length-1]}+`SP`/100",event)
+      msg=extend_message(msg,"Unit #{u}: #{r[0]}#{rstar} #{name.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,name,m)} +#{r[1]} #{"(+#{r[2]}, -#{r[3]})" if !['',' '].include?(r[2]) || !['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}  \u200B  \u200B  BST: #{b[b.length-1]}  \u200B  \u200B  Score: #{scr[scr.length-1]}+`SP`/100",event)
     end
   end
   event.channel.send_temporary_message("#{event.user.mention} Units found, calculating BST and arena score...",8)
@@ -13147,217 +13147,25 @@ end
 
 bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   return nil if overlap_prevent(event)
-  data_load()
-  nicknames_load()
-  if newname.nil? || unit.nil?
-    event.respond 'You must specify both a new alias and a unit/skill to give the alias to.'
-    return nil
-  elsif event.user.id != 167657750971547648 && event.server.nil?
-    event.respond 'Only my developer is allowed to use this command in PM.'
-    return nil
-  elsif !is_mod?(event.user,event.server,event.channel) && ![368976843883151362,195303206933233665].include?(event.user.id)
-    event.respond 'You are not a mod.'
-    return nil
-  elsif newname.include?('"') || newname.include?("\n")
-    event.respond 'Full stop.  " is not allowed in an alias.'
-    return nil
-  elsif !event.server.nil? && event.server.id==363917126978764801
-    event.respond "You guys revoked your permission to add aliases when you refused to listen to me regarding the Erk alias for Serra."
-    return nil
+  t=Time.now
+  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+    puts 'reloading EliseMulti1'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+    @last_multi_reload[0]=t
   end
-  type=['Alias','Alias']
-  if find_unit(newname,event,true)>=0
-    type[0]='Unit'
-  elsif find_skill(newname,event,true)>=0
-    type[0]='Skill'
-  elsif find_structure(newname,event,true).length>0
-    type[0]='Structure'
-  elsif find_accessory(newname,event,true)>=0
-    type[0]='Accessory'
-  elsif find_item_feh(newname,event,true)>=0
-    type[0]='Item'
-  elsif find_unit(newname,event)>=0
-    type[0]='Unit*'
-  elsif find_skill(newname,event)>=0
-    type[0]='Skill*'
-  elsif find_structure(newname,event).length>0
-    type[0]='Structure*'
-  elsif find_accessory(newname,event)>=0
-    type[0]='Accessory*'
-  elsif find_item_feh(newname,event)>=0
-    type[0]='Item*'
+  add_new_alias(bot,event,newname,unit,modifier,modifier2)
+  return nil
+end
+
+bot.command(:alias) do |event, newname, unit, modifier, modifier2|
+  return nil if overlap_prevent(event)
+  t=Time.now
+  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+    puts 'reloading EliseMulti1'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+    @last_multi_reload[0]=t
   end
-  type[0]='Skill' if newname.downcase=='adult'
-  if find_unit(unit,event,true)>=0
-    type[1]='Unit'
-  elsif find_skill(unit,event,true)>=0
-    type[1]='Skill'
-  elsif find_structure(unit,event,true).length>0
-    type[1]='Structure'
-  elsif find_accessory(unit,event,true)>=0
-    type[1]='Accessory'
-  elsif find_item_feh(unit,event,true)>=0
-    type[1]='Item'
-  elsif find_unit(unit,event)>=0
-    type[1]='Unit*'
-  elsif find_skill(unit,event)>=0
-    type[1]='Skill*'
-  elsif find_structure(unit,event).length>0
-    type[1]='Structure*'
-  elsif find_accessory(unit,event)>=0
-    type[1]='Accessory*'
-  elsif find_item_feh(unit,event)>=0
-    type[1]='Item*'
-  end
-  type[1]='Skill' if unit.downcase=='adult'
-  cck=nil
-  checkstr=normalize(newname)
-  if type.reject{|q| q != 'Alias'}.length<=0
-    type[0]='Alias' if type[0].include?('*')
-    type[1]='Alias' if type[1].include?('*') && type[0]!='Alias'
-  end
-  if type.reject{|q| q == 'Alias'}.length<=0
-    event.respond "Neither #{newname} nor #{unit} is a pre-defined unit/skill/alias.  Please try again."
-    return nil
-  elsif type.reject{|q| q != 'Alias'}.length<=0
-    x=['a','a']
-    x[0]='an' if ['item','accessory'].include?(type[0].downcase)
-    x[1]='an' if ['item','accessory'].include?(type[1].downcase)
-    event.respond "#{newname} is #{x[0]} #{type[0].downcase}\n#{unit} is #{x[1]} #{type[1].downcase}\nPlease try again."
-    return nil
-  end
-  if type[1]=='Alias' && type[0]!='Alias'
-    f="#{newname}"
-    newname="#{unit}"
-    unit="#{f}"
-    type=type.reverse.map{|q| q.gsub('*','')}
-  end
-  if type[0]=='Alias' && type[1].gsub('*','')=='Unit'
-    unt=@units[find_unit(unit,event)]
-    checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
-    cck=unt[12].split(', ')[1][0,1].downcase if unt[12].split(', ').length>1
-  elsif type[0]=='Alias' && type[1].gsub('*','')=='Skill'
-    unt=@skills[find_skill(unit,event)]
-    checkstr2=unt[0].gsub(' ','').downcase
-  elsif type[0]=='Alias' && type[1].gsub('*','')=='Structure'
-    unt=find_structure(unit,event)
-    if unt.is_a?(Array) && unt.length<=1
-      unt=@structures[unt[0]]
-      unt[0]="#{unt[0]} #{unt[1]}"
-    elsif unt.is_a?(Array)
-      unt=@structures[unt[0]]
-    else
-      unt=@structures[unt]
-    end
-    checkstr2="#{unt[0]}"
-  elsif type[0]=='Alias' && type[1].gsub('*','')=='Accessory'
-    unt=@accessories[find_accessory(unit,event)]
-    checkstr2="#{unt[0]}"
-  elsif type[0]=='Alias' && type[1].gsub('*','')=='Item'
-    unt=@itemus[find_item_feh(unit,event)]
-    checkstr2="#{unt[0]}"
-  end
-  logchn=386658080257212417
-  logchn=431862993194582036 if @shardizard==4
-  newname=newname.gsub('!','').gsub('(','').gsub(')','').gsub('_','')
-  srv=0
-  srv=event.server.id unless event.server.nil?
-  srv=modifier.to_i if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
-  srvname='PM with dev'
-  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
-  k=event.message.emoji
-  for i in 0...k.length
-    checkstr=checkstr.gsub("<:#{k[i].name}:#{k[i].id}>",k[i].name)
-  end
-  if type[1]=='Unit' && checkstr2.length<=1 && checkstr2 != cck && event.user.id != 167657750971547648
-    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nOne need look no farther than BLucina and BLyn to understand why single-letter alias differentiation is a bad idea."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Single-letter differentiation.")
-    return nil
-  elsif !detect_multi_unit_alias(event,checkstr.downcase,checkstr.downcase,2).nil?
-    x=detect_multi_unit_alias(event,checkstr.downcase,checkstr.downcase,2)
-    if checkstr.downcase==x[0] || (!x[2].nil? && x[2].include?(checkstr.downcase))
-      event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nThis is a multi-unit alias."
-      bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Confusion prevention.")
-      return nil
-    end
-  elsif checkstr.downcase =~ /(7|t)+?h+?(o|0)+?(7|t)+?/
-    event.respond "That name has __***NOT***__ been added to #{unt[0]}'s aliases."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Begone, alias.")
-    return nil
-  elsif checkstr.downcase =~ /n+?((i|1)+?|(e|3)+?)(b|g|8)+?(a|4|(e|3)+?r+?)+?/
-    event.respond "That name has __***NOT***__ been added to #{unt[0]}'s aliases."
-    bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** >Censored< for #{unit}~~\n**Reason for rejection:** Begone, alias.")
-    return nil
-  end
-  newname=normalize(newname)
-  m=nil
-  m=[event.server.id] unless event.server.nil?
-  srv=0
-  srv=event.server.id unless event.server.nil?
-  srv=modifier.to_i if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
-  srvname='PM with dev'
-  srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
-  if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
-    m=[modifier.to_i]
-    modifier=nil
-  end
-  chn=event.channel.id
-  chn=modifier2.to_i if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-  m=nil if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?
-  unit=unt[0]
-  double=false
-  for i in 0...@aliases.length
-    if @aliases[i][3].nil? || @aliases[i][0]!=type[1]
-    elsif @aliases[i][1].downcase==newname.downcase && @aliases[i][2].downcase==unit.downcase
-      if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?
-        @aliases[i][3]=nil
-        @aliases[i][4]=nil
-        @aliases[i].compact!
-        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.")
-        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit} - gone global.")
-        double=true
-      else
-        @aliases[i][3].push(srv)
-        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.")
-        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-        metadata_load()
-        bot.user(167657750971547648).pm("The alias **#{@aliases[i][1]}** for the #{type[1].downcase} **#{@aliases[i][2]}** is used in quite a few servers.  It might be time to make this global") if @aliases[i][3].length >= @server_data[0].inject(0){|sum,x| sum + x } / 20 && @aliases[i][4].nil?
-        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit} - gained a new server that supports it.")
-        double=true
-      end
-    end
-  end
-  unless double
-    @aliases.push([type[1].gsub('*',''),newname,unit,m].compact)
-    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-    bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unit}*.\nPlease test to be sure that the alias stuck.")
-    event.respond "**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unit}*." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
-  end
-  @aliases.uniq!
-  nzzz=@aliases.map{|a| a}
-  open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
-    for i in 0...nzzz.length
-      f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
-    end
-  }
-  nicknames_load()
-  nzzz=@aliases.reject{|q| q[0]!='Unit'}
-  nzzz2=@aliases.reject{|q| q[0]!='Skill'}
-  nzzz3=@aliases.reject{|q| q[0]!='Structure'}
-  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
-    bot.channel(logchn).send_message('Alias list saved.')
-    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
-      for i in 0...nzzz.length
-        f.puts "#{nzzz[i].to_s}"
-      end
-      for i in 0...nzzz2.length
-        f.puts "#{nzzz2[i].to_s}#{"\n" if i<nzzz2.length-1}"
-      end
-    }
-    bot.channel(logchn).send_message('Alias list has been backed up.')
-  end
+  add_new_alias(bot,event,newname,unit,modifier,modifier2,1)
   return nil
 end
 
@@ -13375,6 +13183,12 @@ end
 
 bot.command([:serveraliases,:saliases]) do |event, *args|
   return nil if overlap_prevent(event)
+  t=Time.now
+  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+    puts 'reloading EliseMulti1'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+    @last_multi_reload[0]=t
+  end
   list_unit_aliases(event,args,bot,1)
   return nil
 end
