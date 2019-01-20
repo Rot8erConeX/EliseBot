@@ -13,7 +13,9 @@ Cavalry School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-
 Cavalry School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\150, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\250, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\350, 0, 0\0\Only one school can be placed at a time.
-Escape Ladder\-\Offensive\Restores Aether cost of one failed battle per season.  (If battle was the first battle of a day, next battle is also free)\No\100, 0, 0\0
+Escape Ladder\1\Offensive\Restores Aether cost of one failed battle per season.  (If battle was the first battle of a day, next battle is also free)\No\100, 0, 0\0
+Escape Ladder\2\Offensive\Restores Aether cost of two failed battles per season.  (If battle was the first battle of a day, next battle is also free)\No\300, 0, 0\0
+Escape Ladder\3\Offensive\Restores Aether cost of three failed battles per season.  (If battle was the first battle of a day, next battle is also free)\No\500, 0, 0\0
 Flier School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on flying foes within 3 columns centered on structure through their next actions.\Yes\50, 0, 0\0\Only one school can be placed at a time.
 Flier School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on flying foes within 3 columns centered on structure through their next actions.\Yes\150, 0, 0\0\Only one school can be placed at a time.
 Flier School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on flying foes within 3 columns centered on structure through their next actions.\Yes\250, 0, 0\0\Only one school can be placed at a time.

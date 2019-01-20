@@ -1156,7 +1156,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   end
   type[1]='Skill' if unit.downcase=='adult'
   cck=nil
-  checkstr=normalize(newname)
+  checkstr=normalize(newname.gsub('!','').gsub('(','').gsub(')','').gsub('_',''))
   if type.reject{|q| q != 'Alias'}.length<=0
     type[0]='Alias' if type[0].include?('*')
     type[1]='Alias' if type[1].include?('*') && type[0]!='Alias'

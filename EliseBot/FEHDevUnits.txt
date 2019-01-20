@@ -172,6 +172,16 @@ Chilling Seal
 Res Ploy 1\Res Ploy 2\Res Ploy 3
 Darting Stance 2
 
+Gunnthra(Winter)
+5\0\Resistance\Speed\-
+Iron Sword\Steel Sword\Silver Sword\Hikami
+Reposition
+Night Sky\Glimmer
+Darting Blow 1\Swift Sparrow 1\Swift Sparrow 2
+Desperation 1\Desperation 2\Desperation 3
+Hone Spd 1\Hone Spd 2\Hone Spd 3\Joint Hone Spd
+Spd Ploy 2
+
 Kana(F)
 5\0\Attack\Defense\-
 Fire Breath\Fire Breath+\Lightning Breath\Lightning Breath+\Lightning Breath (+) Resistance Mode
