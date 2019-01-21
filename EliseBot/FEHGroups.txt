@@ -2,6 +2,7 @@
 ["Askr", ["Anna", "Alfonse", "Sharena", "Gustaf", "Henriette", "Lif"]]
 ["BadUnits", ["Takumi", "Catria(Spring)", "Robin(F)(Fallen)", "Gray", "Kliff"], [372323006082449409]]
 ["Bannerless", []]
+["Bathing", []]
 ["BestArmors", ["Zelgius", "Ephraim(Brave)", "Jakob(Halloween)", "Tharja(Winter)", "Lyn(Valentines)", "Henry(Halloween)", "Myrrh(Halloween)", "Robin(M)(Winter)", "Tiki(Young)(Earth)"], [396028474621427713]]
 ["BestCavs", ["Chrom(Branded)", "Ephraim(Fire)", "Walhart", "Lyn(Brave)", "Linde(Summer)", "Eirika(Memories)", "L'Arachel", "Lilina(Valentines)", "Veronica(Brave)", "Olwen(World)"], [396028474621427713]]
 ["BestDancers", ["Azura(Performing)", "Micaiah(Festival)", "Olivia(Traveler)", "Wrys"], [396028474621427713]]

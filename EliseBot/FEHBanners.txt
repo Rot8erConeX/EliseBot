@@ -2,7 +2,7 @@
 Heroes with Link Skills\3\-\5\01/02/2019, 14/02/2019\SkillBanner
 Mythic Heroes: >Unknown<\-8\Eirika(Graceful), Ike(Vanguard), Lyn(Wind), Tiki(Young)(Earth)\5\30/01/2019, 05/02/2019\Legendary
 Elincia & Nephenee's Battle\3\Elincia, Nephenee\5\27/01/2019, 03/02/2019\BHB
->Special Heroes: Unknown<\3\-\5\23/01/2019, 22/02/2019\Seasonal
+Hostile Springs\3\Elise(Bath), Hinoka(Bath), Ryoma(Bath), Sakura(Bath)\5\23/01/2019, 22/02/2019\Seasonal
 New Power (January 2019)\3\Deirdre, Julia, Seliph, Tailtiu\5\20/01/2019, 21/01/2019\NewPower
 Heroes with Sword Valor\3\Chrom(Branded), Gray, Lene\5\13/01/2019, 19/01/2019\SkillBanner
 Rulers of the Laguz\3\Leanne, Nailah, Reyson, Tibarn\5\11/01/2019, 29/01/2019
@@ -96,7 +96,7 @@ World of Thracia\3\Leif, Nanna, Olwen(World), Reinhardt(World)\5\11/04/2018, 24/
 Tiki & Nowi's Battle\3\Nowi, Robin(M)(Fallen), Tiki(Adult)\5\10/04/2018, 17/04/2018\BHB
 Cooldown Bonuses\3\Ike(Brave), Mia, Nephenee\5\07/04/2018, 22/04/2018\SkillBanner
 4 Star and 5 Star Heroes, April 2018\3\Abel, Cain, Camilla(Launch), Fae, Felicia, Hinata, Jeorge, Klein, L'Arachel, Nino(Launch), Soleil, Tailtiu\54\03/04/2018, 17/04/2018\4Star
-Spring Festival (April 2018 revival)\3\Camilla(Spring), Chrom(Spring), Lucina(Spring), Xander(Spring)\5\31/03/2018, 10/04/2018\Seasonal, Spring, VotingGauntlet
+Spring Festival (April 2018 revival)\3\Camilla(Bunny), Chrom(Spring), Lucina(Spring), Xander(Spring)\5\31/03/2018, 10/04/2018\Seasonal, Spring, VotingGauntlet
 Legendary Heroes - Robin Fell Vessel\-8\Elise(Summer), Fjorm, Gunnthra, Ike, Lucina(Brave), Lute, Lyn(Brave), Nowi(Halloween), Robin(F)(Fallen), Sakura(Halloween), Tiki(Adult)(Summer), Zelgius\5\29/03/2018, 03/04/2018\Legendary
 Heroes with Miracle\3\Delthea, Mist, Sigurd\5\28/03/2018, 07/04/2018\SkillBanner
 Hares at the Fair\3\Alfonse(Spring), Catria(Spring), Kagero(Spring), Sharena(Spring)\5\22/03/2018, 23/04/2018\Seasonal, Spring
@@ -133,7 +133,7 @@ Weapons to Refine (New Power, November 2017)\3\Ephraim, Lyn, Takumi\5\07/12/2017
 Children of Fate\3\Shiro, Siegbert, Soleil\5\04/12/2017, 18/12/2017
 Unrequited Love, Block A\3\Faye, Priscilla, Rhajat, Tharja\5\02/12/2017, 12/12/2017\VotingGauntler
 Unrequited Love, Block B\3\Catria, Dorcas, Katarina, Sigurd\5\02/12/2017, 12/12/2017\VotingGauntler
-Legendary Heroes - Fjorm\-8\Ayra, Caeda(Bride), Camilla(Spring), Celica, Cordelia(Bride), Deirdre, Fjorm, Genny, Hector, Ike, Lyn(Brave), Xander(Spring)\5\28/11/2017, 04/12/2017\Legendary
+Legendary Heroes - Fjorm\-8\Ayra, Caeda(Bride), Camilla(Bunny), Celica, Cordelia(Bride), Deirdre, Fjorm, Genny, Hector, Ike, Lyn(Brave), Xander(Spring)\5\28/11/2017, 04/12/2017\Legendary
 Heroes with Powerful Specials\3\Karel, Nephenee, Sonya\5\23/11/2017, 07/12/2017\SkillBanner
 "Less Than Heroic" Tempest Trials\3\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5\18/11/2017, 05/12/2017\Tempest, CYL
 Takumi and Hinoka's Battle\3\Hinoka(Launch), Sakura, Takumi\5\16/11/2017, 24/11/2017\BHB
@@ -196,7 +196,7 @@ World of Shadows\3\Alm, Clair, Faye, Lukas\5\14/04/2017, 26/04/2017
 Battling Navarre\3\Caeda, Effie, Kagero, Sophia\5\04/04/2017, 09/04/2017\GHB
 Pegasus Knights\3\Cordelia, Hinoka(Launch), Subaki, Palla\5\03/04/2017, 11/04/2017\VotingGauntlet
 Wyvern Riders\3\Beruka, Camilla(Launch), Cherche, Minerva\5\03/04/2017, 11/04/2017\VotingGauntlet
-Spring Festival\3\Camilla(Spring), Chrom(Spring), Lucina(Spring), Xander(Spring)\5\30/03/2017, 14/04/2017\Seasonal, Spring
+Spring Festival\3\Camilla(Bunny), Chrom(Spring), Lucina(Spring), Xander(Spring)\5\30/03/2017, 14/04/2017\Seasonal, Spring
 Battling Michalis\3\Eliwood, Gordin, Minerva, Selena(Fates)\5\24/03/2017, 28/03/2017\GHB
 Blazing Shadows\3\Jaffar, Karel, Lucius, Ninian, Priscilla, Rebecca\5\14/03/2017, 30/03/2017
 Battling Ursula\3\Effie, Felicia, Nino(Launch), Setsuna\5\10/03/2017, 14/03/2017\GHB

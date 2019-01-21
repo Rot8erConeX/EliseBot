@@ -203,12 +203,16 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
       return [str,['Camilla(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch"]]
-    elsif str2.include?('bunny') || str2.include?('spring') || str2.include?('easter') || str2.include?('sf')
-      return [str,['Camilla(Spring)'],["bunny#{str}","#{str}bunny","spring#{str}","#{str}spring","easter#{str}","#{str}easter","sf#{str}","#{str}sf"]]
+    elsif str2.include?('bunny') || str2.include?('easter') || str2.include?('sf')
+      return [str,['Camilla(Bunny)'],["bunny#{str}","#{str}bunny","easter#{str}","#{str}easter","sf#{str}","#{str}sf"]]
+    elsif str2.include?('bath') || str2.include?('bathhouse') || str2.include?('bathouse') || str2.include?('hotspring') || str2.include?('hot')
+      return [str,['Camilla(Bath)'],["bath#{str}","#{str}bath","bathhouse#{str}","#{str}bathhouse","bathouse#{str}","#{str}bathouse","hotspring#{str}","#{str}hotspring","hot#{str}","#{str}hot"]]
     elsif str2.include?('winter') || str2.include?('newyear') || str2.include?('holiday') || str2.include?('ny')
       return [str,['Camilla(Winter)'],["winter#{str}","#{str}winter","newyear#{str}","#{str}newyear","holiday#{str}","#{str}holiday","ny#{str}","#{str}ny"]]
     elsif str2.include?('adrift') || str2.include?('dream') || str2.include?('valla') || str2.include?('vallite') || str2.include?('dreamy') || str2.include?('dreamer') || str2.include?('dreaming') || str2.include?('dreams') || str2.include?('fauxzura') || str2.include?('fauxura') || str2.include?('revelation') || str2.include?('rev') || str2.include?('sleepy') || str2.include?('sleep')
       return [str,['Camilla(Adrift)'],["adrift#{str}","#{str}adrift","dream#{str}","#{str}dream","valla#{str}","#{str}valla","vallite#{str}","#{str}vallite","dreamy#{str}","#{str}dreamy","dreamer#{str}","#{str}dreamer","dreaming#{str}","#{str}dreaming","dreams#{str}","#{str}dreams","fauxzura#{str}","#{str}fauxzura","fauxura#{str}","#{str}fauxura","revelation#{str}","#{str}revelation","revelations#{str}","#{str}revelations","rev#{str}","#{str}rev","#{str}sleepy","#{str}sleep","sleepy#{str}","sleep#{str}"]]
+    elsif str2.include?('spring')
+      return [str,['Camilla(Bunny)','Camilla(Bath)'],["spring#{str}","#{str}spring","b#{str}","#{str}b"]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Camilla(Launch)','Camilla(Adrift)'],[str]]
@@ -252,6 +256,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Hinoka(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch"]]
     elsif str2.include?('wings') || str2.include?('kinshi') || str2.include?('winged') || str2.include?("#{str}2")
       return [str,['Hinoka(Wings)'],["wings#{str}","#{str}wings","kinshi#{str}","#{str}kinshi","winged#{str}","#{str}winged","#{str}2"]]
+    elsif str2.include?('bath') || str2.include?('bathhouse') || str2.include?('bathouse') || str2.include?('hotspring') || str2.include?('hot') || str2.include?('spring')
+      return [str,['Hinoka(Bath)'],["bath#{str}","#{str}bath","bathhouse#{str}","#{str}bathhouse","bathouse#{str}","#{str}bathouse","hotspring#{str}","#{str}hotspring","hot#{str}","#{str}hot","spring#{str}","#{str}spring"]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Hinoka(Launch)','Hinoka(Wings)'],[str]]
@@ -1223,7 +1229,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     checkstr=checkstr.gsub("<:#{k[i].name}:#{k[i].id}>",k[i].name)
   end
   if type[1]=='Unit' && checkstr2.length<=1 && checkstr2 != cck && event.user.id != 167657750971547648
-    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nOne need look no farther than BLucina and BLyn to understand why single-letter alias differentiation is a bad idea."
+    event.respond "#{newname} has __***NOT***__ been added to #{unt[0]}'s aliases.\nOne need look no farther than BLucina, BLyn, BCamilla, or SCamilla to understand why single-letter alias differentiation is a bad idea."
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Single-letter differentiation.")
     return nil
   elsif !detect_multi_unit_alias(event,checkstr.downcase,checkstr.downcase,2).nil?
@@ -1299,6 +1305,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   nzzz=@aliases.reject{|q| q[0]!='Unit'}
   nzzz2=@aliases.reject{|q| q[0]!='Skill'}
   nzzz3=@aliases.reject{|q| q[0]!='Structure'}
+  nzzz4=@aliases.reject{|q| ['Unit','Skill','Structure'].include?(q[0])}
   if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
     bot.channel(logchn).send_message('Alias list saved.')
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
@@ -1307,6 +1314,12 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
       end
       for i in 0...nzzz2.length
         f.puts "#{nzzz2[i].to_s}#{"\n" if i<nzzz2.length-1}"
+      end
+      for i in 0...nzzz3.length
+        f.puts "#{nzzz3[i].to_s}#{"\n" if i<nzzz3.length-1}"
+      end
+      for i in 0...nzzz4.length
+        f.puts "#{nzzz4[i].to_s}#{"\n" if i<nzzz4.length-1}"
       end
     }
     bot.channel(logchn).send_message('Alias list has been backed up.')
