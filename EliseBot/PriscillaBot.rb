@@ -1475,6 +1475,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='Winter' if ['winter','holiday'].include?(name.downcase)
   name='WorseThanLiki' if ['worsethanliki','liki'].include?(name.downcase)
   name='Bunnies' if ['bunnies','bunny','spring'].include?(name.downcase)
+  name='Bathing' if ['bathers','bathhouse','bathouse','bath','bathing'].include?(name.downcase)
   name="Valentine's" if ['valentines',"valentine's"].include?(name.downcase)
   name="NewYear's" if ['newyears',"newyear's",'newyear'].include?(name.downcase)
   name='Wedding' if ['brides','grooms','bride','groom','wedding'].include?(name.downcase)
@@ -6002,8 +6003,11 @@ def get_group(name,event)
   elsif ['valentines',"valentine's"].include?(name.downcase)
     l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Valentines)')}
     return ["Valentine's",l.map{|q| q[0]}]
+  elsif ['Bathing'].include?(name.downcase)
+    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Bath)')}
+    return ['Bathing',l.map{|q| q[0]}]
   elsif ['bunnies'].include?(name.downcase)
-    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Spring)')}
+    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || (!q[0].include?('(Spring)') && !q[0].include?('(Bunny)'))}
     return ['Bunnies',l.map{|q| q[0]}]
   elsif ['wedding','bride','brides','groom','grooms'].include?(name.downcase)
     l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !(q[0].include?('(Bride)') || q[0].include?('(Groom)'))}
@@ -13275,8 +13279,9 @@ bot.command([:deletealias,:removealias]) do |event, name|
   nzzz=@aliases.reject{|q| q[0]!='Unit'}
   nzzz2=@aliases.reject{|q| q[0]!='Skill'}
   nzzz3=@aliases.reject{|q| q[0]!='Structure'}
+  nzzz4=@aliases.reject{|q| ['Unit','Skill','Structure'].include?(q[0])}
   if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
-    bot.channel(logchn).send_message("Alias list saved.")
+    bot.channel(logchn).send_message('Alias list saved.')
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...nzzz.length
         f.puts "#{nzzz[i].to_s}"
@@ -13284,8 +13289,14 @@ bot.command([:deletealias,:removealias]) do |event, name|
       for i in 0...nzzz2.length
         f.puts "#{nzzz2[i].to_s}#{"\n" if i<nzzz2.length-1}"
       end
+      for i in 0...nzzz3.length
+        f.puts "#{nzzz3[i].to_s}#{"\n" if i<nzzz3.length-1}"
+      end
+      for i in 0...nzzz4.length
+        f.puts "#{nzzz4[i].to_s}#{"\n" if i<nzzz4.length-1}"
+      end
     }
-    bot.channel(logchn).send_message("Alias list has been backed up.")
+    bot.channel(logchn).send_message('Alias list has been backed up.')
   end
   return nil
 end
