@@ -152,7 +152,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
      'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics','legend',
-     'legends','legendarys','item','accessory','acc','accessorie','alias'].uniq
+     'legends','legendarys','item','accessory','acc','accessorie','alias','s2s'].uniq
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -313,6 +313,7 @@ def nicknames_load() # loads the nickname list
     nzzzzz=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Unit'}.uniq
     nzzzzz2=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Skill'}.uniq
     nzzzzz3=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Structure'}.uniq
+    nzzzzz4=b.reject{|q| q.nil? || q[2].nil? || ['Unit','Skill','Structure'].include?(q[0])}.uniq
     if nzzzzz[nzzzzz.length-1][2]<'Zephiel' || nzzzzz2[nzzzzz2.length-1][2]<'Yato' || nzzzzz3[nzzzzz3.length-1][2]<'Armor School'
       puts 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
@@ -333,6 +334,12 @@ def nicknames_load() # loads the nickname list
       end
       for i in 0...nzzzzz2.length
         f.puts "#{nzzzzz2[i].to_s}#{"\n" if i<nzzzzz2.length-1}"
+      end
+      for i in 0...nzzzzz3.length
+        f.puts "#{nzzzzz3[i].to_s}#{"\n" if i<nzzzzz3.length-1}"
+      end
+      for i in 0...nzzzzz4.length
+        f.puts "#{nzzzzz4[i].to_s}#{"\n" if i<nzzzzz4.length-1}"
       end
     }
     puts 'Alias list has been restored from backup.'
