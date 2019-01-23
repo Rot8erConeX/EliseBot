@@ -1,10 +1,9 @@
-Eir, Ephraim(Winter), Eirika(Winter), Fae(Winter), Cecilia(Winter), Xander, Lloyd, Gunter, Robin(F)(Fallen), Alfonse\Aether\07/01/2019, 14/01/2019\Light, Dark\Flier School, Flier School
-Azura(Vallite), Fjorm(Winter), Gunnthra(Winter), Hrid(Winter), Lavatain(Winter), Laegjarn(Winter), Linus, Berkut, Raigh, Sharena\Arena\08/01/2019, 14/01/2019\Water, Earth
-Eir, Fjorm(Winter), Gunnthra(Winter), Hrid(Winter), Lavatain(Winter), Laegjarn(Winter), Camus, Marth(Masked), Lyn(Wind), Sharena\Aether\15/01/2019, 21/01/2019\Astra, Anima\Bolt Tower, Bolt Tower
-Azura(Vallite), Fjorm(Winter), Gunnthra(Winter), Hrid(Winter), Lavatain(Winter), Laegjarn(Winter), Linus, Berkut, Raigh, Sharena\Arena\15/01/2019, 21/01/2019\Water, Wind
-Eir, Fjorm(Winter), Gunnthra(Winter), Hrid(Winter), Lavatain(Winter), Laegjarn(Winter), Camus, Marth(Masked), Lyn(Wind), Sharena\Aether\22/01/2019, 28/01/2019\Light, Dark\Unknown, Unknown
+Eir, Fjorm(Winter), Gunnthra(Winter), Hrid(Winter), Lavatain(Winter), Laegjarn(Winter), Camus, Marth(Masked), Lyn(Wind), Sharena\Aether\22/01/2019, 28/01/2019\Light, Dark\Tactics Room, Tactics Room
 Tibarn, Reyson, Leanne, Nailah, Naesala, Lloyd, Athena, Beruka, Niles, Anna\Arena\22/01/2019, 28/01/2019\Water, Fire
+Ryoma(Bath), Hinoka(Bath), Sakura(Bath), Elise(Bath), Camilla(Bath), Xander, Takumi, Leo\Tempest\26/01/2019, 04/02/2019
+Eir, Tibarn, Reyson, Leanne, Nailah, Naesala, Legion, Clarisse, Ryoma(Supreme), Anna\Aether\29/01/2019, 04/02/2019\Astra, Anima\Healing Tower, Healing Tower
 Tibarn, Reyson, Leanne, Nailah, Naesala, Lloyd, Athena, Beruka, Niles, Anna\Arena\29/01/2019, 04/02/2019\Water, Earth
+Eir, Tibarn, Reyson, Leanne, Nailah, Naesala, Legion, Clarisse, Ryoma(Supreme), Anna\Aether\11/02/2019, 11/02/2019\Light, Dark\Panic Manor, Panic Manor
 -\Arena\05/02/2019, 11/02/2019\Wind, Water
 -\Arena\12/02/2019, 18/02/2019\Wind, Fire
 -\Arena\19/02/2019, 25/02/2019\Wind, Earth
