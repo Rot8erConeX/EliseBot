@@ -203,6 +203,15 @@ end
 def avg_color(c,mode=0)
   m=[0,0,0]
   for i in 0...c.length
+    unless c[i].is_a?(Array)
+      x=1*c[i]
+      c[i]=[]
+      c[i].push(x/(256*256))
+      x=x % (256*256)
+      c[i].push(x/256)
+      x=x%256
+      c[i].push(x)
+    end
     m[0]+=c[i][0]
     m[1]+=c[i][1]
     m[2]+=c[i][2]
