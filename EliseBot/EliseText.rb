@@ -172,7 +172,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s aliases.\nIf no name is listed, responds with a list of all aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
   elsif ['saliases','serveraliases'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s server-specific aliases.\nIf no name is listed, responds with a list of all server-specific aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
-  elsif ['daily','today','todayinfeh','today_in_feh'].include?(command.downcase)
+  elsif ['daily','dailies','today','todayinfeh','today_in_feh','now'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Shows the day's in-game daily events.\nIf in PM, will also show tomorrow's.",0xD49F61)
   elsif ['next','schedule'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nBonus",0xD49F61)
@@ -384,7 +384,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
     create_embed([event,x],"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit/Character Data**__\n\n`data` __unit__ - shows both stats and skills (*also `unit`*)\n`stats` __unit__ - shows only the stats\n`smolstats` __unit__ - shows ths stats in a condensed format (*also `tinystats` and `microstats`*)\n`skills` __unit__ - shows only the skills (*also `fodder`*)\n`study` __unit__ - for a study of the unit at multiple rarities and merges\n`effHP` __unit__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __unit__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`serveraliases` __unit__ - show server-specific aliases for the unit\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __unit__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`banners` __unit__ - for a list of banners the unit has been a focus unit on\n`art` __unit__ __art type__ - for the character's art\n`learnable` __unit__ - for a list of all learnable skills (*also `inheritable`*)\n\n`games` __character__ - for a list of games the character is in\n`alts` __character__ - for a list of all units this character has",0xD49F61)
     create_embed([event,x],"","__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`bonus` - used to list all Arena and TT bonus units (*also `arena` and `tt`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`structure` __structure name__ - used to show data on a specific Aether Raid structure\n`accessory` __accessory name__ - used to show data on a specific accessory\n`item` __item name__ - used to show data on a specific item\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
-    create_embed([event,x],"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`score` - for help understanding how Arena Score is calculated\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`daily` - shows the current day's in-game daily events (*also `today` or `todayInFEH`*)\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)\n\n__**Developer Information**__\n`avatar` - to see why my avatar is different from the norm\n\n`bugreport` __\\*message__ - to send my developer a bug report\n`suggestion` __\\*message__ - to send my developer a feature suggestion\n`feedback` __\\*message__ - to send my developer other kinds of feedback\n~~the above three commands are actually identical, merely given unique entries to help people find them~~\n\n`donation` (*also `donate`*) - for information on how to donate to my developer\n`whyelise` - for an explanation as to how Elise was chosen as the face of the bot\n`skillrarity` (*also `skill_rarity`*)\n`attackcolor` - for a reason for multiple Atk icons (*also `attackicon`*)\n`snagstats` __type__ - to receive relevant bot stats\n`spam` - to determine if the current location is safe for me to send long replies to (*also `safetospam` or `safe2spam`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
+    create_embed([event,x],"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`score` - for help understanding how Arena Score is calculated\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`today` - shows the current day's in-game daily events (*also `daily` or `todayInFEH`*)\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)\n\n__**Developer Information**__\n`avatar` - to see why my avatar is different from the norm\n\n`bugreport` __\\*message__ - to send my developer a bug report\n`suggestion` __\\*message__ - to send my developer a feature suggestion\n`feedback` __\\*message__ - to send my developer other kinds of feedback\n~~the above three commands are actually identical, merely given unique entries to help people find them~~\n\n`donation` (*also `donate`*) - for information on how to donate to my developer\n`whyelise` - for an explanation as to how Elise was chosen as the face of the bot\n`skillrarity` (*also `skill_rarity`*)\n`attackcolor` - for a reason for multiple Atk icons (*also `attackicon`*)\n`snagstats` __type__ - to receive relevant bot stats\n`spam` - to determine if the current location is safe for me to send long replies to (*also `safetospam` or `safe2spam`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
     create_embed([event,x],"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
     create_embed([event,x],"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**Mjolnr, the Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n\n__**Meta Data Storage**__\n`reload` - reloads the unit and skill data\n`backup` __item__ - backs up the (alias/group) list\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
     event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n\nWhen looking up a character or skill, you also have the option of @ mentioning me in a message that includes that character/skill's name" unless x==1
@@ -1192,7 +1192,7 @@ def show_tools(event,bot)
   end
 end
 
-def today_in_feh(event,bot)
+def today_in_feh(event,bot,shift=false)
   t=Time.now
   timeshift=8
   timeshift-=1 unless t.dst?
@@ -1202,9 +1202,9 @@ def today_in_feh(event,bot)
   t2=Time.new(2017,2,2)-60*60
   t2=t-t2
   date=(((t2.to_i/60)/60)/24)
-  str="#{str}\nThe Arena season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete your daily Arena-related quests before then!" if date%7==4 && 15-t.hour>=0
-  str="#{str}\nThe Aether Raid season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete any Aether-related quests before then!" if date%7==4 && 15-t.hour>=0
-  str="#{str}\nThe monthly quests end in #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete them before then!" if t.month != (t+24*60*60).month
+  str="#{str}\n#{'~~' if shift}The Arena season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete your daily Arena-related quests before then!#{'~~' if shift}" if date%7==4 && 15-t.hour>=0
+  str="#{str}\n#{'~~' if shift}The Aether Raid season ends in #{"#{15-t.hour} hours, " if 15-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete any Aether-related quests before then!#{'~~' if shift}" if date%7==4 && 15-t.hour>=0
+  str="#{str}\n#{'~~' if shift}The monthly quests end in #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds.  Complete them before then!#{'~~' if shift}" if t.month != (t+24*60*60).month
   colors=['Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>',
           'Colorless <:Shard_Colorless:443733396921909248><:Crystal_Transparent:445510676295843870><:Badge_Transparent:445510675976945664><:Great_Badge_Transparent:443704781597573120>',
           'Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>',
@@ -1239,14 +1239,27 @@ def today_in_feh(event,bot)
           'Fire <:Legendary_Effect_Fire:443331186480119808>',
           'Water <:Legendary_Effect_Water:443331186534776832>',
           'Wind <:Legendary_Effect_Wind:443331186467536896>']
-  str="#{str}\n"
-  str="#{str}\nDate assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
-  str="#{str}\nDays since game release: #{longFormattedNumber(date)}"
+  str="#{str}\n\n#{'~~' if shift}Date assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})#{'~~' if shift}"
+  str="#{str}\n#{'~~' if shift}Days since game release: #{longFormattedNumber(date)}#{'~~' if shift}"
   if event.user.id==167657750971547648 && @shardizard==4
-    str="#{str}\nDaycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12"
-    str="#{str}\nWeekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)"
+    str="#{str}\n#{'~~' if shift}Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12#{'~~' if shift}"
+    str="#{str}\n#{'~~' if shift}Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)#{'~~' if shift}"
   end
-  str2='__**Today in** ***Fire Emblem Heroes***__'
+  if shift
+    t+=24*60*60
+    t2=Time.new(2017,2,2)-60*60
+    t2=t-t2
+    date=(((t2.to_i/60)/60)/24)
+    str="#{str}\n\nTomorrow's date: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
+    str="#{str}\nDays since game release, come tomorrow: #{longFormattedNumber(date)}"
+    if event.user.id==167657750971547648 && @shardizard==4
+      str="#{str}\nTomorrow's daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12"
+      str="#{str}\nTomorrow's weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)"
+    end
+    str2='__**Tomorrow in** ***Fire Emblem Heroes***__'
+  else
+    str2='__**Today in** ***Fire Emblem Heroes***__'
+  end
   str2="#{str2}\nTraining Tower color: #{colors[date%colors.length]}"
   str2="#{str2}\nDaily Hero Battle: #{dhb[date%dhb.length]}"
   str2="#{str2}\nWeekend SP bonus!" if [1,2].include?(date%7)
@@ -1313,9 +1326,9 @@ def today_in_feh(event,bot)
   end
   str=extend_message(str,str2,event,2)
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(' tomorrow ') || " #{event.message.text.downcase} ".include?(' next ')
-    str2=disp_current_events(1)
+    str2=disp_current_events(1,shift)
     str=extend_message(str,str2,event,2)
-    str2=disp_current_events(2)
+    str2=disp_current_events(2,shift)
     str=extend_message(str,str2,event,2)
     bonus_load()
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
@@ -1329,7 +1342,7 @@ def today_in_feh(event,bot)
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
       element=b[0][3][1]
       moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
-      str2="__**Current Arena Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Elemental season:* #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+      str2="__**Current Arena Season#{', as of tomorrow' if shift}**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Elemental season:* #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
     end
     str=extend_message(str,str2,event,2)
     b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
@@ -1338,7 +1351,7 @@ def today_in_feh(event,bot)
     else
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
       m=k.length%2
-      str2="__**Current Tempest Trials+ Bonus Units**__\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}"
+      str2="__**Current Tempest Trials+ Bonus Units#{', as of tomorrow' if shift}**__\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}"
     end
     str=extend_message(str,str2,event,2)
     b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][1].split('/').reverse.join('').to_i<tm}
@@ -1353,73 +1366,75 @@ def today_in_feh(event,bot)
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
       element=b[0][3][1]
       moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
-      str2="__**Current Aether Raids Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m2].join(', ')}\n#{k[k.length/2+m2,k.length/2].join(', ')}\n*Bonus Structures:* #{m}\n*Elemental Season:* #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+      str2="__**Current Aether Raids Season#{', as of tomorrow' if shift}**__\n*Bonus Units:*\n#{k[0,k.length/2+m2].join(', ')}\n#{k[k.length/2+m2,k.length/2].join(', ')}\n*Bonus Structures:* #{m}\n*Elemental Season:* #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
     end
     str=extend_message(str,str2,event,2)
-    str2='__**Tomorrow in** ***Fire Emblem Heroes***__'
-    str2="#{str2}\nTraining Tower color: #{colors[(date+1)%colors.length]}"
-    str2="#{str2}\nDaily Hero Battle: #{dhb[(date+1)%dhb.length]}"
-    str2="#{str2}\nWeekend SP bonus!" if [1,2].include?((date+1)%7)
-    str2="#{str2}\nSpecial Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][(date+1)%5]}"
-    str2="#{str2}\nGrand Hero Battle revival: #{ghb[(date+1)%ghb.length].split(' / ')[0]}"
-    str2="#{str2}\nGrand Hero Battle revival 2: #{ghb[(date+1)%ghb.length].split(' / ')[1]}"
-    str2="#{str2}\nNew Blessed Gardens addition: #{garden[week_from(date+1,3)%garden.length]}" if (date+1)%7==3
-    if (date+1)%7==2 && rd[week_from(date+1,2)%rd.length]!=rd[week_from(date,2)%rd.length]
-      if rd[week_from(date+1,2)%rd.length]==''
-        str2="#{str2}\nRival Domains will be replaced with Relay Defense"
-      else
-        str2="#{str2}\nRival Domains movement preference: #{rd[week_from(date+1,2)%rd.length]}"
+    unless shift
+      str2='__**Tomorrow in** ***Fire Emblem Heroes***__'
+      str2="#{str2}\nTraining Tower color: #{colors[(date+1)%colors.length]}"
+      str2="#{str2}\nDaily Hero Battle: #{dhb[(date+1)%dhb.length]}"
+      str2="#{str2}\nWeekend SP bonus!" if [1,2].include?((date+1)%7)
+      str2="#{str2}\nSpecial Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][(date+1)%5]}"
+      str2="#{str2}\nGrand Hero Battle revival: #{ghb[(date+1)%ghb.length].split(' / ')[0]}"
+      str2="#{str2}\nGrand Hero Battle revival 2: #{ghb[(date+1)%ghb.length].split(' / ')[1]}"
+      str2="#{str2}\nNew Blessed Gardens addition: #{garden[week_from(date+1,3)%garden.length]}" if (date+1)%7==3
+      if (date+1)%7==2 && rd[week_from(date+1,2)%rd.length]!=rd[week_from(date,2)%rd.length]
+        if rd[week_from(date+1,2)%rd.length]==''
+          str2="#{str2}\nRival Domains will be replaced with Relay Defense"
+        else
+          str2="#{str2}\nRival Domains movement preference: #{rd[week_from(date+1,2)%rd.length]}"
+        end
       end
-    end
-    if (date+1)%7==0
-      str2="#{str2}\nNew Tactics Drills addition: #{['Skill Studies','Grandmaster'][week_from(date+1,0)%2]}"
-      if [10,11].include?(week_from(date+1,0)%12)
-        str2="#{str2}, 1<:Orb_Rainbow:471001777622351872> reward"
-      else
-        str2="#{str2}, 300<:Hero_Feather:471002465542602753> reward"
+      if (date+1)%7==0
+        str2="#{str2}\nNew Tactics Drills addition: #{['Skill Studies','Grandmaster'][week_from(date+1,0)%2]}"
+        if [10,11].include?(week_from(date+1,0)%12)
+          str2="#{str2}, 1<:Orb_Rainbow:471001777622351872> reward"
+        else
+          str2="#{str2}, 300<:Hero_Feather:471002465542602753> reward"
+        end
       end
+      t3=t+24*60*60
+      tm="#{'0' if t3.day<10}#{t3.day}/#{'0' if t3.month<10}#{t3.month}/#{t3.year}"
+      b2=bx.reject{|q| q[4].nil? || q[4].split(', ')[0]!=tm}
+      c2=c.reject{|q| q[2].nil? || q[2][0]!=tm}
+      str2="#{str2}\nNew Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}" if b2.length>0
+      str2="#{str2}\nNew Events: #{c2.map{|q| "*#{q[0]} (#{q[1]})*"}.join('; ')}" if c2.length>0
+      tm="#{t3.year}#{'0' if t3.month<10}#{t3.month}#{'0' if t3.day<10}#{t3.day}".to_i
+      bonus_load()
+      b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][0].split('/').reverse.join('').to_i != tm}
+      unless b.length<=0
+        k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        m=k.length%2
+        element=b[0][3][0]
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
+        element=b[0][3][1]
+        moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        str2="#{str2}\nTomorrow's Arena Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nElemental season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+      end
+      b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][0].split('/').reverse.join('').to_i != tm}
+      unless b.length<=0
+        k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        str2="#{str2}\nTomorrow's Tempest Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}"
+      end
+      b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][0].split('/').reverse.join('').to_i != tm}
+      unless b.length<=0
+        k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        m="#{b[0][4][0]} (O), #{b[0][4][1]} (D)"
+        m="#{b[0][4][0]} (O/D)" if b[0][4][0]==b[0][4][1]
+        element=b[0][3][0]
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        element=b[0][3][1]
+        moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        str2="#{str2}\nTomorrow's Aether Raids Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nTomorrow's Aether Raids Bonus Structures: #{m}\nElemental Season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+      end
+      str=extend_message(str,str2,event,2)
     end
-    t3=t+24*60*60
-    tm="#{'0' if t3.day<10}#{t3.day}/#{'0' if t3.month<10}#{t3.month}/#{t3.year}"
-    b2=bx.reject{|q| q[4].nil? || q[4].split(', ')[0]!=tm}
-    c2=c.reject{|q| q[2].nil? || q[2][0]!=tm}
-    str2="#{str2}\nNew Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}" if b2.length>0
-    str2="#{str2}\nNew Events: #{c2.map{|q| "*#{q[0]} (#{q[1]})*"}.join('; ')}" if c2.length>0
-    tm="#{t3.year}#{'0' if t3.month<10}#{t3.month}#{'0' if t3.day<10}#{t3.day}".to_i
-    bonus_load()
-    b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][0].split('/').reverse.join('').to_i != tm}
-    unless b.length<=0
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
-      m=k.length%2
-      element=b[0][3][0]
-      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
-      element=b[0][3][1]
-      moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
-      str2="#{str2}\nTomorrow's Arena Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nElemental season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
-    end
-    b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][0].split('/').reverse.join('').to_i != tm}
-    unless b.length<=0
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
-      str2="#{str2}\nTomorrow's Tempest Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}"
-    end
-    b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][0].split('/').reverse.join('').to_i != tm}
-    unless b.length<=0
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
-      m="#{b[0][4][0]} (O), #{b[0][4][1]} (D)"
-      m="#{b[0][4][0]} (O/D)" if b[0][4][0]==b[0][4][1]
-      element=b[0][3][0]
-      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
-      element=b[0][3][1]
-      moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
-      str2="#{str2}\nTomorrow's Aether Raids Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nTomorrow's Aether Raids Bonus Structures: #{m}\nElemental Season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
-    end
-    str=extend_message(str,str2,event,2)
   else
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
     b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm}
     c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
-    str="#{str}\nCurrent Banners: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}"
-    str="#{str}\nCurrent Events: #{c2.map{|q| "*#{q[0]} (#{q[1]})*"}.join('; ')}"
+    str="#{str}\nCurrent Banners#{', as of tomorrow' if shift}: #{b2.map{|q| "*#{q[0]}*"}.join('; ')}"
+    str="#{str}\nCurrent Events#{', as of tomorrow' if shift}: #{c2.map{|q| "*#{q[0]} (#{q[1]})*"}.join('; ')}"
     bonus_load()
     b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
     if b.length<=0
@@ -1430,7 +1445,7 @@ def today_in_feh(event,bot)
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
       element=b[0][3][1]
       moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
-      str2="Current Arena Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nElemental season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+      str2="Current Arena Bonus Units#{', as of tomorrow' if shift}: #{k.map{|q| "*#{q}*"}.join(', ')}\nElemental season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
     end
     str=extend_message(str,str2,event)
     b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
@@ -1438,7 +1453,7 @@ def today_in_feh(event,bot)
       str2="There are no Tempest Trials events going on."
     else
       k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
-      str2="Current Tempest Trials+ Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}"
+      str2="Current Tempest Trials+ Bonus Units#{', as of tomorrow' if shift}: #{k.map{|q| "*#{q}*"}.join(', ')}"
     end
     str=extend_message(str,str2,event)
     b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
@@ -1452,24 +1467,26 @@ def today_in_feh(event,bot)
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
       element=b[0][3][1]
       moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
-      str2="Current Aether Raids Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}\nCurrent Aether Raids Bonus Structures: #{m}\nElemental Season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+      str2="Current Aether Raids Bonus Units#{', as of tomorrow' if shift}: #{k.map{|q| "*#{q}*"}.join(', ')}\nCurrent Aether Raids Bonus Structures: #{m}\nElemental Season: #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
     end
     str=extend_message(str,str2,event)
   end
   event.respond str
 end
 
-def disp_current_events(mode=0)
+def disp_current_events(mode=0,shift=false)
   t=Time.now
   timeshift=8
   timeshift-=1 unless t.dst?
   t-=60*60*timeshift
+  t+=24*60*60 if shift && mode>0
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
   mdfr='left'
   mdfr='from now' if mode<0
   m=mode*1
   m=0-m if m<0
-  str2="__**#{'Current' if mode>0}#{'Future' if mode<0} #{['','Banners','Events'][m]}**__"
+  str2="__**#{'Current' if mode>0}#{'Future' if mode<0} #{['','Banners','Events'][m]}#{', as of tomorrow' if shift}**__"
+  str2="#{str2}\n~~all \"time remaining\" indicators shown as if from today's viewpoint~~" if shift && mode>0
   if [1,-1].include?(mode) # current/future banners
     b=[]
     if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
@@ -1494,6 +1511,7 @@ def disp_current_events(mode=0)
       t2=b2[i][4].split(', ')[[mode,0].max].split('/').map{|q| q.to_i}
       t2=Time.new(t2[2],t2[1],t2[0])+24*60*60*([0,mode].min+1)
       t2=t2-t
+      t2+=24*60*60 if shift && mode>0
       if t2/(24*60*60)>1
         str2="#{str2}\n#{b2[i][0]} - #{(t2/(24*60*60)).floor} days #{mdfr}"
       elsif t2/(60*60)>1
@@ -1536,6 +1554,7 @@ def disp_current_events(mode=0)
       t2=c2[i][2][[mode,0].max].split('/').map{|q| q.to_i}
       t2=Time.new(t2[2],t2[1],t2[0])+24*60*60*([0,mode].min+1)
       t2=t2-t
+      t2+=24*60*60 if shift && mode>0
       n=c2[i][0]
       if ['Voting Gauntlet','Tempest Trials','Forging Bonds','Quests','Log-In Bonus'].include?(c2[i][1])
         n="\"#{n}\" #{c2[i][1]}"
