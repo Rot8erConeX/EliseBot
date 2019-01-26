@@ -152,7 +152,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
      'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics','legend',
-     'legends','legendarys','item','accessory','acc','accessorie','alias','s2s'].uniq
+     'legends','legendarys','item','accessory','acc','accessorie','alias','s2s','dailies','tomorrow','tommorrow','tomorow','tommorow'].uniq
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -14120,7 +14120,7 @@ bot.command(:shard) do |event, i|
   event.respond "This server uses #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(event.server.id >> 22) % 4]} Shards." unless event.server.nil? || @shardizard==4
 end
 
-bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily]) do |event|
+bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily,:now]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || @shardizard==4
@@ -14129,6 +14129,18 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily])
     @last_multi_reload[1]=t
   end
   today_in_feh(event,bot)
+  return nil
+end
+
+bot.command([:tomorrow,:tomorow,:tommorrow,:tommorow]) do |event|
+  return nil if overlap_prevent(event)
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseTexts'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
+  end
+  today_in_feh(event,bot,true)
   return nil
 end
 
@@ -15482,6 +15494,18 @@ bot.mention do |event|
     disp_stats(bot,'Lavatain',nil,event,true,true)
     disp_skill(bot,'Bladeblade',event,true)
     k=3
+  elsif ['today','daily','dailies','now'].include?(a[0].downcase)
+    a.shift
+    today_in_feh(event,bot)
+    k=1
+  elsif ['tomorrow','tommorrow','tomorow','tommorow'].include?(a[0].downcase)
+    a.shift
+    today_in_feh(event,bot,true)
+    k=1
+  elsif ['next','schedule'].include?(a[0].downcase)
+    a.shift
+    next_events(event,bot,a[0])
+    k=1
   elsif ['random','rand'].include?(a[0].downcase)
     a.shift
     if ['unit','real'].include?(a[0].downcase)
@@ -15990,14 +16014,6 @@ bot.ready do |event|
     b=[]
   end
   @aliases=b
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt')
-    b=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGroups.txt').each_line do |line|
-      b.push(eval line)
-    end
-  else
-    b=[]
-  end
   groups_load()
   @groups=b
   metadata_load()
