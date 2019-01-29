@@ -719,7 +719,7 @@ def sort_legendaries(event,bot,mode=0)
         t2+=(8-t2.wday)*24*60*60
         tm="#{t2.year}#{'0' if t2.month<10}#{t2.month}#{'0' if t2.day<10}#{t2.day}".to_i
         lemoji1='<:Mythic_Effect_Unknown:523328368079273984>'
-        b2=bx2.reject{|q| q[2].nil? || q[2][0].split(', ')[0].split('/').reverse.join('').to_i<=tm}
+        b2=[]
       else
         b2=bx.reject{|q| q[2].nil? || q[2][0].split(', ')[0].split('/').reverse.join('').to_i<=tm}
       end
