@@ -11,6 +11,7 @@ require 'rufus-scheduler'              # Download link: https://github.com/jmett
 require 'active_support/core_ext/time' # Download link: https://rubygems.org/gems/activesupport/versions/5.0.0
 require_relative 'rot8er_functs'       # functions I use commonly in bots
 load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
 
 # this is required to get her to change her avatar on certain holidays
 ENV['TZ'] = 'America/Chicago'
@@ -152,7 +153,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
      'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics','legend',
-     'legends','legendarys','item','accessory','acc','accessorie','alias','s2s','dailies','tomorrow','tommorrow','tomorow','tommorow'].uniq
+     'legends','legendarys','item','accessory','acc','accessorie','alias','s2s','dailies','tomorrow','tommorrow','tomorow','tommorow','aoe','area']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -163,6 +164,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
        'removemultiunitalias','removedualunitalias','removemulti','removefrommultialias','removefromdualalias','removefrommultiunitalias','backup',
        'removefromdualunitalias','removefrommulti','sendpm','ignoreuser','sendmessage','leaveserver','cleanupaliases','setmarker','snagchannels','reload']
   end
+  k.uniq!
   k.unshift(nil) if include_nil
   return k
 end
@@ -13855,6 +13857,17 @@ bot.command([:worstamong,:worstin,:worststats,:loweststats,:lowest,:worst,:lowes
   return nil
 end
 
+bot.command([:aoe,:AOE,:AoE,:area]) do |event, *args|
+  return nil if overlap_prevent(event)
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseText'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
+  end
+  aoe(event,bot,args)
+end
+
 bot.command([:embeds,:embed]) do |event|
   return nil if overlap_prevent(event)
   embedless_swap(bot,event)
@@ -14221,10 +14234,12 @@ bot.command([:donation, :donate]) do |event, uid|
     if g[2]>=2
       if g[3].nil? || g[3].length.zero? || g[4].nil? || g[4].length.zero?
         str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
-      elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{g[4]}.png")
-        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected.\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4]}"
+      elsif g[4][0]=='-'
+        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2713 May be given via another bot."
+      elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseImages/#{g[4][0]}.png")
+        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected.\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4][0]}"
       else
-        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2713 Given\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4]}"
+        str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2713 Given\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4][0]}"
       end
     end
     if g[2]>=3
@@ -15578,6 +15593,10 @@ bot.mention do |event|
     a.shift
     disp_itemu(bot,a.join(' '),event)
     k=1
+  elsif ['aoe','area'].include?(a[0].downcase)
+    a.shift
+    aoe(event,bot,a)
+    k=1
   elsif ['allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable'].include?(a[0].downcase)
     a.shift
     k=parse_function(:learnable_skills,event,a,bot)
@@ -15868,8 +15887,10 @@ def next_holiday(bot,mode=0)
   d=get_donor_list()
   d=d.reject{|q| q[2]<2}
   for i in 0...d.length
-    holidays.push([0,d[i][3][0],d[i][3][1],d[i][4],"in recognition of #{bot.user(d[i][0]).distinct}","Donator's birthday"])
-    holidays[-1][5]="Donator's Day" if d[i][0]==189235935563481088
+    if d[i][4][0]!='-'
+      holidays.push([0,d[i][3][0],d[i][3][1],d[i][4][0],"in recognition of #{bot.user(d[i][0]).distinct}","Donator's birthday"])
+      holidays[-1][5]="Donator's Day" if d[i][0]==189235935563481088
+    end
   end
   for i in 0...holidays.length
     if t.month>holidays[i][1] || (t.month==holidays[i][1] && t.day>holidays[i][2])
