@@ -86,6 +86,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['color','colors','colour','colours'].include?("#{subcommand}".downcase)}**","Explains the reasoning behind the multiple Attack stat icons - <:StrengthS:514712248372166666> <:MagicS:514712247289774111> <:FreezeS:514712247474585610>",0xD49F61)
   elsif ['struct','struncture'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows data on the Aether Raid structure named `name`.',0xD49F61)
+  elsif ['aoe','area'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __type__","Shows the range of all AoE specials of the type `type`.\nIf `type` is unspecified in PM, shows the range of all AoE specials.",0xD49F61)
   elsif ['item'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows data on the item named `name`.',0xD49F61)
   elsif ['accessory','acc','accessorie'].include?(command.downcase)
@@ -382,11 +384,115 @@ def help_text(event,bot,command=nil,subcommand=nil)
       command=''
     end
     event.respond "#{command.downcase} is not a command" if command!='' && command.downcase != 'devcommands'
-    create_embed([event,x],"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__","__**Unit/Character Data**__\n\n`data` __unit__ - shows both stats and skills (*also `unit`*)\n`stats` __unit__ - shows only the stats\n`smolstats` __unit__ - shows ths stats in a condensed format (*also `tinystats` and `microstats`*)\n`skills` __unit__ - shows only the skills (*also `fodder`*)\n`study` __unit__ - for a study of the unit at multiple rarities and merges\n`effHP` __unit__ - for a study of the unit's bulkiness (*also `bulk`*)\n`aliases` __unit__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)\n`serveraliases` __unit__ - show server-specific aliases for the unit\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)\n`procstudy` __unit__ - to see what how much each damaging Special does (*also `studyproc`*)\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)\n`banners` __unit__ - for a list of banners the unit has been a focus unit on\n`art` __unit__ __art type__ - for the character's art\n`learnable` __unit__ - for a list of all learnable skills (*also `inheritable`*)\n\n`games` __character__ - for a list of games the character is in\n`alts` __character__ - for a list of all units this character has",0xD49F61)
-    create_embed([event,x],"","__**Other Data**__\n`bst` __\\*allies__\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)\n`summonpool` \\*colors - for a list of summonable units sorted by rarity (*also `pool`*)\n`legendaries` \\*filters - for a sorted list of all legendaries. (*also `legendary`*)\n`bonus` - used to list all Arena and TT bonus units (*also `arena` and `tt`*)\n`refinery` - used to show a list of refineable weapons (*also `refine`*)\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats\n`skill` __skill name__ - used to show data on a specific skill\n`structure` __structure name__ - used to show data on a specific Aether Raid structure\n`accessory` __accessory name__ - used to show data on a specific accessory\n`item` __item name__ - used to show data on a specific item\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)\n`compareskills` __\\*allies__ - compares units' skills",0xD49F61)
-    create_embed([event,x],"","__**Meta data**__\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups\n`tools` - for a list of tools aside from me that may aid you\n`natures` - for help understanding my nature names\n`growths` - for help understanding how growths work (*also `gps`*)\n`merges` - for help understanding how merges work\n`score` - for help understanding how Arena Score is calculated\n`invite` - for a link to invite me to your server\n`random` - generates a random unit (*also `rand`*)\n`today` - shows the current day's in-game daily events (*also `daily` or `todayInFEH`*)\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)\n\n__**Developer Information**__\n`avatar` - to see why my avatar is different from the norm\n\n`bugreport` __\\*message__ - to send my developer a bug report\n`suggestion` __\\*message__ - to send my developer a feature suggestion\n`feedback` __\\*message__ - to send my developer other kinds of feedback\n~~the above three commands are actually identical, merely given unique entries to help people find them~~\n\n`donation` (*also `donate`*) - for information on how to donate to my developer\n`whyelise` - for an explanation as to how Elise was chosen as the face of the bot\n`skillrarity` (*also `skill_rarity`*)\n`attackcolor` - for a reason for multiple Atk icons (*also `attackicon`*)\n`snagstats` __type__ - to receive relevant bot stats\n`spam` - to determine if the current location is safe for me to send long replies to (*also `safetospam` or `safe2spam`*)#{"\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)}",0xD49F61)
-    create_embed([event,x],"__**Server Admin Commands**__","__**Unit Aliases**__\n`addalias` __new alias__ __unit__ - Adds a new server-specific alias\n~~`aliases` __unit__ (*also `checkaliases` or `seealiases`*)~~\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias\n\n__**Groups**__\n`addgroup` __name__ __\\*members__ - adds a server-specific group\n~~`groups` (*also `checkgroups` or `seegroups`*)~~\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group\n\n",0xC31C19) if is_mod?(event.user,event.server,event.channel)
-    create_embed([event,x],"__**Bot Developer Commands**__","`devedit` __subcommand__ __unit__ __\\*effect__\n\n__**Mjolnr, the Hammer**__\n`ignoreuser` __user id number__ - makes me ignore a user\n`leaveserver` __server id number__ - makes me leave a server\n\n__**Communication**__\n`status` __\\*message__ - sets my status\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user\n\n__**Server Info**__\n`snagstats` - snags relevant bot stats\n`setmarker` __letter__\n\n__**Shards**__\n`reboot` - reboots this shard\n\n__**Meta Data Storage**__\n`reload` - reloads the unit and skill data\n`backup` __item__ - backs up the (alias/group) list\n`sort aliases` - sorts the alias list alphabetically by unit\n`sort groups` - sorts the group list alphabetically by group name\n\n__**Multi-unit Aliases**__\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias\n`deletemulti` __name__ (*also `removemulti`*) - Deletes a multi-unit alias",0x008b8b) if (event.server.nil?|| event.channel.id==283821884800499714 || @shardizard==4 || command.downcase=='devcommands') && event.user.id==167657750971547648
+    str="__**Unit/Character Data**__"
+    str="#{str}\n`data` __unit__ - shows both stats and skills (*also `unit`*)"
+    str="#{str}\n`stats` __unit__ - shows only the stats"
+    str="#{str}\n`bigstats` __unit__ - shows ths stats in a larger format (*also `macrostats`*)"
+    str="#{str}\n`skills` __unit__ - shows only the skills (*also `fodder`*)"
+    str="#{str}\n\n`aliases` __unit__ - show all aliases for the unit (*also `checkaliases` or `seealiases`*)"
+    str="#{str}\n`serveraliases` __unit__ - show server-specific aliases for the unit"
+    str="#{str}\n\n`study` __unit__ - for a study of the unit at multiple rarities and merges"
+    str="#{str}\n`effHP` __unit__ - for a study of the unit's bulkiness (*also `bulk`*)"
+    str="#{str}\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)"
+    str="#{str}\n`procstudy` __unit__ - to see what how much each damaging Special does (*also `studyproc`*)"
+    str="#{str}\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)"
+    str="#{str}\n~~The above commands are collectively referred to as \"the `study` suite\"~~"
+    str="#{str}\n\n`banners` __unit__ - for a list of banners the unit has been a focus unit on"
+    str="#{str}\n`art` __unit__ __art type__ - for the character's art"
+    str="#{str}\n`learnable` __unit__ - for a list of all learnable skills (*also `inheritable`*)"
+    str="#{str}\n\n`games` __character__ - for a list of games the character is in"
+    str="#{str}\n`alts` __character__ - for a list of all units this character has"
+    str="#{str}\n\n\n__**Skill Data**__"
+    str="#{str}\n`skill` __skill name__ - used to show data on a specific skill"
+    str="#{str}\n\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)"
+    str="#{str}\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)"
+    str="#{str}\n`AoE` __type__ - to show the range of all AoE skills (*also `area`*)"
+    create_embed([event,x],"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__",str,0xD49F61)
+    str="__**Additional Index Data**__"
+    str="#{str}\n`structure` __structure name__ - used to show data on a specific Aether Raid structure"
+    str="#{str}\n`accessory` __accessory name__ - used to show data on a specific accessory"
+    str="#{str}\n`item` __item name__ - used to show data on a specific item"
+    str="#{str}\n\n__**Current Events**__"
+    str="#{str}\n`bonus` - used to list all Arena and TT bonus units (*also `arena`, `tt`, or `aether`*)"
+    str="#{str}\n`today` - shows the current day's in-game daily events (*also `daily` or `todayInFEH`*)"
+    str="#{str}\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)"
+    str="#{str}\n\n__**Lists**__"
+    str="#{str}\n`summonpool` __\\*colors__ - for a list of summonable units sorted by rarity (*also `pool`*)"
+    str="#{str}\n`legendaries` __\\*filters__ - for a sorted list of all legendaries. (*also `legendary`*)"
+    str="#{str}\n`mythics` __\\*filters__ - for a sorted list of all legendaries. (*also `mythic`, `mythical`, or `mythicals`*)"
+    str="#{str}\n`refinery` - used to show a list of refineable weapons (*also `refine`*)"
+    str="#{str}\n\n__**Searches**__"
+    str="#{str}\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)"
+    str="#{str}\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats"
+    str="#{str}\n`average` __\\*filters__ - used to find the average stats of applicable units (*also `mean`*)"
+    str="#{str}\n`bestamong` __\\*filters__ - used to find the best stats among applicable units (*also `bestin`, `beststats`, or `higheststats`*)"
+    str="#{str}\n`worstamong` __\\*filters__ - used to find the worst stats among applicable units (*also `worstin`, `worststats`, or `loweststats`*)"
+    str="#{str}\n\n__**Comparisons**__"
+    str="#{str}\n`compare` __\\*allies__ - compares units' stats (*also `comparison`*)"
+    str="#{str}\n`compareskills` __\\*allies__ - compares units' skills"
+    str="#{str}\n\n__**Other Data**__"
+    str="#{str}\n`bst` __\\*allies__"
+    create_embed([event,x],"",str,0xD49F61)
+    str="__**Meta data**__"
+    str="#{str}\n`tools` - for a list of tools aside from me that may aid you"
+    str="#{str}\n\n`aliases` - show all aliases (*also `checkaliases` or `seealiases`*)"
+    str="#{str}\n`serveraliases` - show server-specific aliases"
+    str="#{str}\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups"
+    str="#{str}\n\n`natures` - for help understanding my nature names"
+    str="#{str}\n`growths` - for help understanding how growths work (*also `gps`*)"
+    str="#{str}\n`merges` - for help understanding how merges work"
+    str="#{str}\n`score` - for help understanding how Arena Score is calculated"
+    str="#{str}\n`skillrarity` - explains why characters have skills at lower than expected rarities (*also `skill_rarity`*)"
+    str="#{str}\n`attackcolor` - for a reason for multiple Atk icons (*also `attackicon`*)"
+    str="#{str}\n\n`invite` - for a link to invite me to your server"
+    str="#{str}\n\n`random` - generates a random unit (*also `rand`*)"
+    str="#{str}\n\n\n__**Developer Information**__"
+    str="#{str}\n`avatar` - to see why my avatar is different from the norm"
+    str="#{str}\n\n`bugreport` __\\*message__ - to send my developer a bug report"
+    str="#{str}\n`suggestion` __\\*message__ - to send my developer a feature suggestion"
+    str="#{str}\n`feedback` __\\*message__ - to send my developer other kinds of feedback"
+    str="#{str}\n~~the above three commands are actually identical, merely given unique entries to help people find them~~"
+    str="#{str}\n\n`donation` (*also `donate`*) - for information on how to donate to my developer"
+    str="#{str}\n`whyelise` - for an explanation as to how Elise was chosen as the face of the bot"
+    str="#{str}\n`snagstats` __type__ - to receive relevant bot stats"
+    str="#{str}\n`spam` - to determine if the current location is safe for me to send long replies to (*also `safetospam` or `safe2spam`*)"
+    str="#{str}\n\n__**Server-specific command**__\n`summon` \\*colors - to simulate summoning on a randomly-chosen banner" if !event.server.nil? && @summon_servers.include?(event.server.id)
+    create_embed([event,x],"",str,0xD49F61)
+    str="__**Aliases**__"
+    str="#{str}\n`addalias` __new alias__ __target__ - Adds a new server-specific alias"
+    str="#{str}\n~~`aliases` __target__ (*also `checkaliases` or `seealiases`*)~~"
+    str="#{str}\n~~`serveraliases` __target__ (*also `saliases`*)~~"
+    str="#{str}\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias"
+    str="#{str}\n\n__**Groups**__"
+    str="#{str}\n`addgroup` __name__ __\\*members__ - adds a server-specific group"
+    str="#{str}\n~~`groups` (*also `checkgroups` or `seegroups`*)~~"
+    str="#{str}\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group"
+    str="#{str}\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group"
+    str="#{str}\n\n__**Channels**__"
+    str="#{str}\n`spam` __toggle__ - to allow the current channel to be safe to send long replies to (*also `safetospam` or `safe2spam`*)"
+    create_embed([event,x],"__**Server Admin Commands**__",str,0xC31C19) if is_mod?(event.user,event.server,event.channel)
+    str="`devedit` __subcommand__ __unit__ __\\*effect__"
+    str="#{str}\n\n__**Mjolnr, the Hammer**__"
+    str="#{str}\n`ignoreuser` __user id number__ - makes me ignore a user"
+    str="#{str}\n`leaveserver` __server id number__ - makes me leave a server"
+    str="#{str}\n\n__**Communication**__"
+    str="#{str}\n`status` __\\*message__ - sets my status"
+    str="#{str}\n`sendmessage` __channel id__ __\\*message__ - sends a message to a specific channel"
+    str="#{str}\n`sendpm` __user id number__ __\\*message__ - sends a PM to a user"
+    str="#{str}\n\n__**Server Info**__"
+    str="#{str}\n`snagstats` - snags relevant bot stats"
+    str="#{str}\n`setmarker` __letter__"
+    str="#{str}\n\n__**Shards**__"
+    str="#{str}\n`reboot` - reboots this shard"
+    str="#{str}\n\n__**Meta Data Storage**__"
+    str="#{str}\n`reload` - reloads the unit and skill data"
+    str="#{str}\n`backup` __item__ - backs up the (alias/group) list"
+    str="#{str}\n`sort aliases` - sorts the alias list alphabetically by unit"
+    str="#{str}\n`sort groups` - sorts the group list alphabetically by group name"
+    str="#{str}\n\n__**Multi-unit Aliases**__"
+    str="#{str}\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias"
+    str="#{str}\n`deletemulti` __name__ - Deletes a multi-unit alias (*also `removemulti`*)"
+    create_embed([event,x],"__**Bot Developer Commands**__",str,0x008b8b) if event.user.id==167657750971547648 && (x==1 || safe_to_spam?(event))
     event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n\nWhen looking up a character or skill, you also have the option of @ mentioning me in a message that includes that character/skill's name" unless x==1
     event.user.pm("If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n\nWhen looking up a character or skill, you also have the option of @ mentioning me in a message that includes that character/skill's name") if x==1
     event.respond "A PM has been sent to you.\nIf you would like to show the help list in this channel, please use the command `FEH!help here`." if x==1
@@ -1052,6 +1158,73 @@ def random_dev_unit_with_nature(event,x=true) # used by `disp_more_info()` to ra
     return random_dev_unit_with_nature(event) if u[3]==' ' || u[4]==' ' || find_unit(u[0],event,true)<0
   end
   return u
+end
+
+def hybrid_range(x,y)
+  # turning each string into an array, splitting by the fake newline character
+  x=x.split("n") if x.is_a?(String)
+  y=y.split("n") if y.is_a?(String)
+  # making sure all the substrings in each array are the same length as each other, padding shorter strings to the left
+  for i in 0...x.length
+    x[i]=x[i].gsub(' ',"\u00A0")
+    x[i]="#{x[i]}#{"\u00A0"*(x.map{|q| q.length}.max-x[i].length)}" if x[i].length<x.map{|q| q.length}.max
+  end
+  for i in 0...y.length
+    y[i]=y[i].gsub(' ',"\u00A0")
+    y[i]="#{y[i]}#{"\u00A0"*(y.map{|q| q.length}.max-y[i].length)}" if y[i].length<y.map{|q| q.length}.max
+  end
+  # making sure the two arrays are equal length to each other, padding the smaller one towards the center
+  if x.length>y.length
+    y.push("\u00A0"*y.map{|q| q.length}.max) if (x.length-y.length)%2==1
+    for i in 0...(x.length-y.length)/2
+      y.push("\u00A0"*y.map{|q| q.length}.max)
+      y.unshift("\u00A0"*y.map{|q| q.length}.max)
+    end
+  elsif x.length<y.length
+    x.push("\u00A0"*x.map{|q| q.length}.max) if (y.length-x.length)%2==1
+    for i in 0...(y.length-x.length)/2
+      x.push("\u00A0"*x.map{|q| q.length}.max)
+      x.unshift("\u00A0"*x.map{|q| q.length}.max)
+    end
+  end
+  # putting each line beside the corresponding line in the other array
+  z=[]
+  for i in 0...x.length
+    z.push("#{x[i]}  \u200B  #{y[i]}")
+  end
+  return "```#{z.join("\n")}```"
+end
+
+def aoe(event,bot,args=nil)
+  args=event.message.downcase.split(' ') if args.nil?
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  args=args.map{|q| q.downcase}
+  data_load()
+  sklz=@skills.map{|q| q}
+  mode=0
+  for i in 0...args.length
+    mode=1 if mode==0 && ['flame','fire','flames','fires'].include?(args[i])
+    mode=2 if mode==0 && ['wind','winds'].include?(args[i])
+    mode=3 if mode==0 && ['thunder','thunders'].include?(args[i])
+    mode=4 if mode==0 && ['light','lights','lightness'].include?(args[i])
+  end
+  if mode==0 && !safe_to_spam?(event)
+    event.respond "This command, unless given inputs, takes a lot of screen space due to dealing with vertical attack ranges.\nPlease try again, either in PM or with one of the following words:\n- Flame\n- Wind\n- Thunder\n- Light"
+    return nil
+  end
+  str2=''
+  for i in 1...5
+    type=['specials','Flame','Wind','Thunder','Light'][i]
+    if [i,0].include?(mode)
+      m=sklz[sklz.find_index{|q| q[0]=="Blazing #{type}"}]
+      m2=sklz[sklz.find_index{|q| q[0]=="Growing #{type}"}]
+      str="__**Blazing #{type}** vs. **Growing #{type}**__\n#{hybrid_range(m[3],m2[3])}"
+      str2=extend_message(str2,str,event)
+    end
+  end
+  type=['specials','Flame','Wind','Thunder','Light'][mode]
+  str2=extend_message(str2,"Base damage is `Atk - eDR`, where eDR is the enemy's Def or Res, based on the type of weapon being used.\nBlazing #{type} do#{'es' if mode>0} 1.5x as much damage as Growing #{type}.\nRising #{type} ha#{'ve' if mode==0}#{'s' if mode>0} the range of Blazing but deal#{'s' if mode>0} as much damage as Growing.",event)
+  event.respond str2
 end
 
 def why_elise(event,bot)
@@ -2629,8 +2802,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << ''
     event << "**There are #{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command('}.length)} commands, invoked with #{longFormattedNumber(all_commands().length)} different phrases.**"
     event << 'This includes:'
-    event << "#{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command(' || q.include?('from: 167657750971547648')}.length-b[0].reject{|q| q.gsub('  ','')!="event.respond 'You are not a mod.'"}.length)} global commands, invoked with #{longFormattedNumber(all_commands(false,0).length)} different phrases."
-    event << "#{longFormattedNumber(b[0].reject{|q| q.gsub('  ','')!="event.respond 'You are not a mod.'"}.length)} mod-only commands, invoked with #{longFormattedNumber(all_commands(false,1).length)} different phrases."
+    event << "#{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command(' || q.include?('from: 167657750971547648')}.length-b[0].reject{|q| q.gsub('  ','')!="event.respond 'You are not a mod.'" && q.gsub('  ','')!="str='You are not a mod.'"}.length)} global commands, invoked with #{longFormattedNumber(all_commands(false,0).length)} different phrases."
+    event << "#{longFormattedNumber(b[0].reject{|q| q.gsub('  ','')!="event.respond 'You are not a mod.'" && q.gsub('  ','')!="str='You are not a mod.'"}.length)} mod-only commands, invoked with #{longFormattedNumber(all_commands(false,1).length)} different phrases."
     event << "#{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command(' || !q.include?('from: 167657750971547648')}.length)} dev-only commands, invoked with #{longFormattedNumber(all_commands(false,2).length)} different phrases."
     event << ''
     event << "**There are #{longFormattedNumber(@prefix.map{|q| q.downcase}.uniq.length)} command prefixes**, but because I am faking case-insensitivity it's actually #{longFormattedNumber(@prefix.length)} prefixes."

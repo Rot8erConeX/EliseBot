@@ -27,6 +27,7 @@ def get_donor_list()
       b[i][0]=b[i][0].to_i
       b[i][2]=b[i][2].to_i
       b[i][3]=b[i][3].split('/').map{|q| q.to_i} unless b[i][3].nil?
+      b[i][4]=b[i][4].split(', ') unless b[i][4].nil?
     end
   else
     b=[]

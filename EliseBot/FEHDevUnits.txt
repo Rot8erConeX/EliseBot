@@ -1,4 +1,4 @@
-Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Halloween)\Soleil
+Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil
 Alm\Eir\Kana(F)\Matthew\Owain\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
@@ -281,6 +281,16 @@ Darting Blow 1\Darting Blow 2\Darting Blow 3
 Poison Strike 1\Poison Strike 2\Poison Strike 3
 Threaten Res 1\Threaten Res 2
 Distant Def 2
+
+Sakura(Bath)
+5\0\Resistance\HP\-
+Assault\Grandscratcher\Grandscratcher+\~~Grandscratcher+ (+) Dazzling Mode~~
+Heal\Reconcile\Rehabilitate\Rehabilitate+
+Imbue\Still-Water Balm\Fireflood Balm\Fireflood Balm+
+Defiant Atk 1\Defiant Atk 2\Defiant Atk 3
+Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
+Spd Opening 1\Spd Opening 2\Spd Opening 3
+Atk/Spd Bond 2
 
 Sakura(Halloween)
 5\0\Defense\Speed\-
