@@ -65,3 +65,6 @@ Streetlamp\-\Ornament\A lamp in an elegant, classic design. It's an event item.\
 Feh Kagami Mochi\-\Ornament\Not the real Feh! It's a decoration that brings good luck for the New Year. It's an event item.\Yes\0, 0, 500\0\New Year's 2019
 Fireplace\-\Ornament\If it's cold where you are, this item should help you feel a little bit warmer. It's an event item.\Yes\0, 0, 500\0\New Year's 2019
 Snow Family\-\Ornament\It seems they're brother and sister. It's an event item.\Yes\0, 0, 500\0\New Year's 2019
+Anniversary Cake\-\Ornament\A massive cake baked to celebrate the second anniversary. It's an event item.\Yes\0, 0, 500\0\2nd Anniversary Celebration
+Anniversary Arch\-\Ornament\An arch built to welcome well-wishers during the second anniversary. It's an event item.\Yes\0, 0, 500\0\2nd Anniversary Celebration
+Heart Garland\-\Ornament\A decoration that symbolizes overflowing love. It's an event item.\Yes\0, 0, 500\0\2nd Anniversary Celebration
