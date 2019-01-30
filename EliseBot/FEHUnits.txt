@@ -67,6 +67,7 @@ Donnel\Blue, Blade\ \Infantry\8, 9, 7, 8, 5\43, 35, 29, 32, 23\Okaya\Sam Regal\I
 Dorcas\Green, Blade\ \Infantry\8, 8, 4, 8, 5\45, 35, 23, 35, 24\Soeda Ippei\Kirk Thornton\Kitamura Kenji\5p\M\FE7\Dorcas
 Dorcas(Halloween)\Green, Blade\ \Armor\8, 10, 5, 9, 3\49, 41, 25, 37, 21\Soeda Ippei\Kirk Thornton\Kitamura Kenji\4t5t0s\M\FE7\Dorcas
 Draug\Red, Blade\ \Armor\8, 6, 8, 8, 3\50, 30, 32, 39, 18\Itagaki Hako\Patrick Seitz\Takeuchi Ryouta\3p4p2q3qLU\M\FE3, FE1, FE11, FE12, (s)SSBU\Draug
+Duma\Colorless, Dragon\Anima, Attack, 21/01/2019\Armor\7, 10, 3, 8, 7\48, 40, 21, 34, 31\Yoneko\Josh Petersdorf\\5s\M\FE15, FE2\Duma
 Effie\Blue, Blade\ \Armor\9, 9, 4, 6, 5\50, 40, 22, 33, 23\HACCAN\Marisha Ray\Kuwahara Yuuki\3p4pLU\F\FE14C\Effie
 Eir\Colorless, Dagger\Light, Resistance, 21/03/2019\Flier\5, 7, 9, 1, 7\35, 32, 37, 14, 31\Kozaki Yusuke\Xanthe Huynh\\5s5y\F\FEH\Eir
 Eirika(Bonds)\Red, Blade\ \Infantry\7, 5, 8, 5, 6\42, 26, 35, 26, 28\Asatani Tomoyo\Kira Buckland\Mizuhashi Kaori\3p4p\F\FE8, (st)SSBB, (s)SSBU\Eirika*
@@ -158,10 +159,10 @@ Klein\Colorless, Bow\ \Infantry\6, 6, 8, 3, 5\40, 31, 33, 20, 24\Tobi\Edward Bos
 Kliff\Blue, Tome, Light\ \Infantry\6, 7, 11, 6, 5\37, 30, 37, 25, 28\Tobi\Christopher Patton\\5p\M\FE15, FE2\Kliff
 Lachesis\Colorless, Healer\ \Infantry\6, 8, 4, 4, 6\39, 32, 25, 22, 30\Miwabe Sakura\Cristina Valenzuela\Oonishi Saori\3p4p\F\FE4\Lachesis
 Laegjarn\Red, Blade\ \Flier\7, 7, 8, 9, 2\41, 32, 36, 36, 17\Maeshima Shigeki\Alicia Stratten\Tamura Yukari\5p\F\FEH\Laegjarn
-Laegjarn(Winter)\Blue, Blade\ \Cavalry\6, 7, 8, 8, 2\38, 32, 35, 35, 17\kawasumi\Alicia Stratten\Tamura Yukari\4t5t0s\F\FEH\Laegjarn
+Laegjarn(Winter)\Blue, Blade\ \Cavalry\6, 7, 8, 8, 2\38, 32, 35, 35, 17\Daisuke Izuka\Alicia Stratten\Tamura Yukari\4t5t0s\F\FEH\Laegjarn
 L'Arachel\Blue, Tome, Light\ \Cavalry\4, 7, 7, 2, 7\33, 33, 31, 17, 31\Konfuzi Kokon\Carrie Keranen\Nabatame Hitomi\4p5p\F\FE8, (s)SSBU\L'Arachel
 Lavatain\Red, Blade\ \Infantry\6, 8, 7, 8, 4\39, 37, 31, 34, 22\Maeshima Shigeki\Sarah Williams\Kugimiya Rie\5p\F\FEH\Lavatain
-Lavatain(Winter)\Colorless, Healer\ \Cavalry\4, 8, 7, 5, 3\33, 36, 30, 27, 18\Daisuke Izuka\Sarah Williams\Kugimiya Rie\5s5b\F\FEH\Lavatain
+Lavatain(Winter)\Colorless, Healer\ \Cavalry\4, 8, 7, 5, 3\33, 36, 30, 27, 18\kawasumi\Sarah Williams\Kugimiya Rie\5s5b\F\FEH\Lavatain
 Laslow\Red, Blade\ \Infantry\7, 8, 5, 7, 4\44, 35, 26, 30, 22\Suekane Kumiko\Mick Wingert\Kijima Ryuichi\3p4p3qLU\M\FE14C\*Inigo, Fates
 Legault\Colorless, Dagger\ \Infantry\6, 7, 9, 4, 3\39, 31, 38, 24, 19\PenekoR\Christopher Bevins\\4p5p\M\FE7\Legault
 Leanne\Colorless, Beast, Heron\\Flier\6, 6, 9, 2, 8\36, 27, 37, 16, 34\Yura\Rachelle Heger\\5p\F\FE10, FE9\Leanne
