@@ -7303,6 +7303,66 @@ def display_skills(event, mode)
   end
 end
 
+def display_units_and_skills(event,bot,args)
+  args=event.message.text.split(' ') if args.nil?
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  metadata_load()
+  mode=1
+  mode=0 if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+  if args.nil? || args.length.zero?
+    p1=find_in_units(event,mode,true)
+    p2=find_in_skills(event,mode,true,p1)
+    if !p1.is_a?(Array) && !p2.is_a?(Array)
+      event.respond 'Your request is gibberish.'
+    elsif !p1.is_a?(Array)
+      display_skills(event, mode)
+    elsif !p2.is_a?(Array)
+      display_units(event, mode)
+    else
+      event.respond "I'm not displaying all units *and* all skills!"
+    end
+  elsif ['unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
+    event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+    display_units(event, mode)
+  elsif ['skill','skills'].include?(args[0].downcase)
+    event.channel.send_temporary_message('Calculating data, please wait...',(event.message.text.length/30).floor+1)
+    display_skills(event, mode)
+  else
+    event.channel.send_temporary_message('Calculating data, please wait...',(event.message.text.length/30).floor+2)
+    p1=find_in_units(event,1,true)
+    m=[p1[0]]
+    p1=p1[1].map{|q| "#{'~~' if !["Laevatein","- - -"].include?(q) && !@units[find_unit(q,event,false,true)][13][0].nil?}#{q}#{'~~' if !["Laevatein","- - -"].include?(q) && !@units[find_unit(q,event,false,true)][13][0].nil?}"}
+    p2=find_in_skills(event,1,true)
+    m.push(p2[0])
+    p2=p2[1]
+    if !p1.is_a?(Array) && !p2.is_a?(Array)
+      event.respond 'Your request is gibberish.'
+    elsif !p1.is_a?(Array)
+      display_skills(event, mode)
+    elsif !p2.is_a?(Array)
+      display_units(event, mode)
+    elsif p1.join("\n").length+p2.join("\n").length+m.join("\n").length<=1950
+      create_embed(event,"#{"__**Unit search**__\n#{m[0].join("\n")}\n\n" if m[0].length>0}#{"__**Skill search**__\n#{m[1].join("\n")}\n\n" if m[1].length>0}__**Results**__",'',0x9400D3,"Totals: #{p1.reject{|q| q=='- - -'}.uniq.length} units, #{p2.reject{|q| q=='- - -'}.uniq.length} skills",nil,[['**Units**',p1.join("\n")],['**Skills**',p2.join("\n")]],2)
+    elsif !safe_to_spam?(event)
+      event.respond 'My response would be so long that I would prefer you ask me in PM.'
+    else
+      t="**Units:** #{p1[0]}"
+      if p1.length>1
+        for i in 1...p1.length
+          t=extend_message(t,p1[i],event)
+        end
+      end
+      t=extend_message(t,"**Skills:** #{p2[0]}",event,3)
+      if p2.length>1
+        for i in 1...p2.length
+          t=extend_message(t,p2[i],event)
+        end
+      end
+      event.respond t
+    end
+  end
+end
+
 def sort_units(bot,event,args=[])
   args=event.message.text.downcase.split(' ') if args.nil? || args.length.zero?
   event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -9442,7 +9502,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   else
     x.push(['Frostbite',rd])
   end
-  x.push(['Misc.',"Defense + Resistance = #{rdr}#{"\n\n#{u40[0].gsub('Lavatain','Laevatein')} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0].gsub('Lavatain','Laevatein')}:\n#{rs}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\nOutnumber #{u40[0].gsub('Lavatain','Laevatein')}'s allies within 2 spaces" if weapon=='Thunder Armads'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless @units[j][1][1]=='Healer'}",1])
+  x.push(['Misc.',"Defense + Resistance = #{rdr}#{"\n\n#{u40[0].gsub('Lavatain','Laevatein')} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0].gsub('Lavatain','Laevatein')}:\n#{rs}#{"\nFull HP" if weapon=='Fell Breath'}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\nOutnumber #{u40[0].gsub('Lavatain','Laevatein')}'s allies within 2 spaces" if weapon=='Thunder Armads'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless @units[j][1][1]=='Healer'}",1])
   ftr="\"Frostbite\" is weapons like Felicia's Plate"
   ftr="#{ftr} and refined dragonstones" if ['Healer','Tome','Bow','Dagger'].include?(@units[j][1][1])
   if photon=="0"
@@ -13587,63 +13647,7 @@ end
 
 bot.command([:find,:search]) do |event, *args|
   return nil if overlap_prevent(event)
-  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
-  metadata_load()
-  mode=1
-  mode=0 if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-  if args.nil? || args.length.zero?
-    p1=find_in_units(event,mode,true)
-    p2=find_in_skills(event,mode,true,p1)
-    if !p1.is_a?(Array) && !p2.is_a?(Array)
-      event.respond 'Your request is gibberish.'
-    elsif !p1.is_a?(Array)
-      display_skills(event, mode)
-    elsif !p2.is_a?(Array)
-      display_units(event, mode)
-    else
-      event.respond "I'm not displaying all units *and* all skills!"
-    end
-  elsif ['unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
-    event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
-    display_units(event, mode)
-  elsif ['skill','skills'].include?(args[0].downcase)
-    event.channel.send_temporary_message('Calculating data, please wait...',(event.message.text.length/30).floor+1)
-    display_skills(event, mode)
-  else
-    event.channel.send_temporary_message('Calculating data, please wait...',(event.message.text.length/30).floor+2)
-    p1=find_in_units(event,1,true)
-    m=[p1[0]]
-    p1=p1[1].map{|q| "#{'~~' if !["Laevatein","- - -"].include?(q) && !@units[find_unit(q,event,false,true)][13][0].nil?}#{q}#{'~~' if !["Laevatein","- - -"].include?(q) && !@units[find_unit(q,event,false,true)][13][0].nil?}"}
-    p2=find_in_skills(event,1,true)
-    m.push(p2[0])
-    p2=p2[1]
-    if !p1.is_a?(Array) && !p2.is_a?(Array)
-      event.respond 'Your request is gibberish.'
-    elsif !p1.is_a?(Array)
-      display_skills(event, mode)
-    elsif !p2.is_a?(Array)
-      display_units(event, mode)
-    elsif p1.join("\n").length+p2.join("\n").length+m.join("\n").length<=1950
-      create_embed(event,"#{"__**Unit search**__\n#{m[0].join("\n")}\n\n" if m[0].length>0}#{"__**Skill search**__\n#{m[1].join("\n")}\n\n" if m[1].length>0}__**Results**__",'',0x9400D3,"Totals: #{p1.reject{|q| q=='- - -'}.uniq.length} units, #{p2.reject{|q| q=='- - -'}.uniq.length} skills",nil,[['**Units**',p1.join("\n")],['**Skills**',p2.join("\n")]],2)
-    elsif !safe_to_spam?(event)
-      event.respond 'My response would be so long that I would prefer you ask me in PM.'
-    else
-      t="**Units:** #{p1[0]}"
-      if p1.length>1
-        for i in 1...p1.length
-          t=extend_message(t,p1[i],event)
-        end
-      end
-      t=extend_message(t,"**Skills:** #{p2[0]}",event,3)
-      if p2.length>1
-        for i in 1...p2.length
-          t=extend_message(t,p2[i],event)
-        end
-      end
-      event.respond t
-    end
-  end
-  return nil
+  display_units_and_skills(event,bot,args)
 end
 
 bot.command([:sort,:list]) do |event, *args|
@@ -15732,6 +15736,10 @@ bot.mention do |event|
     else
       sort_units(bot,event,a)
     end
+    k=1
+  elsif ['find','search'].include?(a[0].downcase)
+    a.shift
+    display_units_and_skills(event,bot,a)
     k=1
   elsif ['sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortskil','skilsort','sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist'].include?(a[0].downcase)
     a.shift
