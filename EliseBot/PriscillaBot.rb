@@ -10733,20 +10733,48 @@ def phase_study(event,name,bot,weapon=nil)
       x=nil if inner_skill.include?(", #{x}") && (inner_skill.include?('If foe uses') || inner_skill.include?('If foe initiates combat and uses'))
       x=nil if !x.nil? && x.include?('to allies')
       unless x.nil? || refinement != 'Effect'
-        x2=x.scan(/\d+?/)[0].to_i
-        x3=[0,0,0,0,0,0]
-        x3[2]+=x2 if x.include?('Atk')
-        x3[3]+=x2 if x.include?('Spd')
-        x3[4]+=x2 if x.include?('Def')
-        x3[5]+=x2 if x.include?('Res')
-        unless x.include?('foe initiates') || x.include?('is attacked') || x.include?('is under attack') || x.include?('foe attacks')
-          for i in 0...x3pp.length
-            x3pp[i]=[x3pp[i],x3[i]].max
+        zzz2=find_effect_name(sklz[ww2],event,1)
+        lookout=[]
+        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
+          lookout=[]
+          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
+            lookout.push(eval line)
           end
         end
-        unless x.include?('unit initiates') || x.include?('unit attacks')
-          for i in 0...x3ep.length
-            x3ep[i]=[x3ep[i],x3[i]].max
+        statskl=lookout.find_index{|q| q[0]==zzz2}
+        if statskl.nil?
+          x2=x.scan(/\d+?/)[0].to_i
+          x3=[0,0,0,0,0,0]
+          x3[2]+=x2 if x.include?('Atk')
+          x3[3]+=x2 if x.include?('Spd')
+          x3[4]+=x2 if x.include?('Def')
+          x3[5]+=x2 if x.include?('Res')
+          unless x.include?('foe initiates') || x.include?('is attacked') || x.include?('is under attack') || x.include?('foe attacks')
+            for i in 0...x3pp.length
+              x3pp[i]=[x3pp[i],x3[i]].max
+            end
+          end
+          unless x.include?('unit initiates') || x.include?('unit attacks')
+            for i in 0...x3ep.length
+              x3ep[i]=[x3ep[i],x3[i]].max
+            end
+          end
+        else
+          statskl=lookout[statskl]
+          if ['Enemy Phase','Player Phase','In-Combat Buffs 1','In-Combat Buffs 2'].include?(statskl[3])
+            x3=statskl[4].map{|q| q}
+            x3.unshift(0)
+            x3[6]=0
+            unless statskl[3]=='Enemy Phase'
+              for i in 0...x3pp.length
+                x3pp[i]=[x3pp[i],x3[i]].max
+              end
+            end
+            unless statskl[3]=='Player Phase'
+              for i in 0...x3ep.length
+                x3ep[i]=[x3ep[i],x3[i]].max
+              end
+            end
           end
         end
       end
@@ -11832,7 +11860,7 @@ bot.command([:art,:artist]) do |event, *args|
   return nil
 end
 
-bot.command([:mythic,:mythical,:mythics,:mythicals]) do |event, *args|
+bot.command([:mythic,:mythical,:mythics,:mythicals,:mystic,:mystical,:mystics,:mysticals]) do |event, *args|
   return nil if overlap_prevent(event)
   disp_legendary_mythical(event,bot,args,'Mythic')
   return nil
