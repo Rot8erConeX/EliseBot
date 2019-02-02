@@ -287,6 +287,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Removes a unit from the donor units attached to the invoker.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['merge','combine'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","Causes me to merge the donor unit with the name `unit`.\n\nIf `number` is defined, I will merge the donor unit that many times.\nIf not, I will merge them once.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['flower','flowers','dragonflower','dragonflowers'].include?(subcommand.downcase)
+      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __number__","Causes me to equip the donor unit with the name `unit`, with an additional dragonflower.\n\nIf `number` is defined, I will equip that many dragonflowers.\nIf not, I will equip one.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['nature','ivs'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*effects__","Causes me to change the nature of the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['equip','skill'].include?(subcommand.downcase)
@@ -316,6 +318,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Removes a unit from either the developer \"nobodies\" list or the devunits.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['merge','combine'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","Causes me to merge the devunit with the name `unit`.\n\nIf `number` is defined, I will merge the devunit that many times.\nIf not, I will merge them once.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+    elsif ['flower','flowers','dragonflower','dragonflowers'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","Causes me to equip the devunit with the name `unit`, with an additional dragonflower.\n\nIf `number` is defined, I will equip that many dragonflowers.\nIf not, I will equip one.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['nature','ivs'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*effects__","Causes me to change the nature of the devunit with the name `unit`\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['learn','teach'].include?(subcommand.downcase)
@@ -529,6 +533,11 @@ def disp_more_info(event, mode=0) # used by the `help` command to display info t
       str="#{str}\n\n**Summoner Support**"
       str="#{str}\nProper format: #{['C','B','A','S'].sample} ~~Just a single letter~~"
       str="#{str}\nDefault: No support"
+      str="#{str}\n\n**Dragonflower stats**"
+      str="#{str}\nProper format: Flower#{rand(5)+1}"
+      str="#{str}\nSecondary format: F#{rand(5)+1}"
+      str="#{str}\nDefault: No flower stats"
+      str="#{str}\nNote: The simple word \"Flower\" will automatically equip the maximum number of flowers"
       str="#{str}\n\n**Beast transformation**"
       str="#{str}\nBeast units, when equipped with a weapon, can take two forms."
       str="#{str}\nProper format: transformed ~~just include the word~~"

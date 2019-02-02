@@ -1191,6 +1191,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     unit="#{f}"
     type=type.reverse.map{|q| q.gsub('*','')}
   end
+  checkstr=normalize(newname.gsub('!','').gsub('(','').gsub(')','').gsub('_',''))
   if type[0]=='Alias' && type[1].gsub('*','')=='Unit'
     unt=@units[find_unit(unit,event)]
     checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
