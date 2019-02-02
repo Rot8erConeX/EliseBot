@@ -12295,56 +12295,61 @@ bot.command(:summon) do |event, *colors|
       two_star = 0
       one_star = 0
     end
+    five_star=0 if focus>=100
+    four_star=0 if focus+five_star>=100
+    three_star=0 if focus+five_star+four_star>=100
+    two_star=0 if focus+five_star+four_star+three_star>=100
+    one_star=0 if focus+five_star+four_star+three_star+two_star>=100
     fakes=false
     fakes=true if @summon_rate[0]>=120 && @summon_rate[2]%3==0
     str="#{str}\n5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % focus}%"
-    str="#{str}\nOther 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % five_star}%" unless five_star.zero?
+    str="#{str}\nOther 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % five_star}%" unless five_star<=0
     if fakes
       if bnr[8].nil?
-        str="#{str}\n~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % four_star}%" unless four_star.zero?
+        str="#{str}\n~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % four_star}%" unless four_star<=0
       elsif four_star>0
         str="#{str}\n~~4\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (four_star/2)}%"
         str="#{str}\nOther ~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (four_star/2)}%"
       end
       if bnr[9].nil?
-        str="#{str}\n~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % three_star}%" unless three_star.zero?
+        str="#{str}\n~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % three_star}%" unless three_star<=0
       elsif three_star>0
         str="#{str}\n~~3\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (three_star/2)}%"
         str="#{str}\nOther ~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (three_star/2)}%"
       end
       if bnr[10].nil?
-        str="#{str}\n~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % two_star}%" unless two_star.zero?
+        str="#{str}\n~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % two_star}%" unless two_star<=0
       elsif two_star>0
         str="#{str}\n~~2\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (two_star/2)}%"
         str="#{str}\nOther ~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (two_star/2)}%"
       end
       if bnr[11].nil?
-        str="#{str}\n~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % one_star}%" unless one_star.zero?
+        str="#{str}\n~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % one_star}%" unless one_star<=0
       elsif two_star>0
         str="#{str}\n~~1\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (one_star/2)}%"
         str="#{str}\nOther ~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (one_star/2)}%"
       end
     else
       if bnr[8].nil?
-        str="#{str}\n4<:Icon_Rarity_4:448266418459377684> Unit:  #{'%.2f' % four_star}%" unless four_star.zero?
+        str="#{str}\n4<:Icon_Rarity_4:448266418459377684> Unit:  #{'%.2f' % four_star}%" unless four_star<=0
       elsif four_star>0
         str="#{str}\n4<:Icon_Rarity_4p10:448272714210476033> Focus:  #{'%.2f' % (four_star/2)}%"
         str="#{str}\nOther 4<:Icon_Rarity_4:448266418459377684>:  #{'%.2f' % (four_star/2)}%"
       end
       if bnr[9].nil?
-        str="#{str}\n3<:Icon_Rarity_3:448266417934958592> Unit:  #{'%.2f' % three_star}%" unless three_star.zero?
+        str="#{str}\n3<:Icon_Rarity_3:448266417934958592> Unit:  #{'%.2f' % three_star}%" unless three_star<=0
       elsif three_star>0
         str="#{str}\n3<:Icon_Rarity_3p10:448294378293952513> Focus:  #{'%.2f' % (three_star/2)}%"
         str="#{str}\nOther 3<:Icon_Rarity_3:448266417934958592>:  #{'%.2f' % (three_star/2)}%"
       end
       if bnr[10].nil?
-        str="#{str}\n2<:Icon_Rarity_2:448266417872044032> Unit:  #{'%.2f' % two_star}%" unless two_star.zero?
+        str="#{str}\n2<:Icon_Rarity_2:448266417872044032> Unit:  #{'%.2f' % two_star}%" unless two_star<=0
       elsif two_star>0
         str="#{str}\n2<:Icon_Rarity_2p10:448294378205872130> Focus:  #{'%.2f' % (two_star/2)}%"
         str="#{str}\nOther 2<:Icon_Rarity_2:448266417872044032>:  #{'%.2f' % (two_star/2)}%"
       end
       if bnr[11].nil?
-        str="#{str}\n1<:Icon_Rarity_1:448266417481973781> Unit:  #{'%.2f' % one_star}%" unless one_star.zero?
+        str="#{str}\n1<:Icon_Rarity_1:448266417481973781> Unit:  #{'%.2f' % one_star}%" unless one_star<=0
       elsif two_star>0
         str="#{str}\n1<:Icon_Rarity_1p10:448294377878716417> Focus:  #{'%.2f' % (one_star/2)}%"
         str="#{str}\nOther 1<:Icon_Rarity_1:448266417481973781>:  #{'%.2f' % (one_star/2)}%"
@@ -14376,6 +14381,8 @@ bot.command(:edit) do |event, cmd, *args|
       create_embed(event,"**edit #{subcommand.downcase}** __unit__","Removes a unit from the donor units attached to the invoker.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['merge','combine'].include?(subcommand.downcase)
       create_embed(event,"**edit #{subcommand.downcase}** __unit__ __number__","Causes me to merge the donor unit with the name `unit`.\n\nIf `number` is defined, I will merge the donor unit that many times.\nIf not, I will merge them once.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['flower','flowers','dragonflower','dragonflowers'].include?(subcommand.downcase)
+      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __number__","Causes me to equip the donor unit with the name `unit`, with an additional dragonflower.\n\nIf `number` is defined, I will equip that many dragonflowers.\nIf not, I will equip one.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['nature','ivs'].include?(subcommand.downcase)
       create_embed(event,"**edit #{subcommand.downcase}** __unit__ __\*effects__","Causes me to change the nature of the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['equip','skill'].include?(subcommand.downcase)
@@ -14626,11 +14633,31 @@ bot.command(:edit) do |event, cmd, *args|
     event.respond "You have promoted your #{donor_units[j2][0]} to #{donor_units[j2][1]}#{@rarity_stars[donor_units[j2][1]-1]}!"
   elsif ['merge','combine'].include?(cmd.downcase)
     flurp=find_stats_in_string(event,nil,1)
-    donor_units[j2][2]+=flurp[1] unless flurp[1].nil?
-    donor_units[j2][2]+=1 if flurp[1].nil?
+    if !flurp[1].nil?
+      donor_units[j2][2]+=flurp[1]
+    elsif !flurp[0].nil?
+      donor_units[j2][2]+=flurp[0]
+    else
+      donor_units[j2][2]+=1
+    end
     donor_units[j2][2]=[donor_units[j2][2],@max_rarity_merge[1]].min
     donor_unit_save(uid,donor_units)
     event.respond "You have merged your #{donor_units[j2][0]} to +#{donor_units[j2][2]}!"
+  elsif ['flower','flowers','dragonflower','dragonflowers'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    if !flurp[8].nil?
+      donor_units[j2][6]+=flurp[8]
+    elsif !flurp[1].nil?
+      donor_units[j2][6]+=flurp[1]
+    elsif !flurp[0].nil?
+      donor_units[j2][6]+=flurp[0]
+    else
+      donor_units[j2][6]+=1
+    end
+    donor_units[j2][6]=[donor_units[j2][6],2*@max_rarity_merge[2]].min
+    donor_units[j2][6]=[donor_units[j2][6],@max_rarity_merge[2]].min unless @units[j][3]=='Infantry' && @units[j][9][0].include?('PF')
+    donor_unit_save(uid,donor_units)
+    event.respond "You have given #{donor_units[j2][0]} their #{longFormattedNumber(donor_units[j2][6],true)} flower!"
   elsif ['nature','ivs'].include?(cmd.downcase)
     flurp=find_stats_in_string(event,nil,1)
     n=''
@@ -15110,8 +15137,13 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
     return nil
   elsif ['promote','rarity','feathers'].include?(cmd.downcase)
     flurp=find_stats_in_string(event,nil,1)
-    @dev_units[j2][1]=flurp[0] unless flurp[0].nil?
-    @dev_units[j2][1]+=1 if flurp[0].nil?
+    if !flurp[1].nil?
+      @dev_units[j2][2]+=flurp[1]
+    elsif !flurp[0].nil?
+      @dev_units[j2][2]+=flurp[0]
+    else
+      @dev_units[j2][2]+=1
+    end
     @dev_units[j2][1]=[@dev_units[j2][1],5].min
     @dev_units[j2][2]=0
     devunits_save()
@@ -15123,6 +15155,21 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
     @dev_units[j2][2]=[@dev_units[j2][2],@max_rarity_merge[1]].min
     devunits_save()
     event.respond "You have merged your #{@dev_units[j2][0]} to +#{@dev_units[j2][2]}!"
+  elsif ['flower','flowers','dragonflower','dragonflowers'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    if !flurp[8].nil?
+      @dev_units[j2][6]+=flurp[8]
+    elsif !flurp[1].nil?
+      @dev_units[j2][6]+=flurp[1]
+    elsif !flurp[0].nil?
+      @dev_units[j2][6]+=flurp[0]
+    else
+      @dev_units[j2][6]+=1
+    end
+    @dev_units[j2][6]=[@dev_units[j2][6],2*@max_rarity_merge[2]].min
+    @dev_units[j2][6]=[@dev_units[j2][6],@max_rarity_merge[2]].min unless @units[j][3]=='Infantry' && @units[j][9][0].include?('PF')
+    devunits_save()
+    event.respond "You have given #{@dev_units[j2][0]} their #{longFormattedNumber(@dev_units[j2][6],true)} flower!"
   elsif ['nature','ivs'].include?(cmd.downcase)
     flurp=find_stats_in_string(event,nil,1)
     n=''
