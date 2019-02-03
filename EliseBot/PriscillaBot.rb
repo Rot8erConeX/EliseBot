@@ -153,7 +153,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
      'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics','legend',
-     'legends','legendarys','item','accessory','acc','accessorie','alias','s2s','dailies','tomorrow','tommorrow','tomorow','tommorow','aoe','area']
+     'legends','legendarys','item','accessory','acc','accessorie','alias','s2s','dailies','tomorrow','tommorrow','tomorow','tommorow','aoe','area','prf','prfs']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -6840,7 +6840,9 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
           for i in 0...matches2.length
             for j in 0...weapon_subsets.length
               if matches2[i][4]=='Weapon' && weapon_subsets[j]=='Inheritable'
-                matches3.push(matches2[i]) unless matches2[i][11].split(', ').include?('Prf')
+                matches3.push(matches2[i]) if matches2[i][6]=='-'
+              elsif matches2[i][4]=='Weapon' && weapon_subsets[j]=='Prf'
+                matches3.push(matches2[i]) unless matches2[i][6]=='-'
               elsif matches2[i][4]=='Weapon' && weapon_subsets[j]=='Pega-killer' && !weapon_subsets.include?('Effective')
                 matches3.push(matches2[i]) if (matches2[i][5]=='Bow Users Only' && !matches2[i][11].split(', ').include?('UnBow')) || matches2[i][11].split(', ').include?(weapon_subsets[j])
               elsif matches2[i][4]=='Weapon' && weapon_subsets[j]=='Retro-Prf'
@@ -11917,239 +11919,58 @@ end
 
 bot.command([:mythic,:mythical,:mythics,:mythicals,:mystic,:mystical,:mystics,:mysticals]) do |event, *args|
   return nil if overlap_prevent(event)
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseText'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
+  end
   disp_legendary_mythical(event,bot,args,'Mythic')
   return nil
 end
 
 bot.command([:legendary,:legendaries,:legendarys,:legend,:legends]) do |event, *args|
   return nil if overlap_prevent(event)
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseText'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
+  end
   disp_legendary_mythical(event,bot,args,'Legendary')
   return nil
 end
 
 bot.command([:refinery,:refine,:effect]) do |event|
   return nil if overlap_prevent(event)
-  if !safe_to_spam?(event)
-    event.respond "There is a lot of data being displayed.  Please use this command in PM."
-    return nil
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseText'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
   end
-  event.channel.send_temporary_message('Calculating data, please wait...',1)
-  srv=0
-  srv=event.server.id unless event.server.nil?
-  data_load()
-  stones=[]
-  dew=[]
-  g=get_markers(event)
-  skkz=@skills.map{|q| q}.reject{|q| ['Falchion','Missiletainn','Breidablik','Adult (All)'].include?(q[0]) || q[4]!='Weapon' || !has_any?(g, q[13])}
-  if event.message.text.downcase.include?('effect')
-    for i in 0...skkz.length
-      eff=false
-      unless skkz[i][15].nil? || skkz[i][15].length.zero?
-        str=skkz[i][15].split(' ').join(' ')
-        for i2 in 0...6
-          if str[0,1]=='-' && str[1,1].to_i.to_s==str[1,1]
-            str=str[2,str.length-2]
-          elsif str[0,1].to_i.to_s==str[0,1]
-            str=str[1,str.length-1]
-          end
-        end
-        eff=true if str[0,1]!='*' && str != 'y'
-      end
-      if eff
-        if skkz[i][6]=='-'
-          stones.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} (->) #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][13].nil?}")
-        else
-          dew.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} (->) #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][13].nil?}")
-        end
-      end
-    end
-    stones.uniq!
-    dew.uniq!
-    if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-        msg='__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
-        for i in 0...dew.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew[i].gsub('~~','').split(' (->) ')[0])}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
-          for j in 0...k.length
-            k[j][1].push(dew[i]) if k2==k[j][0].split('> ')[1]
-          end
-        end
-        for i in 0...k.length
-          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
-        end
-        event.respond msg
-      else
-        create_embed(event,'__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x9BFFFF,nil,nil,triple_finish(dew,true),3)
-      end
-      if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-        msg='__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
-        for i in 0...stones.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones[i].gsub('~~','').split(' (->) ')[0])}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
-          for j in 0...k.length
-            k[j][1].push(stones[i]) if k2==k[j][0].split('> ')[1]
-          end
-        end
-        for i in 0...k.length
-          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
-        end
-        event.respond msg
-      else
-        create_embed(event,'__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x688C68,nil,nil,triple_finish(stones,true),3)
-      end
-    else
-      dew2=dew[dew.length/2+dew.length%2,dew.length/2].join("\n")
-      dew=dew[0,dew.length/2+3*dew.length%2].join("\n")
-      create_embed(event,'__**Weapon Refines with Effect Modes**__','',0x688C68,nil,nil,[['<:Divine_Dew:453618312434417691> Divine Dew',dew],['<:Divine_Dew:453618312434417691> Divine Dew',dew2],['<:Refining_Stone:453618312165720086> Refining Stones',stones.join("\n"),1]],3)
-    end
-    return nil
+  disp_all_refines(event,bot)
+end
+
+bot.command([:prf,:prfs,:PRF]) do |event|
+  return nil if overlap_prevent(event)
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseText'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
   end
-  for i in 0...skkz.length
-    if !skkz[i][15].nil?
-      if skkz[i][6]=='-'
-        stones.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
-      else
-        dew.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
-      end
-    end
-  end
-  dew2=[]
-  stones2=[]
-  for i in 0...skkz.length
-    unless skkz[i].nil?
-      if !skkz[i][14].nil?
-        s=skkz[i][14].split(', ')
-        for j in 0...s.length
-          if s[j].include?('!')
-            s[j]=s[j].split('!')
-            s2=skkz[skkz.find_index{|q| q[0]==s[j][1]}]
-            if s2[6]=='-'
-              stones2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})#{'~~' unless skkz[i][13].nil?}")
-            else
-              dew2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})#{'~~' unless skkz[i][13].nil?}")
-            end
-          else
-            s2=skkz[skkz.find_index{|q| q[0]==s[j]}]
-            if s2[6]=='-'
-              stones2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
-            else
-              dew2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
-            end
-          end
-        end
-      end
-    end
-  end
-  stones.uniq!
-  dew.uniq!
-  stones2.uniq!
-  dew2.uniq!
-  if stones.join("\n").length+dew.join("\n").length+stones2.join("\n").length+dew2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    if dew2.join("\n").length+stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      if dew2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-        msg='__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
-        for i in 0...dew2.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
-          for j in 0...k.length
-            k[j][1].push(dew2[i]) if k2==k[j][0].split('> ')[1]
-          end
-        end
-        for i in 0...k.length
-          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
-        end
-        event.respond msg
-      else
-        create_embed(event,'__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x9BFFFF,nil,nil,triple_finish(dew2),3)
-      end
-      if stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-        msg='__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
-        for i in 0...stones2.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
-          for j in 0...k.length
-            k[j][1].push(stones2[i]) if k2==k[j][0].split('> ')[1]
-          end
-        end
-        for i in 0...k.length
-          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
-        end
-        event.respond msg
-      else
-        create_embed(event,'__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x9BFFFF,nil,nil,triple_finish(stones2),3)
-      end
-    else
-      create_embed(event,'__**Weapon Evolution**__','',0x9BFFFF,nil,nil,[['**Divine Dew** <:Divine_Dew:453618312434417691>',dew2.join("\n")],['**Refining Stones** <:Refining_Stone:453618312165720086>',stones2.join("\n")]],3)
-    end
-    if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-        msg='__**Weapon Refines: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
-        for i in 0...dew.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
-          for j in 0...k.length
-            k[j][1].push(dew[i]) if k2==k[j][0].split('> ')[1]
-          end
-        end
-        for i in 0...k.length
-          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
-        end
-        event.respond msg
-      else
-        create_embed(event,'__**Weapon Refines: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x688C68,nil,nil,triple_finish(dew),3)
-      end
-      if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-        msg='__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
-        for i in 0...stones.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
-          for j in 0...k.length
-            k[j][1].push(stones[i]) if k2==k[j][0].split('> ')[1]
-          end
-        end
-        for i in 0...k.length
-          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
-        end
-        event.respond msg
-      else
-        create_embed(event,'__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x688C68,nil,nil,triple_finish(stones),3)
-      end
-    else
-      stones2=stones[stones.length/2+stones.length%2,stones.length/2]
-      stones=stones[0,stones.length/2+3*stones.length%2]
-      create_embed(event,'__**Weapon Refines**__','',0x688C68,nil,nil,[['**Divine Dew** <:Divine_Dew:453618312434417691>',dew.join("\n")],['**Refining Stones** <:Refining_Stone:453618312165720086>',stones.join("\n")],['**Refining Stones** <:Refining_Stone:453618312165720086>',stones2.join("\n")]],3)
-    end
-    return nil
-  else
-    dew3=['__**Refinement**__']
-    stones3=['__**Refinement**__']
-    for i in 0...dew.length
-      dew3.push(dew[i])
-    end
-    for i in 0...stones.length
-      stones3.push(stones[i])
-    end
-    stones=stones3.map{|q| q}
-    dew=dew3.map{|q| q}
-    dew.push('- - -')
-    dew.push('__**Evolution**__')
-    stones.push('- - -')
-    stones.push('__**Evolution**__')
-    for i in 0...dew2.length
-      dew.push(dew2[i])
-    end
-    for i in 0...stones2.length
-      stones.push(stones2[i])
-    end
-    stones2=stones[stones.length/2+stones.length%2,stones.length/2]
-    stones=stones[0,stones.length/2+3*stones.length%2]
-    create_embed(event,'Weapon Refinery','',0x688C68,nil,nil,[['**Divine Dew** <:Divine_Dew:453618312434417691>',dew.join("\n")],['**Refining Stones** <:Refining_Stone:453618312165720086>',stones.join("\n")],['**Refining Stones** <:Refining_Stone:453618312165720086>',stones2.join("\n")]],3)
-  end
+  disp_all_prfs(event,bot)
 end
 
 bot.command([:attackicon, :attackcolor, :attackcolors, :attackcolour, :attackcolours, :atkicon, :atkcolor, :atkcolors, :atkcolour, :atkcolours, :atticon, :attcolor, :attcolors, :attcolour, :attcolours, :staticon, :statcolor, :statcolors, :statcolour, :statcolours, :iconcolor, :iconcolors, :iconcolour, :iconcolours]) do |event|
   return nil if overlap_prevent(event)
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseText'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
+  end
   attack_icon(event)
   return nil
 end
