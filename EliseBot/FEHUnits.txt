@@ -362,11 +362,11 @@ Matt(C137)\Colorless, Bow\ \Flier\5, 7, 10, 2, 6\32, 31, 39, 16, 27\\\\4p5pPF\M\
 Mex\Blue, Tome, Thunder\ \Infantry\9, 7, 12, 4, 4\42, 34, 39, 21, 21\\\\4p5pPF\M\\Mex\Y184841080242438144
 Micaiah(C137)\Green, Tome, Wind\ \Infantry\5, 6, 9, 5, 9\33, 28, 35, 22, 34\\\\5pPF\F\\Micaiah\YH166307944235794432
 Mint\Colorless, Bow\ \Flier\5, 8, 9, 6, 6\29, 35, 38, 24, 27\\\\5pPF\F\\Mint\Y282258540444254219
-Mintz\Blue, Tome, Light\ \Infantry\6, 6, 5, 5, 7\34, 30, 26, 28, 33\\\\3p4pPF\M\\Mintz\Y103926672939581440
+Mintz\Blue, Tome, Light\ \Infantry\6, 6, 5, 5, 7\34, 30, 26, 28, 33\\\\3p4pPF\M\\Mintz\YA103926672939581440
 Minus\Red, Blade\ \Infantry\6, 8, 9, 4, 6\37, 35, 41, 21, 29\\\\5pPF\M\\Minus\Y193452332359352321
 M'joe'ra\Colorless, Healer\ \Infantry\11, 5, 0, 9, 4\49, 27, 12, 38, 24\\\\4p5pPF\M\\M'joe'ra\Y82897855479549952
 Moony\Green, Blade\ \Cavalry\7, 9, 8, 4, 10\38, 37, 33, 21, 35\\\\5pPF\M\\Moony\Y240495532378816513
-Moosie\Blue, Blade\ \Infantry\10, 6, 4, 6, 7\45, 30, 22, 31, 34\\\\4p5pPF\M\\Moosie\Y270372601107447808
+Moosie\Blue, Blade\ \Infantry\10, 6, 4, 6, 7\45, 30, 22, 31, 34\\\\4p5pPF\M\\Moosie\YA270372601107447808
 Nebby\Blue, Tome, Light\ \Infantry\7, 7, 3, 11, 11\31, 27, 18, 36, 38\\\\3p4pPF\M\\Nebby\Y251497172003061762
 Nesspeon\Red, Tome, Dark\ \Infantry\5, 11, 10, 2, 8\33, 40, 37, 15, 33\\\\4p5pPF\M\\Nesspeon\Y152179484991291392
 Nixx(C137)\Colorless, Healer\ \Flier\6, 6, 10, 3, 9\34, 28, 35, 19, 37\\\\4p5pPF\F\\Nixx(C137)\Y302271226896711682

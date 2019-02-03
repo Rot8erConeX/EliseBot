@@ -183,7 +183,7 @@ Hone Spd 1\Hone Spd 2\Hone Spd 3\Joint Hone Spd
 Spd Ploy 3
 
 Kana(F)
-5\0\Attack\Defense\-\0
+5\1\Attack\Defense\-\0
 Fire Breath\Fire Breath+\Lightning Breath\Lightning Breath+\Lightning Breath (+) Resistance Mode
 Harsh Command
 Dragon Gaze\Draconic Aura

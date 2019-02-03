@@ -198,6 +198,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}**",'Lists all weapons that can be refined to obtain an Effect Mode in the weapon refinery.',0xD49F61)
   elsif ['refinery','refine'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Lists all weapons that can be refined or evolved in the weapon refinery, organized by whether they use Divine Dew or Refining Stones.\n\nYou can also include the word \"Effect\" in your message to show only weapons that get Effect Mode refines.",0xD49F61)
+  elsif ['prf','prfs'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}**","Lists all skills that are PRF to one or more units.",0xD49F61)
   elsif ['legendary','legendaries','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical','legend','legends','legendarys'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Lists all of the Legendary and Mythic heroes, sorted by up to three defined filters.\nBy default, will sort by __Element__ and then the non-HP __stat__ boost given by the hero.\n\nPossible filters (in order of priority when applied) :\nElement(s), Flavor(s), Affinity/Affinities\nStat(s), Boost(s)\nWeapon(s)\nColo(u)r(s)\nMove(s), Movement(s)\nNext, Time, Future, Month(s)",0xD49F61)
   elsif ['games'].include?(command.downcase)
@@ -425,6 +427,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n`legendaries` __\\*filters__ - for a sorted list of all legendaries. (*also `legendary`*)"
     str="#{str}\n`mythics` __\\*filters__ - for a sorted list of all legendaries. (*also `mythic`, `mythical`, or `mythicals`*)"
     str="#{str}\n`refinery` - used to show a list of refineable weapons (*also `refine`*)"
+    str="#{str}\n`prf` - used to show a list of PRF skills"
     str="#{str}\n\n__**Searches**__"
     str="#{str}\n`find` __\\*filters__ - used to generate a list of applicable units and/or skills (*also `search`*)"
     str="#{str}\n`sort` __\\*filters__ - used to create a list of applicable units and sort them based on specified stats"
@@ -1124,6 +1127,368 @@ def disp_legendary_mythical(event,bot,args=[],dispmode='',forcesplit=false)
   else
     create_embed(event,"__**All #{dispmode} Heroes**__",'',avg_color(c),nil,nil,p1)
   end
+end
+
+def disp_all_refines(event,bot)
+  event.channel.send_temporary_message('Calculating data, please wait...',1)
+  data_load()
+  stones=[]
+  dew=[]
+  g=get_markers(event)
+  skkz=@skills.map{|q| q}.reject{|q| ['Falchion','Missiletainn','Chill Breidablik','Breidablik','Adult (All)'].include?(q[0]) || q[4]!='Weapon' || !has_any?(g, q[13])}
+  if event.message.text.downcase.include?('effect')
+    for i in 0...skkz.length
+      eff=false
+      unless skkz[i][15].nil? || skkz[i][15].length.zero?
+        str=skkz[i][15].split(' ').join(' ')
+        for i2 in 0...6
+          if str[0,1]=='-' && str[1,1].to_i.to_s==str[1,1]
+            str=str[2,str.length-2]
+          elsif str[0,1].to_i.to_s==str[0,1]
+            str=str[1,str.length-1]
+          end
+        end
+        eff=true if str[0,1]!='*' && str != 'y'
+      end
+      if eff
+        if skkz[i][6]=='-'
+          stones.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} \u2192 #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][13].nil?}")
+        else
+          dew.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} \u2192 #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][13].nil?}")
+        end
+      end
+    end
+    stones.uniq!
+    dew.uniq!
+    if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg='__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__'
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        for i in 0...dew.length
+          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew[i].gsub('~~','').split(' (->) ')[0])}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          for j in 0...k.length
+            k[j][1].push(dew[i]) if k2==k[j][0].split('> ')[1]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        create_embed(event,'__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x9BFFFF,nil,nil,triple_finish(dew,true),3)
+      end
+      if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg='__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__'
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        for i in 0...stones.length
+          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones[i].gsub('~~','').split(' (->) ')[0])}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          for j in 0...k.length
+            k[j][1].push(stones[i]) if k2==k[j][0].split('> ')[1]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        create_embed(event,'__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x688C68,nil,nil,triple_finish(stones,true),3)
+      end
+    else
+      dew2=dew[dew.length/2+dew.length%2,dew.length/2].join("\n")
+      dew=dew[0,dew.length/2+3*dew.length%2].join("\n")
+      create_embed(event,'__**Weapon Refines with Effect Modes**__','',0x688C68,nil,nil,[['<:Divine_Dew:453618312434417691> Divine Dew',dew],['<:Divine_Dew:453618312434417691> Divine Dew',dew2],['<:Refining_Stone:453618312165720086> Refining Stones',stones.join("\n"),1]],3)
+    end
+    return nil
+  end
+  for i in 0...skkz.length
+    if !skkz[i][15].nil?
+      if skkz[i][6]=='-'
+        stones.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
+      else
+        dew.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
+      end
+    end
+  end
+  dew2=[]
+  stones2=[]
+  for i in 0...skkz.length
+    unless skkz[i].nil?
+      if !skkz[i][14].nil?
+        s=skkz[i][14].split(', ')
+        for j in 0...s.length
+          if s[j].include?('!')
+            s[j]=s[j].split('!')
+            s2=skkz[skkz.find_index{|q| q[0]==s[j][1]}]
+            if s2[6]=='-'
+              stones2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})#{'~~' unless skkz[i][13].nil?}")
+            else
+              dew2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})#{'~~' unless skkz[i][13].nil?}")
+            end
+          else
+            s2=skkz[skkz.find_index{|q| q[0]==s[j]}]
+            if s2[6]=='-'
+              stones2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
+            else
+              dew2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
+            end
+          end
+        end
+      end
+    end
+  end
+  stones.uniq!
+  dew.uniq!
+  stones2.uniq!
+  dew2.uniq!
+  if stones.join("\n").length+dew.join("\n").length+stones2.join("\n").length+dew2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    if dew2.join("\n").length+stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      if dew2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg='__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__'
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        for i in 0...dew2.length
+          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          for j in 0...k.length
+            k[j][1].push(dew2[i]) if k2==k[j][0].split('> ')[1]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        create_embed(event,'__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x9BFFFF,nil,nil,triple_finish(dew2),3)
+      end
+      if stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg='__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__'
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        for i in 0...stones2.length
+          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          for j in 0...k.length
+            k[j][1].push(stones2[i]) if k2==k[j][0].split('> ')[1]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        create_embed(event,'__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x9BFFFF,nil,nil,triple_finish(stones2),3)
+      end
+    else
+      create_embed(event,'__**Weapon Evolution**__','',0x9BFFFF,nil,nil,[['**Divine Dew** <:Divine_Dew:453618312434417691>',dew2.join("\n")],['**Refining Stones** <:Refining_Stone:453618312165720086>',stones2.join("\n")]],3)
+    end
+    if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg='__**Weapon Refines: Divine Dew <:Divine_Dew:453618312434417691>**__'
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        for i in 0...dew.length
+          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          for j in 0...k.length
+            k[j][1].push(dew[i]) if k2==k[j][0].split('> ')[1]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        create_embed(event,'__**Weapon Refines: Divine Dew <:Divine_Dew:453618312434417691>**__','',0x688C68,nil,nil,triple_finish(dew),3)
+      end
+      if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg='__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__'
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        for i in 0...stones.length
+          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          for j in 0...k.length
+            k[j][1].push(stones[i]) if k2==k[j][0].split('> ')[1]
+          end
+        end
+        for i in 0...k.length
+          msg=extend_message(msg,"*#{k[i][0]}:* #{k[i][1].join(', ')}",event) if k[i][1].length>0
+        end
+        event.respond msg
+      else
+        create_embed(event,'__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x688C68,nil,nil,triple_finish(stones),3)
+      end
+    else
+      stones2=stones[stones.length/2+stones.length%2,stones.length/2]
+      stones=stones[0,stones.length/2+3*stones.length%2]
+      create_embed(event,'__**Weapon Refines**__','',0x688C68,nil,nil,[['**Divine Dew** <:Divine_Dew:453618312434417691>',dew.join("\n")],['**Refining Stones** <:Refining_Stone:453618312165720086>',stones.join("\n")],['**Refining Stones** <:Refining_Stone:453618312165720086>',stones2.join("\n")]],3)
+    end
+    return nil
+  else
+    dew3=['__**Refinement**__']
+    stones3=['__**Refinement**__']
+    for i in 0...dew.length
+      dew3.push(dew[i])
+    end
+    for i in 0...stones.length
+      stones3.push(stones[i])
+    end
+    stones=stones3.map{|q| q}
+    dew=dew3.map{|q| q}
+    dew.push('- - -')
+    dew.push('__**Evolution**__')
+    stones.push('- - -')
+    stones.push('__**Evolution**__')
+    for i in 0...dew2.length
+      dew.push(dew2[i])
+    end
+    for i in 0...stones2.length
+      stones.push(stones2[i])
+    end
+    stones2=stones[stones.length/2+stones.length%2,stones.length/2]
+    stones=stones[0,stones.length/2+3*stones.length%2]
+    create_embed(event,'Weapon Refinery','',0x688C68,nil,nil,[['**Divine Dew** <:Divine_Dew:453618312434417691>',dew.join("\n")],['**Refining Stones** <:Refining_Stone:453618312165720086>',stones.join("\n")],['**Refining Stones** <:Refining_Stone:453618312165720086>',stones2.join("\n")]],3)
+  end
+end
+
+def disp_all_prfs(event,bot)
+  if !safe_to_spam?(event)
+    event.respond "There is a lot of data being displayed.  Please use this command in PM."
+    return nil
+  end
+  event.channel.send_temporary_message('Calculating data, please wait...',1)
+  data_load()
+  g=get_markers(event)
+  skkz=@skills.reject{|q| ['Falchion','Missiletainn','Chill Breidablik','Breidablik','Adult (All)'].include?(q[0]) || q[4]!='Weapon' || q[6]=='-' || !has_any?(g, q[13])}
+  untz=@units.reject{|q| !has_any?(g, q[13][0])}
+  for i in 0...skkz.length
+    skkz[i][6]=skkz[i][6].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
+    skkz[i][6]=skkz[i][6].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
+    skkz[i][6]=skkz[i][6].join(', ')
+    skkz[i][0]="#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]}#{'~~' unless skkz[i][13].nil?} \u2192 #{skkz[i][6]}"
+  end
+  k=skkz.reject{|q| q[8]=='-'}
+  f=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],
+     ['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],
+     ['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],
+     ['<:Gold_Dragon:443172811641454592> Dragon Breaths',[]],['<:Gold_Beast:532854442299752469> Beast Damage',[]],
+     ['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],
+     ["#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')} Damaging Staves",[]]]
+  for i in 0...k.length
+    f[0][1].push(k[i][0]) if k[i][5]=='Sword Users Only'
+    f[1][1].push(k[i][0]) if k[i][5]=='Red Tome Users Only'
+    f[2][1].push(k[i][0]) if k[i][5]=='Lance Users Only'
+    f[3][1].push(k[i][0]) if k[i][5]=='Blue Tome Users Only'
+    f[4][1].push(k[i][0]) if k[i][5]=='Axe Users Only'
+    f[5][1].push(k[i][0]) if k[i][5]=='Green Tome Users Only'
+    f[6][1].push(k[i][0]) if k[i][5]=='Dragons Only'
+    f[7][1].push(k[i][0]) if k[i][5].split(', ').include?('Beasts Only')
+    f[8][1].push(k[i][0]) if k[i][5]=='Bow Users Only'
+    f[9][1].push(k[i][0]) if k[i][5]=='Dagger Users Only'
+    f[10][1].push(k[i][0]) if k[i][5]=='Staff Users Only'
+  end
+  f=f.reject{|q| q[1].nil? || q[1].length<=0}
+  if f.map{|q| "__*#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
+    str="__**Standard PRF Weapons**__"
+    for i in 0...f.length
+      str=extend_message(str,"__*#{f[i][0]}*__",event,2)
+      for i2 in 0...f[i][1].length
+        str=extend_message(str,f[i][1][i2],event)
+      end
+    end
+    event.respond str
+  else
+    create_embed(event,'__**Standard PRF Weapons**__','',0xF4728C,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
+  end
+  k=skkz-k
+  f=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],
+     ['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],
+     ['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],
+     ['<:Gold_Dragon:443172811641454592> Dragon Breaths',[]],['<:Gold_Beast:532854442299752469> Beast Damage',[]],
+     ['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],
+     ["#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')} Damaging Staves",[]]]
+  for i in 0...k.length
+    f[0][1].push(k[i][0]) if k[i][5]=='Sword Users Only'
+    f[1][1].push(k[i][0]) if k[i][5]=='Red Tome Users Only'
+    f[2][1].push(k[i][0]) if k[i][5]=='Lance Users Only'
+    f[3][1].push(k[i][0]) if k[i][5]=='Blue Tome Users Only'
+    f[4][1].push(k[i][0]) if k[i][5]=='Axe Users Only'
+    f[5][1].push(k[i][0]) if k[i][5]=='Green Tome Users Only'
+    f[6][1].push(k[i][0]) if k[i][5]=='Dragons Only'
+    f[7][1].push(k[i][0]) if k[i][5].split(', ').include?('Beasts Only')
+    f[8][1].push(k[i][0]) if k[i][5]=='Bow Users Only'
+    f[9][1].push(k[i][0]) if k[i][5]=='Dagger Users Only'
+    f[10][1].push(k[i][0]) if k[i][5]=='Staff Users Only'
+  end
+  f=f.reject{|q| q[1].nil? || q[1].length<=0}
+  if f.map{|q| "__*#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
+    str="__**Retro-PRF Weapons**__"
+    for i in 0...f.length
+      str=extend_message(str,"__*#{f[i][0]}*__",event,2)
+      for i2 in 0...f[i][1].length
+        str=extend_message(str,f[i][1][i2],event)
+      end
+    end
+    event.respond str
+  else
+    create_embed(event,'__**Retro-PRF Weapons**__','',0xF4728C,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
+  end
+  skkz=@skills.reject{|q| q[4]!='Assist' || q[6]=='-' || !has_any?(g, q[13])}
+  for i in 0...skkz.length
+    skkz[i][6]=skkz[i][6].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
+    skkz[i][6]=skkz[i][6].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
+    skkz[i][6]=skkz[i][6].join(', ')
+    skkz[i][0]="#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]}#{'~~' unless skkz[i][13].nil?} \u2192 #{skkz[i][6]}"
+  end
+  k=skkz.map{|q| q}
+  skkz=@skills.reject{|q| q[4]!='Special' || q[6]=='-' || !has_any?(g, q[13])}
+  for i in 0...skkz.length
+    skkz[i][6]=skkz[i][6].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
+    skkz[i][6]=skkz[i][6].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
+    skkz[i][6]=skkz[i][6].join(', ')
+    skkz[i][0]="#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]}#{'~~' unless skkz[i][13].nil?} \u2192 #{skkz[i][6]}"
+  end
+  if k.map{|q| q[0]}.join("\n").length+skkz.map{|q| q[0]}.join("\n").length>1800
+    if k.map{|q| q[0]}.join("\n").length>1800
+      str='<:Skill_Assist:444078171025965066>__**PRF Assists**__'
+      for i in 0...k.length
+        str=extend_message(str,k[i],event)
+      end
+      event.respond str
+    else
+      create_embed(event,'<:Skill_Assist:444078171025965066>__**PRF Assists**__','',0x07DFBB,nil,nil,triple_finish(k.map{|q| q[0]},true))
+    end
+    if skkz.map{|q| q[0]}.join("\n").length>1800
+      str='<:Skill_Special:444078170665254929>__**PRF Specials**__'
+      for i in 0...skkz.length
+        str=extend_message(str,skkz[i],event)
+      end
+      event.respond str
+    else
+      create_embed(event,'<:Skill_Special:444078170665254929>__**PRF Specials**__','',0xF67EF8,nil,nil,triple_finish(skkz.map{|q| q[0]},true))
+    end
+  else
+    create_embed(event,'__**PRF Assists and Specials**__','',0x7FAFDA,nil,nil,[['<:Skill_Assist:444078171025965066> Assists',k.map{|q| q[0]}.join("\n")],['<:Skill_Special:444078170665254929> Specials',skkz.map{|q| q[0]}.join("\n")]])
+  end
+  skkz=@skills.reject{|q| ['Weapon','Assist','Special','Seal','Passive(W)'].include?(q[4]) || q[10].reject{|q2| q2=='-'}.length<=0 || q[6]=='-' || !has_any?(g, q[13])}
+  for i in 0...skkz.length
+    skkz[i][6]=skkz[i][6].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
+    skkz[i][6]=skkz[i][6].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
+    skkz[i][6]=skkz[i][6].join(', ')
+    skkz[i][0]="#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]}#{'~~' unless skkz[i][13].nil?} \u2192 #{skkz[i][6]}"
+  end
+  f=[['<:Passive_A:443677024192823327> A Passives',[]],['<:Passive_B:443677023257493506> B Passives',[]],['<:Passive_C:443677023555026954> C Passives',[]]]
+  for i in 0...skkz.length
+    f[0][1].push(skkz[i][0]) if skkz[i][4].split(', ').include?('Passive(A)')
+    f[1][1].push(skkz[i][0]) if skkz[i][4].split(', ').include?('Passive(B)')
+    f[2][1].push(skkz[i][0]) if skkz[i][4].split(', ').include?('Passive(C)')
+  end
+  f=f.reject{|q| q[1].nil? || q[1].length<=0}
+  if f.map{|q| "__*#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
+    str="__**PRF Passives**__"
+    for i in 0...f.length
+      str=extend_message(str,"__*#{f[i][0]}*__",event,2)
+      for i2 in 0...f[i][1].length
+        str=extend_message(str,f[i][1][i2],event)
+      end
+    end
+    event.respond str
+  else
+    create_embed(event,'__**PRF Passives**__','',0xFDDC7E,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
+  end
+  puts skkz.map{|q| q[0]}
 end
 
 def oregano_explain(event,bot)
