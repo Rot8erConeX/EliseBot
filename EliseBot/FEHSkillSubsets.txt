@@ -16,6 +16,7 @@
 ['Life-Giver', ['life-giver', 'lifegiver', 'bol', 'breath-of-life', 'breathoflife'], 'Weapon']
 ['WoDao', ['wodao', 'wo-dao'], 'Weapon']
 ['Bladetome', ['bladetome'], 'Weapon']
+['Bloomtome', ['bloomtome', 'bloom', 'blooms', 'bloomtomes', 'bloomstome'], 'Weapon']
 ['Hogtome', ['hogtome', 'hog'], 'Weapon']
 ['Serpenttome', ['serpenttome', 'serpentome', 'snaketome', 'snektome', 'serpent', 'snake', 'snek'], 'Weapon']
 ['Owltome', ['owltome', 'owl'], 'Weapon']

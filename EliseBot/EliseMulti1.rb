@@ -161,8 +161,9 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Ephraim(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Ephraim(Fire)','Ephraim(Brave)'],[str]]
-  elsif /(hector|kektor|heckutoru)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
+  elsif /(hector|hektor|kektor|heckutoru)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
     str='hector'
+    str='hektor' if str2.include?('hektor')
     str='kektor' if str2.include?('kektor')
     str='heckutoru' if str2.include?('heckutoru')
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
@@ -277,7 +278,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str='kuromu' if str2.include?('kuromu')
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
-    if str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.include?('we') || str2.include?('santa')
+    if str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.gsub('flower','').include?('we') || str2.include?('santa')
       return [str,['Chrom(Winter)'],["winter#{str}","#{str}winter","christmas#{str}","#{str}christmas","holiday#{str}","#{str}holiday","we#{str}","#{str}we","santa#{str}","#{str}santa"]]
     elsif str2.include?('bunny') || str2.include?('spring') || str2.include?('easter') || str2.include?('sf')
       return [str,['Chrom(Spring)'],["bunny#{str}","#{str}bunny","spring#{str}","#{str}spring","easter#{str}","#{str}easter","sf#{str}","#{str}sf"]]
@@ -361,7 +362,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Tobin'],['robingaiden','robinsov','gaidenrobin','sovrobin']]
     elsif str2.include?('summer') || str2.include?('beach') || str2.include?('swimsuit') || str2.include?('ys')
       return [str,['Robin(F)(Summer)'],["summer#{str}","beach#{str}","swimsuit#{str}","ys#{str}","#{str}summer","#{str}beach","#{str}swimsuit","#{str}ys"]]
-    elsif str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.include?('we')
+    elsif str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.gsub('flower','').include?('we')
       return [str,['Robin(M)(Winter)'],["winter#{str}","christmas#{str}","holiday#{str}","we#{str}","#{str}winter","#{str}christmas","#{str}holiday","#{str}we"]]
     elsif str2.include?('fallen') || str2.include?('evil') || str2.include?('dark') || str2.include?('alter') || str2.include?('fh') || str2.include?('grima')
       strx='fallen'
@@ -524,8 +525,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Lyn(Bride)'],["bb#{str}","#{str}bb","#{str}bride","#{str}bridal","#{str}wedding","bride#{str}","bridal#{str}","wedding#{str}"]]
     elsif str2.include?('brave') || str2.include?('cyl') || str2.include?('nomad') || str2.include?("bh#{str}") || str2.include?("#{str}bh")
       return [str,['Lyn(Brave)'],["brave#{str}","nomad#{str}","cyl#{str}","bh#{str}","#{str}nomad","#{str}brave","#{str}cyl","#{str}bh"]]
-    elsif str2.include?('abounds') || str2.include?('valentines') || str2.include?("valentine's") || str2.include?("la#{str}") || str2.include?("#{str}la") || str2.include?("v#{str}") || str2.include?("#{str}v")
-      return [str,['Lyn(Valentines)'],["love#{str}","abounds#{str}","valentines#{str}","valentine's#{str}","#{str}love","#{str}abounds","#{str}valentines","#{str}valentine's","la#{str}","#{str}la"]]
+    elsif str2.include?('abounds') || str2.include?('valentines') || str2.include?('devoted') || str2.include?("valentine's") || str2.include?("la#{str}") || str2.include?("#{str}la") || str2.include?("v#{str}") || str2.include?("#{str}v")
+      return [str,['Lyn(Valentines)'],["love#{str}","abounds#{str}","devoted#{str}","valentines#{str}","valentine's#{str}","#{str}love","#{str}devoted","#{str}abounds","#{str}valentines","#{str}valentine's","la#{str}","#{str}la"]]
     elsif str2.include?('winds') || str2.include?('wind') || str2.include?('bladelord') || str2.include?('legendary') || str2.include?("#{str}lh") || str2.include?("lh#{str}")
       return [str,['Lyn(Wind)'],["wind#{str}","#{str}wind","bladelord#{str}","#{str}bladelord","#{str}legendary","legendary#{str}","lh#{str}","#{str}lh"]]
     elsif str2.include?('love')
@@ -1666,4 +1667,215 @@ def list_collapse(list,mode=0)
   end
   newlist=newlist.sort {|a,b| a[0].gsub('~~','').gsub('*','').gsub('[El]','').downcase <=> b[0].gsub('~~','').gsub('*','').gsub('[El]','').downcase} unless (mode/8)%2==1
   return newlist
+end
+
+def legal_weapon(event,name,weapon,refinement='-',recursion=false)
+  return '-' if weapon=='-'
+  u=@units[@units.find_index{|q| q[0]==name.gsub('Laevatein','Lavatain')}]
+  w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
+  unless w[0].split(' ')[0].length>u[0].length
+    return '-' if w[0][0,u[0].length].downcase==u[0].downcase && count_in(event.message.text.downcase.split(' '),u[0].downcase,1)<=1
+  end
+  return '-' if w[4]!='Weapon'
+  if weapon=='Falchion'
+    if ['FE13'].include?(u[11][0])
+      weapon='Falchion (Awakening)'
+    elsif ['FE2','FE15'].include?(u[11][0])
+      weapon='Falchion (Valentia)'
+    elsif ['FE1','FE3','FE11','FE12'].include?(u[11][0])
+      weapon='Falchion (Mystery)'
+    elsif u[11].include?('FE13')
+      weapon='Falchion (Awakening)'
+    elsif u[11].include?('FE2') || u[11].include?('FE15')
+      weapon='Falchion (Valentia)'
+    elsif u[11].include?('FE1') || u[11].include?('FE3') || u[11].include?('FE11') || u[11].include?('FE12')
+      weapon='Falchion (Mystery)'
+    elsif u[11].map{|q| q[0,4]}.include?('FE14')
+      weapon='Falchion (Awakening)'
+    end
+  elsif weapon=='Missiletainn'
+    if ['FE14'].include?(u[11][0][0,4])
+      weapon='Missiletainn (Dusk)'
+    elsif ['FE13'].include?(u[11][0])
+      weapon='Missiletainn (Dark)'
+    elsif ['Red Blade'].include?("#{u[1][0]} #{u[1][1]}")
+      weapon='Missiletainn (Dusk)'
+    elsif ['Blue Tome'].include?("#{u[1][0]} #{u[1][1]}")
+      weapon='Missiletainn (Dusk)'
+    elsif u[11].map{|q| q[0,4]}.include?('FE14')
+      weapon='Missiletainn (Dusk)'
+    elsif u[11].include?('FE13')
+      weapon='Missiletainn (Dark)'
+    elsif ['Blade','Dragon','Beast'].include?(u[1][1])
+      weapon='Missiletainn (Dusk)'
+    elsif ['Tome','Bow','Dagger','Healer'].include?(u[1][1])
+      weapon='Missiletainn (Dusk)'
+    end
+    w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
+  elsif weapon=='Adult (All)'
+    weapon="Adult (#{u[3]})"
+    w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
+  end
+  w2="#{weapon}"
+  w2="#{weapon} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  return "~~#{w2}~~" if w[6]!='-' && !w[6].split(', ').include?(u[0]) # prf weapons are illegal on anyone but their holders
+  u2=weapon_clss(u[1],event)
+  u2='Bow' if u2.include?('Bow')
+  u2='Dagger' if u2.include?('Dagger')
+  u2="#{u2.gsub('Healer','Staff')} Users Only"
+  u2='Dragons Only' if u[1][1]=='Dragon'
+  u2="Beasts Only, #{u[3].gsub('Flier','Fliers')} Only" if u[1][1]=='Beast'
+  return w2 if u2==w[5]
+  return "~~#{w2}~~" if recursion
+  if 'Raudr'==w[0][0,5] || 'Blar'==w[0][0,4] || 'Gronn'==w[0][0,5] || 'Keen Raudr'==w[0][0,10] || 'Keen Blar'==w[0][0,9] || 'Keen Gronn'==w[0][0,10]
+    return weapon_legality(event,name,weapon.gsub('Blar','Raudr').gsub('Gronn','Raudr'),refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,weapon.gsub('Raudr','Blar').gsub('Gronn','Blar'),refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,weapon.gsub('Raudr','Gronn').gsub('Blar','Gronn'),refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless u[1][0]=='Colorless'
+    w2="#{weapon.gsub('Raudr','Hoss').gsub('Blar','Hoss').gsub('Gronn','Hoss')}"
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Ruby Sword','Sapphire Lance','Emerald Axe'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Ruby Sword#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Sapphire Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Emerald Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Hibiscus Tome','Sealife Tome','Tomato Tome'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Tomato Tome#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Sealife Tome#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Hibiscus Tome#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ["Dancer's Ring","Dancer's Score"].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Dancer's Score#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Dancer's Ring#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless u[1][0]=='Red'
+    w2="Dancer's Ribbon#{'+' if w[0].include?('+')}"
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Kadomatsu','Hagoita'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Kadomatsu#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Hagoita#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless u[1][0]=='Blue'
+    w2="Sushi Sticks#{'+' if w[0].include?('+')}"
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Tannenboom!',"Sack o' Gifts",'Handbell'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Tannenboom!#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"#{["Sack o' Gifts",'Handbell'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green' && w[0].gsub('+','')=='Tannenboom!'
+    return "~~#{w2}~~" unless u[1][0]=='Red'
+    w2="Santa's Sword#{'+' if w[0].include?('+')}"
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ["Faithful Axe","Heart's Blade"].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Heart's Blade#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Faithful Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless ['Colorless','Blue'].include?(u[1][0])
+    w2="Rod of Bonds#{'+' if w[0].include?('+')}"
+    w2="Loving Lance#{'+' if w[0].include?('+')}" if u[1][0]=='Blue'
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Carrot Lance','Carrot Axe'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Carrot Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Carrot Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless ['Colorless','Red'].include?(u[1][0])
+    w2="Carrot#{'+' if w[0].include?('+')}...just a carrot#{'+' if w[0].include?('+')}"
+    w2="Carrot Sword#{'+' if w[0].include?('+')}" if u[1][0]=='Red'
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Blue Egg','Green Egg','Blue Gift','Green Gift'].include?(w[0].gsub('+',''))
+    t='Egg'
+    t='Gift' if ['Blue Gift','Green Gift'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Blue #{t}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Green #{t}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless ['Colorless','Red'].include?(u[1][0])
+    w2="Empty #{t}#{'+' if w[0].include?('+')}"
+    w2="Red #{t}#{'+' if w[0].include?('+')}" if u[1][0]=='Red'
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Melon Crusher','Deft Harpoon'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Deft Harpoon#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Melon Crusher#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless ['Red'].include?(u[1][0])
+    w2="Ylissian Summer Sword#{'+' if w[0].include?('+')}"
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Iron Sword','Iron Lance','Iron Axe','Steel Sword','Steel Lance','Steel Axe','Silver Sword','Silver Lance','Silver Axe','Brave Sword','Brave Lance','Brave Axe','Firesweep Sword','Firesweep Lance','Firesweep Axe'].include?(w[0].gsub('+',''))
+    t='Iron'
+    t='Steel' if 'Steel '==w[0][0,6]
+    t='Silver' if 'Silver '==w[0][0,7]
+    t='Brave' if 'Brave '==w[0][0,6]
+    t='Firesweep' if 'Firesweep '==w[0][0,10]
+    if event.message.text.downcase.include?('sword') || event.message.text.downcase.include?('edge')
+    elsif event.message.text.downcase.include?('lance')
+    elsif event.message.text.downcase.include?('axe')
+    elsif (['Iron','Steel','Silver'].include?(t) && u[1][1]=='Dagger') || u[1][1]=='Bow'
+      return weapon_legality(event,name,"#{t} Dagger#{'+' if w[0].include?('+')}",refinement,true) if u[1][1]=='Dagger'
+      return weapon_legality(event,name,"#{t} Bow#{'+' if w[0].include?('+')}",refinement,true) if u[1][1]=='Bow'
+    end
+    return weapon_legality(event,name,"#{t} Sword#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"#{t} Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"#{t} Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless u[1][0]=='Colorless'
+    w2="#{t} Rod"
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Killing Edge','Killer Lance','Killer Axe','Slaying Edge','Slaying Lance','Slaying Axe'].include?(w[0].gsub('+',''))
+    t='Killer'
+    t='Killing' if u[1][0]=='Red'
+    t='Slaying' if 'Slaying '==w[0][0,8]
+    if event.message.text.downcase.include?('sword') || event.message.text.downcase.include?('edge')
+    elsif event.message.text.downcase.include?('lance')
+    elsif event.message.text.downcase.include?('axe')
+    elsif u[1][1]=='Bow'
+      return weapon_legality(event,name,"#{t} Bow#{'+' if w[0].include?('+')}",refinement,true) if u[1][1]=='Bow'
+    end
+    return weapon_legality(event,name,"#{t} Edge#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"#{t} Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"#{t} Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless u[1][0]=='Colorless'
+    w2="#{t} Rod"
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Fire','Flux','Thunder','Light','Wind'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Fire#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Fire'
+    return weapon_legality(event,name,"Flux#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Dark'
+    return weapon_legality(event,name,"#{['Fire','Flux'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Thunder#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Thunder'
+    return weapon_legality(event,name,"Light#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Light'
+    return weapon_legality(event,name,"#{['Thunder','Light'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Wind#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Wind'
+    return weapon_legality(event,name,"#{['Wind'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Elfire','Ruin','Elthunder','Ellight','Elwind'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Elfire#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Fire'
+    return weapon_legality(event,name,"Ruin#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Dark'
+    return weapon_legality(event,name,"#{['Elfire','Ruin'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Elthunder#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Thunder'
+    return weapon_legality(event,name,"Ellight#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Light'
+    return weapon_legality(event,name,"#{['Elthunder','Ellight'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Elwind#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Wind'
+    return weapon_legality(event,name,"#{['Elwind'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Bolganone','Fenrir','Thoron','Shine','Rexcalibur'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Bolganone#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Fire'
+    return weapon_legality(event,name,"Fenrir#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Dark'
+    return weapon_legality(event,name,"#{['Bolganone','Fenrir'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Thoron#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Thunder'
+    return weapon_legality(event,name,"Shine#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Light'
+    return weapon_legality(event,name,"#{['Thoron','Shine'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Rexcalibur#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Wind'
+    return weapon_legality(event,name,"#{['Rexcalibur'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Armorslayer','Heavy Spear','Hammer'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Armorslayer#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Heavy Spear#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Hammer#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Armorsmasher','Slaying Spear','Slaying Hammer'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Armorsmasher#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Slaying Spear#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Slaying Hammer#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Zanbato','Ridersbane','Poleaxe'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Zanbato#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Ridersbane#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Poleaxe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Wo Dao','Harmonic Lance','Giant Spoon','Wo Gun'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Wo Dao#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Harmonic Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Wo Gun#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Whelp (Infantry)','Hatchling (Flier)'].include?(w[0])
+    return weapon_legality(event,name,"Whelp (Infantry)",refinement,true) if u[3]=='Infantry'
+    return weapon_legality(event,name,"Hatchling (Flier)",refinement,true) if u[3]=='Flier'
+  elsif ['Yearling (Infantry)','Fledgeling (Flier)'].include?(w[0])
+    return weapon_legality(event,name,"Yearling (Infantry)",refinement,true) if u[3]=='Infantry'
+    return weapon_legality(event,name,"Fledgeling (Flier)",refinement,true) if u[3]=='Flier'
+  elsif ['Adult (Infantry)','Adult (Flier)'].include?(w[0])
+    return weapon_legality(event,name,"Adult (Infantry)",refinement,true) if u[3]=='Infantry'
+    return weapon_legality(event,name,"Adult (Flier)",refinement,true) if u[3]=='Flier'
+  end
+  return "~~#{w2}~~"
 end
