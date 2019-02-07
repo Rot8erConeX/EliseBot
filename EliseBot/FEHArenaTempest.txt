@@ -1,11 +1,11 @@
-Eir, Tibarn, Reyson, Leanne, Nailah, Naesala, Legion, Clarisse, Ryoma(Supreme), Anna\Aether\29/01/2019, 06/02/2019\Astra, Anima\Healing Tower, Healing Tower
-Tibarn, Reyson, Leanne, Nailah, Naesala, Lloyd, Athena, Beruka, Niles, Anna\Arena\29/01/2019, 06/02/2019\Water, Earth
-Duma, Ryoma(Bath), Hinoka(Bath), Sakura(Bath), Elise(Bath), Camilla(Bath), Berkut, Tobin, Hector(Marquess), Fjorm\Aether\07/02/2019, 11/02/2019\Light, Dark\Panic Manor, Panic Manor
+Eir, Tibarn, Reyson, Leanne, Nailah, Naesala, Legion, Clarisse, Ryoma(Supreme), Anna\Aether\07/02/2019, 11/02/2019\Light, Dark\Panic Manor, Panic Manor
 Duma, Ryoma(Bath), Hinoka(Bath), Sakura(Bath), Elise(Bath), Camilla(Bath), Ursula, Eliwood, Boey, Fjorm\Arena\07/02/2019, 11/02/2019\Wind, Water
+Ike(Valentines), Soren(Valentines), Mist(Valentines), Greil(Valentines), Titania(Valentines), Ike, Oscar, Mia\Tempest\10/02/2019, 19/02/2019
 Duma, Ryoma(Bath), Hinoka(Bath), Sakura(Bath), Elise(Bath), Camilla(Bath), Berkut, Tobin, Hector(Marquess), Fjorm\Aether\12/02/2019, 18/02/2019\Astra, Anima\Catapult, Catapult
 Duma, Ryoma(Bath), Hinoka(Bath), Sakura(Bath), Elise(Bath), Camilla(Bath), Ursula, Eliwood, Boey, Fjorm\Arena\12/02/2019, 18/02/2019\Wind, Fire
--\Arena\19/02/2019, 25/02/2019\Wind, Earth
--\Arena\26/02/2019, 04/03/2019\Fire, Wind
+Duma, Ryoma(Bath), Hinoka(Bath), Sakura(Bath), Elise(Bath), Camilla(Bath), Berkut, Tobin, Hector(Marquess), Fjorm\Aether\19/02/2019, 25/02/2019\Astra, Anima\Infantry School, Infantry School
+Ike(Valentines), Soren(Valentines), Mist(Valentines), Greil(Valentines), Titania(Valentines), Walhart, Rebecca, Oscar, Gunnthra, Alfonse\Arena\19/02/2019, 25/02/2019\Wind, Earth
+Ike(Valentines), Soren(Valentines), Mist(Valentines), Greil(Valentines), Titania(Valentines), Walhart, Rebecca, Oscar, Gunnthra, Alfonse\Arena\26/02/2019, 04/03/2019\Fire, Wind
 -\Arena\05/03/2019, 11/03/2019\Fire, Water
 -\Arena\12/03/2019, 18/03/2019\Fire, Earth
 -\Arena\19/03/2019, 25/03/2019\Fire, Wind

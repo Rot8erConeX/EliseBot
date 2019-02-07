@@ -2,6 +2,7 @@ Askran Hairpin\Hair\A hair accessory adorned with the emblem of the Kingdom of A
 Damsel's Ribbon\Hair\A hair ribbon from Maribelle. It's made from the highest quality fabric.\Reach 100 green friendship with Maribelle during Forging Bonds: Defending Ylisse.
 Damsel's Ribbon EX\Hair\A hair ribbon from Maribelle. It's made from the highest quality fabric and is lightly perfumed.\Reach 2500 green friendship with Maribelle during Forging Bonds: Defending Ylisse.
 Feh Doll\Hair\A doll that looks amazingly similar to Feh, messenger owl for the Order of Heroes. So fluffy!\Enter the Equip Accessories Menu for the first time.
+Flower Band\Hair\The vibrant red color makes this hair ornament stand out.\Clear Floors 6-10 in Illusory Dungeon: Carrying the Flame.
 Flower Fortune Pin\Hair\A hairpin from Sumia. It's made from a flower she used for a flower fortune, with a fresh and lovely scent.\Reach 100 orange friendship with Sumia during Forging Bonds: Defending Ylisse.
 Flower Fortune Pin EX\Hair\A hairpin from Sumia. It's made from a flower she used for a flower fortune, with a refined and elegant scent.\Reach 2500 orange friendship with Sumia during Forging Bonds: Defending Ylisse.
 Flower Hairpin\Hair\A hair ornament found at Hoshidan festivals. The floral design is adored by many.\Clear floors 6-10 in Illusory Dungeon: Festival of Heroes.
@@ -39,8 +40,9 @@ Chilly Tiara EX\Hat\Fjorm's tiara. The gems that decorate it are clear and cold,
 Crown of Nifl\Hat\Hríd's crown. It's always cold to the touch, and if you place it on your head, your demeanor will remain cool.\Reach 100 orange friendship with Hrid during Forging Bonds: The Sworn Oath.
 Crown of Nifl EX\Hat\Hríd's crown. It has been passed down in the royal family of Nifl for generations, or so it is said.\Reach 2500 orange friendship with Hrid during Forging Bonds: The Sworn Oath.
 Enigmatic Mask\Hat\A mask that looks an awful lot like one used by a mysterious man. Maybe this was his spare...\Enter the Equip Accessories Menu for the first time.
-Explorer's Hat\Hair\Kliff got this hat in preparation for his journeys into unknown realms.\Reach 100 blue friendship with Kliff during Forging Bonds: Dueling Desires.
+Explorer's Hat\Hat\Kliff got this hat in preparation for his journeys into unknown realms.\Reach 100 blue friendship with Kliff during Forging Bonds: Dueling Desires.
 Explorer's Hat EX\Hat\When Kliff was but a boy, his father found this hat in a far-off land during his travels.\Reach 2500 blue friendship with Kliff during Forging Bonds: Dueling Desires.
+Floral Headband\Hat\A headband decorated with pink blooms.\Clear floors 81-85 in Illusory Dungeon: Carrying the Flame.
 Gold Armored Helmet\Hat\Proof of victory over Legendary Ryoma.\Beat Ryoma(Supreme)'s LHB at Abyssal difficulty.
 Golden Diadem\Hat\Proof of victory over Mythic Duma.\Beat Duma's MHB at Abyssal difficulty
 Gold Priest's Miter\Hat\Proof of victory over Grand Hero Xander.\Beat Xander's GHB at Abyssal difficulty.

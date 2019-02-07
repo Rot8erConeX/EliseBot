@@ -108,7 +108,7 @@ Gerome\Green, Blade\ \Flier\8, 9, 5, 8, 3\45, 38, 25, 34, 19\Meka\Orion Acaba\Sh
 Gharnef\Red, Tome, Dark\ \Infantry\6, 6, 7, 6, 4\38, 30, 34, 27, 23\HACCAN\DC Douglas\\3g4g4g4rPF\M\FE3, FE1, FE11, FE12, (s)SSBU\Gharnef
 Gordin\Colorless, Bow\ \Infantry\7, 7, 5, 7, 2\43, 31, 25, 32, 17\Itagaki Hako\Max Mittelman\Murase Ayumu\3p4p3qLUPF\M\FE3, FE1, FE11, FE12\Gordin
 Gray\Red, Blade\ \Infantry\8, 9, 8, 7, 5\43, 35, 32, 30, 22\Kawasumi\Max Mittelman\Taniyama Kisho\5pPF\M\FE15, FE2\Gray
-Greil(Valentines)\Green, Blade\ \Armor\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Daisuke Izuka\Frank Todaru\\5s\M\FE9\Greil
+Greil(Valentines)\Green, Blade\ \Armor\7, 10, 2, 9, 7\47, 41, 18, 38, 30\Daisuke Izuka\Frank Todaru\\5s\M\FE9\Greil
 Gunnthra\Green, Tome, Wind\Wind, Resistance, 21/02/2019\Cavalry\6, 7, 7, 2, 5\37, 31, 33, 19, 25\Maeshima Shigeki\Carrie Keranen\Kayano Ai\5sPF\F\FEH\Gunnthra
 Gunnthra(Winter)\Red, Blade\ \Flier\6, 8, 8, 5, 6\38, 34, 37, 27, 26\Yoshiku\Carrie Keranen\Kayano Ai\5sPF\F\FEH\Gunnthra
 Gunter\Green, Blade\ \Cavalry\6, 6, 4, 6, 2\43, 32, 24, 33, 18\Yamada Akihiro\DC Douglas\Naya Rokuro\1d2d3p4p3qLUPF\M\FE14C\Gunter
@@ -132,7 +132,7 @@ Hrid\Red, Blade\Wind, Defense, 21/02/2019\Cavalry\6, 10, 2, 7, 6\41, 37, 17, 36,
 Hrid(Winter)\Red, Blade\ \Flier\7, 9, 3, 8, 6\42, 38, 19, 36, 27\argon\Mark P. Whitten\\5sPF\M\FEH\Hrid
 Ike\Red, Blade\ \Infantry\7, 8, 7, 7, 2\42, 35, 31, 32, 18\Meka\Greg Chun\Hagi Michihiko\5pPF\M\FE9, FE10, SSBB, (st)SSBB, SSBProM, (a)FE14, (a)FE15, (a)STEAM, SSBU, (s)SSBU\Ike
 Ike(Brave)\Green, Blade\ \Infantry\8, 8, 6, 8, 3\43, 36, 28, 35, 20\Kita Senri\Greg Chun\Hagi Michihiko\5pPF\M\FE9, FE10, (a)FE14, (a)FE15, (a)STEAM\Ike
-Ike(Valentines)\Red, Blade\ \Armor\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Kita Senri\Greg Chun\Hagi Michihiko\5s\M\FE9, FE10, (a)FE14, (a)FE15, (a)STEAM\Ike
+Ike(Valentines)\Red, Blade\ \Armor\6, 9, 9, 8, 2\43, 37, 38, 35, 19\Kita Senri\Greg Chun\Hagi Michihiko\5s\M\FE9, FE10, (a)FE14, (a)FE15, (a)STEAM\Ike
 Ike(Vanguard)\Red, Blade\Earth, Attack, 21/04/2019\Infantry\6, 8, 7, 8, 4\41, 36, 30, 35, 21\Kita Senri\Greg Chun\Hagi Michihiko\5s5yPF\M\FE10, FE9, (st)SSBB, SSB4, (a)FE14, (a)FE15, (a)STEAM, SSBU, (s)SSBU\*Ike
 Inigo(Performing)\Green, Tome, Wind\ \Infantry\6, 6, 8, 4, 4\37, 28, 33, 22, 20\Suekane Kumiko\Mick Wingert\Kijima Ryuichi\5sPF\M\FE13\Inigo, Awakening
 Innes\Colorless, Bow\ \Infantry\5, 7, 8, 1, 7\35, 33, 34, 14, 31\Teita\Xander Mobus\Fukuyama Jun\5pPF\M\FE8\Innes
@@ -220,7 +220,7 @@ Michalis\Green, Blade\ \Flier\7, 8, 5, 8, 3\43, 34, 26, 35, 19\Daisuke Izuka\Dav
 Mikoto\Colorless, Healer\ \Infantry\6, 8, 7, 3, 5\38, 35, 32, 20, 26\Ito Misei\Marisha Ray\\5pPF\F\FE13\Mikoto
 Minerva\Green, Blade\ \Flier\6, 7, 7, 7, 4\40, 31, 33, 32, 22\Daisuke Izuka\Cindy Robinson\Sakura Ayane\5pLUPF\F\FE3, FE1, FE11, FE12, FEW, (s)SSBU\Minerva
 Mist\Colorless, Healer\ \Infantry\6, 5, 6, 3, 8\39, 27, 28, 20, 34\Miwabe Sakura\Sarah Williams\Enomoto Atsuko\5pPF\F\FE9, FE10, (st)SSBB, (s)SSBU\Mist
-Mist(Valentines)\Green, Tome, Wind\ \Cavalry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Miwabe Sakura\Sarah Williams\Enomoto Atsuko\5s\F\FE9, FE10, (st)SSBB, (s)SSBU\Mist
+Mist(Valentines)\Green, Tome, Wind\ \Cavalry\5, 7, 8, 2, 5\36, 34, 34, 17, 23\Miwabe Sakura\Sarah Williams\Enomoto Atsuko\5s\F\FE9, FE10, (st)SSBB, (s)SSBU\Mist
 Morgan(F)\Blue, Tome, Thunder\ \Flier\5, 8, 7, 2, 7\37, 34, 30, 16, 33\Tobi\Nicole Balick\Sawashiro Miyuki\5pPF\F\FE13\*Morgan, F
 Morgan(M)\Red, Tome, Dark\ \Infantry\5, 8, 8, 3, 5\37, 33, 34, 20, 26\Tobi\Todd Haberkorn\Hosoya Yoshimasa\4p5pPF\M\FE13\*Morgan, M
 Myrrh\Green, Dragon\ \Flier\8, 8, 5, 11, 7\42, 33, 25, 36, 31\Amagaitaro\Erica Lindbeck\Kadowaki Mai\5pPF\F\FE8, (st)SSBB\Myrrh
@@ -306,7 +306,7 @@ Soleil\Red, Blade\ \Infantry\5, 9, 8, 6, 5\37, 38, 35, 28, 24\Enkyo Yuichiro\Mic
 Sonya\Green, Tome, Wind\ \Infantry\5, 8, 7, 1, 7\36, 33, 31, 15, 32\Yura\Tara Sands\Shimoda Rei\5pPF\F\FE15, FE2\Sonya
 Sophia\Red, Tome, Dark\ \Infantry\6, 7, 3, 6, 6\40, 33, 19, 28, 29\Zaza\Wendee Lee\Oonishi Saori\1d2d3p4p3qLUPF\F\FE6, FE7\Sophia
 Soren\Green, Tome, Wind\ \Infantry\5, 8, 7, 2, 6\36, 33, 33, 17, 29\Miyajima Haru\Kyle McCarley\Murase Ayumu\3p4pPF\M\FE9, FE10, (s)SSBU\Soren
-Soren(Valentines)\Blue, Tome, Light\ \Cavalry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Miyajima Haru\Kyle McCarley\Murase Ayumu\5s\M\FE9, FE10, (s)SSBU\Soren
+Soren(Valentines)\Blue, Tome, Light\ \Cavalry\5, 8, 7, 1, 6\37, 35, 33, 14, 25\Miyajima Haru\Kyle McCarley\Murase Ayumu\5s\M\FE9, FE10, (s)SSBU\Soren
 Sothe\Colorless, Dagger\ \Infantry\6, 8, 7, 4, 4\39, 36, 33, 22, 21\Kusugi Toku\Nicolas Roye\Majima Junji\4p5pPF\M\FE10, FE9, (t)SSBB, (st)SSBB, (t)SSB4, (s)SSBU\Sothe
 Stahl\Red, Blade\ \Cavalry\8, 7, 5, 6, 4\45, 31, 26, 30, 22\Mayo\Sam Regal\Shingaki Tarusuke\1d2d3p4p3qLUPF\M\FE13\Stahl
 Subaki\Blue, Blade\ \Flier\6, 5, 8, 8, 4\40, 25, 35, 35, 22\Yura\Walden James\Mogi Takamasa\1d2d3p4p3qLUPF\M\FE14B\Subaki

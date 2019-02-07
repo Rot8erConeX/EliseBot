@@ -1,19 +1,21 @@
+"Greil's Request" Tempest Trials\3\Ike, Mia, Oscar\5\\Tempest
+New Power (February 2019)\3\Amelia, Eliwood, Hinata, Niles, Nino(Launch), Oboro, Seth, Tharja\5\\NewPower
 2nd Anniversary Celebration: 2018 Seasonal Mass Rerun\-100\Alfonse(Spring), Camilla(Summer), Catria(Spring), Cordelia(Summer), Eirika(Winter), Elincia(Festival), Ephraim(Winter), Fae(Winter), Fjorm(Winter), Gunnthra(Winter), Hector(Valentines), Hrid(Winter), Innes(Summer), Kagero(Halloween), Kagero(Spring), Lavatain(Winter), Lilina(Valentines), Linde(Summer), Lyn(Valentines), Mia(Halloween), Micaiah(Festival), Myrrh(Halloween), Niles(Halloween), Ninian(Bride), Noire(Summer), Roy(Valentines), Ryoma(Festival), Sanaki(Bride), Sharena(Spring), Tana(Summer), Tharja(Bride), Tiki(Young)(Summer), Takumi(Summer), Xander(Festival)\5\09/02/2019, 15/02/2019\Seasonal
->Special Heroes: Unknown<\3\-\5\08/02/2019, 07/03/2019\Seasonal, Valentine's
+Greil's Devoted\3\Greil(Valentines), Ike(Valentines), Mist(Valentines), Soren(Valentines)\5\08/02/2019, 07/03/2019\Seasonal, Valentine's
 2nd Anniversary Celebration: 2017 Seasonal Mass Rerun\-100\Azura(Performing), Azura(Winter), Caeda(Bride), Camilla(Bunny), Camilla(Winter), Charlotte(Bride), Chrom(Spring), Chrom(Winter), Cordelia(Bride), Corrin(F)(Summer), Elise(Summer), Frederick(Summer), Gaius(Summer), Henry(Halloween), Inigo(Performing), Jakob(Halloween), Leo(Summer), Lissa(Winter), Lucina(Spring), Lyn(Bride), Nowi(Halloween), Olivia(Performing), Robin(F)(Summer), Robin(M)(Winter), Sakura(Halloween), Shigure(Performing), Takumi(Winter), Tharja(Winter), Tiki(Adult)(Summer), Xander(Spring), Xander(Summer)\5\02/02/2019, 08/02/2019\Seasonal
 2nd Anniversary Celebration: Daily Summoning Events\3\Cecilia, Clair, Deirdre, Elincia, Julia, Genny, Hector, Hinoka(Launch), Ike, Ishtar, Lillina, Lukas, Maria, Matthew, Micaiah, Minerva, Nowi, Palla, Reinhardt(Bonds), Reinhardt(World), Robin(M)(Fallen), Roy, Sakura, Sanaki, Seliph, Serra, Soren, Sothe, Takumi, Tiki(Adult)\50\02/02/2019, 12/02/2019\BHB
 Heroes with Link Skills\3\Lavatain, Nina, Sumia\5\01/02/2019, 14/02/2019\SkillBanner
+Hostile Springs\3\Elise(Bath), Hinoka(Bath), Ryoma(Bath), Sakura(Bath)\5\23/01/2019, 22/02/2019\Seasonal
+GHB Units\5\-\543\\Dynamic, GHB
+TT Units\5\-\54\\Dynamic, Tempest
 Mythic Heroes: Duma, God of Strength\-8\Duma, Eirika(Graceful), Elincia(Festival), Ephraim(Brave), Ike(Vanguard), Kliff, Laegjarn, Linde(Summer), Loki, Lyn(Wind), Ryoma(Festival), Tiki(Young)(Earth)\5\30/01/2019, 05/02/2019\Legendary
 Sons\3\Corrin(M)(Adrift), Lief, Owain\5\28/01/2019, 05/02/2019\VG
 Mothers\3\Cherche, Lissa, Mikoto\5\28/01/2019, 05/02/2019\VG
 Elincia & Nephenee's Battle\3\Elincia, Ike(Brave), Nephenee\5\27/01/2019, 03/02/2019\BHB
-Hostile Springs\3\Elise(Bath), Hinoka(Bath), Ryoma(Bath), Sakura(Bath)\5\23/01/2019, 22/02/2019\Seasonal
 "Heating Things Up" Tempest Trials\3\Leo, Takumi\5\24/01/2019, 04/02/2019\TT
 Rulers of the Laguz\3\Leanne, Nailah, Reyson, Tibarn\5\11/01/2019, 29/01/2019
 Happy New Year! (January 2019 rerun)\3\Azura(Winter), Camilla(Winter), Takumi(Winter)\5\01/01/2019, 31/01/2019\Seasonal, NewYear's
 New Year's of Fire and Ice\3\Fjorm(Winter), Gunnthra(Winter), Hrid(Winter), Lavatain(Winter)\5\01/01/2019, 31/01/2019\Seasonal, NewYear's
-GHB Units\5\-\543\\Dynamic, GHB
-TT Units\5\-\54\\Dynamic, Tempest
 New Power (January 2019)\3\Deirdre, Julia, Seliph, Tailtiu\5\20/01/2019, 21/01/2019\NewPower
 Heroes with Sword Valor\3\Chrom(Branded), Gray, Lene\5\13/01/2019, 19/01/2019\SkillBanner
 Heroes with Tactic Skills\3\L'Arachel, Shiro, Siegbert\5\06/01/2019, 12/01/2019\SkillBanner
