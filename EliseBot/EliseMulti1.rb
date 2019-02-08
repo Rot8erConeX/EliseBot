@@ -1191,6 +1191,8 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     newname="#{unit}"
     unit="#{f}"
     type=type.reverse.map{|q| q.gsub('*','')}
+  else
+    type=type.map{|q| q.gsub('*','')}
   end
   checkstr=normalize(newname.gsub('!','').gsub('(','').gsub(')','').gsub('_',''))
   if type[0]=='Alias' && type[1].gsub('*','')=='Unit'
@@ -1760,6 +1762,8 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return "~~#{w2}~~" unless u[1][0]=='Red'
     w2="Santa's Sword#{'+' if w[0].include?('+')}"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ["Loyal Wreath"].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Raudrblooms#{'+' if w[0].include?('+')}",refinement) if u[1][0]!='Red'
   elsif ["Faithful Axe","Heart's Blade"].include?(w[0].gsub('+',''))
     return weapon_legality(event,name,"Heart's Blade#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
     return weapon_legality(event,name,"Faithful Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
