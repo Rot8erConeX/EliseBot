@@ -693,13 +693,6 @@ end
 
 def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='',flowers=0) # used by multiple commands to calculate a unit's stats
   data_load()
-  newmerge=false
-  args=event.message.text.downcase.gsub('(','').gsub(')','').split(' ')
-  newmerge=true if args.include?('feb') || args.include?('february')
-  t=Time.now
-  newmerge=true if t.year>2019
-  newmerge=true if t.year==2019 && t.month>2
-  newmerge=true if t.year==2019 && t.month==2 && t.day>8
   # find neutral five-star level 40 stats
   u=@units.map{|q| q}
   if name=='Robin'
@@ -711,7 +704,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='',flowers=0) #
   sttz=['hp','attack','speed','defense','resistance']
   for i in 0...sttz.length
     sttz[i]=1 if boon.downcase==sttz[i]
-    sttz[i]=-1 if bane.downcase==sttz[i] && (merges==0 || !newmerge)
+    sttz[i]=-1 if bane.downcase==sttz[i] && merges==0
     sttz[i]=0 if sttz[i].is_a?(String)
   end
   if rarity>=@mods[0].length
@@ -744,7 +737,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='',flowers=0) #
         u.push(@mods[f[4][i]+sttz[i]+4][rarity])
       end
     end
-    if merges>0 && bane=='' && boon=='' && newmerge
+    if merges>0 && bane=='' && boon==''
       s2=u.map{|q| q}
       s=[[s2[1],1],[s2[2],2],[s2[3],3],[s2[4],4],[s2[5],5]]
       s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}
@@ -773,7 +766,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='',flowers=0) #
         u[i+1]+=@mods[f[4][i]+sttz[i]+4][rarity]
       end
     end 
-    if merges>0 && bane=='' && boon=='' && newmerge
+    if merges>0 && bane=='' && boon==''
       s2=u.map{|q| q}
       s=[[s2[1],1],[s2[2],2],[s2[3],3],[s2[4],4],[s2[5],5]]
       s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}
@@ -847,7 +840,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='',flowers=0) #
         end
       end
     end
-    if merges>0 && bane=='' && boon=='' && newmerge
+    if merges>0 && bane=='' && boon==''
       for i in 0...3
         u[s[i][1]]+=1
       end
@@ -2746,12 +2739,6 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
 end
 
 def display_stars(bot,event,rarity,merges,support='-',flowers=['Infantry',0],expandedmode=false) # used to determine which star emojis should be used, based on the rarity, merge count, and whether the unit is Summoner Supported
-  newmerge=false
-  newmerge=true if event.message.text.downcase.split(' ').include?('feb') || event.message.text.downcase.split(' ').include?('february')
-  t=Time.now
-  newmerge=nil if t.year>2019
-  newmerge=nil if t.year==2019 && t.month>2
-  newmerge=nil if t.year==2019 && t.month==2 && t.day>8
   emo=@rarity_stars[rarity-1]
   if merges==@max_rarity_merge[1]
     emo='<:Icon_Rarity_4p10:448272714210476033>' if rarity==4
@@ -2763,8 +2750,8 @@ def display_stars(bot,event,rarity,merges,support='-',flowers=['Infantry',0],exp
   femote='<:Dragonflower_Infantry:541170819980722176>'
   moji=bot.server(449988713330769920).emoji.values.reject{|q| q.name != "Dragonflower_#{flowers[0]}"}
   femote=moji[0].mention if moji.length>0
-  return "**#{rarity}-star#{" +#{merges}#{' (Feb)' if newmerge}#{' (current)' if newmerge==false}" unless merges.zero? && !expandedmode}**#{"  \u00B7  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}#{"  \u00B7  #{femote}**x#{flowers[1]}**" unless flowers[1]<=0 && !expandedmode}#{"\nNo Summoner Support" if support =='-' && expandedmode}" if rarity>@rarity_stars.length
-  return "#{emo*rarity}#{"**+#{merges}#{' (Feb)' if newmerge}#{' (current)' if newmerge==false}**" unless merges.zero? && !expandedmode}#{"  \u00B7  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}#{"  \u00B7  #{femote}**x#{flowers[1]}**" unless flowers[1]<=0 && !expandedmode}#{"\nNo Summoner Support" if support =='-' && expandedmode}"
+  return "**#{rarity}-star#{" +#{merges}" unless merges.zero? && !expandedmode}**#{"  \u00B7  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}#{"  \u00B7  #{femote}**x#{flowers[1]}**" unless flowers[1]<=0 && !expandedmode}#{"\nNo Summoner Support" if support =='-' && expandedmode}" if rarity>@rarity_stars.length
+  return "#{emo*rarity}#{"**+#{merges}**" unless merges.zero? && !expandedmode}#{"  \u00B7  <:Icon_Support:448293527642701824>**#{support}**" unless support =='-'}#{"  \u00B7  #{femote}**x#{flowers[1]}**" unless flowers[1]<=0 && !expandedmode}#{"\nNo Summoner Support" if support =='-' && expandedmode}"
 end
 
 def get_unit_prf(name)
@@ -2801,12 +2788,6 @@ def has_weapon_tag?(tag,wpn,refinement=nil,transformed=false)
 end
 
 def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=nil,expandedmodex=nil) # displays stats
-  newmerge=false
-  newmerge=true if event.message.text.downcase.split(' ').include?('feb') || event.message.text.downcase.split(' ').include?('february')
-  t=Time.now
-  newmerge=nil if t.year>2019
-  newmerge=nil if t.year==2019 && t.month>2
-  newmerge=nil if t.year==2019 && t.month==2 && t.day>8
   expandedmode=false if expandedmode.nil?
   expandedmodex=!(!expandedmode) if expandedmodex.nil?
   dispstr=" #{event.message.text.downcase} "
@@ -3294,7 +3275,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       superbaan[i-5]='(-)' if [-2,2,6,11,15].include?(u40[i]) && rarity==5
       superbaan[i-5]='(+)' if [-2,10].include?(u40[i]) && rarity==4
       superbaan[i-5]='(-)' if [-1,11].include?(u40[i]) && rarity==4
-      superbaan[i]='~~()~~' if newmerge != false && superbaan[i]=='(-)' && merges>0
+      superbaan[i-5]='~~()~~' if superbaan[i-5]=='(-)' && merges>0
     end
     if ggg.length>0
     elsif superbaan.include?('(+)') || superbaan.include?('(-)')
@@ -3311,7 +3292,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       superbaan[i]='(Superbane)' if bane==x[i] && [-3,1,5,10,14].include?(u40[i+5]) && rarity==5
       superbaan[i]='(Superboon)' if boon==x[i] && [-1,11].include?(u40[i+5]) && rarity==4
       superbaan[i]='(Superbane)' if bane==x[i] && [-2,10].include?(u40[i+5]) && rarity==4
-      if newmerge != false && merges>0 && bane==x[i]
+      if merges>0 && bane==x[i]
         superbaan[i]='~~(Superbane)~~' if [-2,2,6,11,15].include?(u40[i+5]) && rarity==5
         superbaan[i]='~~(Superbane)~~' if [-1,11].include?(u40[i+5]) && rarity==4
       end
@@ -3344,30 +3325,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       sttttz.push("#{'+' if www2[4]>0}#{www2[4]} Res") unless www2[4]==0
       mergetext="\n\nWhen transformed: #{sttttz.join(', ')}\nInclude the word \"Transformed\" to apply this directly."
     end
-  end
-  if merges>0 && newmerge==false
-    mergetextx=''
-    if bane=='' && boon==''
-      s2=u1.map{|q| q}
-      s=[[s2[1],1,'HP'],[s2[2],2,'Atk'],[s2[3],3,'Spd'],[s2[4],4,'Def'],[s2[5],5,'Res']]
-      s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}
-      s=s[0,3]
-      s.sort!{|b,a| b[1] <=> a[1]}
-      mergetextx="+1 #{s[0][2]}/#{s[1][2]}/#{s[2][2]}"
-    elsif bane != ''
-      s=[6,'HP'] if bane=='HP'
-      s=[7,'Atk'] if bane=='Attack'
-      s=[8,'Spd'] if bane=='Speed'
-      s=[9,'Def'] if bane=='Defense'
-      s=[10,'Res'] if bane=='Resistance'
-      baan=3
-      baan=4 if [-3,1,5,10,14].include?(u40[s[0]]) && rarity==5
-      baan=4 if [-2,10].include?(u40[s[0]]) && rarity==4
-      baan=2 if [0,4,10].include?(u40[s[0]]) && rarity==2
-      baan=2 if [-2,1,4,7,10,14].include?(u40[s[0]]) && rarity==1
-      mergetextx="+#{baan} #{s[1]}"
-    end
-    mergetext="#{mergetext}\n\nAfter February update: #{mergetextx}\nInclude the word \"Feb\" to apply this directly."
   end
   if skillstoo && u40[0]!='Robin (Shared stats)' # when invoked any way except the main stats command, will also display the unit's top level skills
     uskl=unit_skills(name,event)
@@ -3448,12 +3405,6 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
 end
 
 def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=false) # displays stats
-  newmerge=false
-  newmerge=true if event.message.text.downcase.split(' ').include?('feb') || event.message.text.downcase.split(' ').include?('february')
-  t=Time.now
-  newmerge=nil if t.year>2019
-  newmerge=nil if t.year==2019 && t.month>2
-  newmerge=nil if t.year==2019 && t.month==2 && t.day>8
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
@@ -3828,7 +3779,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   flds=[["**Level 1#{" +#{merges}" if merges>0}**",["#{' ' if u1[1]<10}#{u1[1]}","#{' ' if u1[2]<10}#{u1[2]}","#{' ' if u1[3]<10}#{u1[3]}","#{' ' if u1[4]<10}#{u1[4]}","#{' ' if u1[5]<10}#{u1[5]}"]],["**Level 40#{" +#{merges}" if merges>0}**",["#{' ' if u40[1]<10}#{u40[1]}","#{' ' if u40[2]<10}#{u40[2]}","#{' ' if u40[3]<10}#{u40[3]}","#{' ' if u40[4]<10}#{u40[4]}","#{' ' if u40[5]<10}#{u40[5]}"]]]
   superbaan=["\u00A0","\u00A0","\u00A0","\u00A0","\u00A0","\u00A0"]
   mergetext=''
-  if boon=="" && bane=="" && !mu && (merges==0 || newmerge==false)
+  if boon=="" && bane=="" && !mu && merges==0
     for i in 6...11
       superbaan[i-5]='+' if [-3,1,5,10,14].include?(u40[i]) && rarity==5
       superbaan[i-5]='-' if [-2,2,6,11,15].include?(u40[i]) && rarity==5
@@ -3857,30 +3808,6 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
       sttttz.push("#{'+' if www2[4]>0}#{www2[4]} Res") unless www2[4]==0
       mergetext="\n\nWhen transformed: #{sttttz.join(', ')}\nInclude the word \"Transformed\" to apply this directly."
     end
-  end
-  if merges>0 && newmerge==false
-    mergetextx=''
-    if bane=='' && boon==''
-      s2=u1.map{|q| q}
-      s=[[s2[1],1,'HP'],[s2[2],2,'Atk'],[s2[3],3,'Spd'],[s2[4],4,'Def'],[s2[5],5,'Res']]
-      s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}
-      s=s[0,3]
-      s.sort!{|b,a| b[1] <=> a[1]}
-      mergetextx="+1 #{s[0][2]}/#{s[1][2]}/#{s[2][2]}"
-    elsif bane != ''
-      s=[6,'HP'] if bane=='HP'
-      s=[7,'Atk'] if bane=='Attack'
-      s=[8,'Spd'] if bane=='Speed'
-      s=[9,'Def'] if bane=='Defense'
-      s=[10,'Res'] if bane=='Resistance'
-      baan=3
-      baan=4 if [-3,1,5,10,14].include?(u40[s[0]]) && rarity==5
-      baan=4 if [-2,10].include?(u40[s[0]]) && rarity==4
-      baan=2 if [0,4,10].include?(u40[s[0]]) && rarity==2
-      baan=2 if [-2,1,4,7,10,14].include?(u40[s[0]]) && rarity==1
-      mergetextx="+#{baan} #{s[1]}"
-    end
-    mergetext="#{mergetext}\n\nAfter February update: #{mergetextx}\nInclude the word \"Feb\" to apply this directly."
   end
   for i in 0...5
     flds[1][1][i]="#{flds[1][1][i]}#{superbaan[i+1]}"
@@ -7670,12 +7597,6 @@ def get_games_list(arr,includefeh=true)
 end
 
 def comparison(event,args,bot)
-  newmerge=false
-  newmerge=true if event.message.text.downcase.split(' ').include?('feb') || event.message.text.downcase.split(' ').include?('february')
-  t=Time.now
-  newmerge=nil if t.year>2019
-  newmerge=nil if t.year==2019 && t.month>2
-  newmerge=nil if t.year==2019 && t.month==2 && t.day>8
   event.channel.send_temporary_message('Calculating data, please wait...',3)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   s1=args.join(' ').gsub(',','').gsub('/','').downcase.gsub('laevatein','lavatain')
@@ -7875,7 +7796,7 @@ def comparison(event,args,bot)
         s=' (-)' if [-2,2,6,11,15].include?(b[iz][0][jz+5]) && b[iz][3]==5
         s=' (+)' if [-2,10].include?(b[iz][0][jz+5]) && b[iz][3]==4
         s=' (-)' if [-1,11].include?(b[iz][0][jz+5]) && b[iz][3]==4
-        s='' if s==' (-)' && newmerge != false && b[iz][5]>0
+        s='' if s==' (-)' && b[iz][5]>0
         s='' unless b.reject{|q| q[1][q[1].length-10,10]==' (neutral)'}.length<=0
         dzz[iz][1].push("#{stzzz[jz]}: #{stz}#{s}")
         if stz>hstats[jz][0]
@@ -7970,7 +7891,7 @@ def comparison(event,args,bot)
     s=' (-)' if [-2,2,6,11,15].include?(b[0][0][i+5]) && b[0][3]==5
     s=' (+)' if [-2,10].include?(b[0][0][i+5]) && b[0][3]==4
     s=' (-)' if [-1,11].include?(b[0][0][i+5]) && b[0][3]==4
-    s='' if s==' (-)' && newmerge != false && b[0][5]>0
+    s='' if s==' (-)' && b[0][5]>0
     s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)' && !names[0].include?("Mathoo's ")
     d1[1].push("#{stzzz[i]}: #{b[0][0][i]}#{s}")
     s=''
@@ -7978,7 +7899,7 @@ def comparison(event,args,bot)
     s=' (-)' if [-2,2,6,11,15].include?(b[1][0][i+5]) && b[1][3]==5
     s=' (+)' if [-2,10].include?(b[1][0][i+5]) && b[1][3]==4
     s=' (-)' if [-1,11].include?(b[1][0][i+5]) && b[1][3]==4
-    s='' if s==' (-)' && newmerge != false && b[1][5]>0
+    s='' if s==' (-)' && b[1][5]>0
     s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)' && !names[1].include?("Mathoo's ")
     d2[1].push("#{stzzz[i]}: #{b[1][0][i]}#{s}")
     d1[2]+=b[0][0][i]
@@ -9366,12 +9287,6 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
 end
 
 def unit_study(event,name,bot,weapon=nil)
-  newmerge=false
-  newmerge=true if event.message.text.downcase.split(' ').include?('feb') || event.message.text.downcase.split(' ').include?('february')
-  t=Time.now
-  newmerge=nil if t.year>2019
-  newmerge=nil if t.year==2019 && t.month>2
-  newmerge=nil if t.year==2019 && t.month==2 && t.day>8
   if name.is_a?(Array)
     g=get_markers(event)
     u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
@@ -9511,7 +9426,7 @@ def unit_study(event,name,bot,weapon=nil)
   end
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","**Available rarities:** #{summon_type}#{"\n**Highest available merge:** #{highest_merge}" unless highest_merge==@max_rarity_merge[1]}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}#{"\n**Merge calculation formula:** #{'Current (use the word "Feb" to see the new one)' unless newmerge}#{'Feb' if newmerge}" unless newmerge.nil?}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,rar,2)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}**__","**Available rarities:** #{summon_type}#{"\n**Highest available merge:** #{highest_merge}" unless highest_merge==@max_rarity_merge[1]}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j,u40[0])}\n",xcolor,nil,pic,rar,2)
 end
 
 def heal_study(event,name,bot,weapon=nil)
@@ -13360,7 +13275,7 @@ bot.command([:removemember,:removefromgroup]) do |event, group, unit|
   return nil
 end
 
-bot.command([:find,:search]) do |event, *args|
+bot.command([:find,:search,:lookup]) do |event, *args|
   return nil if overlap_prevent(event)
   display_units_and_skills(event,bot,args)
 end
@@ -15133,7 +15048,25 @@ bot.message do |event|
     elsif !all_commands(true).include?(a[0])
       str=find_name_in_string(event,nil,1)
       data_load()
-      if find_skill(s,event,false,true)>=0
+      if !str.nil? && (find_unit(str[0],event,true)>=0 || str[0].downcase.gsub(' ','').gsub('(','').gsub(')','')==str[1].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':',''))
+        x=str[0].downcase.gsub(' ','').gsub('(','').gsub(')','')
+        if !detect_multi_unit_alias(event,x,x).nil?
+          x=detect_multi_unit_alias(event,x,x)
+          event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+          k2=get_weapon(first_sub(str[1],x[0],''),event)
+          w=nil
+          w=k2[0] unless k2.nil?
+          disp_stats(bot,x[1],w,event,true,true)
+        elsif find_unit(str[0],event,true)>=0
+          event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+          k=find_name_in_string(event,nil,1)
+          str=k[0]
+          k2=get_weapon(first_sub(s,k[1],''),event)
+          w=nil
+          w=k2[0] unless k2.nil?
+          disp_stats(bot,str,w,event,event.server.nil?,true)
+        end
+      elsif find_skill(s,event,false,true)>=0
         disp_skill(bot,s,event,true)
       elsif find_structure_ex(s,event,true).length>0
         disp_struct(bot,s,event,true)
@@ -15165,8 +15098,6 @@ bot.message do |event|
           w=k2[0] unless k2.nil?
           disp_stats(bot,x[1],w,event,true,true)
         end
-      elsif str[1].downcase=='ploy' && find_skill(stat_buffs(s,s),event)>=0
-        disp_skill(bot,stat_buffs(s,s),event,true)
       elsif !detect_multi_unit_alias(event,str[0].downcase,event.message.text.downcase).nil?
         x=detect_multi_unit_alias(event,str[0].downcase,event.message.text.downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -15553,7 +15484,25 @@ bot.mention do |event|
   if k<0
     str=find_name_in_string(event,nil,1)
     data_load()
-    if find_skill(s,event,false,true)>=0
+    if !str.nil? && (find_unit(str[0],event,true)>=0 || str[0].downcase.gsub(' ','').gsub('(','').gsub(')','')==str[1].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':',''))
+      x=str[0].downcase.gsub(' ','').gsub('(','').gsub(')','')
+      if !detect_multi_unit_alias(event,x,x).nil?
+        x=detect_multi_unit_alias(event,x,x)
+        event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+        k2=get_weapon(first_sub(str[1],x[0],''),event)
+        w=nil
+        w=k2[0] unless k2.nil?
+        disp_stats(bot,x[1],w,event,true,true)
+      elsif find_unit(str[0],event,true)>=0
+        event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+        k=find_name_in_string(event,nil,1)
+        str=k[0]
+        k2=get_weapon(first_sub(s,k[1],''),event)
+        w=nil
+        w=k2[0] unless k2.nil?
+        disp_stats(bot,str,w,event,event.server.nil?,true)
+      end
+    elsif find_skill(s,event,false,true)>=0
       disp_skill(bot,s,event,true)
     elsif find_structure_ex(s,event,true).length>0
       disp_struct(bot,s,event,true)
