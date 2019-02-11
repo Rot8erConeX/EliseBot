@@ -1,7 +1,7 @@
 Mintz\0xFFA500\Orange
 
 Oscar
-5\10\Attack\Defense\S
+5\10\Attack\Defense\S\0
 Iron Lance\Steel Lance\Slaying Lance\Slaying Lance+\Slaying Lance+ (+) Speed Mode
 Rally Speed\Rally Spd/Def
 Daylight\Sol\Aether

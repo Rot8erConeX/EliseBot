@@ -1,7 +1,7 @@
 Ooocast\0x8310EC\Purple
 
 Nowi
-5\10\Speed\Resistance\S
+5\10\Speed\Resistance\S\0
 Fire Breath\Fire Breath+\Lightning Breath\Lightning Breath+\Lightning Breath+ (+) Speed Mode
 Swap
 Daylight\Sol\Aether
@@ -11,7 +11,7 @@ Panic Ploy 1\Panic Ploy 2\Panic Ploy 3
 Quick Riposte 3
 
 Nowi(Halloween)
-5\1\Speed\Defense\-
+5\1\Speed\Defense\-\0
 Flux\Ruin\Fenrir\Grimoire
 Reposition
 Dragon Gaze\Draconic Aura
@@ -21,7 +21,7 @@ Atk Tactic 1\Atk Tactic 2\Atk Tactic 3
 Guidance 3
 
 Ooocast
-5\0\\\-
+5\0\ \ \-\0
 Iron Sword\Steel Sword\Armorsmasher\Mana Cat
 ~~none~~
 Glowing Ember\Ignis
@@ -31,7 +31,7 @@ Seal Res 1\Seal Res 2\Seal Res 3
  
 
 Tharja
-5\5\Attack\Defense\-
+5\7\Attack\HP\-\0
 Flux\Ruin\Fenrir\Fenrir+\Fenrir+ (+) Speed Mode
 Draw Back
 Dragon Gaze\Dragon Fang

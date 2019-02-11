@@ -331,7 +331,7 @@ Tiki(Young)\Red, Dragon\ \Infantry\8, 8, 8, 7, 6\41, 31, 30, 32, 29\Ito Noizi\Me
 Tiki(Young)(Earth)\Blue, Dragon\Earth, Defense, 21/05/2019\Armor\9, 7, 7, 11, 7\45, 34, 35, 37, 29\Enkyo Yuichiro\Mela Lee\Morohoshi Sumire\5sPF\F\FE3, FE1, FE11, FE12, FEW\Tiki, Young
 Tiki(Young)(Summer)\Red, Dragon\ \Flier\7, 8, 11, 7, 6\40, 33, 37, 32, 26\Gaou\Mela Lee\Morohoshi Sumire\5sPF\F\FE3, FE1, FE11, FE12, FEW\Tiki, Young
 Titania\Green, Blade\ \Cavalry\5, 6, 8, 5, 6\37, 28, 34, 25, 30\Wada Sachiko\Misty Lee\Miyagawa Miho\3p4pPF\F\FE9, FE10, (s)SSBU\Titania
-Titania(Valentines)\Red, Tome, Fire\ \Cavalry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\Misty Lee\Miyagawa Miho\4t5t\F\FE9, FE10, (s)SSBU\Titania
+Titania(Valentines)\Red, Tome, Fire\ \Cavalry\5, 6, 7, 2, 7\35, 30, 33, 17, 30\\Misty Lee\Miyagawa Miho\4t5t\F\FE9, FE10, (s)SSBU\Titania
 Tobin\Red, Blade\ \Infantry\9, 7, 6, 9, 6\46, 31, 27, 33, 26\kaya8\Robbie Daymond\Abe Atsushi\4t5t4t4rPF\M\FE15, FE2\Tobin
 Ursula\Blue, Tome, Thunder\ \Cavalry\5, 6, 7, 3, 6\35, 29, 32, 19, 30\Kotobuki Tsukasa\Misty Lee\Mizuhashi Kaori\3g4g4g3q4q3q4q4rPF\F\FE7\Ursula
 Valter\Blue, Blade\ \Flier\7, 7, 6, 8, 3\42, 32, 31, 34, 19\PenekoR\Imari\Ohkawa Toru\3g4g4g3q4q4rPF\M\FE8\Valter

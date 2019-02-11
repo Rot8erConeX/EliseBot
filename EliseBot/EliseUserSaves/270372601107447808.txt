@@ -1,7 +1,7 @@
 Moosie\0xFF00B9\Magenta
 
 Elise
-5\2\Attack\Defense\S
+5\2\Attack\Defense\S\0
 Assault\Pain\Pain+\Pain+ (+) Wrathful Mode
 Heal\Mend\Recover\Recover+
 Miracle
@@ -11,7 +11,7 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Elise(Summer)
-5\3\Speed\Attack\-
+5\3\Speed\Attack\-\0
 Wind\Elwind\Gronnblade\Gronnblade+
 Draw Back
 Night Sky\Glimmer
@@ -21,7 +21,7 @@ Hone Spd 1\Hone Spd 2\Hone Spd 3
 Speed +3
 
 Myrrh
-5\3\Attack\Speed\-
+5\3\Attack\Speed\-\0
 Fire Breath\Fire Breath+\Flametongue\Great Flame
 Reposition
 Glowing Ember\Bonfire
@@ -31,7 +31,7 @@ Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Iote's Shield
 
 Myrrh(Halloween)
-5\0\Attack\HP\-
+5\0\Attack\HP\-\0
 Fire Breath\Fire Breath+\Flametongue\Spirit Breath
 ~~none~~
 Glowing Ember\Bonfire

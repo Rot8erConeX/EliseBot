@@ -259,8 +259,11 @@ def help_text(event,bot,command=nil,subcommand=nil)
           end
         end
         w=lookout.reject{|q| q[2]!='Weapon' || !q[4].nil?}.map{|q| q[0]}.sort
+        w.push('Slaying')
+        w.sort!
         p=lookout.reject{|q| q[2]!='Passive' || !q[4].nil?}.map{|q| q[0]}.sort
         w=w.reject{|q| q=='Hogtome'} unless !event.server.nil? && event.server.id==330850148261298176
+        p=p.reject{|q| q=='Command'} unless !event.server.nil? && event.server.id==167657750971547648
         if w.join("\n").length+p.join("\n").length>=1950 || !safe_to_spam?(event)
           create_embed(event,'Weapon Flavors','',0x40C0F0,nil,nil,triple_finish(w))
           create_embed(event,'Passive Flavors','',0x40C0F0,nil,nil,triple_finish(p))
@@ -340,8 +343,11 @@ def help_text(event,bot,command=nil,subcommand=nil)
         end
       end
       w=lookout.reject{|q| q[2]!='Weapon' || !q[4].nil?}.map{|q| q[0]}.sort
+      w.push('Slaying')
+      w.sort!
       p=lookout.reject{|q| q[2]!='Passive' || !q[4].nil?}.map{|q| q[0]}.sort
       w=w.reject{|q| q=='Hogtome'} unless !event.server.nil? && event.server.id==330850148261298176
+      p=p.reject{|q| q=='Command'} unless !event.server.nil? && event.server.id==167657750971547648
       if w.join("\n").length+p.join("\n").length>=1950 || !safe_to_spam?(event)
         create_embed(event,'Weapon Flavors','',0x40C0F0,nil,nil,triple_finish(w))
         create_embed(event,'Passive Flavors','',0x40C0F0,nil,nil,triple_finish(p))
@@ -370,8 +376,11 @@ def help_text(event,bot,command=nil,subcommand=nil)
           end
         end
         w=lookout.reject{|q| q[2]!='Weapon' || !q[4].nil?}.map{|q| q[0]}.sort
+        w.push('Slaying')
+        w.sort!
         p=lookout.reject{|q| q[2]!='Passive' || !q[4].nil?}.map{|q| q[0]}.sort
         w=w.reject{|q| q=='Hogtome'} unless !event.server.nil? && event.server.id==330850148261298176
+        p=p.reject{|q| q=='Command'} unless !event.server.nil? && event.server.id==167657750971547648
         if w.join("\n").length+p.join("\n").length>=1950 || !safe_to_spam?(event)
           create_embed(event,'Weapon Flavors','',0x40C0F0,nil,nil,triple_finish(w))
           create_embed(event,'Passive Flavors','',0x40C0F0,nil,nil,triple_finish(p))
@@ -2052,7 +2061,7 @@ def disp_current_events(mode=0,shift=false)
       b[i]=nil if b[i][2][0]=='-' && b[i][4].nil?
     end
     b.compact!
-    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm}
+    b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || (q[4].split(', ').length>1 && q[4].split(', ')[1].split('/').reverse.join('').to_i<tm)}
     b2=b.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm}.reverse if mode<0
     for i in 0...b2.length
       t2=b2[i][4].split(', ')[[mode,0].max].split('/').map{|q| q.to_i}
@@ -2095,7 +2104,7 @@ def disp_current_events(mode=0,shift=false)
       c[i][1]='Log-In Bonus' if c[i][1]=='Log-In' || c[i][1]=='Login'
       c[i][2]=c[i][2].split(', ')
     end
-    c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
+    c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i>tm || (q.length>1 && q[2][1].split('/').reverse.join('').to_i<tm)}
     c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i<=tm} if mode<0
     for i in 0...c2.length
       t2=c2[i][2][[mode,0].max].split('/').map{|q| q.to_i}
@@ -2380,11 +2389,13 @@ def next_events(event,bot,type)
   timeshift=8
   timeshift-=1 unless t.dst?
   t-=60*60*timeshift
-  msg="Date assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
+  msg="Time elapsed since today's reset: #{"#{t.hour} hours, " if t.hour>0}#{"#{'0' if t.min<10}#{t.min} minutes, " if t.hour>0 || t.min>0}#{'0' if t.sec<10}#{t.sec} seconds"
+  msg="#{msg}\nTime until tomorrow's reset: #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds"
+  msg="#{msg}\n\nDate assuming reset is at midnight: #{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
   t2=Time.new(2017,2,2)-60*60
   t2=t-t2
   date=(((t2.to_i/60)/60)/24)
-  msg=extend_message(msg,"Days since game release: #{longFormattedNumber(date)}",event)
+  msg="#{msg}\nDays since game release: #{longFormattedNumber(date)}"
   if event.user.id==167657750971547648 && @shardizard==4
     msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
     msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)",event)
@@ -2480,8 +2491,9 @@ def next_events(event,bot,type)
   msg2="#{msg2}\n#{ghb[0].split(' / ')[0]} - #{ghb.length} days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
   msg3="#{msg3}\n#{ghb[0].split(' / ')[1]} - #{ghb.length} days from now - #{t2.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t2.month]} #{t2.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t2.wday]})"
   msg=extend_message(msg,msg2,event,2) if [-1,4].include?(idx)
-  msg=extend_message(msg,msg3,event,2) if [-1,5].include?(idx)
-  msg=extend_message(msg,"Try the command again with \"GHB2\" if you're looking for the second set of Grand Hero Battles.\nYou may also want to try \"Events\" if you're looking for non-cyclical GHBs.",event,2) if [4].include?(idx)
+  msg=extend_message(msg,msg3,event,2) if [-1,5].include?(idx) || (idx==4 && safe_to_spam?(event))
+  msg=extend_message(msg,"Try the command again with \"GHB2\" if you're looking for the second set of Grand Hero Battles.\nYou may also want to try \"Events\" if you're looking for non-cyclical GHBs.",event,2) if [4].include?(idx) && !safe_to_spam?(event)
+  msg=extend_message(msg,"You may also want to try \"Events\" if you're looking for non-cyclical GHBs.",event,2) if [4,5].include?(idx) && safe_to_spam?(event)
   if [-1,6].include?(idx)
     rd=['Cavalry <:Icon_Move_Cavalry:443331186530451466>',
         'Flying <:Icon_Move_Flier:443331186698354698>',
@@ -2642,8 +2654,8 @@ def next_events(event,bot,type)
     data_load()
     t=Time.now
     timeshift=8
-    t-=60*60*timeshift
     timeshift-=1 unless t.dst?
+    t-=60*60*timeshift
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
     b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][1].split('/').reverse.join('').to_i<tm}
     if b.length<=0
@@ -2672,8 +2684,8 @@ def next_events(event,bot,type)
     data_load()
     t=Time.now
     timeshift=8
-    t-=60*60*timeshift
     timeshift-=1 unless t.dst?
+    t-=60*60*timeshift
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
     b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][1].split('/').reverse.join('').to_i<tm}
     if b.length<=0
