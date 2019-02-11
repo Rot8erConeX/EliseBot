@@ -924,9 +924,9 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
   t-=60*60*timeshift
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
   b3=b2.map{|q| q}
-  b3=b2.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm} if banner_types.include?('Current')
+  b3=b2.reject{|q| q[4].nil? || q[4].split(', ').length<2 || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[-1].split('/').reverse.join('').to_i<tm} if banner_types.include?('Current')
   b3=b2.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm} if banner_types.include?('Upcoming')
-  b3=b2.reject{|q| q[4].nil? || q[4].split(', ')[1].split('/').reverse.join('').to_i<tm} if banner_types.include?('Current') && banner_types.include?('Upcoming')
+  b3=b2.reject{|q| q[4].nil? || q[4].split(', ')[-1].split('/').reverse.join('').to_i<tm} if banner_types.include?('Current') && banner_types.include?('Upcoming')
   b3=b2.map{|q| q} if b2.length==0
   bnr=b3.sample
   data_load()
@@ -1248,20 +1248,20 @@ def find_data_ex(callback,name,event,fullname=false)
   k=method(callback).call(name,event,true)
   return k if k>=0
   args=name.split(' ')
-  for i in 0...args.length-1
+  for i in 0...args.length
     for i2 in 0...args.length-i
-      k=method(callback).call(args[i,args.length-1-i-i2].join(' '),event,true)
-      return k if k>=0 && args[i,args.length-1-i-i2].length>0
+      k=method(callback).call(args[i,args.length-i-i2].join(' '),event,true)
+      return k if k>=0 && args[i,args.length-i-i2].length>0
     end
   end
   return -1 if fullname
   k=method(callback).call(name,event)
   return k if k>=0
   args=name.split(' ')
-  for i in 0...args.length-1
+  for i in 0...args.length
     for i2 in 0...args.length-i
-      k=method(callback).call(args[i,args.length-1-i-i2].join(' '),event)
-      return k if k>=0 && args[i,args.length-1-i-i2].length>0
+      k=method(callback).call(args[i,args.length-i-i2].join(' '),event)
+      return k if k>=0 && args[i,args.length-i-i2].length>0
     end
   end
   return -1
@@ -4328,6 +4328,42 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
     w=w.map{|q| "#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}#{q[0]}#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}"}
     create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[0][0]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
   end
+  if " #{event.message.text.downcase} ".include?(' tags ') || " #{event.message.text.downcase} ".include?(' tag ')
+    str=''
+    k=skill.map{|q| q[11].split(', ')}
+    m=[]
+    for i in 0...k.length
+      for i2 in 0...k[i].length
+        m.push([k[i][i2],i+1])
+      end
+    end
+    f=m.map{|q| q[0]}.uniq
+    k2=[]
+    for i in 0...f.length
+      if m.reject{|q| q[0]!=f[i]}.length==k.length
+        k2.push(f[i])
+      else
+        k2.push("#{f[i]} *#{m.reject{|q| q[0]!=f[i]}.map{|q| q[1]}.join('/')}*")
+      end
+    end
+    k=k2.map{|q| q}
+    if k[0]=='Passive'
+      str="#{str}\n**Type:** <:Passive:544139850677485579> Passive"
+      k.shift
+      clrs=k.reject{|q| !['A','B','C','Seal','W'].include?(q)}
+      for i in 0...clrs.length
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Passive_#{clrs[i].gsub('Seal','S')}"}
+        clrs[i]="#{"#{moji[0].mention} " if moji.length>0}#{clrs[i]}"
+      end
+      str="#{str}\n**Slot#{'s' if clrs.length>1}:** #{clrs.join(', ')}" if clrs.length>0
+      k=k.reject{|q| ['A','B','C','Seal','W'].include?(q)}
+    end
+    if k.length<=0
+      create_embed(event,'Searchable tags',str,xcolor)
+    else
+      create_embed(event,'Searchable tags',str,xcolor,nil,nil,triple_finish(k))
+    end
+  end
 end
 
 def disp_skill(bot,name,event,ignore=false,dispcolors=false)
@@ -4343,6 +4379,12 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   args=sever(s,true).split(' ')
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   name=args.join(' ') if name.nil?
+  f=find_data_ex(:find_skill,name,event)
+  if f>=0
+    namex=@skills[f][0].split(' ')
+    namex.pop if find_skill(stat_buffs(namex.join(' '),name),event,false,false,true,1).is_a?(Array)
+    name=namex.join(' ')
+  end
   name=stat_buffs(name,name)
   return disp_skill_line(bot,name,event,ignore,dispcolors) if find_skill(name,event,false,false,true,1).is_a?(Array)
   lookout=[]
@@ -4353,7 +4395,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     end
   end
   lookout2=lookout.reject{|q| q[2]!='Weapon' || q[3].nil?}
-  f=find_skill(name,event)
+  f=find_data_ex(:find_skill,name,event)
   if f<0
     if event.message.text.downcase.include?('psychic')
       event.respond 'No matches found.  Might you be looking for the skill **Physic** or its upgrade **Physic+**?' unless ignore
@@ -5254,6 +5296,75 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     for i in 0...str.length
       create_embed(event,'__**Refinery Options**__',str[i],0x688C68,nil,xpic) if i==0
       create_embed(event,'',str[i],0x688C68) unless i==0
+    end
+  end
+  if " #{event.message.text.downcase} ".include?(' tags ') || " #{event.message.text.downcase} ".include?(' tag ')
+    str=''
+    k=skill[11].split(', ')
+    if k[0]=='Weapon'
+      str="#{str}\n**Slot:**  <:Skill_Weapon:444078171114045450> Weapon"
+      k.shift
+      clrs=k.reject{|q| !['Red','Blue','Green','Colorless','Purple'].include?(q)}
+      for i in 0...clrs.length
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clrs[i]}_Unknown"}
+        clrs[i]="#{"#{moji[0].mention} " if moji.length>0}#{clrs[i]}"
+      end
+      str="#{str}\n**Color#{'s' if clrs.length>1}:** #{clrs.join(', ')}" if clrs.length>0
+      k=k.reject{|q| ['Red','Blue','Green','Colorless','Purple'].include?(q)}
+      clrs=k.reject{|q| !['Blade','Tome','Breath','Bow','Dagger','Staff','Beast','Gun'].include?(q)}
+      for i in 0...clrs.length
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "Gold_#{clrs[i]}"}
+        clrs[i]="#{"#{moji[0].mention} " if moji.length>0}#{clrs[i]}"
+      end
+      str="#{str}\n**Type#{'s' if clrs.length>1}:** #{clrs.join(', ')}" if clrs.length>0
+      k=k.reject{|q| ['Blade','Tome','Breath','Bow','Dagger','Staff','Beast','Gun'].include?(q)}
+      if k.reject{|q| q.include?('(E)') || q.include?('(R)') || q.include?('(T)') || q.include?('(TE)') || q.include?('(TR)') || q.include?('(ET)') || q.include?('(RT)') || q.include?('(T)(E)') || q.include?('(T)(R)') || q.include?('(E)(T)') || q.include?('(R)(T)')}.length<k.length
+        flds=[['Base weapon',[]],['All refinements',[]],['Effect Mode refinement',[]],['Transformed base',[]],['Refined Transformation',[]],['Effect Transformation',[]]]
+        for i in 0...k.length
+          if k[i][0,3]=='(R)'
+            flds[1][1].push(k[i][3,k[i].length-3])
+          elsif k[i][0,3]=='(E)'
+            flds[2][1].push(k[i][3,k[i].length-3])
+          elsif k[i][0,3]=='(T)'
+            flds[3][1].push(k[i][3,k[i].length-3])
+          elsif ['(TR)','(RT)'].include?(k[i][0,4])
+            flds[4][1].push(k[i][4,k[i].length-4])
+          elsif ['(TE)','(ET)'].include?(k[i][0,4])
+            flds[5][1].push(k[i][4,k[i].length-4])
+          elsif ['(T)(R)','(R)(T)'].include?(k[i][0,6])
+            flds[4][1].push(k[i][6,k[i].length-6])
+          elsif ['(T)(E)','(E)(T)'].include?(k[i][0,6])
+            flds[5][1].push(k[i][6,k[i].length-6])
+          else
+            flds[0][1].push(k[i])
+          end
+        end
+        flds=flds.reject{|q| q[1].length<=0}.map{|q| [q[0],q[1].join("\n")]}
+        flds=nil if flds.length<=0
+        create_embed(event,'Searchable tags',str,xcolor,nil,nil,flds)
+        return nil
+      end
+    elsif k[0]=='Assist'
+      str="#{str}\n**Slot:** <:Skill_Assist:444078171025965066> Assist"
+      k.shift
+    elsif k[0]=='Special'
+      str="#{str}\n**Slot:** <:Skill_Special:444078170665254929> Special"
+      k.shift
+    elsif k[0]=='Passive'
+      str="#{str}\n**Type:** <:Passive:544139850677485579> Passive"
+      k.shift
+      clrs=k.reject{|q| !['A','B','C','Seal','W'].include?(q)}
+      for i in 0...clrs.length
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Passive_#{clrs[i].gsub('Seal','S')}"}
+        clrs[i]="#{"#{moji[0].mention} " if moji.length>0}#{clrs[i]}"
+      end
+      str="#{str}\n**Slot#{'s' if clrs.length>1}:** #{clrs.join(', ')}" if clrs.length>0
+      k=k.reject{|q| ['A','B','C','Seal','W'].include?(q)}
+    end
+    if k.length<=0
+      create_embed(event,'Searchable tags',str,xcolor)
+    else
+      create_embed(event,'Searchable tags',str,xcolor,nil,nil,triple_finish(k))
     end
   end
 end
@@ -6581,42 +6692,6 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   passives=[]
   weapon_subsets=[]
   passive_subsets=[]
-  for i in 0...args.length
-    colors.push('Red') if ['red','reds'].include?(args[i].downcase)
-    colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
-    colors.push('Green') if ['green','greens','grean','greans'].include?(args[i].downcase)
-    colors.push('Colorless') if ['colorless','colourless','colorlesses','colourlesses','clear','clears'].include?(args[i].downcase)
-    color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
-    color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
-    color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
-    color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
-    color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
-    color_weapons.push(['Green','Tome']) if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
-    skill_types.push('Weapon') if ['weapon','weapons'].include?(args[i].downcase)
-    skill_types.push('Assist') if ['assist','assists'].include?(args[i].downcase)
-    skill_types.push('Special') if ['special','specials'].include?(args[i].downcase)
-    skill_types.push('Passive') if ['passive','passives','apassives','apassive','passivea','passivesa','a_passives','a_passive','passive_a','passives_a','bpassives','bpassive','passiveb','passivesb','b_passives','b_passive','passive_b','passives_b','cpassives','cpassive','passivec','passivesc','c_passives','c_passive','passive_c','passives_c','spassives','spassive','passives','passivess','s_passives','s_passive','passive_s','passives_s','sealpassives','sealpassive','passiveseal','passivesseal','seal_passives','seal_passive','passive_seal','passives_seal','sealspassives','sealspassive','passiveseals','passivesseals','seals_passives','seals_passive','passive_seals','passives_seals','wpassives','wpassive','passivew','passivesw','w_passives','w_passive','passive_w','passives_w'].include?(args[i].downcase)
-    weapons.push('Blade') if ['physical','blade','blades','close','closerange'].include?(args[i].downcase)
-    weapons.push('Tome') if ['tome','mage','magic','spell','tomes','mages','spells','range','ranged','distance','distant'].include?(args[i].downcase)
-    weapons.push('Breath') if ['dragon','dragons','breath','manakete','manaketes','close','closerange'].include?(args[i].downcase)
-    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers','close','closerange'].include?(args[i].downcase)
-    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves','range','ranged','distance','distant'].include?(args[i].downcase)
-    weapons.push('Staff') if ['healer','staff','cleric','healers','clerics','staves','range','ranged','distance','distant'].include?(args[i].downcase)
-    weapons.push('Beast') if ['beast','beasts','laguz','close','closerange'].include?(args[i].downcase)
-    assists.push('Health') if ['health','hp'].include?(args[i].downcase)
-    assists.push('Move') if ['move','movement','moving','arrangement','positioning','positions','position'].include?(args[i].downcase)
-    assists.push('Staff') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
-    assists.push('Rally') if ['rally','rallys','rallies','buff','buffs'].include?(args[i].downcase)
-    specials.push('Staff') if ['healer','staff','cleric','healers','clerics','staves','balm','balms'].include?(args[i].downcase)
-    specials.push('Defensive') if ['defense','defence','defensive','defencive','proc'].include?(args[i].downcase)
-    specials.push('Offensive') if ['offense','offence','offensive','offencive','damage','damaging','proc'].include?(args[i].downcase)
-    specials.push('AoE') if ['aoe','area','spread','area_of_effect'].include?(args[i].downcase)
-    passives.push('A') if ['a','apassives','apassive','passivea','passivesa','a_passives','a_passive','passive_a','passives_a'].include?(args[i].downcase)
-    passives.push('B') if ['b','bpassives','bpassive','passiveb','passivesb','b_passives','b_passive','passive_b','passives_b'].include?(args[i].downcase)
-    passives.push('C') if ['c','cpassives','cpassive','passivec','passivesc','c_passives','c_passive','passive_c','passives_c'].include?(args[i].downcase)
-    passives.push('Seal') if ['s','seal','seals','spassives','spassive','passives','passivess','s_passives','s_passive','passive_s','passives_s','sealpassives','sealpassive','passiveseal','passivesseal','seal_passives','seal_passive','passive_seal','passives_seal','sealspassives','sealspassive','passiveseals','passivesseals','seals_passives','seals_passive','passive_seals','passives_seals'].include?(args[i].downcase)
-    passives.push('W') if ['w','wpassives','wpassive','passivew','passivesw','w_passives','w_passive','passive_w','passives_w'].include?(args[i].downcase)
-  end
   lookout=[]
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
     lookout=[]
@@ -6627,10 +6702,24 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   for i in 0...args.length
     for i2 in 0...lookout.length
       if lookout[i2][1].include?(args[i].downcase)
+        skill_types.push(lookout[i2][0]) if lookout[i2][2]=='Type'
+        colors.push(lookout[i2][0]) if lookout[i2][2]=='Color'
+        weapons.push(lookout[i2][0]) if lookout[i2][2]=='Class'
         weapon_subsets.push(lookout[i2][0]) if lookout[i2][2]=='Weapon'
+        assists.push(lookout[i2][0]) if lookout[i2][2]=='Assist'
+        specials.push(lookout[i2][0]) if lookout[i2][2]=='Special'
+        passives.push(lookout[i2][0]) if lookout[i2][2]=='Slot'
         passive_subsets.push(lookout[i2][0]) if lookout[i2][2]=='Passive'
       end
     end
+    color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
+    color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
+    color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
+    color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
+    color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
+    color_weapons.push(['Green','Tome']) if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
+  end
+  for i in 0...args.length
     passive_subsets.push('Breathskill') if ['breath'].include?(args[i].downcase) && !skill_types.include?('weapon') && skill_types.length>0
     passive_subsets.push('Bladeskill') if ['blade'].include?(args[i].downcase) && !skill_types.include?('weapon') && skill_types.length>0
   end
@@ -11233,7 +11322,8 @@ def banner_list(event,name,bot,weapon=nil)
         unless b[i][4].nil?
           mo=['','January','February','March','April','May','June','July','August','September','October','November','December']
           t=b[i][4].split(', ').map{|q| q.split('/').map{|q2| q2.to_i}}
-          tm="\n*Duration:* #{t[0][0]} #{mo[t[0][1]]} #{t[0][2]} - #{t[1][0]} #{mo[t[1][1]]} #{t[1][2]}"
+          tm="\n*Duration:* #{t[0][0]} #{mo[t[0][1]]} #{t[0][2]} - #{t[1][0]} #{mo[t[1][1]]} #{t[1][2]}" if t.length>1
+          tm="\n*Duration:* #{t[0][0]} #{mo[t[0][1]]} #{t[0][2]} - >Unknown<" unless t.length>1
         end
         if !b[i][3].nil? && b[i][3].include?('0')
           str="__*#{b[i][0]}*__#{tm}\n*Multi-banner hybrid with #{shared_color.length+other_color.length+1} total focus units*\n*Starting Focus Chance:* #{len % percentage}% (5<:Icon_Rarity_5p10:448272715099406336>) each banner#{"\n*Current Focus Chance:* #{len % disperc}% (5<:Icon_Rarity_5p10:448272715099406336>) each banner" if star_buff>0}"
@@ -11787,7 +11877,8 @@ bot.command(:summon) do |event, *colors|
     unless bnr[0][1].nil? || bnr[0][1].length.zero?
       b=bnr[0][1].split(', ').map{|q| q.split('/')}
       m=['','January','February','March','April','May','June','July','August','September','October','November','December']
-      str="#{str}\n*Real world run:* #{b[0][0]} #{m[b[0][1].to_i]} #{b[0][2]} - #{b[1][0]} #{m[b[1][1].to_i]} #{b[1][2]}"
+      str="#{str}\n*Real world run:* #{b[0][0]} #{m[b[0][1].to_i]} #{b[0][2]} - #{b[1][0]} #{m[b[1][1].to_i]} #{b[1][2]}" if b.length>1
+      str="#{str}\n*Real world run:* #{b[0][0]} #{m[b[0][1].to_i]} #{b[0][2]} - >Unknown<" unless b.length>1
     end
     str="#{str}\n"
     k=[[],[],[],[],[]]
@@ -14965,6 +15056,33 @@ bot.command(:reload, from: 167657750971547648) do |event|
     e.respond 'Nothing reloaded.  If you meant to use the command, please try it again.' unless reload
   end
   return nil
+end
+
+bot.command(:boop) do |event|
+  return nil if overlap_prevent(event)
+  return nil unless [167657750971547648].include?(event.user.id)
+  return nil unless safe_to_spam?(event)
+  data_load()
+  tagz=@skills.map{|q| q[11]}.join(', ').split(', ').map{|q| q.split(')')[-1]}.uniq
+  lookout=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
+    lookout=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
+      lookout.push(eval line)
+    end
+  end
+  lookout=lookout.reject{|q| q[2]=='Banner'}
+  k=tagz.reject{|q| !lookout.map{|q2| q2[0]}.include?(q)}
+  str="__**Sortable tags**__"
+  for i in 0...k.length
+    str=extend_message(str,k[i],event)
+  end
+  str=extend_message(str,"__**Un-sortable tags**__",event,2)
+  k=tagz.reject{|q| lookout.map{|q2| q2[0]}.include?(q)}
+  for i in 0...k.length
+    str=extend_message(str,k[i],event)
+  end
+  event.respond str
 end
 
 bot.server_create do |event|
