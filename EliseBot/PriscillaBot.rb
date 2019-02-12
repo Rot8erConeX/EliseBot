@@ -64,6 +64,7 @@ bot.gateway.check_heartbeat_acks = false
                  347491426852143109,392557615177007104,295686580528742420,412303462764773376,442465051371372544,353997181193289728,462100851864109056,
                  337397338823852034,446111983155150875,295001062790660097,328109510449430529,483437489021911051,513061112896290816,327599133210705923]
 @summon_rate=[0,0,3]
+@summon_rate_2=[0,0,3]
 @spam_channels=[]
 @mods=[[ 0, 0, 0, 0, 0, 0, 0],
        [ 1, 1, 1, 1, 1, 1, 2],
@@ -880,136 +881,6 @@ def get_bonus_units(type='Arena',mode=0)
   return [] if b.length<=0
   return b[mode-1][0] if mode>=1
   return b.map{|q| q[0]}.join(', ').split(', ')
-end
-
-def make_banner(event) # used by the `summon` command to pick a random banner and choose which units are on it.
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
-    b=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
-      b.push(line.gsub("\n",''))
-    end
-  else
-    b=[]
-  end
-  for i in 0...b.length
-    b[i]=b[i].split('\\'[0])
-    b[i][1]=b[i][1].to_i
-    b[i][2]=b[i][2].gsub(' ','').split(',')
-    b[i][2]=[] if b[i][2][0]=='-'
-    b[i][4]=nil if !b[i][4].nil? && b[i][4].length<=0
-  end
-  b=b.reject{|q| q[2].length==0 && !q[0].include?('GHB') && !q[0].include?('TT')}
-  args=event.message.text.downcase.gsub("\n",' ').split(' ')
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-  end
-  banner_types=[]
-  for i in 0...args.length
-    for i2 in 0...lookout.length
-      if lookout[i2][1].include?(args[i].downcase)
-        banner_types.push(lookout[i2][0]) if lookout[i2][2]=='Banner'
-      end
-    end
-  end
-  b2=b.map{|q| q}
-  b2=b2.reject{|q| q[5].nil? || !has_any?(q[5].split(', '),banner_types.reject{|q2| ['Current','Upcoming'].include?(q2)})} if banner_types.reject{|q2| ['Current','Upcoming'].include?(q2)}.length>0
-  b2=b.map{|q| q} if b2.length==0
-  t=Time.now
-  timeshift=8
-  timeshift-=1 unless t.dst?
-  t-=60*60*timeshift
-  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
-  b3=b2.map{|q| q}
-  b3=b2.reject{|q| q[4].nil? || q[4].split(', ').length<2 || q[4].split(', ')[0].split('/').reverse.join('').to_i>tm || q[4].split(', ')[-1].split('/').reverse.join('').to_i<tm} if banner_types.include?('Current')
-  b3=b2.reject{|q| q[4].nil? || q[4].split(', ')[0].split('/').reverse.join('').to_i<=tm} if banner_types.include?('Upcoming')
-  b3=b2.reject{|q| q[4].nil? || q[4].split(', ')[-1].split('/').reverse.join('').to_i<tm} if banner_types.include?('Current') && banner_types.include?('Upcoming')
-  b3=b2.map{|q| q} if b2.length==0
-  bnr=b3.sample
-  data_load()
-  x=false
-  y=false
-  z=false
-  w=false
-  unless bnr[3].nil?
-    x=true if bnr[3].include?('4') # banner has 4* Focus Units
-    y=true if bnr[3].include?('3') # banner has 3* Focus Units
-    z=true if bnr[3].include?('2') # banner has 2* Focus Units
-    w=true if bnr[3].include?('1') # banner has 1* Focus Units
-    bnr[3]=nil
-  end
-  bnr[0]=[bnr[0],bnr[4]]
-  bnr[4]=nil
-  bnr[5]=nil
-  bnr.compact!
-  bnr.push([])
-  bnr.push([])
-  bnr.push([])
-  bnr.push([])
-  bnr.push([])
-  data_load()
-  u=@units.map{|q| q}
-  for i in 0...u.length
-    bnr[2].push(u[i][0]) if u[i][9][0].downcase.include?('g') && bnr[0][0]=='GHB Units' && u[i][13][0].nil? # the fake GHB Unit banner
-    bnr[2].push(u[i][0]) if u[i][9][0].downcase.include?('t') && bnr[0][0]=='TT Units' && u[i][13][0].nil?  # the fake Tempest Unit banner
-  end
-  if x # 4* Focus Units
-    bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
-  else
-    bnr.push(nil)
-  end
-  if y # 3* Focus Units
-    bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
-  else
-    bnr.push(nil)
-  end
-  if z # 2* Focus Units
-    bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
-  else
-    bnr.push(nil)
-  end
-  if w # 1* Focus Units
-    bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
-  else
-    bnr.push(nil)
-  end
-  for i in 0...u.length # non-focus units
-    bnr[3].push(u[i][0]) if u[i][9][0].include?('5p') && u[i][13][0].nil?
-    bnr[4].push(u[i][0]) if u[i][9][0].include?('4p') && u[i][13][0].nil?
-    bnr[5].push(u[i][0]) if u[i][9][0].include?('3p') && u[i][13][0].nil?
-    bnr[6].push(u[i][0]) if u[i][9][0].include?('2p') && u[i][13][0].nil?
-    bnr[7].push(u[i][0]) if u[i][9][0].include?('1p') && u[i][13][0].nil?
-  end
-  return bnr
-end
-
-def crack_orbs(bot,event,e,user,list) # used by the `summon` command to wait for a reply
-  summons=0
-  five_star=false
-  for i in 1...6
-    if list.include?(i)
-      e << "Orb ##{i} contained a #{@banner[i][0]} **#{@banner[i][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,@banner[i][1],false,4)} (*#{@banner[i][2]}*)"
-      summons+=1
-      five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5:448266417553539104>')
-      five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
-    end
-  end
-  e << ''
-  e << "In this current summoning session, you fired Breidablik #{summons} time#{'s' unless summons==1}, expending #{[0,5,9,13,17,20][summons]} orbs."
-  metadata_load()
-  @summon_rate[0]+=summons
-  @summon_rate[1]+=[0,5,9,13,17,20][summons]
-  e << "Since the last 5\* summons, Breidablik has been fired #{@summon_rate[0]} time#{'s' unless @summon_rate[0]==1} and #{@summon_rate[1]} orbs have been expended."
-  if @summon_rate[2]>2
-    @summon_rate=[0,0,(@summon_rate[2]+1)%3+3] if five_star
-  else
-    @summon_rate=[0,0,@summon_rate[2]] if five_star
-  end
-  metadata_save()
-  @banner=[]
 end
 
 def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's data entry based on their name
@@ -6731,6 +6602,33 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   assists=assists.uniq
   specials=specials.uniq
   weapon_subsets=weapon_subsets.uniq
+  if passive_subsets.include?('Debuff') && !has_any?(['Damage','UnAtk','UnSpd','UnDef','UnRes'],passive_subsets)
+    k=0
+    for i in 0...passive_subsets.length
+      if passive_subsets[i]=='HP'
+        k+=1
+        passive_subsets[i]='Damage'
+      elsif passive_subsets[i]=='Atk'
+        k+=1
+        passive_subsets[i]='UnAtk'
+      elsif passive_subsets[i]=='Spd'
+        k+=1
+        passive_subsets[i]='UnSpd'
+      elsif passive_subsets[i]=='Def'
+        k+=1
+        passive_subsets[i]='UnDef'
+      elsif passive_subsets[i]=='Res'
+        k+=1
+        passive_subsets[i]='UnRes'
+      end
+    end
+    if k>0
+      for i in 0...passive_subsets.length
+        passive_subsets[i]=nil if passive_subsets[i]=='Debuff'
+      end
+      passive_subsets.compact!
+    end
+  end
   passive_subsets=passive_subsets.uniq
   # prune based on inputs
   k=0
@@ -6989,6 +6887,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   m.push("*Weapon subtypes:* #{weapon_subsets.join(', ')}") if weapon_subsets.length>0
   m.push("*Assist subtypes:* #{assists.join(', ')}") if assists.length>0
   m.push("*Special subtypes:* #{specials.join(', ')}") if specials.length>0
+  m.push("*Passive slots:* #{passives.join(', ')}") if passives.length>0
   m.push("*Passive subtypes:* #{passive_subsets.join(', ')}") if passive_subsets.length>0
   if matches4.length>=microskills.length && !(args.nil? || args.length.zero?) && !safe_to_spam?(event)
     event.respond 'Your request is gibberish.' if ['skill','skills'].include?(args[0].downcase)
@@ -11836,291 +11735,13 @@ bot.command(:summon) do |event, *colors|
     disp_summon_pool(event,args)
     return nil
   end
-  if event.server.nil?
-    event.respond 'This command in unavailable in PM.'
-  elsif event.server.id==238770788272963585
-    event.respond 'This command is unavailable in this server.  If you wish to fix that, take it up with the mod team.'
-  elsif !@summon_servers.include?(event.server.id)
-    event.respond 'This command is unavailable in this server.'
-  elsif event.server.id==238770788272963585 && event.channel.id != 377526015939051520
-    event.respond 'This command is unavailable in this channel.  Please go to <#377526015939051520>.'
-  elsif event.server.id==330850148261298176 && event.channel.id != 330851389104455680
-    event.respond 'This command is unavailable in this channel.  Please go to <#330851389104455680>.'
-  elsif event.server.id==328109510449430529 && event.channel.id != 328136987804565504
-    event.respond 'This command is unavailable in this channel.  Please go to <#328136987804565504>.'
-  elsif event.server.id==305889949574496257 && event.channel.id != 460903186773835806
-    event.respond 'This command is unavailable in this channel.  Please go to <#460903186773835806>.'
-  elsif event.server.id==271642342153388034 && event.channel.id != 312736133203361792
-    event.respond 'This command is unavailable in this channel.  Please go to <#312736133203361792>.'
-  else
-    if !@banner[0].nil?
-      post=Time.now
-      if (post - @banner[0][1]).to_f < 300
-        if event.server.id==@banner[0][2]
-          event.respond "<@#{@banner[0][0]}>, please choose your summons as others would like to use this command"
-        else
-          event.respond 'Please wait, as another server is using this command.'
-        end
-        return nil
-      else
-        @banner=[]
-      end
-    end
-    metadata_load()
-    bnr=make_banner(event)
-    n=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP',
-       '+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral']
-    n=['Neutral'] if bnr[0][0]=='TT Units' || bnr[0][0]=='GHB Units'
-    str="**Summoner:** #{event.user.distinct}"
-    str="#{str}\n"
-    str="#{str}\n**Banner:** #{bnr[0][0]}"
-    unless bnr[0][1].nil? || bnr[0][1].length.zero?
-      b=bnr[0][1].split(', ').map{|q| q.split('/')}
-      m=['','January','February','March','April','May','June','July','August','September','October','November','December']
-      str="#{str}\n*Real world run:* #{b[0][0]} #{m[b[0][1].to_i]} #{b[0][2]} - #{b[1][0]} #{m[b[1][1].to_i]} #{b[1][2]}" if b.length>1
-      str="#{str}\n*Real world run:* #{b[0][0]} #{m[b[0][1].to_i]} #{b[0][2]} - >Unknown<" unless b.length>1
-    end
-    str="#{str}\n"
-    k=[[],[],[],[],[]]
-    untz=@units.map{|q| q}
-    for i in 0...bnr[2].length
-      k2=untz[untz.find_index{|q| q[0]==bnr[2][i]}][1][0]
-      k[0].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Red'
-      k[1].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Blue'
-      k[2].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Green'
-      k[3].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Colorless'
-      k[4].push(bnr[2][i].gsub('Lavatain','Laevatein')) unless ['Red','Blue','Green','Colorless'].include?(k2)
-    end
-    str="#{str}\n**Focus Heroes:**"
-    str="#{str}\n<:Orb_Red:455053002256941056> *Red*:  #{k[0].join(', ')}" if k[0].length>0
-    str="#{str}\n<:Orb_Blue:455053001971859477> *Blue*:  #{k[1].join(', ')}" if k[1].length>0
-    str="#{str}\n<:Orb_Green:455053002311467048> *Green*:  #{k[2].join(', ')}" if k[2].length>0
-    str="#{str}\n<:Orb_Colorless:455053002152083457> *Colorless*:  #{k[3].join(', ')}" if k[3].length>0
-    str="#{str}\n<:Orb_Gold:455053002911514634> *Gold*:  #{k[4].join(', ')}" if k[4].length>0
-    str="#{str}\n"
-    str="#{str}\n**Summon rates:**"
-    @banner=[[event.user.id,Time.now,event.server.id]]
-    if bnr[1]<0 # negative "starting focus" numbers indicate there is no non-focus rate
-      sr=(@summon_rate[0]/5)*0.5
-      sr=100.00 + bnr[1] if @summon_rate[0]>=120 && @summon_rate[2]%3==2
-      b= 0 - bnr[1]
-      focus = b + sr
-      five_star = 0.00
-      if @summon_rate[0]>=120 && @summon_rate[2]%3==1
-        focus = 50.00
-        five_star = 50.00
-      end
-      four_star = (100.00 - focus - five_star) * 58.00 / (100.00 - b)
-      three_star = 100.00 - focus - five_star - four_star
-      two_star = 0
-      one_star = 0
-    else
-      sr=(@summon_rate[0]/5)*0.5
-      sr=97.00 - bnr[1] if @summon_rate[0]>=120 && @summon_rate[2]%3==2
-      focus = bnr[1] + sr * bnr[1] / (bnr[1] + 3.00)
-      five_star = 3.00 + sr * 3.00 / (bnr[1] + 3.00)
-      if @summon_rate[0]>=120 && @summon_rate[2]%3==1
-        focus = 50.00
-        five_star = 50.00
-      end
-      four_star = (100.00 - focus - five_star) * 58.00 / (100.00 - bnr[1] - 3)
-      three_star = 100.00 - focus - five_star - four_star
-      two_star = 0
-      one_star = 0
-    end
-    five_star=0 if focus>=100
-    four_star=0 if focus+five_star>=100
-    three_star=0 if focus+five_star+four_star>=100
-    two_star=0 if focus+five_star+four_star+three_star>=100
-    one_star=0 if focus+five_star+four_star+three_star+two_star>=100
-    fakes=false
-    fakes=true if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-    str="#{str}\n5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % focus}%"
-    str="#{str}\nOther 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % five_star}%" unless five_star<=0
-    if fakes
-      if bnr[8].nil?
-        str="#{str}\n~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % four_star}%" unless four_star<=0
-      elsif four_star>0
-        str="#{str}\n~~4\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (four_star/2)}%"
-        str="#{str}\nOther ~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (four_star/2)}%"
-      end
-      if bnr[9].nil?
-        str="#{str}\n~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % three_star}%" unless three_star<=0
-      elsif three_star>0
-        str="#{str}\n~~3\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (three_star/2)}%"
-        str="#{str}\nOther ~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (three_star/2)}%"
-      end
-      if bnr[10].nil?
-        str="#{str}\n~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % two_star}%" unless two_star<=0
-      elsif two_star>0
-        str="#{str}\n~~2\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (two_star/2)}%"
-        str="#{str}\nOther ~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (two_star/2)}%"
-      end
-      if bnr[11].nil?
-        str="#{str}\n~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104> Unit:  #{'%.2f' % one_star}%" unless one_star<=0
-      elsif two_star>0
-        str="#{str}\n~~1\\*~~ 5<:Icon_Rarity_5p10:448272715099406336> Focus:  #{'%.2f' % (one_star/2)}%"
-        str="#{str}\nOther ~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>:  #{'%.2f' % (one_star/2)}%"
-      end
-    else
-      if bnr[8].nil?
-        str="#{str}\n4<:Icon_Rarity_4:448266418459377684> Unit:  #{'%.2f' % four_star}%" unless four_star<=0
-      elsif four_star>0
-        str="#{str}\n4<:Icon_Rarity_4p10:448272714210476033> Focus:  #{'%.2f' % (four_star/2)}%"
-        str="#{str}\nOther 4<:Icon_Rarity_4:448266418459377684>:  #{'%.2f' % (four_star/2)}%"
-      end
-      if bnr[9].nil?
-        str="#{str}\n3<:Icon_Rarity_3:448266417934958592> Unit:  #{'%.2f' % three_star}%" unless three_star<=0
-      elsif three_star>0
-        str="#{str}\n3<:Icon_Rarity_3p10:448294378293952513> Focus:  #{'%.2f' % (three_star/2)}%"
-        str="#{str}\nOther 3<:Icon_Rarity_3:448266417934958592>:  #{'%.2f' % (three_star/2)}%"
-      end
-      if bnr[10].nil?
-        str="#{str}\n2<:Icon_Rarity_2:448266417872044032> Unit:  #{'%.2f' % two_star}%" unless two_star<=0
-      elsif two_star>0
-        str="#{str}\n2<:Icon_Rarity_2p10:448294378205872130> Focus:  #{'%.2f' % (two_star/2)}%"
-        str="#{str}\nOther 2<:Icon_Rarity_2:448266417872044032>:  #{'%.2f' % (two_star/2)}%"
-      end
-      if bnr[11].nil?
-        str="#{str}\n1<:Icon_Rarity_1:448266417481973781> Unit:  #{'%.2f' % one_star}%" unless one_star<=0
-      elsif two_star>0
-        str="#{str}\n1<:Icon_Rarity_1p10:448294377878716417> Focus:  #{'%.2f' % (one_star/2)}%"
-        str="#{str}\nOther 1<:Icon_Rarity_1:448266417481973781>:  #{'%.2f' % (one_star/2)}%"
-      end
-    end
-    str="#{str}\n"
-    for i in 1...6
-      k=rand(10000)
-      if k<focus*100
-        hx=bnr[2].sample
-        rx='5<:Icon_Rarity_5p10:448272715099406336>'
-        nr=n.sample
-      elsif k<focus*100+five_star*100
-        hx=bnr[3].sample
-        rx='5<:Icon_Rarity_5:448266417553539104>'
-        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res',
-            '+Def -HP','+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
-      elsif !bnr[8].nil? && k<focus*100+five_star*100+four_star*50
-        hx=bnr[8].sample
-        rx='4<:Icon_Rarity_4p10:448272714210476033>'
-        rx='~~4\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=n.sample
-      elsif k<focus*100+five_star*100+four_star*100
-        hx=bnr[4].sample
-        rx='4<:Icon_Rarity_4:448266418459377684>'
-        rx='~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res',
-            '+Def -HP','+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
-      elsif !bnr[9].nil? && k<focus*100+five_star*100+four_star*100+three_star*50
-        hx=bnr[9].sample
-        rx='3<:Icon_Rarity_3p10:448294378293952513>'
-        rx='~~3\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=n.sample
-      elsif k<focus*100+five_star*100+four_star*100+three_star*100
-        hx=bnr[5].sample
-        rx='3<:Icon_Rarity_3:448266417934958592>'
-        rx='~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res',
-            '+Def -HP','+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
-      elsif !bnr[10].nil? && k<focus*100+five_star*100+four_star*100+three_star*100+two_star*50
-        hx=bnr[10].sample
-        rx='2<:Icon_Rarity_2p10:448294378205872130>'
-        rx='~~2\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=n.sample
-      elsif k<focus*100+five_star*100+four_star*100+three_star*100+two_star*100
-        hx=bnr[6].sample
-        rx='2<:Icon_Rarity_2:448266417872044032>'
-        rx='~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res',
-            '+Def -HP','+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
-      elsif !bnr[11].nil? && k<focus*100+five_star*100+four_star*100+three_star*100+two_star*100+one_star*50
-        hx=bnr[11].sample
-        rx='1<:Icon_Rarity_1p10:448294377878716417>'
-        rx='~~1\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=n.sample
-      else
-        hx=bnr[7].sample
-        rx='1<:Icon_Rarity_1:448266417481973781>'
-        rx='~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>' if @summon_rate[0]>=120 && @summon_rate[2]%3==0
-        nr=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res',
-            '+Def -HP','+Def -Atk','+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral'].sample
-      end
-      @banner.push([rx,hx,nr])
-    end
-    cracked_orbs=[]
-    if colors.nil? || colors.length.zero?
-      str="#{str}\n**Orb options:**"
-    else
-      trucolors=[]
-      for i in 0...colors.length
-        trucolors.push('Red') if ['red','reds','all'].include?(colors[i].downcase)
-        trucolors.push('Blue') if ['blue','blues','all'].include?(colors[i].downcase)
-        trucolors.push('Green') if ['green','greens','all'].include?(colors[i].downcase)
-        trucolors.push('Colorless') if ['colorless','colourless','clear','clears','all'].include?(colors[i].downcase)
-      end
-      if trucolors.length>0
-        for i in 1...@banner.length
-          cracked_orbs.push([@banner[i],i]) if trucolors.include?(@units[find_unit(@banner[i][1],event)][1][0])
-        end
-        str="#{str}\nNone of the colors you requested appeared.  Here are your **Orb options:**" if cracked_orbs.length.zero?
-      else
-        str="#{str}\n**Orb options:**"
-      end
-    end
-    if cracked_orbs.length>0
-      summons=0
-      five_star=false
-      str="#{str}\n**Summoning Results:**"
-      for i in 0...cracked_orbs.length
-        str="#{str}\nOrb ##{cracked_orbs[i][1]} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,cracked_orbs[i][0][1],false,4)} (*#{cracked_orbs[i][0][2]}*)"
-        summons+=1
-        five_star=true if cracked_orbs[i][0][0].include?('5<:Icon_Rarity_5:448266417553539104>')
-        five_star=true if cracked_orbs[i][0][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
-      end
-      str="#{str}\n"
-      str="#{str}\nIn this current summoning session, you fired Breidablik #{summons} time#{'s' unless summons==1}, expending #{[0,5,9,13,17,20][summons]} orbs."
-      metadata_load()
-      @summon_rate[0]+=summons
-      @summon_rate[1]+=[0,5,9,13,17,20][summons]
-      str="#{str}\nSince the last 5\* summons, Breidablik has been fired #{@summon_rate[0]} time#{"s" unless @summon_rate[0]==1} and #{@summon_rate[1]} orbs have been expended."
-      event.respond str
-      if @summon_rate[2]>2
-        @summon_rate=[0,0,(@summon_rate[2]+1)%3+3] if five_star
-      else
-        @summon_rate=[0,0,@summon_rate[2]] if five_star
-      end
-      metadata_save()
-      @banner=[]
-    else
-      for i in 1...@banner.length
-        k=untz[untz.find_index{|q| q[0]==@banner[i][1]}][1][0]
-        str="#{str}\n#{i}.) <:Orb_Red:455053002256941056> *Red*" if k=='Red'
-        str="#{str}\n#{i}.) <:Orb_Blue:455053001971859477> *Blue*" if k=='Blue'
-        str="#{str}\n#{i}.) <:Orb_Green:455053002311467048> *Green*" if k=='Green'
-        str="#{str}\n#{i}.) <:Orb_Colorless:455053002152083457> *Colorless*" if k=='Colorless'
-        str="#{str}\n#{i}.) <:Orb_Gold:455053002911514634> *Gold*" unless ['Red','Blue','Green','Colorless'].include?(k)
-      end
-      str="#{str}\n"
-      str="#{str}\nTo open orbs, please respond - in a single message - with the number of each orb you want to crack."
-      str="#{str}\nYou can also just say \"Summon all\" to open all orbs."
-      event.respond str
-      event.channel.await(:bob, from: event.user.id) do |e|
-        if @banner[0].nil?
-        elsif e.user.id == @banner[0][0] && e.message.text.downcase.include?('summon all')
-          crack_orbs(bot,event,e,e.user.id,[1,2,3,4,5])
-        elsif e.user.id == @banner[0][0] && e.message.text =~ /1|2|3|4|5/
-          l=[]
-          for i in 1...6
-            l.push(i) if e.message.text.include?(i.to_s)
-          end
-          crack_orbs(bot,event,e,e.user.id,l)
-        else
-          return false
-        end
-      end
-    end
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseText'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
   end
-  return nil
+  summon_sim(bot,event,colors)
 end
 
 bot.command([:effhp,:effHP,:eff_hp,:eff_HP,:bulk]) do |event, *args|
