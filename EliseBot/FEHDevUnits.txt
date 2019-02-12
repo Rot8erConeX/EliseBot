@@ -1,9 +1,9 @@
-Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil
-Alm\Eir\Kana(F)\Matthew\Owain\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
+Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
+Alm\Eir\Kana(F)\Leanne\Matthew\Owain\Reyson\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
-5\10\Resistance\Defense\S\0
+5\10\Resistance\Defense\S\2
 Assault\Absorb\Absorb+\Absorb+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -255,11 +255,11 @@ Earth Dance 3
 Owain
 5\2\Resistance\HP\-\0
 Iron Sword\Steel Sword\Silver Sword\Missiletainn\Missiletainn (Dark)
-~~Shove~~
-Glowing Ember\Bonfire\~~Blue Flame~~
+Shove
+Glowing Ember\Bonfire\Blue Flame
 Atk/Def Bond 1\Atk/Def Bond 2\Atk/Def Bond 3
-Wrath 1\Wrath 2\~~Wrath 3~~
-Spur Spd 1\Spur Spd Def 1\~~Spur Spd Def 2~~
+Wrath 1\Wrath 2\Wrath 3
+Spur Spd 1\Spur Spd Def 1\Spur Spd Def 2
 Hardy Bearing 3
 
 Priscilla
@@ -282,8 +282,18 @@ Poison Strike 1\Poison Strike 2\Poison Strike 3
 Threaten Res 1\Threaten Res 2
 Distant Def 2
 
+Reyson
+4\0\Res\Atk\-\0
+Hatchling (Flier)\Fledgling (Flier)\Adult (Flier)
+Sing
+Chilling Wind\Iceberg
+Darting Stance 1\Steady Posture 1\Steady Posture 2
+Vantage 1\Vantage 2\Vantage 3
+Fortify Res 1\Fortify Res 2\~~Fortify Res 3~~
+Gale Dance 2
+
 Sakura(Bath)
-5\0\Resistance\HP\-\0
+5\0\Resistance\HP\-\1
 Assault\Grandscratcher\Grandscratcher+\~~Grandscratcher+ (+) Dazzling Mode~~
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Still-Water Balm\Fireflood Balm\Fireflood Balm+
@@ -341,6 +351,16 @@ Fierce Stance 1\Fierce Stance 2\Fierce Breath
 Bold Fighter 1\Bold Fighter 2\Bold Fighter 3
 With Everyone!
 Armored Boots
+
+Titania(Valentines)
+5\0\ \ \-\0
+Fire\Elfire\Loyal Wreath\Loyal Wreath+
+Swap
+New Moon\~~Moonbow~~
+Triangle Adept 1\Triangle Adept 2\Triangle Adept 3
+Atk/Res Link 1\Atk/Res Link 2\Atk/Res Link 3
+Def Tactic 1\Def Tactic 2\~~Def Tactic 3~~
+Res Tactic 2
 
 Ylgr
 5\0\Defense\Resistance\-\0
