@@ -3054,7 +3054,9 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     rarity=10000000
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
-  u40x2=get_stats(event,name,40,5,0,boon,bane)
+  bane2="#{bane}"
+  bane2='' if merges>0
+  u40x2=get_stats(event,name,40,5,0,boon,bane2)
   u1=get_stats(event,name,1,rarity,merges,boon,bane,flowers)
   j=find_unit(name,event)
   atk='<:StrengthS:514712248372166666> Attack'
@@ -3118,7 +3120,9 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ") || donate_trigger_word(event)>0
   end
   ftr='"Pandering to the minority gets you nowhere." - Shylock#2166' if event.user.id==198201016984797184
-  bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5)*5
+  bb=0
+  bb=3 if ['',' ',nil].include?(boon) && merges>0
+  bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5)*5
   if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
     lookout=[]
     if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
@@ -3600,7 +3604,9 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
         mergetext="\n\nWhen transformed: #{sttttz.join(', ')}\nInclude the word \"Transformed\" to apply this directly."
       end
     end
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(bot,event,5,merges,summoner,[untz[j][3],flowers])}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,transformed,wl,false,true)}\n**<:HP_S:514712247503945739>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:514712247625580555>#{u40[3]} | <:DefenseS:514712247461871616>#{u40[4]} | <:ResistanceS:514712247574986752>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Score: #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5+25+merges*2+90+blessing.length*4})#{mergetext}",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
+    bb=0
+    bb=3 if merges>0
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0].gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,j,u40[0],mu,2)}**__","#{display_stars(bot,event,5,merges,summoner,[untz[j][3],flowers])}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,[],nil,tempest,blessing,transformed,wl,false,true)}\n**<:HP_S:514712247503945739>#{u40[1]} | #{atk}#{u40[2]} | <:SpeedS:514712247625580555>#{u40[3]} | <:DefenseS:514712247461871616>#{u40[4]} | <:ResistanceS:514712247574986752>#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Score: #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5+25+merges*2+90+blessing.length*4})#{mergetext}",xcolor,nil,pick_thumbnail(event,j,bot),nil,1)
     return nil
   end
   # units for whom both level 40 and level 1 stats are known
@@ -3618,7 +3624,9 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
     rarity=10000000
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
-  u40x2=get_stats(event,name,40,5,0,boon,bane)
+  bane2="#{bane}"
+  bane2='' if merges>0
+  u40x2=get_stats(event,name,40,5,0,boon,bane2)
   u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
   u1=get_stats(event,name,1,rarity,merges,boon,bane,flowers)
   u1=apply_stat_skills(event,stat_skills,u1,tempest,summoner,weapon,refinement,blessing,transformed)
@@ -3733,7 +3741,9 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
     end
     realflds=[['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"]]
   end
-  bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5)*5
+  bb=0
+  bb=3 if ['',' ',nil].include?(boon) && merges>0
+  bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5)*5
   if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
     lookout=[]
     if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
@@ -10374,7 +10384,9 @@ def phase_study(event,name,bot,weapon=nil)
     n=n.join(' / ') if ['<:StrengthS:514712248372166666> Attack','<:FreezeS:514712247474585610> Freeze'].include?(atk)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
-  u40x2=get_stats(event,name,40,5,0,boon,bane)
+  bane2="#{bane}"
+  bane2='' if merges>0
+  u40x2=get_stats(event,name,40,5,0,boon,bane2)
   spec_wpn=false
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
@@ -10714,7 +10726,9 @@ def phase_study(event,name,bot,weapon=nil)
   for i in 0...epu40.length
     epu40[i]="~~#{epu40[i]}~~ #{epu40xw[i]}" if epu40[i]!=epu40xw[i] && wl.include?('~~')
   end
-  bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5])/5)*5
+  bb=0
+  bb=3 if ['',' ',nil].include?(boon) && merges>0
+  bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5)*5
   if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
     lookout=[]
     if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
@@ -12008,8 +12022,12 @@ bot.command([:bst, :BST]) do |event, *args|
       end
       st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
       b.push(st[1]+st[2]+st[3]+st[4]+st[5])
-      st=get_stats(event,name,40,5,0,r[2],r[3])
-      scr.push(((st[1]+st[2]+st[3]+st[4]+st[5])/5)+r[0]*5+r[1]*2+90)
+      bane2="#{r[3]}"
+      bane2='' if r[1]>0
+      st=get_stats(event,name,40,5,0,r[2],bane2)
+      bb=0
+      bb=3 if ['',' ',nil].include?(r[2]) && r[1]>0
+      scr.push(((st[1]+st[2]+st[3]+st[4]+st[5]+bb)/5)+r[0]*5+r[1]*2+90)
       rstar=@rarity_stars[r[0]-1]
       rstar=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4p10:448272714210476033>','<:Icon_Rarity_5p10:448272715099406336>','<:Icon_Rarity_6p10:491487784822112256>'][r[0]-1] if r[1]>=10
       rstar='<:Icon_Rarity_S:448266418035621888>' unless sup=='-'
