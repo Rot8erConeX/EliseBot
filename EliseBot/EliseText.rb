@@ -1670,12 +1670,17 @@ def merge_explain(event,bot)
   disp="#{disp}\n\n4.) This does mean that the base unit's nature can affect the order in which stats increase."
   disp="#{disp}\n- For example, Sakura(Halloween)'s level 1 neutral stats are 16/8/8/4/8.  This means under normal circumstances, her stats increase in the following order: HP->Atk->Spd->Res->Def."
   disp="#{disp}\n- However, consider a +Res -Spd Sakura(Halloween); her level 1 stats are 16/8/7/4/9.  This changes the order stats increase to HP->Res->Atk->Spd->Def."
+  disp="#{disp}\n\n5.) In addition, units with at least one merge get an additional boost to their stats."
+  disp="#{disp}\n- Units with non-neutral natures get their bane completely removed."
+  disp="#{disp}\n- Units with neutral natures get an additional point each to the first three stats in the list created in step 2."
+  disp="#{disp}\n- These changes do affect the BST portion of the arena score calculation, even though it uses unmerged stats."
   create_embed(event,"__**How to predict what stats will increase by a merge**__",disp,0x008b8b)
 end
 
 def score_explain(event,bot)
   disp="**`5`<:Icon_Rarity_5:448266417553539104>`+0 level 40 BST` / 5, rounded down to the nearest full number**"
   disp="#{disp}\nEven if the unit is not 5\\* or level 40, or already merged, it is their 5\\*+0 level 40 BST without skills that determines their BST bin."
+  disp="#{disp}\nDespite using unmerged stats for BST, the unit's bane is ignored if the unit is merged.  Neutral-natured merged units get +3 to their standard BST before the division by 5."
   disp="#{disp}\nIf the unit is 5\\* and has a level 3 Duel skill, the lowest this number can be is 34."
   disp="#{disp}\n\n**`Rarity` \* 5**"
   disp="#{disp}\nMost users will be using a team of full 5\*s, so this will usually be 25."
