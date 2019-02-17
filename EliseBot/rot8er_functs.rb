@@ -576,6 +576,77 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
   return nil
 end
 
+def triple_weakness(bot,event)
+  types=[[1, 1,   1,   1,   1,   0.5, 1,   0,   0.5, 1,   1,   1,   1,   1,   1,   1,   1,   1,   "Normal",   0xA8A77A],
+         [2, 1,   0.5, 0.5, 1,   2,   0.5, 0,   2,   1,   1,   1,   1,   0.5, 2,   1,   2,   0.5, "Fighting", 0xC22E28],
+         [1, 2,   1,   1,   1,   0.5, 2,   1,   0.5, 1,   1,   2,   0.5, 1,   1,   1,   1,   1,   "Flying",   0xA98FF3],
+         [1, 1,   1,   0.5, 0.5, 0.5, 1,   0.5, 0,   1,   1,   2,   1,   1,   1,   1,   1,   2,   "Poison",   0xA33EA1],
+         [1, 1,   0,   2,   1,   2,   0.5, 1,   2,   2,   1,   0.5, 2,   1,   1,   1,   1,   1,   "Ground",   0xE2BF65],
+         [1, 0.5, 2,   1,   0.5, 1,   2,   1,   0.5, 2,   1,   1,   1,   1,   2,   1,   1,   1,   "Rock",     0xB6A136],
+         [1, 0.5, 0.5, 0.5, 1,   1,   1,   0.5, 0.5, 0.5, 1,   2,   1,   2,   1,   1,   2,   0.5, "Bug",      0xA6B91A],
+         [0, 1,   1,   1,   1,   1,   1,   2,   1,   1,   1,   1,   1,   2,   1,   1,   0.5, 1,   "Ghost",    0x735797],
+         [1, 1,   1,   1,   1,   2,   1,   1,   0.5, 0.5, 0.5, 1,   0.5, 1,   2,   1,   1,   2,   "Steel",    0xB7B7CE],
+         [1, 1,   1,   1,   1,   0.5, 2,   1,   2,   0.5, 0.5, 2,   1,   1,   2,   0.5, 1,   1,   "Fire",     0xEE8130],
+         [1, 1,   1,   1,   2,   2,   1,   1,   1,   2,   0.5, 0.5, 1,   1,   1,   0.5, 1,   1,   "Water",    0x6390F0],
+         [1, 1,   0.5, 0.5, 2,   2,   0.5, 1,   0.5, 0.5, 2,   0.5, 1,   1,   1,   0.5, 1,   1,   "Grass",    0x7AC74C],
+         [1, 1,   2,   1,   0,   1,   1,   1,   1,   1,   2,   0.5, 0.5, 1,   1,   0.5, 1,   1,   "Electric", 0xF7D02C],
+         [1, 2,   1,   2,   1,   1,   1,   1,   0.5, 1,   1,   1,   1,   0.5, 1,   1,   0,   1,   "Psychic",  0xF95587],
+         [1, 1,   2,   1,   2,   1,   1,   1,   0.5, 0.5, 0.5, 2,   1,   1,   0.5, 2,   1,   1,   "Ice",      0x96D9D6],
+         [1, 1,   1,   1,   1,   1,   1,   1,   0.5, 1,   1,   1,   1,   1,   1,   2,   1,   0,   "Dragon",   0x6F35FC],
+         [1, 0.5, 1,   1,   1,   1,   1,   2,   1,   1,   1,   1,   1,   2,   1,   1,   0.5, 0.5, "Dark",     0x705746],
+         [1, 2,   1,   0.5, 1,   1,   1,   1,   0.5, 0.5, 1,   1,   1,   1,   1,   2,   2,   1,   "Fairy",    0xD685AD]]
+  args=event.message.text.downcase.gsub(',','').split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  tpz=[]
+  inv=false
+  for i in 0...args.length
+    for j in 0...types.length
+      tpz.push(j) if args[i]==types[j][18].downcase
+    end
+    inv=true if ['inverse','reverse','backwards'].include?(args[i])
+  end
+  tpz=tpz.uniq
+  if @shardizard==4
+  elsif !event.server.nil? && event.server.id==330850148261298176 && bot.user(206147275775279104).on(event.server.id).nil?
+  else
+    return nil if tpz.length<3 && !inv
+  end
+  if inv
+    for i in 0...types.length
+      for i2 in 0...types.length
+        if types[i][i2]==0
+          types[i][i2]=2
+        else
+          types[i][i2]=1.0/types[i][i2]
+        end
+      end
+    end
+  end
+  w=types.map{|q| [q[18],1]}
+  colors=[]
+  for i in 0...3
+    colors.push(types[tpz[i]][19])
+    for i2 in 0...w.length
+      w[i2][1]*=types[i2][tpz[i]]
+    end
+  end
+  w.push(['~~Flying Press~~',w[1][1]*w[2][1]])
+  w.push(['~~Freeze Dry~~',w[10][1]*4]) if tpz[0,3].map{|q| types[q][18]}.include?('Water') && !inv
+  for i in 0...w.length
+    w[i][1]=w[i][1].to_i if w[i][1]==w[i][1].to_i
+  end
+  flds=[['8x weak to:',w.reject{|q| q[1]!=8}.map{|q| q[0]}.join(', ')],
+        ['4x weak to:',w.reject{|q| q[1]!=4}.map{|q| q[0]}.join(', ')],
+        ['2x weak to:',w.reject{|q| q[1]!=2}.map{|q| q[0]}.join(', ')],
+        ['Takes neutral damage from:',w.reject{|q| q[1]!=1}.map{|q| q[0]}.join(', ')],
+        ['2x resists:',w.reject{|q| q[1]!=0.5}.map{|q| q[0]}.join(', ')],
+        ['4x resists:',w.reject{|q| q[1]!=0.25}.map{|q| q[0]}.join(', ')],
+        ['8x resists:',w.reject{|q| q[1]!=0.125}.map{|q| q[0]}.join(', ')],
+        ['Immune to:',w.reject{|q| q[1]!=0}.map{|q| q[0]}.join(', ')]]
+  flds=flds.reject{|q| q[1].nil? || q[1].length<=0}
+  create_embed(event,"#{tpz[0,3].map{|q| types[q][18]}.join('/')}#{' (in an Inverse Battle)' if inv}",flds.map{|q| "**#{q[0]}**\n#{q[1]}"}.join("\n\n"),avg_color(colors))
+end
+
 def embedless_swap(bot,event)
   metadata_load()
   if @embedless.include?(event.user.id)
