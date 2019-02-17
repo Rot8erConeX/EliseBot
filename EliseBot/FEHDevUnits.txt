@@ -356,10 +356,10 @@ Titania(Valentines)
 5\0\ \ \-\0
 Fire\Elfire\Loyal Wreath\Loyal Wreath+
 Swap
-New Moon\~~Moonbow~~
+New Moon\Moonbow
 Triangle Adept 1\Triangle Adept 2\Triangle Adept 3
 Atk/Res Link 1\Atk/Res Link 2\Atk/Res Link 3
-Def Tactic 1\Def Tactic 2\~~Def Tactic 3~~
+Def Tactic 1\Def Tactic 2\Def Tactic 3
 Res Tactic 2
 
 Ylgr

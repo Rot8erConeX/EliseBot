@@ -2727,42 +2727,42 @@ def skill_data(legal_skills,all_skills,event,mode=0)
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
     ls2=legal_skills.reject{|q| q[4]!='Weapon'}
     as2=all_skills.reject{|q| q[4]!='Weapon'}
-    str="#{str}\n#{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades   #{filler(ls2,as2,5,-1,'Sword Users Only')} swords, #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
-    str="#{str}\n#{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes   #{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
-    str="#{str}\n#{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
-    str="#{str}\n#{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
-    str="#{str}\n#{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
-    str="#{str}\n#{filler(ls2,as2,5,-1,'Staff Users Only')} damaging staves"
-    str="#{str}\n__#{filler(ls2,as2,5,-1,'Beasts Only')} beaststones__"
+    str="#{str}\n<:Gold_Blade:443172811620745236> #{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades   <:Red_Blade:443172811830198282> #{filler(ls2,as2,5,-1,'Sword Users Only')} swords, <:Blue_Blade:467112472768151562> #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, <:Green_Blade:467122927230386207> #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
+    str="#{str}\n<:Gold_Tome:443172812413337620> #{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes   <:Red_Tome:443172811826003968> #{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, <:Blue_Tome:467112472394858508> #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, <:Green_Tome:467122927666593822> #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
+    str="#{str}\n<:Gold_Dragon:443172811641454592> #{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
+    str="#{str}\n<:Gold_Bow:443172812492898314> #{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
+    str="#{str}\n<:Gold_Dagger:443172811461230603> #{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
+    str="#{str}\n<:Gold_Staff:443172811628871720> #{filler(ls2,as2,5,-1,'Staff Users Only')} damaging staves"
+    str="#{str}\n<:Gold_Beast:532854442299752469> __#{filler(ls2,as2,5,-1,'Beasts Only')} beast weapons__"
     ls2=legal_skills.reject{|q| q[4]!='Assist'}
     as2=all_skills.reject{|q| q[4]!='Assist'}
-    str="#{str}\n#{filler(ls2,as2,11,-1,'Rally',1)} rally assists"
-    str="#{str}\n#{filler(ls2,as2,11,[-1,-1],['Move','Music'],[1,-1])} movement assists"
-    str="#{str}\n#{filler(ls2,as2,11,-1,'Music',1)} musical assists"
-    str="#{str}\n#{filler(ls2,as2,11,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
-    str="#{str}\n#{filler(ls2,as2,11,-1,'Staff',1)} healing staves"
-    str="#{str}\n__#{filler(ls2,as2,11,-3,['Rally','Move','Health','Music','Staff'],-4)} misc. assists__"
+    str="#{str}\n<:Assist_Rally:454462054619807747> #{filler(ls2,as2,11,-1,'Rally',1)} rally assists"
+    str="#{str}\n<:Assist_Move:454462055479508993> #{filler(ls2,as2,11,[-1,-1],['Move','Music'],[1,-1])} movement assists"
+    str="#{str}\n<:Assist_Music:454462054959415296> #{filler(ls2,as2,11,-1,'Music',1)} musical assists"
+    str="#{str}\n<:Assist_Health:454462054636584981> #{filler(ls2,as2,11,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
+    str="#{str}\n<:Assist_Staff:454451496831025162> #{filler(ls2,as2,11,-1,'Staff',1)} healing staves"
+    str="#{str}\n__<:Assist_Unknown:454451496482897921> #{filler(ls2,as2,11,-3,['Rally','Move','Health','Music','Staff'],-4)} misc. assists__"
     ls2=legal_skills.reject{|q| q[4]!='Special'}
     as2=all_skills.reject{|q| q[4]!='Special'}
-    str="#{str}\n#{filler(ls2,as2,11,[-1,-1],['Offensive','Defensive'],[1,-1])} offensive specials"
-    str="#{str}\n#{filler(ls2,as2,11,-1,'Defensive',1)} defensive specials"
-    str="#{str}\n#{filler(ls2,as2,11,-1,'AoE',1)} Area-of-Effect specials"
-    str="#{str}\n#{filler(ls2,as2,11,-1,'Staff',1)} healer specials"
-    str="#{str}\n__#{filler(ls2,as2,11,-3,['Damage','Defense','AoE','Staff'],-4)} misc. specials__"
+    str="#{str}\n<:Special_Offensive:454460020793278475> #{filler(ls2,as2,11,[-1,-1],['Offensive','Defensive'],[1,-1])} offensive specials"
+    str="#{str}\n<:Special_Defensive:454460020591951884> #{filler(ls2,as2,11,-1,'Defensive',1)} defensive specials"
+    str="#{str}\n<:Special_AoE:454460021665693696> #{filler(ls2,as2,11,-1,'AoE',1)} Area-of-Effect specials"
+    str="#{str}\n<:Special_Healer:454451451805040640> #{filler(ls2,as2,11,-1,'Staff',1)} healer specials"
+    str="#{str}\n__<:Special_Unknown:454451451603976192> #{filler(ls2,as2,11,-3,['Damage','Defense','AoE','Staff'],-4)} misc. specials__"
   else
-    str="#{str}\n#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
-    str="#{str}\n#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
-    str="#{str}\n#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
+    str="#{str}\n<:Skill_Weapon:444078171114045450> #{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
+    str="#{str}\n<:Skill_Assist:444078171025965066> #{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
+    str="#{str}\n<:Skill_Special:444078170665254929> #{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
   end
   ls2=legal_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
   as2=all_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
-  str="#{str}\n#{filler(ls2,as2,4,-1,'Passive(A)',1)} A Passives"
-  str="#{str}\n#{filler(ls2,as2,4,-1,'Passive(B)',1)} B Passives"
-  str="#{str}\n#{filler(ls2,as2,4,-1,'Passive(C)',1)} C Passives"
+  str="#{str}\n<:Passive_A:443677024192823327> #{filler(ls2,as2,4,-1,'Passive(A)',1)} A Passives"
+  str="#{str}\n<:Passive_B:443677023257493506> #{filler(ls2,as2,4,-1,'Passive(B)',1)} B Passives"
+  str="#{str}\n<:Passive_C:443677023555026954> #{filler(ls2,as2,4,-1,'Passive(C)',1)} C Passives"
   if mode==2
-    str="#{str}\n#{filler(ls2,as2,4,-1,'Seal')} Passive Seals"
+    str="#{str}\n<:Passive_S:443677023626330122> #{filler(ls2,as2,4,-1,'Seal')} Passive Seals"
   else
-    str="#{str}\n#{filler(ls2,as2,4,-1,'Seal',1)} Passive Seals   #{filler(ls2,as2,4,-1,'Seal')} of which are exclusive to the Seal slot"
+    str="#{str}\n<:Passive_S:443677023626330122> #{filler(ls2,as2,4,-1,'Seal',1)} Passive Seals   #{filler(ls2,as2,4,-1,'Seal')} of which are exclusive to the Seal slot"
   end
   return str
 end
@@ -2869,52 +2869,53 @@ def snagstats(event,bot,f=nil,f2=nil)
     return nil
   elsif ['units','characters','unit','character','charas','chara','chars','char'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',1)
-    event << "**There are #{filler(legal_units,all_units,-1)} units, including:**"
-    event << ''
-    event << "#{filler(legal_units,all_units,9,0,'p',1)} summonable units"
-    event << "#{filler(legal_units,all_units,9,0,'g',1)} Grand Hero Battle reward units"
-    event << "#{filler(legal_units,all_units,9,0,'t',1)} Tempest Trials reward units"
-    event << "#{filler(legal_units,all_units,[9,2],[0,0],['s',2],[1,-2])} seasonal units"
-    event << "#{filler(legal_units,all_units,2,0,2,2)} legendary units"
-    event << "#{filler(legal_units,all_units,9,0,'-',1)} unobtainable units"
-    event << ''
-    event << "#{filler(legal_units,all_units,1,0,'Red')} red units,   with #{filler(legal_units,all_units,[1,9],[0,0],['Red','p'],[0,1])} in the main summon pool"
-    event << "#{filler(legal_units,all_units,1,0,'Blue')} blue units,   with #{filler(legal_units,all_units,[1,9],[0,0],['Blue','p'],[0,1])} in the main summon pool"
-    event << "#{filler(legal_units,all_units,1,0,'Green')} green units,   with #{filler(legal_units,all_units,[1,9],[0,0],['Green','p'],[0,1])} in the main summon pool"
-    event << "#{filler(legal_units,all_units,1,0,'Colorless')} colorless units,   with #{filler(legal_units,all_units,[1,9],[0,0],['Colorless','p'],[0,1])} in the main summon pool"
-    event << ''
-    event << "#{filler(legal_units,all_units,1,1,'Blade')} blade users:   #{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, and #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes"
-    event << "#{filler(legal_units,all_units,1,1,'Tome')} tome users:   #{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, and #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green"
-    event << "#{filler(legal_units,all_units,1,1,'Dragon')} dragon units"
-    event << "#{filler(legal_units,all_units,1,1,'Bow')} bow users"
-    event << "#{filler(legal_units,all_units,1,1,'Dagger')} dagger users"
-    event << "#{filler(legal_units,all_units,1,1,'Healer')} staff users"
-    event << "#{filler(legal_units,all_units,1,1,'Beast')} beast units"
-    event << ''
-    event << "#{filler(legal_units,all_units,3,-1,'Infantry')} infantry units"
-    event << "#{filler(legal_units,all_units,3,-1,'Cavalry')} cavalry units"
-    event << "#{filler(legal_units,all_units,3,-1,'Flier')} flying units"
-    event << "#{filler(legal_units,all_units,3,-1,'Armor')} armored units"
+    str="**There are #{filler(legal_units,all_units,-1)} units, including:**"
+    str2="#{filler(legal_units,all_units,9,0,'p',1)} summonable units"
+    str2="#{str2}\n#{filler(legal_units,all_units,9,0,'g',1)} Grand Hero Battle reward units"
+    str2="#{str2}\n#{filler(legal_units,all_units,9,0,'t',1)} Tempest Trials reward units"
+    str2="#{str2}\n#{filler(legal_units,all_units,[9,2],[0,0],['s',2],[1,-2])} seasonal units"
+    str2="#{str2}\n#{filler(legal_units,all_units,2,0,2,2)} legendary units"
+    str2="#{str2}\n#{filler(legal_units,all_units,9,0,'-',1)} unobtainable units"
+    str=extend_message(str,str2,event,2)
+    str2="<:Red_Unknown:443172811486396417> #{filler(legal_units,all_units,1,0,'Red')} red units,   <:Orb_Red:455053002256941056> with #{filler(legal_units,all_units,[1,9],[0,0],['Red','p'],[0,1])} in the main summon pool"
+    str2="#{str2}\n<:Blue_Unknown:467112473980305418> #{filler(legal_units,all_units,1,0,'Blue')} blue units,   <:Orb_Blue:455053001971859477> with #{filler(legal_units,all_units,[1,9],[0,0],['Blue','p'],[0,1])} in the main summon pool"
+    str2="#{str2}\n<:Green_Unknown:467122926785921044> #{filler(legal_units,all_units,1,0,'Green')} green units,   <:Orb_Green:455053002311467048> with #{filler(legal_units,all_units,[1,9],[0,0],['Green','p'],[0,1])} in the main summon pool"
+    str2="#{str2}\n<:Colorless_Unknown:443692132738531328> #{filler(legal_units,all_units,1,0,'Colorless')} colorless units,   <:Orb_Colorless:455053002152083457> with #{filler(legal_units,all_units,[1,9],[0,0],['Colorless','p'],[0,1])} in the main summon pool"
+    str=extend_message(str,str2,event,2)
+    str2="<:Gold_Blade:443172811620745236> #{filler(legal_units,all_units,1,1,'Blade')} blade users:   <:Red_Blade:443172811830198282> #{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, <:Blue_Blade:467112472768151562> #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, <:Green_Blade:467122927230386207> #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes"
+    str2="#{str2}\n<:Gold_Tome:443172812413337620> #{filler(legal_units,all_units,1,1,'Tome')} tome users:   <:Red_Tome:443172811826003968> #{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, <:Blue_Tome:467112472394858508> #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, <:Green_Tome:467122927666593822> #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green"
+    str2="#{str2}\n<:Gold_Dragon:443172811641454592> #{filler(legal_units,all_units,1,1,'Dragon')} dragon units"
+    str2="#{str2}\n<:Gold_Bow:443172812492898314> #{filler(legal_units,all_units,1,1,'Bow')} bow users"
+    str2="#{str2}\n<:Gold_Dagger:443172811461230603> #{filler(legal_units,all_units,1,1,'Dagger')} dagger users"
+    str2="#{str2}\n<:Gold_Staff:443172811628871720> #{filler(legal_units,all_units,1,1,'Healer')} staff users"
+    str2="#{str2}\n<:Gold_Beast:532854442299752469> #{filler(legal_units,all_units,1,1,'Beast')} beast units"
+    str=extend_message(str,str2,event,2)
+    str2="<:Icon_Move_Infantry:443331187579289601> #{filler(legal_units,all_units,3,-1,'Infantry')} infantry units"
+    str2="#{str2}\n<:Icon_Move_Cavalry:443331186530451466> #{filler(legal_units,all_units,3,-1,'Cavalry')} cavalry units"
+    str2="#{str2}\n<:Icon_Move_Flier:443331186698354698> #{filler(legal_units,all_units,3,-1,'Flier')} flying units"
+    str2="#{str2}\n<:Icon_Move_Armor:443331186316673025> #{filler(legal_units,all_units,3,-1,'Armor')} armored units"
+    str=extend_message(str,str2,event,2)
     if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
-      event << ''
-      event << "#{filler(legal_units,all_units,11,-1,'FE1',1)} units from *FE1*,    #{filler(legal_units,all_units,11,0,'FE1')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE2',1)} units from *FE2*,    #{filler(legal_units,all_units,11,0,'FE2')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE3',1)} units from *FE3*,    #{filler(legal_units,all_units,11,0,'FE3')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE4',1)} units from *FE4*,    #{filler(legal_units,all_units,11,0,'FE4')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE5',1)} units from *FE5*,    #{filler(legal_units,all_units,11,0,'FE5')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE6',1)} units from *FE6*,    #{filler(legal_units,all_units,11,0,'FE6')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE7',1)} units from *FE7*,    #{filler(legal_units,all_units,11,0,'FE7')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE8',1)} units from *FE8*,    #{filler(legal_units,all_units,11,0,'FE8')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE9',1)} units from *FE9*,    #{filler(legal_units,all_units,11,0,'FE9')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE10',1)} units from *FE10*,    #{filler(legal_units,all_units,11,0,'FE10')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE11',1)} units from *FE11*,    #{filler(legal_units,all_units,11,0,'FE11')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE12',1)} units from *FE12*,    #{filler(legal_units,all_units,11,0,'FE12')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE13',1)} units from *FE13*,    #{filler(legal_units,all_units,11,0,'FE13')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,['FE14','FE14B','FE14C','FE14R','FE14g'],4)} units from *FE14*,  #{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],-3)} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE15',1)} units from *FE15*,    #{filler(legal_units,all_units,11,0,'FE15')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FE16',1)} units from *FE16*,    #{filler(legal_units,all_units,11,0,'FE16')} of which are credited"
-      event << "#{filler(legal_units,all_units,11,-1,'FEH',1)} units from *FEH* itself,    #{filler(legal_units,all_units,11,0,'FEH')} of which are credited"
+      str2="#{filler(legal_units,all_units,11,-1,'FE1',1)} units from *FE1*,    #{filler(legal_units,all_units,11,0,'FE1')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE2',1)} units from *FE2*,    #{filler(legal_units,all_units,11,0,'FE2')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE3',1)} units from *FE3*,    #{filler(legal_units,all_units,11,0,'FE3')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE4',1)} units from *FE4*,    #{filler(legal_units,all_units,11,0,'FE4')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE5',1)} units from *FE5*,    #{filler(legal_units,all_units,11,0,'FE5')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE6',1)} units from *FE6*,    #{filler(legal_units,all_units,11,0,'FE6')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE7',1)} units from *FE7*,    #{filler(legal_units,all_units,11,0,'FE7')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE8',1)} units from *FE8*,    #{filler(legal_units,all_units,11,0,'FE8')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE9',1)} units from *FE9*,    #{filler(legal_units,all_units,11,0,'FE9')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE10',1)} units from *FE10*,    #{filler(legal_units,all_units,11,0,'FE10')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE11',1)} units from *FE11*,    #{filler(legal_units,all_units,11,0,'FE11')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE12',1)} units from *FE12*,    #{filler(legal_units,all_units,11,0,'FE12')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE13',1)} units from *FE13*,    #{filler(legal_units,all_units,11,0,'FE13')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,['FE14','FE14B','FE14C','FE14R','FE14g'],4)} units from *FE14*,  #{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],-3)} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE15',1)} units from *FE15*,    #{filler(legal_units,all_units,11,0,'FE15')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE16',1)} units from *FE16*,    #{filler(legal_units,all_units,11,0,'FE16')} of which are credited"
+      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FEH',1)} units from *FEH* itself,    #{filler(legal_units,all_units,11,0,'FEH')} of which are credited"
+      str=extend_message(str,str2,event,2)
     end
+    event.respond str
     return nil
   elsif ['skill','skills','weapon','weapons','assist','assists','special','specials','passive','passives'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',3)
@@ -2940,31 +2941,31 @@ def snagstats(event,bot,f=nil,f2=nil)
   elsif ['structure','structures','structs','struct'].include?(f.downcase)
     m=@structures.map{|q| q}
     str="**There are #{longFormattedNumber(m.length)} structure levels, including:**"
-    str="#{str}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Offensive')}.length)} Offensive structure levels"
-    str="#{str}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Defensive')}.length)} Defensive structure levels"
-    str="#{str}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Trap')}.length)} Trap levels"
-    str="#{str}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Resources')}.length)} Resource structure levels"
-    str="#{str}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Ornament')}.length)} Ornament levels"
+    str="#{str}\n<:Offensive_Structure:510774545997758464> #{longFormattedNumber(m.reject{|q| !q[2].include?('Offensive')}.length)} Offensive structure levels"
+    str="#{str}\n<:Defensive_Structure:510774545108566016> #{longFormattedNumber(m.reject{|q| !q[2].include?('Defensive')}.length)} Defensive structure levels"
+    str="#{str}\n<:Trap_Structure:510774545179869194> #{longFormattedNumber(m.reject{|q| !q[2].include?('Trap')}.length)} Trap levels"
+    str="#{str}\n<:Resource_Structure:510774545154572298> #{longFormattedNumber(m.reject{|q| !q[2].include?('Resources')}.length)} Resource structure levels"
+    str="#{str}\n<:Ornamental_Structure:510774545150640128> #{longFormattedNumber(m.reject{|q| !q[2].include?('Ornament')}.length)} Ornament levels"
     m=m.map{|q| [q[0],0,q[2]]}.uniq
     str2="**There are #{longFormattedNumber(m.length)} structures, including:**"
-    str2="#{str2}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Offensive')}.length)} Offensive structures"
-    str2="#{str2}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Defensive')}.length)} Defensive structures"
-    str2="#{str2}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Trap')}.length)} Traps"
-    str2="#{str2}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Resources')}.length)} Resource structures"
-    str2="#{str2}\n#{longFormattedNumber(m.reject{|q| !q[2].include?('Ornament')}.length)} Ornaments"
+    str2="#{str2}\n<:Offensive_Structure:510774545997758464> #{longFormattedNumber(m.reject{|q| !q[2].include?('Offensive')}.length)} Offensive structures"
+    str2="#{str2}\n<:Defensive_Structure:510774545108566016> #{longFormattedNumber(m.reject{|q| !q[2].include?('Defensive')}.length)} Defensive structures"
+    str2="#{str2}\n<:Trap_Structure:510774545179869194> #{longFormattedNumber(m.reject{|q| !q[2].include?('Trap')}.length)} Traps"
+    str2="#{str2}\n<:Resource_Structure:510774545154572298> #{longFormattedNumber(m.reject{|q| !q[2].include?('Resources')}.length)} Resource structures"
+    str2="#{str2}\n<:Ornamental_Structure:510774545150640128> #{longFormattedNumber(m.reject{|q| !q[2].include?('Ornament')}.length)} Ornaments"
     str=extend_message(str,str2,event,2)
     event.respond str
     return nil
   elsif ['accessories','accessory','accessorys','accessorie'].include?(f.downcase)
     str2="**There are #{longFormattedNumber(@accessories.length)} accessories, including:**"
     m=@accessories.reject{|q| q[1]!='Hair'}
-    str2="#{str2}\n\n#{longFormattedNumber(m.length)} pins and other hair accessories"
+    str2="#{str2}\n\n<:Accessory_Type_Hair:531733124741201940> #{longFormattedNumber(m.length)} pins and other hair accessories"
     m=@accessories.reject{|q| q[1]!='Hat'}
-    str2="#{str2}\n#{longFormattedNumber(m.length)} hats and other top-of-head accessories"
+    str2="#{str2}\n<:Accessory_Type_Hat:531733125227741194> #{longFormattedNumber(m.length)} hats and other top-of-head accessories"
     m=@accessories.reject{|q| q[1]!='Mask'}
-    str2="#{str2}\n#{longFormattedNumber(m.length)} masks and other face accessories"
+    str2="#{str2}\n<:Accessory_Type_Mask:531733125064163329> #{longFormattedNumber(m.length)} masks and other face accessories"
     m=@accessories.reject{|q| q[1]!='Tiara'}
-    str2="#{str2}\n#{longFormattedNumber(m.length)} tiaras and other back-of-head accessories"
+    str2="#{str2}\n<:Accessory_Type_Tiara:531733130734731284> #{longFormattedNumber(m.length)} tiaras and other back-of-head accessories"
     m=@accessories.reject{|q| !q[2].include?('Proof of victory over')}
     str2="#{str2}\n\n#{longFormattedNumber(m.length)} Golden Accessories"
     m=@accessories.reject{|q| !q[0].include?(' EX')}
