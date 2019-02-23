@@ -2335,7 +2335,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   w='Rod' if jj[1][0]=='Colorless' && w=='Blade'
   if jj[1][1]!=w
     w="*#{w}* (#{jj[1][0]} #{jj[1][1]})"
-  elsif ['Tome', 'Dragon', 'Bow', 'Dagger'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers'))
+  elsif ['Tome', 'Dragon', 'Bow', 'Dagger'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers')) || jj[1][1]=='Beast'
     w="*#{jj[1][0]} #{jj[1][1]}*"
   elsif jj[1][0]=='Gold'
     w="*#{w}*"
