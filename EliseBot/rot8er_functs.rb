@@ -188,6 +188,12 @@ def supersort(a,b,m,n=nil)
   end
 end
 
+def not_both(a,b)
+  return false if a && b
+  return true if a || b
+  return false
+end
+
 def list_lift(a,c)
   if a.length==1
     return a[0]
@@ -238,30 +244,15 @@ def longFormattedNumber(number,cardinal=false)
     end
     return "#{longFormattedNumber(number,false)}#{k}"
   end
-  return "1,000" if number==1000
   return "#{number}" if number<1000
-  if number<1000
-    bob="#{number%1000}"
-  elsif number%1000<10
+  if number%1000<10
     bob="00#{number%1000}"
   elsif number%1000<100
     bob="0#{number%1000}"
   elsif number%1000<1000
     bob="#{number%1000}"
   end
-  while number>1000
-    number=number/1000
-    if number<1000
-      bob="#{number%1000},#{bob}"
-    elsif number%1000<10
-      bob="00#{number%1000},#{bob}"
-    elsif number%1000<100
-      bob="0#{number%1000},#{bob}"
-    elsif number%1000<1000
-      bob="#{number%1000},#{bob}"
-    end
-  end
-  return bob
+  return "#{longFormattedNumber(number/1000)},#{bob}"
 end
 
 def prio(arr,o)
@@ -624,7 +615,7 @@ def triple_weakness(bot,event)
   end
   w=types.map{|q| [q[18],1]}
   colors=[]
-  for i in 0...3
+  for i in 0...[3,tpz.length].min
     colors.push(types[tpz[i]][19])
     for i2 in 0...w.length
       w[i2][1]*=types[i2][tpz[i]]
