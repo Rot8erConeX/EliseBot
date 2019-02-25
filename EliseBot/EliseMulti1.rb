@@ -185,6 +185,18 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Ike(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Ike(Vanguard)','Ike(Brave)'],[str]]
+  elsif /(roy|roi||ourboy)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
+    str='roy'
+    str='roi' if str2.include?('roi')
+    str='ourboy' if str2.include?('ourboy')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('legendary')
+      return [str,['Roy(Fire)'],["legendary#{str}","#{str}legendary"]]
+    elsif str2.include?('brave') || str2.include?('cyl') || str2.include?('bh')
+      return [str,['Roy(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
+    end
+    return [str,['Roy(Brave)','Roy(Fire)'],[str]]
   elsif /(luc(ina|i|y)|rukina)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
     str='lucina'
     str='rukina' if str2.include?('rukina')
@@ -609,7 +621,7 @@ def list_unit_aliases(event,args,bot,mode=0)
       u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
       unit=unit.reject{|q| !u.include?(q)}
     elsif find_unit(args.join(''),event)==-1 && find_skill(args.join(''),event)==-1 && find_accessory(args.join(''),event)==-1 && find_item_feh(args.join(''),event)==-1 && find_structure(args.join(''),event).length<=0 && !has_any?(args,['unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils','structures','structure','struct','structs','item','items','accessorys','accessory','accessories'])
-      event.respond "The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\m- Items\n\n#{args.join(' ')} does not fall into any of these categories."
+      event.respond "The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\n#{args.join(' ')} does not fall into any of these categories."
       return nil
     end
   end
@@ -2280,7 +2292,7 @@ def summon_sim(bot,event,colors)
     str="#{str}\n<:Orb_Blue:455053001971859477> *Blue*:  #{k[1].join(', ')}" if k[1].length>0
     str="#{str}\n<:Orb_Green:455053002311467048> *Green*:  #{k[2].join(', ')}" if k[2].length>0
     str="#{str}\n<:Orb_Colorless:455053002152083457> *Colorless*:  #{k[3].join(', ')}" if k[3].length>0
-    str="#{str}\n<:Orb_Gold:455053002911514634> *Gold*:  #{k[4].join(', ')}" if k[4].length>0
+    str="#{str}\n<:Orb_Gold:549338084102111250> *Gold*:  #{k[4].join(', ')}" if k[4].length>0
     str2="**Summon rates:**"
     @banner=[[event.user.id,Time.now,event.server.id]]
     if bnr[1]<0 # negative "starting focus" numbers indicate there is no non-focus rate
@@ -2483,7 +2495,7 @@ def summon_sim(bot,event,colors)
         str2="#{str2}\n#{i}.) <:Orb_Blue:455053001971859477> *Blue*" if k=='Blue'
         str2="#{str2}\n#{i}.) <:Orb_Green:455053002311467048> *Green*" if k=='Green'
         str2="#{str2}\n#{i}.) <:Orb_Colorless:455053002152083457> *Colorless*" if k=='Colorless'
-        str2="#{str2}\n#{i}.) <:Orb_Gold:455053002911514634> *Gold*" unless ['Red','Blue','Green','Colorless'].include?(k)
+        str2="#{str2}\n#{i}.) <:Orb_Gold:549338084102111250> *Gold*" unless ['Red','Blue','Green','Colorless'].include?(k)
       end
       str=extend_message(str,str2,event)
       str2="To open orbs, please respond - in a single message - with the number of each orb you want to crack, or the colors of those orbs."

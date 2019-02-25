@@ -23,6 +23,10 @@ Heron Circlet EX\Hair\A headband bestowed by Reyson. Elegant and intricate, it g
 Heron Hairpin\Hair\A hairpin bestowed by Leanne. It's made of nuts and flowers, which are edible, apparently.\Reach 100 orange friendship with Leanne during Forging Bonds: Hearts as One
 Heron Hairpin EX\Hair\A hairpin bestowed by Leanne. Be careful with it - it looks fragile.\Reach 2500 orange friendship with Leanne during Forging Bonds: Hearts as One
 Kagami Mochi\Hair\A favorite of Takumi's. It's a traditional decoration to welcome in the Hoshidan New Year.\Clear floors 81-85 in Illusory Dungeon: Kingdom of Hoshido.
+Kitsune Doodad\Hair\A hair accessory from Selkie that matches the one she wears. It's tied with string of superb quality.\Reach 100 blue friendship with Selkie during Forging Bonds: The Orb Case
+Kitsune Doodad EX\Hair\A hair accessory from Selkie. It has a pretty golden bell that rings excitedly with each movement.\Reach 2500 blue friendship with Selkie during Forging Bonds: The Orb Case
+Kitsune Ears\Hair\A headpiece from Kaden that's shaped like kitsune ears. It's made of kitsune hair left over from Kaden's grooming.\Reach 100 green friendship with Kaden during Forging Bonds: The Orb Case
+Kitsune Ears EX\Hair\A headpiece from Kaden that's shaped like kitsune ears. It's decorated to coordinate with Selkie, his daughter.\Reach 2500 green friendship with Kaden during Forging Bonds: The Orb Case
 Peach Ducky\Hair\A duck-shaped toy that floats on water. The way it bobs up and down is very soothing.\Clear floors 6-10 in Illusory Dungeon: Farewells.
 Sacred Stardust\Hair\Ophelia claims this stardust holds great power. (It's really just a hairpin, but you're nice for humoring her.)\Reach 100 green friendship with Ophelia during Forging Bonds: High Tea Jinks.
 Sacred Stardust EX\Hair\According to Ophelia, only the chosen may touch this stardust. (Actually just a hairpin, but don't dash her dreams.)\Reach 2500 green friendship with Ophelia during Forging Bonds: High Tea Jinks.
@@ -35,6 +39,8 @@ Armored Helmet\Hat\This helmet from Hector was forged in Ostia. It's pretty heav
 Armored Helmet EX\Hat\The extravagant design of this Ostian helmet contrasts with its battle marks to paint a vivid picture of its history.\Reach 2500 blue friendship with Hector(Brave) during Forging Bonds: Rejecting Destiny.
 Bat Ears\Hat\Aren't they cute?\Clear floors 6-10 in Illusory Dungeon: Farewells.
 Bath Bucket\Hat\When preparing to bathe in a hot spring, etiquette dictates washing with this bucket first. Don't splash!\
+Bird Nest\Hat\A bird nest Velouria found up in a tree. According to her, it's a treasure with a great scent.\Reach 100 orange friendship with Velouria during Forging Bonds: The Orb Case
+Bird Nest EX\Hat\A bird nest Velouria found up in a tree. It's a treasure with a great scent. And what's this? Something's in the nest!\Reach 2500 orange friendship with Velouria during Forging Bonds: The Orb Case
 Chilly Tiara\Hat\Fjorm's tiara. Though it is of exquisite workmanship, it was damaged in the battle against Surtr.\Reach 100 blue friendship with Fjorm during Forging Bonds: The Sworn Oath.
 Chilly Tiara EX\Hat\Fjorm's tiara. The gems that decorate it are clear and cold, and they come from Nifl.\Reach 2500 blue friendship with Fjorm during Forging Bonds: The Sworn Oath.
 Crown of Nifl\Hat\Hríd's crown. It's always cold to the touch, and if you place it on your head, your demeanor will remain cool.\Reach 100 orange friendship with Hrid during Forging Bonds: The Sworn Oath.
@@ -67,6 +73,8 @@ Steamed Buns\Hat\A famous delicacy from a Hoshidan hot spring. Doughy and filled
 Summer Bunny Hat\Hat\A hat once worn by a Hero tempted by blue summer skies. The bunny's face has a lot of character.\Clear floors 81-85 in Illusory Dungeon: Farewells
 Tactician's Hat\Hat\Those who wear this hat gain an air that lulls companions into following their orders. It's Loki's.\Reach 100 red friendship with Loki during Forging Bonds: Dueling Desires.
 Tactician's Hat EX\Hat\Those who wear this hat seem to find everyone bending to their whims. It's Loki's.\Reach 2500 red friendship with Loki during Forging Bonds: Dueling Desires.
+Worn-Out Doll\Hat\A stuffed animal from Keaton. It's all torn up, and the stuffing is falling out, but apparently that makes it great!\Reach 100 red friendship with Keaton during Forging Bonds: The Orb Case
+Worn-Out Doll EX\Hat\A stuffed animal from Keaton. It has all kinds of "treasures" stuck to it—a lizard tail, a hair ball, you name it.\Reach 2500 red friendship with Keaton during Forging Bonds: The Orb Case
 Dancer's Mask\Mask\A mask from Olivia. A dancer would wear this to project a mystical aura while performing.\Reach 100 red friendship with Olivia(Traveler) during Forging Bonds: Defending Ylisse.
 Dancer's Mask EX\Mask\A mask from Olivia. A dancer would wear this to project an alluring aura while performing.\Reach 2500 red friendship with Olivia(Traveler) during Forging Bonds: Defending Ylisse.
 Devil Horns\Mask\Equip these for a menacing aura.\Clear floors 81-85 in Illusory Dungeon: Heir of Light.

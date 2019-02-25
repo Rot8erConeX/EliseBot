@@ -1,5 +1,5 @@
 Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
-Alm\Eir\Kana(F)\Leanne\Matthew\Owain\Reyson\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
+Alm\Eir\Kana(F)\Leanne\Matthew\Owain\Reyson\Selkie\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
@@ -40,7 +40,7 @@ Dragon Gaze\Draconic Aura
 Death Blow 1\Swift Sparrow 1\Swift Sparrow 2
 Escape Route 1\Escape Route 2\Escape Route 3
 Spur Def 1\Spur Def 2\Spur Def 3
-Brazen Atk/Res 3
+Brazen Atk/Def 2
 
 Celica(Brave)
 5\0\Defense\Speed\-\0
@@ -103,7 +103,7 @@ Spur Res 1\Spur Def/Res 1\Spur Def/Res 2
 Attack/Def +2
 
 Eir
-5\0\ \ \-\0
+5\1\ \ \-\0
 Iron Dagger\Steel Dagger\Silver Dagger\Lyfjaberg
 Reciprocal Aid
 Chilling Wind\Iceberg
@@ -133,14 +133,14 @@ Spur Def 1\Drive Def 1\Drive Def 2
 Spur Spd 3
 
 Felicia
-4\10\Resistance\HP\-\0
+5\10\Resistance\Defense\-\0
 Iron Dagger\Steel Dagger\Silver Dagger\Silver Dagger+\__Silver Dagger+ (+) Resistance Mode__\Felicia's Plate\Felicia's Plate (+) Effect Mode
 Rally Speed
 Chilling Wind\Glacies
 Warding Blow 1\Warding Blow 2\Warding Blow 3
 Renewal 1\Renewal 2\Renewal 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
-Fortress Res 3
+Brazen Atk/Res 3
 
 Fjorm
 5\1\Attack\HP\-\0
@@ -163,7 +163,7 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Gunnthra
-5\0\Attack\Speed\-\0
+5\0\Attack\Speed\-\1
 Wind\Elwind\Rexcalibur\Blizzard
 Rally Speed
 Chilling Wind\Glacies
@@ -293,7 +293,7 @@ Fortify Res 1\Fortify Res 2\~~Fortify Res 3~~
 Gale Dance 2
 
 Sakura(Bath)
-5\0\Resistance\HP\-\1
+5\0\Resistance\HP\-\2
 Assault\Grandscratcher\Grandscratcher+\~~Grandscratcher+ (+) Dazzling Mode~~
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Still-Water Balm\Fireflood Balm\Fireflood Balm+
@@ -311,6 +311,16 @@ Warding Stance 1\Warding Stance 2\Warding Stance 3
 Guard 1\Guard 2\Guard 3
 Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Def Ploy 2
+
+Selkie
+5\0\Speed\HP\-\0
+Whelp (Cavalry)\Yearling (Cavalry)\Adult (Cavalry)\Foxkit Fang
+Draw Back
+Chilling Wind\Iceberg
+Atk/Spd Bond 1\Atk/Spd Bond 2\Atk/Spd Bond 3
+Sabotage Atk 1\Sabotage Atk 2\Sabotage Atk 3
+Even Res Wave 1\Even Res Wave 2\Even Res Wave 3
+Even Def Wave 2
 
 Soleil
 5\4\Speed\Attack\-\0
@@ -343,7 +353,7 @@ Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
 Quick Riposte 3
 
 Tiki(Young)(Earth)
-5\0\Resistance\HP\-\0
+5\0\Resistance\HP\-\1
 Fire Breath\Fire Breath+\Flametongue\Divine Mist
 Reposition
 New Moon\Moonbow

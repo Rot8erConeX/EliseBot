@@ -1,28 +1,22 @@
-Voting Gauntlet\Log-In Bonus\28/01/2019, 10/02/2019
 2nd Anniversary\Log-In Bonus\02/02/2019, 28/02/2019
 2nd Anniversary\Celebration\02/02/2019, 28/02/2019
 2nd Anniversary\Daily Reward Maps\02/02/2019, 28/02/2019
-Walhart, the Conqueror (revival)\GHB\04/02/2019, 11/02/2019
-Pair-Up\Quests\05/02/2019, 18/02/2018
 Special Heroes\Log-In Bonus\08/02/2019, 21/02/2019
 February Edition\Orb Promo\08/02/2019, 21/02/2019
-Tempest Trials+\Log-In Bonus\09/02/2019, 19/02/2019
-Greil's Request\Tempest\10/02/2019, 19/02/2019
 Carrying the Flame\Tap Battle\11/02/2019, 03/03/2019
-Cherche & Virion\BHB\12/02/2019, 17/02/2019
 -\Grand Conquests\15/02/2019, 21/02/2019
 Jamke, Prince of Verdane (revival)\GHB\18/02/2019, 23/02/2019
 New Heroes\Log-In Bonus\20/02/2019, 05/03/2019
->Unknown<\Forging Bonds\20/02/2019, 05/03/2019
+The Orb Case\Forging Bonds\20/02/2019, 05/03/2019
 Arena\Quests\22/02/2019, 07/03/2019
->Unknown<\GHB\24/02/2019, 04/03/2019
+Panne, Proud Taguel\GHB\24/02/2019, 04/03/2019
 Voting Gauntlet\Log-In Bonus\25/02/2019, 10/03/2019
->Unknown<\LHB\27/02/2019, 07/03/2019
+Roy, Blazing Lion\LHB\27/02/2019, 07/03/2019
 Hrid, Icy Blade\LHB\27/02/2019, 07/03/2019
 Ephraim, Legendary Lord\LHB\27/02/2019, 07/03/2019
 Robin, Fell Vessel\LHB\27/02/2019, 07/03/2019
->Unknown<\Voting Gauntlet\28/02/2019, 05/03/2019
-Weapon Workout\Quest\03/03/2019, 16/03/2019
+The War of Tacticians\Voting Gauntlet\28/02/2019, 05/03/2019
+Weapon Workout\Quests\03/03/2019, 16/03/2019
 Micaiah & Sothe\BHB\05/03/2019, 10/03/2019
 3.3.0 (projected, includes inheritance increase)\Update\06/03/2019, 07/03/2019
 New Heroes\Log-In Bonus\08/03/2019, 20/03/2019

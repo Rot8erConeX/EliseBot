@@ -856,7 +856,7 @@ def sort_legendaries(event,bot,mode=0)
       m.uniq!
       data_load()
       k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('5s') || m.include?(q[0])}.uniq
-      m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Pink:466196714513235988>Gold',[]]]
+      m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Pink:549339019318788175>Gold',[]]]
       for i in 0...k.length
         m2[0][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Red'
         m2[1][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Blue'
@@ -911,7 +911,7 @@ def sort_legendaries(event,bot,mode=0)
       end
       data_load()
       k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('p') || q[9][0].include?('4p') || q[9][0].include?('3p') || q[9][0].include?('2p') || q[9][0].include?('1p') || m.include?(q[0])}.uniq
-      m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Gold:455053002911514634>Gold',[]]]
+      m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Gold:549338084102111250>Gold',[]]]
       for i in 0...k.length
         m2[0][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Red'
         m2[1][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Blue'
@@ -1714,6 +1714,9 @@ def show_tools(event,bot)
     event << 'Google Play: <https://play.google.com/store/apps/details?id=com.nintendo.zaba&hl=en>'
     event << 'Apple App Store: <https://itunes.apple.com/app/id1181774280>'
     event << ''
+    event << '__News__'
+    event << 'In-game news: <https://fire-emblem-heroes.com/en/topics/>'
+    event << ''
     event << '__Wikis and Databases__'
     event << 'Gamepedia FEH wiki: <https://feheroes.gamepedia.com/>'
     event << 'Gamepress FEH database: <https://fireemblem.gamepress.gg/>'
@@ -1736,6 +1739,8 @@ def show_tools(event,bot)
     str="__Download the game__"
     str="#{str}\n[Google Play](https://play.google.com/store/apps/details?id=com.nintendo.zaba&hl=en)"
     str="#{str}\n[Apple App Store](https://itunes.apple.com/app/id1181774280)"
+    str="#{str}\n\n__News__"
+    str="#{str}\n[In-game news](https://fire-emblem-heroes.com/en/topics/)"
     str="#{str}\n\n__Wikis and Databases__\n[Gamepedia FEH wiki](https://feheroes.gamepedia.com/)"
     str="#{str}\n[Gamepress FEH database](https://fireemblem.gamepress.gg/)"
     str="#{str}\n\n__Simulators__"
