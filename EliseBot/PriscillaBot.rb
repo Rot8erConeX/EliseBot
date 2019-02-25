@@ -906,6 +906,8 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
     alz=@aliases.reject{|q| q[0]!='Unit'}
     k=alz.find_index{|q| q[1].downcase==name.downcase && (q[3].nil? || q[3].include?(ks))}
     return untz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, untz[untz.find_index{|q| q[0]==alz[k][2]}][13][0])
+    k=alz.find_index{|q| q[1].gsub('||','').downcase==name.downcase && (q[3].nil? || q[3].include?(ks))}
+    return untz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, untz[untz.find_index{|q| q[0]==alz[k][2]}][13][0])
   end
   return -1 if name.length<2
   return -1 if ignore || ['blade','blad','bla'].include?(name.downcase)
@@ -917,6 +919,8 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
     alz=@aliases.map{|q| q}
     k=alz.find_index{|q| q[0][0,name.length].downcase==name.downcase && (q[2].nil? || q[2].include?(ks))}
     return untz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, untz[untz.find_index{|q| q[0]==alz[k][1]}][13][0])
+    k=alz.find_index{|q| q[0][0,name.length].gsub('||','').downcase==name.downcase && (q[2].nil? || q[2].include?(ks))}
+    return untz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, untz[untz.find_index{|q| q[0]==alz[k][1]}][13][0])
   end
   unless ignore2 || !name.downcase.include?('launch')
     name=name.downcase.gsub('launch','') # if the name includes the word "launch", remove it from consideration
@@ -926,6 +930,8 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
     return k unless k.nil? || !has_any?(g, untz[k][13][0])
     alz=@aliases.reject{|q| q[0]!='Unit' || q[2].include?('(') || !q[3].nil?}
     k=alz.find_index{|q| q[0][0,name.length].downcase==name.downcase}
+    return untz.find_index{|q| q[0]==alz[k][1]} unless k.nil? || !has_any?(g, untz[k][13][0])
+    k=alz.find_index{|q| q[0][0,name.length].gsub('||','').downcase==name.downcase}
     return untz.find_index{|q| q[0]==alz[k][1]} unless k.nil? || !has_any?(g, untz[k][13][0])
   end
   return -1
@@ -995,6 +1001,8 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
     alz=@aliases.reject{|q| q[0]!='Skill'}
     k=alz.find_index{|q| q[1].downcase==name.downcase && (q[3].nil? || q[3].include?(ks))}
     return sklz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
+    k=alz.find_index{|q| q[1].gsub('||','').downcase==name.downcase && (q[3].nil? || q[3].include?(ks))}
+    return sklz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
   end
   return -1 if ignore
   return find_skill("the#{name.downcase.gsub(' ','')}",event) if find_skill("the#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("the#{name.downcase.gsub(' ','')}",event,true)][0][0,4]=='The '
@@ -1012,6 +1020,8 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   unless ignore2
     alz=@aliases.reject{|q| q[0]!='Skill'}
     k=alz.find_index{|q| q[1][0,namex.length].downcase==namex.downcase && (q[3].nil? || q[3].include?(ks))}
+    return sklz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
+    k=alz.find_index{|q| q[1][0,namex.length].gsub('||','').downcase==namex.downcase && (q[3].nil? || q[3].include?(ks))}
     return sklz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
   end
   return find_skill(name.downcase.gsub('_',' '),event) if name.include?('_')
@@ -1037,6 +1047,13 @@ def find_structure(name,event,fullname=false)
     s=strct.reject{|q| q[0]!=alz[k][1]}
     return s.map{|q| strct.find_index{|q2| q==q2}}
   end
+  k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
+  unless k.nil?
+    m=strct.find_index{|q| "#{q[0]} #{q[1]}"==alz[k][1]}
+    return [m] unless m.nil?
+    s=strct.reject{|q| q[0]!=alz[k][1]}
+    return s.map{|q| strct.find_index{|q2| q==q2}}
+  end
   return [] if fullname
   return [] if name.length<3
   k=strct.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
@@ -1044,6 +1061,10 @@ def find_structure(name,event,fullname=false)
   s=strct.reject{|q| q[0]!=strct[k][0] || q[2]!=strct[k][2]} unless k.nil?
   return s.map{|q| strct.find_index{|q2| q==q2}} if s.length>0
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
+  s=[]
+  s=strct.reject{|q| q[0]!=strct[k][0] || q[2]!=strct[k][2]} unless k.nil?
+  return s.map{|q| strct.find_index{|q2| q==q2}} if s.length>0
+  k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
   s=[]
   s=strct.reject{|q| q[0]!=strct[k][0] || q[2]!=strct[k][2]} unless k.nil?
   return s.map{|q| strct.find_index{|q2| q==q2}} if s.length>0
@@ -1085,11 +1106,15 @@ def find_item_feh(name,event,fullname=false)
   g=event.server.id unless event.server.nil?
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
   return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
+  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
   return -1 if fullname
   return -1 if name.length<3
   k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
   return k unless k.nil?
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
+  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
   return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
   return -1
 end
@@ -1106,11 +1131,15 @@ def find_accessory(name,event,fullname=false)
   g=event.server.id unless event.server.nil?
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
   return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
+  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
   return -1 if fullname
   return -1 if name.length<3
   k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
   return k unless k.nil?
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
+  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
   return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
   return -1
 end
@@ -4075,10 +4104,10 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
     for i in 0...usklz2.length
       clrz=[['<:Orb_Red:455053002256941056> Red Summonables',[]],['<:Orb_Blue:455053001971859477> Blue Summonables',[]],
             ['<:Orb_Green:455053002311467048> Green Summonables',[]],['<:Orb_Colorless:455053002152083457> Colorless Summonables',[]],
-            ['<:Orb_Gold:455053002911514634> Summonables',[]],['<:Orb_Red:455053002256941056> Red Limited',[]],
+            ['<:Orb_Gold:549338084102111250> Summonables',[]],['<:Orb_Red:455053002256941056> Red Limited',[]],
             ['<:Orb_Blue:455053001971859477> Blue Limited',[]],['<:Orb_Green:455053002311467048> Green Limited',[]],
-            ['<:Orb_Colorless:455053002152083457> Colorless Limited',[]],['<:Orb_Gold:455053002911514634> Limited',[]],
-            ['<:Orb_Pink:466196714513235988> Free units',[]]]
+            ['<:Orb_Colorless:455053002152083457> Colorless Limited',[]],['<:Orb_Gold:549338084102111250> Limited',[]],
+            ['<:Orb_Pink:549339019318788175> Free units',[]]]
       for i3 in 0...usklz2[i].length
         unless usklz2[i][i3][1].nil? || usklz2[i][i3][0].nil?
           k=usklz2[i][i3][1].split(', ')
@@ -4686,7 +4715,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   str2="#{str2}\n*<:Orb_Green:455053002311467048> Green Limited:* #{clrz[7].join(', ')}" unless clrz[7].length<=0
   str2="#{str2}\n*<:Orb_Colorless:455053002152083457> Colorless Limited:* #{clrz[8].join(', ')}" unless clrz[8].length<=0
   str2="#{str2}\n*<:Orb_Gold:455053002911514634> Limited:* #{clrz[9].join(', ')}" unless clrz[9].length<=0
-  str2="#{str2}\n*<:Orb_Pink:466196714513235988> Free units:* #{clrz[10].join(', ')}" unless clrz[10].length<=0
+  str2="#{str2}\n*<:Orb_Pink:549339019318788175> Free units:* #{clrz[10].join(', ')}" unless clrz[10].length<=0
   clrz=[[],[],[],[],[],[],[],[],[],[],[]]
   unitz=@units.map{|q| q}
   str="#{str}#{"\n" unless x}\n#{str2}" unless str2=='**Heroes who can learn without inheritance:**' || ['Missiletainn','Adult (All)'].include?(skill[0])
@@ -4745,7 +4774,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str2="#{str2}\n*<:Orb_Green:455053002311467048> Green Limited:* #{clrz[7].join(', ')}" unless clrz[7].length<=0
       str2="#{str2}\n*<:Orb_Colorless:455053002152083457> Colorless Limited:* #{clrz[8].join(', ')}" unless clrz[8].length<=0
       str2="#{str2}\n*<:Orb_Gold:455053002911514634> Limited:* #{clrz[9].join(', ')}" unless clrz[9].length<=0
-      str2="#{str2}\n*<:Orb_Pink:466196714513235988> Free units:* #{clrz[10].join(', ')}" unless clrz[10].length<=0
+      str2="#{str2}\n*<:Orb_Pink:549339019318788175> Free units:* #{clrz[10].join(', ')}" unless clrz[10].length<=0
       if str2=="**It#{' also' if x} evolves from #{skill2[0]}, #{prev[i][1]} the following heroes:**"
         str="#{str}\n\n**It#{' also' if x} evolves from #{skill2[0]}**"
       else
