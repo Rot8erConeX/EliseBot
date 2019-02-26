@@ -137,6 +137,7 @@
 ['StatDrops', ['stat-drops', 'statdrops'], 'Passive']
 ['Sweep', ['sweep', 'elementsweep'], 'Passive']
 ['Opening', ['opening', 'open'], 'Passive']
+['Buffstuffer', ['buffstuffer'], 'Passive']
 ['Ploy', ['ploy'], 'Passive']
 ['Feint', ['feint', 'faint'], 'Passive']
 ['Null', ['null', 'dull', 'anti'], 'Passive']

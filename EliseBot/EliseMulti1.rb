@@ -1175,7 +1175,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   end
   type[1]='Skill' if unit.downcase=='adult'
   cck=nil
-  checkstr=normalize(newname.gsub('!','').gsub('(','').gsub(')','').gsub('_',''))
+  checkstr=normalize(newname.gsub('!','').gsub('(','').gsub(')','').gsub('_',''),true)
   if type.reject{|q| q != 'Alias'}.length<=0
     type[0]='Alias' if type[0].include?('*')
     type[1]='Alias' if type[1].include?('*') && type[0]!='Alias'
@@ -1206,7 +1206,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   else
     type=type.map{|q| q.gsub('*','')}
   end
-  checkstr=normalize(newname.gsub('!','').gsub('(','').gsub(')','').gsub('_',''))
+  checkstr=normalize(newname.gsub('!','').gsub('(','').gsub(')','').gsub('_',''),true)
   if type[0]=='Alias' && type[1].gsub('*','')=='Unit'
     unt=@units[find_unit(unit,event)]
     checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
@@ -1264,7 +1264,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     bot.channel(logchn).send_message("~~**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** >Censored< for #{unit}~~\n**Reason for rejection:** Begone, alias.")
     return nil
   end
-  newname=normalize(newname)
+  newname=normalize(newname,true)
   m=nil
   m=[event.server.id] unless event.server.nil?
   srv=0
