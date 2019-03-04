@@ -1496,12 +1496,13 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
   return name
 end
 
-def stat_modify(x,includerefines=false) # used to find all stat names regardless of format and turn them into their proper format
+def stat_modify(x,includerefines=false,includeduel=false) # used to find all stat names regardless of format and turn them into their proper format
   x='HP' if ['hp','health'].include?(x.downcase)
   x='Attack' if ['attack','atk','att','strength','str','magic','mag'].include?(x.downcase)
   x='Speed' if ['spd','speed'].include?(x.downcase)
   x='Defense' if ['defense','def','defence'].include?(x.downcase)
   x='Resistance' if ['res','resistance'].include?(x.downcase)
+  x='Duel' if ['duel','dual'].include?(x.downcase) && includeduel
   if includerefines
     x='Effect' if ['effect','special','eff'].include?(x.downcase)
     x='Wrathful' if ['wrazzle','wrathful'].include?(x.downcase)
@@ -1594,26 +1595,26 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
           args[i]=nil
         end
       elsif args[i].length>9 && (args[i].gsub('(','').gsub(')','')[0,9].downcase=='blessing2' || args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-9,9].downcase=='blessing2')
-        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing2',''))
-        if ['Attack','Speed','Defense','Resistance'].include?(x)
+        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing2',''),false,true)
+        if ['Attack','Speed','Defense','Resistance','Duel'].include?(x)
           blessing.push("#{x}(Mythical)")
           args[i]=nil
         end
       elsif args[i].length>15 && (['blessingmythical','mythicalblessing'].include?(args[i].gsub('(','').gsub(')','')[0,15].downcase) || ['blessingmythical','mythicalblessing'].include?(args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-15,15].downcase))
-        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing','').gsub('mythical',''))
-        if ['Attack','Speed','Defense','Resistance'].include?(x)
+        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing','').gsub('mythical',''),false,true)
+        if ['Attack','Speed','Defense','Resistance','Duel'].include?(x)
           blessing.push("#{x}(Mythical)")
           args[i]=nil
         end
       elsif args[i].length>13 && (['blessingmythic','mythicblessing'].include?(args[i].gsub('(','').gsub(')','')[0,13].downcase) || ['blessingmythic','mythicblessing'].include?(args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-13,13].downcase))
-        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing','').gsub('mythic',''))
-        if ['Attack','Speed','Defense','Resistance'].include?(x)
+        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing','').gsub('mythic',''),false,true)
+        if ['Attack','Speed','Defense','Resistance','Duel'].include?(x)
           blessing.push("#{x}(Mythical)")
           args[i]=nil
         end
       elsif args[i].length>8 && (args[i].gsub('(','').gsub(')','')[0,8].downcase=='blessing' || args[i].gsub('(','').gsub(')','')[args[i].gsub('(','').gsub(')','').length-8,8].downcase=='blessing')
-        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing',''))
-        if ['Attack','Speed','Defense','Resistance'].include?(x)
+        x=stat_modify(args[i].gsub('(','').gsub(')','').downcase.gsub('blessing',''),false,true)
+        if ['Attack','Speed','Defense','Resistance','Duel'].include?(x)
           blessing.push("#{x}(Legendary)")
           args[i]=nil
         end
@@ -2286,8 +2287,8 @@ def pick_thumbnail(event,j,bot) # used to choose the thumbnail used by most embe
   return bot.user(d[13][1]).avatar_url if d.length>13 && !d[13].nil? && !d[13][1].nil? && d[13][1].is_a?(Integer) && !bot.user(d[13][1]).nil?
   return 'https://cdn.discordapp.com/emojis/418140222530912256.png' if d[0]=='Nino(Launch)' && (event.message.text.downcase.include?('face') || rand(100).zero?)
   return 'https://cdn.discordapp.com/emojis/420339780421812227.png' if d[0]=='Amelia' && (event.message.text.downcase.include?('face') || rand(1000).zero?)
-  return 'https://cdn.discordapp.com/emojis/420339781524783114.png' if d[0]=='Reinhardt(Bonds)' && (event.message.text.downcase.include?('grin') || rand(100).zero?)
-  return 'https://cdn.discordapp.com/emojis/437515327652364288.png' if d[0]=='Reinhardt(World)' && (event.message.text.downcase.include?('grin') || rand(100).zero?)
+  return 'https://cdn.discordapp.com/emojis/420339781524783114.png' if d[0]=='Reinhardt(Bonds)' && (event.message.text.downcase.include?('creep') || event.message.text.downcase.include?('grin') || rand(100).zero?)
+  return 'https://cdn.discordapp.com/emojis/437515327652364288.png' if d[0]=='Reinhardt(World)' && (event.message.text.downcase.include?('creep') || event.message.text.downcase.include?('grin') || rand(100).zero?)
   return 'https://cdn.discordapp.com/emojis/437519293240836106.png' if d[0]=='Arden' && (event.message.text.downcase.include?('woke') || rand(100).zero?)
   return 'https://cdn.discordapp.com/emojis/420360385862828052.png' if d[0]=='Sakura' && event.message.text.downcase.include?("mathoo's")
   return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{d[0].gsub(' ','_')}/Face_FC.png"
@@ -2395,7 +2396,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
     lemote1=moji[0].mention unless moji.length<=0
     stat='Spectrum'
-    stat=jj[2][1] if ['Attack','Speed','Defense','Resistance'].include?(jj[2][1])
+    stat=jj[2][1] if ['Attack','Speed','Defense','Resistance','Duel'].include?(jj[2][1])
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{stat}"}
     lemote2=moji[0].mention unless moji.length<=0
   end
@@ -2447,7 +2448,7 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily b
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
     lemote1=moji[0].mention unless moji.length<=0
     stat='Spectrum'
-    stat=jj[2][1] if ['Attack','Speed','Defense','Resistance'].include?(jj[2][1])
+    stat=jj[2][1] if ['Attack','Speed','Defense','Resistance','Duel'].include?(jj[2][1])
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{stat}"}
     lemote2=moji[0].mention unless moji.length<=0
   end
@@ -2749,7 +2750,9 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
   end
   blessing.compact!
-  flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  unless name=='Robin'
+    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  end
   stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
   stat_skills_2=make_stat_skill_list_2(name,event,args)
@@ -3167,6 +3170,9 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       end
     end
   end
+  if blessing.map{|q|q.split('(')[0]}.include?('Duel') && rarity>=5
+    bin=[bin,175].max
+  end
   flds=[["**Level 1#{" +#{merges}" if merges>0}**",["<:HP_S:514712247503945739> HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","<:SpeedS:514712247625580555> Speed: #{u1[3]}","<:DefenseS:514712247461871616> Defense: #{u1[4]}","<:ResistanceS:514712247574986752> Resistance: #{u1[5]}","","BST: #{u1[6]}","Score: #{bin/5+merges*2+rarity*5+blessing.length*4+2+sp/100}#{"+`SP`/100" unless sp>0}"]]]
   if args.map{|q| q.downcase}.include?('gps') || args.map{|q| q.downcase}.include?('gp') || args.map{|q| q.downcase}.include?('growths') || args.map{|q| q.downcase}.include?('growth') || expandedmode
     flds.push(["**Growth Rates**",["<:HP_S:514712247503945739> HP: #{micronumber(u40[6])} / #{u40[6]*5+20}%","#{atk}: #{micronumber(u40[7])} / #{u40[7]*5+20}%","<:SpeedS:514712247625580555> Speed: #{micronumber(u40[8])} / #{u40[8]*5+20}%","<:DefenseS:514712247461871616> Defense: #{micronumber(u40[9])} / #{u40[9]*5+20}%","<:ResistanceS:514712247574986752> Resistance: #{micronumber(u40[10])} / #{u40[10]*5+20}%","","\u0262\u1D18\u1D1B #{micronumber(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])} / GRT: #{(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])*5+100}%"]])
@@ -3361,7 +3367,9 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
     blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
   end
   blessing.compact!
-  flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  unless name=='Robin'
+    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  end
   stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
   tempest=get_bonus_type(event)
@@ -3787,6 +3795,9 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
         bin=[bin,lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5]].max
       end
     end
+  end
+  if blessing.map{|q|q.split('(')[0]}.include?('Duel') && rarity>=5
+    bin=[bin,175].max
   end
   xtype=1
   xtype=6 if skillstoo && u40[0]!='Robin (Shared stats)'
@@ -9095,7 +9106,9 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
   end
   blessing.compact!
-  flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  unless name=='Robin'
+    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  end
   args.compact!
   if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
     unless u40x[0]=='Kiran'
@@ -9504,7 +9517,9 @@ def heal_study(event,name,bot,weapon=nil)
     blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
   end
   blessing.compact!
-  flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  unless name=='Robin'
+    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  end
   args.compact!
   if args.nil? || args.length<1
     event.respond 'No unit was included'
@@ -9798,7 +9813,9 @@ def proc_study(event,name,bot,weapon=nil)
     blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
   end
   blessing.compact!
-  flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  unless name=='Robin'
+    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  end
   args.compact!
   if args.nil? || args.length<1
     event.respond 'No unit was included'
@@ -10294,7 +10311,9 @@ def phase_study(event,name,bot,weapon=nil)
     blessing=blessing.map{|q| q.gsub('Mythical','Legendary')}
   end
   blessing.compact!
-  flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  unless name=='Robin'
+    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  end
   args.compact!
   if args.nil? || args.length<1
     event.respond 'No unit was included'
@@ -10461,11 +10480,21 @@ def phase_study(event,name,bot,weapon=nil)
   ppu40xw=apply_combat_buffs(event,stat_skills_3,ppu40xw,'Player')
   epu40xw=crblu40.map{|q| q}
   epu40xw=apply_combat_buffs(event,stat_skills_3,epu40xw,'Enemy')
-  if has_weapon_tag?('Buffstuffer',zzzl,refinement,transformed)
+  if has_weapon_tag?('Buffstuffer',zzzl,refinement,transformed) || stat_skills_3.include?('Bonus Doubler 3')
     m=apply_stat_skills(event,stat_skills_2,[u40[0],0,0,0,0,0])
     for i in 2...6
       ppu40[i]+=m[i] if m[i]>0
       epu40[i]+=m[i] if m[i]>0
+    end
+  elsif stat_skills_3.reject{|q| q.length<14 || q[0,14]!='Bonus Doubler '}.length>0
+    m2=stat_skills_3.reject{|q| q.length<14 || q[0,14]!='Bonus Doubler '}
+    m=apply_stat_skills(event,stat_skills_2,[u40[0],0,0,0,0,0])
+    for i2 in 0...m2.length
+      qq=m2[i2][14,m2[i2].length-14].to_i+1
+      for i in 2...6
+        ppu40[i]+=m[i]*qq/4 if m[i]>0
+        epu40[i]+=m[i]*qq/4 if m[i]>0
+      end
     end
   end
   unless weapon.nil? || weapon=='-'
@@ -10772,6 +10801,9 @@ def phase_study(event,name,bot,weapon=nil)
         bin=[bin,lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5]].max
       end
     end
+  end
+  if blessing.map{|q|q.split('(')[0]}.include?('Duel') && rarity>=5
+    bin=[bin,175].max
   end
   pic=pick_thumbnail(event,j,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
