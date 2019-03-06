@@ -1130,6 +1130,8 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     return nil
   end
   type=['Alias','Alias']
+  newname=newname.gsub('!','').gsub('(','').gsub(')','').gsub('_','')
+  unit=unit.gsub('!','').gsub('(','').gsub(')','').gsub('_','')
   if find_unit(newname,event,true)>=0
     type[0]='Unit'
   elsif find_skill(newname,event,true)>=0
@@ -1175,7 +1177,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   end
   type[1]='Skill' if unit.downcase=='adult'
   cck=nil
-  checkstr=normalize(newname.gsub('!','').gsub('(','').gsub(')','').gsub('_',''),true)
+  checkstr=normalize(newname,true)
   if type.reject{|q| q != 'Alias'}.length<=0
     type[0]='Alias' if type[0].include?('*')
     type[1]='Alias' if type[1].include?('*') && type[0]!='Alias'
@@ -1206,7 +1208,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   else
     type=type.map{|q| q.gsub('*','')}
   end
-  checkstr=normalize(newname.gsub('!','').gsub('(','').gsub(')','').gsub('_',''),true)
+  checkstr=normalize(newname,true)
   if type[0]=='Alias' && type[1].gsub('*','')=='Unit'
     unt=@units[find_unit(unit,event)]
     checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
@@ -1234,7 +1236,6 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   end
   logchn=386658080257212417
   logchn=431862993194582036 if @shardizard==4
-  newname=newname.gsub('!','').gsub('(','').gsub(')','').gsub('_','')
   srv=0
   srv=event.server.id unless event.server.nil?
   srv=modifier.to_i if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
@@ -1799,6 +1800,11 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     w2="Empty #{t}#{'+' if w[0].include?('+')}"
     w2="Red #{t}#{'+' if w[0].include?('+')}" if u[1][0]=='Red'
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Safeguard','Vanguard'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Safeguard#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Vanguard#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return "~~#{w2}~~" unless ['Green'].include?(u[1][0])
+    w2="Midguard#{'+' if w[0].include?('+')}"
   elsif ['Melon Crusher','Deft Harpoon'].include?(w[0].gsub('+',''))
     return weapon_legality(event,name,"Deft Harpoon#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
     return weapon_legality(event,name,"Melon Crusher#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'

@@ -90,6 +90,7 @@ Reading Glasses EX\Mask\Nina says that these glasses will let you keep reading i
 Swim Goggles\Mask\Use these to see clearly underwater. The added snorkel means you can take your time watching sea life.\Clear floors 81-85 in Illusory Dungeon: Summer of Heroes.
 Wolf Eyepatch\Mask\An eyepatch bestowed by Nailah. The fabric is exquisite and conveys to its wearer an air of intrigue.\Reach 100 blue friendship with Nailah during Forging Bonds: Hearts as One
 Wolf Eyepatch EX\Mask\An eyepatch bestowed by Nailah. The fabric is exquisite and conveys to its wearer unquestionable charisma.\Reach 2500 blue friendship with Nailah during Forging Bonds: Hearts as One
+Gold Imperial Tiara\Tiara\Proof of victory over Legendary Roy.\Beat Roy's LHB at Abyssal difficulty.
 Hoshidan Headpiece\Tiara\This headwear is the exclusive hair ornament of the queen of Hoshido.\Clear floors 6-10 in Illusory Dungeon: Labyrinth of Despair.
 Imperial Tiara\Tiara\This imperial headpiece from Veronica was forged in the Emblian Empire. It's a bit large but is actually quite light.\Reach 100 orange friendship with Veronica(Brave) during Forging Bonds: Rejecting Destiny.
 Imperial Tiara EX\Tiara\An imperial headpiece from Veronica, forged in the Emblian Empire. Passed down by imperial princesses for ages.\Reach 2500 orange friendship with Veronica(Brave) during Forging Bonds: Rejecting Destiny.

@@ -1,7 +1,8 @@
-Ike(Valentines), Soren(Valentines), Mist(Valentines), Greil(Valentines), Titania(Valentines), Walhart, Rebecca, Oscar, Gunnthra, Alfonse\Arena\19/02/2019, 25/02/2019\Wind, Earth
 Eir, Ike(Valentines), Soren(Valentines), Mist(Valentines), Greil(Valentines), Titania(Valentines), Clive, Valter, Lucina(Glorious), Alfonse\Aether\26/02/2019, 04/03/2019\Light, Dark\Armor School, Armor School
 Ike(Valentines), Soren(Valentines), Mist(Valentines), Greil(Valentines), Titania(Valentines), Walhart, Rebecca, Oscar, Gunnthra, Alfonse\Arena\26/02/2019, 04/03/2019\Fire, Wind
-Eir, Ike(Valentines), Soren(Valentines), Mist(Valentines), Greil(Valentines), Titania(Valentines), Clive, Valter, Lucina(Glorious), Alfonse\Aether\26/02/2019, 04/03/2019\Astra, Anima\Flier School, Flier School
--\Arena\05/03/2019, 11/03/2019\Fire, Water
--\Arena\12/03/2019, 18/03/2019\Fire, Earth
+Eir, Ike(Valentines), Soren(Valentines), Mist(Valentines), Greil(Valentines), Titania(Valentines), Clive, Valter, Lucina(Glorious), Alfonse\Aether\05/03/2019, 11/03/2019\Astra, Anima\Flier School, Flier School
+Roy(Fire), Selkie, Velouria, Kaden, Keaton, Panne, Maria, Arthur, Ike(Vanguard), Sharena\Arena\05/03/2019, 11/03/2019\Fire, Water
+Duma, Selkie, Velouria, Kaden, Keaton, Panne, Black Knight, Arvis, Marth(King), Sharena\Aether\12/03/2019, 18/03/2019\Light, Dark\Flier School, Flier School
+Roy(Fire), Selkie, Velouria, Kaden, Keaton, Panne, Maria, Arthur, Ike(Vanguard), Sharena\Arena\12/03/2019, 18/03/2019\Fire, Earth
+Duma, Selkie, Velouria, Kaden, Keaton, Panne, Black Knight, Arvis, Marth(King), Sharena\Aether\19/03/2019, 25/03/2019\Astra, Anima\Unknown, Unknown
 -\Arena\19/03/2019, 25/03/2019\Fire, Wind

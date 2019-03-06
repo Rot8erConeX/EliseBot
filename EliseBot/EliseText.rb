@@ -1016,7 +1016,7 @@ def disp_legendary_mythical(event,bot,args=[],dispmode='',forcesplit=false)
   if pri=='Element'
     l2=split_list(event,l,['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima'],-5)
   elsif pri=='Stat'
-    l2=split_list(event,l,['Attack','Speed','Defense','Resistance'],-6)
+    l2=split_list(event,l,['Attack','Speed','Defense','Resistance','Duel'],-6)
   elsif pri=='Color'
     l2=split_list(event,l,['Red','Blue','Green','Colorless'],-2)
   elsif pri=='Weapon'
@@ -1064,7 +1064,7 @@ def disp_legendary_mythical(event,bot,args=[],dispmode='',forcesplit=false)
       x2="#{unit_moji(bot,event,-1,p1[i][0][0],false,1)} #{weapon_clss(p1[i][0][1],event,1)}"
     end
     if sec=='Stat'
-      l2=split_list(event,p1[i],['Attack','Speed','Defense','Resistance'],-6)
+      l2=split_list(event,p1[i],['Attack','Speed','Defense','Resistance','Duel'],-6)
     elsif sec=='Color'
       l2=split_list(event,p1[i],['Red','Blue','Green','Colorless'],-2)
     elsif sec=='Weapon'
@@ -1093,7 +1093,7 @@ def disp_legendary_mythical(event,bot,args=[],dispmode='',forcesplit=false)
       elsif sec=='Stat'
         x3=p2[j][0][2][1]
         element='Spectrum'
-        element=x3 if ['Attack','Speed','Defense','Resistance'].include?(x3)
+        element=x3 if ['Attack','Speed','Defense','Resistance','Duel'].include?(x3)
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{element}"}
         x3="#{moji[0].mention} #{x3}" if moji.length>0
       elsif sec=='Color'
@@ -2803,6 +2803,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << "The <:Shard_Red:443733396842348545> Scarlet Shard is in #{longFormattedNumber(@server_data[0][1])} server#{"s" if @server_data[0][1]!=1}, reaching #{longFormattedNumber(@server_data[1][1])} unique members."
     event << "The <:Shard_Blue:443733396741554181> Azure Shard is in #{longFormattedNumber(@server_data[0][2])} server#{"s" if @server_data[0][2]!=1}, reaching #{longFormattedNumber(@server_data[1][2])} unique members."
     event << "The <:Shard_Green:443733397190344714> Verdant Shard is in #{longFormattedNumber(@server_data[0][3])} server#{"s" if @server_data[0][3]!=1}, reaching #{longFormattedNumber(@server_data[1][3])} unique members."
+    event << "The <:Shard_Orange:552681863962165258> Citrus Shard is in #{longFormattedNumber(@server_data[0][5])} server#{"s" if @server_data[0][5]!=1}, reaching #{longFormattedNumber(@server_data[1][5])} unique members."
+    event << "The <:Shard_Cyan:552681863995588628> Sky Shard is in #{longFormattedNumber(@server_data[0][6])} server#{"s" if @server_data[0][6]!=1}, reaching #{longFormattedNumber(@server_data[1][6])} unique members."
     event << "The <:Shard_Gold:443733396913520640> Golden Shard is in #{longFormattedNumber(@server_data[0][4])} server#{"s" if @server_data[0][4]!=1}, reaching #{longFormattedNumber(@server_data[1][4])} unique members." if event.user.id==167657750971547648
     return nil
   elsif ['alts','alt','alternate','alternates','alternative','alternatives'].include?(f.downcase)
@@ -3225,13 +3227,13 @@ def snagstats(event,bot,f=nil,f2=nil)
     return nil
   elsif event.user.id==167657750971547648 && !f.nil? && f.to_i.to_s==f
     if @shardizard==4
-      s2="That server uses/would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(f.to_i >> 22) % 4]} Shards."
+      s2="That server uses/would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Orange','<:Shard_Cyan:552681863995588628> Cyan'][(f.to_i >> 22) % 6]} Shards."
     else
       srv=(bot.server(f.to_i) rescue nil)
       if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
-        s2="I am not in that server, but it would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(f.to_i >> 22) % 4]} Shards."
+        s2="I am not in that server, but it would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Orange','<:Shard_Cyan:552681863995588628> Cyan'][(f.to_i >> 22) % 6]} Shards."
       else
-        s2="__**#{srv.name}** (#{srv.id})__\n*Owner:* #{srv.owner.distinct} (#{srv.owner.id})\n*Shard:* #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(srv.id >> 22) % 4]}\n*My nickname:* #{bot.user(312451658908958721).on(srv.id).display_name}"
+        s2="__**#{srv.name}** (#{srv.id})__\n*Owner:* #{srv.owner.distinct} (#{srv.owner.id})\n*Shard:* #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Orange','<:Shard_Cyan:552681863995588628> Cyan'][(srv.id >> 22) % 6]}\n*My nickname:* #{bot.user(312451658908958721).on(srv.id).display_name}"
       end
     end
     event.respond s2

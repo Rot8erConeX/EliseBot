@@ -3,7 +3,7 @@ Alm\Eir\Kana(F)\Leanne\Matthew\Owain\Reyson\Selkie\Sharena(Spring)\Tailtiu\Tiki(
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
-5\10\Resistance\Defense\S\2
+5\10\Resistance\Defense\S\3
 Assault\Absorb\Absorb+\Absorb+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -11,6 +11,16 @@ C Duel Infantry 1\C Duel Infantry 2\C Duel Infantry 3
 Wings of Mercy 1\Wings of Mercy 2\Wings of Mercy 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Live to Serve 3
+
+Alm
+5\0\Speed\Resistance\-\0
+Iron Sword\Steel Sword\Silver Sword\Falchion (Valentia)\~~Falchion (Valentia) (+) Effect Mode~~
+Reciprical Aid
+Dragon Gaze\Draconic Aura
+Attack +1\Attack +2\Attack +3
+Wrath 1\Wrath 2\Wrath 3
+Hone Spd 1\Hone Spd 2\~~Hone Spd 3~~
+Drive Spd 1
 
 Anna
 5\0\ \ \-\0
@@ -40,7 +50,7 @@ Dragon Gaze\Draconic Aura
 Death Blow 1\Swift Sparrow 1\Swift Sparrow 2
 Escape Route 1\Escape Route 2\Escape Route 3
 Spur Def 1\Spur Def 2\Spur Def 3
-Brazen Atk/Def 2
+Brazen Atk/Def 3
 
 Celica(Brave)
 5\0\Defense\Speed\-\0
@@ -163,7 +173,7 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Gunnthra
-5\0\Attack\Speed\-\1
+5\1\Attack\Speed\-\1
 Wind\Elwind\Rexcalibur\Blizzard
 Rally Speed
 Chilling Wind\Glacies
@@ -213,7 +223,7 @@ Fortify Res 1\Fortify Res 2\Fortify Res 3
 Fortify Def 2
 
 Marisa
-5\6\ \ \-\0
+5\7\ \ \-\0
 Iron Sword\Steel Sword\Wo Dao\Wo Dao+\Wo Dao+ (+) Speed Mode
 Shove
 Night Sky\Glimmer
