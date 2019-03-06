@@ -1,6 +1,6 @@
 @shardizard = ARGV.first.to_i              # taking a single variable from the command prompt to get the shard value
-system("color 0#{"7CBAE"[@shardizard,1]}") # command prompt color and title determined by the shard
-system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
+system("color 0#{"7CBAEDB"[@shardizard,1]}") # command prompt color and title determined by the shard
+system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden','Citrus','Sky'][@shardizard]} EliseBot")
 
 require 'discordrb'                    # Download link: https://github.com/meew0/discordrb
 require 'open-uri'                     # pre-installed with Ruby in Windows
@@ -25,8 +25,10 @@ ENV['TZ'] = 'America/Chicago'
 # The bot's token is basically their password, so is censored for obvious reasons
 if @shardizard==4
   bot = Discordrb::Commands::CommandBot.new token: '>Debug Token<', client_id: 431895561193390090, prefix: @prefix
+elsif @shardizard<4
+  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: @shardizard, num_shards: 6, client_id: 312451658908958721, prefix: @prefix
 else
-  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: @shardizard, num_shards: 4, client_id: 312451658908958721, prefix: @prefix
+  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: (@shardizard-1), num_shards: 6, client_id: 312451658908958721, prefix: @prefix
 end
 bot.gateway.check_heartbeat_acks = false
 
@@ -42,7 +44,7 @@ bot.gateway.check_heartbeat_acks = false
 @embedless=[]
 @ignored=[]
 @banner=[]
-@server_data=[[0,0,0,0],[0,0,0,0]]
+@server_data=[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]
 @server_markers=[]
 @x_markers=[]
 @max_rarity_merge=[5,10,5]
@@ -377,7 +379,7 @@ def metadata_load() # loads the metadata - users who choose to see plaintext ove
       b.push(eval line)
     end
   else
-    b=[[],[],[0,0],[[0,0,0,0,0],[0,0,0,0,0]],[0,0,0],[],[],[]]
+    b=[[],[],[0,0],[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]],[0,0,0],[],[],[]]
   end
   @embedless=b[0]
   @embedless=[168592191189417984, 256379815601373184] if @embedless.nil?
@@ -386,7 +388,7 @@ def metadata_load() # loads the metadata - users who choose to see plaintext ove
   @summon_rate=b[2]
   @summon_rate=[0,0,3] if @summon_rate.nil?
   @server_data=b[3]
-  @server_data=[[0,0,0,0,0],[0,0,0,0,0]] if @server_data.nil?
+  @server_data=[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]] if @server_data.nil?
   @headpats=b[4] unless b[4].nil?
   @server_markers=b[5] unless b[5].nil?
   @x_markers=b[6] unless b[6].nil?
@@ -12635,6 +12637,7 @@ end
 
 bot.command([:flowers,:flower]) do |event|
   return nil if overlap_prevent(event)
+  event << "<:Dragonflower_Infantry:541170819980722176><:Dragonflower_Orange:552648156790390796><:Dragonflower_Cavalry:541170819955556352><:Dragonflower_Armor:541170820001824778><:Dragonflower_Cyan:552648156202926097><:Dragonflower_Flier:541170820089774091><:Dragonflower_Purple:552648232673607701><:Dragonflower_Pink:552648232510160897>"
   event << 'Look at all the pretty flowers!'
   event << "https://www.getrandomthings.com/list-flowers.php"
 end
@@ -13547,15 +13550,15 @@ bot.command(:shard) do |event, i|
   if i.to_i.to_s==i && i.to_i.is_a?(Integer) && @shardizard != 4
     srv=(bot.server(i.to_i) rescue nil)
     if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
-      event.respond "I am not in that server, but it would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(i.to_i >> 22) % 4]} Shards."
+      event.respond "I am not in that server, but it would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(i.to_i >> 22) % 6]} Shards."
     else
-      event.respond "#{srv.name} uses #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(i.to_i >> 22) % 4]} Shards."
+      event.respond "#{srv.name} uses #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(i.to_i >> 22) % 6]} Shards."
     end
     return nil
   end
   event.respond 'This is the debug mode, which uses <:Shard_Gold:443733396913520640> Golden Shards.' if @shardizard==4
   event.respond 'PMs always use <:Shard_Colorless:443733396921909248> Transparent Shards.' if event.server.nil?
-  event.respond "This server uses #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(event.server.id >> 22) % 4]} Shards." unless event.server.nil? || @shardizard==4
+  event.respond "This server uses #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(event.server.id >> 22) % 6]} Shards." unless event.server.nil? || @shardizard==4
 end
 
 bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily,:now]) do |event|
@@ -14798,7 +14801,7 @@ bot.server_create do |event|
     (chn.send_message(get_debug_leave_message()) rescue nil)
     event.server.leave
   else
-    bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant'][(event.server.id >> 22) % 4]} Shards")
+    bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(event.server.id >> 22) % 6]} Shards")
     metadata_load()
     @server_data[0][((event.server.id >> 22) % 4)] += 1
     metadata_save()
@@ -14810,7 +14813,7 @@ bot.server_delete do |event|
   unless @shardizard==4
     bot.user(167657750971547648).pm("Left server **#{event.server.name}**")
     metadata_load()
-    @server_data[0][((event.server.id >> 22) % 4)] -= 1
+    @server_data[0][((event.server.id >> 22) % 6)] -= 1
     metadata_save()
   end
 end
@@ -15563,7 +15566,7 @@ bot.ready do |event|
       end
     end
   end
-  system("color 5#{"7CBAE"[@shardizard,1]}")
+  system("color 5#{"7CBAEDB"[@shardizard,1]}")
   system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
   bot.game="Loading, please wait..."
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
@@ -15589,8 +15592,8 @@ bot.ready do |event|
   data_load()
   bonus_load()
   @last_multi_reload[0]=Time.now
-  system("color e#{"04126"[@shardizard,1]}")
-  system("title #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
+  system("color e#{"0412653"[@shardizard,1]}")
+  system("title #{['Transparent','Scarlet','Azure','Verdant','Golden','Citrus','Sky'][@shardizard]} EliseBot")
   bot.game='Fire Emblem Heroes' if [0,4].include?(@shardizard)
   if @shardizard==4
     next_holiday(bot)
