@@ -17,10 +17,22 @@ load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
 ENV['TZ'] = 'America/Chicago'
 @scheduler = Rufus::Scheduler.new
 
-# All the possible command prefixes, not case insensitive so I have to fake it by including every combination of lower- and upper-case
-@prefix = ['FEH!','FEh!','FeH!','Feh!','fEH!','fEh!','feH!','feh!',
-           'FEH?','FEh?','FeH?','Feh?','fEH?','fEh?','feH?','feh?',
-           'f?','F?','e?','E?','h?','H?']
+# All the possible command prefixes
+@prefixes={}
+load 'C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb'
+
+prefix_proc = proc do |message|
+  load 'C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb'
+  next message.content[4..-1] if message.text.downcase.start_with?('feh!')
+  next message.content[4..-1] if message.text.downcase.start_with?('feh?')
+  next message.content[2..-1] if message.text.downcase.start_with?('f?')
+  next message.content[2..-1] if message.text.downcase.start_with?('e?')
+  next message.content[2..-1] if message.text.downcase.start_with?('h?')
+  next if message.channel.server.nil? || @prefixes[message.channel.server.id].nil? || @prefixes[message.channel.server.id].length<=0
+  prefix = @prefixes[message.channel.server.id]
+  # We use [prefix.size..-1] so we can handle prefixes of any length
+  next message.content[prefix.size..-1] if message.text.downcase.start_with?(prefix.downcase)
+end
 
 # The bot's token is basically their password, so is censored for obvious reasons
 if @shardizard==4
@@ -156,11 +168,12 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
      'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics','legend',
-     'legends','legendarys','item','accessory','acc','accessorie','alias','s2s','dailies','tomorrow','tommorrow','tomorow','tommorow','aoe','area','prf','prfs']
+     'legends','legendarys','item','accessory','acc','accessorie','alias','s2s','dailies','tomorrow','tommorrow','tomorow','tommorow','aoe','area','prf','prfs',
+     'prefix']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
-    k=['addalias','deletealias','removealias','addgroup','deletegroup','removegroup','removemember','removefromgroup']
+    k=['addalias','deletealias','removealias','addgroup','deletegroup','removegroup','removemember','removefromgroup','prefix']
   elsif permissions==2
     k=['reboot','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti',
        'deletemultialias','deletedualalias','deletemultiunitalias','deletedualunitalias','deletemulti','removemultialias','removedualalias','dev_edit','devedit',
@@ -291,6 +304,13 @@ def data_load() # loads the character and skill data from the files on my comput
     b[i][2]=longFormattedNumber(b[i][2].to_i) if b[i][2].to_i.to_s==b[i][2]
   end
   @itemus=b.map{|q| q}
+end
+
+def prefixes_save()
+  x=@prefixes
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb', 'w') { |f|
+    f.puts x.to_s.gsub('=>',' => ').gsub(', ',",\n  ").gsub('{',"@prefixes = {\n  ").gsub('}',"\n}")
+  }
 end
 
 def nicknames_load() # loads the nickname list
@@ -565,8 +585,7 @@ def donate_trigger_word(event,str=nil,mode=0)
     if str.nil?
       str=event.message.text
       str=str.downcase
-      str=str[2,str.length-2] if ['f?','e?','h?'].include?(str[0,2])
-      str=str[4,str.length-4] if ['feh?','feh!'].include?(str[0,4])
+      str=remove_prefix(str,event)
     end
     str=str.downcase
     d=Dir["C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/*.txt"]
@@ -671,8 +690,7 @@ def overlap_prevent(event) # used to prevent servers with both Elise and her deb
       canpost=false
     end
     s=event.message.text.downcase
-    s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
-    s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+    s=remove_prefix(s,event)
     return true if !canpost && s==@zero_by_four[3]
     @zero_by_four[3]=s
     return false
@@ -1439,8 +1457,7 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
   data_load()
   stringx=event.message.text if stringx.nil?
   s=stringx
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2]) && s.length>1
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4]) && s.length>3
+  s=remove_prefix(s,event)
   s=s[0,s.length-2] if ["``"].include?(stringx.downcase[stringx.length-2,2]) && s.length>1
   a=s.gsub('.','').split(' ')
   s=stringx if all_commands().include?(a[0])
@@ -1455,8 +1472,7 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
   args=args.reject{ |a| find_skill(a,event,true)>-1 }
   args=args.reject{ |a| a=="``"}
   args.compact!
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2]) && s.length>1 && ['f?','e?','h?'].include?(s.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4]) && s.length>3 && ['feh!','feh?'].include?(s.downcase[0,2])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   args.shift if all_commands().include?(a[0])
   args2=args.join(' ').split(' ')
@@ -1516,8 +1532,7 @@ end
 def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the rarity, merge count, nature, weapon refinement, and any blessings within the inputs
   stringx=event.message.text if stringx.nil?
   s=stringx
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(stringx.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(stringx.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   s=stringx if all_commands().include?(a[0])
   nicknames_load()
@@ -2720,8 +2735,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   data_load()
   weapon='-' if weapon.nil?
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
@@ -3329,8 +3343,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   data_load()
   weapon='-' if weapon.nil?
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
@@ -3919,8 +3932,7 @@ end
 def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
   data_load()
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   if all_commands().include?(a[0])
     a.shift
@@ -4289,11 +4301,17 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
   end
 end
 
+def remove_prefix(s,event)
+  s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
+  s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
+  s=s[@prefixes[event.server.id].length,s.length-@prefixes[event.server.id].length] if !event.server.nil? && !@prefixes[event.server.id].nil? && @prefixes[event.server.id].length>0 && [@prefixes[event.server.id].downcase].include?(s.downcase[0,@prefixes[event.server.id].length])
+  return s
+end
+
 def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   data_load()
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   if all_commands().include?(a[0])
     a.shift
@@ -5295,8 +5313,7 @@ end
 def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=false)
   data_load()
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
@@ -5511,8 +5528,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
     sklz2=unit_skills(name,event)
   end
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
@@ -5644,8 +5660,7 @@ def disp_struct(bot,name,event,ignore=false)
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
   b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ').reject{ |q| q.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   if all_commands().include?(a[0])
     a.shift
@@ -5744,8 +5759,7 @@ end
 def disp_accessory(bot,name,event,ignore=false)
   data_load()
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ').reject{ |q| q.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   if all_commands().include?(a[0])
     a.shift
@@ -5776,8 +5790,7 @@ end
 def disp_itemu(bot,name,event,ignore=false)
   data_load()
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ').reject{ |q| q.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   if all_commands().include?(a[0])
     a.shift
@@ -6234,7 +6247,7 @@ def find_in_units(event, mode=0, paired=false, ignore_limit=false)
   groups_load()
   srv=0
   srv=event.server.id unless event.server.nil?
-  args=event.message.text.split(' ')
+  args=event.message.text.gsub(',','').split(' ')
   args.shift
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   colors=[]
@@ -6603,7 +6616,7 @@ end
 
 def find_in_skills(event, mode=0, paired=false, brk=false)
   data_load()
-  args=event.message.text.split(' ')
+  args=event.message.text.gsub(',','').split(' ')
   args.shift
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   colors=[]
@@ -9080,8 +9093,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   data_load()
   weapon='-' if weapon.nil?
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
@@ -9493,8 +9505,7 @@ def heal_study(event,name,bot,weapon=nil)
   data_load()
   weapon='-' if weapon.nil?
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
@@ -9789,8 +9800,7 @@ def proc_study(event,name,bot,weapon=nil)
   data_load()
   weapon='-' if weapon.nil?
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
@@ -10287,8 +10297,7 @@ def phase_study(event,name,bot,weapon=nil)
   data_load()
   weapon='-' if weapon.nil?
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
@@ -12297,8 +12306,7 @@ end
 bot.command([:skills,:skils,:fodder,:manual,:book,:combatmanual]) do |event, *args|
   return nil if overlap_prevent(event)
   s=event.message.text
-  s=s[2,s.length-2] if ['f?','e?','h?'].include?(s.downcase[0,2])
-  s=s[4,s.length-4] if ['feh!','feh?'].include?(s.downcase[0,4])
+  s=remove_prefix(s,event)
   if s.downcase[0,6]=='skills'
     if ['stat','stats'].include?(args[0].downcase)
       args.shift
@@ -12640,6 +12648,22 @@ bot.command([:flowers,:flower]) do |event|
   event << "<:Dragonflower_Infantry:541170819980722176><:Dragonflower_Orange:552648156790390796><:Dragonflower_Cavalry:541170819955556352><:Dragonflower_Armor:541170820001824778><:Dragonflower_Cyan:552648156202926097><:Dragonflower_Flier:541170820089774091><:Dragonflower_Purple:552648232673607701><:Dragonflower_Pink:552648232510160897>"
   event << 'Look at all the pretty flowers!'
   event << "https://www.getrandomthings.com/list-flowers.php"
+end
+
+bot.command(:prefix) do |event, prefix|
+  if prefix.nil?
+    event.respond 'No prefix was defined.  Try again'
+    return nil
+  elsif event.server.nil?
+    event.respond 'This command is not available in PM.'
+    return nil
+  elsif !is_mod?(event.user,event.server,event.channel)
+    event.respond 'You are not a mod.'
+    return nil
+  end
+  @prefixes[event.server.id]=prefix
+  prefixes_save()
+  event.respond "This server's prefix has been saved as **#{prefix}**"
 end
 
 bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
@@ -13531,7 +13555,7 @@ end
 
 bot.command([:bugreport, :suggestion, :feedback]) do |event, *args|
   return nil if overlap_prevent(event)
-  bug_report(bot,event,args,4,["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant"],'Shard',@prefix)
+  bug_report(bot,event,args,6,["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant",'<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'],'Shard',@prefix)
 end
 
 bot.command([:tools,:links,:tool,:link,:resources,:resources]) do |event|
@@ -13697,8 +13721,9 @@ bot.command(:edit) do |event, cmd, *args|
   return nil if overlap_prevent(event)
   uid=event.user.id
   if uid==167657750971547648
-    event.respond "This command is for the donors.  Your version of the command is `FEH!devedit`."
-    return nil
+    uid=244073468981805056
+   # event.respond "This command is for the donors.  Your version of the command is `FEH!devedit`."
+    #return nil
   elsif !get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(uid)
     event.respond "You do not have permission to use this command."
     return nil
@@ -14821,6 +14846,7 @@ end
 bot.message do |event|
   data_load()
   str=event.message.text.downcase
+  load 'C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb'
   if @shardizard==4 && (['fea!','fef!'].include?(str[0,4]) || ['fe13!','fe14!'].include?(str[0,5]) || ['fe!'].include?(str[0,3]))
     str=str[4,str.length-4] if ['fea!','fef!'].include?(str[0,4])
     str=str[5,str.length-5] if ['fe13!','fe14!'].include?(str[0,5])
@@ -14862,11 +14888,12 @@ bot.message do |event|
       triple_weakness(bot,event)
     end
   elsif overlap_prevent(event)
-  elsif ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  elsif ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4]) || (!event.server.nil? && !@prefixes[event.server.id].nil? && @prefixes[event.server.id].length>0 && @prefixes[event.server.id].downcase==event.message.text.downcase[0,@prefixes[event.server.id].length])
     puts event.message.text
     s=event.message.text.downcase
     s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
     s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+    s=s[@prefixes[event.server.id].length,s.length-@prefixes[event.server.id].length] if [@prefixes[event.server.id].downcase].include?(event.message.text.downcase[0,@prefixes[event.server.id].length])
     s=s[1,s.length-1] if s[0,1]==' '
     s=s[2,s.length-2] if s[0,2]=='5*'
     a=s.split(' ')
@@ -15024,7 +15051,7 @@ bot.mention do |event|
   k=-1
   k=1 if event.user.bot_account?
   if k>0
-  elsif ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4])
+  elsif ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4]) || (!event.server.nil? && !@prefixes[event.server.id].nil? && @prefixes[event.server.id].length>0 && @prefixes[event.server.id].downcase==event.message.text.downcase[0,@prefixes[event.server.id].length])
     k=3
   elsif s.gsub(' ','').downcase=='laevatein'
     disp_stats(bot,'Lavatain',nil,event,true,true)
@@ -15542,7 +15569,7 @@ def next_holiday(bot,mode=0)
   else
     t=Time.now
     t-=60*60*6
-    bot.game='Fire Emblem Heroes'
+    bot.game='Fire Emblem Heroes (FEH!help for info)'
     if [6,7,8].include?(t.month)
       bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/Elise(Summer).png','r')) rescue nil if @shardizard.zero?
       @avvie_info=['Elise(Summer)','*Fire Emblem Heroes*','']
@@ -15594,7 +15621,7 @@ bot.ready do |event|
   @last_multi_reload[0]=Time.now
   system("color e#{"0412653"[@shardizard,1]}")
   system("title #{['Transparent','Scarlet','Azure','Verdant','Golden','Citrus','Sky'][@shardizard]} EliseBot")
-  bot.game='Fire Emblem Heroes' if [0,4].include?(@shardizard)
+  bot.game='Fire Emblem Heroes (FEH!help for info)'
   if @shardizard==4
     next_holiday(bot)
     bot.user(bot.profile.id).on(285663217261477889).nickname='EliseBot (Debug)'
