@@ -12661,7 +12661,7 @@ bot.command(:prefix) do |event, prefix|
   elsif !is_mod?(event.user,event.server,event.channel)
     event.respond 'You are not a mod.'
     return nil
-  elsif ['feh!','feh?','f?','e?','h?','fgo!','fgo?','fg0!','fg0?','liz!','liz?','iiz!','iiz?','fate!','fate?','dl!','dl?','fe!','fe14!','fef!','fe13!','fea!'].include?(prefix.downcase)
+  elsif ['feh!','feh?','f?','e?','h?','fgo!','fgo?','fg0!','fg0?','liz!','liz?','iiz!','iiz?','fate!','fate?','dl!','dl?','fe!','fe14!','fef!','fe13!','fea!','fe?','fe14?','fef?','fe13?','fea?'].include?(prefix.downcase)
     event.respond "That is a prefix that would conflict with either myself or another one of my developer's bots."
     return nil
   end
@@ -14851,10 +14851,10 @@ bot.message do |event|
   data_load()
   str=event.message.text.downcase
   load 'C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb'
-  if @shardizard==4 && (['fea!','fef!'].include?(str[0,4]) || ['fe13!','fe14!'].include?(str[0,5]) || ['fe!'].include?(str[0,3]))
-    str=str[4,str.length-4] if ['fea!','fef!'].include?(str[0,4])
-    str=str[5,str.length-5] if ['fe13!','fe14!'].include?(str[0,5])
-    str=str[3,str.length-3] if ['fe!'].include?(str[0,3])
+  if @shardizard==4 && (['fea!','fef!','fea?','fef?'].include?(str[0,4]) || ['fe13!','fe14!','fe13?','fe14?'].include?(str[0,5]) || ['fe!','fe?'].include?(str[0,3]))
+    str=str[4,str.length-4] if ['fea!','fef!','fea?','fef?'].include?(str[0,4])
+    str=str[5,str.length-5] if ['fe13!','fe14!','fe13?','fe14?'].include?(str[0,5])
+    str=str[3,str.length-3] if ['fe!','fe?'].include?(str[0,3])
     a=str.split(' ')
     if a[0].downcase=='reboot'
       event.respond 'Becoming Robin.  Please wait approximately ten seconds...'
@@ -14897,7 +14897,7 @@ bot.message do |event|
     s=event.message.text.downcase
     s=s[2,s.length-2] if ['f?','e?','h?'].include?(event.message.text.downcase[0,2])
     s=s[4,s.length-4] if ['feh!','feh?'].include?(event.message.text.downcase[0,4])
-    s=s[@prefixes[event.server.id].length,s.length-@prefixes[event.server.id].length] if [@prefixes[event.server.id].downcase].include?(event.message.text.downcase[0,@prefixes[event.server.id].length])
+    s=s[@prefixes[event.server.id].length,s.length-@prefixes[event.server.id].length] if (!event.server.nil? && !@prefixes[event.server.id].nil? && @prefixes[event.server.id].length>0 && @prefixes[event.server.id].downcase==event.message.text.downcase[0,@prefixes[event.server.id].length])
     s=s[1,s.length-1] if s[0,1]==' '
     s=s[2,s.length-2] if s[0,2]=='5*'
     a=s.split(' ')
