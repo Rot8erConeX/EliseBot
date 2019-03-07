@@ -36,11 +36,11 @@ end
 
 # The bot's token is basically their password, so is censored for obvious reasons
 if @shardizard==4
-  bot = Discordrb::Commands::CommandBot.new token: '>Debug Token<', client_id: 431895561193390090, prefix: @prefix
+  bot = Discordrb::Commands::CommandBot.new token: '>Debug Token<', client_id: 431895561193390090, prefix: prefix_proc
 elsif @shardizard<4
-  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: @shardizard, num_shards: 6, client_id: 312451658908958721, prefix: @prefix
+  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: @shardizard, num_shards: 6, client_id: 312451658908958721, prefix: prefix_proc
 else
-  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: (@shardizard-1), num_shards: 6, client_id: 312451658908958721, prefix: @prefix
+  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: (@shardizard-1), num_shards: 6, client_id: 312451658908958721, prefix: prefix_proc
 end
 bot.gateway.check_heartbeat_acks = false
 
@@ -12651,6 +12651,7 @@ bot.command([:flowers,:flower]) do |event|
 end
 
 bot.command(:prefix) do |event, prefix|
+  return nil if overlap_prevent(event)
   if prefix.nil?
     event.respond 'No prefix was defined.  Try again'
     return nil
@@ -12659,6 +12660,9 @@ bot.command(:prefix) do |event, prefix|
     return nil
   elsif !is_mod?(event.user,event.server,event.channel)
     event.respond 'You are not a mod.'
+    return nil
+  elsif ['feh!','feh?','f?','e?','h?','fgo!','fgo?','fg0!','fg0?','liz!','liz?','iiz!','iiz?','fate!','fate?','dl!','dl?','fe!','fe14!','fef!','fe13!','fea!'].include?(prefix.downcase)
+    event.respond "That is a prefix that would conflict with either myself or another one of my developer's bots."
     return nil
   end
   @prefixes[event.server.id]=prefix
