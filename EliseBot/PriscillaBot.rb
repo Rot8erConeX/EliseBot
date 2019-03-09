@@ -1,6 +1,5 @@
-@shardizard = ARGV.first.to_i              # taking a single variable from the command prompt to get the shard value
-system("color 0#{"7CBAEDB"[@shardizard,1]}") # command prompt color and title determined by the shard
-system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden','Citrus','Sky'][@shardizard]} EliseBot")
+@shardizard = ARGV.first.to_i # taking a single variable from the command prompt to get the shard value
+@shards = 6                   # total number of shards
 
 require 'discordrb'                    # Download link: https://github.com/meew0/discordrb
 require 'open-uri'                     # pre-installed with Ruby in Windows
@@ -13,6 +12,9 @@ require_relative 'rot8er_functs'       # functions I use commonly in bots
 load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
 load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
 
+system("color 0#{"7CBAEDB"[@shardizard,1]}") # command prompt color and title determined by the shard
+system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden','Citrus','Sky'][@shardizard]} EliseBot")
+
 # this is required to get her to change her avatar on certain holidays
 ENV['TZ'] = 'America/Chicago'
 @scheduler = Rufus::Scheduler.new
@@ -22,12 +24,12 @@ ENV['TZ'] = 'America/Chicago'
 load 'C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb'
 
 prefix_proc = proc do |message|
-  load 'C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb'
   next message.content[4..-1] if message.text.downcase.start_with?('feh!')
   next message.content[4..-1] if message.text.downcase.start_with?('feh?')
   next message.content[2..-1] if message.text.downcase.start_with?('f?')
   next message.content[2..-1] if message.text.downcase.start_with?('e?')
   next message.content[2..-1] if message.text.downcase.start_with?('h?')
+  load 'C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb'
   next if message.channel.server.nil? || @prefixes[message.channel.server.id].nil? || @prefixes[message.channel.server.id].length<=0
   prefix = @prefixes[message.channel.server.id]
   # We use [prefix.size..-1] so we can handle prefixes of any length
@@ -10918,10 +10920,10 @@ def disp_art(event,name,bot,weapon=nil)
       for i in 0...b.length
         b[i]=b[i].gsub("\n",'').split('\\'[0])
         unless nammes[0].nil? || nammes[0].length<=0 || b[i][24].nil? || b[i][24].length<=0
-          charsx[0].push("FGO Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][24]==nammes[0]
+          charsx[0].push("*[FGO]* Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][24]==nammes[0]
         end
         unless nammes[2].nil? || nammes[2].length<=0 || b[i][25].nil? || b[i][25].length<=0
-          charsx[1].push("FGO Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} *[Japanese]*") if b[i][25].split(' & ').include?(nammes[2])
+          charsx[1].push("*[FGO]* Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} *[Japanese]*") if b[i][25].split(' & ').include?(nammes[2])
         end
       end
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FGOCraftEssances.txt')
@@ -10935,7 +10937,57 @@ def disp_art(event,name,bot,weapon=nil)
       for i in 0...b.length
         b[i]=b[i].gsub("\n",'').split('\\'[0])
         unless nammes[0].nil? || nammes[0].length<=0 || b[i][9].nil? || b[i][9].length<=0
-          charsx[0].push("FGO CE-#{b[i][0]}#{".) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][9]==nammes[0]
+          charsx[0].push("*[FGO]* CE-#{b[i][0]}#{".) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][9]==nammes[0]
+        end
+      end
+    end
+    if event.server.nil? || !bot.user(543373018303299585).on(event.server.id).nil? || @shardizard==4
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLAdventurers.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/DLAdventurers.txt').each_line do |line|
+          b.push(line)
+        end
+      else
+        b=[]
+      end
+      for i in 0...b.length
+        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        unless b[i][10].nil? || b[i][10].length<=0 || b[i][11].nil? || b[i][11].length<=0
+          m=b[i][10].split(' as ')
+          m2=b[i][11].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Both]*") if m[0]==nammes[2] && m2[0]==nammes[1]
+        end
+        unless b[i][11].nil? || b[i][11].length<=0
+          m=b[i][11].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{b[i][0]} *[Both]*")
+        end
+        unless b[i][10].nil? || b[i][10].length<=0
+          m=b[i][10].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{b[i][0]} *[Both]*")
+        end
+      end
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLDragons.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/DLDragons.txt').each_line do |line|
+          b.push(line)
+        end
+      else
+        b=[]
+      end
+      for i in 0...b.length
+        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        unless b[i][13].nil? || b[i][13].length<=0 || b[i][14].nil? || b[i][14].length<=0
+          m=b[i][13].split(' as ')
+          m2=b[i][14].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Both]*") if m[0]==nammes[2] && m2[0]==nammes[1]
+        end
+        unless b[i][14].nil? || b[i][14].length<=0
+          m=b[i][14].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{b[i][0]} *[Both]*")
+        end
+        unless b[i][13].nil? || b[i][13].length<=0
+          m=b[i][13].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{b[i][0]} *[Both]*")
         end
       end
     end
@@ -13559,7 +13611,7 @@ end
 
 bot.command([:bugreport, :suggestion, :feedback]) do |event, *args|
   return nil if overlap_prevent(event)
-  bug_report(bot,event,args,6,["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant",'<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'],'Shard',@prefix)
+  bug_report(bot,event,args,@shards,["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant",'<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'],'Shard',@prefix)
 end
 
 bot.command([:tools,:links,:tool,:link,:resources,:resources]) do |event|
@@ -13578,15 +13630,15 @@ bot.command(:shard) do |event, i|
   if i.to_i.to_s==i && i.to_i.is_a?(Integer) && @shardizard != 4
     srv=(bot.server(i.to_i) rescue nil)
     if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
-      event.respond "I am not in that server, but it would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(i.to_i >> 22) % 6]} Shards."
+      event.respond "I am not in that server, but it would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(i.to_i >> 22) % @shards]} Shards."
     else
-      event.respond "#{srv.name} uses #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(i.to_i >> 22) % 6]} Shards."
+      event.respond "#{srv.name} uses #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(i.to_i >> 22) % @shards]} Shards."
     end
     return nil
   end
   event.respond 'This is the debug mode, which uses <:Shard_Gold:443733396913520640> Golden Shards.' if @shardizard==4
   event.respond 'PMs always use <:Shard_Colorless:443733396921909248> Transparent Shards.' if event.server.nil?
-  event.respond "This server uses #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(event.server.id >> 22) % 6]} Shards." unless event.server.nil? || @shardizard==4
+  event.respond "This server uses #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(event.server.id >> 22) % @shards]} Shards." unless event.server.nil? || @shardizard==4
 end
 
 bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily,:now]) do |event|
@@ -14830,9 +14882,9 @@ bot.server_create do |event|
     (chn.send_message(get_debug_leave_message()) rescue nil)
     event.server.leave
   else
-    bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(event.server.id >> 22) % 6]} Shards")
+    bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(event.server.id >> 22) % @shards]} Shards")
     metadata_load()
-    @server_data[0][((event.server.id >> 22) % 4)] += 1
+    @server_data[0][((event.server.id >> 22) % @shards)] += 1
     metadata_save()
     chn.send_message("<a:zeldawave:464974581434679296> I'm here to deliver the happiest of hellos - as well as data for heroes and skills in *Fire Emblem: Heroes*!  So, here I am!  Summon me with messages that start with `FEH!`.") rescue nil
   end
@@ -14842,7 +14894,7 @@ bot.server_delete do |event|
   unless @shardizard==4
     bot.user(167657750971547648).pm("Left server **#{event.server.name}**")
     metadata_load()
-    @server_data[0][((event.server.id >> 22) % 6)] -= 1
+    @server_data[0][((event.server.id >> 22) % @shards)] -= 1
     metadata_save()
   end
 end
