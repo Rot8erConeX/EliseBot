@@ -1,4 +1,5 @@
 @shardizard = ARGV.first.to_i # taking a single variable from the command prompt to get the shard value
+system('color 0F')
 @shards = 6                   # total number of shards
 
 require 'discordrb'                    # Download link: https://github.com/meew0/discordrb
@@ -12,8 +13,8 @@ require_relative 'rot8er_functs'       # functions I use commonly in bots
 load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
 load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
 
-system("color 0#{"7CBAEDB"[@shardizard,1]}") # command prompt color and title determined by the shard
-system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden','Citrus','Sky'][@shardizard]} EliseBot")
+system("color 0#{shard_data(4)[@shardizard,1]}") # command prompt color and title determined by the shard
+system("title loading #{shard_data(2)[@shardizard]} EliseBot")
 
 # this is required to get her to change her avatar on certain holidays
 ENV['TZ'] = 'America/Chicago'
@@ -58,7 +59,7 @@ bot.gateway.check_heartbeat_acks = false
 @embedless=[]
 @ignored=[]
 @banner=[]
-@server_data=[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]
+@server_data=[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
 @server_markers=[]
 @x_markers=[]
 @max_rarity_merge=[5,10,5]
@@ -171,7 +172,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
      'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics','legend',
      'legends','legendarys','item','accessory','acc','accessorie','alias','s2s','dailies','tomorrow','tommorrow','tomorow','tommorow','aoe','area','prf','prfs',
-     'prefix']
+     'prefix','shards']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -401,7 +402,7 @@ def metadata_load() # loads the metadata - users who choose to see plaintext ove
       b.push(eval line)
     end
   else
-    b=[[],[],[0,0],[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]],[0,0,0],[],[],[]]
+    b=[[],[],[0,0],[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],[0,0,0],[],[],[]]
   end
   @embedless=b[0]
   @embedless=[168592191189417984, 256379815601373184] if @embedless.nil?
@@ -410,7 +411,17 @@ def metadata_load() # loads the metadata - users who choose to see plaintext ove
   @summon_rate=b[2]
   @summon_rate=[0,0,3] if @summon_rate.nil?
   @server_data=b[3]
-  @server_data=[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]] if @server_data.nil?
+  @server_data=[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]] if @server_data.nil?
+  if @server_data[0].length<@shards+1
+    for i in 0...@shards+1
+      @server_data[0][i]=0 if @server_data[0][i].nil?
+    end
+  end
+  if @server_data[1].length<@shards+1
+    for i in 0...@shards+1
+      @server_data[1][i]=0 if @server_data[1][i].nil?
+    end
+  end
   @headpats=b[4] unless b[4].nil?
   @server_markers=b[5] unless b[5].nil?
   @x_markers=b[6] unless b[6].nil?
@@ -419,6 +430,16 @@ def metadata_load() # loads the metadata - users who choose to see plaintext ove
 end
 
 def metadata_save() # saves the metadata
+  if @server_data[0].length<@shards+1
+    for i in 0...@shards+1
+      @server_data[0][i]=0 if @server_data[0][i].nil?
+    end
+  end
+  if @server_data[1].length<@shards+1
+    for i in 0...@shards+1
+      @server_data[1][i]=0 if @server_data[1][i].nil?
+    end
+  end
   x=[@embedless.map{|q| q}, @ignored.map{|q| q}, @summon_rate.map{|q| q}, @server_data.map{|q| q}, @headpats.map{|q| q}, @server_markers.map{|q| q}, @x_markers.map{|q| q}, @spam_channels.map{|q| q}]
   open('C:/Users/Mini-Matt/Desktop/devkit/FEHSave.txt', 'w') { |f|
     f.puts x[0].to_s
@@ -561,7 +582,7 @@ end
 
 def safe_to_spam?(event,chn=nil) # determines whether or not it is safe to send extremely long messages
   return true if event.server.nil? # it is safe to spam in PM
-  return true if [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id) # it is safe to spam in the emoji servers
+  return true if [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id) # it is safe to spam in the emoji servers
   return true if @shardizard==4 # it is safe to spam during debugging
   chn=event.channel if chn.nil?
   return true if ['bots','bot'].include?(chn.name.downcase) # channels named "bots" are safe to spam in
@@ -679,9 +700,9 @@ end
 def overlap_prevent(event) # used to prevent servers with both Elise and her debug form from receiving two replies
   if event.server.nil? # failsafe code catching PMs as not a server
     return false
-  elsif event.message.text.downcase.split(' ').include?('debug') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id)
+  elsif event.message.text.downcase.split(' ').include?('debug') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id)
     return @shardizard != 4 # the debug bot can be forced to be used in the emoji servers by including the word "debug" in your message
-  elsif [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id) # emoji servers will use default Elise otherwise
+  elsif [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id) # emoji servers will use default Elise otherwise
     return @shardizard == 4
   elsif event.server.id==332249772180111360 # two identical commands cannot be used in the same minute in the FEHKeeper server
     canpost=true
@@ -10990,6 +11011,21 @@ def disp_art(event,name,bot,weapon=nil)
           charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{b[i][0]} *[Both]*")
         end
       end
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLWyrmprints.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/DLWyrmprints.txt').each_line do |line|
+          b.push(line)
+        end
+      else
+        b=[]
+      end
+      for i in 0...b.length
+        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        unless b[i][7].nil? || b[i][7].length<=0
+          m=b[i][7].split(' as ')
+          charsx[0].push("*[DL-Print]* #{b[i][0]}") if m[0]==nammes[0]
+        end
+      end
     end
     disp='>No information<' if disp.length<=0
   end
@@ -11640,7 +11676,7 @@ bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, 
   f='' if f.nil?
   if event.server.nil?
     event.respond 'It is safe for me to send long replies here because this is my PMs with you.'
-  elsif [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id)
+  elsif [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id)
     event.respond 'It is safe for me to send long replies here because this is one of my emoji servers.'
   elsif @shardizard==4
     event.respond 'It is safe for me to send long replies here because this is my debug mode.'
@@ -13611,7 +13647,7 @@ end
 
 bot.command([:bugreport, :suggestion, :feedback]) do |event, *args|
   return nil if overlap_prevent(event)
-  bug_report(bot,event,args,@shards,["<:Shard_Colorless:443733396921909248> Transparent","<:Shard_Red:443733396842348545> Scarlet","<:Shard_Blue:443733396741554181> Azure","<:Shard_Green:443733397190344714> Verdant",'<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'],'Shard',@prefix)
+  bug_report(bot,event,args,@shards,shard_data(0,true),'Shard',['feh!','feh?','f?','e?','h?'])
 end
 
 bot.command([:tools,:links,:tool,:link,:resources,:resources]) do |event|
@@ -13625,20 +13661,40 @@ bot.command([:tools,:links,:tool,:link,:resources,:resources]) do |event|
   show_tools(event,bot)
 end
 
-bot.command(:shard) do |event, i|
+bot.command(:shard) do |event, i, j|
   return nil if overlap_prevent(event)
-  if i.to_i.to_s==i && i.to_i.is_a?(Integer) && @shardizard != 4
+  if j.to_i.to_s==j
+    j=j.to_i
+    if j>256*256 && i.to_i.to_s==i && i.to_i<=256*256
+      k=j*1
+      j=i.to_i
+      i=k*1
+    end
+  else
+    j=@shards*1
+  end
+  if (i.to_i.to_s==i || i.to_i==i) && i.to_i>256*256
     srv=(bot.server(i.to_i) rescue nil)
-    if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
-      event.respond "I am not in that server, but it would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(i.to_i >> 22) % @shards]} Shards."
+    if @shardizard ==4 && j != @shards
+      event.respond "In a system of #{j} shards, that server would use #{shard_data(0,true,j)[(i.to_i >> 22) % j]} Shards."
+    elsif @shardizard ==4
+      event.respond "That server uses/would use #{shard_data(0,true,j)[(i.to_i >> 22) % j]} Shards."
+    elsif srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
+      event.respond "I am not in that server, but it would use #{shard_data(0,true,j)[(i.to_i >> 22) % j]} Shards #{"(in a system of #{j} shards)" if j != @shards}."
+    elsif j != @shards
+      event.respond "In a system of #{j} shards, *#{srv.name}* would use #{shard_data(0,true,j)[(i.to_i >> 22) % j]} Shards."
     else
-      event.respond "#{srv.name} uses #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(i.to_i >> 22) % @shards]} Shards."
+      event.respond "*#{srv.name}* uses #{shard_data(0,true,j)[(i.to_i >> 22) % j]} Shards."
     end
     return nil
+  elsif i.to_i.to_s==i
+    j=i.to_i*1
+    i=0
   end
-  event.respond 'This is the debug mode, which uses <:Shard_Gold:443733396913520640> Golden Shards.' if @shardizard==4
-  event.respond 'PMs always use <:Shard_Colorless:443733396921909248> Transparent Shards.' if event.server.nil?
-  event.respond "This server uses #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(event.server.id >> 22) % @shards]} Shards." unless event.server.nil? || @shardizard==4
+  event.respond "This is the debug mode, which uses #{shard_data(0,false,j)[4]} Shards." if @shardizard==4
+  event.respond "PMs always use #{shard_data(0,true,j)[0]} Shards." if event.server.nil? && @shardizard != 4
+  event.respond "In a system of #{j} shards, this server would #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || @shardizard==4 || j == @shards
+  event.respond "This server uses #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || @shardizard==4 || j != @shards
 end
 
 bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily,:now]) do |event|
@@ -14878,11 +14934,11 @@ bot.server_create do |event|
     end
     chn=chnn[0] if chnn.length>0
   end
-  if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id) && @shardizard==4
+  if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id) && @shardizard==4
     (chn.send_message(get_debug_leave_message()) rescue nil)
     event.server.leave
   else
-    bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'][(event.server.id >> 22) % @shards]} Shards")
+    bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{shard_data(0,true)[(event.server.id >> 22) % @shards]} Shards")
     metadata_load()
     @server_data[0][((event.server.id >> 22) % @shards)] += 1
     metadata_save()
@@ -15643,14 +15699,14 @@ end
 bot.ready do |event|
   if @shardizard==4
     for i in 0...bot.servers.values.length
-      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(bot.servers.values[i].id)
+      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(bot.servers.values[i].id)
         bot.servers.values[i].general_channel.send_message(get_debug_leave_message()) rescue nil
         bot.servers.values[i].leave
       end
     end
   end
-  system("color 5#{"7CBAEDB"[@shardizard,1]}")
-  system("title loading #{['Transparent','Scarlet','Azure','Verdant','Golden'][@shardizard]} EliseBot")
+  system("color #{'4' if shard_data(4)[@shardizard,1]=='5'}#{'5' unless shard_data(4)[@shardizard,1]=='5'}#{shard_data(4)[@shardizard,1]}")
+  system("title loading #{shard_data(2)[@shardizard]} EliseBot")
   bot.game="Loading, please wait..."
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt')
     b=[]
@@ -15675,8 +15731,8 @@ bot.ready do |event|
   data_load()
   bonus_load()
   @last_multi_reload[0]=Time.now
-  system("color e#{"0412653"[@shardizard,1]}")
-  system("title #{['Transparent','Scarlet','Azure','Verdant','Golden','Citrus','Sky'][@shardizard]} EliseBot")
+  system("color e#{shard_data(3)[@shardizard,1]}")
+  system("title #{shard_data(2)[@shardizard]} EliseBot")
   bot.game='Fire Emblem Heroes (FEH!help for info)'
   if @shardizard==4
     next_holiday(bot)
