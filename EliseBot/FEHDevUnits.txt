@@ -14,8 +14,8 @@ Live to Serve 3
 
 Alm
 5\0\Speed\Resistance\-\0
-Iron Sword\Steel Sword\Silver Sword\Falchion (Valentia)\~~Falchion (Valentia) (+) Effect Mode~~
-Reciprical Aid
+Iron Sword\Steel Sword\Silver Sword\Falchion (Valentia)\Falchion (Valentia) (+) Effect Mode
+Reciprocal Aid
 Dragon Gaze\Draconic Aura
 Attack +1\Attack +2\Attack +3
 Wrath 1\Wrath 2\Wrath 3

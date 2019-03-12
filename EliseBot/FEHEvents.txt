@@ -1,23 +1,24 @@
-2nd Anniversary\Log-In Bonus\02/02/2019, 28/02/2019
-2nd Anniversary\Celebration\02/02/2019, 28/02/2019
-2nd Anniversary\Daily Reward Maps\02/02/2019, 28/02/2019
-Special Heroes\Log-In Bonus\08/02/2019, 21/02/2019
-February Edition\Orb Promo\08/02/2019, 21/02/2019
-Carrying the Flame\Tap Battle\11/02/2019, 03/03/2019
--\Grand Conquests\15/02/2019, 21/02/2019
-Jamke, Prince of Verdane (revival)\GHB\18/02/2019, 23/02/2019
-New Heroes\Log-In Bonus\20/02/2019, 05/03/2019
-The Orb Case\Forging Bonds\20/02/2019, 05/03/2019
-Arena\Quests\22/02/2019, 07/03/2019
-Panne, Proud Taguel\GHB\24/02/2019, 04/03/2019
-Voting Gauntlet\Log-In Bonus\25/02/2019, 10/03/2019
-Roy, Blazing Lion\LHB\27/02/2019, 07/03/2019
-Hrid, Icy Blade\LHB\27/02/2019, 07/03/2019
-Ephraim, Legendary Lord\LHB\27/02/2019, 07/03/2019
-Robin, Fell Vessel\LHB\27/02/2019, 07/03/2019
-The War of Tacticians\Voting Gauntlet\28/02/2019, 05/03/2019
 Weapon Workout\Quests\03/03/2019, 16/03/2019
 Micaiah & Sothe\BHB\05/03/2019, 10/03/2019
-3.3.0 (projected, includes inheritance increase)\Update\06/03/2019, 07/03/2019
 New Heroes\Log-In Bonus\08/03/2019, 20/03/2019
 March Edition\Orb Promo\08/03/2019, 21/03/2019
+Reason to Fight\Forging Bonds\08/03/2019, 22/03/2019
+Encore!\Tap Battle\11/03/2019, 04/04/2019
+Rutger: Lone Swordsman\GHB\11/03/2019, 19/03/2019
+-\Grand Conquests\14/03/2019, 19/03/2019
+Movement Type\Quests\16/03/2019, 29/03/2019
+Special Heroes\Log-In Bonus\19/03/2019, 01/04/2019
+Ishtar & Reinhardt (Revival)\BHB\20/03/2019, 25/03/2019
+>Unknown<\Tempest Trials\23/03/2019, 01/04/2019
+Barte & Fir\BHB\26/03/2019, 02/04/2019
+Voting Gauntlet\Log-In Bonus\28/03/2019, 10/04/2019
+>Unknown<\MHB\29/03/2019, 04/04/2019
+Azura: Vallite Songstress\LHB\29/03/2019, 04/04/2019
+Lucina: Glorious Archer\LHB\29/03/2019, 04/04/2019
+Ryoma: Supreme Samurai\LHB\29/03/2019, 04/04/2019
+>Unknown<\Voting Gauntlet\01/04/2019, 06/04/2019
+Garon: King of Nohr\GHB\03/04/2019, 10/04/2019
+Anima Blessing\Quests\06/04/2019, 19/04/2019
+3.4.0 (projected, includes whatever Roy's new mechanic will be)\Update\08/04/2019, 09/04/2019
+April Edition\Orb Promo\10/04/2019, 23/04/2019
+New Heroes\Log-In Bonus\10/04/2019, 23/04/2019

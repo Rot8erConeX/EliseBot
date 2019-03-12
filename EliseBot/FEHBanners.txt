@@ -1,5 +1,15 @@
->New Heroes< (Binding Blade)\3\-\5\08/03/2019
+>New Heroes<\3\-\5\10/04/2019, 12/05/2019
+Heroes with Odd Wave Skills\3\Ishtar, Lavatain, Lewyn, Loki\5\05/04/2019, 15/04/2019\SkillBanner
+Mythic Heroes: >Unknown<\3\Azura(Vallite), Eir, Lucina(Glorious), Ryoma(Supreme)\5\29/03/2019, 04/04/2019\Legendary
+>Voting Gauntlet: Unknown<\3\-\5\28/03/2019, 06/04/2019\VotingGauntlet
+Bartre & Fir's Battle\3\Bartr, Fir\5\26/03/2019, 02/04/2019\BHB
+Heroes with Bond Skills\3\-\5\24/03/2019, 04/04/2019\SkillBanner
+>Special Heroes: Unknown<\3\-\5\19/03/2019, 18/04/2019\Seasonal, Spring
+New Power (March 2019)\3\Klein, Linde, Merric, Sophia\5\13/03/2019, 23/03/2019\NewPower
+Beyond Darkness\3\Idunn, Lugh, Sue, Thea\5\08/03/2019, 10/04/2019
 Heroes with Sweep Skills\3\Alm, Soren\5\04/03/2019, 12/03/2019\SkillBanner
+GHB Units\5\-\543\\Dynamic, GHB
+TT Units\5\-\54\\Dynamic, Tempest
 Legendary Heroes: Roy, Blazing Lion\-8\Corrin(F)(Adrift), Corrin(M)(Adrift), Ephraim(Fire), Gunnthra, Hrid, Micaiah(Festival), Mikoto, Niles(Halloween), Robin(F)(Fallen), Roy(Fire), Surtr, Xander(Festival)\5\27/02/2019, 07/03/2019\Legendary
 War of Tacticians, Block A\3\Katarina, Lewyn, Morgan(F)\5\25/02/2019, 05/03/2019\VotingGauntlet
 War of Tacticians, Block B\3\Cecilia, Innes, Jagen, Soren\5\25/02/2019, 05/03/2019\VotingGauntlet
@@ -7,8 +17,6 @@ War of Tacticians, Block B\3\Cecilia, Innes, Jagen, Soren\5\25/02/2019, 05/03/20
 Heroes with Blazing Light\3\Celica, Leif, Leo, Ophelia\5\23/02/2019, 03/03/2019\SkillBanner
 Kitsune and Wolfskin\3\Kaden, Keaton, Selkie, Velouria\5\20/02/2019, 07/03/2019
 Love Abounds (2019 rerun)\3\Hector(Valentines), Lilina(Valentines), Lyn(Valentines), Roy(Valentines)\5\11/02/2019, 10/03/2019\Seasonal, Valentine's
-GHB Units\5\-\543\\Dynamic, GHB
-TT Units\5\-\54\\Dynamic, Tempest
 New Power (February 2019), Part 2\3\Eliwood, Hinata, Niles, Nino(Launch)\5\13/02/2019, 22/02/2019\NewPower
 New Power (February 2019), Part 1\3\Amelia, Oboro, Seth, Tharja\5\13/02/2019, 22/02/2019\NewPower
 Cherce & Virion's Battle\3\Cherche, Virion\5\12/02/2019, 17/02/2019\BHB

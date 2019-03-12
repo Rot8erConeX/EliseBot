@@ -74,6 +74,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,'**invite**','PMs the invoker with a link to invite me to their server.',0x40C0F0)
   elsif command.downcase=='addalias'
     create_embed(event,'**addalias** __new alias__ __name__',"Adds `new alias` to `name`'s aliases.\nIf the arguments are listed in the opposite order, the command will auto-switch them.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nInforms you if the alias already belongs to someone/something.\nAlso informs you if the unit you wish to give the alias to does not exist.\n\n**This command can only be used by server mods.**",0xC31C19)
+  elsif command.downcase=='prefix'
+    create_embed(event,'**prefix** __new prefix__',"Sets the server's custom prefix to `prefix`.\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif ['oregano','whoisoregano'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Answers the question of who Oregano is.",0xD49F61)
   elsif ['allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable'].include?(command.downcase)
@@ -422,7 +424,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)"
     str="#{str}\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)"
     str="#{str}\n`AoE` __type__ - to show the range of all AoE skills (*also `area`*)"
-    create_embed([event,x],"Command Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__",str,0xD49F61)
+    create_embed([event,x],"Global Command Prefixes: `FEH!` `FEH?` `F?` `E?` `H?`#{"\nServer Command Prefix: `#{@prefixes[event.server.id]}`" if !event.server.nil? && !@prefixes[event.server.id].nil? && @prefixes[event.server.id].length>0}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__",str,0xD49F61)
     str="__**Additional Index Data**__"
     str="#{str}\n`structure` __structure name__ - used to show data on a specific Aether Raid structure"
     str="#{str}\n`accessory` __accessory name__ - used to show data on a specific accessory"
@@ -486,6 +488,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group"
     str="#{str}\n\n__**Channels**__"
     str="#{str}\n`spam` __toggle__ - to allow the current channel to be safe to send long replies to (*also `safetospam` or `safe2spam`*)"
+    str="#{str}\n\n__**Customization**__"
+    str="#{str}\n`prefix` __chars__ - to create or edit the server's custom command prefix"
     create_embed([event,x],"__**Server Admin Commands**__",str,0xC31C19) if is_mod?(event.user,event.server,event.channel)
     str="`devedit` __subcommand__ __unit__ __\\*effect__"
     str="#{str}\n\n__**Mjolnr, the Hammer**__"
@@ -509,8 +513,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n`addmulti` __name__ __\\*units__ - to create a multi-unit alias"
     str="#{str}\n`deletemulti` __name__ - Deletes a multi-unit alias (*also `removemulti`*)"
     create_embed([event,x],"__**Bot Developer Commands**__",str,0x008b8b) if event.user.id==167657750971547648 && (x==1 || safe_to_spam?(event))
-    event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n\nWhen looking up a character or skill, you also have the option of @ mentioning me in a message that includes that character/skill's name" unless x==1
-    event.user.pm("If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nCommand Prefixes: #{@prefix.map{|q| q.upcase}.uniq.map {|s| "`#{s}`"}.join(', ')}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n\nWhen looking up a character or skill, you also have the option of @ mentioning me in a message that includes that character/skill's name") if x==1
+    event.respond "If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nGlobal Command Prefixes: `FEH!` `FEH?` `F?` `E?` `H?`#{"\nServer Command Prefix: `#{@prefixes[event.server.id]}`" if !event.server.nil? && !@prefixes[event.server.id].nil? && @prefixes[event.server.id].length>0}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n\nWhen looking up a character or skill, you also have the option of @ mentioning me in a message that includes that character/skill's name" unless x==1
+    event.user.pm("If the you see the above message as only three lines long, please use the command `FEH!embeds` to see my messages as plaintext instead of embeds.\n\nGlobal Command Prefixes: `FEH!` `FEH?` `F?` `E?` `H?`#{"\nServer Command Prefix: `#{@prefixes[event.server.id]}`" if !event.server.nil? && !@prefixes[event.server.id].nil? && @prefixes[event.server.id].length>0}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n\nWhen looking up a character or skill, you also have the option of @ mentioning me in a message that includes that character/skill's name") if x==1
     event.respond "A PM has been sent to you.\nIf you would like to show the help list in this channel, please use the command `FEH!help here`." if x==1
   end
 end
@@ -1761,7 +1765,7 @@ end
 def today_in_feh(event,bot,shift=false)
   t=Time.now
   timeshift=8
-  timeshift-=1 unless t.dst?
+  timeshift-=1 unless (t-24*60*60).dst?
   t-=60*60*timeshift
   str="Time elapsed since today's reset: #{"#{t.hour} hours, " if t.hour>0}#{"#{'0' if t.min<10}#{t.min} minutes, " if t.hour>0 || t.min>0}#{'0' if t.sec<10}#{t.sec} seconds"
   str="#{str}\nTime until tomorrow's reset: #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds"
@@ -2043,7 +2047,7 @@ end
 def disp_current_events(mode=0,shift=false)
   t=Time.now
   timeshift=8
-  timeshift-=1 unless t.dst?
+  timeshift-=1 unless (t-24*60*60).dst?
   t-=60*60*timeshift
   t+=24*60*60 if shift && mode>0
   tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
@@ -2730,15 +2734,15 @@ end
 def skill_data(legal_skills,all_skills,event,mode=0)
   str="**There are #{filler(legal_skills,all_skills,-1)} #{['skills','skill branches','skill trees'][mode]}, including:**"
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
-    ls2=legal_skills.reject{|q| q[4]!='Weapon'}
-    as2=all_skills.reject{|q| q[4]!='Weapon'}
+    ls2=legal_skills.reject{|q| q[4]!='Weapon' || ['Adult (All)','Falchion','Missiletainn'].include?(q[0])}
+    as2=all_skills.reject{|q| q[4]!='Weapon' || ['Adult (All)','Falchion','Missiletainn'].include?(q[0])}
     str="#{str}\n<:Gold_Blade:443172811620745236> #{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades   <:Red_Blade:443172811830198282> #{filler(ls2,as2,5,-1,'Sword Users Only')} swords, <:Blue_Blade:467112472768151562> #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, <:Green_Blade:467122927230386207> #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
     str="#{str}\n<:Gold_Tome:443172812413337620> #{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes   <:Red_Tome:443172811826003968> #{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, <:Blue_Tome:467112472394858508> #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, <:Green_Tome:467122927666593822> #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
     str="#{str}\n<:Gold_Dragon:443172811641454592> #{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
     str="#{str}\n<:Gold_Bow:443172812492898314> #{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
     str="#{str}\n<:Gold_Dagger:443172811461230603> #{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
     str="#{str}\n<:Gold_Staff:443172811628871720> #{filler(ls2,as2,5,-1,'Staff Users Only')} damaging staves"
-    str="#{str}\n<:Gold_Beast:532854442299752469> __#{filler(ls2,as2,5,-1,'Beasts Only')} beast weapons__"
+    str="#{str}\n<:Gold_Beast:532854442299752469> __#{filler(ls2,as2,5,-1,['Beasts Only, Infantry Only','Beasts Only, Armor Only','Beasts Only, Fliers Only','Beasts Only, Cavalry Only'],-3)} beast weapons__"
     ls2=legal_skills.reject{|q| q[4]!='Assist'}
     as2=all_skills.reject{|q| q[4]!='Assist'}
     str="#{str}\n<:Assist_Rally:454462054619807747> #{filler(ls2,as2,11,-1,'Rally',1)} rally assists"
@@ -2782,9 +2786,10 @@ def snagstats(event,bot,f=nil,f2=nil)
   f2='' if f2.nil?
   bot.servers.values(&:members)
   k=bot.servers.length
-  k=1 if @shardizard==4 # Debug shard shares the five emote servers with the main account
+  k=1 if @shardizard==4 # Debug shard shares the six emote servers with the main account
   @server_data[0][@shardizard]=k
   @server_data[1][@shardizard]=bot.users.size
+  @server_data[0][4]=1
   metadata_save()
   all_units=@units.reject{|q| !has_any?(g, q[13][0])}
   all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
@@ -2798,14 +2803,14 @@ def snagstats(event,bot,f=nil,f2=nil)
     b.push(l) unless l.length<=0
   end
   if ['servers','server','members','member','shard','shards','user','users'].include?(f.downcase)
-    event << "**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
-    event << "The <:Shard_Colorless:443733396921909248> Transparent Shard is in #{longFormattedNumber(@server_data[0][0])} server#{"s" if @server_data[0][0]!=1}, reaching #{longFormattedNumber(@server_data[1][0])} unique members."
-    event << "The <:Shard_Red:443733396842348545> Scarlet Shard is in #{longFormattedNumber(@server_data[0][1])} server#{"s" if @server_data[0][1]!=1}, reaching #{longFormattedNumber(@server_data[1][1])} unique members."
-    event << "The <:Shard_Blue:443733396741554181> Azure Shard is in #{longFormattedNumber(@server_data[0][2])} server#{"s" if @server_data[0][2]!=1}, reaching #{longFormattedNumber(@server_data[1][2])} unique members."
-    event << "The <:Shard_Green:443733397190344714> Verdant Shard is in #{longFormattedNumber(@server_data[0][3])} server#{"s" if @server_data[0][3]!=1}, reaching #{longFormattedNumber(@server_data[1][3])} unique members."
-    event << "The <:Shard_Orange:552681863962165258> Citrus Shard is in #{longFormattedNumber(@server_data[0][5])} server#{"s" if @server_data[0][5]!=1}, reaching #{longFormattedNumber(@server_data[1][5])} unique members."
-    event << "The <:Shard_Cyan:552681863995588628> Sky Shard is in #{longFormattedNumber(@server_data[0][6])} server#{"s" if @server_data[0][6]!=1}, reaching #{longFormattedNumber(@server_data[1][6])} unique members."
-    event << "The <:Shard_Gold:443733396913520640> Golden Shard is in #{longFormattedNumber(@server_data[0][4])} server#{"s" if @server_data[0][4]!=1}, reaching #{longFormattedNumber(@server_data[1][4])} unique members." if event.user.id==167657750971547648
+    str="**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
+    for i in 0...@shards
+      m=i
+      m=i+1 if i>3
+      str=extend_message(str,"The #{shard_data(0,true)[i]} Shard is in #{longFormattedNumber(@server_data[0][m])} server#{"s" if @server_data[0][m]!=1}, reaching #{longFormattedNumber(@server_data[1][m])} unique members.",event)
+    end
+    str=extend_message(str,"The #{shard_data(0)[4]} Shard is in 1 server, reaching #{longFormattedNumber(@server_data[1][4])} unique members.",event,2) if event.user.id==167657750971547648
+    event.respond str
     return nil
   elsif ['alts','alt','alternate','alternates','alternative','alternatives'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',3)
@@ -2876,71 +2881,132 @@ def snagstats(event,bot,f=nil,f2=nil)
     return nil
   elsif ['units','characters','unit','character','charas','chara','chars','char'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',1)
+    all_units=@units.reject{|q| !has_any?(g, q[13][0])}
+    all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
+    legal_units=@units.reject{|q| !q[13][0].nil?}
+    if @shardizard==4 && !f2.nil?
+      k=find_in_units(event,3,false,false,[f2])
+      all_units=all_units.reject{|q| !k.include?(q)}.uniq
+      legal_units=legal_units.reject{|q| !k.include?(q)}.uniq
+    end
     str="**There are #{filler(legal_units,all_units,-1)} units, including:**"
-    str2="#{filler(legal_units,all_units,9,0,'p',1)} summonable units"
-    str2="#{str2}\n#{filler(legal_units,all_units,9,0,'g',1)} Grand Hero Battle reward units"
-    str2="#{str2}\n#{filler(legal_units,all_units,9,0,'t',1)} Tempest Trials reward units"
-    str2="#{str2}\n#{filler(legal_units,all_units,[9,2],[0,0],['s',2],[1,-2])} seasonal units"
-    str2="#{str2}\n#{filler(legal_units,all_units,2,0,2,2)} legendary units"
-    str2="#{str2}\n#{filler(legal_units,all_units,9,0,'-',1)} unobtainable units"
+    m=filler(legal_units,all_units,9,0,'p',1)
+    str2=''
+    str2="#{m} summonable units" unless m=='0'
+    m=filler(legal_units,all_units,9,0,'g',1)
+    str2="#{str2}\n#{m} Grand Hero Battle reward units" unless m=='0'
+    m=filler(legal_units,all_units,9,0,'t',1)
+    str2="#{str2}\n#{m} Tempest Trials reward units" unless m=='0'
+    m=filler(legal_units,all_units,[9,2],[0,0],['s',2],[1,-2])
+    str2="#{str2}\n#{m} seasonal units" unless m=='0'
+    m=filler(legal_units,all_units,2,0,2,2)
+    str2="#{str2}\n#{m} legendary units" unless m=='0'
+    m=filler(legal_units,all_units,9,0,'-',1)
+    str2="#{str2}\n#{m} unobtainable units" unless m=='0'
+    str2=str2[1,str2.length-1] if str2[0,1]=="\n"
+    str2=str2[2,str2.length-2] if str2[0,2]=="\n"
     str=extend_message(str,str2,event,2)
-    str2="<:Red_Unknown:443172811486396417> #{filler(legal_units,all_units,1,0,'Red')} red units,   <:Orb_Red:455053002256941056> with #{filler(legal_units,all_units,[1,9],[0,0],['Red','p'],[0,1])} in the main summon pool"
-    str2="#{str2}\n<:Blue_Unknown:467112473980305418> #{filler(legal_units,all_units,1,0,'Blue')} blue units,   <:Orb_Blue:455053001971859477> with #{filler(legal_units,all_units,[1,9],[0,0],['Blue','p'],[0,1])} in the main summon pool"
-    str2="#{str2}\n<:Green_Unknown:467122926785921044> #{filler(legal_units,all_units,1,0,'Green')} green units,   <:Orb_Green:455053002311467048> with #{filler(legal_units,all_units,[1,9],[0,0],['Green','p'],[0,1])} in the main summon pool"
-    str2="#{str2}\n<:Colorless_Unknown:443692132738531328> #{filler(legal_units,all_units,1,0,'Colorless')} colorless units,   <:Orb_Colorless:455053002152083457> with #{filler(legal_units,all_units,[1,9],[0,0],['Colorless','p'],[0,1])} in the main summon pool"
+    str2=''
+    m=filler(legal_units,all_units,1,0,'Red')
+    str2="<:Red_Unknown:443172811486396417> #{m} red units,   <:Orb_Red:455053002256941056> with #{filler(legal_units,all_units,[1,9],[0,0],['Red','p'],[0,1])} in the main summon pool" unless m=='0'
+    m=filler(legal_units,all_units,1,0,'Blue')
+    str2="#{str2}\n<:Blue_Unknown:467112473980305418> #{m} blue units,   <:Orb_Blue:455053001971859477> with #{filler(legal_units,all_units,[1,9],[0,0],['Blue','p'],[0,1])} in the main summon pool" unless m=='0'
+    m=filler(legal_units,all_units,1,0,'Green')
+    str2="#{str2}\n<:Green_Unknown:467122926785921044> #{m} green units,   <:Orb_Green:455053002311467048> with #{filler(legal_units,all_units,[1,9],[0,0],['Green','p'],[0,1])} in the main summon pool" unless m=='0'
+    m=filler(legal_units,all_units,1,0,'Colorless')
+    str2="#{str2}\n<:Colorless_Unknown:443692132738531328> #{m} colorless units,   <:Orb_Colorless:455053002152083457> with #{filler(legal_units,all_units,[1,9],[0,0],['Colorless','p'],[0,1])} in the main summon pool" unless m=='0'
+    str2=str2[1,str2.length-1] if str2[0,1]=="\n"
+    str2=str2[2,str2.length-2] if str2[0,2]=="\n"
     str=extend_message(str,str2,event,2)
-    str2="<:Gold_Blade:443172811620745236> #{filler(legal_units,all_units,1,1,'Blade')} blade users:   <:Red_Blade:443172811830198282> #{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, <:Blue_Blade:467112472768151562> #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, <:Green_Blade:467122927230386207> #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes"
-    str2="#{str2}\n<:Gold_Tome:443172812413337620> #{filler(legal_units,all_units,1,1,'Tome')} tome users:   <:Red_Tome:443172811826003968> #{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, <:Blue_Tome:467112472394858508> #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, <:Green_Tome:467122927666593822> #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green"
-    str2="#{str2}\n<:Gold_Dragon:443172811641454592> #{filler(legal_units,all_units,1,1,'Dragon')} dragon units"
-    str2="#{str2}\n<:Gold_Bow:443172812492898314> #{filler(legal_units,all_units,1,1,'Bow')} bow users"
-    str2="#{str2}\n<:Gold_Dagger:443172811461230603> #{filler(legal_units,all_units,1,1,'Dagger')} dagger users"
-    str2="#{str2}\n<:Gold_Staff:443172811628871720> #{filler(legal_units,all_units,1,1,'Healer')} staff users"
-    str2="#{str2}\n<:Gold_Beast:532854442299752469> #{filler(legal_units,all_units,1,1,'Beast')} beast units"
+    str2=''
+    m=filler(legal_units,all_units,1,1,'Blade')
+    str2="<:Gold_Blade:443172811620745236> #{m} blade users:   <:Red_Blade:443172811830198282> #{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, <:Blue_Blade:467112472768151562> #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, <:Green_Blade:467122927230386207> #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes" unless m=='0'
+    m=filler(legal_units,all_units,1,1,'Tome')
+    str2="#{str2}\n<:Gold_Tome:443172812413337620> #{m} tome users:   <:Red_Tome:443172811826003968> #{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, <:Blue_Tome:467112472394858508> #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, <:Green_Tome:467122927666593822> #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green" unless m=='0'
+    m=filler(legal_units,all_units,1,1,'Dragon')
+    str2="#{str2}\n<:Gold_Dragon:443172811641454592> #{m} dragon units" unless m=='0'
+    m=filler(legal_units,all_units,1,1,'Bow')
+    str2="#{str2}\n<:Gold_Bow:443172812492898314> #{m} bow users" unless m=='0'
+    m=filler(legal_units,all_units,1,1,'Dagger')
+    str2="#{str2}\n<:Gold_Dagger:443172811461230603> #{m} dagger users" unless m=='0'
+    m=filler(legal_units,all_units,1,1,'Healer')
+    str2="#{str2}\n<:Gold_Staff:443172811628871720> #{m} staff users" unless m=='0'
+    m=filler(legal_units,all_units,1,1,'Beast')
+    str2="#{str2}\n<:Gold_Beast:532854442299752469> #{m} beast units" unless m=='0'
+    str2=str2[1,str2.length-1] if str2[0,1]=="\n"
+    str2=str2[2,str2.length-2] if str2[0,2]=="\n"
     str=extend_message(str,str2,event,2)
-    str2="<:Icon_Move_Infantry:443331187579289601> #{filler(legal_units,all_units,3,-1,'Infantry')} infantry units"
-    str2="#{str2}\n<:Icon_Move_Cavalry:443331186530451466> #{filler(legal_units,all_units,3,-1,'Cavalry')} cavalry units"
-    str2="#{str2}\n<:Icon_Move_Flier:443331186698354698> #{filler(legal_units,all_units,3,-1,'Flier')} flying units"
-    str2="#{str2}\n<:Icon_Move_Armor:443331186316673025> #{filler(legal_units,all_units,3,-1,'Armor')} armored units"
+    str2=''
+    m=filler(legal_units,all_units,3,-1,'Infantry')
+    str2="<:Icon_Move_Infantry:443331187579289601> #{m} infantry units" unless m=='0'
+    m=filler(legal_units,all_units,3,-1,'Cavalry')
+    str2="#{str2}\n<:Icon_Move_Cavalry:443331186530451466> #{m} cavalry units" unless m=='0'
+    m=filler(legal_units,all_units,3,-1,'Flier')
+    str2="#{str2}\n<:Icon_Move_Flier:443331186698354698> #{m} flying units" unless m=='0'
+    m=filler(legal_units,all_units,3,-1,'Armor')
+    str2="#{str2}\n<:Icon_Move_Armor:443331186316673025> #{m} armored units" unless m=='0'
+    str2=str2[1,str2.length-1] if str2[0,1]=="\n"
+    str2=str2[2,str2.length-2] if str2[0,2]=="\n"
     str=extend_message(str,str2,event,2)
     if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
-      str2="#{filler(legal_units,all_units,11,-1,'FE1',1)} units from *FE1*,    #{filler(legal_units,all_units,11,0,'FE1')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE2',1)} units from *FE2*,    #{filler(legal_units,all_units,11,0,'FE2')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE3',1)} units from *FE3*,    #{filler(legal_units,all_units,11,0,'FE3')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE4',1)} units from *FE4*,    #{filler(legal_units,all_units,11,0,'FE4')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE5',1)} units from *FE5*,    #{filler(legal_units,all_units,11,0,'FE5')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE6',1)} units from *FE6*,    #{filler(legal_units,all_units,11,0,'FE6')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE7',1)} units from *FE7*,    #{filler(legal_units,all_units,11,0,'FE7')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE8',1)} units from *FE8*,    #{filler(legal_units,all_units,11,0,'FE8')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE9',1)} units from *FE9*,    #{filler(legal_units,all_units,11,0,'FE9')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE10',1)} units from *FE10*,    #{filler(legal_units,all_units,11,0,'FE10')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE11',1)} units from *FE11*,    #{filler(legal_units,all_units,11,0,'FE11')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE12',1)} units from *FE12*,    #{filler(legal_units,all_units,11,0,'FE12')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE13',1)} units from *FE13*,    #{filler(legal_units,all_units,11,0,'FE13')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,['FE14','FE14B','FE14C','FE14R','FE14g'],4)} units from *FE14*,  #{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],-3)} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE15',1)} units from *FE15*,    #{filler(legal_units,all_units,11,0,'FE15')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FE16',1)} units from *FE16*,    #{filler(legal_units,all_units,11,0,'FE16')} of which are credited"
-      str2="#{str2}\n#{filler(legal_units,all_units,11,-1,'FEH',1)} units from *FEH* itself,    #{filler(legal_units,all_units,11,0,'FEH')} of which are credited"
+      str2=''
+      m=filler(legal_units,all_units,11,-1,'FE1',1)
+      str2="#{m} units from *FE1*,    #{filler(legal_units,all_units,11,0,'FE1')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE2',1)
+      str2="#{str2}\n#{m} units from *FE2*,    #{filler(legal_units,all_units,11,0,'FE2')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE3',1)
+      str2="#{str2}\n#{m} units from *FE3*,    #{filler(legal_units,all_units,11,0,'FE3')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE4',1)
+      str2="#{str2}\n#{m} units from *FE4*,    #{filler(legal_units,all_units,11,0,'FE4')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE5',1)
+      str2="#{str2}\n#{m} units from *FE5*,    #{filler(legal_units,all_units,11,0,'FE5')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE6',1)
+      str2="#{str2}\n#{m} units from *FE6*,    #{filler(legal_units,all_units,11,0,'FE6')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE7',1)
+      str2="#{str2}\n#{m} units from *FE7*,    #{filler(legal_units,all_units,11,0,'FE7')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE8',1)
+      str2="#{str2}\n#{m} units from *FE8*,    #{filler(legal_units,all_units,11,0,'FE8')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE9',1)
+      str2="#{str2}\n#{m} units from *FE9*,    #{filler(legal_units,all_units,11,0,'FE9')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE10',1)
+      str2="#{str2}\n#{m} units from *FE10*,    #{filler(legal_units,all_units,11,0,'FE10')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE11',1)
+      str2="#{str2}\n#{m} units from *FE11*,    #{filler(legal_units,all_units,11,0,'FE11')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE12',1)
+      str2="#{str2}\n#{m} units from *FE12*,    #{filler(legal_units,all_units,11,0,'FE12')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE13',1)
+      str2="#{str2}\n#{m} units from *FE13*,    #{filler(legal_units,all_units,11,0,'FE13')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE14','FE14B','FE14C','FE14R','FE14g'],4)
+      str2="#{str2}\n#{m} units from *FE14*,  #{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],-3)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE15',1)
+      str2="#{str2}\n#{m} units from *FE15*,    #{filler(legal_units,all_units,11,0,'FE15')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FE16',1)
+      str2="#{str2}\n#{m} units from *FE16*,    #{filler(legal_units,all_units,11,0,'FE16')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,'FEH',1)
+      str2="#{str2}\n#{m} units from *FEH* itself,    #{filler(legal_units,all_units,11,0,'FEH')} of which are credited" unless m=='0'
+      str2=str2[1,str2.length-1] if str2[0,1]=="\n"
+      str2=str2[2,str2.length-2] if str2[0,2]=="\n"
       str=extend_message(str,str2,event,2)
     end
     event.respond str
     return nil
   elsif ['skill','skills','weapon','weapons','assist','assists','special','specials','passive','passives'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',3)
+    data_load()
+    all_skills_1=@skills.reject{|q| !has_any?(g, q[13])}
+    all_skills_1=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
+    legal_skills_1=@skills.reject{|q| !q[13].nil?}
     msg=skill_data(legal_skills,all_skills,event,0)
-    data_load()
-    legal_skills=@skills.reject{|q| !q[13].nil? || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
+    legal_skills=legal_skills_1.reject{|q| !q[13].nil? || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
     legal_skills=collapse_skill_list(legal_skills,6)
-    data_load()
-    all_skills=@skills.reject{|q| !has_any?(g, q[13]) || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
-    all_skills=@skills.reject{|q| q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')} if event.server.nil? && event.user.id==167657750971547648
+    all_skills=all_skills_1.reject{|q| !has_any?(g, q[13]) || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
+    all_skills=all_skills_1.reject{|q| q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')} if event.server.nil? && event.user.id==167657750971547648
     all_skills=collapse_skill_list(all_skills,6)
     msg=extend_message(msg,skill_data(legal_skills,all_skills,event,1),event,2)
-    data_load()
-    legal_skills=@skills.reject{|q| !q[13].nil? || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
+    legal_skills=legal_skills_1.reject{|q| !q[13].nil? || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
     legal_skills=collapse_skill_list(legal_skills,14)
-    data_load()
-    all_skills=@skills.reject{|q| !has_any?(g, q[13]) || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
-    all_skills=@skills.reject{|q| q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')} if event.server.nil? && event.user.id==167657750971547648
+    all_skills=all_skills_1.reject{|q| !has_any?(g, q[13]) || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
+    all_skills=all_skills_1.reject{|q| q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')} if event.server.nil? && event.user.id==167657750971547648
     all_skills=collapse_skill_list(all_skills,14)
     msg=extend_message(msg,skill_data(legal_skills,all_skills,event,2),event,2)
     event.respond msg
@@ -3203,8 +3269,6 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << "#{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command(' || q.include?('from: 167657750971547648')}.length-b[0].reject{|q| q.gsub('  ','')!="event.respond 'You are not a mod.'" && q.gsub('  ','')!="str='You are not a mod.'"}.length)} global commands, invoked with #{longFormattedNumber(all_commands(false,0).length)} different phrases."
     event << "#{longFormattedNumber(b[0].reject{|q| q.gsub('  ','')!="event.respond 'You are not a mod.'" && q.gsub('  ','')!="str='You are not a mod.'"}.length)} mod-only commands, invoked with #{longFormattedNumber(all_commands(false,1).length)} different phrases."
     event << "#{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command(' || !q.include?('from: 167657750971547648')}.length)} dev-only commands, invoked with #{longFormattedNumber(all_commands(false,2).length)} different phrases."
-    event << ''
-    event << "**There are #{longFormattedNumber(@prefix.map{|q| q.downcase}.uniq.length)} command prefixes**, but because I am faking case-insensitivity it's actually #{longFormattedNumber(@prefix.length)} prefixes."
     event << ''
     event << "**There are #{longFormattedNumber(b[0].reject{|q| q[0,4]!='def '}.length)} functions the commands use.**"
     if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")

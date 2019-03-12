@@ -1,5 +1,15 @@
 Ooocast\0x8310EC\Purple
 
+Beruka
+5\2\\\-\0
+Iron Axe\Steel Axe\Killer Axe\Killer Axe+
+~~none~~
+Glowing Ember\Ignis
+~~Unknown base~~\Sturdy Stance 1\Sturdy Stance 2
+Quick Riposte 1\Quick Riposte 2
+~~none~~
+ 
+
 Nowi
 5\10\Speed\Resistance\S\0
 Fire Breath\Fire Breath+\Lightning Breath\Lightning Breath+\Lightning Breath+ (+) Speed Mode
@@ -31,12 +41,12 @@ Seal Res 1\Seal Res 2\Seal Res 3
  
 
 Tharja
-5\7\Attack\HP\-\0
-Flux\Ruin\Fenrir\Fenrir+\Fenrir+ (+) Speed Mode
+5\10\Attack\HP\-\0
+Tharja's Hex\Tharja's Hex (+) Effect Mode
 Draw Back
-Dragon Gaze\Dragon Fang
-Life and Death 1\Life and Death 2\Life and Death 3
-Desperation 1\Desperation 2\Desperation 3
-Hone Atk 1\Hone Atk 2\Hone Atk 3
-Attack +3
+Rising Wind\Growing Wind
+Darting Blow 1\Swift Sparrow 1\Swift Sparrow 2
+Special Spiral 1\Special Spiral 2\Special Spiral 3
+Savage Blow 1\Savage Blow 2\Savage Blow 3
+Heavy Blade 3
 

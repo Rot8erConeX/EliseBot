@@ -28,6 +28,7 @@ Fortress\5\Offensive/Defensive\If structure's level > opponent's Fortress level,
 Healing Tower\1\Offensive/Defensive\At start of turn, restores 10 HP to allies within 3 rows and 5 columns centered on structure.\Yes\100, 0, 0\0
 Healing Tower\2\Offensive/Defensive\At start of turn, restores 15 HP to allies within 3 rows and 5 columns centered on structure.\Yes\300, 0, 0\0
 Healing Tower\3\Offensive/Defensive\At start of turn, restores 20 HP to allies within 3 rows and 5 columns centered on structure.\Yes\500, 0, 0\0
+Healing Tower\4\Offensive/Defensive\At start of turn, restores 25 HP to allies within 3 rows and 5 columns centered on structure.\Yes\700, 0, 0\0
 Infantry School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on infantry foes within 3 columns centered on structure through their next actions.\Yes\50, 0, 0\0\Only one school can be placed at a time.
 Infantry School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on infantry foes within 3 columns centered on structure through their next actions.\Yes\150, 0, 0\0\Only one school can be placed at a time.
 Infantry School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on infantry foes within 3 columns centered on structure through their next actions.\Yes\250, 0, 0\0\Only one school can be placed at a time.

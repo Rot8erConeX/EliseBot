@@ -57,6 +57,8 @@ Gold Spring Bunny Hat\Hat\Proof of victory over Legendary Lyn.\Beat Lyn(Wind)'s 
 Knight Headpiece\Hat\A knight's headpiece from Silas. This gear is given to those who earn the title of knight.\Reach 100 blue friendship with Silas during Forging Bonds: High Tea Jinks.
 Knight Headpiece EX\Hat\A knight's headpiece from Silas. This special piece of gear is given to those who reach the title of paladin.\Reach 2500 blue friendship with Silas during Forging Bonds: High Tea Jinks.
 Lost Child's Hat\Hat\The hat worn by young Azura.\Clear floors 81-85 in Illusory Dungeon: Labyrinth of Despair.
+Mage Cap\Hat\A hat from Lugh. It's made for mages. Wearing it quiets the mind.\Reach 100 green friendship with Lugh during Forging Bonds: Reason to Fight
+Mage Cap EX\Hat\A hat from Lugh. It's made for mages. Wearing it expands the mind.\Reach 2500 green friendship with Lugh during Forging Bonds: Reason to Fight
 Maid Headpiece\Hat\A maid's headpiece from Flora. This is the authentic Nohrian object, straight from Castle Krakenburg.\Reach 100 red friendship with Flora during Forging Bonds: High Tea Jinks.
 Maid Headpiece EX\Hat\A maid's headpiece from Flora. Only the head maid is allowed to wear this superior-quality item.\Reach 2500 red friendship with Flora during Forging Bonds: High Tea Jinks.
 Plegian Crown\Hat\A crown said to be worn by members of the Grimleal. Aversa had it in her possession.\Reach 100 orange friendship with Aversa during Forging Bonds: Dueling Desires.
@@ -90,9 +92,15 @@ Reading Glasses EX\Mask\Nina says that these glasses will let you keep reading i
 Swim Goggles\Mask\Use these to see clearly underwater. The added snorkel means you can take your time watching sea life.\Clear floors 81-85 in Illusory Dungeon: Summer of Heroes.
 Wolf Eyepatch\Mask\An eyepatch bestowed by Nailah. The fabric is exquisite and conveys to its wearer an air of intrigue.\Reach 100 blue friendship with Nailah during Forging Bonds: Hearts as One
 Wolf Eyepatch EX\Mask\An eyepatch bestowed by Nailah. The fabric is exquisite and conveys to its wearer unquestionable charisma.\Reach 2500 blue friendship with Nailah during Forging Bonds: Hearts as One
+Dark Finery\Tiara\A head ornament bestowed by Idunn. It seems ancient, but it still sparkles with a certain mystique.\Reach 100 red friendship with Idunn during Forging Bonds: Reason to Fight
+Dark Finery EX\Tiara\A head ornament bestowed by Idunn. It seems ancient, but it still shimmers with a certain air of mystery.\Reach 2500 red friendship with Idunn during Forging Bonds: Reason to Fight
 Gold Imperial Tiara\Tiara\Proof of victory over Legendary Roy.\Beat Roy's LHB at Abyssal difficulty.
 Hoshidan Headpiece\Tiara\This headwear is the exclusive hair ornament of the queen of Hoshido.\Clear floors 6-10 in Illusory Dungeon: Labyrinth of Despair.
+Ilian Wing Hairpin\Tiara\An ornament from Thea. It's a token of the Ilian pegasus knights, fashioned after a pegasus wing.\Reach 100 blue friendship with Thea during Forging Bonds: Reason to Fight
+Ilian Wing Hairpin EX\Tiara\An ornament from Thea. It's a token of the Ilian pegasus knights, said to also serve as a protective charm.\Reach 2500 blue friendship with Thea during Forging Bonds: Reason to Fight
 Imperial Tiara\Tiara\This imperial headpiece from Veronica was forged in the Emblian Empire. It's a bit large but is actually quite light.\Reach 100 orange friendship with Veronica(Brave) during Forging Bonds: Rejecting Destiny.
 Imperial Tiara EX\Tiara\An imperial headpiece from Veronica, forged in the Emblian Empire. Passed down by imperial princesses for ages.\Reach 2500 orange friendship with Veronica(Brave) during Forging Bonds: Rejecting Destiny.
+Kutolah Band\Tiara\A headband from Sue. It's a red cloth, velvety soft and embroidered with a golden thread.\Reach 100 orange friendship with Sue during Forging Bonds: Reason to Fight.
+Kutolah Band EX\Tiara\A headband from Sue. It's adorned with a tuft of soft fur, the mark of a nomad trooper.\Reach 2500 orange friendship with Sue during Forging Bonds: Reason to Fight.
 Wings of Darkness\Tiara\Wings held by Owain. He says they have a unique power useful for fighting the darkness.\Reach 100 green friendship with Owain during Forging Bonds: Dueling Desires.
 Wings of Darkness EX\Tiara\Wings held by Owain. He says that sacred powers changed them to the purest white.\Reach 2500 green friendship with Owain during Forging Bonds: Dueling Desires.

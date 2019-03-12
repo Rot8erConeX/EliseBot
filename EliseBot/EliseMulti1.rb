@@ -2550,3 +2550,122 @@ def summon_sim(bot,event,colors)
   end
   return nil
 end
+
+def shard_data(mode=0,ignoredebug=false,s=nil)
+  s=@shards*1 if s.nil?
+  if mode==0 # shard icons + names
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Gold:443733396913520640> Golden'] if s<=4
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Gold:443733396913520640> Golden','<:Shard_Cyan:552681863995588628> Sky'] if s==5
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Gold:443733396913520640> Golden','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky'] if s==6
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Gold:443733396913520640> Golden','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Purple:443733396401946625> Violet'] if s==7
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet'] if s==8
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s==9
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Pink:554109520906027018> Bubblegum','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s==10
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Black:554090555932540941> Onyx','<:Shard_Pink:554109520906027018> Bubblegum','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s==11
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Black:554090555932540941> Onyx','<:Shard_Grey:554090554963525639> Steel','<:Shard_Pink:554109520906027018> Bubblegum','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s==12
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Black:554090555932540941> Onyx','<:Shard_Grey:554090554963525639> Steel','<:Shard_Platinum:554109521182588957> Platinum','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Pink:554109520906027018> Bubblegum','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s>=13
+    if k.length<s
+      k2=['<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta']
+      i=2
+      while k.length<s+1
+        k3=k2.map{|q| "#{q}#{i}"}
+        for j in 0...k3.length
+          k.push(k3[j])
+        end
+        i+=1
+      end
+    end
+  elsif mode==1 # shard icons, no names
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Red:443733396842348545>','<:Shard_Blue:443733396741554181>','<:Shard_Green:443733397190344714>','<:Shard_Gold:443733396913520640>'] if s<=4
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Red:443733396842348545>','<:Shard_Blue:443733396741554181>','<:Shard_Green:443733397190344714>','<:Shard_Gold:443733396913520640>','<:Shard_Cyan:552681863995588628>'] if s==5
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Red:443733396842348545>','<:Shard_Blue:443733396741554181>','<:Shard_Green:443733397190344714>','<:Shard_Gold:443733396913520640>','<:Shard_Orange:552681863962165258>','<:Shard_Cyan:552681863995588628>'] if s==6
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Red:443733396842348545>','<:Shard_Blue:443733396741554181>','<:Shard_Green:443733397190344714>','<:Shard_Gold:443733396913520640>','<:Shard_Orange:552681863962165258>','<:Shard_Cyan:552681863995588628>','<:Shard_Purple:443733396401946625>'] if s==7
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Rot8er:443733397223768084>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>'] if s==8
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Rot8er:443733397223768084>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s==9
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Pink:554109520906027018>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Rot8er:443733397223768084>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s==10
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Black:554090555932540941>','<:Shard_Pink:554109520906027018>','<:Shard_Red:443733396842348545>','<:Shard_Rot8er:443733397223768084>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s==11
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Black:554090555932540941>','<:Shard_Grey:554090554963525639>','<:Shard_Pink:554109520906027018>','<:Shard_Rot8er:443733397223768084>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s==12
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Black:554090555932540941>','<:Shard_Grey:554090554963525639>','<:Shard_Platinum:554109521182588957>','<:Shard_Rot8er:443733397223768084>','<:Shard_Pink:554109520906027018>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s>=13
+    if k.length<s
+      k2=['<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>']
+      i=2
+      while k.length<s+1
+        k3=k2.map{|q| "#{q}*#{i}*"}
+        for j in 0...k3.length
+          k.push(k3[j])
+        end
+        i+=1
+      end
+    end
+  elsif mode==2 # shard names, no icons
+    k=['Transparent','Scarlet','Azure','Verdant','Golden'] if s<=4
+    k=['Transparent','Scarlet','Azure','Verdant','Golden','Sky'] if s==5
+    k=['Transparent','Scarlet','Azure','Verdant','Golden','Citrus','Sky'] if s==6
+    k=['Transparent','Scarlet','Azure','Verdant','Golden','Citrus','Sky','Violet'] if s==7
+    k=['Transparent','Scarlet','Citrus','Golden','Hybrid','Verdant','Sky','Azure','Violet'] if s==8
+    k=['Transparent','Scarlet','Citrus','Golden','Hybrid','Verdant','Sky','Azure','Violet','Magenta'] if s==9
+    k=['Transparent','Bubblegum','Scarlet','Citrus','Hybrid','Golden','Verdant','Sky','Azure','Violet','Magenta'] if s==10
+    k=['Transparent','Onyx','Bubblegum','Scarlet','Hybrid','Citrus','Golden','Verdant','Sky','Azure','Violet','Magenta'] if s==11
+    k=['Transparent','Onyx','Steel','Bubblegum','Hybrid','Scarlet','Citrus','Golden','Verdant','Sky','Azure','Violet','Magenta'] if s==12
+    k=['Transparent','Onyx','Steel','Platinum','Hybrid','Bubblegum','Scarlet','Citrus','Golden','Verdant','Sky','Azure','Violet','Magenta'] if s>=13
+    if k.length<s
+      k2=['Scarlet','Citrus','Golden','Verdant','Sky','Azure','Violet','Magenta']
+      i=2
+      while k.length<s+1
+        k3=k2.map{|q| "#{q}#{i}"}
+        for j in 0...k3.length
+          k.push(k3[j])
+        end
+        i+=1
+      end
+    end
+  elsif mode==3 # bright command prompt text color
+    k=['0','4','1','2','6'] if s<=4
+    k=['0','4','1','2','6','9'] if s==5
+    k=['0','4','1','2','6','C','9'] if s==6
+    k=['0','4','1','2','6','C','9','5'] if s==7
+    k=['0','4','C','6','0','2','9','1','5'] if s==8
+    k=['0','4','C','6','0','2','9','1','5','5'] if s==9
+    k=['0','5','4','C','0','6','2','9','1','5','5'] if s==10
+    k=['0','0','5','4','0','C','6','2','9','1','5','5'] if s==11
+    k=['0','0','8','5','0','4','C','6','2','9','1','5','5'] if s==12
+    k=['0','0','8','8','0','5','4','C','6','2','9','1','5','5'] if s>=13
+    if k.length<s
+      k2=['C','6','8','A','B','9','5','D']
+      i=2
+      while k.length<s+1
+        for j in 0...k2.length
+          k.push(k2[j])
+        end
+        i+=1
+      end
+    end
+  elsif mode==4 # dark command prompt text color
+    k=['7','C','B','A','E'] if s<=4
+    k=['7','C','B','A','E','B'] if s==5
+    k=['7','C','B','A','E','D','B'] if s==6
+    k=['7','C','B','A','E','D','B','5'] if s==7
+    k=['7','C','6','E','8','A','B','9','5'] if s==8
+    k=['7','C','6','E','8','A','B','9','5','D'] if s==9
+    k=['7','D','C','E','6','8','A','B','9','5','D'] if s==10
+    k=['7','F','D','E','C','6','8','A','B','9','5','D'] if s==11
+    k=['7','F','7','E','D','C','6','8','A','B','9','5','D'] if s==12
+    k=['7','F','8','E','7','D','C','6','8','A','B','9','5','D'] if s>=13
+    if k.length<s
+      k2=['C','6','8','A','B','9','5','D']
+      i=2
+      while k.length<s+1
+        for j in 0...k2.length
+          k.push(k2[j])
+        end
+        i+=1
+      end
+    end
+  end
+  if ignoredebug
+    k[4]=nil
+    k.compact!
+  end
+  return k.join('') if mode>2
+  return k
+end
