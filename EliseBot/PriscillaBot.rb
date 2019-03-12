@@ -6265,13 +6265,15 @@ def collapse_skill_list(list,mode=0)
   return list_collapse(list,mode)
 end
 
-def find_in_units(event, mode=0, paired=false, ignore_limit=false)
+def find_in_units(event,mode=0,paired=false,ignore_limit=false,args=nil)
   data_load()
   groups_load()
   srv=0
   srv=event.server.id unless event.server.nil?
-  args=event.message.text.gsub(',','').split(' ')
-  args.shift
+  if args.nil?
+    args=event.message.text.gsub(',','').split(' ')
+    args.shift
+  end
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   colors=[]
   weapons=[]
@@ -13693,7 +13695,7 @@ bot.command(:shard) do |event, i, j|
   end
   event.respond "This is the debug mode, which uses #{shard_data(0,false,j)[4]} Shards." if @shardizard==4
   event.respond "PMs always use #{shard_data(0,true,j)[0]} Shards." if event.server.nil? && @shardizard != 4
-  event.respond "In a system of #{j} shards, this server would #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || @shardizard==4 || j == @shards
+  event.respond "In a system of #{j} shards, this server would use #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || @shardizard==4 || j == @shards
   event.respond "This server uses #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || @shardizard==4 || j != @shards
 end
 
