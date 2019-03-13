@@ -15171,6 +15171,10 @@ bot.mention do |event|
     disp_stats(bot,'Lavatain',nil,event,true,true)
     disp_skill(bot,'Bladeblade',event,true)
     k=3
+  elsif ['help','commands'].include?(a[0].downcase)
+    a.shift
+    help_text(event,bot,a[0],a[1])
+    k=1
   elsif ['today','daily','dailies','now'].include?(a[0].downcase)
     a.shift
     today_in_feh(event,bot)
