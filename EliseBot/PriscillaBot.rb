@@ -4087,7 +4087,7 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
   else
     p2=list_lift(p2.map{|q| "*#{q}*"},"or")
   end
-  str="#{str}#{"\n" unless skill[0][8]=='-' && p.nil? && skill[-1][6]!='-'}#{"\n**Restrictions on inheritance:** #{skill[-1][5].gsub('Excludes Tome Users, Excludes Staff Users, Excludes Dragons','Physical Weapon Users Only')}" if skill[-1][6]=='-' && skill[-1][4]!='Weapon'}#{"\n**<:Prf_Sparkle:490307608973148180>Prf to:** #{skill[-1][6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless ['Missiletainn','Adult (All)'].include?(skill[-1][0]) || skill[-1][6]=='-' || skill[-1][6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.length.zero?}#{"\n**Promotes from:** #{skill[0][8]}" unless skill[0][8]=='-'}#{"\n**Branching lines:** #{p2}" unless p2.nil?}#{"\n**Promotes into:** #{p}" unless p.nil?}"
+  str="#{str}#{"\n" unless skill[0][8]=='-' && p.nil? && skill[-1][6]!='-'}#{"\n**Restrictions on inheritance:** #{skill[-1][5].gsub('Excludes Tome Users, Excludes Staff Users, Excludes Dragons','Physical Weapon Users Only')}" if skill[-1][6]=='-' && skill[-1][4]!='Weapon'}#{"\n**<:Prf_Sparkle:490307608973148180>Prf to:** #{skill[-1][6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.join(', ').gsub('Lavatain','Laevatein')}" unless skill[-1][6]=='-' || skill[-1][6].split(', ').reject {|u| find_unit(u,event,false,true)<0 && u != '-'}.length.zero?}#{"\n**Promotes from:** #{skill[0][8]}" unless skill[0][8]=='-'}#{"\n**Branching lines:** #{p2}" unless p2.nil?}#{"\n**Promotes into:** #{p}" unless p.nil?}"
   usklz=[]
   for i in 0...skill.length
     for i2 in 0...skill[i][10].length
@@ -4187,8 +4187,8 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
       usklz2[i]=clrz.map{|q| q}
     end
   end
-  str="#{str}\n\n**Heroes who learn part of the line, without inheritance**\n#{usklz2[0].map{|q| "*#{q[0]}:* #{q[1]}"}.join("\n")}" if usklz2[0].length>0
-  str="#{str}\n\n**Heroes who learn the final skill of the line, without inheritance**\n#{usklz2[1].map{|q| "*#{q[0]}:* #{q[1]}"}.join("\n")}" if usklz2[1].length>0
+  str="#{str}\n\n**Heroes who learn part of the line, without inheritance**\n#{usklz2[0].map{|q| "*#{q[0]}:* #{q[1].gsub('Lavatain','Laevatein')}"}.join("\n")}" if usklz2[0].length>0
+  str="#{str}\n\n**Heroes who learn the final skill of the line, without inheritance**\n#{usklz2[1].map{|q| "*#{q[0]}:* #{q[1].gsub('Lavatain','Laevatein')}"}.join("\n")}" if usklz2[1].length>0
   m=false
   for i in 0...skill.length
     if !skill[i][12].nil? && skill[i][12]!='' && skill[i][4].include?('Passive(W)')
@@ -15171,7 +15171,7 @@ bot.mention do |event|
     disp_stats(bot,'Lavatain',nil,event,true,true)
     disp_skill(bot,'Bladeblade',event,true)
     k=3
-  elsif ['help','commands'].include?(a[0].downcase)
+  elsif ['help','commands','command_list','commandlist'].include?(a[0].downcase)
     a.shift
     help_text(event,bot,a[0],a[1])
     k=1
