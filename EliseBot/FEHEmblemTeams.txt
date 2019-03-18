@@ -8,6 +8,7 @@
 ['Healer', 0, 0]
 ['Dagger', 0, 0]
 ['Archer', 0, 0]
+['Beast', 0, 0]
 ['Red', 0, 0]
 ['Blue', 0, 0]
 ['Green', 0, 0]
@@ -42,3 +43,4 @@
 ['Sakura', 0, 0, ['Sakura', 'Sakura(Halloween)', 'Sakura(Bath)']]
 ['Elise', 0, 0, ['Elise', 'Elise(Summer)', 'Elise(Bath)']]
 ['Hinoka', 0, 0, ['Hinoka(Launch)', 'Hinoka(Wings)', 'Hinoka(Bath)']]
+['Veronica', 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Spring)']]

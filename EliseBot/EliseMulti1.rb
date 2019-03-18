@@ -216,8 +216,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
       return [str,['Camilla(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch"]]
-    elsif str2.include?('bunny') || str2.include?('easter') || str2.include?('sf')
-      return [str,['Camilla(Bunny)'],["bunny#{str}","#{str}bunny","easter#{str}","#{str}easter","sf#{str}","#{str}sf"]]
+    elsif str2.include?('bunny') || str2.include?('easter') || str2.include?('sf') || str2.include?('rabbit')
+      return [str,['Camilla(Bunny)'],["bunny#{str}","#{str}bunny","easter#{str}","#{str}easter","sf#{str}","#{str}sf","rabbit#{str}","#{str}rabbit"]]
     elsif str2.include?('bath') || str2.include?('bathhouse') || str2.include?('bathouse') || str2.include?('hotspring') || str2.include?('hot') || str2.include?('spa')
       return [str,['Camilla(Bath)'],["bath#{str}","#{str}bath","bathhouse#{str}","#{str}bathhouse","bathouse#{str}","#{str}bathouse","hotspring#{str}","#{str}hotspring","hot#{str}","#{str}hot","spa#{str}","#{str}spa"]]
     elsif str2.include?('winter') || str2.include?('newyear') || str2.include?('holiday') || str2.include?('ny')
@@ -292,8 +292,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.gsub('flower','').include?('we') || str2.include?('santa')
       return [str,['Chrom(Winter)'],["winter#{str}","#{str}winter","christmas#{str}","#{str}christmas","holiday#{str}","#{str}holiday","we#{str}","#{str}we","santa#{str}","#{str}santa"]]
-    elsif str2.include?('bunny') || str2.include?('spring') || str2.include?('easter') || str2.include?('sf')
-      return [str,['Chrom(Spring)'],["bunny#{str}","#{str}bunny","spring#{str}","#{str}spring","easter#{str}","#{str}easter","sf#{str}","#{str}sf"]]
+    elsif str2.include?('bunny') || str2.include?('spring') || str2.include?('easter') || str2.include?('sf') || str2.include?('rabbit')
+      return [str,['Chrom(Spring)'],["bunny#{str}","#{str}bunny","spring#{str}","#{str}spring","easter#{str}","#{str}easter","sf#{str}","#{str}sf","rabbit#{str}","#{str}rabbit"]]
     elsif str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch') || str2.include?('prince')
       return [str,['Chrom(Launch)'],["launch#{str}","#{str}launch","vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","prince#{str}","#{str}prince"]]
     elsif str2.include?('branded') || str2.include?('brand') || str2.include?('exalted') || str2.include?('exalt') || str2.include?('king') || str2.include?('sealed') || str2.include?('horse') || str2.include?('knight')
@@ -621,7 +621,9 @@ def list_unit_aliases(event,args,bot,mode=0)
       u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
       unit=unit.reject{|q| !u.include?(q)}
     elsif find_unit(args.join(''),event)==-1 && find_skill(args.join(''),event)==-1 && find_accessory(args.join(''),event)==-1 && find_item_feh(args.join(''),event)==-1 && find_structure(args.join(''),event).length<=0 && !has_any?(args,['unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils','structures','structure','struct','structs','item','items','accessorys','accessory','accessories'])
-      event.respond "The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\n#{args.join(' ')} does not fall into any of these categories."
+      alz=args.join(' ')
+      alz='>censored mention<' if alz.include?('@')
+      event.respond "The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\n#{alz} does not fall into any of these categories."
       return nil
     end
   end
@@ -631,7 +633,7 @@ def list_unit_aliases(event,args,bot,mode=0)
   unless skill.nil? || skill.is_a?(Array)
     skill=nil if find_skill(args.join(''),event)<0
   end
-  if struct.length>0
+  if !struct.nil? && struct.length>0
     struct=struct.map{|q| @structures[q]}
   else
     struct=nil
@@ -1183,13 +1185,21 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     type[1]='Alias' if type[1].include?('*') && type[0]!='Alias'
   end
   if type.reject{|q| q == 'Alias'}.length<=0
+    alz1=newname
+    alz2=unit
+    alz1='>Censored mention<' if alz1.include?('@')
+    alz2='>Censored mention<' if alz2.include?('@')
     str="The alias system can cover:\n- Units\n- Skills (Weapons, Assists, Specials, Passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nNeither #{newname} nor #{unit} is any of the above."
     err=true
   elsif type.reject{|q| q != 'Alias'}.length<=0
+    alz1=newname
+    alz2=unit
+    alz1='>Censored mention<' if alz1.include?('@')
+    alz2='>Censored mention<' if alz2.include?('@')
     x=['a','a']
     x[0]='an' if ['item','accessory'].include?(type[0].downcase)
     x[1]='an' if ['item','accessory'].include?(type[1].downcase)
-    str="#{newname} is #{x[0]} #{type[0].downcase}\n#{unit} is #{x[1]} #{type[1].downcase}"
+    str="#{alz1} is #{x[0]} #{type[0].downcase}\n#{alz2} is #{x[1]} #{type[1].downcase}"
     err=true
   end
   if err

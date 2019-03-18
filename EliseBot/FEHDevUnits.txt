@@ -1,5 +1,5 @@
 Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
-Alm\Eir\Kana(F)\Leanne\Matthew\Owain\Reyson\Selkie\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
+Alm\Delthea\Eir\Kana(F)\Leanne\Matthew\Owain\Reyson\Selkie\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
@@ -19,7 +19,7 @@ Reciprocal Aid
 Dragon Gaze\Draconic Aura
 Attack +1\Attack +2\Attack +3
 Wrath 1\Wrath 2\Wrath 3
-Hone Spd 1\Hone Spd 2\~~Hone Spd 3~~
+Hone Spd 1\Hone Spd 2\Hone Spd 3
 Drive Spd 1
 
 Anna
@@ -111,6 +111,16 @@ Armored Blow 1\Sturdy Blow 1\Sturdy Blow 2
 Dull Close 1\Dull Close 2\Dull Close 3
 Spur Res 1\Spur Def/Res 1\Spur Def/Res 2
 Attack/Def +2
+
+Delthea
+5\0\Defense\Resistance\-\0
+Thunder\Elthunder\Thoron\Dark Aura
+Reposition
+Miracle
+Death Blow 1\Death Blow 2\Death Blow 3
+Bowbreaker 1\Bowbreaker 2\Bowbreaker 3
+Spur Atk 1\Drive Atk 1\Drive Atk 2
+Darting Blow 2
 
 Eir
 5\1\ \ \-\0
@@ -213,7 +223,7 @@ Threaten Atk 1\Threaten Atk 2\Threaten Atk 3
 Brash Assault 3
 
 Maria
-4\10\ \ \-\0
+5\1\ \ \-\0
 Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light

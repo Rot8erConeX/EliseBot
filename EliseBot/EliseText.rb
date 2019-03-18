@@ -2263,6 +2263,8 @@ def show_bonus_units(event,args='',bot)
         elsif i==1
           m.push("Next week: #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}")
         elsif m[0,1]=='-' && s[1]>10
+        elsif moji2.length<=0
+          m.push("Week #{s[1]}: #{moji[0].mention}#{b[i][3][0]}, <:Legendary_Effect_Unknown:443337603945857024>#{b[i][3][1]}")
         else
           m.push("Week #{s[1]}: #{moji[0].mention}#{b[i][3][0]}, #{moji2[0].mention}#{b[i][3][1]}")
         end
@@ -2884,7 +2886,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     all_units=@units.reject{|q| !has_any?(g, q[13][0])}
     all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
     legal_units=@units.reject{|q| !q[13][0].nil?}
-    if @shardizard==4 && !f2.nil?
+    unless f2.nil?
       k=find_in_units(event,3,false,false,[f2])
       all_units=all_units.reject{|q| !k.include?(q)}.uniq
       legal_units=legal_units.reject{|q| !k.include?(q)}.uniq
@@ -3291,13 +3293,13 @@ def snagstats(event,bot,f=nil,f2=nil)
     return nil
   elsif event.user.id==167657750971547648 && !f.nil? && f.to_i.to_s==f
     if @shardizard==4
-      s2="That server uses/would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Orange','<:Shard_Cyan:552681863995588628> Cyan'][(f.to_i >> 22) % 6]} Shards."
+      s2="That server uses/would use #{shard_data(0,true)[(f.to_i >> 22) % @shards]} Shards."
     else
       srv=(bot.server(f.to_i) rescue nil)
       if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
-        s2="I am not in that server, but it would use #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Orange','<:Shard_Cyan:552681863995588628> Cyan'][(f.to_i >> 22) % 6]} Shards."
+        s2="I am not in that server, but it would use #{shard_data(0,true)[(f.to_i >> 22) % @shards]} Shards."
       else
-        s2="__**#{srv.name}** (#{srv.id})__\n*Owner:* #{srv.owner.distinct} (#{srv.owner.id})\n*Shard:* #{['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Orange:552681863962165258> Orange','<:Shard_Cyan:552681863995588628> Cyan'][(srv.id >> 22) % 6]}\n*My nickname:* #{bot.user(312451658908958721).on(srv.id).display_name}"
+        s2="__**#{srv.name}** (#{srv.id})__\n*Owner:* #{srv.owner.distinct} (#{srv.owner.id})\n*Shard:* #{shard_data(0,true)[(srv.id >> 22) % @shards]}\n*My nickname:* #{bot.user(312451658908958721).on(srv.id).display_name}"
       end
     end
     event.respond s2

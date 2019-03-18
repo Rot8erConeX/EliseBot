@@ -5,7 +5,7 @@ Mythic Heroes: >Unknown<\3\Azura(Vallite), Eir, Lucina(Glorious), Ryoma(Supreme)
 Bartre & Fir's Battle\3\Bartr, Fir\5\26/03/2019, 02/04/2019\BHB
 Heroes with Bond Skills\3\-\5\24/03/2019, 04/04/2019\SkillBanner
 >Special Heroes: Unknown<\3\-\5\19/03/2019, 18/04/2019\Seasonal, Spring
-New Power (March 2019)\3\Klein, Linde, Merric, Sophia\5\13/03/2019, 23/03/2019\NewPower
+New Power (March 2019)\3\Delthea, Klein, Sonya, Sophia\5\13/03/2019, 23/03/2019\NewPower
 Beyond Darkness\3\Idunn, Lugh, Sue, Thea\5\08/03/2019, 10/04/2019
 Heroes with Sweep Skills\3\Alm, Soren\5\04/03/2019, 12/03/2019\SkillBanner
 GHB Units\5\-\543\\Dynamic, GHB
