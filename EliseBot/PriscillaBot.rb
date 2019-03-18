@@ -12073,7 +12073,7 @@ bot.command([:bst, :BST]) do |event, *args|
               ['Story',0,0],['GHB',0,0],['Tempest',0,0]]
   end
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
-  braves=[[],[0,0],[0,0]]
+  braves=[[],[0,0,0,0,0],[0,0,0,0,0]]
   m=false
   did=-1
   msg=""
@@ -12139,20 +12139,22 @@ bot.command([:bst, :BST]) do |event, *args|
           counters[7][i2]+=1 if j[1][1]=='Healer'
           counters[8][i2]+=1 if j[1][1]=='Dagger'
           counters[9][i2]+=1 if j[1][1]=='Bow'
-          counters[10][i2]+=1 if j[1][0]=='Red'
-          counters[11][i2]+=1 if j[1][0]=='Blue'
-          counters[12][i2]+=1 if j[1][0]=='Green'
-          counters[13][i2]+=1 if j[1][0]=='Colorless'
+          counters[10][i2]+=1 if j[1][1]=='Beast'
+          counters[11][i2]+=1 if j[1][0]=='Red'
+          counters[12][i2]+=1 if j[1][0]=='Blue'
+          counters[13][i2]+=1 if j[1][0]=='Green'
+          counters[14][i2]+=1 if j[1][0]=='Colorless'
           if ['',' '].include?(r[2]) && ['',' '].include?(r[3])
-            counters[14][i2]+=1 if summon_type.include?('y') || summon_type.include?('g') || summon_type.include?('t') || summon_type.include?('d') || summon_type.include?('f')
+            counters[15][i2]+=1 if summon_type.include?('y') || summon_type.include?('g') || summon_type.include?('t') || summon_type.include?('d') || summon_type.include?('f')
             braves[i2][0]+=1 if ['Ike(Brave)','Lucina(Brave)','Lyn(Brave)','Roy(Brave)'].include?(name)
             braves[i2][1]+=1 if ['Celica(Brave)','Ephraim(Brave)','Hector(Brave)','Veronica(Brave)'].include?(name)
+            braves[i2][2]+=1 if ['Micaiah(Brave)','Camilla(Brave)','Alm(Brave)','Eliwood(Brave)'].include?(name)
           end
-          counters[15][i2]+=1 if [summon_type].include?('y')
-          counters[16][i2]+=1 if [summon_type].include?('g')
-          counters[17][i2]+=1 if [summon_type].include?('t')
-          if counters.length>18
-            for i3 in 18...counters.length
+          counters[16][i2]+=1 if [summon_type].include?('y')
+          counters[17][i2]+=1 if [summon_type].include?('g')
+          counters[18][i2]+=1 if [summon_type].include?('t')
+          if counters.length>19
+            for i3 in 19...counters.length
               counters[i3][i2]+=1 if counters[i3][3].include?(name)
             end
           end
@@ -12199,23 +12201,23 @@ bot.command([:bst, :BST]) do |event, *args|
   end
   event.channel.send_temporary_message("#{event.user.mention} Units found, calculating BST and arena score...",8)
   if braves[1].max==1
-    counters[14][1]+=braves[1][1]+braves[1][0]
-    counters[14][0][1]='Pseudo-F2P'
+    counters[15][1]+=braves[1][1]+braves[1][0]
+    counters[15][0][1]='Pseudo-F2P'
   end
   if braves[2].max==1
-    counters[14][2]+=braves[2][1]+braves[2][0]
-    counters[14][0][2]='Pseudo-F2P'
+    counters[15][2]+=braves[2][1]+braves[2][0]
+    counters[15][0][2]='Pseudo-F2P'
   end
   event << ''
   emblem_name=['','','']
   for i in 0...counters.length
     cname=counters[i][0]
     for i2 in 1...3
-      cname=counters[i][0][i2] if i==14 # F2P marker
+      cname=counters[i][0][i2] if i==15 # F2P marker
       if counters[i][i2]>=[[i2*4,k.length].min,2].max
         if emblem_name[i2].length>0 && i>3 && i<10 && emblem_name[i2].split(' ').length<=2
           emblem_name[i2]="#{cname} #{emblem_name[i2]}"
-        elsif emblem_name[i2].length>0 && i>9 && i<14 && emblem_name[i2].split(' ').length<=3
+        elsif emblem_name[i2].length>0 && i>9 && i<15 && emblem_name[i2].split(' ').length<=3
           emblem_name[i2]="#{cname} #{emblem_name[i2]}"
         else
           emblem_name[i2]="#{cname} Emblem"
