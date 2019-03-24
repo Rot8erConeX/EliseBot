@@ -25,16 +25,22 @@ ENV['TZ'] = 'America/Chicago'
 load 'C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb'
 
 prefix_proc = proc do |message|
-  next message.content[4..-1] if message.text.downcase.start_with?('feh!')
-  next message.content[4..-1] if message.text.downcase.start_with?('feh?')
-  next message.content[2..-1] if message.text.downcase.start_with?('f?')
-  next message.content[2..-1] if message.text.downcase.start_with?('e?')
-  next message.content[2..-1] if message.text.downcase.start_with?('h?')
+  next message.text.downcase[5..-1] if message.text.downcase.start_with?('feh! ')
+  next message.text.downcase[5..-1] if message.text.downcase.start_with?('feh? ')
+  next message.text.downcase[3..-1] if message.text.downcase.start_with?('f? ')
+  next message.text.downcase[3..-1] if message.text.downcase.start_with?('e? ')
+  next message.text.downcase[3..-1] if message.text.downcase.start_with?('h? ')
+  next message.text.downcase[4..-1] if message.text.downcase.start_with?('feh!')
+  next message.text.downcase[4..-1] if message.text.downcase.start_with?('feh?')
+  next message.text.downcase[2..-1] if message.text.downcase.start_with?('f?')
+  next message.text.downcase[2..-1] if message.text.downcase.start_with?('e?')
+  next message.text.downcase[2..-1] if message.text.downcase.start_with?('h?')
   load 'C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb'
   next if message.channel.server.nil? || @prefixes[message.channel.server.id].nil? || @prefixes[message.channel.server.id].length<=0
   prefix = @prefixes[message.channel.server.id]
   # We use [prefix.size..-1] so we can handle prefixes of any length
-  next message.content[prefix.size..-1] if message.text.downcase.start_with?(prefix.downcase)
+  next message.text.downcase[prefix.size+1..-1] if message.text.downcase.start_with?("#{prefix.downcase} ")
+  next message.text.downcase[prefix.size..-1] if message.text.downcase.start_with?(prefix.downcase)
 end
 
 # The bot's token is basically their password, so is censored for obvious reasons
@@ -3004,7 +3010,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     xcolor=unit_color(event,j,untz[j][0],0,mu)
     atk='<:StrengthS:514712248372166666> Attack'
     atk='<:MagicS:514712247289774111> Magic' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
-    atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
+    atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(untz[j][1][1])
     zzzl=@skills[find_weapon(weapon,event)]
     atk='<:FreezeS:514712247474585610> Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
     n=nature_name(boon,bane)
@@ -3132,7 +3138,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   j=find_unit(name,event)
   atk='<:StrengthS:514712248372166666> Attack'
   atk='<:MagicS:514712247289774111> Magic' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
-  atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
+  atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(untz[j][1][1])
   zzzl=@skills[find_weapon(weapon,event)]
   atk='<:FreezeS:514712247474585610> Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
@@ -3614,7 +3620,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
     xcolor=unit_color(event,j,untz[j][0],0,mu)
     atk='<:StrengthS:514712248372166666>*'
     atk='<:MagicS:514712247289774111>' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
-    atk='<:StrengthS:514712248372166666>' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
+    atk='<:StrengthS:514712248372166666>' if ['Blade','Bow','Dagger','Beast'].include?(untz[j][1][1])
     zzzl=@skills[find_weapon(weapon,event)]
     if zzzl[11].split(', ').include?('Frostbite')
       atk='<:FreezeS:514712247474585610>'
@@ -3708,7 +3714,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   j=find_unit(name,event)
   atk='<:StrengthS:514712248372166666>*'
   atk='<:MagicS:514712247289774111>' if ['Tome','Dragon','Healer'].include?(untz[j][1][1])
-  atk='<:StrengthS:514712248372166666>' if ['Blade','Bow','Dagger'].include?(untz[j][1][1])
+  atk='<:StrengthS:514712248372166666>' if ['Blade','Bow','Dagger','Beast'].include?(untz[j][1][1])
   zzzl=@skills[find_weapon(weapon,event)]
   if zzzl[11].split(', ').include?('Frostbite')
     atk='<:FreezeS:514712247474585610>'
@@ -7697,7 +7703,7 @@ def comparison(event,args,bot)
           uemoji=unit_moji(bot,event,-1,name,m,2,f[i])
           b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{uemoji if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0],uemoji])
           c.push(unit_color(event,find_unit(name,event),nil,1,m))
-          atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
+          atkstat.push('Strength') if ['Blade','Bow','Dagger','Beast'].include?(u[1][1])
           atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
           atkstat.push('Freeze') if ['Dragon'].include?(u[1][1])
         end
@@ -7734,7 +7740,7 @@ def comparison(event,args,bot)
         uemoji=unit_moji(bot,event,-1,name,m,2,uid)
         b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{uemoji if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0],uemoji])
         c.push(unit_color(event,find_unit(find_name_in_string(event,f[i]),event),nil,1,m))
-        atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
+        atkstat.push('Strength') if ['Blade','Bow','Dagger','Beast'].include?(u[1][1])
         atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
         atkstat.push('Freeze') if ['Dragon'].include?(u[1][1])
       end
@@ -7825,7 +7831,7 @@ def comparison(event,args,bot)
         rstar='<:Icon_Rarity_Sp10:448272715653054485>' if sup != '-' && r[1]>=10
         b.push([st,"#{r[0]}#{rstar}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{uemoji if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0],uemoji,r[1]])
         c.push(unit_color(event,find_unit(find_name_in_string(event,sever(k[i])),event),nil,1,m))
-        atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(u[1][1])
+        atkstat.push('Strength') if ['Blade','Bow','Dagger','Beast'].include?(u[1][1])
         atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
         atkstat.push('Freeze') if ['Dragon'].include?(u[1][1])
       elsif k[i].downcase=="mathoo's"
@@ -9246,7 +9252,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
   atk='Attack'
   atk='Magic' if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
-  atk='Strength' if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
+  atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(@units[j][1][1])
   zzzl=sklz[ww2]
   atk='Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
@@ -9475,7 +9481,7 @@ def unit_study(event,name,bot,weapon=nil)
   end
   atk='Attack'
   atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
-  atk='Strength' if ['Blade','Bow','Dagger'].include?(u40x[1][1])
+  atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
   n=nature_name(boon,bane)
   unless n.nil?
     n=n[0] if atk=='Strength'
@@ -9655,7 +9661,7 @@ def heal_study(event,name,bot,weapon=nil)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
   atk='Attack'
   atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
-  atk='Strength' if ['Blade','Bow','Dagger'].include?(u40x[1][1])
+  atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
   zzzl=sklz[ww2]
   atk='Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
@@ -10000,7 +10006,7 @@ def proc_study(event,name,bot,weapon=nil)
   end
   atk='Attack'
   atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
-  atk='Strength' if ['Blade','Bow','Dagger'].include?(u40x[1][1])
+  atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
   zzzl=sklz[ww2]
   atk='Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
@@ -13265,7 +13271,7 @@ bot.command([:average,:mean]) do |event, *args|
   u=@units.map{|q| q}
   for i2 in 0...k222.length
     ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i2][0].gsub('Laevatein','Lavatain')},k222[i2][0],1))
-    atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(k222[i2][1][1])
+    atkstat.push('Strength') if ['Blade','Bow','Dagger','Beast'].include?(k222[i2][1][1])
     atkstat.push('Magic') if ['Tome','Healer'].include?(k222[i2][1][1])
     atkstat.push('Freeze') if ['Dragon'].include?(k222[i2][1][1])
     f2[1]+=k222[i2][5][0]
@@ -13309,7 +13315,7 @@ bot.command([:bestamong,:bestin,:beststats,:higheststats,:highest,:best,:highest
   for i in 0...k222.length
     d=u[u.find_index{|q| q[0]==k222[i][0].gsub('Laevatein','Lavatain')}]
     ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i][0].gsub('Laevatein','Lavatain')},k222[i][0],1))
-    atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(k222[i][1][1])
+    atkstat.push('Strength') if ['Blade','Bow','Dagger','Beast'].include?(k222[i][1][1])
     atkstat.push('Magic') if ['Tome','Healer'].include?(k222[i][1][1])
     atkstat.push('Freeze') if ['Dragon'].include?(k222[i][1][1])
     for j in 0...6
@@ -13367,7 +13373,7 @@ bot.command([:worstamong,:worstin,:worststats,:loweststats,:lowest,:worst,:lowes
   for i in 0...k222.length
     d=u[u.find_index{|q| q[0]==k222[i][0].gsub('Laevatein','Lavatain')}]
     ccz.push(unit_color(event,u.find_index{|q| q[0]==k222[i][0].gsub('Laevatein','Lavatain')},k222[i][0],1))
-    atkstat.push('Strength') if ['Blade','Bow','Dagger'].include?(k222[i][1][1])
+    atkstat.push('Strength') if ['Blade','Bow','Dagger','Beast'].include?(k222[i][1][1])
     atkstat.push('Magic') if ['Tome','Healer'].include?(k222[i][1][1])
     atkstat.push('Freeze') if ['Dragon'].include?(k222[i][1][1])
     for j in 0...6
@@ -14164,7 +14170,7 @@ bot.command(:edit) do |event, cmd, *args|
       donor_units[j2][4]=flurp[3]
       atk='Attack'
       atk='Magic' if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
-      atk='Strength' if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
+      atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(@units[j][1][1])
       n=nature_name(flurp[2],flurp[3])
       unless n.nil?
         n=n[0] if atk=='Strength'
@@ -14675,7 +14681,7 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
       @dev_units[j2][4]=flurp[3]
       atk='Attack'
       atk='Magic' if ['Tome','Dragon','Healer'].include?(@units[j][1][1])
-      atk='Strength' if ['Blade','Bow','Dagger'].include?(@units[j][1][1])
+      atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(@units[j][1][1])
       n=nature_name(flurp[2],flurp[3])
       unless n.nil?
         n=n[0] if atk=='Strength'
