@@ -7763,6 +7763,7 @@ def comparison(event,args,bot)
       if k[i].downcase=="mathoo's" || donate_trigger_word(event,k[i])>0
         k2.push(str)
       elsif !x.nil? && x[1].is_a?(Array) && x[1].length>1
+        puts 'x2'
         if (i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?) || (i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?) || (i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?) || !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
           if i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?
             x=detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1)
@@ -7773,12 +7774,14 @@ def comparison(event,args,bot)
           elsif !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
             x=detect_multi_unit_alias(event,k[i],"#{k[i]}",1)
           end
+          x[0]=x[0].downcase.gsub('(','').gsub(')','').gsub('_','').gsub('!','')
+          str=str.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('!','')
           if x[1].is_a?(Array) && x[1].length>1
             for i in 0...x[1].length
-              k2.push(str.downcase.gsub(x[0],x[1][i]))
+              k2.push(str.gsub(x[0],x[1][i]))
             end
           else
-            k2.push(str.downcase.gsub(x[0],x[1][0]))
+            k2.push(str.gsub(x[0],x[1][0]))
           end
         end
       elsif find_name_in_string(event,sever(k[i]))!=nil
