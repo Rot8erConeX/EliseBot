@@ -2,4 +2,7 @@ Duma, Selkie, Velouria, Kaden, Keaton, Panne, Black Knight, Arvis, Marth(King), 
 Roy(Fire), Selkie, Velouria, Kaden, Keaton, Panne, Maria, Arthur(Fates), Ike(Vanguard), Sharena\Arena\12/03/2019, 18/03/2019\Fire, Water
 Duma, Selkie, Velouria, Kaden, Keaton, Panne, Black Knight, Arvis, Marth(King), Sharena\Aether\19/03/2019, 25/03/2019\Astra, Anima\Bolt Tower, Bolt Tower
 Idunn, Lugh, Sue, Thea, Rutger, Shanna, Sophia, Clarine, Ephraim(Fire), Anna\Arena\19/03/2019, 25/03/2019\Fire, Wind
+Palla(Spring), Marisa(Spring), Bruno(Spring), Veronica(Spring), Catria(Spring), Alfonse(Spring), Sharena(Spring), Loki(Spring)\Tempest\23/03/2019, 01/04/2019
+Eir, Idunn, Lugh, Sue, Thea, Rutger, Arden, Joshua, Tiki(Young)(Earth), Anna\Aether\26/03/2019, 01/04/2019\Light, Dark\Tactics Room, Tactics Room
 Idunn, Lugh, Sue, Thea, Rutger, Shanna, Sophia, Clarine, Ephraim(Fire), Anna\Arena\26/03/2019, 01/04/2019\Unknown, Unknown
+Eir, Idunn, Lugh, Sue, Thea, Rutger, Arden, Joshua, Tiki(Young)(Earth), Anna\Aether\26/03/2019, 01/04/2019\Astra, Anima\Unknown, Unknown

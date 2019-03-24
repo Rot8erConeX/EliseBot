@@ -267,8 +267,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
       return [str,['Hinoka(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch"]]
-    elsif str2.include?('wings') || str2.include?('kinshi') || str2.include?('winged') || str2.include?("#{str}2")
-      return [str,['Hinoka(Wings)'],["wings#{str}","#{str}wings","kinshi#{str}","#{str}kinshi","winged#{str}","#{str}winged","#{str}2"]]
+    elsif str2.include?('wings') || str2.include?('kinshi') || str2.include?('wf') || str2.include?('winged') || str2.include?("#{str}2")
+      return [str,['Hinoka(Wings)'],["wings#{str}","#{str}wings","kinshi#{str}","#{str}kinshi","wf#{str}","#{str}wf","winged#{str}","#{str}winged","#{str}2"]]
     elsif str2.include?('bath') || str2.include?('bathhouse') || str2.include?('bathouse') || str2.include?('hotspring') || str2.include?('hot') || str2.include?('spring')
       return [str,['Hinoka(Bath)'],["bath#{str}","#{str}bath","bathhouse#{str}","#{str}bathhouse","bathouse#{str}","#{str}bathouse","hotspring#{str}","#{str}hotspring","hot#{str}","#{str}hot","spring#{str}","#{str}spring"]]
     end

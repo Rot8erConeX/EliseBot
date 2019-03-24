@@ -1,4 +1,4 @@
-Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
+Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Spring)\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
 Alm\Delthea\Eir\Kana(F)\Leanne\Matthew\Owain\Reyson\Selkie\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
@@ -223,7 +223,7 @@ Threaten Atk 1\Threaten Atk 2\Threaten Atk 3
 Brash Assault 3
 
 Maria
-5\1\ \ \-\0
+5\2\ \ \-\0
 Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light

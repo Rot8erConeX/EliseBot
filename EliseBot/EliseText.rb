@@ -2835,8 +2835,10 @@ def snagstats(event,bot,f=nil,f2=nil)
       unless untz[i][0]==untz[i][12] || untz[i][12][untz[i][12].length-1,1]=='*'
         k=untz.reject{|q| q[12].gsub('*','').split(', ')[0]!=untz[i][12].gsub('*','').split(', ')[0] || q[0]==untz[i][0] || !(q[0]==q[12].split(', ')[0] || q[12].split(', ')[0].include?('*'))}
         n="x" if k.length<=0
+        k=untz.reject{|q| q[9][0]=='-' || q[12].gsub('*','').split(', ')[0]!=untz[i][12].gsub('*','').split(', ')[0] || q[0]==untz[i][0] || !(q[0]==q[12].split(', ')[0] || q[12].split(', ')[0].include?('*'))}
+        n="#{n}y" if k.length<=0
       end
-      untz2.push([untz[i][0],untz[i][12].gsub('*','').split(', '),m,n,untz[i][13]])
+      untz2.push([untz[i][0],untz[i][12].gsub('*','').split(', '),m,n,untz[i][13],untz[i][9][0]])
     end
     untz2.uniq!
     all_units=untz2.reject{|q| !has_any?(g, q[4][0])}
@@ -2852,14 +2854,19 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'Fallen',1)} Fallen alts"
     event << "There are #{filler(legal_units.uniq,all_units.uniq,2,-1,'out-of-left-field',1)} out-of-left-field alts *(Eirika, Reinhardt, Hinoka, etc.)*"
     k=[]
+    k2=[]
     for i in 0...all_units.length
       x="#{'~~' unless all_units[i][4][0].nil? || all_units[i][4][0].length.zero?}"
-      k.push("#{x}#{all_units[i][1][0]}#{x}") if !all_units[i][2].include?('faceted') && all_units[i][3].length>0
+      k.push("#{x}#{all_units[i][1][0]}#{x}") if !all_units[i][2].include?('faceted') && all_units[i][3].include?('x')
+      k2.push("#{x}#{all_units[i][1][0]}#{x}") if !all_units[i][2].include?('faceted') && all_units[i][3].include?('y')
     end
     k.uniq!
-    if k.length>0
+    k2=k2.reject{|q| k.include?(q)}.uniq
+    event << ''
+    if k.length>0 || k2.length>0
+      event << "The following characters have alts but not default units in FEH: #{list_lift(k.map{|q| "*#{q}*"},"and")}." if k.length>0
+      event << "The following characters have playable alts but not playable default units in FEH: #{list_lift(k2.map{|q| "*#{q}*"},"and")}." if k2.length>0
       event << ''
-      event << "The following characters have alts but not default units in FEH: #{list_lift(k.map{|q| "*#{q}*"},"and")}."
     end
     k=legal_units.map{|q| [q[1][0],0]}.uniq
     for i in 0...k.length
