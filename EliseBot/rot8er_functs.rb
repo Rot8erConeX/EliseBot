@@ -17,6 +17,12 @@ def triple_finish(list,forcetwo=false) # used to split a list into three roughly
   return [['.',p1],['.',p2],['.',p3]]
 end
 
+def pseudocase(str)
+  str=str.split(' ').compact
+  str[0]=str[0].downcase
+  return str.join(' ')
+end
+
 def get_donor_list()
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHDonorList.txt')
     b=[]
