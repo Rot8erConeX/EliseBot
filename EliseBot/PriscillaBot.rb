@@ -2325,13 +2325,25 @@ def pick_thumbnail(event,j,bot) # used to choose the thumbnail used by most embe
   return nil if d.nil?
   return 'http://vignette.wikia.nocookie.net/fireemblem/images/0/04/Kiran.png' if d[0]=='Kiran'
   return bot.user(d[13][1]).avatar_url if d.length>13 && !d[13].nil? && !d[13][1].nil? && d[13][1].is_a?(Integer) && !bot.user(d[13][1]).nil?
-  return 'https://cdn.discordapp.com/emojis/418140222530912256.png' if d[0]=='Nino(Launch)' && (event.message.text.downcase.include?('face') || rand(100).zero?)
-  return 'https://cdn.discordapp.com/emojis/420339780421812227.png' if d[0]=='Amelia' && (event.message.text.downcase.include?('face') || rand(1000).zero?)
-  return 'https://cdn.discordapp.com/emojis/420339781524783114.png' if d[0]=='Reinhardt(Bonds)' && (event.message.text.downcase.include?('creep') || event.message.text.downcase.include?('grin') || rand(100).zero?)
-  return 'https://cdn.discordapp.com/emojis/437515327652364288.png' if d[0]=='Reinhardt(World)' && (event.message.text.downcase.include?('creep') || event.message.text.downcase.include?('grin') || rand(100).zero?)
+  if event.message.text.downcase.include?('face') || rand(1000).zero?
+    return 'https://cdn.discordapp.com/emojis/418140222530912256.png' if d[0]=='Nino(Launch)'
+    return 'https://cdn.discordapp.com/emojis/420339780421812227.png' if d[0]=='Amelia'
+  elsif event.message.text.downcase.include?('face') || rand(100).zero?
+    return 'https://cdn.discordapp.com/emojis/418140222530912256.png' if d[0]=='Nino(Launch)'
+  elsif event.message.text.downcase.include?('creep') || event.message.text.downcase.include?('grin') || rand(100).zero?
+    return 'https://cdn.discordapp.com/emojis/420339781524783114.png' if d[0]=='Reinhardt(Bonds)'
+    return 'https://cdn.discordapp.com/emojis/437515327652364288.png' if d[0]=='Reinhardt(World)'
+  end
   return 'https://cdn.discordapp.com/emojis/437519293240836106.png' if d[0]=='Arden' && (event.message.text.downcase.include?('woke') || rand(100).zero?)
   return 'https://cdn.discordapp.com/emojis/420360385862828052.png' if d[0]=='Sakura' && event.message.text.downcase.include?("mathoo's")
-  return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{d[0].gsub(' ','_')}/Face_FC.png"
+  dd=d[0].gsub(' ','_')
+  args=event.message.text.downcase.split(' ')
+  if has_any?(args,['battle','attacking'])
+    return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{dd}/BtlFace_BU.png"
+  elsif has_any?(args,['damage','damaged','lowhealth','lowhp','low_health','low_hp','injured'])
+    return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{dd}/BtlFace_BU_D.png"
+  end
+  return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{dd}/Face_FC.png"
 end
 
 def unit_color(event,j,name=nil,mode=0,m=false,chain=false) # used to choose the color of the sidebar used by must embeds including units.
@@ -10872,20 +10884,29 @@ def disp_art(event,name,bot,weapon=nil)
   j=untz[untz.find_index{|q| q[0]==name}]
   data_load()
   args=event.message.text.downcase.split(' ')
-  artype='Face'
-  artype='BtlFace' if args.include?('battle') || args.include?('attack') || args.include?('att') || args.include?('atk') || args.include?('attacking')
-  artype='BtlFace_D' if args.include?('damage') || args.include?('damaged') || (args.include?('low') && (args.include?('health') || args.include?('hp'))) || args.include?('lowhealth') || args.include?('lowhp') || args.include?('low_health') || args.include?('low_hp') || args.include?('injured')
-  artype='BtlFace_C' if args.include?('critical') || args.include?('special') || args.include?('crit') || args.include?('proc')
-  art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{j[0].gsub(' ','_')}/#{artype}.png"
+  artype=['Face','Default']
+  if has_any?(args,['battle','attack','att','atk','attacking'])
+    artype=['BtlFace','Attack']
+  elsif has_any?(args,['damage','damaged','lowhealth','lowhp','low_health','low_hp','injured']) || (args.include?('low') && has_any?(args,['health','hp']))
+    artype=['BtlFace_D','Damaged']
+  elsif has_any?(args,['critical','special','crit','proc'])
+    artype=['BtlFace_C','Special']
+  elsif has_any?(args,['loading','load','title']) && ['Alfonse','Sharena','Veronica','Eirika(Bonds)','Marth','Roy','Ike','Chrom(Launch)','Camilla(Launch)','Takumi','Lyn','Marth(Launch)','Roy(Launch)','Ike(World)','Takumi(Launch)','Lyn(Launch)'].include?(j[0])
+    artype=['Face_Load','Title Screen']
+    j[6]=''
+  end
+  art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{j[0].gsub(' ','_')}/#{artype[0]}.png"
   if args.include?('just') || args.include?('justart') || args.include?('blank') || args.include?('noinfo')
     charsx=[[],[],[]]
     disp=''
   else
     if j[0]=='Reinhardt(World)' && (rand(100).zero? || event.message.text.downcase.include?('zelda') || event.message.text.downcase.include?('link') || event.message.text.downcase.include?('master sword'))
       art='https://i.redd.it/pdeqrncp21r01.png'
+      artype=['','Meme Zelda']
       j[6]="u/ZachminSSB (ft. #{j[6]})"
     elsif j[0]=='Arden' && (rand(1000).zero? || event.message.text.downcase.include?('infinity'))
       art='https://pbs.twimg.com/media/DcEh5jRWsAAYofz.png'
+      artype=['','Meme Thanos']
       j[6]='@_DJSaturn (twitter)'
     end
     disp=''
@@ -11036,6 +11057,7 @@ def disp_art(event,name,bot,weapon=nil)
   end
   dispx="#{disp}"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    disp="__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,6)}__\n#{artype[1]} art\n\n#{disp}"
     disp="#{disp}\n" if charsx.map{|q| q.length}.max>0
     disp="#{disp}\n**Same artist:** #{charsx[0].join(', ')}" if charsx[0].length>0
     if charsx[1].length>0
@@ -11075,27 +11097,13 @@ def disp_art(event,name,bot,weapon=nil)
     if flds.length.zero?
       flds=nil
     elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1500 && safe_to_spam?(event)
-      event.channel.send_embed("__**#{j[0].gsub('Lavatain','Laevatein')}**__") do |embed|
-        embed.description=disp
-        embed.color=unit_color(event,find_unit(j[0],event),j[0],0)
-        embed.image = Discordrb::Webhooks::EmbedImage.new(url: art)
-      end
+      create_embed(event,"__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art])
       if flds.map{|q| q.join("\n")}.join("\n\n").length>=1900
         for i in 0...flds.length
-          event.channel.send_embed('') do |embed|
-            embed.color=unit_color(event,find_unit(j[0],event),j[0],0)
-            embed.add_field(name: flds[i][0], value: flds[i][1], inline: true)
-          end
+          create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,[flds[i]])
         end
       else
-        event.channel.send_embed('') do |embed|
-          embed.color=unit_color(event,find_unit(j[0],event),j[0],0)
-          unless flds.nil?
-            for i in 0...flds.length
-              embed.add_field(name: flds[i][0], value: flds[i][1], inline: true)
-            end
-          end
-        end
+        create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,flds)
       end
       return nil
     elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1800
@@ -11105,16 +11113,7 @@ def disp_art(event,name,bot,weapon=nil)
       flds[-1][2]=nil if flds.length<3
       flds[-1].compact!
     end
-    event.channel.send_embed("__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0])}__") do |embed|
-      embed.description=disp
-      embed.color=unit_color(event,find_unit(j[0],event),j[0],0)
-      unless flds.nil?
-        for i in 0...flds.length
-          embed.add_field(name: flds[i][0], value: flds[i][1], inline: flds[i][2].nil?)
-        end
-      end
-      embed.image = Discordrb::Webhooks::EmbedImage.new(url: art)
-    end
+    create_embed(event,"__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art],flds)
   end
   return nil
 end
@@ -11151,6 +11150,10 @@ def disp_generic_art(event,name,bot)
     movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
     movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
   end
+  if colors.length<=0 && weapons.length<=0 && color_weapons.length<=0 && movement.length<=0
+    event.respond 'No unit was included.'
+    return nil
+  end
   if colors.length<=0
     colors=['Red']
     colors=['Colorless'] if weapons.length>0 && ['Dagger','Staff','Bow'].include?(weapons[0])
@@ -11163,10 +11166,7 @@ def disp_generic_art(event,name,bot)
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     event.respond art
   else
-    event.channel.send_embed("__**#{color_weapons[0]}_#{movement[0]}**__") do |embed|
-      embed.color=0x800000
-      embed.image = Discordrb::Webhooks::EmbedImage.new(url: art)
-    end
+    create_embed(event,"__Generic: **#{color_weapons[0]}_#{movement[0]}**__",'',0x800000,nil,[nil,art])
   end
 end
 
