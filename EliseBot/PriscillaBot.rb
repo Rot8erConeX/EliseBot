@@ -561,6 +561,21 @@ def bonus_load()
   @bonus_units=b.map{|q| q}
 end
 
+def lookout_load(sheet='StatSkills',types=[],mode=0)
+  lookout=[]
+  if File.exist?("C:/Users/Mini-Matt/Desktop/devkit/FEH#{sheet}.txt")
+    File.open("C:/Users/Mini-Matt/Desktop/devkit/FEH#{sheet}.txt").each_line do |line|
+      lookout.push(eval line)
+    end
+    if mode==1
+      lookout=lookout.reject{|q| !types.include?(q[3][0,q[3].length-2])} if types.length>0
+    else
+      lookout=lookout.reject{|q| !types.include?(q[3])} if types.length>0
+    end
+  end
+  return lookout
+end
+
 bot.command([:help,:commands,:command_list,:commandlist,:Help]) do |event, command, subcommand| # used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
   return nil if overlap_prevent(event)
   t=Time.now
@@ -1835,14 +1850,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       # weapon refinement...
       if find_effect_name(s2,event).length>0
         zzz2=find_effect_name(s2,event,1)
-        lookout=[]
-        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-          lookout=[]
-          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-            lookout.push(eval line)
-          end
-          lookout=lookout.reject{|q| !['Stat-Affecting 1','Stat-Affecting 2'].include?(q[3])}
-        end
+        lookout=lookout_load('StatSkills',['Stat-Affecting 1','Stat-Affecting 2'])
         skillls.push(find_effect_name(s2,event,1)) if refinement=='Effect' && find_effect_name(s2,event,1).length>0 && lookout.map{|q| q[0]}.include?(zzz2) # ...including any stat-based Effect Modes
       end
       sttz=[]
@@ -1937,14 +1945,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
   negative=[0,0,0,0,0]
   rally=[0,0,0,0,0]
   if skillls.length>0
-    lookout=[]
-    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-      lookout=[]
-      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-        lookout.push(eval line)
-      end
-      lookout=lookout.reject{|q| !['Stat-Affecting','Stat-Buffing','Stat-Nerfing'].include?(q[3][0,q[3].length-2])}
-    end
+    lookout=lookout_load('StatSkills',['Stat-Affecting','Stat-Buffing','Stat-Nerfing'],1)
     for i in 0...skillls.length
       statskl=lookout.find_index{|q| q[0]==skillls[i]}
       unless statskl.nil?
@@ -2032,6 +2033,14 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
     stats[4]=[stats[4],0].max
     stats[5]=[stats[5],0].max
   end
+  if skillls.include?('Chaos Named')
+    kxs=[[stats[2]-15,2],[stats[3],3],[stats[4],4],[stats[5],5]]
+    kxs.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}
+    kxs=kxs.reject{|q| q[0]!=kxs[0][0]}.map{|q| q[1]}
+    for i in 0...kxs.length
+      stats[kxs[i]]-=5
+    end
+  end
   return stats
 end
 
@@ -2041,14 +2050,7 @@ def apply_combat_buffs(event,skillls,stats,phase) # used to apply in-combat buff
   skillls=skillls.map{|q| q}
   close=[0,0,0,0,0,0]
   distant=[0,0,0,0,0,0]
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-    lookout=lookout.reject{|q| !['Enemy Phase','Player Phase','In-Combat Buffs 1','In-Combat Buffs 2'].include?(q[3])}
-  end
+  lookout=lookout_load('StatSkills',['Enemy Phase','Player Phase','In-Combat Buffs 1','In-Combat Buffs 2'])
   for i in 0...skillls.length
     statskl=lookout.find_index{|q| q[0]==skillls[i]}
     unless statskl.nil?
@@ -2080,14 +2082,7 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
   k=event.server.id unless event.server.nil?
   alz=@aliases.reject{|q| q[0]!='Skill' || q[3].nil? || !q[3].include?(k)}.map{|q| [q[1],q[2]]}
   stat_skills=[]
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-    lookout=lookout.reject{|q| q[3]!='Stat-Affecting 1'}
-  end
+  lookout=lookout_load('StatSkills',['Stat-Affecting 1'])
   for i in 0...lookout.length
     m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
     lookout[i][1]+=m
@@ -2098,14 +2093,7 @@ def make_stat_skill_list_1(name,event,args) # this is for yellow-stat skills
   lokoout=lookout.map{|q| q[0]}
   args=event.message.text.downcase.split(' ') # reobtain args without the reformatting caused by the sever function
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }.map{|q| q.gsub('(','').gsub(')','')} # remove any mentions included in the inputs
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-    lookout=lookout.reject{|q| q[3]!='Stat-Affecting 2'}
-  end
+  lookout=lookout_load('StatSkills',['Stat-Affecting 2'])
   for i in 0...lookout.length
     lokoout.push(lookout[i][0])
     m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
@@ -2149,14 +2137,7 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
   k=event.server.id unless event.server.nil?
   alz=@aliases.reject{|q| q[0]!='Skill' || q[3].nil? || !q[3].include?(k)}.map{|q| [q[1],q[2]]}
   stat_skills_2=[]
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-    lookout=lookout.reject{|q| q[3]!='Stat-Buffing 1' && q[3]!='Stat-Nerfing 1'}
-  end
+  lookout=lookout_load('StatSkills',['Stat-Buffing 1','Stat-Nerfing 1'])
   for i in 0...lookout.length
     m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
     lookout[i][1]+=m
@@ -2182,14 +2163,7 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
   j=find_unit(name,event)
   # Only the first eight - was six until Rival Domains was released - Hone/Fortify skills are allowed, as that's the most that can apply to the unit at once.
   # Tactic skills stack with this list's limit, but allow up to fourteen to be applied
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-    lookout=lookout.reject{|q| q[3]!='Stat-Buffing 2' && q[3]!='Stat-Nerfing 2'}
-  end
+  lookout=lookout_load('StatSkills',['Stat-Buffing 2','Stat-Nerfing 2'])
   for i in 0...lookout.length
     m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
     lookout[i][1]+=m
@@ -2212,14 +2186,7 @@ def make_stat_skill_list_2(name,event,args) # this is for blue- and red- stat sk
     stat_skills_2.push(hf2[i]) if hf2.length>i
   end
   # Rally skills not stacking with themselves is handled in the apply_stat_skills function, so 'unaccepted' duplication is allowed.
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-    lookout=lookout.reject{|q| q[3]!='Stat-Buffing 3' && q[3]!='Stat-Nerfing 3'}
-  end
+  lookout=lookout_load('StatSkills',['Stat-Buffing 3','Stat-Nerfing 3'])
   for i in 0...lookout.length
     m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
     lookout[i][1]+=m
@@ -2242,14 +2209,7 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
   k=event.server.id unless event.server.nil?
   alz=@aliases.reject{|q| q[0]!='Skill' || q[3].nil? || !q[3].include?(k)}.map{|q| [q[1],q[2]]}
   stat_skills_3=[]
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-    lookout=lookout.reject{|q| q[3]!='Enemy Phase' && q[3]!='Player Phase' && q[3]!='In-Combat Buffs 1'}
-  end
+  lookout=lookout_load('StatSkills',['Enemy Phase','Player Phase','In-Combat Buffs 1'])
   for i in 0...lookout.length
     m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
     lookout[i][1]+=m
@@ -2287,14 +2247,7 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
   j=find_unit(name,event)
   # Only the first eight Spur/Goad/Ward skills are allowed, as that's the most that can apply to the unit at once.
   # Tactic skills stack with this list's limit, but allow up to fourteen to be applied
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-    lookout=lookout.reject{|q| q[3]!='In-Combat Buffs 2'}
-  end
+  lookout=lookout_load('StatSkills',['In-Combat Buffs 2'])
   for i in 0...lookout.length
     m=alz.reject{|q| q[1]!=lookout[i][0]}.map{|q| q[0].downcase}
     lookout[i][1]+=m
@@ -2637,14 +2590,7 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   stat_skills_2=k.map{|q| "#{q[0]}#{" (x#{q[1]})" if q[1]>1}"}
   stat_buffers=[]
   stat_nerfers=[]
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-    lookout=lookout.reject{|q| q[3]!='Stat-Buffing 1' && q[3]!='Stat-Nerfing 1'}
-  end
+  lookout=lookout_load('StatSkills',['Stat-Buffing 1','Stat-Nerfing 1'])
   for i in 0...stat_skills_2.length
     if lookout.find_index{|q| q[0]==stat_skills_2[i]}.nil?
       stat_buffers.push(stat_skills_2[i])
@@ -3207,14 +3153,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   bb=3 if ['',' ',nil].include?(boon) && merges>0
   bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5)*5
   if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
-    lookout=[]
-    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-      lookout=[]
-      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-        lookout.push(eval line)
-      end
-      lookout=lookout.reject{|q| !['Stat-Affecting'].include?(q[3][0,q[3].length-2])}
-    end
+    lookout=lookout_load('StatSkills',['Stat-Affecting'],1)
     for i in 0...stat_skills.length
       unless lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5].nil?
         bin=[bin,lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5]].max
@@ -3832,14 +3771,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   bb=3 if ['',' ',nil].include?(boon) && merges>0
   bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5)*5
   if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
-    lookout=[]
-    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-      lookout=[]
-      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-        lookout.push(eval line)
-      end
-      lookout=lookout.reject{|q| !['Stat-Affecting'].include?(q[3][0,q[3].length-2])}
-    end
+    lookout=lookout_load('StatSkills',['Stat-Affecting'],1)
     for i in 0...stat_skills.length
       unless lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5].nil?
         bin=[bin,lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5]].max
@@ -3982,13 +3914,7 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
     event.respond "No matches found.  If you are looking for data on the skills a character learns, try ```#{first_sub(event.message.text,'skill','skills',1)}```, with an s." unless ignore
     return false
   end
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-  end
+  lookout=lookout_load('SkillSubsets')
   lookout2=lookout.reject{|q| q[2]!='Weapon' || q[3].nil?}
   skill=k.map{|q| @skills[q]}.uniq
   sklz=@skills.map{|q| q}
@@ -4363,13 +4289,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   end
   name=stat_buffs(name,name)
   return disp_skill_line(bot,name,event,ignore,dispcolors) if find_skill(name,event,false,false,true,1).is_a?(Array)
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-  end
+  lookout=lookout_load('SkillSubsets')
   lookout2=lookout.reject{|q| q[2]!='Weapon' || q[3].nil?}
   f=find_data_ex(:find_skill,name,event)
   if f<0
@@ -5059,14 +4979,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       zzz=[skill[0],0,0,0,0,0] if skill[5].include?('Tome Users Only') || ['Staff Users Only','Bow Users Only','Dagger Users Only'].include?(skill[5])
       if find_effect_name(skill,event).length>0
         zzz2=find_effect_name(skill,event,1)
-        lookout=[]
-        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-          lookout=[]
-          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-            lookout.push(eval line)
-          end
-          lookout=lookout.reject{|q| !['Stat-Affecting 1','Stat-Affecting 2'].include?(q[3])}
-        end
+        lookout=lookout_load('StatSkills',['Stat-Affecting 1','Stat-Affecting 2'])
         zzz=apply_stat_skills(event,[find_effect_name(skill,event,1)],zzz,'','-','','',[],false,true) if lookout.map{|q| q[0]}.include?(zzz2)
       end
       skill[12][10]=zzz[2]
@@ -6298,13 +6211,7 @@ def find_in_units(event,mode=0,paired=false,ignore_limit=false,args=nil)
   games=[]
   supernatures=[]
   statlimits=[[-100,100],[-100,100],[-100,100],[-100,100],[-100,100]]
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-  end
+  lookout=lookout_load('Games')
   for i in 0...args.length
     args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
     colors.push('Red') if ['red','reds'].include?(args[i].downcase)
@@ -6312,7 +6219,7 @@ def find_in_units(event,mode=0,paired=false,ignore_limit=false,args=nil)
     colors.push('Green') if ['green','greens','grean','greans'].include?(args[i].downcase)
     colors.push('Colorless') if ['colorless','colourless','colorlesses','colourlesses','clear','clears'].include?(args[i].downcase)
     color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
-    color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
+    color_weapons.push(['Blue','Blade']) if ['lance','lances','lancer','lancers','spear','spears','naginata'].include?(args[i].downcase)
     color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
     color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
     color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
@@ -6665,13 +6572,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   passives=[]
   weapon_subsets=[]
   passive_subsets=[]
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-  end
+  lookout=lookout_load('SkillSubsets')
   for i in 0...args.length
     for i2 in 0...lookout.length
       if lookout[i2][1].include?(args[i].downcase)
@@ -6686,7 +6587,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
       end
     end
     color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
-    color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
+    color_weapons.push(['Blue','Blade']) if ['lance','lances','lancer','lancers','spear','spears','naginata'].include?(args[i].downcase)
     color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
     color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
     color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
@@ -7669,13 +7570,7 @@ end
 
 def get_games_list(arr,includefeh=true)
   g=[]
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-  end
+  lookout=lookout_load('Games')
   for i in 0...arr.length
     for i2 in 0...lookout.length
       g.push(lookout[i2][2]) if lookout[i2][0]==arr[i]
@@ -9050,12 +8945,24 @@ def parse_function(callback,event,args,bot,healers=nil)
       event.respond msg
       return -1
     elsif callback==:disp_art
+      t=Time.now
+      if t-@last_multi_reload[1]>60*60 || @shardizard==4
+        puts 'reloading EliseText'
+        load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+        @last_multi_reload[1]=t
+      end
       disp_generic_art(event,'',bot)
     else
       event.respond 'No unit was included'
       return -1
     end
   elsif ['red','reds','blue','blues','green','greens','grean','greans','colorless','colourless','colorlesses','colourlesses','clear','clears','physical','blade','blades','tome','mage','spell','tomes','mages','spells','dragon','dragons','breath','manakete','manaketes','beast','beasts','laguz','bow','arrow','bows','arrows','archer','archers','dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves','healer','staff','cleric','healers','clerics','staves','sword','swords','katana','lance','lances','spear','spears','naginata','axe','axes','ax','club','clubs','redtome','redtomes','redmage','redmages','bluetome','bluetomes','bluemage','bluemages','greentome','greentomes','greenmage','greenmages','flier','flying','flyer','fly','pegasus','fliers','flyers','pegasi','wyvern','wyverns','cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs','infantry','foot','feet','armor','armour','armors','armours','armored','armoured'].include?(k[1]) && callback==:disp_art
+    t=Time.now
+    if t-@last_multi_reload[1]>60*60 || @shardizard==4
+      puts 'reloading EliseText'
+      load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+      @last_multi_reload[1]=t
+    end
     disp_generic_art(event,'',bot)
   else
     str=k[0]
@@ -10621,13 +10528,7 @@ def phase_study(event,name,bot,weapon=nil)
       x=nil if !x.nil? && x.include?('to allies')
       unless x.nil? || refinement != 'Effect'
         zzz2=find_effect_name(sklz[ww2],event,1)
-        lookout=[]
-        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-          lookout=[]
-          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-            lookout.push(eval line)
-          end
-        end
+        lookout=lookout_load('StatSkills')
         statskl=lookout.find_index{|q| q[0]==zzz2}
         if statskl.nil?
           x2=x.scan(/\d+?/)[0].to_i
@@ -10839,14 +10740,7 @@ def phase_study(event,name,bot,weapon=nil)
   bb=3 if ['',' ',nil].include?(boon) && merges>0
   bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5)*5
   if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
-    lookout=[]
-    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt')
-      lookout=[]
-      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHStatSkills.txt').each_line do |line|
-        lookout.push(eval line)
-      end
-      lookout=lookout.reject{|q| !['Stat-Affecting'].include?(q[3][0,q[3].length-2])}
-    end
+    lookout=lookout_load('StatSkills',['Stat-Affecting'],1)
     for i in 0...stat_skills.length
       unless lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5].nil?
         bin=[bin,lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5]].max
@@ -10879,295 +10773,13 @@ def disp_art(event,name,bot,weapon=nil)
     end
     return nil
   end
-  name=find_name_in_string(event) if name.nil?
-  untz=@units.map{|q| q}
-  j=untz[untz.find_index{|q| q[0]==name}]
-  data_load()
-  args=event.message.text.downcase.split(' ')
-  artype=['Face','Default']
-  if has_any?(args,['battle','attack','att','atk','attacking'])
-    artype=['BtlFace','Attack']
-  elsif has_any?(args,['damage','damaged','lowhealth','lowhp','low_health','low_hp','injured']) || (args.include?('low') && has_any?(args,['health','hp']))
-    artype=['BtlFace_D','Damaged']
-  elsif has_any?(args,['critical','special','crit','proc'])
-    artype=['BtlFace_C','Special']
-  elsif has_any?(args,['loading','load','title']) && ['Alfonse','Sharena','Veronica','Eirika(Bonds)','Marth','Roy','Ike','Chrom(Launch)','Camilla(Launch)','Takumi','Lyn','Marth(Launch)','Roy(Launch)','Ike(World)','Takumi(Launch)','Lyn(Launch)'].include?(j[0])
-    artype=['Face_Load','Title Screen']
-    j[6]=''
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    puts 'reloading EliseText'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+    @last_multi_reload[1]=t
   end
-  art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{j[0].gsub(' ','_')}/#{artype[0]}.png"
-  if args.include?('just') || args.include?('justart') || args.include?('blank') || args.include?('noinfo')
-    charsx=[[],[],[]]
-    disp=''
-  else
-    if j[0]=='Reinhardt(World)' && (rand(100).zero? || event.message.text.downcase.include?('zelda') || event.message.text.downcase.include?('link') || event.message.text.downcase.include?('master sword'))
-      art='https://i.redd.it/pdeqrncp21r01.png'
-      artype=['','Meme Zelda']
-      j[6]="u/ZachminSSB (ft. #{j[6]})"
-    elsif j[0]=='Arden' && (rand(1000).zero? || event.message.text.downcase.include?('infinity'))
-      art='https://pbs.twimg.com/media/DcEh5jRWsAAYofz.png'
-      artype=['','Meme Thanos']
-      j[6]='@_DJSaturn (twitter)'
-    end
-    disp=''
-    nammes=['','','']
-    unless j[6].nil? || j[6].length<=0
-      m=j[6].split(' as ')
-      nammes[0]=m[0]
-      disp="#{disp}\n**Artist:** #{m[m.length-1]}"
-    end
-    unless j[7].nil? || j[7].length<=0
-      m=j[7].split(' as ')
-      nammes[1]=m[0]
-      disp="#{disp}\n**VA (English):** #{m[m.length-1]}"
-    end
-    unless j[8].nil? || j[8].length<=0
-      m=j[8].split(' as ')
-      nammes[2]=m[0]
-      disp="#{disp}\n**VA (Japanese):** #{m[m.length-1]}"
-    end
-    g=get_markers(event)
-    chars=untz.reject{|q| q[0]==j[0] || !has_any?(g, q[13][0]) || ((q[6].nil? || q[6].length<=0) && (q[7].nil? || q[7].length<=0) && (q[8].nil? || q[8].length<=0))}
-    charsx=[[],[],[]]
-    for i in 0...chars.length
-      x=chars[i]
-      unless x[6].nil? || x[6].length<=0 || x[7].nil? || x[7].length<=0 || x[8].nil? || x[8].length<=0
-        m=x[6].split(' as ')
-        m2=x[7].split(' as ')
-        m3=x[8].split(' as ')
-        charsx[2].push("#{x[0].gsub('Lavatain','Laevatein')}") if m[0]==nammes[0] && m2[0]==nammes[1] && m3[0]==nammes[2]
-      end
-      unless x[6].nil? || x[6].length<=0
-        m=x[6].split(' as ')
-        charsx[0].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[0] && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
-      end
-      unless x[7].nil? || x[7].length<=0 || x[8].nil? || x[8].length<=0
-        m=x[7].split(' as ')
-        m2=x[8].split(' as ')
-        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") if m[0]==nammes[1] && m2[0]==nammes[2] && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
-      end
-      unless x[7].nil? || x[7].length<=0
-        m=x[7].split(' as ')
-        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
-      end
-      unless x[8].nil? || x[8].length<=0
-        m=x[8].split(' as ')
-        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
-      end
-    end
-    if event.server.nil? || !bot.user(502288364838322176).on(event.server.id).nil? || @shardizard==4
-      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FGOServants.txt')
-        b=[]
-        File.open('C:/Users/Mini-Matt/Desktop/devkit/FGOServants.txt').each_line do |line|
-          b.push(line)
-        end
-      else
-        b=[]
-      end
-      for i in 0...b.length
-        b[i]=b[i].gsub("\n",'').split('\\'[0])
-        unless nammes[0].nil? || nammes[0].length<=0 || b[i][24].nil? || b[i][24].length<=0
-          charsx[0].push("*[FGO]* Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][24]==nammes[0]
-        end
-        unless nammes[2].nil? || nammes[2].length<=0 || b[i][25].nil? || b[i][25].length<=0
-          charsx[1].push("*[FGO]* Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} *[Japanese]*") if b[i][25].split(' & ').include?(nammes[2])
-        end
-      end
-      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FGOCraftEssances.txt')
-        b=[]
-        File.open('C:/Users/Mini-Matt/Desktop/devkit/FGOCraftEssances.txt').each_line do |line|
-          b.push(line)
-        end
-      else
-        b=[]
-      end
-      for i in 0...b.length
-        b[i]=b[i].gsub("\n",'').split('\\'[0])
-        unless nammes[0].nil? || nammes[0].length<=0 || b[i][9].nil? || b[i][9].length<=0
-          charsx[0].push("*[FGO]* CE-#{b[i][0]}#{".) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][9]==nammes[0]
-        end
-      end
-    end
-    if event.server.nil? || !bot.user(543373018303299585).on(event.server.id).nil? || @shardizard==4
-      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLAdventurers.txt')
-        b=[]
-        File.open('C:/Users/Mini-Matt/Desktop/devkit/DLAdventurers.txt').each_line do |line|
-          b.push(line)
-        end
-      else
-        b=[]
-      end
-      for i in 0...b.length
-        b[i]=b[i].gsub("\n",'').split('\\'[0])
-        unless b[i][10].nil? || b[i][10].length<=0 || b[i][11].nil? || b[i][11].length<=0
-          m=b[i][10].split(' as ')
-          m2=b[i][11].split(' as ')
-          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Both]*") if m[0]==nammes[2] && m2[0]==nammes[1]
-        end
-        unless b[i][11].nil? || b[i][11].length<=0
-          m=b[i][11].split(' as ')
-          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{b[i][0]} *[Both]*")
-        end
-        unless b[i][10].nil? || b[i][10].length<=0
-          m=b[i][10].split(' as ')
-          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{b[i][0]} *[Both]*")
-        end
-      end
-      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLDragons.txt')
-        b=[]
-        File.open('C:/Users/Mini-Matt/Desktop/devkit/DLDragons.txt').each_line do |line|
-          b.push(line)
-        end
-      else
-        b=[]
-      end
-      for i in 0...b.length
-        b[i]=b[i].gsub("\n",'').split('\\'[0])
-        unless b[i][13].nil? || b[i][13].length<=0 || b[i][14].nil? || b[i][14].length<=0
-          m=b[i][13].split(' as ')
-          m2=b[i][14].split(' as ')
-          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Both]*") if m[0]==nammes[2] && m2[0]==nammes[1]
-        end
-        unless b[i][14].nil? || b[i][14].length<=0
-          m=b[i][14].split(' as ')
-          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{b[i][0]} *[Both]*")
-        end
-        unless b[i][13].nil? || b[i][13].length<=0
-          m=b[i][13].split(' as ')
-          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{b[i][0]} *[Both]*")
-        end
-      end
-      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLWyrmprints.txt')
-        b=[]
-        File.open('C:/Users/Mini-Matt/Desktop/devkit/DLWyrmprints.txt').each_line do |line|
-          b.push(line)
-        end
-      else
-        b=[]
-      end
-      for i in 0...b.length
-        b[i]=b[i].gsub("\n",'').split('\\'[0])
-        unless b[i][7].nil? || b[i][7].length<=0
-          m=b[i][7].split(' as ')
-          charsx[0].push("*[DL-Print]* #{b[i][0]}") if m[0]==nammes[0]
-        end
-      end
-    end
-    disp='>No information<' if disp.length<=0
-  end
-  dispx="#{disp}"
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    disp="__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,6)}__\n#{artype[1]} art\n\n#{disp}"
-    disp="#{disp}\n" if charsx.map{|q| q.length}.max>0
-    disp="#{disp}\n**Same artist:** #{charsx[0].join(', ')}" if charsx[0].length>0
-    if charsx[1].length>0
-      disp="#{disp}\n**Same VA:**"
-      disp2=""
-      c=charsx[1].reject{|q| !q.include?('*[English]*')}.map{|q| q.gsub(' *[English]*','')}
-      disp2="#{disp2}\n*English only:* #{c.join(', ')}" if c.length>0
-      c=charsx[1].reject{|q| !q.include?('*[Japanese]*')}.map{|q| q.gsub(' *[Japanese]*','')}
-      disp2="#{disp2}\n*Japanese only:* #{c.join(', ')}" if c.length>0
-      c=charsx[1].reject{|q| !q.include?('*[Both]*')}.map{|q| q.gsub(' *[Both]*','')}
-      disp2="#{disp2}\n*Both languages:* #{c.join(', ')}" if c.length>0
-      disp2=disp2[1,disp2.length-1]
-      if disp2.include?("\n")
-        disp="#{disp}\n#{disp2}"
-      else
-        disp="#{disp} #{disp2}"
-      end
-    end
-    disp="#{disp}\n**Same __everything__:** #{charsx[2].join(', ')}" if charsx[2].length>0
-    disp=dispx if disp.length>=1900
-    event.respond "#{disp}\n\n#{art}"
-  else
-    flds=[]
-    flds.push(['Same Artist',charsx[0].join("\n")]) if charsx[0].length>0
-    if charsx[1].length>0
-      if charsx[1].length==charsx[1].reject{|q| !q.include?('*[English]*')}.length
-        flds.push(['Same VA (English)',charsx[1].map{|q| q.gsub(' *[English]*','')}.join("\n")])
-      elsif charsx[1].length==charsx[1].reject{|q| !q.include?('*[Japanese]*')}.length
-        flds.push(['Same VA (Japanese)',charsx[1].map{|q| q.gsub(' *[Japanese]*','')}.join("\n")])
-      elsif charsx[1].length==charsx[1].reject{|q| !q.include?('*[Both]*')}.length
-        flds.push(['Same VA (Both)',charsx[1].map{|q| q.gsub(' *[Both]*','')}.join("\n")])
-      else
-        flds.push(['Same VA',charsx[1].join("\n")])
-      end
-    end
-    flds.push(['Same everything',charsx[2].join("\n"),1]) if charsx[2].length>0
-    if flds.length.zero?
-      flds=nil
-    elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1500 && safe_to_spam?(event)
-      create_embed(event,"__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art])
-      if flds.map{|q| q.join("\n")}.join("\n\n").length>=1900
-        for i in 0...flds.length
-          create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,[flds[i]])
-        end
-      else
-        create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,flds)
-      end
-      return nil
-    elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1800
-      disp="#{disp}\nThe list of units with the same artist and/or VA is so long that I cannot fit it into a single embed. Please use this command in PM."
-      flds=nil
-    else
-      flds[-1][2]=nil if flds.length<3
-      flds[-1].compact!
-    end
-    create_embed(event,"__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art],flds)
-  end
-  return nil
-end
-
-def disp_generic_art(event,name,bot)
-  args=event.message.text.downcase.split(' ')
-  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
-  colors=[]
-  weapons=[]
-  color_weapons=[]
-  movement=[]
-  for i in 0...args.length
-    args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
-    colors.push('Red') if ['red','reds'].include?(args[i].downcase)
-    colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
-    colors.push('Green') if ['green','greens','grean','greans'].include?(args[i].downcase)
-    colors.push('Colorless') if ['colorless','colourless','colorlesses','colourlesses','clear','clears'].include?(args[i].downcase)
-    weapons.push('Blade') if ['physical','blade','blades'].include?(args[i].downcase)
-    weapons.push('Tome') if ['tome','mage','spell','tomes','mages','spells'].include?(args[i].downcase)
-    weapons.push('Dragon') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
-    weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase)
-    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
-    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves'].include?(args[i].downcase)
-    weapons.push('Staff') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
-    color_weapons.push('Sword') if ['sword','swords','katana'].include?(args[i].downcase)
-    color_weapons.push('Lance') if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
-    color_weapons.push('Axe') if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
-    color_weapons.push('Red_Tome') if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
-    color_weapons.push('Blue_Tome') if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
-    color_weapons.push('Green_Tome') if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
-    movement.push('Pegasus') if ['flier','flying','flyer','fly','pegasus','fliers','flyers','pegasi'].include?(args[i].downcase)
-    movement.push('Wyvern') if ['wyvern','wyverns'].include?(args[i].downcase)
-    movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs'].include?(args[i].downcase)
-    movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
-    movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
-  end
-  if colors.length<=0 && weapons.length<=0 && color_weapons.length<=0 && movement.length<=0
-    event.respond 'No unit was included.'
-    return nil
-  end
-  if colors.length<=0
-    colors=['Red']
-    colors=['Colorless'] if weapons.length>0 && ['Dagger','Staff','Bow'].include?(weapons[0])
-  end
-  weapons=['Tome'] if weapons.length<=0
-  color_weapons=["#{colors[0]}_#{weapons[0]}".gsub('Red_Blade','Sword').gsub('Blue_Blade','Lance').gsub('Green_Blade','Axe')] if color_weapons.length<=0
-  movement=['Infantry'] if movement.length<=0
-  movement[0]='Flier' if color_weapons[0][color_weapons[0].length-6,6]=='Dragon' && ['Pegasus','Wyvern'].include?(movement[0])
-  art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/GENERICS/#{color_weapons[0]}_#{movement[0]}/BtlFace.png"
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    event.respond art
-  else
-    create_embed(event,"__Generic: **#{color_weapons[0]}_#{movement[0]}**__",'',0x800000,nil,[nil,art])
-  end
+  return disp_unit_art(event,name,bot)
 end
 
 def learnable_skills(event,name,bot,weapon=nil)
@@ -14911,14 +14523,8 @@ bot.command(:boop) do |event|
   return nil unless safe_to_spam?(event)
   data_load()
   tagz=@skills.map{|q| q[11]}.join(', ').split(', ').map{|q| q.split(')')[-1]}.uniq
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-  end
-  lookout=lookout.reject{|q| q[2]=='Banner'}
+  lookout=lookout_load('SkillSubsets')
+  lookout=lookout.reject{|q| q[2]=='Banner' || q[2]=='Art'}
   k=tagz.reject{|q| !lookout.map{|q2| q2[0]}.include?(q)}
   str="__**Sortable tags**__"
   for i in 0...k.length
