@@ -32,3 +32,4 @@
 ['SSBU', ['SSB5', 'SSBU', 'UltimateSmash', 'SmashUltimate'], '*Super Smash Bros.: Ultimate*']
 ['PXZ2', ['ProjextXZone', 'ProjextXZone2', 'XZone', 'X-Zone'], '*Project X Zone 2*']
 ['STEAM', ['Codename', 'Steam', 'S.T.E.A.M.', 'CodenameSteam', 'Codename:Steam', 'CodenameS.T.E.A.M.', 'Codename:S.T.E.A.M.'], '*Codename: S.T.E.A.M.*']
+['DL', ['dl', 'draglialost', 'dragalia'], '*Dragalia Lost*']

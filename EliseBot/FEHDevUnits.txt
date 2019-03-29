@@ -83,7 +83,7 @@ Fortify Def 1\Fortify Def 2\Fortify Def 3
 Attack +3
 
 Cordelia
-5\8\Attack\HP\-\0
+5\9\Attack\HP\-\0
 Iron Lance\Steel Lance\Brave Lance\Brave Lance+
 Reposition
 Night Sky\Astra\Galeforce
@@ -133,8 +133,8 @@ Sparkling Boost
 Iote's Shield
 
 Est
-4\9\Resistance\Attack\-\0
-Iron Lance\Steel Lance\Heavy Spear\Heavy Spear+\Slaying Spear+\~~__Slaying Spear+ (+) Effect Mode__~~\Whitewing Spear\~~Whitewing Spear (+) Effect Mode~~
+4\10\Resistance\Attack\-\0
+Iron Lance\Steel Lance\Heavy Spear\Heavy Spear+\Slaying Spear+\__Slaying Spear+ (+) Effect Mode__\Whitewing Spear\~~Whitewing Spear (+) Effect Mode~~
 Reposition
 Chilling Wind\Glacies
 Defiant Resistance 1\Defiant Resistance 2\Defiant Resistance 3
@@ -160,7 +160,7 @@ Chilling Wind\Glacies
 Warding Blow 1\Warding Blow 2\Warding Blow 3
 Renewal 1\Renewal 2\Renewal 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
-Brazen Atk/Res 3
+Warding Stance 2
 
 Fjorm
 5\1\Attack\HP\-\0

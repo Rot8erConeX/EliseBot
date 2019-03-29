@@ -42,13 +42,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
       create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units, skills, structures, accessories, and items in the game\n- the numbers of aliases of each type I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s), Shard(s), User(s)\nUnit(s), Character(s), Char(a)(s)\nAlt(s)\nSkill(s)\nStructure(s), Struct(s)\nAccessory, Accessories\nItem(s)\nAlias(es), Name(s), Nickname(s)\nGroup(s), Grouping(s)\nCode, Line(s), SLOC#{"\n\nAs the bot developer, you can also include a server ID number to snag the shard number, owner, and my nickname in the specified server." if event.user.id==167657750971547648}",0x40C0F0)
     end
   elsif ['randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats'].include?(command.downcase) || (['random','rand'].include?(command.downcase) && ['unit','stats'].include?("#{subcommand}".downcase)) || (['unit','stats'].include?(command.downcase) && ['random','rand'].include?("#{subcommand}".downcase))
-    lookout=[]
-    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
-      lookout=[]
-      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt').each_line do |line|
-        lookout.push(eval line)
-      end
-    end
+    lookout=lookout_load('Games')
     lookout=lookout.reject{|q| q[0].length>4 && q[0][0,4]=='FE14'}
     d=[]
     for i in 0...lookout.length
@@ -130,13 +124,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}#{" pool" if command.downcase=='summon'}** __*colors__","Shows the summon pool for the listed color.\n\nIn PM, all colors listed will be displayed, or all colors if none are specified.\nIn servers, only the first color listed will be displayed.",0xD49F61)
   elsif @summon_servers.include?(k) && ['summon'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\nYou can include the word \"current\" or \"now\" to force me to choose a banner that is currently available in-game.\nThe words \"upcoming\" and \"future\" allow you to force a banner that will be available in the future.\nYou can also include one or more of the words below to force the banner to fit into those categories.\n\n**This command is only available in certain servers**.",0x9E682C)
-    lookout=[]
-    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
-      lookout=[]
-      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
-        lookout.push(eval line)
-      end
-    end
+    lookout=lookout_load('SkillSubsets')
     w=lookout.reject{|q| q[2]!='Banner' || ['Current','Upcoming'].include?(q[0])}.map{|q| q[0]}.sort
     create_embed(event,'Banner types','',0x40C0F0,nil,nil,triple_finish(w))
   elsif ['effhp','eff_hp'].include?(command.downcase)
@@ -226,13 +214,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
   elsif ['find','search','lookup'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['unit','char','character','person','units','chars','charas','chara','people'].include?(subcommand.downcase)
-      lookout=[]
-      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt')
-        lookout=[]
-        File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHGames.txt').each_line do |line|
-          lookout.push(eval line)
-        end
-      end
+      lookout=lookout_load('Games')
       lookout=lookout.reject{|q| q[0].length>4 && q[0][0,4]=='FE14'}
       d=[]
       for i in 0...lookout.length
@@ -253,13 +235,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     elsif ['skill','skills'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list.\n\n#{disp_more_info(event,3)}#{"\n\nI also have tags for weapon and passive \"flavors\".  Use this command in PM to see them." unless safe_to_spam?(event)}",0xD49F61)
       if safe_to_spam?(event)
-        lookout=[]
-        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
-          lookout=[]
-          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
-            lookout.push(eval line)
-          end
-        end
+        lookout=lookout_load('SkillSubsets')
         w=lookout.reject{|q| q[2]!='Weapon' || !q[4].nil?}.map{|q| q[0]}.sort
         w.push('Slaying')
         w.sort!
@@ -337,13 +313,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
   elsif ['sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list in order based on their SP cost.\n\n#{disp_more_info(event,3)}",0xD49F61)
     if safe_to_spam?(event)
-      lookout=[]
-      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
-        lookout=[]
-        File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
-          lookout.push(eval line)
-        end
-      end
+      lookout=lookout_load('SkillSubsets')
       w=lookout.reject{|q| q[2]!='Weapon' || !q[4].nil?}.map{|q| q[0]}.sort
       w.push('Slaying')
       w.sort!
@@ -370,13 +340,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     elsif ['skills','skill'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list in order based on their SP cost.\n\n#{disp_more_info(event,3)}",0xD49F61)
       if safe_to_spam?(event)
-        lookout=[]
-        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
-          lookout=[]
-          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
-            lookout.push(eval line)
-          end
-        end
+        lookout=lookout_load('SkillSubsets')
         w=lookout.reject{|q| q[2]!='Weapon' || !q[4].nil?}.map{|q| q[0]}.sort
         w.push('Slaying')
         w.sort!
@@ -1614,6 +1578,346 @@ def aoe(event,bot,args=nil)
   event.respond str2
 end
 
+def disp_unit_art(event,name,bot)
+  name=find_name_in_string(event) if name.nil?
+  untz=@units.map{|q| q}
+  j=untz[untz.find_index{|q| q[0]==name}]
+  data_load()
+  args=event.message.text.downcase.split(' ')
+  artype=[]
+  if has_any?(args,['battle','attack','att','atk','attacking'])
+    artype=['BtlFace','Attack']
+  elsif has_any?(args,['damage','damaged','lowhealth','lowhp','low_health','low_hp','injured']) || (args.include?('low') && has_any?(args,['health','hp']))
+    artype=['BtlFace_D','Damaged']
+  elsif has_any?(args,['critical','special','crit','proc'])
+    artype=['BtlFace_C','Special']
+  elsif has_any?(args,['loading','load','title']) && ['Alfonse','Sharena','Veronica','Eirika(Bonds)','Marth','Roy','Ike','Chrom(Launch)','Camilla(Launch)','Takumi','Lyn','Marth(Launch)','Roy(Launch)','Ike(World)','Takumi(Launch)','Lyn(Launch)'].include?(j[0])
+    artype=['Face_Load','Title Screen']
+    j[6]=''
+  end
+  lookout=lookout_load('SkillSubsets')
+  lookout=lookout.reject{|q| q[2]!='Art'}
+  charza=j[0].gsub(' ','_')
+  zart=[]
+  for i in 0...lookout.length
+    zart.push(lookout[i][0]) if has_any?(args,lookout[i][1])
+  end
+  if zart.include?('Normal2') && zart.length>1
+    zart2=[]
+    for i in 0...zart.length
+      if zart[i]=='Normal2'
+        zart2.push(zart[i])
+      elsif lookout.map{|q| q[0]}.include?("#{zart[i]}2")
+        zart2.push("#{zart[i]}2")
+        zart2.push(zart[i])
+      end
+    end
+    zart=zart2.map{|q| q}
+  end
+  if j[0]=='Hrid'
+    if zart.include?('Toasty')
+      for i in 0...zart.length
+        zart[i]=nil if zart[i]=='Toasty'
+      end
+      zart.compact!
+      zart2=zart.map{|q| "#{q}_Toasty"}
+      zart2.push('Toasty')
+      for i in 0...zart.length
+        zart2.push(zart[i])
+      end
+      zart=zart2.map{|q| q}
+    end
+  else
+    for i in 0...zart.length
+      zart[i]=nil if zart[i]=='Toasty'
+    end
+    zart.compact!
+  end
+  artype2=[]
+  for i in 0...zart.length
+    m=false
+    IO.copy_stream(open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{charza}/Face_#{zart[i]}.png"), "C:/Users/Mini-Matt/Desktop/devkit/FEHTemp#{@shardizard}.png") rescue m=true
+    unless File.size("C:/Users/Mini-Matt/Desktop/devkit/FEHTemp#{@shardizard}.png")<=100 || m || artype2.length>1
+      artype2=["Face_#{zart[i]}","#{zart[i].gsub('_',' ')}"]
+    end
+  end
+  artype=artype2.map{|q| q} if artype2.length>0
+  artype=['Face','Default'] if artype.length<=0
+  art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{charza}/#{artype[0]}.png"
+  if args.include?('just') || args.include?('justart') || args.include?('blank') || args.include?('noinfo')
+    charsx=[[],[],[]]
+    disp=''
+  else
+    if j[0]=='Reinhardt(World)' && (rand(100).zero? || event.message.text.downcase.include?('zelda') || event.message.text.downcase.include?('link') || event.message.text.downcase.include?('master sword'))
+      art='https://i.redd.it/pdeqrncp21r01.png'
+      artype=['','Meme Zelda']
+      j[6]="u/ZachminSSB (ft. #{j[6]})"
+    elsif j[0]=='Arden' && (rand(1000).zero? || event.message.text.downcase.include?('infinity'))
+      art='https://pbs.twimg.com/media/DcEh5jRWsAAYofz.png'
+      artype=['','Meme Thanos']
+      j[6]='@_DJSaturn (twitter)'
+    end
+    disp=''
+    nammes=['','','']
+    unless j[6].nil? || j[6].length<=0
+      m=j[6].split(' as ')
+      nammes[0]=m[0]
+      disp="#{disp}\n**Artist:** #{m[m.length-1]}"
+    end
+    unless j[7].nil? || j[7].length<=0
+      m=j[7].split(' as ')
+      nammes[1]=m[0]
+      disp="#{disp}\n**VA (English):** #{m[m.length-1]}"
+    end
+    unless j[8].nil? || j[8].length<=0
+      m=j[8].split(' as ')
+      nammes[2]=m[0]
+      disp="#{disp}\n**VA (Japanese):** #{m[m.length-1]}"
+    end
+    g=get_markers(event)
+    chars=untz.reject{|q| q[0]==j[0] || !has_any?(g, q[13][0]) || ((q[6].nil? || q[6].length<=0) && (q[7].nil? || q[7].length<=0) && (q[8].nil? || q[8].length<=0))}
+    charsx=[[],[],[]]
+    for i in 0...chars.length
+      x=chars[i]
+      unless x[6].nil? || x[6].length<=0 || x[7].nil? || x[7].length<=0 || x[8].nil? || x[8].length<=0
+        m=x[6].split(' as ')
+        m2=x[7].split(' as ')
+        m3=x[8].split(' as ')
+        charsx[2].push("#{x[0].gsub('Lavatain','Laevatein')}") if m[0]==nammes[0] && m2[0]==nammes[1] && m3[0]==nammes[2]
+      end
+      unless x[6].nil? || x[6].length<=0
+        m=x[6].split(' as ')
+        charsx[0].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[0] && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
+      end
+      unless x[7].nil? || x[7].length<=0 || x[8].nil? || x[8].length<=0
+        m=x[7].split(' as ')
+        m2=x[8].split(' as ')
+        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") if m[0]==nammes[1] && m2[0]==nammes[2] && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
+      end
+      unless x[7].nil? || x[7].length<=0
+        m=x[7].split(' as ')
+        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
+      end
+      unless x[8].nil? || x[8].length<=0
+        m=x[8].split(' as ')
+        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
+      end
+    end
+    if event.server.nil? || !bot.user(502288364838322176).on(event.server.id).nil? || @shardizard==4
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FGOServants.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FGOServants.txt').each_line do |line|
+          b.push(line)
+        end
+      else
+        b=[]
+      end
+      for i in 0...b.length
+        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        unless nammes[0].nil? || nammes[0].length<=0 || b[i][24].nil? || b[i][24].length<=0
+          charsx[0].push("*[FGO]* Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][24]==nammes[0]
+        end
+        unless nammes[2].nil? || nammes[2].length<=0 || b[i][25].nil? || b[i][25].length<=0
+          charsx[1].push("*[FGO]* Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} *[Japanese]*") if b[i][25].split(' & ').include?(nammes[2])
+        end
+      end
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FGOCraftEssances.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FGOCraftEssances.txt').each_line do |line|
+          b.push(line)
+        end
+      else
+        b=[]
+      end
+      for i in 0...b.length
+        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        unless nammes[0].nil? || nammes[0].length<=0 || b[i][9].nil? || b[i][9].length<=0
+          charsx[0].push("*[FGO]* CE-#{b[i][0]}#{".) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][9]==nammes[0]
+        end
+      end
+    end
+    if event.server.nil? || !bot.user(543373018303299585).on(event.server.id).nil? || @shardizard==4
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLAdventurers.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/DLAdventurers.txt').each_line do |line|
+          b.push(line)
+        end
+      else
+        b=[]
+      end
+      for i in 0...b.length
+        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        unless b[i][10].nil? || b[i][10].length<=0 || b[i][11].nil? || b[i][11].length<=0
+          m=b[i][10].split(' as ')
+          m2=b[i][11].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Both]*") if m[0]==nammes[2] && m2[0]==nammes[1]
+        end
+        unless b[i][11].nil? || b[i][11].length<=0
+          m=b[i][11].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{b[i][0]} *[Both]*")
+        end
+        unless b[i][10].nil? || b[i][10].length<=0
+          m=b[i][10].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{b[i][0]} *[Both]*")
+        end
+      end
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLDragons.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/DLDragons.txt').each_line do |line|
+          b.push(line)
+        end
+      else
+        b=[]
+      end
+      for i in 0...b.length
+        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        unless b[i][13].nil? || b[i][13].length<=0 || b[i][14].nil? || b[i][14].length<=0
+          m=b[i][13].split(' as ')
+          m2=b[i][14].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Both]*") if m[0]==nammes[2] && m2[0]==nammes[1]
+        end
+        unless b[i][14].nil? || b[i][14].length<=0
+          m=b[i][14].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{b[i][0]} *[Both]*")
+        end
+        unless b[i][13].nil? || b[i][13].length<=0
+          m=b[i][13].split(' as ')
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{b[i][0]} *[Both]*")
+        end
+      end
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLWyrmprints.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/DLWyrmprints.txt').each_line do |line|
+          b.push(line)
+        end
+      else
+        b=[]
+      end
+      for i in 0...b.length
+        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        unless b[i][7].nil? || b[i][7].length<=0
+          m=b[i][7].split(' as ')
+          charsx[0].push("*[DL-Print]* #{b[i][0]}") if m[0]==nammes[0]
+        end
+      end
+    end
+    disp='>No information<' if disp.length<=0
+  end
+  dispx="#{disp}"
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    disp="__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,6)}__\n#{artype[1]} art\n\n#{disp}"
+    disp="#{disp}\n" if charsx.map{|q| q.length}.max>0
+    disp="#{disp}\n**Same artist:** #{charsx[0].join(', ')}" if charsx[0].length>0
+    if charsx[1].length>0
+      disp="#{disp}\n**Same VA:**"
+      disp2=""
+      c=charsx[1].reject{|q| !q.include?('*[English]*')}.map{|q| q.gsub(' *[English]*','')}
+      disp2="#{disp2}\n*English only:* #{c.join(', ')}" if c.length>0
+      c=charsx[1].reject{|q| !q.include?('*[Japanese]*')}.map{|q| q.gsub(' *[Japanese]*','')}
+      disp2="#{disp2}\n*Japanese only:* #{c.join(', ')}" if c.length>0
+      c=charsx[1].reject{|q| !q.include?('*[Both]*')}.map{|q| q.gsub(' *[Both]*','')}
+      disp2="#{disp2}\n*Both languages:* #{c.join(', ')}" if c.length>0
+      disp2=disp2[1,disp2.length-1]
+      if disp2.include?("\n")
+        disp="#{disp}\n#{disp2}"
+      else
+        disp="#{disp} #{disp2}"
+      end
+    end
+    disp="#{disp}\n**Same __everything__:** #{charsx[2].join(', ')}" if charsx[2].length>0
+    disp=dispx if disp.length>=1900
+    event.respond "#{disp}\n\n#{art}"
+  else
+    flds=[]
+    flds.push(['Same Artist',charsx[0].join("\n")]) if charsx[0].length>0
+    if charsx[1].length>0
+      if charsx[1].length==charsx[1].reject{|q| !q.include?('*[English]*')}.length
+        flds.push(['Same VA (English)',charsx[1].map{|q| q.gsub(' *[English]*','')}.join("\n")])
+      elsif charsx[1].length==charsx[1].reject{|q| !q.include?('*[Japanese]*')}.length
+        flds.push(['Same VA (Japanese)',charsx[1].map{|q| q.gsub(' *[Japanese]*','')}.join("\n")])
+      elsif charsx[1].length==charsx[1].reject{|q| !q.include?('*[Both]*')}.length
+        flds.push(['Same VA (Both)',charsx[1].map{|q| q.gsub(' *[Both]*','')}.join("\n")])
+      else
+        flds.push(['Same VA',charsx[1].join("\n")])
+      end
+    end
+    flds.push(['Same everything',charsx[2].join("\n"),1]) if charsx[2].length>0
+    if flds.length.zero?
+      flds=nil
+    elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1500 && safe_to_spam?(event)
+      create_embed(event,"__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art])
+      if flds.map{|q| q.join("\n")}.join("\n\n").length>=1900
+        for i in 0...flds.length
+          create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,[flds[i]])
+        end
+      else
+        create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,flds)
+      end
+      return nil
+    elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1800
+      disp="#{disp}\nThe list of units with the same artist and/or VA is so long that I cannot fit it into a single embed. Please use this command in PM."
+      flds=nil
+    else
+      flds[-1][2]=nil if flds.length<3
+      flds[-1].compact!
+    end
+    create_embed(event,"__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art],flds)
+  end
+  return nil
+end
+
+def disp_generic_art(event,name,bot)
+  args=event.message.text.downcase.split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  colors=[]
+  weapons=[]
+  color_weapons=[]
+  movement=[]
+  for i in 0...args.length
+    args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
+    colors.push('Red') if ['red','reds'].include?(args[i].downcase)
+    colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
+    colors.push('Green') if ['green','greens','grean','greans'].include?(args[i].downcase)
+    colors.push('Colorless') if ['colorless','colourless','colorlesses','colourlesses','clear','clears'].include?(args[i].downcase)
+    weapons.push('Blade') if ['physical','blade','blades'].include?(args[i].downcase)
+    weapons.push('Tome') if ['tome','mage','spell','tomes','mages','spells'].include?(args[i].downcase)
+    weapons.push('Dragon') if ['dragon','dragons','breath','manakete','manaketes'].include?(args[i].downcase)
+    weapons.push('Beast') if ['beast','beasts','laguz'].include?(args[i].downcase)
+    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers'].include?(args[i].downcase)
+    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves'].include?(args[i].downcase)
+    weapons.push('Staff') if ['healer','staff','cleric','healers','clerics','staves'].include?(args[i].downcase)
+    color_weapons.push('Sword') if ['sword','swords','katana'].include?(args[i].downcase)
+    color_weapons.push('Lance') if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
+    color_weapons.push('Axe') if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
+    color_weapons.push('Red_Tome') if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
+    color_weapons.push('Blue_Tome') if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
+    color_weapons.push('Green_Tome') if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
+    movement.push('Pegasus') if ['flier','flying','flyer','fly','pegasus','fliers','flyers','pegasi'].include?(args[i].downcase)
+    movement.push('Wyvern') if ['wyvern','wyverns'].include?(args[i].downcase)
+    movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs'].include?(args[i].downcase)
+    movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
+    movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
+  end
+  if colors.length<=0 && weapons.length<=0 && color_weapons.length<=0 && movement.length<=0
+    event.respond 'No unit was included.'
+    return nil
+  end
+  if colors.length<=0
+    colors=['Red']
+    colors=['Colorless'] if weapons.length>0 && ['Dagger','Staff','Bow'].include?(weapons[0])
+  end
+  weapons=['Tome'] if weapons.length<=0
+  color_weapons=["#{colors[0]}_#{weapons[0]}".gsub('Red_Blade','Sword').gsub('Blue_Blade','Lance').gsub('Green_Blade','Axe')] if color_weapons.length<=0
+  movement=['Infantry'] if movement.length<=0
+  movement[0]='Flier' if color_weapons[0][color_weapons[0].length-6,6]=='Dragon' && ['Pegasus','Wyvern'].include?(movement[0])
+  art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/GENERICS/#{color_weapons[0]}_#{movement[0]}/BtlFace.png"
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    event.respond art
+  else
+    create_embed(event,"__Generic: **#{color_weapons[0]}_#{movement[0]}**__",'',0x800000,nil,[nil,art])
+  end
+end
+
 def why_elise(event,bot)
   if (!event.message.text.downcase.include?('full') && !event.message.text.downcase.include?('long')) && !safe_to_spam?(event)
     str="When people learn that my main waifu is Sakura, almost invariably, the next question that springs to their mind is: \"If that's the case, then why does your bot take after the **opposite** *Fates* imouto healer?\""
@@ -2255,6 +2559,7 @@ def show_bonus_units(event,args='',bot)
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
         element=b[i][3][1]
         moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
+        moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"} if element=='Unknown'
         if i==0
           t2=Time.new(2017,2,2)-60*60
           t2=t-t2

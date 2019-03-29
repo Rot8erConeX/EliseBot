@@ -1,6 +1,6 @@
 Abel\Blue, Blade\ \Cavalry\6, 8, 7, 4, 5\39, 33, 32, 25, 25\Sasashima Suisei\Mick Wingert\Satou Takuya\3p4pLUPF\M\FE3, FE1, FE11, FE12\Abel
 Alfonse\Red, Blade\ \Infantry\7, 8, 5, 7, 4\43, 35, 25, 32, 22\Kozaki Yusuke\Ray Chase\Suzuki Tatsuhisa\2y4yPF\M\FEH\Alfonse
-Alfonse(Spring)\Green, Blade\ \Cavalry\6, 8, 8, 7, 2\41, 35, 33, 30, 18\Kozaki Yusuke\Ray Chase\Suzuki Tatsuhisa\5sPF\M\FEH\Alfonse
+Alfonse(Bunny)\Green, Blade\ \Cavalry\6, 8, 8, 7, 2\41, 35, 33, 30, 18\Kozaki Yusuke\Ray Chase\Suzuki Tatsuhisa\5sPF\M\FEH\Alfonse
 Alm\Red, Blade\ \Infantry\7, 7, 7, 6, 4\45, 33, 30, 28, 22\Arai Teruko\Kyle McCarley\Hanae Natsuki\5pPF\M\FE15, FE2, (s)SSBU\Alm
 Amelia\Green, Blade\ \Armor\9, 9, 8, 8, 5\47, 34, 34, 35, 23\Amagaitaro\Liv Strander\Nagano Ai\5pPF\F\FE8\Amelia
 Anna\Green, Blade\ \Infantry\6, 6, 9, 4, 6\41, 29, 38, 22, 28\Kozaki Yusuke\Karen Strassman\Seto Saori\2y4yPF\F\FEH\Anna
@@ -24,7 +24,7 @@ Beruka\Green, Blade\ \Flier\8, 6, 4, 9, 4\46, 29, 23, 37, 22\lack\Stephanie Sheh
 Black Knight\Red, Blade\ \Armor\8, 7, 8, 8, 2\48, 34, 34, 35, 18\Daisuke Izuka\Robert Clotworthy\Majima Junji\4t5t5b5t4rPF\M\FE9, FE10, (t)SSBB, (st)SSBB, (m)SSB4, (t)SSB4, (at)SSBU, (m)SSBU, (s)SSBU\Black Knight
 Boey\Green, Tome, Wind\ \Infantry\7, 6, 6, 7, 2\43, 29, 27, 32, 18\Aoji\Chris Hackney\Sasaki Takuma\3p4pPF\M\FE15, FE2\Boey
 Bruno\Blue, Tome, Thunder\ \Cavalry\4, 6, 8, 4, 5\33, 29, 35, 22, 25\Kozaki Yusuke\T. Axelrod\Miki Shinichiro\-\M\FEH\Bruno
-Bruno(Spring)\Colorless, Healer\ \Cavalry\7, 6, 5, 8, 1\41, 30, 24, 35, 14\PenekoR\T. Axelrod\Miki Shinichiro\5s\M\FEH\Bruno
+Bruno(Bunny)\Colorless, Healer\ \Cavalry\7, 6, 5, 8, 1\41, 30, 24, 35, 14\PenekoR\T. Axelrod\Miki Shinichiro\5s\M\FEH\Bruno
 Caeda\Red, Blade\ \Flier\5, 5, 9, 5, 7\36, 25, 37, 24, 34\HAKO\Cherami Leigh\Hayami Saori\3p4pLUPF\F\FE3, FE1, (st)SSBB, FE11, FE12, FEW, (s)SSBU\Caeda
 Caeda(Bride)\Blue, Tome, Thunder\ \Infantry\4, 6, 9, 3, 6\33, 29, 37, 19, 30\Yoshiku\Cherami Leigh\Hayami Saori\5sPF\F\FE3, FE1, FE11, FE12, FEW\Caeda
 Cain\Red, Blade\ \Cavalry\7, 7, 8, 5, 3\42, 32, 32, 27, 21\Meka\T. Axelrod\Masuda Toshiki\3p4pLUPF\M\FE3, FE1, FE11, FE12\Cain
@@ -37,7 +37,7 @@ Camilla(Winter)\Red, Blade\ \Flier\6, 7, 8, 7, 5\40, 33, 35, 31, 23\Mikuro\Misty
 Camus\Blue, Blade\ \Cavalry\7, 7, 7, 7, 2\42, 32, 33, 31, 17\Suekane Kumiko\Travis Willingham\Inoue Kazuhiko\3g4g4q4rPF\M\FE3, FE1, FE11, FE12, (s)SSBU\*Camus, SD
 Canas\Red, Tome, Dark\ \Infantry\5, 6, 7, 4, 7\36, 32, 29, 21, 33\Tobi\Joe Zeija\\4t5t4rPF\M\FE7\Canas
 Catria\Blue, Blade\ \Flier\6, 7, 7, 6, 5\39, 31, 34, 29, 25\Amagaitaro\Connor Kelley\Nabatame Hitomi\3p4p3qLUPF\F\FE3, FE1, FE2, FE11, FE12, FE15, (s)SSBU\Catria
-Catria(Spring)\Blue, Tome, Thunder\ \Cavalry\5, 8, 8, 2, 4\36, 32, 35, 18, 23\Amagaitaro\Connor Kelley\Nabatame Hitomi\5sPF\F\FE3, FE1, FE2, FE11, FE12, FE15\Catria
+Catria(Bunny)\Blue, Tome, Thunder\ \Cavalry\5, 8, 8, 2, 4\36, 32, 35, 18, 23\Amagaitaro\Connor Kelley\Nabatame Hitomi\5sPF\F\FE3, FE1, FE2, FE11, FE12, FE15\Catria
 Cecilia\Green, Tome, Wind\ \Cavalry\5, 7, 5, 4, 6\36, 32, 25, 22, 29\Kita Senri\Cherami Leigh\Yukinari Toa\1d2d3p4p3qLUPF\F\FE6\Cecilia
 Cecilia(Winter)\Colorless, Dagger\ \Armor\6, 7, 4, 7, 8\41, 35, 23, 30, 36\Kita Senri\Cherami Leigh\Yukinari Toa\4t5t0sPF\F\FE6\Cecilia
 Celica\Red, Tome, Fire\ \Infantry\6, 7, 8, 4, 3\39, 32, 33, 22, 22\Fujikawa Akira\Erica Lindbeck\Touyama Nao\5pPF\F\FE15, FE2, FEW, (s)SSBU\Celica
@@ -46,8 +46,8 @@ Celica(Fallen)\Red, Blade\ \Infantry\6, 8, 8, 6, 5\40, 35, 35, 27, 26\Fujikawa A
 Charlotte(Bride)\Blue, Blade\ \Infantry\8, 8, 7, 5, 3\46, 36, 32, 24, 19\Pikomaro\Brianna Knickerbocker\Shimizu Ai\5sPF\F\FE14C\Charlotte
 Cherche\Green, Blade\ \Flier\8, 9, 5, 7, 2\46, 38, 25, 32, 16\Wada Sachiko\Amanda Miller\Takada Yuuki\3p4p3qLUPF\F\FE13\Cherche
 Chrom(Branded)\Red, Blade\ \Cavalry\6, 9, 6, 8, 2\41, 37, 28, 34, 17\Yamada Kotaro\Matt Mercer\Sugita Tomokazu\5pPF\M\FE13, FEW, PXZ2\Chrom
+Chrom(Bunny)\Green, Blade\ \Infantry\7, 8, 7, 6, 3\43, 35, 32, 28, 20\Ebila\Matt Mercer\Sugita Tomokazu\5sPF\M\FE13, FEW, PXZ2\Chrom
 Chrom(Launch)\Red, Blade\ \Infantry\8, 9, 5, 7, 2\47, 37, 25, 31, 17\Ebila\Matt Mercer\Sugita Tomokazu\3p4p3qLUPF\M\FE13, (m)SSB4, (t)SSB4, FEW, PXZ2, SSBU, (m)SSBU, (s)SSBU\Chrom*
-Chrom(Spring)\Green, Blade\ \Infantry\7, 8, 7, 6, 3\43, 35, 32, 28, 20\Ebila\Matt Mercer\Sugita Tomokazu\5sPF\M\FE13, FEW, PXZ2\Chrom
 Chrom(Winter)\Green, Blade\ \Armor\8, 9, 3, 8, 7\51, 40, 19, 35, 29\Ebila\Matt Mercer\Sugita Tomokazu\5sPF\M\FE13, FEW, PXZ2\Chrom
 Clair\Blue, Blade\ \Flier\5, 5, 9, 5, 7\37, 26, 36, 24, 33\Takagi Masafumi\Alexis Tipton\Endo Aya\3p4pPF\F\FE15, FE2\Clair
 Clarine\Colorless, Healer\ \Cavalry\5, 5, 7, 4, 6\35, 25, 33, 22, 29\Amagaitaro\Hunter MacKenzie Austin\Onodera Runa\3p4p3qLUPF\F\FE6\Clarine
@@ -153,7 +153,7 @@ Julius\Red, Tome, Dark\ \Infantry\6, 8, 5, 2, 8\38, 35, 27, 16, 35\sachie\Griffi
 Kaden\Green, Beast, Kitsune\ \Cavalry\6, 7, 8, 5, 5\38, 32, 36, 25, 25\Kusugi Toku\Max Mittelman\\5p\M\FE14B\Kaden
 Kagero\Colorless, Dagger\ \Infantry\3, 8, 7, 4, 6\31, 35, 32, 22, 28\lack\Sarah Blandy\Murakawa Rie\3p4pLUPF\F\FE14B\Kagero
 Kagero(Halloween)\Green, Dagger\ \Armor\6, 8, 4, 7, 7\41, 38, 21, 32, 33\cuboon\Sarah Blandy\Murakawa Rie\5sPF\F\FE14B\Kagero
-Kagero(Spring)\Colorless, Dagger\ \Flier\5, 8, 8, 2, 6\36, 35, 34, 18, 27\cuboon\Sarah Blandy\Murakawa Rie\5sPF\F\FE14B\Kagero
+Kagero(Bunny)\Colorless, Dagger\ \Flier\5, 8, 8, 2, 6\36, 35, 34, 18, 27\cuboon\Sarah Blandy\Murakawa Rie\5sPF\F\FE14B\Kagero
 Kana(F)\Green, Dragon\ \Infantry\6, 6, 8, 8, 5\40, 30, 34, 33, 26\Miwabe Sakura\Eden Riegel as Claudia Lenz\Satou Satomi\5pPF\F\FE14\*Kana, F
 Kana(M)\Blue, Dragon\ \Infantry\6, 6, 8, 7, 6\40, 31, 33, 31, 29\kawasumi\Sandy Fox\Shimazaki Nobunaga\3g4g4g4rPF\M\FE14\*Kana, M
 Karel\Red, Blade\ \Infantry\9, 6, 8, 5, 3\47, 30, 35, 25, 20\Kita Senri\Bryce Papenbrook\Majima Junji\5pPF\M\FE7, FE6, (s)SSBU\Karel
@@ -191,12 +191,12 @@ Lissa\Colorless, Healer\ \Infantry\6, 5, 5, 6, 6\39, 26, 25, 28, 30\Zaza\Kate Da
 Lissa(Winter)\Green, Blade\ \Armor\6, 7, 6, 8, 8\43, 33, 30, 35, 34\Umiu Geso\Kate Davis\Asumi Kana\5sPF\F\FE13, FEW\Lissa
 Lloyd\Red, Blade\ \Infantry\7, 7, 8, 3, 6\41, 32, 35, 20, 30\Pikomaro\Kaiji Tang\Matsuda Kenichirou\3g4g3q4q3q4q4rPF\M\FE7\Lloyd
 Loki\Colorless, Healer\ \Infantry\7, 7, 8, 2, 5\42, 33, 35, 16, 25\Maeshima Shigeki\Erika Ishii\Arai Satomi\5pPF\F\FEH\Loki
-Loki(Spring)\Colorless, Bow\ \Flier\6, 7, 8, 6, 4\39, 31, 34, 27, 25\Kusakihara Toshiyuki\Erika Ishii\Arai Satomi\4t5t0s\F\FEH\Loki
+Loki(Bunny)\Colorless, Bow\ \Flier\6, 7, 8, 6, 4\39, 31, 34, 27, 25\Kusakihara Toshiyuki\Erika Ishii\Arai Satomi\4t5t0s\F\FEH\Loki
 Lon'qu\Red, Blade\ \Infantry\8, 6, 9, 4, 4\45, 29, 39, 22, 22\AKIRA\Travis Willingham\Koyasu Takehito\3p4p3qLUPF\M\FE13, (t)SSB4, (s)SSBU\Lon'qu
 Lucina\Red, Blade\ \Infantry\7, 8, 8, 5, 3\43, 34, 36, 25, 19\Maiponpon\Laura Bailey\Kobayashi Yuu\5pLUPF\F\FE13, SSB4, FEW, PXZ2, (a)FE14, (a)FE15, (a)STEAM, SSBU, (s)SSBU\Lucina
 Lucina(Brave)\Blue, Blade\ \Infantry\7, 8, 8, 5, 3\41, 34, 36, 27, 19\Kozaki Yusuke\Alexis Tipton\Kobayashi Yuu\5pPF\F\FE13, FEW, PXZ2, (a)FE14, (a)FE15, (a)STEAM\Lucina
+Lucina(Bunny)\Blue, Tome, Thunder\ \Infantry\5, 6, 8, 4, 5\35, 29, 36, 22, 25\Tomioka Jiro\Alexis Tipton\Kobayashi Yuu\5sPF\F\FE13, FEW, PXZ2, (a)FE14, (a)FE15, (a)STEAM\Lucina
 Lucina(Glorious)\Blue, Bow\Wind, Speed, 21/03/2019\Infantry\5, 8, 8, 5, 3\36, 34, 35, 25, 20\Yamada Kotaro\Alexis Tipton\Kobayashi Yuu\5sPF\F\FE13, FEW, PXZ2, (a)FE14, (a)FE15, (a)STEAM\Lucina
-Lucina(Spring)\Blue, Tome, Thunder\ \Infantry\5, 6, 8, 4, 5\35, 29, 36, 22, 25\Tomioka Jiro\Alexis Tipton\Kobayashi Yuu\5sPF\F\FE13, FEW, PXZ2, (a)FE14, (a)FE15, (a)STEAM\Lucina
 Lucius\Colorless, Healer\ \Infantry\5, 8, 6, 1, 8\37, 32, 30, 13, 35\Itagaki Hako\Michael Sinterniklaas\Yukinari Toa\3p4pPF\M\FE7\Lucius
 Lugh\Green, Tome, Wind\ \Infantry\5, 10, 7, 2, 7\37, 35, 36, 17, 31\Himukai Yuji\Michael Johnston\\5p\M\FE6\Lugh
 Lukas\Blue, Blade\ \Infantry\8, 8, 4, 9, 2\45, 35, 22, 38, 17\cuboon\Greg Chun\Sakurai Takahiro\3p4pPF\M\FE15, FE2\Lukas
@@ -212,7 +212,7 @@ Mae\Blue, Tome, Thunder\ \Infantry\5, 8, 7, 2, 6\35, 36, 31, 16, 30\Gaou\Cherami
 Maria\Colorless, Healer\ \Infantry\5, 6, 8, 3, 6\36, 27, 34, 19, 32\kaya8\Wendee Lee\Suzaki Aya\3p4pLUPF\F\FE3, FE1, FE11, FE12\Maria
 Maribelle\Colorless, Healer\ \Cavalry\4, 8, 7, 2, 6\34, 35, 33, 16, 27\Kousei Horiguchi\Melissa Fahn\\5pPF\F\FE13\Maribelle
 Marisa\Red, Blade\ \Infantry\9, 6, 8, 7, 3\46, 30, 36, 30, 21\Fujikawa Akira\Connor Kelley\Nakahara Mai\4t5t4f4rPF\F\FE8\Marisa
-Marisa(Spring)\Blue, Blade\ \Flier\7, 7, 10, 6, 3\42, 33, 38, 28, 21\Tsukito\Connor Kelley\Nakahara Mai\5s\F\FE8\Marisa
+Marisa(Bunny)\Blue, Blade\ \Flier\7, 7, 10, 6, 3\42, 33, 38, 28, 21\Tsukito\Connor Kelley\Nakahara Mai\5s\F\FE8\Marisa
 Marth\Red, Blade\ \Infantry\6, 7, 8, 6, 4\41, 31, 34, 29, 23\Wada Sachiko\Yuri Lowenthal\Midorikawa Hikaru\3p4p3qLUPF\M\FE3, FE1, SSBM, SSBB, (st)SSBB, FE11, FE12, SSBProM, SSB4, FEW, (a)FE14, (a)FE15, (a)STEAM, SSBU, (s)SSBU\Marth
 Marth(Groom)\Green, Blade\ \Cavalry\6, 7, 8, 7, 3\40, 31, 36, 30, 20\Mayo\Yuri Lowenthal\Midorikawa Hikaru\4t5t4r0sPF\M\FE3, FE1, FE11, FE12, FEW, (a)FE14, (a)FE15, (a)STEAM\Marth
 Marth(King)\Red, Blade\Fire, Resistance, 21/04/2019\Infantry\6, 8, 8, 7, 4\40, 34, 36, 32, 21\Daisuke Izuka\Yuri Lowenthal\Midorikawa Hikaru\5sPF\M\FE3, FE1, FE11, FE12, FEW, (a)FE14, (a)FE15, (a)STEAM\Marth
@@ -262,7 +262,7 @@ Ophelia\Blue, Tome, Light\ \Infantry\6, 10, 7, 3, 3\38, 37, 33, 20, 23\Umiu Geso
 Oscar\Blue, Blade\ \Cavalry\6, 8, 8, 5, 3\40, 33, 34, 26, 21\Ichiiro Hako\Bryce Papenbrook\Majima Junji\3p4pPF\M\FE9, FE10\Oscar
 Owain\Red, Blade\ \Infantry\7, 7, 9, 7, 3\41, 32, 37, 31, 22\Suekane Kumiko\Kaiji Tang\Takahashi Hidenori\5pPF\M\FE13, FEW, (t)SSB4, (s)SSBU\*Owain, Awakening
 Palla\Red, Blade\ \Flier\7, 7, 6, 6, 5\42, 31, 31, 28, 26\cuboon\Laura Bailey\Taneda Risa\3p4p3qLUPF\F\FE3, FE1, FE2, FE11, FE12, FE15, (s)SSBU\Palla
-Palla(Spring)\Red, Dagger\ \Flier\5, 10, 7, 2, 7\38, 37, 34, 17, 29\Mayo\Alexis Tipton\Taneda Risa\5s\F\FE3, FE1, FE2, FE11, FE12, FE15\Palla
+Palla(Bunny)\Red, Dagger\ \Flier\5, 10, 7, 2, 7\38, 37, 34, 17, 29\Mayo\Alexis Tipton\Taneda Risa\5s\F\FE3, FE1, FE2, FE11, FE12, FE15\Palla
 Panne\Blue, Beast, Taguel\ \Cavalry\7, 6, 7, 6, 5\41, 29, 34, 30, 23\Chiko\Jessica Gee-George\Masuda Yuki\3g4g4g\F\FE13\Panne
 Peri\Blue, Blade\ \Cavalry\5, 7, 7, 4, 7\35, 33, 33, 23, 30\Takagi Masafumi\Cindy Robinson\Takahashi Minami\3p4pLUPF\F\FE14C\Peri
 Priscilla\Colorless, Healer\ \Cavalry\5, 6, 6, 3, 7\36, 29, 29, 19, 32\kaya8\Marcella Lentz-Pope\Hashimoto Chinami\3p4pPF\F\FE7\Priscilla
@@ -306,7 +306,7 @@ Seth\Red, Blade\ \Cavalry\5, 7, 7, 7, 4\37, 32, 31, 32, 22\Fujiwara Ryo\Chris Sm
 Setsuna\Colorless, Bow\ \Infantry\5, 6, 9, 4, 4\37, 28, 37, 22, 23\Kusugi Toku\Connor Kelley\Ishikawa Ayano\3p4pLUPF\F\FE14B\Setsuna
 Shanna\Blue, Blade\ \Flier\6, 6, 8, 5, 6\39, 30, 35, 25, 29\HAKO\Marisha Ray\Shiraki Nao\3p4p3qLUPF\F\FE6\Shanna
 Sharena\Blue, Blade\ \Infantry\7, 7, 7, 6, 4\43, 32, 32, 29, 22\Kozaki Yusuke\Julie Kliewer\Uchida Maaya\2y4yPF\F\FEH\Sharena
-Sharena(Spring)\Green, Tome, Wind\ \Infantry\5, 7, 8, 2, 7\37, 32, 36, 16, 30\Kozaki Yusuke\Julie Kliewer\Uchida Maaya\5sPF\F\FEH\Sharena
+Sharena(Bunny)\Green, Tome, Wind\ \Infantry\5, 7, 8, 2, 7\37, 32, 36, 16, 30\Kozaki Yusuke\Julie Kliewer\Uchida Maaya\5sPF\F\FEH\Sharena
 Sheena\Green, Blade\ \Armor\7, 6, 5, 7, 8\45, 30, 25, 36, 33\Mayo\Lauren Landa\Kobayashi Yuu\3p4pLUPF\F\FE3, FE12\Sheena
 Shigure\Blue, Blade\ \Flier\6, 8, 9, 6, 4\40, 33, 37, 27, 25\Yura\Matt Mercer\Hosoya Yoshimasa\4p5pPF\M\FE14\Shigure
 Shigure(Performing)\Blue, Tome, Thunder\ \Infantry\5, 7, 7, 4, 5\34, 31, 29, 21, 24\Yura\Matt Mercer\Hosoya Yoshimasa\5sPF\M\FE14\Shigure
@@ -353,15 +353,16 @@ Valter\Blue, Blade\ \Flier\7, 7, 6, 8, 3\42, 32, 31, 34, 19\PenekoR\Imari\Ohkawa
 Velouria\Colorless, Beast, Wolfskin\ \Infantry\6, 8, 9, 8, 4\40, 35, 37, 33, 23\kawasumi\Angela Maria Volne\\5p\F\FE14C\Velouria
 Veronica\Green, Tome, Wind\ \Infantry\7, 8, 4, 6, 3\41, 35, 22, 29, 21\Kozaki Yusuke\Wendee Lee\Hidaka Rina\-\F\FEH\Veronica
 Veronica(Brave)\Colorless, Healer\ \Cavalry\5, 7, 8, 4, 3\36, 32, 36, 21, 19\Kozaki Yusuke\Wendee Lee\Hidaka Rina\5pPF\F\FEH\Veronica
-Veronica(Spring)\Green, Tome, Wind\ \Flier\6, 8, 8, 2, 5\38, 35, 36, 16, 25\Umiu Geso\Wendee Lee\Hidaka Rina\5s\F\FEH\Veronica
+Veronica(Bunny)\Green, Tome, Wind\ \Flier\6, 8, 8, 2, 5\38, 35, 36, 16, 25\Umiu Geso\Wendee Lee\Hidaka Rina\5s\F\FEH\Veronica
 Virion\Colorless, Bow\ \Infantry\8, 7, 7, 5, 1\46, 31, 31, 26, 13\Wada Sachiko\Taylor Henry\Kogami Hiromichi\1d2d3p4p1y4f3qLUPF\M\FE13\Virion
 Walhart\Green, Blade\ \Cavalry\6, 8, 6, 9, 2\41, 37, 27, 36, 16\Soeda Ippei\Richard Epcar\\3g4g4g4rPF\M\FE13, (s)SSBU\Walhart
 Wrys\Colorless, Healer\ \Infantry\7, 5, 4, 4, 8\42, 24, 23, 22, 36\Pikomaro\DC Douglas\Tone Kentarou\1d2d3p4p3qLUPF\M\FE1, FE11, FE12, (s)SSBU\Wrys
 Xander\Red, Blade\ \Cavalry\7, 7, 5, 9, 2\44, 32, 24, 37, 17\Maeshima Shigeki\George Spelvin\Konishi Katsuyuki\3g4g4g4q4rPF\M\FE14C, (t)SSB4, FEW, (s)SSBU\Xander
+Xander(Bunny)\Blue, Blade\ \Cavalry\6, 5, 6, 8, 5\40, 25, 28, 35, 26\Suekane Kumiko\George Spelvin\Konishi Katsuyuki\5sPF\M\FE14C, FEW\Xander
 Xander(Festival)\Colorless, Dagger\ \Infantry\6, 9, 2, 9, 2\38, 35, 17, 34, 16\PenekoR\George Spelvin\Konishi Katsuyuki\5sPF\M\FE14C, FEW\Xander
-Xander(Spring)\Blue, Blade\ \Cavalry\6, 5, 6, 8, 5\40, 25, 28, 35, 26\Suekane Kumiko\George Spelvin\Konishi Katsuyuki\5sPF\M\FE14C, FEW\Xander
 Xander(Summer)\Green, Blade\ \Infantry\7, 7, 7, 9, 1\43, 32, 30, 36, 16\PenekoR\George Spelvin\Konishi Katsuyuki\5sPF\M\FE14C, FEW\Xander
 Ylgr\Blue, Dagger\ \Infantry\6, 8, 9, 3, 3\38, 33, 38, 22, 20\Maeshima Shigeki\Megan Lee\\5pPF\F\FEH\Ylgr
+Yune\Green, Tome, Wind\Dark, Speed, 21/03/2019\Flier\6, 7, 6, 1, 9\38, 33, 27, 15, 37\Miwabe Sakura\Megan Lee\\5s\F\FE10\Yune
 Zelgius\Red, Blade\ \Armor\7, 8, 8, 9, 3\46, 36, 33, 38, 21\Daisuke Izuka\Robert Clotworthy\Majima Junji\5pPF\M\FE10, FE9, (s)SSBU\Black Knight
 Zephiel\Red, Blade\ \Armor\10, 8, 2, 8, 5\55, 35, 16, 38, 24\Yamada Akihiro\Taylor Henry\Matsuda Kenichirou\3g4g4g3q3q4q4rPF\M\FE6, FE7\Zephiel
 Mathoo\Red, Blade\ \Infantry\8, 6, 4, 5, 10\45, 29, 24, 25, 39\\\\3p4pPF\M\FE14g\Mathoo\X167657750971547648

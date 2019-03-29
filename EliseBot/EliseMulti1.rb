@@ -140,7 +140,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str='blucina'
     str='bluecina' if str2.include?('bluecina')
     return nil if robinmode==2 && str2.downcase != str.downcase
-    return [str,['Lucina(Spring)','Lucina(Brave)','Lucina(Glorious)'],[str]]
+    return [str,['Lucina(Bunny)','Lucina(Brave)','Lucina(Glorious)'],[str]]
   elsif /ax(e|)(-|)(z|)ura/ =~ str1
     str='ax'
     str="#{str}e" if str2.include?('axe')
@@ -293,7 +293,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
     if str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.gsub('flower','').include?('we') || str2.include?('santa')
       return [str,['Chrom(Winter)'],["winter#{str}","#{str}winter","christmas#{str}","#{str}christmas","holiday#{str}","#{str}holiday","we#{str}","#{str}we","santa#{str}","#{str}santa"]]
     elsif str2.include?('bunny') || str2.include?('spring') || str2.include?('easter') || str2.include?('sf') || str2.include?('rabbit')
-      return [str,['Chrom(Spring)'],["bunny#{str}","#{str}bunny","spring#{str}","#{str}spring","easter#{str}","#{str}easter","sf#{str}","#{str}sf","rabbit#{str}","#{str}rabbit"]]
+      return [str,['Chrom(Bunny)'],["bunny#{str}","#{str}bunny","spring#{str}","#{str}spring","easter#{str}","#{str}easter","sf#{str}","#{str}sf","rabbit#{str}","#{str}rabbit"]]
     elsif str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch') || str2.include?('prince')
       return [str,['Chrom(Launch)'],["launch#{str}","#{str}launch","vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","prince#{str}","#{str}prince"]]
     elsif str2.include?('branded') || str2.include?('brand') || str2.include?('exalted') || str2.include?('exalt') || str2.include?('king') || str2.include?('sealed') || str2.include?('horse') || str2.include?('knight')
@@ -350,6 +350,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
         return [m[i],['Tiki(Adult)(Summer)','Tiki(Young)(Summer)'],m] if event.message.text.downcase.include?(m[i])
       end
       return [str,['Tiki(Adult)(Summer)','Tiki(Young)(Summer)'],m]
+    elsif str2.include?('creatonist')
+      return [str,['Tiki(Young)(Earth)'],["creationist#{str}","#{str}creatonist","creationistiki"]]
     elsif str2.include?('legendary') || str2.include?('legend') || str2.include?('caped') || str2.include?('cape') || str2.include?('hood') || str2.include?('hooded') || str2.include?('cloak') || str2.include?('cloaked') || str2.include?('earth') || str2.include?('leg')
       return [str,['Tiki(Young)(Earth)'],["legendary#{str}","#{str}legendary","#{str}legend","legend#{str}","#{str}caped","caped#{str}","#{str}cape","cape#{str}","#{str}hood","hood#{str}","#{str}hooded","hooded#{str}","#{str}cloak","cloak#{str}","#{str}cloaked","cloaked#{str}","#{str}earth","earth#{str}","leg#{str}","#{str}leg"]]
     end
@@ -563,7 +565,7 @@ def game_adjust(name)
   name='Corrin' if name==['Corrin(M)(Launch)','Corrin(F)(Launch)'] || name==['Corrin(F)(Launch)','Corrin(M)(Launch)']
   name='Corrin' if name==['Corrin(M)(Adrift)','Corrin(F)(Adrift)'] || name==['Corrin(F)(Adrift)','Corrin(M)(Adrift)']
   name='Azura' if name==['Azura(Performing)','Azura(Winter)']
-  name='Lucina' if name==['Lucina(Spring)','Lucina(Brave)']
+  name='Lucina' if name==['Lucina(Bunny)','Lucina(Brave)']
   name='Hector' if name==['Hector(Marquess)','Hector(Brave)']
   name='Tiki' if name==['Tiki(Young)','Tiki(Adult)']
   name='Tiki' if name==['Tiki(Adult)(Summer)','Tiki(Young)(Summer)']
@@ -1930,13 +1932,7 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
   end
   b=b.reject{|q| q[2].length==0 && !q[0].include?('GHB') && !q[0].include?('TT')}
   args=event.message.text.downcase.gsub("\n",' ').split(' ')
-  lookout=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt')
-    lookout=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHSkillSubsets.txt').each_line do |line|
-      lookout.push(eval line)
-    end
-  end
+  lookout=lookout_load('SkillSubsets')
   banner_types=[]
   for i in 0...args.length
     for i2 in 0...lookout.length
@@ -1945,6 +1941,7 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
       end
     end
   end
+  puts banner_types.to_s
   b2=b.map{|q| q}
   b2=b2.reject{|q| q[5].nil? || !has_any?(q[5].split(', '),banner_types.reject{|q2| ['Current','Upcoming'].include?(q2)})} if banner_types.reject{|q2| ['Current','Upcoming'].include?(q2)}.length>0
   b2=b.map{|q| q} if b2.length==0

@@ -13,6 +13,7 @@ Gold Damsel's Ribbon\Hair\Proof of victory over Grand Hero Lloyd.\Beat Lloyd's G
 Gold Feh Doll\Hair\Proof of victory over Legendary Eirika.\Beat Eirika(Graceful)'s LHB at Abyssal difficulty
 Gold Flower Hairpin\Hair\Proof of victory over Legendary Hríd.\Beat Hrid's LHB at Abyssal difficulty
 Gold Hand Towel\Hair\Proof of victory over Grand Hero Robin.\Beat Robin(F)'s GHB at Abyssal difficulty
+Gold Peach Ducky\Hair\Proof of victory over Mythic Yune.\Beat Yune's MHB at Abyssal difficulty
 Gold Seashell Hairpin\Hair\Proof of victory over Legendary Marth.\Beat Marth(King)'s LHB at Abyssal difficulty
 Gold Summer Mask\Hair\Proof of victory over Legendary Lucina.\Beat Lucina(Glorious)'s LHB at Abyssal difficulty
 Golden Ducky\Hair\Proof of victory over Grand Hero Navarre.\Beat Navarre's GHB at Abyssal difficulty
@@ -54,6 +55,7 @@ Golden Diadem\Hat\Proof of victory over Mythic Duma.\Beat Duma's MHB at Abyssal 
 Gold Priest's Miter\Hat\Proof of victory over Grand Hero Xander.\Beat Xander's GHB at Abyssal difficulty.
 Gold Restoration Helm\Hat\Proof of victory over Legendary Azura.\Beat Azura(Vallite)'s LHB at Abyssal difficulty.
 Gold Spring Bunny Hat\Hat\Proof of victory over Legendary Lyn.\Beat Lyn(Wind)'s LHB at Abyssal difficulty.
+Head-Orb\Hat\Feh likes to balance this accessory, which resembles an Orb, on her head.\
 Knight Headpiece\Hat\A knight's headpiece from Silas. This gear is given to those who earn the title of knight.\Reach 100 blue friendship with Silas during Forging Bonds: High Tea Jinks.
 Knight Headpiece EX\Hat\A knight's headpiece from Silas. This special piece of gear is given to those who reach the title of paladin.\Reach 2500 blue friendship with Silas during Forging Bonds: High Tea Jinks.
 Lost Child's Hat\Hat\The hat worn by young Azura.\Clear floors 81-85 in Illusory Dungeon: Labyrinth of Despair.

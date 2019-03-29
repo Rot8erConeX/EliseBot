@@ -194,6 +194,7 @@
 ['Def/Res Link 2', ['defenseresistancelink2', 'defenceresistancelink2', 'defresistancelink2', 'defensereslink2', 'defencereslink2', 'defreslink2', 'resistancedefenselink2', 'resistancedefencelink2', 'resistancedeflink2', 'resdefenselink2', 'resdefencelink2', 'resdeflink2'], 2, 'Stat-Buffing 1', [0, 0, 0, 4, 4]]
 ['Def/Res Link 1', ['defenseresistancelink1', 'defenceresistancelink1', 'defresistancelink1', 'defensereslink1', 'defencereslink1', 'defreslink1', 'resistancedefenselink1', 'resistancedefencelink1', 'resistancedeflink1', 'resdefenselink1', 'resdefencelink1', 'resdeflink1'], 2, 'Stat-Buffing 1', [0, 0, 0, 2, 3]]
 ['Spectrum Link', ['spectrumlink', 'alllink', 'linkspectrum', 'linkall'], 2, 'Stat-Buffing 1', [0, 2, 2, 2, 3]]
+['Chaos Named', ['chaosnamed', 'nameofchaos'], 1, 'Stat-Nerfing 1', [0, 0, 0, 0, 0]]
 ['Atk Ploy 3', ['attackploy', 'atkploy', 'attploy', 'attackploy3', 'atkploy3', 'attploy3'], 2, 'Stat-Nerfing 1', [0, 5, 0, 0, 0]]
 ['Atk Ploy 2', ['attackploy2', 'atkploy2', 'attploy2'], 2, 'Stat-Nerfing 1', [0, 4, 0, 0, 0]]
 ['Atk Ploy 1', ['attackploy1', 'atkploy1', 'attploy1'], 3, 'Stat-Nerfing 1', [0, 3, 0, 0, 0]]
