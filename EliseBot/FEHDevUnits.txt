@@ -3,7 +3,7 @@ Alm\Delthea\Eir\Kana(F)\Leanne\Matthew\Owain\Reyson\Selkie\Sharena(Spring)\Tailt
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
-5\10\Resistance\Defense\S\3
+5\10\Resistance\Defense\S\4
 Assault\Absorb\Absorb+\Absorb+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light

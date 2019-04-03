@@ -429,7 +429,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str='corrin'
     str='kamui' if str1.include?('kamui')
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
-    if str=='kamui' && (str2.include?('gaiden') || str2.include?('sov')) && find_unit('Kamui',event,true)>-1
+    if str=='kamui' && (str2.include?('gaiden') || str2.include?('sov')) && find_unit('Kamui',event,true).length>0
       return [str,['Kamui'],['kamuigaiden','kamuisov','gaidenkamui','sovkamui']]
     elsif str2.include?('summer') || str2.include?('beach') || str2.include?('swimsuit') || str2.include?('ns')
       return [str,['Corrin(F)(Summer)']]
@@ -495,7 +495,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
     elsif str2.include?('male') || str2.include?("#{str}m") || str2.include?("m#{str}")
       return [str,['Corrin(M)(Launch)'],["male#{str}","m#{str}","#{str}male","#{str}m"]]
     end
-    return [str,['Kamui'],[str]] if str=='kamui' && find_unit('Kamui',event,true)>-1
+    return [str,['Kamui'],[str]] if str=='kamui' && find_unit('Kamui',event,true).length>0
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Corrin(M)(Launch)','Corrin(F)(Launch)'],[str]]
   elsif /(morgan|marc)/ =~ str1 || (/linfan/ =~ str1 && !(/duelinfantry/ =~ str1))
@@ -610,7 +610,7 @@ def list_unit_aliases(event,args,bot,mode=0)
   data_load()
   nicknames_load()
   unless args.length.zero?
-    unit=@units[find_unit(args.join(''),event)][0]
+    unit=find_unit(args.join(''),event)[0]
     skill=@skills[find_skill(args.join(''),event)][0]
     struct=find_structure(args.join(''),event)
     azry=@accessories[find_accessory(args.join(''),event)][0]
@@ -622,7 +622,7 @@ def list_unit_aliases(event,args,bot,mode=0)
       g=get_markers(event)
       u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
       unit=unit.reject{|q| !u.include?(q)}
-    elsif find_unit(args.join(''),event)==-1 && find_skill(args.join(''),event)==-1 && find_accessory(args.join(''),event)==-1 && find_item_feh(args.join(''),event)==-1 && find_structure(args.join(''),event).length<=0 && !has_any?(args,['unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils','structures','structure','struct','structs','item','items','accessorys','accessory','accessories'])
+    elsif find_unit(args.join(''),event)==-1 && find_skill(args.join(''),event)==-1 && find_accessory(args.join(''),event)==-1 && find_item_feh(args.join(''),event)==-1 && find_structure(args.join(''),event).length<=0 && !has_any?(args,['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils','structures','structure','struct','structs','item','items','accessorys','accessory','accessories'])
       alz=args.join(' ')
       alz='>censored mention<' if alz.include?('@')
       event.respond "The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\n#{alz} does not fall into any of these categories."
@@ -630,7 +630,7 @@ def list_unit_aliases(event,args,bot,mode=0)
     end
   end
   unless unit.nil? || unit.is_a?(Array)
-    unit=nil if find_unit(args.join(''),event)<0
+    unit=nil if find_unit(args.join(''),event).length<=0
   end
   unless skill.nil? || skill.is_a?(Array)
     skill=nil if find_skill(args.join(''),event)<0
@@ -652,7 +652,7 @@ def list_unit_aliases(event,args,bot,mode=0)
   h=''
   skipmulti=false
   if unit.nil? && skill.nil? && struct.nil? && azry.nil? && itmu.nil?
-    if has_any?(args,['unit','units','characters','character','chara','charas','char','chars'])
+    if has_any?(args,['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars'])
       f.push('__**Single-unit aliases**__')
       for i in 0...n.length
         if n[i][2].nil?
@@ -913,7 +913,7 @@ def list_unit_aliases(event,args,bot,mode=0)
       h=' that contain both of these units' if unit.length>1
       h=' that contain all of these units' if unit.length>2
       for i1 in 0...unit.length
-        u=@units[find_unit(unit[i1],event)][0]
+        u=find_unit(unit[i1],event)[0]
         m=m.reject{|q| !q[1].include?(u)}
         f.push("#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,u,false,4)}**#{"'s server-specific aliases__" if mode==1}")
         f.push(u) if u=='Lavatain'
@@ -1136,7 +1136,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   type=['Alias','Alias']
   newname=newname.gsub('!','').gsub('(','').gsub(')','').gsub('_','')
   unit=unit.gsub('!','').gsub('(','').gsub(')','').gsub('_','')
-  if find_unit(newname,event,true)>=0
+  if find_unit(newname,event,true).length>0
     type[0]='Unit'
   elsif find_skill(newname,event,true)>=0
     type[0]='Skill'
@@ -1146,7 +1146,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     type[0]='Accessory'
   elsif find_item_feh(newname,event,true)>=0
     type[0]='Item'
-  elsif find_unit(newname,event)>=0
+  elsif find_unit(newname,event).length>0
     type[0]='Unit*'
   elsif find_skill(newname,event)>=0
     type[0]='Skill*'
@@ -1158,7 +1158,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     type[0]='Item*'
   end
   type[0]='Skill' if newname.downcase=='adult'
-  if find_unit(unit,event,true)>=0
+  if find_unit(unit,event,true).length>0
     type[1]='Unit'
   elsif find_skill(unit,event,true)>=0
     type[1]='Skill'
@@ -1168,7 +1168,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     type[1]='Accessory'
   elsif find_item_feh(unit,event,true)>=0
     type[1]='Item'
-  elsif find_unit(unit,event)>=0
+  elsif find_unit(unit,event).length>0
     type[1]='Unit*'
   elsif find_skill(unit,event)>=0
     type[1]='Skill*'
@@ -1222,7 +1222,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   end
   checkstr=normalize(newname,true)
   if type[0]=='Alias' && type[1].gsub('*','')=='Unit'
-    unt=@units[find_unit(unit,event)]
+    unt=find_unit(unit,event)
     checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
     cck=unt[12].split(', ')[1][0,1].downcase if unt[12].split(', ').length>1
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Skill'
@@ -2468,7 +2468,7 @@ def summon_sim(bot,event,colors)
       end
       if trucolors.length>0
         for i in 1...@banner.length
-          cracked_orbs.push([@banner[i],i]) if trucolors.include?(@units[find_unit(@banner[i][1],event)][1][0])
+          cracked_orbs.push([@banner[i],i]) if trucolors.include?(find_unit(@banner[i][1],event)[1][0])
         end
         str2="#{str2}\nNone of the colors you requested appeared.  Here are your **Orb options:**" if cracked_orbs.length.zero?
       else

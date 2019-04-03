@@ -22,7 +22,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of servers and unique members each shard reaches.',0x40C0F0)
     elsif ['alts','alt','alternate','alternates','alternative','alternatives'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of units within each type of alt, as well as specifics about characters with the most alts.',0x40C0F0)
-    elsif ['unit','char','character','units','chars','charas','chara'].include?(subcommand.downcase)
+    elsif ['hero','heroes','heros','unit','char','character','units','chars','charas','chara'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Returns the number of units sorted in each of the following ways:\n- Obtainability\n- Color\n- Weapon type\n- Movement type\n- Game of origin (in PM)",0x40C0F0)
     elsif ['skills','skill','weapon','weapons','assist','assists','special','specials','passive','passives'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**",'Returns the number of skills, as well as numbers condensing them into branches (same name with different number) and trees (all skills that promote into/from each other are a single entry).',0x40C0F0)
@@ -41,7 +41,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     else
       create_embed(event,"**#{command.downcase}**","Returns:\n- the number of servers I'm in\n- the numbers of units, skills, structures, accessories, and items in the game\n- the numbers of aliases of each type I keep track of\n- the numbers of groups I keep track of\n- how long of a file I am.\n\nYou can also include the following words to get more specialized data:\nServer(s), Member(s), Shard(s), User(s)\nUnit(s), Character(s), Char(a)(s)\nAlt(s)\nSkill(s)\nStructure(s), Struct(s)\nAccessory, Accessories\nItem(s)\nAlias(es), Name(s), Nickname(s)\nGroup(s), Grouping(s)\nCode, Line(s), SLOC#{"\n\nAs the bot developer, you can also include a server ID number to snag the shard number, owner, and my nickname in the specified server." if event.user.id==167657750971547648}",0x40C0F0)
     end
-  elsif ['randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats'].include?(command.downcase) || (['random','rand'].include?(command.downcase) && ['unit','stats'].include?("#{subcommand}".downcase)) || (['unit','stats'].include?(command.downcase) && ['random','rand'].include?("#{subcommand}".downcase))
+  elsif ['randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats'].include?(command.downcase) || (['random','rand'].include?(command.downcase) && ['hero','unit','stats'].include?("#{subcommand}".downcase)) || (['unit','stats'].include?(command.downcase) && ['random','rand'].include?("#{subcommand}".downcase))
     lookout=lookout_load('Games')
     lookout=lookout.reject{|q| q[0].length>4 && q[0][0,4]=='FE14'}
     d=[]
@@ -51,13 +51,13 @@ def help_text(event,bot,command=nil,subcommand=nil)
     if d.join("\n\n").length>=1900 || !safe_to_spam?(event)
       d=lookout.map{|q| q[0]}
       if d.length>50 && !safe_to_spam?(event)
-        create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['random','rand','unit','stats'].include?(command.downcase)}** __\*filters__","Picks a random unit within the desired group, and displays that unit's stats and skills.\n\n#{disp_more_info(event,2)}\n\nYou can also group units by gender.\nYou can group by game as well, and game options can be displayed if you use this command in PM.",0xD49F61)
+        create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['random','rand','hero','unit','stats'].include?(command.downcase)}** __\*filters__","Picks a random unit within the desired group, and displays that unit's stats and skills.\n\n#{disp_more_info(event,2)}\n\nYou can also group units by gender.\nYou can group by game as well, and game options can be displayed if you use this command in PM.",0xD49F61)
       else
-        create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['random','rand','unit','stats'].include?(command.downcase)}** __\*filters__","Picks a random unit within the desired group, and displays that unit's stats and skills.\n\n#{disp_more_info(event,2)}\n\nYou can also group units by gender.\nYou can group by game as well, by using the words below.",0xD49F61)
+        create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['random','rand','hero','unit','stats'].include?(command.downcase)}** __\*filters__","Picks a random unit within the desired group, and displays that unit's stats and skills.\n\n#{disp_more_info(event,2)}\n\nYou can also group units by gender.\nYou can group by game as well, by using the words below.",0xD49F61)
         create_embed(event,'Games','',0x40C0F0,nil,nil,triple_finish(d))
       end
     else
-      create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['random','rand','unit','stats'].include?(command.downcase)}** __\*filters__","Picks a random unit within the desired group, and displays that unit's stats and skills.\n\n#{disp_more_info(event,2)}\n\nYou can also group units by gender.\nYou can group by game as well, by using the words below.",0xD49F61)
+      create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['random','rand','hero','unit','stats'].include?(command.downcase)}** __\*filters__","Picks a random unit within the desired group, and displays that unit's stats and skills.\n\n#{disp_more_info(event,2)}\n\nYou can also group units by gender.\nYou can group by game as well, by using the words below.",0xD49F61)
       create_embed(event,'Games',d.join("\n\n"),0x40C0F0)
     end
   elsif command.downcase=='shard'
@@ -76,7 +76,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}** __name__","Shows all the skills that `name`can learn.\n\nIn servers, will only show the weapons, assists, and specials.\nIn PM, will also show the passive skills.",0xD49F61)
   elsif ['safe','spam','safetospam','safe2spam','long','longreplies'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __toggle__","Responds with whether or not the channel the command is invoked in is one in which I can send extremely long replies.\n\nIf the channel does not fill one of the many molds for acceptable channels, server mods can toggle the ability with the words \"on\" and \"off\".",0xD49F61)
-  elsif ['data','unit'].include?(command.downcase)
+  elsif ['data','hero','unit'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats, and skills.",0xD49F61)
   elsif ['attackicon','attackcolor','attackcolors','attackcolour','attackcolours','atkicon','atkcolor','atkcolors','atkcolour','atkcolours','atticon','attcolor','attcolors','attcolour','attcolours','staticon','statcolor','statcolors','statcolour','statcolours','iconcolor','iconcolors','iconcolour','iconcolours'].include?(command.downcase) || (['stats','stat'].include?(command.downcase) && ['color','colors','colour','colours'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['color','colors','colour','colours'].include?("#{subcommand}".downcase)}**","Explains the reasoning behind the multiple Attack stat icons - <:StrengthS:514712248372166666> <:MagicS:514712247289774111> <:FreezeS:514712247474585610>",0xD49F61)
@@ -213,7 +213,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then finds the unit(s) with the worst in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
   elsif ['find','search','lookup'].include?(command.downcase)
     subcommand='' if subcommand.nil?
-    if ['unit','char','character','person','units','chars','charas','chara','people'].include?(subcommand.downcase)
+    if ['hero','heroes','heros','unit','char','character','person','units','chars','charas','chara','people'].include?(subcommand.downcase)
       lookout=lookout_load('Games')
       lookout=lookout.reject{|q| q[0].length>4 && q[0][0,4]=='FE14'}
       d=[]
@@ -335,7 +335,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Sorts the groups list alphabetically by group name.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['alias','aliases'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}**","Sorts the alias list alphabetically by unit the alias is for.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
-    elsif ['stat','stats','unit','units'].include?(subcommand.downcase)
+    elsif ['stat','stats','hero','unit','units'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all units which match your defined filters, then displays the resulting list in order based on the stats you include.\n\n#{disp_more_info(event,2)}",0xD49F61)
     elsif ['skills','skill'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list in order based on their SP cost.\n\n#{disp_more_info(event,3)}",0xD49F61)
@@ -1506,7 +1506,7 @@ def random_dev_unit_with_nature(event,x=true) # used by `disp_more_info()` to ra
   u=@dev_units.sample
   if x
     # try again if the randomly-chosen unit is neutral or server-specific to another server
-    return random_dev_unit_with_nature(event) if u[3]==' ' || u[4]==' ' || find_unit(u[0],event,true)<0
+    return random_dev_unit_with_nature(event) if u[3]==' ' || u[4]==' ' || find_unit(u[0],event,true).length<=0
   end
   return u
 end
@@ -1644,9 +1644,25 @@ def disp_unit_art(event,name,bot)
   artype=artype2.map{|q| q} if artype2.length>0
   artype=['Face','Default'] if artype.length<=0
   art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{charza}/#{artype[0]}.png"
+  disp=''
+  nammes=['','','']
+  unless j[6].nil? || j[6].length<=0
+    m=j[6].split(' as ')
+    nammes[0]=m[0]
+    disp="#{disp}\n**Artist:** #{m[m.length-1]}"
+  end
+  unless j[7].nil? || j[7].length<=0
+    m=j[7].split(' as ')
+    nammes[1]=m[0]
+    disp="#{disp}\n**VA (English):** #{m[m.length-1]}"
+  end
+  unless j[8].nil? || j[8].length<=0
+    m=j[8].split(' as ')
+    nammes[2]=m[0]
+    disp="#{disp}\n**VA (Japanese):** #{m[m.length-1]}"
+  end
   if args.include?('just') || args.include?('justart') || args.include?('blank') || args.include?('noinfo')
     charsx=[[],[],[]]
-    disp=''
   else
     if j[0]=='Reinhardt(World)' && (rand(100).zero? || event.message.text.downcase.include?('zelda') || event.message.text.downcase.include?('link') || event.message.text.downcase.include?('master sword'))
       art='https://i.redd.it/pdeqrncp21r01.png'
@@ -1656,23 +1672,6 @@ def disp_unit_art(event,name,bot)
       art='https://pbs.twimg.com/media/DcEh5jRWsAAYofz.png'
       artype=['','Meme Thanos']
       j[6]='@_DJSaturn (twitter)'
-    end
-    disp=''
-    nammes=['','','']
-    unless j[6].nil? || j[6].length<=0
-      m=j[6].split(' as ')
-      nammes[0]=m[0]
-      disp="#{disp}\n**Artist:** #{m[m.length-1]}"
-    end
-    unless j[7].nil? || j[7].length<=0
-      m=j[7].split(' as ')
-      nammes[1]=m[0]
-      disp="#{disp}\n**VA (English):** #{m[m.length-1]}"
-    end
-    unless j[8].nil? || j[8].length<=0
-      m=j[8].split(' as ')
-      nammes[2]=m[0]
-      disp="#{disp}\n**VA (Japanese):** #{m[m.length-1]}"
     end
     g=get_markers(event)
     chars=untz.reject{|q| q[0]==j[0] || !has_any?(g, q[13][0]) || ((q[6].nil? || q[6].length<=0) && (q[7].nil? || q[7].length<=0) && (q[8].nil? || q[8].length<=0))}
@@ -3193,7 +3192,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     k=k.reject{|q| q[1]!=k[0][1]}
     event << "#{list_lift(k.map{|q| "*#{q[0]}*"},'and')} #{"is" if k.length==1}#{"are" unless k.length==1} the character facet#{"s" unless k.length==1} with the most alts, with #{k[0][1]} alts (including the default)#{" each" unless k.length==1}."
     return nil
-  elsif ['units','characters','unit','character','charas','chara','chars','char'].include?(f.downcase)
+  elsif ['hero','heroes','heros','units','characters','unit','character','charas','chara','chars','char'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',1)
     all_units=@units.reject{|q| !has_any?(g, q[13][0])}
     all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
