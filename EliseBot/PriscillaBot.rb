@@ -172,7 +172,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
      'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics','legend',
      'legends','legendarys','item','accessory','acc','accessorie','alias','s2s','dailies','tomorrow','tommorrow','tomorow','tommorow','aoe','area','prf','prfs',
-     'prefix','shards']
+     'prefix','shards','hero']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -754,11 +754,11 @@ end
 def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='',flowers=0) # used by multiple commands to calculate a unit's stats
   data_load()
   # find neutral five-star level 40 stats
-  u=@units.map{|q| q}
+  unit=@units.map{|q| q}
   if name=='Robin'
-    f=u[u.find_index{|q| q[0]=='Robin(F)'}]
+    f=unit[unit.find_index{|q| q[0]=='Robin(F)'}]
   else
-    f=u[u.find_index{|q| q[0]==name}]
+    f=unit[unit.find_index{|q| q[0]==name}]
   end
   flowers=[flowers,@max_rarity_merge[2]].min unless f[9][0].include?('PF') && f[3]=='Infantry'
   sttz=['hp','attack','speed','defense','resistance']
@@ -772,141 +772,80 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='',flowers=0) #
       @mods[i][rarity]=(0.39*((((i-4)*5+20)*(0.79+(0.07*rarity))).to_i)).to_i
     end
   end
-  if rarity<@max_rarity_merge[0]+1 && rarity%2==1 && merges%5==0 && flowers%5==0 && f[4].reject{|q| q==q.to_i}.length.zero?
-    if level==40
-      u=[f[0]]
-      for i in 0...f[5].length
-        u.push(f[5][i]+sttz[i]-@mods[f[4][i]+4][5]+@mods[f[4][i]+sttz[i]+4][rarity]+2*(merges/5)+(flowers/5)-(5-rarity)/2)
-      end
-      for i in 0...f[4].length
-        u.push(f[4][i]+sttz[i])
-      end
-      for i in 0...f[4].length
-        u.push(@mods[f[4][i]+sttz[i]+4][5])
-      end
-    else
-      u=[f[0]]
-      for i in 0...f[5].length
-        u.push(f[5][i]+sttz[i]-@mods[f[4][i]+4][5]+2*(merges/5)+(flowers/5)-(5-rarity)/2)
-      end
-      u.push(u[1]+u[2]+u[3]+u[4]+u[5])
-      for i in 0...f[4].length
-        u.push(f[4][i]+sttz[i])
-      end
-      for i in 0...f[4].length
-        u.push(@mods[f[4][i]+sttz[i]+4][rarity])
-      end
-    end
-    if merges>0 && bane=='' && boon==''
-      s2=u.map{|q| q}
-      s=[[s2[1],1],[s2[2],2],[s2[3],3],[s2[4],4],[s2[5],5]]
-      s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}
-      for i in 0...3
-        u[s[i][1]]+=1
-      end
-    end
-  elsif rarity<@max_rarity_merge[0]+1 && rarity%2==0 && merges%5==0 && flowers%5==0 && f[4].reject{|q| q==q.to_i}.length.zero?
-    u=[f[0]]
-    for i in 0...f[5].length
-      u.push(f[5][i]+sttz[i]-@mods[f[4][i]+4][5]+2*(merges/5)+(flowers/5)-(6-rarity)/2)
-    end
-    s=[[u[2],2],[u[3],3],[u[4],4],[u[5],5]]                                   # all non-HP stats
-    s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}  # sort the stats based on amount
-    u[s[0][1]]+=1
-    u[s[1][1]]+=1
-    u.push(u[1]+u[2]+u[3]+u[4]+u[5]) if level==1
-    for i in 0...f[4].length
-      u.push(f[4][i]+sttz[i])
-    end
-    for i in 0...f[4].length
-      u.push(@mods[f[4][i]+sttz[i]+4][rarity])
-    end
-    if level==40
-      for i in 0...f[5].length
-        u[i+1]+=@mods[f[4][i]+sttz[i]+4][rarity]
-      end
-    end 
-    if merges>0 && bane=='' && boon==''
-      s2=u.map{|q| q}
-      s=[[s2[1],1],[s2[2],2],[s2[3],3],[s2[4],4],[s2[5],5]]
-      s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}
-      for i in 0...3
-        u[s[i][1]]+=1
-      end
-    end
-  else
-    # find neutral level 1 stats based on rarity
-    r=f[4].map{|q| q}                                                         # rate numbers
-    m=r.map{|q| (0.39*(((q*5+20)*(0.79+(0.07*5))).to_i)).to_i}                # growth rates
-    u=[f[0]]
-    for i in 0...5
-      u.push(f[5][i]-m[i])                                                    # apply the difference in the step above
-    end
-    s=[[u[2],2],[u[3],3],[u[4],4],[u[5],5]]                                   # all non-HP stats
-    s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}  # sort the stats based on amount
-    # apply the level 1 rarity difference between 5* and 1*
-    u[1]-=2
-    u[2]-=2
-    u[3]-=2
-    u[4]-=2
-    u[5]-=2
-    # Every odd rarity increases all stats by 1 compared to the previous odd rarity
-    u[1]+=((rarity-1)/2)
-    u[2]+=((rarity-1)/2)
-    u[3]+=((rarity-1)/2)
-    u[4]+=((rarity-1)/2)
-    u[5]+=((rarity-1)/2)
-    # find level 1 stats and growth rates based on boon and bane
-    for i in 0...5
-      u[i+1]+=sttz[i]
-      r[i]+=sttz[i]
-    end
-    s2=u.map{|q| q}
-    # if rarity is even, increase the two highest non-HP stats by 1 each
-    if rarity%2==0
-      u[s[0][1]]+=1
-      u[s[1][1]]+=1
-    end
-    # find stats based on merges
-    s=[[s2[1],1],[s2[2],2],[s2[3],3],[s2[4],4],[s2[5],5]]                                                        # all stats
-    s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}                                     # sort the stats based on amount
-    s.push(s[0],s[1],s[2],s[3],s[4])                                                                             # loop the list for use with multiple merges
-    s.push(s[0],s[1],s[2],s[3],s[4])
-    s.push(s[0],s[1],s[2],s[3],s[4])
-    if level==40
-      # find level 40 stats based on growth rates and level 1 stats
-      # growth rates
-      m=r.map{|q| (0.39*(((q*5+20)*(0.79+(0.07*rarity))).to_i)).to_i}
-      u=[u[0],u[1]+m[0],u[2]+m[1],u[3]+m[2],u[4]+m[3],u[5]+m[4],r[0],r[1],r[2],r[3],r[4],m[0],m[1],m[2],m[3],m[4]]
-      # apply the difference above
-    end
-    if merges>0 || flowers>0
-      # every five merges results in +2 to each stat
-      # every five flowers results in +1 to each stat
-      u[1]+=2*(merges/5)+(flowers/5)
-      u[2]+=2*(merges/5)+(flowers/5)
-      u[3]+=2*(merges/5)+(flowers/5)
-      u[4]+=2*(merges/5)+(flowers/5)
-      u[5]+=2*(merges/5)+(flowers/5)
-      # beyond that, two stats per merge, order determined above
-      if (merges%5)>0
-        for i in 0...2*(merges%5)
-          u[s[i][1]]+=1
-        end
-      end
-      if (flowers%5)>0
-        for i in 0...(flowers%5)
-          u[s[i][1]]+=1
-        end
+  # find neutral 5* level 1 stats based on rarity
+  rates=f[4].map{|q| q}                                                     # rate numbers
+  m=rates.map{|q| (0.39*(((q*5+20)*(0.79+(0.07*5))).to_i)).to_i}            # growth rates
+  unit=[f[0]]
+  for i in 0...5
+    unit.push(f[5][i]-m[i])                                                 # apply the difference in the step above
+  end
+  s=[[unit[2],2],[unit[3],3],[unit[4],4],[unit[5],5]]                       # all non-HP stats
+  s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}  # sort the stats based on amount
+  # apply the level 1 rarity difference between 5* and 1*
+  unit[1]-=2
+  unit[2]-=2
+  unit[3]-=2
+  unit[4]-=2
+  unit[5]-=2
+  # Every odd rarity increases all stats by 1 compared to the previous odd rarity
+  unit[1]+=((rarity-1)/2)
+  unit[2]+=((rarity-1)/2)
+  unit[3]+=((rarity-1)/2)
+  unit[4]+=((rarity-1)/2)
+  unit[5]+=((rarity-1)/2)
+  # store current stats
+  s2=unit.map{|q| q}
+  # if rarity is even, increase the two highest non-HP stats by 1 each
+  if rarity%2==0
+    unit[s[0][1]]+=1
+    unit[s[1][1]]+=1
+  end
+  # find level 1 stats and growth rates based on boon and bane
+  for i in 0...5
+    unit[i+1]+=sttz[i]
+    s2[i+1]+=sttz[i] # adjust even the odd-locked stats
+    rates[i]+=sttz[i]
+  end
+  # find stats based on merges
+  s=[[s2[1],1],[s2[2],2],[s2[3],3],[s2[4],4],[s2[5],5]]                                                        # all stats
+  s.sort! {|b,a| (a[0] <=> b[0]) == 0 ? (b[1] <=> a[1]) : (a[0] <=> b[0])}                                     # sort the stats based on amount
+  s.push(s[0],s[1],s[2],s[3],s[4])                                                                             # loop the list for use with multiple merges
+  s.push(s[0],s[1],s[2],s[3],s[4])
+  s.push(s[0],s[1],s[2],s[3],s[4])
+  if level==40
+    # find level 40 stats based on growth rates and level 1 stats
+    # growth rates
+    m=rates.map{|q| (0.39*(((q*5+20)*(0.79+(0.07*rarity))).to_i)).to_i}
+    unit=[unit[0],unit[1]+m[0],unit[2]+m[1],unit[3]+m[2],unit[4]+m[3],unit[5]+m[4],rates[0],rates[1],rates[2],rates[3],rates[4],m[0],m[1],m[2],m[3],m[4]]
+    # apply the difference above
+  end
+  if merges>0 || flowers>0
+    # every five merges results in +2 to each stat
+    # every five flowers results in +1 to each stat
+    unit[1]+=2*(merges/5)+(flowers/5)
+    unit[2]+=2*(merges/5)+(flowers/5)
+    unit[3]+=2*(merges/5)+(flowers/5)
+    unit[4]+=2*(merges/5)+(flowers/5)
+    unit[5]+=2*(merges/5)+(flowers/5)
+    # beyond that, two stats per merge, order determined above
+    if (merges%5)>0
+      for i in 0...2*(merges%5)
+        unit[s[i][1]]+=1
       end
     end
-    if merges>0 && bane=='' && boon==''
-      for i in 0...3
-        u[s[i][1]]+=1
+    # one stat per flower, order same as merges
+    if (flowers%5)>0
+      for i in 0...(flowers%5)
+        unit[s[i][1]]+=1
       end
     end
   end
-  return u
+  if merges>0 && bane=='' && boon=='' # neutral-natured units with merges get +1 to each of the first three stats in the same calculation above
+    for i in 0...3
+      unit[s[i][1]]+=1
+    end
+  end
+  return unit
 end
 
 def make_stats_string(event,name,rarity,boon='',bane='',hm=@max_rarity_merge[1]) # used by the `study` command to create the stat arrangement shown in it
@@ -6521,7 +6460,7 @@ def find_in_units(event,mode=0,paired=false,ignore_limit=false,args=nil)
   end
   g=get_markers(event)
   if matches5.length==@units.reject{|q| has_any?(g, q[13][0])}.compact.length && !(args.nil? || args.length.zero?) && !safe_to_spam?(event) && mode != 3
-    event.respond 'Your request is gibberish.' if ['unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
+    event.respond 'Your request is gibberish.' if ['hero','heroes','heros','unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
     return -1
   elsif mode==3
     return matches5
@@ -7280,7 +7219,7 @@ def display_units_and_skills(event,bot,args)
     else
       event.respond "I'm not displaying all units *and* all skills!"
     end
-  elsif ['unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
+  elsif ['hero','heroes','heros','unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
     display_units(event, mode)
   elsif ['skill','skills'].include?(args[0].downcase)
@@ -7751,7 +7690,7 @@ def comparison(event,args,bot)
     sleep 1
     b.uniq!
   end
-  if b.length==1 && !['unit','stats'].include?(event.message.text.downcase.split(' ')[0].gsub('feh!','').gsub('feh?','').gsub('f?','').gsub('e?','').gsub('h?',''))
+  if b.length==1 && !['hero','unit','stats'].include?(event.message.text.downcase.split(' ')[0].gsub('feh!','').gsub('feh?','').gsub('f?','').gsub('e?','').gsub('h?',''))
     event.respond "I need at least two units in order to compare anything.\nInstead, I will show you the results of the `study` command, which is similar to `compare` but for one unit."
     unit_study(event,name,bot)
     return 1
@@ -11480,7 +11419,7 @@ end
 bot.command([:random,:rand]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length.zero?
-  elsif ['unit','real'].include?(args[0].downcase)
+  elsif ['hero','unit','real'].include?(args[0].downcase)
     pick_random_unit(event,args,bot)
     return nil
   end
@@ -12298,7 +12237,7 @@ bot.command([:huge,:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hug
   end
 end
 
-bot.command([:unit, :data, :statsskills, :statskills, :stats_skills, :stat_skills, :statsandskills, :statandskills, :stats_and_skills, :stat_and_skills, :statsskill, :statskill, :stats_skill, :stat_skill, :statsandskill, :statandskill, :stats_and_skill, :stat_and_skill, :statsskils, :statskils, :stats_skils, :stat_skils, :statsandskils, :statandskils, :stats_and_skils, :stat_and_skils, :statsskil, :statskil, :stats_skil, :stat_skil, :statsandskil, :statandskil, :stats_and_skil, :stat_and_skil]) do |event, *args|
+bot.command([:hero, :unit, :data, :statsskills, :statskills, :stats_skills, :stat_skills, :statsandskills, :statandskills, :stats_and_skills, :stat_and_skills, :statsskill, :statskill, :stats_skill, :stat_skill, :statsandskill, :statandskill, :stats_and_skill, :stat_and_skill, :statsskils, :statskils, :stats_skils, :stat_skils, :statsandskils, :statandskils, :stats_and_skils, :stat_and_skils, :statsskil, :statskil, :stats_skil, :stat_skil, :statsandskil, :statandskil, :stats_and_skil, :stat_and_skil]) do |event, *args|
   return nil if overlap_prevent(event)
   if ['compare','comparison'].include?(args[0].downcase)
     args.shift
@@ -14801,7 +14740,7 @@ bot.mention do |event|
     k=1
   elsif ['random','rand'].include?(a[0].downcase)
     a.shift
-    if ['unit','real'].include?(a[0].downcase)
+    if ['hero','unit','real'].include?(a[0].downcase)
       pick_random_unit(event,a,bot)
     else
       generate_random_unit(event,a,bot)
