@@ -18,6 +18,7 @@ def triple_finish(list,forcetwo=false) # used to split a list into three roughly
 end
 
 def pseudocase(str)
+  return '' if str.nil? || str.length<=0
   str=str.split(' ').compact
   str[0]=str[0].downcase
   return str.join(' ')

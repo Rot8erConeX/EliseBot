@@ -1482,9 +1482,10 @@ def oregano_explain(event,bot)
     str="**Q4.) Wait...\"exclusive to the server in which they were created\"?  Then how did I see Oregano in the first place?**"
     str="#{str}\nA.) This answer gets a little technical."
     str="#{str}\nFirst off, Oregano is at the bottom of Elise's unit list.  She is, of Penumbra's second generation - or more specifically, those that had FEH units made - the alphabetically last character."
-    str="#{str}\nWhen looking for an entry number within a list, I wrote code so that the function returns `-1` if no matching entries were found, and use `>=0` to make sure that I am looking at an entry."
+    str="#{str}\nWhen looking for an entry number within a list, I originally wrote code so that the function returns `-1` if no matching entries were found, and use `>=0` to make sure that I am looking at an entry."
     str="#{str}\n__However__, sometimes, interference of some kind causes either the `-1` to pass the check, or for a number that legitimately passed the check to __become__ -1 after the check.  I generally refer to this as a \"typewriter jam\" error, and it doesn't always become -1 - sometimes it will become the number for another entry, which is how you can look up Anna and get her stats but Abel's picture displays, for example."
     str="#{str}\nWhen the typewriter jam results in a legitimized -1, Ruby - the programming language Elise is written in - interprets that as \"read the last entry in the list\", which for the unit list is Oregano."
+    str="#{str}\n\nThe code has since been changed in such a way that typewriter jams are less likely (if not outright impossible, though I want to avoid claiming such since code sometimes likes to do things that you don't tell it to do).  This means Oregano is less likely to appear outside the server she is supposed to appear in."
     str="#{str}\n\n**Q5.) What does her real-world father think of this?**"
     str="#{str}\nA.) IRL, Draco is a memelord, and he loves the fact that his daughter - who he designed to be a glass cannon to the utmost extreme - is legitimately \"breaking everything\" to the point that she is breaking my code and appearing places she shouldn't be."
     str="#{str}\n\n**Q6.) That thumbnail, who I presume is Oregano, is adorable.  Where do I find it?**\nMy friend BluechanXD, from the same server, made it based on Draco's description.  [Here's a link](https://www.deviantart.com/bluechanxd/art/FE-OC-Oregano-V2-765406579)." unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
@@ -1497,6 +1498,7 @@ def oregano_explain(event,bot)
     str="#{str}\n\n**Q3.) \"Server-specific\", eh?  Then how did I see her?**"
     str="#{str}\nA.) Non-technical answer: a weird quirk of the programming language I coded Elise in, combined with how I store the unit data, sometimes means that the last listed unit in Elise's unit list is shown in other servers."
     str="#{str}\nIt is related to the same bug that causes, when you look up one unit, the unit color or profile image to be a different character."
+    str="#{str}\nAs of the time of writing, changes to the code have been made to make this bug less likely, if not outright impossible, based on tricks I learned since the original coding of Elise."
     create_embed(event,'A word from my developer',str,0x759371,'For more detailed answers, use this command in PM.','https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/Oregano/Face_FC.png')
   end
 end

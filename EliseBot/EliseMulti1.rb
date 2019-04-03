@@ -609,12 +609,17 @@ def list_unit_aliases(event,args,bot,mode=0)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   data_load()
   nicknames_load()
+  unit=nil
+  skill=nil
+  struct=nil
+  azry=nil
+  itmu=nil
   unless args.length.zero?
-    unit=find_unit(args.join(''),event)[0]
-    skill=@skills[find_skill(args.join(''),event)][0]
-    struct=find_structure(args.join(''),event)
-    azry=@accessories[find_accessory(args.join(''),event)][0]
-    itmu=@itemus[find_item_feh(args.join(''),event)][0]
+    unit=find_unit(args.join(''),event)[0] unless find_unit(args.join(''),event).length<=0
+    skill=find_skill(args.join(''),event)[0] unless find_skill(args.join(''),event).length<=0
+    struct=find_structure(args.join(''),event) unless find_structure(args.join(''),event).length<=0
+    azry=find_accessory(args.join(''),event)[0] unless find_accessory(args.join(''),event).length<=0
+    itmu=find_item_feh(args.join(''),event)[0] unless find_item_feh(args.join(''),event).length<=0
     if !detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1).nil?
       x=detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1)
       unit=x[1]
@@ -622,7 +627,7 @@ def list_unit_aliases(event,args,bot,mode=0)
       g=get_markers(event)
       u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
       unit=unit.reject{|q| !u.include?(q)}
-    elsif find_unit(args.join(''),event)==-1 && find_skill(args.join(''),event)==-1 && find_accessory(args.join(''),event)==-1 && find_item_feh(args.join(''),event)==-1 && find_structure(args.join(''),event).length<=0 && !has_any?(args,['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils','structures','structure','struct','structs','item','items','accessorys','accessory','accessories'])
+    elsif find_unit(args.join(''),event).length<=0 && find_skill(args.join(''),event).length<=0 && find_accessory(args.join(''),event).length<=0 && find_item_feh(args.join(''),event).length<=0 && find_structure(args.join(''),event).length<=0 && !has_any?(args,['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils','structures','structure','struct','structs','item','items','accessorys','accessory','accessories'])
       alz=args.join(' ')
       alz='>censored mention<' if alz.include?('@')
       event.respond "The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\n#{alz} does not fall into any of these categories."
@@ -633,7 +638,7 @@ def list_unit_aliases(event,args,bot,mode=0)
     unit=nil if find_unit(args.join(''),event).length<=0
   end
   unless skill.nil? || skill.is_a?(Array)
-    skill=nil if find_skill(args.join(''),event)<0
+    skill=nil if find_skill(args.join(''),event).length<=0
   end
   if !struct.nil? && struct.length>0
     struct=struct.map{|q| @structures[q]}
@@ -641,10 +646,10 @@ def list_unit_aliases(event,args,bot,mode=0)
     struct=nil
   end
   unless itmu.nil? || itmu.is_a?(Array)
-    itmu=nil if find_item_feh(args.join(''),event)<0
+    itmu=nil if find_item_feh(args.join(''),event).length<=0
   end
   unless azry.nil? || azry.is_a?(Array)
-    azry=nil if find_accessory(args.join(''),event)<0
+    azry=nil if find_accessory(args.join(''),event).length<=0
   end
   f=[]
   n=@aliases.reject{|q| q[0]!='Unit'}.map{|q| [q[1],q[2],q[3]]}
@@ -949,7 +954,7 @@ def list_unit_aliases(event,args,bot,mode=0)
       n=n.reject{|q| q[2].nil?} if mode==1
       skill=[skill] unless skill.is_a?(Array)
       for i1 in 0...skill.length
-        u=@skills[find_skill(skill[i1],event)]
+        u=find_skill(skill[i1],event)
         f.push("\n#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u[0].gsub('Bladeblade','Laevatein')}#{skill_moji(u,event,bot)}**#{"'s server-specific aliases__" if mode==1}")
         u=u[0]
         f.push(u) if u=='Bladeblade'
@@ -1035,7 +1040,7 @@ def list_unit_aliases(event,args,bot,mode=0)
     n=n.reject{|q| q[2].nil?} if mode==1
     azry=[azry] unless azry.is_a?(Array)
     for i1 in 0...azry.length
-      u=@accessories[find_accessory(azry[i1],event)]
+      u=find_accessory(azry[i1],event)
       semote=''
       semote='<:Accessory_Type_Hair:531733124741201940>' if u[1]=='Hair'
       semote='<:Accessory_Type_Hat:531733125227741194>' if u[1]=='Hat'
@@ -1068,7 +1073,7 @@ def list_unit_aliases(event,args,bot,mode=0)
     n=n.reject{|q| q[2].nil?} if mode==1
     itmu=[itmu] unless itmu.is_a?(Array)
     for i1 in 0...itmu.length
-      u=@itemus[find_item_feh(itmu[i1],event)]
+      u=find_item_feh(itmu[i1],event)
       f.push("\n#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u[0]}**#{"'s server-specific aliases__" if mode==1}")
       u=u[0]
       f.push(u.gsub('(','').gsub(')','').gsub(' ','')) if u.include?('(') || u.include?(')') || u.include?(' ')
@@ -1138,45 +1143,45 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   unit=unit.gsub('!','').gsub('(','').gsub(')','').gsub('_','')
   if find_unit(newname,event,true).length>0
     type[0]='Unit'
-  elsif find_skill(newname,event,true)>=0
+  elsif find_skill(newname,event,true).length>0
     type[0]='Skill'
   elsif find_structure(newname,event,true).length>0
     type[0]='Structure'
-  elsif find_accessory(newname,event,true)>=0
+  elsif find_accessory(newname,event,true).length>0
     type[0]='Accessory'
-  elsif find_item_feh(newname,event,true)>=0
+  elsif find_item_feh(newname,event,true).length>0
     type[0]='Item'
   elsif find_unit(newname,event).length>0
     type[0]='Unit*'
-  elsif find_skill(newname,event)>=0
+  elsif find_skill(newname,event).length>0
     type[0]='Skill*'
   elsif find_structure(newname,event).length>0
     type[0]='Structure*'
-  elsif find_accessory(newname,event)>=0
+  elsif find_accessory(newname,event).length>0
     type[0]='Accessory*'
-  elsif find_item_feh(newname,event)>=0
+  elsif find_item_feh(newname,event).length>0
     type[0]='Item*'
   end
   type[0]='Skill' if newname.downcase=='adult'
   if find_unit(unit,event,true).length>0
     type[1]='Unit'
-  elsif find_skill(unit,event,true)>=0
+  elsif find_skill(unit,event,true).length>0
     type[1]='Skill'
   elsif find_structure(unit,event,true).length>0
     type[1]='Structure'
-  elsif find_accessory(unit,event,true)>=0
+  elsif find_accessory(unit,event,true).length>0
     type[1]='Accessory'
-  elsif find_item_feh(unit,event,true)>=0
+  elsif find_item_feh(unit,event,true).length>0
     type[1]='Item'
   elsif find_unit(unit,event).length>0
     type[1]='Unit*'
-  elsif find_skill(unit,event)>=0
+  elsif find_skill(unit,event).length>0
     type[1]='Skill*'
   elsif find_structure(unit,event).length>0
     type[1]='Structure*'
-  elsif find_accessory(unit,event)>=0
+  elsif find_accessory(unit,event).length>0
     type[1]='Accessory*'
-  elsif find_item_feh(unit,event)>=0
+  elsif find_item_feh(unit,event).length>0
     type[1]='Item*'
   end
   type[1]='Skill' if unit.downcase=='adult'
@@ -1226,7 +1231,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
     cck=unt[12].split(', ')[1][0,1].downcase if unt[12].split(', ').length>1
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Skill'
-    unt=@skills[find_skill(unit,event)]
+    unt=find_skill(unit,event)
     checkstr2=unt[0].gsub(' ','').downcase
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Structure'
     unt=find_structure(unit,event)
@@ -1240,10 +1245,10 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     end
     checkstr2="#{unt[0]}"
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Accessory'
-    unt=@accessories[find_accessory(unit,event)]
+    unt=find_accessory(unit,event)
     checkstr2="#{unt[0]}"
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Item'
-    unt=@itemus[find_item_feh(unit,event)]
+    unt=find_item_feh(unit,event)
     checkstr2="#{unt[0]}"
   end
   logchn=386658080257212417
