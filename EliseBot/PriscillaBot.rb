@@ -258,6 +258,7 @@ def data_load() # loads the character and skill data from the files on my comput
     bob4[2]=bob4[2].to_i unless bob4[2]=='-' # ...as should the Might or Cooldown
     bob4[9]=bob4[9].split('; ')   # the list of units that know a skill by default should be split into lists based on rarity...
     bob4[10]=bob4[10].split('; ') # ...as should the list of units who can learn a skill without inheritance
+    bob4[11]=bob4[11].split(', ') # the list of tags should be split by tag
     bob4[12]=bob4[12].split(',').map{|q| q.to_i} if bob4[4]=='Weapon' # stats affected by the weapon, split into a list and turned from strings into numbers
     bob4[13]=nil unless bob4[13].nil? || bob4[13].length>0 # tag for server-specific skills
     bob4[14]=nil unless bob4[14].nil? || bob4[14].length>0 # this entry is used by weapons to store their evolutions, and by healing staves to store their healing formula
@@ -940,18 +941,18 @@ def find_skill(name,event,ignore=false,ignore2=false,m=false,mode=0) # one of tw
   data_load()
   sklz=@skills.map{|q| q}
   x=x_find_skill(name,event,sklz,ignore,ignore2,m) # find the skill that matches.
-  return x if x<0 # if no skill matches, skip more
-  return -1 if sklz[x].nil?
-  return x if ['weapon','assist','special'].include?(sklz[x][4].downcase) # weapons and such do not need weird calculations
-  return x if sklz[x][0].downcase==name.downcase # exact matches do not need weird calculations
+  return x if x.length<0 # if no skill matches, skip more
+  return [] if x.nil? || x.length<=0
+  return x if ['weapon','assist','special'].include?(x[4].downcase) # weapons and such do not need weird calculations
+  return x if x[0].downcase==name.downcase # exact matches do not need weird calculations
   if name[name.length-1,1].to_i.to_s==name[name.length-1,1]
-    return x if sklz[x][0][sklz[x][0].length-1,1].to_i.to_s == sklz[x][0][sklz[x][0].length-1,1] # skills with numbers do not need weird calculations
+    return x if x[0][x[0].length-1,1].to_i.to_s == x[0][x[0].length-1,1] # skills with numbers do not need weird calculations
   else
-    return x if sklz[x][0][sklz[x][0].length-1,1].to_i.to_s != sklz[x][0][sklz[x][0].length-1,1] # skills with numbers do not need weird calculations
+    return x if x[0][x[0].length-1,1].to_i.to_s != x[0][x[0].length-1,1] # skills with numbers do not need weird calculations
   end
-  n=sklz[x][0].gsub(' ','').gsub('_','')
+  n=x[0].gsub(' ','').gsub('_','')
   name=name.gsub(' ','').gsub('_','')
-  xx=sklz[x][0].reverse.scan(/\d+/)[0].reverse
+  xx=x[0].reverse.scan(/\d+/)[0].reverse
   # removing any numbers that weren't part of the original input
   for j in 0..xx.length
     for i in 0...10 # find the highest tier skill with a matching name
@@ -960,18 +961,18 @@ def find_skill(name,event,ignore=false,ignore2=false,m=false,mode=0) # one of tw
     end
   end
   return x_find_skill(n,event,sklz) if n[n.length-1,1].to_i.to_s==n[n.length-1,1] # if the skill already has a match with a name that ends in a number, return that value
-  x2=first_sub(sklz[x][0].reverse,xx.reverse,'').reverse
+  x2=first_sub(x[0].reverse,xx.reverse,'').reverse
   x3=[]
   # find any skills with the same name but different values...
   for i in 0...sklz.length
     if sklz[i][0][sklz[i][0].length-1].to_i.to_s==sklz[i][0][sklz[i][0].length-1]
       m2=sklz[i][0].reverse.scan(/\d+/)[0].reverse
-      x3.push([i,m2.to_i,sklz[i][0]]) if first_sub(sklz[i][0].reverse,m2.reverse,'').reverse==x2
+      x3.push([sklz[i],m2.to_i,sklz[i][0]]) if first_sub(sklz[i][0].reverse,m2.reverse,'').reverse==x2
     end
   end
   # ...and return the one at the end of the list (which is the beginning of the list after the sorting)
   g=get_markers(event)
-  x3=x3.reject{|q| !has_any?(g, sklz[q[0]][13])}.sort{|a,b| b[1]<=>a[1]}
+  x3=x3.reject{|q| !has_any?(g, q[0][13])}.sort{|a,b| b[1]<=>a[1]}
   return x3.reverse.map{|q| q[0]} if mode==1
   return x3[0][0]
 end
@@ -980,50 +981,50 @@ def x_find_skill(name,event,sklz,ignore=false,ignore2=false,m=false) # one of tw
   ks=0
   ks=event.server.id unless event.server.nil?
   g=get_markers(event)
-  return -1 if name.nil?
+  return [] if name.nil?
   name=normalize(name.gsub('!','').gsub('.','').gsub('?',''))
   if name.downcase.gsub(' ','').gsub('_','')[0,2]=='<:'
-    name=name.split(':')[1] if x_find_skill(name.split(':')[1],event,sklz,ignore,ignore2)>=0
+    name=name.split(':')[1] if x_find_skill(name.split(':')[1],event,sklz,ignore,ignore2).length>0
   end
   # use the `stat_buffs` function so that "Atk" and "Attack", for example, are treated the same
   # try with only replacing spaces and underscores first...
   x2=stat_buffs(name.gsub(' ','').gsub('_',''),name,2)
   k=sklz.find_index{|q| stat_buffs(q[0].gsub('.','').gsub('!',''),name,2).gsub('?','').gsub(' ','').gsub('_','')==x2}
-  return k unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
+  return sklz[k] unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
   # ...if that fails, try removing quotes, slashes, and hyphens as well
   x2=stat_buffs(name.gsub(' ','').gsub('_','').gsub("'",'').gsub('/','').gsub("-",''),name,2)
   k=sklz.find_index{|q| stat_buffs(q[0].gsub('.','').gsub('!','').gsub('?','').gsub('/','').gsub("'",'').gsub("-",''),name,2).gsub(' ','').gsub('_','')==x2}
-  return k unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
+  return sklz[k] unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
   # skill aliases...
   unless ignore2
     alz=@aliases.reject{|q| q[0]!='Skill'}
     k=alz.find_index{|q| q[1].downcase==name.downcase && (q[3].nil? || q[3].include?(ks))}
-    return sklz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
+    return sklz[sklz.find_index{|q| q[0]==alz[k][2]}] unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
     k=alz.find_index{|q| q[1].gsub('||','').downcase==name.downcase && (q[3].nil? || q[3].include?(ks))}
-    return sklz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
+    return sklz[sklz.find_index{|q| q[0]==alz[k][2]}] unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
   end
-  return -1 if ignore
-  return find_skill("the#{name.downcase.gsub(' ','')}",event) if find_skill("the#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("the#{name.downcase.gsub(' ','')}",event,true)][0][0,4]=='The '
-  return find_skill("a#{name.downcase.gsub(' ','')}",event) if find_skill("a#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("a#{name.downcase.gsub(' ','')}",event,true)][0][0,2]=='A '
-  return find_skill("an#{name.downcase.gsub(' ','')}",event) if find_skill("an#{name.downcase.gsub(' ','')}",event,true)>=0 && @skills[find_skill("an#{name.downcase.gsub(' ','')}",event,true)][0][0,3]=='An '
-  return -1 if name.length<2
+  return [] if ignore
+  return find_skill("the#{name.downcase.gsub(' ','')}",event) if find_skill("the#{name.downcase.gsub(' ','')}",event,true).length>0 && @skills[find_skill("the#{name.downcase.gsub(' ','')}",event,true)][0][0,4]=='The '
+  return find_skill("a#{name.downcase.gsub(' ','')}",event) if find_skill("a#{name.downcase.gsub(' ','')}",event,true).length>0 && @skills[find_skill("a#{name.downcase.gsub(' ','')}",event,true)][0][0,2]=='A '
+  return find_skill("an#{name.downcase.gsub(' ','')}",event) if find_skill("an#{name.downcase.gsub(' ','')}",event,true).length>0 && @skills[find_skill("an#{name.downcase.gsub(' ','')}",event,true)][0][0,3]=='An '
+  return [] if name.length<2
   # try everything again, but this time matching the portion of the skill name that is exactly as long as the input string.
   x2=stat_buffs(name.gsub(' ','').gsub('_',''),name,2)
   k=sklz.find_index{|q| stat_buffs(q[0].gsub('.','').gsub('!','').gsub('?',''),name,2).gsub(' ','').gsub('_','')[0,name.length]==x2}
-  return k unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
+  return sklz[k] unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
   k=sklz.find_index{|q| stat_buffs(q[0].gsub('.','').gsub('!','').gsub('?',''),name,2).gsub(' ','').gsub('_','')[0,x2.length]==x2}
-  return k unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
-  return -1 if name.length<4
+  return sklz[k] unless k.nil? || sklz[k].nil? || !has_any?(g, sklz[k][13])
+  return [] if name.length<4
   namex=name.gsub(' ','').downcase
   unless ignore2
     alz=@aliases.reject{|q| q[0]!='Skill'}
     k=alz.find_index{|q| q[1][0,namex.length].downcase==namex.downcase && (q[3].nil? || q[3].include?(ks))}
-    return sklz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
+    return sklz[sklz.find_index{|q| q[0]==alz[k][2]}] unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
     k=alz.find_index{|q| q[1][0,namex.length].gsub('||','').downcase==namex.downcase && (q[3].nil? || q[3].include?(ks))}
-    return sklz.find_index{|q| q[0]==alz[k][2]} unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
+    return sklz[sklz.find_index{|q| q[0]==alz[k][2]}] unless k.nil? || !has_any?(g, sklz[sklz.find_index{|q| q[0]==alz[k][2]}][13])
   end
   return find_skill(name.downcase.gsub('_',' '),event) if name.include?('_')
-  return -1
+  return []
 end
 
 def find_structure(name,event,fullname=false)
@@ -1097,24 +1098,23 @@ def find_item_feh(name,event,fullname=false)
   itmu=@itemus.map{|q| q}
   name=name.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
   k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name}
-  return k unless k.nil?
+  return itmu[k] unless k.nil?
   nicknames_load()
   alz=@aliases.reject{|q| q[0]!='Item'}.map{|q| [q[1],q[2],q[3]]}
   g=0
   g=event.server.id unless event.server.nil?
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
-  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  return itmu[itmu.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
   k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
-  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
-  return -1 if fullname
-  return -1 if name.length<3
+  return itmu[itmu.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
+  return [] if fullname || name.length<3
   k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
-  return k unless k.nil?
+  return itmu[k] unless k.nil?
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
-  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  return itmu[itmu.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
   k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
-  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
-  return -1
+  return itmu[itmu.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
+  return []
 end
 
 def find_accessory(name,event,fullname=false)
@@ -1122,60 +1122,82 @@ def find_accessory(name,event,fullname=false)
   itmu=@accessories.map{|q| q}
   name=name.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
   k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name}
-  return k unless k.nil?
+  return itmu[k] unless k.nil?
   nicknames_load()
   alz=@aliases.reject{|q| q[0]!='Accessory'}.map{|q| [q[1],q[2],q[3]]}
   g=0
   g=event.server.id unless event.server.nil?
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
-  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  return itmu[itmu.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
   k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
-  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
-  return -1 if fullname
-  return -1 if name.length<3
+  return itmu[itmu.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
+  return [] if fullname || name.length<3
   k=itmu.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
-  return k unless k.nil?
+  return itmu[k] unless k.nil?
   k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
-  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
+  return itmu[itmu.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
   k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && (q[2].nil? || q[2].include?(g))}
-  return itmu.find_index{|q| q[0]==alz[k][1]} unless k.nil?
-  return -1
+  return itmu[itmu.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
+  return []
 end
 
 def find_data_ex(callback,name,event,fullname=false)
-  k=method(callback).call(name,event,true)
-  return k if k>=0
-  args=name.split(' ')
-  for i in 0...args.length
-    for i2 in 0...args.length-i
-      k=method(callback).call(args[i,args.length-i-i2].join(' '),event,true)
-      return k if k>=0 && args[i,args.length-i-i2].length>0
+  if [:find_skill,:find_accessory,:find_item_feh].include?(callback)
+    k=method(callback).call(name,event,true)
+    return k if k.length>0
+    args=name.split(' ')
+    for i in 0...args.length
+      for i2 in 0...args.length-i
+        k=method(callback).call(args[i,args.length-i-i2].join(' '),event,true)
+        return k if k.length>0 && args[i,args.length-i-i2].length>0
+      end
     end
-  end
-  return -1 if fullname
-  k=method(callback).call(name,event)
-  return k if k>=0
-  args=name.split(' ')
-  for i in 0...args.length
-    for i2 in 0...args.length-i
-      k=method(callback).call(args[i,args.length-i-i2].join(' '),event)
-      return k if k>=0 && args[i,args.length-i-i2].length>0
+    return [] if fullname
+    k=method(callback).call(name,event)
+    return k if k.length>0
+    args=name.split(' ')
+    for i in 0...args.length
+      for i2 in 0...args.length-i
+        k=method(callback).call(args[i,args.length-i-i2].join(' '),event)
+        return k if k.length>0 && args[i,args.length-i-i2].length>0
+      end
     end
+    return []
+  else
+    k=method(callback).call(name,event,true)
+    return k if k>=0
+    args=name.split(' ')
+    for i in 0...args.length
+      for i2 in 0...args.length-i
+        k=method(callback).call(args[i,args.length-i-i2].join(' '),event,true)
+        return k if k>=0 && args[i,args.length-i-i2].length>0
+      end
+    end
+    return -1 if fullname
+    k=method(callback).call(name,event)
+    return k if k>=0
+    args=name.split(' ')
+    for i in 0...args.length
+      for i2 in 0...args.length-i
+        k=method(callback).call(args[i,args.length-i-i2].join(' '),event)
+        return k if k>=0 && args[i,args.length-i-i2].length>0
+      end
+    end
+    return -1
   end
-  return -1
 end
 
 def find_promotions(j,event) # finds the promotions of a given skill.  Input is given in the skill's entry number, not name
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
-  return [] if j<0
+  return [] if j.length<=0
   data_load()
   p=[]
   sklz=@skills.map{|q| q}
   for i in 0...sklz.length
     unless sklz[i].nil? || sklz[i][8].nil?
-      p.push(sklz[i][0].gsub('Bladeblade','Laevatein')) if sklz[i][8].include?("*#{sklz[j][0]}*") && has_any?(g, sklz[i][13])
+      p.push(sklz[i][0].gsub('Bladeblade','Laevatein')) if sklz[i][8].include?("*#{j[0]}*") && has_any?(g, sklz[i][13])
     end
   end
   p=p.sort{|a,b| a.downcase <=> b.downcase}
@@ -1187,7 +1209,7 @@ def find_prevolutions(j,event) # finds any "pre-evolutions" of evolved weapons. 
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
-  return [] if j<0
+  return [] if j.length<0
   data_load()
   p=[]
   sklz=@skills.map{|q| q}
@@ -1205,9 +1227,9 @@ def find_prevolutions(j,event) # finds any "pre-evolutions" of evolved weapons. 
               z2[10][i3]='-'
             end
           end
-          p.push([z2,'but only when on']) if z[1]==sklz[j][0] && has_any?(g, sklz[i][13])
+          p.push([z2,'but only when on']) if z[1]==j[0] && has_any?(g, sklz[i][13])
         else # used code starts back here.
-          p.push([sklz[i],'which is learned by']) if k[i2]==sklz[j][0] && has_any?(g, sklz[i][13])
+          p.push([sklz[i],'which is learned by']) if k[i2]==j[0] && has_any?(g, sklz[i][13])
         end
       end
     end
@@ -1256,7 +1278,7 @@ def find_weapon(name,event,ignore=false,ignore2=false,mode=0) # used by the `get
 end
 
 def get_weapon(str,event,mode=0) # used by the `stats` command and many derivations to find a weapon's name in the inputs that remain after the unit is decided
-  return nil if str.gsub(' ','').length<=0
+  return [] if str.gsub(' ','').length<=0
   skz=@skills.map{|q| q}
   args=str.gsub('(','').gsub(')','').split(' ')
   args=args.reject{|q| q.gsub('*','').gsub('+','').to_i.to_s==q.gsub('*','').gsub('+','') || skz.reject{|q2| ['Weapon','Assist','Special'].include?(q2[4])}.map{|q2| stat_buffs(q2[0]).downcase.gsub(' ','')}.include?(stat_buffs(q,nil,2).downcase) || skz.reject{|q2| ['Weapon','Assist','Special'].include?(q2[4])}.map{|q2| q2[0].gsub('/','').downcase.gsub(' ','')}.include?(q.downcase) || ['+','-'].include?(q[0,1])} if args.length>1
@@ -1265,27 +1287,27 @@ def get_weapon(str,event,mode=0) # used by the `stats` command and many derivati
   name=args.join(' ')
   args3=args.join(' ').split(' ')
   # try full-name matches first...
-  if find_weapon(name,event,false,false,mode)<0
+  if find_weapon(name,event,false,false,mode).length<=0
     for i in 0...args.length-1
       args.pop
-      if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,true,false,mode)>=0
+      if find_weapon(name,event,false,false,mode).length<=0 && find_weapon(args.join('').downcase,event,true,false,mode).length>0
         args3=args.join(' ').split(' ') 
-        name=skz[find_weapon(args.join('').downcase,event,true,false,mode)][0]
+        name=find_weapon(args.join('').downcase,event,true,false,mode)[0]
       end
     end
-    if find_weapon(name,event,false,false,mode)<0
+    if find_weapon(name,event,false,false,mode).length<=0
       for j in 0...args2.length-1
         args2.shift
         args=args2.join(' ').split(' ')
-        if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,true,false,mode)>=0
+        if find_weapon(name,event,false,false,mode).length<=0 && find_weapon(args.join('').downcase,event,true,false,mode).length>0
           args3=args.join(' ').split(' ') 
-          name=skz[find_weapon(args.join('').downcase,event,true,false,mode)][0]
+          name=find_weapon(args.join('').downcase,event,true,false,mode)[0]
         end
         for i in 0...args.length-1
           args.pop
-          if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,true,false,mode)>=0
+          if find_weapon(name,event,false,false,mode).length<=0 && find_weapon(args.join('').downcase,event,true,false,mode).length>0
             args3=args.join(' ').split(' ') 
-            name=skz[find_weapon(args.join('').downcase,event,true,false,mode)][0]
+            name=find_weapon(args.join('').downcase,event,true,false,mode)[0]
           end
         end
       end
@@ -1293,34 +1315,34 @@ def get_weapon(str,event,mode=0) # used by the `stats` command and many derivati
   end
   args2=args4.join(' ').split(' ')
   # ...then try partial name matches
-  if find_weapon(name,event,false,false,mode)<0
+  if find_weapon(name,event,false,false,mode).length<=0
     for i in 0...args.length-1
       args.pop
-      if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,false,false,mode)>=0
+      if find_weapon(name,event,false,false,mode).length<=0 && find_weapon(args.join('').downcase,event,false,false,mode).length>0
         args3=args.join(' ').split(' ') 
-        name=skz[find_weapon(args.join('').downcase,event,false,false,mode)][0]
+        name=find_weapon(args.join('').downcase,event,false,false,mode)[0]
       end
     end
-    if find_weapon(name,event,false,false,mode)<0
+    if find_weapon(name,event,false,false,mode).length<=0
       for j in 0...args2.length-1
         args2.shift
         args=args2.join(' ').split(' ')
-        if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,false,false,mode)>=0
+        if find_weapon(name,event,false,false,mode).length<=0 && find_weapon(args.join('').downcase,event,false,false,mode).length>0
           args3=args.join(' ').split(' ') 
-          name=skz[find_weapon(args.join('').downcase,event,false,false,mode)][0]
+          name=find_weapon(args.join('').downcase,event,false,false,mode)[0]
         end
         for i in 0...args.length-1
           args.pop
-          if find_weapon(name,event,false,false,mode)<0 && find_weapon(args.join('').downcase,event,false,false,mode)>=0
+          if find_weapon(name,event,false,false,mode).length<=0 && find_weapon(args.join('').downcase,event,false,false,mode).length>0
             args3=args.join(' ').split(' ') 
-            name=skz[find_weapon(args.join('').downcase,event,false,false,mode)][0]
+            name=find_weapon(args.join('').downcase,event,false,false,mode)[0]
           end
         end
       end
     end
   end
-  return [skz[find_weapon(name,event)][0],args3.join(' ')] if find_weapon(name,event)>-1
-  return nil
+  return [find_weapon(name,event)[0],args3.join(' ')] if find_weapon(name,event).length>0
+  return []
 end
 
 def find_in_dev_units(name) # used by the `stats` command and many derivations to determine if the bot developer has recorded owning a listed unit
@@ -1447,7 +1469,7 @@ def find_name_in_string(event,stringx=nil,mode=0) # used to find not only a unit
   args=args.reject{ |a| a[0,1]=='+' && a[1,a.length-1].to_i.to_s==a[1,a.length-1] }
   args=args.reject{ |a| a[0,a.length-1].to_i.to_s==a[0,a.length-1] && a[a.length-1,1]=='*'}
   args=args.reject{ |a| a.to_i.to_s==a}
-  args=args.reject{ |a| find_skill(a,event,true)>-1 }
+  args=args.reject{ |a| find_skill(a,event,true).length>0 }
   args=args.reject{ |a| a=="``"}
   args.compact!
   s=remove_prefix(s,event)
@@ -1785,7 +1807,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
   skillls=skillls.map{|q| q}
   if weapon.nil? || weapon=='' || weapon==' ' || weapon=='-'
   else # this is the weapon's stat effect
-    s2=@skills[find_skill(weapon,event)]
+    s2=find_skill(weapon,event)
     if !s2.nil? && s2[4]=='Weapon' && !s2[15].nil? && !refinement.nil? && refinement.length>0 && (s2[5]!='Staff Users Only' || refinement=='Effect')
       # weapon refinement...
       if find_effect_name(s2,event).length>0
@@ -1796,7 +1818,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       sttz=[]
       inner_skill=s2[15]
       mt=[0,0,0,0,0]
-      mt[1]=1 if s2[11].split(', ').include?('Silver')
+      mt[1]=1 if s2[11].include?('Silver')
       if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
         mt[1]+=inner_skill[0,1].to_i
         inner_skill=inner_skill[1,inner_skill.length-1]
@@ -1868,7 +1890,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       sttz=[[0,0,0,0,0]]
       ks=0
     end
-    s2=@skills[find_skill(weapon,event)]
+    s2=find_skill(weapon,event)
     s2[12]=[0,0,0,0,0] if s2[12].nil? || !s2.is_a?(Array) || s2[12].length<=0
     stats[1]+=sttz[ks][0]
     stats[2]+=s2[12][1]+sttz[ks][1]
@@ -2452,14 +2474,14 @@ def skill_moji(k,event,bot)
     end
   elsif k[4]=='Assist'
     m="#{m}<:Skill_Assist:444078171025965066>"
-    m="#{m}<:Assist_Music:454462054959415296>" if k[11].split(', ').include?('Music')
-    m="#{m}<:Assist_Rally:454462054619807747>" if k[11].split(', ').include?('Rally')
+    m="#{m}<:Assist_Music:454462054959415296>" if k[11].include?('Music')
+    m="#{m}<:Assist_Rally:454462054619807747>" if k[11].include?('Rally')
     m="#{m}<:Assist_Staff:454451496831025162>" if k[5]=='Staff Users Only'
   elsif k[4]=='Special'
     m="#{m}<:Skill_Special:444078170665254929>"
-    m="#{m}<:Special_Offensive:454460020793278475>" if k[11].split(', ').include?('Offensive')
-    m="#{m}<:Special_Defensive:454460020591951884>" if k[11].split(', ').include?('Defensive')
-    m="#{m}<:Special_AoE:454460021665693696>" if k[11].split(', ').include?('AoE')
+    m="#{m}<:Special_Offensive:454460020793278475>" if k[11].include?('Offensive')
+    m="#{m}<:Special_Defensive:454460020591951884>" if k[11].include?('Defensive')
+    m="#{m}<:Special_AoE:454460021665693696>" if k[11].include?('AoE')
     m="#{m}<:Special_Healer:454451451805040640>" if k[5]=='Staff Users Only'
   else
     m="#{m}<:Passive_A:443677024192823327>" if k[4].split(', ').include?('Passive(A)')
@@ -2619,18 +2641,19 @@ def get_unit_prf(name)
 end
 
 def has_weapon_tag?(tag,wpn,refinement=nil,transformed=false)
-  return true if wpn[11].split(', ').include?(tag)
-  return true if wpn[11].split(', ').include?("(E)#{tag}") && refinement=='Effect'
-  return true if wpn[11].split(', ').include?("(R)#{tag}") && !refinement.nil? && refinement.length>0
-  return true if wpn[11].split(', ').include?("(T)#{tag}") && transformed
-  return true if wpn[11].split(', ').include?("(TE)#{tag}") && transformed && refinement=='Effect'
-  return true if wpn[11].split(', ').include?("(ET)#{tag}") && transformed && refinement=='Effect'
-  return true if wpn[11].split(', ').include?("(T)(E)#{tag}") && transformed && refinement=='Effect'
-  return true if wpn[11].split(', ').include?("(E)(T)#{tag}") && transformed && refinement=='Effect'
-  return true if wpn[11].split(', ').include?("(TR)#{tag}") && transformed && !refinement.nil? && refinement.length>0
-  return true if wpn[11].split(', ').include?("(RT)#{tag}") && transformed && !refinement.nil? && refinement.length>0
-  return true if wpn[11].split(', ').include?("(T)(R)#{tag}") && transformed && !refinement.nil? && refinement.length>0
-  return true if wpn[11].split(', ').include?("(R)(T)#{tag}") && transformed && !refinement.nil? && refinement.length>0
+  return false if wpn.nil? || wpn.length<=0
+  return true if wpn[11].include?(tag)
+  return true if wpn[11].include?("(E)#{tag}") && refinement=='Effect'
+  return true if wpn[11].include?("(R)#{tag}") && !refinement.nil? && refinement.length>0
+  return true if wpn[11].include?("(T)#{tag}") && transformed
+  return true if wpn[11].include?("(TE)#{tag}") && transformed && refinement=='Effect'
+  return true if wpn[11].include?("(ET)#{tag}") && transformed && refinement=='Effect'
+  return true if wpn[11].include?("(T)(E)#{tag}") && transformed && refinement=='Effect'
+  return true if wpn[11].include?("(E)(T)#{tag}") && transformed && refinement=='Effect'
+  return true if wpn[11].include?("(TR)#{tag}") && transformed && !refinement.nil? && refinement.length>0
+  return true if wpn[11].include?("(RT)#{tag}") && transformed && !refinement.nil? && refinement.length>0
+  return true if wpn[11].include?("(T)(R)#{tag}") && transformed && !refinement.nil? && refinement.length>0
+  return true if wpn[11].include?("(R)(T)#{tag}") && transformed && !refinement.nil? && refinement.length>0
   return false
 end
 
@@ -2787,8 +2810,8 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
       weapon2='-'
       weapon=uskl[uskl.length-1] if uskl.length>0
       weapon2=uskl2[uskl2.length-1] if uskl2.length>0
-      w2=@skills[find_skill(weapon,event)]
-      w22=@skills[find_skill(weapon2,event)]
+      w2=find_skill(weapon,event)
+      w22=find_skill(weapon2,event)
       diff_num=[w2[2]-w22[2],'M','F']
     else
       uskl=unit_skills(name,event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
@@ -2811,18 +2834,18 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
         w2=['-',0,0]
       else
         spec_wpn=true
-        w2=@skills[find_skill(weapon,event)]
+        w2=find_skill(weapon,event)
       end
       if weapon2=='-'
         w22=['-',0,0]
       else
         spec_wpn=true
-        w22=@skills[find_skill(weapon2,event)]
+        w22=find_skill(weapon2,event)
       end
       diff_num=[w2[2]-w22[2],'M','F']
     end
   end
-  w2=@skills[find_skill(weapon,event)]
+  w2=find_skill(weapon,event)
   if w2[15].nil?
     refinement=nil
     transformed=false
@@ -2911,7 +2934,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
     atk='<:StrengthS:514712248372166666> Attack'
     atk='<:MagicS:514712247289774111> Magic' if ['Tome','Dragon','Healer'].include?(j[1][1])
     atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(j[1][1])
-    zzzl=@skills[find_weapon(weapon,event)]
+    zzzl=find_weapon(weapon,event)
     atk='<:FreezeS:514712247474585610> Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
     n=nature_name(boon,bane)
     unless n.nil?
@@ -3040,7 +3063,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   atk='<:StrengthS:514712248372166666> Attack'
   atk='<:MagicS:514712247289774111> Magic' if ['Tome','Dragon','Healer'].include?(j[1][1])
   atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(j[1][1])
-  zzzl=@skills[find_weapon(weapon,event)]
+  zzzl=find_weapon(weapon,event)
   atk='<:FreezeS:514712247474585610> Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
   unless n.nil?
@@ -3095,7 +3118,7 @@ def disp_stats(bot,name,weapon,event,ignore=false,skillstoo=false,expandedmode=n
   if weapon != '-'
     ftr=nil if ftr[0,6]=='Please'
     tr=skill_tier(weapon,event)
-    ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ") || donate_trigger_word(event)>0
+    ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || @skills.find_index{|q| q[0]=="#{weapon}+"}.nil? || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ") || donate_trigger_word(event)>0
   end
   ftr='"Pandering to the minority gets you nowhere." - Shylock#2166' if event.user.id==198201016984797184
   bb=0
@@ -3405,8 +3428,8 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
       weapon2='-'
       weapon=uskl[uskl.length-1] if uskl.length>0
       weapon2=uskl2[uskl2.length-1] if uskl2.length>0
-      w2=@skills[find_skill(weapon,event)]
-      w22=@skills[find_skill(weapon2,event)]
+      w2=find_skill(weapon,event)
+      w22=find_skill(weapon2,event)
       diff_num=[w2[2]-w22[2],'M','F']
     else
       uskl=unit_skills(name,event,true,rarity,false,true)[0].reject{|q| q.include?('~~')}
@@ -3423,18 +3446,18 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
         w2=['-',0,0]
       else
         spec_wpn=true
-        w2=@skills[find_skill(weapon,event)]
+        w2=find_skill(weapon,event)
       end
       if weapon2=='-'
         w22=['-',0,0]
       else
         spec_wpn=true
-        w22=@skills[find_skill(weapon2,event)]
+        w22=find_skill(weapon2,event)
       end
       diff_num=[w2[2]-w22[2],'M','F']
     end
   end
-  w2=@skills[find_skill(weapon,event)]
+  w2=find_skill(weapon,event)
   if w2[15].nil?
     refinement=nil
   elsif w2[15].length<2 && refinement=='Effect'
@@ -3451,8 +3474,8 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
       wl=weapon_legality(event,'Robin(M)',weapon)
       wl2=weapon_legality(event,'Robin(F)',weapon2)
       wl="#{wl}(M) / #{wl2}(F)"
-      w2=@skills[find_skill(weapon,event)]
-      w22=@skills[find_skill(weapon2,event)]
+      w2=find_skill(weapon,event)
+      w22=find_skill(weapon2,event)
       diff_num=[w2[2]-w22[2],'M','F']
     else
       spec_wpn=true
@@ -3515,8 +3538,8 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
     atk='<:StrengthS:514712248372166666>*'
     atk='<:MagicS:514712247289774111>' if ['Tome','Dragon','Healer'].include?(j[1][1])
     atk='<:StrengthS:514712248372166666>' if ['Blade','Bow','Dagger','Beast'].include?(j[1][1])
-    zzzl=@skills[find_weapon(weapon,event)]
-    if zzzl[11].split(', ').include?('Frostbite')
+    zzzl=find_weapon(weapon,event)
+    if zzzl.length>0 && zzzl[11].include?('Frostbite')
       atk='<:FreezeS:514712247474585610>'
     end
     n=nature_name(boon,bane)
@@ -3609,8 +3632,8 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   atk='<:StrengthS:514712248372166666>*'
   atk='<:MagicS:514712247289774111>' if ['Tome','Dragon','Healer'].include?(j[1][1])
   atk='<:StrengthS:514712248372166666>' if ['Blade','Bow','Dagger','Beast'].include?(j[1][1])
-  zzzl=@skills[find_weapon(weapon,event)]
-  if zzzl[11].split(', ').include?('Frostbite')
+  zzzl=find_weapon(weapon,event)
+  if zzzl.length>0 && zzzl[11].include?('Frostbite')
     atk='<:FreezeS:514712247474585610>'
   end
   n=nature_name(boon,bane)
@@ -3683,7 +3706,7 @@ def disp_tiny_stats(bot,name,weapon,event,ignore=false,skillstoo=false,loaded=fa
   ftr="Include the word \"#{ggg}\" to apply bonus unit buffs" if ggg.length>0 && (sp>0 || rand(2)==0)
   if weapon != '-'
     tr=skill_tier(weapon,event)
-    ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || !find_promotions(find_weapon(weapon,event),event).uniq.reject{|q| @skills[find_skill(q,event,true,true)][4]!="Weapon"}.include?("#{weapon}+") || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ") || donate_trigger_word(event)>0
+    ftr="You equipped the Tier #{tr} version of the weapon.  Perhaps you want #{wl.gsub('~~','').split(' (+) ')[0]}+ ?" unless weapon[weapon.length-1,1]=='+' || @skills.find_index{|q| q[0]=="#{weapon}+"}.nil? || " #{event.message.text.downcase} ".include?(' summoned ') || " #{event.message.text.downcase} ".include?(" mathoo's ") || donate_trigger_word(event)>0
   end
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{diff_num[0]} point#{'s' unless diff_num[0]==1} lower." if !diff_num.nil? && diff_num[0]>0
   ftr="Attack displayed is for #{u40[0].split(' ')[0]}(#{diff_num[1]}).  #{u40[0].split(' ')[0]}(#{diff_num[2]})'s Attack is #{0-diff_num[0]} point#{'s' unless diff_num[0]==-1} higher." if !diff_num.nil? && diff_num[0]<0
@@ -3792,7 +3815,7 @@ def find_base_skill(x,event)
   end
   if x[8].include?('*, *')
     k=x[8].gsub('*','').split(', ')
-    k=k.map{|q| find_base_skill(@skills[find_skill(q,event)],event)}
+    k=k.map{|q| find_base_skill(find_skill(q,event),event)}
     k=k.uniq
     k=k.map{|q| "*#{q}*"}
     k=k.join(', ')
@@ -3801,7 +3824,7 @@ def find_base_skill(x,event)
     return k
   elsif x[8].include?('* or *')
     k=x[8].gsub('*','').split(' or ')
-    k=[find_base_skill(@skills[find_skill(k[0],event)],event),find_base_skill(@skills[find_skill(k[1],event)],event)]
+    k=[find_base_skill(find_skill(k[0],event),event),find_base_skill(find_skill(k[1],event),event)]
     k=k.uniq
     k=k.map{|q| "*#{q}*"}
     k=k.join(' or ')
@@ -3809,7 +3832,7 @@ def find_base_skill(x,event)
     return "Bl\u00E1r" if k=='*Thunder* or *Light*'
     return k
   end
-  return find_base_skill(@skills[find_skill(x[8][1,x[8].length-2],event)],event)
+  return find_base_skill(find_skill(x[8][1,x[8].length-2],event),event)
 end
 
 def cumulative_sp_cost(x,event,mode=0)
@@ -3830,17 +3853,17 @@ def cumulative_sp_cost(x,event,mode=0)
     k=k.reject{|q| q.scan(/[[:alpha:]]+?/).join != x[0].scan(/[[:alpha:]]+?/).join}
     return m if k.length<=0
     k=k[0]
-    n=cumulative_sp_cost(@skills[find_skill(k,event)],event,1)
+    n=cumulative_sp_cost(find_skill(k,event),event,1)
     return [m[0],m[1]+n[1],m[2]+n[2],m[3]+n[3]]
   end
   return 0 if x.nil?
   return x[1] if x[8]=='-'
   if x[8].include?('*, *')
-    k=@skills[find_skill(x[8].gsub('*','').split(', ')[0],event)]
+    k=find_skill(x[8].gsub('*','').split(', ')[0],event)
   elsif x[8].include?('* or *')
-    k=@skills[find_skill(x[8].gsub('*','').split(' or ')[0],event)]
+    k=find_skill(x[8].gsub('*','').split(' or ')[0],event)
   else
-    k=@skills[find_skill(x[8].gsub('*',''),event)]
+    k=find_skill(x[8].gsub('*',''),event)
   end
   return x[1]+cumulative_sp_cost(k,event)
 end
@@ -3859,13 +3882,13 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
   name=args.join(' ') if name.nil?
   name=stat_buffs(name,name)
   k=find_skill(name,event,false,false,true,1)
-  if k.nil? || !k.is_a?(Array)
+  if k.nil? || !k.is_a?(Array) || !k[0].is_a?(Array)
     event.respond "No matches found.  If you are looking for data on the skills a character learns, try ```#{first_sub(event.message.text,'skill','skills',1)}```, with an s." unless ignore
     return false
   end
   lookout=lookout_load('SkillSubsets')
   lookout2=lookout.reject{|q| q[2]!='Weapon' || q[3].nil?}
-  skill=k.map{|q| @skills[q]}.uniq
+  skill=k.map{|q| q}.uniq
   sklz=@skills.map{|q| q}
   g=get_markers(event)
   unitz=@units.reject{|q| !has_any?(g, q[13][0])}
@@ -3881,7 +3904,7 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
   if m && sklslt.include?('Passive(W)')
     eff=skill.map{|q| q[12].split(', ')}.join("\n").split("\n").uniq
     for i in 0...eff.length
-      eff[i]=nil unless find_skill(eff[i],event,true)>1
+      eff[i]=nil unless find_skill(eff[i],event,true).length>0
     end
     eff.compact!
     if eff.length<=0
@@ -3929,15 +3952,15 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
     cumul=cumulative_sp_cost(skill[-1],event,1)
     str="#{str}\n**Total Seal Cost:** #{cumul[1]}#{floop[-1][0].split(' ')[0]} #{cumul[2]}#{floop[-1][0].split(' ')[1]} #{cumul[3]}<:Sacred_Coin:453618312996323338>" if [cumul[1],cumul[2],cumul[3]]!=[floop[-1][1],floop[-1][2],floop[-1][3]]
   end
-  p=find_promotions(sklz.find_index{|q| q[0]==skill[-1][0]},event)
+  p=find_promotions(skill[-1],event)
   p=p.uniq
   if skill[-1][4].include?('Passive') || skill[-1][4]=='Seal'
-    p=p.reject{|q| ['Weapon', 'Assist', 'Special'].include?(sklz[find_skill(q,event,true,true)][4])}
-    p=p.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(A)')} if skill[-1][4].include?('(A)')
-    p=p.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(B)')} if skill[-1][4].include?('(B)')
-    p=p.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(C)')} if skill[-1][4].include?('(C)')
+    p=p.reject{|q| ['Weapon', 'Assist', 'Special'].include?(find_skill(q,event,true,true)[4])}
+    p=p.reject{|q| !find_skill(q,event,true,true)[4].include?('(A)')} if skill[-1][4].include?('(A)')
+    p=p.reject{|q| !find_skill(q,event,true,true)[4].include?('(B)')} if skill[-1][4].include?('(B)')
+    p=p.reject{|q| !find_skill(q,event,true,true)[4].include?('(C)')} if skill[-1][4].include?('(C)')
   else
-    p=p.reject{|q| !has_any?(sklslt, sklz[find_skill(q,event,true,true)][4].split(', '))}
+    p=p.reject{|q| !has_any?(sklslt, find_skill(q,event,true,true)[4].split(', '))}
   end
   if p.length.zero?
     p=nil
@@ -3949,15 +3972,15 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
   end
   p2=[]
   for i in 0...skill.length-1
-    p3=find_promotions(sklz.find_index{|q| q[0]==skill[i][0]},event)
+    p3=find_promotions(skill[i],event)
     p3=p3.uniq
     if skill[i][4].include?('Passive') || skill[i][4]=='Seal'
-      p3=p3.reject{|q| ['Weapon', 'Assist', 'Special'].include?(sklz[find_skill(q,event,true,true)][4])}
-      p3=p3.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(A)')} if skill[i][4].include?('(A)')
-      p3=p3.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(B)')} if skill[i][4].include?('(B)')
-      p3=p3.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(C)')} if skill[i][4].include?('(C)')
+      p3=p3.reject{|q| ['Weapon', 'Assist', 'Special'].include?(find_skill(q,event,true,true)[4])}
+      p3=p3.reject{|q| !find_skill(q,event,true,true)[4].include?('(A)')} if skill[i][4].include?('(A)')
+      p3=p3.reject{|q| !find_skill(q,event,true,true)[4].include?('(B)')} if skill[i][4].include?('(B)')
+      p3=p3.reject{|q| !find_skill(q,event,true,true)[4].include?('(C)')} if skill[i][4].include?('(C)')
     else
-      p3=p3.reject{|q| !has_any?(sklslt, sklz[find_skill(q,event,true,true)][4].split(', '))}
+      p3=p3.reject{|q| !has_any?(sklslt, find_skill(q,event,true,true)[4].split(', '))}
     end
     if p3.length.zero?
       p3=nil
@@ -4081,7 +4104,7 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
     if !skill[i][12].nil? && skill[i][12]!='' && skill[i][4].include?('Passive(W)')
       eff=skill[i][12].split(', ')
       for i2 in 0...eff.length
-        eff[i2]=nil unless find_skill(eff[i2],event,true)>1
+        eff[i2]=nil unless find_skill(eff[i2],event,true).length>0
       end
       eff.compact!
       str="#{str}\n" if eff.length>0 && !m
@@ -4162,20 +4185,20 @@ def disp_skill_line(bot,name,event,ignore=false,dispcolors=false)
   else
     create_embed(event,"__**#{skill[-1][0].gsub(" #{skill[-1][0].reverse.scan(/\d+/)[0].reverse}",'')}**__",str,xcolor,xfooter,xpic)
   end
-  if !['Weapon','Assist','Special'].include?(skill[0][4]) && skill[0][11].split(', ').include?('Link')
-    w=sklz.reject{|q| q[4]!='Assist' || !q[11].split(', ').include?('Move') || q[11].split(', ').include?('Music') || !has_any?(g, q[13])}
+  if !['Weapon','Assist','Special'].include?(skill[0][4]) && skill[0][11].include?('Link')
+    w=sklz.reject{|q| q[4]!='Assist' || !q[11].include?('Move') || q[11].include?('Music') || !has_any?(g, q[13])}
     w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}#{q[0]}#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}"}
     create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[0][0]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
-  elsif !['Weapon','Assist','Special'].include?(skill[0][4]) && skill[0][11].split(', ').include?('Feint')
-    w=sklz.reject{|q| q[4]!='Assist' || !q[11].split(', ').include?('Rally') || !has_any?(g, q[13])}
+  elsif !['Weapon','Assist','Special'].include?(skill[0][4]) && skill[0][11].include?('Feint')
+    w=sklz.reject{|q| q[4]!='Assist' || !q[11].include?('Rally') || !has_any?(g, q[13])}
     w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}#{q[0]}#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}"}
     create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[0][0]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
   end
   if " #{event.message.text.downcase} ".include?(' tags ') || " #{event.message.text.downcase} ".include?(' tag ')
     str=''
-    k=skill.map{|q| q[11].split(', ')}
+    k=skill.map{|q| q[11]}
     m=[]
     for i in 0...k.length
       for i2 in 0...k[i].length
@@ -4231,17 +4254,17 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   name=args.join(' ') if name.nil?
   f=find_data_ex(:find_skill,name,event)
-  if f>=0
-    namex=@skills[f][0].split(' ')
-    namex.pop if find_skill(stat_buffs(namex.join(' '),name),event,false,false,true,1).is_a?(Array)
+  if f.length>0
+    namex=f[0].split(' ')
+    namex.pop if find_skill(stat_buffs(namex.join(' '),name),event,false,false,true,1)[0].is_a?(Array)
     name=namex.join(' ')
   end
   name=stat_buffs(name,name)
-  return disp_skill_line(bot,name,event,ignore,dispcolors) if find_skill(name,event,false,false,true,1).is_a?(Array)
+  return disp_skill_line(bot,name,event,ignore,dispcolors) if find_skill(name,event,false,false,true,1)[0].is_a?(Array)
   lookout=lookout_load('SkillSubsets')
   lookout2=lookout.reject{|q| q[2]!='Weapon' || q[3].nil?}
   f=find_data_ex(:find_skill,name,event)
-  if f<0
+  if f.length<=0
     if event.message.text.downcase.include?('psychic')
       event.respond 'No matches found.  Might you be looking for the skill **Physic** or its upgrade **Physic+**?' unless ignore
     else
@@ -4249,7 +4272,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     end
     return false
   end
-  skill=@skills[f]
+  skill=f.map{|q| q}
   sklz=@skills.map{|q| q}
   g=get_markers(event)
   unitz=@units.reject{|q| !has_any?(g, q[13][0])}
@@ -4341,7 +4364,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{emote} **Weapon Type:** #{s} Magic (Green Tome)\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}"
       xfooter=nil unless skill[6]=='-'
     elsif skill[5]=='Bow Users Only'
-      effective.push('<:Icon_Move_Flier:443331186698354698>') unless skill[11].split(', ').include?('UnBow')
+      effective.push('<:Icon_Move_Flier:443331186698354698>') unless skill[11].include?('UnBow')
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n<:Gold_Bow:443172812492898314> **Weapon Type:** Bow\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}"
     elsif skill[5]=='Dagger Users Only'
       skill[7]=skill[7].split(' *** ')
@@ -4411,7 +4434,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[4]}\n#{s.split(' / ')[0]} **Weapon Type:** #{s.split(' / ')[1]}\n**Might:** #{skill[2]}  \u200B  \u200B  \u200B  **Range:** #{skill[3]}"
     end
     for i in 0...lookout2.length
-      effective.push(lookout2[i][3]) if skill[11].split(', ').include?(lookout2[i][0])
+      effective.push(lookout2[i][3]) if skill[11].include?(lookout2[i][0])
     end
     str="#{str}\n**Effective against:** #{effective.join('')}" if effective.length>0 && skill[0]!='Mana Cat'
     if skill[7].is_a?(Array)
@@ -4438,7 +4461,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     str="#{str}\n\n**SP required:** #{skill[1]} #{"(#{skill[1]*3/2} when inherited)" if skill[6]=='-'}"
     cumul=cumulative_sp_cost(skill,event)
     cumul2=cumul+skill[1]/2
-    if skill[0][skill[0].length-1,1]=='+' && skill[11].split(', ').include?("Seasonal")
+    if skill[0][skill[0].length-1,1]=='+' && skill[11].include?("Seasonal")
       # seasonal + weapons come bundled with their non-plus selves, so their minimum inherited SP cost has to include the non-plus version as inherited as well
       cumul2+=sklz[sklz.find_index{|q| q[0]==skill[0].gsub('+','')}][1]/2
     elsif skill[0][skill[0].length-1,1]=='+' && skill[5]=="Staff Users Only"
@@ -4482,7 +4505,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     if !skill[12].nil? && skill[12]!='' && skill[4].include?('Passive(W)')
       eff=skill[12].split(', ')
       for i in 0...eff.length
-        eff[i]=nil unless find_skill(eff[i],event,true)>1
+        eff[i]=nil unless find_skill(eff[i],event,true).length>0
       end
       eff.compact!
       if eff.length<=0
@@ -4527,12 +4550,12 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   p=find_promotions(f,event)
   p=p.uniq
   if skill[4].include?('Passive') || skill[4]=='Seal'
-    p=p.reject{|q| ['Weapon', 'Assist', 'Special'].include?(sklz[find_skill(q,event,true,true)][4])}
-    p=p.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(A)')} if skill[4].include?('(A)')
-    p=p.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(B)')} if skill[4].include?('(B)')
-    p=p.reject{|q| !sklz[find_skill(q,event,true,true)][4].include?('(C)')} if skill[4].include?('(C)')
+    p=p.reject{|q| ['Weapon', 'Assist', 'Special'].include?(find_skill(q,event,true,true)[4])}
+    p=p.reject{|q| !find_skill(q,event,true,true)[4].include?('(A)')} if skill[4].include?('(A)')
+    p=p.reject{|q| !find_skill(q,event,true,true)[4].include?('(B)')} if skill[4].include?('(B)')
+    p=p.reject{|q| !find_skill(q,event,true,true)[4].include?('(C)')} if skill[4].include?('(C)')
   else
-    p=p.reject{|q| !has_any?(sklslt, sklz[find_skill(q,event,true,true)][4].split(', '))}
+    p=p.reject{|q| !has_any?(sklslt, find_skill(q,event,true,true)[4].split(', '))}
   end
   p3=unitz.map{|q| q}
   if p.length.zero?
@@ -4564,24 +4587,24 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     for i in 0...prm.length
       sklll=prm[i].split('!')
       if sklll.length==1
-        prm[i]=nil if x_find_skill(sklll[0],event,sklz.map{|q| q})<0
+        prm[i]=nil if x_find_skill(sklll[0],event,sklz.map{|q| q}).length<=0
       else
         prm[i]="#{sklll[1]} (#{sklll[0]})"
-        prm[i]=nil if x_find_skill(sklll[1],event,sklz.map{|q| q})<0
+        prm[i]=nil if x_find_skill(sklll[1],event,sklz.map{|q| q}).length<=0
         prm[i]=nil if find_unit(sklll[0],event,false,true).length<=0
       end
     end
     str="#{str}\n**Evolves into:** #{list_lift(prm.map{|q| "*#{q}*"},"or")}"
   elsif skill[0]=='Falchion'
-    sk1=sklz[find_skill('Falchion (Mystery)',event,true,true)]
-    sk2=sklz[find_skill('Falchion (Valentia)',event,true,true)]
-    sk3=sklz[find_skill('Falchion (Awakening)',event,true,true)]
+    sk1=find_skill('Falchion (Mystery)',event,true,true)
+    sk2=find_skill('Falchion (Valentia)',event,true,true)
+    sk3=find_skill('Falchion (Awakening)',event,true,true)
     str="#{str}\n**Falchion(Mystery) evolves into:** #{list_lift(sk1[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk1[14].nil? && sk1[14].length>0 && sk1[4]=='Weapon'
     str="#{str}\n**Falchion(Valentia) evolves into:** #{list_lift(sk2[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk2[14].nil? && sk2[14].length>0 && sk2[4]=='Weapon'
     str="#{str}\n**Falchion(Awakening) evolves into:** #{list_lift(sk3[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk3[14].nil? && sk3[14].length>0 && sk3[4]=='Weapon'
   elsif skill[0]=='Missiletainn'
-    sk1=sklz[find_skill('Missiletainn (Dark)',event,true,true)]
-    sk2=sklz[find_skill('Missiletainn (Dusk)',event,true,true)]
+    sk1=find_skill('Missiletainn (Dark)',event,true,true)
+    sk2=find_skill('Missiletainn (Dusk)',event,true,true)
     str="#{str}\n**Missiletainn(Dark) evolves into:** #{list_lift(sk1[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk1[14].nil? && sk1[14].length>0 && sk1[4]=='Weapon'
     str="#{str}\n**Missiletainn(Dusk) evolves into:** #{list_lift(sk2[14].split(', ').map{|q| "*#{q}*"},"or")}" if !sk2[14].nil? && sk2[14].length>0 && sk2[4]=='Weapon'
   end
@@ -4725,7 +4748,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   if !skill[12].nil? && skill[12]!='' && skill[4].include?('Passive(W)')
     eff=skill[12].split(', ')
     for i in 0...eff.length
-      eff[i]=nil unless find_skill(eff[i],event,true)>1
+      eff[i]=nil unless find_skill(eff[i],event,true).length>0
     end
     eff.compact!
     str="#{str}\n\n**Gained via Effect Mode on:** #{eff.join(', ')}" if eff.length>0
@@ -4805,33 +4828,33 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     end
   end
   g=get_markers(event)
-  if skill[4]=="Assist" && skill[11].split(', ').include?('Music')
-    w=sklz.reject{|q| !q[11].split(', ').include?('DanceRally') || !has_any?(g, q[13])}
+  if skill[4]=="Assist" && skill[11].include?('Music')
+    w=sklz.reject{|q| !q[11].include?('DanceRally') || !has_any?(g, q[13])}
     w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}#{q[0]}#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}"}
     create_embed(event,'',"The following skills are triggered when their holder uses #{skill[0]}:",0x40C0F0,nil,nil,triple_finish(w))
-  elsif skill[4]=="Assist" && skill[11].split(', ').include?('Move') && skill[11].split(', ').include?('Rally')
-    w=sklz.reject{|q| !(q[11].split(', ').include?('Link') || q[11].split(', ').include?('Feint')) || !has_any?(g, q[13])}
+  elsif skill[4]=="Assist" && skill[11].include?('Move') && skill[11].include?('Rally')
+    w=sklz.reject{|q| !(q[11].include?('Link') || q[11].include?('Feint')) || !has_any?(g, q[13])}
     w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}#{q[0]}#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}"}
     create_embed(event,'',"The following skills are triggered when their holder uses or is targeted by #{skill[0]}:",0x40C0F0,nil,nil,triple_finish(w))
-  elsif skill[4]=="Assist" && skill[11].split(', ').include?('Move')
-    w=sklz.reject{|q| !q[11].split(', ').include?('Link') || !has_any?(g, q[13])}
+  elsif skill[4]=="Assist" && skill[11].include?('Move')
+    w=sklz.reject{|q| !q[11].include?('Link') || !has_any?(g, q[13])}
     w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}#{q[0]}#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}"}
     create_embed(event,'',"The following skills are triggered when their holder uses or is targeted by #{skill[0]}:",0x40C0F0,nil,nil,triple_finish(w))
-  elsif skill[4]=="Assist" && skill[11].split(', ').include?('Rally')
-    w=sklz.reject{|q| !q[11].split(', ').include?('Feint') || !has_any?(g, q[13])}
+  elsif skill[4]=="Assist" && skill[11].include?('Rally')
+    w=sklz.reject{|q| !q[11].include?('Feint') || !has_any?(g, q[13])}
     w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}#{q[0]}#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}"}
     create_embed(event,'',"The following skills are triggered when their holder uses or is targeted by #{skill[0]}:",0x40C0F0,nil,nil,triple_finish(w))
-  elsif !['Weapon','Assist','Special'].include?(skill[4]) && skill[11].split(', ').include?('Link')
-    w=sklz.reject{|q| q[4]!='Assist' || !q[11].split(', ').include?('Move') || q[11].split(', ').include?('Music') || !has_any?(g, q[13])}
+  elsif !['Weapon','Assist','Special'].include?(skill[4]) && skill[11].include?('Link')
+    w=sklz.reject{|q| q[4]!='Assist' || !q[11].include?('Move') || q[11].include?('Music') || !has_any?(g, q[13])}
     w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}#{q[0]}#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}"}
     create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[0]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
-  elsif !['Weapon','Assist','Special'].include?(skill[4]) && skill[11].split(', ').include?('Feint')
-    w=sklz.reject{|q| q[4]!='Assist' || !q[11].split(', ').include?('Rally') || !has_any?(g, q[13])}
+  elsif !['Weapon','Assist','Special'].include?(skill[4]) && skill[11].include?('Feint')
+    w=sklz.reject{|q| q[4]!='Assist' || !q[11].include?('Rally') || !has_any?(g, q[13])}
     w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}#{q[0]}#{'~~' unless q[13].nil? || q[13][0].nil? || q[13][0].length.zero?}"}
     create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[0]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
@@ -4842,8 +4865,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     sttz=[]
     inner_skill=skill[15]
     mt=[0,0,0,0,0]
-    skill[12][1]+=1 if skill[11].split(', ').include?('Silver')
-    skill[2]+=1 if skill[11].split(', ').include?('Silver')
+    skill[12][1]+=1 if skill[11].include?('Silver')
+    skill[2]+=1 if skill[11].include?('Silver')
     if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
       skill[12][1]+=inner_skill[0,1].to_i
       skill[2]+=inner_skill[0,1].to_i
@@ -4934,8 +4957,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       skill[12][10]=zzz[2]
       sttz.push([zzz[1],0,zzz[3],zzz[4],zzz[5],'Effect'])
     elsif skill[0]=='Missiletainn'
-      sk1=sklz[find_skill('Missiletainn (Dark)',event,true,true)]
-      sk2=sklz[find_skill('Missiletainn (Dusk)',event,true,true)]
+      sk1=find_skill('Missiletainn (Dark)',event,true,true)
+      sk2=find_skill('Missiletainn (Dusk)',event,true,true)
       refinements=[]
       refinements.push(['Dark',sk1[15],nil,0]) unless sk1[15].nil?
       refinements.push(['Dusk',sk2[15],nil,0]) unless sk2[15].nil?
@@ -4972,9 +4995,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       sttz.push([3,refinements[0][3],0,0,0,"**Missiletainn(Dark) (+) Effect Mode**#{" - #{find_effect_name(sk1,event)}" unless find_effect_name(sk1,event).length<=0}",refinements[0][1]]) unless refinements[0][1].nil?
       sttz.push([3,refinements[1][3],0,0,0,"**Missiletainn(Dark) (+) Effect Mode**#{" - #{find_effect_name(sk2,event)}" unless find_effect_name(sk2,event).length<=0}",refinements[1][1]]) unless refinements[1][1].nil?
     elsif skill[0]=='Falchion'
-      sk1=sklz[find_skill('Falchion (Mystery)',event,true,true)]
-      sk2=sklz[find_skill('Falchion (Valentia)',event,true,true)]
-      sk3=sklz[find_skill('Falchion (Awakening)',event,true,true)]
+      sk1=find_skill('Falchion (Mystery)',event,true,true)
+      sk2=find_skill('Falchion (Valentia)',event,true,true)
+      sk3=find_skill('Falchion (Awakening)',event,true,true)
       refinements=[]
       refinements.push(['Mystery',sk1[15],nil,0]) unless sk1[15].nil?
       refinements.push(['Echoes',sk2[15],nil,0]) unless sk2[15].nil?
@@ -5022,7 +5045,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     end
     xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine_Strength.png'
     xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine_Magic.png' if skill[5].include?('Tome Users Only') || skill[5]=='Dragons Only'
-    xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine_Freeze.png' if skill[11].split(', ').include?('Frostbite') || skill[11].split(', ').include?('(R)Frostbite')
+    xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine_Freeze.png' if skill[11].include?('Frostbite') || skill[11].include?('(R)Frostbite')
     if skill[5]=='Staff Users Only' && (skill[7].include?("This weapon's damage is calculated the same as other weapons.") || skill[7].include?('Damage from staff calculated like other weapons.'))
       xpic='https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Dazzling_W.png'
       sttzx=[[0,0,0,0,0,'Dazzling','The foe cannot counterattack.']]
@@ -5057,7 +5080,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       if k=='Attack'
         emo='<:StrengthW:449999580948463617>'
         emo='<:MagicW:449999580835086337>' if skill[5].include?('Tome Users Only') || skill[5]=='Dragons Only' || skill[5]=='Staff Users Only'
-        emo='<:FreezeW:449999580864708618>' if skill[11].split(', ').include?('Frostbite') || skill[11].split(', ').include?('(R)Frostbite')
+        emo='<:FreezeW:449999580864708618>' if skill[11].include?('Frostbite') || skill[11].include?('(R)Frostbite')
       end
       emo='<:SpeedW:449999580868640798>' if k=='Speed'
       emo='<:DefenseW:449999580793274408>' if k=='Defense'
@@ -5084,9 +5107,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       effective=[]
       effective.push('<:Icon_Move_Flier:443331186698354698>') if skill[5]=="Bow Users Only"
       for i2 in 0...lookout2.length
-        effective.push(lookout2[i2][3]) if skill[11].split(', ').include?(lookout2[i2][0])
-        effective.push(lookout2[i2][3]) if skill[11].split(', ').include?("(R)#{lookout2[i2][0]}")
-        effective.push(lookout2[i2][3]) if sttz[i][5]=="Effect" && skill[11].split(', ').include?("(E)#{lookout2[i2][0]}")
+        effective.push(lookout2[i2][3]) if skill[11].include?(lookout2[i2][0])
+        effective.push(lookout2[i2][3]) if skill[11].include?("(R)#{lookout2[i2][0]}")
+        effective.push(lookout2[i2][3]) if sttz[i][5]=="Effect" && skill[11].include?("(E)#{lookout2[i2][0]}")
       end
       str="#{str}\n*Effective against*: #{effective.join('')}" if effective.length>0
       unless debuff.nil?
@@ -5098,7 +5121,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       else
         str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{outer_skill}"
       end
-      str="#{str}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if skill[11].split(', ').include?("(R)Frostbite") || (sttz[i][5]=="Effect" && skill[11].split(', ').include?("(E)Frostbite"))
+      str="#{str}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if skill[11].include?("(R)Frostbite") || (sttz[i][5]=="Effect" && skill[11].include?("(E)Frostbite"))
       str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{sttz[i][6]}" unless sttz[i][6].nil?
       str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{inner_skill}" if inner_skill.length>1 && sttz[i][5]=="Effect"
     end
@@ -5138,7 +5161,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   end
   if " #{event.message.text.downcase} ".include?(' tags ') || " #{event.message.text.downcase} ".include?(' tag ')
     str=''
-    k=skill[11].split(', ')
+    k=skill[11]
     if k[0]=='Weapon'
       str="#{str}\n**Slot:**  <:Skill_Weapon:444078171114045450> Weapon"
       k.shift
@@ -5354,15 +5377,15 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=fals
         sklz2[i][j]="**#{sklz2[i][j]}**" if box2[i].include?(sklz2[i][j])
       end
     end
-    s=@skills[find_skill(sklz2[0][sklz2[0].length-1].gsub('**',''),event)]
+    s=find_skill(sklz2[0][sklz2[0].length-1].gsub('**',''),event)
     if !s[14].nil? && s[14].length>0 && s[4]=='Weapon'
       s2=s[14].split(', ')
       for i in 0...s2.length
         if s2[i].include?('!')
           s3=s2[i].split('!')
-          sklz2[0].push("~~#{s3[1]}~~") if s3[0]==name && find_skill(s3[1],event,false,true)>-1
+          sklz2[0].push("~~#{s3[1]}~~") if s3[0]==name && find_skill(s3[1],event,false,true).length>0
         else
-          sklz2[0].push("~~#{s2[i]}~~") if find_skill(s2[i],event,false,true)>-1
+          sklz2[0].push("~~#{s2[i]}~~") if find_skill(s2[i],event,false,true).length>0
         end
       end
     end
@@ -5374,15 +5397,15 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=fals
           sklz2[0][sklz2[0].length-1]="__#{sklz2[0][sklz2[0].length-1]}__"
         end
         sklz2[0].push(retroprf[i])
-        s=@skills[find_skill(sklz2[0][sklz2[0].length-1].gsub('**',''),event)]
+        s=find_skill(sklz2[0][sklz2[0].length-1].gsub('**',''),event)
         if !s[14].nil? && s[14].length>0 && s[4]=='Weapon'
           s2=s[14].split(', ')
           for i in 0...s2.length
             if s2[i].include?('!')
               s3=s2[i].split('!')
-              sklz2[0].push("~~#{s3[1]}~~") if s3[0]==name && find_skill(s3[1],event,false,true)>-1
+              sklz2[0].push("~~#{s3[1]}~~") if s3[0]==name && find_skill(s3[1],event,false,true).length>0
             else
-              sklz2[0].push("~~#{s2[i]}~~") if find_skill(s2[i],event,false,true)>-1
+              sklz2[0].push("~~#{s2[i]}~~") if find_skill(s2[i],event,false,true).length>0
             end
           end
         end
@@ -5392,12 +5415,12 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=fals
   unless r>0
     if " #{event.message.text.downcase} ".include?(' weaponless ') || (" #{event.message.text.downcase} ".include?(' zelgius ') && name.downcase != 'zelgius') || " #{event.message.text.downcase} ".include?(' zelgiused ') || " #{event.message.text.downcase} ".include?(" zelgius'd ")
       sklz2[0]=['~~none~~']
-      s=@skills[find_skill(sklz2[1][sklz2[1].length-1].gsub('**','').gsub('~~',''),event)]
+      s=find_skill(sklz2[1][sklz2[1].length-1].gsub('**','').gsub('~~',''),event)
       if !s.nil? && s[6]!='-'
         sklz2[1].pop
         sklz2[1]=['~~none~~'] if sklz2[1].length<=0
       end
-      s=@skills[find_skill(sklz2[2][sklz2[2].length-1].gsub('**','').gsub('~~',''),event)]
+      s=find_skill(sklz2[2][sklz2[2].length-1].gsub('**','').gsub('~~',''),event)
       if !s.nil? && s[6]!='-'
         sklz2[2].pop
         sklz2[2]=['~~none~~'] if sklz2[2].length<=0
@@ -5666,11 +5689,10 @@ def disp_accessory(bot,name,event,ignore=false)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   name=args.join(' ') if name.nil?
   k=find_data_ex(:find_accessory,args.join(' '),event)
-  if k<0
+  if k.length<=0
     event.respond 'No matches found.' unless ignore
     return nil
   end
-  k=@accessories[k]
   xcolor=0xFF47FF
   str=''
   str="<:Accessory_Type_Hair:531733124741201940>**Accessory Type:** Hair" if k[1]=='Hair'
@@ -5697,11 +5719,10 @@ def disp_itemu(bot,name,event,ignore=false)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   name=args.join(' ') if name.nil?
   k=find_data_ex(:find_item_feh,args.join(' '),event)
-  if k<0
+  if k.length<=0
     event.respond 'No matches found.' unless ignore
     return nil
   end
-  k=@itemus[k]
   str="**Item Type:** #{k[1]}\n**Maximum:** #{k[2]}"
   xcolor=0x5BACB9
   if ['Main','Event'].include?(k[1])
@@ -6592,7 +6613,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     all_skills[i][4]=all_skills[i][4].gsub(', Passive(W)','')
   end
   data_load()
-  tmp=@skills.reject{|q| !has_any?(g, q[13]) || !q[4].include?(', Passive(W)')}.reject{|q| q[12].split(', ').reject{|q2| find_skill(q2,event)<0}.length<=0}
+  tmp=@skills.reject{|q| !has_any?(g, q[13]) || !q[4].include?(', Passive(W)')}.reject{|q| q[12].split(', ').reject{|q2| find_skill(q2,event).length<=0}.length<=0}
   for i in 0...tmp.length
     tmp[i][4]='Passive(W)'
     all_skills.push(tmp[i])
@@ -6604,7 +6625,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     if skill_types.length>0
       for i in 0...all_skills.length
         for j in 0...skill_types.length
-          matches0.push(all_skills[i]) if all_skills[i][11].split(', ').include?(skill_types[j])
+          matches0.push(all_skills[i]) if all_skills[i][11].include?(skill_types[j])
         end
       end
     else
@@ -6621,26 +6642,26 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
         for i in 0...matches0.length
           for j in 0...weapons.length
             for j2 in 0...colors.length
-              matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(weapons[j]) && matches0[i][11].split(', ').include?(colors[j])
+              matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].include?(weapons[j]) && matches0[i][11].include?(colors[j])
             end
           end
         end
       elsif colors.length>0
         for i in 0...matches0.length
           for j in 0...colors.length
-            matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(colors[j])
+            matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].include?(colors[j])
           end
         end
       elsif weapons.length>0
         for i in 0...matches0.length
           for j in 0...weapons.length
-            matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(weapons[j])
+            matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].include?(weapons[j])
           end
         end
       elsif color_weapons.length>0
         for i in 0...matches0.length
           for j in 0...color_weapons.length
-            matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].split(', ').include?(color_weapons[j][1]) && matches0[i][11].split(', ').include?(color_weapons[j][0])
+            matches1.push(matches0[i]) if matches0[i][4]=='Weapon' && matches0[i][11].include?(color_weapons[j][1]) && matches0[i][11].include?(color_weapons[j][0])
           end
         end
         cwc=true
@@ -6661,7 +6682,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
       if assists.length>0
         for i in 0...matches0.length
           for j in 0...assists.length
-            matches2.push(matches0[i]) if matches0[i][4]=='Assist' && matches0[i][11].split(', ').include?(assists[j])
+            matches2.push(matches0[i]) if matches0[i][4]=='Assist' && matches0[i][11].include?(assists[j])
           end
         end
       else
@@ -6672,7 +6693,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
       if specials.length>0
         for i in 0...matches0.length
           for j in 0...specials.length
-            matches2.push(matches0[i]) if matches0[i][4]=='Special' && matches0[i][11].split(', ').include?(specials[j])
+            matches2.push(matches0[i]) if matches0[i][4]=='Special' && matches0[i][11].include?(specials[j])
           end
         end
       else
@@ -6690,7 +6711,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
         end
       else
         for i in 0...matches0.length
-          if matches0[i][11].split(', ').include?('Passive')
+          if matches0[i][11].include?('Passive')
             matches2.push(matches0[i]) if skill_types.length.zero? || skill_types.include?('Passive')
             matches2.push(matches0[i]) if skill_types.reject{|q| q.include?('*')}.length.zero? && weapons==['Staff'] && assists==['Staff'] && specials==['Staff']
           end
@@ -6710,24 +6731,24 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
               elsif matches2[i][4]=='Weapon' && weapon_subsets[j]=='Prf'
                 matches3.push(matches2[i]) unless matches2[i][6]=='-'
               elsif matches2[i][4]=='Weapon' && weapon_subsets[j]=='Pega-killer' && !weapon_subsets.include?('Effective')
-                matches3.push(matches2[i]) if (matches2[i][5]=='Bow Users Only' && !matches2[i][11].split(', ').include?('UnBow')) || matches2[i][11].split(', ').include?(weapon_subsets[j])
+                matches3.push(matches2[i]) if (matches2[i][5]=='Bow Users Only' && !matches2[i][11].include?('UnBow')) || matches2[i][11].include?(weapon_subsets[j])
               elsif matches2[i][4]=='Weapon' && weapon_subsets[j]=='Retro-Prf'
-                matches3.push(matches2[i]) if matches2[i][11].split(', ').include?('Prf') && matches2[i][8]=='-'
-              elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?(weapon_subsets[j])
+                matches3.push(matches2[i]) if matches2[i][11].include?('Prf') && matches2[i][8]=='-'
+              elsif matches2[i][4]=='Weapon' && matches2[i][11].include?(weapon_subsets[j])
                 matches3.push(matches2[i])
-              elsif matches2[i][4]=='Weapon' && has_any?(matches2[i][11].split(', '),["(TR)#{weapon_subsets[j]}","(RT)#{weapon_subsets[j]}","(T)(R)#{weapon_subsets[j]}","(R)(T)#{weapon_subsets[j]}"])
+              elsif matches2[i][4]=='Weapon' && has_any?(matches2[i][11],["(TR)#{weapon_subsets[j]}","(RT)#{weapon_subsets[j]}","(T)(R)#{weapon_subsets[j]}","(R)(T)#{weapon_subsets[j]}"])
                 matches2[i][0]="#{matches2[i][0]} *(+) [Tsfrm]All*"
                 matches3.push(matches2[i])
-              elsif matches2[i][4]=='Weapon' && has_any?(matches2[i][11].split(', '),["(TE)#{weapon_subsets[j]}","(ET)#{weapon_subsets[j]}","(T)(E)#{weapon_subsets[j]}","(E)(T)#{weapon_subsets[j]}"])
+              elsif matches2[i][4]=='Weapon' && has_any?(matches2[i][11],["(TE)#{weapon_subsets[j]}","(ET)#{weapon_subsets[j]}","(T)(E)#{weapon_subsets[j]}","(E)(T)#{weapon_subsets[j]}"])
                 matches2[i][0]="#{matches2[i][0]} *(+) [Tsfrm]Effect*"
                 matches3.push(matches2[i])
-              elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(R)#{weapon_subsets[j]}")
+              elsif matches2[i][4]=='Weapon' && matches2[i][11].include?("(R)#{weapon_subsets[j]}")
                 matches2[i][0]="#{matches2[i][0]} *(+) All*"
                 matches3.push(matches2[i])
-              elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(E)#{weapon_subsets[j]}")
+              elsif matches2[i][4]=='Weapon' && matches2[i][11].include?("(E)#{weapon_subsets[j]}")
                 matches2[i][0]="#{matches2[i][0]} *(+) Effect*"
                 matches3.push(matches2[i])
-              elsif matches2[i][4]=='Weapon' && matches2[i][11].split(', ').include?("(T)#{weapon_subsets[j]}")
+              elsif matches2[i][4]=='Weapon' && matches2[i][11].include?("(T)#{weapon_subsets[j]}")
                 matches2[i][0]="#{matches2[i][0]} *- Transformed*"
                 matches3.push(matches2[i])
               end
@@ -6751,7 +6772,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
         if passive_subsets.length>0
           for i in 0...matches2.length
             for j in 0...passive_subsets.length
-              matches3.push(matches2[i]) if (matches2[i][4].include?('Passive') || matches2[i][4]=='Seal') && matches2[i][11].split(', ').include?(passive_subsets[j])
+              matches3.push(matches2[i]) if (matches2[i][4].include?('Passive') || matches2[i][4]=='Seal') && matches2[i][11].include?(passive_subsets[j])
             end
           end
         elsif passives.length>0 || skill_types.include?('Passive')
@@ -6801,9 +6822,9 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[4]}.uniq[0]=='Assist' && matches4.map{|q| q[5]}.uniq.length>1
     matches4=split_list(event,matches4,[['Rally',1],['Move',2],['Music',1],['Health',2],['Staff',1]],11)
   elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[4]}.uniq[0]=='Special'
-    if matches4.reject{|q| q[11].split(', ').include?('Damage')}.length.zero? && matches4[0][11].split(', ').include?('Damage')
+    if matches4.reject{|q| q[11].include?('Damage')}.length.zero? && matches4[0][11].include?('Damage')
       matches4=split_list(event,matches4,[['StarSpecial',2],['MoonSpecial',2],['SunSpecial',2],['EclipseSpecial',1],['FireSpecial',2],['IceSpecial',2],['DragonSpecial',2],['DarkSpecial',2],['RendSpecial',2]],11)
-    elsif matches4.reject{|q| q[11].split(', ').include?('Defense')}.length.zero? && matches4[0][11].split(', ').include?('Defense')
+    elsif matches4.reject{|q| q[11].include?('Defense')}.length.zero? && matches4[0][11].include?('Defense')
       matches4=split_list(event,matches4,[['MiracleSpecial',2],['SupershieldSpecial',1],['AegisSpecial',2],['PaviseSpecial',2]],11)
     elsif matches4.map{|q| q[5]}.uniq.length>1
       matches4=split_list(event,matches4,[['Damage',1],['Defense',1],['AoE',1],['Staff',1]],11)
@@ -7015,10 +7036,10 @@ def display_skills(event, mode)
       end
       colors=[]
       if typesx.reject{|q| q[4]!='Weapon'}==typesx
-        colors.push('Red') if typesx.reject{|q| !q[11].split(', ').include?('Red')}==typesx
-        colors.push('Blue') if typesx.reject{|q| !q[11].split(', ').include?('Blue')}==typesx
-        colors.push('Green') if typesx.reject{|q| !q[11].split(', ').include?('Green')}==typesx
-        colors.push('Colorless') if typesx.reject{|q| !q[11].split(', ').include?('Colorless')}==typesx
+        colors.push('Red') if typesx.reject{|q| !q[11].include?('Red')}==typesx
+        colors.push('Blue') if typesx.reject{|q| !q[11].include?('Blue')}==typesx
+        colors.push('Green') if typesx.reject{|q| !q[11].include?('Green')}==typesx
+        colors.push('Colorless') if typesx.reject{|q| !q[11].include?('Colorless')}==typesx
       end
       emotes=['<:Gold_Staff:443172811628871720>','<:Gold_Dagger:443172811461230603>','<:Gold_Dragon:443172811641454592>','<:Gold_Bow:443172812492898314>','<:Gold_Beast:532854442299752469>']
       emotes[0]='<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')
@@ -7055,7 +7076,7 @@ def display_skills(event, mode)
         types.uniq!
         h='.'
         if types2.length==1 && types2[0]=='Special'
-          m=typesx.map{|q| q[11].split(', ')}
+          m=typesx.map{|q| q[11]}
           if m.reject{|q| !q.include?('SupershieldSpecial')}.length>0 && m.reject{|q| !q.include?('SupershieldSpecial')}.length==m.length
             h='<:Special_Defensive_Supershield:454460021066170378> Supershield Specials'
           elsif m.reject{|q| !q.include?('AegisSpecial')}.length>0 && m.reject{|q| !q.include?('AegisSpecial')}.length==m.length
@@ -7094,7 +7115,7 @@ def display_skills(event, mode)
             h='<:Special_Unknown:454451451603976192> Misc. Specials'
           end
         elsif types2.length==1 && types2[0]=='Assist'
-          m=typesx.map{|q| q[11].split(', ')}
+          m=typesx.map{|q| q[11]}
           if m.reject{|q| !q.include?('Staff')}.length>0 && m.reject{|q| !q.include?('Staff')}.length==m.length
             h='<:Assist_Staff:454451496831025162> Healing Staves'
           elsif m.reject{|q| !q.include?('Health')}.length>0 && m.reject{|q| !q.include?('Health')}.length==m.length
@@ -7915,7 +7936,7 @@ def disp_unit_stats_and_skills(event,args,bot)
     if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
-      w=k2[0] unless k2.nil?
+      w=k2[0] unless k2.length<=0
       disp_stats(bot,x[1],w,event,true,true)
     else
       event.respond 'No matches found.'
@@ -7925,7 +7946,7 @@ def disp_unit_stats_and_skills(event,args,bot)
   str=k[0]
   k2=get_weapon(first_sub(args.join(' '),k[1],''),event)
   w=nil
-  w=k2[0] unless k2.nil?
+  w=k2[0] unless k2.length<=0
   data_load()
   if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
     x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
@@ -8731,7 +8752,7 @@ def parse_function_alts(callback,event,args,bot)
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(event.message.text,x[0],''),event)
       weapon='-'
-      weapon=k2[0] unless k2.nil?
+      weapon=k2[0] unless k2.length<=0
       xx=[]
       for i in 0...x[1].length
         j2=find_unit(x[1][i],event)
@@ -8747,7 +8768,7 @@ def parse_function_alts(callback,event,args,bot)
     str=k[0]
     k2=get_weapon(first_sub(event.message.text,k[1],''),event)
     weapon='-'
-    weapon=k2[0] unless k2.nil?
+    weapon=k2[0] unless k2.length<=0
     name=find_name_in_string(event)
     if !detect_multi_unit_alias(event,name.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,name.downcase,event.message.text.downcase)
@@ -8764,7 +8785,7 @@ def parse_function_alts(callback,event,args,bot)
       x=detect_multi_unit_alias(event,name.downcase,name.downcase)
       k2=get_weapon(first_sub(event.message.text,x[0],''),event)
       weapon='-'
-      weapon=k2[0] unless k2.nil?
+      weapon=k2[0] unless k2.length<=0
       xx=[]
       for i in 0...x[1].length
         j2=find_unit(x[1][i],event)
@@ -8846,7 +8867,7 @@ def parse_function(callback,event,args,bot,healers=nil)
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(event.message.text,x[0],''),event)
       weapon='-'
-      weapon=k2[0] unless k2.nil?
+      weapon=k2[0] unless k2.length<=0
       xx=[]
       xn=[]
       for i in 0...x[1].length
@@ -8917,7 +8938,7 @@ def parse_function(callback,event,args,bot,healers=nil)
     str=k[0]
     k2=get_weapon(first_sub(event.message.text,k[1],''),event)
     weapon='-'
-    weapon=k2[0] unless k2.nil?
+    weapon=k2[0] unless k2.length<=0
     name=find_name_in_string(event)
     if !detect_multi_unit_alias(event,name.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,name.downcase,event.message.text.downcase)
@@ -9087,12 +9108,12 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
       if weapon=='-'
         w2=['-',0,0]
       else
-        w2=@skills[find_skill(weapon,event)]
+        w2=find_skill(weapon,event)
       end
       if weapon2=='-'
         w22=['-',0,0]
       else
-        w22=@skills[find_skill(weapon2,event)]
+        w22=find_skill(weapon2,event)
       end
       diff_num=[w2[2]-w22[2],'M','F']
     end
@@ -9494,12 +9515,12 @@ def heal_study(event,name,bot,weapon=nil)
       if weapon=='-'
         w2=['-',0,0]
       else
-        w2=@skills[find_skill(weapon,event)]
+        w2=find_skill(weapon,event)
       end
       if weapon2=='-'
         w22=['-',0,0]
       else
-        w22=@skills[find_skill(weapon2,event)]
+        w22=find_skill(weapon2,event)
       end
       diff_num=[w2[2]-w22[2],'M','F']
     end
@@ -9802,12 +9823,12 @@ def proc_study(event,name,bot,weapon=nil)
       if weapon=='-'
         w2=['-',0,0]
       else
-        w2=@skills[find_skill(weapon,event)]
+        w2=find_skill(weapon,event)
       end
       if weapon2=='-'
         w22=['-',0,0]
       else
-        w22=@skills[find_skill(weapon2,event)]
+        w22=find_skill(weapon2,event)
       end
       diff_num=[w2[2]-w22[2],'M','F']
     end
@@ -9831,7 +9852,7 @@ def proc_study(event,name,bot,weapon=nil)
   refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
   mergetext=''
   if refinement.nil? || refinement.length==0
-    m=w2[11].split(', ')
+    m=w2[11]
     m=m.map{|q| q.gsub(/\(T\)\(E\)|\(TE\)|\(E\)\(T\)|\(ET\)/,'(E)').gsub(/\(T\)\(R\)|\(TR\)|\(R\)\(T\)|\(RT\)/,'(R)')} if w2[5].split(', ')[0]=='Beasts Only' && transformed
     m=m.reject{|q| !['(E)','(R)'].include?(q[0,3])}.reject{|q| q[3,5]!='WoDao' && q[3,6]!='Killer' && !['SlowSpecial','SpecialSlow'].include?(q[3,11])}
     mx=['Atk','Spd','Def','Res']
@@ -9852,7 +9873,7 @@ def proc_study(event,name,bot,weapon=nil)
     end
   end
   if w2[5].split(', ')[0]=='Beasts Only' && !transformed
-    m=w2[11].split(', ')
+    m=w2[11]
     unless refinement.nil? || refinement.length==0
       m=m.map{|q| q.gsub(/\(T\)\(R\)|\(TR\)|\(R\)\(T\)|\(RT\)/,'(T)')}
       m=m.map{|q| q.gsub(/\(T\)\(E\)|\(TE\)|\(E\)\(T\)|\(ET\)/,'(T)')} if refinement=='Effect'
@@ -10284,12 +10305,12 @@ def phase_study(event,name,bot,weapon=nil)
       if weapon=='-'
         w2=['-',0,0]
       else
-        w2=@skills[find_skill(weapon,event)]
+        w2=find_skill(weapon,event)
       end
       if weapon2=='-'
         w22=['-',0,0]
       else
-        w22=@skills[find_skill(weapon2,event)]
+        w22=find_skill(weapon2,event)
       end
       diff_num=[w2[2]-w22[2],'M','F']
     end
@@ -10410,7 +10431,7 @@ def phase_study(event,name,bot,weapon=nil)
     x=desc3.match(wpnnn).to_s unless desc3.match(sklz[ww2][7]).nil?
     x=nil if !x.nil? && x.include?('to allies') # remove any matches that include "to allies", which were caught in the prior line so they weren't considered non-phase-based
     x=nil if sklz[ww2][7].include?(", #{x}") && (sklz[ww2][7].include?('If foe uses') || sklz[ww2][7].include?('If foe initiates combat and uses'))
-    x=nil if sklz[ww2][11].split(', ').include?('(R)Overwrite') && !refinement.nil? && refinement.length>0
+    x=nil if sklz[ww2][11].include?('(R)Overwrite') && !refinement.nil? && refinement.length>0
     x3=[0,0,0,0,0,0]
     x3pp=[0,0,0,0,0,0]
     x3ep=[0,0,0,0,0,0]
@@ -10563,7 +10584,7 @@ def phase_study(event,name,bot,weapon=nil)
     end
   end
   unless weapon.nil? || weapon=='-'
-    tags=zzzl[11].split(', ')
+    tags=zzzl[11]
     for i in 0...tags.length
       if tags[i][0,1]=='(' && tags[i][3,1]==')'
         if tags[i][1,2]=='cP'
@@ -12068,7 +12089,7 @@ bot.command([:stats,:stat]) do |event, *args|
       if !detect_multi_unit_alias(event,event.message.text.downcase.gsub(sze.downcase,''),event.message.text.downcase.gsub(sze.downcase,'')).nil?
         x=detect_multi_unit_alias(event,event.message.text.downcase.gsub(sze.downcase,''),event.message.text.downcase.gsub(sze.downcase,''))
         k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
-        w=k2[0] unless k2.nil?
+        w=k2[0] unless k2.length<=0
         disp_tiny_stats(bot,x[1],w,event,true)
       else
         event.respond 'No matches found.'
@@ -12078,7 +12099,7 @@ bot.command([:stats,:stat]) do |event, *args|
     str=k[0]
     k2=get_weapon(first_sub(args.join(' '),k[1],''),event)
     w=nil
-    w=k2[0] unless k2.nil?
+    w=k2[0] unless k2.length<=0
     data_load()
     if !detect_multi_unit_alias(event,str.downcase.gsub(sze.downcase,''),event.message.text.downcase.gsub(sze.downcase,'')).nil?
       x=detect_multi_unit_alias(event,str.downcase.gsub(sze.downcase,''),event.message.text.downcase.gsub(sze.downcase,''))
@@ -12109,7 +12130,7 @@ bot.command([:stats,:stat]) do |event, *args|
     if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
-      w=k2[0] unless k2.nil?
+      w=k2[0] unless k2.length<=0
       disp_stats(bot,x[1],w,event,true)
     else
       event.respond 'No matches found.'
@@ -12119,7 +12140,7 @@ bot.command([:stats,:stat]) do |event, *args|
   str=k[0]
   k2=get_weapon(first_sub(args.join(' '),k[1],''),event)
   w=nil
-  w=k2[0] unless k2.nil?
+  w=k2[0] unless k2.length<=0
   data_load()
   if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
     x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
@@ -12143,7 +12164,7 @@ bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstat
     if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
-      w=k2[0] unless k2.nil?
+      w=k2[0] unless k2.length<=0
       disp_tiny_stats(bot,x[1],w,event,true)
     elsif !@embedless.include?(event.user.id) && !was_embedless_mentioned?(event)
       event.channel.send_embed("__**No matches found.  Have a smol me instead.**__") do |embed|
@@ -12159,7 +12180,7 @@ bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstat
   str=k[0]
   k2=get_weapon(first_sub(args.join(' '),k[1],''),event)
   w=nil
-  w=k2[0] unless k2.nil?
+  w=k2[0] unless k2.length<=0
   data_load()
   if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
     x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
@@ -12182,7 +12203,7 @@ bot.command([:big,:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:largestats
     if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
-      w=k2[0] unless k2.nil?
+      w=k2[0] unless k2.length<=0
       disp_stats(bot,x[1],w,event,true,false,false,true)
     else
       event.respond 'No matches found.'
@@ -12192,7 +12213,7 @@ bot.command([:big,:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:largestats
   str=k[0]
   k2=get_weapon(first_sub(args.join(' '),k[1],''),event)
   w=nil
-  w=k2[0] unless k2.nil?
+  w=k2[0] unless k2.length<=0
   data_load()
   if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
     x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
@@ -12215,7 +12236,7 @@ bot.command([:huge,:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hug
     if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
-      w=k2[0] unless k2.nil?
+      w=k2[0] unless k2.length<=0
       disp_stats(bot,x[1],w,event,true,false,true)
     else
       event.respond 'No matches found.'
@@ -12225,7 +12246,7 @@ bot.command([:huge,:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hug
   str=k[0]
   k2=get_weapon(first_sub(args.join(' '),k[1],''),event)
   w=nil
-  w=k2[0] unless k2.nil?
+  w=k2[0] unless k2.length<=0
   data_load()
   if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
     x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
@@ -12384,21 +12405,19 @@ bot.command([:deletealias,:removealias]) do |event, name|
   j=find_unit(name,event)
   if j.length<=0
     j=find_skill(name,event)
-    if j<0
+    if j.length<=0
       j=find_structure(name,event)
       if j.length<=0
         j=find_accessory(name,event)
-        if j<0
+        if j.length<=0
           j=find_item_feh(name,event)
-          if j<0
+          if j.length<=0
             event.respond "#{name} is not an alias, silly!"
             return nil
           else
-            j=@itemus[j]
             jjj='Item'
           end
         else
-          j=@accessories[j]
           jjj='Accessory'
         end
       else
@@ -12406,7 +12425,6 @@ bot.command([:deletealias,:removealias]) do |event, name|
         jjj='Structure'
       end
     else
-      j=@skills[j]
       jjj='Skill'
     end
   else
@@ -12494,7 +12512,7 @@ bot.command(:addgroup) do |event, groupname, *args|
   elsif find_group(groupname,event)>-1 && @groups[find_group(groupname,event)][1].length<=0
     event.respond 'This group is dynamic, automatically updating when a new unit that fits the criteria appears.'
     return nil
-  elsif find_skill(groupname,event,false,true)>=0
+  elsif find_skill(groupname,event,false,true).length>0
     event.respond "This is not allowed as a group name as it's a skill name."
     return nil
   elsif find_unit(groupname,event,true).length>0
@@ -13140,7 +13158,7 @@ bot.command([:oregano, :Oregano]) do |event|
   elsif [256291408598663168,462100851864109056].include?(event.server.id)
     k2=get_weapon(event.message.text.downcase.gsub('feh!oregano','').gsub('feh?oregano','').gsub('f?oregano','').gsub('e?oregano','').gsub('h?oregano',''),event)
     w=nil
-    w=k2[0] unless k2.nil?
+    w=k2[0] unless k2.length<=0
     disp_stats(bot,'Oregano',w,event,false,true)
     return nil
   end
@@ -14265,7 +14283,7 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
         if skill_types[i]==13
           seel=@dev_units[j2][skill_types[i]].scan(/\d+?/)[0].to_i
           seel=@dev_units[j2][skill_types[i]].gsub(seel.to_s,(seel+1).to_s)
-          k=true if find_skill(seel,event,true)>=0
+          k=true if find_skill(seel,event,true).length>0
         else
           k=true if @dev_units[j2][skill_types[i]][j][0,2]=='~~' && @dev_units[j2][skill_types[i]][j]!='~~none~~'
         end
@@ -14283,7 +14301,7 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
       if skill_types[i]==13 # skill seals
         seel=@dev_units[j2][skill_types[i]].scan(/\d+?/)[0].to_i
         seel=@dev_units[j2][skill_types[i]].gsub(seel.to_s,(seel+1).to_s)
-        if find_skill(seel,event,true)>=0
+        if find_skill(seel,event,true).length>0
           @dev_units[j2][skill_types[i]]=seel
           skills_learned.push("#{@dev_units[j2][skill_types[i]]} (seal)")
         else
@@ -14578,7 +14596,7 @@ bot.message do |event|
           event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
           k2=get_weapon(first_sub(str[1],x[0],''),event)
           w=nil
-          w=k2[0] unless k2.nil?
+          w=k2[0] unless k2.length<=0
           disp_stats(bot,x[1],w,event,true,true)
         elsif find_unit(str[0],event,true).length>0
           event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -14586,39 +14604,39 @@ bot.message do |event|
           str=k[0]
           k2=get_weapon(first_sub(s,k[1],''),event)
           w=nil
-          w=k2[0] unless k2.nil?
+          w=k2[0] unless k2.length<=0
           disp_stats(bot,str,w,event,event.server.nil?,true)
         end
-      elsif find_skill(s,event,false,true)>=0
+      elsif find_skill(s,event,false,true).length>0
         disp_skill(bot,s,event,true)
       elsif find_structure_ex(s,event,true).length>0
         disp_struct(bot,s,event,true)
-      elsif find_data_ex(:find_accessory,s,event,true)>=0
+      elsif find_data_ex(:find_accessory,s,event,true).length>0
         disp_accessory(bot,s,event,true)
-      elsif find_data_ex(:find_item_feh,s,event,true)>=0
+      elsif find_data_ex(:find_item_feh,s,event,true).length>0
         disp_itemu(bot,s,event,true)
       elsif str.nil?
-        if find_skill(s,event)>=0
+        if find_skill(s,event).length>0
           disp_skill(bot,s,event,true)
         elsif find_structure_ex(s,event).length>0
           disp_struct(bot,s,event,true)
-        elsif find_data_ex(:find_accessory,s,event)>=0
+        elsif find_data_ex(:find_accessory,s,event).length>0
           disp_accessory(bot,s,event,true)
-        elsif find_data_ex(:find_item_feh,s,event)>=0
+        elsif find_data_ex(:find_item_feh,s,event).length>0
           disp_itemu(bot,s,event,true)
         elsif !detect_multi_unit_alias(event,s.downcase,event.message.text.downcase).nil?
           x=detect_multi_unit_alias(event,s.downcase,event.message.text.downcase)
           event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
           k2=get_weapon(first_sub(s,x[0],''),event)
           w=nil
-          w=k2[0] unless k2.nil?
+          w=k2[0] unless k2.length<=0
           disp_stats(bot,x[1],w,event,true,true)
         elsif !detect_multi_unit_alias(event,s.downcase,s.downcase).nil?
           x=detect_multi_unit_alias(event,s.downcase,s.downcase)
           event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
           k2=get_weapon(first_sub(s,x[0],''),event)
           w=nil
-          w=k2[0] unless k2.nil?
+          w=k2[0] unless k2.length<=0
           disp_stats(bot,x[1],w,event,true,true)
         end
       elsif !detect_multi_unit_alias(event,str[0].downcase,event.message.text.downcase).nil?
@@ -14626,14 +14644,14 @@ bot.message do |event|
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
-        w=k2[0] unless k2.nil?
+        w=k2[0] unless k2.length<=0
         disp_stats(bot,x[1],w,event,true,true)
       elsif !detect_multi_unit_alias(event,str[0].downcase,str[0].downcase).nil?
         x=detect_multi_unit_alias(event,str[0].downcase,str[0].downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
-        w=k2[0] unless k2.nil?
+        w=k2[0] unless k2.length<=0
         disp_stats(bot,x[1],w,event,true,true)
       elsif find_unit(str[0],event).length>0
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -14644,23 +14662,23 @@ bot.message do |event|
           str=k[0]
           k2=get_weapon(first_sub(s,k[1],''),event)
           w=nil
-          w=k2[0] unless k2.nil?
+          w=k2[0] unless k2.length<=0
         end
         disp_stats(bot,str,w,event,event.server.nil?,true)
-      elsif find_skill(s,event)>0
+      elsif find_skill(s,event).length>0
         disp_skill(bot,s,event,true)
       elsif find_structure_ex(s,event).length>0
         disp_struct(bot,s,event,true)
-      elsif find_data_ex(:find_accessory,s,event)>=0
+      elsif find_data_ex(:find_accessory,s,event).length>0
         disp_accessory(bot,s,event,true)
-      elsif find_data_ex(:find_item_feh,s,event)>=0
+      elsif find_data_ex(:find_item_feh,s,event).length>0
         disp_itemu(bot,s,event,true)
       elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
         x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
-        w=k2[0] unless k2.nil?
+        w=k2[0] unless k2.length<=0
         disp_stats(bot,x[1],w,event,true,true)
       end
     end
@@ -14868,7 +14886,7 @@ bot.mention do |event|
         if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
           x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
           k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
-          w=k2[0] unless k2.nil?
+          w=k2[0] unless k2.length<=0
           disp_stats(bot,x[1],w,event,true)
         else
           event.respond 'No matches found.'
@@ -14878,7 +14896,7 @@ bot.mention do |event|
       str=k[0]
       k2=get_weapon(first_sub(a.join(' '),k[1],''),event)
       w=nil
-      w=k2[0] unless k2.nil?
+      w=k2[0] unless k2.length<=0
       data_load()
       if k23>0
       elsif !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
@@ -14968,7 +14986,7 @@ bot.mention do |event|
       if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
         x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
         k2=get_weapon(first_sub(a.join(' '),x[0],''),event)
-        w=k2[0] unless k2.nil?
+        w=k2[0] unless k2.length<=0
         disp_tiny_stats(bot,x[1],w,event,true)
       elsif !@embedless.include?(event.user.id) && !was_embedless_mentioned?(event)
         event.channel.send_embed("__**No matches found.  Have a smol me instead.**__") do |embed|
@@ -14983,7 +15001,7 @@ bot.mention do |event|
     str=k[0]
     k2=get_weapon(first_sub(a.join(' '),k[1],''),event)
     w=nil
-    w=k2[0] unless k2.nil?
+    w=k2[0] unless k2.length<=0
     data_load()
     if !detect_multi_unit_alias(event,str.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,str.downcase,event.message.text.downcase)
@@ -15018,7 +15036,7 @@ bot.mention do |event|
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(str[1],x[0],''),event)
         w=nil
-        w=k2[0] unless k2.nil?
+        w=k2[0] unless k2.length<=0
         disp_stats(bot,x[1],w,event,true,true)
       elsif find_unit(str[0],event,true).length>0
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -15026,56 +15044,56 @@ bot.mention do |event|
         str=k[0]
         k2=get_weapon(first_sub(s,k[1],''),event)
         w=nil
-        w=k2[0] unless k2.nil?
+        w=k2[0] unless k2.length<=0
         disp_stats(bot,str,w,event,event.server.nil?,true)
       end
-    elsif find_skill(s,event,false,true)>=0
+    elsif find_skill(s,event,false,true).length>0
       disp_skill(bot,s,event,true)
     elsif find_structure_ex(s,event,true).length>0
       disp_struct(bot,s,event,true)
-    elsif find_data_ex(:find_accessory,s,event,true)>=0
+    elsif find_data_ex(:find_accessory,s,event,true).length>0
       disp_accessory(bot,s,event,true)
-    elsif find_data_ex(:find_item_feh,s,event,true)>=0
+    elsif find_data_ex(:find_item_feh,s,event,true).length>0
       disp_itemu(bot,s,event,true)
     elsif str.nil?
-      if find_skill(s,event)>=0
+      if find_skill(s,event).length>0
         disp_skill(bot,s,event,true)
       elsif find_structure_ex(s,event).length>0
         disp_struct(bot,s,event,true)
-      elsif find_data_ex(:find_accessory,s,event)>=0
+      elsif find_data_ex(:find_accessory,s,event).length>0
         disp_accessory(bot,s,event,true)
-      elsif find_data_ex(:find_item_feh,s,event)>=0
+      elsif find_data_ex(:find_item_feh,s,event).length>0
         disp_itemu(bot,s,event,true)
       elsif !detect_multi_unit_alias(event,s.downcase,event.message.text.downcase).nil?
         x=detect_multi_unit_alias(event,s.downcase,event.message.text.downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
-        w=k2[0] unless k2.nil?
+        w=k2[0] unless k2.length<=0
         disp_stats(bot,x[1],w,event,true,true)
       elsif !detect_multi_unit_alias(event,s.downcase,s.downcase).nil?
         x=detect_multi_unit_alias(event,s.downcase,s.downcase)
         event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
         k2=get_weapon(first_sub(s,x[0],''),event)
         w=nil
-        w=k2[0] unless k2.nil?
+        w=k2[0] unless k2.length<=0
         disp_stats(bot,x[1],w,event,true,true)
       end
-    elsif str[1].downcase=='ploy' && find_skill(stat_buffs(s,s),event)>=0
+    elsif str[1].downcase=='ploy' && find_skill(stat_buffs(s,s),event).length>0
       disp_skill(bot,stat_buffs(s,s),event,true)
     elsif !detect_multi_unit_alias(event,str[0].downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,str[0].downcase,event.message.text.downcase)
       event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
       k2=get_weapon(first_sub(s,x[0],''),event)
       w=nil
-      w=k2[0] unless k2.nil?
+      w=k2[0] unless k2.length<=0
       disp_stats(bot,x[1],w,event,true,true)
     elsif !detect_multi_unit_alias(event,str[0].downcase,str[0].downcase).nil?
       x=detect_multi_unit_alias(event,str[0].downcase,str[0].downcase)
       event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
       k2=get_weapon(first_sub(s,x[0],''),event)
       w=nil
-      w=k2[0] unless k2.nil?
+      w=k2[0] unless k2.length<=0
       disp_stats(bot,x[1],w,event,true,true)
     elsif find_unit(str[0],event).length>0
       event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
@@ -15086,23 +15104,23 @@ bot.mention do |event|
         str=k[0]
         k2=get_weapon(first_sub(s,k[1],''),event)
         w=nil
-        w=k2[0] unless k2.nil?
+        w=k2[0] unless k2.length<=0
       end
       disp_stats(bot,str,w,event,event.server.nil?,true)
-    elsif find_skill(s,event)>0
+    elsif find_skill(s,event).length>0
       disp_skill(bot,s,event,true)
     elsif !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
       event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
       k2=get_weapon(first_sub(s,x[0],''),event)
       w=nil
-      w=k2[0] unless k2.nil?
+      w=k2[0] unless k2.length<=0
       disp_stats(bot,x[1],w,event,true,true)
     elsif find_structure_ex(s,event).length>0
       disp_struct(bot,s,event,true)
-    elsif find_data_ex(:find_accessory,s,event)>=0
+    elsif find_data_ex(:find_accessory,s,event).length>0
       disp_accessory(bot,s,event,true)
-    elsif find_data_ex(:find_item_feh,s,event)>=0
+    elsif find_data_ex(:find_item_feh,s,event).length>0
       disp_itemu(bot,s,event,true)
     end
   end
