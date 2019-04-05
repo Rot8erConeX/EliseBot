@@ -172,7 +172,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
      'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics','legend',
      'legends','legendarys','item','accessory','acc','accessorie','alias','s2s','dailies','tomorrow','tommorrow','tomorow','tommorow','aoe','area','prf','prfs',
-     'prefix','shards','hero']
+     'prefix','shards','hero','aliashift','fu']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -209,34 +209,36 @@ def data_load() # loads the character and skill data from the files on my comput
     else
       bob4[2]=[' ',' ']
     end
-    if bob4.length>4
-      bob4[4]=bob4[4].split(', ')
-      bob4[5]=bob4[5].split(', ')
-      for j in 0...5 # growth rates and level 40 stats should be stored as numbers, not strings
-        bob4[4][j]=bob4[4][j].to_i
-        bob4[5][j]=bob4[5][j].to_i
-      end
+    bob4[4]=bob4[4].split(', ')
+    bob4[5]=bob4[5].split(', ')
+    for j in 0...5 # growth rates and level 40 stats should be stored as numbers, not strings
+      bob4[4][j]=bob4[4][j].to_i
+      bob4[5][j]=bob4[5][j].to_i
     end
-    if bob4.length>8 # the list of games should be spliced into an array of game abbreviations
-      if bob4[9].length>1
-        bob4[9]=bob4[9].split(', ')
-      else
-        bob4[9]=['-']
-      end
+    if bob4[7].length<=0
+      bob4[7]=['','']
+    elsif !bob4[7].include?(';; ')
+      bob4[7]=[bob4[7],'']
+    else
+      bob4[7]=bob4[7].split(';; ')
     end
-    if bob4.length>10 # the list of games should be spliced into an array of game abbreviations
-      if bob4[11].length>1
-        bob4[11]=bob4[11].split(', ')
-      else
-        bob4[11]=[' ']
-      end
+    bob4[8]=bob4[8].to_i
+    # the list of games should be spliced into an array of game abbreviations
+    if bob4[9].length>1
+      bob4[9]=bob4[9].split(', ')
+    else
+      bob4[9]=['-']
     end
-    if bob4.length>12
-      if bob4[13].nil? # server-specific units' markers should be split into two pieces - the server(s) they are allowed in, and the ID of the user whose avatar to use
-        bob4[13]=[]
-      else
-        bob4[13]=[bob4[13].scan(/[[:alpha:]]+?/).join, bob4[13].gsub(bob4[13].scan(/[[:alpha:]]+?/).join,'').to_i]
-      end
+    # the list of games should be spliced into an array of game abbreviations
+    if bob4[11].length>1
+      bob4[11]=bob4[11].split(', ')
+    else
+      bob4[11]=[' ']
+    end
+    if bob4[13].nil? # server-specific units' markers should be split into two pieces - the server(s) they are allowed in, and the ID of the user whose avatar to use
+      bob4[13]=[]
+    else
+      bob4[13]=[bob4[13].scan(/[[:alpha:]]+?/).join, bob4[13].gsub(bob4[13].scan(/[[:alpha:]]+?/).join,'').to_i]
     end
     @units.push(bob4)
   end
@@ -330,7 +332,8 @@ def nicknames_load() # loads the nickname list
   nzzzz=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Unit'}.uniq
   nzzzz2=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Skill'}.uniq
   nzzzz3=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Structure'}.uniq
-  if nzzzz[nzzzz.length-1][2]<'Zephiel' || nzzzz2[nzzzz2.length-1][2]<'Yato' || nzzzz3[nzzzz3.length-1][2]<'Armor School'
+  if @shardizard==4
+  elsif nzzzz[nzzzz.length-1][2]<366 || nzzzz2[nzzzz2.length-1][2]<'Yato' || nzzzz3[nzzzz3.length-1][2]<'Armor School'
     if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt')
       b=[]
       File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt').each_line do |line|
@@ -343,7 +346,7 @@ def nicknames_load() # loads the nickname list
     nzzzzz2=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Skill'}.uniq
     nzzzzz3=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Structure'}.uniq
     nzzzzz4=b.reject{|q| q.nil? || q[2].nil? || ['Unit','Skill','Structure'].include?(q[0])}.uniq
-    if nzzzzz[nzzzzz.length-1][2]<'Zephiel' || nzzzzz2[nzzzzz2.length-1][2]<'Yato' || nzzzzz3[nzzzzz3.length-1][2]<'Armor School'
+    if nzzzzz[nzzzzz.length-1][2]<366 || nzzzzz2[nzzzzz2.length-1][2]<'Yato' || nzzzzz3[nzzzzz3.length-1][2]<'Armor School'
       puts 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
         b=[]
@@ -897,41 +900,61 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
   end
   name=name.gsub('(','').gsub(')','') unless ignore2
   untz=@units.map{|q| q}
-  k=untz.find_index{|q| q[0].downcase==name.downcase}
-  k=untz.find_index{|q| q[0].gsub('(','').gsub(')','').downcase==name.downcase} unless ignore2
-  return untz[k] unless k.nil? || !has_any?(g, untz[k][13][0])
   nicknames_load()
-  unless ignore2
-    alz=@aliases.reject{|q| q[0]!='Unit'}
-    k=alz.find_index{|q| q[1].downcase==name.downcase && (q[3].nil? || q[3].include?(ks))}
-    return untz[untz.find_index{|q| q[0]==alz[k][2]}] unless k.nil? || !has_any?(g, untz[untz.find_index{|q| q[0]==alz[k][2]}][13][0])
-    k=alz.find_index{|q| q[1].gsub('||','').downcase==name.downcase && (q[3].nil? || q[3].include?(ks))}
-    return untz[untz.find_index{|q| q[0]==alz[k][2]}] unless k.nil? || !has_any?(g, untz[untz.find_index{|q| q[0]==alz[k][2]}][13][0])
+  b=@aliases.map{|q| q}
+  b.reject!{|q| !q[3].nil? && !q[3].include?(ks)}
+  b.reject!{|q| q[0]!='Unit'}
+  b.sort!{|a,b| supersort(a,b,1)}
+  k=b.bsearch_index{|q| q[1].downcase<=>name.downcase}
+  unless k.nil?
+    if b[k][2]<1000
+      return untz[b[k][2]]
+    else
+      m=untz[untz.find_index{|q| q[8]==b[k][2]}]
+      return m if has_any?(g, m[13][0])
+    end
   end
-  return [] if name.length<2
-  return [] if ignore || ['blade','blad','bla'].include?(name.downcase)
-  untz=@units.map{|q| q}
-  k=untz.find_index{|q| q[0][0,name.length].downcase==name.downcase}
-  k=untz.find_index{|q| q[0][0,name.length].gsub('(','').gsub(')','').downcase==name.downcase} unless ignore2
-  return untz[k] unless k.nil? || !has_any?(g, untz[k][13][0])
-  unless ignore2
-    alz=@aliases.map{|q| q}
-    k=alz.find_index{|q| q[0][0,name.length].downcase==name.downcase && (q[2].nil? || q[2].include?(ks))}
-    return untz[untz.find_index{|q| q[0]==alz[k][2]}] unless k.nil? || !has_any?(g, untz[untz.find_index{|q| q[0]==alz[k][1]}][13][0])
-    k=alz.find_index{|q| q[0][0,name.length].gsub('||','').downcase==name.downcase && (q[2].nil? || q[2].include?(ks))}
-    return untz[untz.find_index{|q| q[0]==alz[k][2]}] unless k.nil? || !has_any?(g, untz[untz.find_index{|q| q[0]==alz[k][1]}][13][0])
+  k=b.bsearch_index{|q| q[1].gsub('||','').downcase<=>name.downcase}
+  unless k.nil?
+    if b[k][2]<1000
+      return untz[b[k][2]]
+    else
+      m=untz[untz.find_index{|q| q[8]==b[k][2]}]
+      return m if has_any?(g, m[13][0])
+    end
+  end
+  unless name.length<2 || ignore || ['blade','blad','bla'].include?(name.downcase)
+    b.reject!{|q| q[1].length<name.length}
+    k=b.bsearch_index{|q| q[1][0,name.length].downcase<=>name.downcase}
+    unless k.nil?
+      if b[k][2]<1000
+        return untz[b[k][2]]
+      else
+        m=untz[untz.find_index{|q| q[8]==b[k][2]}]
+        return m if has_any?(g, m[13][0])
+      end
+    end
+    k=b.bsearch_index{|q| q[1].gsub('||','')[0,name.length].downcase<=>name.downcase}
+    unless k.nil?
+      if b[k][2]<1000
+        return untz[b[k][2]]
+      else
+        m=untz[untz.find_index{|q| q[8]==b[k][2]}]
+        return m if has_any?(g, m[13][0])
+      end
+    end
   end
   unless ignore2 || !name.downcase.include?('launch')
-    name=name.downcase.gsub('launch','') # if the name includes the word "launch", remove it from consideration
-    untz=@units.map{|q| q}
-    k=untz.find_index{|q| q[0].downcase==name.downcase}
-    k=untz.find_index{|q| q[0].downcase==name.downcase && q[9][0].include?('LU')} unless ignore2
-    return untz[k] unless k.nil? || !has_any?(g, untz[k][13][0])
-    alz=@aliases.reject{|q| q[0]!='Unit' || q[2].include?('(') || !q[3].nil?}
-    k=alz.find_index{|q| q[0][0,name.length].downcase==name.downcase}
-    return untz[untz.find_index{|q| q[0]==alz[k][1]}] unless k.nil? || !has_any?(g, untz[k][13][0])
-    k=alz.find_index{|q| q[0][0,name.length].gsub('||','').downcase==name.downcase}
-    return untz[untz.find_index{|q| q[0]==alz[k][1]}] unless k.nil? || !has_any?(g, untz[k][13][0])
+    name2=name.downcase.gsub('launch','')
+    b.reject!{|q| q[1].length<name2.length}
+    k=b.bsearch_index{|q| q[1].downcase<=>name2.downcase}
+    unless k.nil?
+      return untz[b[k][2]] if b[k][2]<100 && untz[b[k][2]][9][0].include?('LU')
+    end
+    k=b.bsearch_index{|q| q[1].gsub('||','').downcase<=>name2.downcase}
+    unless k.nil?
+      return untz[b[k][2]] if b[k][2]<100 && untz[b[k][2]][9][0].include?('LU')
+    end
   end
   return []
 end
@@ -5942,7 +5965,7 @@ def get_group(name,event)
   elsif ['valentines',"valentine's"].include?(name.downcase)
     l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Valentines)')}
     return ["Valentine's",l.map{|q| q[0]}]
-  elsif ['Bathing'].include?(name.downcase)
+  elsif ['bathing'].include?(name.downcase)
     l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Bath)')}
     return ['Bathing',l.map{|q| q[0]}]
   elsif ['bunnies'].include?(name.downcase)
@@ -12468,7 +12491,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
   nzzz2=@aliases.reject{|q| q[0]!='Skill'}
   nzzz3=@aliases.reject{|q| q[0]!='Structure'}
   nzzz4=@aliases.reject{|q| ['Unit','Skill','Structure'].include?(q[0])}
-  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
+  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>=366 || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
     bot.channel(logchn).send_message('Alias list saved.')
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...nzzz.length
@@ -14004,7 +14027,7 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
     zunits=@aliases.reject{|q| q[0]!='Unit'}
     zskills=@aliases.reject{|q| q[0]!='Skill'}
     zstructs=@aliases.reject{|q| q[0]!='Structure'}
-    if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<'Zephiel' || zskills[zskills.length-1].length<=1 || zskills[zskills.length-1][2]<'Yato' || zstructs[zstructs.length-1].length<=1 || zstructs[zstructs.length-1][2]<'Armor School'
+    if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<366 || zskills[zskills.length-1].length<=1 || zskills[zskills.length-1][2]<'Yato' || zstructs[zstructs.length-1].length<=1 || zstructs[zstructs.length-1][2]<'Armor School'
       event.respond 'Alias list has __***NOT***__ been backed up, as alias list has been corrupted.'
       return nil
     end
@@ -14388,7 +14411,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
       zunits=nzzzzz.reject{|q| q[0]!='Unit'}
       zskills=nzzzzz.reject{|q| q[0]!='Skill'}
       zstructs=nzzzzz.reject{|q| q[0]!='Structure'}
-      if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<'Zephiel' || zskills[zskills.length-1].length<=1 || zskills[zskills.length-1][2]<'Yato' || zstructs[zstructs.length-1].length<=1 || zstructs[zstructs.length-1][2]<'Armor School'
+      if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<366 || zskills[zskills.length-1].length<=1 || zskills[zskills.length-1][2]<'Yato' || zstructs[zstructs.length-1].length<=1 || zstructs[zstructs.length-1][2]<'Armor School'
         event << 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
         if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
           b=[]
@@ -14475,6 +14498,33 @@ bot.command(:reload, from: 167657750971547648) do |event|
     e.respond 'Nothing reloaded.  If you meant to use the command, please try it again.' unless reload
   end
   return nil
+end
+
+bot.command(:aliashift) do |event|
+  return nil if overlap_prevent(event)
+  return nil unless [167657750971547648].include?(event.user.id)
+  return nil unless @shardizard==4
+  nicknames_load()
+  data_load()
+  untz=@units.map{|q| q}
+  alz=@aliases.reject{|q| q[0]!='Unit'}
+  for i in 0...alz.length
+    x=untz.find_index{|q| q[0]==alz[i][2]}
+    unless x.nil?
+      alz[i][2]=untz[x][8]
+    end
+  end
+  for i in 0...untz.length
+    alz.push(['Unit',untz[i][0].gsub('!','').gsub('(','').gsub(')','').gsub('_','').gsub(' ',''),untz[i][8]])
+    alz.push(['Unit',untz[i][0],untz[i][8]]) if has_any?(['!','(',')','_',' '],untz[i][0])
+  end
+  alz.sort!{|a,b| (supersort(a,b,2) == 0 ? supersort(a,b,1) : supersort(a,b,2))}
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHNamesX.txt', 'w') { |f|
+    for i in 0...alz.length
+      f.puts alz[i].to_s
+    end
+  }
+  event.respond 'done'
 end
 
 bot.command(:boop) do |event|
