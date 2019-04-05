@@ -660,10 +660,20 @@ def list_unit_aliases(event,args,bot,mode=0)
     if has_any?(args,['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars'])
       f.push('__**Single-unit aliases**__')
       for i in 0...n.length
-        if n[i][2].nil?
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+        uuu=n[i][1]
+        unless uuu.is_a?(String)
+          if uuu<1000
+            uuu=@units[uuu][0]
+          else
+            uu2=@units.find_index{|q| q[8]==uuu}
+            uuu=@units[uu2][0] unless uu2.nil?
+          end
+        end
+        if uuu==n[i][0]
+        elsif n[i][2].nil?
+          f.push("#{n[i][0]} = #{uuu}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{uuu}#{" *(in this server only)*" unless mode==1}")
         else
           a=[]
           for j in 0...n[i][2].length
@@ -672,7 +682,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{uuu} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
       if m.length>0 && mode != 1
@@ -687,9 +697,9 @@ def list_unit_aliases(event,args,bot,mode=0)
       f.push('__**Skill aliases**__')
       for i in 0...n.length
         if n[i][2].nil?
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+          f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
         else
           a=[]
           for j in 0...n[i][2].length
@@ -698,7 +708,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{n[i][1]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
     elsif has_any?(args,['structures','structure','struct','structs'])
@@ -707,9 +717,9 @@ def list_unit_aliases(event,args,bot,mode=0)
       f.push('__**[Aether Raids] Structure aliases**__')
       for i in 0...n.length
         if n[i][2].nil?
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+          f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
         else
           a=[]
           for j in 0...n[i][2].length
@@ -718,7 +728,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{n[i][1]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
     elsif has_any?(args,['accessorys','accessory','accessories'])
@@ -727,9 +737,9 @@ def list_unit_aliases(event,args,bot,mode=0)
       f.push('__**Accessory aliases**__')
       for i in 0...n.length
         if n[i][2].nil?
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+          f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
         else
           a=[]
           for j in 0...n[i][2].length
@@ -738,7 +748,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{n[i][1]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
     elsif has_any?(args,['items','item'])
@@ -747,9 +757,9 @@ def list_unit_aliases(event,args,bot,mode=0)
       f.push('__**Item aliases**__')
       for i in 0...n.length
         if n[i][2].nil?
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+          f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
         else
           a=[]
           for j in 0...n[i][2].length
@@ -758,7 +768,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{n[i][1]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
     elsif safe_to_spam?(event) || mode==1
@@ -771,7 +781,16 @@ def list_unit_aliases(event,args,bot,mode=0)
         end
         msg='__**Single-unit aliases**__'
         for i in 0...n.length
-          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
+          uuu=n[i][1]
+          unless uuu.is_a?(String)
+            if uuu<1000
+              uuu=@units[uuu][0]
+            else
+              uu2=@units.find_index{|q| q[8]==uuu}
+              uuu=@units[uu2][0] unless uu2.nil?
+            end
+          end
+          msg=extend_message(msg,"#{n[i][0]} = #{uuu}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
         end
         unless mode==1
           msg=extend_message(msg,'__**Multi-unit aliases**__',event,2)
@@ -780,26 +799,26 @@ def list_unit_aliases(event,args,bot,mode=0)
           end
         end
         n=@aliases.reject{|q| q[0]!='Skill'}.map{|q| [q[1],q[2],q[3]]}
-        n=n.reject{|q| q[2].nil?} if mode==1
-        msg=extend_message(startstr,'__**Skill aliases**__',event,2)
+        n=n.reject{|q| q[2].nil? || !q[2].include?(event.server.id)} if mode==1
+        msg=extend_message(msg,'__**Skill aliases**__',event,2)
         for i in 0...n.length
           msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
         end
         n=@aliases.reject{|q| q[0]!='Structure'}.map{|q| [q[1],q[2],q[3]]}
-        n=n.reject{|q| q[2].nil?} if mode==1
-        msg=extend_message(startstr,'__**[Aether Raids] Structure aliases**__',event,2)
+        n=n.reject{|q| q[2].nil? || !q[2].include?(event.server.id)} if mode==1
+        msg=extend_message(msg,'__**[Aether Raids] Structure aliases**__',event,2)
         for i in 0...n.length
           msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
         end
         n=@aliases.reject{|q| q[0]!='Accessory'}.map{|q| [q[1],q[2],q[3]]}
-        n=n.reject{|q| q[2].nil?} if mode==1
-        msg=extend_message(startstr,'__**Accessory aliases**__',event,2)
+        n=n.reject{|q| q[2].nil? || !q[2].include?(event.server.id)} if mode==1
+        msg=extend_message(msg,'__**Accessory aliases**__',event,2)
         for i in 0...n.length
           msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
         end
         n=@aliases.reject{|q| q[0]!='Item'}.map{|q| [q[1],q[2],q[3]]}
-        n=n.reject{|q| q[2].nil?} if mode==1
-        msg=extend_message(startstr,'__**Item aliases**__',event,2)
+        n=n.reject{|q| q[2].nil? || !q[2].include?(event.server.id)} if mode==1
+        msg=extend_message(msg,'__**Item aliases**__',event,2)
         for i in 0...n.length
           msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
         end
@@ -808,10 +827,20 @@ def list_unit_aliases(event,args,bot,mode=0)
       end
       f.push('__**Single-unit aliases**__')
       for i in 0...n.length
-        if n[i][2].nil?
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+        uuu=n[i][1]
+        unless uuu.is_a?(String)
+          if uuu<1000
+            uuu=@units[uuu][0]
+          else
+            uu2=@units.find_index{|q| q[8]==uuu}
+            uuu=@units[uu2][0] unless uu2.nil?
+          end
+        end
+        if uuu==n[i][0]
+        elsif n[i][2].nil?
+          f.push("#{n[i][0]} = #{uuu}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{uuu}#{" *(in this server only)*" unless mode==1}")
         else
           a=[]
           for j in 0...n[i][2].length
@@ -820,7 +849,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{uuu} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
       if m.length>0 && mode != 1
@@ -834,9 +863,9 @@ def list_unit_aliases(event,args,bot,mode=0)
       f.push("\n__**Skill aliases**__")
       for i in 0...n.length
         if n[i][2].nil?
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+          f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
         else
           a=[]
           for j in 0...n[i][2].length
@@ -845,7 +874,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{n[i][1]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
       n=@aliases.reject{|q| q[0]!='Structure'}.map{|q| [q[1],q[2],q[3]]}
@@ -853,9 +882,9 @@ def list_unit_aliases(event,args,bot,mode=0)
       f.push("\n__**[Aether Raids] Structure aliases**__")
       for i in 0...n.length
         if n[i][2].nil?
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+          f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
         else
           a=[]
           for j in 0...n[i][2].length
@@ -864,7 +893,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{n[i][1]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
       n=@aliases.reject{|q| q[0]!='Accessory'}.map{|q| [q[1],q[2],q[3]]}
@@ -872,9 +901,9 @@ def list_unit_aliases(event,args,bot,mode=0)
       f.push('__**Accessory aliases**__')
       for i in 0...n.length
         if n[i][2].nil?
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+          f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
         else
           a=[]
           for j in 0...n[i][2].length
@@ -883,7 +912,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{n[i][1]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
       n=@aliases.reject{|q| q[0]!='Item'}.map{|q| [q[1],q[2],q[3]]}
@@ -891,9 +920,9 @@ def list_unit_aliases(event,args,bot,mode=0)
       f.push('__**Item aliases**__')
       for i in 0...n.length
         if n[i][2].nil?
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}")
+          f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
         else
           a=[]
           for j in 0...n[i][2].length
@@ -902,7 +931,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0].gsub('_','\_')} = #{n[i][1].gsub('_','\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{n[i][1]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
     else
@@ -917,14 +946,19 @@ def list_unit_aliases(event,args,bot,mode=0)
       h=' that contain this unit'
       h=' that contain both of these units' if unit.length>1
       h=' that contain all of these units' if unit.length>2
+      puts unit.to_s
       for i1 in 0...unit.length
         u=find_unit(unit[i1],event)[0]
+        u2=find_unit(unit[i1],event)[8]
         m=m.reject{|q| !q[1].include?(u)}
-        f.push("#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,u,false,4)}**#{"'s server-specific aliases__" if mode==1}")
-        f.push(u) if u=='Lavatain'
+        f.push("#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u}#{unit_moji(bot,event,-1,u,false,4)}**#{" [Unt-##{u2}]" if @shardizard==4}#{"'s server-specific aliases__" if mode==1}")
         f.push(u.gsub('(','').gsub(')','')) if u.include?('(') || u.include?(')')
         for i in 0...n.length
-          if n[i][1].downcase==u.downcase
+          mtch=false
+          mtch=true if n[i][1].is_a?(String) && n[i][1].downcase==u.downcase
+          mtch=true if !n[i][1].is_a?(String) && n[i][1]==u2
+          mtch=false if !n[i][1].is_a?(String) && n[i][0].downcase==u.downcase
+          if mtch
             if event.server.nil? && !n[i][2].nil?
               a=[]
               for j in 0...n[i][2].length
@@ -933,11 +967,11 @@ def list_unit_aliases(event,args,bot,mode=0)
                   a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
                 end
               end
-              f.push("#{n[i][0].gsub('_','\\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+              f.push("#{n[i][0]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
             elsif n[i][2].nil?
-              f.push(n[i][0].gsub('_','\\_')) unless mode==1
+              f.push(n[i][0]) unless mode==1
             else
-              f.push("#{n[i][0].gsub('_','\\_')}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
+              f.push("#{n[i][0]}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
             end
           end
         end
@@ -960,7 +994,10 @@ def list_unit_aliases(event,args,bot,mode=0)
         f.push(u) if u=='Bladeblade'
         f.push(u.gsub('(','').gsub(')','').gsub(' ','')) if u.include?('(') || u.include?(')') || u.include?(' ')
         for i in 0...n.length
-          if n[i][1].downcase==u.downcase
+          mtch=false
+          mtch=true if n[i][1].is_a?(String) && n[i][1].downcase==u.downcase
+         # mtch=true if !n[i][1].is_a?(String) && n[i][1]==u2
+          if mtch
             if event.server.nil? && !n[i][2].nil?
               a=[]
               for j in 0...n[i][2].length
@@ -969,11 +1006,11 @@ def list_unit_aliases(event,args,bot,mode=0)
                   a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
                 end
               end
-              f.push("#{n[i][0].gsub('_','\\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+              f.push("#{n[i][0]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
             elsif n[i][2].nil?
-              f.push(n[i][0].gsub('_','\\_')) unless mode==1
+              f.push(n[i][0]) unless mode==1
             else
-              f.push("#{n[i][0].gsub('_','\\_')}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
+              f.push("#{n[i][0]}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
             end
           end
         end
@@ -1002,11 +1039,11 @@ def list_unit_aliases(event,args,bot,mode=0)
                 a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
               end
             end
-            f.push("#{n[i][0].gsub('_','\\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+            f.push("#{n[i][0]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
           elsif n[i][2].nil?
-            f.push(n[i][0].gsub('_','\\_')) unless mode==1
+            f.push(n[i][0]) unless mode==1
           else
-            f.push("#{n[i][0].gsub('_','\\_')}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
+            f.push("#{n[i][0]}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
           end
         end
       end
@@ -1025,11 +1062,11 @@ def list_unit_aliases(event,args,bot,mode=0)
                   a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
                 end
               end
-              f.push("#{n[i][0].gsub('_','\\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+              f.push("#{n[i][0]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
             elsif n[i][2].nil?
-              f.push(n[i][0].gsub('_','\\_')) unless mode==1
+              f.push(n[i][0]) unless mode==1
             else
-              f.push("#{n[i][0].gsub('_','\\_')}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
+              f.push("#{n[i][0]}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
             end
           end
         end
@@ -1050,7 +1087,10 @@ def list_unit_aliases(event,args,bot,mode=0)
       u=u[0]
       f.push(u.gsub('(','').gsub(')','').gsub(' ','')) if u.include?('(') || u.include?(')') || u.include?(' ')
       for i in 0...n.length
-        if n[i][1].downcase==u.downcase
+        mtch=false
+        mtch=true if n[i][1].is_a?(String) && n[i][1].downcase==u.downcase
+       # mtch=true if !n[i][1].is_a?(String) && n[i][1]==u2
+        if mtch
           if event.server.nil? && !n[i][2].nil?
             a=[]
             for j in 0...n[i][2].length
@@ -1059,11 +1099,11 @@ def list_unit_aliases(event,args,bot,mode=0)
                 a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
               end
             end
-            f.push("#{n[i][0].gsub('_','\\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+            f.push("#{n[i][0]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
           elsif n[i][2].nil?
-            f.push(n[i][0].gsub('_','\\_')) unless mode==1
+            f.push(n[i][0]) unless mode==1
           else
-            f.push("#{n[i][0].gsub('_','\\_')}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
+            f.push("#{n[i][0]}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
           end
         end
       end
@@ -1078,7 +1118,10 @@ def list_unit_aliases(event,args,bot,mode=0)
       u=u[0]
       f.push(u.gsub('(','').gsub(')','').gsub(' ','')) if u.include?('(') || u.include?(')') || u.include?(' ')
       for i in 0...n.length
-        if n[i][1].downcase==u.downcase
+        mtch=false
+        mtch=true if n[i][1].is_a?(String) && n[i][1].downcase==u.downcase
+       # mtch=true if !n[i][1].is_a?(String) && n[i][1]==u2
+        if mtch
           if event.server.nil? && !n[i][2].nil?
             a=[]
             for j in 0...n[i][2].length
@@ -1087,11 +1130,11 @@ def list_unit_aliases(event,args,bot,mode=0)
                 a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
               end
             end
-            f.push("#{n[i][0].gsub('_','\\_')} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+            f.push("#{n[i][0]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
           elsif n[i][2].nil?
-            f.push(n[i][0].gsub('_','\\_')) unless mode==1
+            f.push(n[i][0]) unless mode==1
           else
-            f.push("#{n[i][0].gsub('_','\\_')}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
+            f.push("#{n[i][0]}#{" *(in this server only)*" unless mode==1}") if n[i][2].include?(k)
           end
         end
       end
@@ -1298,10 +1341,14 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   chn=modifier2.to_i if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
   m=nil if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?
   unit=unt[0]
+  unit=unt[8] if type[1]=='Unit'
   double=false
   for i in 0...@aliases.length
+    mtch=false
+    mtch=true if @aliases[i][2].is_a?(String) && unit.is_a?(String) && @aliases[i][2].downcase==unit.downcase
+    mtch=true if !@aliases[i][2].is_a?(String) && !unit.is_a?(String) && @aliases[i][2]==unit
     if @aliases[i][3].nil? || @aliases[i][0]!=type[1]
-    elsif @aliases[i][1].downcase==newname.downcase && @aliases[i][2].downcase==unit.downcase
+    elsif @aliases[i][1].downcase==newname.downcase && mtch
       if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?
         @aliases[i][3]=nil
         @aliases[i][4]=nil
@@ -1312,21 +1359,21 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
         double=true
       else
         @aliases[i][3].push(srv)
-        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.")
-        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unt[0].gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.")
+        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unt[0].gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
         metadata_load()
         bot.user(167657750971547648).pm("The alias **#{@aliases[i][1]}** for the #{type[1].downcase} **#{@aliases[i][2]}** is used in quite a few servers.  It might be time to make this global") if @aliases[i][3].length >= @server_data[0].inject(0){|sum,x| sum + x } / 20 && @aliases[i][4].nil?
-        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit} - gained a new server that supports it.")
+        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unt[0]} - gained a new server that supports it.")
         double=true
       end
     end
   end
   unless double
     @aliases.push([type[1].gsub('*',''),newname,unit,m].compact)
-    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-    bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unit}*.\nPlease test to be sure that the alias stuck.")
-    event.respond "**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unit}*." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
+    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((supersort(b,a,2)) == 0 ? (supersort(b,a,1)) : (supersort(b,a,2))) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
+    bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unt[0]}*.\nPlease test to be sure that the alias stuck.")
+    event.respond "**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unt[0]}*." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unt[0]}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
   end
   @aliases.uniq!
   nzzz=@aliases.map{|a| a}
@@ -1340,7 +1387,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   nzzz2=@aliases.reject{|q| q[0]!='Skill'}
   nzzz3=@aliases.reject{|q| q[0]!='Structure'}
   nzzz4=@aliases.reject{|q| ['Unit','Skill','Structure'].include?(q[0])}
-  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>='Zephiel' || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
+  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>=366 || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
     bot.channel(logchn).send_message('Alias list saved.')
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...nzzz.length

@@ -1653,13 +1653,13 @@ def disp_unit_art(event,name,bot)
     nammes[0]=m[0]
     disp="#{disp}\n**Artist:** #{m[m.length-1]}"
   end
-  unless j[7].nil? || j[7].length<=0
-    m=j[7].split(' as ')
+  unless j[7][0].nil? || j[7][0].length<=0
+    m=j[7][0].split(' as ')
     nammes[1]=m[0]
     disp="#{disp}\n**VA (English):** #{m[m.length-1]}"
   end
-  unless j[8].nil? || j[8].length<=0
-    m=j[8].split(' as ')
+  unless j[7][1].nil? || j[7][1].length<=0
+    m=j[7][1].split(' as ')
     nammes[2]=m[0]
     disp="#{disp}\n**VA (Japanese):** #{m[m.length-1]}"
   end
@@ -1676,31 +1676,31 @@ def disp_unit_art(event,name,bot)
       j[6]='@_DJSaturn (twitter)'
     end
     g=get_markers(event)
-    chars=untz.reject{|q| q[0]==j[0] || !has_any?(g, q[13][0]) || ((q[6].nil? || q[6].length<=0) && (q[7].nil? || q[7].length<=0) && (q[8].nil? || q[8].length<=0))}
+    chars=untz.reject{|q| q[0]==j[0] || !has_any?(g, q[13][0]) || ((q[6].nil? || q[6].length<=0) && (q[7][0].nil? || q[7][0].length<=0) && (q[7][1].nil? || q[7][1].length<=0))}
     charsx=[[],[],[]]
     for i in 0...chars.length
       x=chars[i]
-      unless x[6].nil? || x[6].length<=0 || x[7].nil? || x[7].length<=0 || x[8].nil? || x[8].length<=0
+      unless x[6].nil? || x[6].length<=0 || x[7][0].nil? || x[7][0].length<=0 || x[7][1].nil? || x[7][1].length<=0
         m=x[6].split(' as ')
-        m2=x[7].split(' as ')
-        m3=x[8].split(' as ')
+        m2=x[7][0].split(' as ')
+        m3=x[7][1].split(' as ')
         charsx[2].push("#{x[0].gsub('Lavatain','Laevatein')}") if m[0]==nammes[0] && m2[0]==nammes[1] && m3[0]==nammes[2]
       end
       unless x[6].nil? || x[6].length<=0
         m=x[6].split(' as ')
         charsx[0].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[0] && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
       end
-      unless x[7].nil? || x[7].length<=0 || x[8].nil? || x[8].length<=0
-        m=x[7].split(' as ')
-        m2=x[8].split(' as ')
+      unless x[7][0].nil? || x[7][0].length<=0 || x[7][1].nil? || x[7][1].length<=0
+        m=x[7][0].split(' as ')
+        m2=x[7][1].split(' as ')
         charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") if m[0]==nammes[1] && m2[0]==nammes[2] && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
       end
-      unless x[7].nil? || x[7].length<=0
-        m=x[7].split(' as ')
+      unless x[7][0].nil? || x[7][0].length<=0
+        m=x[7][0].split(' as ')
         charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
       end
-      unless x[8].nil? || x[8].length<=0
-        m=x[8].split(' as ')
+      unless x[7][1].nil? || x[7][1].length<=0
+        m=x[7][1].split(' as ')
         charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
       end
     end
@@ -3395,23 +3395,6 @@ def snagstats(event,bot,f=nil,f2=nil)
     all_units=all_units.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
     k=all_units.reject{|q| q[1]!=all_units[0][1]}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
     str="#{str}\nThe unit#{"s" unless k.length==1} with the most global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global aliases#{" each" unless k.length==1}."
-    k=all_units.reject{|q| q[1]!=0}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
-    if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
-      if k.length.zero?
-        all_units=all_units.sort{|a,b| supersort(a,b,1).zero? ? supersort(b,a,0) : supersort(a,b,1)}
-        k=all_units.reject{|q| q[1]!=all_units[0][1]}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
-        str="#{str}\nThe unit#{"s" unless k.length==1} with the fewest global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global alias#{"es" unless all_units[0][1]==1}#{" each" unless k.length==1}."
-      elsif event.server.nil? && event.user.id==167657750971547648
-        if k.reject{|q| q.include?('~~')}.length.zero?
-          str="#{str}\nThe following unit#{"s" unless k.length==1} have no global aliases: #{list_lift(k.map{|q| q.gsub('~~','')},"and")}"
-        else
-          str="#{str}\nThe following unit#{"s" unless k.reject{|q| q.include?('~~')}.length==1} have no global aliases: #{list_lift(k.reject{|q| q.include?('~~')},"and")}"
-          str="#{str}\nThe following unit#{"s" unless k.reject{|q| !q.include?('~~')}.length==1} are fake: #{list_lift(k.reject{|q| !q.include?('~~')}.map{|q| q.gsub('~~','')},"and")}"
-        end
-      else
-        str="#{str}\nThe following unit#{"s" unless k.length==1} have no global aliases: #{list_lift(k,"and")}"
-      end
-    end
     str="#{str}\n\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]unit aliases.**"
     if event.server.nil? && @shardizard==4
       str="#{str}\nDue to being the debug version, I cannot show more information."
@@ -3526,7 +3509,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << "*Legendaries* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Legendaries'}][1].length)} current members) - Any unit that gives a Legendary Hero Boost to blessed allies during specific seasons."
     event << "*Retro-Prfs* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro-Prfs'}][1].length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything."
     event << "*Seasonals* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Seasonals'}][1].length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost."
-    event << "    The following subsets of the Seasonals group are also dynamic: *Bathing* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bathing'}][1].length)}), *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Spring* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})"
+    event << "    The following subsets of the Seasonals group are also dynamic: *Bathing* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bathing'}][1].length)}), *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Bunny* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})"
     event << "*Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can be obtained via a Tempest Trials event."
     event << "*Worse Than Liki* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='WorseThanLiki'}][1].length)} current members) - Any unit with every stat equal to or less than the same stat on Tiki(Young)(Earth), excluding Tiki(Young)(Earth) herself."
     display=false
