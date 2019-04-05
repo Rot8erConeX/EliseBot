@@ -175,6 +175,7 @@
 ['Current', ['current', 'now'], 'Banner']
 ['Upcoming', ['upcoming', 'future'], 'Banner']
 ['Legendary', ['legendary', 'legend', 'legendaries'], 'Banner']
+['NewUnits', ['newunits', 'new'], 'Banner']
 ['4Star', ['fourstar', 'four-star', '4star', '4-star'], 'Banner']
 ['VotingGauntlet', ['vg', 'voting', 'gauntlet'], 'Banner']
 ['HeroFest', ['herofest', 'fest', 'hf'], 'Banner']

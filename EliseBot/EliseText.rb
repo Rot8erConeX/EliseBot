@@ -826,11 +826,11 @@ def sort_legendaries(event,bot,mode=0)
       k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('5s') || m.include?(q[0])}.uniq
       m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Pink:549339019318788175>Gold',[]]]
       for i in 0...k.length
-        m2[0][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Red'
-        m2[1][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Blue'
-        m2[2][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Green'
-        m2[3][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Colorless'
-        m2[4][1].push(k[i][0].gsub('Lavatain','Laevatein')) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
+        m2[0][1].push(k[i][0]) if k[i][1][0]=='Red'
+        m2[1][1].push(k[i][0]) if k[i][1][0]=='Blue'
+        m2[2][1].push(k[i][0]) if k[i][1][0]=='Green'
+        m2[3][1].push(k[i][0]) if k[i][1][0]=='Colorless'
+        m2[4][1].push(k[i][0]) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
       end
       m2=m2.reject{|q| q[1].length<=0}
       j="\n"
@@ -881,11 +881,11 @@ def sort_legendaries(event,bot,mode=0)
       k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('p') || q[9][0].include?('4p') || q[9][0].include?('3p') || q[9][0].include?('2p') || q[9][0].include?('1p') || m.include?(q[0])}.uniq
       m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Gold:549338084102111250>Gold',[]]]
       for i in 0...k.length
-        m2[0][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Red'
-        m2[1][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Blue'
-        m2[2][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Green'
-        m2[3][1].push(k[i][0].gsub('Lavatain','Laevatein')) if k[i][1][0]=='Colorless'
-        m2[4][1].push(k[i][0].gsub('Lavatain','Laevatein')) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
+        m2[0][1].push(k[i][0]) if k[i][1][0]=='Red'
+        m2[1][1].push(k[i][0]) if k[i][1][0]=='Blue'
+        m2[2][1].push(k[i][0]) if k[i][1][0]=='Green'
+        m2[3][1].push(k[i][0]) if k[i][1][0]=='Colorless'
+        m2[4][1].push(k[i][0]) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
       end
       m2=m2.reject{|q| q[1].length<=0}
       j="\n"
@@ -1013,9 +1013,9 @@ def disp_legendary_mythical(event,bot,args=[],dispmode='',forcesplit=false)
     elsif pri=='Stat'
       x2=p1[i][0][2][1]
       element='Spectrum'
-      element=x2 if ['Attack','Speed','Defense','Resistance'].include?(x2)
+      element=x2 if ['Attack','Speed','Defense','Resistance','Duel'].include?(x2)
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{element}"}
-      x2="#{moji[0].mention} #{x2}" if moji.length>0
+      x2="#{moji[0].mention} #{x2}#{' + Pair-Up' if x2=='Duel'}" if moji.length>0
     elsif pri=='Color'
       x2=p1[i][0][1][0]
       element='Gold'
@@ -1063,7 +1063,7 @@ def disp_legendary_mythical(event,bot,args=[],dispmode='',forcesplit=false)
         element='Spectrum'
         element=x3 if ['Attack','Speed','Defense','Resistance','Duel'].include?(x3)
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{element}"}
-        x3="#{moji[0].mention} #{x3}" if moji.length>0
+        x3="#{moji[0].mention} #{x3}#{' + Pair-Up' if x3=='Duel'}" if moji.length>0
       elsif sec=='Color'
         x3=p2[j][0][1][0]
         element='Gold'
@@ -1129,9 +1129,9 @@ def disp_all_refines(event,bot)
       end
       if eff
         if skkz[i][6]=='-'
-          stones.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} \u2192 #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][13].nil?}")
+          stones.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]} \u2192 #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][13].nil?}")
         else
-          dew.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} \u2192 #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][13].nil?}")
+          dew.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]} \u2192 #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][13].nil?}")
         end
       end
     end
@@ -1197,9 +1197,9 @@ def disp_all_refines(event,bot)
             s[j]=s[j].split('!')
             s2=skkz[skkz.find_index{|q| q[0]==s[j][1]}]
             if s2[6]=='-'
-              stones2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})#{'~~' unless skkz[i][13].nil?}")
+              stones2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0]})#{'~~' unless skkz[i][13].nil?}")
             else
-              dew2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0].gsub('Lavatain','Laevatein')})#{'~~' unless skkz[i][13].nil?}")
+              dew2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0]})#{'~~' unless skkz[i][13].nil?}")
             end
           else
             s2=skkz[skkz.find_index{|q| q[0]==s[j]}]
@@ -1465,7 +1465,6 @@ def disp_all_prfs(event,bot)
   else
     create_embed(event,'__**PRF Passives**__','',0xFDDC7E,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
   end
-  puts skkz.map{|q| q[0]}
 end
 
 def oregano_explain(event,bot)
@@ -1684,24 +1683,24 @@ def disp_unit_art(event,name,bot)
         m=x[6].split(' as ')
         m2=x[7][0].split(' as ')
         m3=x[7][1].split(' as ')
-        charsx[2].push("#{x[0].gsub('Lavatain','Laevatein')}") if m[0]==nammes[0] && m2[0]==nammes[1] && m3[0]==nammes[2]
+        charsx[2].push("#{x[0]}") if m[0]==nammes[0] && m2[0]==nammes[1] && m3[0]==nammes[2]
       end
       unless x[6].nil? || x[6].length<=0
         m=x[6].split(' as ')
-        charsx[0].push(x[0].gsub('Lavatain','Laevatein')) if m[0]==nammes[0] && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
+        charsx[0].push(x[0]) if m[0]==nammes[0] && !charsx[2].include?(x[0])
       end
       unless x[7][0].nil? || x[7][0].length<=0 || x[7][1].nil? || x[7][1].length<=0
         m=x[7][0].split(' as ')
         m2=x[7][1].split(' as ')
-        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") if m[0]==nammes[1] && m2[0]==nammes[2] && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
+        charsx[1].push("#{x[0]} *[Both]*") if m[0]==nammes[1] && m2[0]==nammes[2] && !charsx[2].include?(x[0])
       end
       unless x[7][0].nil? || x[7][0].length<=0
         m=x[7][0].split(' as ')
-        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
+        charsx[1].push("#{x[0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{x[0]} *[Both]*") && !charsx[2].include?(x[0])
       end
       unless x[7][1].nil? || x[7][1].length<=0
         m=x[7][1].split(' as ')
-        charsx[1].push("#{x[0].gsub('Lavatain','Laevatein')} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{x[0].gsub('Lavatain','Laevatein')} *[Both]*") && !charsx[2].include?(x[0].gsub('Lavatain','Laevatein'))
+        charsx[1].push("#{x[0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{x[0]} *[Both]*") && !charsx[2].include?(x[0])
       end
     end
     if event.server.nil? || !bot.user(502288364838322176).on(event.server.id).nil? || @shardizard==4
@@ -1806,7 +1805,7 @@ def disp_unit_art(event,name,bot)
   end
   dispx="#{disp}"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    disp="__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,6)}__\n#{artype[1]} art\n\n#{disp}"
+    disp="__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,6)}__\n#{artype[1]} art\n\n#{disp}"
     disp="#{disp}\n" if charsx.map{|q| q.length}.max>0
     disp="#{disp}\n**Same artist:** #{charsx[0].join(', ')}" if charsx[0].length>0
     if charsx[1].length>0
@@ -1846,7 +1845,7 @@ def disp_unit_art(event,name,bot)
     if flds.length.zero?
       flds=nil
     elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1500 && safe_to_spam?(event)
-      create_embed(event,"__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art])
+      create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art])
       if flds.map{|q| q.join("\n")}.join("\n\n").length>=1900
         for i in 0...flds.length
           create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,[flds[i]])
@@ -1862,7 +1861,7 @@ def disp_unit_art(event,name,bot)
       flds[-1][2]=nil if flds.length<3
       flds[-1].compact!
     end
-    create_embed(event,"__**#{j[0].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art],flds)
+    create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art],flds)
   end
   return nil
 end
@@ -2211,7 +2210,7 @@ def today_in_feh(event,bot,shift=false)
     if b.length<=0
       str2"There are no known quantities about Arena."
     else
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      k=b[0][0].map{|q| q}
       m=k.length%2
       element=b[0][3][0]
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
@@ -2224,7 +2223,7 @@ def today_in_feh(event,bot,shift=false)
     if b.length<=0
       str2="There are no Tempest Trials events going on."
     else
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      k=b[0][0].map{|q| q}
       m=k.length%2
       str2="__**Current Tempest Trials+ Bonus Units#{', as of tomorrow' if shift}**__\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}"
     end
@@ -2233,7 +2232,7 @@ def today_in_feh(event,bot,shift=false)
     if b.length<=0
       str2"There are no known quantities about Aether Raids."
     else
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      k=b[0][0].map{|q| q}
       m2=k.length%2
       m="#{b[0][4][0]} (O), #{b[0][4][1]} (D)"
       m="#{b[0][4][0]} (O/D)" if b[0][4][0]==b[0][4][1]
@@ -2278,7 +2277,7 @@ def today_in_feh(event,bot,shift=false)
       bonus_load()
       b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][0].split('/').reverse.join('').to_i != tm}
       unless b.length<=0
-        k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        k=b[0][0].map{|q| q}
         m=k.length%2
         element=b[0][3][0]
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
@@ -2288,12 +2287,12 @@ def today_in_feh(event,bot,shift=false)
       end
       b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][0].split('/').reverse.join('').to_i != tm}
       unless b.length<=0
-        k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        k=b[0][0].map{|q| q}
         str2="#{str2}\nTomorrow's Tempest Bonus Units: #{k.map{|q| "*#{q}*"}.join(', ')}"
       end
       b=@bonus_units.reject{|q| q[1]!='Aether' || q[2][0].split('/').reverse.join('').to_i != tm}
       unless b.length<=0
-        k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        k=b[0][0].map{|q| q}
         m="#{b[0][4][0]} (O), #{b[0][4][1]} (D)"
         m="#{b[0][4][0]} (O/D)" if b[0][4][0]==b[0][4][1]
         element=b[0][3][0]
@@ -2315,7 +2314,7 @@ def today_in_feh(event,bot,shift=false)
     if b.length<=0
       str2="There are no known quantities about Arena."
     else
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      k=b[0][0].map{|q| q}
       element=b[0][3][0]
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
       element=b[0][3][1]
@@ -2327,7 +2326,7 @@ def today_in_feh(event,bot,shift=false)
     if b.length<=0
       str2="There are no Tempest Trials events going on."
     else
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      k=b[0][0].map{|q| q}
       str2="Current Tempest Trials+ Bonus Units#{', as of tomorrow' if shift}: #{k.map{|q| "*#{q}*"}.join(', ')}"
     end
     str=extend_message(str,str2,event)
@@ -2335,7 +2334,7 @@ def today_in_feh(event,bot,shift=false)
     if b.length<=0
       str2="There are no known quantities about Aether Raids."
     else
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      k=b[0][0].map{|q| q}
       m="#{b[0][4][0]} (O), #{b[0][4][1]} (D)"
       m="#{b[0][4][0]} (O/D)" if b[0][4][0]==b[0][4][1]
       element=b[0][3][0]
@@ -2443,6 +2442,7 @@ def disp_current_events(mode=0,shift=false)
         n="#{n} Update"
       elsif c2[i][1]=='Orb Promo'
         n="#{c2[i][1]} (#{n})"
+      elsif c2[i][1]=='Event'
       else
         n="#{n} (#{c2[i][1]})"
       end
@@ -2551,7 +2551,7 @@ def show_bonus_units(event,args='',bot)
           end
           k=b[i][0].map{|q| q}
           m=[]
-          m.push(b[i][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}.join("\n"))
+          m.push(b[i][0].map{|q| "#{q}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}.join("\n"))
           m.push('')
           s[0]+=1
           s[1]=1
@@ -2599,7 +2599,7 @@ def show_bonus_units(event,args='',bot)
       event.respond "There are no known quantities about Tempest."
     else
       flds=[]
-      k=b[0][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
+      k=b[0][0].map{|q| "#{q}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
       if b[0][2][0].split('/').reverse.join('').to_i<tm || b.length>1
         msg2="Current"
       else
@@ -2607,7 +2607,7 @@ def show_bonus_units(event,args='',bot)
       end
       flds.push([msg2,k.join("\n")])
       if b.length>1
-        k=b[1][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
+        k=b[1][0].map{|q| "#{q}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}
         flds.push(['Future',k.join("\n")])
       end
       if flds.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length>1500
@@ -2643,7 +2643,7 @@ def show_bonus_units(event,args='',bot)
           end
           k=b[i][0].map{|q| q}
           m=[]
-          m.push(b[i][0].map{|q| "#{q.gsub('Lavatain','Laevatein')}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}.join("\n"))
+          m.push(b[i][0].map{|q| "#{q}#{unit_moji(bot,event,-1,q,false,4) if safe_to_spam?(event)}"}.join("\n"))
           m.push('')
           s[0]+=1
           s[1]=1
@@ -2937,7 +2937,7 @@ def next_events(event,bot,type)
     if b.length<=0
       msg=extend_message(msg,"There are no known quantities about Arena.",event,2)
     else
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      k=b[0][0].map{|q| q}
       m=k.length%2
       element=b[0][3][0]
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
@@ -2945,7 +2945,7 @@ def next_events(event,bot,type)
       moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
       msg=extend_message(msg,"__**Current Arena Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Elemental season:* #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}",event,2)
       if b.length>1
-        k2=b[1][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        k2=b[1][0].map{|q| q}
         m=k2.length%2
         element=b[1][3][0]
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
@@ -2983,7 +2983,7 @@ def next_events(event,bot,type)
     if b.length<=0
       msg=extend_message(msg,"There are no known quantities about Tempest Trials+.",event,2)
     else
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      k=b[0][0].map{|q| q}
       if b[0][2][0].split('/').reverse.join('').to_i<tm || b.length>1
         msg2="__**Current Tempest Trials+ Bonus Units**__"
       else
@@ -2992,7 +2992,7 @@ def next_events(event,bot,type)
       m=k.length%2
       msg=extend_message(msg,"#{msg2}\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}",event,2)
       if b.length>1
-        k=b[1][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        k=b[1][0].map{|q| q}
         m=k.length%2
         msg=extend_message(msg,"__**Future Tempest Trials+ Bonus Units**__\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}",event,2)
       end
@@ -3013,7 +3013,7 @@ def next_events(event,bot,type)
     if b.length<=0
       msg=extend_message(msg,"There are no known quantities about Aether Raids.",event,2)
     else
-      k=b[0][0].map{|q| q.gsub('Lavatain','Laevatein')}
+      k=b[0][0].map{|q| q}
       m=k.length%2
       struct="#{b[0][4][0]} (O), #{b[0][4][1]} (D)"
       struct="#{b[0][4][0]} (O/D)" if b[0][4][0]==b[0][4][1]
@@ -3023,7 +3023,7 @@ def next_events(event,bot,type)
       moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
       msg=extend_message(msg,"__**Current Aether Raids Season**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Bonus Structures:* #{struct}\n*Elemental Season:* #{moji[0].mention unless moji[0].nil?}#{b[0][3][0]}, #{moji2[0].mention unless moji2[0].nil?}#{b[0][3][1]}",event,2)
       if b.length>1
-        k2=b[1][0].map{|q| q.gsub('Lavatain','Laevatein')}
+        k2=b[1][0].map{|q| q}
         m=k2.length%2
         d=b[1][2][0].split('/').map{|q| q.to_i}
         struct="#{b[1][4][0]} (O), #{b[1][4][1]} (D)"

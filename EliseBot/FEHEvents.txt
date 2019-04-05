@@ -1,16 +1,3 @@
-Weapon Workout\Quests\03/03/2019, 16/03/2019
-Micaiah & Sothe\BHB\05/03/2019, 10/03/2019
-New Heroes\Log-In Bonus\08/03/2019, 20/03/2019
-March Edition\Orb Promo\08/03/2019, 21/03/2019
-Reason to Fight\Forging Bonds\08/03/2019, 22/03/2019
-Encore!\Tap Battle\11/03/2019, 04/04/2019
-Rutger: Lone Swordsman\GHB\11/03/2019, 19/03/2019
--\Grand Conquests\14/03/2019, 19/03/2019
-Movement Type\Quests\16/03/2019, 29/03/2019
-Special Heroes\Log-In Bonus\19/03/2019, 01/04/2019
-Ishtar & Reinhardt (Revival)\BHB\20/03/2019, 25/03/2019
-To Defy The Gods\Tempest Trials\23/03/2019, 01/04/2019
-Barte & Fir\BHB\26/03/2019, 02/04/2019
 Voting Gauntlet\Log-In Bonus\28/03/2019, 10/04/2019
 Yune: Chaos Goddess\MHB\29/03/2019, 04/04/2019
 Azura: Vallite Songstress\LHB\29/03/2019, 04/04/2019
@@ -19,6 +6,7 @@ Ryoma: Supreme Samurai\LHB\29/03/2019, 04/04/2019
 Destructive Forces\Voting Gauntlet\01/04/2019, 06/04/2019
 Garon: King of Nohr\GHB\03/04/2019, 10/04/2019
 Anima Blessing\Quests\06/04/2019, 19/04/2019
-3.4.0 (projected, includes whatever Roy's new mechanic will be)\Update\08/04/2019, 09/04/2019
+3.4.0 (projected, includes Aether Resort)\Update\08/04/2019, 09/04/2019
 April Edition\Orb Promo\10/04/2019, 23/04/2019
 New Heroes\Log-In Bonus\10/04/2019, 23/04/2019
+First Season of Allegance Battles\Event\27/04/2019, 03/05/2019

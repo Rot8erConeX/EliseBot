@@ -121,7 +121,6 @@ def multi_for_units(event,str1,str2,robinmode=0)
     m=['Robin'] if (m==['Robin(M)', 'Robin(F)'] || m==['Robin(F)', 'Robin(M)']) && robinmode != 1
     return [str1, m, @multi_aliases[i][0].downcase] if @multi_aliases[i][0].downcase==str1
   end
-  return ['laevatein', ['Lavatain'], 'laevatein'] if /laevatein/ =~ str1
   return nil if robinmode==3 # only allow actual multi-unit aliases without context clues
   k=0
   k=event.server.id unless event.server.nil?
@@ -1353,14 +1352,14 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
         @aliases[i][3]=nil
         @aliases[i][4]=nil
         @aliases[i].compact!
-        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.")
-        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.")
+        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
         bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit} - gone global.")
         double=true
       else
         @aliases[i][3].push(srv)
-        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unt[0].gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.")
-        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unt[0].gsub('Lavatain','Laevatein').gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unt[0].gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.")
+        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unt[0].gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
         metadata_load()
         bot.user(167657750971547648).pm("The alias **#{@aliases[i][1]}** for the #{type[1].downcase} **#{@aliases[i][2]}** is used in quite a few servers.  It might be time to make this global") if @aliases[i][3].length >= @server_data[0].inject(0){|sum,x| sum + x } / 20 && @aliases[i][4].nil?
         bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unt[0]} - gained a new server that supports it.")
@@ -1750,7 +1749,7 @@ end
 
 def legal_weapon(event,name,weapon,refinement='-',recursion=false)
   return '-' if weapon=='-'
-  u=@units[@units.find_index{|q| q[0]==name.gsub('Laevatein','Lavatain')}]
+  u=@units[@units.find_index{|q| q[0]==name}]
   w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
   unless w[0].split(' ')[0].length>u[0].length
     return '-' if w[0][0,u[0].length].downcase==u[0].downcase && count_in(event.message.text.downcase.split(' '),u[0].downcase,1)<=1
@@ -1981,6 +1980,11 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
     b[i][2]=b[i][2].gsub(' ','').split(',')
     b[i][2]=[] if b[i][2][0]=='-'
     b[i][4]=nil if !b[i][4].nil? && b[i][4].length<=0
+    if b[i][5].nil?
+      b[i][5]=[]
+    else
+      b[i][5]=b[i][5].split(', ')
+    end
   end
   b=b.reject{|q| q[2].length==0 && !q[0].include?('GHB') && !q[0].include?('TT')}
   args=event.message.text.downcase.gsub("\n",' ').split(' ')
@@ -1993,9 +1997,8 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
       end
     end
   end
-  puts banner_types.to_s
   b2=b.map{|q| q}
-  b2=b2.reject{|q| q[5].nil? || !has_any?(q[5].split(', '),banner_types.reject{|q2| ['Current','Upcoming'].include?(q2)})} if banner_types.reject{|q2| ['Current','Upcoming'].include?(q2)}.length>0
+  b2=b2.reject{|q| q[5].nil? || !has_any?(q[5],banner_types.reject{|q2| ['Current','Upcoming'].include?(q2)})} if banner_types.reject{|q2| ['Current','Upcoming'].include?(q2)}.length>0
   b2=b.map{|q| q} if b2.length==0
   t=Time.now
   timeshift=8
@@ -2022,6 +2025,8 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
   end
   bnr[0]=[bnr[0],bnr[4]]
   bnr[4]=nil
+  nu=false
+  nu=true if bnr[5].include?('NewUnits')
   bnr[5]=nil
   bnr.compact!
   bnr.push([])
@@ -2056,11 +2061,13 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
     bnr.push(nil)
   end
   for i in 0...u.length # non-focus units
-    bnr[3].push(u[i][0]) if u[i][9][0].include?('5p') && u[i][13][0].nil?
-    bnr[4].push(u[i][0]) if u[i][9][0].include?('4p') && u[i][13][0].nil?
-    bnr[5].push(u[i][0]) if u[i][9][0].include?('3p') && u[i][13][0].nil?
-    bnr[6].push(u[i][0]) if u[i][9][0].include?('2p') && u[i][13][0].nil?
-    bnr[7].push(u[i][0]) if u[i][9][0].include?('1p') && u[i][13][0].nil?
+    unless u[i][9][0].include?('TD') && nu
+      bnr[3].push(u[i][0]) if u[i][9][0].include?('5p') && u[i][13][0].nil?
+      bnr[4].push(u[i][0]) if u[i][9][0].include?('4p') && u[i][13][0].nil?
+      bnr[5].push(u[i][0]) if u[i][9][0].include?('3p') && u[i][13][0].nil?
+      bnr[6].push(u[i][0]) if u[i][9][0].include?('2p') && u[i][13][0].nil?
+      bnr[7].push(u[i][0]) if u[i][9][0].include?('1p') && u[i][13][0].nil?
+    end
   end
   return bnr
 end
@@ -2071,12 +2078,12 @@ def crack_orbs(bot,event,e,user,list) # used by the `summon` command to wait for
   trucolors=[]
   for i in 1...6
     if list.include?(@units[@units.find_index{|q| q[0]==@banner[i][1]}][1][0])
-      e << "Orb ##{i} contained a #{@banner[i][0]} **#{@banner[i][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,@banner[i][1],false,4)} (*#{@banner[i][2]}*)"
+      e << "Orb ##{i} contained a #{@banner[i][0]} **#{@banner[i][1]}**#{unit_moji(bot,event,-1,@banner[i][1],false,4)} (*#{@banner[i][2]}*)"
       summons+=1
       five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5:448266417553539104>')
       five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
     elsif list.include?(i)
-      e << "Orb ##{i} contained a #{@banner[i][0]} **#{@banner[i][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,@banner[i][1],false,4)} (*#{@banner[i][2]}*)"
+      e << "Orb ##{i} contained a #{@banner[i][0]} **#{@banner[i][1]}**#{unit_moji(bot,event,-1,@banner[i][1],false,4)} (*#{@banner[i][2]}*)"
       summons+=1
       five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5:448266417553539104>')
       five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
@@ -2113,14 +2120,14 @@ def multi_summon(bot,event,e,user,list,str2='',wheel=0,srate=nil)
   str2="#{str2}\n\n**Wheel ##{wheel}**"
   for i in 1...6
     if trucolors.include?(@units[@units.find_index{|q| q[0]==@banner[i][1]}][1][0])
-      str2="#{str2}\nOrb ##{i} contained a #{@banner[i][0]} **#{@banner[i][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,@banner[i][1],false,4)} (*#{@banner[i][2]}*)"
+      str2="#{str2}\nOrb ##{i} contained a #{@banner[i][0]} **#{@banner[i][1]}**#{unit_moji(bot,event,-1,@banner[i][1],false,4)} (*#{@banner[i][2]}*)"
       summons+=1
       five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5:448266417553539104>')
       five_star=true if @banner[i][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
     end
   end
   if summons<=0
-    str2="#{str2} - No target colors\nOrb #4 contained a #{@banner[4][0]} **#{@banner[4][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,@banner[4][1],false,4)} (*#{@banner[4][2]}*)"
+    str2="#{str2} - No target colors\nOrb #4 contained a #{@banner[4][0]} **#{@banner[4][1]}**#{unit_moji(bot,event,-1,@banner[4][1],false,4)} (*#{@banner[4][2]}*)"
     summons+=1
     five_star=true if @banner[4][0].include?('5<:Icon_Rarity_5:448266417553539104>')
     five_star=true if @banner[4][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
@@ -2346,11 +2353,11 @@ def summon_sim(bot,event,colors)
     untz=@units.map{|q| q}
     for i in 0...bnr[2].length
       k2=untz[untz.find_index{|q| q[0]==bnr[2][i]}][1][0]
-      k[0].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Red'
-      k[1].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Blue'
-      k[2].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Green'
-      k[3].push(bnr[2][i].gsub('Lavatain','Laevatein')) if k2=='Colorless'
-      k[4].push(bnr[2][i].gsub('Lavatain','Laevatein')) unless ['Red','Blue','Green','Colorless'].include?(k2)
+      k[0].push(bnr[2][i]) if k2=='Red'
+      k[1].push(bnr[2][i]) if k2=='Blue'
+      k[2].push(bnr[2][i]) if k2=='Green'
+      k[3].push(bnr[2][i]) if k2=='Colorless'
+      k[4].push(bnr[2][i]) unless ['Red','Blue','Green','Colorless'].include?(k2)
     end
     str="#{str}\n**Focus Heroes:**"
     str="#{str}\n<:Orb_Red:455053002256941056> *Red*:  #{k[0].join(', ')}" if k[0].length>0
@@ -2532,7 +2539,7 @@ def summon_sim(bot,event,colors)
       five_star=false
       str2="**Summoning Results:**"
       for i in 0...cracked_orbs.length
-        str2="#{str2}\nOrb ##{cracked_orbs[i][1]} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1].gsub('Lavatain','Laevatein')}**#{unit_moji(bot,event,-1,cracked_orbs[i][0][1],false,4)} (*#{cracked_orbs[i][0][2]}*)"
+        str2="#{str2}\nOrb ##{cracked_orbs[i][1]} contained a #{cracked_orbs[i][0][0]} **#{cracked_orbs[i][0][1]}**#{unit_moji(bot,event,-1,cracked_orbs[i][0][1],false,4)} (*#{cracked_orbs[i][0][2]}*)"
         summons+=1
         five_star=true if cracked_orbs[i][0][0].include?('5<:Icon_Rarity_5:448266417553539104>')
         five_star=true if cracked_orbs[i][0][0].include?('5<:Icon_Rarity_5p10:448272715099406336>')
@@ -2601,8 +2608,6 @@ def summon_sim(bot,event,colors)
             l.push(trucolors[i][0]) if has_any?(trucolors[i][1],e.message.text.downcase.split(' '))
           end
           crack_orbs(bot,event,e,e.user.id,l)
-        else
-          return false
         end
       end
     end
