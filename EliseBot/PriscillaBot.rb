@@ -71,7 +71,7 @@ bot.gateway.check_heartbeat_acks = false
 @avvie_info=['Elise','*Fire Emblem Heroes*','N/A']
 @stored_event=nil
 @zero_by_four=[0,0,0,'']
-@last_multi_reload=[0,0]
+@last_multi_reload=[0,0,0]
 @headpats=[0,0,0]
 @rarity_stars=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>',
                '<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>','<:Icon_Rarity_6:491487784650145812>']
@@ -329,52 +329,42 @@ def nicknames_load() # loads the nickname list
     b=[]
   end
   @aliases=b.reject{|q| q.nil? || q[1].nil?}.uniq
-  nzzzz=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Unit'}.uniq
-  nzzzz2=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Skill'}.uniq
-  nzzzz3=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Structure'}.uniq
-  if @shardizard==4
-  elsif nzzzz[nzzzz.length-1][2]<366 || nzzzz2[nzzzz2.length-1][2]<'Yato' || nzzzz3[nzzzz3.length-1][2]<'Armor School'
-    if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt')
-      b=[]
-      File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt').each_line do |line|
-        b.push(eval line)
-      end
-    else
-      b=[]
-    end
-    nzzzzz=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Unit'}.uniq
-    nzzzzz2=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Skill'}.uniq
-    nzzzzz3=b.reject{|q| q.nil? || q[2].nil? || q[0]!='Structure'}.uniq
-    nzzzzz4=b.reject{|q| q.nil? || q[2].nil? || ['Unit','Skill','Structure'].include?(q[0])}.uniq
-    if nzzzzz[nzzzzz.length-1][2]<366 || nzzzzz2[nzzzzz2.length-1][2]<'Yato' || nzzzzz3[nzzzzz3.length-1][2]<'Armor School'
-      puts 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
-      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
+  t=Time.now
+  if t-@last_multi_reload[2]<=10*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
+    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((supersort(b,a,2)) == 0 ? (supersort(b,a,1)) : (supersort(b,a,2))) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
+    @last_multi_reload[2]=t
+    puts 'reloading and checking Alias list'
+    if !@aliases[-1][2].is_a?(String) || @aliases[-1][2]<'Verdant Shard'
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt')
         b=[]
-        File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt').each_line do |line|
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt').each_line do |line|
           b.push(eval line)
         end
       else
         b=[]
       end
-      nzzzzz=b.reject{|q| q.nil? || q[1].nil?}.uniq
-    else
-      puts 'Last backup of the alias list being used.'
+      b=b.reject{|q| q.nil? || q[1].nil?}.uniq
+      if !b[-1][2].is_a?(String) || b[-1][2]<'Verdant Shard'
+        puts 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
+        if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
+          b=[]
+          File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt').each_line do |line|
+            b.push(eval line)
+          end
+        else
+          b=[]
+        end
+        b=b.reject{|q| q.nil? || q[1].nil?}.uniq
+      else
+        puts 'Last backup of the alias list being used.'
+      end
+      open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
+        for i in 0...b.length
+          f.puts "#{b[i].to_s}"
+        end
+      }
+      puts 'Alias list has been restored from backup.'
     end
-    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
-      for i in 0...nzzzzz.length
-        f.puts "#{nzzzzz[i].to_s}"
-      end
-      for i in 0...nzzzzz2.length
-        f.puts "#{nzzzzz2[i].to_s}#{"\n" if i<nzzzzz2.length-1}"
-      end
-      for i in 0...nzzzzz3.length
-        f.puts "#{nzzzzz3[i].to_s}#{"\n" if i<nzzzzz3.length-1}"
-      end
-      for i in 0...nzzzzz4.length
-        f.puts "#{nzzzzz4[i].to_s}#{"\n" if i<nzzzzz4.length-1}"
-      end
-    }
-    puts 'Alias list has been restored from backup.'
   end
   if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHMultiNames.txt')
     b=[]
@@ -583,7 +573,7 @@ end
 bot.command([:help,:commands,:command_list,:commandlist,:Help]) do |event, command, subcommand| # used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -1468,7 +1458,7 @@ end
 
 def reshape_unit_into_multi(name,args3) # used by the find_unit_in_string function to switch a unit match into a relevant multi-unit
   t=Time.now
-  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseMulti1'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
     @last_multi_reload[0]=t
@@ -6175,7 +6165,7 @@ end
 
 def collapse_skill_list(list,mode=0)
   t=Time.now
-  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseMulti1'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
     @last_multi_reload[0]=t
@@ -7931,7 +7921,7 @@ end
 
 def detect_multi_unit_alias(event,str1,str2,robinmode=0)
   t=Time.now
-  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseMulti1'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
     @last_multi_reload[0]=t
@@ -8115,7 +8105,7 @@ end
 
 def weapon_legality(event,name,weapon,refinement='-',recursion=false)
   t=Time.now
-  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseMulti1'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
     @last_multi_reload[0]=t
@@ -8914,7 +8904,7 @@ def parse_function(callback,event,args,bot,healers=nil)
       return 0
     elsif callback==:banner_list
       t=Time.now
-      if t-@last_multi_reload[1]>60*60 || @shardizard==4
+      if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
         puts 'reloading EliseText'
         load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
         @last_multi_reload[1]=t
@@ -8939,7 +8929,7 @@ def parse_function(callback,event,args,bot,healers=nil)
       return -1
     elsif callback==:disp_art
       t=Time.now
-      if t-@last_multi_reload[1]>60*60 || @shardizard==4
+      if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
         puts 'reloading EliseText'
         load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
         @last_multi_reload[1]=t
@@ -8951,7 +8941,7 @@ def parse_function(callback,event,args,bot,healers=nil)
     end
   elsif ['red','reds','blue','blues','green','greens','grean','greans','colorless','colourless','colorlesses','colourlesses','clear','clears','physical','blade','blades','tome','mage','spell','tomes','mages','spells','dragon','dragons','breath','manakete','manaketes','beast','beasts','laguz','bow','arrow','bows','arrows','archer','archers','dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves','healer','staff','cleric','healers','clerics','staves','sword','swords','katana','lance','lances','spear','spears','naginata','axe','axes','ax','club','clubs','redtome','redtomes','redmage','redmages','bluetome','bluetomes','bluemage','bluemages','greentome','greentomes','greenmage','greenmages','flier','flying','flyer','fly','pegasus','fliers','flyers','pegasi','wyvern','wyverns','cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs','infantry','foot','feet','armor','armour','armors','armours','armored','armoured'].include?(k[1]) && callback==:disp_art
     t=Time.now
-    if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
       puts 'reloading EliseText'
       load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
       @last_multi_reload[1]=t
@@ -10762,7 +10752,7 @@ def disp_art(event,name,bot,weapon=nil)
     return nil
   end
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11146,7 +11136,7 @@ end
 
 def games_list(event,name,bot,weapon=nil)
   t=Time.now
-  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseMulti1'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
     @last_multi_reload[0]=t
@@ -11351,7 +11341,7 @@ bot.command([:banners, :banner]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1 || ['next','schedule'].include?(args[0].downcase)
     t=Time.now
-    if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
       puts 'reloading EliseText'
       load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
       @last_multi_reload[1]=t
@@ -11408,7 +11398,7 @@ end
 bot.command([:mythic,:mythical,:mythics,:mythicals,:mystic,:mystical,:mystics,:mysticals]) do |event, *args|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11420,7 +11410,7 @@ end
 bot.command([:legendary,:legendaries,:legendarys,:legend,:legends]) do |event, *args|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11432,7 +11422,7 @@ end
 bot.command([:refinery,:refine,:effect]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11443,7 +11433,7 @@ end
 bot.command([:prf,:prfs,:PRF]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11454,7 +11444,7 @@ end
 bot.command([:attackicon, :attackcolor, :attackcolors, :attackcolour, :attackcolours, :atkicon, :atkcolor, :atkcolors, :atkcolour, :atkcolours, :atticon, :attcolor, :attcolors, :attcolour, :attcolours, :staticon, :statcolor, :statcolors, :statcolour, :statcolours, :iconcolor, :iconcolors, :iconcolour, :iconcolours]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11483,7 +11473,7 @@ end
 bot.command(:whyelise) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseTexts'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11495,7 +11485,7 @@ end
 bot.command([:skillrarity,:onestar,:twostar,:threestar,:fourstar,:fivestar,:skill_rarity,:one_star,:two_star,:three_star,:four_star,:five_star]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11514,7 +11504,7 @@ bot.command(:summon) do |event, *colors|
     return nil
   end
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11875,7 +11865,7 @@ end
 bot.command(:bonus) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11898,7 +11888,7 @@ end
 bot.command([:arena,:arenabonus,:arena_bonus,:bonusarena,:bonus_arena]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11910,7 +11900,7 @@ end
 bot.command([:tempest,:tempestbonus,:tempest_bonus,:bonustempest,:bonus_tempest,:tt,:ttbonus,:tt_bonus,:bonustt,:bonus_tt]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11922,7 +11912,7 @@ end
 bot.command([:aether,:aetherbonus,:aether_bonus,:aethertempest,:aether_tempest,:raid,:raidbonus,:raid_bonus,:bonusraid,:bonus_raid,:raids,:raidsbonus,:raids_bonus,:bonusraids,:bonus_raids]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -11965,7 +11955,7 @@ bot.command([:skill,:skil]) do |event, *args|
     return nil
   elsif ['rarity','rarities'].include?(args[0].downcase)
     t=Time.now
-    if t-@last_multi_reload[1]>60*60 || @shardizard==4
+    if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
       puts 'reloading EliseText'
       load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
       @last_multi_reload[1]=t
@@ -12367,7 +12357,7 @@ end
 bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseMulti1'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
     @last_multi_reload[0]=t
@@ -12379,7 +12369,7 @@ end
 bot.command(:alias) do |event, newname, unit, modifier, modifier2|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseMulti1'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
     @last_multi_reload[0]=t
@@ -12391,7 +12381,7 @@ end
 bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseMulti1'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
     @last_multi_reload[0]=t
@@ -12403,7 +12393,7 @@ end
 bot.command([:serveraliases,:saliases]) do |event, *args|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[0]>5*60 || @shardizard==4
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseMulti1'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
     @last_multi_reload[0]=t
@@ -12491,20 +12481,11 @@ bot.command([:deletealias,:removealias]) do |event, name|
   nzzz2=@aliases.reject{|q| q[0]!='Skill'}
   nzzz3=@aliases.reject{|q| q[0]!='Structure'}
   nzzz4=@aliases.reject{|q| ['Unit','Skill','Structure'].include?(q[0])}
-  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>=366 || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
+  if !@aliases[-1][2].is_a?(String) || @aliases[-1][2]<'Verdant Shard'
     bot.channel(logchn).send_message('Alias list saved.')
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
-      for i in 0...nzzz.length
-        f.puts "#{nzzz[i].to_s}"
-      end
-      for i in 0...nzzz2.length
-        f.puts "#{nzzz2[i].to_s}#{"\n" if i<nzzz2.length-1}"
-      end
-      for i in 0...nzzz3.length
-        f.puts "#{nzzz3[i].to_s}#{"\n" if i<nzzz3.length-1}"
-      end
-      for i in 0...nzzz4.length
-        f.puts "#{nzzz4[i].to_s}#{"\n" if i<nzzz4.length-1}"
+      for i in 0...@aliases.length
+        f.puts "#{@aliases[i].to_s}"
       end
     }
     bot.channel(logchn).send_message('Alias list has been backed up.')
@@ -12811,7 +12792,7 @@ bot.command([:sort,:list]) do |event, *args|
     data_load()
     nicknames_load()
     @aliases.uniq!
-    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
+    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((supersort(b,a,2)) == 0 ? (supersort(b,a,1)) : (supersort(b,a,2))) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
       for i in 0...@aliases.length
         f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
@@ -13006,7 +12987,7 @@ end
 bot.command([:aoe,:AOE,:AoE,:area]) do |event, *args|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -13167,7 +13148,7 @@ end
 bot.command([:growths, :gps, :growth, :gp]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -13186,7 +13167,7 @@ bot.command([:oregano, :Oregano]) do |event|
     return nil
   end
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseTexts'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -13197,7 +13178,7 @@ end
 bot.command([:whoisoregano, :whoIsOregano, :whoisOregano]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseTexts'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -13208,7 +13189,7 @@ end
 bot.command(:merges) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -13219,7 +13200,7 @@ end
 bot.command(:score) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -13255,7 +13236,7 @@ end
 bot.command([:tools,:links,:tool,:link,:resources,:resources]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseText'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -13302,7 +13283,7 @@ end
 bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily,:now]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseTexts'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -13314,7 +13295,7 @@ end
 bot.command([:tomorrow,:tomorow,:tommorrow,:tommorow]) do |event|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseTexts'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -13326,7 +13307,7 @@ end
 bot.command([:next,:schedule]) do |event, type|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseTexts'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -14023,11 +14004,8 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
   elsif ['aliases','alias'].include?(trigger.downcase)
     nicknames_load()
     @aliases.uniq!
-    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((a[2].downcase <=> b[2].downcase) == 0 ? (a[1].downcase <=> b[1].downcase) : (a[2].downcase <=> b[2].downcase)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-    zunits=@aliases.reject{|q| q[0]!='Unit'}
-    zskills=@aliases.reject{|q| q[0]!='Skill'}
-    zstructs=@aliases.reject{|q| q[0]!='Structure'}
-    if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<366 || zskills[zskills.length-1].length<=1 || zskills[zskills.length-1][2]<'Yato' || zstructs[zstructs.length-1].length<=1 || zstructs[zstructs.length-1][2]<'Armor School'
+    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((supersort(b,a,2)) == 0 ? (supersort(b,a,1)) : (supersort(b,a,2))) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
+    if !@aliases[-1][2].is_a?(String) || @aliases[-1][2]<'Verdant Shard'
       event.respond 'Alias list has __***NOT***__ been backed up, as alias list has been corrupted.'
       return nil
     end
@@ -14382,7 +14360,7 @@ end
 bot.command(:snagstats) do |event, f, f2|
   return nil if overlap_prevent(event)
   t=Time.now
-  if t-@last_multi_reload[1]>60*60 || @shardizard==4
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
     puts 'reloading EliseTexts'
     load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
     @last_multi_reload[1]=t
@@ -14408,10 +14386,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
         b=[]
       end
       nzzzzz=b.uniq
-      zunits=nzzzzz.reject{|q| q[0]!='Unit'}
-      zskills=nzzzzz.reject{|q| q[0]!='Skill'}
-      zstructs=nzzzzz.reject{|q| q[0]!='Structure'}
-      if zunits[zunits.length-1].length<=1 || zunits[zunits.length-1][2]<366 || zskills[zskills.length-1].length<=1 || zskills[zskills.length-1][2]<'Yato' || zstructs[zstructs.length-1].length<=1 || zstructs[zstructs.length-1][2]<'Armor School'
+      if !nzzzz[-1][2].is_a?(String) || nzzzz[-1][2]<'Verdant Shard'
         event << 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
         if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHNames3.txt')
           b=[]
@@ -14826,7 +14801,7 @@ bot.mention do |event|
     k=1
   elsif ['checkaliases','seealiases','aliases'].include?(a[0].downcase)
     t=Time.now
-    if t-@last_multi_reload[0]>5*60 || @shardizard==4
+    if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
       puts 'reloading EliseMulti1'
       load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
       @last_multi_reload[0]=t
@@ -14842,7 +14817,7 @@ bot.mention do |event|
     a.shift
     if a.length.zero? || ['next','schedule'].include?(a[0].downcase)
       t=Time.now
-      if t-@last_multi_reload[1]>60*60 || @shardizard==4
+      if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
         puts 'reloading EliseText'
         load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
         @last_multi_reload[1]=t
