@@ -1,12 +1,27 @@
-Voting Gauntlet\Log-In Bonus\28/03/2019, 10/04/2019
-Yune: Chaos Goddess\MHB\29/03/2019, 04/04/2019
-Azura: Vallite Songstress\LHB\29/03/2019, 04/04/2019
-Lucina: Glorious Archer\LHB\29/03/2019, 04/04/2019
-Ryoma: Supreme Samurai\LHB\29/03/2019, 04/04/2019
-Destructive Forces\Voting Gauntlet\01/04/2019, 06/04/2019
-Garon: King of Nohr\GHB\03/04/2019, 10/04/2019
 Anima Blessing\Quests\06/04/2019, 19/04/2019
-3.4.0 (projected, includes Aether Resort)\Update\08/04/2019, 09/04/2019
 April Edition\Orb Promo\10/04/2019, 23/04/2019
 New Heroes\Log-In Bonus\10/04/2019, 23/04/2019
+Harr: Black Tempest\GHB\11/04/2019, 17/04/2019
+Three Heroes\Quests\13/02/2019, 26/04/2019
+-\Grand Conquests\17/04/2019, 22/04/2019
+Ephraim & Myrrh (revival)\BHB\18/04/2019, 24/04/2019
+Special Heroes\Log-In Bonus\19/04/2019, 03/05/2019
+Heartstring's Ties\Tap Battle\20/04/2019, 10/05/2019
+Tempest Trials+\Log-In Bonus\21/04/2019, 03/05/2019
+>Unknown<\Tempest\24/04/2019, 03/05/2019
+Titania & Mist\BHB\25/04/2019, 03/05/2019
+Voting Gauntlet\Log-In Bonus\26/04/2019, 09/05/2019
 First Season of Allegance Battles\Event\27/04/2019, 03/05/2019
+Golden Week Celebration\Event\27/04/2019, 20/05/2019
+>Unknown<\LHB\27/04/2019, 06/05/2019
+Marth: Hero King\LHB\27/04/2019, 06/05/2019
+Ike: Vanguard Legend\LHB\27/04/2019, 06/05/2019
+Roy: Blazing Lion\LHB\27/04/2019, 06/05/2019
+Hector: Marquess of Ostia\LHB\27/04/2019, 06/05/2019
+>Unknown<\Voting Gauntlet\30/04/2019, 05/05/2019
+Aversa: Dark One (revival)\GHB\04/05/2019, 11/05/2019
+Cavalry Mastery\Quests\06/05/2019, 19/05/2019
+3.5.0 (projected)\Update\08/05/2019, 09/05/2019
+New Heroes\Log-In Bonus\10/05/2019, 08/06/2019
+May Edition\Orb Promo\10/05/2019, 08/06/2019
+>Unknown<\Forging Bonds\10/05/2019, 20/05/2019

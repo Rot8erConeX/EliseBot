@@ -1,5 +1,5 @@
-Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Spring)\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
-Alm\Delthea\Eir\Kana(F)\Leanne\Matthew\Owain\Reyson\Selkie\Sharena(Spring)\Tailtiu\Tiki(Young)(Earth)\Ylgr
+Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Bunny)\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
+Alm\Delthea\Eir\Kana(F)\Leanne\Matthew\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
@@ -241,6 +241,16 @@ HP +3\HP Def 1\HP Def 2
 Vantage 1\Vantage 2\Vantage 3
 Infantry Pulse 1\Infantry Pulse 2\Infantry Pulse 3
 Heavy Blade 3
+
+Marisa(Bunny)
+5\0\HP\Speed\-\0
+Iron Lance\Steel Lance\Flashing Carrot\Flashing Carrot+
+Reposition
+Dragon Gaze\Draconic Aura
+Warding Blow 1\Mirror Strike 1\Mirror Strike 2
+Spd/Def Link 1\Spd/Def Link 2\Spd/Def Link 3
+Flier Guidance 1\Flier Guidance 2\Flier Guidance 3
+Fierce Stance 2
 
 Matthew
 4\10\Resistance\Speed\-\0

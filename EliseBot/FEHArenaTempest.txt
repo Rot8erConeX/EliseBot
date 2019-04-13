@@ -1,8 +1,7 @@
-Palla(Bunny), Marisa(Bunny), Bruno(Bunny), Veronica(Bunny), Catria(Bunny), Alfonse(Bunny), Sharena(Bunny), Loki(Bunny)\Tempest\23/03/2019, 01/04/2019
-Eir, Idunn, Lugh, Sue, Thea, Rutger, Arden, Joshua, Tiki(Young)(Earth), Anna\Aether\26/03/2019, 01/04/2019\Light, Dark\Tactics Room, Tactics Room
-Idunn, Lugh, Sue, Thea, Rutger, Shanna, Sophia, Clarine, Ephraim(Fire), Anna\Arena\26/03/2019, 01/04/2019\Wind, Earth
-Yune, Palla(Bunny), Marisa(Bunny), Bruno(Bunny), Veronica(Bunny), Loki(Bunny), Jamke, Hawkeye, Robin(F)(Fallen), Alfonse\Arena\02/04/2019, 07/04/2019\Wind, Water
-Eir, Idunn, Lugh, Sue, Thea, Rutger, Arden, Joshua, Tiki(Young)(Earth), Anna\Aether\02/04/2019, 07/04/2019\Astra, Anima\Healing Tower, Healing Tower
-Yune, Palla(Bunny), Marisa(Bunny), Bruno(Bunny), Veronica(Bunny), Loki(Bunny), Jamke, Hawkeye, Robin(F)(Fallen), Alfonse\Arena\08/04/2019, 14/04/2019\Wind, Fire
-Yune, Palla(Bunny), Marisa(Bunny), Bruno(Bunny), Veronica(Bunny), Loki(Bunny), Oliver, Corrin(M)(Winter), Eirika(Graceful), Anna\Aether\08/04/2019, 14/04/2019\Light, Dark\Panic Manor, Panic Manor
-Yune, Palla(Bunny), Marisa(Bunny), Bruno(Bunny), Veronica(Bunny), Loki(Bunny), Oliver, Corrin(M)(Winter), Eirika(Graceful), Anna\Aether\15/04/2019, 21/04/2019\Astra, Anima\Wind, Earth
+Yune, Palla(Bunny), Marisa(Bunny), Bruno(Bunny), Veronica(Bunny), Loki(Bunny), Jamke, Hawkeye, Robin(F)(Fallen), Alfonse\Arena\09/04/2019, 15/04/2019\Wind, Fire
+Yune, Palla(Bunny), Marisa(Bunny), Bruno(Bunny), Veronica(Bunny), Loki(Bunny), Oliver, Corrin(M)(Winter), Eirika(Graceful), Anna\Aether\09/04/2019, 15/04/2019\Light, Dark\Panic Manor, Panic Manor
+Caineghis, Ranulf, Lethe, Mordecai, Haar, Seth, Hinata, Lissa, Lyn(Wind), Sharena\Arena\16/04/2019, 22/04/2019\Wind, Earth
+Yune, Palla(Bunny), Marisa(Bunny), Bruno(Bunny), Veronica(Bunny), Loki(Bunny), Oliver, Corrin(M)(Winter), Eirika(Graceful), Anna\Aether\16/04/2019, 22/04/2019\Astra, Anima\Catapult, Catapult
+Caineghis, Ranulf, Lethe, Mordecai, Haar, Seth, Hinata, Lissa, Lyn(Wind), Sharena\Arena\23/04/2019, 29/04/2019\Unknown, Unknown
+Duma, Caineghis, Ranulf, Lethe, Mordecai, Haar, Lyon, Marisa, Hrid, Alfonse\Aether\23/04/2019, 29/04/2019\Light, Dark\Infantry School, Infantry School
+Duma, Caineghis, Ranulf, Lethe, Mordecai, Haar, Lyon, Marisa, Hrid, Alfonse\Aether\30/04/2019, 07/05/2019\Astra, Anima\Cavalry School, Cavalry School

@@ -1,17 +1,26 @@
->New Heroes<\3\-\5\10/04/2019, 12/05/2019\NewUnits
+>New Heroes: Unknown<\3\-\5\10/05/2019, 08/06/2019\NewUnits
+Heroes with Wrath\3\Karla, Nephenee, Owain\5\02/05/2019, 13/05/2019
+Legendary Heroes: >Unknown<\-8\Fjorm, Hector(Marquess), Ike(Vanguard), Marth(King), Roy(Fire)\5\27/04/2019, 06/05/2019\Legendary
+Voting Gauntlet: >Unknown<\3\-\5\26/04/2019, 05/05/2019\VotingGauntlet
+Titania & Mist's Battle\3\Mist, Titania\5\25/04/2019, 03/05/2019\BHB
+Heroes with Iceberg\3\-\5\23/04/2019, 01/05/2019\SkillBanner
+Tempest Trials+\3\-\5\21/04/2019, 03/05/2019\Tempest
+>Special Heroes: Unknown<\3\-\5\19/04/2019, 18/05/2019\Seasonal, NewUnits
+New Power (April 2019)\3\Abel, Cain, Hana, Peri\5\16/04/2019, 22/04/2019\NewPower
+Out of Gallia\3\-\5\10/04/2019, 12/05/2019\NewUnits
 Heroes with Odd Wave Skills\3\Ishtar, Laevatein, Loki\5\05/04/2019, 15/04/2019\SkillBanner
+Spring Festival (March 2019 rerun)\3\Camilla(Bunny), Chrom(Bunny), Lucina(Bunny), Xander(Bunny)\5\22/03/2019, 22/04/2019\Seasonal, Spring
+Hares at the Fair (March 2019 rerun)\3\Alfonse(Bunny), Catria(Bunny), Kagero(Bunny), Sharena(Bunny)\5\21/03/2019, 21/04/2019\Seasonal, Spring, Tempest
+Regal Rabbits\3\Bruno(Bunny), Marisa(Bunny), Palla(Bunny), Veronica(Bunny)\5\19/03/2019, 18/04/2019\Seasonal, Spring
+GHB Units\5\-\543\\Dynamic, GHB
+TT Units\5\-\54\\Dynamic, Tempest
 Mythic Heroes: Yune, Chaos Goddess\-8\Azura(Vallite), Celica(Brave), Eir, Kagero(Halloween), Lewyn, Lucina(Glorious), Lyn(Brave), Mia(Halloween), Myrrh(Halloween), Ophelia, Ryoma(Supreme), Yune\5\29/03/2019, 04/04/2019\Legendary
 Destructive Forces\3\Hardin(Fallen), Robin(M)(Fallen), Surtr\5\28/03/2019, 06/04/2019\VotingGauntlet
 Bartre & Fir's Battle\3\Bartr, Fir\5\26/03/2019, 02/04/2019\BHB
 Heroes with Bond Skills\3\Corrin(F)(Adrift), Corrin(M)(Adrift), Hinoka(Wings)\5\24/03/2019, 04/04/2019\SkillBanner
-Spring Festival (March 2019 rerun)\3\Camilla(Bunny), Chrom(Bunny), Lucina(Bunny), Xander(Bunny)\5\22/03/2019, 22/04/2019\Seasonal, Spring
-Hares at the Fair (March 2019 rerun)\3\Alfonse(Bunny), Catria(Bunny), Kagero(Bunny), Sharena(Bunny)\5\21/03/2019, 21/04/2019\Seasonal, Spring, Tempest
-Regal Rabbits\3\Bruno(Bunny), Marisa(Bunny), Palla(Bunny), Veronica(Bunny)\5\19/03/2019, 18/04/2019\Seasonal, Spring
 New Power (March 2019)\3\Delthea, Klein, Sonya, Sophia\5\13/03/2019, 23/03/2019\NewPower
 Beyond Darkness\3\Idunn, Lugh, Sue, Thea\5\08/03/2019, 10/04/2019
 Heroes with Sweep Skills\3\Alm, Soren\5\04/03/2019, 12/03/2019\SkillBanner
-GHB Units\5\-\543\\Dynamic, GHB
-TT Units\5\-\54\\Dynamic, Tempest
 Legendary Heroes: Roy, Blazing Lion\-8\Corrin(F)(Adrift), Corrin(M)(Adrift), Ephraim(Fire), Gunnthra, Hrid, Micaiah(Festival), Mikoto, Niles(Halloween), Robin(F)(Fallen), Roy(Fire), Surtr, Xander(Festival)\5\27/02/2019, 07/03/2019\Legendary
 War of Tacticians, Block A\3\Katarina, Lewyn, Morgan(F)\5\25/02/2019, 05/03/2019\VotingGauntlet
 War of Tacticians, Block B\3\Cecilia, Innes, Jagen, Soren\5\25/02/2019, 05/03/2019\VotingGauntlet

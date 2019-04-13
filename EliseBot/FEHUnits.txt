@@ -38,7 +38,7 @@ Corrin(M)(Launch)\Red, Blade\ \Infantry\6, 7, 7, 6, 5\42, 32, 32, 28, 24\Maiponp
 Draug\Red, Blade\ \Armor\8, 6, 8, 8, 3\50, 30, 32, 39, 18\Itagaki Hako\Patrick Seitz;; Takeuchi Ryouta\37\3p4p2q3qLUPF\M\FE3, FE1, FE11, FE12, (s)SSBU\Draug
 Effie\Blue, Blade\ \Armor\9, 9, 4, 6, 5\50, 40, 22, 33, 23\HACCAN\Marisha Ray;; Kuwahara Yuuki\38\3p4pLUPF\F\FE14C\Effie
 Elise\Colorless, Healer\ \Cavalry\3, 7, 7, 3, 7\30, 32, 32, 19, 32\HAKO\Liv Strander;; Suwa Ayaka\39\5pLUPFTD\F\FE14C, FEW, (s)SSBU\Elise
-Eliwood\Red, Blade\ \Cavalry\6, 7, 6, 4, 7\39, 31, 30, 23, 32\Miyuu\Yuri Lowenthal;; Sakurai Takahiro\40\3p4pLUPF\M\FE7, FE6, (st)SSBB, (s)SSBU\Eliwood
+Eliwood\Red, Blade\ \Cavalry\6, 7, 6, 4, 7\39, 31, 30, 23, 32\Miyuu\Yuri Lowenthal;; Sakurai Takahiro\40\3p4p3qLUPF\M\FE7, FE6, (st)SSBB, (s)SSBU\Eliwood
 Est\Blue, Blade\ \Flier\5, 8, 6, 5, 7\36, 35, 30, 24, 32\Miwabe Sakura\Brianna Knickerbocker;; Murakawa Rie\41\3p4p3qLUPF\F\FE3, FE1, FE2, FE11, FE12, FE15, (s)SSBU\Est
 Fae\Green, Dragon\ \Infantry\10, 9, 7, 5, 6\46, 33, 28, 25, 30\Himukai Yuji\Sarah Blandy;; Ozawa Ari\42\3p4pLUPF\F\FE6, FE7\Fae
 Fir\Red, Blade\ \Infantry\6, 5, 8, 5, 7\41, 25, 36, 24, 31\kaya8\Liv Strander;; Hikasa Yoko\43\3p4p3qLUPF\F\FE6\Fir
@@ -75,7 +75,7 @@ Odin\Blue, Tome, Thunder\ \Infantry\7, 4, 7, 5, 5\43, 22, 32, 25, 25\Suekane Kum
 Ogma\Red, Blade\ \Infantry\8, 9, 7, 6, 1\47, 35, 34, 28, 13\Yamada Akihiro\Travis Willingham;; Kosugi Juurouta\74\3p4pPF\M\FE3, FE1, FE11, FE12\Ogma
 Palla\Red, Blade\ \Flier\7, 7, 6, 6, 5\42, 31, 31, 28, 26\cuboon\Laura Bailey;; Taneda Risa\75\3p4p3qLUPF\F\FE3, FE1, FE2, FE11, FE12, FE15, (s)SSBU\Palla
 Peri\Blue, Blade\ \Cavalry\5, 7, 7, 4, 7\35, 33, 33, 23, 30\Takagi Masafumi\Cindy Robinson;; Takahashi Minami\76\3p4pLUPF\F\FE14C\Peri
-Raven\Green, Blade\ \Infantry\6, 8, 8, 5, 4\41, 34, 35, 25, 22\AKIRA\Bryce Papenbrook;; Umehara Yuuichirou\77\3p4pLUPF\M\FE7, (s)SSBU\Raven
+Raven\Green, Blade\ \Infantry\6, 8, 8, 5, 4\41, 34, 35, 25, 22\AKIRA\Bryce Papenbrook;; Umehara Yuuichirou\77\3p4p3qLUPF\M\FE7, (s)SSBU\Raven
 Robin(M)\Blue, Tome, Thunder\ \Infantry\6, 6, 6, 6, 4\40, 29, 29, 29, 22\Fujiwara Ryo\David Vincent;; Hosoya Yoshimasa\78\3p4p3qLUPF\M\FE13, SSB4, FEW, (a)FE14, (a)FE15, (a)STEAM, SSBU, (s)SSBU\*Robin, M
 Roy\Red, Blade\ \Infantry\7, 6, 6, 5, 7\44, 30, 31, 25, 28\BUNBUN\Ray Chase;; Fukuyama Jun\79\3p4p3q3qLUPF\M\FE6, SSBM, (st)SSBB, SSBProM, SSB4, (a)FE15, SSBU, (s)SSBU\Roy
 Ryoma\Red, Blade\ \Infantry\6, 8, 7, 6, 4\41, 34, 35, 27, 21\Kita Senri\Matt Mercer;; Nakamura Yuichi\80\5pLUPFTD\M\FE14B, (t)SSB4, FEW, (s)SSBU\Ryoma
@@ -150,7 +150,7 @@ Tiki(Adult)(Summer)\Green, Blade\ \Infantry\4, 9, 7, 7, 4\35, 36, 30, 32, 24\Oka
 Tobin\Red, Blade\ \Infantry\9, 7, 6, 9, 6\46, 31, 27, 33, 26\kaya8\Robbie Daymond;; Abe Atsushi\149\4t5t4rPF\M\FE15, FE2\Tobin
 Delthea\Blue, Tome, Thunder\ \Infantry\4, 8, 8, 1, 7\33, 36, 34, 13, 31\Miwabe Sakura\Christine Marie Cabanos;; Suzuki Eri\150\5pPFTD\F\FE15, FE2\Delthea
 Gray\Red, Blade\ \Infantry\8, 9, 8, 7, 5\43, 35, 32, 30, 22\Kawasumi\Max Mittelman;; Taniyama Kisho\151\5pPFTD\M\FE15, FE2\Gray
-Leon\Colorless, Bow\ \Infantry\6, 8, 7, 6, 1\39, 34, 30, 30, 15\Miyajima Haru\Lucien Dodge;; Takahashi Koji\152\3p4pPF\M\FE15, FE2\Leon
+Leon\Colorless, Bow\ \Infantry\6, 8, 7, 6, 1\39, 34, 30, 30, 15\Miyajima Haru\Lucien Dodge;; Takahashi Koji\152\3p4p3qPF\M\FE15, FE2\Leon
 Mathilda\Blue, Blade\ \Cavalry\5, 6, 7, 4, 8\35, 29, 32, 24, 34\Okaya\Caitlin Glass;; Kaida Yuko\153\3p4pPF\F\FE15, FE2\Mathilda
 Saber\Red, Blade\ \Infantry\6, 7, 7, 7, 4\40, 31, 33, 32, 22\PenekoR\Keith Silverstein;; Koyasu Takehito\154\5pPFTD\M\FE15, FE2\Saber
 Sonya\Green, Tome, Wind\ \Infantry\5, 8, 7, 1, 7\36, 33, 31, 15, 32\Yura\Tara Sands;; Shimoda Rei\155\5pPFTD\F\FE15, FE2\Sonya
@@ -357,7 +357,7 @@ Roy(Fire)\Red, Blade\Fire, Duel, 21/04/2019\Infantry\6, 7, 9, 7, 6\39, 34, 38, 3
 Idunn\Red, Dragon\ \Armor\8, 7, 6, 10, 10\45, 35, 26, 39, 34\Yamada Kotaro\;; \356\5p\F\FE6\Idunn
 Lugh\Green, Tome, Wind\ \Infantry\5, 10, 7, 2, 7\37, 35, 36, 17, 31\Himukai Yuji\Michael Johnston;; \357\5p\M\FE6\Lugh
 Sue\Green, Bow\ \Cavalry\5, 7, 9, 5, 3\36, 32, 38, 23, 20\Mayo\Megan Harvey;; \358\5p\F\FE6\Sue
-Thea\Blue, Blade\ \Flier\5, 8, 7, 7, 6\37, 31, 35, 31, 28\Tobi\Kayli Mills;; \359\5p\F\FE6\Thea
+Thea\Blue, Blade\ \Flier\5, 8, 7, 7, 6\37, 31, 35, 31, 28\Tobi\Kayli Mills;; \359\4p5p\F\FE6\Thea
 Rutger\Red, Blade\ \Infantry\7, 7, 10, 6, 5\44, 32, 39, 29, 24\Itagaki Hako\Brian Kimmett;; \360\3g4g4g\M\FE6\Rutger
 Bruno(Bunny)\Colorless, Healer\ \Cavalry\7, 6, 5, 8, 1\41, 30, 24, 35, 14\PenekoR\T. Axelrod;; Miki Shinichiro\361\5s\M\FEH\Bruno
 Marisa(Bunny)\Blue, Blade\ \Flier\7, 7, 10, 6, 3\42, 33, 38, 28, 21\Tsukito\Connor Kelley;; Nakahara Mai\362\5s\F\FE8\Marisa
@@ -365,6 +365,11 @@ Palla(Bunny)\Red, Dagger\ \Flier\5, 10, 7, 2, 7\38, 37, 34, 17, 29\Mayo\Alexis T
 Veronica(Bunny)\Green, Tome, Wind\ \Flier\6, 8, 8, 2, 5\38, 35, 36, 16, 25\Umiu Geso\Wendee Lee;; Hidaka Rina\364\5s\F\FEH\Veronica
 Loki(Bunny)\Colorless, Bow\ \Flier\6, 7, 8, 6, 4\39, 31, 34, 27, 25\Kusakihara Toshiyuki\Erika Ishii;; Arai Satomi\365\4t5t0s\F\FEH\Loki
 Yune\Green, Tome, Wind\Dark, Speed, 21/06/2019\Flier\6, 7, 6, 1, 9\38, 33, 27, 15, 37\Miwabe Sakura\Megan Lee;; \366\5s\F\FE10\Yune
+Caineghis\Colorless, Beast, Lion\ \Armor\7, 9, 5, 8, 6\47, 37, 23, 37, 30\Kita Senri\Jake Eberle;; \367\5p\M\FE10, FE9\Caineghis
+Lethe\Red, Beast, Cat\ \Cavalry\7, 7, 9, 6, 2\41, 33, 38, 26, 19\kaya8\Kristen Day;; \368\5p\F\FE10, FE9\Lethe
+Mordecai\Blue, Beast, Tiger\ \Infantry\9, 8, 5, 10, 3\47, 37, 24, 39, 20\Homazo\Jason Vande Brake;; \369\5p\M\FE10, FE9\Mordecai
+Ranulf\Green, Beast, Cat\ \Cavalry\7, 6, 8, 8, 2\40, 30, 37, 33, 17\Meka\Armen Taylor;; \370\5p\M\FE10, FE9\Ranulf
+Haar\Green, Blade\ \Flier\9, 9, 5, 8, 2\45, 37, 25, 36, 18\\;; \371\3g4g4g\M\FE10, FE9\Haar
 Mathoo\Red, Blade\ \Infantry\8, 6, 4, 5, 10\45, 29, 24, 25, 39\\;; \1000\3p4pPF\M\FE14g\Mathoo\X167657750971547648
 Ace(C137)\Blue, Blade\ \Cavalry\8, 9, 2, 7, 4\41, 40, 17, 32, 24\\;; \1100\5pPF\M\\Ace(C137)\YF78649866577780736
 Declan\Red, Tome, Dark\ \Infantry\4, 9, 8, 12, 3\27, 33, 32, 41, 22\\;; \1101\5pPF\M\\Declan\Y125624530692472832

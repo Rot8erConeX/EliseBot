@@ -6,6 +6,8 @@ Flower Band\Hair\The vibrant red color makes this hair ornament stand out.\Clear
 Flower Fortune Pin\Hair\A hairpin from Sumia. It's made from a flower she used for a flower fortune, with a fresh and lovely scent.\Reach 100 orange friendship with Sumia during Forging Bonds: Defending Ylisse.
 Flower Fortune Pin EX\Hair\A hairpin from Sumia. It's made from a flower she used for a flower fortune, with a refined and elegant scent.\Reach 2500 orange friendship with Sumia during Forging Bonds: Defending Ylisse.
 Flower Hairpin\Hair\A hair ornament found at Hoshidan festivals. The floral design is adored by many.\Clear floors 6-10 in Illusory Dungeon: Festival of Heroes.
+Forest Friends\Hair\Squirrels that made friends with Mordecai. They cavort upon him as he naps in the forest.\Reach 100 blue friendship with Mordecai during Forging Bonds: A Trust Earned
+Forest Friends EX\Hair\Ducks attracted by Mordecai's gentle character. They approached of their own accord.\Reach 2500 blue friendship with Mordecai during Forging Bonds: A Trust Earned
 Frostflower Band\Hair\Gunnthra's frostflower. Translucent and cold to the touch, this bloom will never melt.\Reach 100 green friendship with Gunnthra during Forging Bonds: The Sworn Oath.
 Frostflower Band EX\Hair\Gunnthra's frostflower. Though it blossoms only in some regions of Nifl, it will never melt—anywhere.\Reach 2500 green friendship with Gunnthra during Forging Bonds: The Sworn Oath.
 Gold Askran Hairpin\Hair\Proof of victory over Legendary Tiki.\Beat Tiki(Young)(Earth)'s LHB at Abyssal difficulty.
@@ -40,6 +42,8 @@ Armored Helmet\Hat\This helmet from Hector was forged in Ostia. It's pretty heav
 Armored Helmet EX\Hat\The extravagant design of this Ostian helmet contrasts with its battle marks to paint a vivid picture of its history.\Reach 2500 blue friendship with Hector(Brave) during Forging Bonds: Rejecting Destiny.
 Bat Ears\Hat\Aren't they cute?\Clear floors 6-10 in Illusory Dungeon: Farewells.
 Bath Bucket\Hat\When preparing to bathe in a hot spring, etiquette dictates washing with this bucket first. Don't splash!\
+Beast Headband\Hat\Ranulf's favorite headband. Crafted from thick fabric, it protects the wearer's head quite well.\Reach 100 green friendship with Ranulf during Forging Bonds: A Trust Earned
+Beast Headband EX\Hat\This version of Ranulf's headband has very convincing fakes of his ears attached.\Reach 2500 green friendship with Ranulf during Forging Bonds: A Trust Earned
 Bird Nest\Hat\A bird nest Velouria found up in a tree. According to her, it's a treasure with a great scent.\Reach 100 orange friendship with Velouria during Forging Bonds: The Orb Case
 Bird Nest EX\Hat\A bird nest Velouria found up in a tree. It's a treasure with a great scent. And what's this? Something's in the nest!\Reach 2500 orange friendship with Velouria during Forging Bonds: The Orb Case
 Chilly Tiara\Hat\Fjorm's tiara. Though it is of exquisite workmanship, it was damaged in the battle against Surtr.\Reach 100 blue friendship with Fjorm during Forging Bonds: The Sworn Oath.
@@ -55,7 +59,9 @@ Golden Diadem\Hat\Proof of victory over Mythic Duma.\Beat Duma's MHB at Abyssal 
 Gold Priest's Miter\Hat\Proof of victory over Grand Hero Xander.\Beat Xander's GHB at Abyssal difficulty.
 Gold Restoration Helm\Hat\Proof of victory over Legendary Azura.\Beat Azura(Vallite)'s LHB at Abyssal difficulty.
 Gold Spring Bunny Hat\Hat\Proof of victory over Legendary Lyn.\Beat Lyn(Wind)'s LHB at Abyssal difficulty.
-Head-Orb\Hat\Feh likes to balance this accessory, which resembles an Orb, on her head.\
+Head-Orb\Hat\Feh likes to balance this accessory, which resembles an Orb, on her head.\April Fool's 2019 log-in bonus
+Kitty Ribbon\Hat\Lethe's green ribbon. The bells sewn to it create a lovely sound when the wearer moves.\Reach 100 orange friendship with Lethe during Forging Bonds: A Trust Earned
+Kitty Ribbon EX\Hat\Lethe's green ribbon. The ears that are attached to it look surprisingly realistic.\Reach 2500 orange friendship with Lethe during Forging Bonds: A Trust Earned
 Knight Headpiece\Hat\A knight's headpiece from Silas. This gear is given to those who earn the title of knight.\Reach 100 blue friendship with Silas during Forging Bonds: High Tea Jinks.
 Knight Headpiece EX\Hat\A knight's headpiece from Silas. This special piece of gear is given to those who reach the title of paladin.\Reach 2500 blue friendship with Silas during Forging Bonds: High Tea Jinks.
 Lost Child's Hat\Hat\The hat worn by young Azura.\Clear floors 81-85 in Illusory Dungeon: Labyrinth of Despair.
@@ -75,6 +81,8 @@ Restoration Helm EX\Hat\The Restoration King's many victories are recounted in t
 Spring Bunny Hat\Hat\A hat once worn by a Hero tempted by sunny spring skies. The bunny's face has a lot of character.\Use cavalry ally to defeat foes level 30 or higher during June 2018 Quest "Yay, Accessories!".
 Steamed Buns\Hat\A famous delicacy from a Hoshidan hot spring. Doughy and filled with bean jam, and best served with tea.\
 Summer Bunny Hat\Hat\A hat once worn by a Hero tempted by blue summer skies. The bunny's face has a lot of character.\Clear floors 81-85 in Illusory Dungeon: Farewells
+Symbol of Gallia\Hat\A headpiece bestowed by Caineghis. It's modeled on the royal insignia, and is quite heavy.\Reach 100 red friendship with Caineghis during Forging Bonds: A Trust Earned
+Symbol of Gallia EX\Hat\A headpiece bestowed by Caineghis. This shining symbol of the Lion King is said to grant strength to its wearer.\Reach 2500 red friendship with Caineghis during Forging Bonds: A Trust Earned
 Tactician's Hat\Hat\Those who wear this hat gain an air that lulls companions into following their orders. It's Loki's.\Reach 100 red friendship with Loki during Forging Bonds: Dueling Desires.
 Tactician's Hat EX\Hat\Those who wear this hat seem to find everyone bending to their whims. It's Loki's.\Reach 2500 red friendship with Loki during Forging Bonds: Dueling Desires.
 Worn-Out Doll\Hat\A stuffed animal from Keaton. It's all torn up, and the stuffing is falling out, but apparently that makes it great!\Reach 100 red friendship with Keaton during Forging Bonds: The Orb Case

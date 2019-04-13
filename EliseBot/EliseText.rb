@@ -129,7 +129,9 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,'Banner types','',0x40C0F0,nil,nil,triple_finish(w))
   elsif ['effhp','eff_hp'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows the effective HP data for the unit `name`.',0xD49F61)
-    disp_more_info(event) if safe_to_spam?(event)
+  elsif ['pair','pairup','pair_up'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __name__",'Shows the stats the unit `name` gives to the main unit when `name` is the cohort in a Pair-Up pair.',0xD49F61)
+    disp_more_info(event,-3) if safe_to_spam?(event)
   elsif ['natures'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**",'Responds with a chart with my nature names.',0xD49F61)
   elsif ['growths','growth','gps','gp'].include?(command.downcase)
@@ -377,6 +379,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)"
     str="#{str}\n`procstudy` __unit__ - to see what how much each damaging Special does (*also `studyproc`*)"
     str="#{str}\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)"
+    str="#{str}\n`phairup` __unit__ - to see the stats the unit gives during pair-up (*also `pair`*)"
     str="#{str}\n~~The above commands are collectively referred to as \"the `study` suite\"~~"
     str="#{str}\n\n`banners` __unit__ - for a list of banners the unit has been a focus unit on"
     str="#{str}\n`art` __unit__ __art type__ - for the character's art"
@@ -506,10 +509,12 @@ def disp_more_info(event, mode=0) # used by the `help` command to display info t
       str="#{str}\n\n**Weapon**"
       str="#{str}\nProper format: Silver Dagger+ ~~just the weapon's name~~"
       str="#{str}\nDefault: No weapon"
-      str="#{str}\n\n**Arena/Aether Raids/Tempest Trials+ Bonus Unit Buff**"
-      str="#{str}\nProper format: Bonus"
-      str="#{str}\nSecondary format: Arena, Aether, Tempest"
-      str="#{str}\nDefault: Not applied"
+      unless mode==-3
+        str="#{str}\n\n**Arena/Aether Raids/Tempest Trials+ Bonus Unit Buff**"
+        str="#{str}\nProper format: Bonus"
+        str="#{str}\nSecondary format: Arena, Aether, Tempest"
+        str="#{str}\nDefault: Not applied"
+      end
       str="#{str}\n\n**Summoner Support**"
       str="#{str}\nProper format: #{['C','B','A','S'].sample} ~~Just a single letter~~"
       str="#{str}\nDefault: No support"
@@ -533,14 +538,16 @@ def disp_more_info(event, mode=0) # used by the `help` command to display info t
       str="#{str}\nOptions: HP+, Atk+, Spd+, Def+, Res+, LifeAndDeath/LnD/LaD, Fury, FortressDef, FortressRes"
       str="#{str}\n~~LnD, Fury, and the Fortress skills default to tier 3, but other tiers can be applied by including numbers like so: LnD1~~"
       str="#{str}\nDefault: No skills applied"
-      str="#{str}\n\n**Stat-buffing skills**"
-      str="#{str}\nOptions: Rally skills, Defiant skills, Hone/Fortify skills, Balm skills, Even/Odd Atk/Spd/Def/Res Wave"
-      str="#{str}\n~~please note that the skill name must be written out without spaces~~"
-      str="#{str}\nDefault: No skills applied"
-      str="#{str}\n\n**Stat-nerfing skills**"
-      str="#{str}\nOptions: Smoke skills, Seal skills, Threaten skills, Chill skills, Ploy skills"
-      str="#{str}\n~~please note that the skill name must be written out without spaces~~"
-      str="#{str}\nDefault: No skills applied"
+      unless mode==-3
+        str="#{str}\n\n**Stat-buffing skills**"
+        str="#{str}\nOptions: Rally skills, Defiant skills, Hone/Fortify skills, Balm skills, Even/Odd Atk/Spd/Def/Res Wave"
+        str="#{str}\n~~please note that the skill name must be written out without spaces~~"
+        str="#{str}\nDefault: No skills applied"
+        str="#{str}\n\n**Stat-nerfing skills**"
+        str="#{str}\nOptions: Smoke skills, Seal skills, Threaten skills, Chill skills, Ploy skills"
+        str="#{str}\n~~please note that the skill name must be written out without spaces~~"
+        str="#{str}\nDefault: No skills applied"
+      end
       if mode==-1
         str="#{str}\n\n**In-combat buffs**"
         str="#{str}\nOptions: Blow skills, Stance/Breath skills, Bond skills, Brazen skills, Close/Distant Def, Fire/Wind/Earth/Water Boost"
@@ -550,15 +557,17 @@ def disp_more_info(event, mode=0) # used by the `help` command to display info t
         str="#{str}\nProper format: DefTile"
         str="#{str}\nDefault: Not applied"
       end
-      str="#{str}\n\n**Stat buffs from Legendary Hero/Blessing interaction**"
-      str="#{str}\nProper format: #{['Atk','Spd','Def','Res'].sample} Blessing ~~following the stat buffed by the word \"blessing\"~~"
-      str="#{str}\nSecondary format: #{['Atk','Spd','Def','Res'].sample}Blessing ~~no space~~, Blessing#{['Atk','Spd','Def','Res'].sample}"
-      str="#{str}\nDefault: No blessings applied"
-      str="#{str}\n**Stat buffs from Mythic Hero/Blessing interaction**"
-      str="#{str}\nProper format: #{['Atk','Spd','Def','Res'].sample} Blessing2 ~~following the stat buffed by the word \"blessing\"~~"
-      str="#{str}\nSecondary format: #{['Atk','Spd','Def','Res'].sample}Blessing2 ~~no space~~, Blessing#{['Atk','Spd','Def','Res'].sample}2"
-      str="#{str}\nDefault: No blessings applied"
-      str="#{str}\n**The above two cannot be applied simultaneously.  All blessings will convert to whichever type is the first one listed in your message.**"
+      unless mode==-3
+        str="#{str}\n\n**Stat buffs from Legendary Hero/Blessing interaction**"
+        str="#{str}\nProper format: #{['Atk','Spd','Def','Res'].sample} Blessing ~~following the stat buffed by the word \"blessing\"~~"
+        str="#{str}\nSecondary format: #{['Atk','Spd','Def','Res'].sample}Blessing ~~no space~~, Blessing#{['Atk','Spd','Def','Res'].sample}"
+        str="#{str}\nDefault: No blessings applied"
+        str="#{str}\n**Stat buffs from Mythic Hero/Blessing interaction**"
+        str="#{str}\nProper format: #{['Atk','Spd','Def','Res'].sample} Blessing2 ~~following the stat buffed by the word \"blessing\"~~"
+        str="#{str}\nSecondary format: #{['Atk','Spd','Def','Res'].sample}Blessing2 ~~no space~~, Blessing#{['Atk','Spd','Def','Res'].sample}2"
+        str="#{str}\nDefault: No blessings applied"
+        str="#{str}\n**The above two cannot be applied simultaneously.  All blessings will convert to whichever type is the first one listed in your message.**"
+      end
       str="#{str}\n\nThese can be listed in any order."
     end
     create_embed(event,"",str,0x40C0F0)
@@ -638,6 +647,17 @@ def skill_rarity(event) # this is used by the skillrarity command to display all
     create_embed(event,"**Supposed Bug: X character, despite not being available at #{r}, has skills listed for #{r.gsub('Y','that')} in the `skill` command.**\n\nA word from my developer",str,xcolor)
     event.respond "To see the progression I have discovered, please use the command `FEH!skillrarity progression`."
   end
+end
+
+def book_color(n,mode=0)
+  if mode==1
+    return [31,98,114] if n==1
+    return [166,59,89] if n==2
+    return [120,70,152] if n==3
+  end
+  return 0x1F6272 if n==1
+  return 0xA63B59 if n==2
+  return 0x784698 if n==3
 end
 
 def sort_legendaries(event,bot,mode=0)
@@ -875,10 +895,65 @@ def sort_legendaries(event,bot,mode=0)
         end
         event.respond "There are too many seasonal #{list_lift(tolongs,'and')} heroes to display." if tolongs.length>0
       else
-        create_embed(event,"__**Seasonal units that have not yet been on a Legendary or Mythic Banner**__",'',0x9400D3,nil,nil,m2,2)
+        create_embed(event,"__**Seasonal units that have not yet been on a Legendary or Mythic Banner**__",'',0xAA937A,nil,nil,m2,2)
       end
       data_load()
-      k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('p') || q[9][0].include?('4p') || q[9][0].include?('3p') || q[9][0].include?('2p') || q[9][0].include?('1p') || m.include?(q[0])}.uniq
+      k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('p') || q[9][0].include?('4p') || q[9][0].include?('3p') || q[9][0].include?('2p') || q[9][0].include?('1p') || !q[9][0].include?('TD') || m.include?(q[0])}.uniq
+      m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Gold:549338084102111250>Gold',[]]]
+      for i in 0...k.length
+        m2[0][1].push(k[i][0]) if k[i][1][0]=='Red'
+        m2[1][1].push(k[i][0]) if k[i][1][0]=='Blue'
+        m2[2][1].push(k[i][0]) if k[i][1][0]=='Green'
+        m2[3][1].push(k[i][0]) if k[i][1][0]=='Colorless'
+        m2[4][1].push(k[i][0]) unless ['Red','Blue','Green','Colorless'].include?(k[i][1][0])
+      end
+      m2=m2.reject{|q| q[1].length<=0}
+      j="\n"
+      j=', ' if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      for i in 0...m2.length
+        m2[i][1]=m2[i][1].join(j)
+      end
+      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        msg="__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from Book 1 that have not yet been on a Legendary or Mythic Banner**__"
+        tolongs=[]
+        for i in 0...m2.length
+          if m2[i][1].length>1900
+            tolongs.push(m2[i][0].split('>')[1])
+          else
+            msg=extend_message(msg,"*#{m2[i][0]}*: #{m2[i][1]}",event)
+          end
+        end
+        msg=extend_message(msg,"There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes from Book 1 to display.",event) if tolongs.length>0
+        event.respond msg
+      elsif m2.map{|q| "*#{q[0]}*: #{q[1]}"}.join("\n\n").length>1700
+        tolongs=[]
+        if m2[0][1].length>1900
+          event.respond "__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from Book 1 that have not yet been on a Legendary or Mythic Banner**__"
+          tolongs.push('Red')
+        else
+          create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from Book 1 that have not yet been on a Legendary or Mythic Banner**__",'',0xE22141,nil,nil,triple_finish(m2[0][1].split("\n")),2)
+        end
+        if m2[1][1].length>1900
+          tolongs.push('Blue')
+        else
+          create_embed(event,'','',0x2764DE,nil,nil,triple_finish(m2[1][1].split("\n")),2)
+        end
+        if m2[2][1].length>1900
+          tolongs.push('Green')
+        else
+          create_embed(event,'','',0x09AA24,nil,nil,triple_finish(m2[2][1].split("\n")),2)
+        end
+        if m2[3][1].length>1900
+          tolongs.push('Colorless')
+        else
+          create_embed(event,'','',0x64757D,nil,nil,triple_finish(m2[3][1].split("\n")),2)
+        end
+        event.respond "There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes from Book 1 to display." if tolongs.length>0
+      else
+        create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from Book 1 that have not yet been on a Legendary Banner**__",'',avg_color([book_color(1,1)]),nil,nil,m2,2)
+      end
+      data_load()
+      k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('p') || q[9][0].include?('4p') || q[9][0].include?('3p') || q[9][0].include?('2p') || q[9][0].include?('1p') || q[9][0].include?('TD') || m.include?(q[0])}.uniq
       m2=[['<:Orb_Red:455053002256941056>Red',[]],['<:Orb_Blue:455053001971859477>Blue',[]],['<:Orb_Green:455053002311467048>Green',[]],['<:Orb_Colorless:455053002152083457>Colorless',[]],['<:Orb_Gold:549338084102111250>Gold',[]]]
       for i in 0...k.length
         m2[0][1].push(k[i][0]) if k[i][1][0]=='Red'
@@ -930,7 +1005,7 @@ def sort_legendaries(event,bot,mode=0)
         end
         event.respond "There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes to display." if tolongs.length>0
       else
-        create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__",'',0x9400D3,nil,nil,m2,2)
+        create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__",'',avg_color([book_color(2,1),book_color(3,1)]),nil,nil,m2,2)
       end
     end
   end
@@ -1580,7 +1655,6 @@ def aoe(event,bot,args=nil)
 end
 
 def disp_unit_art(event,name,bot)
-  name=find_name_in_string(event) if name.nil?
   untz=@units.map{|q| q}
   j=untz[untz.find_index{|q| q[0]==name}]
   data_load()
@@ -3381,19 +3455,19 @@ def snagstats(event,bot,f=nil,f2=nil)
     return nil
   elsif ['alias','aliases','name','names','nickname','nicknames'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',1)
-    glbl=@aliases.reject{|q| q[0]!='Unit' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
-    srv_spec=@aliases.reject{|q| q[0]!='Unit' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    glbl=@aliases.reject{|q| q[0]!='Unit' || q[2].is_a?(Array) || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    srv_spec=@aliases.reject{|q| q[0]!='Unit' || q[2].is_a?(Array) || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
     all_units=@units.reject{|q| !has_any?(g, q[13][0])}
     all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
-    all_units=all_units.map{|q| [q[0],0,0]}
-    srv_spec=srv_spec.reject{|q| !all_units.map{|q| q[0]}.include?(q[1])}
+    all_units=all_units.map{|q| [q[0],q[8],0,0]}
+    srv_spec=srv_spec.reject{|q| !all_units.map{|q2| q2[1]}.include?(q[1])}
     for j in 0...all_units.length
-      all_units[j][1]+=glbl.reject{|q| q[1]!=all_units[j][0]}.length
-      all_units[j][2]+=srv_spec.reject{|q| q[1]!=all_units[j][0]}.length
+      all_units[j][2]+=glbl.reject{|q| q[1]!=all_units[j][1]}.length
+      all_units[j][3]+=srv_spec.reject{|q| q[1]!=all_units[j][1]}.length
     end
     str="**There are #{longFormattedNumber(glbl.length)} global single-unit aliases.**"
-    all_units=all_units.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
-    k=all_units.reject{|q| q[1]!=all_units[0][1]}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
+    all_units=all_units.sort{|b,a| supersort(a,b,2).zero? ? supersort(a,b,1) : supersort(a,b,2)}
+    k=all_units.reject{|q| q[2]!=all_units[0][2]}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
     str="#{str}\nThe unit#{"s" unless k.length==1} with the most global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global aliases#{" each" unless k.length==1}."
     str="#{str}\n\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]unit aliases.**"
     if event.server.nil? && @shardizard==4
@@ -3403,21 +3477,27 @@ def snagstats(event,bot,f=nil,f2=nil)
     else
       str="#{str}\nThis server accounts for #{@aliases.reject{|q| q[0]!='Unit' || q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
     end
-    all_units=all_units.sort{|b,a| supersort(a,b,2).zero? ? supersort(a,b,0) : supersort(a,b,2)}
-    k=all_units.reject{|q| q[2]!=all_units[0][2]}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
+    all_units=all_units.sort{|b,a| supersort(a,b,3).zero? ? supersort(a,b,0) : supersort(a,b,3)}
+    k=all_units.reject{|q| q[3]!=all_units[0][3]}.map{|q| "*#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_units.find_index{|q2| q2[0]==q[0]}.nil?}*"}
     str="#{str}\nThe unit#{"s" unless k.length==1} with the most server-specific aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][2]} server-specific aliases#{" each" unless k.length==1}."
     for i in 0...srv_spec.length
       srv_spec[i][2]=srv_spec[i][2].length
     end
     srv_spec=srv_spec.sort{|b,a| supersort(a,b,2).zero? ? (supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)) : supersort(a,b,2)}
-    k=srv_spec.reject{|q| q[2]!=srv_spec[0][2]}.map{|q| "*#{q[0]} = #{q[1]}*"}
+    k=srv_spec.reject{|q| q[2]!=srv_spec[0][2]}.map{|q| "*#{q[0]} = #{all_units[all_units.find_index{|q2| q2[1]==q[1]}][0]}*"}
     str="#{str}\nThe most agreed-upon server-specific alias#{"es are" unless k.length==1}#{" is" if k.length==1} #{list_lift(k,"and")}.  #{srv_spec[0][2]} servers agree on #{"them" unless k.length==1}#{"it" if k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
     k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
     str="#{str}\nCounting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
-    str="#{str}\n\n**There are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases, covering #{@multi_aliases.map{|q| q[1]}.uniq.length} groups of units.**"
-    m=@multi_aliases.map{|q| [q[1],0]}.uniq
+    multi=@aliases.reject{|q| q[0]!='Unit' || !q[2].is_a?(Array)}
+    str="#{str}\n\n**There are #{longFormattedNumber(multi.length)} [global] multi-unit aliases, covering #{multi.map{|q| q[2]}.uniq.length} groups of units.**"
+    data_load()
+    untz=@units.map{|q| q}
+    for i in 0...multi.length
+      multi[i][2]=multi[i][2].map{|q| untz[untz.bsearch_index{|q2| q<=>q2[8]}][0]}
+    end
+    m=multi.map{|q| [q[2],0]}.uniq
     for i in 0...m.length
-      m[i][1]+=@multi_aliases.reject{|q| q[1]!=m[i][0]}.length
+      m[i][1]+=multi.reject{|q| q[2]!=m[i][0]}.length
       m[i][0]=m[i][0].join('/')
     end
     m=m.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
@@ -3459,6 +3539,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
     str2="#{str2}\nCounting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
     str2="#{str2}\n\n**There are 3 [global] multi-skill aliases.**"
+    puts str
     str=extend_message(str,str2,event,3)
     glbl=@aliases.reject{|q| q[0]!='Structure' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
     srv_spec=@aliases.reject{|q| q[0]!='Structure' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
@@ -3672,11 +3753,11 @@ def snagstats(event,bot,f=nil,f2=nil)
   str=extend_message(str,str2,event,extln)
   glbl=@aliases.reject{|q| !q[3].nil?}
   srv_spec=@aliases.reject{|q| q[3].nil?}
-  str2="**There are #{longFormattedNumber(glbl.length+@multi_aliases.length+2)} global and #{longFormattedNumber(srv_spec.length)} server-specific *aliases*.**"
-  glbl=@aliases.reject{|q| q[0]!='Unit' || !q[3].nil?}
+  str2="**There are #{longFormattedNumber(glbl.length+2)} global and #{longFormattedNumber(srv_spec.length)} server-specific *aliases*.**"
+  glbl=@aliases.reject{|q| q[0]!='Unit' || q[2].is_a?(Array) || !q[3].nil?}
   srv_spec=@aliases.reject{|q| q[0]!='Unit' || q[3].nil?}
   str2="#{str2}\nThere are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-]unit aliases."
-  str2="#{str2}\nThere are #{longFormattedNumber(@multi_aliases.length)} [global] multi-unit aliases."
+  str2="#{str2}\nThere are #{longFormattedNumber(@aliases.reject{|q| q[0]!='Unit' || !q[2].is_a?(Array)}.length)} [global] multi-unit aliases."
   glbl=@aliases.reject{|q| q[0]!='Skill' || !q[3].nil?}
   srv_spec=@aliases.reject{|q| q[0]!='Skill' || q[3].nil?}
   str2="#{str2}\nThere are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-]skill aliases.\nThere are 3 global multi-skill aliases."

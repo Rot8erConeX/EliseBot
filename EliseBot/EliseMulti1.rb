@@ -1,104 +1,3 @@
-def unit_into_multi(name,args3)
-  if name.include?('(M)') || name.include?('(F)')
-    if args3.length==1 || !['(','m','f'].include?(args3[1][0,1].downcase)
-      if ['robin','reflet','daraen'].include?(args3[0].downcase)
-        name='Robin'
-      elsif ['morgan','marc','linfan'].include?(args3[0].downcase)
-        name='Morgan'
-      elsif ['kana','kanna'].include?(args3[0].downcase)
-        name='Kana'
-      elsif ['corrin','kamui','corrinlaunch','kamuilaunch','launchcorrin','launchkamui','corrindefault','kamuidefault','defaultcorrin','defaultkamui','corrinvanilla','kamuivanilla','vanillacorrin','vanillakamui','corrinog','kamuiog','ogcorrin','ogkamui'].include?(args3[0].gsub('(','').gsub(')','').downcase)
-        name='Corrin'
-      elsif ['corrinadrift','kamuiadrift','adriftcorrin','adriftkamui','corrindreaming','kamuidreaming','dreamingcorrin','dreamingkamui','corrindreamer','kamuidreamer','dreamercorrin','dreamerkamui','corrindreams','kamuidreams','dreamscorrin','dreamskamui','corrindream','kamuidream','dreamcorrin','dreamkamui','corrinfauxzura','kamuifauxzura','fauxzuracorrin','fauxzurakamui','corrinfauxura','kamuifauxura','fauxuracorrin','fauxurakamui'].include?(args3[0].gsub('(','').gsub(')','').downcase)
-        name='CorrinAdrift'
-      else
-        name=args3[0]
-      end
-    end
-  elsif name=='Tiki(Young)' || name=='Tiki(Adult)'
-    if args3.length==1
-      if ['tiki','chiki'].include?(args3[0].downcase)
-        name='Tiki'
-      else
-        name=args3[0]
-      end
-    end
-  elsif name=='Tiki(Young)(Summer)' || name=='Tiki(Adult)(Summer)'
-    if args3.reject{|q| ['summer','beach','swimsuit'].include?(q.downcase)}.length==1
-      if ['tiki','chiki'].include?(args3[0].downcase)
-        name='TikiSummer'
-      else
-        name=args3[0]
-      end
-    end
-  elsif name=='Eirika(Bonds)' || name=='Eirika(Memories)'
-    if args3.length==1
-      if ['eirika','eirik','eiriku','erika'].include?(args3[0].downcase)
-        name='Eirika'
-      else
-        name=args3[0]
-      end
-    end
-  elsif name=='Olivia(Launch)' || name=='Olivia(Traveler)'
-    if args3.length==1
-      if ['olivia','olivie','olive'].include?(args3[0].downcase)
-        name='Olivia'
-      else
-        name=args3[0]
-      end
-    end
-  elsif name=='Camilla(Launch)' || name=='Camilla(Adrift)'
-    if args3.length==1
-      if ['camilla'].include?(args3[0].downcase)
-        name='Camilla'
-      else
-        name=args3[0]
-      end
-    end
-  elsif name=='Hinoka(Launch)' || name=='Hinoka(Wings)'
-    if args3.length==1
-      if ['hinoka'].include?(args3[0].downcase)
-        name='Hinoka'
-      else
-        name=args3[0]
-      end
-    end
-  elsif name=='Nino(Launch)' || name=='Nino(Fangs)'
-    if args3.length==1
-      if ['nino'].include?(args3[0].downcase)
-        name='nino'
-      else
-        name=args3[0]
-      end
-    end
-  elsif name=='Chrom(Launch)' || name=='Chrom(Branded)'
-    if args3.length==1
-      if ['chrom'].include?(args3[0].downcase)
-        name='Chrom'
-      else
-        name=args3[0]
-      end
-    end
-  elsif name=='Reinhardt(Bonds)' || name=='Reinhardt(World)'
-    if args3.length==1
-      if ['reinhardt','rainharuto'].include?(args3[0].downcase)
-        name='Reinhardt'
-      else
-        name=args3[0]
-      end
-    end
-  elsif name=='Olwen(Bonds)' || name=='Olwen(World)'
-    if args3.length==1
-      if ['olwen','oruen'].include?(args3[0].downcase)
-        name='Olwen'
-      else
-        name=args3[0]
-      end
-    end
-  end
-  return name
-end
-
 def multi_for_units(event,str1,str2,robinmode=0)
   str1=str1.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('!','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
   s=event.message.text.downcase
@@ -115,23 +14,27 @@ def multi_for_units(event,str1,str2,robinmode=0)
     a.shift if all_commands(true).include?(a[0]) || (['f','e','h'].include?(a[0].downcase[0,1]) && all_commands(true).include?(a[0][1,a[0].length-1])) || (['feh','feh'].include?(a[0].downcase[0,3]) && all_commands(true).include?(a[0][3,a[0].length-3]))
     str1=a.join(' ').gsub('!','')
   end
-  nicknames_load()
-  for i in 0...@multi_aliases.length
-    m=@multi_aliases[i][1].map{|q| q}
-    m=['Robin'] if (m==['Robin(M)', 'Robin(F)'] || m==['Robin(F)', 'Robin(M)']) && robinmode != 1
-    return [str1, m, @multi_aliases[i][0].downcase] if @multi_aliases[i][0].downcase==str1
-  end
-  return nil if robinmode==3 # only allow actual multi-unit aliases without context clues
   k=0
   k=event.server.id unless event.server.nil?
   data_load()
   g=get_markers(event)
   u=@units.reject{|q| !has_any?(g, q[13][0])}
+  nicknames_load()
+  multi=@aliases.reject{|q| q[0]!='Unit' || !q[2].is_a?(Array)}
+  for i in 0...multi.length
+    if multi[i][1].downcase==str1
+      m=multi[i][2].map{|q| u[u.find_index{|q2| q2[8]==q}][0]}
+      m=['Robin'] if (m==['Robin(M)', 'Robin(F)'] || m==['Robin(F)', 'Robin(M)']) && robinmode != 1
+      return [str1, m, multi[i][1].downcase]
+    end
+  end
+  return nil if robinmode==3 # only allow actual multi-unit aliases without context clues
   for i in 0...u.length
     return [str1, [u[i][0]], str1] if str1.downcase==u[i][0].downcase.gsub('(','').gsub(')','')
   end
-  for i in 0...@aliases.length
-    return [str1, [@aliases[i][2]], @aliases[i][1].downcase] if @aliases[0]=='Unit' && @aliases[i][1].downcase==str1 && (@aliases[i][3].nil? || @aliases[i][3].include?(k))
+  alz=@aliases.reject{|q| q[0]!='Unit' || q[2].is_a?(Array) || (!q[3].nil? && q[3].include?(k))}
+  for i in 0...alz.length
+    return [str1, [u[u.find_index{|q| q[8]==alz[i][2]}][0]], alz[i][1].downcase] if alz[i][1].downcase==str1
   end
   str3=str2.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('!','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
   str2=str2.downcase.gsub('(','').gsub(')','').gsub('_','').gsub('!','').gsub('hp','').gsub('attack','').gsub('speed','').gsub('defense','').gsub('defence','').gsub('resistance','')
@@ -523,7 +426,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Kana(M)','Kana(F)'],[str]]
   elsif /(lyn(dis||)|rin(disu|))/ =~ str1
-    return nil if find_name_in_string(event,str1)
+    return nil if find_data_ex(:find_unit,event.message.text,event).length>0
     str='lyn'
     str='rin' if str2.include?('rin')
     str='lyndis' if str2.include?('lyndis')
@@ -651,8 +554,8 @@ def list_unit_aliases(event,args,bot,mode=0)
     azry=nil if find_accessory(args.join(''),event).length<=0
   end
   f=[]
-  n=@aliases.reject{|q| q[0]!='Unit'}.map{|q| [q[1],q[2],q[3]]}
-  m=@multi_aliases.map{|a| a}
+  n=@aliases.reject{|q| q[0]!='Unit' || q[2].is_a?(Array)}.map{|q| [q[1],q[2],q[3]]}
+  m=@aliases.reject{|q| q[0]!='Unit' || !q[2].is_a?(Array)}.map{|q| [q[1],q[2]]}
   h=''
   skipmulti=false
   if unit.nil? && skill.nil? && struct.nil? && azry.nil? && itmu.nil?
@@ -687,7 +590,20 @@ def list_unit_aliases(event,args,bot,mode=0)
       if m.length>0 && mode != 1
         f.push("\n__**Multi-unit aliases**__")
         for i in 0...m.length
-          f.push("#{m[i][0]}#{" = #{m[i][1].join(', ')}" if unit.nil?}")
+          uuuu=[]
+          for i2 in 0...m[i][1].length
+            uuu=m[i][1][i1]
+            unless uuu.is_a?(String)
+              if uuu<1000
+                uuu=@units[uuu][0]
+              else
+                uu2=@units.find_index{|q| q[8]==uuu}
+                uuu=@units[uu2][0] unless uu2.nil?
+              end
+            end
+            uuuu.push(uuu)
+          end
+          f.push("#{m[i][0]}#{" = #{uuuu.join(', ')}" if unit.nil?}")
         end
       end
     elsif has_any?(args,['skill','skills','skil','skils'])
@@ -794,7 +710,20 @@ def list_unit_aliases(event,args,bot,mode=0)
         unless mode==1
           msg=extend_message(msg,'__**Multi-unit aliases**__',event,2)
           for i in 0...m.length
-            msg=extend_message(msg,"#{m[i][0]} = #{m[i][1].join(', ')}",event)
+            uuuu=[]
+            for i2 in 0...m[i][1].length
+              uuu=m[i][1][i1]
+              unless uuu.is_a?(String)
+                if uuu<1000
+                  uuu=@units[uuu][0]
+                else
+                  uu2=@units.find_index{|q| q[8]==uuu}
+                  uuu=@units[uu2][0] unless uu2.nil?
+                end
+              end
+              uuuu.push(uuu)
+            end
+            msg=extend_message(msg,"#{m[i][0]} = #{uuuu.join(', ')}",event)
           end
         end
         n=@aliases.reject{|q| q[0]!='Skill'}.map{|q| [q[1],q[2],q[3]]}
@@ -854,7 +783,20 @@ def list_unit_aliases(event,args,bot,mode=0)
       if m.length>0 && mode != 1
         f.push("\n__**Multi-unit aliases**__")
         for i in 0...m.length
-          f.push("#{m[i][0]}#{" = #{m[i][1].join(', ')}" if unit.nil?}")
+          uuuu=[]
+          for i2 in 0...m[i][1].length
+            uuu=m[i][1][i1]
+            unless uuu.is_a?(String)
+              if uuu<1000
+                uuu=@units[uuu][0]
+              else
+                uu2=@units.find_index{|q| q[8]==uuu}
+                uuu=@units[uu2][0] unless uu2.nil?
+              end
+            end
+            uuuu.push(uuu)
+          end
+          f.push("#{m[i][0]}#{" = #{uuuu.join(', ')}" if unit.nil?}")
         end
       end
       n=@aliases.reject{|q| q[0]!='Skill'}.map{|q| [q[1],q[2],q[3]]}
@@ -945,11 +887,10 @@ def list_unit_aliases(event,args,bot,mode=0)
       h=' that contain this unit'
       h=' that contain both of these units' if unit.length>1
       h=' that contain all of these units' if unit.length>2
-      puts unit.to_s
       for i1 in 0...unit.length
         u=find_unit(unit[i1],event)[0]
         u2=find_unit(unit[i1],event)[8]
-        m=m.reject{|q| !q[1].include?(u)}
+        m=m.reject{|q| !q[1].include?(u2)}
         f.push("#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u}#{unit_moji(bot,event,-1,u,false,4)}**#{" [Unt-##{u2}]" if @shardizard==4}#{"'s server-specific aliases__" if mode==1}")
         f.push(u.gsub('(','').gsub(')','')) if u.include?('(') || u.include?(')')
         for i in 0...n.length
@@ -1019,12 +960,13 @@ def list_unit_aliases(event,args,bot,mode=0)
     n=@aliases.reject{|q| q[0]!='Structure'}.map{|q| [q[1],q[2],q[3]]}
     n=n.reject{|q| q[2].nil?} if mode==1
     semote=''
-    semote='<:Offensive_Structure:510774545997758464><:Defensive_Structure:510774545108566016>' if struct[0][2]=='Offensive/Defensive'
+    semote='<:Battle_Structure:565064414454349843>' if struct[0][2]=='Offensive/Defensive'
     semote='<:Defensive_Structure:510774545108566016>' if struct[0][2]=='Defensive'
     semote='<:Offensive_Structure:510774545997758464>' if struct[0][2]=='Offensive'
     semote='<:Trap_Structure:510774545179869194>' if struct[0][2]=='Trap'
     semote='<:Resource_Structure:510774545154572298>' if struct[0][2]=='Resources'
     semote='<:Ornamental_Structure:510774545150640128>' if struct[0][2]=='Ornament'
+    semote='<:Resort_Structure:565064414521196561>' if struct[0][2]=='Resort'
     unless n.find_index{|q| q[1].downcase==struct[0][0].downcase}.nil?
       f.push("\n#{"__" if mode==1}**#{struct[0][0]}#{semote}**#{"'s server-specific aliases__" if mode==1}")
       f.push("#{struct[0][0].gsub('(','').gsub(')','').gsub(' ','')}") if struct[0][0].include?('(') || struct[0][0].include?(')') || struct[0][0].include?(' ')
@@ -1270,6 +1212,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   checkstr=normalize(newname,true)
   if type[0]=='Alias' && type[1].gsub('*','')=='Unit'
     unt=find_unit(unit,event)
+    unt=unt[0] if unt[0].is_a?(Array)
     checkstr2=checkstr.downcase.gsub(unt[12].split(', ')[0].gsub('*','').downcase,'')
     cck=unt[12].split(', ')[1][0,1].downcase if unt[12].split(', ').length>1
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Skill'
@@ -1369,7 +1312,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   end
   unless double
     @aliases.push([type[1].gsub('*',''),newname,unit,m].compact)
-    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? ((supersort(b,a,2)) == 0 ? (supersort(b,a,1)) : (supersort(b,a,2))) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
+    @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
     bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unt[0]}*.\nPlease test to be sure that the alias stuck.")
     event.respond "**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unt[0]}*." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
     bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unt[0]}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
@@ -1382,24 +1325,12 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     end
   }
   nicknames_load()
-  nzzz=@aliases.reject{|q| q[0]!='Unit'}
-  nzzz2=@aliases.reject{|q| q[0]!='Skill'}
-  nzzz3=@aliases.reject{|q| q[0]!='Structure'}
-  nzzz4=@aliases.reject{|q| ['Unit','Skill','Structure'].include?(q[0])}
-  if nzzz[nzzz.length-1].length>1 && nzzz[nzzz.length-1][2]>=366 || nzzz2[nzzz2.length-1].length>1 && nzzz2[nzzz2.length-1][2]>='Yato' || nzzz3[nzzz3.length-1].length>1 && nzzz3[nzzz3.length-1][2]>='Armor School'
+  nzzz=@aliases.map{|q| q}
+  if nzzz[-1].length>1 && nzzz[-1][2].is_a?(String) && nzzz[-1][2]>='Verdant Shard'
     bot.channel(logchn).send_message('Alias list saved.')
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...nzzz.length
         f.puts "#{nzzz[i].to_s}"
-      end
-      for i in 0...nzzz2.length
-        f.puts "#{nzzz2[i].to_s}#{"\n" if i<nzzz2.length-1}"
-      end
-      for i in 0...nzzz3.length
-        f.puts "#{nzzz3[i].to_s}#{"\n" if i<nzzz3.length-1}"
-      end
-      for i in 0...nzzz4.length
-        f.puts "#{nzzz4[i].to_s}#{"\n" if i<nzzz4.length-1}"
       end
     }
     bot.channel(logchn).send_message('Alias list has been backed up.')
