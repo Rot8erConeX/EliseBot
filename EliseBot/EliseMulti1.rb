@@ -576,6 +576,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{uuu}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{uuu}#{" *(in this server only)*" unless mode==1}")
+        elsif mode==1 && !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -615,6 +616,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
+        elsif mode==1 && !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -635,6 +637,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
+        elsif mode==1 && !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -655,6 +658,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
+        elsif mode==1 && !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -675,6 +679,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
+        elsif mode==1 && !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -705,7 +710,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               uuu=@units[uu2][0] unless uu2.nil?
             end
           end
-          msg=extend_message(msg,"#{n[i][0]} = #{uuu}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
+          msg=extend_message(msg,"#{n[i][0]} = #{uuu}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event) unless mode==1 && !event.server.nil?
         end
         unless mode==1
           msg=extend_message(msg,'__**Multi-unit aliases**__',event,2)
@@ -730,25 +735,25 @@ def list_unit_aliases(event,args,bot,mode=0)
         n=n.reject{|q| q[2].nil? || !q[2].include?(event.server.id)} if mode==1
         msg=extend_message(msg,'__**Skill aliases**__',event,2)
         for i in 0...n.length
-          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
+          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event) unless mode==1 && !event.server.nil? && !n[i][2].nil? && !n[i][2].include?(event.server.id)
         end
         n=@aliases.reject{|q| q[0]!='Structure'}.map{|q| [q[1],q[2],q[3]]}
         n=n.reject{|q| q[2].nil? || !q[2].include?(event.server.id)} if mode==1
         msg=extend_message(msg,'__**[Aether Raids] Structure aliases**__',event,2)
         for i in 0...n.length
-          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
+          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event) unless mode==1 && !event.server.nil? && !n[i][2].nil? && !n[i][2].include?(event.server.id)
         end
         n=@aliases.reject{|q| q[0]!='Accessory'}.map{|q| [q[1],q[2],q[3]]}
         n=n.reject{|q| q[2].nil? || !q[2].include?(event.server.id)} if mode==1
         msg=extend_message(msg,'__**Accessory aliases**__',event,2)
         for i in 0...n.length
-          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
+          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event) unless mode==1 && !event.server.nil? && !n[i][2].nil? && !n[i][2].include?(event.server.id)
         end
         n=@aliases.reject{|q| q[0]!='Item'}.map{|q| [q[1],q[2],q[3]]}
         n=n.reject{|q| q[2].nil? || !q[2].include?(event.server.id)} if mode==1
         msg=extend_message(msg,'__**Item aliases**__',event,2)
         for i in 0...n.length
-          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event)
+          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event) unless mode==1 && !event.server.nil? && !n[i][2].nil? && !n[i][2].include?(event.server.id)
         end
         event.respond msg
         return nil
@@ -769,6 +774,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{uuu}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{uuu}#{" *(in this server only)*" unless mode==1}")
+        elsif mode==1 && !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -807,6 +813,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
+        elsif mode==1 && !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -826,6 +833,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
+        elsif mode==1 && !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -845,6 +853,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
+        elsif mode==1 && !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -864,6 +873,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
+        elsif mode==1 && !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -2663,4 +2673,318 @@ def shard_data(mode=0,ignoredebug=false,s=nil)
   end
   return k.join('') if mode>2
   return k
+end
+
+def combined_BST(event,args,bot)
+  event.channel.send_temporary_message('Parsing message, please wait...',8)
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  s1=args.join(' ').gsub(',','').gsub('/','').downcase
+  s2=args.join(' ').gsub(',','').gsub('/','')
+  if s1.include?('|')
+    k=[]
+    f=s1.gsub(' |','|').gsub('| ','|').split('|')
+    for i in 0...f.length
+      x=detect_multi_unit_alias(event,f[i],f[i],1)
+      if !x.nil? && x[1].length>1
+        r=find_stats_in_string(event,f[i])
+        k.push("#{r[0]}*#{x[0]}+#{r[1]}#{"+#{r[2]}" if r[2].length>0}#{"-#{r[3]}" if r[3].length>0}")
+      elsif find_data_ex(:find_unit,f[i],event).length>0
+        name=find_data_ex(:find_unit,f[i],event)
+        r=find_stats_in_string(event,f[i])
+        u=find_unit(name[0],event)
+        m=false
+        if f[i].downcase.split(' ').include?("mathoo's") && find_in_dev_units(name)>=0
+          m=true
+          dv=@dev_units[find_in_dev_units(name)]
+          r[0]=dv[1]
+          r[1]=dv[2]
+          r[2]=dv[3].gsub(' ','')
+          r[3]=dv[4].gsub(' ','')
+          r[2]='' if r[2].nil?
+          r[3]='' if r[3].nil?
+        elsif donate_trigger_word(event,f[i])>0
+          uid=donate_trigger_word(event,f[i])
+          x=donor_unit_list(uid)
+          x2=x.find_index{|q| q[0]==name}
+          unless x2.nil?
+            r[0]=x[x2][1]
+            r[1]=x[x2][2]
+            r[2]=x[x2][3].gsub(' ','')
+            r[3]=x[x2][4].gsub(' ','')
+            r[2]='' if r[2].nil?
+            r[3]='' if r[3].nil?
+          end
+        end
+        k.push("#{r[0]}*#{u[0]}+#{r[1]}#{"+#{r[2]}" if r[2].length>0}#{"-#{r[3]}" if r[3].length>0}")
+      end
+    end
+  else
+    for i in 0...args.length
+      unless s1.split(' ').nil? || s1.gsub(' ','').length<=0
+        k=find_data_ex(:find_unit,s1,event,false,1)
+        unless k.length<=0
+          if k[0].is_a?(Array)
+            if k[0][0].is_a?(Array)
+              k[0]=k[0].map{|q| q[0]}
+            else
+              k[0]=k[0][0]
+            end
+          end
+          puts k.to_s
+          s1=first_sub(s1,k[1],'')
+          s2=first_sub(s2,k[1],k[0])
+        end
+      end
+    end
+    k=splice(s2)
+  end
+  u=0
+  n=0
+  au=0
+  b=[]
+  scr=[]
+  counters=[['Infantry', 0, 0],
+            ['Horse', 0, 0],
+            ['Armor', 0, 0],
+            ['Flier', 0, 0],
+            ['Magic', 0, 0],
+            ['Dragon', 0, 0],
+            ['Melee', 0, 0],
+            ['Healer', 0, 0],
+            ['Dagger', 0, 0],
+            ['Archer', 0, 0],
+            ['Beast', 0, 0],
+            ['Red', 0, 0],
+            ['Blue', 0, 0],
+            ['Green', 0, 0],
+            ['Colorless', 0, 0],
+            [['', 'F2P', 'F2P'], 0, 0],
+            ['Story', 0, 0],
+            ['GHB', 0, 0],
+            ['Tempest', 0, 0],
+            ['Yandere', 0, 0, ['Valter', 'Tharja', 'Rhajat', 'Camilla', 'Faye', 'Tharja(Winter)', 'Tharja(Bride)']],
+            ['Lucina', 0, 0, ['Lucina', 'Lucina(Bunny)', 'Marth(Masked)', 'Lucina(Brave)', 'Lucina(Glorious)']],
+            ['Marth', 0, 0, ['Marth', 'Marth(Groom)', 'Marth(Masked)']],
+            ['Robin', 0, 0, ['Robin(M)', 'Robin(F)', 'Robin(F)(Summer)', 'Robin(M)(Winter)', 'Robin(M)(Fallen)', 'Robin(F)(Fallen)', 'Tobin']],
+            ['Corrin', 0, 0, ['Corrin(M)(Launch)', 'Corrin(F)(Launch)', 'Corrin(F)(Summer)', 'Corrin(M)(Winter)', 'Corrin(M)(Adrift)', 'Corrin(F)(Adrift)', 'Kamui']],
+            ['Xander', 0, 0, ['Xander', 'Xander(Bunny)', 'Xander(Summer)', 'Xander(Festival)']],
+            ['Tiki', 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)']],
+            ['Lyn', 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)']],
+            ['Chrom', 0, 0, ['Chrom(Launch)', 'Chrom(Bunny)', 'Chrom(Winter)', 'Chrom(Branded)']],
+            ['Azura', 0, 0, ['Azura', 'Azura(Performing)', 'Azura(Winter)', 'Azura(Adrift)', 'Azura(Vallite)']],
+            ['Camilla', 0, 0, ['Camilla', 'Camilla(Bunny)', 'Camilla(Winter)', 'Camilla(Summer)', 'Camilla(Adrift)', 'Camilla(Bath)']],
+            ['Ike', 0, 0, ['Ike', 'Ike(Vanguard)', 'Ike(Brave)']],
+            ['Roy', 0, 0, ['Roy', 'Roy(Valentines)', 'Roy(Brave)']],
+            ['Hector', 0, 0, ['Hector', 'Hector(Valentines)', 'Hector(Marquess)', 'Hector(Brave)']],
+            ['Celica', 0, 0, ['Celica', 'Celica(Fallen)', 'Celica(Brave)']],
+            ['Takumi', 0, 0, ['Takumi', 'Takumi(Fallen)', 'Takumi(Winter)', 'Takumi(Summer)']],
+            ['Ephraim', 0, 0, ['Ephraim', 'Ephraim(Fire)', 'Ephraim(Brave)', 'Ephraim(Winter)']],
+            ['Tharja', 0, 0, ['Tharja', 'Tharja(Winter)', 'Tharja(Bride)', 'Rhajat']],
+            ['Cordelia', 0, 0, ['Cordelia', 'Cordelia(Bride)', 'Cordelia(Summer)', 'Caeldori']],
+            ['Olivia', 0, 0, ['Olivia(Launch)', 'Olivia(Performing)', 'Olivia(Traveler)']],
+            ['Ryoma', 0, 0, ['Ryoma', 'Ryoma(Supreme)', 'Ryoma(Festival)', 'Ryoma(Bath)']],
+            ['Marth', 0, 0, ['Marth', 'Marth(Masked)', 'Marth(Groom)', 'Marth(King)']],
+            ['Eirika', 0, 0, ['Eirika(Bonds)', 'Eirika(Memories)', 'Eirika(Graceful)', 'Eirika(Winter)']],
+            ['Sakura', 0, 0, ['Sakura', 'Sakura(Halloween)', 'Sakura(Bath)']],
+            ['Elise', 0, 0, ['Elise', 'Elise(Summer)', 'Elise(Bath)']],
+            ['Hinoka', 0, 0, ['Hinoka(Launch)', 'Hinoka(Wings)', 'Hinoka(Bath)']],
+            ['Veronica', 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)']]]
+  colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
+  braves=[[],[0,0,0,0,0],[0,0,0,0,0]]
+  m=false
+  did=-1
+  msg=""
+  event.channel.send_temporary_message("Message parsed, calculating units...",2)
+  for i in 0...k.length
+    x=detect_multi_unit_alias(event,k[i],k[i],1)
+    name=nil
+    if k[i].downcase=="mathoo's"
+      m=true
+    elsif donate_trigger_word(event,k[i])>0
+      did=donate_trigger_word(event,k[i])
+    elsif !x.nil? && x[1].is_a?(Array) && x[1].length>1
+      if (i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?) || (i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?) || (i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?) || !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
+        if i>0 && i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]} #{k[i+1]}",1)
+        elsif i>0 && !detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i-1]} #{k[i]}",1)
+        elsif i<k.length-1 && !detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i]} #{k[i+1]}",1)
+        elsif !detect_multi_unit_alias(event,k[i],"#{k[i]}",1).nil?
+          x=detect_multi_unit_alias(event,k[i],"#{k[i]}",1)
+        end
+        if x[1].is_a?(Array) && x[1].length>1
+          au+=1
+          msg=extend_message(msg,"Ambiguous Unit #{au}: #{x[0]} - #{list_lift(x[1].map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"},'or')}",event)
+        else
+          name=find_unit(find_data_ex(:find_unit,x[1][0],event),event)[0]
+          summon_type=find_unit(find_data_ex(:find_unit,x[1][0],event),event)[9][0].downcase
+        end
+      else
+        au+=1
+        msg=extend_message(msg,"Ambiguous Unit #{au}: #{x[0]} - #{list_lift(x[1].map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"},'or')}",event)
+      end
+    elsif find_data_ex(:find_unit,sever(k[i]),event).length>0
+      mxx=find_data_ex(:find_unit,sever(k[i]),event)
+      name=mxx[0]
+      summon_type=mxx[9][0].downcase
+    elsif !x.nil? && !x[1].is_a?(Array)
+      mxx=find_data_ex(:find_unit,x[1],event)
+      name=mxx[0]
+      summon_type=mxx[9][0].downcase
+    elsif x.nil?
+      if i>1 && !detect_multi_unit_alias(event,k[i-2],"#{k[i-2]} #{k[i-1]} #{k[i]}",1).nil?
+      elsif i>0 && !detect_multi_unit_alias(event,k[i-1],"#{k[i-1]} #{k[i]}",1).nil?
+      elsif i<k.length-2 && !detect_multi_unit_alias(event,k[i+2],"#{k[i]} #{k[i+1]} #{k[i+2]}",1).nil?
+      elsif i<k.length-1 && !detect_multi_unit_alias(event,k[i+1],"#{k[i]} #{k[i+1]}",1).nil?
+      else
+        n+=1
+        msg=extend_message(msg,"Nonsense term #{n}: #{k[i]}",event)
+      end
+    end
+    if !name.nil?
+      u+=1
+      r=find_stats_in_string(event,sever(k[i]))
+      j=find_unit(name,event)
+      for i2 in 1...3
+        if i<4*i2
+          counters[0][i2]+=1 if j[3]=='Infantry'
+          counters[1][i2]+=1 if j[3]=='Cavalry'
+          counters[2][i2]+=1 if j[3]=='Armor'
+          counters[3][i2]+=1 if j[3]=='Flier'
+          counters[4][i2]+=1 if j[1][1]=='Tome'
+          counters[5][i2]+=1 if j[1][1]=='Dragon'
+          counters[6][i2]+=1 if j[1][1]=='Blade'
+          counters[7][i2]+=1 if j[1][1]=='Healer'
+          counters[8][i2]+=1 if j[1][1]=='Dagger'
+          counters[9][i2]+=1 if j[1][1]=='Bow'
+          counters[10][i2]+=1 if j[1][1]=='Beast'
+          counters[11][i2]+=1 if j[1][0]=='Red'
+          counters[12][i2]+=1 if j[1][0]=='Blue'
+          counters[13][i2]+=1 if j[1][0]=='Green'
+          counters[14][i2]+=1 if j[1][0]=='Colorless'
+          if ['',' '].include?(r[2]) && ['',' '].include?(r[3])
+            counters[15][i2]+=1 if summon_type.include?('y') || summon_type.include?('g') || summon_type.include?('t') || summon_type.include?('d') || summon_type.include?('f')
+            braves[i2][0]+=1 if ['Ike(Brave)','Lucina(Brave)','Lyn(Brave)','Roy(Brave)'].include?(name)
+            braves[i2][1]+=1 if ['Celica(Brave)','Ephraim(Brave)','Hector(Brave)','Veronica(Brave)'].include?(name)
+            braves[i2][2]+=1 if ['Micaiah(Brave)','Camilla(Brave)','Alm(Brave)','Eliwood(Brave)'].include?(name)
+          end
+          counters[16][i2]+=1 if [summon_type].include?('y')
+          counters[17][i2]+=1 if [summon_type].include?('g')
+          counters[18][i2]+=1 if [summon_type].include?('t')
+          if counters.length>19
+            for i3 in 19...counters.length
+              counters[i3][i2]+=1 if counters[i3][3].include?(name)
+            end
+          end
+          colors[i2][0]+=1 if j[1][0]=='Red'
+          colors[i2][1]+=1 if j[1][0]=='Blue'
+          colors[i2][2]+=1 if j[1][0]=='Green'
+          colors[i2][3]+=1 if j[1][0]=='Colorless'
+          colors[i2][4]+=1 unless ['Red','Blue','Green','Colorless'].include?(j[1][0])
+        end
+      end
+      sup='-'
+      if m && find_in_dev_units(name)>=0
+        dv=@dev_units[find_in_dev_units(name)]
+        r[0]=dv[1]
+        r[1]=dv[2]
+        r[2]=dv[3].gsub(' ','')
+        r[3]=dv[4].gsub(' ','')
+        sup=dv[5]
+      elsif did>0
+        x=donor_unit_list(did)
+        x2=x.find_index{|q| q[0]==name}
+        unless x2.nil?
+          r[0]=x[x2][1]
+          r[1]=x[x2][2]
+          r[2]=x[x2][3].gsub(' ','')
+          r[3]=x[x2][4].gsub(' ','')
+          sup=x[x2][5]
+        end
+      end
+      st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
+      b.push(st[1]+st[2]+st[3]+st[4]+st[5])
+      bane2="#{r[3]}"
+      bane2='' if r[1]>0
+      st=get_stats(event,name,40,5,0,r[2],bane2)
+      bb=0
+      bb=3 if ['',' ',nil].include?(r[2]) && r[1]>0
+      scr.push(((st[1]+st[2]+st[3]+st[4]+st[5]+bb)/5)+r[0]*5+r[1]*2+90)
+      rstar=@rarity_stars[r[0]-1]
+      rstar=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4p10:448272714210476033>','<:Icon_Rarity_5p10:448272715099406336>','<:Icon_Rarity_6p10:491487784822112256>'][r[0]-1] if r[1]>=10
+      rstar='<:Icon_Rarity_S:448266418035621888>' unless sup=='-'
+      rstar='<:Icon_Rarity_Sp10:448272715653054485>' if sup != '-' && r[1]>=10
+      msg=extend_message(msg,"Unit #{u}: #{r[0]}#{rstar} #{name}#{unit_moji(bot,event,-1,name,m)} +#{r[1]} #{"(+#{r[2]}, -#{r[3]})" if !['',' '].include?(r[2]) || !['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}  \u200B  \u200B  BST: #{b[b.length-1]}  \u200B  \u200B  Score: #{scr[scr.length-1]}+`SP`/100",event)
+    end
+  end
+  event.channel.send_temporary_message("#{event.user.mention} Units found, calculating BST and arena score...",8)
+  if braves[1].max==1
+    counters[15][1]+=braves[1][1]+braves[1][0]
+    counters[15][0][1]='Pseudo-F2P'
+  end
+  if braves[2].max==1
+    counters[15][2]+=braves[2][1]+braves[2][0]
+    counters[15][0][2]='Pseudo-F2P'
+  end
+  event << ''
+  emblem_name=['','','']
+  for i in 0...counters.length
+    cname=counters[i][0]
+    for i2 in 1...3
+      cname=counters[i][0][i2] if i==15 # F2P marker
+      if counters[i][i2]>=[[i2*4,k.length].min,2].max
+        if emblem_name[i2].length>0 && i>3 && i<10 && emblem_name[i2].split(' ').length<=2
+          emblem_name[i2]="#{cname} #{emblem_name[i2]}"
+        elsif emblem_name[i2].length>0 && i>9 && i<15 && emblem_name[i2].split(' ').length<=3
+          emblem_name[i2]="#{cname} #{emblem_name[i2]}"
+        else
+          emblem_name[i2]="#{cname} Emblem"
+        end
+      end
+    end
+  end
+  emblem_name[1]=emblem_name[1].gsub('Red Melee','Sword').gsub('Blue Melee','Lance').gsub('Green Melee','Axe')
+  emblem_name[2]=emblem_name[2].gsub('Red Melee','Sword').gsub('Blue Melee','Lance').gsub('Green Melee','Axe')
+  if b.length<=0
+    event.respond 'No units listed'
+  else
+    for i2 in 1...3
+      if counters[0,4].map{|q| q[i2]}.max<=2
+        if emblem_name[i2].length>0
+          emblem_name[i2]="#{emblem_name[i2]} Tactics"
+        else
+          emblem_name[i2]='Tactics'
+        end
+      end
+      if colors[i2].max==i2 && b.length>=i2*4
+        if emblem_name[i2].length>0
+          emblem_name[i2]="Color-balanced #{emblem_name[i2]}"
+        else
+          emblem_name[i2]='Color-balanced'
+        end
+      end
+    end
+    b2=b.inject(0){|sum,x| sum + x }
+    s2=scr.inject(0){|sum,x| sum + x }
+    xy=[155,2]
+    if b.length<=4
+      if emblem_name[1].length>0
+        msg2="__**#{emblem_name[1]} team**__"
+      else
+        msg2="__**Team**__"
+      end
+      msg2="#{msg2}\n**BST: #{b2}**\n**Advanced Arena Score: #{'%.1f' % (s2*1.0/b.length+7*b.length+xy[0])}+`SP`/#{b.length*100}**, #{'%.1f' % ((s2*1.0/b.length+7*b.length+xy[0])*2)}+`SP`/#{b.length*50} with bonus"
+      msg=extend_message(msg,msg2,event,2)
+    elsif b.length<=8
+      msg=extend_message(msg,"__**First four listed#{", which constitutes a #{emblem_name[1]} team" if emblem_name[1].length>0}**__\n**BST: #{(b[0]+b[1]+b[2]+b[3])}**\n**Advanced Arena Score: #{'%.1f' % ((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])}+`SP`/400**, #{'%.1f' % (((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])*2)}+`SP`/200 with bonus",event,2)
+      msg=extend_message(msg,"__*All listed units#{", which constitutes a #{emblem_name[2]} team" if emblem_name[2].length>0}*__\n*BST: #{b2}*\n*Advanced (pseudo)Arena Score: #{'%.1f' % (s2*1.0/b.length+7*b.length+xy[0])}+`SP`/#{b.length*100}*, #{'%.1f' % ((s2*1.0/b.length+7*b.length+xy[0])*2)}+`SP`/#{b.length*50} with bonus",event,2)
+    else
+      msg=extend_message(msg,"__**First four listed#{", which constitutes a #{emblem_name[1]} team" if emblem_name[1].length>0}**__\n**BST: #{b[0]+b[1]+b[2]+b[3]}**\n**Advanced Arena Score: #{'%.1f' % ((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])}+`SP`/400**, #{'%.1f' % (((scr[0]+scr[1]+scr[2]+scr[3])/4.0+28+xy[0])*2)}+`SP`/200 with bonus",event,2)
+      msg=extend_message(msg,"__*First eight listed#{", which constitutes a #{emblem_name[2]} team" if emblem_name[2].length>0}*__\n*BST: #{b[0]+b[1]+b[2]+b[3]+b[4]+b[5]+b[6]+b[7]}*\n*Advanced (pseudo)Arena Score: #{'%.1f' % ((scr[0]+scr[1]+scr[2]+scr[3]+scr[4]+scr[5]+scr[6]+scr[7])/8.0+56+xy[0])}+`SP`/800*, #{'%.1f' % (((scr[0]+scr[1]+scr[2]+scr[3]+scr[4]+scr[5]+scr[6]+scr[7])/8.0+56+xy[0])*2)}+`SP`/400 with bonus",event,2)
+      msg=extend_message(msg,"__All listed units__\nBST: #{b2}\nAdvanced (pseudo)Arena Score: #{'%.1f' % (s2*1.0/b.length+7*b.length+xy[0])}+`SP`/#{b.length*100}, #{'%.1f' % ((s2*1.0/b.length+7*b.length+xy[0])*2)}+`SP`/#{b.length*50} with bonus",event,2)
+    end
+  end
+  msg=extend_message(msg,"Please note that activated blessings will add 2 points to this score, or 4 points with bonus.",event,2)
+  event.respond msg
 end
