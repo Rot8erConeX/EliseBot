@@ -576,7 +576,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{uuu}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{uuu}#{" *(in this server only)*" unless mode==1}")
-        elsif mode==1 && !event.server.nil?
+        elsif !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -616,7 +616,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
-        elsif mode==1 && !event.server.nil?
+        elsif !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -637,7 +637,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
-        elsif mode==1 && !event.server.nil?
+        elsif !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -658,7 +658,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
-        elsif mode==1 && !event.server.nil?
+        elsif !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -679,7 +679,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
-        elsif mode==1 && !event.server.nil?
+        elsif !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -774,7 +774,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{uuu}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{uuu}#{" *(in this server only)*" unless mode==1}")
-        elsif mode==1 && !event.server.nil?
+        elsif !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -813,7 +813,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
-        elsif mode==1 && !event.server.nil?
+        elsif !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -833,7 +833,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
-        elsif mode==1 && !event.server.nil?
+        elsif !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -853,7 +853,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
-        elsif mode==1 && !event.server.nil?
+        elsif !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -873,7 +873,7 @@ def list_unit_aliases(event,args,bot,mode=0)
           f.push("#{n[i][0]} = #{n[i][1]}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
           f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
-        elsif mode==1 && !event.server.nil?
+        elsif !event.server.nil?
         else
           a=[]
           for j in 0...n[i][2].length
@@ -967,6 +967,8 @@ def list_unit_aliases(event,args,bot,mode=0)
       end
     end
   elsif !struct.nil?
+    k=0
+    k=event.server.id unless event.server.nil?
     n=@aliases.reject{|q| q[0]!='Structure'}.map{|q| [q[1],q[2],q[3]]}
     n=n.reject{|q| q[2].nil?} if mode==1
     semote=''
@@ -1024,6 +1026,8 @@ def list_unit_aliases(event,args,bot,mode=0)
       end
     end
   elsif !azry.nil?
+    k=0
+    k=event.server.id unless event.server.nil?
     n=@aliases.reject{|q| q[0]!='Accessory'}.map{|q| [q[1],q[2],q[3]]}
     n=n.reject{|q| q[2].nil?} if mode==1
     azry=[azry] unless azry.is_a?(Array)
@@ -1060,6 +1064,8 @@ def list_unit_aliases(event,args,bot,mode=0)
       end
     end
   elsif !itmu.nil?
+    k=0
+    k=event.server.id unless event.server.nil?
     n=@aliases.reject{|q| q[0]!='Item'}.map{|q| [q[1],q[2],q[3]]}
     n=n.reject{|q| q[2].nil?} if mode==1
     itmu=[itmu] unless itmu.is_a?(Array)
@@ -1228,6 +1234,8 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Skill'
     unt=find_skill(unit,event)
     checkstr2=unt[0].gsub(' ','').downcase
+    event.respond "Adding aliases to skills is currently disabled due to an overhaul being made to the skill system.  Please be patient as this may take a few days."
+    return nil
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Structure'
     unt=find_structure(unit,event)
     if unt.is_a?(Array) && unt.length<=1
@@ -1795,14 +1803,14 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     w2="Carrot#{'+' if w[0].include?('+')}...just a carrot#{'+' if w[0].include?('+')}"
     w2="Carrot Sword#{'+' if w[0].include?('+')}" if u[1][0]=='Red'
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Blue Egg','Green Egg','Blue Gift','Green Gift'].include?(w[0].gsub('+',''))
+  elsif ['Red Egg','Blue Egg','Green Egg','Red Gift','Blue Gift','Green Gift'].include?(w[0].gsub('+',''))
     t='Egg'
-    t='Gift' if ['Blue Gift','Green Gift'].include?(w[0].gsub('+',''))
+    t='Gift' if ['Red Gift','Blue Gift','Green Gift'].include?(w[0].gsub('+',''))
+    return weapon_legality(event,name,"Red #{t}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
     return weapon_legality(event,name,"Blue #{t}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
     return weapon_legality(event,name,"Green #{t}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
-    return "~~#{w2}~~" unless ['Colorless','Red'].include?(u[1][0])
+    return "~~#{w2}~~" unless ['Colorless'].include?(u[1][0])
     w2="Empty #{t}#{'+' if w[0].include?('+')}"
-    w2="Red #{t}#{'+' if w[0].include?('+')}" if u[1][0]=='Red'
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
   elsif ['Safeguard','Vanguard'].include?(w[0].gsub('+',''))
     return weapon_legality(event,name,"Safeguard#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
@@ -2730,7 +2738,6 @@ def combined_BST(event,args,bot)
               k[0]=k[0][0]
             end
           end
-          puts k.to_s
           s1=first_sub(s1,k[1],'')
           s2=first_sub(s2,k[1],k[0])
         end
