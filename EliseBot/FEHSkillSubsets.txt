@@ -67,6 +67,7 @@
 ['Bathing', ['bathers', 'bathhouse', 'bathouse', 'bath', 'bathing'], 'Weapon']
 ["Valentine's", ["valentine's", 'valentine', 'valentines', 'love', 'seasonal', 'seasonals'], 'Weapon']
 ['Spring', ['spring', 'easter', 'bunny', 'bunnies', 'seasonal', 'seasonals'], 'Weapon']
+['Picnic', ['picnic', 'lunch'], 'Weapon']
 ['Bride', ['brides', 'bride', 'waifu', 'wedding', 'bridal', 'love', 'seasonal', 'seasonals'], 'Weapon']
 ['Summer', ['summer', 'swimsuit', 'beach', 'seasonal', 'seasonals'], 'Weapon']
 ['Fall', ['fall', 'autumn', 'seasonal', 'seasonals'], 'Weapon']

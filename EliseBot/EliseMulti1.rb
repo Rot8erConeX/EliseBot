@@ -518,7 +518,7 @@ def list_unit_aliases(event,args,bot,mode=0)
   itmu=nil
   unless args.length.zero?
     unit=find_unit(args.join(''),event)[0] unless find_unit(args.join(''),event).length<=0
-    skill=find_skill(args.join(''),event)[0] unless find_skill(args.join(''),event).length<=0
+    skill=find_skill(args.join(''),event) unless find_skill(args.join(''),event).length<=0
     struct=find_structure(args.join(''),event) unless find_structure(args.join(''),event).length<=0
     azry=find_accessory(args.join(''),event)[0] unless find_accessory(args.join(''),event).length<=0
     itmu=find_item_feh(args.join(''),event)[0] unless find_item_feh(args.join(''),event).length<=0
@@ -612,10 +612,19 @@ def list_unit_aliases(event,args,bot,mode=0)
       n=n.reject{|q| q[2].nil?} if mode==1
       f.push('__**Skill aliases**__')
       for i in 0...n.length
-        if n[i][2].nil?
-          f.push("#{n[i][0]} = #{n[i][1]}")
+        uuu=n[i][1]
+        unless uuu.is_a?(String)
+          uu2=@skills.find_index{|q| q[0]==uuu}
+          uu2=@skills[uu2] unless uu2.nil?
+          unless uu2.nil?
+            uuu="#{uu2[1]}#{"#{' ' unless uu2[1][-1,1]=='+'}#{uu2[2]}" unless ['-','example'].include?(uu2[2]) || ['Weapon','Assist','Special'].include?(uu2[6])}"
+          end
+        end
+        if n[i][0]==uuu || n[i][0]==uuu.gsub(' ','')
+        elsif n[i][2].nil?
+          f.push("#{n[i][0]} = #{uuu}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{uuu}#{" *(in this server only)*" unless mode==1}")
         elsif !event.server.nil?
         else
           a=[]
@@ -625,7 +634,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0]} = #{n[i][1]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{uuu} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
     elsif has_any?(args,['structures','structure','struct','structs'])
@@ -735,7 +744,15 @@ def list_unit_aliases(event,args,bot,mode=0)
         n=n.reject{|q| q[2].nil? || !q[2].include?(event.server.id)} if mode==1
         msg=extend_message(msg,'__**Skill aliases**__',event,2)
         for i in 0...n.length
-          msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event) unless mode==1 && !event.server.nil? && !n[i][2].nil? && !n[i][2].include?(event.server.id)
+          uuu=n[i][1]
+          unless uuu.is_a?(String)
+            uu2=@skills.find_index{|q| q[0]==uuu}
+            uu2=@skills[uu2] unless uu2.nil?
+            unless uu2.nil?
+              uuu="#{uu2[1]}#{"#{' ' unless uu2[1][-1,1]=='+'}#{uu2[2]}" unless ['-','example'].include?(uu2[2]) || ['Weapon','Assist','Special'].include?(uu2[6])}"
+            end
+          end
+          msg=extend_message(msg,"#{n[i][0]} = #{uuu}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event) unless mode==1 && !event.server.nil? && !n[i][2].nil? && !n[i][2].include?(event.server.id)
         end
         n=@aliases.reject{|q| q[0]!='Structure'}.map{|q| [q[1],q[2],q[3]]}
         n=n.reject{|q| q[2].nil? || !q[2].include?(event.server.id)} if mode==1
@@ -809,10 +826,19 @@ def list_unit_aliases(event,args,bot,mode=0)
       n=n.reject{|q| q[2].nil?} if mode==1
       f.push("\n__**Skill aliases**__")
       for i in 0...n.length
-        if n[i][2].nil?
-          f.push("#{n[i][0]} = #{n[i][1]}")
+        uuu=n[i][1]
+        unless uuu.is_a?(String)
+          uu2=@skills.find_index{|q| q[0]==uuu}
+          uu2=@skills[uu2] unless uu2.nil?
+          unless uu2.nil?
+            uuu="#{uu2[1]}#{"#{' ' unless uu2[1][-1,1]=='+'}#{uu2[2]}" unless ['-','example'].include?(uu2[2]) || ['Weapon','Assist','Special'].include?(uu2[6])}"
+          end
+        end
+        if n[i][0]==uuu || n[i][0]==uuu.gsub(' ','')
+        elsif n[i][2].nil?
+          f.push("#{n[i][0]} = #{uuu}")
         elsif !event.server.nil? && n[i][2].include?(event.server.id)
-          f.push("#{n[i][0]} = #{n[i][1]}#{" *(in this server only)*" unless mode==1}")
+          f.push("#{n[i][0]} = #{uuu}#{" *(in this server only)*" unless mode==1}")
         elsif !event.server.nil?
         else
           a=[]
@@ -822,7 +848,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               a.push("*#{bot.server(n[i][2][j]).name}*") unless event.user.on(n[i][2][j]).nil?
             end
           end
-          f.push("#{n[i][0]} = #{n[i][1]} (in the following servers: #{list_lift(a,'and')})") if a.length>0
+          f.push("#{n[i][0]} = #{uuu} (in the following servers: #{list_lift(a,'and')})") if a.length>0
         end
       end
       n=@aliases.reject{|q| q[0]!='Structure'}.map{|q| [q[1],q[2],q[3]]}
@@ -936,17 +962,19 @@ def list_unit_aliases(event,args,bot,mode=0)
     if !skill.nil?
       n=@aliases.reject{|q| q[0]!='Skill'}.map{|q| [q[1],q[2],q[3]]}
       n=n.reject{|q| q[2].nil?} if mode==1
-      skill=[skill] unless skill.is_a?(Array)
+      skill=[skill] unless skill[0].is_a?(Array)
       for i1 in 0...skill.length
-        u=find_skill(skill[i1],event)
-        f.push("\n#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u[0].gsub('Bladeblade','Laevatein')}#{skill_moji(u,event,bot)}**#{"'s server-specific aliases__" if mode==1}")
-        u=u[0]
+        u=skill[i1]
+        u2=u[0]
+        f.push("\n#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u[1].gsub('Bladeblade','Laevatein')}#{"#{' ' unless u[1][-1,1]=='+'}#{u[2]}" unless ['-','example'].include?(u[2]) || ['Weapon','Assist','Special'].include?(u[6])}#{skill_moji_2(u,event,bot)}**#{" [Skl-##{u2}]" if @shardizard==4}#{"'s server-specific aliases__" if mode==1}")
+        u="#{u[1]}#{"#{' ' unless u[1][-1,1]=='+'}#{u[2]}" unless ['-','example'].include?(u[2]) || ['Weapon','Assist','Special'].include?(u[6])}"
         f.push(u) if u=='Bladeblade'
         f.push(u.gsub('(','').gsub(')','').gsub(' ','')) if u.include?('(') || u.include?(')') || u.include?(' ')
         for i in 0...n.length
           mtch=false
           mtch=true if n[i][1].is_a?(String) && n[i][1].downcase==u.downcase
-         # mtch=true if !n[i][1].is_a?(String) && n[i][1]==u2
+          mtch=true if !n[i][1].is_a?(String) && n[i][1]==u2
+          mtch=false if !n[i][1].is_a?(String) && n[i][0].downcase==u.downcase
           if mtch
             if event.server.nil? && !n[i][2].nil?
               a=[]
@@ -1233,9 +1261,12 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     cck=unt[12].split(', ')[1][0,1].downcase if unt[12].split(', ').length>1
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Skill'
     unt=find_skill(unit,event)
-    checkstr2=unt[0].gsub(' ','').downcase
-    event.respond "Adding aliases to skills is currently disabled due to an overhaul being made to the skill system.  Please be patient as this may take a few days."
-    return nil
+    unt=unt[0] if unt[0].is_a?(Array)
+    checkstr2="#{unt[1]}#{"#{' ' unless unt[1][-1,1]=='+'}#{unt[2]}" unless ['-','example'].include?(unt[2]) || ['Weapon','Assist','Special'].include?(unt[6])}".gsub(' ','')
+    unless @shardizard==4
+      event.respond "Adding aliases to skills is currently disabled due to an overhaul being made to the skill system.  Please be patient as this may take a few days."
+      return nil
+    end
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Structure'
     unt=find_structure(unit,event)
     if unt.is_a?(Array) && unt.length<=1
@@ -1302,6 +1333,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   m=nil if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?
   unit=unt[0]
   unit=unt[8] if type[1]=='Unit'
+  unit="#{unt[1]}#{"#{' ' unless unt[1][-1,1]=='+'}#{unt[2]}" unless ['-','example'].include?(unt[2]) || ['Weapon','Assist','Special'].include?(unt[6])}" if type[1]=='Skill'
   double=false
   for i in 0...@aliases.length
     mtch=false
@@ -1329,11 +1361,11 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     end
   end
   unless double
-    @aliases.push([type[1].gsub('*',''),newname,unit,m].compact)
+    @aliases.push([type[1].gsub('*',''),newname,unt[0],m].compact)
     @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-    bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unt[0]}*.\nPlease test to be sure that the alias stuck.")
+    bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unit}*.\nPlease test to be sure that the alias stuck.")
     event.respond "**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unt[0]}*." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unt[0]}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
+    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
   end
   @aliases.uniq!
   nzzz=@aliases.map{|a| a}
@@ -1356,354 +1388,145 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
 end
 
 def list_collapse(list,mode=0)
-  list=list.uniq
-  newlist=[]
-  for i in 0...list.length
-    unless list[i].nil? || (list[i][0][0,10]=='Falchion (' && skill_include?(list,'Falchion')>0) || (list[i][0][0,14]=='Missiletainn (' && skill_include?(list,'Missiletainn')>0)
-      if skill_include?(list,"#{list[i][0]}+")>=0
-        list[i][0]="#{list[i][0]}[+]"
-        if list[i][0]=='Fire Breath[+]' && skill_include?(list,'Flametongue')>=0 && (mode/2)%2==1
-          if skill_include?(list,'Flametongue+')>=0
-            list[i][0]='Fire Breath[+]/Flametongue[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Flametongue+')][15]
-            list[skill_include?(list,'Flametongue+')]=nil if skill_include?(list,'Flametongue+')>=0
-            newlist[skill_include?(newlist,'Flametongue+')]=nil if skill_include?(newlist,'Flametongue+')>=0
+  list2=list.map{|q| "#{'-' if q[0]<0}#{q[0].abs/10}"}.uniq
+  list3=[]
+  for i in 0...list2.length
+    m=list.reject{|q| "#{'-' if q[0]<0}#{q[0].abs/10}" != list2[i]}
+    n=m[-1]
+    if ['Falchion','Missiletainn'].include?(m[0][1])
+      for i2 in 0...m.length
+        list3.push(m[i2]) unless ['Falchion','Missiletainn'].include?(m[i2][1])
+      end
+    elsif ['Weapon','Assist','Special'].include?(n[6])
+      x=m.map{|q| q[1].gsub('~~','')}
+      if (mode/2)%2==0 && ['Fire Breath','Fire Breath+','Flametongue','Flametongue+'].include?(x[0])
+        if n[1].include?('Flametongue')
+          if x.include?('Fire Breath') && x.include?('Fire Breath+')
+            m[1][1]='Fire Breath[+]'
+            list3.push(m[1])
           else
-            list[i][0]='Fire Breath[+]/Flametongue'
-            list[i][1]=200
+            list3.push(m[0])
           end
-          list[skill_include?(list,'Fire Breath+')]=nil if skill_include?(list,'Fire Breath+')>=0
-          newlist[skill_include?(newlist,'Fire Breath+')]=nil if skill_include?(newlist,'Fire Breath+')>=0
-          list[skill_include?(list,'Flametongue')]=nil if skill_include?(list,'Flametongue')>=0
-          newlist[skill_include?(newlist,'Flametongue')]=nil if skill_include?(newlist,'Flametongue')>=0
-        elsif list[i][0]=='Fire Breath[+]' && skill_include?(list,'Flametongue[+]')>=0 && (mode/2)%2==1
-          list[i][0]='Fire Breath[+]/Flametongue[+]'
-          list[i][1]=300
-          list[i][15]=list[skill_include?(list,'Flametongue+')][15]
-          list[skill_include?(list,'Fire Breath+')]=nil if skill_include?(list,'Fire Breath+')>=0
-          newlist[skill_include?(newlist,'Fire Breath+')]=nil if skill_include?(newlist,'Fire Breath+')>=0
-          list[skill_include?(list,'Flametongue[+]')]=nil if skill_include?(list,'Flametongue[+]')>=0
-          newlist[skill_include?(newlist,'Flametongue[+]')]=nil if skill_include?(newlist,'Flametongue[+]')>=0
-        elsif list[i][0]=='Fire Breath[+]'
-          list[i][1]=100
-        else
-          list[i][1]=300
-          list[i][15]=list[skill_include?(list,"#{list[i][0].gsub('[+]','')}+")][15]
         end
-        list[skill_include?(list,"#{list[i][0].gsub('[+]','')}+")]=nil if skill_include?(list,"#{list[i][0].gsub('[+]','')}+")>=0
-      elsif list[i][0].include?('Iron ') && skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")>=0 && (mode/2)%2==1
-        if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")>=0
-          if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")>=0
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")][15]
-            list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")>=0
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
-            list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")>=0
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")>=0
-            list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}+")>=0
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}+")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}+")>=0
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}[+]")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}[+]")>=0
-            list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel/Silver[+]')}"
+        n[1]=n[1].gsub('+','[+]') if n[1].include?('+') && x.include?(n[1].gsub('+',''))
+      elsif x.include?("#{x[0]}+")
+        n[1]="#{x[0]}[+]"
+        n[1]="#{x[0]}[+]/Flametongue" if x.include?('Flametongue')
+        n[1]="#{x[0]}[+]/Flametongue+" if x.include?('Flametongue+')
+        n[1]="#{x[0]}[+]/Flametongue[+]" if x.include?('Flametongue') && x.include?('Flametongue+')
+      elsif x[0].gsub('+','')=='Fire Breath'
+        n[1]="#{x[0]}/Flametongue" if x.include?('Flametongue')
+        n[1]="#{x[0]}/Flametongue+" if x.include?('Flametongue+')
+        n[1]="#{x[0]}/Flametongue[+]" if x.include?('Flametongue') && x.include?('Flametongue+')
+      elsif (mode/2)%2==0 && ['Ruin','Flux','Fenrir','Fenrir+','Fire','Elfire','Bolganone','Bolganone+','Thunder','Elthunder','Thoron','Thoron+','Light','Ellight','Shine','Shine+','Wind','Elwind','Rexcalibur','Rexcalibur+'].include?(x[0])
+        for i2 in 0...m.length
+          list3.push(m[i2]) unless m[i2][1].gsub('+','')==n[1].gsub('+','')
+        end
+        n[1]=n[1].gsub('+','[+]') if n[1].include?('+') && x.include?(n[1].gsub('+',''))
+      elsif ['Ruin','Flux','Fenrir','Fenrir+'].include?(x[0])
+        n[1]=''
+        n[1]="Ruin" if x.include?('Ruin')
+        n[1]="#{n[1]}/Flux" if x.include?('Flux')
+        n[1]="#{n[1]}/Fenrir" if x.include?('Fenrir')
+        if x.include?('Fenrir+')
+          if n[1].include?('Fenrir')
+            n[1]="#{n[1]}[+]"
           else
-            list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
-            list[skill_include?(list,"#{list[i][0].gsub('Iron','Silver')}")]=nil
-            newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Silver')}")>=0
-            list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel/Silver')}"
-            list[i][1]=200
-          end
-        else
-          list[skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(list,"#{list[i][0].gsub('Iron','Steel')}")>=0
-          newlist[skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")]=nil if skill_include?(newlist,"#{list[i][0].gsub('Iron','Steel')}")>=0
-          list[i][0]="#{list[i][0].gsub('Iron','Iron/Steel')}"
-          list[i][1]=100
-        end
-      elsif skill_include?(list,"El#{list[i][0].downcase}")>=0 && list[i][5].include?('Tome Users Only') && list[i][4]=='Weapon' && (mode/2)%2==1
-        v2=list[i][0].downcase
-        list[i][0]="[El]#{list[i][0]}"
-        list[i][1]=100
-        if list[i][0]=='[El]Fire'
-          if skill_include?(list,'Bolganone')>=0
-            if skill_include?(list,'Bolganone+')>=0
-              list[i][0]='[El]Fire/Bolganone[+]'
-              list[i][1]=300
-              list[i][15]=list[skill_include?(list,'Bolganone+')][15]
-              list[skill_include?(list,'Bolganone+')]=nil if skill_include?(list,'Bolganone+')>=0
-              newlist[skill_include?(newlist,'Bolganone+')]=nil if skill_include?(newlist,'Bolganone+')>=0
-            else
-              list[i][0]='[El]Fire/Bolganone'
-              list[i][1]=200
-            end
-            list[skill_include?(list,'Bolganone')]=nil if skill_include?(list,'Bolganone')>=0
-            newlist[skill_include?(newlist,'Bolganone')]=nil if skill_include?(newlist,'Bolganone')>=0
-          elsif skill_include?(list,'Bolganone[+]')>=0
-            list[i][0]='[El]Fire/Bolganone[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Bolganone[+]')][15]
-            list[skill_include?(list,'Bolganone[+]')]=nil if skill_include?(list,'Bolganone[+]')>=0
-            newlist[skill_include?(newlist,'Bolganone[+]')]=nil if skill_include?(newlist,'Bolganone[+]')>=0
-          end
-        elsif list[i][0]=='[El]Thunder'
-          if skill_include?(list,'Thoron')>=0
-            if skill_include?(list,'Thoron+')>=0
-              list[i][0]='[El]Thunder/Thoron[+]'
-              list[i][1]=300
-              list[i][15]=list[skill_include?(list,'Thoron+')][15]
-              list[skill_include?(list,'Thoron+')]=nil if skill_include?(list,'Thoron+')>=0
-              newlist[skill_include?(newlist,'Thoron+')]=nil if skill_include?(newlist,'Thoron+')>=0
-            else
-              list[i][0]='[El]Thunder/Thoron'
-              list[i][1]=200
-            end
-            list[skill_include?(list,'Thoron')]=nil if skill_include?(list,'Thoron')>=0
-            newlist[skill_include?(newlist,'Thoron')]=nil if skill_include?(newlist,'Thoron')>=0
-          elsif skill_include?(list,'Thoron[+]')>=0
-            list[i][0]='[El]Thunder/Thoron[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Thoron[+]')][15]
-            list[skill_include?(list,'Thoron[+]')]=nil if skill_include?(list,'Thoron[+]')>=0
-            newlist[skill_include?(newlist,'Thoron[+]')]=nil if skill_include?(newlist,'Thoron[+]')>=0
-          end
-        elsif list[i][0]=='[El]Light'
-          if skill_include?(list,'Shine')>=0
-            if skill_include?(list,'Shine+')>=0
-              list[i][0]='[El]Light/Shine[+]'
-              list[i][1]=300
-              list[i][15]=list[skill_include?(list,'Shine+')][15]
-              list[skill_include?(list,'Shine+')]=nil if skill_include?(list,'Shine+')>=0
-              newlist[skill_include?(newlist,'Shine+')]=nil if skill_include?(newlist,'Shine+')>=0
-            else
-              list[i][0]='[El]Light/Shine'
-              list[i][1]=200
-            end
-            list[skill_include?(list,'Shine')]=nil if skill_include?(list,'Shine')>=0
-            newlist[skill_include?(newlist,'Shine')]=nil if skill_include?(newlist,'Shine')>=0
-          elsif skill_include?(list,'Shine[+]')>=0
-            list[i][0]='[El]Light/Shine[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Shine[+]')][15]
-            list[skill_include?(list,'Shine[+]')]=nil if skill_include?(list,'Shine[+]')>=0
-            newlist[skill_include?(newlist,'Shine[+]')]=nil if skill_include?(newlist,'Shine[+]')>=0
-          end
-        elsif list[i][0]=='[El]Wind'
-          if skill_include?(list,'Rexcalibur')>=0
-            if skill_include?(list,'Rexcalibur+')>=0
-              list[i][0]='[El]Wind/Rexcalibur[+]'
-              list[i][1]=300
-              list[i][15]=list[skill_include?(list,'Rexcalibur+')][15]
-              list[skill_include?(list,'Rexcalibur+')]=nil if skill_include?(list,'Rexcalibur+')>=0
-              newlist[skill_include?(newlist,'Rexcalibur+')]=nil if skill_include?(newlist,'Rexcalibur+')>=0
-            else
-              list[i][0]='[El]Wind/Rexcalibur'
-              list[i][1]=200
-            end
-            list[skill_include?(list,'Rexcalibur')]=nil if skill_include?(list,'Rexcalibur')>=0
-            newlist[skill_include?(newlist,'Rexcalibur')]=nil if skill_include?(newlist,'Rexcalibur')>=0
-          elsif skill_include?(list,'Rexcalibur[+]')>=0
-            list[i][0]='[El]Wind/Rexcalibur[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Rexcalibur[+]')][15]
-            list[skill_include?(list,'Rexcalibur[+]')]=nil if skill_include?(list,'Rexcalibur[+]')>=0
-            newlist[skill_include?(newlist,'Rexcalibur[+]')]=nil if skill_include?(newlist,'Rexcalibur[+]')>=0
+            n[1]="#{n[1]}/Fenrir+"
           end
         end
-        list[skill_include?(list,"El#{v2}")]=nil
-        newlist[skill_include?(newlist,"El#{v2}")]=nil if skill_include?(newlist,"El#{v2}")
-      elsif list[i][0]=='Whelp (Infantry)' && skill_include?(list,'Yearling (Infantry)')>=0 && (mode/2)%2==1
-        if skill_include?(list,'Adult (Infantry)')>=0
-          list[i][0]='Whelp/Yearling/Adult (Infantry)'
-          list[i][1]=200
-          list[skill_include?(list,'Adult (Infantry)')]=nil if skill_include?(list,'Adult (Infantry)')>=0
-          newlist[skill_include?(newlist,'Adult (Infantry)')]=nil if skill_include?(newlist,'Adult (Infantry)')>=0
-        else
-          list[i][0]='Whelp/Yearling (Infantry)'
-          list[i][1]=100
-        end
-        list[skill_include?(list,'Yearling (Infantry)')]=nil
-        newlist[skill_include?(newlist,'Yearling (Infantry)')]=nil if skill_include?(newlist,'Yearling (Infantry)')>=0
-      elsif list[i][0]=='Hatchling (Flier)' && skill_include?(list,'Fledgeling (Flier)')>=0 && (mode/2)%2==1
-        if skill_include?(list,'Adult (Flier)')>=0
-          list[i][0]='Hatchling/Fledgeling/Adult (Flier)'
-          list[i][1]=200
-          list[skill_include?(list,'Adult (Flier)')]=nil if skill_include?(list,'Adult (Flier)')>=0
-          newlist[skill_include?(newlist,'Adult (Flier)')]=nil if skill_include?(newlist,'Adult (Flier)')>=0
-        else
-          list[i][0]='Hatchling/Fledgeling (Flier)'
-          list[i][1]=100
-        end
-        list[skill_include?(list,'Fledgeling (Flier)')]=nil
-        newlist[skill_include?(newlist,'Fledgeling (Flier)')]=nil if skill_include?(newlist,'Fledgeling (Flier)')>=0
-      elsif list[i][0]=='Flux' && skill_include?(list,'Ruin')>=0 && (mode/2)%2==1
-        if skill_include?(list,'Fenrir')>=0
-          if skill_include?(list,'Fenrir+')>=0
-            list[i][0]='Flux/Ruin/Fenrir[+]'
-            list[i][1]=300
-            list[i][15]=list[skill_include?(list,'Fenrir+')][15]
-            list[skill_include?(list,'Fenrir+')]=nil if skill_include?(list,'Fenrir+')>=0
-            newlist[skill_include?(newlist,'Fenrir+')]=nil if skill_include?(newlist,'Fenrir+')>=0
+      elsif ['Fire','Elfire','Bolganone','Bolganone+'].include?(x[0])
+        n[1]=''
+        n[1]="Fire" if x.include?('Fire')
+        n[1]="Elfire" if x.include?('Elfire')
+        n[1]="[El]Fire" if x.include?('Fire') && x.include?('Elfire')
+        n[1]="#{n[1]}/Bolganone" if x.include?('Bolganone')
+        if x.include?('Bolganone+')
+          if n[1].include?('Bolganone')
+            n[1]="#{n[1]}[+]"
           else
-            list[i][0]='Flux/Ruin/Fenrir'
-            list[i][1]=200
+            n[1]="#{n[1]}/Bolganone+"
           end
-          list[skill_include?(list,'Fenrir')]=nil if skill_include?(list,'Fenrir')>=0
-          newlist[skill_include?(newlist,'Fenrir')]=nil if skill_include?(newlist,'Fenrir')>=0
-        elsif skill_include?(list,'Fenrir[+]')>=0
-          list[i][0]='Flux/Ruin/Fenrir[+]'
-          list[i][1]=300
-          list[i][15]=list[skill_include?(list,'Fenrir[+]')][15]
-          list[skill_include?(list,'Fenrir[+]')]=nil if skill_include?(list,'Fenrir[+]')>=0
-          newlist[skill_include?(newlist,'Fenrir[+]')]=nil if skill_include?(newlist,'Fenrir[+]')>=0
-        else
-          list[i][0]='Flux/Ruin'
-          list[i][1]=100
         end
-        list[skill_include?(list,'Ruin')]=nil
-        newlist[skill_include?(newlist,'Ruin')]=nil if skill_include?(newlist,'Ruin')>=0
-      elsif list[i][0][list[i][0].length-1,1].to_i.to_s==list[i][0][list[i][0].length-1,1]
-        v=list[i][0].gsub(list[i][0].scan(/([^0-9])+?/).join,"").to_i
-        v2=list[i][0].scan(/([^0-9])+?/).join
-        if skill_include?(list,"#{v2}#{v+1}")>=0
-          if skill_include?(list,"#{v2}#{v+2}")>=0
-            if skill_include?(list,"#{v2}#{v+3}")>=0
-              if skill_include?(list,"#{v2}#{v+4}")>=0
-                if skill_include?(list,"#{v2}#{v+5}")>=0
-                  if skill_include?(list,"#{v2}#{v+6}")>=0
-                    if skill_include?(list,"#{v2}#{v+7}")>=0
-                      if skill_include?(list,"#{v2}#{v+8}")>=0
-                        if skill_include?(list,"#{v2}#{v+9}")>=0
-                          list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}/#{v+8}/#{v+9}"
-                          list[i][1]=list[skill_include?(list,"#{v2}#{v+9}")][1]*1
-                          list[skill_include?(list,"#{v2}#{v+9}")]=nil if skill_include?(list,"#{v2}#{v+9}")>=0
-                        else
-                          list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}/#{v+8}"
-                          list[i][1]=list[skill_include?(list,"#{v2}#{v+8}")][1]*1
-                        end
-                        list[skill_include?(list,"#{v2}#{v+8}")]=nil if skill_include?(list,"#{v2}#{v+8}")>=0
-                      else
-                        list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}/#{v+7}"
-                        list[i][1]=list[skill_include?(list,"#{v2}#{v+7}")][1]*1
-                      end
-                      list[skill_include?(list,"#{v2}#{v+7}")]=nil if skill_include?(list,"#{v2}#{v+7}")>=0
-                    else
-                      list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}/#{v+6}"
-                      list[i][1]=list[skill_include?(list,"#{v2}#{v+6}")][1]*1
-                    end
-                    list[skill_include?(list,"#{v2}#{v+6}")]=nil if skill_include?(list,"#{v2}#{v+6}")>=0
-                  else
-                    list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}/#{v+5}"
-                    list[i][1]=list[skill_include?(list,"#{v2}#{v+5}")][1]*1
-                  end
-                  list[skill_include?(list,"#{v2}#{v+5}")]=nil if skill_include?(list,"#{v2}#{v+5}")>=0
-                else
-                  list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}/#{v+4}"
-                  list[i][1]=list[skill_include?(list,"#{v2}#{v+4}")][1]*1
-                end
-                list[skill_include?(list,"#{v2}#{v+4}")]=nil if skill_include?(list,"#{v2}#{v+4}")>=0
-              else
-                list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}/#{v+3}"
-                list[i][1]=list[skill_include?(list,"#{v2}#{v+3}")][1]*1
-              end
-              list[skill_include?(list,"#{v2}#{v+3}")]=nil if skill_include?(list,"#{v2}#{v+3}")>=0
-            else
-              list[i][0]="#{v2}#{v}/#{v+1}/#{v+2}"
-              list[i][1]=list[skill_include?(list,"#{v2}#{v+2}")][1]*1
-            end
-            list[skill_include?(list,"#{v2}#{v+2}")]=nil if skill_include?(list,"#{v2}#{v+2}")>=0
+      elsif ['Thunder','Elthunder','Thoron','Thoron+'].include?(x[0])
+        n[1]=''
+        n[1]="Thunder" if x.include?('Thunder')
+        n[1]="Elthunder" if x.include?('Elthunder')
+        n[1]="[El]Thunder" if x.include?('Thunder') && x.include?('Elthunder')
+        n[1]="#{n[1]}/Thoron" if x.include?('Thoron')
+        if x.include?('Thoron+')
+          if n[1].include?('Thoron')
+            n[1]="#{n[1]}[+]"
           else
-            list[i][0]="#{v2}#{v}/#{v+1}"
-            list[i][1]=list[skill_include?(list,"#{v2}#{v+1}")][1]*1
+            n[1]="#{n[1]}/Thoron+"
           end
-          list[skill_include?(list,"#{v2}#{v+1}")]=nil if skill_include?(list,"#{v2}#{v+1}")>=0
+        end
+      elsif ['Light','Ellight','Shine','Shine+'].include?(x[0])
+        n[1]=''
+        n[1]="Light" if x.include?('Light')
+        n[1]="Ellight" if x.include?('Ellight')
+        n[1]="[El]Light" if x.include?('Light') && x.include?('Ellight')
+        n[1]="#{n[1]}/Shine" if x.include?('Shine')
+        if x.include?('Shine+')
+          if n[1].include?('Shine')
+            n[1]="#{n[1]}[+]"
+          else
+            n[1]="#{n[1]}/Shine+"
+          end
+        end
+      elsif ['Wind','Elwind','Rexcalibur','Rexcalibur+'].include?(x[0])
+        n[1]=''
+        n[1]="Wind" if x.include?('Wind')
+        n[1]="Elwind" if x.include?('Elwind')
+        n[1]="[El]Wind" if x.include?('Wind') && x.include?('Elwind')
+        n[1]="#{n[1]}/Rexcalibur" if x.include?('Rexcalibur')
+        if x.include?('Rexcalibur+')
+          if n[1].include?('Rexcalibur')
+            n[1]="#{n[1]}[+]"
+          else
+            n[1]="#{n[1]}/Rexcalibur+"
+          end
+        end
+      elsif x[0][0,5]=='Iron ' || x[0][0,6]=='Steel '
+        if (mode/2)%2==0
+        else
+          mm=x[0].split(' ')[1]
+          n[1]=''
+          n[1]="Iron" if x.include?("Iron #{mm}")
+          n[1]="#{n[1]}/Steel" if x.include?("Steel #{mm}")
+          n[1]="#{n[1]}/Silver" if x.include?("Silver #{mm}")
+          if x.include?("Silver #{mm}+")
+            if n[1].include?('Silver')
+              n[1]="#{n[1]}[+]"
+            else
+              n[1]="#{n[1]}/Silver+"
+            end
+          end
+          n[1]="#{n[1]} #{mm}"
         end
       end
-      newlist.push(list[i].map{|q| q})
-      newlist.push(list[i].map{|q| q}) if list[i][0][0,4]=='[El]'
+      n[1]=n[1][1,n[1].length-1] if n[1][0,1]=='/'
+      list3.push(n)
+    elsif m.length<=1 || m.reject{|q| q[2].to_i.to_s != q[2]}.length<=1
+    else
+      n=m.reject{|q| q[2].to_i.to_s != q[2]}[-1].map{|q| q}
+      n[2]='-'
+      n[1]="#{n[1]}#{' ' unless n[1][-1,1]=='+'}#{m.reject{|q| q[2].to_i.to_s != q[2]}.map{|q| q[2]}.uniq.join('/')}"
+      list3.push(n)
     end
   end
-  newlist.compact!
-  newlist.uniq!
-  unless (mode/4)%2==1
-    data_load()
-    u=@units.map{|q| q}
-    for i in 0...newlist.length
-      newlist[i][0]=newlist[i][0].gsub('Bladeblade','Laevatein')
-      newlist[i][0]="~~#{newlist[i][0]}~~" if !newlist[i][13].nil? && newlist[i][13].length>0 && mode%2==1
-      m=[]
-      if newlist[i][4]=='Weapon' && newlist[i][6]!='-'
-        m=newlist[i][6].split(', ').reject{|q| !u.map{|q2| q2[0]}.include?(q) || u[u.find_index{|q2| q2[0]==q}][9][0]=='-'}
-        newlist[i][0]="*#{newlist[i][0]}*" if m.length==0
-      end
-    end
-  end
-  if (mode/8)%2==1
-    for i in 0...newlist.length
-      if newlist[i][0].include?('Iron/Steel/Silver[+] ')
-        m=newlist[i][0].gsub('Iron/Steel/Silver[+] ','')
-        newlist[i][0]=["Iron #{m}","Steel #{m}","Silver #{m}","Silver #{m}+"]
-      else
-        newlist[i][0]=newlist[i][0].split('/')
-        for i2 in 0...newlist[i][0].length
-          newlist[i][0][i2]="#{newlist[i][0][i2].gsub('[El]','')}/El#{newlist[i][0][i2].gsub('[El]','').downcase}" if newlist[i][0][i2].include?('[El]')
-          newlist[i][0][i2]="#{newlist[i][0][i2].gsub('[+]','')}/#{newlist[i][0][i2].gsub('[+]','')}+" if newlist[i][0][i2].include?('[+]')
-        end
-      end
-      newlist[i][0]=newlist[i][0].join('/').split('/')
-      if !newlist[i][0][1].nil? && newlist[i][0][1].length<=1
-        m=newlist[i][0][0][0,newlist[i][0][0].length-1]
-        for i2 in 1...newlist[i][0].length
-          newlist[i][0][i2]="#{m}#{newlist[i][0][i2]}"
-        end
-      end
-      if newlist[i][8].include?('*, *')
-        newlist[i][8]=newlist[i][8].gsub('*','').split(', ')
-      elsif newlist[i][8].include?('* or *')
-        newlist[i][8]=newlist[i][8].split('* or *').map{|q| q.gsub('*','')}
-      elsif newlist[i][8].include?('*')
-        newlist[i][8]=[newlist[i][8].gsub('*','')]
-      else
-        newlist[i][8]=[]
-      end
-    end
-    for i in 0...newlist.length
-      m=false
-      for i2 in 0...newlist.length
-        if i != i2 && !newlist[i2].nil? && has_any?(newlist[i][8],newlist[i2][0])
-          m=true
-          for i3 in 0...newlist[i][0].length
-            newlist[i2][0].push(newlist[i][0][i3])
-          end
-        end
-      end
-      newlist[i]=nil if m
-    end
-    newlist.compact!
-    for i in 0...newlist.length
-      for i2 in 0...newlist.length
-        if i != i2 && !newlist[i].nil? && !newlist[i2].nil? && has_any?(newlist[i][0],newlist[i2][0])
-          for i3 in 0...newlist[i][0].length
-            newlist[i2][0].push(newlist[i][0][i3])
-          end
-          newlist[i2][0].uniq!
-          newlist[i2][0]=newlist[i2][0].sort{|a,b| a <=> b}
-          newlist[i]=nil
-        end
-      end
-    end
-    newlist.compact!
-  end
-  newlist=newlist.sort {|a,b| a[0].gsub('~~','').gsub('*','').gsub('[El]','').downcase <=> b[0].gsub('~~','').gsub('*','').gsub('[El]','').downcase} unless (mode/8)%2==1
-  return newlist
+  list3=list3.sort {|a,b| a[1].gsub('~~','').gsub('*','').gsub('[El]','').downcase <=> b[1].gsub('~~','').gsub('*','').gsub('[El]','').downcase} unless (mode/8)%2==1
+  return list3
 end
 
 def legal_weapon(event,name,weapon,refinement='-',recursion=false)
   return '-' if weapon=='-'
   u=@units[@units.find_index{|q| q[0]==name}]
-  w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
-  unless w[0].split(' ')[0].length>u[0].length
-    return '-' if w[0][0,u[0].length].downcase==u[0].downcase && count_in(event.message.text.downcase.split(' '),u[0].downcase,1)<=1
+  w=@skills[@skills.find_index{|q| q[1]==weapon.gsub('Laevatein','Bladeblade')}]
+  unless w[1].split(' ')[0].length>u[0].length
+    return '-' if w[1][0,u[0].length].downcase==u[0].downcase && count_in(event.message.text.downcase.split(' '),u[0].downcase,1)<=1
   end
-  return '-' if w[4]!='Weapon'
+  return '-' if w[6]!='Weapon'
   if weapon=='Falchion'
     if ['FE13'].include?(u[11][0])
       weapon='Falchion (Awakening)'
@@ -1738,42 +1561,42 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     elsif ['Tome','Bow','Dagger','Healer'].include?(u[1][1])
       weapon='Missiletainn (Dusk)'
     end
-    w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
+    w=@skills[@skills.find_index{|q| q[1]==weapon.gsub('Laevatein','Bladeblade')}]
   elsif weapon=='Adult (All)'
     weapon="Adult (#{u[3]})"
-    w=@skills[@skills.find_index{|q| q[0]==weapon.gsub('Laevatein','Bladeblade')}]
+    w=@skills[@skills.find_index{|q| q[1]==weapon.gsub('Laevatein','Bladeblade')}]
   end
   w2="#{weapon}"
   w2="#{weapon} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  return "~~#{w2}~~" if w[6]!='-' && !w[6].split(', ').include?(u[0]) # prf weapons are illegal on anyone but their holders
+  return "~~#{w2}~~" if w[8]!='-' && !w[8].split(', ').include?(u[0]) # prf weapons are illegal on anyone but their holders
   u2=weapon_clss(u[1],event)
   u2='Bow' if u2.include?('Bow')
   u2='Dagger' if u2.include?('Dagger')
   u2="#{u2.gsub('Healer','Staff')} Users Only"
   u2='Dragons Only' if u[1][1]=='Dragon'
   u2="Beasts Only, #{u[3].gsub('Flier','Fliers')} Only" if u[1][1]=='Beast'
-  return w2 if u2==w[5]
+  return w2 if u2==w[7]
   return "~~#{w2}~~" if recursion
-  if 'Raudr'==w[0][0,5] || 'Blar'==w[0][0,4] || 'Gronn'==w[0][0,5] || 'Keen Raudr'==w[0][0,10] || 'Keen Blar'==w[0][0,9] || 'Keen Gronn'==w[0][0,10]
+  if 'Raudr'==w[1][0,5] || 'Blar'==w[1][0,4] || 'Gronn'==w[1][0,5] || 'Keen Raudr'==w[1][0,10] || 'Keen Blar'==w[1][0,9] || 'Keen Gronn'==w[1][0,10]
     return weapon_legality(event,name,weapon.gsub('Blar','Raudr').gsub('Gronn','Raudr'),refinement,true) if u[1][0]=='Red'
     return weapon_legality(event,name,weapon.gsub('Raudr','Blar').gsub('Gronn','Blar'),refinement,true) if u[1][0]=='Blue'
     return weapon_legality(event,name,weapon.gsub('Raudr','Gronn').gsub('Blar','Gronn'),refinement,true) if u[1][0]=='Green'
     return "~~#{w2}~~" unless u[1][0]=='Colorless'
     w2="#{weapon.gsub('Raudr','Hoss').gsub('Blar','Hoss').gsub('Gronn','Hoss')}"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Ruby Sword','Sapphire Lance','Emerald Axe'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Ruby Sword#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Sapphire Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Emerald Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
-  elsif ['Hibiscus Tome','Sealife Tome','Tomato Tome'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Tomato Tome#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Sealife Tome#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Hibiscus Tome#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
-  elsif ["Dancer's Ring","Dancer's Score"].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Dancer's Score#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Dancer's Ring#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Ruby Sword','Sapphire Lance','Emerald Axe'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Ruby Sword#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Sapphire Lance#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Emerald Axe#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Hibiscus Tome','Sealife Tome','Tomato Tome'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Tomato Tome#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Sealife Tome#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Hibiscus Tome#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ["Dancer's Ring","Dancer's Score"].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Dancer's Score#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Dancer's Ring#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
     return "~~#{w2}~~" unless u[1][0]=='Red'
-    w2="Dancer's Ribbon#{'+' if w[0].include?('+')}"
+    w2="Dancer's Ribbon#{'+' if w[1].include?('+')}"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
   elsif ['Kadomatsu','Hagoita'].include?(w[0].gsub('+',''))
     return weapon_legality(event,name,"Kadomatsu#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
@@ -2795,7 +2618,8 @@ def combined_BST(event,args,bot)
             ['Sakura', 0, 0, ['Sakura', 'Sakura(Halloween)', 'Sakura(Bath)']],
             ['Elise', 0, 0, ['Elise', 'Elise(Summer)', 'Elise(Bath)']],
             ['Hinoka', 0, 0, ['Hinoka(Launch)', 'Hinoka(Wings)', 'Hinoka(Bath)']],
-            ['Veronica', 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)']]]
+            ['Veronica', 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)']],
+            ['Leo', 0, 0, ['Leo', 'Leo(Summer)', 'Leo(Picnic)']]]
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0,0,0,0],[0,0,0,0,0]]
   m=false

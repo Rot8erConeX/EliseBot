@@ -369,7 +369,12 @@ Caineghis\Colorless, Beast, Lion\ \Armor\7, 9, 5, 8, 6\47, 37, 23, 37, 30\Kita S
 Lethe\Red, Beast, Cat\ \Cavalry\7, 7, 9, 6, 2\41, 33, 38, 26, 19\kaya8\Kristen Day;; \368\5p\F\FE10, FE9\Lethe
 Mordecai\Blue, Beast, Tiger\ \Infantry\9, 8, 5, 10, 3\47, 37, 24, 39, 20\Homazo\Jason Vande Brake;; \369\5p\M\FE10, FE9\Mordecai
 Ranulf\Green, Beast, Cat\ \Cavalry\7, 6, 8, 8, 2\40, 30, 37, 33, 17\Meka\Armen Taylor;; \370\5p\M\FE10, FE9\Ranulf
-Haar\Green, Blade\ \Flier\9, 9, 5, 8, 2\45, 37, 25, 36, 18\\;; \371\3g4g4g\M\FE10, FE9\Haar
+Haar\Green, Blade\ \Flier\9, 9, 5, 8, 2\45, 37, 25, 36, 18\Shimomura Watari\Jake Eberle;; \371\3g4g4g\M\FE10, FE9\Haar
+Flora(Picnic)\Red, Dagger\ \Armor\7, 8, 4, 6, 9\43, 38, 22, 29, 38\HAKO\Julie Ann Taylor;; \372\5s\F\FE14C\Flora
+Lukas(Picnic)\Blue, Blade\ \Armor\8, 9, 3, 10, 5\51, 37, 21, 42, 22\cuboon\Greg Chun;; Sakurai Takahiro\373\5s\M\FE15, FE2\Lukas
+Genny(Picnic)\Colorless, Healer\ \Cavalry\5, 8, 5, 1, 8\35, 36, 24, 14, 34\Amagaitaro\Eden Riegel as Claudia Lenz;; Horinaka Yuki\374\5s\F\FE15, FE2\Genny
+Felicia(Picnic)\Green, Blade\ \Armor\6, 6, 8, 6, 9\43, 30, 37, 30, 35\HAKO\Connor Kelley;; Sasaki Nozomi\375\5s\F\FE14\Felicia
+Leo(Picnic)\Green, Tome, Wind\ \Cavalry\6, 6, 3, 6, 6\37, 33, 21, 27, 28\Hino Shinnosuke\Max Mittelman;; Miyano Mamoru\376\4t5t0s\M\FE14C, FEW, (s)SSBU\Leo
 Mathoo\Red, Blade\ \Infantry\8, 6, 4, 5, 10\45, 29, 24, 25, 39\\;; \1000\3p4pPF\M\FE14g\Mathoo\X167657750971547648
 Ace(C137)\Blue, Blade\ \Cavalry\8, 9, 2, 7, 4\41, 40, 17, 32, 24\\;; \1100\5pPF\M\\Ace(C137)\YF78649866577780736
 Declan\Red, Tome, Dark\ \Infantry\4, 9, 8, 12, 3\27, 33, 32, 41, 22\\;; \1101\5pPF\M\\Declan\Y125624530692472832

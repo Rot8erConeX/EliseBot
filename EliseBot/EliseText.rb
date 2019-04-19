@@ -1187,12 +1187,12 @@ def disp_all_refines(event,bot)
   stones=[]
   dew=[]
   g=get_markers(event)
-  skkz=@skills.map{|q| q}.reject{|q| ['Falchion','Missiletainn','Chill Breidablik','Breidablik','Adult (All)'].include?(q[0]) || q[4]!='Weapon' || !has_any?(g, q[13])}
+  skkz=@skills.map{|q| q}.reject{|q| ['Falchion','Missiletainn','Chill Breidablik','Breidablik','Adult (All)'].include?(q[1]) || q[6]!='Weapon' || !has_any?(g, q[15])}
   if event.message.text.downcase.include?('effect')
     for i in 0...skkz.length
       eff=false
-      unless skkz[i][15].nil? || skkz[i][15].length.zero?
-        str=skkz[i][15].split(' ').join(' ')
+      unless skkz[i][17].nil? || skkz[i][17].length.zero?
+        str=skkz[i][17].split(' ').join(' ')
         for i2 in 0...6
           if str[0,1]=='-' && str[1,1].to_i.to_s==str[1,1]
             str=str[2,str.length-2]
@@ -1203,21 +1203,23 @@ def disp_all_refines(event,bot)
         eff=true if str[0,1]!='*' && str != 'y'
       end
       if eff
-        if skkz[i][6]=='-'
-          stones.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]} \u2192 #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][13].nil?}")
+        if skkz[i][8]=='-'
+          stones.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]} \u2192 #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][15].nil?}")
         else
-          dew.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]} \u2192 #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][13].nil?}")
+          dew.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]} \u2192 #{find_effect_name(skkz[i],event,1)}#{'~~' unless skkz[i][15].nil?}")
         end
       end
     end
     stones.uniq!
+    stones.sort!{|a,b| a.gsub('~~','') <=> b.gsub('~~','')}
     dew.uniq!
+    dew.sort!{|a,b| a.gsub('~~','') <=> b.gsub('~~','')}
     if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__'
         k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...dew.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==dew[i].gsub('~~','').split(" \u2192 ")[0]}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          k2="#{skkz[skkz.find_index{|q| q[1]==dew[i].gsub('~~','').split(" \u2192 ")[0]}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
             k[j][1].push(dew[i]) if k2==k[j][0].split('> ')[1]
           end
@@ -1233,7 +1235,7 @@ def disp_all_refines(event,bot)
         msg='__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__'
         k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...stones.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==stones[i].gsub('~~','').split(" \u2192 ")[0]}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          k2="#{skkz[skkz.find_index{|q| q[1]==stones[i].gsub('~~','').split(" \u2192 ")[0]}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
             k[j][1].push(stones[i]) if k2==k[j][0].split('> ')[1]
           end
@@ -1253,11 +1255,11 @@ def disp_all_refines(event,bot)
     return nil
   end
   for i in 0...skkz.length
-    if !skkz[i][15].nil?
-      if skkz[i][6]=='-'
-        stones.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
+    if !skkz[i][17].nil?
+      if skkz[i][8]=='-'
+        stones.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][15].nil?}")
       else
-        dew.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
+        dew.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][15].nil?}")
       end
     end
   end
@@ -1265,40 +1267,40 @@ def disp_all_refines(event,bot)
   stones2=[]
   for i in 0...skkz.length
     unless skkz[i].nil?
-      if !skkz[i][14].nil?
-        s=skkz[i][14].split(', ')
+      if !skkz[i][16].nil?
+        s=skkz[i][16].split(', ')
         for j in 0...s.length
           if s[j].include?('!')
             s[j]=s[j].split('!')
-            s2=skkz[skkz.find_index{|q| q[0]==s[j][1]}]
-            if s2[6]=='-'
-              stones2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0]})#{'~~' unless skkz[i][13].nil?}")
+            s2=skkz[skkz.find_index{|q| q[1]==s[j][1] && q[2]==s[j][2]}]
+            if s2[8]=='-'
+              stones2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0]})#{'~~' unless skkz[i][15].nil?}")
             else
-              dew2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0]})#{'~~' unless skkz[i][13].nil?}")
+              dew2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0]})#{'~~' unless skkz[i][15].nil?}")
             end
           else
-            s2=skkz[skkz.find_index{|q| q[0]==s[j]}]
-            if s2[6]=='-'
-              stones2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
+            s2=skkz[skkz.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==s[j]}]
+            if s2[8]=='-'
+              stones2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][15].nil?}")
             else
-              dew2.push("#{'~~' unless skkz[i][13].nil?}#{skkz[i][0].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][13].nil?}")
+              dew2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][15].nil?}")
             end
           end
         end
       end
     end
   end
-  stones.uniq!
-  dew.uniq!
-  stones2.uniq!
-  dew2.uniq!
+  stones.sort!{|a,b| a.gsub('~~','') <=> b.gsub('~~','')}
+  stones2.sort!{|a,b| a.gsub('~~','') <=> b.gsub('~~','')}
+  dew.sort!{|a,b| a.gsub('~~','') <=> b.gsub('~~','')}
+  dew2.sort!{|a,b| a.gsub('~~','') <=> b.gsub('~~','')}
   if stones.join("\n").length+dew.join("\n").length+stones2.join("\n").length+dew2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     if dew2.join("\n").length+stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__'
         k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...dew2.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          k2="#{skkz[skkz.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==stat_buffs(dew2[i].gsub('~~',''))}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
             k[j][1].push(dew2[i]) if k2==k[j][0].split('> ')[1]
           end
@@ -1314,7 +1316,7 @@ def disp_all_refines(event,bot)
         msg='__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__'
         k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...stones2.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones2[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          k2="#{skkz[skkz.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==stat_buffs(stones2[i].gsub('~~',''))}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
             k[j][1].push(stones2[i]) if k2==k[j][0].split('> ')[1]
           end
@@ -1334,7 +1336,7 @@ def disp_all_refines(event,bot)
         msg='__**Weapon Refines: Divine Dew <:Divine_Dew:453618312434417691>**__'
         k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...dew.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(dew[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          k2="#{skkz[skkz.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==stat_buffs(dew[i].gsub('~~',''))}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
             k[j][1].push(dew[i]) if k2==k[j][0].split('> ')[1]
           end
@@ -1350,7 +1352,7 @@ def disp_all_refines(event,bot)
         msg='__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__'
         k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...stones.length
-          k2="#{skkz[skkz.find_index{|q| q[0]==stat_buffs(stones[i].gsub('~~',''))}][5].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          k2="#{skkz[skkz.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==stat_buffs(stones[i].gsub('~~',''))}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
             k[j][1].push(stones[i]) if k2==k[j][0].split('> ')[1]
           end
@@ -1403,15 +1405,15 @@ def disp_all_prfs(event,bot)
   event.channel.send_temporary_message('Calculating data, please wait...',1)
   data_load()
   g=get_markers(event)
-  skkz=@skills.reject{|q| ['Falchion','Missiletainn','Chill Breidablik','Breidablik','Adult (All)'].include?(q[0]) || q[4]!='Weapon' || q[6]=='-' || !has_any?(g, q[13])}
+  skkz=@skills.reject{|q| ['Falchion','Missiletainn','Chill Breidablik','Breidablik','Adult (All)'].include?(q[1]) || q[6]!='Weapon' || q[8]=='-' || !has_any?(g, q[15])}
   untz=@units.reject{|q| !has_any?(g, q[13][0])}
   for i in 0...skkz.length
-    skkz[i][6]=skkz[i][6].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
-    skkz[i][6]=skkz[i][6].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
-    skkz[i][6]=skkz[i][6].join(', ')
-    skkz[i][0]="#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]}#{'~~' unless skkz[i][13].nil?} \u2192 #{skkz[i][6]}"
+    skkz[i][8]=skkz[i][8].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
+    skkz[i][8]=skkz[i][8].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
+    skkz[i][8]=skkz[i][8].join(', ')
+    skkz[i][1]="#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]}#{'~~' unless skkz[i][15].nil?} \u2192 #{skkz[i][8]}"
   end
-  k=skkz.reject{|q| q[8]=='-'}
+  k=skkz.reject{|q| q[10]=='-'}
   f=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],
      ['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],
      ['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],
@@ -1419,17 +1421,17 @@ def disp_all_prfs(event,bot)
      ['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],
      ["#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')} Damaging Staves",[]]]
   for i in 0...k.length
-    f[0][1].push(k[i][0]) if k[i][5]=='Sword Users Only'
-    f[1][1].push(k[i][0]) if k[i][5]=='Red Tome Users Only'
-    f[2][1].push(k[i][0]) if k[i][5]=='Lance Users Only'
-    f[3][1].push(k[i][0]) if k[i][5]=='Blue Tome Users Only'
-    f[4][1].push(k[i][0]) if k[i][5]=='Axe Users Only'
-    f[5][1].push(k[i][0]) if k[i][5]=='Green Tome Users Only'
-    f[6][1].push(k[i][0]) if k[i][5]=='Dragons Only'
-    f[7][1].push(k[i][0]) if k[i][5].split(', ').include?('Beasts Only')
-    f[8][1].push(k[i][0]) if k[i][5]=='Bow Users Only'
-    f[9][1].push(k[i][0]) if k[i][5]=='Dagger Users Only'
-    f[10][1].push(k[i][0]) if k[i][5]=='Staff Users Only'
+    f[0][1].push(k[i][1]) if k[i][7]=='Sword Users Only'
+    f[1][1].push(k[i][1]) if k[i][7]=='Red Tome Users Only'
+    f[2][1].push(k[i][1]) if k[i][7]=='Lance Users Only'
+    f[3][1].push(k[i][1]) if k[i][7]=='Blue Tome Users Only'
+    f[4][1].push(k[i][1]) if k[i][7]=='Axe Users Only'
+    f[5][1].push(k[i][1]) if k[i][7]=='Green Tome Users Only'
+    f[6][1].push(k[i][1]) if k[i][7]=='Dragons Only'
+    f[7][1].push(k[i][1]) if k[i][7].split(', ').include?('Beasts Only')
+    f[8][1].push(k[i][1]) if k[i][7]=='Bow Users Only'
+    f[9][1].push(k[i][1]) if k[i][7]=='Dagger Users Only'
+    f[10][1].push(k[i][1]) if k[i][7]=='Staff Users Only'
   end
   f=f.reject{|q| q[1].nil? || q[1].length<=0}
   if f.map{|q| "__*#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
@@ -1452,17 +1454,17 @@ def disp_all_prfs(event,bot)
      ['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],
      ["#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')} Damaging Staves",[]]]
   for i in 0...k.length
-    f[0][1].push(k[i][0]) if k[i][5]=='Sword Users Only'
-    f[1][1].push(k[i][0]) if k[i][5]=='Red Tome Users Only'
-    f[2][1].push(k[i][0]) if k[i][5]=='Lance Users Only'
-    f[3][1].push(k[i][0]) if k[i][5]=='Blue Tome Users Only'
-    f[4][1].push(k[i][0]) if k[i][5]=='Axe Users Only'
-    f[5][1].push(k[i][0]) if k[i][5]=='Green Tome Users Only'
-    f[6][1].push(k[i][0]) if k[i][5]=='Dragons Only'
-    f[7][1].push(k[i][0]) if k[i][5].split(', ').include?('Beasts Only')
-    f[8][1].push(k[i][0]) if k[i][5]=='Bow Users Only'
-    f[9][1].push(k[i][0]) if k[i][5]=='Dagger Users Only'
-    f[10][1].push(k[i][0]) if k[i][5]=='Staff Users Only'
+    f[0][1].push(k[i][1]) if k[i][7]=='Sword Users Only'
+    f[1][1].push(k[i][1]) if k[i][7]=='Red Tome Users Only'
+    f[2][1].push(k[i][1]) if k[i][7]=='Lance Users Only'
+    f[3][1].push(k[i][1]) if k[i][7]=='Blue Tome Users Only'
+    f[4][1].push(k[i][1]) if k[i][7]=='Axe Users Only'
+    f[5][1].push(k[i][1]) if k[i][7]=='Green Tome Users Only'
+    f[6][1].push(k[i][1]) if k[i][7]=='Dragons Only'
+    f[7][1].push(k[i][1]) if k[i][7].split(', ').include?('Beasts Only')
+    f[8][1].push(k[i][1]) if k[i][7]=='Bow Users Only'
+    f[9][1].push(k[i][1]) if k[i][7]=='Dagger Users Only'
+    f[10][1].push(k[i][1]) if k[i][7]=='Staff Users Only'
   end
   f=f.reject{|q| q[1].nil? || q[1].length<=0}
   if f.map{|q| "__*#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
@@ -1477,20 +1479,20 @@ def disp_all_prfs(event,bot)
   else
     create_embed(event,'__**Retro-PRF Weapons**__','',0xF4728C,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
   end
-  skkz=@skills.reject{|q| q[4]!='Assist' || q[6]=='-' || !has_any?(g, q[13])}
+  skkz=@skills.reject{|q| q[6]!='Assist' || q[8]=='-' || !has_any?(g, q[15])}
   for i in 0...skkz.length
-    skkz[i][6]=skkz[i][6].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
-    skkz[i][6]=skkz[i][6].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
-    skkz[i][6]=skkz[i][6].join(', ')
-    skkz[i][0]="#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]}#{'~~' unless skkz[i][13].nil?} \u2192 #{skkz[i][6]}"
+    skkz[i][8]=skkz[i][8].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
+    skkz[i][8]=skkz[i][8].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
+    skkz[i][8]=skkz[i][8].join(', ')
+    skkz[i][1]="#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]}#{'~~' unless skkz[i][15].nil?} \u2192 #{skkz[i][8]}"
   end
   k=skkz.map{|q| q}
-  skkz=@skills.reject{|q| q[4]!='Special' || q[6]=='-' || !has_any?(g, q[13])}
+  skkz=@skills.reject{|q| q[6]!='Special' || q[8]=='-' || !has_any?(g, q[15])}
   for i in 0...skkz.length
-    skkz[i][6]=skkz[i][6].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
-    skkz[i][6]=skkz[i][6].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
-    skkz[i][6]=skkz[i][6].join(', ')
-    skkz[i][0]="#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]}#{'~~' unless skkz[i][13].nil?} \u2192 #{skkz[i][6]}"
+    skkz[i][8]=skkz[i][8].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
+    skkz[i][8]=skkz[i][8].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
+    skkz[i][8]=skkz[i][8].join(', ')
+    skkz[i][1]="#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]}#{'~~' unless skkz[i][15].nil?} \u2192 #{skkz[i][8]}"
   end
   if k.map{|q| q[0]}.join("\n").length+skkz.map{|q| q[0]}.join("\n").length>1800
     if k.map{|q| q[0]}.join("\n").length>1800
@@ -1500,7 +1502,7 @@ def disp_all_prfs(event,bot)
       end
       event.respond str
     else
-      create_embed(event,'<:Skill_Assist:444078171025965066>__**PRF Assists**__','',0x07DFBB,nil,nil,triple_finish(k.map{|q| q[0]},true))
+      create_embed(event,'<:Skill_Assist:444078171025965066>__**PRF Assists**__','',0x07DFBB,nil,nil,triple_finish(k.map{|q| q[1]},true))
     end
     if skkz.map{|q| q[0]}.join("\n").length>1800
       str='<:Skill_Special:444078170665254929>__**PRF Specials**__'
@@ -1509,23 +1511,23 @@ def disp_all_prfs(event,bot)
       end
       event.respond str
     else
-      create_embed(event,'<:Skill_Special:444078170665254929>__**PRF Specials**__','',0xF67EF8,nil,nil,triple_finish(skkz.map{|q| q[0]},true))
+      create_embed(event,'<:Skill_Special:444078170665254929>__**PRF Specials**__','',0xF67EF8,nil,nil,triple_finish(skkz.map{|q| q[1]},true))
     end
   else
-    create_embed(event,'__**PRF Assists and Specials**__','',0x7FAFDA,nil,nil,[['<:Skill_Assist:444078171025965066> Assists',k.map{|q| q[0]}.join("\n")],['<:Skill_Special:444078170665254929> Specials',skkz.map{|q| q[0]}.join("\n")]])
+    create_embed(event,'__**PRF Assists and Specials**__','',0x7FAFDA,nil,nil,[['<:Skill_Assist:444078171025965066> Assists',k.map{|q| q[1]}.join("\n")],['<:Skill_Special:444078170665254929> Specials',skkz.map{|q| q[1]}.join("\n")]])
   end
-  skkz=@skills.reject{|q| ['Weapon','Assist','Special','Seal','Passive(W)'].include?(q[4]) || q[10].reject{|q2| q2=='-'}.length<=0 || q[6]=='-' || !has_any?(g, q[13])}
+  skkz=@skills.reject{|q| ['Weapon','Assist','Special','Seal','Passive(W)'].include?(q[6]) || q[12].reject{|q2| q2=='-'}.length<=0 || q[8]=='-' || !has_any?(g, q[15])}
   for i in 0...skkz.length
-    skkz[i][6]=skkz[i][6].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
-    skkz[i][6]=skkz[i][6].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
-    skkz[i][6]=skkz[i][6].join(', ')
-    skkz[i][0]="#{'~~' unless skkz[i][13].nil?}#{skkz[i][0]}#{'~~' unless skkz[i][13].nil?} \u2192 #{skkz[i][6]}"
+    skkz[i][8]=skkz[i][8].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
+    skkz[i][8]=skkz[i][8].map{|q| "#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}#{q}#{'~~' unless untz[untz.find_index{|q2| q2[0]==q}][13][0].nil?}"}
+    skkz[i][8]=skkz[i][8].join(', ')
+    skkz[i][1]="#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]}#{'~~' unless skkz[i][15].nil?} \u2192 #{skkz[i][8]}"
   end
   f=[['<:Passive_A:443677024192823327> A Passives',[]],['<:Passive_B:443677023257493506> B Passives',[]],['<:Passive_C:443677023555026954> C Passives',[]]]
   for i in 0...skkz.length
-    f[0][1].push(skkz[i][0]) if skkz[i][4].split(', ').include?('Passive(A)')
-    f[1][1].push(skkz[i][0]) if skkz[i][4].split(', ').include?('Passive(B)')
-    f[2][1].push(skkz[i][0]) if skkz[i][4].split(', ').include?('Passive(C)')
+    f[0][1].push(skkz[i][1]) if skkz[i][6].split(', ').include?('Passive(A)')
+    f[1][1].push(skkz[i][1]) if skkz[i][6].split(', ').include?('Passive(B)')
+    f[2][1].push(skkz[i][1]) if skkz[i][6].split(', ').include?('Passive(C)')
   end
   f=f.reject{|q| q[1].nil? || q[1].length<=0}
   if f.map{|q| "__*#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
@@ -1643,9 +1645,9 @@ def aoe(event,bot,args=nil)
   for i in 1...5
     type=['specials','Flame','Wind','Thunder','Light'][i]
     if [i,0].include?(mode)
-      m=sklz[sklz.find_index{|q| q[0]=="Blazing #{type}"}]
-      m2=sklz[sklz.find_index{|q| q[0]=="Growing #{type}"}]
-      str="__**Blazing #{type}** vs. **Growing #{type}**__\n#{hybrid_range(m[3],m2[3])}"
+      m=sklz[sklz.find_index{|q| q[1]=="Blazing #{type}"}]
+      m2=sklz[sklz.find_index{|q| q[1]=="Growing #{type}"}]
+      str="__**Blazing #{type}** vs. **Growing #{type}**__\n#{hybrid_range(m[5],m2[5])}"
       str2=extend_message(str2,str,event)
     end
   end
@@ -3114,46 +3116,46 @@ def next_events(event,bot,type)
 end
 
 def skill_data(legal_skills,all_skills,event,mode=0)
-  str="**There are #{filler(legal_skills,all_skills,-1)} #{['skills','skill branches','skill trees'][mode]}, including:**"
+  str="**There are #{filler(legal_skills,all_skills,-1)} #{['skills','skill lines','skill trees'][mode]}, including:**"
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
-    ls2=legal_skills.reject{|q| q[4]!='Weapon' || ['Adult (All)','Falchion','Missiletainn'].include?(q[0])}
-    as2=all_skills.reject{|q| q[4]!='Weapon' || ['Adult (All)','Falchion','Missiletainn'].include?(q[0])}
-    str="#{str}\n<:Gold_Blade:443172811620745236> #{filler(ls2,as2,5,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades   <:Red_Blade:443172811830198282> #{filler(ls2,as2,5,-1,'Sword Users Only')} swords, <:Blue_Blade:467112472768151562> #{filler(ls2,as2,5,-1,'Lance Users Only')} lances, <:Green_Blade:467122927230386207> #{filler(ls2,as2,5,-1,'Axe Users Only')} axes"
-    str="#{str}\n<:Gold_Tome:443172812413337620> #{filler(ls2,as2,5,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes   <:Red_Tome:443172811826003968> #{filler(ls2,as2,5,-1,'Red Tome Users Only')} red, <:Blue_Tome:467112472394858508> #{filler(ls2,as2,5,-1,'Blue Tome Users Only')} blue, <:Green_Tome:467122927666593822> #{filler(ls2,as2,5,-1,'Green Tome Users Only')} green"
-    str="#{str}\n<:Gold_Dragon:443172811641454592> #{filler(ls2,as2,5,-1,'Dragons Only')} dragonstones"
-    str="#{str}\n<:Gold_Bow:443172812492898314> #{filler(ls2,as2,5,-1,'Bow Users Only')} bows"
-    str="#{str}\n<:Gold_Dagger:443172811461230603> #{filler(ls2,as2,5,-1,'Dagger Users Only')} daggers"
-    str="#{str}\n<:Gold_Staff:443172811628871720> #{filler(ls2,as2,5,-1,'Staff Users Only')} damaging staves"
-    str="#{str}\n<:Gold_Beast:532854442299752469> __#{filler(ls2,as2,5,-1,['Beasts Only, Infantry Only','Beasts Only, Armor Only','Beasts Only, Fliers Only','Beasts Only, Cavalry Only'],-3)} beast weapons__"
-    ls2=legal_skills.reject{|q| q[4]!='Assist'}
-    as2=all_skills.reject{|q| q[4]!='Assist'}
-    str="#{str}\n<:Assist_Rally:454462054619807747> #{filler(ls2,as2,11,-1,'Rally',1)} rally assists"
-    str="#{str}\n<:Assist_Move:454462055479508993> #{filler(ls2,as2,11,[-1,-1],['Move','Music'],[1,-1])} movement assists"
-    str="#{str}\n<:Assist_Music:454462054959415296> #{filler(ls2,as2,11,-1,'Music',1)} musical assists"
-    str="#{str}\n<:Assist_Health:454462054636584981> #{filler(ls2,as2,11,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
-    str="#{str}\n<:Assist_Staff:454451496831025162> #{filler(ls2,as2,11,-1,'Staff',1)} healing staves"
-    str="#{str}\n__<:Assist_Unknown:454451496482897921> #{filler(ls2,as2,11,-3,['Rally','Move','Health','Music','Staff'],-4)} misc. assists__"
-    ls2=legal_skills.reject{|q| q[4]!='Special'}
-    as2=all_skills.reject{|q| q[4]!='Special'}
-    str="#{str}\n<:Special_Offensive:454460020793278475> #{filler(ls2,as2,11,[-1,-1],['Offensive','Defensive'],[1,-1])} offensive specials"
-    str="#{str}\n<:Special_Defensive:454460020591951884> #{filler(ls2,as2,11,-1,'Defensive',1)} defensive specials"
-    str="#{str}\n<:Special_AoE:454460021665693696> #{filler(ls2,as2,11,-1,'AoE',1)} Area-of-Effect specials"
-    str="#{str}\n<:Special_Healer:454451451805040640> #{filler(ls2,as2,11,-1,'Staff',1)} healer specials"
-    str="#{str}\n__<:Special_Unknown:454451451603976192> #{filler(ls2,as2,11,-3,['Damage','Defense','AoE','Staff'],-4)} misc. specials__"
+    ls2=legal_skills.reject{|q| q[6]!='Weapon' || ['Adult (All)','Falchion','Missiletainn'].include?(q[1])}
+    as2=all_skills.reject{|q| q[6]!='Weapon' || ['Adult (All)','Falchion','Missiletainn'].include?(q[1])}
+    str="#{str}\n<:Gold_Blade:443172811620745236> #{filler(ls2,as2,7,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades   <:Red_Blade:443172811830198282> #{filler(ls2,as2,7,-1,'Sword Users Only')} swords, <:Blue_Blade:467112472768151562> #{filler(ls2,as2,7,-1,'Lance Users Only')} lances, <:Green_Blade:467122927230386207> #{filler(ls2,as2,7,-1,'Axe Users Only')} axes"
+    str="#{str}\n<:Gold_Tome:443172812413337620> #{filler(ls2,as2,7,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes   <:Red_Tome:443172811826003968> #{filler(ls2,as2,7,-1,'Red Tome Users Only')} red, <:Blue_Tome:467112472394858508> #{filler(ls2,as2,7,-1,'Blue Tome Users Only')} blue, <:Green_Tome:467122927666593822> #{filler(ls2,as2,7,-1,'Green Tome Users Only')} green"
+    str="#{str}\n<:Gold_Dragon:443172811641454592> #{filler(ls2,as2,7,-1,'Dragons Only')} dragonstones"
+    str="#{str}\n<:Gold_Bow:443172812492898314> #{filler(ls2,as2,7,-1,'Bow Users Only')} bows"
+    str="#{str}\n<:Gold_Dagger:443172811461230603> #{filler(ls2,as2,7,-1,'Dagger Users Only')} daggers"
+    str="#{str}\n<:Gold_Staff:443172811628871720> #{filler(ls2,as2,7,-1,'Staff Users Only')} damaging staves"
+    str="#{str}\n<:Gold_Beast:532854442299752469> __#{filler(ls2,as2,7,-1,['Beasts Only, Infantry Only','Beasts Only, Armor Only','Beasts Only, Fliers Only','Beasts Only, Cavalry Only'],-3)} beast weapons__"
+    ls2=legal_skills.reject{|q| q[6]!='Assist'}
+    as2=all_skills.reject{|q| q[6]!='Assist'}
+    str="#{str}\n<:Assist_Rally:454462054619807747> #{filler(ls2,as2,13,-1,'Rally',1)} rally assists"
+    str="#{str}\n<:Assist_Move:454462055479508993> #{filler(ls2,as2,13,[-1,-1],['Move','Music'],[1,-1])} movement assists"
+    str="#{str}\n<:Assist_Music:454462054959415296> #{filler(ls2,as2,13,-1,'Music',1)} musical assists"
+    str="#{str}\n<:Assist_Health:454462054636584981> #{filler(ls2,as2,13,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
+    str="#{str}\n<:Assist_Staff:454451496831025162> #{filler(ls2,as2,13,-1,'Staff',1)} healing staves"
+    str="#{str}\n__<:Assist_Unknown:454451496482897921> #{filler(ls2,as2,13,-1,['Rally','Move','Health','Music','Staff'],-1)} misc. assists__"
+    ls2=legal_skills.reject{|q| q[6]!='Special'}
+    as2=all_skills.reject{|q| q[6]!='Special'}
+    str="#{str}\n<:Special_Offensive:454460020793278475> #{filler(ls2,as2,13,[-1,-1],['Offensive','Defensive'],[1,-1])} offensive specials"
+    str="#{str}\n<:Special_Defensive:454460020591951884> #{filler(ls2,as2,13,-1,'Defensive',1)} defensive specials"
+    str="#{str}\n<:Special_AoE:454460021665693696> #{filler(ls2,as2,13,-1,'AoE',1)} Area-of-Effect specials"
+    str="#{str}\n<:Special_Healer:454451451805040640> #{filler(ls2,as2,13,-1,'Staff',1)} healer specials"
+    str="#{str}\n__<:Special_Unknown:454451451603976192> #{filler(ls2,as2,13,-1,['Damage','Defense','AoE','Staff'],-1)} misc. specials__"
   else
-    str="#{str}\n<:Skill_Weapon:444078171114045450> #{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
-    str="#{str}\n<:Skill_Assist:444078171025965066> #{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
-    str="#{str}\n<:Skill_Special:444078170665254929> #{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
+    str="#{str}\n<:Skill_Weapon:444078171114045450> #{filler(legal_skills,all_skills,6,-1,'Weapon')} Weapons"
+    str="#{str}\n<:Skill_Assist:444078171025965066> #{filler(legal_skills,all_skills,6,-1,'Assist')} Assists"
+    str="#{str}\n<:Skill_Special:444078170665254929> #{filler(legal_skills,all_skills,6,-1,'Special')} Specials"
   end
-  ls2=legal_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
-  as2=all_skills.reject{|q| q[4]!='Seal' && !q[4].include?('Passive')}
-  str="#{str}\n<:Passive_A:443677024192823327> #{filler(ls2,as2,4,-1,'Passive(A)',1)} A Passives"
-  str="#{str}\n<:Passive_B:443677023257493506> #{filler(ls2,as2,4,-1,'Passive(B)',1)} B Passives"
-  str="#{str}\n<:Passive_C:443677023555026954> #{filler(ls2,as2,4,-1,'Passive(C)',1)} C Passives"
+  ls2=legal_skills.reject{|q| q[6]!='Seal' && !q[6].include?('Passive')}
+  as2=all_skills.reject{|q| q[6]!='Seal' && !q[6].include?('Passive')}
+  str="#{str}\n<:Passive_A:443677024192823327> #{filler(ls2,as2,6,-1,'Passive(A)',1)} A Passives"
+  str="#{str}\n<:Passive_B:443677023257493506> #{filler(ls2,as2,6,-1,'Passive(B)',1)} B Passives"
+  str="#{str}\n<:Passive_C:443677023555026954> #{filler(ls2,as2,6,-1,'Passive(C)',1)} C Passives"
   if mode==2
-    str="#{str}\n<:Passive_S:443677023626330122> #{filler(ls2,as2,4,-1,'Seal')} Passive Seals"
+    str="#{str}\n<:Passive_S:443677023626330122> #{filler(ls2,as2,6,-1,'Seal')} Passive Seals"
   else
-    str="#{str}\n<:Passive_S:443677023626330122> #{filler(ls2,as2,4,-1,'Seal',1)} Passive Seals   #{filler(ls2,as2,4,-1,'Seal')} of which are exclusive to the Seal slot"
+    str="#{str}\n<:Passive_S:443677023626330122> #{filler(ls2,as2,6,-1,'Seal',1)} Passive Seals   #{filler(ls2,as2,6,-1,'Seal')} of which are exclusive to the Seal slot"
   end
   return str
 end
@@ -3176,9 +3178,9 @@ def snagstats(event,bot,f=nil,f2=nil)
   all_units=@units.reject{|q| !has_any?(g, q[13][0])}
   all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
   legal_units=@units.reject{|q| !q[13][0].nil?}
-  all_skills=@skills.reject{|q| !has_any?(g, q[13])}
+  all_skills=@skills.reject{|q| !has_any?(g, q[15])}
   all_skills=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
-  legal_skills=@skills.reject{|q| !q[13].nil?}
+  legal_skills=@skills.reject{|q| !q[15].nil?}
   b=[]
   File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
     l=line.gsub(' ','').gsub("\n",'')
@@ -3382,22 +3384,16 @@ def snagstats(event,bot,f=nil,f2=nil)
   elsif ['skill','skills','weapon','weapons','assist','assists','special','specials','passive','passives'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',3)
     data_load()
-    all_skills_1=@skills.reject{|q| !has_any?(g, q[13])}
+    all_skills_1=@skills.reject{|q| !has_any?(g, q[15])}
     all_skills_1=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
-    legal_skills_1=@skills.reject{|q| !q[13].nil?}
+    legal_skills_1=@skills.reject{|q| !q[15].nil?}
     msg=skill_data(legal_skills,all_skills,event,0)
-    legal_skills=legal_skills_1.reject{|q| !q[13].nil? || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
-    legal_skills=collapse_skill_list(legal_skills,6)
-    all_skills=all_skills_1.reject{|q| !has_any?(g, q[13]) || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
-    all_skills=all_skills_1.reject{|q| q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')} if event.server.nil? && event.user.id==167657750971547648
-    all_skills=collapse_skill_list(all_skills,6)
+    legal_skills=legal_skills_1.reject{|q| !q[15].nil? || q[1].include?('Initiate Seal ') || q[1].include?('Squad Ace ')}
+    legal_skills=collapse_skill_list_2(legal_skills,6)
+    all_skills=all_skills_1.reject{|q| !has_any?(g, q[15]) || q[1].include?('Initiate Seal ') || q[1].include?('Squad Ace ')}
+    all_skills=all_skills_1.reject{|q| q[1].include?('Initiate Seal ') || q[1].include?('Squad Ace ')} if event.server.nil? && event.user.id==167657750971547648
+    all_skills=collapse_skill_list_2(all_skills,6)
     msg=extend_message(msg,skill_data(legal_skills,all_skills,event,1),event,2)
-    legal_skills=legal_skills_1.reject{|q| !q[13].nil? || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
-    legal_skills=collapse_skill_list(legal_skills,14)
-    all_skills=all_skills_1.reject{|q| !has_any?(g, q[13]) || q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')}
-    all_skills=all_skills_1.reject{|q| q[0].include?('Initiate Seal ') || q[0].include?('Squad Ace ')} if event.server.nil? && event.user.id==167657750971547648
-    all_skills=collapse_skill_list(all_skills,14)
-    msg=extend_message(msg,skill_data(legal_skills,all_skills,event,2),event,2)
     event.respond msg
     return nil
   elsif ['structure','structures','structs','struct'].include?(f.downcase)
@@ -3506,20 +3502,20 @@ def snagstats(event,bot,f=nil,f2=nil)
     m=m.sort{|a,b| supersort(a,b,1).zero? ? supersort(b,a,0) : supersort(a,b,1)}
     k=m.reject{|q| q[1]!=m[0][1]}.map{|q| "*#{q[0]}*"}
     str="#{str}\n#{list_lift(k,"and")} #{"is" if k.length==1}#{"are" unless k.length==1} the group#{"s" unless k.length==1} of units with the fewest multi-unit aliases (among those that have them), with #{m[0][1]} multi-unit alias#{"es" unless m[0][1]==1}#{" each" unless k.length==1}." if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
-    glbl=@aliases.reject{|q| q[0]!='Skill' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
-    srv_spec=@aliases.reject{|q| q[0]!='Skill' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
-    all_units=@skills.reject{|q| !has_any?(g, q[13])}
+    glbl=@aliases.reject{|q| q[0]!='Skill' || q[2].is_a?(String) || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    srv_spec=@aliases.reject{|q| q[0]!='Skill' || q[2].is_a?(String) || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
+    all_units=@skills.reject{|q| !has_any?(g, q[15])}
     all_units=@skills.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
-    all_units=all_units.map{|q| [q[0],0,0]}
+    all_units=all_units.map{|q| [q[0],"#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['-','example'].include?(q[2]) || ['Weapon','Assist','Special'].include?(q[6])}",0,0]}
     srv_spec=srv_spec.reject{|q| !all_units.map{|q| q[0]}.include?(q[1])}
     for j in 0...all_units.length
-      all_units[j][1]+=glbl.reject{|q| q[1]!=all_units[j][0]}.length
-      all_units[j][2]+=srv_spec.reject{|q| q[1]!=all_units[j][0]}.length
+      all_units[j][2]+=glbl.reject{|q| q[1]!=all_units[j][0]}.length
+      all_units[j][3]+=srv_spec.reject{|q| q[1]!=all_units[j][0]}.length
     end
     str2="**There are #{longFormattedNumber(glbl.length)} global single-skill aliases.**"
-    all_units=all_units.sort{|b,a| supersort(a,b,1).zero? ? supersort(a,b,0) : supersort(a,b,1)}
-    k=all_units.reject{|q| q[1]!=all_units[0][1]}.map{|q| "*#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}*"}
-    str2="#{str2}\nThe skill#{"s" unless k.length==1} with the most global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][1]} global aliases#{" each" unless k.length==1}."
+    all_units=all_units.sort{|b,a| supersort(a,b,2).zero? ? supersort(a,b,1) : supersort(a,b,2)}
+    k=all_units.reject{|q| q[2]!=all_units[0][2]}.map{|q| "*#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}#{q[1]}#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}*"}
+    str2="#{str2}\nThe skill#{"s" unless k.length==1} with the most global aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][2]} global aliases#{" each" unless k.length==1}."
     str2="#{str2}\n\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]skill aliases.**"
     if event.server.nil? && @shardizard==4
       str2="#{str2}\nDue to being the debug version, I cannot show more information."
@@ -3528,9 +3524,9 @@ def snagstats(event,bot,f=nil,f2=nil)
     else
       str2="#{str2}\nThis server accounts for #{@aliases.reject{|q| q[0]!='Skill' || q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
     end
-    all_units=all_units.sort{|b,a| supersort(a,b,2).zero? ? supersort(a,b,0) : supersort(a,b,2)}
-    k=all_units.reject{|q| q[2]!=all_units[0][2]}.map{|q| "*#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}#{q[0]}#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}*"}
-    str2="#{str2}\nThe skill#{"s" unless k.length==1} with the most server-specific aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][2]} server-specific aliases#{" each" unless k.length==1}." unless k.length<=0
+    all_units=all_units.sort{|b,a| supersort(a,b,3).zero? ? supersort(a,b,1) : supersort(a,b,3)}
+    k=all_units.reject{|q| q[3]!=all_units[0][3]}.map{|q| "*#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}#{q[1]}#{'~~' if legal_skills.find_index{|q2| q2[0]==q[0]}.nil?}*"}
+    str2="#{str2}\nThe skill#{"s" unless k.length==1} with the most server-specific aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][3]} server-specific aliases#{" each" unless k.length==1}." unless k.length<=0
     for i in 0...srv_spec.length
       srv_spec[i][2]=srv_spec[i][2].length
     end
@@ -3539,6 +3535,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
     str2="#{str2}\nCounting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
     str2="#{str2}\n\n**There are 3 [global] multi-skill aliases.**"
+    puts str2
     str=extend_message(str,str2,event,3)
     glbl=@aliases.reject{|q| q[0]!='Structure' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
     srv_spec=@aliases.reject{|q| q[0]!='Structure' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
@@ -3589,7 +3586,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << "*Legendaries* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Legendaries'}][1].length)} current members) - Any unit that gives a Legendary Hero Boost to blessed allies during specific seasons."
     event << "*Retro-Prfs* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro-Prfs'}][1].length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything."
     event << "*Seasonals* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Seasonals'}][1].length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost."
-    event << "    The following subsets of the Seasonals group are also dynamic: *Bathing* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bathing'}][1].length)}), *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Bunny* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})"
+    event << "    The following subsets of the Seasonals group are also dynamic: *Bathing* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bathing'}][1].length)}), *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Bunny* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Picnic* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Picnic'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})"
     event << "*Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can be obtained via a Tempest Trials event."
     event << "*Worse Than Liki* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='WorseThanLiki'}][1].length)} current members) - Any unit with every stat equal to or less than the same stat on Tiki(Young)(Earth), excluding Tiki(Young)(Earth) herself."
     display=false

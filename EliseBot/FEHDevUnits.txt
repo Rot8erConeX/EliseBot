@@ -1,5 +1,5 @@
-Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Genny\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Bunny)\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
-Alm\Delthea\Eir\Kana(F)\Leanne\Matthew\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr
+Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Bunny)\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
+Alm\Delthea\Eir\Kana(F)\Leanne\Lethe\Matthew\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
@@ -134,7 +134,7 @@ Iote's Shield
 
 Est
 4\10\Resistance\Attack\-\0
-Iron Lance\Steel Lance\Heavy Spear\Heavy Spear+\Slaying Spear+\__Slaying Spear+ (+) Effect Mode__\Whitewing Spear\~~Whitewing Spear (+) Effect Mode~~
+Iron Lance\Steel Lance\Heavy Spear\Heavy Spear+\Slaying Spear+\__Slaying Spear+ (+) Effect Mode__\Whitewing Spear\Whitewing Spear (+) Effect Mode
 Reposition
 Chilling Wind\Glacies
 Defiant Resistance 1\Defiant Resistance 2\Defiant Resistance 3
@@ -212,6 +212,16 @@ Renewal 1\Renewal 2\Renewal 3
 Spur Atk 1\Drive Atk 1\Drive Atk 2
 Close Def 3
 
+Lethe
+5\0\Resistance\HP\-\0
+Whelp (Cavalry)\Yearling (Cavalry)\Adult (Cavalry)\Brazen Cat Fang
+~~Rally Speed~~
+New Moon\Moonbow
+Spd/Def Solo 1\Spd/Def Solo 2\Spd/Def Solo 3
+Pass 1\~~Pass 2~~\~~Pass 3~~
+Hone Atk 1\Hone Atk 2\Hone Beasts
+Brazen Atk/Res 2
+
 Mae
 5\5\Attack\Defense\-\0
 Light\Ellight\Blarowl\Blarowl+\Blarowl+ (+) Attack Mode
@@ -233,7 +243,7 @@ Fortify Res 1\Fortify Res 2\Fortify Res 3
 Fortify Def 2
 
 Marisa
-5\7\ \ \-\0
+5\8\ \ \-\0
 Iron Sword\Steel Sword\Wo Dao\Wo Dao+\Wo Dao+ (+) Speed Mode
 Shove
 Night Sky\Glimmer
@@ -363,7 +373,7 @@ Spur Res 1\Drive Res 1\Drive Res 2
 Deflect Melee 3
 
 Tailtiu
-5\2\ \ \-\0
+5\3\ \ \-\0
 Thunder\Elthunder\Blarblade\__Blarblade+__\Tome of Thoron\Tome of Thoron (+) Effect Mode
 Rally Resistance\Rally Spd/Res
 Chilling Wind\Glacies

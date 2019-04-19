@@ -37,6 +37,7 @@
 ["NewYear's", ["Azura(Winter)", "Camilla(Winter)", "Corrin(M)(Winter)", "Takumi(Winter)", "Fjorm(Winter)", "Gunnthra(Winter)", "Hrid(Winter)", "Laevatein(Winter)", "Laegjarn(Winter)"]]
 ["Nifl", ["Fjorm", "Gunnthra", "Ylgr", "Hrid"]]
 ["Penumbrans", ["Bluezie", "Dizzy", "Draco(Gates)", "Dwight(Gates)", "Elentil", "Erich", "Gray(Gates)", "Mathoo", "Megan(Gates)", "Nitsuagi", "Oregano", "Rudyard", "Sheldon(Gates)", "Steel"], [256291408598663168]]
+["Picnic", []]
 ["PKEmblem", ["Hector", "Hector(Marquess)", "Hector(Brave)", "Hector(Valentines)"], [485532538731757588]]
 ["Retro-Prfs", []]
 ["Seasonals", []]
