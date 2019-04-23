@@ -940,7 +940,7 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
   unless ignore2 || !name.downcase.include?('launch')
     name2=name.downcase.gsub('launch','')
     b.reject!{|q| q[1].length<name2.length}
-    k=b.bsearch_index{|q| name.downcase<=>q[1].downcase}
+    k=b.bsearch_index{|q| name2.downcase<=>q[1].downcase}
     unless k.nil?
       return untz[b[k][2]] if !k.is_a?(Array) && b[k][2]<100 && untz[b[k][2]][9][0].include?('LU')
     end
