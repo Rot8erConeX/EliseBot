@@ -69,6 +69,7 @@ Mage Cap\Hat\A hat from Lugh. It's made for mages. Wearing it quiets the mind.\R
 Mage Cap EX\Hat\A hat from Lugh. It's made for mages. Wearing it expands the mind.\Reach 2500 green friendship with Lugh during Forging Bonds: Reason to Fight
 Maid Headpiece\Hat\A maid's headpiece from Flora. This is the authentic Nohrian object, straight from Castle Krakenburg.\Reach 100 red friendship with Flora during Forging Bonds: High Tea Jinks.
 Maid Headpiece EX\Hat\A maid's headpiece from Flora. Only the head maid is allowed to wear this superior-quality item.\Reach 2500 red friendship with Flora during Forging Bonds: High Tea Jinks.
+Picnic Lunch\Hat\A set with handmade sandwiches from Flora, tea brewed by Lukas, and some tomatoes carefully prepared by Leo.\Clear floors 16-20 in Illusioray Dungeon:Heartstring's Ties
 Plegian Crown\Hat\A crown said to be worn by members of the Grimleal. Aversa had it in her possession.\Reach 100 orange friendship with Aversa during Forging Bonds: Dueling Desires.
 Plegian Crown EX\Hat\An impressive crown made of pure gold. Aversa had it in her possession.\Reach 2500 orange friendship with Aversa during Forging Bonds: Dueling Desires.
 Priest's Miter\Hat\A hat from Libra. Worn in sacred places, it can bring peace of mind.\Reach 100 blue friendship with Libra during Forging Bonds: Defending Ylisse.
@@ -85,6 +86,7 @@ Symbol of Gallia\Hat\A headpiece bestowed by Caineghis. It's modeled on the roya
 Symbol of Gallia EX\Hat\A headpiece bestowed by Caineghis. This shining symbol of the Lion King is said to grant strength to its wearer.\Reach 2500 red friendship with Caineghis during Forging Bonds: A Trust Earned
 Tactician's Hat\Hat\Those who wear this hat gain an air that lulls companions into following their orders. It's Loki's.\Reach 100 red friendship with Loki during Forging Bonds: Dueling Desires.
 Tactician's Hat EX\Hat\Those who wear this hat seem to find everyone bending to their whims. It's Loki's.\Reach 2500 red friendship with Loki during Forging Bonds: Dueling Desires.
+White-Flower Crown\Hat\A crown made from the white flowers that grow in the mountains. Handmade by Heroes during their picnic outing.\Clear floors 76-80 in Illusiory Dungeon: Heartstring's Ties
 Worn-Out Doll\Hat\A stuffed animal from Keaton. It's all torn up, and the stuffing is falling out, but apparently that makes it great!\Reach 100 red friendship with Keaton during Forging Bonds: The Orb Case
 Worn-Out Doll EX\Hat\A stuffed animal from Keaton. It has all kinds of "treasures" stuck to it—a lizard tail, a hair ball, you name it.\Reach 2500 red friendship with Keaton during Forging Bonds: The Orb Case
 Dancer's Mask\Mask\A mask from Olivia. A dancer would wear this to project a mystical aura while performing.\Reach 100 red friendship with Olivia(Traveler) during Forging Bonds: Defending Ylisse.

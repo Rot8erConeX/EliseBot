@@ -1397,6 +1397,7 @@ def list_collapse(list,mode=0)
       for i2 in 0...m.length
         list3.push(m[i2]) unless ['Falchion','Missiletainn'].include?(m[i2][1])
       end
+    elsif ['Whelp (All)','Yearling (All)','Adult (All)'].include?(m[0][1])
     elsif ['Weapon','Assist','Special'].include?(n[6])
       x=m.map{|q| q[1].gsub('~~','')}
       if (mode/2)%2==0 && ['Fire Breath','Fire Breath+','Flametongue','Flametongue+'].include?(x[0])
@@ -1409,6 +1410,8 @@ def list_collapse(list,mode=0)
           end
         end
         n[1]=n[1].gsub('+','[+]') if n[1].include?('+') && x.include?(n[1].gsub('+',''))
+      elsif m[0][1]=='Ragnarok'
+        n=m[0].map{|q| q}
       elsif x.include?("#{x[0]}+")
         n[1]="#{x[0]}[+]"
         n[1]="#{x[0]}[+]/Flametongue" if x.include?('Flametongue')
@@ -1488,22 +1491,28 @@ def list_collapse(list,mode=0)
           end
         end
       elsif x[0][0,5]=='Iron ' || x[0][0,6]=='Steel '
-        if (mode/2)%2==0
-        else
-          mm=x[0].split(' ')[1]
-          n[1]=''
-          n[1]="Iron" if x.include?("Iron #{mm}")
-          n[1]="#{n[1]}/Steel" if x.include?("Steel #{mm}")
-          n[1]="#{n[1]}/Silver" if x.include?("Silver #{mm}")
-          if x.include?("Silver #{mm}+")
-            if n[1].include?('Silver')
-              n[1]="#{n[1]}[+]"
-            else
-              n[1]="#{n[1]}/Silver+"
-            end
+        mm=x[0].split(' ')[1]
+        n[1]=''
+        n[1]="Iron" if x.include?("Iron #{mm}")
+        n[1]="#{n[1]}/Steel" if x.include?("Steel #{mm}")
+        n[1]="#{n[1]}/Silver" if x.include?("Silver #{mm}")
+        if x.include?("Silver #{mm}+")
+          if n[1].include?('Silver')
+            n[1]="#{n[1]}[+]"
+          else
+            n[1]="#{n[1]}/Silver+"
           end
-          n[1]="#{n[1]} #{mm}"
         end
+        n[1]="#{n[1]} #{mm}"
+      elsif x[0][0,7]=='Whelp (' || x[0][0,11]=='Hatchling (' || x[0][0,10]=='Yearling (' || x[0][0,11]=='Fledgling (' || x[0][0,7]=='Adult( '
+        mm=x[0].split(' (')[1]
+        n[1]=''
+        n[1]="Whelp" if x.include?("Whelp (#{mm}")
+        n[1]="Hatchling" if x.include?("Hatchling (#{mm}")
+        n[1]="#{n[1]}/Yearling" if x.include?("Yearling (#{mm}")
+        n[1]="#{n[1]}/Fledgling" if x.include?("Fledgling (#{mm}")
+        n[1]="#{n[1]}/Adult" if x.include?("Adult (#{mm}")
+        n[1]="#{n[1]} (#{mm}"
       end
       n[1]=n[1][1,n[1].length-1] if n[1][0,1]=='/'
       list3.push(n)
@@ -1561,6 +1570,14 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     elsif ['Tome','Bow','Dagger','Healer'].include?(u[1][1])
       weapon='Missiletainn (Dusk)'
     end
+    w=@skills[@skills.find_index{|q| q[1]==weapon.gsub('Laevatein','Bladeblade')}]
+  elsif weapon=='Whelp (All)'
+    weapon="Whelp (#{u[3]})"
+    weapon="Hatchling (#{u[3]})" if u[3]=='Flier'
+    w=@skills[@skills.find_index{|q| q[1]==weapon.gsub('Laevatein','Bladeblade')}]
+  elsif weapon=='Yearling (All)'
+    weapon="Yearling (#{u[3]})"
+    weapon="Fledgling (#{u[3]})" if u[3]=='Flier'
     w=@skills[@skills.find_index{|q| q[1]==weapon.gsub('Laevatein','Bladeblade')}]
   elsif weapon=='Adult (All)'
     weapon="Adult (#{u[3]})"

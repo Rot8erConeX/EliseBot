@@ -1187,7 +1187,7 @@ def disp_all_refines(event,bot)
   stones=[]
   dew=[]
   g=get_markers(event)
-  skkz=@skills.map{|q| q}.reject{|q| ['Falchion','Missiletainn','Chill Breidablik','Breidablik','Adult (All)'].include?(q[1]) || q[6]!='Weapon' || !has_any?(g, q[15])}
+  skkz=@skills.map{|q| q}.reject{|q| ['Falchion','Missiletainn','Chill Breidablik','Breidablik','Whelp (All)','Yearling (All)','Adult (All)'].include?(q[1]) || q[6]!='Weapon' || !has_any?(g, q[15])}
   if event.message.text.downcase.include?('effect')
     for i in 0...skkz.length
       eff=false
@@ -1405,7 +1405,7 @@ def disp_all_prfs(event,bot)
   event.channel.send_temporary_message('Calculating data, please wait...',1)
   data_load()
   g=get_markers(event)
-  skkz=@skills.reject{|q| ['Falchion','Missiletainn','Chill Breidablik','Breidablik','Adult (All)'].include?(q[1]) || q[6]!='Weapon' || q[8]=='-' || !has_any?(g, q[15])}
+  skkz=@skills.reject{|q| ['Falchion','Ragnarok+','Missiletainn','Chill Breidablik','Breidablik','Whelp (All)','Yearling (All)','Adult (All)'].include?(q[1]) || q[6]!='Weapon' || q[8]=='-' || !has_any?(g, q[15])}
   untz=@units.reject{|q| !has_any?(g, q[13][0])}
   for i in 0...skkz.length
     skkz[i][8]=skkz[i][8].split(', ').reject{|q| untz.find_index{|q2| q2[0]==q}.nil?}
@@ -3118,8 +3118,8 @@ end
 def skill_data(legal_skills,all_skills,event,mode=0)
   str="**There are #{filler(legal_skills,all_skills,-1)} #{['skills','skill lines','skill trees'][mode]}, including:**"
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
-    ls2=legal_skills.reject{|q| q[6]!='Weapon' || ['Adult (All)','Falchion','Missiletainn'].include?(q[1])}
-    as2=all_skills.reject{|q| q[6]!='Weapon' || ['Adult (All)','Falchion','Missiletainn'].include?(q[1])}
+    ls2=legal_skills.reject{|q| q[6]!='Weapon' || ['Whelp (All)','Yearling (All)','Adult (All)','Falchion','Missiletainn'].include?(q[1])}
+    as2=all_skills.reject{|q| q[6]!='Weapon' || ['Whelp (All)','Yearling (All)','Adult (All)','Falchion','Missiletainn'].include?(q[1])}
     str="#{str}\n<:Gold_Blade:443172811620745236> #{filler(ls2,as2,7,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades   <:Red_Blade:443172811830198282> #{filler(ls2,as2,7,-1,'Sword Users Only')} swords, <:Blue_Blade:467112472768151562> #{filler(ls2,as2,7,-1,'Lance Users Only')} lances, <:Green_Blade:467122927230386207> #{filler(ls2,as2,7,-1,'Axe Users Only')} axes"
     str="#{str}\n<:Gold_Tome:443172812413337620> #{filler(ls2,as2,7,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes   <:Red_Tome:443172811826003968> #{filler(ls2,as2,7,-1,'Red Tome Users Only')} red, <:Blue_Tome:467112472394858508> #{filler(ls2,as2,7,-1,'Blue Tome Users Only')} blue, <:Green_Tome:467122927666593822> #{filler(ls2,as2,7,-1,'Green Tome Users Only')} green"
     str="#{str}\n<:Gold_Dragon:443172811641454592> #{filler(ls2,as2,7,-1,'Dragons Only')} dragonstones"
