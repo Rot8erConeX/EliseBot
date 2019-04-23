@@ -1300,7 +1300,7 @@ def get_weapon(str,event,mode=0) # used by the `stats` command and many derivati
   return [] if str.gsub(' ','').length<=0
   skz=@skills.map{|q| q}
   args=str.gsub('(','').gsub(')','').split(' ')
-  args=args.reject{|q| q.gsub('*','').gsub('+','').to_i.to_s==q.gsub('*','').gsub('+','') || skz.reject{|q2| ['Weapon','Assist','Special'].include?(q2[4])}.map{|q2| (stat_buffs(q2[0]).downcase.gsub(' ','')}.include?(stat_buffs(q,nil,2).downcase) rescue false) || skz.reject{|q2| ['Weapon','Assist','Special'].include?(q2[4])}.map{|q2| q2[0].gsub('/','').downcase.gsub(' ','')}.include?(q.downcase) || ['+','-'].include?(q[0,1])} if args.length>1
+  args=args.reject{|q| q.gsub('*','').gsub('+','').to_i.to_s==q.gsub('*','').gsub('+','') || skz.reject{|q2| ['Weapon','Assist','Special'].include?(q2[4])}.map{|q2| (stat_buffs(q2[1]).downcase.gsub(' ','') rescue "\u0F8F")}.include?((stat_buffs(q,nil,2).downcase rescue "\u0653")) || skz.reject{|q2| ['Weapon','Assist','Special'].include?(q2[6])}.map{|q2| q2[1].gsub('/','').downcase.gsub(' ','')}.include?(q.downcase) || ['+','-'].include?(q[0,1])} if args.length>1
   args2=args.join(' ').split(' ')
   args4=args.join(' ').split(' ')
   name=args.join(' ')
@@ -3971,9 +3971,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       str="#{str}\n\n#{str2}"
       x=true
     end
-    if skill[6]=='Weapon'
+    if skill[6]=='Weapon' && !['Missiletainn','Whelp (All)','Yearling (All)','Adult (All)'].include?(skill[1])
       prev=find_prevolutions(f,event)
-      if prev.length>0 && !['Missiletainn','Whelp (All)','Yearling (All)','Adult (All)'].include?(skill[1])
+      if prev.length>0
         for i in 0...prev.length
           skill2=prev[i][0]
           for i2 in 0...@max_rarity_merge[0]
@@ -5410,9 +5410,10 @@ def split_list(event,list,headers,mode=0,x=true,loads='Units')
         mips=list[i][1][2] if mode==-4
         mips=list[i][2][0] if mode==-5
         mips=list[i][2][1] if mode==-6
+        mips=list[i][7].split(', ')[1].gsub(' Only','') if mode==-9
         mips=weapon_clss(list[i][1],event) if mode==-7
         mips=list[i][5].split(' ')[0] if mode==-8
-        mips=mips.split(', ')
+        mips=mips.split(', ') unless mips.is_a?(Array)
         f=list[i].map{|q| q}
         for j in 0...headers.length
           unless headers[j][1]!=i2+1
@@ -5434,6 +5435,7 @@ def split_list(event,list,headers,mode=0,x=true,loads='Units')
       mips=list[i][1][2] if mode==-4
       mips=list[i][2][0] if mode==-5
       mips=list[i][2][1] if mode==-6
+      mips=list[i][7].split(', ')[1].gsub(' Only','') if mode==-9
       mips=weapon_clss(list[i][1],event) if mode==-7
       mips=list[i][3].split(' ')[0] if mode==-8
       for j in 0...headers.length
@@ -5939,6 +5941,11 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   data_load()
   tmp=@skills.reject{|q| !has_any?(g, q[15]) || !q[6].include?(', Passive(W)')}.reject{|q| q[14].split(', ').reject{|q2| find_skill(q2,event).length<=0}.length<=0}
   for i in 0...tmp.length
+    x=1
+    x=-1 if tmp[i][0]<0
+    tmp[i][0]*=x
+    tmp[i][0]=tmp[i][0]%100000+600000
+    tmp[i][0]*=x
     tmp[i][6]='Passive(W)'
     all_skills.push(tmp[i])
   end
@@ -6117,6 +6124,9 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   elsif (weapons==['Blade'] && colors.length<=0 && color_weapons.length<=0) || (color_weapons.length>0 && color_weapons.map{|q| q[1]}.reject{|q| q=='Blade'}.length<=0 && weapons.length<=0 && colors.length<=0)
     # Blades are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Sword','Lance','Axe','Rod'],7,true,'Skills')
+  elsif weapons==['Beast'] || (color_weapons.length>0 && color_weapons.map{|q| q[1]}.reject{|q| q=='Beast'}.length<=0 && weapons.length<=0 && colors.length<=0)
+    # beast weapons are the only type requested but no other restrictions are given
+    matches4=split_list(event,matches4,['Infantry','Fliers','Cavalry','Armor'],-9,true,'Skills')
   elsif (weapons==['Tome'] && colors==['Red'] && color_weapons.length<=0) || (colors.length<=0 && weapons.length<=0 && color_weapons==[['Red','Tome']])
     # Red Tomes are the only type requested but no other restrictions are given
     matches4=split_list(event,matches4,['Fire','Raudr','Dark'],2,true,'Skills')
@@ -6145,13 +6155,13 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     matches4=split_list(event,matches4,['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Rod','Colorless Tome','Dragon','Beast','Bow','Dagger','Staff'],7,true,'Skills')
   elsif matches4.map{|q| q[1]}.join("\n").length<=1800 && matches4.map{|q| q[6]}.uniq.length==1 && matches4.map{|q| q[6]}.uniq[0]=='Assist' && matches4.map{|q| q[7]}.uniq.length>1
     matches4=split_list(event,matches4,[['Rally',1],['Move',2],['Music',1],['Health',2],['Staff',1]],13,true,'Skills')
-  elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[4]}.uniq.length==1 && matches4.map{|q| q[6]}.uniq[0]=='Special'
-    if matches4.reject{|q| q[13].include?('Damage')}.length.zero? && matches4[0][13].include?('Damage')
+  elsif matches4.map{|q| q[0]}.join("\n").length<=1800 && matches4.map{|q| q[6]}.uniq.length==1 && matches4.map{|q| q[6]}.uniq[0]=='Special'
+    if matches4.reject{|q| q[13].include?('Offensive')}.length.zero? && matches4[0][13].include?('Offensive')
       matches4=split_list(event,matches4,[['StarSpecial',2],['MoonSpecial',2],['SunSpecial',2],['EclipseSpecial',1],['FireSpecial',2],['IceSpecial',2],['DragonSpecial',2],['DarkSpecial',2],['RendSpecial',2]],13,true,'Skills')
-    elsif matches4.reject{|q| q[13].include?('Defense')}.length.zero? && matches4[0][13].include?('Defense')
-      matches4=split_list(event,matches4,[['MiracleSpecial',2],['SupershieldSpecial',1],['AegisSpecial',2],['PaviseSpecial',2]],13,'Skills')
-    elsif matches4.map{|q| q[5]}.uniq.length>1
-      matches4=split_list(event,matches4,[['Damage',1],['Defense',1],['AoE',1],['Staff',1]],13,true,'Skills')
+    elsif matches4.reject{|q| q[13].include?('Defensive')}.length.zero? && matches4[0][13].include?('Defensive')
+      matches4=split_list(event,matches4,[['MiracleSpecial',2],['SupershieldSpecial',1],['AegisSpecial',2],['PaviseSpecial',2]],13,true,'Skills')
+    elsif matches4.map{|q| q[7]}.uniq.length>1
+      matches4=split_list(event,matches4,[['Offensive',1],['Defensive',1],['AoE',1],['Staff',1]],13,true,'Skills')
     end
   elsif !has_any?(matches4.map{|q| q[6]}.uniq, ['Weapon', 'Assist', 'Special'])
     ptypes=matches4.map{|q| q[6]}.uniq
@@ -6356,6 +6366,17 @@ def display_skills(event, mode)
         end
       end
       k[i][1]="#{m}#{k[i][1]}#{m}"
+      if k[i][1]!='- - -' && k[i][12].join(', ').split(', ').reject{|q| q=='-' || untz.find_index{|q2| q2[0]==q}.nil? || untz[untz.find_index{|q2| q2[0]==q}][8]>=1000}.length<=0
+        if k[i][6]=='Weapon'
+          k2=k[i].map{|q| q}
+          k2[1]=k2[1].gsub('[+]','+')
+          k[i][1]="#{k[i][1]} - *unavailable*" unless find_prevolutions(k2,event).length>0 || k[i][12].join(', ').split(', ').reject{|q| q[0,4]!='All '}.length>0
+        elsif ['Assist','Special'].include?(k[i][6])
+          k[i][1]="#{k[i][1]} - *unavailable*" unless k[i][12].join(', ').split(', ').reject{|q| q[0,4]!='All '}.length>0
+        else
+          k[i][1]="#{k[i][1]} - *unavailable*" if !has_any?(k[i][6].split(', '),['Passive(S)','Seal','Passive(W)'])
+        end
+      end
     end
     if k.map{|q| q[1]}.include?('- - -')
       p1=[['.',[]]]
@@ -6368,36 +6389,213 @@ def display_skills(event, mode)
           p1[p2][1].push(k[i])
         end
       end
+      colorsx=k.reject{|q| q[1]=='- - -' || q[6]!='Weapon'}.map{|q| q[13].reject{|q2| !['Red','Blue','Green','Colorless','Gold'].include?(q2)}}
+      colors=[]
+      colors.push('Red') if colorsx.reject{|q| q.include?('Red')}.length<=0
+      colors.push('Blue') if colorsx.reject{|q| q.include?('Blue')}.length<=0
+      colors.push('Green') if colorsx.reject{|q| q.include?('Green')}.length<=0
+      colors.push('Colorless') if colorsx.reject{|q| q.include?('Colorless')}.length<=0
+      colors.push('Gold') if colorsx.reject{|q| q.include?('Gold')}.length<=0
+      emotes=['<:Gold_Staff:443172811628871720>','<:Gold_Dagger:443172811461230603>','<:Gold_Dragon:443172811641454592>','<:Gold_Bow:443172812492898314>','<:Gold_Beast:532854442299752469>']
+      emotes[0]='<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')
+      emotes=['<:Red_Staff:443172812455280640>','<:Red_Dagger:443172811490721804>','<:Red_Dragon:443172811796774932>','<:Red_Bow:443172812455280641>','<:Red_Beast:532853459444170753>'] if colors.length==1 && colors[0]=='Red'
+      emotes=['<:Blue_Staff:467112472407703553>','<:Blue_Dagger:467112472625545217>','<:Blue_Dragon:467112473313542144>','<:Blue_Bow:467112473313542155>','<:Blue_Beast:532853459842629642>'] if colors.length==1 && colors[0]=='Blue'
+      emotes=['<:Green_Staff:467122927616262144>','<:Green_Dagger:467122926655897610>','<:Green_Dragon:467122926718550026>','<:Green_Bow:467122927536570380>','<:Green_Beast:532853459779846154>'] if colors.length==1 && colors[0]=='Green'
+      emotes=['<:Colorless_Staff:443692132323295243>','<:Colorless_Dagger:443692132683743232>','<:Colorless_Dragon:443692132415438849>','<:Colorless_Bow:443692132616896512>','<:Colorless_Beast:532853459804749844>'] if colors.length==1 && colors[0]=='Colorless'
+      emotes[0]='<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')
+      ftr=''
       for i in 0...p1.length
-        p1[i][1]=p1[i][1].map{|q| q[1]}.join("\n")
+        if k.reject{|q| q[6]=='Weapon'}.length<=0 # only weapons
+          p1[i][0]='<:Skill_Weapon:444078171114045450> Weapons'
+          if k.reject{|q| q[7]=='Red Tome Users Only'}.length<=0
+            p1[i][0]='<:Red_Tome:443172811826003968> Red Tomes'
+            p1[i][0]='<:Red_Tome:443172811826003968> Raudr Magic' if p1[i][1].reject{|q| q[2]=='Raudr'}.length<=0
+            p1[i][0]='<:Fire_Tome:499760605826252800> Fire Magic' if p1[i][1].reject{|q| q[2]=='Fire'}.length<=0
+            p1[i][0]='<:Dark_Tome:499958772073103380> Dark Magic' if p1[i][1].reject{|q| q[2]=='Dark'}.length<=0
+          elsif k.reject{|q| q[7]=='Blue Tome Users Only'}.length<=0
+            p1[i][0]='<:Blue_Tome:467112472394858508> Blue Tomes'
+            p1[i][0]='<:Blue_Tome:467112472394858508> Blar Magic' if p1[i][1].reject{|q| q[2]=='Blar'}.length<=0
+            p1[i][0]='<:Light_Tome:499760605381787650> Light Magic' if p1[i][1].reject{|q| q[2]=='Light'}.length<=0
+            p1[i][0]='<:Thunder_Tome:499790911178539009> Thunder Magic' if p1[i][1].reject{|q| q[2]=='Thunder'}.length<=0
+          elsif k.reject{|q| q[7]=='Green Tome Users Only'}.length<=0
+            p1[i][0]='<:Green_Tome:467122927666593822> Green Tomes'
+            p1[i][0]='<:Green_Tome:467122927666593822> Gronn Magic' if p1[i][1].reject{|q| q[2]=='Gronn'}.length<=0
+            p1[i][0]='<:Wind_Tome:499760605713137664> Wind Magic' if p1[i][1].reject{|q| q[2]=='Wind'}.length<=0
+          elsif k.reject{|q| q[7].include?('Beasts Only')}.length<=0
+            p1[i][0]="#{emotes[4]} Beast Damage"
+            if p1[i][1].reject{|q| q[7]=='Beasts Only, Infantry Only'}.length<=0
+              p1[i][0]="#{emotes[4]}<:Icon_Move_Infantry:443331187579289601> Infantry Beast weapons"
+            elsif p1[i][1].reject{|q| q[7]=='Beasts Only, Fliers Only'}.length<=0
+              p1[i][0]="#{emotes[4]}<:Icon_Move_Flier:443331186698354698> Flying Beast weapons"
+            elsif p1[i][1].reject{|q| q[7]=='Beasts Only, Cavalry Only'}.length<=0
+              p1[i][0]="#{emotes[4]}<:Icon_Move_Cavalry:443331186530451466> Cavalry Beast weapons"
+            elsif p1[i][1].reject{|q| q[7]=='Beasts Only, Armor Only'}.length<=0
+              p1[i][0]="#{emotes[4]}<:Icon_Move_Armor:443331186316673025> Armor Beast weapons"
+            end
+          elsif p1[i][1].reject{|q| q[7]=='Sword Users Only'}.length<=0
+            p1[i][0]='<:Red_Blade:443172811830198282> Swords'
+          elsif p1[i][1].reject{|q| q[7]=='Red Tome Users Only'}.length<=0
+            p1[i][0]='<:Red_Tome:443172811826003968> Red Tomes'
+          elsif p1[i][1].reject{|q| q[7]=='Lance Users Only'}.length<=0
+            p1[i][0]='<:Blue_Blade:467112472768151562> Lances'
+          elsif p1[i][1].reject{|q| q[7]=='Blue Tome Users Only'}.length<=0
+            p1[i][0]='<:Blue_Tome:467112472394858508> Blue Tomes'
+          elsif p1[i][1].reject{|q| q[7]=='Axe Users Only'}.length<=0
+            p1[i][0]='<:Green_Blade:467122927230386207> Axes'
+          elsif p1[i][1].reject{|q| q[7]=='Green Tome Users Only'}.length<=0
+            p1[i][0]='<:Green_Tome:467122927666593822> Green Tomes'
+          elsif p1[i][1].reject{|q| q[7]=='Dragons Only'}.length<=0
+            p1[i][0]="#{emotes[2]} Dragon Breaths"
+          elsif p1[i][1].reject{|q| q[7]=='Bow Users Only'}.length<=0
+            p1[i][0]="#{emotes[3]} Bows"
+          elsif p1[i][1].reject{|q| q[7]=='Dagger Users Only'}.length<=0
+            p1[i][0]="#{emotes[1]} Daggers"
+          elsif p1[i][1].reject{|q| q[7].include?('Beasts Only')}.length<=0
+            p1[i][0]="#{emotes[4]} Beast Damage"
+          elsif p1[i][1].reject{|q| q[7]=='Staff Users Only'}.length<=0
+            p1[i][0]="#{emotes[0]} Damaging Staves"
+          end
+        elsif k.reject{|q| q[6]=='Assist'}.length<=0 # only assists
+          p1[i][0]='<:Skill_Assist:444078171025965066> Assists'
+          if p1[i][1].reject{|q| q[13].include?('Music')}.length<=0
+            p1[i][0]='<:Assist_Music:454462054959415296> Musical Assists'
+          elsif p1[i][1].reject{|q| q[13].include?('Staff')}.length<=0
+            p1[i][0]='<:Assist_Staff:454451496831025162> Healing Staves'
+          elsif p1[i][1].reject{|q| q[13].include?('Move')}.length<=0
+            p1[i][0]='<:Assist_Move:454462055479508993> Movement Assists'
+          elsif p1[i][1].reject{|q| q[13].include?('Health')}.length<=0
+            p1[i][0]='<:Assist_Health:454462054636584981> Health Assists'
+          elsif p1[i][1].reject{|q| q[13].include?('Rally')}.length<=0
+            p1[i][0]='<:Assist_Rally:454462054619807747> Rally Assists'
+          elsif p1[i][1].map{|q| q[13]}.uniq.length<=1
+            p1[i][0]='<:Assist_Unknown:454451496482897921> Misc. Assists'
+          end
+        elsif k.reject{|q| q[6]=='Special'}.length<=0 # only specials
+          p1[i][0]='<:Skill_Special:444078170665254929> Specials'
+          if k.reject{|q| q[13].include?('Offensive')}.length<=0
+            p1[i][0]='<:Special_Offensive:454460020793278475> Offensive Specials'
+            if p1[i][1].reject{|q| q[13].include?('EclipseSpecial')}.length<=0
+              p1[i][0]='<:Special_Offensive_Eclipse:454473651308199956> Eclipse Specials'
+            elsif p1[i][1].reject{|q| q[13].include?('StarSpecial')}.length<=0
+              p1[i][0]='<:Special_Offensive_Star:454473651396542504> Star Specials'
+            elsif p1[i][1].reject{|q| q[13].include?('MoonSpecial')}.length<=0
+              p1[i][0]='<:Special_Offensive_Moon:454473651345948683> Moon Specials'
+            elsif p1[i][1].reject{|q| q[13].include?('SunSpecial')}.length<=0
+              p1[i][0]='<:Special_Offensive_Sun:454473651429965834> Sun Specials'
+            elsif p1[i][1].reject{|q| q[13].include?('FireSpecial')}.length<=0
+              p1[i][0]='<:Special_Offensive_Fire:454473651861979156> Fire Specials'
+            elsif p1[i][1].reject{|q| q[13].include?('IceSpecial')}.length<=0
+              p1[i][0]='<:Special_Offensive_Ice:454473651291422720> Ice Specials'
+            elsif p1[i][1].reject{|q| q[13].include?('DragonSpecial')}.length<=0
+              p1[i][0]='<:Special_Offensive_Dragon:454473651186696192> Dragon Specials'
+            elsif p1[i][1].reject{|q| q[13].include?('DarkSpecial')}.length<=0
+              p1[i][0]='<:Special_Offensive_Darkness:454473651010535435> Darkness Specials'
+            elsif p1[i][1].reject{|q| q[13].include?('RendSpecial')}.length<=0
+              p1[i][0]='<:Special_Offensive_Rend:454473651119718401> Rend Specials'
+            end
+          elsif k.reject{|q| q[13].include?('Defensive')}.length<=0
+            p1[i][0]='<:Special_Defensive:454460020591951884> Defensive Specials'
+            if p1[i][1].reject{|q| q[13].include?('SupershieldSpecial')}.length<=0
+              p1[i][0]='<:Special_Defensive_Supershield:454460021066170378> Supershield Specials'
+            elsif p1[i][1].reject{|q| q[13].include?('AegisSpecial')}.length<=0
+              p1[i][0]='<:Special_Defensive_Aegis:454460020625768470> Aegis Specials'
+            elsif p1[i][1].reject{|q| q[13].include?('PaviseSpecial')}.length<=0
+              p1[i][0]='<:Special_Defensive_Pavise:454460020801929237> Pavise Specials'
+            elsif p1[i][1].reject{|q| q[13].include?('MiracleSpecial')}.length<=0
+              p1[i][0]='<:Special_Defensive_Miracle:454460020973764610> Miracle Specials'
+            end
+          elsif p1[i][1].reject{|q| q[13].include?('Offensive')}.length<=0
+            p1[i][0]='<:Special_Offensive:454460020793278475> Offensive Specials'
+          elsif p1[i][1].reject{|q| q[13].include?('Defensive')}.length<=0
+            p1[i][0]='<:Special_Defensive:454460020591951884> Defensive Specials'
+          elsif p1[i][1].reject{|q| q[13].include?('AoE')}.length<=0
+            p1[i][0]='<:Special_AoE:454460021665693696> Area-of-Effect Specials'
+          elsif p1[i][1].reject{|q| q[13].include?('Staff')}.length<=0
+            p1[i][0]='<:Special_Healer:454451451805040640> Healer Specials'
+          elsif p1[i][1].map{|q| q[13]}.uniq.length<=1
+            p1[i][0]='<:Special_Unknown:454451451603976192> Misc. Specials'
+          end
+        elsif k.reject{|q| !['Weapon','Assist','Special'].include?(q[6])}.length<=0 # only passives
+          p1[i][0]='<:Passive:544139850677485579> Passives'
+          if k.reject{|q| q[6].include?('Passive(A)')}.length<=0
+            p1[i][0]='<:Passive_A:443677024192823327> A Passives'
+          elsif k.reject{|q| q[6].include?('Passive(B)')}.length<=0
+            p1[i][0]='<:Passive_B:443677023257493506> B Passives'
+          elsif k.reject{|q| q[6].include?('Passive(C)')}.length<=0
+            p1[i][0]='<:Passive_C:443677023555026954> C Passives'
+          elsif k.reject{|q| has_any?(k[1][6].split(', '),['Passive(S)','Seal'])}.length<=0
+            p1[i][0]='<:Passive_S:443677023626330122> Sacred Seals'
+            if p1[i][1].reject{|q| q[5].split(' ')[0].downcase=='scarlet'}.length<=0
+              p1[i][0]='<:Great_Badge_Scarlet:443704781001850910> Scarlet Seals'
+            elsif p1[i][1].reject{|q| q[5].split(' ')[0].downcase=='azure'}.length<=0
+              p1[i][0]='<:Great_Badge_Azure:443704780783616016> Azure Seals'
+            elsif p1[i][1].reject{|q| q[5].split(' ')[0].downcase=='verdant'}.length<=0
+              p1[i][0]='<:Great_Badge_Verdant:443704780943261707> Verdant Seals'
+            elsif p1[i][1].reject{|q| q[5].split(' ')[0].downcase=='transparent'}.length<=0
+              p1[i][0]='<:Great_Badge_Transparent:443704781597573120> Transparent Seals'
+            elsif p1[i][1].reject{|q| q[5].split(' ')[0].downcase=='gold'}.length<=0
+              p1[i][0]='<:Great_Badge_Golden:443704781068959744> Golden Seals'
+            elsif p1[i][1].reject{|q| q[5].split(' ')[0].downcase=='-'}.length<=0
+              p1[i][0]='<:Great_Badge_Unknown:443704780754255874> Seals of unknown color'
+            end
+          elsif k.reject{|q| q[6].include?('Passive(W)')}.length<=0
+            p1[i][0]='<:Passive_W:443677023706152960> Weapon Effects'
+          elsif p1[i][1].reject{|q| q[6].include?('Passive(A)')}.length<=0
+            p1[i][0]='<:Passive_A:443677024192823327> A Passives'
+          elsif p1[i][1].reject{|q| q[6].include?('Passive(B)')}.length<=0
+            p1[i][0]='<:Passive_B:443677023257493506> B Passives'
+          elsif p1[i][1].reject{|q| q[6].include?('Passive(C)')}.length<=0
+            p1[i][0]='<:Passive_C:443677023555026954> C Passives'
+          elsif p1[i][1].reject{|q| has_any?(k[1][6].split(', '),['Passive(S)','Seal'])}.length<=0
+            p1[i][0]='<:Passive_S:443677023626330122> Sacred Seals'
+          elsif p1[i][1].reject{|q| q[6].include?('Passive(W)')}.length<=0
+            p1[i][0]='<:Passive_W:443677023706152960> Weapon Effects'
+          end
+        elsif p1[i][1].reject{|q| q[6]=='Weapon'}.length<=0 # only weapons
+          p1[i][0]='<:Skill_Weapon:444078171114045450> Weapons'
+          p1[i][0]="#{emotes[0]} Damaging Staves" if k.reject{|q| q[7].include?('Staff Users Only')}.length<=0
+        elsif p1[i][1].reject{|q| q[6]=='Assist'}.length<=0 # only assists
+          p1[i][0]='<:Skill_Assist:444078171025965066> Assists'
+          p1[i][0]='<:Assist_Staff:454451496831025162> Healing Staves' if k.reject{|q| q[7].include?('Staff Users Only')}.length<=0
+        elsif p1[i][1].reject{|q| q[6]=='Special'}.length<=0 # only specials
+          p1[i][0]='<:Skill_Special:444078170665254929> Specials'
+          p1[i][0]='<:Special_Healer:454451451805040640> Healer Specials' if k.reject{|q| q[7].include?('Staff Users Only')}.length<=0
+        elsif p1[i][1].reject{|q| !['Weapon','Assist','Special'].include?(q[6])}.length<=0 # only passives
+          p1[i][0]='<:Passive:544139850677485579> Passives'
+          p1[i][0]='<:Passive_Staff:443677023848890388> Healer Passives' if k.reject{|q| q[7].include?('Staff Users Only')}.length<=0
+        end
+        p1[i][1]=p1[i][1].map{|q| q[1]}.sort.uniq.join("\n")
       end
-      if "#{"__**Skill Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__".length+p1.map{|q| "__**#{q[0]}**__\n#{q[1]}"}.join("\n\n").length>=1900
+      p1=p1.reject{|q| q[1].length<=0}
+      if "#{"__**Skill Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__".length+p1.map{|q| "__**#{q[0]}**__\n#{q[1]}"}.join("\n\n").length>=1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         str="#{"__**Skill Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__"
         for i in 0...p1.length
-          if "**#{p1[i][0]}:** #{q[1].gsub("\n",', ')}".length>=1900
-            str=extend_message(str,"**#{p1[i][0]}:**",event)
+          if "**#{p1[i][0]}:** #{p1[i][1].gsub("\n",', ')}".length>=1900
+            str=extend_message(str,"**#{p1[i][0]}:**",event) unless p1[i][0]=='.'
+            str="#{str}\n" if p1[i][0]=='.'
             m=p1[i][1].split("\n")
             for i2 in 0...m.length
               str=extend_message(str,m[i2],event,1,sym=', ')
             end
           else
-            str=extend_message(str,"**#{p1[i][0]}:** #{q[1].gsub("\n",', ')}",event)
+            str=extend_message(str,"**#{p1[i][0]}:** #{p1[i][1].gsub("\n",', ')}",event) unless p1[i][0]=='.'
+            str=extend_message(str,"#{p1[i][1].gsub("\n",', ')}",event) if p1[i][0]=='.'
           end
         end
         event.respond str
+        event.respond ftr if ftr.length>0
       else
-        create_embed(event,"#{"__**Skill Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__",'',0x9400D3,"#{k.length} total.  This command is in a transitionary state.  A lot of the visual flair users have come to expect of this command will be missing.  Please be patient.",nil,p1)
+        create_embed(event,"#{"__**Skill Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__",'',0x9400D3,"#{k.reject{|q| q[1]=='- - -'}.length} total.#{"  #{ftr}" if ftr.length>0}",nil,p1)
       end
-    elsif "#{"__**Skill Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__".length+k.map{|q| q[1]}.join("\n").length>=1900
+    elsif "#{"__**Skill Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__".length+k.map{|q| q[1]}.join("\n").length>=1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       m=k.map{|q| q[1]}
       str="#{"__**Skill Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__"
       for i in 0...m.length
         str=extend_message(str,m[i],event)
       end
       event.respond str
-      event.respond "~~This command is in a transitionary state.  A lot of the visual flair users have come to expect of this command will be missing.  Please be patient.~~"
     else
-      create_embed(event,"#{"__**Skill Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__",'',0x9400D3,"#{k.length} total.  This command is in a transitionary state.  A lot of the visual flair users have come to expect of this command will be missing.  Please be patient.",nil,triple_finish(k.map{|q| q[1]}))
+      create_embed(event,"#{"__**Skill Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__",'',0x9400D3,"#{k.length} total.",nil,triple_finish(k.map{|q| q[1]}))
     end
   end
 end
