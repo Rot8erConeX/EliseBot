@@ -966,7 +966,7 @@ def list_unit_aliases(event,args,bot,mode=0)
       for i1 in 0...skill.length
         u=skill[i1]
         u2=u[0]
-        f.push("\n#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u[1].gsub('Bladeblade','Laevatein')}#{"#{' ' unless u[1][-1,1]=='+'}#{u[2]}" unless ['-','example'].include?(u[2]) || ['Weapon','Assist','Special'].include?(u[6])}#{skill_moji_2(u,event,bot)}**#{" [Skl-##{u2}]" if @shardizard==4}#{"'s server-specific aliases__" if mode==1}")
+        f.push("\n#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u[1].gsub('Bladeblade','Laevatein')}#{"#{' ' unless u[1][-1,1]=='+'}#{u[2]}" unless ['-','example'].include?(u[2]) || ['Weapon','Assist','Special'].include?(u[6])}#{skill_moji(u,event,bot)}**#{" [Skl-##{u2}]" if @shardizard==4}#{"'s server-specific aliases__" if mode==1}")
         u="#{u[1]}#{"#{' ' unless u[1][-1,1]=='+'}#{u[2]}" unless ['-','example'].include?(u[2]) || ['Weapon','Assist','Special'].include?(u[6])}"
         f.push(u) if u=='Bladeblade'
         f.push(u.gsub('(','').gsub(')','').gsub(' ','')) if u.include?('(') || u.include?(')') || u.include?(' ')
@@ -2835,4 +2835,2147 @@ def combined_BST(event,args,bot)
   end
   msg=extend_message(msg,"Please note that activated blessings will add 2 points to this score, or 4 points with bonus.",event,2)
   event.respond msg
+end
+
+def get_effHP(event,name,bot,weapon=nil)
+  data_load()
+  weapon='-' if weapon.nil?
+  s=event.message.text
+  s=remove_prefix(s,event)
+  a=s.split(' ')
+  s=event.message.text if all_commands().include?(a[0])
+  args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  flurp=find_stats_in_string(event)
+  flurp[5]='' if flurp[5].nil?
+  u40x=find_unit(name,event)
+  rarity=flurp[0]
+  merges=flurp[1]
+  boon=flurp[2]
+  bane=flurp[3]
+  summoner=flurp[4]
+  refinement=flurp[5]
+  blessing=flurp[6]
+  blessing=blessing[0,8] if blessing.length>8
+  transformed=flurp[7]
+  flowers=flurp[8]
+  untz=@units.map{|q| q}
+  if untz.find_index{|q| q[0]==name}.nil?
+  elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    for i in 0...blessing.length
+      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='PairUp('
+    end
+  elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    for i in 0...blessing.length
+      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='PairUp('
+    end
+  end
+  blessing.compact!
+  unless name=='Robin'
+    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  end
+  args.compact!
+  if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
+    unless u40x[0]=='Kiran'
+      event.respond "#{u40x[0]} does not have official stats.  I cannot study #{'his' if u40x[10]=='M'}#{'her' if u40x[10]=='F'}#{'their' unless ['M','F'].include?(u40x[10])} effective HP."
+      return nil
+    end
+  end
+  stat_skills=make_stat_skill_list_1(name,event,args)
+  mu=false
+  if event.message.text.downcase.include?("mathoo's")
+    devunits_load()
+    dv=find_in_dev_units(name)
+    if dv>=0
+      mu=true
+      rarity=@dev_units[dv][1]
+      merges=@dev_units[dv][2]
+      boon=@dev_units[dv][3].gsub(' ','')
+      bane=@dev_units[dv][4].gsub(' ','')
+      summoner=@dev_units[dv][5]
+      flowers=@dev_units[dv][6]
+      weaponz=@dev_units[dv][7].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
+    elsif @dev_nobodies.include?(name)
+      event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
+    elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
+      event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats.'
+    else
+      event.respond 'Mathoo does not have that character.  Showing neutral stats.'
+    end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(uid)
+    x2=x.find_index{|q| q[0]==name}
+    if x2.nil?
+      event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+    else
+      rarity=x[x2][1]
+      merges=x[x2][2]
+      boon=x[x2][3].gsub(' ','')
+      bane=x[x2][4].gsub(' ','')
+      summoner=x[x2][5]
+      flowers=x[x2][6]
+      weaponz=x[x2][7].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.nil?
+        weapon='-'
+      elsif weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
+    end
+  elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
+    weapon=get_unit_prf(name)
+    weapon2=weapon[1] unless weapon[1].nil?
+    weapon=weapon[0]
+    unless weapon2.nil?
+      if weapon=='-'
+        w2=['-',0,0,0,0]
+      else
+        w2=find_skill(weapon,event)
+      end
+      if weapon2=='-'
+        w22=['-',0,0,0,0]
+      else
+        w22=find_skill(weapon2,event)
+      end
+      diff_num=[w2[4]-w22[4],'M','F']
+    end
+  end
+  sklz=@skills.map{|q| q}
+  tempest=get_bonus_type(event)
+  stat_skills_2=make_stat_skill_list_2(name,event,args)
+  ww2=sklz.find_index{|q| q[1]==weapon}
+  ww2=-1 if ww2.nil?
+  w2=sklz[ww2]
+  if w2[15].nil?
+    refinement=nil
+  elsif w2[15].length<2 && refinement=='Effect'
+    refinement=nil
+  elsif w2[15][0,1].to_i.to_s==w2[15][0,1] && refinement=='Effect'
+    refinement=nil if w2[15][1,1]=='*'
+  elsif w2[0,1]=='-' && w2[15][1,1].to_i.to_s==w2[15][1,1] && refinement=='Effect'
+    refinement=nil if w2[15][2,1]=='*'
+  end
+  refinement=nil if w2[5]!='Staff Users Only' && ['Wrathful','Dazzling'].include?(refinement)
+  refinement=nil if w2[5]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
+  atk='Attack'
+  atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
+  atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
+  zzzl=sklz[ww2]
+  atk='Freeze' if has_weapon_tag2?('Frostbite',zzzl,refinement,transformed)
+  n=nature_name(boon,bane)
+  unless n.nil?
+    n=n[0] if atk=='Strength'
+    n=n[n.length-1] if atk=='Magic'
+    n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
+  end
+  u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
+  spec_wpn=false
+  if name=='Robin'
+    u40[0]='Robin (Shared stats)'
+    w='*Tome*'
+    spec_wpn=true
+    wl=weapon_legality(event,'Robin(M)',weapon)
+    wl2=weapon_legality(event,'Robin(F)',weapon)
+    wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+  end
+  xcolor=unit_color(event,u40x,u40[0],0,mu)
+  unless spec_wpn
+    wl=weapon_legality(event,u40[0],weapon,refinement)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  end
+  cru40=u40.map{|a| a}
+  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
+  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing,transformed)
+  if u40[0]=='Kiran'
+    u40[1]=0
+    u40[2]=0
+    u40[3]=0
+    u40[4]=0
+    u40[5]=0
+    mu=false
+    tempest=false
+    xcolor=0x9400D3
+    stat_skills=[]
+    stat_skills_2=[]
+  end
+  blu40=apply_stat_skills(event,stat_skills_2,u40.map{|a| a})
+  crblu40=apply_stat_skills(event,stat_skills_2,cru40.map{|a| a})
+  photon=[u40[4]>=u40[5]+5,blu40[4]>=blu40[5]+5,cru40[4]>=cru40[5]+5,crblu40[4]>=crblu40[5]+5]
+  for i in 0...photon.length
+    if photon[i]
+      photon[i]=7
+    else
+      photon[i]=0
+    end
+  end
+  photon[0]="#{photon[0]}#{" (#{photon[1]})" if photon[0]!=photon[1]}"
+  if wl.include?('~~')
+    photon[1]="#{photon[2]}#{" (#{photon[3]})" if photon[2]!=photon[3]}"
+    photon[0]="~~#{photon[0]}~~ #{photon[1]}" unless photon[0]==photon[1]
+  end
+  photon=photon[0]
+  rp=[u40[1]+u40[4],(u40[1]/2.0).ceil+u40[4],(u40[1]/4.0).ceil+u40[4],blu40[1]+blu40[4],(blu40[1]/2.0).ceil+blu40[4],(blu40[1]/4.0).ceil+blu40[4]]
+  rm=[u40[1]+u40[5],(u40[1]/2.0).ceil+u40[5],(u40[1]/4.0).ceil+u40[5],blu40[1]+blu40[5],(blu40[1]/2.0).ceil+blu40[5],(blu40[1]/4.0).ceil+blu40[5]]
+  rd=[u40[1]+[u40[4],u40[5]].min,(u40[1]/2.0).ceil+[u40[4],u40[5]].min,(u40[1]/4.0).ceil+[u40[4],u40[5]].min,blu40[1]+[blu40[4],blu40[5]].min,(blu40[1]/2.0).ceil+[blu40[4],blu40[5]].min,(blu40[1]/4.0).ceil+[blu40[4],blu40[5]].min]
+  rdr="#{u40[4]+u40[5]}#{" (#{blu40[4]+blu40[5]})" if blu40[4]+blu40[5]!=u40[4]+u40[5]}"
+  rmg="#{5*u40[2]/8}#{" (#{5*blu40[2]/8})" if 5*blu40[5]/8!=5*u40[5]/8}"
+  rs="#{u40[3]+5}+#{" (#{blu40[3]+5}+)" if u40[3]!=blu40[3]}"
+  if wl.include?('~~')
+    rpc=[cru40[1]+cru40[4],(cru40[1]/2.0).ceil+cru40[4],(cru40[1]/4.0).ceil+cru40[4],crblu40[1]+crblu40[4],(crblu40[1]/2.0).ceil+crblu40[4],(crblu40[1]/4.0).ceil+crblu40[4]]
+    rmc=[cru40[1]+cru40[5],(cru40[1]/2.0).ceil+cru40[5],(cru40[1]/4.0).ceil+cru40[5],crblu40[1]+crblu40[5],(crblu40[1]/2.0).ceil+crblu40[5],(crblu40[1]/4.0).ceil+crblu40[5]]
+    rdc=[cru40[1]+[cru40[4],cru40[5]].min,(cru40[1]/2.0).ceil+[cru40[4],cru40[5]].min,(cru40[1]/4.0).ceil+[cru40[4],cru40[5]].min,crblu40[1]+[crblu40[4],crblu40[5]].min,(crblu40[1]/2.0).ceil+[crblu40[4],crblu40[5]].min,(crblu40[1]/4.0).ceil+[crblu40[4],crblu40[5]].min]
+    rdrc="#{cru40[4]+cru40[5]}#{" (#{crblu40[4]+crblu40[5]})" if crblu40[4]+crblu40[5]!=cru40[4]+cru40[5]}"
+    rmgc="#{5*cru40[2]/8}#{" (#{5*crblu40[2]/8})" if 5*crblu40[5]/8!=5*cru40[5]/8}"
+    rsc="#{cru40[3]+5}+#{" (#{crblu40[3]+5}+)" if cru40[3]!=crblu40[3]}"
+    rdr="~~#{rdr}~~ #{rdrc}" unless rdr==rdrc
+    rmg="~~#{rmg}~~ #{rmgc}" unless rmg==rmgc
+    rs="~~#{rs}~~ #{rsc}" unless rs==rsc
+  else
+    rpc=rp.map{|q| q}
+    rmc=rm.map{|q| q}
+    rdc=rd.map{|q| q}
+    rdrc=rdr.split(' ').join(' ')
+    rmgc=rmg.split(' ').join(' ')
+    rsc=rs.split(' ').join(' ')
+  end
+  rs="#{rs} Speed"
+  rp=["#{rp[0]}#{" (#{rp[3]})" if rp[0]!=rp[3]}","#{rp[1]}#{" (#{rp[4]})" if rp[1]!=rp[4]}","#{rp[2]}#{" (#{rp[5]})" if rp[2]!=rp[5]}"]
+  rpc=["#{rpc[0]}#{" (#{rpc[3]})" if rpc[0]!=rpc[3]}","#{rpc[1]}#{" (#{rpc[4]})" if rpc[1]!=rpc[4]}","#{rpc[2]}#{" (#{rpc[5]})" if rpc[2]!=rpc[5]}"]
+  rm=["#{rm[0]}#{" (#{rm[3]})" if rm[0]!=rm[3]}","#{rm[1]}#{" (#{rm[4]})" if rm[1]!=rm[4]}","#{rm[2]}#{" (#{rm[5]})" if rm[2]!=rm[5]}"]
+  rmc=["#{rmc[0]}#{" (#{rmc[3]})" if rmc[0]!=rmc[3]}","#{rmc[1]}#{" (#{rmc[4]})" if rmc[1]!=rmc[4]}","#{rmc[2]}#{" (#{rmc[5]})" if rmc[2]!=rmc[5]}"]
+  rd=["#{rd[0]}#{" (#{rd[3]})" if rd[0]!=rd[3]}","#{rd[1]}#{" (#{rd[4]})" if rd[1]!=rd[4]}","#{rd[2]}#{" (#{rd[5]})" if rd[2]!=rd[5]}"]
+  rdc=["#{rdc[0]}#{" (#{rdc[3]})" if rdc[0]!=rdc[3]}","#{rdc[1]}#{" (#{rdc[4]})" if rdc[1]!=rdc[4]}","#{rdc[2]}#{" (#{rdc[5]})" if rdc[2]!=rdc[5]}"]
+  for i in 0...3
+    rp[i]="~~#{rp[i]}~~ #{rpc[i]}" unless rp[i]==rpc[i]
+    rm[i]="~~#{rm[i]}~~ #{rmc[i]}" unless rm[i]==rmc[i]
+    rd[i]="~~#{rd[i]}~~ #{rdc[i]}" unless rd[i]==rdc[i]
+  end
+  rp="Single-hit: #{rp[0]}\nDouble-hit: #{rp[1]}\nQuad-hit: #{rp[2]}"
+  rm="Single-hit: #{rm[0]}\nDouble-hit: #{rm[1]}\nQuad-hit: #{rm[2]}"
+  rd="Single-hit: #{rd[0]}\nDouble-hit: #{rd[1]}\nQuad-hit: #{rd[2]}"
+  x=[['Physical',rp],['Magical',rm]]
+  if rd==rp && rd==rm
+    x[0][0]='Physical / Magical / Frostbite'
+    x[1]=nil
+    x.compact!
+  elsif rd==rp
+    x[0][0]='Physical / Frostbite'
+  elsif rd==rm
+    x[1][0]='Magical / Frostbite'
+  else
+    x.push(['Frostbite',rd])
+  end
+  x.push(['Misc.',"Defense + Resistance = #{rdr}#{"\n\n#{u40[0]} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0]}:\n#{rs}#{"\nFull HP" if weapon=='Fell Breath'}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\nOutnumber #{u40[0]}'s allies within 2 spaces" if weapon=='Thunder Armads'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless u40x[1][1]=='Healer'}",1])
+  ftr="\"Frostbite\" is weapons like Felicia's Plate"
+  ftr="#{ftr} and refined dragonstones" if ['Healer','Tome','Bow','Dagger'].include?(u40x[1][1])
+  if photon=="0"
+    ftr="#{ftr} that deal damage based on lower of Def and Res."
+  else
+    ftr="#{ftr}.  \"Photon\" is weapons like Light Brand."
+  end
+  pic=pick_thumbnail(event,u40x,bot)
+  pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,ftr,pic,x,5)
+end
+
+def study_of_healing(event,name,bot,weapon=nil)
+  u40x=find_unit(name,event)
+  if name=='Robin' && u40x[0].is_a?(Array)
+    u40x=u40x[0]
+    u40x[0]='Robin (Shared stats)'
+    u40x[1][0]='Cyan'
+  end
+  if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
+    unless u40x[0]=='Kiran'
+      event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[10]=='M'}#{'she does' if u40x[10]=='F'}#{'they do' unless ['M','F'].include?(u40x[10])} with each healing staff."
+      return nil
+    end
+  end
+  data_load()
+  weapon='-' if weapon.nil?
+  s=event.message.text
+  s=remove_prefix(s,event)
+  a=s.split(' ')
+  s=event.message.text if all_commands().include?(a[0])
+  args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  flurp=find_stats_in_string(event)
+  flurp[5]='' if flurp[5].nil?
+  rarity=flurp[0]
+  merges=flurp[1]
+  boon=flurp[2]
+  bane=flurp[3]
+  summoner=flurp[4]
+  refinement=flurp[5]
+  blessing=flurp[6]
+  blessing=blessing[0,8] if blessing.length>8
+  transformed=flurp[7]
+  flowers=flurp[8]
+  untz=@units.map{|q| q}
+  if untz.find_index{|q| q[0]==name}.nil?
+  elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    for i in 0...blessing.length
+      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='PairUp('
+    end
+  elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    for i in 0...blessing.length
+      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='PairUp('
+    end
+  end
+  blessing.compact!
+  unless name=='Robin'
+    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  end
+  args.compact!
+  if args.nil? || args.length<1
+    event.respond 'No unit was included'
+    return nil
+  end
+  weapon='-' if weapon.nil?
+  stat_skills=make_stat_skill_list_1(name,event,args)
+  mu=false
+  if event.message.text.downcase.include?("mathoo's")
+    devunits_load()
+    dv=find_in_dev_units(name)
+    if dv>=0
+      mu=true
+      rarity=@dev_units[dv][1]
+      merges=@dev_units[dv][2]
+      boon=@dev_units[dv][3].gsub(' ','')
+      bane=@dev_units[dv][4].gsub(' ','')
+      summoner=@dev_units[dv][5]
+      flowers=@dev_units[dv][6]
+      weaponz=@dev_units[dv][7].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
+    elsif @dev_nobodies.include?(name)
+      event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
+    elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
+      event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats.'
+    else
+      event.respond 'Mathoo does not have that character.  Showing neutral stats.'
+    end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(uid)
+    x2=x.find_index{|q| q[0]==name}
+    if x2.nil?
+      event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+    else
+      rarity=x[x2][1]
+      merges=x[x2][2]
+      boon=x[x2][3].gsub(' ','')
+      bane=x[x2][4].gsub(' ','')
+      summoner=x[x2][5]
+      flowers=x[x2][6]
+      weaponz=x[x2][7].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.nil?
+        weapon='-'
+      elsif weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
+    end
+  elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
+    weapon=get_unit_prf(name)
+    weapon2=weapon[1] unless weapon[1].nil?
+    weapon=weapon[0]
+    unless weapon2.nil?
+      if weapon=='-'
+        w2=['-',0,0,0,0]
+      else
+        w2=find_skill(weapon,event)
+      end
+      if weapon2=='-'
+        w22=['-',0,0,0,0]
+      else
+        w22=find_skill(weapon2,event)
+      end
+      diff_num=[w2[4]-w22[4],'M','F']
+    end
+  end
+  sklz=@skills.map{|q| q}
+  tempest=get_bonus_type(event)
+  stat_skills_2=make_stat_skill_list_2(name,event,args)
+  ww2=sklz.find_index{|q| q[1]==weapon}
+  ww2=-1 if ww2.nil?
+  w2=sklz[ww2]
+  if w2[17].nil?
+    refinement=nil
+  elsif w2[17].length<2 && refinement=='Effect'
+    refinement=nil
+  elsif w2[17][0,1].to_i.to_s==w2[17][0,1] && refinement=='Effect'
+    refinement=nil if w2[17][1,1]=='*'
+  elsif w2[17][0,1]=='-' && w2[17][1,1].to_i.to_s==w2[17][1,1] && refinement=='Effect'
+    refinement=nil if w2[17][2,1]=='*'
+  end
+  refinement=nil if w2[7]!='Staff Users Only' && ['Wrathful','Dazzling'].include?(refinement)
+  refinement=nil if w2[7]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
+  atk='Attack'
+  atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
+  atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
+  zzzl=sklz[ww2]
+  atk='Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
+  n=nature_name(boon,bane)
+  unless n.nil?
+    n=n[0] if atk=='Strength'
+    n=n[n.length-1] if atk=='Magic'
+    n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
+  end
+  u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
+  spec_wpn=false
+  if name=='Robin'
+    u40[0]='Robin (Shared stats)'
+    w='*Tome*'
+    spec_wpn=true
+    wl=weapon_legality(event,'Robin(M)',weapon)
+    wl2=weapon_legality(event,'Robin(F)',weapon)
+    wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+  end
+  xcolor=unit_color(event,u40x,u40[0],0,mu)
+  unless spec_wpn
+    wl=weapon_legality(event,u40[0],weapon,refinement)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  end
+  cru40=u40.map{|q| q}
+  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
+  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing,transformed) if wl.include?('~~')
+  cru40=u40.map{|q| q} unless wl.include?('~~')
+  if u40[0]=='Kiran'
+    u40[1]=0
+    u40[2]=0
+    u40[3]=0
+    u40[4]=0
+    u40[5]=0
+    mu=false
+    tempest=false
+    xcolor=0x9400D3
+    stat_skills=[]
+    stat_skills_2=[]
+  end
+  blu40=u40.map{|a| a}
+  crblu40=cru40.map{|a| a}
+  blu40=apply_stat_skills(event,stat_skills_2,blu40)
+  crblu40=apply_stat_skills(event,stat_skills_2,crblu40)
+  atkk=u40[2]
+  hppp=u40[1]
+  blatkk=blu40[2]
+  blhppp=blu40[1]
+  cratkk=cru40[2]
+  crhppp=cru40[1]
+  crblatkk=crblu40[2]
+  crblhppp=crblu40[1]
+  staves=[]
+  staves.push("**Heal:** heals target for 5 HP, 15 HP when Imbue triggers\n\n**Mend:** heals target for 10 HP, 20 HP when Imbue triggers\n\n**Physic:** heals target for 8 HP, 18 HP when Imbue triggers") if event.message.text.downcase.include?(' all')
+  d=[atkk/2,8].max
+  d2=[blatkk/2,8].max
+  cd=[cratkk/2,8].max
+  cd2=[crblatkk/2,8].max
+  i="#{d+10}#{" (#{d2+10})" unless d==d2}"
+  ci="#{cd+10}#{" (#{cd2+10})" unless cd==cd2}"
+  i="~~#{i}~~ #{ci}" unless i==ci
+  d="#{d}#{" (#{d2})" unless d==d2}"
+  cd="#{cd}#{" (#{cd2})" unless cd==cd2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves.push("**Physic+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+  staves.push('~~Phsyic[+] has a range of 2~~')
+  staves.push(' ')
+  staves.push('**Recover:** heals target for 15 HP, 25 HP when Imbue triggers') if event.message.text.downcase.include?(' all')
+  d=[atkk/2+10,15].max
+  d2=[blatkk/2+10,15].max
+  cd=[cratkk/2+10,15].max
+  cd2=[crblatkk/2+10,15].max
+  i="#{d+10}#{" (#{d2+10})" unless d==d2}"
+  ci="#{cd+10}#{" (#{cd2+10})" unless cd==cd2}"
+  i="~~#{i}~~ #{ci}" unless i==ci
+  d="#{d}#{" (#{d2})" unless d==d2}"
+  cd="#{cd}#{" (#{cd2})" unless cd==cd2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves.push("**Recover+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+  staves.push(' ')
+  staves.push('**Restore:** heals target for 8 HP, 18 HP when Imbue triggers') if event.message.text.downcase.include?(' all')
+  d=[atkk/2,8].max
+  d2=[blatkk/2,8].max
+  cd=[cratkk/2,8].max
+  cd2=[crblatkk/2,8].max
+  i="#{d+10}#{" (#{d2+10})" unless d==d2}"
+  ci="#{cd+10}#{" (#{cd2+10})" unless cd==cd2}"
+  i="~~#{i}~~ #{ci}" unless i==ci
+  d="#{d}#{" (#{d2})" unless d==d2}"
+  cd="#{cd}#{" (#{cd2})" unless cd==cd2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves.push("**Restore+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+  staves.push('~~Restore[+] will also remove any negative status effects placed on the target.~~')
+  staves.push(' ')
+  d=hppp-1
+  d2=blhppp-1
+  cd=crhppp-1
+  cd2=crblhppp-1
+  s="0-#{d}#{" (0-#{d2})" unless d==d2}"
+  cs="0-#{cd}#{" (0-#{cd2})" unless cd==cd2}"
+  i="17-#{d+17}#{" (17-#{d2+17})" unless d==d2}"
+  ci="17-#{cd+17}#{" (17-#{cd2+17})" unless cd==cd2}"
+  d="7-#{d+7}#{" (7-#{d2+7})" unless d==d2}"
+  cd="7-#{cd+7}#{" (7-#{cd2+7})" unless cd==cd2}"
+  s="~~#{s}~~ #{cs}" unless s==cs
+  i="~~#{i}~~ #{ci}" unless i==ci
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves.push("**Reconcile:** heals target for 7 HP, 17 HP when Imbue triggers, also heals #{u40[0]} for 7 HP\n\n**Martyr:** heals target for #{d} HP, #{i} HP when Imbue triggers, also heals #{u40[0]} for #{s} HP") if event.message.text.downcase.include?(" all")
+  d=[hppp-1,[atkk/2,7].max]
+  d2=[blhppp-1,[blatkk/2,7].max]
+  cd=[crhppp-1,[cratkk/2,7].max]
+  cd2=[crblhppp-1,[crblatkk/2,7].max]
+  s="0-#{d[0]}#{" (0-#{d2[0]})" unless d[0]==d2[0]}"
+  cs="0-#{cd[0]}#{" (0-#{cd2[0]})" unless cd[0]==cd2[0]}"
+  i="#{d[1]+10}-#{d[0]+d[1]+10}#{" (#{d2[1]+10}-#{d2[0]+d2[1]+10})" unless d==d2}"
+  ci="#{cd[1]+10}-#{cd[0]+cd[1]+10}#{" (#{cd2[1]+10}-#{cd2[0]+cd2[1]+10})" unless cd==cd2}"
+  d="#{d[1]}-#{d[0]+d[1]}#{" (#{d2[1]}-#{d2[0]+d2[1]})" unless d==d2}"
+  cd="#{cd[1]}-#{cd[0]+cd[1]}#{" (#{cd2[1]}-#{cd2[0]+cd2[1]})" unless cd==cd2}"
+  i="~~#{i}~~ #{ci}" unless i==ci
+  s="~~#{s}~~ #{cs}" unless s==cs
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves.push("**Martyr+:** heals target for #{d} HP, #{i} HP when Imbue triggers, also heals #{u40[0]} for #{s} HP")
+  staves.push("~~How much Martyr[+] heals is based on how much damage *#{u40[0]}* has taken.~~")
+  staves.push(" ")
+  staves.push("**Rehabilitate:** heals target for 7-105 HP, 17-115 HP when Imbue triggers") if event.message.text.downcase.include?(" all")
+  d=[atkk/2-10,7].max
+  d2=[blatkk/2-10,7].max
+  cd=[cratkk/2-10,7].max
+  cd2=[crblatkk/2-10,7].max
+  i="#{d+10}-#{d+108}#{" (#{d2+10}-#{d2+108})" unless d==d2}"
+  ci="#{cd+10}-#{cd+108}#{" (#{cd2+10}-#{cd2+108})" unless cd==cd2}"
+  d="#{d}-#{d+98}#{" (#{d2}-#{d2+98})" unless d==d2}"
+  cd="#{cd}-#{cd+98}#{" (#{cd2}-#{cd2+98})" unless cd==cd2}"
+  i="~~#{i}~~ #{ci}" unless i==ci
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves.push("**Rehabilitate+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+  staves.push("~~How much Rehabilitate[+] heals is based on how much damage the target has taken.~~\n~~If they are above 50% HP, the lower end of the range is how much is healed.~~")
+  pic=pick_thumbnail(event,u40x,bot)
+  pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
+  k="__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}"
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.join("\n").length>=1950
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[untz[j][3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}"
+    event.respond staves.join("\n")
+  else
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
+  end
+end
+
+def study_of_procs(event,name,bot,weapon=nil)
+  u40x=find_unit(name,event)
+  if name=='Robin' && u40x[0].is_a?(Array)
+    u40x=u40x[0]
+    u40x[0]='Robin (Shared stats)'
+    u40x[1][0]='Cyan'
+  end
+  if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
+    unless u40x[0]=='Kiran'
+      event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[10]=='M'}#{'she does' if u40x[10]=='F'}#{'they do' unless ['M','F'].include?(u40x[10])} with each proc skill."
+      return nil
+    end
+  end
+  data_load()
+  weapon='-' if weapon.nil?
+  s=event.message.text
+  s=remove_prefix(s,event)
+  a=s.split(' ')
+  s=event.message.text if all_commands().include?(a[0])
+  args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  flurp=find_stats_in_string(event)
+  flurp[5]='' if flurp[5].nil?
+  rarity=flurp[0]
+  merges=flurp[1]
+  boon=flurp[2]
+  bane=flurp[3]
+  summoner=flurp[4]
+  refinement=flurp[5]
+  blessing=flurp[6]
+  blessing=blessing[0,8] if blessing.length>8
+  transformed=flurp[7]
+  flowers=flurp[8]
+  untz=@units.map{|q| q}
+  if untz.find_index{|q| q[0]==name}.nil?
+  elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    for i in 0...blessing.length
+      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='PairUp('
+    end
+  elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    for i in 0...blessing.length
+      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='PairUp('
+    end
+  end
+  blessing.compact!
+  unless name=='Robin'
+    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  end
+  args.compact!
+  if args.nil? || args.length<1
+    event.respond 'No unit was included'
+    return nil
+  end
+  weapon='-' if weapon.nil?
+  stat_skills=make_stat_skill_list_1(name,event,args)
+  mu=false
+  wrathcount=0
+  wrathcount+=1 if has_any?(event.message.text.downcase.split(' '),['wrath','wrath1','wrath2','wrath3'])
+  wrathcount+=1 if count_in(event.message.text.downcase.split(' '),['wrath','wrath1','wrath2','wrath3'])>=2
+  wrathsub=''
+  wrathsub='Bushido' if event.message.text.downcase.split(' ').include?('bushido') && u40[0]=='Ryoma(Supreme)'
+  if event.message.text.downcase.include?("mathoo's")
+    devunits_load()
+    dv=find_in_dev_units(name)
+    if dv>=0
+      mu=true
+      wrathcount=0
+      wrathsub=''
+      rarity=@dev_units[dv][1]
+      merges=@dev_units[dv][2]
+      boon=@dev_units[dv][3].gsub(' ','')
+      bane=@dev_units[dv][4].gsub(' ','')
+      summoner=@dev_units[dv][5]
+      flowers=@dev_units[dv][6]
+      weaponz=@dev_units[dv][7].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
+      wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(@dev_units[dv][10][-1])
+      wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(@dev_units[dv][12])
+      wrathsub='Bushido' if 'Bushido'==@dev_units[dv][10][-1]
+    elsif @dev_nobodies.include?(name)
+      event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
+    elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
+      event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats.'
+    else
+      event.respond 'Mathoo does not have that character.  Showing neutral stats.'
+    end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(uid)
+    x2=x.find_index{|q| q[0]==name}
+    if x2.nil?
+      event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+    else
+      wrathcount=0
+      rarity=x[x2][1]
+      merges=x[x2][2]
+      boon=x[x2][3].gsub(' ','')
+      bane=x[x2][4].gsub(' ','')
+      summoner=x[x2][5]
+      flowers=x[x2][6]
+      weaponz=x[x2][7].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.nil?
+        weapon='-'
+      elsif weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
+      wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(x[x2][10][-1])
+      wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(x[x2][12])
+      wrathsub='Bushido' if 'Bushido'==x[x2][10][-1]
+    end
+  elsif event.message.text.downcase.split(' ').include?('prf') || args.map{|q| q.downcase}.include?('prf')
+    weapon=get_unit_prf(name)
+    weapon2=weapon[1] unless weapon[1].nil?
+    weapon=weapon[0]
+    unless weapon2.nil?
+      if weapon=='-'
+        w2=['-',0,0,0,0]
+      else
+        w2=find_skill(weapon,event)
+      end
+      if weapon2=='-'
+        w22=['-',0,0,0,0]
+      else
+        w22=find_skill(weapon2,event)
+      end
+      diff_num=[w2[4]-w22[4],'M','F']
+    end
+  end
+  sklz=@skills.map{|q| q}
+  tempest=get_bonus_type(event)
+  stat_skills_2=make_stat_skill_list_2(name,event,args)
+  ww2=sklz.find_index{|q| q[0]==weapon}
+  ww2=-1 if ww2.nil?
+  w2=sklz[ww2]
+  if w2[17].nil?
+    refinement=nil
+  elsif w2[17].length<2 && refinement=='Effect'
+    refinement=nil
+  elsif w2[17][0,1].to_i.to_s==w2[17][0,1] && refinement=='Effect'
+    refinement=nil if w2[17][1,1]=='*'
+  elsif w2[17][0,1]=='-' && w2[17][1,1].to_i.to_s==w2[17][1,1] && refinement=='Effect'
+    refinement=nil if w2[17][2,1]=='*'
+  end
+  refinement=nil if w2[7]!='Staff Users Only' && ['Wrathful','Dazzling'].include?(refinement)
+  refinement=nil if w2[7]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
+  mergetext=''
+  if refinement.nil? || refinement.length==0
+    m=w2[13]
+    m=m.map{|q| q.gsub(/\(T\)\(E\)|\(TE\)|\(E\)\(T\)|\(ET\)/,'(E)').gsub(/\(T\)\(R\)|\(TR\)|\(R\)\(T\)|\(RT\)/,'(R)')} if w2[5].split(', ')[0]=='Beasts Only' && transformed
+    m=m.reject{|q| !['(E)','(R)'].include?(q[0,3])}.reject{|q| q[3,5]!='WoDao' && q[3,6]!='Killer' && !['SlowSpecial','SpecialSlow'].include?(q[3,11])}
+    mx=['Atk','Spd','Def','Res']
+    mx=['Wrathful','Dazzling'] if w2[5]=='Staff Users Only'
+    if m.length<=0
+    elsif m.length==1 && m[0][0,3]=='(R)'
+      mergetext="#{mergetext}\n\n#{w2[0]} has a *#{m[0][3,m[0].length-3]}* effect when refined.  This can affect the proc calculations.\nTo include a refinement, try typing the weapon as \"#{w2[0]} (+) #{mx.sample} Mode\" instead."
+    elsif m.length==1 && m[0][0,3]=='(E)'
+      mergetext="#{mergetext}\n\n#{w2[0]} has a *#{m[0][3,m[0].length-3]}* effect when refined into its Effect Mode.  This can affect the proc calculations.\nTo include a refinement, try typing the weapon as \"#{w2[0]} (+) Effect Mode\" instead."
+    else
+      mx.unshift('Effect')
+      mergetext="#{mergetext}\n\nThe following effects can be applied to #{w2[0]} via Weapon Refinement.  This can affect the proc calculations."
+      m2=m.reject{|q| q[0,3]=='(E)'}.map{|q| q[3,q.length-3]}
+      mergetext="#{mergetext}\nAll refinements: #{m2.join(',')}" if m2.length>0
+      m2=m.reject{|q| q[0,3]=='(R)'}.map{|q| q[3,q.length-3]}
+      mergetext="#{mergetext}\nEffect Mode only: #{m2.join(',')}" if m2.length>0
+      mergetext="#{mergetext}\nTo include a refinement, try typing the weapon as \"#{w2[0]} (+) #{mx.sample} Mode\" instead."
+    end
+  end
+  if w2[5].split(', ')[0]=='Beasts Only' && !transformed
+    m=w2[13]
+    unless refinement.nil? || refinement.length==0
+      m=m.map{|q| q.gsub(/\(T\)\(R\)|\(TR\)|\(R\)\(T\)|\(RT\)/,'(T)')}
+      m=m.map{|q| q.gsub(/\(T\)\(E\)|\(TE\)|\(E\)\(T\)|\(ET\)/,'(T)')} if refinement=='Effect'
+    end
+    m=m.reject{|q| q[0,3]!='(T)'}.reject{|q| q[3,5]!='WoDao' && q[3,6]!='Killer' && !['SlowSpecial','SpecialSlow'].include?(q[3,11])}
+    if m.length<=0
+    elsif m.length==1
+      mergetext="#{mergetext}\n\n#{w2[0]} has a *#{m[0][3,m[0].length-3]}* effect when #{u40x[0]} is transformed.\nTo show #{u40x[0]}'s data when transformed, include the word \"Transformed\" in your message."
+    else
+      mergetext="#{mergetext}\n\nWhen #{u40x[0]} is transformed, #{w2[0]} also has the following effects:\n#{m.join(', ')}\nTo show #{u40x[0]}'s data when transformed, include the word \"Transformed\" in your message."
+    end
+  end
+  atk='Attack'
+  atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
+  atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
+  zzzl=sklz[ww2]
+  atk='Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
+  n=nature_name(boon,bane)
+  unless n.nil?
+    n=n[0] if atk=='Strength'
+    n=n[n.length-1] if atk=='Magic'
+    n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
+  end
+  u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
+  spec_wpn=false
+  if name=='Robin'
+    u40[0]='Robin (Shared stats)'
+    w='*Tome*'
+    spec_wpn=true
+    wl=weapon_legality(event,'Robin(M)',weapon)
+    wl2=weapon_legality(event,'Robin(F)',weapon)
+    wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+  end
+  xcolor=unit_color(event,u40x,u40[0],0,mu)
+  unless spec_wpn
+    wl=weapon_legality(event,u40[0],weapon,refinement)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  end
+  cru40=u40.map{|q| q}
+  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
+  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing,transformed) if wl.include?('~~')
+  cru40=u40.map{|q| q} unless wl.include?('~~')
+  if u40[0]=='Kiran'
+    u40[1]=0
+    u40[2]=0
+    u40[3]=0
+    u40[4]=0
+    u40[5]=0
+    mu=false
+    tempest=false
+    xcolor=0x9400D3
+    stat_skills=[]
+    stat_skills_2=[]
+  end
+  blu40=apply_stat_skills(event,stat_skills_2,u40.map{|a| a})
+  crblu40=apply_stat_skills(event,stat_skills_2,cru40.map{|a| a})
+  hppp=u40[1]-1
+  atkk=u40[2]
+  spdd=u40[3]
+  deff=u40[4]
+  ress=u40[5]
+  blhppp=blu40[1]-1
+  blatkk=blu40[2]
+  blspdd=blu40[3]
+  bldeff=blu40[4]
+  blress=blu40[5]
+  crhppp=cru40[1]-1
+  cratkk=cru40[2]
+  crspdd=cru40[3]
+  crdeff=cru40[4]
+  crress=cru40[5]
+  crblhppp=crblu40[1]-1
+  crblatkk=crblu40[2]
+  crblspdd=crblu40[3]
+  crbldeff=crblu40[4]
+  crblress=crblu40[5]
+  wdamage=0
+  wdamage2=0
+  if wrathcount>=1
+    wdamage+=10
+    wdamage2+=10
+    stat_skills.push('Wrath')
+  end
+  if wrathcount>=2
+    wdamage+=10
+    wdamage2+=10
+    stat_skills.push('Wrath')
+  end
+  if wrathsub.length>0
+    wdamage+=10
+    wdamage2+=10
+    stat_skills.push(wrathsub)
+  end
+  wdamage+=10 if has_weapon_tag?('WoDao',sklz[ww2],refinement,transformed)
+  wdamage2+=10 if has_weapon_tag?('WoDao',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  cdwn=0
+  cdwn-=1 if has_weapon_tag?('Killer',sklz[ww2],refinement,transformed)
+  cdwn+=1 if has_weapon_tag?('SlowSpecial',sklz[ww2],refinement,transformed) || has_weapon_tag?('SpecialSlow',sklz[ww2],refinement,transformed)
+  cdwn2=0
+  cdwn2=cdwn unless wl.include?('~~')
+  cdwns=cdwn
+  cdwns="~~#{cdwn}~~ #{cdwn2}" unless cdwn2==cdwn
+  staves=[[],[],[],[],[],[],[],[],[]]
+  g=get_markers(event) 
+  procs=@skills.reject{|q| !has_any?(g, q[15]) || q[6]!='Special'}
+  czz=0
+  czz2=0
+  czz+=10 if has_weapon_tag?('WoDao_Star',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Star',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  c=add_number_to_string(get_match_in_list(procs, 'Night Sky',1)[4],cdwns)
+  d="`dmg /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`dmg /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[0].push("Night Sky - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  c=add_number_to_string(get_match_in_list(procs, 'Astra',1)[4],cdwns)
+  d="`3* dmg /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`3* dmg /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[0].push("Astra - #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Regnal Astra',1)[4],cdwns)
+  d="#{spdd*2/5+wdamage+czz}#{" (#{blspdd*2/5+wdamage+czz})" unless spdd*2/5==blspdd*2/5}"
+  cd="#{crspdd*2/5+wdamage2+czz2}#{" (#{crblspdd*2/5+wdamage2+czz2})" unless crspdd*2/5==crblspdd*2/5}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[0].push("**Regnal Astra - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Regnal Astra',1)[8].split(', ').include?(u40[0])
+  c=add_number_to_string(get_match_in_list(procs, 'Glimmer',1)[4],cdwns)
+  d="`dmg /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`dmg /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[0].push("Glimmer - #{d}, cooldown of #{c}")
+  czz=0
+  czz2=0
+  czz+=10 if has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  c=add_number_to_string(get_match_in_list(procs, 'New Moon',1)[4],cdwns)
+  d="`3* eDR /10#{" +#{wdamage+czz}" if wdamage+czz2>0}`"
+  d2="`3* eDR /10#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[1].push("New Moon - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  c=add_number_to_string(get_match_in_list(procs, 'Luna',1)[4],cdwns)
+  d="`eDR /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`eDR /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[1].push("Luna - #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Black Luna',1)[4],cdwns)
+  d="`4* eDR /5#{" +#{wdamage+czz}" if wdamage+czz2>0}`"
+  d2="`4* eDR /5#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[1].push("**Black Luna - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Black Luna',1)[8].split(', ').include?(u40[0])
+  c=add_number_to_string(get_match_in_list(procs, 'Moonbow',1)[4],cdwns)
+  d="`3* eDR /10#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`3* eDR /10#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[1].push("Moonbow - #{d}, cooldown of #{c}")
+  wd="#{"#{wdamage}, " if wdamage>0}"
+  wd="~~#{wdamage}~~ #{wdamage2}, " unless wdamage==wdamage2
+  czz=0
+  czz2=0
+  czz+=10 if has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  c=add_number_to_string(get_match_in_list(procs, 'Daylight',1)[4],cdwns)
+  d="`3* #{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /10`"
+  d2="`3* #{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /10`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[2].push("Daylight - #{wd}heals for #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  c=add_number_to_string(get_match_in_list(procs, 'Sol',1)[4],cdwns)
+  d="`#{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /2`"
+  d2="`#{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /2`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[2].push("Sol - #{wd}heals for #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Noontime',1)[4],cdwns)
+  d="`3* #{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /10`"
+  d2="`3* #{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /10`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[2].push("Noontime - #{wd}heals for #{d}, cooldown of #{c}")
+  czz=0
+  czz2=0
+  czz+=10 if has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Eclipse',sklz[ww2],refinement,transformed)
+  czz2+=10 if (has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Eclipse',sklz[ww2],refinement,transformed)) && !wl.include?('~~')
+  c=add_number_to_string(get_match_in_list(procs, 'Aether',1)[4],cdwns)
+  d="`eDR /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  d2="`eDR /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  h="`#{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /2 + eDR /4`"
+  h2="`#{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /2 + eDR /4`"
+  h="~~#{h}~~ #{h2}" unless h==h2
+  staves[3].push("Aether - #{d}, heals for #{h}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Radiant Aether',1)[4],cdwns)
+  staves[3].push("**Radiant Aether - `#{d}, heals for #{h}, cooldown of #{c}**") if get_match_in_list(procs, 'Radiant Aether',1)[8].split(', ').include?(u40[0])
+  czz=0
+  czz2=0
+  czz+=10 if has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  c=add_number_to_string(get_match_in_list(procs, 'Glowing Ember',1)[4],cdwns)
+  d="#{deff/2+wdamage+czz}#{" (#{bldeff/2+wdamage+czz})" unless deff/2==bldeff/2}"
+  cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[4].push("Glowing Ember - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  c=add_number_to_string(get_match_in_list(procs, 'Ignis',1)[4],cdwns)
+  d="#{deff*4/5+wdamage+czz}#{" (#{bldeff*4/5+wdamage+czz})" unless deff*4/5==bldeff*4/5}"
+  cd="#{crdeff*4/5+wdamage2+czz2}#{" (#{crbldeff*4/5+wdamage2+czz2})" unless crdeff*4/5==crbldeff*4/5}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[4].push("Ignis - #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Bonfire',1)[4],cdwns)
+  d="#{deff/2+wdamage+czz}#{" (#{bldeff/2+wdamage+czz})" unless deff/2==bldeff/2}"
+  cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[4].push("Bonfire - #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Blue Flame',1)[4],cdwns)
+  d="#{wdamage+czz}-#{10+wdamage+czz}"
+  cd="#{wdamage2+czz2}-#{10+wdamage2+czz2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  dx="#{d}"
+  d="#{wdamage+czz}-#{25+wdamage+czz}"
+  cd="#{wdamage2+czz2}-#{25+wdamage2+czz2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[4].push("Blue Flame - #{dx} (#{d} when adjacent to an ally), cooldown of #{c}")
+  czz=0
+  czz2=0
+  czz+=10 if has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  c=add_number_to_string(get_match_in_list(procs, 'Chilling Wind',1)[4],cdwns)
+  d="#{ress/2+wdamage+czz}#{" (#{blress/2+wdamage+czz})" unless ress/2==blress/2}"
+  cd="#{crress/2+wdamage2+czz2}#{" (#{crblress/2+wdamage2+czz2})" unless crress/2==crblress/2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[5].push("Chilling Wind - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  c=add_number_to_string(get_match_in_list(procs, 'Glacies',1)[4],cdwns)
+  d="#{ress*4/5+wdamage+czz}#{" (#{blress*4/5+wdamage+czz})" unless ress*4/5==blress*4/5}"
+  cd="#{crress*4/5+wdamage2+czz2}#{" (#{crblress*4/5+wdamage2+czz2})" unless crress*4/5==crblress*4/5}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[5].push("Glacies - #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Iceberg',1)[4],cdwns)
+  d="#{ress/2+wdamage+czz}#{" (#{blress/2+wdamage+czz})" unless ress/2==blress/2}"
+  cd="#{crress/2+wdamage2+czz2}#{" (#{crblress/2+wdamage2+czz2})" unless crress/2==crblress/2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[5].push("Iceberg - #{d}, cooldown of #{c}")
+  czz=0
+  czz2=0
+  czz+=10 if has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Freezeflame',sklz[ww2],refinement,transformed)
+  czz2+=10 if (has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Freezeflame',sklz[ww2],refinement,transformed)) && !wl.include?('~~')
+  if procs.map{|q| q[1]}.include?('Freezeflame')
+    c=add_number_to_string(get_match_in_list(procs, 'Freezeflame',1)[4],cdwns)
+    d="#{deff/2+ress/2+wdamage+czz}#{" (#{bldeff/2+blress/2+wdamage+czz})" unless ress/2==blress/2}"
+    cd="#{crdeff/2+crress/2+wdamage2+czz2}#{" (#{crbldeff/2+crblress/2+wdamage2+czz2})" unless crress/2==crblress/2}"
+    d="~~#{d}~~ #{cd}" unless d==cd
+    staves[6].push("Freezeflame - #{d}, cooldown of #{c}") if get_match_in_list(procs, 'Freezeflame',1)[8].split(', ').include?(u40[0])
+  end
+  czz=0
+  czz2=0
+  czz+=10 if has_weapon_tag?('WoDao_Dragon',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Dragon',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  c=add_number_to_string(get_match_in_list(procs, 'Dragon Gaze',1)[4],cdwns)
+  d="#{atkk*3/10+wdamage+czz}#{" (#{blatkk*3/10+wdamage+czz})" unless atkk*3/10==blatkk*3/10}"
+  cd="#{cratkk*3/10+wdamage2+czz2}#{" (#{crblatkk*3/10+wdamage2+czz2})" unless cratkk*3/10==crblatkk*3/10}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[7].push("Dragon Gaze - Up to #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  c=add_number_to_string(get_match_in_list(procs, 'Dragon Fang',1)[4],cdwns)
+  d="#{atkk/2+wdamage+czz}#{" (#{blatkk/2+wdamage+czz})" unless atkk/2==blatkk/2}"
+  cd="#{cratkk/2+wdamage2+czz2}#{" (#{crblatkk/2+wdamage2+czz2})" unless cratkk/2==crblatkk/2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[7].push("Dragon Fang - Up to #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Draconic Aura',1)[4],cdwns)
+  d="#{atkk*3/10+wdamage+czz}#{" (#{blatkk*3/10+wdamage+czz})" unless atkk*3/10==blatkk*3/10}"
+  cd="#{cratkk*3/10+wdamage2+czz2}#{" (#{crblatkk*3/10+wdamage2+czz2})" unless cratkk*3/10==crblatkk*3/10}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[7].push("Draconic Aura - Up to #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Fire Emblem',1)[4],cdwns)
+  d="#{spdd*3/10+wdamage+czz}#{" (#{blspdd*3/10+wdamage+czz})" unless spdd*3/10==blspdd*3/10}"
+  cd="#{crspdd*3/10+wdamage2+czz2}#{" (#{crblspdd*3/10+wdamage2+czz2})" unless crspdd*3/10==crblspdd*3/10}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[7].push("**Fire Emblem - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Fire Emblem',1)[8].split(', ').include?(u40[0])
+  czz=0
+  czz2=0
+  czz+=10 if has_weapon_tag?('WoDao_Darkness',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Darkness',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  c=add_number_to_string(get_match_in_list(procs, 'Retribution',1)[4],cdwns)
+  d="#{wdamage+czz}-#{3*hppp/10+wdamage+czz}#{" (#{wdamage+czz}-#{3*blhppp/10+wdamage+czz}) based on HP lost" if 3*hppp/10!=3*blhppp/10}"
+  cd="#{wdamage2+czz2}-#{3*crhppp/10+wdamage2+czz2}#{" (#{wdamage2+czz2}-#{3*crblhppp/10+wdamage2+czz2}) based on HP lost" if 3*crhppp/10!=3*crblhppp/10}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[8].push("Retribution - #{d}, cooldown of #{c}") if event.message.text.downcase.include?(" all")
+  c=add_number_to_string(get_match_in_list(procs, 'Vengeance',1)[4],cdwns)
+  d="#{wdamage+czz}-#{hppp/2+wdamage+czz}#{" (#{wdamage+czz}-#{blhppp/2+wdamage+czz}) based on HP lost" if hppp/2!=blhppp/2}"
+  cd="#{wdamage2+czz2}-#{crhppp/2+wdamage2+czz2}#{" (#{wdamage2+czz2}-#{crblhppp/2+wdamage2+czz2}) based on HP lost" if crhppp/2!=crblhppp/2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[8].push("Vengeance - #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Reprisal',1)[4],cdwns)
+  d="#{wdamage+czz}-#{3*hppp/10+wdamage+czz}#{" (#{wdamage+czz}-#{3*blhppp/10+wdamage+czz}) based on HP lost" if 3*hppp/10!=3*blhppp/10}"
+  cd="#{wdamage2+czz2}-#{3*crhppp/10+wdamage2+czz2}#{" (#{wdamage2+czz2}-#{3*crblhppp/10+wdamage2+czz2}) based on HP lost" if 3*crhppp/10!=3*crblhppp/10}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[8].push("Reprisal - #{d}, cooldown of #{c}")
+  pic=pick_thumbnail(event,u40x,bot)
+  pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
+  k="__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.map{|q| q.join("\n")}.join("\n\n").length>=1950
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+    s=""
+    for i in 0...staves.length
+      s=extend_message(s,staves[i].join("\n"),event,2) unless staves[i].length.zero?
+    end
+    event.respond s
+  else
+    flds=[["<:Special_Offensive_Star:454473651396542504>Star",staves[0],1],["<:Special_Offensive_Moon:454473651345948683>Moon",staves[1]],["<:Special_Offensive_Sun:454473651429965834>Sun",staves[2]],["<:Special_Offensive_Eclipse:454473651308199956>Eclipse",staves[3],1],["<:Special_Offensive_Fire:454473651861979156>Fire",staves[4]],["<:Special_Offensive_Ice:454473651291422720>Ice",staves[5]],["<:Special_Offensive_Fire:454473651861979156><:Special_Offensive_Ice:454473651291422720>Freezeflame",staves[6]],["<:Special_Offensive_Dragon:454473651186696192>Dragon",staves[7],1],["<:Special_Offensive_Darkness:454473651010535435>Darkness",staves[8]]]
+    for i in 0...flds.length
+      if flds[i][1].length.zero?
+        flds[i]=nil
+      else
+        flds[i][1]=flds[i][1].join("\n")
+      end
+    end
+    flds.compact!
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,flds)
+  end
+end
+
+def study_of_banners(event,name,bot)
+  b=[]
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
+      b.push(line.gsub("\n",''))
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    b[i]=b[i].split('\\'[0])
+    b[i][1]=b[i][1].to_i
+    b[i][2]=b[i][2].split(', ')
+    b[i][4]=nil if !b[i][4].nil? && b[i][4].length<=0
+    b[i]=nil if b[i][2][0]=='-'
+  end
+  justnames=true
+  if !safe_to_spam?(event)
+    justnames=false if event.message.text.downcase.split(' ').include?('rates') || event.message.text.downcase.split(' ').include?('details') || event.message.text.downcase.split(' ').include?('specifics')
+  else
+    justnames=false
+    justnames=true if event.message.text.downcase.split(' ').include?('justnames') || event.message.text.downcase.split(' ').include?('just_names') || " #{event.message.text.downcase} ".include?(' just names ')
+  end
+  star_buff=nil
+  args=event.message.text.downcase.split(' ').reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  for i in 0...args.length
+    if args[i].to_i.to_s==args[i]
+      star_buff=args[i].to_i if star_buff.nil?
+    elsif args[i][0,1]=='+' && args[i][1,args[i].length-1].to_i.to_s==args[i][1,args[i].length-1]
+      star_buff=args[i][1,args[i].length-1].to_i if star_buff.nil?
+    elsif args[i][0,1]=="-" && args[i][1,args[i].length-1].to_i.to_s==args[i][1,args[i].length-1]
+      star_buff=0-args[i][1,args[i].length-1].to_i if star_buff.nil?
+    end
+  end
+  star_buff=0 if star_buff.nil?
+  b.compact!
+  b.reverse!
+  data_load()
+  untz=@units.map{|q| q}
+  j=untz[untz.find_index{|q| q[0]==name}]
+  banners=[]
+  banner_count=0
+  len='%.2f'
+  len='%.4f' if @shardizard==4
+  if j[9][0].include?('LU')
+    banners.push('*Launch Unit*')
+    banner_count=-1
+  end
+  metadata_load()
+  fail_mode=@summon_rate[2]%3
+  for i in 0...b.length
+    percentage=b[i][1]
+    percentage=0-percentage if percentage<0
+    disperc=percentage*1.0+star_buff*0.5
+    disperc=percentage*1.0+star_buff*percentage/(percentage+3.00) if b[i][1]>0
+    five_star=3+star_buff*3/(percentage+3)
+    if star_buff>=24 && fail_mode==2
+      if b[i][1]>0
+        disperc=100.00*percentage/(percentage+3.00)
+        five_star=300.00/(percentage+3.00)
+      else
+        disperc=100.00
+        five_star=0.00
+      end
+    end
+    four_star=(100.00 - disperc - five_star) * 58.00 / (100.00 - percentage - 3)
+    if star_buff>=24 && fail_mode==1
+      disperc=50.00
+      five_star=50.00
+      four_star=0.00
+    end
+    shared_color=[]
+    other_color=[]
+    if b[i][2].include?(j[0])
+      for i2 in 0...b[i][2].length
+        u=untz[untz.find_index{|q| q[0]==b[i][2][i2]}]
+        if u[0]==j[0]
+        elsif u[1][0]==j[1][0]
+          shared_color.push(u[0])
+        else
+          other_color.push(u[0])
+        end
+      end
+      if justnames
+        str=b[i][0]
+      else
+        tm=''
+        unless b[i][4].nil?
+          mo=['','January','February','March','April','May','June','July','August','September','October','November','December']
+          t=b[i][4].split(', ').map{|q| q.split('/').map{|q2| q2.to_i}}
+          tm="\n*Duration:* #{t[0][0]} #{mo[t[0][1]]} #{t[0][2]} - #{t[1][0]} #{mo[t[1][1]]} #{t[1][2]}" if t.length>1
+          tm="\n*Duration:* #{t[0][0]} #{mo[t[0][1]]} #{t[0][2]} - >Unknown<" unless t.length>1
+        end
+        if !b[i][3].nil? && b[i][3].include?('0')
+          str="__*#{b[i][0]}*__#{tm}\n*Multi-banner hybrid with #{shared_color.length+other_color.length+1} total focus units*\n*Starting Focus Chance:* #{len % percentage}% (5<:Icon_Rarity_5p10:448272715099406336>) each banner#{"\n*Current Focus Chance:* #{len % disperc}% (5<:Icon_Rarity_5p10:448272715099406336>) each banner" if star_buff>0}"
+        else
+          str="__*#{b[i][0]}*__#{tm}#{"\n*Shared Focus Color:* #{shared_color.join(', ')}" if shared_color.length>0}#{"\n*Other Focus Color:* #{other_color.join(', ')}" if other_color.length>0}\n*Starting Focus Chance:* #{len % percentage}% (5<:Icon_Rarity_5p10:448272715099406336>)#{"\n*Current Focus Chance:* #{len % disperc}% (5<:Icon_Rarity_5p10:448272715099406336>)" if star_buff>0}"
+        end
+        if !b[i][3].nil? && b[i][3].include?('0')
+        elsif !b[i][3].nil? && b[i][3].include?('4')
+          str="#{str}#{", #{len % (four_star/2)}% (4<:Icon_Rarity_4p10:448272714210476033>)\n*5<:Icon_Rarity_5p10:448272715099406336>#{" Start" unless star_buff>0} Chance:* #{len % (disperc*1.00/(shared_color.length+1))}% (Perceived), #{len % (disperc*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
+          str="#{str}#{"\n*4<:Icon_Rarity_4p10:448272714210476033>#{" Start" unless star_buff>0} Chance:* #{len % ((four_star/2)/(shared_color.length+1))}% (Perceived), #{len % ((four_star/2)/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
+        else
+          str="#{str}#{"\n5<:Icon_Rarity_5p10:448272715099406336> *#{"Start " unless star_buff>0}Chance:* #{len % (disperc*1.00/(shared_color.length+1))}% (Perceived), #{len % (disperc*1.00/(shared_color.length+other_color.length+1))}% (Actual)" if shared_color.length+other_color.length>0}"
+        end
+      end
+      banners.push(str)
+    end
+  end
+  banner_count+=banners.length
+  ftr="Banner count: #{banner_count}"
+  banners=['>Fake unit<'] if !j[13][0].nil? && banners.length<=0
+  five_star=[3+star_buff*3.00/(8.00),3+star_buff*3.00/(6.00)]
+  four_star=[(97.00-star_buff*0.5-five_star[0])*58.00/(94.00),(95.00-star_buff*0.5-five_star[0])*58.00/(92.00)]
+  three_star=[100.00-2*five_star[0]-four_star[0],100.00-(8+star_buff*0.5)-four_star[1]]
+  two_star=[0.0,0.0]
+  one_star=[0.0,0.0]
+  if star_buff>=24 && fail_mode==1
+    five_star=[50.0,50.0]
+    four_star=[0.0,0.0]
+    three_star=[0.0,0.0]
+    two_star=[0.0,0.0]
+    one_star=[0.0,0.0]
+  elsif star_buff>=24 && fail_mode==2
+    five_star=[50.0,37.5]
+    four_star=[0.0,0.0]
+    three_star=[0.0,0.0]
+    two_star=[0.0,0.0]
+    one_star=[0.0,0.0]
+  end
+  non_focus=[[],[]]
+  if j[9][0].include?('5p')
+    k=untz.reject{|q| !q[9][0].include?('5p') || !q[13][0].nil?}
+    k.push(j) unless k.include?(j) || j[9][0].include?('TD')
+    k2=untz.reject{|q| !q[9][0].include?('5p') || q[9][0].include?('TD') || !q[13][0].nil?}
+    k2.push(j) unless k2.include?(j)
+    non_focus[0].push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (New/Special Heroes) - #{len % (five_star[0]/k2.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[0]/k2.length)}% (Actual)") unless five_star[0]<=0 || j[9][0].include?('TD')
+    non_focus[0].push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Other banners) - #{len % (five_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[0]/k.length)}% (Actual)") unless five_star[0]<=0
+    non_focus[1].push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Hero Fest only) - #{len % (five_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (five_star[1]/k.length)}% (Actual)") unless five_star[1]<=0
+  end
+  if j[9][0].include?('4p')
+    k=untz.reject{|q| !q[9][0].include?('4p') || !q[13][0].nil?}
+    k.push(j) unless k.include?(j)
+    non_focus[0].push("4<:Icon_Rarity_4:448266418459377684> (standard banner) - #{len % (four_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (four_star[0]/k.length)}% (Actual)") unless four_star[0]<=0
+    non_focus[0].push("4<:Icon_Rarity_4:448266418459377684> Non-Focus - #{len % ((four_star[0]/2)/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % ((four_star[0]/2)/k.length)}% (Actual)") unless four_star[0]<=0
+    non_focus[1].push("4<:Icon_Rarity_4:448266418459377684> all the time - #{len % (four_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (four_star[1]/k.length)}% (Actual)") unless four_star[1]<=0
+  end
+  if j[9][0].include?('3p')
+    k=untz.reject{|q| !q[9][0].include?('3p') || !q[13][0].nil?}
+    k.push(j) unless k.include?(j)
+    non_focus[0].push("3<:Icon_Rarity_3:448266417934958592> all the time - #{len % (three_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (three_star[0]/k.length)}% (Actual)") unless three_star[0]<=0
+    non_focus[1].push("3<:Icon_Rarity_3:448266417934958592> all the time - #{len % (three_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (three_star[1]/k.length)}% (Actual)") unless three_star[1]<=0
+  end
+  if j[9][0].include?('2p')
+    k=untz.reject{|q| !q[9][0].include?('2p') || !q[13][0].nil?}
+    k.push(j) unless k.include?(j)
+    non_focus[0].push("2<:Icon_Rarity_2:448266417872044032> all the time - #{len % (two_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (two_star[0]/k.length)}% (Actual)") unless two_star[0]<=0
+    non_focus[1].push("2<:Icon_Rarity_2:448266417872044032> all the time - #{len % (two_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (two_star[1]/k.length)}% (Actual)") unless two_star[1]<=0
+  end
+  if j[9][0].include?('1p')
+    k=untz.reject{|q| !q[9][0].include?('1p') || !q[13][0].nil?}
+    k.push(j) unless k.include?(j)
+    non_focus[0].push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % (one_star[0]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (one_star[0]/k.length)}% (Actual)") unless one_star[0]<=0
+    non_focus[1].push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % (one_star[1]/k.reject{|q| q[1][0]!=j[1][0]}.length)}% (Perceived), #{len % (one_star[1]/k.length)}% (Actual)") unless one_star[1]<=0
+  end
+  unless j[9][1].nil?
+    rardata=j[9][0].downcase.gsub('0s','').split('p')[0]
+    summon_type=[[],[],[],[],[],[],[]]
+    for m in 1...@max_rarity_merge[0]+1
+      summon_type[0].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}p") # Summon Pool
+      summon_type[1].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}d") # Daily Rotation Heroes
+      summon_type[2].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}g") # Grand Hero Battles
+      summon_type[3].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}f") # free heroes
+      summon_type[4].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}q") # quest rewards
+      summon_type[5].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}t") # Tempest Trials rewards
+      summon_type[6].push("Seasonal #{m}#{@rarity_stars[m-1]} summon") if rardata.include?("#{m}s")
+      summon_type[6].push("Story unit starting at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}y")
+      summon_type[6].push("Purchasable at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}b")
+    end
+    summon_type[6].push("~~Unavailable on New/Special Heroes banners~~") if rardata.include?('td')
+    if summon_type[6].include?('Story unit starting at 2<:Icon_Rarity_2:448266417872044032>') && summon_type[6].include?('Story unit starting at 4<:Icon_Rarity_4:448266418459377684>')
+      for i in 0...summon_type[6].length
+        if summon_type[6][i]=='Story unit starting at 2<:Icon_Rarity_2:448266417872044032>'
+          summon_type[6][i]='Story unit starting at 2<:Icon_Rarity_2:448266417872044032> (prior to version 2.5.0)'
+        elsif summon_type[6][i]=='Story unit starting at 4<:Icon_Rarity_4:448266418459377684>'
+          summon_type[6][i]='Story unit starting at 4<:Icon_Rarity_4:448266418459377684> (after version 2.5.0)'
+        end
+      end
+    end
+    for m in 0...5
+      summon_type[m]=summon_type[m].sort{|a,b| a <=> b}
+    end
+    mz=['summon','daily rotation battles','Grand Hero Battle','free hero','quest reward','Tempest Trial reward']
+    for m in 0...6
+      if summon_type[m].length>0
+        summon_type[m]="#{summon_type[m].join('/')} #{mz[m]}"
+      else
+        summon_type[m]=nil
+      end
+    end
+    if summon_type[6].length>0
+      summon_type[6]=summon_type[6].join(', ')
+    else
+      summon_type[6]=nil
+    end
+    summon_type.compact!
+    summon_type=['Unobtainable'] if summon_type.nil? || summon_type.length.zero?
+    summon_type=summon_type.join("\n")
+    banners.unshift(summon_type)
+  end
+  if banners.length>0
+    banners[0]="__**Debut:**__\n#{banners[0]}"
+    banners[0]="#{banners[0]}\n\n\n__**Joined the summon pool during:**__\n#{j[9][1]}" unless j[9][1].nil?
+    banners[1]="\n__**Other Banners:**__#{"\n" unless justnames}\n#{banners[1]}" if banners.length>1
+    if justnames && !safe_to_spam?(event)
+      banners.push("\n\n#{ftr}")
+      ftr='You can see more details about these banners by using this command in PM or by including the word "specifics" in the command.'
+    else
+      banners.push("\n__**Starting Non-Focus Chances:**__#{"\n\n__*Standard 3% banners*__\n#{non_focus[0].join("\n")}" if non_focus[0].length>0}#{"\n\n__*Hero Fests and Legendary banners*__\n#{non_focus[1].join("\n")}" if non_focus[1].length>0}") if non_focus[0].length>0 || non_focus[1].length>0
+    end
+  else
+    banners=[">No banners found<"]
+    banners.push("\n__**Starting Non-Focus Chances:**__#{"\n\n__*Standard 3% banners*__\n#{non_focus[0].join("\n")}" if non_focus[0].length>0}#{"\n\n__*Hero Fests and Legendary banners*__\n#{non_focus[1].join("\n")}" if non_focus[1].length>0}") if (non_focus[0].length>0 || non_focus[1].length>0) && !justnames && safe_to_spam?(event)
+  end
+  hdr="__Banners **#{j[0]}** has been on__#{"\nBanners in **+#{star_buff}** form (after #{star_buff*5} to #{star_buff*5+4} failures to get a 5<:Icon_Rarity_5:448266417553539104>)" if star_buff>0}"
+  hdr="__Banners **#{j[0]}** has been on__\nBanners in **Omega** form (after 120 failures to get a 5<:Icon_Rarity_5:448266417553539104>)" if star_buff>=24
+  if banners.join("\n#{"\n" unless justnames}").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    msg=hdr.split(' ').join(' ')
+    for i in 0...banners.length
+      msg=extend_message(msg,banners[i],event,1,"\n#{"\n" unless justnames}")
+    end
+    event.respond msg
+  else
+    create_embed(event,hdr,banners.join("\n#{"\n" unless justnames}"),unit_color(event,j),ftr,pick_thumbnail(event,j,bot),nil,4)
+  end
+end
+
+def study_of_phases(event,name,bot,weapon=nil)
+  u40x=find_unit(name,event)
+  if name=='Robin' && u40x[0].is_a?(Array)
+    u40x=u40x[0]
+    u40x[0]='Robin (Shared stats)'
+    u40x[1][0]='Cyan'
+  end
+  if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
+    unless u40x[0]=='Kiran'
+      event.respond "#{u40x[0]} does not have official stats.  I cannot study how #{'he does' if u40x[10]=='M'}#{'she does' if u40x[10]=='F'}#{'they do' unless ['M','F'].include?(u40x[10])} in each phase."
+      return nil
+    end
+  end
+  data_load()
+  weapon='-' if weapon.nil?
+  s=event.message.text
+  s=remove_prefix(s,event)
+  a=s.split(' ')
+  s=event.message.text if all_commands().include?(a[0])
+  args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  flurp=find_stats_in_string(event)
+  flurp[5]='' if flurp[5].nil?
+  rarity=flurp[0]
+  merges=flurp[1]
+  boon=flurp[2]
+  bane=flurp[3]
+  summoner=flurp[4]
+  refinement=flurp[5]
+  blessing=flurp[6]
+  blessing=blessing[0,8] if blessing.length>8
+  transformed=flurp[7]
+  flowers=flurp[8]
+  untz=@units.map{|q| q}
+  if untz.find_index{|q| q[0]==name}.nil?
+  elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    for i in 0...blessing.length
+      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='PairUp('
+    end
+  elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
+    for i in 0...blessing.length
+      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='PairUp('
+    end
+  end
+  blessing.compact!
+  unless name=='Robin'
+    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+  end
+  args.compact!
+  if args.nil? || args.length<1
+    event.respond 'No unit was included'
+    return nil
+  end
+  weapon='-' if weapon.nil?
+  stat_skills=make_stat_skill_list_1(name,event,args)
+  mu=false
+  if event.message.text.downcase.include?("mathoo's")
+    devunits_load()
+    dv=find_in_dev_units(name)
+    if dv>=0
+      mu=true
+      rarity=@dev_units[dv][1]
+      merges=@dev_units[dv][2]
+      boon=@dev_units[dv][3].gsub(' ','')
+      bane=@dev_units[dv][4].gsub(' ','')
+      summoner=@dev_units[dv][5]
+      flowers=@dev_units[dv][6]
+      weaponz=@dev_units[dv][7].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
+    elsif @dev_nobodies.include?(name)
+      event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
+    elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
+      event.respond 'Mathoo does not have that character...but not for a lack of wanting.  Showing neutral stats.'
+    else
+      event.respond 'Mathoo does not have that character.  Showing neutral stats.'
+    end
+  elsif donate_trigger_word(event)>0
+    uid=donate_trigger_word(event)
+    x=donor_unit_list(uid)
+    x2=x.find_index{|q| q[0]==name}
+    if x2.nil?
+      event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
+    else
+      rarity=x[x2][1]
+      merges=x[x2][2]
+      boon=x[x2][3].gsub(' ','')
+      bane=x[x2][4].gsub(' ','')
+      summoner=x[x2][5]
+      flowers=x[x2][6]
+      weaponz=x[x2][7].reject{|q| q.include?('~~')}
+      weapon=weaponz[weaponz.length-1]
+      if weapon.nil?
+        weapon='-'
+      elsif weapon.include?(' (+) ')
+        w=weapon.split(' (+) ')
+        weapon=w[0]
+        refinement=w[1].gsub(' Mode','')
+      else
+        refinement=nil
+      end
+    end
+  elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
+    weapon=get_unit_prf(name)
+    weapon2=weapon[1] unless weapon[1].nil?
+    weapon=weapon[0]
+    unless weapon2.nil?
+      if weapon=='-'
+        w2=['-',0,0,0,0]
+      else
+        w2=find_skill(weapon,event)
+      end
+      if weapon2=='-'
+        w22=['-',0,0,0,0]
+      else
+        w22=find_skill(weapon2,event)
+      end
+      diff_num=[w2[4]-w22[4],'M','F']
+    end
+  end
+  sklz=@skills.map{|q| q}
+  tempest=get_bonus_type(event)
+  deftile=false
+  deftile=true if event.message.text.downcase.split(' ').include?('defensetile')
+  deftile=true if event.message.text.downcase.split(' ').include?('defencetile')
+  deftile=true if event.message.text.downcase.split(' ').include?('deftile')
+  deftile=true if event.message.text.downcase.split(' ').include?('defensivetile')
+  deftile=true if event.message.text.downcase.split(' ').include?('defencivetile')
+  deftile=true if event.message.text.downcase.split(' ').include?('defenseterrain')
+  deftile=true if event.message.text.downcase.split(' ').include?('defenceterrain')
+  deftile=true if event.message.text.downcase.split(' ').include?('defterrain')
+  deftile=true if event.message.text.downcase.split(' ').include?('defensiveterrain')
+  deftile=true if event.message.text.downcase.split(' ').include?('defenciveterrain')
+  stat_skills_2=make_stat_skill_list_2(name,event,args)
+  ww2=sklz.find_index{|q| q[1]==weapon}
+  ww2=-1 if ww2.nil?
+  w2=sklz[ww2]
+  if w2[17].nil?
+    refinement=nil
+  elsif w2[17].length<2 && refinement=='Effect'
+    refinement=nil
+  elsif w2[17][0,1].to_i.to_s==w2[17][0,1] && refinement=='Effect'
+    refinement=nil if w2[17][1,1]=='*'
+  elsif w2[17][0,1]=='-' && w2[17][1,1].to_i.to_s==w2[17][1,1] && refinement=='Effect'
+    refinement=nil if w2[17][2,1]=='*'
+  end
+  refinement=nil if w2[7]!='Staff Users Only' && ['Wrathful','Dazzling'].include?(refinement)
+  refinement=nil if w2[7]=='Staff Users Only' && !['Wrathful','Dazzling'].include?(refinement)
+  atk='<:StrengthS:514712248372166666> Attack'
+  atk='<:MagicS:514712247289774111> Magic' if ['Tome','Healer','Dragon'].include?(u40x[1][1])
+  atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
+  zzzl=sklz[ww2]
+  atk='<:FreezeS:514712247474585610> Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
+  n=nature_name(boon,bane)
+  unless n.nil?
+    n=n[0] if atk=='<:StrengthS:514712248372166666> Strength'
+    n=n[n.length-1] if atk=='<:MagicS:514712247289774111> Magic'
+    n=n.join(' / ') if ['<:StrengthS:514712248372166666> Attack','<:FreezeS:514712247474585610> Freeze'].include?(atk)
+  end
+  u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
+  bane2="#{bane}"
+  bane2='' if merges>0
+  u40x2=get_stats(event,name,40,5,0,boon,bane2)
+  spec_wpn=false
+  if name=='Robin'
+    u40[0]='Robin (Shared stats)'
+    w='*Tome*'
+    spec_wpn=true
+    wl=weapon_legality(event,'Robin(M)',weapon)
+    wl2=weapon_legality(event,'Robin(F)',weapon)
+    wl="#{wl}(M) / #{wl2}(F)" unless wl==wl2
+  end
+  xcolor=unit_color(event,u40x,u40[0],0,mu)
+  unless spec_wpn
+    wl=weapon_legality(event,u40[0],weapon,refinement)
+    weapon=wl.split(' (+) ')[0] unless wl.include?('~~')
+  end
+  cru40=u40.map{|a| a}
+  u40=apply_stat_skills(event,stat_skills,u40,tempest,summoner,weapon,refinement,blessing,transformed)
+  cru40=apply_stat_skills(event,stat_skills,cru40,tempest,summoner,'-','',blessing,transformed)
+  blu40=u40.map{|a| a}
+  crblu40=cru40.map{|a| a}
+  blu40=apply_stat_skills(event,stat_skills_2,blu40)
+  crblu40=apply_stat_skills(event,stat_skills_2,crblu40)
+  u40=make_stat_string_list(u40,blu40)
+  cru40=make_stat_string_list(cru40,crblu40)
+  u40=make_stat_string_list(u40,cru40,2) if wl.include?('~~')
+  if u40[0]=='Kiran'
+    u40[1]=0
+    u40[2]=0
+    u40[3]=0
+    u40[4]=0
+    u40[5]=0
+    mu=false
+    tempest=false
+    xcolor=0x9400D3
+    stat_skills=[]
+    stat_skills_2=[]
+  end
+  stat_skills_3=make_combat_skill_list(name,event,args)
+  ppu40=blu40.map{|q| q}
+  ppu40=apply_combat_buffs(event,stat_skills_3,ppu40,'Player')
+  epu40=blu40.map{|q| q}
+  epu40=apply_combat_buffs(event,stat_skills_3,epu40,'Enemy')
+  ppu40xw=crblu40.map{|q| q}
+  ppu40xw=apply_combat_buffs(event,stat_skills_3,ppu40xw,'Player')
+  epu40xw=crblu40.map{|q| q}
+  epu40xw=apply_combat_buffs(event,stat_skills_3,epu40xw,'Enemy')
+  if has_weapon_tag?('Buffstuffer',zzzl,refinement,transformed) || stat_skills_3.include?('Bonus Doubler 3')
+    m=apply_stat_skills(event,stat_skills_2,[u40[0],0,0,0,0,0])
+    for i in 2...6
+      ppu40[i]+=m[i] if m[i]>0
+      epu40[i]+=m[i] if m[i]>0
+    end
+  elsif stat_skills_3.reject{|q| q.length<14 || q[0,14]!='Bonus Doubler '}.length>0
+    m2=stat_skills_3.reject{|q| q.length<14 || q[0,14]!='Bonus Doubler '}
+    m=apply_stat_skills(event,stat_skills_2,[u40[0],0,0,0,0,0])
+    for i2 in 0...m2.length
+      qq=m2[i2][14,m2[i2].length-14].to_i+1
+      for i in 2...6
+        ppu40[i]+=m[i]*qq/4 if m[i]>0
+        epu40[i]+=m[i]*qq/4 if m[i]>0
+      end
+    end
+  end
+  unless weapon.nil? || weapon=='-'
+    desc = /((((I|i)f|(w|W)hen) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (attack|combat)))|during combat(| (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat))))), |)((G|g)rants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d ((if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (attack|combat)))|during combat(| (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat)))))/
+    desc2 = /((G|g)rants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d during combat (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat)))/
+    desc3 = /((i|I)f|(W|w)hen) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat))), (grants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d during combat/
+    wpnnn=sklz[ww2][7]
+    wpnnn=wpnnn.split(' *** ')[0] if sklz[ww2][5]=='Dagger Users Only'
+    x=desc.match(wpnnn).to_s
+    x=desc2.match(wpnnn).to_s unless desc2.match(sklz[ww2][7]).nil?
+    x=desc3.match(wpnnn).to_s unless desc3.match(sklz[ww2][7]).nil?
+    x=nil if !x.nil? && x.include?('to allies') # remove any matches that include "to allies", which were caught in the prior line so they weren't considered non-phase-based
+    x=nil if sklz[ww2][7].include?(", #{x}") && (sklz[ww2][7].include?('If foe uses') || sklz[ww2][7].include?('If foe initiates combat and uses'))
+    x=nil if sklz[ww2][11].include?('(R)Overwrite') && !refinement.nil? && refinement.length>0
+    x3=[0,0,0,0,0,0]
+    x3pp=[0,0,0,0,0,0]
+    x3ep=[0,0,0,0,0,0]
+    unless x.nil?
+      x2=x.scan(/\d+?/)[0].to_i
+      x3[2]+=x2 if x.include?('Atk')
+      x3[3]+=x2 if x.include?('Spd')
+      x3[4]+=x2 if x.include?('Def')
+      x3[5]+=x2 if x.include?('Res')
+      x3pp=x3.map{|q| q} unless x.include?('foe initiates') || x.include?('is attacked') || x.include?('is under attack') || x.include?('foe attacks')
+      x3ep=x3.map{|q| q} unless x.include?('unit initiates') || x.include?('unit attacks')
+    end
+    unless refinement.nil? || refinement.length<=1 || sklz[ww2][15].nil?
+      inner_skill=sklz[ww2][15]
+      if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
+        inner_skill=inner_skill[1,inner_skill.length-1]
+        inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+      elsif inner_skill[0,1]=='-' && inner_skill.length>1
+        inner_skill=inner_skill[2,inner_skill.length-2]
+        inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+      end
+      outer_skill='y'
+      if inner_skill[0,1]=='*'
+        outer_skill=inner_skill[1,inner_skill.length-1]
+        inner_skill='y'
+      elsif inner_skill.include?(' ** ')
+        x=inner_skill.split(' ** ')
+        inner_skill=x[0]
+        outer_skill=x[1]
+      end
+      outer_skill=outer_skill.split(' *** ')[0] if sklz[ww2][5]=='Dagger Users Only'
+      x=desc.match(outer_skill).to_s
+      x=desc2.match(outer_skill).to_s unless desc2.match(outer_skill).nil?
+      x=desc3.match(outer_skill).to_s unless desc3.match(outer_skill).nil?
+      x=nil if outer_skill.include?(", #{x}") && (outer_skill.include?('If foe uses') || outer_skill.include?('If foe initiates combat and uses'))
+      x=nil if !x.nil? && x.include?('to allies')
+      unless x.nil?
+        x2=x.scan(/\d+?/)[0].to_i
+        x3=[0,0,0,0,0,0]
+        x3[2]+=x2 if x.include?('Atk')
+        x3[3]+=x2 if x.include?('Spd')
+        x3[4]+=x2 if x.include?('Def')
+        x3[5]+=x2 if x.include?('Res')
+        unless x.include?('foe initiates') || x.include?('is attacked') || x.include?('is under attack') || x.include?('foe attacks')
+          for i in 0...x3pp.length
+            x3pp[i]=[x3pp[i],x3[i]].max
+          end
+        end
+        unless x.include?('unit initiates') || x.include?('unit attacks')
+          for i in 0...x3ep.length
+            x3ep[i]=[x3ep[i],x3[i]].max
+          end
+        end
+      end
+      x=desc.match(inner_skill).to_s
+      x=desc2.match(inner_skill).to_s unless desc2.match(inner_skill).nil?
+      x=desc3.match(inner_skill).to_s unless desc3.match(inner_skill).nil?
+      x=nil if inner_skill.include?(", #{x}") && (inner_skill.include?('If foe uses') || inner_skill.include?('If foe initiates combat and uses'))
+      x=nil if !x.nil? && x.include?('to allies')
+      unless x.nil? || refinement != 'Effect'
+        zzz2=find_effect_name(sklz[ww2],event,1)
+        lookout=lookout_load('StatSkills')
+        statskl=lookout.find_index{|q| q[0]==zzz2}
+        if statskl.nil?
+          x2=x.scan(/\d+?/)[0].to_i
+          x3=[0,0,0,0,0,0]
+          x3[2]+=x2 if x.include?('Atk')
+          x3[3]+=x2 if x.include?('Spd')
+          x3[4]+=x2 if x.include?('Def')
+          x3[5]+=x2 if x.include?('Res')
+          unless x.include?('foe initiates') || x.include?('is attacked') || x.include?('is under attack') || x.include?('foe attacks')
+            for i in 0...x3pp.length
+              x3pp[i]=[x3pp[i],x3[i]].max
+            end
+          end
+          unless x.include?('unit initiates') || x.include?('unit attacks')
+            for i in 0...x3ep.length
+              x3ep[i]=[x3ep[i],x3[i]].max
+            end
+          end
+        else
+          statskl=lookout[statskl]
+          if ['Enemy Phase','Player Phase','In-Combat Buffs 1','In-Combat Buffs 2'].include?(statskl[3])
+            x3=statskl[4].map{|q| q}
+            x3.unshift(0)
+            x3[6]=0
+            unless statskl[3]=='Enemy Phase'
+              for i in 0...x3pp.length
+                x3pp[i]=[x3pp[i],x3[i]].max
+              end
+            end
+            unless statskl[3]=='Player Phase'
+              for i in 0...x3ep.length
+                x3ep[i]=[x3ep[i],x3[i]].max
+              end
+            end
+          end
+        end
+      end
+    end
+    for i in 1...x3pp.length
+      ppu40[i]+=x3pp[i]
+      epu40[i]+=x3ep[i]
+    end
+  end
+  close=[0,0,0,0,0,0,0,0,0,0,0]
+  distant=[0,0,0,0,0,0,0,0,0,0,0]
+  for i in 0...stat_skills_3.length
+    if stat_skills_3[i]=='Close Spectrum'
+      close[2]+=4
+      close[3]+=4
+      close[4]+=4
+      close[5]+=4
+    elsif stat_skills_3[i]=='Close Stance'
+      close[2]+=4
+      close[3]+=4
+      close[4]+=4
+      close[5]+=4
+    elsif stat_skills_3[i][0,12]=='Close Guard '
+      close[4]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      close[5]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      close[9]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      close[10]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+    elsif stat_skills_3[i][0,6]=='Close '
+      close[2]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Atk')
+      close[3]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Spd')
+      close[4]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Def')
+      close[5]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Def')
+    end
+    if stat_skills_3[i]=='Distant Spectrum'
+      distant[2]+=4
+      distant[3]+=4
+      distant[4]+=4
+      distant[5]+=4
+    elsif stat_skills_3[i]=='Distant Stance'
+      distant[2]+=4
+      distant[3]+=4
+      distant[4]+=4
+      distant[5]+=4
+    elsif stat_skills_3[i][0,14]=='Distant Guard '
+      distant[4]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      distant[5]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      distant[9]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+      distant[10]+=stat_skills_3[i].scan(/\d+?/)[0].to_i+1
+    elsif stat_skills_3[i][0,8]=='Distant '
+      distant[2]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Atk')
+      distant[3]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Spd')
+      distant[4]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Def')
+      distant[5]+=2*stat_skills_3[i].scan(/\d+?/)[0].to_i if stat_skills_3[i].include?('Def')
+    end
+  end
+  unless weapon.nil? || weapon=='-'
+    tags=zzzl[11]
+    for i in 0...tags.length
+      if tags[i][0,1]=='(' && tags[i][3,1]==')'
+        if tags[i][1,2]=='cP'
+          close[7]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Atk'
+          close[8]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Spd'
+          close[9]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Def'
+          close[10]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Res'
+        elsif tags[i][1,2]=='dP'
+          distant[7]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Atk'
+          distant[8]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Spd'
+          distant[9]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Def'
+          distant[10]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Res'
+        elsif tags[i][1,2]=='cE'
+          close[2]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Atk'
+          close[3]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Spd'
+          close[4]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Def'
+          close[5]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Res'
+        elsif tags[i][1,2]=='dE'
+          distant[2]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Atk'
+          distant[3]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Spd'
+          distant[4]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Def'
+          distant[5]+=tags[i][8,tags[i].length-8].to_i if tags[i][4,3]=='Res'
+        end
+      end
+    end
+  end
+  for i in 1...close.length
+    m=[close[i],distant[i]].min
+    if i<6
+      epu40xw[i]+=m
+    else
+      ppu40xw[i-5]+=m
+    end
+    epu40[i]+=m
+    close[i]-=m
+    distant[i]-=m
+  end
+  ppu40xw[16]=ppu40xw[1]+ppu40xw[2]+ppu40xw[3]+ppu40xw[4]+ppu40xw[5]
+  epu40xw[16]=epu40xw[1]+epu40xw[2]+epu40xw[3]+epu40xw[4]+epu40xw[5]
+  for i in 1...6
+    ppu40xw[i]="#{ppu40xw[i]}#{" (+#{close[i+5]} against melee)" if close[i+5]>0}#{" (+#{distant[i+5]} against ranged)" if distant[i+5]>0}"
+    epu40xw[i]="#{epu40xw[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
+  end
+  ppu40[16]=ppu40[1]+ppu40[2]+ppu40[3]+ppu40[4]+ppu40[5]
+  epu40[16]=epu40[1]+epu40[2]+epu40[3]+epu40[4]+epu40[5]
+  zzzl=sklz[ww2]
+  if has_weapon_tag?('CloseStance',zzzl,refinement,transformed)
+    close[2]+=4
+    close[3]+=4
+    close[4]+=4
+    close[5]+=4
+  end
+  if has_weapon_tag?('CloseDef',zzzl,refinement,transformed)
+    close[4]+=6
+    close[5]+=6
+  end
+  if has_weapon_tag?('CloseAtk',zzzl,refinement,transformed)
+    close[2]+=6
+  end
+  if has_weapon_tag?('CloseSpd',zzzl,refinement,transformed)
+    close[3]+=6
+  end
+  if has_weapon_tag?('DistantStance',zzzl,refinement,transformed)
+    distant[2]+=4
+    distant[3]+=4
+    distant[4]+=4
+    distant[5]+=4
+  end
+  if has_weapon_tag?('DistantDef',zzzl,refinement,transformed)
+    distant[4]+=6
+    distant[5]+=6
+  end
+  if has_weapon_tag?('DistantAtk',zzzl,refinement,transformed)
+    distant[2]+=6
+  end
+  if has_weapon_tag?('DistantSpd',zzzl,refinement,transformed)
+    distant[3]+=6
+  end
+  for i in 1...close.length
+    m=[close[i],distant[i]].min
+    if i<6
+      epu40[i]+=m
+    else
+      ppu40[i-5]+=m
+    end
+    close[i]-=m
+    distant[i]-=m
+  end
+  if deftile
+    ppu40[4]=(ppu40[4]*1.3).to_i
+    epu40[4]=(epu40[4]*1.3).to_i
+    ppu40xw[4]=(ppu40xw[4]*1.3).to_i
+    epu40xw[4]=(epu40xw[4]*1.3).to_i
+    close[4]=(close[4]*1.3).to_i
+    distant[4]=(distant[4]*1.3).to_i
+    close[9]=(close[9]*1.3).to_i
+    distant[9]=(distant[9]*1.3).to_i
+    ppu40[5]=(ppu40[5]*1.3).to_i
+    epu40[5]=(epu40[5]*1.3).to_i
+    ppu40xw[5]=(ppu40xw[5]*1.3).to_i
+    epu40xw[5]=(epu40xw[5]*1.3).to_i
+    close[5]=(close[5]*1.3).to_i
+    distant[5]=(distant[5]*1.3).to_i
+    close[10]=(close[10]*1.3).to_i
+    distant[10]=(distant[10]*1.3).to_i
+  end
+  for i in 1...6
+    ppu40[i]="#{ppu40[i]}#{" (+#{close[i+5]} against melee)" if close[i+5]>0}#{" (+#{distant[i+5]} against ranged)" if distant[i+5]>0}"
+    epu40[i]="#{epu40[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
+  end
+  for i in 0...ppu40.length
+    ppu40[i]="~~#{ppu40[i]}~~ #{ppu40xw[i]}" if ppu40[i]!=ppu40xw[i] && wl.include?('~~')
+  end
+  for i in 0...epu40.length
+    epu40[i]="~~#{epu40[i]}~~ #{epu40xw[i]}" if epu40[i]!=epu40xw[i] && wl.include?('~~')
+  end
+  bb=0
+  bb=3 if ['',' ',nil].include?(boon) && merges>0
+  bin=((u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5)*5
+  if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
+    lookout=lookout_load('StatSkills',['Stat-Affecting'],1)
+    for i in 0...stat_skills.length
+      unless lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5].nil?
+        bin=[bin,lookout[lookout.find_index{|q| q[0]==stat_skills[i]}][4][5]].max
+      end
+    end
+  end
+  if u40x[2].length>0 && u40x[2][1]=='Duel' && rarity>=5
+    bin=[bin,175].max
+  end
+  pic=pick_thumbnail(event,u40x,bot)
+  pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
+  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(' all')
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}"
+    event.respond "**Displayed stats:**  #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]} - Score: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100\n**#{"Player Phase" unless ppu40==epu40}#{"In-combat Stats" if ppu40==epu40}:**  #{ppu40[1]} / #{ppu40[2]} / #{ppu40[3]} / #{ppu40[4]} / #{ppu40[5]}  (#{ppu40[16]} BST)#{"\n**Enemy Phase:**  #{epu40[1]} / #{epu40[2]} / #{epu40[3]} / #{epu40[4]} / #{epu40[5]}  (#{epu40[16]} BST)" unless ppu40==epu40}"
+  elsif ppu40==epu40
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:514712247503945739> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:514712247625580555> Speed: #{u40[3]}\n<:DefenseS:514712247461871616> Defense: #{u40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100"],["In-combat Stats","<:HP_S:514712247503945739> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:514712247625580555> Speed: #{ppu40[3]}\n<:DefenseS:514712247461871616> Defense: #{ppu40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
+  else
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:514712247503945739> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:514712247625580555> Speed: #{u40[3]}\n<:DefenseS:514712247461871616> Defense: #{u40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100",1],["Player Phase","<:HP_S:514712247503945739> HP: #{ppu40[1]}\n<:Death_Blow:514719899868856340> Attack: #{ppu40[2]}\n<:Darting_Blow:514719899910668298> Speed: #{ppu40[3]}\n<:Armored_Blow:514719899927576578> Defense: #{ppu40[4]}\n<:Warding_Blow:514719900607053824> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","<:HP_S:514712247503945739> HP: #{epu40[1]}\n<:Fierce_Stance:514719899873050624> Attack: #{epu40[2]}\n<:Darting_Stance:514719899919056926> Speed: #{epu40[3]}\n<:Steady_Stance:514719899856273408> Defense: #{epu40[4]}\n<:Warding_Stance:514719899562672138> Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
+  end
+end
+
+def make_random_unit(event,args,bot)
+  colors=[]
+  weapons=[]
+  movement=[]
+  clazzez=[]
+  color_weapons=[]
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  args=args.map{|q| q.downcase}
+  for i in 0...args.length
+    colors.push('Red') if ['red','reds'].include?(args[i].downcase)
+    colors.push('Blue') if ['blue','blues'].include?(args[i].downcase)
+    colors.push('Green') if ['green','greens'].include?(args[i].downcase)
+    colors.push('Colorless') if ['colorless','colourless','clear','clears'].include?(args[i].downcase)
+    weapons.push('Blade') if ['physical','blade','blades','close','closerange','melee'].include?(args[i].downcase)
+    weapons.push('Tome') if ['tome','mage','magic','spell','tomes','mages','spells','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Breath') if ['dragon','dragons','breath','manakete','manaketes','close','closerange','melee'].include?(args[i].downcase)
+    weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Healer') if ['healer','staff','cleric','healers','clerics','staves','range','ranged','distance','distant'].include?(args[i].downcase)
+    weapons.push('Beast') if ['beast','beasts','laguz','close','closerange','melee'].include?(args[i].downcase)
+    color_weapons.push(['Red','Blade']) if ['sword','swords','katana'].include?(args[i].downcase)
+    color_weapons.push(['Blue','Blade']) if ['lance','lances','spear','spears','naginata'].include?(args[i].downcase)
+    color_weapons.push(['Green','Blade']) if ['axe','axes','ax','club','clubs'].include?(args[i].downcase)
+    color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
+    color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
+    color_weapons.push(['Green','Tome']) if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
+    movement.push('Flier') if ['flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi'].include?(args[i].downcase)
+    movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers'].include?(args[i].downcase)
+    movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
+    movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
+    clazzez.push('Trainee') if ['trainee','villager','young'].include?(args[i].downcase)
+    clazzez.push('Veteran') if ['veteran','vet','elder','jagen'].include?(args[i].downcase)
+    clazzez.push('Standard') if ['standard'].include?(args[i].downcase)
+  end
+  colors=['Red', 'Blue', 'Green', 'Colorless'] if colors.length<=0 && weapons.length>0
+  if colors.length>0 && weapons.length<=0
+    weapons=['Blade', 'Tome', 'Breath', 'Bow', 'Dagger']
+    weapons.push('Healer') unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
+  end
+  for i in 0...colors.length
+    for j in 0...weapons.length
+      if colors[i]=='Colorless'
+        color_weapons.push([colors[i],weapons[j]]) unless (weapons[j]=='Blade' && !alter_classes(event,'Colorless Blades')) || (weapons[j]=='Tome' && !alter_classes(event,'Colorless Tomes'))
+      elsif weapons[j]=='Healer' && !alter_classes(event,'Colored Healers')
+      else
+        color_weapons.push([colors[i],weapons[j]])
+      end
+    end
+  end
+  if color_weapons.length<=0
+    color_weapons=[['Red', 'Blade'],  ['Red', 'Tome'],  ['Red', 'Breath'],      ['Red', 'Bow'],      ['Red', 'Dagger'],      ['Red','Beast'],
+                   ['Blue', 'Blade'], ['Blue', 'Tome'], ['Blue', 'Breath'],     ['Blue', 'Bow'],     ['Blue', 'Dagger'],     ['Blue','Beast'],
+                   ['Green', 'Blade'],['Green', 'Tome'],['Green', 'Breath'],    ['Green', 'Bow'],    ['Green', 'Dagger'],    ['Green','Beast'],
+                                                        ['Colorless', 'Breath'],['Colorless', 'Bow'],['Colorless', 'Dagger'],['Colorless','Beast']]
+    color_weapons.push(['Colorless', 'Blade']) if alter_classes(event,'Colorless Blades')
+    color_weapons.push(['Colorless', 'Tome']) if alter_classes(event,'Colorless Tomes')
+    unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
+      color_weapons.push(['Red', 'Healer']) if alter_classes(event,'Colored Healers')
+      color_weapons.push(['Blue', 'Healer']) if alter_classes(event,'Colored Healers')
+      color_weapons.push(['Green', 'Healer']) if alter_classes(event,'Colored Healers')
+      color_weapons.push(['Colorless', 'Healer'])
+    end
+    color_weapons=color_weapons.reject{|q| !colors.include?(q[0])} unless colors.length<=0
+    color_weapons=color_weapons.reject{|q| !weapons.include?(q[1])} unless weapons.length<=0
+  end
+  color_weapons.uniq!
+  clazz=color_weapons.sample
+  movement=['Infantry', 'Flier', 'Cavalry', 'Armor'] if movement.length<=0
+  movement.uniq!
+  mov=movement.sample
+  l1_total=47
+  gp_total=31
+  if ['Tome', 'Bow', 'Dagger', 'Healer'].include?(clazz[1])
+    l1_total-=3
+    gp_total-=3
+  end
+  if mov=='Cavalry'
+    l1_total-=1
+    gp_total-=1
+  elsif mov=='Armor'
+    l1_total+=7
+    gp_total+=6
+  end
+  clazzez=['Trainee','Veteran','Standard','Standard','Standard','Standard','Standard','Standard','Standard','Standard'] if clazzez.length<=0
+  clazz2=[]
+  zzz=clazzez.sample
+  if zzz=='Trainee'
+    clazz2.push('Trainee')
+    l1_total-=8
+    gp_total+=6
+  elsif zzz=='Veteran'
+    clazz2.push('Veteran')
+    l1_total+=8
+    gp_total-=6
+  end
+  if event.message.text.downcase.split(' ').include?('singer')
+    clazz2.push('Singer')
+    l1_total-=8
+  elsif event.message.text.downcase.split(' ').include?('dancer')
+    clazz2.push('Dancer')
+    l1_total-=8
+  elsif event.message.text.downcase.split(' ').include?('music') || event.message.text.downcase.split(' ').include?('musical')
+    clazz2.push(['Dancer','Singer'].sample)
+    l1_total-=8
+  elsif event.message.text.downcase.split(' ').include?('nonmusical')
+  elsif event.message.text.downcase.split(' ').include?('non-musical')
+  elsif clazz[1]!='Healer' && rand(10).zero?
+    clazz2.push(['Dancer','Singer'].sample)
+    l1_total-=8
+  end
+  zzz=rand(100)
+  zzz=rand(1000) if clazz2.include?('Trainee') || clazz2.include?('Veteran')
+  if ['Dancer','Singer'].include?(clazz2)
+  elsif args.include?('gen3')
+    clazz2.push('Gen 3')
+    if ['Tome', 'Healer'].include?(clazz[1]) # magical ranged
+      l1_total+=2
+      l1_total-=1 if ['Cavalry'].include?(mov)
+      l1_total-=2 if ['Flier'].include?(mov)
+      gp_total+=3
+      gp_total-=4 if ['Cavalry'].include?(mov)
+      gp_total-=2 if ['Flier'].include?(mov)
+    elsif ['Bow', 'Dagger'].include?(clazz[1]) # physical ranged
+      l1_total+=2
+      l1_total-=1 if ['Cavalry'].include?(mov)
+      gp_total+=3
+      gp_total-=1 if ['Cavalry'].include?(mov)
+    else # melee
+      l1_total+=2
+      l1_total-=1 if ['Cavalry','Flier'].include?(mov)
+      l1_total-=1 if 'Flier'!=mov
+      gp_total+=2
+      gp_total+=2 if ['Infantry'].include?(mov)
+      gp_total-=1 if ['Cavalry'].include?(mov)
+    end
+  elsif args.include?('gen2')
+    clazz2.push('Gen 2')
+    l1_total+=1
+    l1_total-=1 if ['Cavalry','Flier'].include?(mov)
+    l1_total-=1 if 'Flier'!=mov
+    gp_total+=2
+    gp_total-=1 if ['Cavalry'].include?(mov)
+    gp_total-=1 if ['Tome', 'Bow', 'Dagger', 'Healer'].include?(clazz[1]) && 'Armor'!=mov
+  elsif args.include?('gen1')
+  elsif zzz<67
+    clazz2.push('Gen 3')
+    if ['Tome', 'Healer'].include?(clazz[1]) # magical ranged
+      l1_total+=2
+      l1_total-=1 if ['Cavalry'].include?(mov)
+      l1_total-=2 if ['Flier'].include?(mov)
+      gp_total+=3
+      gp_total-=4 if ['Cavalry'].include?(mov)
+      gp_total-=2 if ['Flier'].include?(mov)
+    elsif ['Bow', 'Dagger'].include?(clazz[1]) # physical ranged
+      l1_total+=2
+      l1_total-=1 if ['Cavalry'].include?(mov)
+      gp_total+=3
+      gp_total-=1 if ['Cavalry'].include?(mov)
+    else # melee
+      l1_total+=2
+      l1_total-=1 if ['Cavalry','Flier'].include?(mov)
+      l1_total-=1 if 'Flier'!=mov
+      gp_total+=2
+      gp_total+=2 if ['Infantry'].include?(mov)
+      gp_total-=1 if ['Cavalry'].include?(mov)
+    end
+  elsif zzz<33
+    clazz2.push('Gen 2')
+    l1_total+=1
+    l1_total-=1 if ['Cavalry','Flier'].include?(mov)
+    l1_total-=1 if 'Flier'!=mov
+    gp_total+=2
+    gp_total-=1 if ['Cavalry'].include?(mov)
+    gp_total-=1 if ['Tome', 'Bow', 'Dagger', 'Healer'].include?(clazz[1]) && 'Armor'!=mov
+  end
+  gp_total+=15
+  name=get_bond_name(event)
+  stats=[0,0,0,0,0]
+  gps=[0,0,0,0,0]
+  stats[0]=10+rand(16)
+  gps[0]=rand(@mods.length-3)+1
+  gps[0]=rand(@mods.length-3)+1 if gps[0]<3 || gps[0]>14
+  gps[0]=rand(@mods.length-3)+1 if gps[0]<3 || gps[0]>14
+  l1_total-=stats[0]
+  gp_total-=gps[0]
+  min_possible=[l1_total-40,2].max
+  max_possible=[l1_total-8,14].min
+  if max_possible<=min_possible
+    stats[1]=min_possible
+  else
+    stats[1]=min_possible+rand(max_possible-min_possible+1)
+  end
+  min_possible=[gp_total-3*(@mods.length-3),1].max
+  max_possible=[gp_total-3,(@mods.length-3)].min
+  if max_possible<=min_possible
+    gps[1]=min_possible
+  else
+    gps[1]=min_possible+rand(max_possible-min_possible+1)
+    gps[1]=min_possible+rand(max_possible-min_possible+1) if gps[1]<3 || gps[1]>14
+    gps[1]=min_possible+rand(max_possible-min_possible+1) if gps[1]<3 || gps[1]>14
+  end
+  l1_total-=stats[1]
+  gp_total-=gps[1]
+  min_possible=[l1_total-26,2].max
+  max_possible=[l1_total-6,14].min
+  if max_possible<=min_possible
+    stats[2]=min_possible
+  else
+    stats[2]=min_possible+rand(max_possible-min_possible+1)
+  end
+  min_possible=[gp_total-2*(@mods.length-3),1].max
+  max_possible=[gp_total-2,(@mods.length-3)].min
+  if max_possible<=min_possible
+    gps[2]=min_possible
+  else
+    gps[2]=min_possible+rand(max_possible-min_possible+1)
+    gps[2]=min_possible+rand(max_possible-min_possible+1) if gps[2]<3 || gps[2]>14
+    gps[2]=min_possible+rand(max_possible-min_possible+1) if gps[2]<3 || gps[2]>14
+  end
+  l1_total-=stats[2]
+  gp_total-=gps[2]
+  min_possible=[l1_total-13,3].max
+  max_possible=[l1_total-3,13].min
+  if max_possible<=min_possible
+    stats[3]=min_possible
+  else
+    stats[3]=min_possible+rand(max_possible-min_possible+1)
+  end
+  min_possible=[gp_total-(@mods.length-3),1].max
+  max_possible=[gp_total-1,(@mods.length-3)].min
+  if max_possible<=min_possible
+    gps[3]=min_possible
+  else
+    gps[3]=min_possible+rand(max_possible-min_possible+1)
+    gps[3]=min_possible+rand(max_possible-min_possible+1) if gps[3]<3 || gps[3]>14
+    gps[3]=min_possible+rand(max_possible-min_possible+1) if gps[3]<3 || gps[3]>14
+  end
+  l1_total-=stats[3]
+  gp_total-=gps[3]
+  stats[4]=l1_total
+  gps[4]=gp_total
+  stats.push(stats[0]+@mods[gps[0]][5])
+  stats.push(stats[1]+@mods[gps[1]][5])
+  stats.push(stats[2]+@mods[gps[2]][5])
+  stats.push(stats[3]+@mods[gps[3]][5])
+  stats.push(stats[4]+@mods[gps[4]][5])
+  for i in 0...gps.length
+    gps[i]-=3
+  end
+  stats.push(stats[0]+stats[1]+stats[2]+stats[3]+stats[4])
+  stats.push(stats[5]+stats[6]+stats[7]+stats[8]+stats[9])
+  stat_names=['HP','Attack','Speed','Defense','Resistance']
+  for i in 0...5
+    stats[i+5]=stats[i+5].to_s
+    stats[i+5]="#{stats[i+5]} (+)" if [-3,1,5,10,14].include?(gps[i])
+    stats[i+5]="#{stats[i+5]} (-)" if [-2,2,6,11,15].include?(gps[i])
+  end
+  xcolor=0xFFD800
+  xcolor=0xE22141 if clazz[0]=='Red'
+  xcolor=0x2764DE if clazz[0]=='Blue'
+  xcolor=0x09AA24 if clazz[0]=='Green'
+  xcolor=0x64757D if clazz[0]=='Colorless'
+  clazz[1]=clazz[1].gsub('Breath','Dragon')
+  w=clazz[1]
+  w='Sword' if clazz[0]=='Red' && w=='Blade'
+  w='Lance' if clazz[0]=='Blue' && w=='Blade'
+  w='Axe' if clazz[0]=='Green' && w=='Blade'
+  w='Rod' if clazz[0]=='Colorless' && w=='Blade'
+  if clazz[1]!=w
+    w="*#{w}* (#{clazz[0]} #{clazz[1]})"
+  elsif ['Tome', 'Dragon', 'Bow', 'Dagger'].include?(w) || (w=='Healer' && alter_classes(event,'Colored Healers'))
+    w="*#{clazz[0]} #{clazz[1]}*"
+  elsif clazz[0]=='Gold'
+    w="*#{w}*"
+  else
+    w="*#{w}* (#{clazz[0]})"
+  end
+  wx=nil
+  if w=='*Red Tome*'
+    wx=['Fire','Dark'].sample
+    w="*#{wx} Mage* (Red Tome)"
+  elsif w=='*Green Tome*'
+    wx=['Wind'].sample
+    w="*#{wx} Mage* (Green Tome)"
+  elsif w=='*Blue Tome*'
+    wx=['Thunder','Light'].sample
+    w="*#{wx} Mage* (Blue Tome)"
+  end
+  atk='<:GenericAttackS:514712247587569664> Attack'
+  atk='<:MagicS:514712247289774111> Magic' if ['Tome','Healer'].include?(clazz[1])
+  atk='<:FreezeS:514712247474585610> Magic' if ['Dragon'].include?(clazz[1])
+  atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(clazz[1])
+  r='<:Icon_Rarity_5:448266417553539104>'*5
+  flds=[['**Level 1**',"<:HP_S:514712247503945739> HP: #{stats[0]}\n#{atk}: #{stats[1]}\n<:SpeedS:514712247625580555> Speed: #{stats[2]}\n<:DefenseS:514712247461871616> Defense: #{stats[3]}\n<:ResistanceS:514712247574986752> Resistance: #{stats[4]}\n\nBST: #{stats[10]}"]]
+  args=args.map{|q| q.downcase}
+  if args.include?('gps') || args.include?('gp') || args.include?('growths') || args.include?('growth')
+    flds.push(['**Growth Rates**',"<:HP_S:514712247503945739> HP: #{micronumber(gps[0])} / #{gps[0]*5+20}%\n#{atk}: #{micronumber(gps[1])} / #{gps[1]*5+20}%\n<:SpeedS:514712247625580555> Speed: #{micronumber(gps[2])} / #{gps[2]*5+20}%\n<:DefenseS:514712247461871616> Defense: #{micronumber(gps[3])} / #{gps[3]*5+20}%\n<:ResistanceS:514712247574986752> Resistance: #{micronumber(gps[4])} / #{gps[4]*5+20}%\n\n\u0262\u1D18\u1D1B #{micronumber(gps[0]+gps[1]+gps[2]+gps[3]+gps[4])} / GRT: #{(gps[0]+gps[1]+gps[2]+gps[3]+gps[4])*5+100}%"])
+  end
+  flds.push(['**Level 40**',"<:HP_S:514712247503945739> HP: #{stats[5]}\n#{atk}: #{stats[6]}\n<:SpeedS:514712247625580555> Speed: #{stats[7]}\n<:DefenseS:514712247461871616> Defense: #{stats[8]}\n<:ResistanceS:514712247574986752> Resistance: #{stats[9]}\n\nBST: #{stats[11]}"])
+  img=nil
+  ftr=nil
+  unless event.server.nil?
+    imgx=event.server.users.sample
+    imgx=event.user if rand(100).zero? && event.server.users.length>100
+    img=imgx.avatar_url
+    ftr="Unit profile provided by #{imgx.distinct}"
+  end
+  if event.message.mentions.length>0 && rand(100)<[event.message.mentions.length*10,50].min
+    imgx=event.message.mentions.sample
+    img=imgx.avatar_url
+    ftr="Unit profile provided by #{imgx.distinct}"
+  end
+  wemote=''
+  moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clazz[0]}_#{clazz[1].gsub('Healer','Staff')}"}
+  wemote=moji[0].mention unless moji.length<=0
+  unless wx.nil?
+    moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{wx}_#{clazz[1].gsub('Healer','Staff')}"}
+    wemote=moji[0].mention unless moji.length<=0
+  end
+  memote=''
+  moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{mov}"}
+  memote=moji[0].mention unless moji.length<=0
+  clazz3=clazz2.reject{|q| ['Dancer','Singer'].include?(q)}
+  create_embed(event,"__**#{name}**__","#{r}\nNeutral nature\n#{wemote} #{w}\n#{memote} *#{mov}*#{"\n<:Assist_Music:454462054959415296> *Dancer*" if clazz2.include?('Dancer')}#{"\n<:Assist_Music:454462054959415296> *Singer*" if clazz2.include?('Singer')}\n#{"Additional Modifier#{'s' if clazz3.length>1}: #{clazz3.map{|q| "*#{q}*"}.join(', ')}" if clazz3.length>0}",xcolor,ftr,img,flds,1)
 end

@@ -1994,6 +1994,123 @@ def disp_generic_art(event,name,bot)
   end
 end
 
+def disp_learnable_skills(event,name,bot)
+  data_load()
+  untz=@units.map{|q| q}
+  sklz=@skills.map{|q| q}
+  j=untz[untz.find_index{|q| q[0]==name}]
+  k=sklz.reject{|q| q[6]=='Passive(W)'}.map{|q| q[7]}.uniq
+  bbb=[]
+  for i in 0...k.length
+    k3=true
+    k2=k[i].split(', ')
+    for i2 in 0...k2.length
+      k3=false if k2[i2]=='No one'
+      if k2[i2].include?('Excludes')
+        k4=true
+        if k2[i2].include?('Weapon Users')
+          k4=false if k2[i2].include?(j[1][0])
+        elsif k2[i2].include?('Users')
+          k4=false if k2[i2].include?('Excludes Tome') && j[1][1]=='Tome'
+          k4=false if k2[i2].include?('and Tome') && j[1][1]=='Tome'
+          k4=false if k2[i2].include?('Excludes Bow') && j[1][1]=='Bow'
+          k4=false if k2[i2].include?('and Bow') && j[1][1]=='Bow'
+          k4=false if k2[i2].include?('Excludes Dagger') && j[1][1]=='Dagger'
+          k4=false if k2[i2].include?('and Dagger') && j[1][1]=='Dagger'
+          k4=false if k2[i2].include?(weapon_clss(j[1],event).gsub('Healer','Staff'))
+        else
+          k4=false if k2[i2].include?('Dragons') && j[1][1]=='Dragon'
+          k4=false if k2[i2].include?('Beasts') && j[1][1]=='Beast'
+          k4=false if k2[i2].include?(j[3].gsub('Flier','Fliers')) || k2[i2].include?(j[3].gsub('Armor','Armored'))
+        end
+        k3=(k3 && k4)
+      end
+      if k2[i2].include?('Only')
+        k4=false
+        k4=true if k2[i2]=='Dragons Only' && j[1][1]=='Dragon'
+        k4=true if k2[i2]=='Beasts Only' && j[1][1]=='Beast'
+        k4=true if k2[i2]=='Tome Users Only' && j[1][1]=='Tome'
+        k4=true if k2[i2]=='Bow Users Only' && j[1][1]=='Bow'
+        k4=true if k2[i2]=='Dagger Users Only' && j[1][1]=='Dagger'
+        k4=true if k2[i2]=='Melee Weapon Users Only' && ['Blade','Dragon','Beast'].include?(j[1][1])
+        k4=true if k2[i2]=='Ranged Weapon Users Only' && ['Tome','Bow','Dagger','Healer'].include?(j[1][1])
+        k4=true if k2[i2].include?(j[3].gsub('Flier','Fliers')) || k2[i2].include?(j[3].gsub('Armor','Armored'))
+        k4=true if k2[i2]=="#{weapon_clss(j[1],event).gsub('Healer','Staff')} Users Only"
+        k4=true if k2[i2]=="#{j[1][0]} Weapon Users Only"
+        k4=true if k2[i2]=='Summon Gun Users Only' && j[0]=='Kiran'
+        if k2[i2].include?('Dancers')
+          u2=sklz[sklz.find_index{|q| q[1]=='Dance'}]
+          b=[]
+          for i3 in 0...@max_rarity_merge[0]
+            u=u2[9][i3].split(', ')
+            for j2 in 0...u.length
+              b.push(u[j2]) unless b.include?(u[j2]) || u[j2].include?('-')
+            end
+          end
+          k4=true if b.include?(j[0])
+        end
+        if k2[i2].include?('Singers')
+          u2=sklz[sklz.find_index{|q| q[1]=='Sing'}]
+          b=[]
+          for i3 in 0...@max_rarity_merge[0]
+            u=u2[9][i3].split(', ')
+            for j2 in 0...u.length
+              b.push(u[j2]) unless b.include?(u[j2]) || u[j2].include?('-')
+            end
+          end
+          k4=true if b.include?(j[0])
+        end
+        k3=(k3 && k4)
+      end
+    end
+    bbb.push(k[i]) if k3
+  end
+  g=get_markers(event)
+  matches3=sklz.reject{|q| !bbb.include?(q[7]) || !has_any?(g, q[15]) || (q[8]!='-' && !q[8].split(', ').include?(j[0])) || q[1].include?('Squad Ace ') || q[1].include?('Initiate Seal ') || (q[6].split(', ').include?('Passive(W)') && !q[6].split(', ').include?('Passive(S)') && !q[6].split(', ').include?('Seal') && q[12].map{|q2| q2.split(', ').length}.max<2)}
+  q=sklz[sklz.length-1]
+  matches4=collapse_skill_list_2(matches3,3)
+  matches4=split_list(event,matches4,['Weapon','Assist','Special','Passive(A)','Passive(B)','Passive(C)','Passive(S)'],6,true,'Skills')
+  p1=[[]]
+  p2=0
+  for i in 0...matches4.length
+    if matches4[i][1]=='- - -'
+      p1.push([])
+      p2+=1
+    else
+      p1[p2].push(matches4[i][1])
+    end
+  end
+  j=untz.find_index{|q| q[0]==j[0]}
+  p1=p1.map{|q| q.join("\n")}
+  if p1[0].length+p1[1].length+p1[2].length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    msg="__Skills **#{untz[j][0]}**#{unit_moji(bot,event,j)} can learn__"
+    msg=extend_message(msg,"<:Skill_Weapon:444078171114045450> *Weapons:* #{p1[0].gsub("\n",', ')}",event,2)
+    msg=extend_message(msg,"<:Skill_Assist:444078171025965066> *Assists:* #{p1[1].gsub("\n",', ')}",event,2)
+    msg=extend_message(msg,"<:Skill_Special:444078170665254929> *Specials:* #{p1[2].gsub("\n",', ')}",event,2)
+    event.respond msg
+  else
+    create_embed(event,"__Skills **#{untz[j][0]}**#{unit_moji(bot,event,j)} can learn__",'',unit_color(event,j),nil,pick_thumbnail(event,j,bot),[["<:Skill_Weapon:444078171114045450> Weapons",p1[0]],["<:Skill_Assist:444078171025965066> Assists",p1[1]],["<:Skill_Special:444078170665254929> Specials",p1[2]]],4)
+  end
+  if !safe_to_spam?(event)
+    event.respond 'For the passive skills this unit can learn, please use this command in PM.'
+    event.respond 'Any undisplayed skill categories have too many applicable skills to display.' if p1.map{|q| q.gsub("\n",', ').length}.max>1900
+    return nil
+  elsif p1[3].length+p1[4].length+p1[5].length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    msg=''
+    msg=extend_message(msg,"<:Passive_A:443677024192823327> *Passives(A):* #{p1[3].gsub("\n",', ')}",event,2) unless p1[3].gsub("\n",', ').length>1900
+    msg=extend_message(msg,"<:Passive_B:443677023257493506> *Passives(B):* #{p1[4].gsub("\n",', ')}",event,2) unless p1[4].gsub("\n",', ').length>1900
+    msg=extend_message(msg,"<:Passive_C:443677023555026954> *Passives(C):* #{p1[5].gsub("\n",', ')}",event,2) unless p1[5].gsub("\n",', ').length>1900
+    msg=extend_message(msg,"<:Passive_S:443677023626330122> *Passives(S):* #{p1[6].gsub("\n",', ')}",event,2) unless p1[6].nil? || p1[6].gsub("\n",', ').length>1900
+    msg=extend_message(msg,'Any undisplayed skill categories have too many applicable skills to display.',event,2) if p1.map{|q| q.gsub("\n",', ').length}.max>1900
+    event.respond msg
+  else
+    create_embed(event,'','',unit_color(event,j),nil,nil,[['<:Passive_A:443677024192823327> Passives(A)',p1[3]],['<:Passive_B:443677023257493506> Passives(B)',p1[4]],['<:Passive_C:443677023555026954> Passives(C)',p1[5]]],4)
+    create_embed(event,"__<:Passive_S:443677023626330122> Seals **#{untz[j][0]}**#{unit_moji(bot,event,j)} can equip__",'',unit_color(event,j),nil,nil,triple_finish(p1[6].split("\n")),4) unless p1[6].nil?
+    event.respond 'Any undisplayed skill categories have too many applicable skills to display.' if p1.map{|q| q.gsub("\n",', ').length}.max>1900
+  end
+  return nil
+end
+
 def why_elise(event,bot)
   if (!event.message.text.downcase.include?('full') && !event.message.text.downcase.include?('long')) && !safe_to_spam?(event)
     str="When people learn that my main waifu is Sakura, almost invariably, the next question that springs to their mind is: \"If that's the case, then why does your bot take after the **opposite** *Fates* imouto healer?\""

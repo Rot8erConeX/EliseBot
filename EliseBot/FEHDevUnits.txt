@@ -83,7 +83,7 @@ Fortify Def 1\Fortify Def 2\Fortify Def 3
 Attack +3
 
 Cordelia
-5\9\Attack\HP\-\0
+5\10\Attack\HP\-\0
 Iron Lance\Steel Lance\Brave Lance\Brave Lance+
 Reposition
 Night Sky\Astra\Galeforce
@@ -130,7 +130,7 @@ Chilling Wind\Iceberg
 Darting Blow 1\Swift Sparrow 1\Swift Sparrow 2
 Mystic Boost 1\Mystic Boost 2\Mystic Boost 3
 Sparkling Boost
-Iote's Shield
+Spd/Res Bond 2
 
 Est
 4\10\Resistance\Attack\-\0
@@ -215,12 +215,12 @@ Close Def 3
 Lethe
 5\0\Resistance\HP\-\0
 Whelp (Cavalry)\Yearling (Cavalry)\Adult (Cavalry)\Brazen Cat Fang
-~~Rally Speed~~
+Rally Speed
 New Moon\Moonbow
 Spd/Def Solo 1\Spd/Def Solo 2\Spd/Def Solo 3
-Pass 1\~~Pass 2~~\~~Pass 3~~
+Pass 1\Pass 2\Pass 3
 Hone Atk 1\Hone Atk 2\Hone Beasts
-Brazen Atk/Res 2
+Brazen Atk/Res 3
 
 Mae
 5\5\Attack\Defense\-\0
@@ -330,7 +330,7 @@ Chilling Wind\Iceberg
 Darting Stance 1\Steady Posture 1\Steady Posture 2
 Vantage 1\Vantage 2\Vantage 3
 Fortify Res 1\Fortify Res 2\~~Fortify Res 3~~
-Gale Dance 2
+Iote's Shield
 
 Sakura(Bath)
 5\0\Resistance\HP\-\2
