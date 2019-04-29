@@ -942,11 +942,11 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
     b.reject!{|q| q[1].length<name2.length}
     k=b.bsearch_index{|q| name2.downcase<=>q[1].downcase}
     unless k.nil?
-      return untz[b[k][2]] if !k.is_a?(Array) && b[k][2]<100 && untz[b[k][2]][9][0].include?('LU')
+      return untz[b[k][2]] if !b[k][2].is_a?(Array) && b[k][2]<100 && untz[b[k][2]][9][0].include?('LU')
     end
     k=b.bsearch_index{|q| q[1].gsub('||','').downcase<=>name2.downcase}
     unless k.nil?
-      return untz[b[k][2]] if !k.is_a?(Array) && b[k][2]<100 && untz[b[k][2]][9][0].include?('LU')
+      return untz[b[k][2]] if !b[k][2].is_a?(Array) && b[k][2]<100 && untz[b[k][2]][9][0].include?('LU')
     end
   end
   return []
@@ -1226,7 +1226,7 @@ def find_promotions(j,event) # finds the promotions of a given skill.  Input is 
   for i in 0...sklz.length
     unless sklz[i].nil? || sklz[i][8].nil?
       if sklz[i][10].include?("*#{checkstr}*") && has_any?(g, sklz[i][15])
-        p.push(sklz[i][1].gsub('Bladeblade','Laevatein')) if sklz[i][2]=='-' || ['Weapon','Assist','Special'].include?(sklz[i][6])
+        p.push(sklz[i][1]) if sklz[i][2]=='-' || ['Weapon','Assist','Special'].include?(sklz[i][6])
         p.push("#{sklz[i][1]}#{' ' if sklz[i][1][-1,1]!='+'}#{sklz[i][2]}") unless sklz[i][2]=='-' || ['Weapon','Assist','Special'].include?(sklz[i][6])
       end
     end
@@ -1262,9 +1262,6 @@ def find_prevolutions(j,event) # finds any "pre-evolutions" of evolved weapons. 
         end
       end
     end
-  end
-  for i in 0...p.length
-    p[i][0][1]=p[i][0][1].gsub('Bladeblade','Laevatein')
   end
   p=p.sort {|a,b| a[0][0] <=> b[0][0]}
   return p
@@ -1311,7 +1308,7 @@ def get_weapon(str,event,mode=0) # used by the `stats` command and many derivati
       args.pop
       if find_weapon(name,event,true,false,mode).length<=0 && find_weapon(args.join('').downcase,event,true,false,mode).length>0
         args3=args.join(' ').split(' ') 
-        name=find_weapon(args.join('').downcase,event,true,false,mode)[0]
+        name=find_weapon(args.join('').downcase,event,true,false,mode)[1]
       end
     end
     if find_weapon(name,event,true,false,mode).length<=0
@@ -1320,13 +1317,13 @@ def get_weapon(str,event,mode=0) # used by the `stats` command and many derivati
         args=args2.join(' ').split(' ')
         if find_weapon(name,event,true,false,mode).length<=0 && find_weapon(args.join('').downcase,event,true,false,mode).length>0
           args3=args.join(' ').split(' ') 
-          name=find_weapon(args.join('').downcase,event,true,false,mode)[0]
+          name=find_weapon(args.join('').downcase,event,true,false,mode)[1]
         end
         for i in 0...args.length-1
           args.pop
           if find_weapon(name,event,true,false,mode).length<=0 && find_weapon(args.join('').downcase,event,true,false,mode).length>0
             args3=args.join(' ').split(' ') 
-            name=find_weapon(args.join('').downcase,event,true,false,mode)[0]
+            name=find_weapon(args.join('').downcase,event,true,false,mode)[1]
           end
         end
       end
@@ -1339,7 +1336,7 @@ def get_weapon(str,event,mode=0) # used by the `stats` command and many derivati
       args.pop
       if find_weapon(name,event,false,false,mode).length<=0 && find_weapon(args.join('').downcase,event,false,false,mode).length>0
         args3=args.join(' ').split(' ') 
-        name=find_weapon(args.join('').downcase,event,false,false,mode)[0]
+        name=find_weapon(args.join('').downcase,event,false,false,mode)[1]
       end
     end
     if find_weapon(name,event,false,false,mode).length<=0
@@ -1348,19 +1345,19 @@ def get_weapon(str,event,mode=0) # used by the `stats` command and many derivati
         args=args2.join(' ').split(' ')
         if find_weapon(name,event,false,false,mode).length<=0 && find_weapon(args.join('').downcase,event,false,false,mode).length>0
           args3=args.join(' ').split(' ') 
-          name=find_weapon(args.join('').downcase,event,false,false,mode)[0]
+          name=find_weapon(args.join('').downcase,event,false,false,mode)[1]
         end
         for i in 0...args.length-1
           args.pop
           if find_weapon(name,event,false,false,mode).length<=0 && find_weapon(args.join('').downcase,event,false,false,mode).length>0
             args3=args.join(' ').split(' ') 
-            name=find_weapon(args.join('').downcase,event,false,false,mode)[0]
+            name=find_weapon(args.join('').downcase,event,false,false,mode)[1]
           end
         end
       end
     end
   end
-  return [find_weapon(name,event)[0],args3.join(' ')] if find_weapon(name,event).length>0
+  return [find_weapon(name,event)[1],args3.join(' ')] if find_weapon(name,event).length>0
   return []
 end
 
@@ -1777,7 +1774,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
         end
       end
       sttz=[]
-      inner_skill=s2[15]
+      inner_skill=s2[17]
       mt=[0,0,0,0,0]
       mt[1]=1 if s2[11].include?('Silver')
       if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
@@ -2459,7 +2456,7 @@ end
 def skill_tier(name,event) # used by the "used a non-plus version of a weapon that has a + form" tooltip in the stats command to figure out the tier of the weapon
   data_load()
   s=@skills.map{|q| q}
-  j=s[s.find_index{|q| q[1]==name.gsub('Laevatein','Bladeblade')}]
+  j=s[s.find_index{|q| q[1]==name}]
   return 1 if j[10]=='-'
   return 1+skill_tier(j[10].gsub(' or ',' ').gsub('*','').split(', ')[0],event) if j[10].include?(', or ')
   return 1+skill_tier(j[10].gsub('*','').split(' or ')[0],event) if j[10].include?(' or ')
@@ -2565,9 +2562,9 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   str="#{str}In-combat buffs: #{stat_skills_3.join(', ')}\n" if stat_skills_3.length>0
   str="#{str}In-combat buffs: -\n" if stat_skills_3.length<=0 && expandedmode
   return "#{str}" if modemode && (weapon=='-' || weapon.include?('~~'))
-  return "#{str}Equipped weapon: #{weapon.gsub('Bladeblade','Laevatein')}\nForm: #{j[1][2]} (transformed)\n" if transformed && j[1][1]=='Beast'
-  return "#{str}Equipped weapon: #{weapon.gsub('Bladeblade','Laevatein')}\nForm: Humanoid\n" if !transformed && j[1][1]=='Beast'
-  return "#{str}Equipped weapon: #{weapon.gsub('Bladeblade','Laevatein')}\n"
+  return "#{str}Equipped weapon: #{weapon}\nForm: #{j[1][2]} (transformed)\n" if transformed && j[1][1]=='Beast'
+  return "#{str}Equipped weapon: #{weapon}\nForm: Humanoid\n" if !transformed && j[1][1]=='Beast'
+  return "#{str}Equipped weapon: #{weapon}\n"
 end
 
 def display_stars(bot,event,rarity,merges,support='-',flowers=['Infantry',0],expandedmode=false) # used to determine which star emojis should be used, based on the rarity, merge count, and whether the unit is Summoner Supported
@@ -3505,7 +3502,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
           p3=unitz.map{|q| q}
           unless p.length.zero?
             for i2 in 0...p.length
-              p[i2]="~~#{p[i2]}~~" unless sklz[sklz.find_index{|q2| "#{q2[1].gsub('Bladeblade','Laevatein')}#{"#{' ' unless q2[1][-1,1]=='+'}#{q2[2]}" unless q2[2]=='-' || ['Weapon','Assist','Special'].include?(q2[6])}"==p[i2]}][15].nil? || !skzz[i][15].nil?
+              p[i2]="~~#{p[i2]}~~" unless sklz[sklz.find_index{|q2| "#{q2[1]}#{"#{' ' unless q2[1][-1,1]=='+'}#{q2[2]}" unless q2[2]=='-' || ['Weapon','Assist','Special'].include?(q2[6])}"==p[i2]}][15].nil? || !skzz[i][15].nil?
             end
             if p.length>8 && !event.message.text.downcase.split(' ').include?('expanded')
               xfooter='If you would like to include the Prfs and units who have them, include the word "expanded" when retrying this command.'
@@ -3732,7 +3729,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       p3=unitz.map{|q| q}
       unless p.length.zero?
         for i2 in 0...p.length
-          p[i2]="~~#{p[i2]}~~" unless sklz[sklz.find_index{|q2| "#{q2[1].gsub('Bladeblade','Laevatein')}#{"#{' ' unless q2[1][-1,1]=='+'}#{q2[2]}" unless q2[2]=='-' || ['Weapon','Assist','Special'].include?(q2[6])}"==p[i2]}][15].nil? || !skill[15].nil?
+          p[i2]="~~#{p[i2]}~~" unless sklz[sklz.find_index{|q2| "#{q2[1]}#{"#{' ' unless q2[1][-1,1]=='+'}#{q2[2]}" unless q2[2]=='-' || ['Weapon','Assist','Special'].include?(q2[6])}"==p[i2]}][15].nil? || !skill[15].nil?
         end
         if p.length>8 && skill[6]=='Weapon' && !event.message.text.downcase.split(' ').include?('expanded')
           xfooter='If you would like to include the Prfs and units who have them, include the word "expanded" when retrying this command.'
@@ -4114,7 +4111,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
     w=w.map{|q| "#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}#{q[1]}#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}"}
     create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[1]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
   elsif event.message.text.downcase.split(' ').include?('refined') && (skill[17].nil? || skill[17].length<=0) && skill[6]=="Weapon"
-    event.respond "#{skill[1].gsub('Bladeblade','Laevatein')} does not have any refinements."
+    event.respond "#{skill[1]} does not have any refinements."
     return nil
   elsif !skill[17].nil? && skill[17].length>0 && !(has_any?(event.message.text.downcase.split(' '),['default','base']) && !event.message.text.downcase.split(' ').include?('refined'))
     sttz=[]
@@ -4594,14 +4591,14 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=fals
   sklz2=[[],[],[],[],[],[]]
   for i in 0...6
     box[i]=box[i].reject{|q| ['Missiletainn','Whelp (All)','Yearling (All)','Adult (All)','Falchion'].include?(q[1])}.sort{|a,b| a[0]<=>b[0]}
-    box2[i].push('~~Unknown base~~') if box[i].length>0 && box[i][0][8]!='-'
+    box2[i].push('~~Unknown base~~') if box[i].length>0 && box[i][0][10]!='-'
     for j in 0...box[i].length
       checkstr="#{box[i][j][1]}#{' ' unless box[i][j][1][-1,1]=='+'}#{box[i][j][2]}"
       checkstr="#{box[i][j][1]}" if box[i][j][2]=='-' || ['Weapon','Assist','Special'].include?(box[i][j][6])
       box2[i].push(box[i][j][1])
     end
     sklz[i]=sklz[i].reject{|q| ['Missiletainn','Whelp (All)','Yearling (All)','Adult (All)','Falchion'].include?(q[1])}.sort{|a,b| a[0]<=>b[0]}
-    sklz2[i].push('~~Unknown base~~') if sklz[i].length>0 && sklz[i][0][8]!='-'
+    sklz2[i].push('~~Unknown base~~') if sklz[i].length>0 && sklz[i][0][10]!='-'
     for j in 0...sklz[i].length
       checkstr="#{sklz[i][j][1]}#{' ' unless sklz[i][j][1][-1,1]=='+'}#{sklz[i][j][2]}"
       checkstr="#{sklz[i][j][1]}" if sklz[i][j][2]=='-' || ['Weapon','Assist','Special'].include?(sklz[i][j][6])
@@ -4762,7 +4759,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
         for i in 0...sklz2[mmm].length
           tmp=sklz2[mmm][i].gsub('~~','').gsub('*','').gsub('__','')
           unless tmp.downcase=='unknown base'
-            tmp2=sklz[sklz.find_index{|q| q[2]!='example' && "#{q[1].gsub('Bladeblade','Laevatein')}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless q[2]=='-' || ['Weapon','Assist','Special'].include?(q[6])}"==tmp}]
+            tmp2=sklz[sklz.find_index{|q| q[2]!='example' && "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless q[2]=='-' || ['Weapon','Assist','Special'].include?(q[6])}"==tmp}]
             if tmp2[8]!='-' && tmp2[8].split(', ').include?(j[0])
               sklz2[mmm][i]="#{sklz2[mmm][i]}<:Prf_Sparkle:490307608973148180>"
               ftrtoggles[0]=true
@@ -6159,7 +6156,7 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
     event.respond 'There were no skills that matched your request.' unless paired
     return -2
   elsif mode==1
-    f=matches4.map{|k| k[1].gsub('Bladeblade','Laevatein')}
+    f=matches4.map{|k| k[1]}
     return [m,f]
   elsif mode==2 || mode==3
     return [m,matches4]
@@ -7528,7 +7525,7 @@ end
 
 def skill_legality(event,unit,skill)
   u=@units[@units.find_index{|q| q[0]==unit}]
-  s=@skills[@skills.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==skill.gsub('Laevatein','Bladeblade')}]
+  s=@skills[@skills.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==skill}]
   k3=true
   k22=s[7].split(', ')
   for i2 in 0...k22.length
@@ -9834,7 +9831,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
     end
   }
   nicknames_load()
-  event.respond "#{name} has been removed from #{baseunt.gsub('Bladeblade','Laevatein')}'s aliases."
+  event.respond "#{name} has been removed from #{baseunt}'s aliases."
   nzzz=@aliases.reject{|q| q[0]!='Unit'}
   nzzz2=@aliases.reject{|q| q[0]!='Skill'}
   nzzz3=@aliases.reject{|q| q[0]!='Structure'}
@@ -12023,7 +12020,7 @@ bot.message do |event|
     a=s.split(' ')
     if s.gsub(' ','').downcase=='laevatein'
       disp_stats(bot,'Laevatein',nil,event,'smol',true,true)
-      disp_skill(bot,'Bladeblade',event,true)
+      disp_skill(bot,'Laevatein',event,true)
     elsif s.gsub(' ','').gsub('?','').gsub('!','').length<2
     elsif !all_commands(true).include?(a[0])
       str=find_data_ex(:find_unit,event.message.text,event,false,1)
@@ -12182,7 +12179,7 @@ bot.mention do |event|
     k=3
   elsif s.gsub(' ','').downcase=='laevatein'
     disp_stats(bot,'Laevatein',nil,event,'smol',true,true)
-    disp_skill(bot,'Bladeblade',event,true)
+    disp_skill(bot,'Laevatein',event,true)
     k=3
   elsif ['help','commands','command_list','commandlist'].include?(a[0].downcase)
     a.shift
