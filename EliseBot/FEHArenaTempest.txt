@@ -1,8 +1,8 @@
-Yune, Palla(Bunny), Marisa(Bunny), Bruno(Bunny), Veronica(Bunny), Loki(Bunny), Jamke, Hawkeye, Robin(F)(Fallen), Alfonse\Arena\09/04/2019, 15/04/2019\Wind, Fire
-Yune, Palla(Bunny), Marisa(Bunny), Bruno(Bunny), Veronica(Bunny), Loki(Bunny), Oliver, Corrin(M)(Winter), Eirika(Graceful), Anna\Aether\09/04/2019, 15/04/2019\Light, Dark\Panic Manor, Panic Manor
-Caineghis, Ranulf, Lethe, Mordecai, Haar, Seth, Hinata, Lissa, Lyn(Wind), Sharena\Arena\16/04/2019, 22/04/2019\Wind, Earth
-Yune, Palla(Bunny), Marisa(Bunny), Bruno(Bunny), Veronica(Bunny), Loki(Bunny), Oliver, Corrin(M)(Winter), Eirika(Graceful), Anna\Aether\16/04/2019, 22/04/2019\Astra, Anima\Catapult, Catapult
 Caineghis, Ranulf, Lethe, Mordecai, Haar, Seth, Hinata, Lissa, Lyn(Wind), Sharena\Arena\23/04/2019, 29/04/2019\Unknown, Unknown
 Duma, Caineghis, Ranulf, Lethe, Mordecai, Haar, Lyon, Marisa, Hrid, Alfonse\Aether\23/04/2019, 29/04/2019\Light, Dark\Infantry School, Infantry School
 Lukas(Picnic), Genny(Picnic), Felicia(Picnic), Flora(Picnic), Leo(Picnic), Alm, Faye, Kliff\Tempest\24/04/2019, 03/05/2019
+Alm(Saint), Lukas(Picnic), Genny(Picnic), Flora(Picnic), Felicia(Picnic), Leo(Picnic), Garon, Olivia(Launch), Ryoma(Supreme), Anna\Arena\30/04/2019, 07/05/2019\Unknown, Unknown
 Duma, Caineghis, Ranulf, Lethe, Mordecai, Haar, Lyon, Marisa, Hrid, Alfonse\Aether\30/04/2019, 07/05/2019\Astra, Anima\Armor School, Armor School
+Alm(Saint), Lukas(Picnic), Genny(Picnic), Flora(Picnic), Felicia(Picnic), Leo(Picnic), Garon, Olivia(Launch), Ryoma(Supreme), Anna\Arena\08/05/2019, 14/05/2019\Unknown, Unknown
+Eir, Lukas(Picnic), Genny(Picnic), Flora(Picnic), Felicia(Picnic), Leo(Picnic), Eliwood(Valentines), Takumi(Fallen), Azura(Vallite), Sharena\Aether\08/05/2019, 14/05/2019\Light, Dark\Cavalry School, Cavalry School
+Eir, Lukas(Picnic), Genny(Picnic), Flora(Picnic), Felicia(Picnic), Leo(Picnic), Eliwood(Valentines), Takumi(Fallen), Azura(Vallite), Sharena\Aether\15/05/2019, 21/05/2019\Astra, Anima\Flier School, Flier School

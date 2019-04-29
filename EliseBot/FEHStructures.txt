@@ -72,6 +72,9 @@ Snow Family\-\Ornament\It seems they're brother and sister. It's an event item.\
 Anniversary Cake\-\Ornament\A massive cake baked to celebrate the second anniversary. It's an event item.\Yes\0, 0, 0, 500\0\2nd Anniversary Celebration
 Anniversary Arch\-\Ornament\An arch built to welcome well-wishers during the second anniversary. It's an event item.\Yes\0, 0, 0, 500\0\2nd Anniversary Celebration
 Heart Garland\-\Ornament\A decoration that symbolizes overflowing love. It's an event item.\Yes\0, 0, 0, 500\0\2nd Anniversary Celebration
+Iron Fence\-\Ornament\Used to separate what's inside from what's outside. It's an event item.\Yes\0, 0, 0, 500\0\Spring 2019
+Foreboding Lizard\-\Ornament\This statue creates an atmosphere of menace, but the candles lighten the mood. It's an event item.\Yes\0, 0, 0, 500\0\Spring 2019
+Lending Library\-\Ornament\All of the Heroes who cherish knowledge gathered up this collection of books. It's an event item.\Yes\0, 0, 0, 500\0\Spring 2019
 Accessory Shop\-\Resort\A structure where Heroes can sample various accessories to find new looks that catch their fancy!\-\300, 0, 0, 0\0\Heroes cannot use this structure to change their equipped accessories.
 Armory\-\Resort\A structure that contains a collection of replica weapons for Heroes to sample.  The stock is updated periodically, too!\-\300, 0, 0, 0\0\Heroes cannot use this structure to learn new skills or change their equipped skills.
 Hot Spring\-\Resort\A structure where Heroes can relax in a nice hot spring.  Apparently it is a natural spring, too, which is especially incredible considering it is located within a floating island in the sky.\-\300, 0, 0, 0\0

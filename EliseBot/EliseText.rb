@@ -825,6 +825,7 @@ def sort_legendaries(event,bot,mode=0)
       end
       event.respond msg
     elsif k2.length>5 || k2.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n").length>1500
+      k2=k2[0,6] if k2.length>6 && !safe_to_spam?(event)
       for i in 0...k2.length/3+1
         x=''
         x="__**Legendary and Mythic Heroes' Appearances**__" if i==0
@@ -1257,9 +1258,9 @@ def disp_all_refines(event,bot)
   for i in 0...skkz.length
     if !skkz[i][17].nil?
       if skkz[i][8]=='-'
-        stones.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][15].nil?}")
+        stones.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]}#{'~~' unless skkz[i][15].nil?}")
       else
-        dew.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][15].nil?}")
+        dew.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]}#{'~~' unless skkz[i][15].nil?}")
       end
     end
   end
@@ -1274,16 +1275,16 @@ def disp_all_refines(event,bot)
             s[j]=s[j].split('!')
             s2=skkz[skkz.find_index{|q| q[1]==s[j][1] && q[2]==s[j][2]}]
             if s2[8]=='-'
-              stones2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0]})#{'~~' unless skkz[i][15].nil?}")
+              stones2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]} -> #{s[j][1]} (#{s[j][0]})#{'~~' unless skkz[i][15].nil?}")
             else
-              dew2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')} -> #{s[j][1].gsub('Bladeblade','Laevatein')} (#{s[j][0]})#{'~~' unless skkz[i][15].nil?}")
+              dew2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]} -> #{s[j][1]} (#{s[j][0]})#{'~~' unless skkz[i][15].nil?}")
             end
           else
             s2=skkz[skkz.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==s[j]}]
             if s2[8]=='-'
-              stones2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][15].nil?}")
+              stones2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]} -> #{s[j]}#{'~~' unless skkz[i][15].nil?}")
             else
-              dew2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1].gsub('Bladeblade','Laevatein')} -> #{s[j].gsub('Bladeblade','Laevatein')}#{'~~' unless skkz[i][15].nil?}")
+              dew2.push("#{'~~' unless skkz[i][15].nil?}#{skkz[i][1]} -> #{s[j]}#{'~~' unless skkz[i][15].nil?}")
             end
           end
         end
@@ -1830,11 +1831,11 @@ def disp_unit_art(event,name,bot)
         end
         unless b[i][11].nil? || b[i][11].length<=0
           m=b[i][11].split(' as ')
-          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{b[i][0]} *[Both]*")
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("*[DL-Adv]* #{b[i][0]} *[Both]*")
         end
         unless b[i][10].nil? || b[i][10].length<=0
           m=b[i][10].split(' as ')
-          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{b[i][0]} *[Both]*")
+          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("*[DL-Adv]* #{b[i][0]} *[Both]*")
         end
       end
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLDragons.txt')
@@ -1850,15 +1851,39 @@ def disp_unit_art(event,name,bot)
         unless b[i][13].nil? || b[i][13].length<=0 || b[i][14].nil? || b[i][14].length<=0
           m=b[i][13].split(' as ')
           m2=b[i][14].split(' as ')
-          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Both]*") if m[0]==nammes[2] && m2[0]==nammes[1]
+          charsx[1].push("*[DL-Drg]* #{b[i][0]} *[Both]*") if m[0]==nammes[2] && m2[0]==nammes[1]
         end
         unless b[i][14].nil? || b[i][14].length<=0
           m=b[i][14].split(' as ')
-          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{b[i][0]} *[Both]*")
+          charsx[1].push("*[DL-Drg]* #{b[i][0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("*[DL-Drg]* #{b[i][0]} *[Both]*")
         end
         unless b[i][13].nil? || b[i][13].length<=0
           m=b[i][13].split(' as ')
-          charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{b[i][0]} *[Both]*")
+          charsx[1].push("*[DL-Drg]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("*[DL-Drg]* #{b[i][0]} *[Both]*")
+        end
+      end
+      if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DL_NPCs.txt')
+        b=[]
+        File.open('C:/Users/Mini-Matt/Desktop/devkit/DL_NPCs.txt').each_line do |line|
+          b.push(line)
+        end
+      else
+        b=[]
+      end
+      for i in 0...b.length
+        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        unless b[i][3].nil? || b[i][3].length<=0 || b[i][4].nil? || b[i][4].length<=0
+          m=b[i][4].split(' as ')
+          m2=b[i][3].split(' as ')
+          charsx[1].push("*[DL-NPC]* #{b[i][0]} *[Both]*") if m[0]==nammes[2] && m2[0]==nammes[1]
+        end
+        unless b[i][3].nil? || b[i][3].length<=0
+          m=b[i][3].split(' as ')
+          charsx[1].push("*[DL-NPC]* #{b[i][0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("*[DL-NPC]* #{b[i][0]} *[Both]*")
+        end
+        unless b[i][4].nil? || b[i][4].length<=0
+          m=b[i][4].split(' as ')
+          charsx[1].push("*[DL-NPC]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("*[DL-NPC]* #{b[i][0]} *[Both]*")
         end
       end
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLWyrmprints.txt')

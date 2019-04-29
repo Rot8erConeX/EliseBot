@@ -63,6 +63,18 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Ephraim(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Ephraim(Fire)','Ephraim(Brave)'],[str]]
+  elsif /alm/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
+    str='alm'
+    str='arum' if str2.include?('arum')
+    str='arumu' if str2.include?('arumu')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('legendary') || str2.include?('saint') || str2.include?('king')
+      return [str,['Alm(Saint)'],["legendary#{str}","#{str}legendary","saint#{str}","#{str}saint","king#{str}","#{str}king"]]
+    elsif str2.include?('brave') || str2.include?('cyl')
+      return [str,['Alm(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
+    end
+    return [str,['Alm(Saint)','Alm(Brave)'],[str]]
   elsif /(hector|hektor|kektor|heckutoru)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
     str='hector'
     str='hektor' if str2.include?('hektor')
@@ -966,9 +978,8 @@ def list_unit_aliases(event,args,bot,mode=0)
       for i1 in 0...skill.length
         u=skill[i1]
         u2=u[0]
-        f.push("\n#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u[1].gsub('Bladeblade','Laevatein')}#{"#{' ' unless u[1][-1,1]=='+'}#{u[2]}" unless ['-','example'].include?(u[2]) || ['Weapon','Assist','Special'].include?(u[6])}#{skill_moji(u,event,bot)}**#{" [Skl-##{u2}]" if @shardizard==4}#{"'s server-specific aliases__" if mode==1}")
+        f.push("\n#{"\n" unless i1.zero?}#{"__" if mode==1}**#{u[1]}#{"#{' ' unless u[1][-1,1]=='+'}#{u[2]}" unless ['-','example'].include?(u[2]) || ['Weapon','Assist','Special'].include?(u[6])}#{skill_moji(u,event,bot)}**#{" [Skl-##{u2}]" if @shardizard==4}#{"'s server-specific aliases__" if mode==1}")
         u="#{u[1]}#{"#{' ' unless u[1][-1,1]=='+'}#{u[2]}" unless ['-','example'].include?(u[2]) || ['Weapon','Assist','Special'].include?(u[6])}"
-        f.push(u) if u=='Bladeblade'
         f.push(u.gsub('(','').gsub(')','').gsub(' ','')) if u.include?('(') || u.include?(')') || u.include?(' ')
         for i in 0...n.length
           mtch=false
@@ -1345,14 +1356,14 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
         @aliases[i][3]=nil
         @aliases[i][4]=nil
         @aliases[i].compact!
-        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.")
-        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unit.gsub('Bladeblade','Laevatein')}* exists in a server already.  Making it global now.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit} - gone global.")
+        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unt[0]}* exists in a server already.  Making it global now.")
+        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unt[0]}* exists in a server already.  Making it global now.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+        bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unt[0]} - gone global.")
         double=true
       else
         @aliases[i][3].push(srv)
-        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unt[0].gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.")
-        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unt[0].gsub('Bladeblade','Laevatein')}* exists in another server already.  Adding this server to those that can use it.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
+        bot.channel(chn).send_message("The alias **#{newname}** for the #{type[1].downcase} *#{unt[0]}* exists in another server already.  Adding this server to those that can use it.")
+        event.respond "The alias **#{newname}** for the #{type[1].downcase} *#{unt[0]}* exists in another server already.  Adding this server to those that can use it.\nPlease test to be sure that the alias stuck." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
         metadata_load()
         bot.user(167657750971547648).pm("The alias **#{@aliases[i][1]}** for the #{type[1].downcase} **#{@aliases[i][2]}** is used in quite a few servers.  It might be time to make this global") if @aliases[i][3].length >= @server_data[0].inject(0){|sum,x| sum + x } / 20 && @aliases[i][4].nil?
         bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unt[0]} - gained a new server that supports it.")
@@ -1361,11 +1372,11 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     end
   end
   unless double
-    @aliases.push([type[1].gsub('*',''),newname,unt[0],m].compact)
+    @aliases.push([type[1].gsub('*',''),newname,unit,m].compact)
     @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-    bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unit}*.\nPlease test to be sure that the alias stuck.")
+    bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unt[0]}*.\nPlease test to be sure that the alias stuck.")
     event.respond "**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unt[0]}*." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
+    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unt[0]}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
   end
   @aliases.uniq!
   nzzz=@aliases.map{|a| a}
@@ -1531,7 +1542,7 @@ end
 def legal_weapon(event,name,weapon,refinement='-',recursion=false)
   return '-' if weapon=='-'
   u=@units[@units.find_index{|q| q[0]==name}]
-  w=@skills[@skills.find_index{|q| q[1]==weapon.gsub('Laevatein','Bladeblade')}]
+  w=@skills[@skills.find_index{|q| q[1]==weapon}]
   unless w[1].split(' ')[0].length>u[0].length
     return '-' if w[1][0,u[0].length].downcase==u[0].downcase && count_in(event.message.text.downcase.split(' '),u[0].downcase,1)<=1
   end
@@ -1570,18 +1581,18 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     elsif ['Tome','Bow','Dagger','Healer'].include?(u[1][1])
       weapon='Missiletainn (Dusk)'
     end
-    w=@skills[@skills.find_index{|q| q[1]==weapon.gsub('Laevatein','Bladeblade')}]
+    w=@skills[@skills.find_index{|q| q[1]==weapon}]
   elsif weapon=='Whelp (All)'
     weapon="Whelp (#{u[3]})"
     weapon="Hatchling (#{u[3]})" if u[3]=='Flier'
-    w=@skills[@skills.find_index{|q| q[1]==weapon.gsub('Laevatein','Bladeblade')}]
+    w=@skills[@skills.find_index{|q| q[1]==weapon}]
   elsif weapon=='Yearling (All)'
     weapon="Yearling (#{u[3]})"
     weapon="Fledgling (#{u[3]})" if u[3]=='Flier'
-    w=@skills[@skills.find_index{|q| q[1]==weapon.gsub('Laevatein','Bladeblade')}]
+    w=@skills[@skills.find_index{|q| q[1]==weapon}]
   elsif weapon=='Adult (All)'
     weapon="Adult (#{u[3]})"
-    w=@skills[@skills.find_index{|q| q[1]==weapon.gsub('Laevatein','Bladeblade')}]
+    w=@skills[@skills.find_index{|q| q[1]==weapon}]
   end
   w2="#{weapon}"
   w2="#{weapon} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
@@ -2636,7 +2647,8 @@ def combined_BST(event,args,bot)
             ['Elise', 0, 0, ['Elise', 'Elise(Summer)', 'Elise(Bath)']],
             ['Hinoka', 0, 0, ['Hinoka(Launch)', 'Hinoka(Wings)', 'Hinoka(Bath)']],
             ['Veronica', 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)']],
-            ['Leo', 0, 0, ['Leo', 'Leo(Summer)', 'Leo(Picnic)']]]
+            ['Leo', 0, 0, ['Leo', 'Leo(Summer)', 'Leo(Picnic)']],
+            ['Alm', 0, 0, ['Alm', 'Alm(Saint)', 'Alm(Brave)']]]
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0,0,0,0],[0,0,0,0,0]]
   m=false
@@ -3718,6 +3730,11 @@ def study_of_procs(event,name,bot,weapon=nil)
   d2="`3* eDR /10#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[1].push("Moonbow - #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Lunar Flash',1)[4],cdwns)
+  d="`eDR /5 +#{wdamage+czz+spdd/5}`#{" (`eDR /5 +#{wdamage+czz+blspdd/5}`)" unless spdd/5==blspdd/5}"
+  d2="`eDR /5 +#{wdamage2+czz2+crspdd/5}`#{" (`eDR /5 +#{wdamage+czz+crblspdd/5}`)" unless crspdd/5==crblspdd/5}"
+  d="~~#{d}~~ #{d2}" unless d==d2
+  staves[1].push("**Lunar Flash - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Lunar Flash',1)[8].split(', ').include?(u40[0])
   wd="#{"#{wdamage}, " if wdamage>0}"
   wd="~~#{wdamage}~~ #{wdamage2}, " unless wdamage==wdamage2
   czz=0

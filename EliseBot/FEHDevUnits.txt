@@ -1,5 +1,5 @@
 Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Bunny)\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
-Alm\Delthea\Eir\Kana(F)\Leanne\Lethe\Matthew\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr
+Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Kana(F)\Leanne\Lethe\Matthew\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
@@ -162,6 +162,16 @@ Renewal 1\Renewal 2\Renewal 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Warding Stance 2
 
+Felicia(Picnic)
+5\0\Attack\Defense\-\0
+Iron Axe\Steel Axe\Silver Axe\Eldhrmnir
+Swap
+Chilling Wind\Glacies
+Spd/Def Bond 1\Spd/Def Bond 2\Spd/Def Bond 3
+Special Fighter 1\Special Fighter 2\Special Fighter 3
+Close Guard 1\Close Guard 2\Close Guard 3
+Armored Boots
+
 Fjorm
 5\1\Attack\HP\-\0
 Iron Lance\Steel Lance\Silver Lance\Leiptr
@@ -233,7 +243,7 @@ Threaten Atk 1\Threaten Atk 2\Threaten Atk 3
 Brash Assault 3
 
 Maria
-5\2\ \ \-\0
+5\3\ \ \-\0
 Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -400,7 +410,7 @@ New Moon\Moonbow
 Fierce Stance 1\Fierce Stance 2\Fierce Breath
 Bold Fighter 1\Bold Fighter 2\Bold Fighter 3
 With Everyone!
-Armored Boots
+Atk Ploy 2
 
 Titania(Valentines)
 5\1\ \ \-\0

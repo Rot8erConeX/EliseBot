@@ -53,3 +53,4 @@ Battle Flag\Event\9999\Used to participate in Voting Gauntlets.\Multiplies user 
 Conquest Lance\Event\99\Grants +8 stamina for Grand Conquests.\Grand Conquest stamina is different from stamina for other modes.
 First Summon Ticket\Event\99\This ticket can be used only for the specified summoning event. It will let you start a summoning session without using Orbs.
 Frosty Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\New Year's 2019
+Spring Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Spring 2019
