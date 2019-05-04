@@ -3,7 +3,7 @@ Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Kana(F)\Leanne\Lethe\Matthew\Owain\Reyson\
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
-5\10\Resistance\Defense\S\4
+5\10\Resistance\Defense\S\5
 Assault\Absorb\Absorb+\Absorb+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -21,6 +21,16 @@ Attack +1\Attack +2\Attack +3
 Wrath 1\Wrath 2\Wrath 3
 Hone Spd 1\Hone Spd 2\Hone Spd 3
 Drive Spd 1
+
+Alm(Saint)
+5\0\Resistance\Defense\-\0
+Iron Bow\Steel Bow\Silver Bow\Luna Arc
+Reciprocal Aid
+New Moon\Moonbow\Lunar Flash
+Darting Blow 1\Darting Blow 2\Darting Blow 3\Darting Blow 4
+Null Follow-up 1\Null Follow-up 2\Null Follow-up 3
+Odd Atk Wave 1\Odd Atk Wave 2\Odd Atk Wave 3
+Even Res Wave 2
 
 Anna
 5\0\ \ \-\0
@@ -53,7 +63,7 @@ Spur Def 1\Spur Def 2\Spur Def 3
 Brazen Atk/Def 3
 
 Celica(Brave)
-5\0\Defense\Speed\-\0
+5\1\Attack\HP\-\0
 Iron Sword\Steel Sword\Silver Sword\Royal Sword
 Rally Speed
 Night Sky\Astra\Galeforce
@@ -191,6 +201,16 @@ Attack +1\Attack +2\Attack +3
 Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
 Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
+
+Genny(Picnic)
+5\0\\\-\0
+Assault\Toasty Skewer\Toasty Skewer+\~~Toasty Skewer+ (+) Dazzling Mode~~
+Heal\Reconcile\Rehabilitate\Rehabilitate+
+Imbue\Fireflood Balm\Fireflood Balm+
+Brazen Atk/Res 1\Brazen Atk/Res 2\Brazen Atk/Res 3
+Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
+Def Opening 1\Def Opening 2\Def Opening 3
+Chill Atk 2
 
 Gunnthra
 5\1\Attack\Speed\-\1
@@ -333,8 +353,8 @@ Threaten Res 1\Threaten Res 2
 Distant Def 2
 
 Reyson
-4\0\Res\Atk\-\0
-Hatchling (Flier)\Fledgling (Flier)\Adult (Flier)
+4\1\Res\Atk\-\0
+Hatchling (Flier)\Fledgling (Flier)\Adult (Flier)\~~Heron Wing~~
 Sing
 Chilling Wind\Iceberg
 Darting Stance 1\Steady Posture 1\Steady Posture 2
@@ -343,8 +363,8 @@ Fortify Res 1\Fortify Res 2\~~Fortify Res 3~~
 Iote's Shield
 
 Sakura(Bath)
-5\0\Resistance\HP\-\2
-Assault\Grandscratcher\Grandscratcher+\~~Grandscratcher+ (+) Dazzling Mode~~
+5\0\Resistance\HP\-\3
+Assault\Grandscratcher\Grandscratcher+\Grandscratcher+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Still-Water Balm\Fireflood Balm\Fireflood Balm+
 Defiant Atk 1\Defiant Atk 2\Defiant Atk 3

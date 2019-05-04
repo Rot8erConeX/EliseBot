@@ -49,9 +49,9 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
   for i in 0...user.roles.length # certain role names will count as EliseMods even if they don't have legitimate mod powers
     return true if ['mod','mods','moderator','moderators','admin','admins','administrator','administrators','owner','owners'].include?(user.roles[i].name.downcase.gsub(' ',''))
   end
-  return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer EliseMod powers
+  return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer BotMod powers
   return false if mode>0
-  return true if get_donor_list().reject{|q| q[2]<1}.map{|q| q[0]}.include?(user.id) # people who donate to the laptop fund will always be EliseMods
+  return true if get_donor_list().reject{|q| q[2]<1}.map{|q| q[0]}.include?(user.id) # people who donate to the laptop fund will always be BotMods for aliases
   return false
 end
 

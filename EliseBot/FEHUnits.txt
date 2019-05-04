@@ -367,7 +367,7 @@ Loki(Bunny)\Colorless, Bow\ \Flier\6, 7, 8, 6, 4\39, 31, 34, 27, 25\Kusakihara T
 Yune\Green, Tome, Wind\Dark, Speed, 21/06/2019\Flier\6, 7, 6, 1, 9\38, 33, 27, 15, 37\Miwabe Sakura\Megan Lee;; \366\5s\F\FE10\Yune
 Caineghis\Colorless, Beast, Lion\ \Armor\7, 9, 5, 8, 6\47, 37, 23, 37, 30\Kita Senri\Jake Eberle;; \367\5p\M\FE10, FE9\Caineghis
 Lethe\Red, Beast, Cat\ \Cavalry\7, 7, 9, 6, 2\41, 33, 38, 26, 19\kaya8\Kristen Day;; \368\5p\F\FE10, FE9\Lethe
-Mordecai\Blue, Beast, Tiger\ \Infantry\9, 8, 5, 10, 3\47, 37, 24, 39, 20\Homazo\Jason Vande Brake;; \369\5p\M\FE10, FE9\Mordecai
+Mordecai\Blue, Beast, Tiger\ \Infantry\9, 8, 5, 10, 3\47, 37, 24, 39, 20\Homazo\Jason Vande Brake;; \369\4p5p\M\FE10, FE9\Mordecai
 Ranulf\Green, Beast, Cat\ \Cavalry\7, 6, 8, 8, 2\40, 30, 37, 33, 17\Meka\Armen Taylor;; \370\5p\M\FE10, FE9\Ranulf
 Haar\Green, Blade\ \Flier\9, 9, 5, 8, 2\45, 37, 25, 36, 18\Shimomura Watari\Jake Eberle;; \371\3g4g4g\M\FE10, FE9\Haar
 Flora(Picnic)\Red, Dagger\ \Armor\7, 8, 4, 6, 9\43, 38, 22, 29, 38\HAKO\Julie Ann Taylor;; \372\5s\F\FE14C\Flora
