@@ -705,9 +705,9 @@ end
 def overlap_prevent(event) # used to prevent servers with both Elise and her debug form from receiving two replies
   if event.server.nil? # failsafe code catching PMs as not a server
     return false
-  elsif event.message.text.downcase.split(' ').include?('debug') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id)
+  elsif event.message.text.downcase.split(' ').include?('debug') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579,572792502159933440].include?(event.server.id)
     return @shardizard != 4 # the debug bot can be forced to be used in the emoji servers by including the word "debug" in your message
-  elsif [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id) # emoji servers will use default Elise otherwise
+  elsif [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579,572792502159933440].include?(event.server.id) # emoji servers will use default Elise otherwise
     return @shardizard == 4
   elsif event.server.id==332249772180111360 # two identical commands cannot be used in the same minute in the FEHKeeper server
     canpost=true
@@ -1069,7 +1069,7 @@ def find_structure(name,event,fullname=false)
     s=strct.reject{|q| q[0]!=alz[k][1]}
     return s.map{|q| strct.find_index{|q2| q==q2}}
   end
-  return [] if fullname
+  return [] if fullname || name.length<=2
   return [] if name.length<3
   k=strct.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
   s=[]
@@ -1096,7 +1096,7 @@ def find_structure_ex(name,event,fullname=false)
       return k if k.length>0 && args[i,args.length-1-i-i2].length>0
     end
   end
-  return [] if fullname
+  return [] if fullname || name.length<=2
   k=find_structure(name,event)
   return k if k.length>0
   args=name.split(' ')
@@ -1170,7 +1170,7 @@ def find_data_ex(callback,name,event,fullname=false,mode=0)
         return k if k.length>0 && args[i,args.length-i-i2].length>0
       end
     end
-    return [] if fullname
+    return [] if fullname || name.length<=2
     k=method(callback).call(name,event)
     return [k,name] if k.length>0 && mode==1
     return k if k.length>0
@@ -1195,7 +1195,7 @@ def find_data_ex(callback,name,event,fullname=false,mode=0)
         return k if k>=0 && args[i,args.length-i-i2].length>0
       end
     end
-    return -1 if fullname
+    return -1 if fullname || name.length<=2
     k=method(callback).call(name,event)
     return [k,name] if k>=0 && mode==1
     return k if k>=0
@@ -6774,7 +6774,7 @@ def sort_units(bot,event,args=[])
         ls.push("#{k[i][5][f[j]-1]} #{sfn}#{sf}") if sf.length>0
       end
     end
-    m2.push("#{'~~' if !k[i][13][0].nil?}**#{k[i][0]}**#{unit_moji(bot,event,-1,k[i][0])} - #{ls.join(', ')}#{'~~' if !k[i][13][0].nil?}")
+    m2.push("#{'~~' if !k[i][13][0].nil?}**#{k[i][0]}**#{unit_moji(bot,event,-1,k[i][0])}#{' - ' if ls.length>0}#{ls.join(', ')}#{'~~' if !k[i][13][0].nil?}")
   end
   if (f.include?(1) || f.include?(2) || f.include?(3) || f.include?(4) || f.include?(5)) && m2.join("\n").include?("(+)") && m2.join("\n").include?("(-)")
     m="#{m}\n(+) and (-) mark units for whom a boon or unmerged bane would increase or decrease a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.\n"
@@ -11943,7 +11943,7 @@ bot.server_create do |event|
     end
     chn=chnn[0] if chnn.length>0
   end
-  if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(event.server.id) && @shardizard==4
+  if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579,572792502159933440].include?(event.server.id) && @shardizard==4
     (chn.send_message(get_debug_leave_message()) rescue nil)
     event.server.leave
   else
@@ -12746,7 +12746,7 @@ end
 bot.ready do |event|
   if @shardizard==4
     for i in 0...bot.servers.values.length
-      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579].include?(bot.servers.values[i].id)
+      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579,572792502159933440].include?(bot.servers.values[i].id)
         bot.servers.values[i].general_channel.send_message(get_debug_leave_message()) rescue nil
         bot.servers.values[i].leave
       end
