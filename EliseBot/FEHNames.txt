@@ -13831,7 +13831,7 @@
 ["Skill", "Faithful Axe+", 21401]
 ["Skill", "FaithfulAxe+", 21401]
 ["Skill", "Glitnir", 21410]
-["Skill", "Eldhrmnir", 21420]
+["Skill", "Eldhrimnir", 21420]
 ["Skill", "Wind", 26000]
 ["Skill", "Elwind", 26001]
 ["Skill", "Rexcalibur", 26002]

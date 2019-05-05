@@ -1,14 +1,16 @@
 >New Heroes: Unknown<\3\-\5\10/05/2019, 08/06/2019\NewUnits
 Heroes with Wrath\3\Karla, Nephenee, Owain\5\02/05/2019, 13/05/2019
+Hero Fest! Choose Your Legends, Round 1\5\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5\27/04/2019, 10/05/2019\CYL, HeroFest
+Hero Fest! Choose Your Legends, Round 2\5\Celica(Brave), Ephraim(Brave), Hector(Brave), Veronica(Brave)\5\27/04/2019, 10/05/2019\CYL, HeroFest
 Legendary Heroes: Alm, Saint King\-8\Alm(Saint), Eirika(Winter), Ephraim(Winter), Fae(Winter), Fjorm, Hector(Marquess), Ike(Vanguard), Leanne, Marth(King), Nailah, Roy(Fire), Sue\5\27/04/2019, 06/05/2019\Legendary
-Children's Day, Block A\3\-\5\26/04/2019, 05/05/2019\VotingGauntlet
-Children's Day, Block B\3\-\5\26/04/2019, 05/05/2019\VotingGauntlet
-Titania & Mist's Battle\3\Mist, Titania\5\25/04/2019, 03/05/2019\BHB
-Heroes with Iceberg\3\-\5\23/04/2019, 01/05/2019\SkillBanner
-"Taste of Spring" Tempest Trials+\3\Alm, Faye, Kliff\5\21/04/2019, 03/05/2019\Tempest
+Children's Day, Block A\3\Lugh, Tiki(Young), Ylgr\5\26/04/2019, 05/05/2019\VotingGauntlet
+Children's Day, Block B\3\Delthea, Fae, Nino(Fangs)\5\26/04/2019, 05/05/2019\VotingGauntlet
 A Season of Picnics\3\Felicia(Picnic), Flora(Picnic), Genny(Picnic), Lukas(Picnic)\5\19/04/2019, 18/05/2019\Seasonal, NewUnits
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
+Titania & Mist's Battle\3\Mist, Titania\5\25/04/2019, 03/05/2019\BHB
+"Taste of Spring" Tempest Trials+\3\Alm, Faye, Kliff\5\21/04/2019, 03/05/2019\Tempest
+Heroes with Iceberg\3\-\5\23/04/2019, 01/05/2019\SkillBanner
 Out of Gallia\3\Caineghis, Lethe, Mordecai, Ranulf\5\10/04/2019, 26/04/2019\NewUnits
 New Power (April 2019)\3\Abel, Cain, Hana, Peri\5\16/04/2019, 22/04/2019\NewPower
 Spring Festival (March 2019 rerun)\3\Camilla(Bunny), Chrom(Bunny), Lucina(Bunny), Xander(Bunny)\5\22/03/2019, 22/04/2019\Seasonal, Spring

@@ -3,7 +3,7 @@ Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Kana(F)\Leanne\Lethe\Matthew\Owain\Reyson\
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
-5\10\Resistance\Defense\S\5
+5\10\Resistance\Defense\S\5\Alm(Saint)
 Assault\Absorb\Absorb+\Absorb+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -23,7 +23,7 @@ Hone Spd 1\Hone Spd 2\Hone Spd 3
 Drive Spd 1
 
 Alm(Saint)
-5\0\Resistance\Defense\-\0
+5\0\Resistance\Defense\-\0\Sakura
 Iron Bow\Steel Bow\Silver Bow\Luna Arc
 Reciprocal Aid
 New Moon\Moonbow\Lunar Flash

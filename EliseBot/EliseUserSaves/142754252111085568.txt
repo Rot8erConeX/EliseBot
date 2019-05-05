@@ -1,0 +1,22 @@
+Shorj\0x5A4DA8\Purple
+
+Mia
+5\10\Speed\HP\-\9
+Iron Sword\Steel Sword\Heart's Blade\Heart's Blade+\Heart's Blade+ (+) Speed Mode
+Rally Attack\Rally Up Atk\Rally Up Atk+
+New Moon\Luna\Aether
+Death Blow 1\Sturdy Blow 1\Sturdy Blow 2\Sturdy Impact
+Null Follow-Up 1\Null Follow-Up 2\Null Follow-Up 3
+Hone Atk 1\Hone Atk 2\Hone Atk 3\Hone Atk 4
+Flashing Blade 3
+
+Mia(Halloween)
+5\10\Speed\HP\-\3
+Assault\Witchy Wand\Witchy Wand+\Witchy Wand+ (+) Dazzling Mode
+Heal\Mend\Restore\Restore+
+Imbue\Kindled-Fire Balm\Windfire Balm\Windfire Balm+
+Atk/Spd Solo 1\Atk/Spd Solo 2\Atk/Spd Solo 3
+Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
+Guidance 1\Guidance 2\Guidance 3
+Aerobatics 3
+
