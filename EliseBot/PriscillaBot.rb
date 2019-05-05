@@ -476,6 +476,7 @@ def devunits_load() # loads information regarding the devunits
     @dev_units[i].push(b[i*10+6].split('\\'[0]))
     @dev_units[i].push(b[i*10+7].split('\\'[0]))
     @dev_units[i].push(b[i*10+8])
+    @dev_units[i].push(k[6]) unless k[6].nil?
   end
 end
 
@@ -521,7 +522,7 @@ def devunits_save() # used by the devedit command to save the devunits
   end
   s="#{w.join('\\'[0])}\n#{sb.join('\\'[0])}\n#{nb.join('\\'[0])}"
   for i in 0...untz.length
-    s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\\#{untz[i][6]}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12].join('\\'[0])}\n#{untz[i][13]}"
+    s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\\#{untz[i][6]}\\#{untz[i][14]}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12].join('\\'[0])}\n#{untz[i][13]}"
   end
   open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt', 'w') { |f|
     f.puts s
@@ -671,6 +672,7 @@ def donor_unit_list(uid, mode=0)
     untz[i].push(b[i*10+6].split('\\'[0]))
     untz[i].push(b[i*10+7].split('\\'[0]))
     untz[i].push(b[i*10+8])
+    untz[i].push(k[6]) unless k[6].nil?
   end
   untz.unshift(m) if mode==1
   return untz
@@ -693,7 +695,7 @@ def donor_unit_save(uid,table) # used by the edit command to save the donorunits
   end
   s="#{b[0]}"
   for i in 0...untz.length
-    s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\\#{untz[i][6]}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12].join('\\'[0])}\n#{untz[i][13]}"
+    s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\\#{untz[i][6]}\\#{untz[i][14]}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12].join('\\'[0])}\n#{untz[i][13]}"
   end
   open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt", 'w') { |f|
     f.puts s
@@ -1734,11 +1736,11 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
     flowers=2*@max_rarity_merge[2] if has_any?(args.map{|q| q.downcase},['flower','flowers']) && flowers.nil?
   end
   blessing=[] if blessing.nil?
-  if args.map{|q| q.downcase}.include?('pairup')
+  if args.map{|q| q.downcase}.include?('duel')
     if blessing.length>0
-      x="PairUp(#{blessing[0].split('(')[1]}"
+      x="Duel(#{blessing[0].split('(')[1]}"
     else
-      x='PairUp(Legendary)'
+      x='Duel(Legendary)'
     end
     blessing.push(x) unless blessing.include?(x)
   end
@@ -2715,11 +2717,11 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
   elsif name=='Robin'
   elsif ['Fire','Earth','Water','Wind'].include?(unitz[2][0])
     for i in 0...blessing.length
-      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='PairUp('
+      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='Duel('
     end
   elsif ['Light','Dark','Astra','Anima'].include?(unitz[2][0])
     for i in 0...blessing.length
-      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='PairUp('
+      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='Duel('
     end
   end
   blessing.compact!
@@ -2731,7 +2733,8 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
   diff_num=[0,'','']
   sp=0
   spec_wpn=false
-  if event.message.text.downcase.include?("mathoo's")
+  pair_up=[]
+  if event.message.text.downcase.split(' ').include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
     if dv>=0
@@ -2761,6 +2764,40 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
       end
       zzzzz=@dev_units[dv][13]
       sp+=@skills[@skills.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==zzzzz}][3] unless zzzzz.nil? || @skills.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==zzzzz}.nil?
+      unless @dev_units[dv][14].nil? || !has_any?(event.message.text.downcase.split(' '),['pair','pairup'])
+        pair_up=[@dev_units[dv][14]]
+        dv2=find_in_dev_units(pair_up[0])
+        if dv2>=0
+          pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],true,2)}",'Pair-Up cohort']
+          pair_up[0][2]='Pocket companion' if pair_up[0][0].include?('Sakura')
+          pair_up.push(@dev_units[dv2][1])
+          pair_up.push(@dev_units[dv2][2])
+          pair_up.push(@dev_units[dv2][3].gsub(' ',''))
+          pair_up.push(@dev_units[dv2][4].gsub(' ',''))
+          pair_up.push(@dev_units[dv2][5])
+          pair_up.push(@dev_units[dv2][6])
+          weaponz=@dev_units[dv2][7].reject{|q| q.include?('~~')}[-1]
+          if weaponz.include?(' (+) ')
+            weaponz=weaponz.split(' (+) ')
+            pair_up.push(weaponz[0])
+            pair_up.push(weaponz[1].gsub(' Mode',''))
+          elsif weaponz.length>0
+            pair_up.push(weaponz)
+            pair_up.push('')
+          else
+            pair_up.push('')
+            pair_up.push('')
+          end
+          lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
+          a=@dev_units[dv2][10].reject{|q| q.include?('~~')}
+          x=[a[a.length-1],@dev_units[dv2][13]]
+          for i in 0...x.length
+            pair_up.push(x[i]) if lookout.include?(x[i])
+          end
+        else
+          pair_up=[]
+        end
+      end
     elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
     elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
@@ -2803,7 +2840,40 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
         sp+=@skills[@skills.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==zzzzz}][3] unless zzzzz.nil? || @skills.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==zzzzz}.nil?
       end
       zzzzz=x[x2][13]
-      sp+=@skills[@skills.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==zzzzz}][1] unless zzzzz.nil? || @skills.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==zzzzz}.nil?
+      sp+=@skills[@skills.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==zzzzz}][3] unless zzzzz.nil? || @skills.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==zzzzz}.nil?
+      unless x[x2][14].nil? || !has_any?(event.message.text.downcase.split(' '),['pair','pairup'])
+        x3=x.find_index{|q| q[0]==x[x2][14]}
+        unless x3.nil?
+          pair_up=[x[x2][14]]
+          pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],false,2,uid)}",'Pair-Up cohort']
+          pair_up.push(x[x3][1])
+          pair_up.push(x[x3][2])
+          pair_up.push(x[x3][3].gsub(' ',''))
+          pair_up.push(x[x3][4].gsub(' ',''))
+          pair_up.push(x[x3][5])
+          pair_up.push(x[x3][6])
+          weaponz=x[x3][7].reject{|q| q.include?('~~')}[-1]
+          if weaponz.include?(' (+) ')
+            weaponz=weaponz.split(' (+) ')
+            pair_up.push(weaponz[0])
+            pair_up.push(weaponz[1].gsub(' Mode',''))
+          elsif weaponz.length>0
+            pair_up.push(weaponz)
+            pair_up.push('')
+          else
+            pair_up.push('')
+            pair_up.push('')
+          end
+          lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
+          a=x[x3][10].reject{|q| q.include?('~~')}
+          x=[a[a.length-1],x[x3][13]]
+          for i in 0...x.length
+            pair_up.push(x[i]) if lookout.include?(x[i])
+          end
+        else
+          pair_up=[]
+        end
+      end
     end
   elsif args.map{|q| q.downcase}.include?('summoned')
     if name=='Robin'
@@ -3050,6 +3120,22 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
   bane2='' if merges>0
   u40x2=get_stats(event,name,40,5,0,boon,bane2)
   u1=get_stats(event,name,1,rarity,merges,boon,bane,flowers)
+  if !pair_up.nil? && pair_up.length>0
+    u40cu=get_stats(event,pair_up[0][0],40,pair_up[1],pair_up[2],pair_up[3],pair_up[4],pair_up[6])
+    u1cu=get_stats(event,pair_up[0][0],1,pair_up[1],pair_up[2],pair_up[3],pair_up[4],pair_up[6])
+    m=pair_up[9,pair_up.length-9]
+    m=[] if m.nil?
+    u1cu=apply_stat_skills(event,m,u1cu,'',pair_up[5],pair_up[7],pair_up[8])
+    u40cu=apply_stat_skills(event,m,u40cu,'',pair_up[5],pair_up[7],pair_up[8])
+    u1[2]+=(u1cu[2]-25)/10
+    u1[3]+=(u1cu[3]-10)/10
+    u1[4]+=(u1cu[4]-10)/10
+    u1[5]+=(u1cu[5]-10)/10
+    u40[2]+=(u40cu[2]-25)/10
+    u40[3]+=(u40cu[3]-10)/10
+    u40[4]+=(u40cu[4]-10)/10
+    u40[5]+=(u40cu[5]-10)/10
+  end
   atk='<:StrengthS:514712248372166666> Attack'
   atk='<:MagicS:514712247289774111> Magic' if ['Tome','Dragon','Healer'].include?(unitz[1][1])
   atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(unitz[1][1])
@@ -3275,7 +3361,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     flds.shift
   end
   flds=nil if flds.length<=0
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,unitz,u40[0],mu,2) if ['smol','xsmol'].include?(sizex)}**__","#{display_stars(bot,event,rarity,merges,summoner,[unitz[3],flowers],sizex=='giant')}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(unitz,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant')}\n#{unit_clss(bot,event,unitz,u40[0]) unless ['smol','xsmol'].include?(sizex)}#{mergetext}",xcolor,ftr,img,flds,xtype)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,unitz,u40[0],mu,2) if ['smol','xsmol'].include?(sizex)}**__","#{display_stars(bot,event,rarity,merges,summoner,[unitz[3],flowers],sizex=='giant')}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(unitz,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant')}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,unitz,u40[0]) unless ['smol','xsmol'].include?(sizex)}#{mergetext}",xcolor,ftr,img,flds,xtype)
   if (skillstoo || sizex=='giant') && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
