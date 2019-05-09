@@ -443,92 +443,23 @@ def metadata_save() # saves the metadata
 end
 
 def devunits_load() # loads information regarding the devunits
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt')
-    b=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt').each_line do |line|
-      b.push(line.gsub("\n",''))
-    end
-  else
-    b=[]
+  t=Time.now
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
+    puts 'reloading EliseMulti1'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+    @last_multi_reload[0]=t
   end
-  @dev_waifus=b[0].split('\\'[0])
-  @dev_somebodies=b[1].split('\\'[0])
-  @dev_nobodies=b[2].split('\\'[0])
-  b.shift
-  b.shift
-  b.shift
-  b.shift
-  @dev_units=[]
-  for i in 0...b.length/10
-    @dev_units[i]=[]
-    @dev_units[i].push(b[i*10])
-    k=b[i*10+1].split('\\'[0])
-    @dev_units[i].push(k[0].to_i)
-    @dev_units[i].push(k[1].to_i)
-    @dev_units[i].push(k[2])
-    @dev_units[i].push(k[3])
-    @dev_units[i].push(k[4])
-    @dev_units[i].push(k[5].to_i)
-    @dev_units[i].push(b[i*10+2].split('\\'[0]))
-    @dev_units[i].push(b[i*10+3].split('\\'[0]))
-    @dev_units[i].push(b[i*10+4].split('\\'[0]))
-    @dev_units[i].push(b[i*10+5].split('\\'[0]))
-    @dev_units[i].push(b[i*10+6].split('\\'[0]))
-    @dev_units[i].push(b[i*10+7].split('\\'[0]))
-    @dev_units[i].push(b[i*10+8])
-    @dev_units[i].push(k[6]) unless k[6].nil?
-  end
+  return load_devunits()
 end
 
 def devunits_save() # used by the devedit command to save the devunits
-  # sort the waifu list alphabetically, but move Sakura to the front of the list
-  k=@dev_waifus.map{|q| q}
-  for i in 0...k.length
-    k[i]=nil if k[i]=='Sakura'
+  t=Time.now
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
+    puts 'reloading EliseMulti1'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+    @last_multi_reload[0]=t
   end
-  k.compact!
-  k=k.sort{|a,b| a<=>b}
-  w=['Sakura']
-  for i in 0...k.length
-    w.push(k[i])
-  end
-  # sort the "somebodies" and "nobodies" lists alphabetically
-  sb=@dev_somebodies.sort{|a,b| a<=>b}
-  nb=@dev_nobodies.sort{|a,b| a<=>b}
-  # remove units from the "somebody" ist if they're also in the waifu list.
-  for i in 0...sb.length
-    sb[i]=nil if w.include?(sb[i])
-  end
-  sb.compact!
-  # remove units from the "nobody" list if they're also in the waifu or "somebody" list, or if they're listed as a normal devunit.
-  for i in 0...nb.length
-    nb[i]=nil if w.include?(nb[i]) || sb.include?(nb[i]) || @dev_units.map{|q| q[0]}.include?(nb[i])
-  end
-  nb.compact!
-  # sort the unit list alphabetically, but move Sakura to the front of the line
-  k=@dev_units.map{|q| q}
-  saku=nil
-  for i in 0...k.length
-    if k[i][0]=='Sakura' && saku.nil?
-      saku=k[i].map{|q| q}
-      k[i]=nil
-    end
-  end
-  k.compact!
-  k=k.sort{|a,b| a[0]<=>b[0]}
-  untz=[saku.map{|q| q}]
-  for i in 0...k.length
-    untz.push(k[i].map{|q| q})
-  end
-  s="#{w.join('\\'[0])}\n#{sb.join('\\'[0])}\n#{nb.join('\\'[0])}"
-  for i in 0...untz.length
-    s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\\#{untz[i][6]}\\#{untz[i][14]}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12].join('\\'[0])}\n#{untz[i][13]}"
-  end
-  open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt', 'w') { |f|
-    f.puts s
-    f.puts "\n"
-  }
-  return nil
+  return save_devunits()
 end
 
 def bonus_load()
@@ -644,64 +575,24 @@ def donate_trigger_word(event,str=nil,mode=0)
   return -1
 end
 
-def donor_unit_list(uid, mode=0)
-  return [] unless File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
-  b=[]
-  File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
-    b.push(line.gsub("\n",''))
+def donor_unit_list(uid,mode=0)
+  t=Time.now
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
+    puts 'reloading EliseMulti1'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+    @last_multi_reload[0]=t
   end
-  m=b[0]
-  b.shift
-  b.shift
-  untz=[]
-  return untz if b.length<10
-  for i in 0...b.length/10
-    untz[i]=[]
-    untz[i].push(b[i*10])
-    k=b[i*10+1].split('\\'[0])
-    untz[i].push(k[0].to_i)
-    untz[i].push(k[1].to_i)
-    untz[i].push(k[2])
-    untz[i].push(k[3])
-    untz[i].push(k[4])
-    untz[i].push(k[5].to_i)
-    untz[i].push(b[i*10+2].split('\\'[0]))
-    untz[i].push(b[i*10+3].split('\\'[0]))
-    untz[i].push(b[i*10+4].split('\\'[0]))
-    untz[i].push(b[i*10+5].split('\\'[0]))
-    untz[i].push(b[i*10+6].split('\\'[0]))
-    untz[i].push(b[i*10+7].split('\\'[0]))
-    untz[i].push(b[i*10+8])
-    untz[i].push(k[6]) unless k[6].nil?
-  end
-  untz.unshift(m) if mode==1
-  return untz
+  load_donorunits(uid,mode)
 end
 
 def donor_unit_save(uid,table) # used by the edit command to save the donorunits
-  return nil unless File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
-  # snag the username
-  b=[]
-  File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
-    b.push(line.gsub("\n",''))
+  t=Time.now
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
+    puts 'reloading EliseMulti1'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+    @last_multi_reload[0]=t
   end
-  # sort the unit list alphabetically
-  k=table.map{|q| q}
-  k.compact!
-  k=k.sort{|a,b| a[0]<=>b[0]}
-  untz=[]
-  for i in 0...k.length
-    untz.push(k[i].map{|q| q})
-  end
-  s="#{b[0]}"
-  for i in 0...untz.length
-    s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\\#{untz[i][6]}\\#{untz[i][14]}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12].join('\\'[0])}\n#{untz[i][13]}"
-  end
-  open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt", 'w') { |f|
-    f.puts s
-    f.puts "\n"
-  }
-  return nil
+  save_donorunits(uid,table)
 end
 
 def overlap_prevent(event) # used to prevent servers with both Elise and her debug form from receiving two replies
@@ -1432,6 +1323,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='Falchion_Users' if ['falchionusers'].include?(name.downcase.gsub('-','').gsub('_',''))
   name='Dancers&Singers' if ['dancers','singers'].include?(name.downcase)
   name='Helspawn' if ['hellspawn'].include?(name.downcase)
+  name='Daily_Rotation' if ['daily_rotation','dailyrotation','daily'].include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(name.downcase)
   name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','f2prfs','f2prf','retroprfs','retro-prfs'].include?(name.downcase)
   j=-1
@@ -3817,14 +3709,19 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         str="#{str}\n**Cumulative SP Cost:** #{cumul} #{"(#{cumul+skill[3]/2}-#{cumul*3/2} when inherited)" if skill[8]=='-'}" unless cumul==f2[-1][3]
         if skill[6].split(', ').include?('Seal') && skill[5]!="-"
           floop=skill[5].split(' ')
-          seals=f.reject{|q| q[2].to_i.to_s != q[2] || q[6]=='-'}.map{|q| q[5].split(' ')}
+          seals=f.reject{|q| q[2].to_i.to_s != q[2] || q[5]=='-'}.map{|q| q[5].split(' ')}
           floop[0]='<:Great_Badge_Transparent:443704781597573120> <:Badge_Transparent:445510675976945664>' if floop[0].downcase=='transparent'
           floop[0]='<:Great_Badge_Scarlet:443704781001850910> <:Badge_Scarlet:445510676060962816>' if floop[0].downcase=='scarlet'
           floop[0]='<:Great_Badge_Azure:443704780783616016> <:Badge_Azure:445510675352125441>' if floop[0].downcase=='azure'
           floop[0]='<:Great_Badge_Verdant:443704780943261707> <:Badge_Verdant:445510676056899594>' if floop[0].downcase=='verdant'
           str="#{str}\n**Seal Cost:** #{seals.map{|q| q[1]}.join('/')}#{floop[0].split(' ')[0]} #{seals.map{|q| q[2]}.join('/')}#{floop[0].split(' ')[1]} #{seals.map{|q| q[3]}.join('/')}<:Sacred_Coin:453618312996323338>"
-          cumul=cumulative_sp_cost(f2[-1],event,1)
-          str="#{str}\n**Cumulative Seal Cost:** #{cumul[1]}#{floop[0].split(' ')[0]} #{cumul[2]}#{floop[0].split(' ')[1]} #{cumul[3]}<:Sacred_Coin:453618312996323338>" if [cumul[1],cumul[2],cumul[3]]!=[floop[1],floop[2],floop[3]]
+          mxm=[0,0,0]
+          for i in 0...seals.length
+            mxm[0]+=seals[i][1].to_i
+            mxm[1]+=seals[i][2].to_i
+            mxm[2]+=seals[i][3].to_i
+          end
+          str="#{str}\n**Cumulative Seal Cost:** #{mxm[0]}#{floop[0].split(' ')[0]} #{mxm[1]}#{floop[0].split(' ')[1]} #{mxm[2]}<:Sacred_Coin:453618312996323338>" if mxm != [floop[1],floop[2],floop[3]]
         end
       end
     end
@@ -5320,11 +5217,11 @@ def get_group(name,event)
     k2=sklz[sklz.find_index{|q| q[1]=='Sing'}]
     b=[]
     for i in 0...@max_rarity_merge[0]
-      u=k[10][i].split(', ')
+      u=k[12][i].split(', ')
       for j in 0...u.length
         b.push(u[j]) unless b.include?(u[j]) || u[j].include?('-') || !has_any?(g, untz[untz.find_index{|q| q[0]==u[j]}][13][0])
       end
-      u2=k2[10][i].split(', ')
+      u2=k2[12][i].split(', ')
       for j in 0...u2.length
         b.push(u2[j]) unless b.include?(u2[j]) || u2[j].include?('-') || !has_any?(g, untz[untz.find_index{|q| q[0]==u2[j]}][13][0])
       end
@@ -5399,7 +5296,7 @@ def get_group(name,event)
       if !k[i][16].nil? && k[i][16].length>0
         m=k[i][16].split(', ')
         for i2 in 0...m.length
-          k2.push(sklz[sklz.find_index{|q| q[0]==m[i2]}])
+          k2.push(sklz[sklz.find_index{|q| q[1]==m[i2]}])
         end
       end
     end
@@ -5412,19 +5309,19 @@ def get_group(name,event)
   elsif name.downcase=='ghb'
     b=[]
     for i in 0...untz.length
-      b.push(untz[i][0]) if untz[i][9][0].downcase.include?('g') && has_any?(g, untz[i][13][0])
+      b.push(untz[i][0]) if untz[i][9][0].include?('g') && has_any?(g, untz[i][13][0])
     end
     return ['GHB',b]
   elsif name.downcase=='tempest'
     b=[]
     for i in 0...untz.length
-      b.push(untz[i][0]) if untz[i][9][0].downcase.include?('t') && has_any?(g, untz[i][13][0])
+      b.push(untz[i][0]) if untz[i][9][0].include?('t') && has_any?(g, untz[i][13][0])
     end
     return ['Tempest',b]
-  elsif name.downcase=='daily_rotation'
+  elsif ['daily_rotation','dailyrotation','daily'].include?(name.downcase)
     b=[]
     for i in 0...untz.length
-      b.push(untz[i][0]) if untz[i][9][0].downcase.include?('d') && has_any?(g, untz[i][13][0])
+      b.push(untz[i][0]) if untz[i][9][0].include?('d') && has_any?(g, untz[i][13][0])
     end
     return ['Daily_Rotation',b]
   elsif name.downcase=='bannerless'
@@ -10892,352 +10789,13 @@ end
 
 bot.command(:edit) do |event, cmd, *args|
   return nil if overlap_prevent(event)
-  uid=event.user.id
-  if uid==167657750971547648
-    uid=244073468981805056
-   # event.respond "This command is for the donors.  Your version of the command is `FEH!devedit`."
-    #return nil
-  elsif !get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(uid)
-    event.respond "You do not have permission to use this command."
-    return nil
-  elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
-    event.respond "Please wait until my developer makes your storage file."
-    return nil
-  elsif cmd.downcase=='help' || ((cmd.nil? || cmd.length.zero?) && (args.nil? || args.length.zero?))
-    subcommand=nil
-    subcommand=args[0] unless args.nil? || args.length.zero?
-    subcommand='' if subcommand.nil?
-    if ['create'].include?(subcommand.downcase)
-      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __\*stats__","Allows me to create a new donor unit with the character `unit` and stats described in `stats`.\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    elsif ['promote','rarity','feathers'].include?(subcommand.downcase)
-      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __number__","Causes me to promote the donor unit with the name `unit`.\n\nIf `number` is defined, I will promote the donor unit that many times.\nIf not, I will promote them once.\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    elsif ['remove','delete','send_home','sendhome','fodder'].include?(subcommand.downcase)
-      create_embed(event,"**edit #{subcommand.downcase}** __unit__","Removes a unit from the donor units attached to the invoker.\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    elsif ['merge','combine'].include?(subcommand.downcase)
-      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __number__","Causes me to merge the donor unit with the name `unit`.\n\nIf `number` is defined, I will merge the donor unit that many times.\nIf not, I will merge them once.\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    elsif ['flower','flowers','dragonflower','dragonflowers'].include?(subcommand.downcase)
-      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __number__","Causes me to equip the donor unit with the name `unit`, with an additional dragonflower.\n\nIf `number` is defined, I will equip that many dragonflowers.\nIf not, I will equip one.\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    elsif ['nature','ivs'].include?(subcommand.downcase)
-      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __\*effects__","Causes me to change the nature of the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    elsif ['equip','skill'].include?(subcommand.downcase)
-      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __\*skill name__","Equips the skill `skill name` on the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    elsif ['seal'].include?(subcommand.downcase)
-      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __\*skill name__","Equips the skill seal `skill name` on the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    elsif ['refine','refinery','refinement'].include?(subcommand.downcase)
-      create_embed(event,"**edit #{subcommand.downcase}** __unit__ __\*refinement__","Refines the weapon equipped by the donor unit with the name `unit`, using the refinement `refinement`\n\nIf no refinement is defined and the equipped weapon has an Effect Mode, defaults to that.\nOtherwise, throws an error message if no refinement is defined.\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    elsif ['support','marry'].include?(subcommand.downcase)
-      create_embed(event,"**edit #{subcommand.downcase}** __unit__","Causes me to change the support rank of the donor unit with the name `unit`.  If the donor unit has no rank, will wipe the other donor unit that has support.\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    else
-      create_embed(event,"**edit** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!edit create` - creates a new donor unit\n`FEH!edit promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!edit merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!edit nature` - changes a donor unit's nature (*also `ivs`*)\n`FEH!edit support` - causes me to change support ranks of donor units (*also `marry`*)\n\n`FEH!edit equip` - equip skill (*also `skill`*)\n`FEH!edit seal` - equip seal\n`FEH!edit refine` - refine weapon\n\n`FEH!edit send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    end
-    return nil
+  t=Time.now
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
+    puts 'reloading EliseMulti1'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+    @last_multi_reload[0]=t
   end
-  data_load()
-  j=find_data_ex(:find_unit,event.message.text,event)
-  if j.length<=0
-    event.respond 'There is no unit by that name.'
-    return nil
-  end
-  donor_units=donor_unit_list(uid)
-  j2=donor_units.find_index{|q| q[0]==j[0]}
-  if j2.nil?
-    args=event.message.text.downcase.split(' ')
-    if cmd.downcase=='create'
-      jn=j[0]
-      sklz2=unit_skills(jn,event,true)
-      flurp=find_stats_in_string(event)
-      donor_units=donor_unit_list(uid)
-      donor_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],flurp[8],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
-      donor_unit_save(uid,donor_units)
-      event.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection."
-    elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
-      event.respond 'You never had that unit in the first place.'
-      return nil
-    else
-      @stored_event=[event,j]
-      event.respond "You do not have this unit.  Do you wish to add them to your collection?\nYes/No"
-      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
-        if e.message.text.downcase.include?('no')
-          e.respond 'Okay.'
-        else
-          jn=@stored_event[1][0]
-          sklz2=unit_skills(jn,@stored_event[0],true)
-          flurp=find_stats_in_string(e)
-          donor_units=donor_unit_list(uid)
-          donor_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],flurp[8],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
-          donor_unit_save(uid,donor_units)
-          event.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection."
-        end
-      end
-    end
-  elsif ['support','marry'].include?(cmd.downcase)
-    donor_units=donor_unit_list(uid)
-    if donor_units[j2][5]=='S'
-      event.respond "You've already married #{donor_units[j2][0]}."
-    elsif donor_units[j2][5]=='A'
-      donor_units[j2][5]='S'
-      donor_unit_save(uid,donor_units)
-      event.respond "You've married #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
-    elsif donor_units[j2][5]=='B'
-      donor_units[j2][5]='A'
-      donor_unit_save(uid,donor_units)
-      event.respond "You've proposed to #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
-    elsif donor_units[j2][5]=='C'
-      donor_units[j2][5]='B'
-      donor_unit_save(uid,donor_units)
-      event.respond "You've started dating #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
-    elsif donor_units[j2][5]=='-'
-      d=''
-      for i in 0...donor_units.length
-        d="#{donor_units[i][0]}" unless donor_units[i][5]=='-'
-        donor_units[i][5]='-'
-      end
-      donor_units[j2][5]='C'
-      donor_unit_save(uid,donor_units)
-      event.respond "You've #{"divorced #{d} and " unless d==''}befriended #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
-    end
-  elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
-    @stored_event=[event,j]
-    event.respond "I have a unit stored for your #{donor_units[j2][0]}.  Do you wish me to delete this build?\nYes/No"
-    event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
-      if e.message.text.downcase.include?('no')
-        e.respond 'Okay.'
-      else
-        jn=@stored_event[1][0]
-        donor_units=donor_unit_list(uid)
-        donor_units=donor_units.reject{|q| q[0]==jn}
-        donor_unit_save(uid,donor_units)
-        e.respond "#{jn} has been removed from your collection."
-      end
-    end
-  elsif ['refine','refinement','refinery'].include?(cmd.downcase)
-    jn=j[0]
-    sklzz=@skills.map{|q| q}
-    m=donor_units[j2][7]
-    m.pop if m[m.length-1].include?(' (+) ')
-    w=sklzz[sklzz.index{|q| q[1]==m[m.length-1]}]
-    if w[17].nil?
-      event.respond "#{m[m.length-1]} cannot be refined."
-      return nil
-    end
-    inner_skill=w[17]
-    if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
-      inner_skill=inner_skill[1,inner_skill.length-1]
-      inner_skill='y' if inner_skill.nil? || inner_skill.length<1
-    elsif inner_skill[0,1]=='-' && inner_skill.length>1
-      inner_skill=inner_skill[2,inner_skill.length-2]
-      inner_skill='y' if inner_skill.nil? || inner_skill.length<1
-    end
-    for i in 0...5
-      if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
-        inner_skill=inner_skill[1,inner_skill.length-1]
-        inner_skill='y' if inner_skill.nil? || inner_skill.length<1
-      elsif inner_skill[0,1]=='-' && inner_skill.length>1
-        inner_skill=inner_skill[2,inner_skill.length-2]
-        inner_skill='y' if inner_skill.nil? || inner_skill.length<1
-      end
-    end
-    overides=['e','a','s','d','r']
-    overides=['e','w','d'] if w[5]=='Staff Users Only'
-    for i in 0...overides.length
-      if inner_skill[0,3]=="(#{overides[i]})"
-        inner_skill=inner_skill[3,inner_skill.length-3]
-        for i2 in 0...6
-          if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
-            inner_skill=inner_skill[1,inner_skill.length-1]
-            inner_skill='y' if inner_skill.nil? || inner_skill.length<1
-          elsif inner_skill[0,1]=='-' && inner_skill.length>1
-            inner_skill=inner_skill[2,inner_skill.length-2]
-            inner_skill='y' if inner_skill.nil? || inner_skill.length<1
-          end
-        end
-      end
-    end
-    words=[]
-    words.push('Effect') unless inner_skill=='y'
-    if w[7]=='Staff Users Only'
-      words.push('Wrathful') unless w[7].include?("This weapon's damage is calculated the same as other weapons.") || w[7].include?('Damage from staff calculated like other weapons.')
-      words.push('Dazzling') unless w[7].include?('The foe cannot counterattack.') || w[7].include?('Foe cannot counterattack.')
-    else
-      words.push('Attack')
-      words.push('Speed')
-      words.push('Defense')
-      words.push('Resistance')
-    end
-    refine=''
-    for i in 0...args.length
-      if refine.length.zero?
-        refine='Effect' if ['effect','special','eff','+effect','+special','+eff'].include?(args[i].downcase) && words.include?('Effect')
-        refine='Wrathful' if ['wrazzle','wrathful','+wrazzle','+wrathful','=w'].include?(args[i].downcase) && words.include?('Wrathful')
-        refine='Dazzling' if ['dazzle','dazzling','+dazzle','+dazzling','+d'].include?(args[i].downcase) && words.include?('Dazzling')
-        refine='Attack' if ['attack','atk','att','strength','str','magic','mag','+attack','+atk','+att','+strength','+str','+magic','+mag'].include?(args[i].downcase) && words.include?('Attack')
-        refine='Speed' if ['spd','speed','+spd','+speed'].include?(args[i].downcase) && words.include?('Speed')
-        refine='Defense' if ['defense','def','defence','+defense','+def','+defence'].include?(args[i].downcase) && words.include?('Defense')
-        refine='Resistance' if ['res','resistance','+res','+resistance'].include?(args[i].downcase) && words.include?('Resistance')
-      end
-    end
-    refine='Effect' if refine.length.zero? && words.include?('Effect')
-    refine=words[0] if refine.length.zero? && words.length==1
-    if refine.length.zero?
-      event.respond "No refinement was defined.  Your options are:\n#{words.join("\n")}"
-      return nil
-    end
-    m.push("#{m[m.length-1]} (+) #{refine} Mode")
-    donor_units[j2][6]=m
-    donor_unit_save(uid,donor_units)
-    event.respond "Your #{donor_units[j2][0]}'s #{m[m.length-2]} has been given the #{refine} Mode refinement!"
-  elsif ['seal'].include?(cmd.downcase)
-    jn=j[0]
-    sklzz=@skills.map{|q| q}
-    k222=find_data_ex(:find_unit,event.message.text,event,false,1)
-    k2=get_weapon(first_sub(args.join(' '),k222[1],''),event,1)
-    unless k2[0][k2[0].length-1,1]!=k2[0][k2[0].length-1,1].to_i.to_s || k2[1][k2[1].length-1,1]==k2[1][k2[1].length-1,1].to_i.to_s
-      skls=sklzz.reject{|q| q[0][0,q[0].length-1]!=k2[0][0,k2[0].length-1]}.map{|q| q[0]}.sort!
-      k2[0]=skls[-1]
-    end
-    js=sklzz.find_index{|q| q[1]==k2[1] && q[2]==k2[2]}
-    q=sklzz[j2]
-    q="#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"
-    if !sklzz[js][6].split(', ').include?('Passive(S)') && !sklzz[js][6].split(', ').include?('Seal')
-      event.respond "#{q} cannot be equipped in the Seal slot.  Please use the `FEH!edit equip` command to equip this skill."
-      return nil
-    elsif !skill_legality(event,donor_units[j2][0],q)
-      event.respond "#{donor_units[j2][0]} cannot equip the #{q} seal."
-      return nil
-    end
-    donor_units[j2][13]=q
-    donor_unit_save(uid,donor_units)
-    event.respond "The #{sklzz[js][0]} seal has been given to your #{donor_units[j2][0]}!"
-  elsif ['equip','skill'].include?(cmd.downcase)
-    jn=j[0]
-    k222=find_data_ex(:find_unit,event.message.text,event,false,1)
-    sklzz=@skills.map{|q| q}
-    k2=get_weapon(first_sub(args.join(' '),k222[1],''),event,1)
-    unless k2[0][k2[0].length-1,1]!=k2[0][k2[0].length-1,1].to_i.to_s || k2[1][k2[1].length-1,1]==k2[1][k2[1].length-1,1].to_i.to_s
-      skls=sklzz.reject{|q| q[0][0,q[0].length-1]!=k2[0][0,k2[0].length-1]}.map{|q| q[0]}.sort!
-      k2[0]=skls[-1]
-    end
-    js=sklzz.find_index{|q| q[1]==k2[1] && q[2]==k2[2]}
-    x=backwards_skill_tree(js)
-    m=0
-    q=sklzz[js]
-    q="#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"
-    if sklzz[js][6]!='Weapon' && !skill_legality(event,donor_units[j2][0],q)
-      event.respond "#{donor_units[j2][0]} cannot equip #{q}."
-      return nil
-    end
-    if sklzz[js][6]=='Weapon'
-      w=weapon_legality(event,donor_units[j2][0],sklzz[js][0])
-      if w.include?('~~')
-        event.respond "#{donor_units[j2][0]} cannot equip #{q}."
-        return nil
-      end
-      js=sklzz.find_index{|q| q[0]==w}
-      m=7
-    elsif sklzz[js][6]=='Assist'
-      m=8
-    elsif sklzz[js][6]=='Special'
-      m=9
-    elsif sklzz[js][6].split(', ').include?('Passive(A)')
-      m=10
-    elsif sklzz[js][6].split(', ').include?('Passive(B)')
-      m=11
-    elsif sklzz[js][6].split(', ').include?('Passive(C)')
-      m=12
-    else
-      event.respond "#{q} cannot be equipped.#{"\nUse the `FEH!edit seal` command to equip a seal." if sklzz[js][6].split(', ').include?('Passive(S)') || sklzz[js][6].split(', ').include?('Seal')}"
-      return nil
-    end
-    x=backwards_skill_tree(js, nil, donor_units[j2][m])
-    donor_units[j2][m]=x[0].map{|q| q}
-    donor_unit_save(uid,donor_units)
-    dispstr=''
-    unless x[1].nil?
-      dispstr="#{x[1]} has been used as the base because your #{donor_units[j2][0]} already knows it."
-      dispstr="#{donor_units[j2][0]} doesn't officially know any of the prerequisites so I marked it as \"Unknown base\"." if dispstr.include?('~~')
-    end
-    event.respond "#{q} has been given to your #{donor_units[j2][0]}!#{"\n#{dispstr}" unless dispstr.length.zero?}#{"\nPlease use the `FEH!edit refine` command to refine the weapon." if sklzz[js][6]=='Weapon'}"
-  elsif cmd.downcase=='create'
-    event.respond "You already have a #{donor_units[j2][0]}."
-    return nil
-  elsif ['promote','rarity','feathers'].include?(cmd.downcase)
-    flurp=find_stats_in_string(event,nil,1)
-    donor_units[j2][1]=flurp[0] unless flurp[0].nil?
-    donor_units[j2][1]+=1 if flurp[0].nil?
-    donor_units[j2][1]=[donor_units[j2][1],5].min
-    donor_units[j2][2]=0
-    donor_unit_save(uid,donor_units)
-    event.respond "You have promoted your #{donor_units[j2][0]} to #{donor_units[j2][1]}#{@rarity_stars[donor_units[j2][1]-1]}!"
-  elsif ['merge','combine'].include?(cmd.downcase)
-    flurp=find_stats_in_string(event,nil,1)
-    if !flurp[1].nil?
-      donor_units[j2][2]+=flurp[1]
-    elsif !flurp[0].nil?
-      donor_units[j2][2]+=flurp[0]
-    else
-      donor_units[j2][2]+=1
-    end
-    donor_units[j2][2]=[donor_units[j2][2],@max_rarity_merge[1]].min
-    donor_unit_save(uid,donor_units)
-    event.respond "You have merged your #{donor_units[j2][0]} to +#{donor_units[j2][2]}!"
-  elsif ['flower','flowers','dragonflower','dragonflowers'].include?(cmd.downcase)
-    flurp=find_stats_in_string(event,nil,1)
-    if !flurp[8].nil?
-      donor_units[j2][6]+=flurp[8]
-    elsif !flurp[1].nil?
-      donor_units[j2][6]+=flurp[1]
-    elsif !flurp[0].nil?
-      donor_units[j2][6]+=flurp[0]
-    else
-      donor_units[j2][6]+=1
-    end
-    donor_units[j2][6]=[donor_units[j2][6],2*@max_rarity_merge[2]].min
-    donor_units[j2][6]=[donor_units[j2][6],@max_rarity_merge[2]].min unless j[3]=='Infantry' && j[9][0].include?('PF')
-    donor_unit_save(uid,donor_units)
-    event.respond "You have given #{donor_units[j2][0]} their #{longFormattedNumber(donor_units[j2][6],true)} flower!"
-  elsif ['nature','ivs'].include?(cmd.downcase)
-    flurp=find_stats_in_string(event,nil,1)
-    n=''
-    if flurp[2].nil? && flurp[3].nil?
-      donor_units[j2][3]=' '
-      donor_units[j2][4]=' '
-      donor_unit_save(uid,donor_units)
-      event.respond "You have changed your #{donor_units[j2][0]}'s nature to neutral!"
-    elsif flurp[2].nil? || flurp[3].nil?
-      @stored_event=[event,j]
-      event.respond "You cannot have a boon without a bane.  Set stats to neutral?\nYes/No" if flurp[3].nil?
-      event.respond "You cannot have a bane without a boon.  Set stats to neutral?\nYes/No" if flurp[2].nil?
-      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
-        if e.message.text.downcase.include?('no')
-          e.respond 'Okay.'
-        else
-          j2=@stored_event[1][0]
-          j2=donor_units.find_index{|q| q[0]==j[0]}
-          donor_units[j2][3]=' '
-          donor_units[j2][4]=' '
-          donor_unit_save(uid,donor_units)
-          event.respond "You have changed your #{donor_units[j2][0]}'s nature to neutral!"
-        end
-      end
-    else
-      donor_units[j2][3]=flurp[2]
-      donor_units[j2][4]=flurp[3]
-      atk='Attack'
-      atk='Magic' if ['Tome','Dragon','Healer'].include?(j[1][1])
-      atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(j[1][1])
-      n=nature_name(flurp[2],flurp[3])
-      unless n.nil?
-        n=n[0] if atk=='Strength'
-        n=n[n.length-1] if atk=='Magic'
-        n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
-      end
-      donor_unit_save(uid,donor_units)
-      event.respond "You have changed your #{donor_units[j2][0]}'s nature to +#{flurp[2]}, -#{flurp[3]} (#{n})!"
-    end
-  else
-    event.respond 'Edit mode was not specified.'
-  end
-  return nil
+  donor_edit(bot,event,args,cmd)
 end
 
 def backwards_skill_tree(j, sklz=nil, table=nil)
@@ -11566,292 +11124,13 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
     event.respond "This command is to allow the developer to edit his units.  Your version of the command is `FEH!edit`"
   end
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
-  data_load()
-  j=find_data_ex(:find_unit,event.message.text,event)
-  if j.length<0
-    event.respond 'There is no unit by that name.'
-    return nil
+  t=Time.now
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
+    puts 'reloading EliseMulti1'
+    load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
+    @last_multi_reload[0]=t
   end
-  if ['newwaifu','newaifu','addwaifu','new_waifu','add_waifu','waifu'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && args[0].downcase=='waifu')
-    if @dev_waifus.include?(j[0])
-      event.respond "#{j[0]} is already listed among your waifus."
-    else
-      @dev_waifus.push(j[0])
-      rfs=false
-      ren=false
-      for i in 0...@dev_somebodies.length
-        if @dev_somebodies[i]==j[0]
-          rfs=true
-          @dev_somebodies[i]=nil
-        end
-      end
-      @dev_somebodies.compact!
-      for i in 0...@dev_nobodies.length
-        if @dev_nobodies[i]==j[0]
-          rfn=true
-          @dev_nobodies[i]=nil
-        end
-      end
-      @dev_nobodies.compact!
-      devunits_save()
-      event.respond "#{j[0]} has been added to the list of your waifus.#{"\nI have also taken the liberty of removing #{j[0]} from your #{"\"somebodies\"" if rfs}#{" and " if rfs && rfn}#{'"nobodies"' if rfn} list#{'s' if rfs && rfn}." if rfs || rfn}"
-    end
-    return nil
-  elsif ['newsomebody','newsomeone','newsomebodies','addsomebody','addsomeone','addsomebodies','new_somebody','new_someone','new_somebodies','add_somebody','add_someone','add_somebodies','somebody','somebodies','someone'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && ['somebody','somebodies','someone'].include?(args[0].downcase))
-    if @dev_waifus.include?(j[0])
-      event.respond "#{j[0]} is already listed among your waifus."
-    elsif @dev_somebodies.include?(j[0])
-      event.respond "#{j[0]} is already listed among your \"somebodies\" list."
-    else
-      @dev_somebodies.push(j[0])
-      ren=false
-      for i in 0...@dev_nobodies.length
-        if @dev_nobodies[i]==j[0]
-          rfn=true
-          @dev_nobodies[i]=nil
-        end
-      end
-      @dev_nobodies.compact!
-      devunits_save()
-      event.respond "#{j[0]} has been added to your \"somebodies\" list.#{"\nI have also taken the liberty of removing #{j[0]} from your \"nobodies\" list." if rfn}"
-    end
-    return nil
-  elsif ['newnobody','newnoone','newnobodies','addnobody','addnoone','addnobodies','new_nobody','new_noone','new_nobodies','add_nobody','add_noone','add_nobodies','nobody','nobodies','noone'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && ['nobody','nobodies','noone'].include?(args[0].downcase))
-    if @dev_waifus.include?(j[0])
-      event.respond "#{j[0]} is already listed among your waifus."
-    elsif @dev_somebodies.include?(j[0])
-      event.respond "#{j[0]} is already listed among your \"somebodies\" list."
-    elsif @dev_nobodies.include?(j[0])
-      event.respond "#{j[0]} is already listed among your \"nobodies\" list."
-    else
-      @dev_nobodies.push(j[0])
-      devunits_save()
-      event.respond "#{j[0]} has been added to your \"nobodies\" list."
-    end
-    return nil
-  end
-  j2=find_in_dev_units(j[0])
-  if j2<0
-    args=event.message.text.downcase.split(' ')
-    if cmd.downcase=='create'
-      jn=j[0]
-      sklz2=unit_skills(jn,event,true)
-      flurp=find_stats_in_string(event)
-      @dev_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],flurp[8],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
-      for i in 0...@dev_nobodies.length
-        @dev_nobodies[i]=nil if @dev_nobodies[i]==jn
-      end
-      @dev_nobodies.compact!
-      devunits_save()
-      congrate=false
-      congrats=true if @dev_waifus.include?(jn) || @dev_somebodies.include?(jn)
-      event.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{'Congrats!' if congrats}"
-    elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
-      if @dev_waifus.include?(j[0])
-        event.respond "Woah, you're getting rid of one of your waifus?!?  Who hacked your Discord and/or FEH account?"
-      elsif @dev_somebodies.include?(j[0])
-        @stored_event=[event,j]
-        event.respond "You're getting rid of one of your somebodies?  Should I remove them from the \"somebodies\" list?"
-        event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
-          if e.message.text.downcase.include?('no')
-            e.respond 'Okay.'
-          else
-            jn=@stored_event[1][0]
-            for i in 0...@dev_somebodies.length
-              @dev_somebodies[i]=nil if @dev_somebodies[i]==jn
-            end
-            @dev_somebodies.compact!
-            devunits_save()
-            e.respond "#{jn} has been removed from your \"somebodies\" list."
-          end
-        end
-      elsif @dev_nobodies.include?(j[0])
-        for i in 0...@dev_nobodies.length
-          @dev_nobodies[i]=nil if @dev_nobodies[i]==j[0]
-        end
-        @dev_nobodies.compact!
-        devunits_save()
-        e.respond "#{j[0]} has been removed from your \"nobodies\" list."
-      else
-        event.respond 'You never had that unit in the first place.'
-      end
-      return nil
-    else
-      @stored_event=[event,j]
-      event.respond 'You do not have this unit.  Do you wish to add them to your collection?' unless @dev_nobodies.include?(j[0])
-      event.respond "You Have this unit but previously stated you don't want to input their data.  Do you wish to add them to your collection?" if @dev_nobodies.include?(j[0])
-      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
-        if e.message.text.downcase.include?('no')
-          e.respond 'Okay.'
-        else
-          jn=@stored_event[1][0]
-          sklz2=unit_skills(jn,@stored_event[0],true)
-          flurp=find_stats_in_string(@stored_event[0])
-          @dev_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],flurp[8],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5]])
-          for i in 0...@dev_nobodies.length
-            @dev_nobodies[i]=nil if @dev_nobodies[i]==jn
-          end
-          @dev_nobodies.compact!
-          devunits_save()
-          congrate=false
-          congrats=true if @dev_waifus.include?(jn) || @dev_somebodies.include?(jn)
-          e.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{"Congrats!" if congrats}"
-        end
-      end
-    end
-  elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
-    @stored_event=[event,j]
-    event.respond "I have a devunit stored for #{@dev_units[j2][0]}.  Do you wish me to delete this build?"
-    event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
-      if e.message.text.downcase.include?('no')
-        e.respond 'Okay.'
-      else
-        jn=@stored_event[1][0]
-        @dev_units[find_in_dev_units(jn)]=nil
-        @dev_units.compact!
-        devunits_save()
-        e.respond "#{jn} has been removed from the devunits."
-      end
-    end
-  elsif cmd.downcase=='create'
-    event.respond "You already have a #{@dev_units[j2][0]}."
-    return nil
-  elsif ['promote','rarity','feathers'].include?(cmd.downcase)
-    flurp=find_stats_in_string(event,nil,1)
-    if !flurp[1].nil?
-      @dev_units[j2][2]+=flurp[1]
-    elsif !flurp[0].nil?
-      @dev_units[j2][2]+=flurp[0]
-    else
-      @dev_units[j2][2]+=1
-    end
-    @dev_units[j2][1]=[@dev_units[j2][1],5].min
-    @dev_units[j2][2]=0
-    devunits_save()
-    event.respond "You have promoted your #{@dev_units[j2][0]} to #{@dev_units[j2][1]}#{@rarity_stars[@dev_units[j2][1]-1]}!"
-  elsif ['merge','combine'].include?(cmd.downcase)
-    flurp=find_stats_in_string(event,nil,1)
-    @dev_units[j2][2]+=flurp[1] unless flurp[1].nil?
-    @dev_units[j2][2]+=1 if flurp[1].nil?
-    @dev_units[j2][2]=[@dev_units[j2][2],@max_rarity_merge[1]].min
-    devunits_save()
-    event.respond "You have merged your #{@dev_units[j2][0]} to +#{@dev_units[j2][2]}!"
-  elsif ['flower','flowers','dragonflower','dragonflowers'].include?(cmd.downcase)
-    flurp=find_stats_in_string(event,nil,1)
-    if !flurp[8].nil?
-      @dev_units[j2][6]+=flurp[8]
-    elsif !flurp[1].nil?
-      @dev_units[j2][6]+=flurp[1]
-    elsif !flurp[0].nil?
-      @dev_units[j2][6]+=flurp[0]
-    else
-      @dev_units[j2][6]+=1
-    end
-    @dev_units[j2][6]=[@dev_units[j2][6],2*@max_rarity_merge[2]].min
-    @dev_units[j2][6]=[@dev_units[j2][6],@max_rarity_merge[2]].min unless j[3]=='Infantry' && j[9][0].include?('PF')
-    devunits_save()
-    event.respond "You have given #{@dev_units[j2][0]} their #{longFormattedNumber(@dev_units[j2][6],true)} flower!"
-  elsif ['nature','ivs'].include?(cmd.downcase)
-    flurp=find_stats_in_string(event,nil,1)
-    n=''
-    if flurp[2].nil? && flurp[3].nil?
-      @dev_units[j2][3]=' '
-      @dev_units[j2][4]=' '
-      devunits_save()
-      event.respond "You have changed your #{@dev_units[j2][0]}'s nature to neutral!"
-    elsif flurp[2].nil? || flurp[3].nil?
-      @stored_event=[event,j]
-      event.respond 'You cannot have a boon without a bane.  Set stats to neutral?' if flurp[3].nil?
-      event.respond 'You cannot have a bane without a boon.  Set stats to neutral?' if flurp[2].nil?
-      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
-        if e.message.text.downcase.include?('no')
-          e.respond 'Okay.'
-        else
-          j2=find_in_dev_units(@stored_event[1][0])
-          @dev_units[j2][3]=' '
-          @dev_units[j2][4]=' '
-          devunits_save()
-          event.respond "You have changed your #{@dev_units[j2][0]}'s nature to neutral!"
-        end
-      end
-    else
-      @dev_units[j2][3]=flurp[2]
-      @dev_units[j2][4]=flurp[3]
-      atk='Attack'
-      atk='Magic' if ['Tome','Dragon','Healer'].include?(j[1][1])
-      atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(j[1][1])
-      n=nature_name(flurp[2],flurp[3])
-      unless n.nil?
-        n=n[0] if atk=='Strength'
-        n=n[n.length-1] if atk=='Magic'
-        n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
-      end
-      devunits_save()
-      event.respond "You have changed your #{@dev_units[j2][0]}'s nature to +#{flurp[2]}, -#{flurp[3]} (#{n})!"
-    end
-  elsif ['learn','teach'].include?(cmd.downcase)
-    skill_types=[]
-    for i in 0...args.length
-      skill_types.push(7) if ['weapon','weapons'].include?(args[i].downcase)
-      skill_types.push(8) if ['assist','assists'].include?(args[i].downcase)
-      skill_types.push(9) if ['special','specials'].include?(args[i].downcase)
-      skill_types.push(10) if ['a','apassives','apassive','passivea','passivesa','a_passives','a_passive','passive_a','passives_a'].include?(args[i].downcase)
-      skill_types.push(11) if ['b','bpassives','bpassive','passiveb','passivesb','b_passives','b_passive','passive_b','passives_b'].include?(args[i].downcase)
-      skill_types.push(12) if ['c','cpassives','cpassive','passivec','passivesc','c_passives','c_passive','passive_c','passives_c'].include?(args[i].downcase)
-      skill_types.push(13) if ['s','seal','seals','spassives','spassive','passives','passivess','s_passives','s_passive','passive_s','passives_s','sealpassives','sealpassive','passiveseal','passivesseal','seal_passives','seal_passive','passive_seal','passives_seal','sealspassives','sealspassive','passiveseals','passivesseals','seals_passives','seals_passive','passive_seals','passives_seals'].include?(args[i].downcase)
-    end
-    if skill_types.length<=0
-      event.respond "Please include the type of skill your #{@dev_units[j2][0]} will be learning."
-      return nil
-    end
-    s='that type'
-    s='those types' if skill_types.uniq.length>1
-    for i in 0...skill_types.length
-      k=false
-      for j in 0...@dev_units[j2][skill_types[i]].length
-        if skill_types[i]==13
-          seel=@dev_units[j2][skill_types[i]].scan(/\d+?/)[0].to_i
-          seel=@dev_units[j2][skill_types[i]].gsub(seel.to_s,(seel+1).to_s)
-          k=true if find_skill(seel,event,true).length>0
-        else
-          k=true if @dev_units[j2][skill_types[i]][j][0,2]=='~~' && @dev_units[j2][skill_types[i]][j]!='~~none~~'
-        end
-      end
-      skill_types[i]=nil unless k
-    end
-    skill_types.compact!
-    if skill_types.length<=0
-      event.respond "Your #{@dev_units[j2][0]} has no unlearned skills of #{s}."
-      return nil
-    end
-    skills_learned=[]
-    for i in 0...skill_types.length
-      k=true
-      if skill_types[i]==13 # skill seals
-        seel=@dev_units[j2][skill_types[i]].scan(/\d+?/)[0].to_i
-        seel=@dev_units[j2][skill_types[i]].gsub(seel.to_s,(seel+1).to_s)
-        if find_skill(seel,event,true).length>0
-          @dev_units[j2][skill_types[i]]=seel
-          skills_learned.push("#{@dev_units[j2][skill_types[i]]} (seal)")
-        else
-          skills_learned.push("#{@dev_units[j2][skill_types[i]]} (seal already maximized)")
-        end
-      else # other skills
-        for j in 0...@dev_units[j2][skill_types[i]].length
-          if @dev_units[j2][skill_types[i]][j][0,2]=='~~' && k
-            k=false
-            @dev_units[j2][skill_types[i]][j]=@dev_units[j2][skill_types[i]][j].gsub('~~','')
-            skills_learned.push(@dev_units[j2][skill_types[i]][j])
-          end
-        end
-      end
-    end
-    devunits_save()
-    event.respond "__Your **#{@dev_units[j2][0]}** has learned the following skills__\n#{skills_learned.join("\n")}"
-  else
-    event.respond 'Edit mode was not specified.'
-  end
-  return nil
+  dev_edit(bot,event,args,cmd)
 end
 
 bot.command(:setmarker, from: 167657750971547648) do |event, letter|
