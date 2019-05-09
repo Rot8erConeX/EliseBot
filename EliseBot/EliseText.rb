@@ -2207,7 +2207,7 @@ def score_explain(event,bot)
   disp="**`5`<:Icon_Rarity_5:448266417553539104>`+0 level 40 BST` / 5, rounded down to the nearest full number**"
   disp="#{disp}\nEven if the unit is not 5\\* or level 40, or already merged, it is their 5\\*+0 level 40 BST without skills that determines their BST bin."
   disp="#{disp}\nDespite using unmerged stats for BST, the unit's bane is ignored if the unit is merged.  Neutral-natured merged units get +3 to their standard BST before the division by 5."
-  disp="#{disp}\nIf the unit is 5\\* and has a level 3 Duel skill, the lowest this number can be is 34."
+  disp="#{disp}\nIf the unit is 5\\* level 40 and has a level 3 Duel skill, the lowest this number can be is 34."
   disp="#{disp}\n\n**`Rarity` \* 5**"
   disp="#{disp}\nMost users will be using a team of full 5\*s, so this will usually be 25."
   disp="#{disp}\n\n**`Merge count` \* 2**"
@@ -2224,7 +2224,7 @@ def score_explain(event,bot)
     disp="#{disp}\nUnder most cases, this is the sum divided by 4."
     disp="#{disp}\n\n**Difficulty modification**"
     disp="#{disp}\nAssuming Advanced difficulty, this is 155."
-    disp="#{disp}\n\n**`number of units on team` \* 4**"
+    disp="#{disp}\n\n**`number of units on team` \* 7**"
     disp="#{disp}\nWith a full team, this is always 28."
     disp="#{disp}\n\n\n**With a bonus unit, multiply the total of everything above by 2.**"
     disp="#{disp}\nWithout a bonus unit, just use the total above."
@@ -3351,7 +3351,7 @@ def snagstats(event,bot,f=nil,f2=nil)
       m.push('faceted') if untz[i][12].split(', ')[0][0,1]=='*' && untz[i][12].split(', ').length>1
       m.push('sensible') if untz[i][12].split(', ')[0][0,1]=='*' && untz[i][12].split(', ').length<2
       m.push('seasonal') if untz[i][9][0].include?('s') && !(!untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1)
-      m.push('community-voted') if @aliases.reject{|q| q[0]!='Unit' || q[2]!=untz[i][0] || !q[3].nil?}.map{|q| q[1]}.include?("#{untz[i][0].split('(')[0]}CYL")
+      m.push('community-voted') if @aliases.reject{|q| q[0]!='Unit' || q[2]!=untz[i][8] || !q[3].nil?}.map{|q| q[1]}.include?("#{untz[i][0].split('(')[0]}CYL")
       m.push('Legendary/Mythic') if !untz[i][2].nil? && !untz[i][2][0].nil? && untz[i][2][0].length>1 && !m.include?('default')
       m.push('Fallen') if untz[i][0].include?('(Fallen)')
       m.push('out-of-left-field') if m.length<=0
@@ -3677,7 +3677,6 @@ def snagstats(event,bot,f=nil,f2=nil)
     k=srv_spec.map{|q| q[2]}.inject(0){|sum,x| sum + x }
     str2="#{str2}\nCounting each alias/server combo as a unique alias, there are #{longFormattedNumber(k)} server-specific aliases"
     str2="#{str2}\n\n**There are 3 [global] multi-skill aliases.**"
-    puts str2
     str=extend_message(str,str2,event,3)
     glbl=@aliases.reject{|q| q[0]!='Structure' || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
     srv_spec=@aliases.reject{|q| q[0]!='Structure' || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}

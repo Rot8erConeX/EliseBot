@@ -13,7 +13,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Live to Serve 3
 
 Alm
-5\0\Speed\Resistance\-\0
+5\0\Speed\Resistance\-\0\
 Iron Sword\Steel Sword\Silver Sword\Falchion (Valentia)\Falchion (Valentia) (+) Effect Mode
 Reciprocal Aid
 Dragon Gaze\Draconic Aura
@@ -33,7 +33,7 @@ Odd Atk Wave 1\Odd Atk Wave 2\Odd Atk Wave 3
 Even Res Wave 2
 
 Anna
-5\0\ \ \-\0
+5\0\ \ \-\0\
 Iron Axe\Steel Axe\Silver Axe\Noatun\Noatun (+) Effect Mode
 Reciprocal Aid
 Retribution\Vengeance
@@ -43,7 +43,7 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Breath of Life 3
 
 Azura(Adrift)
-5\0\ \ \-\0
+5\0\ \ \-\0\
 Wind\Elwind\Rexcalibur\Book of Shadows
 Sing
 Night Sky\Glimmer
@@ -53,7 +53,7 @@ Spur Def 1\Drive Def 1\Drive Def 2
 Blaze Dance 2
 
 Celica
-5\2\Speed\Resistance\-\0
+5\2\Speed\Resistance\-\0\
 Fire\Elfire\Bolganone\Ragnarok\Ragnarok (+) Effect Mode
 Draw Back
 Dragon Gaze\Draconic Aura
@@ -63,7 +63,7 @@ Spur Def 1\Spur Def 2\Spur Def 3
 Brazen Atk/Def 3
 
 Celica(Brave)
-5\1\Attack\HP\-\0
+5\1\Attack\HP\-\0\
 Iron Sword\Steel Sword\Silver Sword\Royal Sword
 Rally Speed
 Night Sky\Astra\Galeforce
@@ -73,7 +73,7 @@ Atk Tactic 1\Atk Tactic 2\Atk Tactic 3
 Flashing Blade 3
 
 Celica(Fallen)
-5\0\HP\Speed\-\0
+5\0\HP\Speed\-\0\
 Iron Sword\Steel Sword\Silver Sword\Beloved Zofia
 Rally Attack\Rally Up Atk\Rally Up Atk+
 New Moon\Luna
@@ -83,7 +83,7 @@ Hone Atk 1\Hone Atk 2\Hone Atk 3
 Spur Atk 2
 
 Cherche
-5\10\Attack\Speed\-\0
+5\10\Attack\Speed\-\0\
 Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\__Slaying Hammer+ (+) Effect Mode__\Cherche's Axe\Cherche's Axe (+) Effect Mode
 Pivot
 New Moon\Luna
@@ -93,7 +93,7 @@ Fortify Def 1\Fortify Def 2\Fortify Def 3
 Attack +3
 
 Cordelia
-5\10\Attack\HP\-\0
+5\10\Attack\HP\-\0\
 Iron Lance\Steel Lance\Brave Lance\Brave Lance+
 Reposition
 Night Sky\Astra\Galeforce
@@ -103,7 +103,7 @@ Threaten Spd 1\Threaten Spd 2\Threaten Spd 3
 Quickened Pulse
 
 Cordelia(Bride)
-5\0\Speed\Defense\-\0
+5\0\Speed\Defense\-\0\
 Iron Bow\Steel Bow\Brave Bow\Brave Bow+
 Rally Attack\Rally Atk/Spd\Rally Atk/Spd+
 New Moon\Moonbow
@@ -113,7 +113,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Speed +2
 
 Cordelia(Summer)
-5\0\Resistance\Speed\-\0
+5\0\Resistance\Speed\-\0\
 Iron Lance\Steel Lance\Shell Lance\Shell Lance+\Shell Lance+ (+) Defense Mode
 Harsh Command
 Glowing Ember\Ignis
@@ -123,7 +123,7 @@ Spur Res 1\Spur Def/Res 1\Spur Def/Res 2
 Attack/Def +2
 
 Delthea
-5\0\Defense\Resistance\-\0
+5\0\Defense\Resistance\-\0\
 Thunder\Elthunder\Thoron\Dark Aura
 Reposition
 Miracle
@@ -133,7 +133,7 @@ Spur Atk 1\Drive Atk 1\Drive Atk 2
 Darting Blow 2
 
 Eir
-5\1\ \ \-\0
+5\1\ \ \-\0\
 Iron Dagger\Steel Dagger\Silver Dagger\Lyfjaberg
 Reciprocal Aid
 Chilling Wind\Iceberg
@@ -143,7 +143,7 @@ Sparkling Boost
 Spd/Res Bond 2
 
 Est
-4\10\Resistance\Attack\-\0
+4\10\Resistance\Attack\-\0\
 Iron Lance\Steel Lance\Heavy Spear\Heavy Spear+\Slaying Spear+\__Slaying Spear+ (+) Effect Mode__\Whitewing Spear\Whitewing Spear (+) Effect Mode
 Reposition
 Chilling Wind\Glacies
@@ -153,7 +153,7 @@ Def Ploy 1\Def Ploy 2\Def Ploy 3
 Res Ploy 3
 
 Ethlyn
-5\2\ \ \-\0
+5\2\ \ \-\0\
 Assault\Fear\Fear+\Fear+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -163,7 +163,7 @@ Spur Def 1\Drive Def 1\Drive Def 2
 Spur Spd 3
 
 Felicia
-5\10\Resistance\Defense\-\0
+5\10\Resistance\Defense\-\0\
 Iron Dagger\Steel Dagger\Silver Dagger\Silver Dagger+\__Silver Dagger+ (+) Resistance Mode__\Felicia's Plate\Felicia's Plate (+) Effect Mode
 Rally Speed
 Chilling Wind\Glacies
@@ -173,7 +173,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Warding Stance 2
 
 Felicia(Picnic)
-5\0\Attack\Defense\-\0
+5\0\Attack\Defense\-\0\
 Iron Axe\Steel Axe\Silver Axe\Eldhrmnir
 Swap
 Chilling Wind\Glacies
@@ -183,7 +183,7 @@ Close Guard 1\Close Guard 2\Close Guard 3
 Armored Boots
 
 Fjorm
-5\1\Attack\HP\-\0
+5\1\Attack\HP\-\0\
 Iron Lance\Steel Lance\Silver Lance\Leiptr
 Rally Attack\Rally Atk/Def
 Holy Vestments\Sacred Cowl\Ice Mirror
@@ -193,7 +193,7 @@ Spur Atk 1\Drive Atk 1\Drive Atk 2
 Drive Def 2
 
 Genny
-5\0\HP\Defense\-\0
+5\0\HP\Defense\-\0\
 Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -203,7 +203,7 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Genny(Picnic)
-5\0\\\-\0
+5\0\\\-\0\
 Assault\Toasty Skewer\Toasty Skewer+\~~Toasty Skewer+ (+) Dazzling Mode~~
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Fireflood Balm\Fireflood Balm+
@@ -213,7 +213,7 @@ Def Opening 1\Def Opening 2\Def Opening 3
 Chill Atk 2
 
 Gunnthra
-5\1\Attack\Speed\-\1
+5\1\Attack\Speed\-\1\
 Wind\Elwind\Rexcalibur\Blizzard
 Rally Speed
 Chilling Wind\Glacies
@@ -223,7 +223,7 @@ Res Ploy 1\Res Ploy 2\Res Ploy 3
 Darting Stance 2
 
 Gunnthra(Winter)
-5\0\Resistance\Speed\-\0
+5\0\Resistance\Speed\-\0\
 Iron Sword\Steel Sword\Silver Sword\Hikami
 Reposition
 Night Sky\Glimmer
@@ -233,7 +233,7 @@ Hone Spd 1\Hone Spd 2\Hone Spd 3\Joint Hone Spd
 Spd Ploy 3
 
 Kana(F)
-5\1\Attack\Defense\-\0
+5\1\Attack\Defense\-\0\
 Fire Breath\Fire Breath+\Lightning Breath\Lightning Breath+\Lightning Breath (+) Resistance Mode
 Harsh Command
 Dragon Gaze\Draconic Aura
@@ -243,7 +243,7 @@ Spur Atk 1\Drive Atk 1\Drive Atk 2
 Close Def 3
 
 Lethe
-5\0\Resistance\HP\-\0
+5\0\Resistance\HP\-\0\
 Whelp (Cavalry)\Yearling (Cavalry)\Adult (Cavalry)\Brazen Cat Fang
 Rally Speed
 New Moon\Moonbow
@@ -253,7 +253,7 @@ Hone Atk 1\Hone Atk 2\Hone Beasts
 Brazen Atk/Res 3
 
 Mae
-5\5\Attack\Defense\-\0
+5\5\Attack\Defense\-\0\
 Light\Ellight\Blarowl\Blarowl+\Blarowl+ (+) Attack Mode
 Draw Back
 Dragon Gaze\Draconic Aura
@@ -263,7 +263,7 @@ Threaten Atk 1\Threaten Atk 2\Threaten Atk 3
 Brash Assault 3
 
 Maria
-5\3\ \ \-\0
+5\3\ \ \-\0\
 Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -273,7 +273,7 @@ Fortify Res 1\Fortify Res 2\Fortify Res 3
 Fortify Def 2
 
 Marisa
-5\8\ \ \-\0
+5\8\ \ \-\0\
 Iron Sword\Steel Sword\Wo Dao\Wo Dao+\Wo Dao+ (+) Speed Mode
 Shove
 Night Sky\Glimmer
@@ -283,7 +283,7 @@ Infantry Pulse 1\Infantry Pulse 2\Infantry Pulse 3
 Heavy Blade 3
 
 Marisa(Bunny)
-5\0\HP\Speed\-\0
+5\0\HP\Speed\-\0\
 Iron Lance\Steel Lance\Flashing Carrot\Flashing Carrot+
 Reposition
 Dragon Gaze\Draconic Aura
@@ -293,7 +293,7 @@ Flier Guidance 1\Flier Guidance 2\Flier Guidance 3
 Fierce Stance 2
 
 Matthew
-4\10\Resistance\Speed\-\0
+4\10\Resistance\Speed\-\0\
 Iron Dagger\Steel Dagger\Lethal Carrot\Lethal Carrot+\Lethal Carrot+ (+) Resistance Mode
 Reciprocal Aid
 Chilling Wind\Glacies
@@ -303,7 +303,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Phantom Spd 2
 
 Megan(Gates)
-5\0\HP\Speed\-\0
+5\0\HP\Speed\-\0\
 Assault\Pain\Pain+\Pain+ (+) Dazzling Mode
 Heal\Mend\Recover\Recover+
 Nightshade\Earthly Shade
@@ -313,7 +313,7 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Olivia(Performing)
-5\0\Defense\Resistance\-\0
+5\0\Defense\Resistance\-\0\
 Iron Dagger\Steel Dagger\Dancer's Fan\Dancer's Fan+\Dancer's Fan+ (+) Attack Mode
 Dance
 Dragon Gaze\Draconic Aura
@@ -323,7 +323,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Earth Dance 3
 
 Owain
-5\2\Resistance\HP\-\0
+5\2\Resistance\HP\-\0\
 Iron Sword\Steel Sword\Silver Sword\Missiletainn\Missiletainn (Dark)
 Shove
 Glowing Ember\Bonfire\Blue Flame
@@ -333,7 +333,7 @@ Spur Spd 1\Spur Spd Def 1\Spur Spd Def 2
 Hardy Bearing 3
 
 Priscilla
-4\10\Resistance\Defense\-\0
+4\10\Resistance\Defense\-\0\
 Assault\Panic\Panic+\Panic+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -343,7 +343,7 @@ Spur Def 1\Spur Def 2\Spur Def 3
 HP +4
 
 Rebecca
-4\10\Speed\Resistance\-\0
+4\10\Speed\Resistance\-\0\
 Iron Bow\Steel Bow\Silver Bow
 Rally Defense
 Chilling Wind\Iceberg
@@ -353,7 +353,7 @@ Threaten Res 1\Threaten Res 2
 Distant Def 2
 
 Reyson
-4\1\Res\Atk\-\0
+4\1\Res\Atk\-\0\
 Hatchling (Flier)\Fledgling (Flier)\Adult (Flier)\~~Heron Wing~~
 Sing
 Chilling Wind\Iceberg
@@ -363,7 +363,7 @@ Fortify Res 1\Fortify Res 2\~~Fortify Res 3~~
 Iote's Shield
 
 Sakura(Bath)
-5\0\Resistance\HP\-\3
+5\0\Resistance\HP\-\3\
 Assault\Grandscratcher\Grandscratcher+\Grandscratcher+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Still-Water Balm\Fireflood Balm\Fireflood Balm+
@@ -373,7 +373,7 @@ Spd Opening 1\Spd Opening 2\Spd Opening 3
 Atk/Spd Bond 2
 
 Sakura(Halloween)
-5\0\Defense\Speed\-\0
+5\0\Defense\Speed\-\0\
 Iron Dagger\Steel Dagger\Kitty Paddle\Kitty Paddle+
 Rally Resistance\Rally Def/Res
 Chilling Wind\Glacies
@@ -383,7 +383,7 @@ Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Def Ploy 2
 
 Selkie
-5\0\Speed\HP\-\0
+5\0\Speed\HP\-\0\
 Whelp (Cavalry)\Yearling (Cavalry)\Adult (Cavalry)\Foxkit Fang
 Draw Back
 Chilling Wind\Iceberg
@@ -393,7 +393,7 @@ Even Res Wave 1\Even Res Wave 2\Even Res Wave 3
 Even Def Wave 2
 
 Soleil
-5\4\Speed\Attack\-\0
+5\4\Speed\Attack\-\0\
 Iron Sword\Steel Sword\Slaying Edge\Slaying Edge+\Slaying Edge+ (+) Attack Mode
 Rally Speed
 New Moon\Luna\Aether
@@ -403,7 +403,7 @@ Spur Res 1\Drive Res 1\Drive Res 2
 Deflect Melee 3
 
 Tailtiu
-5\3\ \ \-\0
+5\3\ \ \-\0\
 Thunder\Elthunder\Blarblade\__Blarblade+__\Tome of Thoron\Tome of Thoron (+) Effect Mode
 Rally Resistance\Rally Spd/Res
 Chilling Wind\Glacies
@@ -413,7 +413,7 @@ Spur Spd 1\Drive Spd 1\Drive Spd 2
 Drive Atk 2
 
 Takumi(Fallen)
-5\0\ \ \-\0
+5\0\ \ \-\0\
 Iron Bow\Steel Bow\Silver Bow\Skadi
 Rally Speed
 Retribution\Vengeance
@@ -423,7 +423,7 @@ Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
 Quick Riposte 3
 
 Tiki(Young)(Earth)
-5\0\Resistance\HP\-\1
+5\0\Resistance\HP\-\1\
 Fire Breath\Fire Breath+\Flametongue\Divine Mist
 Reposition
 New Moon\Moonbow
@@ -433,7 +433,7 @@ With Everyone!
 Atk Ploy 2
 
 Titania(Valentines)
-5\1\ \ \-\0
+5\1\ \ \-\0\
 Fire\Elfire\Loyal Wreath\Loyal Wreath+
 Swap
 New Moon\Moonbow
@@ -443,7 +443,7 @@ Def Tactic 1\Def Tactic 2\Def Tactic 3
 Res Tactic 2
 
 Ylgr
-5\0\Defense\Resistance\-\0
+5\0\Defense\Resistance\-\0\
 Iron Dagger\Steel Dagger\Silver Dagger\Sylgr
 Rally Defense
 Night Sky\Glimmer

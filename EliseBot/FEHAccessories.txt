@@ -30,6 +30,8 @@ Kitsune Doodad\Hair\A hair accessory from Selkie that matches the one she wears.
 Kitsune Doodad EX\Hair\A hair accessory from Selkie. It has a pretty golden bell that rings excitedly with each movement.\Reach 2500 blue friendship with Selkie during Forging Bonds: The Orb Case
 Kitsune Ears\Hair\A headpiece from Kaden that's shaped like kitsune ears. It's made of kitsune hair left over from Kaden's grooming.\Reach 100 green friendship with Kaden during Forging Bonds: The Orb Case
 Kitsune Ears EX\Hair\A headpiece from Kaden that's shaped like kitsune ears. It's decorated to coordinate with Selkie, his daughter.\Reach 2500 green friendship with Kaden during Forging Bonds: The Orb Case
+Nohrian Hairpin\Hair\Corrin cherished this hairpin. The wild power within takes the form of a butterfly that radiates strange light.\Reach 100 green friendship with Corrin(F)(Fallen) during Forging Bonds: Power's Den
+Nohrian Hairpin EX\Hair\Corrin cherished this hairpin. It is delicately crafted into the shape of a butterfly.\Reach 2500 green friendship with Corrin(F)(Fallen) during Forging Bonds: Power's Den
 Peach Ducky\Hair\A duck-shaped toy that floats on water. The way it bobs up and down is very soothing.\Clear floors 6-10 in Illusory Dungeon: Farewells.
 Sacred Stardust\Hair\Ophelia claims this stardust holds great power. (It's really just a hairpin, but you're nice for humoring her.)\Reach 100 green friendship with Ophelia during Forging Bonds: High Tea Jinks.
 Sacred Stardust EX\Hair\According to Ophelia, only the chosen may touch this stardust. (Actually just a hairpin, but don't dash her dreams.)\Reach 2500 green friendship with Ophelia during Forging Bonds: High Tea Jinks.
@@ -37,6 +39,10 @@ Seashell Hairpin\Hair\A hair accessory made from a beautiful seashell.\KO an ene
 Star of Nifl\Hair\A good luck charm that belongs to Ylgr. The decoration comes from Nifl's coat of arms.\Reach 100 red friendship with Ylgr during Forging Bonds: The Sworn Oath.
 Star of Nifl EX\Hair\A good luck charm that belongs to Ylgr. It has been blessed to ensure the safety of its bearer.\Reach 2500 red friendship with Ylgr during Forging Bonds: The Sworn Oath.
 Summer Festival Mask\Hair\A mask found at Hoshidan festivals. The dragon-face motif is pretty cute!\Clear floors 81-85 in Illusory Dungeon: Festival of Heroes.
+Winglet Hairpin\Hair\A hairpin once owned by Mareeta. It shines with a sinister luster, perhaps due to a curse.\Reach 100 red friendship with Mareeta(Fallen) during Forging Bonds: Power's Den
+Winglet Hairpin EX\Hair\A hairpin once owned by Mareeta, it was a gift from a friend. It is both delicate and soft.\Reach 2500 red friendship with Mareeta(Fallen) during Forging Bonds: Power's Den
+Wistful Hairpin\Hair\Berkut made a gift of this ornament. The flower's somewhat charred.\Reach 100 blue friendship with Berkut(Fallen) during Forging Bonds: Power's Den
+Wistful Hairpin EX\Hair\Berkut made a gift of this ornament. The design is a simple flower. It was once worn by one close to him.\Reach 2500 blue friendship with Berkut(Fallen) during Forging Bonds: Power's Den
 Yellow Ducky\Hair\A duck-shaped toy that floats on water. The way it bobs up and down is very relaxing.\Clear floors 6-10 in Illusory Dungeon: Summer of Heroes.
 Armored Helmet\Hat\This helmet from Hector was forged in Ostia. It's pretty heavy, but nothing an armored knight can't handle.\Reach 100 blue friendship with Hector(Brave) during Forging Bonds: Rejecting Destiny.
 Armored Helmet EX\Hat\The extravagant design of this Ostian helmet contrasts with its battle marks to paint a vivid picture of its history.\Reach 2500 blue friendship with Hector(Brave) during Forging Bonds: Rejecting Destiny.
@@ -107,6 +113,8 @@ Wolf Eyepatch\Mask\An eyepatch bestowed by Nailah. The fabric is exquisite and c
 Wolf Eyepatch EX\Mask\An eyepatch bestowed by Nailah. The fabric is exquisite and conveys to its wearer unquestionable charisma.\Reach 2500 blue friendship with Nailah during Forging Bonds: Hearts as One
 Dark Finery\Tiara\A head ornament bestowed by Idunn. It seems ancient, but it still sparkles with a certain mystique.\Reach 100 red friendship with Idunn during Forging Bonds: Reason to Fight
 Dark Finery EX\Tiara\A head ornament bestowed by Idunn. It seems ancient, but it still shimmers with a certain air of mystery.\Reach 2500 red friendship with Idunn during Forging Bonds: Reason to Fight
+Divine Tiara\Tiara\A tiara from Tiki. The unchecked power within gives it a disquieting aura.\Reach 100 orange friendship with Tiki(Young)(Fallen) during Forging Bonds: Power's Den.
+Divine Tiara EX\Tiara\A tiara from Tiki. The red jewel affixed to it is of remarkable clarity.\Reach 2500 orange friendship during Tiki(Young)(Fallen) during Forging Bonds: Power's Den.
 Gold Imperial Tiara\Tiara\Proof of victory over Legendary Roy.\Beat Roy's LHB at Abyssal difficulty.
 Hoshidan Headpiece\Tiara\This headwear is the exclusive hair ornament of the queen of Hoshido.\Clear floors 6-10 in Illusory Dungeon: Labyrinth of Despair.
 Ilian Wing Hairpin\Tiara\An ornament from Thea. It's a token of the Ilian pegasus knights, fashioned after a pegasus wing.\Reach 100 blue friendship with Thea during Forging Bonds: Reason to Fight

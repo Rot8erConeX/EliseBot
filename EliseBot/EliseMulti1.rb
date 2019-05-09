@@ -264,6 +264,16 @@ def multi_for_units(event,str1,str2,robinmode=0)
         return [m[i],['Tiki(Adult)(Summer)','Tiki(Young)(Summer)'],m] if event.message.text.downcase.include?(m[i])
       end
       return [str,['Tiki(Adult)(Summer)','Tiki(Young)(Summer)'],m]
+    elsif str2.include?('fallen') || str2.include?('evil') || str2.include?('darkness') || str2.include?('dark') || str2.include?('alter') || str2.include?('fh')
+      strx='fallen'
+      strx='evil' if str2.include?('evil')
+      strx='dark' if str2.include?('dark')
+      strx='darkness' if str2.include?('darkness')
+      strx='alter' if str2.include?('alter')
+      strx='fh' if str2.include?('fh')
+      str2=str3.gsub(strx,'').gsub("#{str} ",str).gsub(" #{str}",str)
+      m=["#{strx}#{str}","#{str}#{strx}","#{strx} #{str}","#{str} #{strx}"]
+      return [str,['Tiki(Young)(Fallen)'],m]
     elsif str2.include?('creatonist')
       return [str,['Tiki(Young)(Earth)'],["creationist#{str}","#{str}creatonist","creationistiki"]]
     elsif str2.include?('legendary') || str2.include?('legend') || str2.include?('caped') || str2.include?('cape') || str2.include?('hood') || str2.include?('hooded') || str2.include?('cloak') || str2.include?('cloaked') || str2.include?('earth') || str2.include?('leg')
@@ -292,10 +302,11 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Robin(F)(Summer)'],["summer#{str}","beach#{str}","swimsuit#{str}","ys#{str}","#{str}summer","#{str}beach","#{str}swimsuit","#{str}ys"]]
     elsif str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.gsub('flower','').include?('we')
       return [str,['Robin(M)(Winter)'],["winter#{str}","christmas#{str}","holiday#{str}","we#{str}","#{str}winter","#{str}christmas","#{str}holiday","#{str}we"]]
-    elsif str2.include?('fallen') || str2.include?('evil') || str2.include?('dark') || str2.include?('alter') || str2.include?('fh') || str2.include?('grima')
+    elsif str2.include?('fallen') || str2.include?('evil') || str2.include?('darkness') || str2.include?('dark') || str2.include?('alter') || str2.include?('fh') || str2.include?('grima')
       strx='fallen'
       strx='evil' if str2.include?('evil')
       strx='dark' if str2.include?('dark')
+      strx='darkness' if str2.include?('darkness')
       strx='alter' if str2.include?('alter')
       strx='fh' if str2.include?('fh')
       strx='grima' if str2.include?('grima')
@@ -343,12 +354,23 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str='corrin'
     str='kamui' if str1.include?('kamui')
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    puts str2
     if str=='kamui' && (str2.include?('gaiden') || str2.include?('sov')) && find_unit('Kamui',event,true).length>0
       return [str,['Kamui'],['kamuigaiden','kamuisov','gaidenkamui','sovkamui']]
     elsif str2.include?('summer') || str2.include?('beach') || str2.include?('swimsuit') || str2.include?('ns')
       return [str,['Corrin(F)(Summer)']]
     elsif str2.include?('winter') || str2.include?('newyear') || str2.include?('holiday') || str2.include?('ny')
       return [str,['Corrin(M)(Winter)']]
+    elsif str2.include?('fallen') || str2.include?('evil') || str2.include?('darkness') || str2.include?('dark') || str2.include?('alter') || str2.include?('fh')
+      strx='fallen'
+      strx='evil' if str2.include?('evil')
+      strx='dark' if str2.include?('dark')
+      strx='darkness' if str2.include?('darkness')
+      strx='alter' if str2.include?('alter')
+      strx='fh' if str2.include?('fh')
+      str2=str3.gsub(strx,'').gsub("#{str} ",str).gsub(" #{str}",str)
+      m=["#{strx}#{str}","#{str}#{strx}","#{strx} #{str}","#{str} #{strx}"]
+      return [str,['Corrin(F)(Fallen)'],m]
     elsif str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
       strx='default'
       strx='vanilla' if str2.include?('vanilla')
@@ -2624,9 +2646,9 @@ def combined_BST(event,args,bot)
             ['Lucina', 0, 0, ['Lucina', 'Lucina(Bunny)', 'Marth(Masked)', 'Lucina(Brave)', 'Lucina(Glorious)']],
             ['Marth', 0, 0, ['Marth', 'Marth(Groom)', 'Marth(Masked)']],
             ['Robin', 0, 0, ['Robin(M)', 'Robin(F)', 'Robin(F)(Summer)', 'Robin(M)(Winter)', 'Robin(M)(Fallen)', 'Robin(F)(Fallen)', 'Tobin']],
-            ['Corrin', 0, 0, ['Corrin(M)(Launch)', 'Corrin(F)(Launch)', 'Corrin(F)(Summer)', 'Corrin(M)(Winter)', 'Corrin(M)(Adrift)', 'Corrin(F)(Adrift)', 'Kamui']],
+            ['Corrin', 0, 0, ['Corrin(M)(Launch)', 'Corrin(F)(Launch)', 'Corrin(F)(Summer)', 'Corrin(M)(Winter)', 'Corrin(M)(Adrift)', 'Corrin(F)(Adrift)', 'Corrin(F)(Fallen)', 'Kamui']],
             ['Xander', 0, 0, ['Xander', 'Xander(Bunny)', 'Xander(Summer)', 'Xander(Festival)']],
-            ['Tiki', 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)']],
+            ['Tiki', 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)', 'Tiki(Young)(Fallen)']],
             ['Lyn', 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)']],
             ['Chrom', 0, 0, ['Chrom(Launch)', 'Chrom(Bunny)', 'Chrom(Winter)', 'Chrom(Branded)']],
             ['Azura', 0, 0, ['Azura', 'Azura(Performing)', 'Azura(Winter)', 'Azura(Adrift)', 'Azura(Vallite)']],
@@ -2875,11 +2897,11 @@ def get_effHP(event,name,bot,weapon=nil)
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     for i in 0...blessing.length
-      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='PairUp('
+      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='Duel('
     end
   elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     for i in 0...blessing.length
-      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='PairUp('
+      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='Duel('
     end
   end
   blessing.compact!
@@ -2895,6 +2917,7 @@ def get_effHP(event,name,bot,weapon=nil)
   end
   stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
+  pair_up=[]
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
@@ -2914,6 +2937,40 @@ def get_effHP(event,name,bot,weapon=nil)
         refinement=w[1].gsub(' Mode','')
       else
         refinement=nil
+      end
+      unless @dev_units[dv][14].nil? || !has_any?(event.message.text.downcase.split(' '),['pair','pairup'])
+        pair_up=[@dev_units[dv][14]]
+        dv2=find_in_dev_units(pair_up[0])
+        if dv2>=0
+          pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],true,2)}",'Pair-Up cohort']
+          pair_up[0][2]='Pocket companion' if pair_up[0][0].include?('Sakura')
+          pair_up.push(@dev_units[dv2][1])
+          pair_up.push(@dev_units[dv2][2])
+          pair_up.push(@dev_units[dv2][3].gsub(' ',''))
+          pair_up.push(@dev_units[dv2][4].gsub(' ',''))
+          pair_up.push(@dev_units[dv2][5])
+          pair_up.push(@dev_units[dv2][6])
+          weaponz=@dev_units[dv2][7].reject{|q| q.include?('~~')}[-1]
+          if weaponz.include?(' (+) ')
+            weaponz=weaponz.split(' (+) ')
+            pair_up.push(weaponz[0])
+            pair_up.push(weaponz[1].gsub(' Mode',''))
+          elsif weaponz.length>0
+            pair_up.push(weaponz)
+            pair_up.push('')
+          else
+            pair_up.push('')
+            pair_up.push('')
+          end
+          lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
+          a=@dev_units[dv2][10].reject{|q| q.include?('~~')}
+          x=[a[a.length-1],@dev_units[dv2][13]]
+          for i in 0...x.length
+            pair_up.push(x[i]) if lookout.include?(x[i])
+          end
+        else
+          pair_up=[]
+        end
       end
     elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
@@ -2945,6 +3002,39 @@ def get_effHP(event,name,bot,weapon=nil)
         refinement=w[1].gsub(' Mode','')
       else
         refinement=nil
+      end
+      unless x[x2][14].nil? || !has_any?(event.message.text.downcase.split(' '),['pair','pairup'])
+        x3=x.find_index{|q| q[0]==x[x2][14]}
+        unless x3.nil?
+          pair_up=[x[x2][14]]
+          pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],false,2,uid)}",'Pair-Up cohort']
+          pair_up.push(x[x3][1])
+          pair_up.push(x[x3][2])
+          pair_up.push(x[x3][3].gsub(' ',''))
+          pair_up.push(x[x3][4].gsub(' ',''))
+          pair_up.push(x[x3][5])
+          pair_up.push(x[x3][6])
+          weaponz=x[x3][7].reject{|q| q.include?('~~')}[-1]
+          if weaponz.include?(' (+) ')
+            weaponz=weaponz.split(' (+) ')
+            pair_up.push(weaponz[0])
+            pair_up.push(weaponz[1].gsub(' Mode',''))
+          elsif weaponz.length>0
+            pair_up.push(weaponz)
+            pair_up.push('')
+          else
+            pair_up.push('')
+            pair_up.push('')
+          end
+          lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
+          a=x[x3][10].reject{|q| q.include?('~~')}
+          x=[a[a.length-1],x[x3][13]]
+          for i in 0...x.length
+            pair_up.push(x[i]) if lookout.include?(x[i])
+          end
+        else
+          pair_up=[]
+        end
       end
     end
   elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
@@ -2994,6 +3084,16 @@ def get_effHP(event,name,bot,weapon=nil)
     n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
+  if !pair_up.nil? && pair_up.length>0
+    u40cu=get_stats(event,pair_up[0][0],40,pair_up[1],pair_up[2],pair_up[3],pair_up[4],pair_up[6])
+    m=pair_up[9,pair_up.length-9]
+    m=[] if m.nil?
+    u40cu=apply_stat_skills(event,m,u40cu,'',pair_up[5],pair_up[7],pair_up[8])
+    u40[2]+=(u40cu[2]-25)/10
+    u40[3]+=(u40cu[3]-10)/10
+    u40[4]+=(u40cu[4]-10)/10
+    u40[5]+=(u40cu[5]-10)/10
+  end
   spec_wpn=false
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
@@ -3100,7 +3200,7 @@ def get_effHP(event,name,bot,weapon=nil)
   end
   pic=pick_thumbnail(event,u40x,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,ftr,pic,x,5)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,ftr,pic,x,5)
 end
 
 def study_of_healing(event,name,bot,weapon=nil)
@@ -3140,11 +3240,11 @@ def study_of_healing(event,name,bot,weapon=nil)
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     for i in 0...blessing.length
-      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='PairUp('
+      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='Duel('
     end
   elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     for i in 0...blessing.length
-      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='PairUp('
+      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='Duel('
     end
   end
   blessing.compact!
@@ -3159,6 +3259,7 @@ def study_of_healing(event,name,bot,weapon=nil)
   weapon='-' if weapon.nil?
   stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
+  pair_up=[]
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
@@ -3178,6 +3279,40 @@ def study_of_healing(event,name,bot,weapon=nil)
         refinement=w[1].gsub(' Mode','')
       else
         refinement=nil
+      end
+      unless @dev_units[dv][14].nil? || !has_any?(event.message.text.downcase.split(' '),['pair','pairup'])
+        pair_up=[@dev_units[dv][14]]
+        dv2=find_in_dev_units(pair_up[0])
+        if dv2>=0
+          pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],true,2)}",'Pair-Up cohort']
+          pair_up[0][2]='Pocket companion' if pair_up[0][0].include?('Sakura')
+          pair_up.push(@dev_units[dv2][1])
+          pair_up.push(@dev_units[dv2][2])
+          pair_up.push(@dev_units[dv2][3].gsub(' ',''))
+          pair_up.push(@dev_units[dv2][4].gsub(' ',''))
+          pair_up.push(@dev_units[dv2][5])
+          pair_up.push(@dev_units[dv2][6])
+          weaponz=@dev_units[dv2][7].reject{|q| q.include?('~~')}[-1]
+          if weaponz.include?(' (+) ')
+            weaponz=weaponz.split(' (+) ')
+            pair_up.push(weaponz[0])
+            pair_up.push(weaponz[1].gsub(' Mode',''))
+          elsif weaponz.length>0
+            pair_up.push(weaponz)
+            pair_up.push('')
+          else
+            pair_up.push('')
+            pair_up.push('')
+          end
+          lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
+          a=@dev_units[dv2][10].reject{|q| q.include?('~~')}
+          x=[a[a.length-1],@dev_units[dv2][13]]
+          for i in 0...x.length
+            pair_up.push(x[i]) if lookout.include?(x[i])
+          end
+        else
+          pair_up=[]
+        end
       end
     elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
@@ -3209,6 +3344,39 @@ def study_of_healing(event,name,bot,weapon=nil)
         refinement=w[1].gsub(' Mode','')
       else
         refinement=nil
+      end
+      unless x[x2][14].nil? || !has_any?(event.message.text.downcase.split(' '),['pair','pairup'])
+        x3=x.find_index{|q| q[0]==x[x2][14]}
+        unless x3.nil?
+          pair_up=[x[x2][14]]
+          pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],false,2,uid)}",'Pair-Up cohort']
+          pair_up.push(x[x3][1])
+          pair_up.push(x[x3][2])
+          pair_up.push(x[x3][3].gsub(' ',''))
+          pair_up.push(x[x3][4].gsub(' ',''))
+          pair_up.push(x[x3][5])
+          pair_up.push(x[x3][6])
+          weaponz=x[x3][7].reject{|q| q.include?('~~')}[-1]
+          if weaponz.include?(' (+) ')
+            weaponz=weaponz.split(' (+) ')
+            pair_up.push(weaponz[0])
+            pair_up.push(weaponz[1].gsub(' Mode',''))
+          elsif weaponz.length>0
+            pair_up.push(weaponz)
+            pair_up.push('')
+          else
+            pair_up.push('')
+            pair_up.push('')
+          end
+          lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
+          a=x[x3][10].reject{|q| q.include?('~~')}
+          x=[a[a.length-1],x[x3][13]]
+          for i in 0...x.length
+            pair_up.push(x[i]) if lookout.include?(x[i])
+          end
+        else
+          pair_up=[]
+        end
       end
     end
   elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
@@ -3258,6 +3426,16 @@ def study_of_healing(event,name,bot,weapon=nil)
     n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
+  if !pair_up.nil? && pair_up.length>0
+    u40cu=get_stats(event,pair_up[0][0],40,pair_up[1],pair_up[2],pair_up[3],pair_up[4],pair_up[6])
+    m=pair_up[9,pair_up.length-9]
+    m=[] if m.nil?
+    u40cu=apply_stat_skills(event,m,u40cu,'',pair_up[5],pair_up[7],pair_up[8])
+    u40[2]+=(u40cu[2]-25)/10
+    u40[3]+=(u40cu[3]-10)/10
+    u40[4]+=(u40cu[4]-10)/10
+    u40[5]+=(u40cu[5]-10)/10
+  end
   spec_wpn=false
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
@@ -3387,12 +3565,12 @@ def study_of_healing(event,name,bot,weapon=nil)
   staves.push("~~How much Rehabilitate[+] heals is based on how much damage the target has taken.~~\n~~If they are above 50% HP, the lower end of the range is how much is healed.~~")
   pic=pick_thumbnail(event,u40x,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  k="__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}"
+  k="__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.join("\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[untz[j][3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[untz[j][3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}"
     event.respond staves.join("\n")
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
   end
 end
 
@@ -3433,11 +3611,11 @@ def study_of_procs(event,name,bot,weapon=nil)
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     for i in 0...blessing.length
-      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='PairUp('
+      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='Duel('
     end
   elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     for i in 0...blessing.length
-      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='PairUp('
+      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='Duel('
     end
   end
   blessing.compact!
@@ -3457,6 +3635,7 @@ def study_of_procs(event,name,bot,weapon=nil)
   wrathcount+=1 if count_in(event.message.text.downcase.split(' '),['wrath','wrath1','wrath2','wrath3'])>=2
   wrathsub=''
   wrathsub='Bushido' if event.message.text.downcase.split(' ').include?('bushido') && u40[0]=='Ryoma(Supreme)'
+  pair_up=[]
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
@@ -3482,6 +3661,40 @@ def study_of_procs(event,name,bot,weapon=nil)
       wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(@dev_units[dv][10][-1])
       wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(@dev_units[dv][12])
       wrathsub='Bushido' if 'Bushido'==@dev_units[dv][10][-1]
+      unless @dev_units[dv][14].nil? || !has_any?(event.message.text.downcase.split(' '),['pair','pairup'])
+        pair_up=[@dev_units[dv][14]]
+        dv2=find_in_dev_units(pair_up[0])
+        if dv2>=0
+          pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],true,2)}",'Pair-Up cohort']
+          pair_up[0][2]='Pocket companion' if pair_up[0][0].include?('Sakura')
+          pair_up.push(@dev_units[dv2][1])
+          pair_up.push(@dev_units[dv2][2])
+          pair_up.push(@dev_units[dv2][3].gsub(' ',''))
+          pair_up.push(@dev_units[dv2][4].gsub(' ',''))
+          pair_up.push(@dev_units[dv2][5])
+          pair_up.push(@dev_units[dv2][6])
+          weaponz=@dev_units[dv2][7].reject{|q| q.include?('~~')}[-1]
+          if weaponz.include?(' (+) ')
+            weaponz=weaponz.split(' (+) ')
+            pair_up.push(weaponz[0])
+            pair_up.push(weaponz[1].gsub(' Mode',''))
+          elsif weaponz.length>0
+            pair_up.push(weaponz)
+            pair_up.push('')
+          else
+            pair_up.push('')
+            pair_up.push('')
+          end
+          lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
+          a=@dev_units[dv2][10].reject{|q| q.include?('~~')}
+          x=[a[a.length-1],@dev_units[dv2][13]]
+          for i in 0...x.length
+            pair_up.push(x[i]) if lookout.include?(x[i])
+          end
+        else
+          pair_up=[]
+        end
+      end
     elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
     elsif @dev_waifus.include?(name) || @dev_somebodies.include?(name)
@@ -3517,6 +3730,39 @@ def study_of_procs(event,name,bot,weapon=nil)
       wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(x[x2][10][-1])
       wrathcount+=1 if ['Wrath','Wrath 1','Wrath 2','Wrath 3'].include?(x[x2][12])
       wrathsub='Bushido' if 'Bushido'==x[x2][10][-1]
+      unless x[x2][14].nil? || !has_any?(event.message.text.downcase.split(' '),['pair','pairup'])
+        x3=x.find_index{|q| q[0]==x[x2][14]}
+        unless x3.nil?
+          pair_up=[x[x2][14]]
+          pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],false,2,uid)}",'Pair-Up cohort']
+          pair_up.push(x[x3][1])
+          pair_up.push(x[x3][2])
+          pair_up.push(x[x3][3].gsub(' ',''))
+          pair_up.push(x[x3][4].gsub(' ',''))
+          pair_up.push(x[x3][5])
+          pair_up.push(x[x3][6])
+          weaponz=x[x3][7].reject{|q| q.include?('~~')}[-1]
+          if weaponz.include?(' (+) ')
+            weaponz=weaponz.split(' (+) ')
+            pair_up.push(weaponz[0])
+            pair_up.push(weaponz[1].gsub(' Mode',''))
+          elsif weaponz.length>0
+            pair_up.push(weaponz)
+            pair_up.push('')
+          else
+            pair_up.push('')
+            pair_up.push('')
+          end
+          lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
+          a=x[x3][10].reject{|q| q.include?('~~')}
+          x=[a[a.length-1],x[x3][13]]
+          for i in 0...x.length
+            pair_up.push(x[i]) if lookout.include?(x[i])
+          end
+        else
+          pair_up=[]
+        end
+      end
     end
   elsif event.message.text.downcase.split(' ').include?('prf') || args.map{|q| q.downcase}.include?('prf')
     weapon=get_unit_prf(name)
@@ -3601,6 +3847,16 @@ def study_of_procs(event,name,bot,weapon=nil)
     n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
+  if !pair_up.nil? && pair_up.length>0
+    u40cu=get_stats(event,pair_up[0][0],40,pair_up[1],pair_up[2],pair_up[3],pair_up[4],pair_up[6])
+    m=pair_up[9,pair_up.length-9]
+    m=[] if m.nil?
+    u40cu=apply_stat_skills(event,m,u40cu,'',pair_up[5],pair_up[7],pair_up[8])
+    u40[2]+=(u40cu[2]-25)/10
+    u40[3]+=(u40cu[3]-10)/10
+    u40[4]+=(u40cu[4]-10)/10
+    u40[5]+=(u40cu[5]-10)/10
+  end
   spec_wpn=false
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
@@ -3873,9 +4129,9 @@ def study_of_procs(event,name,bot,weapon=nil)
   staves[8].push("Reprisal - #{d}, cooldown of #{c}")
   pic=pick_thumbnail(event,u40x,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  k="__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+  k="__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.map{|q| q.join("\n")}.join("\n\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
     s=""
     for i in 0...staves.length
       s=extend_message(s,staves[i].join("\n"),event,2) unless staves[i].length.zero?
@@ -3891,7 +4147,7 @@ def study_of_procs(event,name,bot,weapon=nil)
       end
     end
     flds.compact!
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,flds)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,flds)
   end
 end
 
@@ -4170,11 +4426,11 @@ def study_of_phases(event,name,bot,weapon=nil)
   if untz.find_index{|q| q[0]==name}.nil?
   elsif ['Fire','Earth','Water','Wind'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     for i in 0...blessing.length
-      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='PairUp('
+      blessing[i]=blessing[i].gsub('Legendary','Mythical') unless blessing[i][0,5]=='Duel('
     end
   elsif ['Light','Dark','Astra','Anima'].include?(untz[untz.find_index{|q| q[0]==name}][2][0])
     for i in 0...blessing.length
-      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='PairUp('
+      blessing[i]=blessing[i].gsub('Mythical','Legendary') unless blessing[i][0,5]=='Duel('
     end
   end
   blessing.compact!
@@ -4189,6 +4445,7 @@ def study_of_phases(event,name,bot,weapon=nil)
   weapon='-' if weapon.nil?
   stat_skills=make_stat_skill_list_1(name,event,args)
   mu=false
+  pair_up=[]
   if event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
@@ -4208,6 +4465,40 @@ def study_of_phases(event,name,bot,weapon=nil)
         refinement=w[1].gsub(' Mode','')
       else
         refinement=nil
+      end
+      unless @dev_units[dv][14].nil? || !has_any?(event.message.text.downcase.split(' '),['pair','pairup'])
+        pair_up=[@dev_units[dv][14]]
+        dv2=find_in_dev_units(pair_up[0])
+        if dv2>=0
+          pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],true,2)}",'Pair-Up cohort']
+          pair_up[0][2]='Pocket companion' if pair_up[0][0].include?('Sakura')
+          pair_up.push(@dev_units[dv2][1])
+          pair_up.push(@dev_units[dv2][2])
+          pair_up.push(@dev_units[dv2][3].gsub(' ',''))
+          pair_up.push(@dev_units[dv2][4].gsub(' ',''))
+          pair_up.push(@dev_units[dv2][5])
+          pair_up.push(@dev_units[dv2][6])
+          weaponz=@dev_units[dv2][7].reject{|q| q.include?('~~')}[-1]
+          if weaponz.include?(' (+) ')
+            weaponz=weaponz.split(' (+) ')
+            pair_up.push(weaponz[0])
+            pair_up.push(weaponz[1].gsub(' Mode',''))
+          elsif weaponz.length>0
+            pair_up.push(weaponz)
+            pair_up.push('')
+          else
+            pair_up.push('')
+            pair_up.push('')
+          end
+          lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
+          a=@dev_units[dv2][10].reject{|q| q.include?('~~')}
+          x=[a[a.length-1],@dev_units[dv2][13]]
+          for i in 0...x.length
+            pair_up.push(x[i]) if lookout.include?(x[i])
+          end
+        else
+          pair_up=[]
+        end
       end
     elsif @dev_nobodies.include?(name)
       event.respond "Mathoo has this character but doesn't care enough about including their stats.  Showing neutral stats."
@@ -4239,6 +4530,39 @@ def study_of_phases(event,name,bot,weapon=nil)
         refinement=w[1].gsub(' Mode','')
       else
         refinement=nil
+      end
+      unless x[x2][14].nil? || !has_any?(event.message.text.downcase.split(' '),['pair','pairup'])
+        x3=x.find_index{|q| q[0]==x[x2][14]}
+        unless x3.nil?
+          pair_up=[x[x2][14]]
+          pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],false,2,uid)}",'Pair-Up cohort']
+          pair_up.push(x[x3][1])
+          pair_up.push(x[x3][2])
+          pair_up.push(x[x3][3].gsub(' ',''))
+          pair_up.push(x[x3][4].gsub(' ',''))
+          pair_up.push(x[x3][5])
+          pair_up.push(x[x3][6])
+          weaponz=x[x3][7].reject{|q| q.include?('~~')}[-1]
+          if weaponz.include?(' (+) ')
+            weaponz=weaponz.split(' (+) ')
+            pair_up.push(weaponz[0])
+            pair_up.push(weaponz[1].gsub(' Mode',''))
+          elsif weaponz.length>0
+            pair_up.push(weaponz)
+            pair_up.push('')
+          else
+            pair_up.push('')
+            pair_up.push('')
+          end
+          lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
+          a=x[x3][10].reject{|q| q.include?('~~')}
+          x=[a[a.length-1],x[x3][13]]
+          for i in 0...x.length
+            pair_up.push(x[i]) if lookout.include?(x[i])
+          end
+        else
+          pair_up=[]
+        end
       end
     end
   elsif " #{event.message.text.downcase} ".include?(' prf ') || args.map{|q| q.downcase}.include?('prf')
@@ -4292,6 +4616,14 @@ def study_of_phases(event,name,bot,weapon=nil)
   atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
   zzzl=sklz[ww2]
   atk='<:FreezeS:514712247474585610> Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
+  staticons=['<:HP_S:514712247503945739>','<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>','<:Death_Blow:514719899868856340>','<:Darting_Blow:514719899910668298>','<:Armored_Blow:514719899927576578>','<:Warding_Blow:514719900607053824>','<:Fierce_Stance:514719899873050624>','<:Darting_Stance:514719899919056926>','<:Steady_Stance:514719899856273408>','<:Warding_Stance:514719899562672138>']
+  if u40x[11][0]=='DL'
+    atk='<:Strength:573344931205349376> Attack'
+    atk='<:Strength:573344931205349376> Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
+    atk='<:Strength:573344931205349376> Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
+    atk='<:Strength:573344931205349376> Freeze' if has_weapon_tag2?('Frostbite',zzzl,refinement,transformed)
+    staticons=['<:HP:573344832307593216>','<:Speed:573366907357495296>','<:FEHDefense:574702109325262878>','<:Defense:573344832282689567>','<:Strength:573344931205349376>','<:Speed:573366907357495296>','<:FEHDefense:574702109325262878>','<:Defense:573344832282689567>','<:Strength:573344931205349376>','<:Speed:573366907357495296>','<:FEHDefense:574702109325262878>','<:Defense:573344832282689567>']
+  end
   n=nature_name(boon,bane)
   unless n.nil?
     n=n[0] if atk=='<:StrengthS:514712248372166666> Strength'
@@ -4299,6 +4631,16 @@ def study_of_phases(event,name,bot,weapon=nil)
     n=n.join(' / ') if ['<:StrengthS:514712248372166666> Attack','<:FreezeS:514712247474585610> Freeze'].include?(atk)
   end
   u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
+  if !pair_up.nil? && pair_up.length>0
+    u40cu=get_stats(event,pair_up[0][0],40,pair_up[1],pair_up[2],pair_up[3],pair_up[4],pair_up[6])
+    m=pair_up[9,pair_up.length-9]
+    m=[] if m.nil?
+    u40cu=apply_stat_skills(event,m,u40cu,'',pair_up[5],pair_up[7],pair_up[8])
+    u40[2]+=(u40cu[2]-25)/10
+    u40[3]+=(u40cu[3]-10)/10
+    u40[4]+=(u40cu[4]-10)/10
+    u40[5]+=(u40cu[5]-10)/10
+  end
   bane2="#{bane}"
   bane2='' if merges>0
   u40x2=get_stats(event,name,40,5,0,boon,bane2)
@@ -4662,12 +5004,12 @@ def study_of_phases(event,name,bot,weapon=nil)
   pic=pick_thumbnail(event,u40x,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(' all')
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}#{"Pair-Up cohort: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}"
     event.respond "**Displayed stats:**  #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]} - Score: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100\n**#{"Player Phase" unless ppu40==epu40}#{"In-combat Stats" if ppu40==epu40}:**  #{ppu40[1]} / #{ppu40[2]} / #{ppu40[3]} / #{ppu40[4]} / #{ppu40[5]}  (#{ppu40[16]} BST)#{"\n**Enemy Phase:**  #{epu40[1]} / #{epu40[2]} / #{epu40[3]} / #{epu40[4]} / #{epu40[5]}  (#{epu40[16]} BST)" unless ppu40==epu40}"
   elsif ppu40==epu40
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:514712247503945739> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:514712247625580555> Speed: #{u40[3]}\n<:DefenseS:514712247461871616> Defense: #{u40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100"],["In-combat Stats","<:HP_S:514712247503945739> HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n<:SpeedS:514712247625580555> Speed: #{ppu40[3]}\n<:DefenseS:514712247461871616> Defense: #{ppu40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","#{staticons[0]} HP: #{u40[1]}\n#{atk}: #{u40[2]}\n#{staticons[1]} Speed: #{u40[3]}\n#{staticons[2]} Defense: #{u40[4]}\n#{staticons[3]} Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100"],["In-combat Stats","#{staticons[0]} HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n#{staticons[1]} Speed: #{ppu40[3]}\n#{staticons[2]} Defense: #{ppu40[4]}\n#{staticons[3]} Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","<:HP_S:514712247503945739> HP: #{u40[1]}\n#{atk}: #{u40[2]}\n<:SpeedS:514712247625580555> Speed: #{u40[3]}\n<:DefenseS:514712247461871616> Defense: #{u40[4]}\n<:ResistanceS:514712247574986752> Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100",1],["Player Phase","<:HP_S:514712247503945739> HP: #{ppu40[1]}\n<:Death_Blow:514719899868856340> Attack: #{ppu40[2]}\n<:Darting_Blow:514719899910668298> Speed: #{ppu40[3]}\n<:Armored_Blow:514719899927576578> Defense: #{ppu40[4]}\n<:Warding_Blow:514719900607053824> Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","<:HP_S:514712247503945739> HP: #{epu40[1]}\n<:Fierce_Stance:514719899873050624> Attack: #{epu40[2]}\n<:Darting_Stance:514719899919056926> Speed: #{epu40[3]}\n<:Steady_Stance:514719899856273408> Defense: #{epu40[4]}\n<:Warding_Stance:514719899562672138> Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","#{staticons[0]} HP: #{u40[1]}\n#{atk}: #{u40[2]}\n#{staticons[1]} Speed: #{u40[3]}\n#{staticons[2]} Defense: #{u40[4]}\n#{staticons[3]} Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100",1],["Player Phase","#{staticons[0]} HP: #{ppu40[1]}\n#{staticons[4]} Attack: #{ppu40[2]}\n#{staticons[5]} Speed: #{ppu40[3]}\n#{staticons[6]} Defense: #{ppu40[4]}\n#{staticons[7]} Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","#{staticons[0]} HP: #{epu40[1]}\n#{staticons[8]} Attack: #{epu40[2]}\n#{staticons[9]} Speed: #{epu40[3]}\n#{staticons[10]} Defense: #{epu40[4]}\n#{staticons[11]} Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
   end
 end
 
@@ -4995,4 +5337,833 @@ def make_random_unit(event,args,bot)
   memote=moji[0].mention unless moji.length<=0
   clazz3=clazz2.reject{|q| ['Dancer','Singer'].include?(q)}
   create_embed(event,"__**#{name}**__","#{r}\nNeutral nature\n#{wemote} #{w}\n#{memote} *#{mov}*#{"\n<:Assist_Music:454462054959415296> *Dancer*" if clazz2.include?('Dancer')}#{"\n<:Assist_Music:454462054959415296> *Singer*" if clazz2.include?('Singer')}\n#{"Additional Modifier#{'s' if clazz3.length>1}: #{clazz3.map{|q| "*#{q}*"}.join(', ')}" if clazz3.length>0}",xcolor,ftr,img,flds,1)
+end
+
+def load_devunits()
+  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt')
+    b=[]
+    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt').each_line do |line|
+      b.push(line.gsub("\n",''))
+    end
+  else
+    b=[]
+  end
+  @dev_waifus=b[0].split('\\'[0])
+  @dev_somebodies=b[1].split('\\'[0])
+  @dev_nobodies=b[2].split('\\'[0])
+  b.shift
+  b.shift
+  b.shift
+  b.shift
+  @dev_units=[]
+  for i in 0...b.length/10
+    @dev_units[i]=[]
+    @dev_units[i].push(b[i*10])
+    k=b[i*10+1].split('\\'[0])
+    @dev_units[i].push(k[0].to_i)
+    @dev_units[i].push(k[1].to_i)
+    @dev_units[i].push(k[2])
+    @dev_units[i].push(k[3])
+    @dev_units[i].push(k[4])
+    @dev_units[i].push(k[5].to_i)
+    @dev_units[i].push(b[i*10+2].split('\\'[0]))
+    @dev_units[i].push(b[i*10+3].split('\\'[0]))
+    @dev_units[i].push(b[i*10+4].split('\\'[0]))
+    @dev_units[i].push(b[i*10+5].split('\\'[0]))
+    @dev_units[i].push(b[i*10+6].split('\\'[0]))
+    @dev_units[i].push(b[i*10+7].split('\\'[0]))
+    @dev_units[i].push(b[i*10+8])
+    @dev_units[i].push(k[6]) unless k[6].nil?
+  end
+end
+
+def save_devunits()
+  # sort the waifu list alphabetically, but move Sakura to the front of the list
+  k=@dev_waifus.map{|q| q}
+  for i in 0...k.length
+    k[i]=nil if k[i]=='Sakura'
+  end
+  k.compact!
+  k=k.sort{|a,b| a<=>b}
+  w=['Sakura']
+  for i in 0...k.length
+    w.push(k[i])
+  end
+  # sort the "somebodies" and "nobodies" lists alphabetically
+  sb=@dev_somebodies.sort{|a,b| a<=>b}
+  nb=@dev_nobodies.sort{|a,b| a<=>b}
+  # remove units from the "somebody" ist if they're also in the waifu list.
+  for i in 0...sb.length
+    sb[i]=nil if w.include?(sb[i])
+  end
+  sb.compact!
+  # remove units from the "nobody" list if they're also in the waifu or "somebody" list, or if they're listed as a normal devunit.
+  for i in 0...nb.length
+    nb[i]=nil if w.include?(nb[i]) || sb.include?(nb[i]) || @dev_units.map{|q| q[0]}.include?(nb[i])
+  end
+  nb.compact!
+  # sort the unit list alphabetically, but move Sakura to the front of the line
+  k=@dev_units.map{|q| q}
+  saku=nil
+  for i in 0...k.length
+    if k[i][0]=='Sakura' && saku.nil?
+      saku=k[i].map{|q| q}
+      k[i]=nil
+    end
+  end
+  k.compact!
+  k=k.sort{|a,b| a[0]<=>b[0]}
+  untz=[saku.map{|q| q}]
+  for i in 0...k.length
+    untz.push(k[i].map{|q| q})
+  end
+  s="#{w.join('\\'[0])}\n#{sb.join('\\'[0])}\n#{nb.join('\\'[0])}"
+  for i in 0...untz.length
+    s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\\#{untz[i][6]}\\#{untz[i][14]}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12].join('\\'[0])}\n#{untz[i][13]}"
+  end
+  open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt', 'w') { |f|
+    f.puts s
+    f.puts "\n"
+  }
+  return nil
+end
+
+def load_donorunits(uid, mode=0)
+  return [] unless File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+  b=[]
+  File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
+    b.push(line.gsub("\n",''))
+  end
+  m=b[0]
+  b.shift
+  b.shift
+  untz=[]
+  return untz if b.length<10
+  for i in 0...b.length/10
+    untz[i]=[]
+    untz[i].push(b[i*10])
+    k=b[i*10+1].split('\\'[0])
+    untz[i].push(k[0].to_i)
+    untz[i].push(k[1].to_i)
+    untz[i].push(k[2])
+    untz[i].push(k[3])
+    untz[i].push(k[4])
+    untz[i].push(k[5].to_i)
+    untz[i].push(b[i*10+2].split('\\'[0]))
+    untz[i].push(b[i*10+3].split('\\'[0]))
+    untz[i].push(b[i*10+4].split('\\'[0]))
+    untz[i].push(b[i*10+5].split('\\'[0]))
+    untz[i].push(b[i*10+6].split('\\'[0]))
+    untz[i].push(b[i*10+7].split('\\'[0]))
+    untz[i].push(b[i*10+8])
+    untz[i].push(k[6]) unless k[6].nil?
+  end
+  untz.unshift(m) if mode==1
+  return untz
+end
+
+def save_donorunits(uid,table)
+  return nil unless File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+  # snag the username
+  b=[]
+  File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
+    b.push(line.gsub("\n",''))
+  end
+  # sort the unit list alphabetically
+  k=table.map{|q| q}
+  k.compact!
+  k=k.sort{|a,b| a[0]<=>b[0]}
+  untz=[]
+  for i in 0...k.length
+    untz.push(k[i].map{|q| q})
+  end
+  s="#{b[0]}"
+  for i in 0...untz.length
+    s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\\#{untz[i][6]}\\#{untz[i][14]}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12].join('\\'[0])}\n#{untz[i][13]}"
+  end
+  open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt", 'w') { |f|
+    f.puts s
+    f.puts "\n"
+  }
+  return nil
+end
+
+def dev_edit(bot,event,args=[],cmd='')
+  if cmd.downcase=='help' || ((cmd.nil? || cmd.length.zero?) && (args.nil? || args.length.zero?))
+    subcommand=nil
+    subcommand=args[0] unless args.nil? || args.length.zero?
+    subcommand='' if subcommand.nil?
+    help_text(event,bot,'devedit',subcommand)
+    return nil
+  end
+  data_load()
+  j3=find_data_ex(:find_unit,event.message.text,event,false,1)
+  j=j3[0]
+  if j.nil? || j.length<0
+    event.respond 'There is no unit by that name.'
+    return nil
+  end
+  if ['newwaifu','newaifu','addwaifu','new_waifu','add_waifu','waifu'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && args[0].downcase=='waifu')
+    if @dev_waifus.include?(j[0])
+      event.respond "#{j[0]} is already listed among your waifus."
+    else
+      @dev_waifus.push(j[0])
+      rfs=false
+      ren=false
+      for i in 0...@dev_somebodies.length
+        if @dev_somebodies[i]==j[0]
+          rfs=true
+          @dev_somebodies[i]=nil
+        end
+      end
+      @dev_somebodies.compact!
+      for i in 0...@dev_nobodies.length
+        if @dev_nobodies[i]==j[0]
+          rfn=true
+          @dev_nobodies[i]=nil
+        end
+      end
+      @dev_nobodies.compact!
+      devunits_save()
+      event.respond "#{j[0]} has been added to the list of your waifus.#{"\nI have also taken the liberty of removing #{j[0]} from your #{"\"somebodies\"" if rfs}#{" and " if rfs && rfn}#{'"nobodies"' if rfn} list#{'s' if rfs && rfn}." if rfs || rfn}"
+    end
+    return nil
+  elsif ['newsomebody','newsomeone','newsomebodies','addsomebody','addsomeone','addsomebodies','new_somebody','new_someone','new_somebodies','add_somebody','add_someone','add_somebodies','somebody','somebodies','someone'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && ['somebody','somebodies','someone'].include?(args[0].downcase))
+    if @dev_waifus.include?(j[0])
+      event.respond "#{j[0]} is already listed among your waifus."
+    elsif @dev_somebodies.include?(j[0])
+      event.respond "#{j[0]} is already listed among your \"somebodies\" list."
+    else
+      @dev_somebodies.push(j[0])
+      ren=false
+      for i in 0...@dev_nobodies.length
+        if @dev_nobodies[i]==j[0]
+          rfn=true
+          @dev_nobodies[i]=nil
+        end
+      end
+      @dev_nobodies.compact!
+      devunits_save()
+      event.respond "#{j[0]} has been added to your \"somebodies\" list.#{"\nI have also taken the liberty of removing #{j[0]} from your \"nobodies\" list." if rfn}"
+    end
+    return nil
+  elsif ['newnobody','newnoone','newnobodies','addnobody','addnoone','addnobodies','new_nobody','new_noone','new_nobodies','add_nobody','add_noone','add_nobodies','nobody','nobodies','noone'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && ['nobody','nobodies','noone'].include?(args[0].downcase))
+    if @dev_waifus.include?(j[0])
+      event.respond "#{j[0]} is already listed among your waifus."
+    elsif @dev_somebodies.include?(j[0])
+      event.respond "#{j[0]} is already listed among your \"somebodies\" list."
+    elsif @dev_nobodies.include?(j[0])
+      event.respond "#{j[0]} is already listed among your \"nobodies\" list."
+    else
+      @dev_nobodies.push(j[0])
+      devunits_save()
+      event.respond "#{j[0]} has been added to your \"nobodies\" list."
+    end
+    return nil
+  end
+  j2=find_in_dev_units(j[0])
+  if j2<0
+    args=event.message.text.downcase.split(' ')
+    if cmd.downcase=='create'
+      jn=j[0]
+      sklz2=unit_skills(jn,event,true)
+      flurp=find_stats_in_string(event)
+      @dev_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],flurp[8],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
+      for i in 0...@dev_nobodies.length
+        @dev_nobodies[i]=nil if @dev_nobodies[i]==jn
+      end
+      @dev_nobodies.compact!
+      devunits_save()
+      congrate=false
+      congrats=true if @dev_waifus.include?(jn) || @dev_somebodies.include?(jn)
+      event.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{'Congrats!' if congrats}"
+    elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
+      if @dev_waifus.include?(j[0])
+        event.respond "Woah, you're getting rid of one of your waifus?!?  Who hacked your Discord and/or FEH account?"
+      elsif @dev_somebodies.include?(j[0])
+        @stored_event=[event,j]
+        event.respond "You're getting rid of one of your somebodies?  Should I remove them from the \"somebodies\" list?"
+        event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+          if e.message.text.downcase.include?('no')
+            e.respond 'Okay.'
+          else
+            jn=@stored_event[1][0]
+            for i in 0...@dev_somebodies.length
+              @dev_somebodies[i]=nil if @dev_somebodies[i]==jn
+            end
+            @dev_somebodies.compact!
+            devunits_save()
+            e.respond "#{jn} has been removed from your \"somebodies\" list."
+          end
+        end
+      elsif @dev_nobodies.include?(j[0])
+        for i in 0...@dev_nobodies.length
+          @dev_nobodies[i]=nil if @dev_nobodies[i]==j[0]
+        end
+        @dev_nobodies.compact!
+        devunits_save()
+        e.respond "#{j[0]} has been removed from your \"nobodies\" list."
+      else
+        event.respond 'You never had that unit in the first place.'
+      end
+      return nil
+    else
+      @stored_event=[event,j]
+      event.respond 'You do not have this unit.  Do you wish to add them to your collection?' unless @dev_nobodies.include?(j[0])
+      event.respond "You Have this unit but previously stated you don't want to input their data.  Do you wish to add them to your collection?" if @dev_nobodies.include?(j[0])
+      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+        if e.message.text.downcase.include?('no')
+          e.respond 'Okay.'
+        else
+          jn=@stored_event[1][0]
+          sklz2=unit_skills(jn,@stored_event[0],true)
+          flurp=find_stats_in_string(@stored_event[0])
+          @dev_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],flurp[8],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5]])
+          for i in 0...@dev_nobodies.length
+            @dev_nobodies[i]=nil if @dev_nobodies[i]==jn
+          end
+          @dev_nobodies.compact!
+          devunits_save()
+          congrate=false
+          congrats=true if @dev_waifus.include?(jn) || @dev_somebodies.include?(jn)
+          e.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{"Congrats!" if congrats}"
+        end
+      end
+    end
+  elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
+    @stored_event=[event,j]
+    event.respond "I have a devunit stored for #{@dev_units[j2][0]}.  Do you wish me to delete this build?"
+    event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+      if e.message.text.downcase.include?('no')
+        e.respond 'Okay.'
+      else
+        jn=@stored_event[1][0]
+        @dev_units[find_in_dev_units(jn)]=nil
+        @dev_units.compact!
+        devunits_save()
+        e.respond "#{jn} has been removed from the devunits."
+      end
+    end
+  elsif cmd.downcase=='create'
+    event.respond "You already have a #{@dev_units[j2][0]}."
+    return nil
+  elsif ['pairup','pair','pair-up','paired'].include?(cmd.downcase)
+    s1=first_sub(args.join(' ').downcase,j3[1],'')
+    j3=find_data_ex(:find_unit,s1,event)
+    if j3.length<=0
+      event.respond "This subcommand requires at least two devunits."
+      return nil
+    end
+    j4=find_in_dev_units(j3[0])
+    order=[]
+    if j4<0
+      event.respond "This subcommand requires at least two devunits."
+      return nil
+    elsif j[2].length>0 && j[2][1]=='Duel'
+      order=[j[0],j3[0]]
+    elsif j3[2].length>0 && j3[2][1]=='Duel'
+      order=[j3[0],j[0]]
+    else
+      event.respond "Neither #{j[0]} nor #{j3[0]} is a unit that has controllable Pair-Ups."
+      return nil
+    end
+    m=@dev_units.find_index{|q| q[14]==j[0]}
+    @dev_units[m][14]=nil unless m.nil?
+    m=@dev_units.find_index{|q| q[14]==j3[0]}
+    @dev_units[m][14]=nil unless m.nil?
+    @dev_units[j2][14]=@dev_units[j4][0]
+    @dev_units[j4][14]=@dev_units[j2][0]
+    devunits_save()
+    event.respond "Your #{order[0]} is now using #{order[1]} as a cohort unit."
+  elsif ['promote','rarity','feathers'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    if !flurp[1].nil?
+      @dev_units[j2][2]+=flurp[1]
+    elsif !flurp[0].nil?
+      @dev_units[j2][2]+=flurp[0]
+    else
+      @dev_units[j2][2]+=1
+    end
+    @dev_units[j2][1]=[@dev_units[j2][1],5].min
+    @dev_units[j2][2]=0
+    devunits_save()
+    event.respond "You have promoted your #{@dev_units[j2][0]} to #{@dev_units[j2][1]}#{@rarity_stars[@dev_units[j2][1]-1]}!"
+  elsif ['merge','combine'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    @dev_units[j2][2]+=flurp[1] unless flurp[1].nil?
+    @dev_units[j2][2]+=1 if flurp[1].nil?
+    @dev_units[j2][2]=[@dev_units[j2][2],@max_rarity_merge[1]].min
+    devunits_save()
+    event.respond "You have merged your #{@dev_units[j2][0]} to +#{@dev_units[j2][2]}!"
+  elsif ['flower','flowers','dragonflower','dragonflowers'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    if !flurp[8].nil?
+      @dev_units[j2][6]+=flurp[8]
+    elsif !flurp[1].nil?
+      @dev_units[j2][6]+=flurp[1]
+    elsif !flurp[0].nil?
+      @dev_units[j2][6]+=flurp[0]
+    else
+      @dev_units[j2][6]+=1
+    end
+    @dev_units[j2][6]=[@dev_units[j2][6],2*@max_rarity_merge[2]].min
+    @dev_units[j2][6]=[@dev_units[j2][6],@max_rarity_merge[2]].min unless j[3]=='Infantry' && j[9][0].include?('PF')
+    devunits_save()
+    event.respond "You have given #{@dev_units[j2][0]} their #{longFormattedNumber(@dev_units[j2][6],true)} flower!"
+  elsif ['nature','ivs'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    n=''
+    if flurp[2].nil? && flurp[3].nil?
+      @dev_units[j2][3]=' '
+      @dev_units[j2][4]=' '
+      devunits_save()
+      event.respond "You have changed your #{@dev_units[j2][0]}'s nature to neutral!"
+    elsif flurp[2].nil? || flurp[3].nil?
+      @stored_event=[event,j]
+      event.respond 'You cannot have a boon without a bane.  Set stats to neutral?' if flurp[3].nil?
+      event.respond 'You cannot have a bane without a boon.  Set stats to neutral?' if flurp[2].nil?
+      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+        if e.message.text.downcase.include?('no')
+          e.respond 'Okay.'
+        else
+          j2=find_in_dev_units(@stored_event[1][0])
+          @dev_units[j2][3]=' '
+          @dev_units[j2][4]=' '
+          devunits_save()
+          event.respond "You have changed your #{@dev_units[j2][0]}'s nature to neutral!"
+        end
+      end
+    else
+      @dev_units[j2][3]=flurp[2]
+      @dev_units[j2][4]=flurp[3]
+      atk='Attack'
+      atk='Magic' if ['Tome','Dragon','Healer'].include?(j[1][1])
+      atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(j[1][1])
+      n=nature_name(flurp[2],flurp[3])
+      unless n.nil?
+        n=n[0] if atk=='Strength'
+        n=n[n.length-1] if atk=='Magic'
+        n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
+      end
+      devunits_save()
+      event.respond "You have changed your #{@dev_units[j2][0]}'s nature to +#{flurp[2]}, -#{flurp[3]} (#{n})!"
+    end
+  elsif ['learn','teach'].include?(cmd.downcase)
+    skill_types=[]
+    for i in 0...args.length
+      skill_types.push(7) if ['weapon','weapons'].include?(args[i].downcase)
+      skill_types.push(8) if ['assist','assists'].include?(args[i].downcase)
+      skill_types.push(9) if ['special','specials'].include?(args[i].downcase)
+      skill_types.push(10) if ['a','apassives','apassive','passivea','passivesa','a_passives','a_passive','passive_a','passives_a'].include?(args[i].downcase)
+      skill_types.push(11) if ['b','bpassives','bpassive','passiveb','passivesb','b_passives','b_passive','passive_b','passives_b'].include?(args[i].downcase)
+      skill_types.push(12) if ['c','cpassives','cpassive','passivec','passivesc','c_passives','c_passive','passive_c','passives_c'].include?(args[i].downcase)
+      skill_types.push(13) if ['s','seal','seals','spassives','spassive','passives','passivess','s_passives','s_passive','passive_s','passives_s','sealpassives','sealpassive','passiveseal','passivesseal','seal_passives','seal_passive','passive_seal','passives_seal','sealspassives','sealspassive','passiveseals','passivesseals','seals_passives','seals_passive','passive_seals','passives_seals'].include?(args[i].downcase)
+    end
+    if skill_types.length<=0
+      event.respond "Please include the type of skill your #{@dev_units[j2][0]} will be learning."
+      return nil
+    end
+    s='that type'
+    s='those types' if skill_types.uniq.length>1
+    for i in 0...skill_types.length
+      k=false
+      for j in 0...@dev_units[j2][skill_types[i]].length
+        if skill_types[i]==13
+          seel=@dev_units[j2][skill_types[i]].scan(/\d+?/)[0].to_i
+          seel=@dev_units[j2][skill_types[i]].gsub(seel.to_s,(seel+1).to_s)
+          k=true if find_skill(seel,event,true).length>0
+        else
+          k=true if @dev_units[j2][skill_types[i]][j][0,2]=='~~' && @dev_units[j2][skill_types[i]][j]!='~~none~~'
+        end
+      end
+      skill_types[i]=nil unless k
+    end
+    skill_types.compact!
+    if skill_types.length<=0
+      event.respond "Your #{@dev_units[j2][0]} has no unlearned skills of #{s}."
+      return nil
+    end
+    skills_learned=[]
+    for i in 0...skill_types.length
+      k=true
+      if skill_types[i]==13 # skill seals
+        seel=@dev_units[j2][skill_types[i]].scan(/\d+?/)[0].to_i
+        seel=@dev_units[j2][skill_types[i]].gsub(seel.to_s,(seel+1).to_s)
+        if find_skill(seel,event,true).length>0
+          @dev_units[j2][skill_types[i]]=seel
+          skills_learned.push("#{@dev_units[j2][skill_types[i]]} (seal)")
+        else
+          skills_learned.push("#{@dev_units[j2][skill_types[i]]} (seal already maximized)")
+        end
+      else # other skills
+        for j in 0...@dev_units[j2][skill_types[i]].length
+          if @dev_units[j2][skill_types[i]][j][0,2]=='~~' && k
+            k=false
+            @dev_units[j2][skill_types[i]][j]=@dev_units[j2][skill_types[i]][j].gsub('~~','')
+            skills_learned.push(@dev_units[j2][skill_types[i]][j])
+          end
+        end
+      end
+    end
+    devunits_save()
+    event.respond "__Your **#{@dev_units[j2][0]}** has learned the following skills__\n#{skills_learned.join("\n")}"
+  else
+    event.respond 'Edit mode was not specified.'
+  end
+  return nil
+end
+
+def donor_edit(bot,event,args=[],cmd='')
+  uid=event.user.id
+  if uid==167657750971547648
+    uid=244073468981805056
+    event.respond "This command is for the donors.  Your version of the command is `FEH!devedit`."
+    return nil
+  elsif !get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(uid)
+    event.respond "You do not have permission to use this command."
+    return nil
+  elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+    event.respond "Please wait until my developer makes your storage file."
+    return nil
+  elsif cmd.downcase=='help' || ((cmd.nil? || cmd.length.zero?) && (args.nil? || args.length.zero?))
+    subcommand=nil
+    subcommand=args[0] unless args.nil? || args.length.zero?
+    subcommand='' if subcommand.nil?
+    help_text(event,bot,'edit',subcommand)
+    return nil
+  end
+  data_load()
+  j=find_data_ex(:find_unit,event.message.text,event)
+  if j.length<=0
+    event.respond 'There is no unit by that name.'
+    return nil
+  end
+  donor_units=donor_unit_list(uid)
+  j2=donor_units.find_index{|q| q[0]==j[0]}
+  if j2.nil?
+    args=event.message.text.downcase.split(' ')
+    if cmd.downcase=='create'
+      jn=j[0]
+      sklz2=unit_skills(jn,event,true)
+      flurp=find_stats_in_string(event)
+      donor_units=donor_unit_list(uid)
+      donor_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],flurp[8],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
+      donor_unit_save(uid,donor_units)
+      event.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection."
+    elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
+      event.respond 'You never had that unit in the first place.'
+      return nil
+    else
+      @stored_event=[event,j]
+      event.respond "You do not have this unit.  Do you wish to add them to your collection?\nYes/No"
+      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+        if e.message.text.downcase.include?('no')
+          e.respond 'Okay.'
+        else
+          jn=@stored_event[1][0]
+          sklz2=unit_skills(jn,@stored_event[0],true)
+          flurp=find_stats_in_string(e)
+          donor_units=donor_unit_list(uid)
+          donor_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],flurp[8],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
+          donor_unit_save(uid,donor_units)
+          event.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection."
+        end
+      end
+    end
+  elsif ['support','marry'].include?(cmd.downcase)
+    donor_units=donor_unit_list(uid)
+    if donor_units[j2][5]=='S'
+      event.respond "You've already married #{donor_units[j2][0]}."
+    elsif donor_units[j2][5]=='A'
+      donor_units[j2][5]='S'
+      donor_unit_save(uid,donor_units)
+      event.respond "You've married #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
+    elsif donor_units[j2][5]=='B'
+      donor_units[j2][5]='A'
+      donor_unit_save(uid,donor_units)
+      event.respond "You've proposed to #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
+    elsif donor_units[j2][5]=='C'
+      donor_units[j2][5]='B'
+      donor_unit_save(uid,donor_units)
+      event.respond "You've started dating #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
+    elsif donor_units[j2][5]=='-'
+      d=''
+      for i in 0...donor_units.length
+        d="#{donor_units[i][0]}" unless donor_units[i][5]=='-'
+        donor_units[i][5]='-'
+      end
+      donor_units[j2][5]='C'
+      donor_unit_save(uid,donor_units)
+      event.respond "You've #{"divorced #{d} and " unless d==''}befriended #{donor_units[j2][0]}!  (Support rank #{donor_units[j2][5]})"
+    end
+  elsif ['pairup','pair','pair-up','paired'].include?(cmd.downcase)
+    s1=first_sub(args.join(' ').downcase,j3[1],'')
+    j3=find_data_ex(:find_unit,s1,event)
+    if j3.length<=0
+      event.respond "This subcommand requires at least two devunits."
+      return nil
+    end
+    j4=donor_units.find_index{|q| q[0]==j3[0]}
+    order=[]
+    if j4<0
+      event.respond "This subcommand requires at least two devunits."
+      return nil
+    elsif j[2].length>0 && j[2][1]=='Duel'
+      order=[j[0],j3[0]]
+    elsif j3[2].length>0 && j3[2][1]=='Duel'
+      order=[j3[0],j[0]]
+    else
+      event.respond "Neither #{j[0]} nor #{j3[0]} is a unit that has controllable Pair-Ups."
+      return nil
+    end
+    m=donor_units.find_index{|q| q[14]==j[0]}
+    donor_units[m][14]=nil unless m.nil?
+    m=donor_units.find_index{|q| q[14]==j3[0]}
+    donor_units[m][14]=nil unless m.nil?
+    donor_units[j2][14]=donor_units[j4][0]
+    donor_units[j4][14]=donor_units[j2][0]
+    donor_unit_save(uid,donor_units)
+    event.respond "Your #{order[0]} is now using #{order[1]} as a cohort unit."
+  elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
+    @stored_event=[event,j]
+    event.respond "I have a unit stored for your #{donor_units[j2][0]}.  Do you wish me to delete this build?\nYes/No"
+    event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+      if e.message.text.downcase.include?('no')
+        e.respond 'Okay.'
+      else
+        jn=@stored_event[1][0]
+        donor_units=donor_unit_list(uid)
+        donor_units=donor_units.reject{|q| q[0]==jn}
+        donor_unit_save(uid,donor_units)
+        e.respond "#{jn} has been removed from your collection."
+      end
+    end
+  elsif ['refine','refinement','refinery'].include?(cmd.downcase)
+    jn=j[0]
+    sklzz=@skills.map{|q| q}
+    m=donor_units[j2][7]
+    m.pop if m[m.length-1].include?(' (+) ')
+    w=sklzz[sklzz.index{|q| q[1]==m[m.length-1]}]
+    if w[17].nil?
+      event.respond "#{m[m.length-1]} cannot be refined."
+      return nil
+    end
+    inner_skill=w[17]
+    if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
+      inner_skill=inner_skill[1,inner_skill.length-1]
+      inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+    elsif inner_skill[0,1]=='-' && inner_skill.length>1
+      inner_skill=inner_skill[2,inner_skill.length-2]
+      inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+    end
+    for i in 0...5
+      if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
+        inner_skill=inner_skill[1,inner_skill.length-1]
+        inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+      elsif inner_skill[0,1]=='-' && inner_skill.length>1
+        inner_skill=inner_skill[2,inner_skill.length-2]
+        inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+      end
+    end
+    overides=['e','a','s','d','r']
+    overides=['e','w','d'] if w[5]=='Staff Users Only'
+    for i in 0...overides.length
+      if inner_skill[0,3]=="(#{overides[i]})"
+        inner_skill=inner_skill[3,inner_skill.length-3]
+        for i2 in 0...6
+          if inner_skill[0,1].to_i.to_s==inner_skill[0,1]
+            inner_skill=inner_skill[1,inner_skill.length-1]
+            inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+          elsif inner_skill[0,1]=='-' && inner_skill.length>1
+            inner_skill=inner_skill[2,inner_skill.length-2]
+            inner_skill='y' if inner_skill.nil? || inner_skill.length<1
+          end
+        end
+      end
+    end
+    words=[]
+    words.push('Effect') unless inner_skill=='y'
+    if w[7]=='Staff Users Only'
+      words.push('Wrathful') unless w[7].include?("This weapon's damage is calculated the same as other weapons.") || w[7].include?('Damage from staff calculated like other weapons.')
+      words.push('Dazzling') unless w[7].include?('The foe cannot counterattack.') || w[7].include?('Foe cannot counterattack.')
+    else
+      words.push('Attack')
+      words.push('Speed')
+      words.push('Defense')
+      words.push('Resistance')
+    end
+    refine=''
+    for i in 0...args.length
+      if refine.length.zero?
+        refine='Effect' if ['effect','special','eff','+effect','+special','+eff'].include?(args[i].downcase) && words.include?('Effect')
+        refine='Wrathful' if ['wrazzle','wrathful','+wrazzle','+wrathful','=w'].include?(args[i].downcase) && words.include?('Wrathful')
+        refine='Dazzling' if ['dazzle','dazzling','+dazzle','+dazzling','+d'].include?(args[i].downcase) && words.include?('Dazzling')
+        refine='Attack' if ['attack','atk','att','strength','str','magic','mag','+attack','+atk','+att','+strength','+str','+magic','+mag'].include?(args[i].downcase) && words.include?('Attack')
+        refine='Speed' if ['spd','speed','+spd','+speed'].include?(args[i].downcase) && words.include?('Speed')
+        refine='Defense' if ['defense','def','defence','+defense','+def','+defence'].include?(args[i].downcase) && words.include?('Defense')
+        refine='Resistance' if ['res','resistance','+res','+resistance'].include?(args[i].downcase) && words.include?('Resistance')
+      end
+    end
+    refine='Effect' if refine.length.zero? && words.include?('Effect')
+    refine=words[0] if refine.length.zero? && words.length==1
+    if refine.length.zero?
+      event.respond "No refinement was defined.  Your options are:\n#{words.join("\n")}"
+      return nil
+    end
+    m.push("#{m[m.length-1]} (+) #{refine} Mode")
+    donor_units[j2][6]=m
+    donor_unit_save(uid,donor_units)
+    event.respond "Your #{donor_units[j2][0]}'s #{m[m.length-2]} has been given the #{refine} Mode refinement!"
+  elsif ['seal'].include?(cmd.downcase)
+    jn=j[0]
+    sklzz=@skills.map{|q| q}
+    k222=find_data_ex(:find_unit,event.message.text,event,false,1)
+    k2=get_weapon(first_sub(args.join(' '),k222[1],''),event,1)
+    unless k2[0][k2[0].length-1,1]!=k2[0][k2[0].length-1,1].to_i.to_s || k2[1][k2[1].length-1,1]==k2[1][k2[1].length-1,1].to_i.to_s
+      skls=sklzz.reject{|q| q[0][0,q[0].length-1]!=k2[0][0,k2[0].length-1]}.map{|q| q[0]}.sort!
+      k2[0]=skls[-1]
+    end
+    js=sklzz.find_index{|q| q[1]==k2[1] && q[2]==k2[2]}
+    q=sklzz[j2]
+    q="#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"
+    if !sklzz[js][6].split(', ').include?('Passive(S)') && !sklzz[js][6].split(', ').include?('Seal')
+      event.respond "#{q} cannot be equipped in the Seal slot.  Please use the `FEH!edit equip` command to equip this skill."
+      return nil
+    elsif !skill_legality(event,donor_units[j2][0],q)
+      event.respond "#{donor_units[j2][0]} cannot equip the #{q} seal."
+      return nil
+    end
+    donor_units[j2][13]=q
+    donor_unit_save(uid,donor_units)
+    event.respond "The #{sklzz[js][0]} seal has been given to your #{donor_units[j2][0]}!"
+  elsif ['equip','skill'].include?(cmd.downcase)
+    jn=j[0]
+    k222=find_data_ex(:find_unit,event.message.text,event,false,1)
+    sklzz=@skills.map{|q| q}
+    k2=get_weapon(first_sub(args.join(' '),k222[1],''),event,1)
+    unless k2[0][k2[0].length-1,1]!=k2[0][k2[0].length-1,1].to_i.to_s || k2[1][k2[1].length-1,1]==k2[1][k2[1].length-1,1].to_i.to_s
+      skls=sklzz.reject{|q| q[0][0,q[0].length-1]!=k2[0][0,k2[0].length-1]}.map{|q| q[0]}.sort!
+      k2[0]=skls[-1]
+    end
+    js=sklzz.find_index{|q| q[1]==k2[1] && q[2]==k2[2]}
+    x=backwards_skill_tree(js)
+    m=0
+    q=sklzz[js]
+    q="#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"
+    if sklzz[js][6]!='Weapon' && !skill_legality(event,donor_units[j2][0],q)
+      event.respond "#{donor_units[j2][0]} cannot equip #{q}."
+      return nil
+    end
+    if sklzz[js][6]=='Weapon'
+      w=weapon_legality(event,donor_units[j2][0],sklzz[js][0])
+      if w.include?('~~')
+        event.respond "#{donor_units[j2][0]} cannot equip #{q}."
+        return nil
+      end
+      js=sklzz.find_index{|q| q[0]==w}
+      m=7
+    elsif sklzz[js][6]=='Assist'
+      m=8
+    elsif sklzz[js][6]=='Special'
+      m=9
+    elsif sklzz[js][6].split(', ').include?('Passive(A)')
+      m=10
+    elsif sklzz[js][6].split(', ').include?('Passive(B)')
+      m=11
+    elsif sklzz[js][6].split(', ').include?('Passive(C)')
+      m=12
+    else
+      event.respond "#{q} cannot be equipped.#{"\nUse the `FEH!edit seal` command to equip a seal." if sklzz[js][6].split(', ').include?('Passive(S)') || sklzz[js][6].split(', ').include?('Seal')}"
+      return nil
+    end
+    x=backwards_skill_tree(js, nil, donor_units[j2][m])
+    donor_units[j2][m]=x[0].map{|q| q}
+    donor_unit_save(uid,donor_units)
+    dispstr=''
+    unless x[1].nil?
+      dispstr="#{x[1]} has been used as the base because your #{donor_units[j2][0]} already knows it."
+      dispstr="#{donor_units[j2][0]} doesn't officially know any of the prerequisites so I marked it as \"Unknown base\"." if dispstr.include?('~~')
+    end
+    event.respond "#{q} has been given to your #{donor_units[j2][0]}!#{"\n#{dispstr}" unless dispstr.length.zero?}#{"\nPlease use the `FEH!edit refine` command to refine the weapon." if sklzz[js][6]=='Weapon'}"
+  elsif cmd.downcase=='create'
+    event.respond "You already have a #{donor_units[j2][0]}."
+    return nil
+  elsif ['promote','rarity','feathers'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    donor_units[j2][1]=flurp[0] unless flurp[0].nil?
+    donor_units[j2][1]+=1 if flurp[0].nil?
+    donor_units[j2][1]=[donor_units[j2][1],5].min
+    donor_units[j2][2]=0
+    donor_unit_save(uid,donor_units)
+    event.respond "You have promoted your #{donor_units[j2][0]} to #{donor_units[j2][1]}#{@rarity_stars[donor_units[j2][1]-1]}!"
+  elsif ['merge','combine'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    if !flurp[1].nil?
+      donor_units[j2][2]+=flurp[1]
+    elsif !flurp[0].nil?
+      donor_units[j2][2]+=flurp[0]
+    else
+      donor_units[j2][2]+=1
+    end
+    donor_units[j2][2]=[donor_units[j2][2],@max_rarity_merge[1]].min
+    donor_unit_save(uid,donor_units)
+    event.respond "You have merged your #{donor_units[j2][0]} to +#{donor_units[j2][2]}!"
+  elsif ['flower','flowers','dragonflower','dragonflowers'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    if !flurp[8].nil?
+      donor_units[j2][6]+=flurp[8]
+    elsif !flurp[1].nil?
+      donor_units[j2][6]+=flurp[1]
+    elsif !flurp[0].nil?
+      donor_units[j2][6]+=flurp[0]
+    else
+      donor_units[j2][6]+=1
+    end
+    donor_units[j2][6]=[donor_units[j2][6],2*@max_rarity_merge[2]].min
+    donor_units[j2][6]=[donor_units[j2][6],@max_rarity_merge[2]].min unless j[3]=='Infantry' && j[9][0].include?('PF')
+    donor_unit_save(uid,donor_units)
+    event.respond "You have given #{donor_units[j2][0]} their #{longFormattedNumber(donor_units[j2][6],true)} flower!"
+  elsif ['nature','ivs'].include?(cmd.downcase)
+    flurp=find_stats_in_string(event,nil,1)
+    n=''
+    if flurp[2].nil? && flurp[3].nil?
+      donor_units[j2][3]=' '
+      donor_units[j2][4]=' '
+      donor_unit_save(uid,donor_units)
+      event.respond "You have changed your #{donor_units[j2][0]}'s nature to neutral!"
+    elsif flurp[2].nil? || flurp[3].nil?
+      @stored_event=[event,j]
+      event.respond "You cannot have a boon without a bane.  Set stats to neutral?\nYes/No" if flurp[3].nil?
+      event.respond "You cannot have a bane without a boon.  Set stats to neutral?\nYes/No" if flurp[2].nil?
+      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+        if e.message.text.downcase.include?('no')
+          e.respond 'Okay.'
+        else
+          j2=@stored_event[1][0]
+          j2=donor_units.find_index{|q| q[0]==j[0]}
+          donor_units[j2][3]=' '
+          donor_units[j2][4]=' '
+          donor_unit_save(uid,donor_units)
+          event.respond "You have changed your #{donor_units[j2][0]}'s nature to neutral!"
+        end
+      end
+    else
+      donor_units[j2][3]=flurp[2]
+      donor_units[j2][4]=flurp[3]
+      atk='Attack'
+      atk='Magic' if ['Tome','Dragon','Healer'].include?(j[1][1])
+      atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(j[1][1])
+      n=nature_name(flurp[2],flurp[3])
+      unless n.nil?
+        n=n[0] if atk=='Strength'
+        n=n[n.length-1] if atk=='Magic'
+        n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
+      end
+      donor_unit_save(uid,donor_units)
+      event.respond "You have changed your #{donor_units[j2][0]}'s nature to +#{flurp[2]}, -#{flurp[3]} (#{n})!"
+    end
+  else
+    event.respond 'Edit mode was not specified.'
+  end
+  return nil
 end
