@@ -557,10 +557,10 @@ def donate_trigger_word(event,str=nil,mode=0)
       end
       f.push([b[0].split('\\'[0])[0],d[i].gsub("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/",'').gsub('.txt','').to_i,b[0].split('\\'[0])[1],b[0].split('\\'[0])[2]])
       f[-1][2]=f[-1][2].hex unless f[-1][2].nil?
-      if !get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(f[-1][1])
+      if !get_donor_list().reject{|q| q[2][0]<3}.map{|q| q[0]}.include?(f[-1][1])
         f[-1]=nil
         f.compact!
-      elsif !get_donor_list().reject{|q| q[2]<4}.map{|q| q[0]}.include?(f[-1][1])
+      elsif !get_donor_list().reject{|q| q[2][0]<4}.map{|q| q[0]}.include?(f[-1][1])
         f[-1][2]=nil
         f[-1][3]=nil
         f[-1].compact!
@@ -2473,7 +2473,7 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   return "#{str}Equipped weapon: #{weapon}\n"
 end
 
-def display_stars(bot,event,rarity,merges,support='-',flowers=['Infantry',0],expandedmode=false,game='FEH') # used to determine which star emojis should be used, based on the rarity, merge count, and whether the unit is Summoner Supported
+def display_stars(bot,event,rarity,merges,support='-',flowers=['Infantry',0],expandedmode=false,game='FEH',mathoos=false) # used to determine which star emojis should be used, based on the rarity, merge count, and whether the unit is Summoner Supported
   if game=='DL'
     emo="#{['','<:Rarity_1:532086056594440231>','<:Rarity_2:532086056254963713>','<:Rarity_3:532086056519204864>','<:Rarity_4:532086056301101067>','<:Rarity_5:532086056737177600>'][rarity]*rarity}#{['','<:Rarity_1_Blank:555459856476274691>','<:Rarity_2_Blank:555459856400908299>','<:Rarity_3_Blank:555459856568418314>','<:Rarity_4_Blank:555459856497246218>','<:Rarity_5_Blank:555459856190930955>'][rarity]*(5-rarity)}"
     return "**#{rarity}-star#{" +#{merges}" unless merges.zero? && !expandedmode}**#{"  \u00B7  <:Lovewhistle:575233033024569365>**#{support}**" unless support =='-'}#{"\nNo Summoner Support" if support =='-' && expandedmode}#{"  \u00B7  <:Clover:575230371587948568>**x#{flowers[1]}**" unless flowers[1]<=0 && !expandedmode}" if rarity>@rarity_stars.length
@@ -2488,6 +2488,11 @@ def display_stars(bot,event,rarity,merges,support='-',flowers=['Infantry',0],exp
     emo='<:Icon_Rarity_4p10:448272714210476033>' if rarity==4
     emo='<:Icon_Rarity_5p10:448272715099406336>' if rarity==5
     emo='<:Icon_Rarity_6p10:491487784822112256>' if rarity>5
+  end
+  devunits_load()
+  if event.message.text.downcase.split(' ').include?("mathoo's") && mathoos
+    emo='<:FEH_rarity_M:577779126891577355>'
+    emo='<:FEH_rarity_Mp10:577779126853959681>' if rarity>=5 && merges==@max_rarity_merge[1]
   end
   emo='<:Icon_Rarity_S:448266418035621888>' unless support=='-'
   emo='<:Icon_Rarity_Sp10:448272715653054485>' if rarity>=5 && merges==@max_rarity_merge[1] && support != '-'
@@ -3001,7 +3006,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     if ['smol','xsmol'].include?(sizex)
       bb=0
       bb=3 if merges>0
-      create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,unitz,u40[0],mu,2)}**__","#{display_stars(bot,event,5,merges,summoner,[unitz[3],flowers],false,unitz[11][0])}\n*Neutral Nature only so far*\n#{display_stat_skills(unitz,stat_skills,[],nil,tempest,blessing,transformed,wl,false,true)}\n**#{staticons[0]}#{u40[1]} | #{atk}#{u40[2]} | #{staticons[1]}#{u40[3]} | #{staticons[2]}#{u40[4]} | #{staticons[3]}#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Score: #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5+25+merges*2+90+blessing.length*4})#{mergetext}",xcolor,nil,pick_thumbnail(event,unitz,bot),nil,1)
+      create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,unitz,u40[0],mu,2)}**__","#{display_stars(bot,event,5,merges,summoner,[unitz[3],flowers],false,unitz[11][0],mu)}\n*Neutral Nature only so far*\n#{display_stat_skills(unitz,stat_skills,[],nil,tempest,blessing,transformed,wl,false,true)}\n**#{staticons[0]}#{u40[1]} | #{atk}#{u40[2]} | #{staticons[1]}#{u40[3]} | #{staticons[2]}#{u40[4]} | #{staticons[3]}#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Score: #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5+25+merges*2+90+blessing.length*4})#{mergetext}",xcolor,nil,pick_thumbnail(event,unitz,bot),nil,1)
     else
       ftr="Please note that the #{atk.split('> ')[1]} stat displayed here does not include weapon might.  The Attack stat in-game does."
       ftr=nil if weapon != '-'
@@ -3288,7 +3293,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     flds.shift
   end
   flds=nil if flds.length<=0
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,unitz,u40[0],mu,2) if ['smol','xsmol'].include?(sizex)}**__","#{display_stars(bot,event,rarity,merges,summoner,[unitz[3],flowers],sizex=='giant',unitz[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(unitz,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant')}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,unitz,u40[0]) unless ['smol','xsmol'].include?(sizex)}#{mergetext}",xcolor,ftr,img,flds,xtype)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,unitz,u40[0],mu,2) if ['smol','xsmol'].include?(sizex)}**__","#{display_stars(bot,event,rarity,merges,summoner,[unitz[3],flowers],sizex=='giant',unitz[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(unitz,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant')}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,unitz,u40[0]) unless ['smol','xsmol'].include?(sizex)}#{mergetext}",xcolor,ftr,img,flds,xtype)
   if (skillstoo || sizex=='giant') && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
@@ -4749,7 +4754,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
     if dv>=0
       mu=true
       rarity=@dev_units[dv][1]
-      txt=display_stars(bot,event,rarity,@dev_units[dv][2],@dev_units[dv][5],['Infantry',0],false,j[11][0]).split('  ')[0]
+      txt=display_stars(bot,event,rarity,@dev_units[dv][2],@dev_units[dv][5],['Infantry',0],false,j[11][0],true).split('  ')[0]
       sklz2=[@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],@dev_units[dv][12],[@dev_units[dv][13]]]
     elsif @dev_nobodies.include?(j[0])
       event.respond "Mathoo has this character but doesn't care enough about including their skills.  Showing default skills." unless chain
@@ -7957,12 +7962,12 @@ def parse_function_alts(callback,event,args,bot)
     if name.is_a?(Array)
       xx=[]
       if name[0].is_a?(Array)
-        for i in 0...name[i][1].length
-          xx.push(name[i][12].gsub('*','').split(', ')[0])
+        for i in 0...name[0].length
+          xx.push(name[0][i][12].gsub('*','').split(', ')[0])
         end
       else
-        for i in 0...name[i][1].length
-          j2=find_unit(name[i],event)
+        for i in 0...name[0].length
+          j2=find_unit(name[0][i],event)
           xx.push(j[12].gsub('*','').split(', ')[0])
         end
       end
@@ -8439,7 +8444,7 @@ def pair_up(event,name,bot,weapon=nil)
   staticons=['<:StrengthS:514712248372166666>','<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>']
   staticons=['<:Strength:573344931205349376>','<:Speed:573366907357495296>','<:FEHDefense:574702109325262878>','<:Defense:573344832282689567>'] if u40x[11][0]=='DL'
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,-1,u40[0],mu,6)}** as cohort unit__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,[],nil,'',blessing,transformed,wl)}\n#{staticons[0]}Attack: #{u40[2]}\n#{staticons[1]}Speed: #{u40[3]}\n#{staticons[2]}Defense: #{u40[4]}\n#{staticons[3]}Resistance: #{u40[5]}",xcolor,nil,pic,nil,5)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,-1,u40[0],mu,6)}** as cohort unit__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,[],nil,'',blessing,transformed,wl)}\n#{staticons[0]}Attack: #{u40[2]}\n#{staticons[1]}Speed: #{u40[3]}\n#{staticons[2]}Defense: #{u40[4]}\n#{staticons[3]}Resistance: #{u40[5]}",xcolor,nil,pic,nil,5)
 end
 
 def unit_study(event,name,bot,weapon=nil)
@@ -9859,11 +9864,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
   }
   nicknames_load()
   event.respond "#{name} has been removed from #{baseunt}'s aliases."
-  nzzz=@aliases.reject{|q| q[0]!='Unit'}
-  nzzz2=@aliases.reject{|q| q[0]!='Skill'}
-  nzzz3=@aliases.reject{|q| q[0]!='Structure'}
-  nzzz4=@aliases.reject{|q| ['Unit','Skill','Structure'].include?(q[0])}
-  if !@aliases[-1][2].is_a?(String) || @aliases[-1][2]<'Verdant Shard'
+  unless !@aliases[-1][2].is_a?(String) || @aliases[-1][2]<'Verdant Shard'
     bot.channel(logchn).send_message('Alias list saved.')
     open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
       for i in 0...@aliases.length
@@ -10752,8 +10753,8 @@ bot.command([:donation, :donate]) do |event, uid|
       end
     end
     color=n3[0]*256*256+n3[1]*256+n3[2]
-    str="**Tier 1:** Ability to give server-specific aliases in any server\n\u2713 Given" if g[2]>=1
-    if g[2]>=2
+    str="**Tier 1:** Ability to give server-specific aliases in any server\n\u2713 Given" if g[2].max>=1
+    if g[2][0]>=2
       if g[3].nil? || g[3].length.zero? || g[4].nil? || g[4].length.zero?
         str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
       elsif g[4][0]=='-'
@@ -10764,14 +10765,14 @@ bot.command([:donation, :donate]) do |event, uid|
         str="#{str}\n\n**Tier 2:** Birthday avatar\n\u2713 Given\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4][0]}"
       end
     end
-    if g[2]>=3
+    if g[2][0]>=3
       if !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
         str="#{str}\n\n**Tier 3:** Unit tracking\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
       else
         str="#{str}\n\n**Tier 3:** Unit tracking\n\u2713 Given\n*Trigger word:* #{donor_unit_list(uid,1)[0].split('\\'[0])[0]}'s"
       end
     end
-    if g[2]>=4
+    if g[2][0]>=4
       if !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
         str="#{str}\n\n**Tier 4:** __*Colored*__ unit tracking\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
       elsif donor_unit_list(uid,1)[0].split('\\'[0])[1].nil?
@@ -10781,7 +10782,7 @@ bot.command([:donation, :donate]) do |event, uid|
         color=donor_unit_list(uid,1)[0].split('\\'[0])[1].hex
       end
     end
-    create_embed(event,"__**#{n} a Tier #{g[2]} donor.**__",str,color)
+    create_embed(event,"__**#{n} a Tier #{g[2][0]} donor.**__",str,color)
   end
   donor_embed(bot,event)
   return nil
@@ -12023,7 +12024,7 @@ def next_holiday(bot,mode=0)
             [0,12,25,'Robin(M)(Winter)','as Santa Claus for Askr.','Christmas'],
             [0,12,31,'Tiki(Adult)','as Mother Time',"New Year's Eve"]]
   d=get_donor_list()
-  d=d.reject{|q| q[2]<2}
+  d=d.reject{|q| q[2][0]<2 || q[4][0]=='-'}
   for i in 0...d.length
     if d[i][4][0]!='-'
       holidays.push([0,d[i][3][0],d[i][3][1],d[i][4][0],"in recognition of #{bot.user(d[i][0]).distinct}","Donator's birthday"])
