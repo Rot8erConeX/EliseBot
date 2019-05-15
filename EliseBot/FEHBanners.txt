@@ -1,10 +1,19 @@
-Darkness Within\3\Berkut(Fallen), Corrin(F)(Fallen), Mareeta(Fallen), Tiki(Young)(Fallen)\5\10/05/2019, 08/06/2019\NewUnits
+New Heroes: >Unknown<\3\-\5\11/06/2019, 30/06/2019\NewUnits
+Heroes with Flier Formation\3\Elincia, Hinoka(Wings), Leanne\5\06/06/2019, 15/06/2019\SkillBanner
+Mythic Heroes: >Unknown<\-8\Duma, Eirika(Graceful), Hrid, Lyn(Wind), Tiki(Young)(Earth)\5\30/05/2019, 05/06/2019\Legendary
+Leif & Nanna's Battle\3\Leif, Nanna\5\27/05/2019, 04/06/2019\BHB
+Heroes with Dragon Fang\3\-\5\26/05/2019, 05/06/2019\SkillBanner
+Bridal Blessings (2019 revival)\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)\5\24/05/2019, 20/06/2019\Seasonal, Bride
+Bridal Bloom (2019 revival)\3\Ninian(Bride), Sanaki(Bride), Tharja(Bride)\5\22/05/2019, 20/06/2019\Seasonal, Bride
+Special Heroes: >Unknown<\3\-\5\21/05/2019, 20/06/2019\Seasonal, Bride
+New Power (May 2019)\3\Faye, Lukas, Stahl, Sully\5\14/05/2019, 25/05/2019\NewPower
+Darkness Within\3\Berkut(Fallen), Corrin(F)(Fallen), Mareeta(Fallen), Tiki(Young)(Fallen)\5\10/05/2019, 29/05/2019\NewUnits
 Heroes with Wrath\3\Karla, Nephenee, Owain\5\02/05/2019, 13/05/2019
-Hero Fest! Choose Your Legends, Round 1\5\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5\27/04/2019, 10/05/2019\CYL, HeroFest
-Hero Fest! Choose Your Legends, Round 2\5\Celica(Brave), Ephraim(Brave), Hector(Brave), Veronica(Brave)\5\27/04/2019, 10/05/2019\CYL, HeroFest
 A Season of Picnics\3\Felicia(Picnic), Flora(Picnic), Genny(Picnic), Lukas(Picnic)\5\19/04/2019, 18/05/2019\Seasonal, NewUnits
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
+Hero Fest! Choose Your Legends, Round 1\5\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5\27/04/2019, 10/05/2019\CYL, HeroFest
+Hero Fest! Choose Your Legends, Round 2\5\Celica(Brave), Ephraim(Brave), Hector(Brave), Veronica(Brave)\5\27/04/2019, 10/05/2019\CYL, HeroFest
 Legendary Heroes: Alm, Saint King\-8\Alm(Saint), Eirika(Winter), Ephraim(Winter), Fae(Winter), Fjorm, Hector(Marquess), Ike(Vanguard), Leanne, Marth(King), Nailah, Roy(Fire), Sue\5\27/04/2019, 06/05/2019\Legendary
 Children's Day, Block A\3\Lugh, Tiki(Young), Ylgr\5\26/04/2019, 05/05/2019\VotingGauntlet
 Children's Day, Block B\3\Delthea, Fae, Nino(Fangs)\5\26/04/2019, 05/05/2019\VotingGauntlet

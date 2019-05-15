@@ -1,7 +1,26 @@
-Heartstring's Ties\Tap Battle\20/04/2019, 10/05/2019
-Golden Week Celebration\Event\27/04/2019, 20/05/2019
-Aversa: Dark One (revival)\GHB\04/05/2019, 11/05/2019
 Cavalry Mastery\Quests\06/05/2019, 19/05/2019
-New Heroes\Log-In Bonus\10/05/2019, 08/06/2019
-May Edition\Orb Promo\10/05/2019, 08/06/2019
+New Heroes\Log-In Bonus\10/05/2019, 23/05/2019
+May Edition\Orb Promo\10/05/2019, 23/05/2019
 Power's Den\Forging Bonds\10/05/2019, 23/05/2019
+Delthea: Tatarrah's Puppet\GHB\12/05/2019, 19/05/2019
+Eir\Quests\15/05/2019, 28/05/2019
+-\Grand Conquests\17/05/2019, 22/05/2019
+Corrin(M) & Kana(F) (revival)\BHB\20/05/2019, 26/05/2019
+Special Heroes\Log-In Bonus\20/05/2019, 03/06/2019
+Tempest Trials\Log-In Bonus\21/05/2019, 03/06/2019
+Shadowed Memories (Encore)\Tap Battle\23/05/2019, 22/06/2019
+>Unknown<\Tempest Trials\25/05/2019, 03/06/2019
+>Unknown<\MHB\30/05/2019, 05/06/2019
+Duma, God of Strength\MHB\30/05/2019, 05/06/2019
+Eirika, Graceful Resolve\LHB\30/05/2019, 05/06/2019
+Hrid, Icy Blade\LHB\30/05/2019, 05/06/2019
+Lyn, Lady of Wind\LHB\30/05/2019, 05/06/2019
+Tiki, Legendary Dragon\LHB\30/05/2019, 05/06/2019
+Voting Gauntlet\Log-In Bonus\31/05/2019, 08/06/2019
+>Unknown<\Voting Gauntlet\03/06/2019, 08/06/2019
+Gharnef: Dark Pontifax (Revival)\GHB\05/06/2019, 20/06/2019
+Flier Mastery\Quests\08/06/2019, 21/06/2019
+3.6.0 (projected)\Update\09/06/2019, 10/06/2019
+June Edition\Orb Promo\11/06/2019, 24/06/2019
+>Unknown<\Forging Bonds\11/06/2019, 24/06/2019
+New Heroes\Log-In Bonus\11/06/2019, 24/06/2019

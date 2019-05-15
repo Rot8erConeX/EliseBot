@@ -1296,10 +1296,6 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     unt=find_skill(unit,event)
     unt=unt[0] if unt[0].is_a?(Array)
     checkstr2="#{unt[1]}#{"#{' ' unless unt[1][-1,1]=='+'}#{unt[2]}" unless ['-','example'].include?(unt[2]) || ['Weapon','Assist','Special'].include?(unt[6])}".gsub(' ','')
-    unless @shardizard==4
-      event.respond "Adding aliases to skills is currently disabled due to an overhaul being made to the skill system.  Please be patient as this may take a few days."
-      return nil
-    end
   elsif type[0]=='Alias' && type[1].gsub('*','')=='Structure'
     unt=find_structure(unit,event)
     if unt.is_a?(Array) && unt.length<=1
@@ -1366,7 +1362,6 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   m=nil if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?
   unit=unt[0]
   unit=unt[8] if type[1]=='Unit'
-  unit="#{unt[1]}#{"#{' ' unless unt[1][-1,1]=='+'}#{unt[2]}" unless ['-','example'].include?(unt[2]) || ['Weapon','Assist','Special'].include?(unt[6])}" if type[1]=='Skill'
   double=false
   for i in 0...@aliases.length
     mtch=false
@@ -1395,10 +1390,12 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   end
   unless double
     @aliases.push([type[1].gsub('*',''),newname,unit,m].compact)
+    pos=0
+    pos=1 if type[1]=='Skill'
     @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-    bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unt[0]}*.\nPlease test to be sure that the alias stuck.")
+    bot.channel(chn).send_message("**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unt[pos]}*.\nPlease test to be sure that the alias stuck.")
     event.respond "**#{newname}** has been#{" globally" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?} added to the aliases for the #{type[1].gsub('*','').downcase} *#{unt[0]}*." if event.user.id==167657750971547648 && !modifier2.nil? && modifier2.to_i.to_s==modifier2
-    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unt[0]}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
+    bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{type[1].gsub('*','')} Alias:** #{newname} for #{unt[pos]}#{" - global alias" if [167657750971547648,368976843883151362,195303206933233665].include?(event.user.id) && !modifier.nil?}")
   end
   @aliases.uniq!
   nzzz=@aliases.map{|a| a}
@@ -1563,6 +1560,7 @@ end
 
 def legal_weapon(event,name,weapon,refinement='-',recursion=false)
   return '-' if weapon=='-'
+  data_load()
   u=@units[@units.find_index{|q| q[0]==name}]
   w=@skills[@skills.find_index{|q| q[1]==weapon}]
   unless w[1].split(' ')[0].length>u[0].length
@@ -1648,139 +1646,139 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return "~~#{w2}~~" unless u[1][0]=='Red'
     w2="Dancer's Ribbon#{'+' if w[1].include?('+')}"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Kadomatsu','Hagoita'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Kadomatsu#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Hagoita#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Kadomatsu','Hagoita'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Kadomatsu#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Hagoita#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
     return "~~#{w2}~~" unless u[1][0]=='Blue'
     w2="Sushi Sticks#{'+' if w[0].include?('+')}"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Tannenboom!',"Sack o' Gifts",'Handbell'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Tannenboom!#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"#{["Sack o' Gifts",'Handbell'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green' && w[0].gsub('+','')=='Tannenboom!'
+  elsif ['Tannenboom!',"Sack o' Gifts",'Handbell'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Tannenboom!#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"#{["Sack o' Gifts",'Handbell'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green' && w[1].gsub('+','')=='Tannenboom!'
     return "~~#{w2}~~" unless u[1][0]=='Red'
-    w2="Santa's Sword#{'+' if w[0].include?('+')}"
+    w2="Santa's Sword#{'+' if w[1].include?('+')}"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ["Loyal Wreath"].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Raudrblooms#{'+' if w[0].include?('+')}",refinement) if u[1][0]!='Red'
-  elsif ["Faithful Axe","Heart's Blade"].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Heart's Blade#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Faithful Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ["Loyal Wreath"].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Raudrblooms#{'+' if w[1].include?('+')}",refinement) if u[1][0]!='Red'
+  elsif ["Faithful Axe","Heart's Blade"].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Heart's Blade#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Faithful Axe#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
     return "~~#{w2}~~" unless ['Colorless','Blue'].include?(u[1][0])
-    w2="Rod of Bonds#{'+' if w[0].include?('+')}"
-    w2="Loving Lance#{'+' if w[0].include?('+')}" if u[1][0]=='Blue'
+    w2="Rod of Bonds#{'+' if w[1].include?('+')}"
+    w2="Loving Lance#{'+' if w[1].include?('+')}" if u[1][0]=='Blue'
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Carrot Lance','Carrot Axe'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Carrot Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Carrot Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Carrot Lance','Carrot Axe'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Carrot Lance#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Carrot Axe#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
     return "~~#{w2}~~" unless ['Colorless','Red'].include?(u[1][0])
-    w2="Carrot#{'+' if w[0].include?('+')}...just a carrot#{'+' if w[0].include?('+')}"
-    w2="Carrot Sword#{'+' if w[0].include?('+')}" if u[1][0]=='Red'
+    w2="Carrot#{'+' if w[1].include?('+')}...just a carrot#{'+' if w[1].include?('+')}"
+    w2="Carrot Sword#{'+' if w[1].include?('+')}" if u[1][0]=='Red'
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Red Egg','Blue Egg','Green Egg','Red Gift','Blue Gift','Green Gift'].include?(w[0].gsub('+',''))
+  elsif ['Red Egg','Blue Egg','Green Egg','Red Gift','Blue Gift','Green Gift'].include?(w[1].gsub('+',''))
     t='Egg'
-    t='Gift' if ['Red Gift','Blue Gift','Green Gift'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Red #{t}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Blue #{t}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Green #{t}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    t='Gift' if ['Red Gift','Blue Gift','Green Gift'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Red #{t}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Blue #{t}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Green #{t}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
     return "~~#{w2}~~" unless ['Colorless'].include?(u[1][0])
-    w2="Empty #{t}#{'+' if w[0].include?('+')}"
+    w2="Empty #{t}#{'+' if w[1].include?('+')}"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Safeguard','Vanguard'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Safeguard#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Vanguard#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
+  elsif ['Safeguard','Vanguard'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Safeguard#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Vanguard#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
     return "~~#{w2}~~" unless ['Green'].include?(u[1][0])
-    w2="Midguard#{'+' if w[0].include?('+')}"
-  elsif ['Melon Crusher','Deft Harpoon'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Deft Harpoon#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Melon Crusher#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    w2="Midguard#{'+' if w[1].include?('+')}"
+  elsif ['Melon Crusher','Deft Harpoon'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Deft Harpoon#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Melon Crusher#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
     return "~~#{w2}~~" unless ['Red'].include?(u[1][0])
-    w2="Ylissian Summer Sword#{'+' if w[0].include?('+')}"
+    w2="Ylissian Summer Sword#{'+' if w[1].include?('+')}"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Iron Sword','Iron Lance','Iron Axe','Steel Sword','Steel Lance','Steel Axe','Silver Sword','Silver Lance','Silver Axe','Brave Sword','Brave Lance','Brave Axe','Firesweep Sword','Firesweep Lance','Firesweep Axe'].include?(w[0].gsub('+',''))
+  elsif ['Iron Sword','Iron Lance','Iron Axe','Steel Sword','Steel Lance','Steel Axe','Silver Sword','Silver Lance','Silver Axe','Brave Sword','Brave Lance','Brave Axe','Firesweep Sword','Firesweep Lance','Firesweep Axe'].include?(w[1].gsub('+',''))
     t='Iron'
-    t='Steel' if 'Steel '==w[0][0,6]
-    t='Silver' if 'Silver '==w[0][0,7]
-    t='Brave' if 'Brave '==w[0][0,6]
-    t='Firesweep' if 'Firesweep '==w[0][0,10]
+    t='Steel' if 'Steel '==w[1][0,6]
+    t='Silver' if 'Silver '==w[1][0,7]
+    t='Brave' if 'Brave '==w[1][0,6]
+    t='Firesweep' if 'Firesweep '==w[1][0,10]
     if event.message.text.downcase.include?('sword') || event.message.text.downcase.include?('edge')
     elsif event.message.text.downcase.include?('lance')
     elsif event.message.text.downcase.include?('axe')
     elsif (['Iron','Steel','Silver'].include?(t) && u[1][1]=='Dagger') || u[1][1]=='Bow'
-      return weapon_legality(event,name,"#{t} Dagger#{'+' if w[0].include?('+')}",refinement,true) if u[1][1]=='Dagger'
-      return weapon_legality(event,name,"#{t} Bow#{'+' if w[0].include?('+')}",refinement,true) if u[1][1]=='Bow'
+      return weapon_legality(event,name,"#{t} Dagger#{'+' if w[1].include?('+')}",refinement,true) if u[1][1]=='Dagger'
+      return weapon_legality(event,name,"#{t} Bow#{'+' if w[1].include?('+')}",refinement,true) if u[1][1]=='Bow'
     end
-    return weapon_legality(event,name,"#{t} Sword#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"#{t} Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"#{t} Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return weapon_legality(event,name,"#{t} Sword#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"#{t} Lance#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"#{t} Axe#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
     return "~~#{w2}~~" unless u[1][0]=='Colorless'
     w2="#{t} Rod"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Killing Edge','Killer Lance','Killer Axe','Slaying Edge','Slaying Lance','Slaying Axe'].include?(w[0].gsub('+',''))
+  elsif ['Killing Edge','Killer Lance','Killer Axe','Slaying Edge','Slaying Lance','Slaying Axe'].include?(w[1].gsub('+',''))
     t='Killer'
     t='Killing' if u[1][0]=='Red'
-    t='Slaying' if 'Slaying '==w[0][0,8]
+    t='Slaying' if 'Slaying '==w[1][0,8]
     if event.message.text.downcase.include?('sword') || event.message.text.downcase.include?('edge')
     elsif event.message.text.downcase.include?('lance')
     elsif event.message.text.downcase.include?('axe')
     elsif u[1][1]=='Bow'
-      return weapon_legality(event,name,"#{t} Bow#{'+' if w[0].include?('+')}",refinement,true) if u[1][1]=='Bow'
+      return weapon_legality(event,name,"#{t} Bow#{'+' if w[1].include?('+')}",refinement,true) if u[1][1]=='Bow'
     end
-    return weapon_legality(event,name,"#{t} Edge#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"#{t} Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"#{t} Axe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return weapon_legality(event,name,"#{t} Edge#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"#{t} Lance#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"#{t} Axe#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
     return "~~#{w2}~~" unless u[1][0]=='Colorless'
     w2="#{t} Rod"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Fire','Flux','Thunder','Light','Wind'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Fire#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Fire'
-    return weapon_legality(event,name,"Flux#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Dark'
-    return weapon_legality(event,name,"#{['Fire','Flux'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Thunder#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Thunder'
-    return weapon_legality(event,name,"Light#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Light'
-    return weapon_legality(event,name,"#{['Thunder','Light'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Wind#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Wind'
-    return weapon_legality(event,name,"#{['Wind'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
-  elsif ['Elfire','Ruin','Elthunder','Ellight','Elwind'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Elfire#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Fire'
-    return weapon_legality(event,name,"Ruin#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Dark'
-    return weapon_legality(event,name,"#{['Elfire','Ruin'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Elthunder#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Thunder'
-    return weapon_legality(event,name,"Ellight#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Light'
-    return weapon_legality(event,name,"#{['Elthunder','Ellight'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Elwind#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Wind'
-    return weapon_legality(event,name,"#{['Elwind'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
-  elsif ['Bolganone','Fenrir','Thoron','Shine','Rexcalibur'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Bolganone#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Fire'
-    return weapon_legality(event,name,"Fenrir#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Dark'
-    return weapon_legality(event,name,"#{['Bolganone','Fenrir'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Thoron#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Thunder'
-    return weapon_legality(event,name,"Shine#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Light'
-    return weapon_legality(event,name,"#{['Thoron','Shine'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Rexcalibur#{'+' if w[0].include?('+')}",refinement,true) if u[1][2]=='Wind'
-    return weapon_legality(event,name,"#{['Rexcalibur'].sample}#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
-  elsif ['Armorslayer','Heavy Spear','Hammer'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Armorslayer#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Heavy Spear#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Hammer#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
-  elsif ['Armorsmasher','Slaying Spear','Slaying Hammer'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Armorsmasher#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Slaying Spear#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Slaying Hammer#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
-  elsif ['Zanbato','Ridersbane','Poleaxe'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Zanbato#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Ridersbane#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Poleaxe#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
-  elsif ['Wo Dao','Harmonic Lance','Giant Spoon','Wo Gun'].include?(w[0].gsub('+',''))
-    return weapon_legality(event,name,"Wo Dao#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Harmonic Lance#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Wo Gun#{'+' if w[0].include?('+')}",refinement,true) if u[1][0]=='Green'
-  elsif ['Whelp (Infantry)','Hatchling (Flier)'].include?(w[0])
+  elsif ['Fire','Flux','Thunder','Light','Wind'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Fire#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Fire'
+    return weapon_legality(event,name,"Flux#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Dark'
+    return weapon_legality(event,name,"#{['Fire','Flux'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Thunder#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Thunder'
+    return weapon_legality(event,name,"Light#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Light'
+    return weapon_legality(event,name,"#{['Thunder','Light'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Wind#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Wind'
+    return weapon_legality(event,name,"#{['Wind'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Elfire','Ruin','Elthunder','Ellight','Elwind'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Elfire#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Fire'
+    return weapon_legality(event,name,"Ruin#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Dark'
+    return weapon_legality(event,name,"#{['Elfire','Ruin'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Elthunder#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Thunder'
+    return weapon_legality(event,name,"Ellight#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Light'
+    return weapon_legality(event,name,"#{['Elthunder','Ellight'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Elwind#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Wind'
+    return weapon_legality(event,name,"#{['Elwind'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Bolganone','Fenrir','Thoron','Shine','Rexcalibur'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Bolganone#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Fire'
+    return weapon_legality(event,name,"Fenrir#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Dark'
+    return weapon_legality(event,name,"#{['Bolganone','Fenrir'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Thoron#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Thunder'
+    return weapon_legality(event,name,"Shine#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Light'
+    return weapon_legality(event,name,"#{['Thoron','Shine'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Rexcalibur#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Wind'
+    return weapon_legality(event,name,"#{['Rexcalibur'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Armorslayer','Heavy Spear','Hammer'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Armorslayer#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Heavy Spear#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Hammer#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Armorsmasher','Slaying Spear','Slaying Hammer'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Armorsmasher#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Slaying Spear#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Slaying Hammer#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Zanbato','Ridersbane','Poleaxe'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Zanbato#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Ridersbane#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Poleaxe#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Wo Dao','Harmonic Lance','Giant Spoon','Wo Gun'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Wo Dao#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Harmonic Lance#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"Wo Gun#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+  elsif ['Whelp (Infantry)','Hatchling (Flier)'].include?(w[1])
     return weapon_legality(event,name,"Whelp (Infantry)",refinement,true) if u[3]=='Infantry'
     return weapon_legality(event,name,"Hatchling (Flier)",refinement,true) if u[3]=='Flier'
-  elsif ['Yearling (Infantry)','Fledgeling (Flier)'].include?(w[0])
+  elsif ['Yearling (Infantry)','Fledgeling (Flier)'].include?(w[1])
     return weapon_legality(event,name,"Yearling (Infantry)",refinement,true) if u[3]=='Infantry'
     return weapon_legality(event,name,"Fledgeling (Flier)",refinement,true) if u[3]=='Flier'
-  elsif ['Adult (Infantry)','Adult (Flier)'].include?(w[0])
+  elsif ['Adult (Infantry)','Adult (Flier)'].include?(w[1])
     return weapon_legality(event,name,"Adult (Infantry)",refinement,true) if u[3]=='Infantry'
     return weapon_legality(event,name,"Adult (Flier)",refinement,true) if u[3]=='Flier'
   end
@@ -2645,8 +2643,10 @@ def combined_BST(event,args,bot)
             ['Yandere', 0, 0, ['Valter', 'Tharja', 'Rhajat', 'Camilla', 'Faye', 'Tharja(Winter)', 'Tharja(Bride)']],
             ['Lucina', 0, 0, ['Lucina', 'Lucina(Bunny)', 'Marth(Masked)', 'Lucina(Brave)', 'Lucina(Glorious)']],
             ['Marth', 0, 0, ['Marth', 'Marth(Groom)', 'Marth(Masked)']],
-            ['Robin', 0, 0, ['Robin(M)', 'Robin(F)', 'Robin(F)(Summer)', 'Robin(M)(Winter)', 'Robin(M)(Fallen)', 'Robin(F)(Fallen)', 'Tobin']],
-            ['Corrin', 0, 0, ['Corrin(M)(Launch)', 'Corrin(F)(Launch)', 'Corrin(F)(Summer)', 'Corrin(M)(Winter)', 'Corrin(M)(Adrift)', 'Corrin(F)(Adrift)', 'Corrin(F)(Fallen)', 'Kamui']],
+            ['Robin(F)', 0, 0, ['Robin(F)', 'Robin(F)(Summer)', 'Robin(F)(Fallen)']],
+            ['Robin(M)', 0, 0, ['Robin(M)', 'Robin(M)(Winter)', 'Robin(M)(Fallen)', 'Tobin']],
+            ['Corrin(F)', 0, 0, ['Corrin(F)(Launch)', 'Corrin(F)(Summer)', 'Corrin(F)(Adrift)', 'Corrin(F)(Fallen)']],
+            ['Corrin(M)', 0, 0, ['Corrin(M)(Launch)', 'Corrin(M)(Winter)', 'Corrin(M)(Adrift)', 'Kamui']],
             ['Xander', 0, 0, ['Xander', 'Xander(Bunny)', 'Xander(Summer)', 'Xander(Festival)']],
             ['Tiki', 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)', 'Tiki(Young)(Fallen)']],
             ['Lyn', 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)']],
@@ -3200,7 +3200,7 @@ def get_effHP(event,name,bot,weapon=nil)
   end
   pic=pick_thumbnail(event,u40x,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,ftr,pic,x,5)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,ftr,pic,x,5)
 end
 
 def study_of_healing(event,name,bot,weapon=nil)
@@ -3565,12 +3565,12 @@ def study_of_healing(event,name,bot,weapon=nil)
   staves.push("~~How much Rehabilitate[+] heals is based on how much damage the target has taken.~~\n~~If they are above 50% HP, the lower end of the range is how much is healed.~~")
   pic=pick_thumbnail(event,u40x,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  k="__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}"
+  k="__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.join("\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[untz[j][3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[untz[j][3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}"
     event.respond staves.join("\n")
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Staves",staves.join("\n")]])
   end
 end
 
@@ -4129,9 +4129,9 @@ def study_of_procs(event,name,bot,weapon=nil)
   staves[8].push("Reprisal - #{d}, cooldown of #{c}")
   pic=pick_thumbnail(event,u40x,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  k="__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+  k="__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.map{|q| q.join("\n")}.join("\n\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
     s=""
     for i in 0...staves.length
       s=extend_message(s,staves[i].join("\n"),event,2) unless staves[i].length.zero?
@@ -4147,7 +4147,7 @@ def study_of_procs(event,name,bot,weapon=nil)
       end
     end
     flds.compact!
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,flds)
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,flds)
   end
 end
 
@@ -5004,12 +5004,12 @@ def study_of_phases(event,name,bot,weapon=nil)
   pic=pick_thumbnail(event,u40x,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(' all')
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}#{"Pair-Up cohort: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}#{"Pair-Up cohort: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}"
     event.respond "**Displayed stats:**  #{u40[1]} / #{u40[2]} / #{u40[3]} / #{u40[4]} / #{u40[5]} - Score: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100\n**#{"Player Phase" unless ppu40==epu40}#{"In-combat Stats" if ppu40==epu40}:**  #{ppu40[1]} / #{ppu40[2]} / #{ppu40[3]} / #{ppu40[4]} / #{ppu40[5]}  (#{ppu40[16]} BST)#{"\n**Enemy Phase:**  #{epu40[1]} / #{epu40[2]} / #{epu40[3]} / #{epu40[4]} / #{epu40[5]}  (#{epu40[16]} BST)" unless ppu40==epu40}"
   elsif ppu40==epu40
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","#{staticons[0]} HP: #{u40[1]}\n#{atk}: #{u40[2]}\n#{staticons[1]} Speed: #{u40[3]}\n#{staticons[2]} Defense: #{u40[4]}\n#{staticons[3]} Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100"],["In-combat Stats","#{staticons[0]} HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n#{staticons[1]} Speed: #{ppu40[3]}\n#{staticons[2]} Defense: #{ppu40[4]}\n#{staticons[3]} Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","#{staticons[0]} HP: #{u40[1]}\n#{atk}: #{u40[2]}\n#{staticons[1]} Speed: #{u40[3]}\n#{staticons[2]} Defense: #{u40[4]}\n#{staticons[3]} Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100"],["In-combat Stats","#{staticons[0]} HP: #{ppu40[1]}\n#{atk}: #{ppu40[2]}\n#{staticons[1]} Speed: #{ppu40[3]}\n#{staticons[2]} Defense: #{ppu40[4]}\n#{staticons[3]} Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"]])
   else
-    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","#{staticons[0]} HP: #{u40[1]}\n#{atk}: #{u40[2]}\n#{staticons[1]} Speed: #{u40[3]}\n#{staticons[2]} Defense: #{u40[4]}\n#{staticons[3]} Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100",1],["Player Phase","#{staticons[0]} HP: #{ppu40[1]}\n#{staticons[4]} Attack: #{ppu40[2]}\n#{staticons[5]} Speed: #{ppu40[3]}\n#{staticons[6]} Defense: #{ppu40[4]}\n#{staticons[7]} Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","#{staticons[0]} HP: #{epu40[1]}\n#{staticons[8]} Attack: #{epu40[2]}\n#{staticons[9]} Speed: #{epu40[3]}\n#{staticons[10]} Defense: #{epu40[4]}\n#{staticons[11]} Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
+    create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{"Defense Tile\n" if deftile}#{display_stat_skills(u40x,stat_skills,stat_skills_2,stat_skills_3,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,[["Displayed stats","#{staticons[0]} HP: #{u40[1]}\n#{atk}: #{u40[2]}\n#{staticons[1]} Speed: #{u40[3]}\n#{staticons[2]} Defense: #{u40[4]}\n#{staticons[3]} Resistance: #{u40[5]}\n\nBST: #{u40[16]}\nScore: #{bin/5+merges*2+rarity*5+blessing.length*4+90}+`SP`/100",1],["Player Phase","#{staticons[0]} HP: #{ppu40[1]}\n#{staticons[4]} Attack: #{ppu40[2]}\n#{staticons[5]} Speed: #{ppu40[3]}\n#{staticons[6]} Defense: #{ppu40[4]}\n#{staticons[7]} Resistance: #{ppu40[5]}\n\nBST: #{ppu40[16]}"],["Enemy Phase","#{staticons[0]} HP: #{epu40[1]}\n#{staticons[8]} Attack: #{epu40[2]}\n#{staticons[9]} Speed: #{epu40[3]}\n#{staticons[10]} Defense: #{epu40[4]}\n#{staticons[11]} Resistance: #{epu40[5]}\n\nBST: #{epu40[16]}"]])
   end
 end
 
@@ -5819,7 +5819,7 @@ def donor_edit(bot,event,args=[],cmd='')
     uid=244073468981805056
     event.respond "This command is for the donors.  Your version of the command is `FEH!devedit`."
     return nil
-  elsif !get_donor_list().reject{|q| q[2]<3}.map{|q| q[0]}.include?(uid)
+  elsif !get_donor_list().reject{|q| q[2][0]<3}.map{|q| q[0]}.include?(uid)
     event.respond "You do not have permission to use this command."
     return nil
   elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")

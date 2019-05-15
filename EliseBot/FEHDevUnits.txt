@@ -30,7 +30,7 @@ New Moon\Moonbow\Lunar Flash
 Darting Blow 1\Darting Blow 2\Darting Blow 3\Darting Blow 4
 Null Follow-up 1\Null Follow-up 2\Null Follow-up 3
 Odd Atk Wave 1\Odd Atk Wave 2\Odd Atk Wave 3
-Even Res Wave 2
+Even Res Wave 3
 
 Anna
 5\0\ \ \-\0\
@@ -167,10 +167,10 @@ Felicia
 Iron Dagger\Steel Dagger\Silver Dagger\Silver Dagger+\__Silver Dagger+ (+) Resistance Mode__\Felicia's Plate\Felicia's Plate (+) Effect Mode
 Rally Speed
 Chilling Wind\Glacies
-Warding Blow 1\Warding Blow 2\Warding Blow 3
+Warding Stance 1\Warding Stance 2\Warding Stance 3\Warding Stance 4
 Renewal 1\Renewal 2\Renewal 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
-Warding Stance 2
+Warding Stance 3
 
 Felicia(Picnic)
 5\0\Attack\Defense\-\0\
@@ -263,7 +263,7 @@ Threaten Atk 1\Threaten Atk 2\Threaten Atk 3
 Brash Assault 3
 
 Maria
-5\3\ \ \-\0\
+5\7\ \ \-\0\
 Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
