@@ -2886,7 +2886,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
   elsif (unitz[4].nil? || (unitz[4].max<=0 && unitz[5].max<=0)) && unitz[0]!='Kiran' # unknown stats
     data_load()
     xcolor=unit_color(event,unitz,unitz[0],0,mu)
-    create_embed(event,"__**#{unitz[0]}**__","#{unit_clss(bot,event,unitz)}",xcolor,'Stats currently unknown',pick_thumbnail(event,unitz,bot))
+    create_embed(event,["__**#{unitz[0]}**__",unit_clss(bot,event,unitz)],'',xcolor,'Stats currently unknown',pick_thumbnail(event,unitz,bot))
     disp_unit_skills(bot,unitz[0],event) if skillstoo || sizex=='giant'
     return nil
   elsif unitz[0]=='Kiran'
@@ -2909,7 +2909,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
       n=n.join(' / ')
     end
     if ['smol','xsmol'].include?(sizex)
-      create_embed(event,"__**#{j[0]}#{unit_moji(bot,event,j,untz[0],mu,2)}**__","#{display_stars(bot,event,rarity,merges,'-',[j[3],flowers],false,j[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j2)}\n**<:HP_S:514712247503945739>0 | <:StrengthS:514712248372166666>0 | <:SpeedS:514712247625580555>0 | <:DefenseS:514712247461871616>0 | <:ResistanceS:514712247574986752>0** (0 BST, Score: #{115+2*merges})",0x9400D3,nil,pick_thumbnail(event,j,bot),nil,1)
+      create_embed(event,["__**#{j[0]}**__",unit_clss(bot,event,j)],"#{display_stars(bot,event,rarity,merges,'-',[j[3],flowers],false,j[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j2)}\n**<:HP_S:514712247503945739>0 | <:StrengthS:514712248372166666>0 | <:SpeedS:514712247625580555>0 | <:DefenseS:514712247461871616>0 | <:ResistanceS:514712247574986752>0** (0 BST, Score: #{115+2*merges})",0x9400D3,nil,pick_thumbnail(event,j,bot),nil,1)
     else
       flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:514712247503945739> HP: 0\n<:StrengthS:514712248372166666> Attack: 0\n<:SpeedS:514712247625580555> Speed: 0\n<:DefenseS:514712247461871616> Defense: 0\n<:ResistanceS:514712247574986752> Resistance: 0\n\nBST: 0\nScore: #{27+2*merges}"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:514712247503945739> HP: 0\n<:StrengthS:514712248372166666> Attack: 0\n<:SpeedS:514712247625580555> Speed: 0\n<:DefenseS:514712247461871616> Defense: 0\n<:ResistanceS:514712247574986752> Resistance: 0\n\nBST: 0\nScore: #{115+2*merges}"]]
       if skillstoo
@@ -2922,7 +2922,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
         uskl=uskl.map{|q| q[q.length-1]}
         flds.push(['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"])
       end
-      create_embed(event,"__**#{untz[j][0]}**__","#{display_stars(bot,event,rarity,merges,'-',[untz[j][3],flowers],sizex=='giant',j[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j)}\n",0x9400D3,"Please note that the Attack stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),flds,1)
+      create_embed(event,["__**#{untz[j][0]}**__",unit_clss(bot,event,j)],"#{display_stars(bot,event,rarity,merges,'-',[untz[j][3],flowers],sizex=='giant',j[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n",0x9400D3,"Please note that the Attack stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),flds,1)
     end
     return nil
   elsif unitz[4].max<=0 # level 40 stats are known but not level 1
@@ -3023,7 +3023,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
         flds.shift
       end
       j=untz.find_index{|q| q[0]==unitz[0]}
-      create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0 || sizex=='giant'}#{"  \u2764 **#{summoner}**" unless summoner=='-'}#{"\nNo Summoner Support" if summoner =='-' && sizex=='giant'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant')}\n#{unit_clss(bot,event,j)}#{mergetext}",xcolor,ftr,pick_thumbnail(event,j,bot),flds,1)
+      create_embed(event,["__#{"Mathoo's " if mu}**#{u40[0]}**__",unit_clss(bot,event,j)],"#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0 || sizex=='giant'}#{"  \u2764 **#{summoner}**" unless summoner=='-'}#{"\nNo Summoner Support" if summoner =='-' && sizex=='giant'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant')}\n#{mergetext}",xcolor,ftr,pick_thumbnail(event,j,bot),flds,1)
     end
     return nil
   end
@@ -3293,7 +3293,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     flds.shift
   end
   flds=nil if flds.length<=0
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,unitz,u40[0],mu,2) if ['smol','xsmol'].include?(sizex)}**__","#{display_stars(bot,event,rarity,merges,summoner,[unitz[3],flowers],sizex=='giant',unitz[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(unitz,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant')}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,unitz,u40[0]) unless ['smol','xsmol'].include?(sizex)}#{mergetext}",xcolor,ftr,img,flds,xtype)
+  create_embed(event,["__#{"Mathoo's " if mu}**#{u40[0]}**__",unit_clss(bot,event,unitz,u40[0])],"#{display_stars(bot,event,rarity,merges,summoner,[unitz[3],flowers],sizex=='giant',unitz[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(unitz,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant')}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{mergetext}",xcolor,ftr,img,flds,xtype)
   if (skillstoo || sizex=='giant') && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
@@ -3429,6 +3429,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   f2=f.map{|q| q}
   f2=f.reject{|q| q[2].to_i.to_s != q[2]} unless skill==f
   str=''
+  title=nil
   hdr="__**#{skill[1]}**__"
   xfooter=nil
   unless skill[6]=='Weapon' && event.message.text.downcase.split(' ').include?('refined') && !has_any?(event.message.text.downcase.split(' '),['default','base'])
@@ -3447,13 +3448,11 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         elsif s=='Dark'
           xfooter=xfooter.gsub('Dark','Fire')
         end
-        if safe_to_spam?(event)
-          emote='<:Red_Tome:443172811826003968>'
-          moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
-          emote=moji[0].mention unless moji.length<=0
-          str="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n#{emote}**Weapon Type:** #{s} Magic (Red Tome)"
-        end
-        str="#{str}\n**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
+        emote='<:Red_Tome:443172811826003968>'
+        moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
+        emote=moji[0].mention unless moji.length<=0
+        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n#{emote}**Weapon Type:** #{s} Magic (Red Tome)"
+        str="**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
         xfooter=nil unless skill[8]=='-'
       elsif skill[7]=='Blue Tome Users Only'
         s=skill[2]
@@ -3464,46 +3463,42 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         elsif s=='Light'
           xfooter=xfooter.gsub('Light','Thunder')
         end
-        if safe_to_spam?(event)
-          emote='<:Blue_Tome:467112472394858508>'
-          moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
-          emote=moji[0].mention unless moji.length<=0
-          str="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n#{emote}**Weapon Type:** #{s} Magic (Blue Tome)"
-        end
-        str="#{str}\n**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
+        emote='<:Blue_Tome:467112472394858508>'
+        moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
+        emote=moji[0].mention unless moji.length<=0
+        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n#{emote}**Weapon Type:** #{s} Magic (Blue Tome)"
+        str="**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
         xfooter=nil unless skill[8]=='-'
       elsif skill[7]=='Green Tome Users Only'
         s=skill[2]
         if s=='Gronn'
           xfooter=nil
         end
-        if safe_to_spam?(event)
-          emote='<:Green_Tome:467122927666593822>'
-          moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
-          emote=moji[0].mention unless moji.length<=0
-          str="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n#{emote}**Weapon Type:** #{s} Magic (Green Tome)"
-        end
-        str="#{str}\n**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
+        emote='<:Green_Tome:467122927666593822>'
+        moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{s}_Tome"}
+        emote=moji[0].mention unless moji.length<=0
+        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n#{emote}**Weapon Type:** #{s} Magic (Green Tome)"
+        str="**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
         xfooter=nil unless skill[8]=='-'
       elsif skill[7]=='Bow Users Only'
         effective.push('<:Icon_Move_Flier:443331186698354698>') unless skill[13].include?('UnBow')
-        str="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n<:Gold_Bow:443172812492898314>**Weapon Type:** Bow" if safe_to_spam?(event)
-        str="#{str}\n**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
+        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n<:Gold_Bow:443172812492898314>**Weapon Type:** Bow"
+        str="**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
       elsif skill[7]=='Dagger Users Only'
         skill[9]=skill[9].split(' *** ')
         xfooter="Debuff is applied at end of combat if unit attacks, and lasts until the foes' next actions."
-        str="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[6]}\n<:Gold_Dagger:443172811461230603>**Weapon Type:** Dagger" if safe_to_spam?(event)
-        str="#{str}\n**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
+        title="<:Skill_Weapon:444078171114045450> **Skill Slot:** #{skill[6]}\n<:Gold_Dagger:443172811461230603>**Weapon Type:** Dagger"
+        str="**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
       elsif skill[7]=='Staff Users Only'
-        str="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')}**Weapon Type:** Staff" if safe_to_spam?(event)
-        str="#{str}\n**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
+        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')}**Weapon Type:** Staff"
+        str="**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
       elsif skill[7]=='Dragons Only'
-        str="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592>**Weapon Type:** Breath (Dragons)" if safe_to_spam?(event)
-        str="#{str}\n**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
+        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592>**Weapon Type:** Breath (Dragons)"
+        str="**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
       elsif ['Whelp (All)','Yearling (All)','Adult (All)'].include?(skill[1])
         m=skill[1].split(' (')[0]
-        str="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n<:Gold_Beast:532854442299752469>**Weapon Type:** Beast Damage" if safe_to_spam?(event)
-        str="#{str}\n**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}\n**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form."
+        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n<:Gold_Beast:532854442299752469>**Weapon Type:** Beast Damage"
+        str="**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}\n**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form."
         skzz=sklz.reject{|q| q[1]=="#{m} (All)" || (q[1][0,m.length+2]!="#{m} (" && !((q[1]=='Hatchling (Flier)' && m=='Whelp') || (q[1]=='Fledgling (Flier)' && m=='Yearling')))}
         for i in 0...skzz.length
           m=skzz[i][7].split(', ')[1].split(' ').map{|q| q.gsub('s','')}.reject{|q| !['Infantry','Armor','Flier','Cavalry'].include?(q)}
@@ -3548,10 +3543,11 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
           moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{m[i]}"}
           movemoji="#{movemoji}#{moji[0].mention}" if moji.length>0
         end
-        str="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n<:Gold_Beast:532854442299752469>**Weapon Type:** Beast Damage" if safe_to_spam?(event)
-        str="#{str}\n#{movemoji}**Movement Type:** #{skill[7].split(', ')[1]}\n**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}\n**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form."
+        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n<:Gold_Beast:532854442299752469>**Weapon Type:** Beast Damage"
+        str="#{movemoji}**Movement Type:** #{skill[7].split(', ')[1]}\n**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}\n**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form."
       elsif skill[1]=='Missiletainn'
-        str="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n\n__**Missiletainn (Dark)**__\n<:Red_Blade:443172811830198282>**Weapon Type:** Sword (Red Blade)\n**Might:** #{skill[4]+1}  \u200B  \u200B  \u200B  **Range:** 1\n**Effect:** #{skill[9].split(' *** ')[0]}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Owain\n**Promotes from:** *Silver Sword*\n\n__**Missiletainn (Dusk)**__\n<:Light_Tome:499760605381787650>**Weapon Type:** Light Magic (Blue Tome)\n**Might:** #{skill[4]-1}  \u200B  \u200B  \u200B  **Range:** 2\n**Effect:** #{skill[9].split(' *** ')[1]}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Ophelia\n**Promotes from:** *Shine*"
+        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}"
+        str="__**Missiletainn (Dark)**__\n<:Red_Blade:443172811830198282>**Weapon Type:** Sword (Red Blade)\n**Might:** #{skill[4]+1}  \u200B  \u200B  \u200B  **Range:** 1\n**Effect:** #{skill[9].split(' *** ')[0]}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Owain\n**Promotes from:** *Silver Sword*\n\n__**Missiletainn (Dusk)**__\n<:Light_Tome:499760605381787650>**Weapon Type:** Light Magic (Blue Tome)\n**Might:** #{skill[4]-1}  \u200B  \u200B  \u200B  **Range:** 2\n**Effect:** #{skill[9].split(' *** ')[1]}\n**<:Prf_Sparkle:490307608973148180>Prf to:** Ophelia\n**Promotes from:** *Shine*"
         skill[9]='-'
       else
         s=skill[7]
@@ -3561,8 +3557,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         s='<:Green_Blade:467122927230386207> / Axe (Green Blade)' if s=='Axe'
         s='<:Summon_Gun:453639908968628229> / Summon Gun' if s=='Summon Gun'
         s="<:Gold_Unknown:443172811499110411> / #{s}" unless s.include?(' / ')
-        str="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n#{s.split(' / ')[0]}**Weapon Type:** #{s.split(' / ')[1]}" if safe_to_spam?(event)
-        str="#{str}\n**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
+        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n#{s.split(' / ')[0]}**Weapon Type:** #{s.split(' / ')[1]}"
+        str="**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
       end
       for i in 0...lookout2.length
         effective.push(lookout2[i][3]) if skill[13].include?(lookout2[i][0])
@@ -3608,8 +3604,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       effective=[]
       dispname=skill[1].gsub(' ','_').gsub('.','').gsub('/','_').gsub('+','').gsub('!','')
       xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Assists/#{dispname}.png?raw=true"
-      str="<:Skill_Assist:444078171025965066>**Skill Slot:** #{skill[6]}" if safe_to_spam?(event)
-      str="#{str}\n**Range:** #{skill[5]}\n**Effect:** #{skill[9]}"
+      title="<:Skill_Assist:444078171025965066>**Skill Slot:** #{skill[6]}"
+      str="**Range:** #{skill[5]}\n**Effect:** #{skill[9]}"
       str="#{str}\n**Heals:** #{skill[16]}" if skill[7]=="Staff Users Only"
       str="#{str}\n\n**SP required:** #{skill[3]} #{"(#{skill[3]*3/2} when inherited)" if skill[8]=='-'}"
       cumul=cumulative_sp_cost(skill,event)
@@ -3626,8 +3622,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       effective=[]
       dispname=skill[1].gsub(' ','_').gsub('.','').gsub('/','_').gsub('+','').gsub('!','')
       xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Specials/#{dispname}.png?raw=true"
-      str="<:Skill_Special:444078170665254929>**Skill Slot:** #{skill[6]}" if safe_to_spam?(event)
-      str="#{str}\n**Cooldown:** #{skill[4]}\n**Effect:** #{skill[9]}#{"\n**Range:** ```\n#{skill[5].gsub("n","\n")}```" if skill[5]!="-"}"
+      title="<:Skill_Special:444078170665254929>**Skill Slot:** #{skill[6]}"
+      str="**Cooldown:** #{skill[4]}\n**Effect:** #{skill[9]}#{"\n**Range:** ```\n#{skill[5].gsub("n","\n")}```" if skill[5]!="-"}"
       str="#{str}#{"\n" if skill[5]=="-"}\n**SP required:** #{skill[3]} #{"(#{skill[3]*3/2} when inherited)" if skill[8]=='-'}"
       cumul=cumulative_sp_cost(skill,event)
       cumul2=cumul+skill[3]/2
@@ -3683,8 +3679,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         emo.push('<:Passive_S:443677023626330122>') if sklslt[i]=='Passive(S)' || sklslt[i]=='Seal'
         emo.push('<:Passive_W:443677023706152960>') if sklslt[i]=='Passive(W)'
       end
-      str="#{emo.join('')}**Skill Slot:** #{sklslt.join(', ')}" if safe_to_spam?(event)
-      str="#{str}\n**Effect:** #{skill[9]}"
+      title="#{emo.join('')}**Skill Slot:** #{sklslt.join(', ')}" if safe_to_spam?(event)
+      str="**Effect:** #{skill[9]}"
       if skill[1]=='Distant Counter'
         str="#{str}\n**Secondary effect:** Breaks consecutiveness of enemy mage/bow/dagger/staff attacks"
       elsif skill[1]=='Close Counter'
@@ -4078,7 +4074,6 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         end
       end
     end
-    hdr="#{hdr} #{skill_moji(skill,event,bot)}" unless safe_to_spam?(event) || ['Missiletainn'].include?(skill[1])
     m=str.length+hdr.length
     m+=xfooter.length unless xfooter.nil?
     if m>=1900
@@ -4095,12 +4090,12 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       end
       disp.push("#{str2}")
       for i in 0...disp.length
-        create_embed(event,hdr,disp[i],xcolor,nil,xpic) if i==0
+        create_embed(event,[hdr,title],disp[i],xcolor,nil,xpic) if i==0
         create_embed(event,'',disp[i],xcolor) unless i==0 || i==disp.length-1
         create_embed(event,'',disp[i],xcolor,xfooter) if i==disp.length-1
       end
     else
-      create_embed(event,hdr,str,xcolor,xfooter,xpic)
+      create_embed(event,[hdr,title],str,xcolor,xfooter,xpic)
     end
   end
   if skill[6]=="Assist" && skill[13].include?('Music')
@@ -4838,7 +4833,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   xcolor=unit_color(event,j,j[0],0,mu,chain)
   f=chain
   f=false if doubleunit
-  txt="#{txt}\n#{unit_clss(bot,event,j)}\n"
+  txt="#{txt}\n"
   txt=' ' if f
   ftr=nil
   if ftrtoggles[1]
@@ -4859,7 +4854,9 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   ftr='"Pandering to the minority gets you nowhere." - Shylock#2166' if event.user.id==198201016984797184
   flds=[["<:Skill_Weapon:444078171114045450> **Weapons**",sklz2[0].join("\n")],["<:Skill_Assist:444078171025965066> **Assists**",sklz2[1].join("\n")],["<:Skill_Special:444078170665254929> **Specials**",sklz2[2].join("\n")],["<:Passive_A:443677024192823327> **A Passives**",sklz2[3].join("\n")],["<:Passive_B:443677023257493506> **B Passives**",sklz2[4].join("\n")],["<:Passive_C:443677023555026954> **C Passives**",sklz2[5].join("\n")]]
   flds.push(["<:Passive_S:443677023626330122> **Sacred Seal**",sklz2[6][0]]) unless sklz2[6].nil? || sklz2[6][0].length.zero? || sklz2[6][0]==" "
-  create_embed(event,"#{"__#{"Mathoo's " if mu}**#{j[0]}**__" unless f}",txt,xcolor,ftr,pick_thumbnail(event,j,bot),flds)
+  title=unit_clss(bot,event,j)
+  title=nil if chain
+  create_embed(event,["#{"__#{"Mathoo's " if mu}**#{j[0]}**__" unless f}",title],txt,xcolor,ftr,pick_thumbnail(event,j,bot),flds)
 end
 
 def disp_struct(bot,name,event,ignore=false)
@@ -4888,38 +4885,39 @@ def disp_struct(bot,name,event,ignore=false)
   end
   k=k.map{|q| @structures[q]}
   xcolor=0x54C571
-  text=''
+  title=''
   x2='Effect'
   if k[0][2]=='Offensive/Defensive'
     xcolor=0x8CAA7B
-    text="<:Battle_Structure:565064414454349843>**Type:** Offensive/Defensive"
+    title="<:Battle_Structure:565064414454349843>**Type:** Offensive/Defensive"
   elsif k[0][2]=='Offensive'
     xcolor=0xF0631E
-    text="<:Offensive_Structure:510774545997758464>**Type:** Offensive"
+    title="<:Offensive_Structure:510774545997758464>**Type:** Offensive"
   elsif k[0][2]=='Defensive'
     xcolor=0x27F2D8
-    text="<:Defensive_Structure:510774545108566016>**Type:** Defensive"
+    title="<:Defensive_Structure:510774545108566016>**Type:** Defensive"
   elsif k[0][2]=='Trap'
     xcolor=0xB950E9
-    text="<:Trap_Structure:510774545179869194>**Type:** Trap"
+    title="<:Trap_Structure:510774545179869194>**Type:** Trap"
   elsif k[0][2]=='Resources'
     xcolor=0xD3DADC
-    text="<:Resource_Structure:510774545154572298>**Type:** Resource"
+    title="<:Resource_Structure:510774545154572298>**Type:** Resource"
   elsif k[0][2]=='Ornament'
     xcolor=0xFEE257
-    text="<:Ornamental_Structure:510774545150640128>**Type:** Ornament"
+    title="<:Ornamental_Structure:510774545150640128>**Type:** Ornament"
     x2='Description'
   elsif k[0][2]=='Resort'
     xcolor=0xFEE257
-    text="<:Resort_Structure:565064414521196561>**Type:** Resort"
+    title="<:Resort_Structure:565064414521196561>**Type:** Resort"
     x2='Description'
   else
-    text="**Type:** Unknown"
+    title="**Type:** Unknown"
   end
-  text="#{text}\n**#{x2}:** #{k[0][3]}" if k.map{|q| q[3]}.uniq.length<2
-  text="#{text}\n**This structure is currently a bonus structure for both Offense and Defense**" if b[0][3][0]==k[0][0] && b[0][3][1]==k[0][0]
-  text="#{text}\n**This structure is currently a bonus structure for both Offense**" if b[0][3][0]==k[0][0] && b[0][3][1]!=k[0][0]
-  text="#{text}\n**This structure is currently a bonus structure for both Defense**" if b[0][3][0]!=k[0][0] && b[0][3][1]==k[0][0]
+  title="#{title}\n**#{x2}:** #{k[0][3]}" if k.map{|q| q[3]}.uniq.length<2
+  title="#{title}\n<:Current_Aether_Bonus:510022809741950986>**Offense/Defense Aether Bonus Structure**" if b[0][3][0]==k[0][0] && b[0][3][1]==k[0][0]
+  title="#{title}\n<:Current_Aether_Bonus:510022809741950986>**Offense Aether Bonus Structure**" if b[0][3][0]==k[0][0] && b[0][3][1]!=k[0][0]
+  title="#{title}\n<:Current_Aether_Bonus:510022809741950986>**Defense Aether Bonus Structure**" if b[0][3][0]!=k[0][0] && b[0][3][1]==k[0][0]
+  text=''
   if k.length>1
     for i in 0...k.length
       x=' '
@@ -4972,7 +4970,7 @@ def disp_struct(bot,name,event,ignore=false)
   end
   xpic="https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Structures/#{k[0][0].gsub('False ','').gsub(' ','_').gsub('.','').gsub('/','_').gsub('+','').gsub('!','')}.png?raw=true"
   text="#{text}\n**Additional Note:** #{k[0][7]}" unless k.map{|q| q[7]}.uniq.length>1 || k[0][7].nil? || k[0][7].length<=0
-  create_embed(event,"__**#{k[0][0]}#{" #{k[0][1]}" unless k.length>1 || k[0][1]=='-'}**__#{'<:Current_Aether_Bonus:510022809741950986>' if b[0][3].include?(k[0][0])}",text,xcolor,nil,xpic)
+  create_embed(event,["__**#{k[0][0]}#{" #{k[0][1]}" unless k.length>1 || k[0][1]=='-'}**__",title],text,xcolor,nil,xpic)
 end
 
 def disp_accessory(bot,name,event,ignore=false)
@@ -4993,16 +4991,16 @@ def disp_accessory(bot,name,event,ignore=false)
     return nil
   end
   xcolor=0xFF47FF
-  str=''
-  str="<:Accessory_Type_Hair:531733124741201940>**Accessory Type:** Hair" if k[1]=='Hair'
-  str="<:Accessory_Type_Hat:531733125227741194>**Accessory Type:** Hat" if k[1]=='Hat'
-  str="<:Accessory_Type_Mask:531733125064163329>**Accessory Type:** Mask" if k[1]=='Mask'
-  str="<:Accessory_Type_Tiara:531733130734731284>**Accessory Type:** Tiara" if k[1]=='Tiara'
-  str="#{str}\n\n**Description:** #{k[2]}"
+  title=''
+  title="<:Accessory_Type_Hair:531733124741201940>**Accessory Type:** Hair" if k[1]=='Hair'
+  title="<:Accessory_Type_Hat:531733125227741194>**Accessory Type:** Hat" if k[1]=='Hat'
+  title="<:Accessory_Type_Mask:531733125064163329>**Accessory Type:** Mask" if k[1]=='Mask'
+  title="<:Accessory_Type_Tiara:531733130734731284>**Accessory Type:** Tiara" if k[1]=='Tiara'
+  str="**Description:** #{k[2]}"
   str="#{str}\n\n**To obtain:** #{k[3]}" unless k[3].nil?
   str="#{str}\n\n**Additional Info:** #{k[4]}" unless k[4].nil?
   xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Accessories/#{k[0].gsub(' ','_')}.png"
-  create_embed(event,"__**#{k[0]}**__",str,xcolor,nil,xpic)
+  create_embed(event,["__**#{k[0]}**__",title],str,xcolor,nil,xpic)
 end
 
 def disp_itemu(bot,name,event,ignore=false)
@@ -5022,13 +5020,14 @@ def disp_itemu(bot,name,event,ignore=false)
     event.respond 'No matches found.' unless ignore
     return nil
   end
-  str="**Item Type:** #{k[1]}\n**Maximum:** #{k[2]}"
+  title="**Item Type:** #{k[1]}\n**Maximum:** #{k[2]}"
+  str=''
   xcolor=0x5BACB9
   if ['Main','Event'].include?(k[1])
-    str="#{str}\n\n**Effect/Description:** #{k[3]}"
+    str="**Effect/Description:** #{k[3]}"
   elsif k[1]=='Implied'
     xcolor=0x3B474D
-    str="#{str}\n\n**Effect:** #{k[3]}"
+    str="**Effect:** #{k[3]}"
   elsif k[1]=='Blessing'
     xcolor=0xF98281 if k[0].include?('Fire')
     xcolor=0x91F4FF if k[0].include?('Water')
@@ -5038,23 +5037,24 @@ def disp_itemu(bot,name,event,ignore=false)
     xcolor=0xBE83FE if k[0].include?('Dark')
     xcolor=0xF5A4DA if k[0].include?('Astra')
     xcolor=0xE1DACF if k[0].include?('Anima')
-    str="#{str}\n\n**Description:** #{k[3]}"
+    str="**Description:** #{k[3]}"
   elsif k[1]=='Growth'
     xcolor=0xBD9843
     xcolor=0xE22141 if k[0].include?('Scarlet')
     xcolor=0x2764DE if k[0].include?('Azure')
     xcolor=0x09AA24 if k[0].include?('Verdant')
     xcolor=0x64757D if k[0].include?('Transparent')
-    str="#{str}\n\n**Description:** #{k[3]}"
+    str="**Description:** #{k[3]}"
   elsif k[1]=='Assault'
     xcolor=0x332559
-    str="**Type:** Arena Assault\n**Maximum:** #{k[2]}\n\n**Effect:** #{k[3]}"
+    title="**Type:** Arena Assault\n**Maximum:** #{k[2]}"
+    str="**Effect:** #{k[3]}"
   else
-    str="#{str}\n\n**Effect/Description:** #{k[3]}"
+    str="**Effect/Description:** #{k[3]}"
   end
   str="#{str}\n\n**Additional Info:** #{k[4]}" unless k[4].nil?
   xpic="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Items/#{k[0].gsub(' ','_')}.png"
-  create_embed(event,"__**#{k[0]}**__",str,xcolor,nil,xpic)
+  create_embed(event,["__**#{k[0]}**__",title],str,xcolor,nil,xpic)
 end
 
 def reverse_stat(stat)
@@ -8593,7 +8593,7 @@ def unit_study(event,name,bot,weapon=nil)
   end
   pic=pick_thumbnail(event,u40,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}**__","**Available rarities:** #{summon_type}#{"\n**Highest available merge:** #{highest_merge}" unless highest_merge==@max_rarity_merge[1]}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,u40x,u40[0])}\n",xcolor,nil,pic,rar,2)
+  create_embed(event,["__#{"Mathoo's " if mu}**#{u40[0]}**__",unit_clss(bot,event,u40x,u40[0])],"**Available rarities:** #{summon_type}#{"\n**Highest available merge:** #{highest_merge}" unless highest_merge==@max_rarity_merge[1]}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n",xcolor,nil,pic,rar,2)
 end
 
 def heal_study(event,name,bot,weapon=nil)
