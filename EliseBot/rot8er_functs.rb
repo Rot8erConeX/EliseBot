@@ -304,6 +304,12 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
     ch_id=event[1]
     event=event[0]
   end
+  title=nil
+  if header.is_a?(Array)
+    title=header[1]
+    header=header[0]
+    header='' if header.nil?
+  end
   if @embedless.include?(event.user.id) || (was_embedless_mentioned?(event) && ch_id==0)
     str=''
     if header.length>0
@@ -312,6 +318,11 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
       else
         str="__**#{header.gsub('!','')}**__"
       end
+    end
+    unless title.nil? || title.length<=0
+      str="#{str}\n" unless title[0,2]=='<:'
+      str="#{str}\n#{title}"
+      str="#{str}\n" unless [title[title.length-1,1],title[title.length-2,2]].include?("\n")
     end
     unless text.length<=0
       str="#{str}\n" unless text[0,2]=='<:'
@@ -543,6 +554,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
     end
   elsif !xfields.nil? && ftrlnth+header.length+text.length+xfields.map{|q| "#{q[0]}\n\n#{q[1]}"}.length>=1950
     event.channel.send_embed(header) do |embed|
+      embed.title=title unless title.nil?
       embed.description=text
       embed.color=xcolor unless xcolor.nil?
     end
@@ -561,6 +573,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
     end
   elsif ch_id==1
     event.user.pm.send_embed(header) do |embed|
+      embed.title=title unless title.nil?
       embed.description=text
       embed.color=xcolor unless xcolor.nil?
       embed.footer={"text"=>xfooter} unless xfooter.nil?
@@ -575,6 +588,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
     end
   else
     event.channel.send_embed(header) do |embed|
+      embed.title=title unless title.nil?
       embed.description=text
       embed.color=xcolor unless xcolor.nil?
       embed.footer={"text"=>xfooter} unless xfooter.nil?
