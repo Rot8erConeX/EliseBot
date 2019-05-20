@@ -426,6 +426,7 @@
 ['Def/Res Opening 1', ['defenseresistanceopening1', 'defenceresistanceopening1', 'defresistanceopening1', 'defenseresopening1', 'defenceresopening1', 'defresopening1', 'resistancedefenseopening1', 'resistancedefenceopening1', 'resistancedefopening1', 'resdefenseopening1', 'resdefenceopening1', 'resdefopening1', 'defenseresistanceopen1', 'defenceresistanceopen1', 'defresistanceopen1', 'defenseresopen1', 'defenceresopen1', 'defresopen1', 'resistancedefenseopen1', 'resistancedefenceopen1', 'resistancedefopen1', 'resdefenseopen1', 'resdefenceopen1', 'resdefopen1'], 2, 'Stat-Buffing 2', [0, 0, 0, 3, 3]]
 ['Spectrum Opening 1', ['spectrumopening', 'omniopening', 'allopening', 'spectrumopen', 'omniopen', 'allopen'], 2, 'Stat-Buffing 2', [0, 3, 3, 3, 3]]
 ['Harsh Command', ['harshcommand', 'harshcmd', 'harsh'], 1, 'Stat-Buffing 2', [0, 0, 0, 0, 0]]
+['Harsh Command+', ['harshcommand+', 'harshcmd+', 'harsh+'], 1, 'Stat-Buffing 2', [0, 0, 0, 0, 0]]
 ['Rally Attack', ['rallyattack', 'rallyatt', 'rallyatk'], 2, 'Stat-Buffing 3', [0, 4, 0, 0, 0]]
 ['Rally Up Atk', ['rallyupattack', 'rallyupatt', 'rallyupatk'], 2, 'Stat-Buffing 3', [0, 3, 0, 0, 0]]
 ['Rally Up Atk+', ['rallyupattack+', 'rallyupatt+', 'rallyupatk+'], 2, 'Stat-Buffing 3', [0, 6, 0, 0, 0]]

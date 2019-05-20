@@ -1658,9 +1658,9 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return "~~#{w2}~~" unless u[1][0]=='Red'
     w2="Santa's Sword#{'+' if w[1].include?('+')}"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ["Loyal Wreath"].include?(w[1].gsub('+',''))
+  elsif ['Loyal Wreath'].include?(w[1].gsub('+',''))
     return weapon_legality(event,name,"Raudrblooms#{'+' if w[1].include?('+')}",refinement) if u[1][0]!='Red'
-  elsif ["Faithful Axe","Heart's Blade"].include?(w[1].gsub('+',''))
+  elsif ['Faithful Axe',"Heart's Blade"].include?(w[1].gsub('+',''))
     return weapon_legality(event,name,"Heart's Blade#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
     return weapon_legality(event,name,"Faithful Axe#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
     return "~~#{w2}~~" unless ['Colorless','Blue'].include?(u[1][0])
@@ -1688,6 +1688,11 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return weapon_legality(event,name,"Vanguard#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
     return "~~#{w2}~~" unless ['Green'].include?(u[1][0])
     w2="Midguard#{'+' if w[1].include?('+')}"
+  elsif ['Lofty Blossoms','Cake Cutter'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Cake Cutter#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Lofty Blossoms#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return "~~#{w2}~~" unless ['Green'].include?(u[1][0])
+    w2="Bouncer's Axe#{'+' if w[1].include?('+')}"
   elsif ['Melon Crusher','Deft Harpoon'].include?(w[1].gsub('+',''))
     return weapon_legality(event,name,"Deft Harpoon#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
     return weapon_legality(event,name,"Melon Crusher#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
@@ -1730,23 +1735,23 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     w2="#{t} Rod"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
   elsif ['Fire','Flux','Thunder','Light','Wind'].include?(w[1].gsub('+',''))
-    return weapon_legality(event,name,"Fire#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Fire'
-    return weapon_legality(event,name,"Flux#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Dark'
-    return weapon_legality(event,name,"#{['Fire','Flux'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Thunder#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Thunder'
-    return weapon_legality(event,name,"Light#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Light'
-    return weapon_legality(event,name,"#{['Thunder','Light'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Wind#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Wind'
-    return weapon_legality(event,name,"#{['Wind'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return weapon_legality(event,name,'Fire',refinement,true) if u[1][2]=='Fire'
+    return weapon_legality(event,name,'Flux',refinement,true) if u[1][2]=='Dark'
+    return weapon_legality(event,name,['Fire','Flux'].sample,refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,'Thunder',refinement,true) if u[1][2]=='Thunder'
+    return weapon_legality(event,name,'Light',refinement,true) if u[1][2]=='Light'
+    return weapon_legality(event,name,['Thunder','Light'].sample,refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,'Wind',refinement,true) if u[1][2]=='Wind'
+    return weapon_legality(event,name,['Wind'].sample,refinement,true) if u[1][0]=='Green'
   elsif ['Elfire','Ruin','Elthunder','Ellight','Elwind'].include?(w[1].gsub('+',''))
-    return weapon_legality(event,name,"Elfire#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Fire'
-    return weapon_legality(event,name,"Ruin#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Dark'
-    return weapon_legality(event,name,"#{['Elfire','Ruin'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
-    return weapon_legality(event,name,"Elthunder#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Thunder'
-    return weapon_legality(event,name,"Ellight#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Light'
-    return weapon_legality(event,name,"#{['Elthunder','Ellight'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return weapon_legality(event,name,"Elwind#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Wind'
-    return weapon_legality(event,name,"#{['Elwind'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return weapon_legality(event,name,'Elfire',refinement,true) if u[1][2]=='Fire'
+    return weapon_legality(event,name,'Ruin',refinement,true) if u[1][2]=='Dark'
+    return weapon_legality(event,name,['Elfire','Ruin'].sample,refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,'Elthunder',refinement,true) if u[1][2]=='Thunder'
+    return weapon_legality(event,name,'Ellight',refinement,true) if u[1][2]=='Light'
+    return weapon_legality(event,name,['Elthunder','Ellight'].sample,refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,'Elwind',refinement,true) if u[1][2]=='Wind'
+    return weapon_legality(event,name,['Elwind'].sample,refinement,true) if u[1][0]=='Green'
   elsif ['Bolganone','Fenrir','Thoron','Shine','Rexcalibur'].include?(w[1].gsub('+',''))
     return weapon_legality(event,name,"Bolganone#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Fire'
     return weapon_legality(event,name,"Fenrir#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Dark'
@@ -5264,12 +5269,19 @@ def make_random_unit(event,args,bot)
   end
   stats.push(stats[0]+stats[1]+stats[2]+stats[3]+stats[4])
   stats.push(stats[5]+stats[6]+stats[7]+stats[8]+stats[9])
+  stats.push(stats[0,5].map{|q| "#{' ' if q<10}#{q}"}.join("\u00A0|"))
+  stats.push(stats[5,5].map{|q| "#{' ' if q<10}#{q}"})
   stat_names=['HP','Attack','Speed','Defense','Resistance']
   for i in 0...5
     stats[i+5]=stats[i+5].to_s
     stats[i+5]="#{stats[i+5]} (+)" if [-3,1,5,10,14].include?(gps[i])
     stats[i+5]="#{stats[i+5]} (-)" if [-2,2,6,11,15].include?(gps[i])
+    zzz="\u00A0"
+    zzz='+' if [-3,1,5,10,14].include?(gps[i])
+    zzz='-' if [-2,2,6,11,15].include?(gps[i])
+    stats[13][i]="#{stats[13][i]}#{zzz}"
   end
+  stats[13]=stats[13].join('|')
   xcolor=0xFFD800
   xcolor=0xE22141 if clazz[0]=='Red'
   xcolor=0x2764DE if clazz[0]=='Blue'
@@ -5312,6 +5324,11 @@ def make_random_unit(event,args,bot)
     flds.push(['**Growth Rates**',"<:HP_S:514712247503945739> HP: #{micronumber(gps[0])} / #{gps[0]*5+20}%\n#{atk}: #{micronumber(gps[1])} / #{gps[1]*5+20}%\n<:SpeedS:514712247625580555> Speed: #{micronumber(gps[2])} / #{gps[2]*5+20}%\n<:DefenseS:514712247461871616> Defense: #{micronumber(gps[3])} / #{gps[3]*5+20}%\n<:ResistanceS:514712247574986752> Resistance: #{micronumber(gps[4])} / #{gps[4]*5+20}%\n\n\u0262\u1D18\u1D1B #{micronumber(gps[0]+gps[1]+gps[2]+gps[3]+gps[4])} / GRT: #{(gps[0]+gps[1]+gps[2]+gps[3]+gps[4])*5+100}%"])
   end
   flds.push(['**Level 40**',"<:HP_S:514712247503945739> HP: #{stats[5]}\n#{atk}: #{stats[6]}\n<:SpeedS:514712247625580555> Speed: #{stats[7]}\n<:DefenseS:514712247461871616> Defense: #{stats[8]}\n<:ResistanceS:514712247574986752> Resistance: #{stats[9]}\n\nBST: #{stats[11]}"])
+  text='Neutral Nature'
+  if flds.length<=2 && !(event.server.nil? || event.server.id==238059616028590080) && event.channel.id != 362017071862775810
+    flds=nil
+    text="\n<:HP_S:514712247503945739>\u00A0\u200B\u00A0\u200B\u00A0#{atk.split('>')[0]}>\u00A0\u200B\u00A0\u200B\u00A0<:SpeedS:514712247625580555>\u00A0\u200B\u00A0\u200B\u00A0<:DefenseS:514712247461871616>\u00A0\u200B\u00A0\u200B\u00A0<:ResistanceS:514712247574986752>\u00A0\u200B\u00A0\u200B\u00A0#{stats[11]}\u00A0L#{micronumber(40)}\u00A0BST\n```#{stats[12]}\n#{stats[13]}```"
+  end
   img=nil
   ftr=nil
   unless event.server.nil?
@@ -5338,7 +5355,7 @@ def make_random_unit(event,args,bot)
   clazz3=clazz2.reject{|q| ['Dancer','Singer'].include?(q)}
   clazz2=clazz2.reject{|q| !['Dancer','Singer'].include?(q)}
   clazz2=clazz2[0] if clazz2.length>0
-  create_embed(event,["__**#{name}**__","#{wemote} #{w}\n#{memote} *#{mov}*#{"\n<:Assist_Music:454462054959415296> *#{clazz2}*" if clazz2.length>0}\n#{"Additional Modifier#{'s' if clazz3.length>1}: #{clazz3.map{|q| "*#{q}*"}.join(', ')}" if clazz3.length>0}"],"#{r}\nNeutral nature",xcolor,ftr,img,flds,1)
+  create_embed(event,["__**#{name}**__","#{wemote} #{w}\n#{memote} *#{mov}*#{"\n<:Assist_Music:454462054959415296> *#{clazz2}*" if clazz2.length>0}\n#{"Additional Modifier#{'s' if clazz3.length>1}: #{clazz3.map{|q| "*#{q}*"}.join(', ')}" if clazz3.length>0}"],"#{r}\n#{text}",xcolor,ftr,img,flds,1)
 end
 
 def load_devunits()
