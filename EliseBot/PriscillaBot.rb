@@ -1789,7 +1789,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       end
     end
     # Harsh Command will turn all nerfs into buffs
-    if skillls.include?('Harsh Command')
+    if skillls.include?('Harsh Command') || skillls.include?('Harsh Command+')
       for i in 0...negative.length
         rally[i]=[rally[i],0-negative[i]].max
         negative[i]=0
@@ -3148,10 +3148,10 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
         superbaan[i-5]='-' if [-1,11].include?(u40[i]) && rarity==4
       end
     end
-    flp=u1[1,5].map{|q| "#{' ' if q<10}#{q}"}.join("\u00A0|")
-    flp2=u40[1,5].map{|q| "#{' ' if q<10}#{q}"}
-    for i in 0...flp2.length
-      flp2[i]="#{flp2[i]}#{superbaan[i+1]}"
+    flp=u1[1,5].map{|q| "#{"\u00A0" if q<10}#{q}"}.join("\u00A0|")
+    flp2=u40[1,5].map{|q| "#{"\u00A0" if q<10}#{q}"}
+    for i in 0...5
+      flp2[i]="#{flp2[i]}#{superbaan[i]}"
     end
     flp2=flp2.join('|')
     bin=[bin,175].max if unitz[2].length>0 && unitz[2][1]=='Duel' && rarity>=5
@@ -4564,6 +4564,10 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=fals
   clss="#{clss} Users"
   clss='Dragons' if char[1][1]=='Dragon'
   clss='Beasts' if char[1][1]=='Beast'
+  ignoreclss=[]
+  if char[1][2][0,7]=='Ignore:'
+    ignoreclss=char[1][2].split(' ').reject{|q| q=='Ignore:'}
+  end
   retroprf=[]
   skllz=@skills.map{|q| q}
   skllz=skllz.reject{|q| q[2]=='example' || !q[12].map{|q2| q2.split(', ').include?(char[0]) || q2.split(', ').include?("All #{clss}")}.include?(true)}
@@ -4571,22 +4575,22 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=fals
   for i in 0...skllz.length
     for j in 0...rarity
       if skllz[i][11][j].split(', ').include?(char[0]) || skllz[i][11][j]=="All #{clss}"
-        box[0].push(skllz[i]) if skllz[i][6]=='Weapon'
-        box[1].push(skllz[i]) if skllz[i][6]=='Assist'
-        box[2].push(skllz[i]) if skllz[i][6]=='Special'
-        box[3].push(skllz[i]) if skllz[i][6].include?('Passive(A)')
-        box[4].push(skllz[i]) if skllz[i][6].include?('Passive(B)')
-        box[5].push(skllz[i]) if skllz[i][6].include?('Passive(C)')
+        box[0].push(skllz[i]) if skllz[i][6]=='Weapon' && !(skllz[i][11][j]=="All #{clss}" && ignoreclss.include?('Wp'))
+        box[1].push(skllz[i]) if skllz[i][6]=='Assist' && !(skllz[i][11][j]=="All #{clss}" && ignoreclss.include?('As'))
+        box[2].push(skllz[i]) if skllz[i][6]=='Special' && !(skllz[i][11][j]=="All #{clss}" && ignoreclss.include?('Sp'))
+        box[3].push(skllz[i]) if skllz[i][6].include?('Passive(A)') && !(skllz[i][11][j]=="All #{clss}" && ignoreclss.include?('PA'))
+        box[4].push(skllz[i]) if skllz[i][6].include?('Passive(B)') && !(skllz[i][11][j]=="All #{clss}" && ignoreclss.include?('PB'))
+        box[5].push(skllz[i]) if skllz[i][6].include?('Passive(C)') && !(skllz[i][11][j]=="All #{clss}" && ignoreclss.include?('PC'))
       end
     end
     for j in 0...rarity
       if skllz[i][12][j].split(', ').include?(char[0]) || skllz[i][12][j]=="All #{clss}"
-        sklz[0].push(skllz[i]) if skllz[i][6]=='Weapon'
-        sklz[1].push(skllz[i]) if skllz[i][6]=='Assist'
-        sklz[2].push(skllz[i]) if skllz[i][6]=='Special'
-        sklz[3].push(skllz[i]) if skllz[i][6].include?('Passive(A)')
-        sklz[4].push(skllz[i]) if skllz[i][6].include?('Passive(B)')
-        sklz[5].push(skllz[i]) if skllz[i][6].include?('Passive(C)')
+        sklz[0].push(skllz[i]) if skllz[i][6]=='Weapon' && !(skllz[i][12][j]=="All #{clss}" && ignoreclss.include?('Wp'))
+        sklz[1].push(skllz[i]) if skllz[i][6]=='Assist' && !(skllz[i][12][j]=="All #{clss}" && ignoreclss.include?('As'))
+        sklz[2].push(skllz[i]) if skllz[i][6]=='Special' && !(skllz[i][12][j]=="All #{clss}" && ignoreclss.include?('Sp'))
+        sklz[3].push(skllz[i]) if skllz[i][6].include?('Passive(A)') && !(skllz[i][12][j]=="All #{clss}" && ignoreclss.include?('PA'))
+        sklz[4].push(skllz[i]) if skllz[i][6].include?('Passive(B)') && !(skllz[i][12][j]=="All #{clss}" && ignoreclss.include?('PB'))
+        sklz[5].push(skllz[i]) if skllz[i][6].include?('Passive(C)') && !(skllz[i][12][j]=="All #{clss}" && ignoreclss.include?('PC'))
       elsif skllz[i][12][j].split(', ').include?("[Retro]#{char[0]}") || skllz[i][12][j].split(', ').include?("#{char[0]}[Retro]") || skllz[i][12][j].split(', ').include?("[Retro] #{char[0]}") || skllz[i][12][j].split(', ').include?("#{char[0]} [Retro]")
         retroprf.push(skllz[i][1])
       end
