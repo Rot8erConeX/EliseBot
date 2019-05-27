@@ -3151,7 +3151,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     flp=u1[1,5].map{|q| "#{"\u00A0" if q<10}#{q}"}.join("\u00A0|")
     flp2=u40[1,5].map{|q| "#{"\u00A0" if q<10}#{q}"}
     for i in 0...5
-      flp2[i]="#{flp2[i]}#{superbaan[i]}"
+      flp2[i]="#{flp2[i]}#{superbaan[i+1]}"
     end
     flp2=flp2.join('|')
     bin=[bin,175].max if unitz[2].length>0 && unitz[2][1]=='Duel' && rarity>=5
@@ -3197,10 +3197,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
         superbaan[i]='(Superbane)' if bane==x[i] && [-3,1,5,10,14].include?(u40[i+5]) && rarity==5
         superbaan[i]='(Superboon)' if boon==x[i] && [-1,11].include?(u40[i+5]) && rarity==4
         superbaan[i]='(Superbane)' if bane==x[i] && [-2,10].include?(u40[i+5]) && rarity==4
-        if merges>0 && bane==x[i]
-          superbaan[i]='~~(Superbane)~~' if [-2,2,6,11,15].include?(u40[i+5]) && rarity==5
-          superbaan[i]='~~(Superbane)~~' if [-1,11].include?(u40[i+5]) && rarity==4
-        end
+        superbaan[i]='~~(Superbane)~~' if superbaan[i]=='(Superbane)' && merges>0
       end
     end
     for i in 0...5
@@ -4565,7 +4562,7 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=fals
   clss='Dragons' if char[1][1]=='Dragon'
   clss='Beasts' if char[1][1]=='Beast'
   ignoreclss=[]
-  if char[1][2][0,7]=='Ignore:'
+  if char[1].length>2 && char[1][2][0,7]=='Ignore:'
     ignoreclss=char[1][2].split(' ').reject{|q| q=='Ignore:'}
   end
   retroprf=[]
@@ -5519,8 +5516,8 @@ def find_in_units(event,mode=0,paired=false,ignore_limit=false,args=nil)
     movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs'].include?(args[i].downcase)
     movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
     movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
-    genders.push('M') if ['male','man','boy'].include?(args[i].downcase)
-    genders.push('F') if ['female','woman','girl'].include?(args[i].downcase)
+    genders.push('M') if ['male','boy','m','males','boys','man'].include?(args[i].downcase)
+    genders.push('F') if ['female','woman','girl','f','females','women','girls'].include?(args[i].downcase)
     for i2 in 0...lookout.length
       games.push(lookout[i2][0]) if lookout[i2][1].map{|q| q.downcase}.include?(args[i].downcase)
     end
@@ -6234,8 +6231,8 @@ def display_units(event, mode)
           # Magic types
           h='<:Fire_Tome:499760605826252800> Fire Mages' if p1[i].include?('Lilina') || (wpn1[0]==['Red', 'Tome', 'Fire'])
           h='<:Dark_Tome:499958772073103380> Dark Mages' if p1[i].include?('Raigh') || (wpn1[0]==['Red', 'Tome', 'Dark'])
-          h='<:Thunder_Tome:499790911178539009> Thunder Mages' if p1[i].include?('Odin') || (wpn1[0]==['Red', 'Tome', 'Thunder'])
-          h='<:Light_Tome:499760605381787650> Light Mages' if p1[i].include?('Micaiah') || (wpn1[0]==['Red', 'Tome', 'Light'])
+          h='<:Thunder_Tome:499790911178539009> Thunder Mages' if p1[i].include?('Odin') || (wpn1[0]==['Blue', 'Tome', 'Thunder'])
+          h='<:Light_Tome:499760605381787650> Light Mages' if p1[i].include?('Micaiah') || (wpn1[0]==['Blue', 'Tome', 'Light'])
           h='<:Wind_Tome:499760605713137664> Wind Mages' if p1[i].include?('Cecilia') || (wpn1[0]==['Green', 'Tome', 'Wind'])
           # Dragon colors
           h='<:Red_Dragon:443172811796774932> Red Dragons' if p1[i].include?('Tiki(Young)') || (wpn1[0]==['Red', 'Dragon'])
@@ -11435,6 +11432,14 @@ bot.message do |event|
     if s.gsub(' ','').downcase=='laevatein'
       disp_stats(bot,'Laevatein',nil,event,'smol',true,true)
       disp_skill(bot,'Laevatein',event,true)
+    elsif s.gsub(' ','').downcase=='naga'
+      disp_stats(bot,'Naga',nil,event,'smol',true,true) unless @units.find_index{|q| q[0]=='Naga'}.nil?
+      disp_skill(bot,'Naga',event,true)
+      k=3
+    elsif s.gsub(' ','').downcase=='fury'
+      disp_stats(bot,'Fury',nil,event,'smol',true,true) unless @units.find_index{|q| q[0]=='Fury'}.nil?
+      disp_skill(bot,'Fury',event,true)
+      k=3
     elsif s.gsub(' ','').gsub('?','').gsub('!','').length<2
     elsif !all_commands(true).include?(a[0])
       str=find_data_ex(:find_unit,event.message.text,event,false,1)
@@ -11594,6 +11599,14 @@ bot.mention do |event|
   elsif s.gsub(' ','').downcase=='laevatein'
     disp_stats(bot,'Laevatein',nil,event,'smol',true,true)
     disp_skill(bot,'Laevatein',event,true)
+    k=3
+  elsif s.gsub(' ','').downcase=='naga'
+    disp_stats(bot,'Naga',nil,event,'smol',true,true) unless @units.find_index{|q| q[0]=='Naga'}.nil?
+    disp_skill(bot,'Naga',event,true)
+    k=3
+  elsif s.gsub(' ','').downcase=='fury'
+    disp_stats(bot,'Fury',nil,event,'smol',true,true) unless @units.find_index{|q| q[0]=='Fury'}.nil?
+    disp_skill(bot,'Fury',event,true)
     k=3
   elsif ['help','commands','command_list','commandlist'].include?(a[0].downcase)
     a.shift
