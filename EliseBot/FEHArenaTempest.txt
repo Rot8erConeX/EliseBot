@@ -1,5 +1,8 @@
-Alm(Saint), Lukas(Picnic), Genny(Picnic), Flora(Picnic), Felicia(Picnic), Leo(Picnic), Garon, Olivia(Launch), Ryoma(Supreme), Anna\Arena\14/05/2019, 20/05/2019\Water, Earth
-Eir, Lukas(Picnic), Genny(Picnic), Flora(Picnic), Felicia(Picnic), Leo(Picnic), Eliwood(Valentines), Takumi(Fallen), Azura(Vallite), Sharena\Aether\14/05/2019, 20/05/2019\Astra, Anima\Flier School, Flier School
-Tiki(Young)(Fallen), Mareeta(Fallen), Berkut(Fallen), Corrin(F)(Fallen), Delthea(Fallen), Bartre, Sully, Lucius, Hector(Marquess), Alfonse\Arena\21/05/2019, 27/05/2019\Unknown, Unknown
-Eir, Lukas(Picnic), Genny(Picnic), Flora(Picnic), Felicia(Picnic), Leo(Picnic), Eliwood(Valentines), Takumi(Fallen), Azura(Vallite), Sharena\Aether\21/05/2019, 27/05/2019\Light, Dark\Bolt Tower, Bolt Tower
+Fjorm(Bride), Pent(Bride), Tanith(Bride), Sigrun(Bride), Louise(Bride), Tharja(Bride), Ninian(Bride), Sanaki(Bride)\Tempest\25/05/2019, 03/06/2019
 Tiki(Young)(Fallen), Mareeta(Fallen), Berkut(Fallen), Corrin(F)(Fallen), Delthea(Fallen), Bartre, Sully, Lucius, Hector(Marquess), Alfonse\Arena\28/05/2019, 03/06/2019\Unknown, Unknown
+Yune, Tiki(Young)(Fallen), Mareeta(Fallen), Berkut(Fallen), Corrin(F)(Fallen), Delthea(Fallen), Gerome, Saias, Roy(Fire), Anna\Aether\28/05/2019, 03/06/2019\Light, Dark\Tactics Room, Tactics Room
+Naga, Fjorm(Bride), Pent(Bride), Tanith(Bride), Sigrun(Bride), Louise(Bride), Aversa, Stahl, Lucina(Glorious), Sharena\Arena\04/06/2019, 10/06/2019\Unknown, Unknown
+Yune, Tiki(Young)(Fallen), Mareeta(Fallen), Berkut(Fallen), Corrin(F)(Fallen), Delthea(Fallen), Gerome, Saias, Roy(Fire), Anna\Aether\04/06/2019, 10/06/2019\Astra, Anima\Healing Tower, Healing Tower
+Naga, Fjorm(Bride), Pent(Bride), Tanith(Bride), Sigrun(Bride), Louise(Bride), Aversa, Stahl, Lucina(Glorious), Sharena\Arena\11/06/2019, 17/06/2019\Unknown, Unknown
+Naga, Fjorm(Bride), Pent(Bride), Tanith(Bride), Sigrun(Bride), Louise(Bride), Finn, Kana(M), Alm(Saint), Anna\Aether\11/06/2019, 17/06/2019\Light, Dark\Panic Manor, Panic Manor
+Naga, Fjorm(Bride), Pent(Bride), Tanith(Bride), Sigrun(Bride), Louise(Bride), Finn, Kana(M), Alm(Saint), Anna\Aether\18/06/2019, 24/06/2019\Astra, Anima\Panic Manor, Panic Manor

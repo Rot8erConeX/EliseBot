@@ -1,9 +1,9 @@
 Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Bunny)\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Kana(F)\Leanne\Lethe\Matthew\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr
+Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Fjorm\Fjorm(Bride)\Kaden\Kana(F)\Leanne\Lethe\Matthew\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
-5\10\Resistance\Defense\S\5\Alm(Saint)
+5\10\Resistance\Defense\S\6\Alm(Saint)
 Assault\Absorb\Absorb+\Absorb+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -192,6 +192,16 @@ Shield Pulse 1\Shield Pulse 2\Shield Pulse 3
 Spur Atk 1\Drive Atk 1\Drive Atk 2
 Drive Def 2
 
+Fjorm(Bride)
+5\0\Defense\Resistance\-\0\
+Assault\Gjallarbru
+Heal\Mend\Restore\Restore+
+Imbue\Heavenly Light
+HP +3\HP Atk 1\HP Atk 2
+Dazzling Staff 1\Dazzling Staff 2\Dazzling Staff 3
+Ground Orders 1\Ground Orders 2\Ground Orders 3
+Aerobatics 2
+
 Genny
 5\0\HP\Defense\-\0\
 Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
@@ -203,14 +213,14 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Genny(Picnic)
-5\0\\\-\0\
+5\0\ \ \-\0\
 Assault\Toasty Skewer\Toasty Skewer+\~~Toasty Skewer+ (+) Dazzling Mode~~
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Fireflood Balm\Fireflood Balm+
 Brazen Atk/Res 1\Brazen Atk/Res 2\Brazen Atk/Res 3
 Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
 Def Opening 1\Def Opening 2\Def Opening 3
-Chill Atk 2
+Renewal 2
 
 Gunnthra
 5\1\Attack\Speed\-\1\
@@ -231,6 +241,16 @@ Darting Blow 1\Swift Sparrow 1\Swift Sparrow 2
 Desperation 1\Desperation 2\Desperation 3
 Hone Spd 1\Hone Spd 2\Hone Spd 3\Joint Hone Spd
 Spd Ploy 3
+
+Kaden
+5\0\Attack\Resistance\-\0\
+Whelp (Cavalry)\Yearling (Cavalry)\Adult (Cavalry)\Kitsune Fang
+Pivot
+New Moon\Moonbow
+Distant Def 1\Distant Def 2\~~Distant Def 3~~
+Spd/Res Link 1\Spd/Res Link 2\Spd/Res Link 3
+Spur Atk 1\Spur Atk 2\Goad Beasts
+Fortress Res 3
 
 Kana(F)
 5\1\Attack\Defense\-\0\
@@ -263,7 +283,7 @@ Threaten Atk 1\Threaten Atk 2\Threaten Atk 3
 Brash Assault 3
 
 Maria
-5\7\ \ \-\0\
+5\8\ \ \-\0\
 Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -353,7 +373,7 @@ Threaten Res 1\Threaten Res 2
 Distant Def 2
 
 Reyson
-4\1\Res\Atk\-\0\
+4\2\Res\Atk\-\0\
 Hatchling (Flier)\Fledgling (Flier)\Adult (Flier)\~~Heron Wing~~
 Sing
 Chilling Wind\Iceberg
@@ -403,7 +423,7 @@ Spur Res 1\Drive Res 1\Drive Res 2
 Deflect Melee 3
 
 Tailtiu
-5\3\ \ \-\0\
+5\4\ \ \-\0\
 Thunder\Elthunder\Blarblade\__Blarblade+__\Tome of Thoron\Tome of Thoron (+) Effect Mode
 Rally Resistance\Rally Spd/Res
 Chilling Wind\Glacies

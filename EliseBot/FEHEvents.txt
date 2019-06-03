@@ -1,16 +1,8 @@
-Cavalry Mastery\Quests\06/05/2019, 19/05/2019
-New Heroes\Log-In Bonus\10/05/2019, 23/05/2019
-May Edition\Orb Promo\10/05/2019, 23/05/2019
-Power's Den\Forging Bonds\10/05/2019, 23/05/2019
-Delthea: Tatarrah's Puppet\GHB\12/05/2019, 19/05/2019
-Eir\Quests\15/05/2019, 28/05/2019
--\Grand Conquests\17/05/2019, 22/05/2019
-Corrin(M) & Kana(F) (revival)\BHB\20/05/2019, 26/05/2019
 Special Heroes\Log-In Bonus\20/05/2019, 03/06/2019
 Tempest Trials\Log-In Bonus\21/05/2019, 03/06/2019
 Shadowed Memories (Encore)\Tap Battle\23/05/2019, 22/06/2019
->Unknown<\Tempest Trials\25/05/2019, 03/06/2019
->Unknown<\MHB\30/05/2019, 05/06/2019
+The Holy Guard\Tempest Trials\25/05/2019, 03/06/2019
+Naga, Divine Dragon\MHB\30/05/2019, 05/06/2019
 Duma, God of Strength\MHB\30/05/2019, 05/06/2019
 Eirika, Graceful Resolve\LHB\30/05/2019, 05/06/2019
 Hrid, Icy Blade\LHB\30/05/2019, 05/06/2019

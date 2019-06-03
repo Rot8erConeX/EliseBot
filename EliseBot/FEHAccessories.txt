@@ -62,6 +62,7 @@ Explorer's Hat EX\Hat\When Kliff was but a boy, his father found this hat in a f
 Floral Headband\Hat\A headband decorated with pink blooms.\Clear floors 81-85 in Illusory Dungeon: Carrying the Flame.
 Gold Armored Helmet\Hat\Proof of victory over Legendary Ryoma.\Beat Ryoma(Supreme)'s LHB at Abyssal difficulty.
 Golden Diadem\Hat\Proof of victory over Mythic Duma.\Beat Duma's MHB at Abyssal difficulty
+Gold Maid Headpiece\Hat\Proof of victory over Mythic Naga.\Beat Naga's MHB at Abyssal difficulty
 Gold Priest's Miter\Hat\Proof of victory over Grand Hero Xander.\Beat Xander's GHB at Abyssal difficulty.
 Gold Restoration Helm\Hat\Proof of victory over Legendary Azura.\Beat Azura(Vallite)'s LHB at Abyssal difficulty.
 Gold Spring Bunny Hat\Hat\Proof of victory over Legendary Lyn.\Beat Lyn(Wind)'s LHB at Abyssal difficulty.

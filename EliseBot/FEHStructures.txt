@@ -78,6 +78,9 @@ Heart Garland\-\Ornament\A decoration that symbolizes overflowing love. It's an 
 Iron Fence\-\Ornament\Used to separate what's inside from what's outside. It's an event item.\Yes\0, 0, 0, 500\0\Spring 2019
 Foreboding Lizard\-\Ornament\This statue creates an atmosphere of menace, but the candles lighten the mood. It's an event item.\Yes\0, 0, 0, 500\0\Spring 2019
 Lending Library\-\Ornament\All of the Heroes who cherish knowledge gathered up this collection of books. It's an event item.\Yes\0, 0, 0, 500\0\Spring 2019
+Sight of Bonding\-\Ornament\A floral decoration commemorating the eternal connection of friendship. It's an event item.\Yes\0, 0, 0, 500\0\Bridal 2019
+Sound of Bonding\-\Ornament\If two people who share a wish ring it together, their wish will come true. It's an event item.\Yes\0, 0, 0, 500\0\Bridal 2019
+Word of Bonding\-\Ornament\For Heroes who like to deepen their bonds over tea or at gatherings. It's an event item.\Yes\0, 0, 0, 500\0\Bridal 2019
 Accessory Shop\-\Resort\A structure where Heroes can sample various accessories to find new looks that catch their fancy!\-\300, 0, 0, 0\0\Heroes cannot use this structure to change their equipped accessories.
 Armory\-\Resort\A structure that contains a collection of replica weapons for Heroes to sample.  The stock is updated periodically, too!\-\300, 0, 0, 0\0\Heroes cannot use this structure to learn new skills or change their equipped skills.
 Hot Spring\-\Resort\A structure where Heroes can relax in a nice hot spring.  Apparently it is a natural spring, too, which is especially incredible considering it is located within a floating island in the sky.\-\300, 0, 0, 0\0

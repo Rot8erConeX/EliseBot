@@ -738,12 +738,20 @@ def donor_embed(bot,event,str='')
     event << ''
     event << '~~Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.~~'
     event << ''
-    event << "Donor List: <https://goo.gl/ds1LHA>"
+    event << "Donor List: <https://tinyurl.com/y5m8dv6k>"
     event << "Donor perks: <https://urlzs.com/kthnr>"
     event << ''
     event << str
   else
-    create_embed(event,"__**If you wish to donate to me:** A word from my developer__","Due to income regulations within the building where I live, I cannot accept donations in the form of PayPal, Patreon, or other forms of direct payment.  Only a small percentage of any such donations would actually reach me and the rest would end up in the hands of the owners of my building.\n\nHowever, there are other options:\n- You can purchase items from [this list](http://a.co/0p3sBec) and they will be delivered to me.\n- You can also [purchase an Amazon gift card](https://goo.gl/femEcw) and have it delivered via email to **rot8er.conex@gmail.com**.\n\n[Donor List](https://goo.gl/ds1LHA)\n[Donor Perks](https://urlzs.com/kthnr)\n\n#{str}",0x008b8b,"Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.")
+    str2="Due to income regulations within the building where I live, I cannot accept donations in the form of PayPal, Patreon, or other forms of direct payment.  Only a small percentage of any such donations would actually reach me and the rest would end up in the hands of the owners of my building."
+    str2="#{str2}\n\nHowever, there are other options:"
+    str2="#{str2}\n- You can purchase items from [this list](http://a.co/0p3sBec) and they will be delivered to me."
+    str2="#{str2}\n- You can [purchase an Amazon gift card](https://goo.gl/femEcw) and have it delivered via email to **rot8er.conex@gmail.com**."
+    str2="#{str2}\n- You can use your Nitro Boost on either [Elise's](https://discord.gg/9TaRd2h) or [Liz's](https://discord.gg/bcRcanR) primary emote servers, which will count as a $5 donation per month."
+    str2="#{str2}\n\n[Donor List](https://tinyurl.com/y5m8dv6k)"
+    str2="#{str2}\n[Donor Perks](https://urlzs.com/kthnr)"
+    str2="#{str2}\n\n#{str}"
+    create_embed(event,"__**If you wish to donate to me:** A word from my developer__",str2,0x008b8b,"Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.")
     event.respond "If you are on a mobile device and cannot click the links in the embed above, retype the command but with \"mobile\" in your message, to receive this message as plaintext."
   end
 end
@@ -769,6 +777,7 @@ def bug_report(bot,event,args,shrd_num,shrd_names,shrd_type,pref,echo=nil)
     s5=s5[pref[i].length,s5.length-pref[i].length] if pref[i].downcase==s5.downcase[0,pref[i].length]
   end
   a=s5.split(' ')
+  a[0]=a[0].split("\n")[0] if a[0].include?("\n")
   s3='Bug Report'
   s3='Suggestion' if a[0]=='suggestion'
   s3='Feedback' if a[0]=='feedback'
