@@ -3792,14 +3792,15 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       for i in 0...prm.length
         sklll=prm[i].split('!')
         if sklll.length==1
-          prm[i]=nil if find_skill(sklll[1],event,sklz.map{|q| q}).length<=0
+          prm[i]=nil if find_skill(sklll[0],event,sklz.map{|q| q}).length<=0
         else
           prm[i]="#{sklll[1]} (#{sklll[0]})"
           prm[i]=nil if find_skill(sklll[1],event,sklz.map{|q| q}).length<=0
           prm[i]=nil if find_unit(sklll[0],event,false,true).length<=0
         end
       end
-      str="#{str}\n**Evolves into:** #{list_lift(prm.map{|q| "*#{q}*"},"or")}"
+      prm.compact!
+      str="#{str}\n**Evolves into:** #{list_lift(prm.map{|q| "*#{q}*"},"or")}" if prm.length>0
     elsif skill[1]=='Falchion'
       sklz2=sklz.reject{|q| q[6]!='Weapon' || q[7]!='Sword Users Only' || q[0]<=0}
       sk1=sklz2[sklz2.find_index{|q| q[0]==skill[0]+1}]
@@ -4567,6 +4568,19 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=fals
   end
   retroprf=[]
   skllz=@skills.map{|q| q}
+  for i in 0...skllz.length
+    if skllz[i][0]<0
+      skllz[i][0]=0-skllz[i][0]
+      if skllz[i][0]>=300000
+        skllz[i][0]+=90000
+      elsif skllz[i][0]>=100000
+        skllz[i][0]+=9000
+      else
+        skllz[i][0]+=4000
+      end
+    end
+  end
+  skllz=skllz.sort{|a,b| a[0]<=>b[0]}
   skllz=skllz.reject{|q| q[2]=='example' || !q[12].map{|q2| q2.split(', ').include?(char[0]) || q2.split(', ').include?("All #{clss}")}.include?(true)}
   skllz=skllz.reject{|q| q[6]!='Weapon'} if justweapon
   for i in 0...skllz.length
@@ -6969,9 +6983,9 @@ def comparison(event,args,bot)
     end
   else
     for i in 0...args.length
-      unless s1.split(' ').nil? || s1.gsub(' ','').length<=0
+      unless s1.nil? || s1.split(' ').length<=1 || s1.gsub(' ','').length<=0
         k=find_data_ex(:find_unit,s1,event,false,1)
-        unless k.nil?
+        unless k.nil? || k.length<=0
           if k[0].is_a?(Array)
             if k[0][0].is_a?(Array)
               k[0]=k[0].map{|q| q[0]}.join(' ')
@@ -7012,7 +7026,7 @@ def comparison(event,args,bot)
             k2.push(str.gsub(x[0],x[1][0]))
           end
         end
-      elsif find_data_ex(:find_unit,k[i],event).length>0
+      elsif find_data_ex(:find_unit,sever(str),event).length>0
         x=find_data_ex(:find_unit,sever(str),event)
         k2.push(str)
       elsif !x.nil? && !x[1].is_a?(Array)
@@ -8068,7 +8082,7 @@ def parse_function(callback,event,args,bot,healers=nil)
   if k.length<=0
     if !detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase).nil?
       x=detect_multi_unit_alias(event,event.message.text.downcase,event.message.text.downcase)
-      k2=get_weapon(first_sub(event.message.text,x[0],''),event)
+      k2=get_weapon(first_sub(event.message.text,x[0],''),event) rescue k2=[]
       weapon='-'
       weapon=k2[0] unless k2.length<=0
       xx=[]
@@ -8139,7 +8153,7 @@ def parse_function(callback,event,args,bot,healers=nil)
     disp_generic_art(event,'',bot)
   else
     str=k[0]
-    k2=get_weapon(first_sub(event.message.text,k[1],''),event)
+    k2=get_weapon(first_sub(event.message.text,k[1],''),event) rescue k2=[]
     weapon='-'
     weapon=k2[0] unless k2.length<=0
     name=find_data_ex(:find_unit,event.message.text,event)
@@ -8792,13 +8806,17 @@ def games_list(event,name,bot,weapon=nil)
   pic=pick_thumbnail(event,j,bot)
   g2="#{g[0]}"
   g.shift
+  if j[0]=='Naga'
+    g2="#{g2}\n#{g[0]}"
+    g.shift
+  end
   name="#{j[0]}"
   if game_hybrid(j[0],event,bot).length>0
     mmm=game_hybrid(j[0],event,bot)
     pic=mmm[0]
     name=mmm[1]
     xcolor=mmm[2] if mmm.length>2
-  elsif 'Tiki(Adult)'==j[0] && !args.join('').downcase.gsub('games','gmes').include?('a')
+  elsif 'Tiki(Young)'==j[0] && !args.join('').downcase.gsub('games','gmes').include?('a')
     pic='https://orig00.deviantart.net/6c50/f/2018/051/9/e/tiki_by_rot8erconex-dc3tkzq.png'
     name='Tiki'
     m=untz[untz.find_index{|q| q[0]=='Tiki(Young)'}]
@@ -11433,7 +11451,7 @@ bot.message do |event|
       disp_stats(bot,'Laevatein',nil,event,'smol',true,true)
       disp_skill(bot,'Laevatein',event,true)
     elsif s.gsub(' ','').downcase=='naga'
-      disp_stats(bot,'Naga',nil,event,'smol',true,true) unless @units.find_index{|q| q[0]=='Naga'}.nil?
+      disp_stats(bot,'Naga',nil,event,'smol',true,true)
       disp_skill(bot,'Naga',event,true)
       k=3
     elsif s.gsub(' ','').downcase=='fury'
@@ -11601,7 +11619,7 @@ bot.mention do |event|
     disp_skill(bot,'Laevatein',event,true)
     k=3
   elsif s.gsub(' ','').downcase=='naga'
-    disp_stats(bot,'Naga',nil,event,'smol',true,true) unless @units.find_index{|q| q[0]=='Naga'}.nil?
+    disp_stats(bot,'Naga',nil,event,'smol',true,true)
     disp_skill(bot,'Naga',event,true)
     k=3
   elsif s.gsub(' ','').downcase=='fury'
@@ -12159,6 +12177,9 @@ def next_holiday(bot,mode=0)
     if [6,7,8].include?(t.month)
       bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/Elise(Summer).png','r')) rescue nil if @shardizard.zero?
       @avvie_info=['Elise(Summer)','*Fire Emblem Heroes*','']
+    elsif [1,11,12].include?(t.month)
+      bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/Elise(Bath).png','r')) rescue nil if @shardizard.zero?
+      @avvie_info=['Elise(Bath)','*Fire Emblem Heroes*','']
     else
       bot.profile.avatar=(File.open('C:/Users/Mini-Matt/Desktop/devkit/BaseElise.jpg','r')) rescue nil if @shardizard.zero?
       @avvie_info=['Elise','*Fire Emblem Heroes*','']
