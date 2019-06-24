@@ -126,7 +126,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}** __*colors__","Simulates summoning on a randomly-chosen banner.\n\nIf given `colors`, auto-cracks open any orbs of said colors.\nOtherwise, requires a follow-up response of numbers.\n\nYou can include the word \"current\" or \"now\" to force me to choose a banner that is currently available in-game.\nThe words \"upcoming\" and \"future\" allow you to force a banner that will be available in the future.\nYou can also include one or more of the words below to force the banner to fit into those categories.\n\n**This command is only available in certain servers**.",0x9E682C)
     lookout=lookout_load('SkillSubsets')
     w=lookout.reject{|q| q[2]!='Banner' || ['Current','Upcoming'].include?(q[0])}.map{|q| q[0]}.sort
-    create_embed(event,'Banner types','',0x40C0F0,nil,nil,triple_finish(w))
+    create_embed(event,'Banner types','',0x40C0F0,nil,nil,triple_finish(w)) if safe_to_spam?(event) || w.length<=50
   elsif ['effhp','eff_hp'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows the effective HP data for the unit `name`.',0xD49F61)
   elsif ['pair','pairup','pair_up'].include?(command.downcase)
@@ -251,6 +251,11 @@ def help_text(event,bot,command=nil,subcommand=nil)
           create_embed(event,'','',0x40C0F0,nil,nil,[['Weapon Flavors',w.join("\n")],['Passive Flavors',p.join("\n")]])
         end
       end
+    elsif ['summon','summons','banner','banners'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __\*filters__","Finds all banners which match your defined filters, then displays the resulting list.",0xD49F61)
+      lookout=lookout_load('SkillSubsets')
+      w=lookout.reject{|q| q[2]!='Banner' || ['Current','Upcoming'].include?(q[0])}.map{|q| q[0]}.sort
+      create_embed(event,'Banner types','',0x40C0F0,nil,nil,triple_finish(w)) if safe_to_spam?(event) || w.length<=50
     else
       create_embed(event,"**#{command.downcase}** __\*filters__","Combines the results of `FEH!find unit` and `FEH!find skill`, showing them in a single embed.  This combined form is particularly useful when looking at weapon types, so you can see all the weapons *and* all the units that can use them side-by-side.\n\n#{disp_more_info(event,4)}",0xD49F61)
     end
@@ -2242,6 +2247,8 @@ def show_tools(event,bot)
     event << ''
     event << '__News__'
     event << 'In-game news: <https://fire-emblem-heroes.com/en/topics/>'
+    event << '~~Official~~ Twitter: <https://twitter.com/feheroes_news?lang=en>'
+    event << '*The Everyday Life of Heroes* manga: <https://fireemblem.gamepress.gg/feh-manga>'
     event << ''
     event << '__Wikis and Databases__'
     event << 'Gamepedia FEH wiki: <https://feheroes.gamepedia.com/>'
@@ -2267,7 +2274,10 @@ def show_tools(event,bot)
     str="#{str}\n[Apple App Store](https://itunes.apple.com/app/id1181774280)"
     str="#{str}\n\n__News__"
     str="#{str}\n[In-game news](https://fire-emblem-heroes.com/en/topics/)"
-    str="#{str}\n\n__Wikis and Databases__\n[Gamepedia FEH wiki](https://feheroes.gamepedia.com/)"
+    str="#{str}\n[Twitter](https://twitter.com/feheroes_news?lang=en)"
+    str="#{str}\n[*The Everyday Life of Heroes* manga](https://fireemblem.gamepress.gg/feh-manga)"
+    str="#{str}\n\n__Wikis and Databases__"
+    str="#{str}\n[Gamepedia FEH wiki](https://feheroes.gamepedia.com/)"
     str="#{str}\n[Gamepress FEH database](https://fireemblem.gamepress.gg/)"
     str="#{str}\n\n__Simulators__"
     str="#{str}\n[Summon Simulator](https://feh-stuff.github.io/summon-simulator/)"
@@ -2434,7 +2444,7 @@ def today_in_feh(event,bot,shift=false)
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{element}"}
       element=b[0][3][1]
       moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
-      str2="__**Current Arena Season#{', as of tomorrow' if shift}**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Elemental season:* #{moji[0].mention}#{b[0][3][0]}, #{moji2[0].mention}#{b[0][3][1]}"
+      str2="__**Current Arena Season#{', as of tomorrow' if shift}**__\n*Bonus Units:*\n#{k[0,k.length/2+m].join(', ')}\n#{k[k.length/2+m,k.length/2].join(', ')}\n*Elemental season:* #{moji[0].mention unless moji.length<=0}#{b[0][3][0]}, #{moji2[0].mention unless moji2.length<=0}#{b[0][3][1]}"
     end
     str=extend_message(str,str2,event,2)
     b=@bonus_units.reject{|q| q[1]!='Tempest' || q[2][0].split('/').reverse.join('').to_i>tm || q[2][1].split('/').reverse.join('').to_i<tm}

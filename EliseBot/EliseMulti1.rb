@@ -32,7 +32,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
   for i in 0...u.length
     return [str1, [u[i][0]], str1] if str1.downcase==u[i][0].downcase.gsub('(','').gsub(')','')
   end
-  alz=@aliases.reject{|q| q[0]!='Unit' || q[2].is_a?(Array) || (!q[3].nil? && q[3].include?(k))}
+  alz=@aliases.reject{|q| q[0]!='Unit' || q[2].is_a?(Array) || (!q[3].nil? && !q[3].include?(k))}
   for i in 0...alz.length
     return [str1, [u[u.find_index{|q| q[8]==alz[i][2]}][0]], alz[i][1].downcase] if alz[i][1].downcase==str1
   end
@@ -551,11 +551,18 @@ def list_unit_aliases(event,args,bot,mode=0)
   azry=nil
   itmu=nil
   unless args.length.zero?
-    unit=find_unit(args.join(''),event)[0] unless find_unit(args.join(''),event).length<=0
-    skill=find_skill(args.join(''),event) unless find_skill(args.join(''),event).length<=0
-    struct=find_structure(args.join(''),event) unless find_structure(args.join(''),event).length<=0
-    azry=find_accessory(args.join(''),event)[0] unless find_accessory(args.join(''),event).length<=0
-    itmu=find_item_feh(args.join(''),event)[0] unless find_item_feh(args.join(''),event).length<=0
+    unit=find_unit(args.join(''),event,true)[0] unless find_unit(args.join(''),event,true).length<=0
+    skill=find_skill(args.join(''),event,false,true) unless find_skill(args.join(''),event,false,true).length<=0
+    struct=find_structure(args.join(''),event,true) unless find_structure(args.join(''),event,true).length<=0
+    azry=find_accessory(args.join(''),event,true)[0] unless find_accessory(args.join(''),event,true).length<=0
+    itmu=find_item_feh(args.join(''),event,true)[0] unless find_item_feh(args.join(''),event,true).length<=0
+    if unit.nil? && skill.nil? && struct.nil? && azry.nil? && itmu.nil?
+      unit=find_unit(args.join(''),event)[0] unless find_unit(args.join(''),event).length<=0
+      skill=find_skill(args.join(''),event) unless find_skill(args.join(''),event).length<=0
+      struct=find_structure(args.join(''),event) unless find_structure(args.join(''),event).length<=0
+      azry=find_accessory(args.join(''),event)[0] unless find_accessory(args.join(''),event).length<=0
+      itmu=find_item_feh(args.join(''),event)[0] unless find_item_feh(args.join(''),event).length<=0
+    end
     if !detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1).nil?
       x=detect_multi_unit_alias(event,args.join(''),event.message.text.downcase,1)
       unit=x[1]
@@ -1399,7 +1406,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   end
   @aliases.uniq!
   nzzz=@aliases.map{|a| a}
-  open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames.txt', 'w') { |f|
+  open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt", 'w') { |f|
     for i in 0...nzzz.length
       f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
     end
@@ -1408,7 +1415,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   nzzz=@aliases.map{|q| q}
   if nzzz[-1].length>1 && nzzz[-1][2].is_a?(String) && nzzz[-1][2]>='Verdant Shard'
     bot.channel(logchn).send_message('Alias list saved.')
-    open('C:/Users/Mini-Matt/Desktop/devkit/FEHNames2.txt', 'w') { |f|
+    open("C:/Users/#{@mash}/Desktop/devkit/FEHNames2.txt", 'w') { |f|
       for i in 0...nzzz.length
         f.puts "#{nzzz[i].to_s}"
       end
@@ -1602,15 +1609,15 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
       weapon='Missiletainn (Dusk)'
     end
     w=@skills[@skills.find_index{|q| q[1]==weapon}]
-  elsif weapon=='Whelp (All)'
+  elsif weapon[0,7]=='Whelp (' || weapon[0,11]=='Hatchling ('
     weapon="Whelp (#{u[3]})"
     weapon="Hatchling (#{u[3]})" if u[3]=='Flier'
     w=@skills[@skills.find_index{|q| q[1]==weapon}]
-  elsif weapon=='Yearling (All)'
+  elsif weapon[0,10]=='Yearling (' || weapon[0,11]=='Fledgling ('
     weapon="Yearling (#{u[3]})"
     weapon="Fledgling (#{u[3]})" if u[3]=='Flier'
     w=@skills[@skills.find_index{|q| q[1]==weapon}]
-  elsif weapon=='Adult (All)'
+  elsif weapon[0,7]=='Adult ('
     weapon="Adult (#{u[3]})"
     w=@skills[@skills.find_index{|q| q[1]==weapon}]
   end
@@ -1718,6 +1725,20 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return "~~#{w2}~~" unless u[1][0]=='Colorless'
     w2="#{t} Rod"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Barrier Blade','Barrier Lance','Barrier Axe'].include?(w[1].gsub('+',''))
+    t='Barrier'
+    if event.message.text.downcase.include?('sword') || event.message.text.downcase.include?('edge')
+    elsif event.message.text.downcase.include?('lance')
+    elsif event.message.text.downcase.include?('axe')
+    elsif u[1][1]=='Bow'
+     # return weapon_legality(event,name,"#{t} Bow#{'+' if w[1].include?('+')}",refinement,true) if u[1][1]=='Bow'
+    end
+    return weapon_legality(event,name,"#{t} Blade#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"#{t} Lance#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return weapon_legality(event,name,"#{t} Axe#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless u[1][0]=='Colorless'
+    w2="#{t} Rod"
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
   elsif ['Killing Edge','Killer Lance','Killer Axe','Slaying Edge','Slaying Lance','Slaying Axe'].include?(w[1].gsub('+',''))
     t='Killer'
     t='Killing' if u[1][0]=='Red'
@@ -1791,9 +1812,9 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
 end
 
 def make_banner(event) # used by the `summon` command to pick a random banner and choose which units are on it.
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
+  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHBanners.txt")
     b=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
+    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHBanners.txt").each_line do |line|
       b.push(line.gsub("\n",''))
     end
   else
@@ -1978,8 +1999,9 @@ def multi_summon(bot,event,e,user,list,str2='',wheel=0,srate=nil)
       sr=(srate[0]/5)*0.5
       sr=100.00 + bnr[1] if srate[0]>=120 && srate[2]%3==2
       b= 0 - bnr[1]
-      focus = b + sr
-      five_star = 0.00
+      s5 = [(6.00 - b), 0.00].max
+      focus = b + sr * b / (b + s5)
+      five_star = s5 + sr * s5 / (b + s5)
       if srate[0]>=120 && srate[2]%3==1
         focus = 50.00
         five_star = 50.00
@@ -2131,8 +2153,6 @@ end
 def summon_sim(bot,event,colors)
   if event.server.nil?
     event.respond 'This command in unavailable in PM.'
-  elsif event.server.id==238770788272963585
-    event.respond 'This command is unavailable in this server.  If you wish to fix that, take it up with the mod team.'
   elsif !@summon_servers.include?(event.server.id)
     event.respond 'This command is unavailable in this server.'
   elsif event.server.id==238770788272963585 && event.channel.id != 377526015939051520
@@ -2196,8 +2216,9 @@ def summon_sim(bot,event,colors)
       sr=(@summon_rate[0]/5)*0.5
       sr=100.00 + bnr[1] if @summon_rate[0]>=120 && @summon_rate[2]%3==2
       b= 0 - bnr[1]
-      focus = b + sr
-      five_star = 0.00
+      s5 = [(6.00 - b), 0.00].max
+      focus = b + sr * b / (b + s5)
+      five_star = s5 + sr * s5 / (b + s5)
       if @summon_rate[0]>=120 && @summon_rate[2]%3==1
         focus = 50.00
         five_star = 50.00
@@ -2606,7 +2627,7 @@ def combined_BST(event,args,bot)
     for i in 0...args.length
       unless s1.split(' ').nil? || s1.gsub(' ','').length<=0
         k=find_data_ex(:find_unit,s1,event,false,1)
-        unless k.length<=0
+        unless k.nil? || k.length<=0
           if k[0].is_a?(Array)
             if k[0][0].is_a?(Array)
               k[0]=k[0].map{|q| q[0]}
@@ -4158,9 +4179,9 @@ end
 
 def study_of_banners(event,name,bot)
   b=[]
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt')
+  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHBanners.txt")
     b=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHBanners.txt').each_line do |line|
+    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHBanners.txt").each_line do |line|
       b.push(line.gsub("\n",''))
     end
   else
@@ -5359,9 +5380,9 @@ def make_random_unit(event,args,bot)
 end
 
 def load_devunits()
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt')
+  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHDevUnits.txt")
     b=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt').each_line do |line|
+    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHDevUnits.txt").each_line do |line|
       b.push(line.gsub("\n",''))
     end
   else
@@ -5440,7 +5461,7 @@ def save_devunits()
   for i in 0...untz.length
     s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\\#{untz[i][6]}\\#{untz[i][14]}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12].join('\\'[0])}\n#{untz[i][13]}"
   end
-  open('C:/Users/Mini-Matt/Desktop/devkit/FEHDevUnits.txt', 'w') { |f|
+  open("C:/Users/#{@mash}/Desktop/devkit/FEHDevUnits.txt", 'w') { |f|
     f.puts s
     f.puts "\n"
   }
@@ -5448,9 +5469,9 @@ def save_devunits()
 end
 
 def load_donorunits(uid, mode=0)
-  return [] unless File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+  return [] unless File.exist?("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/#{uid}.txt")
   b=[]
-  File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
+  File.open("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
     b.push(line.gsub("\n",''))
   end
   m=b[0]
@@ -5482,10 +5503,10 @@ def load_donorunits(uid, mode=0)
 end
 
 def save_donorunits(uid,table)
-  return nil unless File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+  return nil unless File.exist?("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/#{uid}.txt")
   # snag the username
   b=[]
-  File.open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
+  File.open("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/#{uid}.txt").each_line do |line|
     b.push(line.gsub("\n",''))
   end
   # sort the unit list alphabetically
@@ -5500,7 +5521,7 @@ def save_donorunits(uid,table)
   for i in 0...untz.length
     s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\\#{untz[i][6]}\\#{untz[i][14]}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12].join('\\'[0])}\n#{untz[i][13]}"
   end
-  open("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt", 'w') { |f|
+  open("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/#{uid}.txt", 'w') { |f|
     f.puts s
     f.puts "\n"
   }
@@ -5835,13 +5856,12 @@ end
 def donor_edit(bot,event,args=[],cmd='')
   uid=event.user.id
   if uid==167657750971547648
-    uid=244073468981805056
     event.respond "This command is for the donors.  Your version of the command is `FEH!devedit`."
     return nil
-  elsif !get_donor_list().reject{|q| q[2][0]<3}.map{|q| q[0]}.include?(uid)
+  elsif !get_donor_list().reject{|q| q[2][0]<4}.map{|q| q[0]}.include?(uid)
     event.respond "You do not have permission to use this command."
     return nil
-  elsif !File.exist?("C:/Users/Mini-Matt/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+  elsif !File.exist?("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/#{uid}.txt")
     event.respond "Please wait until my developer makes your storage file."
     return nil
   elsif cmd.downcase=='help' || ((cmd.nil? || cmd.length.zero?) && (args.nil? || args.length.zero?))
@@ -5875,7 +5895,7 @@ def donor_edit(bot,event,args=[],cmd='')
     else
       @stored_event=[event,j]
       event.respond "You do not have this unit.  Do you wish to add them to your collection?\nYes/No"
-      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+      event.channel.await(:bob, contains: /(yes)|(no)/i, from: event.user.id) do |e|
         if e.message.text.downcase.include?('no')
           e.respond 'Okay.'
         else
@@ -5946,7 +5966,7 @@ def donor_edit(bot,event,args=[],cmd='')
   elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
     @stored_event=[event,j]
     event.respond "I have a unit stored for your #{donor_units[j2][0]}.  Do you wish me to delete this build?\nYes/No"
-    event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+    event.channel.await(:bob, contains: /(yes)|(no)/i, from: event.user.id) do |e|
       if e.message.text.downcase.include?('no')
         e.respond 'Okay.'
       else
@@ -6154,7 +6174,7 @@ def donor_edit(bot,event,args=[],cmd='')
       @stored_event=[event,j]
       event.respond "You cannot have a boon without a bane.  Set stats to neutral?\nYes/No" if flurp[3].nil?
       event.respond "You cannot have a bane without a boon.  Set stats to neutral?\nYes/No" if flurp[2].nil?
-      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+      event.channel.await(:bob, contains: /(yes)|(no)/i, from: event.user.id) do |e|
         if e.message.text.downcase.include?('no')
           e.respond 'Okay.'
         else

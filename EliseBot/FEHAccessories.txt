@@ -21,6 +21,8 @@ Gold Summer Mask\Hair\Proof of victory over Legendary Lucina.\Beat Lucina(Glorio
 Golden Ducky\Hair\Proof of victory over Grand Hero Navarre.\Beat Navarre's GHB at Abyssal difficulty
 Golden Fortune Pin\Hair\Proof of victory over Grand Hero Ursula.\Beat Ursula's GHB at Abyssal difficulty
 Hand Towel\Hair\A hand towel commonly used in hot springs. Make sure to keep it dry!\Clear floors 81-85 in Illusory Dungeon: Summer of Heroes.
+Heart Charm\Hair\A heart-shaped hairpiece given by Nah. Childish, yet somehow reflects an adult personality.\Reach 100 red friendship with Nah during Forging Bonds: Spanning Time.
+Heart Charm EX\Hair\A heart-shaped hairpiece given by Nah. A pink ribbon from Nah's mother, Nowi, is attached to the bottom.\Reach 2500 red friendship with Nah during Forging Bonds: Spanning Time.
 Heron Circlet\Hair\A circlet bestowed by Reyson. Elegant and intricate, it gives off an air of refinement.\Reach 100 green friendship with Reyson during Forging Bonds: Hearts as One
 Heron Circlet EX\Hair\A headband bestowed by Reyson. Elegant and intricate, it gives off an air of refinement and seems fragile.\Reach 2500 green friendship with Reyson during Forging Bonds: Hearts as One
 Heron Hairpin\Hair\A hairpin bestowed by Leanne. It's made of nuts and flowers, which are edible, apparently.\Reach 100 orange friendship with Leanne during Forging Bonds: Hearts as One
@@ -59,6 +61,10 @@ Crown of Nifl EX\Hat\Hríd's crown. It has been passed down in the royal family 
 Enigmatic Mask\Hat\A mask that looks an awful lot like one used by a mysterious man. Maybe this was his spare...\Enter the Equip Accessories Menu for the first time.
 Explorer's Hat\Hat\Kliff got this hat in preparation for his journeys into unknown realms.\Reach 100 blue friendship with Kliff during Forging Bonds: Dueling Desires.
 Explorer's Hat EX\Hat\When Kliff was but a boy, his father found this hat in a far-off land during his travels.\Reach 2500 blue friendship with Kliff during Forging Bonds: Dueling Desires.
+False Taguel Ears\Hat\A gift from Yarne, shaped like taguel ears. They are used to distract pursuers while escaping.\Reach 100 green friendship with Yarne during Forging Bonds: Spanning Time
+False Taguel Ears EX\Hat\A gift from Yarne, shaped like taguel ears. They increase height and make the wearer more intimidating.\Reach 2500 green friendship with Yarne during Forging Bonds: Spanning Time
+Favored Helm\Hat\A knight's helm given by Kjelle. Kept in perfect, shiny condition by Kjelle herself.\Reach 100 blue friendship with Kjelle during Forging Bonds: Spanning Time.
+Favored Helm EX\Hat\A knight's helm given by Kjelle. Colored beautifully by Kjelle herself.\Reach 2500 blue friendship with Kjelle during Forging Bonds: Spanning Time
 Floral Headband\Hat\A headband decorated with pink blooms.\Clear floors 81-85 in Illusory Dungeon: Carrying the Flame.
 Gold Armored Helmet\Hat\Proof of victory over Legendary Ryoma.\Beat Ryoma(Supreme)'s LHB at Abyssal difficulty.
 Golden Diadem\Hat\Proof of victory over Mythic Duma.\Beat Duma's MHB at Abyssal difficulty
@@ -110,6 +116,8 @@ Mysterious Mask\Mask\A mask once worn by a swordsman claiming to be the Hero-Kin
 Reading Glasses\Mask\According to Nina, your eyes won't get tired if you wear these—no matter how much, or what, you read.\Reach 100 orange friendship with Nina during Forging Bonds: High Tea Jinks.
 Reading Glasses EX\Mask\Nina says that these glasses will let you keep reading into the dead of night.\Reach 2500 orange friendship with Nina during Forging Bonds: High Tea Jinks.
 Swim Goggles\Mask\Use these to see clearly underwater. The added snorkel means you can take your time watching sea life.\Clear floors 81-85 in Illusory Dungeon: Summer of Heroes.
+Tinted Glasses\Mask\Spectacles with colored lenses from Brady. Good for blocking out the bright teatime sun.\Reach 100 orange friendship with Brady during Forging Bonds: Spanning Time.
+Tinted Glasses EX\Mask\Spectacles with colored lenses from Brady. If worn into battle, your foe will take you more seriously.\Reach 2500 orange friendship with Brady during Forging Bonds: Spanning Time.
 Wolf Eyepatch\Mask\An eyepatch bestowed by Nailah. The fabric is exquisite and conveys to its wearer an air of intrigue.\Reach 100 blue friendship with Nailah during Forging Bonds: Hearts as One
 Wolf Eyepatch EX\Mask\An eyepatch bestowed by Nailah. The fabric is exquisite and conveys to its wearer unquestionable charisma.\Reach 2500 blue friendship with Nailah during Forging Bonds: Hearts as One
 Dark Finery\Tiara\A head ornament bestowed by Idunn. It seems ancient, but it still sparkles with a certain mystique.\Reach 100 red friendship with Idunn during Forging Bonds: Reason to Fight

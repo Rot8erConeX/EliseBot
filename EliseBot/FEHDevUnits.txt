@@ -80,7 +80,7 @@ New Moon\Luna
 Death Blow 1\Death Blow 2\Death Blow 3
 Chill Spd 1\Chill Spd 2\Chill Spd 3
 Hone Atk 1\Hone Atk 2\Hone Atk 3
-Spur Atk 2
+Spur Atk 3
 
 Cherche
 5\10\Attack\Speed\-\0\
@@ -103,7 +103,7 @@ Threaten Spd 1\Threaten Spd 2\Threaten Spd 3
 Quickened Pulse
 
 Cordelia(Bride)
-5\0\Speed\Defense\-\0\
+5\1\Speed\Defense\-\0\
 Iron Bow\Steel Bow\Brave Bow\Brave Bow+
 Rally Attack\Rally Atk/Spd\Rally Atk/Spd+
 New Moon\Moonbow
@@ -223,7 +223,7 @@ Def Opening 1\Def Opening 2\Def Opening 3
 Renewal 2
 
 Gunnthra
-5\1\Attack\Speed\-\1\
+5\1\Attack\Speed\-\3\
 Wind\Elwind\Rexcalibur\Blizzard
 Rally Speed
 Chilling Wind\Glacies
@@ -283,7 +283,7 @@ Threaten Atk 1\Threaten Atk 2\Threaten Atk 3
 Brash Assault 3
 
 Maria
-5\8\ \ \-\0\
+5\10\ \ \-\0\
 Assault\Gravity\Gravity+\Gravity+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -373,7 +373,7 @@ Threaten Res 1\Threaten Res 2
 Distant Def 2
 
 Reyson
-4\2\Res\Atk\-\0\
+4\3\Res\Atk\-\0\
 Hatchling (Flier)\Fledgling (Flier)\Adult (Flier)\~~Heron Wing~~
 Sing
 Chilling Wind\Iceberg
@@ -383,7 +383,7 @@ Fortify Res 1\Fortify Res 2\~~Fortify Res 3~~
 Iote's Shield
 
 Sakura(Bath)
-5\0\Resistance\HP\-\3\
+5\0\Resistance\HP\-\4\
 Assault\Grandscratcher\Grandscratcher+\Grandscratcher+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Still-Water Balm\Fireflood Balm\Fireflood Balm+
@@ -443,7 +443,7 @@ Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
 Quick Riposte 3
 
 Tiki(Young)(Earth)
-5\0\Resistance\HP\-\1\
+5\0\Resistance\HP\-\3\
 Fire Breath\Fire Breath+\Flametongue\Divine Mist
 Reposition
 New Moon\Moonbow
