@@ -3603,6 +3603,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         cumul2+=sklz[sklz.find_index{|q| q[1]==skill[1].gsub('+','')}][3]/2
       end
       str="#{str}\n**Cumulative SP Cost:** #{cumul} #{"(#{cumul2}-#{cumul*3/2} when inherited)" if skill[8]=='-'}" unless cumul==skill[3]
+      xfooter="You may be looking for the reload command." if skill[1][0,7]=='Refresh' && !event.message.text.downcase.include?('skill') && (event.user.id==167657750971547648 || event.channel.id==386658080257212417)
     elsif skill[6]=='Assist'
       xcolor=0x07DFBB
       sklslt=['Assist']
@@ -11308,7 +11309,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
   return nil if overlap_prevent(event)
   return nil unless [167657750971547648].include?(event.user.id) || event.channel.id==386658080257212417
   bot.gateway.check_heartbeat_acks = false
-  event.respond "Reload what?\n1.) Aliases, from backups\n2.) Groups, from backups#{"\n3.) Data, from GitHub\n4.) Libraries, from code" if event.user.id==167657750971547648}\nYou can include multiple numbers to load multiple things."
+  event.respond "Reload what?\n1.) Aliases, from backups\n2.) Groups, from backups#{"\n3.) Data, from GitHub\n4.) Source code, from GitHub\n5.) Libraries, from code" if event.user.id==167657750971547648}\nYou can include multiple numbers to load multiple things."
   event.channel.await(:bob, from: event.user.id) do |e|
     reload=false
     if e.message.text.include?('1')
@@ -11396,6 +11397,35 @@ bot.command(:reload, from: 167657750971547648) do |event|
       reload=true
     end
     if e.message.text.include?('4') && e.user.id==167657750971547648
+      download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/PriscillaBot.rb")
+      IO.copy_stream(download, "FEHTemp.txt")
+      if File.size("FEHTemp.txt")>100
+        if File.exist?("C:/Users/#{@mash}/Desktop/devkit/BotTokens.txt")
+          b2=[]
+          File.open("C:/Users/#{@mash}/Desktop/devkit/BotTokens.txt").each_line do |line|
+            b2.push(line.gsub("\n",''))
+          end
+        else
+          b2=[]
+        end
+        if b2.length>0
+          b=[]
+          File.open("FEHTemp.txt").each_line.with_index do |line, idx|
+            if idx<100
+              b.push(line.gsub('>Main Token<',b2[0]).gsub('>Debug Token<',b2[-1]))
+            else
+              b.push(line)
+            end
+          end
+          open("PriscillaBot.rb", 'w') { |f|
+            f.puts b.join('')
+          }
+          e.respond 'New source code loaded.'
+          reload=true
+        end
+      end
+    end
+    if e.message.text.include?('5') && e.user.id==167657750971547648
       puts 'reloading EliseMulti1'
       load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
       puts 'reloading EliseTexts'
