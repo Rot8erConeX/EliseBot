@@ -1,3 +1,5 @@
+@mash='Mini-Matt'
+
 def triple_finish(list,forcetwo=false) # used to split a list into three roughly-equal parts for use in embeds
   return [['.',list.join("\n")]] if list.length<5
   if list.length<10 || forcetwo
@@ -51,7 +53,7 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
   end
   return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer BotMod powers
   return false if mode>0
-  return true if get_donor_list().reject{|q| q[2].max<1}.map{|q| q[0]}.include?(user.id) # people who donate to the laptop fund will always be BotMods for aliases
+  return true if get_donor_list().reject{|q| q[2].max<2}.map{|q| q[0]}.include?(user.id) # people who donate to the laptop fund will always be BotMods for aliases
   return false
 end
 

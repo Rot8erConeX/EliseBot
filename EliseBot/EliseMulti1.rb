@@ -75,6 +75,18 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Alm(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Alm(Saint)','Alm(Brave)'],[str]]
+  elsif /(eliwood|eliweed|elioud)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
+    str='eliwood'
+    str='eliweed' if str2.include?('eliweed')
+    str='elioud' if str2.include?('elioud')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('legendary') || str2.include?('blazing') || str2.include?('knight')
+      return [str,['Eliwood(Wind)'],["legendary#{str}","#{str}legendary","blazing#{str}","#{str}blazing","knight#{str}","#{str}knight"]]
+    elsif str2.include?('brave') || str2.include?('cyl')
+      return [str,['Eliwood(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
+    end
+    return [str,['Hector(Marquess)','Hector(Brave)'],[str]]
   elsif /(hector|hektor|kektor|heckutoru)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
     str='hector'
     str='hektor' if str2.include?('hektor')

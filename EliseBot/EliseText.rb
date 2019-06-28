@@ -2644,12 +2644,15 @@ def disp_current_events(mode=0,shift=false)
       c[i][1]='Mythic Hero Battle' if c[i][1]=='MHB'
       c[i][1]='Daily Reward Battle' if ['DRM','Daily Reward Maps','DRB'].include?(c[i][1])
       c[i][1]='Grand Conquests' if c[i][1]=='GC'
+      c[i][1]='Rokkr Sieges' if ['RS','Rokkr'].include?(c[i][1])
       c[i][1]='Tempest Trials' if ['TT','Tempest'].include?(c[i][1])
       c[i][1]='Forging Bonds' if ['FB','Bonds','Bond Trials'].include?(c[i][1])
       c[i][1]='Tap Battle' if c[i][1]=='Illusory Dungeon'
       c[i][1]='Log-In Bonus' if c[i][1]=='Log-In' || c[i][1]=='Login'
-      c[i][2]=c[i][2].split(', ')
+      c[i][2]=c[i][2].split(', ') unless c[i][2].nil?
+      c[i]=nil if c[i][2].nil?
     end
+    c.compact!
     c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i>tm || (q.length>1 && q[2][1].split('/').reverse.join('').to_i<tm)}
     c2=c.reject{|q| q[2].nil? || q[2][0].split('/').reverse.join('').to_i<=tm} if mode<0
     for i in 0...c2.length
@@ -2717,6 +2720,28 @@ def disp_current_events(mode=0,shift=false)
         elsif t2>1
           str2="#{str2} - #{t2.floor} seconds remain in Battle #{t4/2+1}"
           str2="#{str2} (Round #{(1-(t2/(60*60)).floor/4).floor} currently ongoing)"
+        elsif t2.floor<=0
+          str2="#{str2} - waiting until Battle #{t4/2+2}"
+        end
+      elsif c2[i][1]=='Rokkr Sieges' && mode>0
+        t4=c2[i][2][0].split('/').map{|q| q.to_i}
+        t4=Time.new(t4[2],t4[1],t4[0])+24*60*60
+        t3=Time.new(t.year,t.month,t.day)+24*60*60
+        t4=t3-t4
+        t4=t4/(24*60*60)
+        t4=t4.floor
+        t2=c2[i][2][0].split('/').map{|q| q.to_i}
+        t2=Time.new(t2[2],t2[1],t2[0])+24*60*60
+        t2+=24*60*60*(2*(t4/2+1)-1)
+        t2=t2-t
+        if t2/(60*60)>44
+          str2="#{str2} - waiting until Battle #{t4/2+1}"
+        elsif t2/(60*60)>1
+          str2="#{str2} - #{(t2/(60*60)).floor} hours remain in Battle #{t4/2+1}"
+        elsif t2/60>1
+          str2="#{str2} - #{(t2/60).floor} minutes remain in Battle #{t4/2+1}"
+        elsif t2>1
+          str2="#{str2} - #{t2.floor} seconds remain in Battle #{t4/2+1}"
         elsif t2.floor<=0
           str2="#{str2} - waiting until Battle #{t4/2+2}"
         end
