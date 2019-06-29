@@ -1657,7 +1657,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
   if weapon.nil? || weapon=='' || weapon==' ' || weapon=='-'
   else # this is the weapon's stat effect
     s2=find_skill(weapon,event)
-    if !s2.nil? && s2[6]=='Weapon' && !s2[17].nil? && !refinement.nil? && refinement.length>0 && (s2[7]!='Staff Users Only' || refinement=='Effect')
+    if !s2.nil? && s2[6]=='Weapon' && !s2[17].nil? && !refinement.nil? && refinement.length>0 && (s2[7]!='Staff Users Only' || s2[2]=='Stat' || refinement=='Effect')
       # weapon refinement...
       if find_effect_name(s2,event).length>0
         zzz2=find_effect_name(s2,event,1)
@@ -1713,7 +1713,7 @@ def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refi
       overides[2][6]='Speed'
       overides[3][6]='Defense'
       overides[4][6]='Resistance'
-      if s2[5].include?('Tome Users Only') || ['Bow Users Only','Dagger Users Only'].include?(s2[5])
+      if s2[5].include?('Tome Users Only') || ['Bow Users Only','Staff Users Only','Dagger Users Only'].include?(s2[5])
         sttz.push([0,0,0,0,0,'Effect']) if inner_skill.length>1
         sttzx=[[2,1,0,0,0,'Attack'],[2,0,2,0,0,'Speed'],[2,0,0,3,0,'Defense'],[2,0,0,0,3,'Resistance']]
       else
@@ -4170,7 +4170,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       end
     end
     overides=[[0,0,0,0,0,0,'e'],[0,0,0,0,0,0,'a'],[0,0,0,0,0,0,'s'],[0,0,0,0,0,0,'d'],[0,0,0,0,0,0,'r']]
-    overides=[[0,0,0,0,0,0,'e'],[0,0,0,0,0,0,'w'],[0,0,0,0,0,0,'d']] if skill[7]=='Staff Users Only'
+    overides=[[0,0,0,0,0,0,'e'],[0,0,0,0,0,0,'w'],[0,0,0,0,0,0,'d']] if skill[7]=='Staff Users Only' && skill[2]!='Stats'
     for i in 0...overides.length
       if inner_skill[0,3]=="(#{overides[i][6]})"
         inner_skill=inner_skill[3,inner_skill.length-3]
@@ -4188,7 +4188,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       end
     end
     overides[0][6]='Effect'
-    if skill[7]=='Staff Users Only'
+    if skill[7]=='Staff Users Only' && skill[2]!='Stats'
       overides[1][6]='Wrathful'
       overides[2][6]='Dazzling'
     else
@@ -4407,7 +4407,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       end
     end
     if safe_to_spam?(event) || ['Attack','Wrathful','Dazzling'].include?(sttz[0][5])
-      str="#{str}\n\n<:Refine_Unknown:455609031701299220>**All #{'Stat' unless skill[7]=='Staff Users Only'}#{'Default' if skill[7]=='Staff Users Only'} Refinements**"
+      str="#{str}\n\n<:Refine_Unknown:455609031701299220>**All #{'Stat' unless skill[7]=='Staff Users Only' && skill[2]!='Stats'}#{'Default' if skill[7]=='Staff Users Only' && skill[2]!='Stats'} Refinements**"
       effective=[]
       effective.push('<:Icon_Move_Flier:443331186698354698>') if skill[5]=="Bow Users Only"
       for i2 in 0...lookout2.length
@@ -11309,7 +11309,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
   return nil if overlap_prevent(event)
   return nil unless [167657750971547648].include?(event.user.id) || event.channel.id==386658080257212417
   bot.gateway.check_heartbeat_acks = false
-  event.respond "Reload what?\n1.) Aliases, from backups\n2.) Groups, from backups#{"\n3.) Data, from GitHub\n4.) Source code, from GitHub\n5.) Libraries, from code" if event.user.id==167657750971547648}\nYou can include multiple numbers to load multiple things."
+  event.respond "Reload what?\n1.) Aliases, from backups\n2.) Groups, from backups#{"\n3.) Data, from GitHub\n4.) Source code, from GitHub\n5.) Libraries, from GitHub\n6.) Libraries, from code" if event.user.id==167657750971547648}\nYou can include multiple numbers to load multiple things."
   event.channel.await(:bob, from: event.user.id) do |e|
     reload=false
     if e.message.text.include?('1')
@@ -11426,6 +11426,55 @@ bot.command(:reload, from: 167657750971547648) do |event|
       end
     end
     if e.message.text.include?('5') && e.user.id==167657750971547648
+      puts 'reloading EliseMulti1'
+      download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/EliseMulti1.rb")
+      IO.copy_stream(download, "FEHTemp.txt")
+      str=''
+      if File.size("FEHTemp.txt")>100
+        b=[]
+        File.open("FEHTemp.txt").each_line.with_index do |line, idx|
+          b.push(line.gsub('Mini-Matt',@mash))
+        end
+        open("EliseMulti1.rb", 'w') { |f|
+          f.puts b.join('')
+        }
+        str="#{str}\nEliseMulti1 loaded."
+        reload=true
+      end
+      puts 'reloading EliseTexts'
+      download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/EliseText.rb")
+      IO.copy_stream(download, "FEHTemp.txt")
+      if File.size("FEHTemp.txt")>100
+        b=[]
+        File.open("FEHTemp.txt").each_line.with_index do |line, idx|
+          b.push(line.gsub('Mini-Matt',@mash))
+        end
+        open("EliseText.rb", 'w') { |f|
+          f.puts b.join('')
+        }
+        str="#{str}\nEliseText loaded."
+        reload=true
+      end
+      download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/rot8er_functs.rb")
+      IO.copy_stream(download, "FEHTemp.txt")
+      if File.size("FEHTemp.txt")>100
+        b=[]
+        File.open("FEHTemp.txt").each_line.with_index do |line, idx|
+          b.push(line.gsub('Mini-Matt',@mash))
+        end
+        open("rot8er_functs.rb", 'w') { |f|
+          f.puts b.join('')
+        }
+        str="#{str}\nrot8er_functs loaded."
+        reload=true
+      end
+      t=Time.now
+      @last_multi_reload[0]=t
+      @last_multi_reload[1]=t
+      e.respond str
+      reload=true
+    end
+    if e.message.text.include?('6') && e.user.id==167657750971547648
       puts 'reloading EliseMulti1'
       load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
       puts 'reloading EliseTexts'
