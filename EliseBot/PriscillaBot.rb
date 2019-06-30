@@ -11403,7 +11403,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
         if File.exist?("C:/Users/#{@mash}/Desktop/devkit/BotTokens.txt")
           b2=[]
           File.open("C:/Users/#{@mash}/Desktop/devkit/BotTokens.txt").each_line do |line|
-            b2.push(line.gsub("\n",''))
+            b2.push(line.split(' # ')[0])
           end
         else
           b2=[]
@@ -11412,7 +11412,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
           b=[]
           File.open("FEHTemp.txt").each_line.with_index do |line, idx|
             if idx<100
-              b.push(line.gsub('>Main Token<',b2[0]).gsub('>Debug Token<',b2[-1]))
+              b.push(line.gsub('>Main Token<',b2[1]).gsub('>Debug Token<',b2[-1]))
             else
               b.push(line)
             end
@@ -11433,7 +11433,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
       if File.size("FEHTemp.txt")>100
         b=[]
         File.open("FEHTemp.txt").each_line.with_index do |line, idx|
-          b.push(line.gsub('Mini-Matt',@mash))
+          b.push(line)
         end
         open("EliseMulti1.rb", 'w') { |f|
           f.puts b.join('')
@@ -11447,7 +11447,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
       if File.size("FEHTemp.txt")>100
         b=[]
         File.open("FEHTemp.txt").each_line.with_index do |line, idx|
-          b.push(line.gsub('Mini-Matt',@mash))
+          b.push(line)
         end
         open("EliseText.rb", 'w') { |f|
           f.puts b.join('')
