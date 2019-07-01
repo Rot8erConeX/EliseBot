@@ -3653,6 +3653,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         hdr="__**#{skill[1]}**#{f2.map{|q| q[2]}.join('/')}__" if skill[1][-1,1]=='+'
       end
       sklimg="#{skill[1].gsub(' ','_').gsub('/','_').gsub('!','').gsub('.','')}_#{skill[2]}"
+      sklimg="#{skill[1].gsub(' ','_').gsub('/','_').gsub('!','').gsub('.','')}#{skill[2]}" if skill[1][-1,1]=='+'
+      sklimg="#{skill[1].gsub(' ','_').gsub('/','_').gsub('!','').gsub('.','')}" if skill[2]=='-'
+      sklimg="#{skill[1].gsub(' ','_').gsub('.','').gsub('/','_').gsub('!','')}_W" if skill[2][0,1]=='W' || has_any?(event.message.text.downcase.split(' '),['refinement','refinements','(w)'])
       if skill[2]=='example' || skill[1][0,10]=='Squad Ace '
         skill2=skill.map{|q| q}
         skill2=f2[-1] if f != skill
@@ -3704,6 +3707,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
           floop[0]='<:Great_Badge_Scarlet:443704781001850910> <:Badge_Scarlet:445510676060962816>' if floop[0].downcase=='scarlet'
           floop[0]='<:Great_Badge_Azure:443704780783616016> <:Badge_Azure:445510675352125441>' if floop[0].downcase=='azure'
           floop[0]='<:Great_Badge_Verdant:443704780943261707> <:Badge_Verdant:445510676056899594>' if floop[0].downcase=='verdant'
+          floop[0]='<:Great_Badge_Golden:443704781068959744> <:Badge_Golden:595157392597975051>' if floop[0].downcase=='gold'
           for i in 1...floop.length
             floop[i]=floop[i].to_i
           end
@@ -3723,6 +3727,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
           floop[0]='<:Great_Badge_Scarlet:443704781001850910> <:Badge_Scarlet:445510676060962816>' if floop[0].downcase=='scarlet'
           floop[0]='<:Great_Badge_Azure:443704780783616016> <:Badge_Azure:445510675352125441>' if floop[0].downcase=='azure'
           floop[0]='<:Great_Badge_Verdant:443704780943261707> <:Badge_Verdant:445510676056899594>' if floop[0].downcase=='verdant'
+          floop[0]='<:Great_Badge_Golden:443704781068959744> <:Badge_Golden:595157392597975051>' if floop[0].downcase=='gold'
           str="#{str}\n**Seal Cost:** #{seals.map{|q| q[1]}.join('/')}#{floop[0].split(' ')[0]} #{seals.map{|q| q[2]}.join('/')}#{floop[0].split(' ')[1]} #{seals.map{|q| q[3]}.join('/')}<:Sacred_Coin:453618312996323338>"
           mxm=[0,0,0]
           for i in 0...seals.length
