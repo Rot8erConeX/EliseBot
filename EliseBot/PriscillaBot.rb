@@ -860,7 +860,7 @@ def find_skill(name,event,ignore=false,ignore2=false,untz=nil)
     name=buff if find_skill(buff,event,ignore,ignore2).length>0
   end
   name=name.gsub(' ','').gsub('_','').gsub('(','').gsub(')','') unless ignore2
-  untz=@skills.map{|q| q} if untz.nil? || untz.length<=0
+  untz=@skills.reject{|q| !has_any?(g, q[15])} if untz.nil? || untz.length<=0
   untz=untz.sort{|a,b| a[0]<=>b[0]}.uniq
   nicknames_load()
   b=@aliases.reject{|q| q[0]!='Skill' || q[2].is_a?(String)}
