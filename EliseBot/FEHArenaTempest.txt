@@ -1,3 +1,8 @@
-Nah, Brady, Yarne, Kjelle, Cynthia, Silvia, Saizo, Luke, Marth(King), Anna\Arena\18/06/2019, 24/06/2019\Unknown, Unknown
-Naga, Fjorm(Bride), Pent(Bride), Tanith(Bride), Sigrun(Bride), Louise(Bride), Finn, Kana(M), Alm(Saint), Anna\Aether\18/06/2019, 24/06/2019\Astra, Anima\Catapult, Catapult
-Nah, Brady, Yarne, Kjelle, Cynthia, Silvia, Saizo, Luke, Marth(King), Anna\Arena\25/06/2019, 01/07/2019\Unknown, Unknown
+Eliwood(Wind), Laegjarn(Summer), Laevatein(Summer), Helbindi(Summer), Gunnthra(Summer), Ylgr(Summer), Gharnef, Leon, Tiki(Young)(Earth), Alfonse\Arena\02/07/2019, 08/07/2019\Wind, Fire
+Duma, Nah, Brady, Yarne, Kjelle, Cynthia, Julius, Marth(Groom), Gunnthra, Alfonse\Aether\02/07/2019, 08/07/2019\Astra, Anima\Armor School, Armor School
+Eliwood(Wind), Laegjarn(Summer), Laevatein(Summer), Helbindi(Summer), Gunnthra(Summer), Ylgr(Summer), Gharnef, Leon, Tiki(Young)(Earth), Alfonse\Arena\09/07/2019, 15/07/2019\Wind, Water
+Eir, Laegjarn(Summer), Laevatein(Summer), Helbindi(Summer), Gunnthra(Summer), Ylgr(Summer), Canas, Eliwood(Wind), Sharena\Aether\09/07/2019, 15/07/2019\Light, Dark\Cavalry School, Cavalry School
+Lilina(Summer), Wolt(Summer), Lyn(Summer), Ursula(Summer), Fiora(Summer), Roy, Cecilia, Gwendolyn\Tempest\13/07/2019, 23/07/2019
+Lilina(Summer), Wolt(Summer), Lyn(Summer), Ursula(Summer), Fiora(Summer), Naesala, Hawkeye, Luke, Eirika(Graceful), Sharena\Arena\16/07/2019, 22/07/2019\Wind, Water
+Eir, Laegjarn(Summer), Laevatein(Summer), Helbindi(Summer), Gunnthra(Summer), Ylgr(Summer), Canas, Eliwood(Wind), Sharena\Aether\16/07/2019, 22/07/2019\Astra, Anima\Unknown, Unknown
+Lilina(Summer), Wolt(Summer), Lyn(Summer), Ursula(Summer), Fiora(Summer), Naesala, Hawkeye, Luke, Eirika(Graceful), Sharena\Arena\23/07/2019, 29/07/2019\Wind, Earth

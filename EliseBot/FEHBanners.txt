@@ -1,30 +1,50 @@
-Book 1 Revival, Week 20\-4\Azura, Elise, Leo\5\\Book1
-Book 1 Revival, Week 19\-4\Gray, Ike(Brave), Lucina(Brave)\5\\Book1
-Book 1 Revival, Week 18\-4\Amelia, Nephenee, Sanaki\5\\Book1
-Book 1 Revival, Week 17\-4\Elincia, Innes, Tana\5\\Book1
-Book 1 Revival, Week 16\-4\Ephraim, Jaffar, Karel\5\\Book1
-Book 1 Revival, Week 15\-4\Azura, Deirdre, Eldigan\5\\Book1
-Book 1 Revival, Week 14\-4\Linde, Saber, Sonya\5\\Book1
-Book 1 Revival, Week 13\-4\Hector, Luke, Tana\5\\Book1
-Book 1 Revival, Week 12\-4\Dorcas, Lute, Mia\5\\Book1
-Book 1 Revival, Week 11\-4\Lyn(Brave), Ninian, Roy(Brave)\5\\Book1
-Book 1 Revival, Week 10\-4\Amelia, Ayra, Olwen(Bonds)\5\\Book1
-Book 1 Revival, Week 9\-4\Alm, Delthea, Faye\5\\Book1
-Book 1 Revival, Week 8\-4\Genny, Katarina, Minerva\5\\Book1
-Book 1 Revival, Week 7\-4\Hinoka, Ryoma, Takumi\5\\Book1
-Book 1 Revival, Week 6\-4\Julia, Lucina, Lucina(Brave)\5\\Book1
-Book 1 Revival, Week 5\-4\Ike, Ike(Brave), Mist\5\\Book1
-Book 1 Revival, Week 4\-4\Hector, Lyn, Lyn(Brave)\5\\Book1
-Book 1 Revival, Week 3\-4\Julia, Nephenee, Sigurd\5\\Book1
-Book 1 Revival, Week 2\-4\Ceilica, Delthea, Genny\5\\Book1
-Book 1 Revival, Week 1\-4\Deirdre, Linde, Tiki(Young)\5\\Book1
-From a Future Past\3\-\5\11/06/2019, 30/06/2019\NewUnits
+Book 1 Revival, Week 20\-4\Azura, Elise, Leo\5\20/10/2019, 26/10/2019\Book1
+Book 1 Revival, Week 19\-4\Gray, Ike(Brave), Lucina(Brave)\5\13/10/2019, 19/10/2019\Book1
+Book 1 Revival, Week 18\-4\Amelia, Nephenee, Sanaki\5\06/10/2019, 12/10/2019\Book1
+Book 1 Revival, Week 17\-4\Elincia, Innes, Tana\5\29/09/2019, 05/10/2019\Book1
+Book 1 Revival, Week 16\-4\Ephraim, Jaffar, Karel\5\22/09/2019, 28/09/2019\Book1
+Book 1 Revival, Week 15\-4\Azura, Deirdre, Eldigan\5\15/09/2019, 21/09/2019\Book1
+Book 1 Revival, Week 14\-4\Linde, Saber, Sonya\5\08/09/2019, 14/09/2019\Book1
+Book 1 Revival, Week 13\-4\Hector, Luke, Tana\5\01/09/2019, 07/09/2019\Book1
+Book 1 Revival, Week 12\-4\Dorcas, Lute, Mia\5\25/08/2019, 31/08/2019\Book1
+Book 1 Revival, Week 11\-4\Lyn(Brave), Ninian, Roy(Brave)\5\18/08/2019, 24/08/2019\Book1
+Book 1 Revival, Week 10\-4\Amelia, Ayra, Olwen(Bonds)\5\11/08/2019, 17/08/2019\Book1
+New Heroes: >Unknown<\3\-\5\07/08/2019, 06/09/2019\NewUnits
+Heroes with Savage Blow\3\Camilla(Launch), Leo, Rhajat\5\05/08/2019, 14/08/2019\SkillBanner
+Book 1 Revival, Week 9\-4\Alm, Delthea, Faye\5\04/08/2019, 10/08/2019\Book1
+Mythic Heroes: >Unknown<\-8\Alm(Saint), Azura(Vallite), Eir, Fjorm, Hector(Marquess), Ike(Vanguard), Lyn(Wind), Marth(King)\5\31/07/2019, 06/08/2019\Legendary
+Book 1 Revival, Week 8\-4\Genny, Katarina, Minerva\5\28/07/2019, 03/08/2019\Book1
+Heroes with Close Def skills\3\-\5\27/07/2019, 10/08/2019\SkillBanner
+New Heroes: >Three Houses tie-in<\3\Byleth(M)\5\22/07/2019, 06/08/2019\NewUnits
+Book 1 Revival, Week 7\-4\Hinoka, Ryoma, Takumi\5\21/07/2019, 27/07/2019\Book1
+New Power (July 2019)\3\Luke, Matthew, Raigh, Roderick\5\14/07/2019, 22/07/2019\NewPower
+Morgan and Morgan's Battle\3\Morgan(F), Morgan(M)\5\14/07/2019, 22/07/2019\BHB
+Book 1 Revival, Week 6\-4\Julia, Lucina, Lucina(Brave)\5\14/07/2019, 20/07/2019\Book1
+"Lessons Learned" Tempest Trials+\3\Cecilia, Gwendolyn, Roy\5\10/07/2019, 23/07/2019\Tempest
+Summer Refreshes\3\Lilina(Summer), Lyn(Summer), Ursula(Summer), Wolt(Summer)\5\09/07/2019, 10/08/2019\Seasonal, Summer
+Book 1 Revival, Week 5\-4\Ike, Ike(Brave), Mist\5\07/07/2019, 13/07/2019\Book1
+Marth & Caeda's Battle\3\Ceada, Catria, Marth\5\06/07/2019, 13/07/2019\BHB
+Heroes with Ignis\3\Hector(Brave), Leon, Thea\5\04/07/2019, 13/07/2019\SkillBanner
+Ylissean Summer (2019 rerun)\3\Frederick(Summer), Gaius(Summer), Robin(F)(Summer), Tiki(Adult)(Summer)\5\26/06/2019, 25/07/2019\Seasonal, Summer
+Summer's Arrival (2019 rerun)\3\Cordelia(Summer), Innes(Summer), Noire(Summer), Tana(Summer)\5\23/06/2019, 22/07/2019\Seasonal, Summer
+"A Promise of Joy" Tempest Trials+\3\Helbindi, Laegjarn, Ylgr\5\21/06/2019, 03/07/2019\Tempest
+Summer Returns\3\Gunnthra(Summer), Helbindi(Summer), Laegjarn(Summer), Laevatein(Summer)\5\20/06/2019, 08/08/2019\Seasonal, Summer
+GHB Units\5\-\543\\Dynamic, GHB
+TT Units\5\-\54\\Dynamic, Tempest
+Book 1 Revival, Week 4\-4\Hector, Lyn, Lyn(Brave)\5\30/06/2019, 06/07/2019\Book1
+Legendary Heroes: Eliwood, Blazing Knight\-8\Eliwood(Wind), Ephraim(Fire), Gunnthra, Hinoka(Bath), Hrid(Winter), Lucina(Glorious), Robin(F)(Fallen), Ryoma(Supreme), Sakura(Bath), Selkie, Veronica, Yune\5\28/06/2019, 04/07/2019\Legendary
+Headband Brawl (Block B)\3\Barst, Gray, Jeorge, Tibarn\5\27/06/2019, 06/07/2019\VotingGauntlet
+Headband Brawl (Block A)\3\Mia, Olivia(Traveler), Sanaki, Sue\5\27/06/2019, 06/07/2019\VotingGauntlet
+Heroes with Chill Skills\3\Celica(Fallen), Ophelia, Ranulf\5\25/06/2019, 03/07/2019\SkillBanner
+Book 1 Revival, Week 3\-4\Julia, Nephenee, Sigurd\5\23/06/2019, 29/06/2019\Book1
+From a Future Past\3\Brady, Kjelle, Nah, Yarne\5\11/06/2019, 30/06/2019\NewUnits
+New Power (June 2019)\3\Elincia, Kagero, Oscar, Saizo\5\16/06/2019, 25/06/2019\NewPower
+Book 1 Revival, Week 2\-4\Ceilica, Delthea, Genny\5\16/06/2019, 22/06/2019\Book1
+Book 1 Revival, Week 1\-4\Deirdre, Linde, Tiki(Young)\5\09/06/2019, 15/06/2019\Book1
 Heroes with Flier Formation\3\Elincia, Hinoka(Wings), Leanne\5\06/06/2019, 15/06/2019\SkillBanner
 Bridal Blessings (2019 Rerun)\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)\5\24/05/2019, 20/06/2019\Seasonal, Bride
 Bridal Bloom (2019 Rerun)\3\Ninian(Bride), Sanaki(Bride), Tharja(Bride)\5\22/05/2019, 20/06/2019\Seasonal, Bride, Tempest
 Bridal Belonging\3\Fjorm(Bride), Pent(Groom), Sigrun(Bride), Tanith(Bride)\5\21/05/2019, 20/06/2019\Seasonal, Bride, Tempest
-GHB Units\5\-\543\\Dynamic, GHB
-TT Units\5\-\54\\Dynamic, Tempest
 Mythic Heroes: Naga, Dragon Divinity\-8\Duma, Eirika(Graceful), Fjorm(Winter), Gunnthra(Winter), Hector(Brave), Hrid, Laevatein(Winter), Lugh, Lyn(Wind), Naga, Tiki(Young)(Earth), Velouria\5\30/05/2019, 05/06/2019\Legendary
 Heroes with Dragon Fang\3\Corrin(M)(Adrift), Julia, Siegbert\5\26/05/2019, 05/06/2019\SkillBanner
 Leif & Nanna's Battle\3\Lachesis, Leif, Nanna\5\27/05/2019, 04/06/2019\BHB

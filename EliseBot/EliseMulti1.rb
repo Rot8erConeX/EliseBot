@@ -491,6 +491,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Lyn(Valentines)'],["love#{str}","abounds#{str}","devoted#{str}","valentines#{str}","valentine's#{str}","#{str}love","#{str}devoted","#{str}abounds","#{str}valentines","#{str}valentine's","la#{str}","#{str}la"]]
     elsif str2.include?('winds') || str2.include?('wind') || str2.include?('bladelord') || str2.include?('legendary') || str2.include?("#{str}lh") || str2.include?("lh#{str}")
       return [str,['Lyn(Wind)'],["wind#{str}","#{str}wind","bladelord#{str}","#{str}bladelord","#{str}legendary","legendary#{str}","lh#{str}","#{str}lh"]]
+    elsif str2.include?('summer') || str2.include?('beach') || str2.include?('swimsuit') || str2.include?('sr')
+      return [str,['Lyn(Symmer)'],["summer#{str}","#{str}summer","beach#{str}","#{str}beach","#{str}swimsuit","swimsuit#{str}","sr#{str}","#{str}sr"]]
     elsif str2.include?('love')
       return [str,['Lyn(Bride)','Lyn(Valentines)'],["love#{str}","#{str}love"]]
     elsif str2.include?('bow') || str2.include?('archer') || str2.include?('legend')

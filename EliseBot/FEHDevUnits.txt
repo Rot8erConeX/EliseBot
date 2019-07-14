@@ -1,5 +1,5 @@
 Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Bunny)\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Fjorm\Fjorm(Bride)\Kaden\Kana(F)\Leanne\Lethe\Matthew\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr
+Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Fjorm\Fjorm(Bride)\Kaden\Kana(F)\Leanne\Lethe\Matthew\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
@@ -153,7 +153,7 @@ Def Ploy 1\Def Ploy 2\Def Ploy 3
 Res Ploy 3
 
 Ethlyn
-5\2\ \ \-\0\
+5\3\ \ \-\0\
 Assault\Fear\Fear+\Fear+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -223,14 +223,14 @@ Def Opening 1\Def Opening 2\Def Opening 3
 Renewal 2
 
 Gunnthra
-5\1\Attack\Speed\-\3\
+5\1\Attack\Speed\-\4\
 Wind\Elwind\Rexcalibur\Blizzard
 Rally Speed
 Chilling Wind\Glacies
 Darting Blow 1\Darting Blow 2\Darting Blow 3
 Chilling Seal
 Res Ploy 1\Res Ploy 2\Res Ploy 3
-Darting Stance 2
+Darting Stance 3
 
 Gunnthra(Winter)
 5\0\Resistance\Speed\-\0\
@@ -293,7 +293,7 @@ Fortify Res 1\Fortify Res 2\Fortify Res 3
 Fortify Def 2
 
 Marisa
-5\8\ \ \-\0\
+5\10\ \ \-\0\
 Iron Sword\Steel Sword\Wo Dao\Wo Dao+\Wo Dao+ (+) Speed Mode
 Shove
 Night Sky\Glimmer
@@ -370,7 +370,7 @@ Chilling Wind\Iceberg
 Darting Blow 1\Darting Blow 2\Darting Blow 3
 Poison Strike 1\Poison Strike 2\Poison Strike 3
 Threaten Res 1\Threaten Res 2
-Distant Def 2
+Distant Def 3
 
 Reyson
 4\3\Res\Atk\-\0\
@@ -471,4 +471,14 @@ Sorcery Blade 1\Sorcery Blade 2\Sorcery Blade 3
 Chill Spd 1\Chill Spd 2\Chill Spd 3
 Spd Tactic 1\Spd Tactic 2\Spd Tactic 3
 Atk/Def Bond 3
+
+Ylgr(Summer)
+5\0\ \ \-\0\
+Iron Axe\Steel Axe\Shoreline Rake\Shoreline Rake+\Shoreline Rake+ (+) Speed Mode
+Rally Speed
+New Moon\Luna
+Flashing Blade 1\Flashing Blade 2\Flashing Blade 3
+Seal Atk 1\Seal Atk 2\Seal Atk 3
+Even Def Wave 1\Even Def Wave 2\Even Def Wave 3
+Seal Spd 2
 

@@ -2667,6 +2667,8 @@ def disp_current_events(mode=0,shift=false)
         n="#{c2[i][1]}: *#{n}*"
       elsif c2[i][1]=='Grand Conquests'
         n="Grand Conquests"
+      elsif c2[i][1]=='Rokkr Sieges'
+        n="Rokkr Sieges"
       elsif c2[i][1]=='Tap Battle'
         n="Illusory Dungeon: #{n}"
       elsif c2[i][1]=='Update'
