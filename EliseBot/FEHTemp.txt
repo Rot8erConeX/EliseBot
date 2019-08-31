@@ -312,10 +312,6 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
     header=header[0]
     header='' if header.nil?
   end
-  if title.is_a?(Array)
-    text="#{title[1]}\n\n#{text}"
-    title=title[0]
-  end
   if @embedless.include?(event.user.id) || (was_embedless_mentioned?(event) && ch_id==0)
     str=''
     if header.length>0

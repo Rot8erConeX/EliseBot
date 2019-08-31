@@ -71,7 +71,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
     if str2.include?('legendary') || str2.include?('saint') || str2.include?('king')
       return [str,['Alm(Saint)'],["legendary#{str}","#{str}legendary","saint#{str}","#{str}saint","king#{str}","#{str}king"]]
-    elsif str2.include?('brave') || str2.include?('cyl')
+    elsif str2.include?('brave') || str2.include?('cyl') || str2.include?('bh')
       return [str,['Alm(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Alm(Saint)','Alm(Brave)'],[str]]
@@ -150,6 +150,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Camilla(Winter)'],["winter#{str}","#{str}winter","newyear#{str}","#{str}newyear","holiday#{str}","#{str}holiday","ny#{str}","#{str}ny"]]
     elsif str2.include?('adrift') || str2.include?('dream') || str2.include?('valla') || str2.include?('vallite') || str2.include?('dreamy') || str2.include?('dreamer') || str2.include?('dreaming') || str2.include?('dreams') || str2.include?('fauxzura') || str2.include?('fauxura') || str2.include?('revelation') || str2.include?('rev') || str2.include?('sleepy') || str2.include?('sleep')
       return [str,['Camilla(Adrift)'],["adrift#{str}","#{str}adrift","dream#{str}","#{str}dream","valla#{str}","#{str}valla","vallite#{str}","#{str}vallite","dreamy#{str}","#{str}dreamy","dreamer#{str}","#{str}dreamer","dreaming#{str}","#{str}dreaming","dreams#{str}","#{str}dreams","fauxzura#{str}","#{str}fauxzura","fauxura#{str}","#{str}fauxura","revelation#{str}","#{str}revelation","revelations#{str}","#{str}revelations","rev#{str}","#{str}rev","#{str}sleepy","#{str}sleep","sleepy#{str}","sleep#{str}"]]
+    elsif str2.include?('brave') || str2.include?('cyl') || str2.include?('bh')
+      return [str,['Camilla(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     elsif str2.include?('spring')
       return [str,['Camilla(Bunny)','Camilla(Bath)'],["spring#{str}","#{str}spring","b#{str}","#{str}b"]]
     end
@@ -459,6 +461,17 @@ def multi_for_units(event,str1,str2,robinmode=0)
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Morgan(M)','Morgan(F)'],[str]]
+  elsif /(byleth)/ =~ str1
+    str='byleth'
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("lass#{str}") || str2.include?("#{str}lass") || str2.include?("#{str}f") || str2.include?("f#{str}")
+      return [str,['Byleth(F)'],["female#{str}","f#{str}","#{str}female","#{str}f"]]
+    elsif str2.include?("male#{str}") || str2.include?("#{str}male") || str2.include?("lad#{str}") || str2.include?("#{str}lad") || str2.include?("#{str}m") || str2.include?("m#{str}")
+      return [str,['Byleth(M)'],["male#{str}","m#{str}","#{str}male","#{str}m"]]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Byleth(F)','Byleth(M)'],[str]]
   elsif /kan(n|)a/ =~ str1
     str='kana'
     str='kanna' if str2.include?('kanna')
@@ -2692,7 +2705,7 @@ def combined_BST(event,args,bot)
             ['Lyn', 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)']],
             ['Chrom', 0, 0, ['Chrom(Launch)', 'Chrom(Bunny)', 'Chrom(Winter)', 'Chrom(Branded)']],
             ['Azura', 0, 0, ['Azura', 'Azura(Performing)', 'Azura(Winter)', 'Azura(Adrift)', 'Azura(Vallite)']],
-            ['Camilla', 0, 0, ['Camilla', 'Camilla(Bunny)', 'Camilla(Winter)', 'Camilla(Summer)', 'Camilla(Adrift)', 'Camilla(Bath)']],
+            ['Camilla', 0, 0, ['Camilla', 'Camilla(Bunny)', 'Camilla(Winter)', 'Camilla(Summer)', 'Camilla(Adrift)', 'Camilla(Bath)', 'Camilla(Brave)']],
             ['Ike', 0, 0, ['Ike', 'Ike(Vanguard)', 'Ike(Brave)']],
             ['Roy', 0, 0, ['Roy', 'Roy(Valentines)', 'Roy(Brave)']],
             ['Hector', 0, 0, ['Hector', 'Hector(Valentines)', 'Hector(Marquess)', 'Hector(Brave)']],
@@ -2710,7 +2723,8 @@ def combined_BST(event,args,bot)
             ['Hinoka', 0, 0, ['Hinoka(Launch)', 'Hinoka(Wings)', 'Hinoka(Bath)']],
             ['Veronica', 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)']],
             ['Leo', 0, 0, ['Leo', 'Leo(Summer)', 'Leo(Picnic)']],
-            ['Alm', 0, 0, ['Alm', 'Alm(Saint)', 'Alm(Brave)']]]
+            ['Alm', 0, 0, ['Alm', 'Alm(Saint)', 'Alm(Brave)']],
+            ['Micaiah', 0, 0, ['Micaiah', 'Micaiah(Festival)', 'Micaiah(Brave)']]]
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0,0,0,0],[0,0,0,0,0]]
   m=false
@@ -3975,7 +3989,7 @@ def study_of_procs(event,name,bot,weapon=nil)
   cdwn2=cdwn unless wl.include?('~~')
   cdwns=cdwn
   cdwns="~~#{cdwn}~~ #{cdwn2}" unless cdwn2==cdwn
-  staves=[[],[],[],[],[],[],[],[],[]]
+  staves=[[],[],[],[],[],[],[],[],[],[]]
   g=get_markers(event) 
   procs=@skills.reject{|q| !has_any?(g, q[15]) || q[6]!='Special'}
   czz=0
@@ -4052,6 +4066,14 @@ def study_of_procs(event,name,bot,weapon=nil)
   d2="`3* #{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /10`"
   d="~~#{d}~~ #{d2}" unless d==d2
   staves[2].push("Noontime - #{wd}heals for #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Sirius',1)[4],cdwns)
+  d="#{spdd*3/10+wdamage+czz}#{" (#{blspdd*3/10+wdamage+czz})" unless spdd*3/10==blspdd*3/10}"
+  cd="#{crspdd*3/10+wdamage2+czz2}#{" (#{crblspdd*3/10+wdamage2+czz2})" unless crspdd*3/10==crblspdd*3/10}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  h="`3*dmg/10#{" + #{(wdamage+czz+(spdd*3/10))*3/10}" unless (wdamage+czz+(spdd*3/10))*3/10==0}`"
+  h2="`3*dmg/10#{" + #{(wdamage2+czz2+(crspdd*3/10))*3/10}" unless (wdamage2+czz2+(crspdd*3/10))*3/10==0}`"
+  h="~~#{h}~~ #{h2}" unless h==h2
+  staves[3].push("**Sirius - #{d}, heals for #{h}, cooldown of #{c}**") if get_match_in_list(procs, 'Sirius',1)[8].split(', ').include?(u40[0])
   czz=0
   czz2=0
   czz+=10 if has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Eclipse',sklz[ww2],refinement,transformed)
@@ -4065,7 +4087,7 @@ def study_of_procs(event,name,bot,weapon=nil)
   h="~~#{h}~~ #{h2}" unless h==h2
   staves[3].push("Aether - #{d}, heals for #{h}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Radiant Aether',1)[4],cdwns)
-  staves[3].push("**Radiant Aether - `#{d}, heals for #{h}, cooldown of #{c}**") if get_match_in_list(procs, 'Radiant Aether',1)[8].split(', ').include?(u40[0])
+  staves[3].push("**Radiant Aether - #{d}, heals for #{h}, cooldown of #{c}**") if get_match_in_list(procs, 'Radiant Aether',1)[8].split(', ').include?(u40[0])
   czz=0
   czz2=0
   czz+=10 if has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed)
@@ -4167,18 +4189,26 @@ def study_of_procs(event,name,bot,weapon=nil)
   cd="#{wdamage2+czz2}-#{3*crhppp/10+wdamage2+czz2}#{" (#{wdamage2+czz2}-#{3*crblhppp/10+wdamage2+czz2}) based on HP lost" if 3*crhppp/10!=3*crblhppp/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[8].push("Reprisal - #{d}, cooldown of #{c}")
+  czz=0
+  czz2=0
+  czz+=10 if has_weapon_tag?('WoDao_Rend',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag?('WoDao_Rend',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  c=add_number_to_string(get_match_in_list(procs, 'Ruptured Sky',1)[4],cdwns)
+  d="`eAtk \* X /5#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  cd="`eAtk \* X /5#{" +#{wdamage+czz}" if wdamage+czz>0}`"
+  staves[9].push("Ruptured Sky - #{d}, where X is 2 against dragons/beasts and 1 against everyone else, cooldown of #{c}")
   pic=pick_thumbnail(event,u40x,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   k="__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(" all") || k.length+staves.map{|q| q.join("\n")}.join("\n\n").length>=1950
-    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations"
+    event.respond "__#{"Mathoo's " if mu}**#{u40[0]}**__\n\n#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{unit_clss(bot,event,u40x,u40[0])}#{mergetext}\n\neDR = Enemy Def/Res, eAtk = Enemy Atk, DMG = Damage dealt by non-proc calculations"
     s=""
     for i in 0...staves.length
       s=extend_message(s,staves[i].join("\n"),event,2) unless staves[i].length.zero?
     end
     event.respond s
   else
-    flds=[["<:Special_Offensive_Star:454473651396542504>Star",staves[0],1],["<:Special_Offensive_Moon:454473651345948683>Moon",staves[1]],["<:Special_Offensive_Sun:454473651429965834>Sun",staves[2]],["<:Special_Offensive_Eclipse:454473651308199956>Eclipse",staves[3],1],["<:Special_Offensive_Fire:454473651861979156>Fire",staves[4]],["<:Special_Offensive_Ice:454473651291422720>Ice",staves[5]],["<:Special_Offensive_Fire:454473651861979156><:Special_Offensive_Ice:454473651291422720>Freezeflame",staves[6]],["<:Special_Offensive_Dragon:454473651186696192>Dragon",staves[7],1],["<:Special_Offensive_Darkness:454473651010535435>Darkness",staves[8]]]
+    flds=[["<:Special_Offensive_Star:454473651396542504>Star",staves[0],1],["<:Special_Offensive_Moon:454473651345948683>Moon",staves[1]],["<:Special_Offensive_Sun:454473651429965834>Sun",staves[2]],["<:Special_Offensive_Eclipse:454473651308199956>Eclipse",staves[3],1],["<:Special_Offensive_Fire:454473651861979156>Fire",staves[4]],["<:Special_Offensive_Ice:454473651291422720>Ice",staves[5]],["<:Special_Offensive_Fire:454473651861979156><:Special_Offensive_Ice:454473651291422720>Freezeflame",staves[6]],["<:Special_Offensive_Dragon:454473651186696192>Dragon",staves[7],1],["<:Special_Offensive_Darkness:454473651010535435>Darkness",staves[8]],["<:Special_Offensive_Rend:454473651119718401>Rend",staves[9]]]
     for i in 0...flds.length
       if flds[i][1].length.zero?
         flds[i]=nil
@@ -4187,7 +4217,7 @@ def study_of_procs(event,name,bot,weapon=nil)
       end
     end
     flds.compact!
-    create_embed(event,["__#{"Mathoo's " if mu}**#{u40[0]}**__",unit_clss(bot,event,u40x,u40[0])],"#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}#{mergetext}\n",xcolor,"eDR = Enemy Def/Res, DMG = Damage dealt by non-proc calculations",pic,flds)
+    create_embed(event,["__#{"Mathoo's " if mu}**#{u40[0]}**__",unit_clss(bot,event,u40x,u40[0])],"#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}#{mergetext}\n",xcolor,"eDR = Enemy Def/Res, eAtk = Enemy Atk, DMG = Damage dealt by non-proc calculations",pic,flds)
   end
 end
 

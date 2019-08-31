@@ -55,3 +55,4 @@ First Summon Ticket\Event\99\This ticket can be used only for the specified summ
 Frosty Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\New Year's 2019
 Havoc Axe\Event\99\Grants +8 stamina for Rokkr Sieges.\Rokkr Sieges stamina is different from stamina for other modes.
 Spring Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Spring 2019
+Summer Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Summer 2019

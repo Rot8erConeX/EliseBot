@@ -22,6 +22,7 @@ Dark Shrine\1\Offensive/Defensive\At start of turn, inflicts Def/Res-2 on foe on
 Escape Ladder\1\Offensive\Restores Aether cost of one failed battle per season.\No\0, 100, 0, 0\0
 Escape Ladder\2\Offensive\Restores Aether cost of two failed battles per season.\No\0, 300, 0, 0\0
 Escape Ladder\3\Offensive\Restores Aether cost of three failed battles per season.\No\0, 500, 0, 0\0
+Escape Ladder\4\Offensive\Restores Aether cost of four failed battles per season.\No\0, 700, 0, 0\0
 Flier School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 50, 0, 0\0\Only one school can be placed at a time.
 Flier School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 150, 0, 0\0\Only one school can be placed at a time.
 Flier School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 250, 0, 0\0\Only one school can be placed at a time.
@@ -36,6 +37,7 @@ Healing Tower\1\Offensive/Defensive\At start of turn, restores 10 HP to allies w
 Healing Tower\2\Offensive/Defensive\At start of turn, restores 15 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 300, 0, 0\0
 Healing Tower\3\Offensive/Defensive\At start of turn, restores 20 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 500, 0, 0\0
 Healing Tower\4\Offensive/Defensive\At start of turn, restores 25 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 700, 0, 0\0
+Healing Tower\5\Offensive/Defensive\At start of turn, restores 30 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 900, 0, 0\0
 Infantry School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 50, 0, 0\0\Only one school can be placed at a time.
 Infantry School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 150, 0, 0\0\Only one school can be placed at a time.
 Infantry School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 250, 0, 0\0\Only one school can be placed at a time.
@@ -86,6 +88,9 @@ Lending Library\-\Ornament\All of the Heroes who cherish knowledge gathered up t
 Sight of Bonding\-\Ornament\A floral decoration commemorating the eternal connection of friendship. It's an event item.\Yes\0, 0, 0, 500\0\Bridal 2019
 Sound of Bonding\-\Ornament\If two people who share a wish ring it together, their wish will come true. It's an event item.\Yes\0, 0, 0, 500\0\Bridal 2019
 Word of Bonding\-\Ornament\For Heroes who like to deepen their bonds over tea or at gatherings. It's an event item.\Yes\0, 0, 0, 500\0\Bridal 2019
+Black Eagle Flag\-\Ornament\Flag for the class led by Edelgard. It's an event item.\Yes\0, 0, 0, 500\0\Summer 2019
+Blue Lion Flag\-\Ornament\Flag for the class led by Dimitri. It's an event item.\Yes\0, 0, 0, 500\0\Summer 2019
+Golden Deer Flag\-\Ornament\Flag for the class led by Claude. It's an event item.\Yes\0, 0, 0, 500\0\Summer 2019
 Accessory Shop\-\Resort\A structure where Heroes can sample various accessories to find new looks that catch their fancy!\-\300, 0, 0, 0\0\Heroes cannot use this structure to change their equipped accessories.
 Armory\-\Resort\A structure that contains a collection of replica weapons for Heroes to sample.  The stock is updated periodically, too!\-\300, 0, 0, 0\0\Heroes cannot use this structure to learn new skills or change their equipped skills.
 Concert Hall\-\Resort\A structure for Heroes who enjoy music and dancing.  You can listen to music, change which songs are played in certain areas, and even order new tracks to listen to!\-\300, 0, 0, 0\0\This structure can be used to change music in Arena, on the lobby screen, and in Aether Raids.

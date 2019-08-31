@@ -2423,6 +2423,7 @@ def today_in_feh(event,bot,shift=false)
     c[i][1]='Grand Conquests' if c[i][1]=='GC'
     c[i][1]='Tempest Trials' if c[i][1]=='TT' || c[i][1]=='Tempest'
     c[i][1]='Tap Battle' if c[i][1]=='Illusory Dungeon'
+    c[i][1]='Lost Lore' if c[i][1]=='Lore'
     c[i][1]='Log-In Bonus' if c[i][1]=='Log-In' || c[i][1]=='Login'
     c[i][2]=c[i][2].split(', ')
   end
@@ -2648,6 +2649,7 @@ def disp_current_events(mode=0,shift=false)
       c[i][1]='Tempest Trials' if ['TT','Tempest'].include?(c[i][1])
       c[i][1]='Forging Bonds' if ['FB','Bonds','Bond Trials'].include?(c[i][1])
       c[i][1]='Tap Battle' if c[i][1]=='Illusory Dungeon'
+      c[i][1]='Lost Lore' if c[i][1]=='Lore'
       c[i][1]='Log-In Bonus' if c[i][1]=='Log-In' || c[i][1]=='Login'
       c[i][2]=c[i][2].split(', ') unless c[i][2].nil?
       c[i]=nil if c[i][2].nil?
@@ -2661,7 +2663,7 @@ def disp_current_events(mode=0,shift=false)
       t2=t2-t
       t2+=24*60*60 if shift && mode>0
       n=c2[i][0]
-      if ['Voting Gauntlet','Tempest Trials','Forging Bonds','Quests','Log-In Bonus'].include?(c2[i][1])
+      if ['Voting Gauntlet','Tempest Trials','Forging Bonds','Quests','Log-In Bonus','Lost Lore'].include?(c2[i][1])
         n="\"#{n}\" #{c2[i][1]}"
       elsif ['Bound Hero Battle','Grand Hero Battle','Legendary Hero Battle','Mythic Hero Battle','Daily Reward Battle','Special Maps'].include?(c2[i][1])
         n="#{c2[i][1]}: *#{n}*"
@@ -3337,6 +3339,421 @@ def skill_data(legal_skills,all_skills,event,mode=0)
     str="#{str}\n<:Passive_S:443677023626330122> #{filler(ls2,as2,6,-1,'Seal',1)} Passive Seals   #{filler(ls2,as2,6,-1,'Seal')} of which are exclusive to the Seal slot"
   end
   return str
+end
+
+def disp_FGO_based_stats(bot,event,srv=nil)
+  hdr="**Availability:** #{['2<:FGO_icon_rarity_sickly:571937157095227402>','3<:FGO_icon_rarity_rust:523903558928826372>','3-4<:FGO_icon_rarity_mono:523903551144198145>','4<:FGO_icon_rarity_mono:523903551144198145>','4-5<:FGO_icon_rarity_gold:523858991571533825>','5<:FGO_icon_rarity_gold:523858991571533825>'][srv[3]]}"
+  if srv[20]=='Event'
+    hdr="**Availability:** 3-4<:FGO_icon_rarity_mono:523903551144198145> GHB"
+    hdr="**Availability:** 2-3<:FGO_icon_rarity_rust:523903558928826372> GHB" if srv[0]==174
+  elsif srv[20]=='Limited'
+    hdr="#{hdr} Seasonal summon"
+  elsif srv[20]=='NonLimited'
+    hdr="#{hdr} Summon"
+  elsif srv[20]=='StoryLocked'
+    hdr="**Availability:** 4-5<:FGO_icon_rarity_gold:523858991571533825> Tempest Trial"
+  elsif srv[20]=='Starter'
+    hdr="**Availability:** Story unit starting at 2<:FGO_icon_rarity_sickly:571937157095227402>"
+  elsif srv[20]=='StoryPromo'
+    hdr="**Availability:** Story unit starting at 4<:FGO_icon_rarity_mono:523903551144198145>"
+  elsif srv[20]=='Unavailable'
+    hdr="**Availability:** Unobtainable"
+  end
+  color='Colorless'
+  wpn='Blade'
+  wpname='Rod *(Colorless Blade)*'
+  moji=[]
+  if srv[2]=='Shielder'
+  elsif [67,97,111,197,236,249].include?(srv[0])
+    wpn='Staff'
+    wpname='Healer *(Staff)*'
+  elsif [24,26,27,28,50,66,86,89,108,116,144,154,155,161,162,209,210,219,226,229,261,267].include?(srv[0])
+    color='Red'
+    wpname='Sword *(Red Blade)*'
+  elsif [48,52,94,98,106,113,163,206,222,243,251].include?(srv[0])
+    color='Blue'
+    wpname='Lance *(Blue Blade)*'
+  elsif [73,80,115,132,233].include?(srv[0])
+    color='Green'
+    wpname='Axe *(Green Blade)*'
+  elsif [58,81,147,149,151,202,238].include?(srv[0])
+    wpn='Beast'
+    color='Green' if srv[17][6,1]=='Q'
+    color='Blue' if srv[17][6,1]=='A'
+    color='Red' if srv[17][6,1]=='B'
+    color='Colorless' if srv[13].include?('Divine') || [81].include?(srv[0])
+    color='Red' if [151].include?(srv[0])
+    wpname="#{color} Beast"
+  elsif [23,265].include?(srv[0])
+    color='Blue'
+    wpn='Dagger'
+    wpname='Blue Dagger'
+  elsif [65,263].include?(srv[0])
+    color='Green'
+    wpn='Dagger'
+    wpname='Green Dagger'
+  elsif [93].include?(srv[0])
+    color='Red'
+    wpn='Dagger'
+    wpname='Red Dagger'
+  elsif [65,257,258].include?(srv[0])
+    color='Colorless'
+    wpn='Bow'
+    wpname='Colorless Bow'
+  elsif [129,164,184,250].include?(srv[0])
+    color='Red'
+    wpn='Bow'
+    wpname='Red Bow'
+  elsif [156].include?(srv[0])
+    color='Blue'
+    wpn='Bow'
+    wpname='Blue Bow'
+  elsif [179,239].include?(srv[0])
+    color='Green'
+    wpn='Bow'
+    wpname='Green Bow'
+  elsif [104,107,137].include?(srv[0])
+    wpn='Dagger'
+    wpname='Colorless Dagger'
+  elsif [29,77,79,83,96,118,139,166,167,168,169,170,173,177,182,189,190,191,194,195,198,199,200,204,215,216,220,224,229,230,237,240,241,242,247,248,253,260].include?(srv[0])
+    wpn='Tome'
+    color='Green' if srv[17][6,1]=='Q'
+    color='Blue' if srv[17][6,1]=='A'
+    color='Red' if srv[17][6,1]=='B'
+    color='Blue' if [77,118,166,182,200,216,229,240,241,242,247,253].include?(srv[0])
+    color='Green' if [215,224].include?(srv[0])
+    color='Red' if [83,96,167,168,170,177,190,191,195,199,204,220,230,248,260].include?(srv[0])
+    color='Colorless' if [169,194,198,237].include?(srv[0])
+    color=['Red','Red','Blue','Blue','Green'].sample if [79].include?(srv[0])
+    typ='Wind'
+    srv[17]="#{srv[0,5]}(X)"
+    typ=['Dark','Fire'][srv[0]%2] if srv[17][6,1]=='B' || ([79].include?(srv[0]) && color=='Red')
+    typ=['Light','Thunder'][srv[0]%2] if srv[17][6,1]=='A' || ([79].include?(srv[0]) && color=='Blue')
+    typ='Thunder' if [77,200].include?(srv[0])
+    typ='Light' if [118,139,166,173,182,216,229,240,241,242,247,253].include?(srv[0])
+    typ='Fire' if [190,191,195,248].include?(srv[0])
+    typ='Ice' if [215,224].include?(srv[0])
+    typ='Dark' if [83,96,167,168,170,177,199,204,220,230,260].include?(srv[0])
+    typ='Story' if [169,237].include?(srv[0])
+    typ='Riddle' if [194].include?(srv[0])
+    typ='Paint' if [198].include?(srv[0])
+    moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{typ}_#{wpn}"}
+    wpname="#{typ} Mage *(#{color} Tome)*"
+  elsif [56,201,208,211].include?(srv[0])
+    wpn='Dragon'
+    color='Green' if srv[17][6,1]=='Q'
+    color='Blue' if srv[17][6,1]=='A'
+    color='Red' if srv[17][6,1]=='B'
+    color='Red' if [208].include?(srv[0])
+    color='Blue' if [211].include?(srv[0])
+    color='Colorless' if srv[13].include?('Divine')
+    wpname="#{color} Dragon"
+  elsif srv[2]=='Saber'
+    color='Red'
+    wpname='Sword *(Red Blade)*'
+  elsif srv[2]=='Lancer'
+    color='Blue'
+    wpname='Lance *(Blue Blade)*'
+  elsif srv[2]=='Berserker'
+    color='Green'
+    wpname='Axe *(Green Blade)*'
+  elsif srv[2]=='Archer'
+    wpn='Bow'
+    color='Red' if [11,69].include?(srv[0])
+    wpname="#{color} Bow"
+  elsif srv[2]=='Caster'
+    wpn='Tome'
+    color='Green' if srv[17][6,1]=='Q'
+    color='Blue' if srv[17][6,1]=='A'
+    color='Red' if srv[17][6,1]=='B' || [62,120].include?(srv[0])
+    typ='Wind'
+    typ=['Dark','Fire'][srv[0]%2] if srv[17][6,1]=='B'
+    typ=['Light','Thunder'][srv[0]%2] if srv[17][6,1]=='A'
+    typ='Dark' if [62,120,203,225].include?(srv[0])
+    typ='Light' if [127].include?(srv[0])
+    moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{typ}_#{wpn}"}
+    wpname="#{typ} Mage *(#{color} Tome)*"
+  elsif srv[2]=='Assassin'
+    wpn='Dagger'
+    wpname='Colorless Dagger'
+  elsif srv[13].include?('Dragon')
+    wpn='Dragon'
+    color='Green' if srv[17][6,1]=='Q'
+    color='Blue' if srv[17][6,1]=='A'
+    color='Red' if srv[17][6,1]=='B'
+    wpname="#{color} Dragon"
+  elsif srv[13].include?('Wild Beast')
+    wpn='Beast'
+    color='Green' if srv[17][6,1]=='Q'
+    color='Blue' if srv[17][6,1]=='A'
+    color='Red' if srv[17][6,1]=='B'
+    wpname="#{color} Beast"
+  elsif srv[13].include?('Divine')
+    wpn='Staff'
+    wpname='Healer *(Staff)*'
+  elsif srv[13].include?('Not Weak to Enuma Elish') && srv[0]%2==0
+    wpn='Staff'
+    wpname='Healer *(Staff)*'
+  elsif srv[13].include?('Female') && srv[0]%5==0
+    wpn='Staff'
+    wpname='Healer *(Staff)*'
+  elsif ['Rider','Ruler'].include?(srv[2]) && srv[0]%7>0
+    color='Green' if srv[17][6,1]=='Q'
+    color='Blue' if srv[17][6,1]=='A'
+    color='Red' if srv[17][6,1]=='B'
+    wpname='Axe *(Green Blade)*' if srv[17][6,1]=='Q'
+    wpname='Lance *(Blue Blade)*' if srv[17][6,1]=='A'
+    wpname='Sword *(Red Blade)*' if srv[17][6,1]=='B'
+  else
+    color='Green' if srv[17][6,1]=='Q'
+    color='Blue' if srv[17][6,1]=='A'
+    color='Red' if srv[17][6,1]=='B'
+    wpn='Bow'
+    wpn='Dagger' if srv[0]%2==0
+    wpname="#{color} #{wpn}"
+  end
+  moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{color}_#{wpn}"} unless wpn=='Tome' && color != 'Colorless'
+  hdr="#{hdr}\n**Weapon:** #{moji[0].mention unless moji.length<=0} #{wpname}"
+  mov='Infantry'
+  if [142,23,29,60,62,65,94,144,172,214,225,233,234,255,257,267].include?(srv[0])
+    mov='Flier'
+    hdr="#{hdr}\n**Movement:** <:Icon_Move_Flier:443331186698354698> Flier"
+  elsif [119,78,10,28,108,114,206,207,226,227,252].include?(srv[0])
+    mov='Cavalry'
+    hdr="#{hdr}\n**Movement:** <:Icon_Move_Cavalry:443331186530451466> Cavalry"
+  elsif [2,5,24,25,59,64,90,175,192].include?(srv[0])
+    hdr="#{hdr}\n**Movement:** <:Icon_Move_Infantry:443331187579289601> Infantry"
+  elsif [76,140,149,164,187,188,190,191,204,205,251,256].include?(srv[0])
+    mov='Armor'
+    hdr="#{hdr}\n**Movement:** <:Icon_Move_Armor:443331186316673025> Armor"
+  elsif has_any?(srv[13],['Greek','Roman','Soverign']) || srv[2]=='Ruler'
+    mov='Armor'
+    hdr="#{hdr}\n**Movement:** <:Icon_Move_Armor:443331186316673025> Armor"
+  elsif srv[2]=='Rider'
+    mov='Cavalry'
+    hdr="#{hdr}\n**Movement:** <:Icon_Move_Cavalry:443331186530451466> Cavalry"
+  else
+    hdr="#{hdr}\n**Movement:** <:Icon_Move_Infantry:443331187579289601> Infantry"
+  end
+  basesttz=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+  actusttz=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+  basesttz[0][0]=(srv[6][0]-1200)*11/10200+14
+  basesttz[0][1]=(srv[7][0]-900)*8/1400+4
+  basesttz[1][0]=(srv[6][2]-9000)*30/11000+30
+  basesttz[1][1]=(srv[7][2]-7000)*21/8000+20
+  basesttz[1][2]=((srv[10][1]-4)*25/22+16).to_i
+  basesttz[1][3]=((100-srv[11])*29/100+13).to_i
+  basesttz[1][4]=((srv[10][0]-9)*29/199+13).to_i+srv[8][1]-1
+  basesttz[2][0]=basesttz[1][0]-basesttz[0][0]
+  basesttz[2][1]=basesttz[1][1]-basesttz[0][1]
+  basesttz[2][2]=1+srv[9][0]
+  basesttz[2][3]=1+srv[9][2]+srv[9][4]/2
+  basesttz[2][4]=1+srv[9][1]
+  f=srv[17][0,5]
+  if f.include?('QQQ')
+    basesttz[1][2]*=3
+    basesttz[1][2]/=2
+    basesttz[2][2]+=2
+  elsif f.include?('QQ')
+    basesttz[1][2]*=5
+    basesttz[1][2]/=4
+    basesttz[2][2]+=1
+  end
+  if f.include?('AA')
+    basesttz[1][4]*=3
+    basesttz[1][4]/=2
+    basesttz[2][4]+=2
+  elsif f.include?('AA')
+    basesttz[1][4]*=5
+    basesttz[1][4]/=4
+    basesttz[2][4]+=1
+  end
+  if f.include?('BBB')
+    basesttz[1][1]*=3
+    basesttz[1][1]/=2
+    basesttz[2][1]+=2
+  elsif f.include?('BB')
+    basesttz[1][1]*=5
+    basesttz[1][1]/=4
+    basesttz[2][1]+=1
+  end
+  if mov=='Armor'
+    basesttz[1][3]*=4
+    basesttz[1][3]/=3
+    basesttz[2][3]+=1
+    basesttz[2][2]-=1
+  elsif mov=='Flier'
+    basesttz[1][4]*=4
+    basesttz[1][4]/=3
+    basesttz[2][4]+=1
+  elsif mov=='Infantry'
+    basesttz[1][2]*=4
+    basesttz[1][2]/=3
+    basesttz[2][2]+=1
+  end
+  if srv[2]=='Assassin' && srv[0]!=75
+    basesttz[1][2]*=2
+    basesttz[1][2]/=3
+  end
+  if srv[0]==12
+    basesttz[1][2]*=7
+    basesttz[1][2]/=3
+    basesttz[1][1]*=4
+    basesttz[1][1]/=3
+    basesttz[1][3]*=4
+    basesttz[1][3]/=5
+    basesttz[1][4]*=4
+    basesttz[1][4]/=5
+  elsif color=='Colorless'
+    if srv[17][6,1]=='Q'
+      basesttz[1][2]*=5
+      basesttz[1][2]/=4
+      basesttz[2][2]+=1
+    elsif srv[17][6,1]=='A'
+      basesttz[1][4]*=5
+      basesttz[1][4]/=4
+      basesttz[2][4]+=1
+    elsif srv[17][6,1]=='B'
+      basesttz[1][1]*=5
+      basesttz[1][1]/=4
+      basesttz[2][1]+=1
+    end
+  end
+  m=@mods.map{|q| q[5]}
+  basesttz[0][2]=[basesttz[1][2]-m[basesttz[2][2]+4],1].max
+  basesttz[0][3]=[basesttz[1][3]-m[basesttz[2][3]+4],1].max
+  basesttz[0][4]=[basesttz[1][4]-m[basesttz[2][4]+4],1].max
+  for i in 0...5
+    basesttz[1][i]=[[basesttz[1][i],99].min,1].max
+  end
+  f=(m.find_index{|q| basesttz[2][0]<=q}-4 rescue 16)
+  basesttz[2][0]=f*1
+  f=(m.find_index{|q| basesttz[2][1]<=q}-4 rescue 16)
+  basesttz[2][1]=f*1
+  totals=[0,0,0,0]
+  totals[0]=basesttz[1][0]+basesttz[1][1]+basesttz[1][2]+basesttz[1][3]+basesttz[1][4]
+  totals[2]=basesttz[0][0]+basesttz[0][1]+basesttz[0][2]+basesttz[0][3]+basesttz[0][4]
+  totals[3]=basesttz[2][0]+basesttz[2][1]+basesttz[2][2]+basesttz[2][3]+basesttz[2][4]
+  l1_total=47
+  gp_total=31
+  if ['Tome', 'Bow', 'Dagger', 'Staff'].include?(wpn)
+    l1_total-=3
+    gp_total-=3
+  end
+  if mov=='Cavalry'
+    l1_total-=1
+    gp_total-=1
+  elsif mov=='Armor'
+    l1_total+=7
+    gp_total+=6
+  end
+  if srv[0]>=151
+    if ['Tome', 'Staff'].include?(wpn) # magical ranged
+      l1_total+=2
+      l1_total-=1 if ['Cavalry'].include?(mov)
+      l1_total-=2 if ['Flier'].include?(mov)
+      gp_total+=3
+      gp_total-=4 if ['Cavalry'].include?(mov)
+      gp_total-=2 if ['Flier'].include?(mov)
+    elsif ['Bow', 'Dagger'].include?(wpn) # physical ranged
+      l1_total+=2
+      l1_total-=1 if ['Cavalry'].include?(mov)
+      gp_total+=3
+      gp_total-=1 if ['Cavalry'].include?(mov)
+    else # melee
+      l1_total+=2
+      l1_total-=1 if ['Cavalry','Flier'].include?(mov)
+      l1_total-=1 if 'Flier'!=mov
+      gp_total+=2
+      gp_total+=2 if ['Infantry'].include?(mov)
+      gp_total-=1 if ['Cavalry'].include?(mov)
+    end
+  elsif srv[0]>=60
+    l1_total+=1
+    l1_total-=1 if ['Cavalry','Flier'].include?(mov)
+    l1_total-=1 if 'Flier'!=mov
+    gp_total+=2
+    gp_total-=1 if ['Cavalry'].include?(mov)
+    gp_total-=1 if ['Tome', 'Bow', 'Dagger', 'Staff'].include?(wpn) && 'Armor'!=mov
+  end
+  actusttz[0]=basesttz[0].map{|q| q}
+  order=[[0,4,3,2,1],[1,2,3,4,0],[2,4,1,3,0],[3,1,4,2,0],[4,3,2,1,0]][srv[0]%5]
+  unless totals[2]==l1_total
+    actusttz[0][0]-=10
+    for i in 0...5
+      actusttz[0][i]*=(l1_total-10)
+      actusttz[0][i]/=(totals[2]-10)
+    end
+    actusttz[0][0]+=10
+    totals[2]=actusttz[0][0]+actusttz[0][1]+actusttz[0][2]+actusttz[0][3]+actusttz[0][4]
+    unless totals[2]==l1_total
+      for i in 0...(l1_total-totals[2])
+        actusttz[0][order[i]]+=1
+      end
+    end
+    totals[2]=actusttz[0][0]+actusttz[0][1]+actusttz[0][2]+actusttz[0][3]+actusttz[0][4]
+  end
+  actusttz[2]=basesttz[2].map{|q| q+4}
+  unless totals[3]==gp_total
+    for i in 0...5
+      actusttz[2][i]*=(gp_total+20)
+      actusttz[2][i]/=(totals[3]+20)
+    end
+    totals[3]=actusttz[2][0]+actusttz[2][1]+actusttz[2][2]+actusttz[2][3]+actusttz[2][4]-20
+    unless totals[3]==gp_total
+      for i in 0...(gp_total-totals[3])
+        actusttz[2][order[i]]+=1
+      end
+    end
+  end
+  for i in 0...5
+    actusttz[1][i]=actusttz[0][i]+m[[actusttz[2][i],m.length-1].min]
+  end
+  totals[1]=actusttz[1][0]+actusttz[1][1]+actusttz[1][2]+actusttz[1][3]+actusttz[1][4]
+  basesttz[0]=basesttz[0].map{|q| "#{' ' if q<10}#{q} "}.join('|')
+  actusttz[0]=actusttz[0].map{|q| "#{' ' if q<10}#{q} "}.join('|')
+  basesttz[1]=basesttz[1].map{|q| "#{' ' if q<10}#{q}"}
+  actusttz[1]=actusttz[1].map{|q| "#{' ' if q<10}#{q}"}
+  f=basesttz[2].join('| ')
+  for i in 0...5
+    basesttz[2][i]='+' if [-3,1,5,10,14].include?(basesttz[2][i])
+    basesttz[2][i]='-' if [-2,2,6,11,15].include?(basesttz[2][i])
+    basesttz[2][i]=' ' unless basesttz[2][i].is_a?(String)
+    basesttz[1][i]="#{basesttz[1][i]}#{basesttz[2][i]}"
+    actusttz[2][i]='+' if [-3,1,5,10,14].include?(actusttz[2][i])
+    actusttz[2][i]='-' if [-2,2,6,11,15].include?(actusttz[2][i])
+    actusttz[2][i]=' ' unless actusttz[2][i].is_a?(String)
+    actusttz[1][i]="#{actusttz[1][i]}#{actusttz[2][i]}"
+  end
+  basesttz[1]=basesttz[1].join('|')
+  actusttz[1]=actusttz[1].join('|')
+  str='<:FGO_icon_rarity_gold:523858991571533825>'*5
+  atk='<:StrengthS:514712248372166666>'
+  atk='<:MagicS:514712247289774111>' if ['Tome','Staff'].include?(wpn)
+  atk='<:FreezeS:514712247474585610>' if ['Dragon'].include?(wpn)
+  statstr="\u200B\u00A0<:HP_S:514712247503945739>\u00A0\u200B\u00A0\u200B\u00A0#{atk}\u00A0\u200B\u00A0\u200B\u00A0<:SpeedS:514712247625580555>\u00A0\u200B\u00A0\u200B\u00A0<:DefenseS:514712247461871616>\u00A0\u200B\u00A0\u200B\u00A0<:ResistanceS:514712247574986752>\u00A0\u200B\u00A0\u200B\u00A0"
+  str="#{str}\n\n__**Direct stat translation**__\n#{statstr}#{totals[0]}\u00A0BST\u2084\u2080\n```#{basesttz[0]}\n#{basesttz[1]}```"
+  str="#{str}\n__**Accounting for FEH legality**__\n#{statstr}#{totals[1]}\u00A0BST\u2084\u2080\n```#{actusttz[0]}\n#{actusttz[1]}```"
+  xcolor=0xE22141 if color=='Red'
+  xcolor=0x2764DE if color=='Blue'
+  xcolor=0x09AA24 if color=='Green'
+  xcolor=0x64757D if color=='Colorless'
+  art=rand(4)+1
+  dispnum="#{'0' if srv[0]<100}#{'0' if srv[0]<10}#{srv[0].to_i}#{art}"
+  dispnum="#{'0' if srv[0]<100}#{'0' if srv[0]<10}#{srv[0].to_i}2" if srv[0]==74 && event.user.id==167657750971547648
+  dispnum="0011" if srv[0]<2
+  dispnum="0014" if srv[0]<2 && art==4
+  unless art<=1
+    m=false
+    IO.copy_stream(open("http://fate-go.cirnopedia.org/icons/servant/servant_#{dispnum}.png"), "C:/Users/#{@mash}/Desktop/devkit/FEHTemp#{@shardizard}.png") rescue m=true
+    art=1 if File.size("C:/Users/#{@mash}/Desktop/devkit/FGOTemp#{@shardizard}.png")<=10 || m
+  end
+  dispnum="#{'0' if srv[0]<100}#{'0' if srv[0]<10}#{srv[0].to_i}#{art}"
+  dispnum="#{'0' if srv[0]<100}#{'0' if srv[0]<10}#{srv[0].to_i}2" if srv[0]==74 && event.user.id==167657750971547648
+  dispnum="0011" if srv[0]<2
+  dispnum="0014" if srv[0]<2 && art==4
+  xpic="http://fate-go.cirnopedia.org/icons/servant/servant_#{dispnum}.png"
+  create_embed(event,["__**#{srv[1]}** [FGO Unit-##{srv[0]}]__",hdr],str,xcolor,nil,xpic)
 end
 
 def snagstats(event,bot,f=nil,f2=nil)
