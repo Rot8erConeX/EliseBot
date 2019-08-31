@@ -845,6 +845,119 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
   return []
 end
 
+def find_FGO_servant(name,event,fullname=false,bot=nil)
+  return [] unless event.server.nil? || !bot.user(502288364838322176).on(event.server.id).nil? || @shardizard==4
+  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FGOServants.txt")
+    b=[]
+    File.open("C:/Users/#{@mash}/Desktop/devkit/FGOServants.txt").each_line do |line|
+      b.push(line)
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    b[i]=b[i][1,b[i].length-1] if b[i][0,1]=='"'
+    b[i]=b[i][0,b[i].length-1] if b[i][-1,1]=='"'
+    b[i]=b[i].gsub("\n",'').split('\\'[0])
+    b[i][0]=b[i][0].to_f
+    b[i][0]=b[i][0].to_i if b[i][0]>1.9
+    b[i][3]=b[i][3].to_i
+    b[i][5]=b[i][5].to_i
+    b[i][6]=b[i][6].split(', ').map{|q| q.to_i}
+    b[i][7]=b[i][7].split(', ').map{|q| q.to_i}
+    for j in 0...3
+      b[i][6][j]=0 if b[i][6][j].nil?
+      b[i][7][j]=0 if b[i][7][j].nil?
+    end
+    b[i][8]=b[i][8].split(', ')
+    b[i][8][0]=b[i][8][0].to_f
+    b[i][8][1]=b[i][8][1].to_i
+    b[i][8][2]=b[i][8][2].to_f unless b[i][8][2].nil?
+    b[i][8][3]='NP' if b[i][8][3].nil? && !b[i][8][2].nil?
+    b[i][9]=b[i][9].split(', ').map{|q| q.to_i}
+    for j in 0...5
+      b[i][9][j]=0 if b[i][9][j].nil?
+    end
+    b[i][10]=b[i][10].split(', ')
+    b[i][10][0]=b[i][10][0].to_i
+    b[i][10][1]=b[i][10][1].to_f
+    for j in 0...2
+      b[i][8][j]=0 if b[i][8][j].nil?
+      b[i][10][j]=0 if b[i][10][j].nil?
+    end
+    b[i][11]=b[i][11].to_f
+    b[i][13]=b[i][13].split(', ')
+    b[i][14]=b[i][14].split('; ').map{|q| q.split(', ')}
+    b[i][15]=b[i][15].split(', ')
+    b[i][18]=b[i][18].split('; ').map{|q| q.split(', ')}
+    b[i][19]=b[i][19].split('; ').map{|q| q.split(', ')}
+    b[i][21]=b[i][21].to_i
+    b[i][23]=b[i][23].to_i
+    b[i][26]=b[i][26].split(', ').map{|q| q.to_i} unless b[i][26].nil?
+    b[i][28]=b[i][28].split(', ') unless b[i][28].nil?
+  end
+  @servants=b.map{|q| q}
+  name=normalize(name)
+  if name[0,1]=='#'
+    name2=name[1,name.length-1]
+    if name2.to_i.to_s==name2 && name2.to_i<=@servants[-1][0]
+      return @servants[@servants.find_index{|q| q[0]==name2.to_i}]
+    elsif name2.to_f.to_s==name2 && name2.to_f<2
+      return @servants[@servants.find_index{|q| q[0]==name2.to_f}]
+    end
+  elsif ['srv-#','srv_#','fgo-#','fgo_#'].include?(name[0,4].downcase)
+    name2=name[5,name.length-5]
+    if name2.to_i.to_s==name2 && name2.to_i<=@servants[-1][0]
+      return @servants[@servants.find_index{|q| q[0]==name2.to_i}]
+    elsif name2.to_f.to_s==name2 && name2.to_f<2
+      return @servants[@servants.find_index{|q| q[0]==name2.to_f}]
+    end
+  elsif ['srv-','srv_','srv#','fgo-','fgo_','fgo#'].include?(name[0,4].downcase)
+    name2=name[4,name.length-4]
+    if name2.to_i.to_s==name2 && name2.to_i<=@servants[-1][0]
+      return @servants[@servants.find_index{|q| q[0]==name2.to_i}]
+    elsif name2.to_f.to_s==name2 && name2.to_f<2
+      return @servants[@servants.find_index{|q| q[0]==name2.to_f}]
+    end
+  elsif name[0,3].downcase=='srv' || name[0,3].downcase=='fgo'
+    name2=name[3,name.length-3]
+    if name2.to_i.to_s==name2 && name2.to_i<=@servants[-1][0]
+      return @servants[@servants.find_index{|q| q[0]==name2.to_i}]
+    elsif name2.to_f.to_s==name2 && name2.to_f<2
+      return @servants[@servants.find_index{|q| q[0]==name2.to_f}]
+    end
+  end
+  name=name.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
+  return [] if name.length<2
+  k=@servants.find_index{|q| q[1].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name}
+  return @servants[k] unless k.nil?
+  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FGONames.txt")
+    b=[]
+    File.open("C:/Users/#{@mash}/Desktop/devkit/FGONames.txt").each_line do |line|
+      b.push(eval line)
+    end
+  else
+    b=[]
+  end
+  alz=b.reject{|q| q[0]!='Servant' || q.nil? || q[1].nil? || q[2].nil?}.map{|q| [q[1],q[2],q[3]]}.uniq
+  g=0
+  g=event.server.id unless event.server.nil?
+  k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
+  return @servants[@servants.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
+  k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name && (q[2].nil? || q[2].include?(g))}
+  return @servants[@servants.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
+  return [] if fullname || name.length<=2
+  k=@servants.find_index{|q| q[1].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name}
+  return @servants[k] unless k.nil?
+  for i in name.length...alz.map{|q| q[0].length}.max
+    k=alz.find_index{|q| q[0].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && q[0].length<=i && (q[2].nil? || q[2].include?(g))}
+    return @servants[@servants.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
+    k=alz.find_index{|q| q[0].downcase.gsub('||','').gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')[0,name.length]==name && q[0].length<=i && (q[2].nil? || q[2].include?(g))}
+    return @servants[@servants.find_index{|q| q[0]==alz[k][1]}] unless k.nil?
+  end
+  return []
+end
+
 def find_skill(name,event,ignore=false,ignore2=false,untz=nil)
   data_load()
   nicknames_load()
@@ -1051,7 +1164,28 @@ def find_accessory(name,event,fullname=false)
 end
 
 def find_data_ex(callback,name,event,fullname=false,mode=0)
-  if [:find_unit,:find_skill,:find_skill,:find_accessory,:find_item_feh].include?(callback)
+  if [:find_FGO_servant].include?(callback)
+    k=method(callback).call(name,event,true,mode)
+    return k if k.length>0
+    args=name.split(' ')
+    for i in 0...args.length
+      for i2 in 0...args.length-i
+        k=method(callback).call(args[i,args.length-i-i2].join(' '),event,true,mode)
+        return k if k.length>0 && args[i,args.length-i-i2].length>0
+      end
+    end
+    return [] if fullname || name.length<=2
+    k=method(callback).call(name,event,false,mode)
+    return k if k.length>0
+    args=name.split(' ')
+    for i in 0...args.length
+      for i2 in 0...args.length-i
+        k=method(callback).call(args[i,args.length-i-i2].join(' '),event,false,mode)
+        return k if k.length>0 && args[i,args.length-i-i2].length>0
+      end
+    end
+    return []
+  elsif [:find_unit,:find_skill,:find_skill,:find_accessory,:find_item_feh].include?(callback)
     k=method(callback).call(name,event,true)
     return [k,name] if k.length>0 && mode==1
     return k if k.length>0
@@ -1325,7 +1459,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='Helspawn' if ['hellspawn'].include?(name.downcase)
   name='Daily_Rotation' if ['daily_rotation','dailyrotation','daily'].include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(name.downcase)
-  name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','f2prfs','f2prf','retroprfs','retro-prfs'].include?(name.downcase)
+  name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','retroprfs','retro-prfs'].include?(name.downcase)
   j=-1
   # try full-name matches first...
   g=@groups.map{|q| q}
@@ -1346,7 +1480,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='Dancers&Singers' if ['dancers','singers'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Helspawn' if ['hellspawn'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends'].map{|q| q[0,name.length]}.include?(name.downcase)
-  name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','f2prfs','f2prf','retroprfs','retro-prfs'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','retroprfs','retro-prfs'].map{|q| q[0,name.length]}.include?(name.downcase)
   for i in 0...g.length
     j=i if g[i][0][0,name.length].downcase==name.downcase && (g[i][2].nil? || g[i][2].include?(k))
   end
@@ -2231,7 +2365,14 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   lm='Legendary/Mythic'
   lm='Legendary' if ['Fire','Water','Wind','Earth'].include?(jj[2][0])
   lm='Mythic' if ['Light','Dark','Astra','Anima'].include?(jj[2][0])
-  return "#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}* / #{lemote2}*#{jj[2][1].gsub('Duel','Pair-Up')}* #{lm} Hero" unless jj[2][0]==" "}#{"\n<:Current_Arena_Bonus:498797967042412544> Current Arena Bonus unit" if get_bonus_units('Arena').include?(jj[0])}#{"\n<:Current_Tempest_Bonus:498797966740422656> Current Tempest Bonus unit" if get_bonus_units('Tempest').include?(jj[0])}#{"\n<:Current_Aether_Bonus:510022809741950986> Current Aether Bonus unit" if get_bonus_units('Aether').include?(jj[0])}"
+  str="#{wemote} #{w}\n#{memote} *#{m}*#{dancer}#{"\n#{lemote1}*#{jj[2][0]}* / #{lemote2}*#{jj[2][1].gsub('Duel','Pair-Up')}* #{lm} Hero" unless jj[2][0]==" "}"
+  str2=''
+  str2="#{str2}\n<:Current_Arena_Bonus:498797967042412544> Current Arena Bonus unit" if get_bonus_units('Arena').include?(jj[0])
+  str2="#{str2}\n<:Current_Tempest_Bonus:498797966740422656> Current Tempest Bonus unit" if get_bonus_units('Tempest').include?(jj[0])
+  str2="#{str2}\n<:Current_Aether_Bonus:510022809741950986> Current Aether Bonus unit" if get_bonus_units('Aether').include?(jj[0])
+  return "#{str}#{str2}" if str.length+str2.length<=250 || str2.length<=0
+  return [str,str2] if str2.length>0
+  return str
 end
 
 def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily by the BST and Alt commands to display a unit's weapon and movement classes as emojis
@@ -2554,10 +2695,12 @@ def has_weapon_tag2?(tag,wpn,refinement=nil,transformed=false)
   return false
 end
 
-def smol_err(event,ignore=false,smol=false)
-  if !smol || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+def smol_err(bot,event,ignore=false,smol=false)
+  if find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+    srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+    event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
+  elsif !smol || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     event.respond 'No unit was included' unless ignore
-    return nil
   else
     event.channel.send_embed("__**No unit was included.  Have a smol me instead.**__") do |embed|
       embed.color = 0xD49F61
@@ -2601,7 +2744,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
   args.compact!
   if name.nil?
     if args.nil? || args.length<1
-      smol_err(event,ignore,['smol','xsmol'].include?(sizex))
+      smol_err(bot,event,ignore,['smol','xsmol'].include?(sizex))
       return nil
     end
   end
@@ -2629,7 +2772,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     end
     return nil
   elsif unitz.length<=0
-    smol_err(event,ignore,['smol','xsmol'].include?(sizex))
+    smol_err(bot,event,ignore,['smol','xsmol'].include?(sizex))
     return nil
   elsif untz.find_index{|q| q[0]==name}.nil?
   elsif name=='Robin'
@@ -2881,7 +3024,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
   sizex='smol' if sizex != 'medium' && !wl.include?('~~') && (stat_skills_2.length<=0 || unitz[0]=='Kiran') && !dispgps && !(event.server.nil? || event.server.id==238059616028590080) && event.channel.id != 362017071862775810
   sizex='medium' if (wl.include?('~~') || (stat_skills_2.length>0 && unitz[0]!='Kiran') || dispgps) && sizex != 'xsmol'
   if unitz.length<=0
-    smol_err(event,ignore,['smol','xsmol'].include?(sizex))
+    smol_err(bot,event,ignore,['smol','xsmol'].include?(sizex))
     return nil
   elsif (unitz[4].nil? || (unitz[4].max<=0 && unitz[5].max<=0)) && unitz[0]!='Kiran' # unknown stats
     data_load()
@@ -2909,7 +3052,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
       n=n.join(' / ')
     end
     if ['smol','xsmol'].include?(sizex)
-      create_embed(event,["__**#{j[0]}**__",unit_clss(bot,event,j)],"#{display_stars(bot,event,rarity,merges,'-',[j[3],flowers],false,j[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{unit_clss(bot,event,j2)}\n**<:HP_S:514712247503945739>0 | <:StrengthS:514712248372166666>0 | <:SpeedS:514712247625580555>0 | <:DefenseS:514712247461871616>0 | <:ResistanceS:514712247574986752>0** (0 BST, Score: #{115+2*merges})",0x9400D3,nil,pick_thumbnail(event,j,bot),nil,1)
+      create_embed(event,["__**#{j[0]}**__",unit_clss(bot,event,j)],"#{display_stars(bot,event,rarity,merges,'-',[j[3],flowers],false,j[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n\n**<:HP_S:514712247503945739>0 | <:StrengthS:514712248372166666>0 | <:SpeedS:514712247625580555>0 | <:DefenseS:514712247461871616>0 | <:ResistanceS:514712247574986752>0** (0 BST, Score: #{115+2*merges})",0x9400D3,nil,pick_thumbnail(event,j,bot),nil,1)
     else
       flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:514712247503945739> HP: 0\n<:StrengthS:514712248372166666> Attack: 0\n<:SpeedS:514712247625580555> Speed: 0\n<:DefenseS:514712247461871616> Defense: 0\n<:ResistanceS:514712247574986752> Resistance: 0\n\nBST: 0\nScore: #{27+2*merges}"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:514712247503945739> HP: 0\n<:StrengthS:514712248372166666> Attack: 0\n<:SpeedS:514712247625580555> Speed: 0\n<:DefenseS:514712247461871616> Defense: 0\n<:ResistanceS:514712247574986752> Resistance: 0\n\nBST: 0\nScore: #{115+2*merges}"]]
       if skillstoo
@@ -7403,6 +7546,9 @@ def disp_unit_stats_and_skills(event,args,bot)
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.length<=0
       disp_stats(bot,x[1],w,event,'smol',true,true)
+    elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+      srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+      event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
     else
       event.respond 'No matches found.'
     end
@@ -7424,6 +7570,9 @@ def disp_unit_stats_and_skills(event,args,bot)
     disp_stats(bot,x[1],w,event,'smol',true,true)
   elsif find_unit(str,event).length>0
     disp_stats(bot,str,w,event,'smol',false,true)
+  elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+    srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+    event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
   else
     event.respond 'No matches found'
   end
@@ -8800,6 +8949,17 @@ def disp_art(event,name,bot,weapon=nil)
   return disp_unit_art(event,name,bot)
 end
 
+def disp_stats_for_FGO(bot,event,srv=nil)
+  srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot) if srv.nil?
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
+    puts 'reloading EliseText'
+    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    @last_multi_reload[1]=t
+  end
+  return disp_FGO_based_stats(bot,event,srv)
+end
+
 def learnable_skills(event,name,bot,weapon=nil)
   if name.nil?
     name=find_data_ex(:find_unit,event.message.text,event)
@@ -9542,6 +9702,9 @@ end
 bot.command([:stats,:stat]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<=0
+  elsif ['fgo'].include?(args[0].downcase) && find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+    disp_stats_for_FGO(bot,event,find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot))
+    return nil
   elsif ['compare','comparison'].include?(args[0].downcase)
     args.shift
     k=comparison(event,args,bot)
@@ -9600,6 +9763,9 @@ bot.command([:stats,:stat]) do |event, *args|
         k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
         w=k2[0] unless k2.length<=0
         disp_stats(bot,x[1],w,event,'xsmol',true)
+      elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+        srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+        event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
       else
         event.respond 'No matches found.'
       end
@@ -9618,6 +9784,9 @@ bot.command([:stats,:stat]) do |event, *args|
       disp_stats(bot,x[1],w,event,'xsmol',true)
     elsif find_unit(str,event)>=0
       disp_stats(bot,str,w,event,'xsmol')
+    elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+      srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+      event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
     else
       event.respond 'No matches found'
     end
@@ -9641,6 +9810,9 @@ bot.command([:stats,:stat]) do |event, *args|
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.length<=0
       disp_stats(bot,x[1],w,event,'smol',true)
+    elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+      srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+      event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
     else
       event.respond 'No matches found.'
     end
@@ -9662,6 +9834,9 @@ bot.command([:stats,:stat]) do |event, *args|
     disp_stats(bot,x[1],w,event,'smol',true)
   elsif find_unit(str,event).length>0
     disp_stats(bot,str,w,event,'smol')
+  elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+    srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+    event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
   else
     event.respond 'No matches found'
   end
@@ -9684,6 +9859,9 @@ bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstat
         embed.image = Discordrb::Webhooks::EmbedImage.new(url: "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Smol_Elise.jpg")
         embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: "image source", url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=58900377")
       end
+    elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+      srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+      event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
     else
       event.respond 'No matches found.'
     end
@@ -9705,6 +9883,9 @@ bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstat
     disp_stats(bot,x[1],w,event,'xsmol',true)
   elsif find_unit(str,event).length>0
     disp_stats(bot,str,w,event,'xsmol')
+  elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+    srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+    event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
   else
     event.respond 'No matches found'
   end
@@ -9720,6 +9901,9 @@ bot.command([:big,:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:largestats
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.length<=0
       disp_stats(bot,x[1],w,event,'medium',true)
+    elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+      srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+      event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
     else
       event.respond 'No matches found.'
     end
@@ -9741,6 +9925,9 @@ bot.command([:big,:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:largestats
     disp_stats(bot,x[1],w,event,'medium',true)
   elsif find_unit(str,event).length>0
     disp_stats(bot,str,w,event,'medium',false)
+  elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+    srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+    event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
   else
     event.respond 'No matches found'
   end
@@ -9756,6 +9943,9 @@ bot.command([:huge,:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hug
       k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
       w=k2[0] unless k2.length<=0
       disp_stats(bot,x[1],w,event,'giant',true)
+    elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+      srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+      event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
     else
       event.respond 'No matches found.'
     end
@@ -9777,6 +9967,9 @@ bot.command([:huge,:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hug
     disp_stats(bot,x[1],w,event,'giant',true)
   elsif find_unit(str,event).length>0
     disp_stats(bot,str,w,event,'giant')
+  elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+    srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+    event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
   else
     event.respond 'No matches found'
   end
@@ -11539,7 +11732,7 @@ end
 
 bot.server_delete do |event|
   unless @shardizard==4
-    bot.user(167657750971547648).pm("Left server **#{event.server.name}**")
+    bot.user(167657750971547648).pm("Left server **#{event.server.name}**\nThis server was using #{shard_data(0,true)[((event.server.id >> 22) % @shards)]} Shards")
     metadata_load()
     @server_data[0][((event.server.id >> 22) % @shards)] -= 1
     metadata_save()
@@ -11711,21 +11904,21 @@ bot.message do |event|
         disp_stats(bot,x[1],w,event,'smol',true,true)
       end
     end
-  elsif event.message.text.downcase.include?('owo') && !event.user.bot_account?
+  elsif event.message.text.downcase.include?('kys') && !event.user.bot_account?
     s=event.message.text
     s=remove_format(s,'```')              # remove large code blocks
     s=remove_format(s,'`')                # remove small code blocks
     s=remove_format(s,'~~')               # remove crossed-out text
     s=s.gsub("\n",' ').gsub("  ",'')
-    if s.split(' ').include?('owo') || s.split(' ').include?('OwO')
+    if s.split(' ').include?('kys') || s.split(' ').include?('KYS')
       k=0
       k=event.server.id unless event.server.nil?
       if k==271642342153388034
       elsif rand(1000)<13
-        puts 'responded to OwO'
-        event.respond "What's this?"
+        puts 'responded to KYS'
+        event.respond "You're going down, scumbag!"
       else
-        puts 'saw OwO, did not respond'
+        puts 'saw KYS, did not respond'
       end
     end
   elsif event.message.text.include?('0x4') && !event.user.bot_account?
@@ -11933,6 +12126,8 @@ bot.mention do |event|
     if ['sort','list'].include?(a[0].downcase)
       a.shift
       sort_units(bot,event,a)
+    elsif ['fgo'].include?(args[0].downcase) && find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+      disp_stats_for_FGO(bot,event,find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot))
     else
       event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
       k=find_data_ex(:find_unit,event.message.text,event,false,1)
@@ -11944,6 +12139,9 @@ bot.mention do |event|
           k2=get_weapon(first_sub(args.join(' '),x[0],''),event)
           w=k2[0] unless k2.length<=0
           disp_stats(bot,x[1],w,event,'smol',true)
+        elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+          srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+          event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
         else
           event.respond 'No matches found.'
         end
@@ -11966,6 +12164,9 @@ bot.mention do |event|
         disp_stats(bot,x[1],w,event,'smol',true)
       elsif find_unit(str,event).length>0
         disp_stats(bot,str,w,event,'smol')
+      elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+        srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+        event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
       else
         event.respond 'No matches found'
       end
@@ -12056,6 +12257,9 @@ bot.mention do |event|
         k2=get_weapon(first_sub(a.join(' '),x[0],''),event)
         w=k2[0] unless k2.length<=0
         disp_stats(bot,x[1],w,event,'xsmol',true)
+      elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+        srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+        event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
       elsif !@embedless.include?(event.user.id) && !was_embedless_mentioned?(event)
         event.channel.send_embed("__**No matches found.  Have a smol me instead.**__") do |embed|
           embed.color = 0xD49F61
@@ -12082,6 +12286,9 @@ bot.mention do |event|
       disp_stats(bot,x[1],w,event,'xsmol',true)
     elsif find_unit(str,event).length>0
       disp_stats(bot,str,w,event,'xsmol')
+    elsif find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).length>0
+      srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+      event.respond "FGO servant found: #{srv[1]} [Srv-##{srv[0]}]\nTry `FEH!stats FGO #{srv[1]}` if you wish to see what this servant's stats would be in FEH."
     elsif !@embedless.include?(event.user.id) && !was_embedless_mentioned?(event)
       event.channel.send_embed("__**No matches found.  Have a smol me instead.**__") do |embed|
         embed.color = 0xD49F61
