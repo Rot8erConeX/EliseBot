@@ -3835,11 +3835,6 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       end
       title="#{emo.join('')}**Skill Slot:** #{sklslt.join(', ')}" if safe_to_spam?(event)
       str="**Effect:** #{skill[9]}"
-      if skill[1]=='Distant Counter'
-        str="#{str}\n**Secondary effect:** Breaks consecutiveness of enemy mage/bow/dagger/staff attacks"
-      elsif skill[1]=='Close Counter'
-        str="#{str}\n**Secondary effect:** Breaks consecutiveness of enemy sword/axe/lance/breath attacks"
-      end
       if skill==f
         str="#{str}\n\n**SP required:** #{skill[3]} #{"(#{skill[3]*3/2} when inherited)" if skill[8]=='-'}"
         cumul=cumulative_sp_cost(skill,event)
@@ -7219,8 +7214,10 @@ def comparison(event,args,bot)
     end
   else
     for i in 0...args.length
+      puts s1
       unless s1.nil? || s1.split(' ').length<=1 || s1.gsub(' ','').length<=0
         k=find_data_ex(:find_unit,s1,event,false,1)
+        k[1]=k[1][1,k[1].length-1] if k[1][0,1]==' '
         unless k.nil? || k.length<=0
           if k[0].is_a?(Array)
             if k[0][0].is_a?(Array)
@@ -7230,7 +7227,7 @@ def comparison(event,args,bot)
             end
           end
           s1=first_sub(s1,k[1],'')
-          s2=first_sub(s2,k[1].gsub(' ',''),k[0])
+          s2=first_sub(s2,k[1],k[0])
         end
       end
     end
@@ -7644,6 +7641,7 @@ def skill_comparison(event,args,bot)
     for i in 0...args.length
       unless s1.split(' ').nil? || s1.gsub(' ','').length<=0
         k=find_data_ex(:find_unit,s1,event,false,1)
+        k[1]=k[1][1,k[1].length-1] if k[1][0,1]==' '
         unless k.nil?
           if k[0].is_a?(Array)
             if k[0][0].is_a?(Array)
@@ -7653,7 +7651,7 @@ def skill_comparison(event,args,bot)
             end
           end
           s1=first_sub(s1,k[1],'')
-          s2=first_sub(s2,k[1].gsub(' ',''),k[0])
+          s2=first_sub(s2,k[1],k[0])
         end
       end
     end
