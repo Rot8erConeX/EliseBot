@@ -1,5 +1,5 @@
-Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Bunny)\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Fiora(Summer)\Fjorm\Fjorm(Bride)\Kaden\Kana(F)\Leanne\Lethe\Matthew\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
+Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
+Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Fiora(Summer)\Fjorm\Fjorm(Bride)\Kaden\Kana(F)\Leanne\Lethe\Matthew\Ninian\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
@@ -163,7 +163,7 @@ Def Ploy 1\Def Ploy 2\Def Ploy 3
 Res Ploy 3
 
 Ethlyn
-5\4\ \ \-\1\
+5\5\ \ \-\1\
 Assault\Fear\Fear+\Fear+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -183,7 +183,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Warding Stance 3
 
 Felicia(Picnic)
-5\0\Attack\Defense\-\0\
+5\0\Attack\Defense\-\1\
 Iron Axe\Steel Axe\Silver Axe\Eldhrmnir
 Swap
 Chilling Wind\Glacies
@@ -293,7 +293,7 @@ Hone Atk 1\Hone Atk 2\Hone Beasts
 Brazen Atk/Res 3
 
 Mae
-5\8\Attack\Defense\-\0\
+5\9\Attack\Defense\-\0\
 Light\Ellight\Blarowl\Blarowl+\__Blarowl+ (+) Attack Mode__\Book of Orchids\Book of Orchids (+) Effect Mode
 Draw Back
 Dragon Gaze\Draconic Aura
@@ -352,6 +352,16 @@ Live to Serve 1\Live to Serve 2\Live to Serve 3
 Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
+Ninian
+5\0\ \ \-\1\
+Fire Breath\Fire Breath+\Light Breath\Light Breath+
+Dance
+Chilling Wind\Glacies
+~~none~~
+Escape Route 1\Escape Route 2\Escape Route 3
+Fortify Def 1\Fortify Def 2\Fortify Dragons
+Fortress Def 3
+
 Olivia(Performing)
 5\0\Defense\Resistance\-\0\
 Iron Dagger\Steel Dagger\Dancer's Fan\Dancer's Fan+\Dancer's Fan+ (+) Attack Mode
@@ -373,7 +383,7 @@ Spur Spd 1\Spur Spd Def 1\Spur Spd Def 2
 Hardy Bearing 3
 
 Priscilla
-4\10\Resistance\Defense\-\0\
+5\10\Resistance\Defense\-\0\
 Assault\Panic\Panic+\Panic+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -443,7 +453,7 @@ Spur Res 1\Drive Res 1\Drive Res 2
 Deflect Melee 3
 
 Tailtiu
-5\6\ \ \-\0\
+5\7\ \ \-\0\
 Thunder\Elthunder\Blarblade\__Blarblade+__\Tome of Thoron\Tome of Thoron (+) Effect Mode
 Rally Resistance\Rally Spd/Res
 Chilling Wind\Glacies
@@ -463,7 +473,7 @@ Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
 Quick Riposte 3
 
 Tiki(Young)(Earth)
-5\0\Resistance\HP\-\4\
+5\0\Resistance\HP\-\5\
 Fire Breath\Fire Breath+\Flametongue\Divine Mist
 Reposition
 New Moon\Moonbow

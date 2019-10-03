@@ -58,49 +58,74 @@ def is_mod?(user,server,channel,mode=0) # used by certain commands to determine 
 end
 
 def normalize(str,allowspoiler=false) # used by the majority of commands that accept input, to replace all non-ASCII characters with their ASCII counterparts
+  fallback_map={"\u2019" => "'", "`" => "'", "\u2018" => "'", "\u2B55" => 'O',
+                "\u00E1" => 'a', "\u00C1" => 'a', "\u0103" => 'a', "\u01CE" => 'a', "\u00C2" => 'a', "\u00E2" => 'a', "\u00C4" => 'a', "\u00E4" => 'a',
+                "\u0227" => 'a', "\u1EA1" => 'a', "\u0201" => 'a', "\u00C0" => 'a', "\u00E0" => 'a', "\u1EA3" => 'a', "\u0203" => 'a', "\u0101" => 'a',
+                "\u0105" => 'a', "\u1E9A" => 'a', "\u00C5" => 'a', "\u00E5" => 'a', "\u1E01" => 'a', "\u023A" => 'a', "\u00C3" => 'a', "\u00E3" => 'a',
+                "\u0363" => 'a', "\u1D00" => 'a', "\u0251" => 'a', "\u0250" => 'a', "\u0252" => 'a', "\u22C0" => 'a', "\u00C6" => 'ae', "\u1D01" => 'ae',
+                "\u00E6" => 'ae', "\u1D02" => 'ae', "\u1E03" => 'b', "\u1E05" => 'b', "\u0181" => 'b', "\u0253" => 'b', "\u1E07" => 'b', "\u0243" => 'b',
+                "\u0180" => 'b', "\u0183" => 'b', "\u0299" => 'b', "\u1D03" => 'b', "\u212C" => 'b', "\u0185" => 'b', "\u0107" => 'c', "\u010D" => 'c',
+                "\u00C7" => 'c', "\u00E7" => 'c', "\u0109" => 'c', "\u0255" => 'c', "\u010B" => 'c', "\u0189" => 'c', "\u023B" => 'c', "\u023C" => 'c',
+                "\u2183" => 'c', "\u212D" => 'c', "\u0368" => 'c', "\u2102" => 'c', "\u1D04" => 'c', "\u0297" => 'c', "\u2184" => 'c',"\u0256" => 'd', 
+                "\u010F" => 'd', "\u1E11" => 'd', "\u1E13" => 'd', "\u0221" => 'd', "\u1E0B" => 'd', "\u1E0D" => 'd', "\u018A" => 'd', "\u0257" => 'd',
+                "\u1E0F" => 'd', "\u0111" => 'd', "\u018C" => 'd', "\u0369" => 'd', "\u2145" => 'd', "\u2146" => 'd', "\u1D05" => 'd', "\u00C9" => 'e',
+                "\u00E9" => 'e', "\u0115" => 'e', "\u011B" => 'e', "\u0229" => 'e', "\u1E19" => 'e', "\u00CA" => 'e', "\u00EA" => 'e', "\u00CB" => 'e',
+                "\u00EB" => 'e', "\u0117" => 'e', "\u1EB9" => 'e', "\u0205" => 'e', "\u00C8" => 'e', "\u00E8" => 'e', "\u1EBB" => 'e', "\u025D" => 'e',
+                "\u0207" => 'e', "\u0113" => 'e', "\u0119" => 'e', "\u0246" => 'e', "\u0247" => 'e', "\u1E1B" => 'e', "\u1EBD" => 'e', "\u0364" => 'e',
+                "\u2147" => 'e', "\u0190" => 'e', "\u018E" => 'e', "\u1D07" => 'e', "\u029A" => 'e', "\u025E" => 'e', "\u025B" => 'e', "\u0258" => 'e',
+                "\u025C" => 'e', "\u01DD" => 'e', "\u1D08" => 'e', "\u2130" => 'e', "\u212F" => 'e', "\u0259" => 'e', "\u018F" => 'e', "\u22FF" => 'e',
+                "\u1E1F" => 'f', "\u0192" => 'f', "\u2131" => 'f', "\u2132" => 'f', "\u214E" => 'f', "\u2640" => '(f)', "\u01F5" => 'g', "\u011F" => 'g',
+                "\u01E7" => 'g', "\u0123" => 'g', "\u011D" => 'g', "\u0121" => 'g', "\u0193" => 'g', "\u029B" => 'g', "\u0260" => 'g', "\u1E21" => 'g',
+                "\u01E5" => 'g', "\u0262" => 'g', "\u0261" => 'g', "\u210A" => 'g', "\u2141" => 'g', "\u210C" => 'h', "\u1E2B" => 'h', "\u021F" => 'h',
+                "\u1E29" => 'h', "\u0125" => 'h', "\u1E27" => 'h', "\u1E23" => 'h', "\u1E25" => 'h', "\u02AE" => 'h', "\u0266" => 'h', "\u1E96" => 'h',
+                "\u0127" => 'h', "\u036A" => 'h', "\u210D" => 'h', "\u029C" => 'h', "\u0265" => 'h', "\u2095" => 'h', "\u02B0" => 'h', "\u210B" => 'h',
+                "\u2111" => 'i', "\u0130" => 'i', "\u00CD" => 'i', "\u00ED" => 'i', "\u012D" => 'i', "\u01D0" => 'i', "\u00CE" => 'i', "\u00EE" => 'i',
+                "\u00CF" => 'i', "\u00EF" => 'i', "\u1CEB" => 'i', "\u0209" => 'i', "\u00CC" => 'i', "\u00EC" => 'i', "\u1EC9" => 'i', "\u020B" => 'i',
+                "\u012B" => 'i', "\u012F" => 'i', "\u0197" => 'i', "\u0268" => 'i', "\u1E2D" => 'i', "\u0129" => 'i', "\u0365" => 'i', "\u2148" => 'i',
+                "\u026A" => 'i', "\u0131" => 'i', "\u1D09" => 'i', "\u1D62" => 'i', "\u2110" => 'i', "\u2071" => 'i', "\u2139" => 'i', "\uFE0F" => 'i',
+                "\u1FBE" => 'i', "\u03B9" => 'i', "\u0399" => 'i', "\u0133" => 'ij', "\u01F0" => 'j', "\u0135" => 'j', "\u029D" => 'j', "\u0248" => 'j',
+                "\u0249" => 'j', "\u025F" => 'j', "\u2149" => 'j', "\u1D0A" => 'j', "\u0237" => 'j', "\u02B2" => 'j', "\u1E31" => 'k', "\u01E9" => 'k',
+                "\u0137" => 'k', "\u1E33" => 'k', "\u0199" => 'k', "\u1E35" => 'k', "\u1D0B" => 'k', "\u029E" => 'k', "\u2096" => 'k', "\u212A" => 'k',
+                "\u0138" => 'k', "\u013A" => 'l', "\u023D" => 'l', "\u019A" => 'l', "\u026C" => 'l', "\u013E" => 'l', "\u013C" => 'l', "\u1E3D" => 'l',
+                "\u0234" => 'l', "\u1E37" => 'l', "\u1E3B" => 'l', "\u0140" => 'l', "\u026B" => 'l', "\u026D" => 'l', "\u1D0C" => 'l', "\u0142" => 'l',
+                "\u029F" => 'l', "\u2097" => 'l', "\u02E1" => 'l', "\u2143" => 'l', "\u2112" => 'l', "\u2113" => 'l', "\u2142" => 'l', "\u2114" => 'lb',
+                "\u264C" => 'leo', "\u1E3F" => 'm', "\u1E41" => 'm', "\u1E43" => 'm', "\u0271" => 'm', "\u0270" => 'm', "\u036B" => 'm', "\u019C" => 'm',
+                "\u1D0D" => 'm', "\u1D1F" => 'm', "\u026F" => 'm', "\u2098" => 'm', "\u2133" => 'm', "\u2642" => '(m)', "\u0144" => 'n', "\u0148" => 'n', 
+                "\u0146" => 'n', "\u1E4B" => 'n', "\u0235" => 'n', "\u1E45" => 'n', "\u1E47" => 'n', "\u01F9" => 'n', "\u019D" => 'n', "\u0272" => 'n',
+                "\u1E49" => 'n', "\u0220" => 'n', "\u019E" => 'n', "\u0273" => 'n', "\u00D1" => 'n', "\u00F1" => 'n', "\u2115" => 'n', "\u0274" => 'n',
+                "\u1D0E" => 'n', "\u2099" => 'n', "\u22C2" => 'n', "\u220F" => 'n', "\u00F3" => 'o', "\u00F0" => 'o', "\u00D3" => 'o', "\u014F" => 'o',
+                "\u01D2" => 'o', "\u00D4" => 'o', "\u00F4" => 'o', "\u00D6" => 'o', "\u00F6" => 'o', "\u022F" => 'o', "\u1ECD" => 'o', "\u0151" => 'o',
+                "\u020D" => 'o', "\u00D2" => 'o', "\u00F2" => 'o', "\u1ECF" => 'o', "\u01A1" => 'o', "\u020F" => 'o', "\u014D" => 'o', "\u019F" => 'o',
+                "\u01EB" => 'o', "\u00D8" => 'o', "\u00F8" => 'o', "\u1D13" => 'o', "\u00D5" => 'o', "\u00F5" => 'o', "\u0366" => 'o', "\u0186" => 'o',
+                "\u1D0F" => 'o', "\u1D10" => 'o', "\u0275" => 'o', "\u1D11" => 'o', "\u2134" => 'o', "\u25CB" => 'o', "\u00A4" => 'o', "\u1D14" => 'oe',
+                "\u0153" => 'oe', "\u0276" => 'oe', "\u01A3" => 'oi', "\u0223" => 'ou', "\u1D15" => 'ou', "\u1E55" => 'p', "\u1E57" => 'p', "\u01A5" => 'p',
+                "\u2119" => 'p', "\u1D18" => 'p', "\u209A" => 'p', "\u2118" => 'p', "\u214C" => 'p', "\u024A" => 'q', "\u024B" => 'q', "\u02A0" => 'q',
+                "\u211A" => 'q', "\u213A" => 'q', "\u0239" => 'qp', "\u211C" => 'r', "\u0155" => 'r', "\u0159" => 'r', "\u0157" => 'r', "\u1E59" => 'r',
+                "\u1E5B" => 'r', "\u0211" => 'r', "\u027E" => 'r', "\u027F" => 'r', "\u027B" => 'r', "\u0213" => 'r', "\u1E5F" => 'r', "\u027C" => 'r',
+                "\u027A" => 'r', "\u024C" => 'r', "\u024D" => 'r', "\u027D" => 'r', "\u036C" => 'r', "\u211D" => 'r', "\u0280" => 'r', "\u0281" => 'r',
+                "\u1D19" => 'r', "\u1D1A" => 'r', "\u0279" => 'r', "\u1D63" => 'r', "\u02B3" => 'r', "\u02B6" => 'r', "\u02B4" => 'r', "\u211B" => 'r',
+                "\u01A6" => 'r', "\u301C" => 'roy', "\u015B" => 's', "\u0161" => 's', "\u015F" => 's', "\u015D" => 's', "\u0219" => 's', "\u1E61" => 's',
+                "\u1E63" => 's', "\u0282" => 's', "\u023F" => 's', "\u209B" => 's', "\u02E2" => 's', "\u1E9B" => 's', "\u223E" => 's', "\u017F" => 's',
+                "\u00DF" => 's', "\u0165" => 't', "\u0163" => 't', "\u1E71" => 't', "\u021B" => 't', "\u0236" => 't', "\u1E97" => 't', "\u023E" => 't',
+                "\u1E6B" => 't', "\u1E6D" => 't', "\u01AD" => 't', "\u1E6F" => 't', "\u01AB" => 't', "\u01AE" => 't', "\u0288" => 't', "\u0167" => 't',
+                "\u036D" => 't', "\u1D1B" => 't', "\u0287" => 't', "\u209C" => 't', "\u00FE" => 'th', "\u00FA" => 'u', "\u028A" => 'u', "\u22C3" => 'u',
+                "\u0244" => 'u', "\u0289" => 'u', "\u00DA" => 'u', "\u1E77" => 'u', "\u016D" => 'u', "\u01D4" => 'u', "\u00DB" => 'u', "\u00FB" => 'u',
+                "\u1E73" => 'u', "\u00DC" => 'u', "\u00FC" => 'u', "\u1EE5" => 'u', "\u0171" => 'u', "\u0215" => 'u', "\u00D9" => 'u', "\u00F9" => 'u',
+                "\u1EE7" => 'u', "\u01B0" => 'u', "\u0217" => 'u', "\u016B" => 'u', "\u0173" => 'u', "\u016F" => 'u', "\u1E75" => 'u', "\u0169" => 'u',
+                "\u0367" => 'u', "\u1D1C" => 'u', "\u1D1D" => 'u', "\u1D1E" => 'u', "\u1D64" => 'u', "\u22C1" => 'v', "\u030C" => 'v', "\u1E7F" => 'v',
+                "\u028B" => 'v', "\u1E7D" => 'v', "\u036E" => 'v', "\u01B2" => 'v', "\u0245" => 'v', "\u1D20" => 'v', "\u028C" => 'v', "\u1D65" => 'v',
+                "\u1E83" => 'w', "\u0175" => 'w', "\u1E85" => 'w', "\u1E87" => 'w', "\u1E89" => 'w', "\u1E81" => 'w', "\u1E98" => 'w', "\u1D21" => 'w',
+                "\u028D" => 'w', "\u02B7" => 'w', "\u2715" => 'x', "\u2716" => 'x', "\u033D" => 'x', "\u0353" => 'x', "\u1E8D" => 'x', "\u1E8B" => 'x',
+                "\u2717" => 'x', "\u036F" => 'x', "\u2718" => 'x', "\u02E3" => 'x', "\u2A09" => 'x', "\u00DD" => 'y', "\u00FD" => 'y', "\u0177" => 'y',
+                "\u0178" => 'y', "\u00FF" => 'y', "\u1E8F" => 'y', "\u1EF5" => 'y', "\u1EF3" => 'y', "\u1EF7" => 'y', "\u01B4" => 'y', "\u0233" => 'y',
+                "\u1E99" => 'y', "\u024E" => 'y', "\u024F" => 'y', "\u1EF9" => 'y', "\u028F" => 'y', "\u028E" => 'y', "\u02B8" => 'y', "\u2144" => 'y',
+                "\u00A5" => 'y', "\u01B6" => 'z', "\u017A" => 'z', "\u017E" => 'z', "\u1E91" => 'z', "\u0291" => 'z', "\u017C" => 'z', "\u1E93" => 'z',
+                "\u0225" => 'z', "\u1E95" => 'z', "\u0290" => 'z', "\u0240" => 'z', "\u2128" => 'z', "\u2124" => 'z', "\u1D22" => 'z'}
   str=str.gsub(/\s+/,' ').gsub(/[[:space:]]+/,' ').gsub(/[[:cntrl:]]/,' ').gsub("``",'')
   str=str.gsub('||','') unless allowspoiler
-  str=str.gsub("\u2019","'").gsub("`","'").gsub("\u2018","'")
-  str=str.gsub("\u{1F1E6}","A").gsub("\u{1F1E7}","B").gsub("\u{1F1E8}","C").gsub("\u{1F1E9}","D").gsub("\u{1F1EA}","E").gsub("\u{1F1EB}","F").gsub("\u{1F1EC}","G").gsub("\u{1F1ED}","H").gsub("\u{1F1EE}","I").gsub("\u{1F1EF}","J").gsub("\u{1F1F0}","K").gsub("\u{1F1F1}","L").gsub("\u{1F1F2}","M").gsub("\u{1F1F3}","N").gsub("\u{1F1F4}","O").gsub("\u{1F1F5}","P").gsub("\u{1F1F6}","Q").gsub("\u{1F1F7}","R").gsub("\u{1F1F8}","S").gsub("\u{1F1F9}","T").gsub("\u{1F1FA}","U").gsub("\u{1F1FB}","V").gsub("\u{1F1FC}","W").gsub("\u{1F1FD}","X").gsub("\u{1F1FE}","Y").gsub("\u{1F1FF}","Z")
-  str=str.gsub("\u{1F170}",'A').gsub("\u{1F171}",'B').gsub("\u{1F18E}",'AB').gsub("\u{1F191}",'CL').gsub("\u2B55",'O').gsub("\u{1F17E}",'O').gsub("\u{1F198}",'SOS')
-  str=str.gsub("\u00E1",'a').gsub("\u00C1",'a').gsub("\u0103",'a').gsub("\u01CE",'a').gsub("\u00C2",'a').gsub("\u00E2",'a').gsub("\u00C4",'a').gsub("\u00E4",'a').gsub("\u0227",'a').gsub("\u1EA1",'a').gsub("\u0201",'a').gsub("\u00C0",'a').gsub("\u00E0",'a').gsub("\u1EA3",'a').gsub("\u0203",'a').gsub("\u0101",'a').gsub("\u0105",'a').gsub("\u1E9A",'a').gsub("\u00C5",'a').gsub("\u00E5",'a').gsub("\u1E01",'a').gsub("\u023A",'a').gsub("\u00C3",'a').gsub("\u00E3",'a').gsub("\u0363",'a').gsub("\u1D00",'a').gsub("\u0251",'a').gsub("\u0250",'a').gsub("\u0252",'a').gsub("\u22C0",'a')
-  str=str.gsub("\u00C6",'ae').gsub("\u1D01",'ae').gsub("\u00E6",'ae').gsub("\u1D02",'ae')
-  str=str.gsub("\u1E03",'b').gsub("\u1E05",'b').gsub("\u0181",'b').gsub("\u0253",'b').gsub("\u1E07",'b').gsub("\u0243",'b').gsub("\u0180",'b').gsub("\u0183",'b').gsub("\u0299",'b').gsub("\u1D03",'b').gsub("\u212C",'b').gsub("\u0185",'b')
-  str=str.gsub("\u0107",'c').gsub("\u010D",'c').gsub("\u00C7",'c').gsub("\u00E7",'c').gsub("\u0109",'c').gsub("\u0255",'c').gsub("\u010B",'c').gsub("\u0189",'c').gsub("\u023B",'c').gsub("\u023C",'c').gsub("\u2183",'c').gsub("\u212D",'c').gsub("\u0368",'c').gsub("\u2102",'c').gsub("\u1D04",'c').gsub("\u0297",'c').gsub("\u2184",'c')
-  str=str.gsub("\u212D",'d').gsub("\u0256",'d').gsub("\u010F",'d').gsub("\u1E11",'d').gsub("\u1E13",'d').gsub("\u0221",'d').gsub("\u1E0B",'d').gsub("\u1E0D",'d').gsub("\u018A",'d').gsub("\u0257",'d').gsub("\u1E0F",'d').gsub("\u0111",'d').gsub("\u0256",'d').gsub("\u018C",'d').gsub("\u0369",'d').gsub("\u2145",'d').gsub("\u2146",'d').gsub("\u0189",'d').gsub("\u1D05",'d')
-  str=str.gsub("\u00C9",'e').gsub("\u00E9",'e').gsub("\u0115",'e').gsub("\u011B",'e').gsub("\u0229",'e').gsub("\u1E19",'e').gsub("\u00CA",'e').gsub("\u00EA",'e').gsub("\u00CB",'e').gsub("\u00EB",'e').gsub("\u0117",'e').gsub("\u1EB9",'e').gsub("\u0205",'e').gsub("\u00C8",'e').gsub("\u00E8",'e').gsub("\u1EBB",'e').gsub("\u025D",'e').gsub("\u0207",'e').gsub("\u0113",'e').gsub("\u0119",'e').gsub("\u0246",'e').gsub("\u0247",'e').gsub("\u1E1B",'e').gsub("\u1EBD",'e').gsub("\u0364",'e').gsub("\u2147",'e').gsub("\u0190",'e').gsub("\u018E",'e').gsub("\u1D07",'e').gsub("\u029A",'e').gsub("\u025E",'e').gsub("\u0153",'e').gsub("\u025B",'e').gsub("\u0258",'e').gsub("\u025C",'e').gsub("\u01DD",'e').gsub("\u1D08",'e').gsub("\u2130",'e').gsub("\u212F",'e').gsub("\u0259",'e').gsub("\u018F",'e').gsub("\u22FF",'e')
-  str=str.gsub("\u1E1F",'f').gsub("\u0192",'f').gsub("\u2131",'f').gsub("\u2132",'f').gsub("\u214E",'f')
-  str=str.gsub("\u2640",'(f)')
-  str=str.gsub("\u01F5",'g').gsub("\u011F",'g').gsub("\u01E7",'g').gsub("\u0123",'g').gsub("\u011D",'g').gsub("\u0121",'g').gsub("\u0193",'g').gsub("\u029B",'g').gsub("\u0260",'g').gsub("\u1E21",'g').gsub("\u01E5",'g').gsub("\u0262",'g').gsub("\u0261",'g').gsub("\u210A",'g').gsub("\u2141",'g')
-  str=str.gsub("\u210C",'h').gsub("\u1E2B",'h').gsub("\u021F",'h').gsub("\u1E29",'h').gsub("\u0125",'h').gsub("\u1E27",'h').gsub("\u1E23",'h').gsub("\u1E25",'h').gsub("\u02AE",'h').gsub("\u0266",'h').gsub("\u1E96",'h').gsub("\u0127",'h').gsub("\u210C",'h').gsub("\u036A",'h').gsub("\u210D",'h').gsub("\u029C",'h').gsub("\u0265",'h').gsub("\u2095",'h').gsub("\u02B0",'h').gsub("\u210B",'h')
-  str=str.gsub("\u2111",'i').gsub("\u0197",'i').gsub("\u0130",'i').gsub("\u00CD",'i').gsub("\u00ED",'i').gsub("\u012D",'i').gsub("\u01D0",'i').gsub("\u00CE",'i').gsub("\u00EE",'i').gsub("\u00CF",'i').gsub("\u00EF",'i').gsub("\u0130",'i').gsub("\u1CEB",'i').gsub("\u0209",'i').gsub("\u00CC",'i').gsub("\u00EC",'i').gsub("\u1EC9",'i').gsub("\u020B",'i').gsub("\u012B",'i').gsub("\u012F",'i').gsub("\u0197",'i').gsub("\u0268",'i').gsub("\u1E2D",'i').gsub("\u0129",'i').gsub("\u2111",'i').gsub("\u0365",'i').gsub("\u2148",'i').gsub("\u026A",'i').gsub("\u0131",'i').gsub("\u1D09",'i').gsub("\u1D62",'i').gsub("\u2110",'i').gsub("\u2071",'i').gsub("\u2139",'i').gsub("\uFE0F",'i').gsub("\u1FBE",'i').gsub("\u03B9",'i').gsub("\u0399",'i')
-  str=str.gsub("\u0133",'ij')
-  str=str.gsub("\u01F0",'j').gsub("\u0135",'j').gsub("\u029D",'j').gsub("\u0248",'j').gsub("\u0249",'j').gsub("\u025F",'j').gsub("\u2149",'j').gsub("\u1D0A",'j').gsub("\u0237",'j').gsub("\u02B2",'j')
-  str=str.gsub("\u1E31",'k').gsub("\u01E9",'k').gsub("\u0137",'k').gsub("\u1E33",'k').gsub("\u0199",'k').gsub("\u1E35",'k').gsub("\u1D0B",'k').gsub("\u029E",'k').gsub("\u2096",'k').gsub("\u212A",'k').gsub("\u0138",'k')
-  str=str.gsub("\u013A",'l').gsub("\u023D",'l').gsub("\u019A",'l').gsub("\u026C",'l').gsub("\u013E",'l').gsub("\u013C",'l').gsub("\u1E3D",'l').gsub("\u0234",'l').gsub("\u1E37",'l').gsub("\u1E3B",'l').gsub("\u0140",'l').gsub("\u026B",'l').gsub("\u026D",'l').gsub("\u1D0C",'l').gsub("\u0142",'l').gsub("\u029F",'l').gsub("\u2097",'l').gsub("\u02E1",'l').gsub("\u2143",'l').gsub("\u2112",'l').gsub("\u2113",'l').gsub("\u2142",'l')
-  str=str.gsub("\u2114",'lb')
-  str=str.gsub("\u264C",'leo')
-  str=str.gsub("\u1E3F",'m').gsub("\u1E41",'m').gsub("\u1E43",'m').gsub("\u0271",'m').gsub("\u0270",'m').gsub("\u036B",'m').gsub("\u019C",'m').gsub("\u1D0D",'m').gsub("\u1D1F",'m').gsub("\u026F",'m').gsub("\u2098",'m').gsub("\u2133",'m')
-  str=str.gsub("\u2642",'(m)')
-  str=str.gsub("\u0144",'n').gsub("\u0148",'n').gsub("\u0146",'n').gsub("\u1E4B",'n').gsub("\u0235",'n').gsub("\u1E45",'n').gsub("\u1E47",'n').gsub("\u01F9",'n').gsub("\u019D",'n').gsub("\u0272",'n').gsub("\u1E49",'n').gsub("\u0220",'n').gsub("\u019E",'n').gsub("\u0273",'n').gsub("\u00D1",'n').gsub("\u00F1",'n').gsub("\u2115",'n').gsub("\u0274",'n').gsub("\u1D0E",'n').gsub("\u2099",'n').gsub("\u22C2",'n').gsub("\u220F",'n')
-  str=str.gsub("\u00F3",'o').gsub("\u00F0",'o').gsub("\u00D3",'o').gsub("\u014F",'o').gsub("\u01D2",'o').gsub("\u00D4",'o').gsub("\u00F4",'o').gsub("\u00D6",'o').gsub("\u00F6",'o').gsub("\u022F",'o').gsub("\u1ECD",'o').gsub("\u0151",'o').gsub("\u020D",'o').gsub("\u00D2",'o').gsub("\u00F2",'o').gsub("\u1ECF",'o').gsub("\u01A1",'o').gsub("\u020F",'o').gsub("\u014D",'o').gsub("\u019F",'o').gsub("\u01EB",'o').gsub("\u00D8",'o').gsub("\u00F8",'o').gsub("\u1D13",'o').gsub("\u00D5",'o').gsub("\u00F5",'o').gsub("\u0366",'o').gsub("\u019F",'o').gsub("\u0186",'o').gsub("\u1D0F",'o').gsub("\u1D10",'o').gsub("\u0275",'o').gsub("\u1D11",'o').gsub("\u2134",'o').gsub("\u25CB",'o').gsub("\u00A4",'o')
-  str=str.gsub("\u1D14",'oe').gsub("\u0153",'oe').gsub("\u0276",'oe')
-  str=str.gsub("\u01A3",'oi')
-  str=str.gsub("\u0223",'ou').gsub("\u1D15",'ou')
-  str=str.gsub("\u1E55",'p').gsub("\u1E57",'p').gsub("\u01A5",'p').gsub("\u2119",'p').gsub("\u1D18",'p').gsub("\u209A",'p').gsub("\u2118",'p').gsub("\u214C",'p')
-  str=str.gsub("\u024A",'q').gsub("\u024B",'q').gsub("\u02A0",'q').gsub("\u211A",'q').gsub("\u213A",'q')
-  str=str.gsub("\u0239",'qp')
-  str=str.gsub("\u211C",'r').gsub("\u0155",'r').gsub("\u0159",'r').gsub("\u0157",'r').gsub("\u1E59",'r').gsub("\u1E5B",'r').gsub("\u0211",'r').gsub("\u027E",'r').gsub("\u027F",'r').gsub("\u027B",'r').gsub("\u0213",'r').gsub("\u1E5F",'r').gsub("\u027C",'r').gsub("\u027A",'r').gsub("\u024C",'r').gsub("\u024D",'r').gsub("\u027D",'r').gsub("\u036C",'r').gsub("\u211D",'r').gsub("\u0280",'r').gsub("\u0281",'r').gsub("\u1D19",'r').gsub("\u1D1A",'r').gsub("\u0279",'r').gsub("\u1D63",'r').gsub("\u02B3",'r').gsub("\u02B6",'r').gsub("\u02B4",'r').gsub("\u211B",'r').gsub("\u01A6",'r')
-  str=str.gsub("\u301C",'roy')
-  str=str.gsub("\u015B",'s').gsub("\u0161",'s').gsub("\u015F",'s').gsub("\u015D",'s').gsub("\u0219",'s').gsub("\u1E61",'s').gsub("\u1E63",'s').gsub("\u0282",'s').gsub("\u023F",'s').gsub("\u209B",'s').gsub("\u02E2",'s').gsub("\u1E9B",'s').gsub("\u223E",'s').gsub("\u017F",'s').gsub("\u00DF",'s')
-  str=str.gsub("\u0165",'t').gsub("\u0163",'t').gsub("\u1E71",'t').gsub("\u021B",'t').gsub("\u0236",'t').gsub("\u1E97",'t').gsub("\u023E",'t').gsub("\u1E6B",'t').gsub("\u1E6D",'t').gsub("\u01AD",'t').gsub("\u1E6F",'t').gsub("\u01AB",'t').gsub("\u01AE",'t').gsub("\u0288",'t').gsub("\u0167",'t').gsub("\u036D",'t').gsub("\u1D1B",'t').gsub("\u0287",'t').gsub("\u209C",'t')
-  str=str.gsub("\u00FE",'th')
-  str=str.gsub("\u00FA",'u').gsub("\u028A",'u').gsub("\u22C3",'u').gsub("\u0244",'u').gsub("\u0289",'u').gsub("\u00DA",'u').gsub("\u1E77",'u').gsub("\u016D",'u').gsub("\u01D4",'u').gsub("\u00DB",'u').gsub("\u00FB",'u').gsub("\u1E73",'u').gsub("\u00DC",'u').gsub("\u00FC",'u').gsub("\u1EE5",'u').gsub("\u0171",'u').gsub("\u0215",'u').gsub("\u00D9",'u').gsub("\u00F9",'u').gsub("\u1EE7",'u').gsub("\u01B0",'u').gsub("\u0217",'u').gsub("\u016B",'u').gsub("\u0173",'u').gsub("\u016F",'u').gsub("\u1E75",'u').gsub("\u0169",'u').gsub("\u0367",'u').gsub("\u1D1C",'u').gsub("\u1D1D",'u').gsub("\u1D1E",'u').gsub("\u1D64",'u')
-  str=str.gsub("\u22C1",'v').gsub("\u030C",'v').gsub("\u1E7F",'v').gsub("\u01B2",'v').gsub("\u028B",'v').gsub("\u1E7D",'v').gsub("\u036E",'v').gsub("\u01B2",'v').gsub("\u0245",'v').gsub("\u1D20",'v').gsub("\u028C",'v').gsub("\u1D65",'v')
-  str=str.gsub("\u1E83",'w').gsub("\u0175",'w').gsub("\u1E85",'w').gsub("\u1E87",'w').gsub("\u1E89",'w').gsub("\u1E81",'w').gsub("\u1E98",'w').gsub("\u1D21",'w').gsub("\u028D",'w').gsub("\u02B7",'w')
-  str=str.gsub("\u2715",'x').gsub("\u2716",'x').gsub("\u2A09",'x').gsub("\u033D",'x').gsub("\u0353",'x').gsub("\u1E8D",'x').gsub("\u1E8B",'x').gsub("\u2717",'x').gsub("\u036F",'x').gsub("\u2718",'x').gsub("\u2A09",'x').gsub("\u02E3",'x').gsub("\u2A09",'x')
-  str=str.gsub("\u00DD",'y').gsub("\u00FD",'y').gsub("\u0177",'y').gsub("\u0178",'y').gsub("\u00FF",'y').gsub("\u1E8F",'y').gsub("\u1EF5",'y').gsub("\u1EF3",'y').gsub("\u1EF7",'y').gsub("\u01B4",'y').gsub("\u0233",'y').gsub("\u1E99",'y').gsub("\u024E",'y').gsub("\u024F",'y').gsub("\u1EF9",'y').gsub("\u028F",'y').gsub("\u028E",'y').gsub("\u02B8",'y').gsub("\u2144",'y').gsub("\u00A5",'y')
-  str=str.gsub("\u01B6",'z').gsub("\u017A",'z').gsub("\u017E",'z').gsub("\u1E91",'z').gsub("\u0291",'z').gsub("\u017C",'z').gsub("\u1E93",'z').gsub("\u0225",'z').gsub("\u1E95",'z').gsub("\u0290",'z').gsub("\u01B6",'z').gsub("\u0240",'z').gsub("\u2128",'z').gsub("\u2124",'z').gsub("\u1D22",'z')
+  str=str.gsub("\u{1F1E6}","A").gsub("\u{1F1E7}","B").gsub("\u{1F1E8}","C").gsub("\u{1F1E9}","D").gsub("\u{1F1EA}","E").gsub("\u{1F1EB}","F").gsub("\u{1F1EC}","G").gsub("\u{1F1ED}","H").gsub("\u{1F1EE}","I").gsub("\u{1F1EF}","J").gsub("\u{1F1F0}","K").gsub("\u{1F1F1}","L").gsub("\u{1F1F2}","M").gsub("\u{1F1F3}","N").gsub("\u{1F1F4}","O").gsub("\u{1F1F5}","P").gsub("\u{1F1F6}","Q").gsub("\u{1F1F7}","R").gsub("\u{1F1F8}","S").gsub("\u{1F1F9}","T").gsub("\u{1F1FA}","U").gsub("\u{1F1FB}","V").gsub("\u{1F1FC}","W").gsub("\u{1F1FD}","X").gsub("\u{1F1FE}","Y").gsub("\u{1F1FF}","Z").gsub("\u{1F170}",'A').gsub("\u{1F171}",'B').gsub("\u{1F18E}",'AB').gsub("\u{1F191}",'CL').gsub("\u{1F17E}",'O').gsub("\u{1F198}",'SOS').gsub("\u{1F34D}",'pineapple').gsub("\u{1F5D1}",'trash').gsub("\u{1F345}",'tomato').gsub("\u{1F440}",'eyes').gsub("\u{1F954}",'potato').gsub("\u{1F63A}",'cat').gsub("\u{1F341}",'leaf').gsub("\u{1F342}",'leaf').gsub("\u{1F343}",'leaf').gsub("\u{1F34C}",'banana').gsub("\u{1F6AE}",'trash')
+  strx=str.encode("ASCII", "UTF-8", fallback: fallback_map, invalid: :replace, undef: :replace, replace: "")
+  str="#{strx}" unless strx.length<=0
   return str
 end
 
@@ -613,30 +638,30 @@ end
 
 def triple_weakness(bot,event)
   types=[[1, 1,   1,   1,   1,   0.5, 1,   0,   0.5, 1,   1,   1,   1,   1,   1,   1,   1,   1,   "Normal",   0xA8A77A],
-         [2, 1,   0.5, 0.5, 1,   2,   0.5, 0,   2,   1,   1,   1,   1,   0.5, 2,   1,   2,   0.5, "Fighting", 0xC22E28],
-         [1, 2,   1,   1,   1,   0.5, 2,   1,   0.5, 1,   1,   2,   0.5, 1,   1,   1,   1,   1,   "Flying",   0xA98FF3],
-         [1, 1,   1,   0.5, 0.5, 0.5, 1,   0.5, 0,   1,   1,   2,   1,   1,   1,   1,   1,   2,   "Poison",   0xA33EA1],
+         [2, 1,   0.5, 0.5, 1,   2,   0.5, 0,   2,   1,   1,   1,   1,   0.5, 2,   1,   2,   0.5, "Fighting", 0xC22E28, ['fight']],
+         [1, 2,   1,   1,   1,   0.5, 2,   1,   0.5, 1,   1,   2,   0.5, 1,   1,   1,   1,   1,   "Flying",   0xA98FF3, ['fly', 'air', 'bird', 'wind']],
+         [1, 1,   1,   0.5, 0.5, 0.5, 1,   0.5, 0,   1,   1,   2,   1,   1,   1,   1,   1,   2,   "Poison",   0xA33EA1, ['psn', 'toxic']],
          [1, 1,   0,   2,   1,   2,   0.5, 1,   2,   2,   1,   0.5, 2,   1,   1,   1,   1,   1,   "Ground",   0xE2BF65],
          [1, 0.5, 2,   1,   0.5, 1,   2,   1,   0.5, 2,   1,   1,   1,   1,   2,   1,   1,   1,   "Rock",     0xB6A136],
-         [1, 0.5, 0.5, 0.5, 1,   1,   1,   0.5, 0.5, 0.5, 1,   2,   1,   2,   1,   1,   2,   0.5, "Bug",      0xA6B91A],
-         [0, 1,   1,   1,   1,   1,   1,   2,   1,   1,   1,   1,   1,   2,   1,   1,   0.5, 1,   "Ghost",    0x735797],
-         [1, 1,   1,   1,   1,   2,   1,   1,   0.5, 0.5, 0.5, 1,   0.5, 1,   2,   1,   1,   2,   "Steel",    0xB7B7CE],
-         [1, 1,   1,   1,   1,   0.5, 2,   1,   2,   0.5, 0.5, 2,   1,   1,   2,   0.5, 1,   1,   "Fire",     0xEE8130],
-         [1, 1,   1,   1,   2,   2,   1,   1,   1,   2,   0.5, 0.5, 1,   1,   1,   0.5, 1,   1,   "Water",    0x6390F0],
-         [1, 1,   0.5, 0.5, 2,   2,   0.5, 1,   0.5, 0.5, 2,   0.5, 1,   1,   1,   0.5, 1,   1,   "Grass",    0x7AC74C],
-         [1, 1,   2,   1,   0,   1,   1,   1,   1,   1,   2,   0.5, 0.5, 1,   1,   0.5, 1,   1,   "Electric", 0xF7D02C],
-         [1, 2,   1,   2,   1,   1,   1,   1,   0.5, 1,   1,   1,   1,   0.5, 1,   1,   0,   1,   "Psychic",  0xF95587],
-         [1, 1,   2,   1,   2,   1,   1,   1,   0.5, 0.5, 0.5, 2,   1,   1,   0.5, 2,   1,   1,   "Ice",      0x96D9D6],
+         [1, 0.5, 0.5, 0.5, 1,   1,   1,   0.5, 0.5, 0.5, 1,   2,   1,   2,   1,   1,   2,   0.5, "Bug",      0xA6B91A, ['insect']],
+         [0, 1,   1,   1,   1,   1,   1,   2,   1,   1,   1,   1,   1,   2,   1,   1,   0.5, 1,   "Ghost",    0x735797, ['spooky', 'spook', 'spoopy']],
+         [1, 1,   1,   1,   1,   2,   1,   1,   0.5, 0.5, 0.5, 1,   0.5, 1,   2,   1,   1,   2,   "Steel",    0xB7B7CE, ['metal']],
+         [1, 1,   1,   1,   1,   0.5, 2,   1,   2,   0.5, 0.5, 2,   1,   1,   2,   0.5, 1,   1,   "Fire",     0xEE8130, ['flame']],
+         [1, 1,   1,   1,   2,   2,   1,   1,   1,   2,   0.5, 0.5, 1,   1,   1,   0.5, 1,   1,   "Water",    0x6390F0, ['aqua']],
+         [1, 1,   0.5, 0.5, 2,   2,   0.5, 1,   0.5, 0.5, 2,   0.5, 1,   1,   1,   0.5, 1,   1,   "Grass",    0x7AC74C, ['plant']],
+         [1, 1,   2,   1,   0,   1,   1,   1,   1,   1,   2,   0.5, 0.5, 1,   1,   0.5, 1,   1,   "Electric", 0xF7D02C, ['elec', 'lightning']],
+         [1, 2,   1,   2,   1,   1,   1,   1,   0.5, 1,   1,   1,   1,   0.5, 1,   1,   0,   1,   "Psychic",  0xF95587, ['psy']],
+         [1, 1,   2,   1,   2,   1,   1,   1,   0.5, 0.5, 0.5, 2,   1,   1,   0.5, 2,   1,   1,   "Ice",      0x96D9D6, ['icy']],
          [1, 1,   1,   1,   1,   1,   1,   1,   0.5, 1,   1,   1,   1,   1,   1,   2,   1,   0,   "Dragon",   0x6F35FC],
-         [1, 0.5, 1,   1,   1,   1,   1,   2,   1,   1,   1,   1,   1,   2,   1,   1,   0.5, 0.5, "Dark",     0x705746],
-         [1, 2,   1,   0.5, 1,   1,   1,   1,   0.5, 0.5, 1,   1,   1,   1,   1,   2,   2,   1,   "Fairy",    0xD685AD]]
+         [1, 0.5, 1,   1,   1,   1,   1,   2,   1,   1,   1,   1,   1,   2,   1,   1,   0.5, 0.5, "Dark",     0x705746, ['evil', 'darkness']],
+         [1, 2,   1,   0.5, 1,   1,   1,   1,   0.5, 0.5, 1,   1,   1,   1,   1,   2,   2,   1,   "Fairy",    0xD685AD, ['fae', 'faerie']]]
   args=event.message.text.downcase.gsub(',','').split(' ')
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   tpz=[]
   inv=false
   for i in 0...args.length
     for j in 0...types.length
-      tpz.push(j) if args[i]==types[j][18].downcase
+      tpz.push(j) if args[i]==types[j][18].downcase || (!types[j][20].nil? && types[j][20].include?(args[i]))
     end
     inv=true if ['inverse','reverse','backwards'].include?(args[i])
   end

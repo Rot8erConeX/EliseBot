@@ -1,14 +1,25 @@
 Book 1 Revival, Week 20\-4\Azura, Elise, Leo\5\20/10/2019, 26/10/2019\Book1
 Book 1 Revival, Week 19\-4\Gray, Ike(Brave), Lucina(Brave)\5\13/10/2019, 19/10/2019\Book1
+Special Heroes: >Unknown<\3\-\5\09/10/2019, 04/11/2019\Seasonal, Halloween
+Heroes with Hone Skills\3\-\5\07/10/2019, 21/10/2019\SkillBanner
 Book 1 Revival, Week 18\-4\Amelia, Nephenee, Sanaki\5\06/10/2019, 12/10/2019\Book1
+Mythic Heroes: Thrasir, Omnicidal Witch\-8\Corrin(F)(Fallen), Eir, Eirika(Graceful), Eliwood(Wind), Ephraim(Fire), Genny(Picnic), Hrid, Kjelle, Soren(Valentines), Thrasir, Veronica(Bunny), Yune\5\30/09/2019, 07/10/2019\Legendary
 Book 1 Revival, Week 17\-4\Elincia, Innes, Tana\5\29/09/2019, 05/10/2019\Book1
+Heroes with Fierce Stance\3\Dorcas, Kana(F), Zelgius\5\26/09/2019, 06/10/2019\SkillBanner
+The Chosen Ones\3\Nagi, Norne, Phina, Sirius\5\19/09/2019, 08/10/2019\NewUnits
+Performing Arts (September 2019 rerun)\3\Azura(Performing), Inigo(Performing), Olivia(Performing), Shigure(Performing)\5\07/09/2019, 06/10/2019\Seasonal, Fall
+A Splendid Soiree\3\Berkut(Soiree), Ishtar(Soiree), Nephenee(Soiree), Reinhardt(Soiree)\5\06/09/2019, 06/10/2019\Seasonal, Fall
+GHB Units\5\-\543\\Dynamic, GHB
+TT Units\5\-\54\\Dynamic, Tempest
 Book 1 Revival, Week 16\-4\Ephraim, Jaffar, Karel\5\22/09/2019, 28/09/2019\Book1
+Heroes with Bonfire\3\-\5\18/09/2019, 25/09/2019\SkillBanner
+Tibarn & Caineghis's Battle\3\Caineghis, Reyson, Tibarn\5\15/09/2019, 22/09/2019\BHB
 Book 1 Revival, Week 15\-4\Azura, Deirdre, Eldigan\5\15/09/2019, 21/09/2019\Book1
+New Power (September 2019)\3\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5\11/09/2019, 17/09/2019\CYL, NewPower
 Book 1 Revival, Week 14\-4\Linde, Saber, Sonya\5\08/09/2019, 14/09/2019\Book1
->Special Heroes: Unknown<\3\-\5\06/09/2019, 06/10/2019\Seasonal, Fall
+Heroes with Desperation\3\Ayra, Karel, Mae\5\01/09/2019, 11/09/2019\SkillBanner
+George & Gordin's Battle\3\Gordin, Hardin(Fallen), Jeorge\5\31/08/2019, 10/09/2019\BHB
 Book 1 Revival, Week 13\-4\Hector, Luke, Tana\5\01/09/2019, 07/09/2019\Book1
-Heroes with Desperation\3\-\5\01/09/2019, 11/09/2019\SkillBanner
-George & Gordin's Battle\3\Gordin, Jeorge\5\31/08/2019, 10/09/2019\BHB
 Legendary Heroes: Julia, Crusader of Light\-8\Bruno(Bunny), Duma, Elise(Bath), Gunnthra, Ike(Vanguard), Julia(Crusader), Kaden, Mist(Valentines), Naga, Robin(F)(Fallen), Roy(Fire), Tiki(Young)(Earth)\5\26/08/2019, 04/09/2019\Legendary
 Book 1 Revival, Week 12\-4\Dorcas, Lute, Mia\5\25/08/2019, 31/08/2019\Book1
 Heroes with Solo Skills\3\-\5\20/08/2019, 31/08/2019\SkillBanner
@@ -21,13 +32,11 @@ Festival in Hoshido (August 2019 rerun)\3\Elincia(Festival), Micaiah(Festival), 
 New Heroes: Changing Winds\3\Hilda, Hubert, Mercedes, Petra\5\07/08/2019, 06/09/2019\NewUnits
 Heroes with Savage Blow\3\Camilla(Launch), Leo, Rhajat\5\05/08/2019, 14/08/2019\SkillBanner
 Book 1 Revival, Week 9\-4\Alm, Delthea, Faye\5\04/08/2019, 10/08/2019\Book1
-Feh's Summer Celebration (2019): Daily Summoning Events\3\Amelia, Ares, Ayra, Celica, Celica(Fallen), Chrom(Launch), Deirdre, Delthea, Dorcas, Effie, Eirika(Memories), Eldigain, Elincia, Hardin(Fallen), Hector, Hinoka(Wings), Ike, Ike(Brave), Innes, Ishtar, Kana(F), Karla, Katarina, Kaze, Kliff, L'Arachel, Leif, Lukas, Lute, Lyn(Brave), Mia, Mist, Micaiah, Morgan(F), Myrrh, Nephenee, Nino(Fangs), Nowi, Olwen(World), Quan, Reinhardt(World), Rhajat, Robin(M)(Fallen), Ryoma, Shiro, Siegbert, Sigurd, Sonya, Takumi, Tana, Zelgius\50\02/08/2019, 23/08/2019\SkillBanner
-GHB Units\5\-\543\\Dynamic, GHB
-TT Units\5\-\54\\Dynamic, Tempest
+Feh's Summer Celebration (2019): Daily Summoning Events\3\Amelia, Ares, Ayra, Celica, Celica(Fallen), Chrom(Launch), Deirdre, Delthea, Dorcas, Effie, Eirika(Memories), Eldigan, Elincia, Hardin(Fallen), Hector, Hinoka(Wings), Ike, Ike(Brave), Innes, Ishtar, Kana(F), Karla, Katarina, Kaze, Kliff, L'Arachel, Leif, Lukas, Lute, Lyn(Brave), Mia, Mist, Micaiah, Morgan(F), Myrrh, Nephenee, Nino(Fangs), Nowi, Olwen(World), Quan, Reinhardt(World), Rhajat, Robin(M)(Fallen), Ryoma, Shiro, Siegbert, Sigurd, Sonya, Takumi, Tana, Zelgius\50\02/08/2019, 23/08/2019\SkillBanner
 Heroes with Close Def skills\3\-\5\27/07/2019, 10/08/2019\SkillBanner
 Summer Refreshes\3\Lilina(Summer), Lyn(Summer), Ursula(Summer), Wolt(Summer)\5\09/07/2019, 10/08/2019\Seasonal, Summer
 Summer Returns\3\Gunnthra(Summer), Helbindi(Summer), Laegjarn(Summer), Laevatein(Summer)\5\20/06/2019, 08/08/2019\Seasonal, Summer
-Mythic Heroes: Sothis, Girl on the Throne\-8\Alm(Saint), Azura(Vallite), Byleth(M), Caineghis, Eir, Fjorm, Greil, Hector(Marquess), Lyn(Wind), Marth(King), Ryoma(Bath), Sothis\5\31/07/2019, 06/08/2019\Legendary
+Mythic Heroes: Sothis, Girl on the Throne\-8\Alm(Saint), Azura(Vallite), Byleth(M), Caineghis, Eir, Fjorm, Greil(Valentines), Hector(Marquess), Lyn(Wind), Marth(King), Ryoma(Bath), Sothis\5\31/07/2019, 06/08/2019\Legendary
 Three Houses\3\Byleth(F), Claude, Dimitri, Edelgard\5\22/07/2019, 06/08/2019\NewUnits
 Book 1 Revival, Week 8\-4\Genny, Katarina, Minerva\5\28/07/2019, 03/08/2019\Book1
 Sketchy Summer (August 2019 rerun)\3\Camilla(Summer), Linde(Summer), Takumi(Summer), Tiki(Young)(Summer)\5\03/08/2019, 03/09/2019\Seasonal, Summer

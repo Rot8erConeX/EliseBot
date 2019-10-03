@@ -2247,7 +2247,7 @@ def show_tools(event,bot)
     event << ''
     event << '__News__'
     event << 'In-game news: <https://fire-emblem-heroes.com/en/topics/>'
-    event << '~~Official~~ Twitter: <https://twitter.com/feheroes_news?lang=en>'
+    event << 'Twitter: <https://twitter.com/FE_Heroes_EN>'
     event << '*The Everyday Life of Heroes* manga: <https://fireemblem.gamepress.gg/feh-manga>'
     event << ''
     event << '__Wikis and Databases__'
@@ -2274,7 +2274,7 @@ def show_tools(event,bot)
     str="#{str}\n[Apple App Store](https://itunes.apple.com/app/id1181774280)"
     str="#{str}\n\n__News__"
     str="#{str}\n[In-game news](https://fire-emblem-heroes.com/en/topics/)"
-    str="#{str}\n[Twitter](https://twitter.com/feheroes_news?lang=en)"
+    str="#{str}\n[Twitter](https://twitter.com/FE_Heroes_EN)"
     str="#{str}\n[*The Everyday Life of Heroes* manga](https://fireemblem.gamepress.gg/feh-manga)"
     str="#{str}\n\n__Wikis and Databases__"
     str="#{str}\n[Gamepedia FEH wiki](https://feheroes.gamepedia.com/)"
@@ -3647,7 +3647,7 @@ def disp_FGO_based_stats(bot,event,srv=nil)
     l1_total+=7
     gp_total+=6
   end
-  if srv[0]>=151
+  if srv[0]>=151 || srv[0]==1.1
     if ['Tome', 'Staff'].include?(wpn) # magical ranged
       l1_total+=2
       l1_total-=1 if ['Cavalry'].include?(mov)
@@ -3668,7 +3668,7 @@ def disp_FGO_based_stats(bot,event,srv=nil)
       gp_total+=2 if ['Infantry'].include?(mov)
       gp_total-=1 if ['Cavalry'].include?(mov)
     end
-  elsif srv[0]>=60
+  elsif srv[0]>=60 || srv[0]==1.2
     l1_total+=1
     l1_total-=1 if ['Cavalry','Flier'].include?(mov)
     l1_total-=1 if 'Flier'!=mov
@@ -3705,6 +3705,35 @@ def disp_FGO_based_stats(bot,event,srv=nil)
         actusttz[2][order[i]]+=1
       end
     end
+  end
+  if actusttz[2][0]==actusttz[2].max
+    actusttz[2][0]-=2
+    actusttz[2][1]+=1
+    actusttz[2][2]+=1
+  else
+    actusttz[2][1]+=1
+    actusttz[2][2]+=1
+    actusttz[2][3+(srv[0]%2)]-=1
+    actusttz[2][3+(srv[0]%4)/2]-=1
+  end
+  if actusttz[2][0]==actusttz[2].max
+    actusttz[2][0]-=2
+    actusttz[2][1]+=1
+    actusttz[2][2]+=1
+  elsif actusttz[2][3]==actusttz[2].max
+    actusttz[2][3]-=2
+    actusttz[2][1]+=1
+    actusttz[2][2]+=1
+  elsif actusttz[2][4]==actusttz[2].max
+    actusttz[2][4]-=2
+    actusttz[2][1]+=1
+    actusttz[2][2]+=1
+  elsif actusttz[2][1]==actusttz[2].max
+    actusttz[2][0]-=1
+    actusttz[2][2]+=1
+  elsif actusttz[2][2]==actusttz[2].max
+    actusttz[2][0]-=1
+    actusttz[2][1]+=1
   end
   for i in 0...5
     actusttz[1][i]=actusttz[0][i]+m[[actusttz[2][i],m.length-1].min]
@@ -3746,7 +3775,7 @@ def disp_FGO_based_stats(bot,event,srv=nil)
   unless art<=1
     m=false
     IO.copy_stream(open("http://fate-go.cirnopedia.org/icons/servant/servant_#{dispnum}.png"), "C:/Users/#{@mash}/Desktop/devkit/FEHTemp#{@shardizard}.png") rescue m=true
-    art=1 if File.size("C:/Users/#{@mash}/Desktop/devkit/FGOTemp#{@shardizard}.png")<=10 || m
+    art=1 if File.size("C:/Users/#{@mash}/Desktop/devkit/FEHTemp#{@shardizard}.png")<=10 || m
   end
   dispnum="#{'0' if srv[0]<100}#{'0' if srv[0]<10}#{srv[0].to_i}#{art}"
   dispnum="#{'0' if srv[0]<100}#{'0' if srv[0]<10}#{srv[0].to_i}2" if srv[0]==74 && event.user.id==167657750971547648
@@ -3764,13 +3793,16 @@ def snagstats(event,bot,f=nil,f2=nil)
   metadata_load()
   f='' if f.nil?
   f2='' if f2.nil?
-  bot.servers.values(&:members)
-  k=bot.servers.length
-  k=1 if @shardizard==4 # Debug shard shares the six emote servers with the main account
-  @server_data[0][@shardizard]=k
-  @server_data[1][@shardizard]=bot.users.size
-  @server_data[0][4]=1
-  metadata_save()
+  unless @shardizard==-1
+    bot.servers.values(&:members)
+    k=bot.servers.length
+    k+=4 if @shardizard==0
+    k=1 if @shardizard==4 # Debug shard shares the six emote servers with the main account
+    @server_data[0][@shardizard]=k
+    @server_data[1][@shardizard]=bot.users.size
+    @server_data[0][4]=1
+    metadata_save()
+  end
   all_units=@units.reject{|q| !has_any?(g, q[13][0])}
   all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
   legal_units=@units.reject{|q| !q[13][0].nil?}
@@ -3787,7 +3819,13 @@ def snagstats(event,bot,f=nil,f2=nil)
     for i in 0...@shards
       m=i
       m=i+1 if i>3
-      str=extend_message(str,"The #{shard_data(0,true)[i]} Shard is in #{longFormattedNumber(@server_data[0][m])} server#{"s" if @server_data[0][m]!=1}, reaching #{longFormattedNumber(@server_data[1][m])} unique members.",event)
+      srvcnt=@server_data[0][m]
+      srvcnt-=3 if m==0 && @shardizard==-1
+      str=extend_message(str,"The #{shard_data(0,true)[i]} Shard is in #{longFormattedNumber(srvcnt)} server#{"s" if srvcnt !=1}, reaching #{longFormattedNumber(@server_data[1][m])} unique members.",event)
+    end
+    if @shardizard==-1
+      bot.servers.values(&:members)
+      str=extend_message(str,"The Smol Shard is in 4 servers, reaching #{longFormattedNumber(bot.users.size)} unique members.",event)
     end
     str=extend_message(str,"The #{shard_data(0)[4]} Shard is in 1 server, reaching #{longFormattedNumber(@server_data[1][4])} unique members.",event,2) if event.user.id==167657750971547648
     event.respond str
@@ -4064,6 +4102,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     str="#{str}\n\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]unit aliases.**"
     if event.server.nil? && @shardizard==4
       str="#{str}\nDue to being the debug version, I cannot show more information."
+    elsif event.server.nil? && @shardizard==-1
+      str="#{str}\nDue to being the smol version, I cannot show more information."
     elsif event.server.nil?
       str="#{str}\nServers you and I share account for #{@aliases.reject{|q| q[0]!='Unit' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
     else
@@ -4115,6 +4155,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="#{str2}\n\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]skill aliases.**"
     if event.server.nil? && @shardizard==4
       str2="#{str2}\nDue to being the debug version, I cannot show more information."
+    elsif event.server.nil? && @shardizard==-1
+      str2="#{str2}\nDue to being the smol version, I cannot show more information."
     elsif event.server.nil?
       str2="#{str2}\nServers you and I share account for #{@aliases.reject{|q| q[0]!='Skill' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
     else
@@ -4137,6 +4179,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="**There are #{longFormattedNumber(glbl.length)} global [single-]structure aliases.**\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]structure aliases.**"
     if event.server.nil? && @shardizard==4
       str2="#{str2} - Due to being the debug version, I cannot show more information."
+    elsif event.server.nil? && @shardizard==-1
+      str2="#{str2} - Due to being the smol version, I cannot show more information."
     elsif event.server.nil?
       str2="#{str2} - Servers you and I share account for #{@aliases.reject{|q| q[0]!='Structure' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
     else
@@ -4148,6 +4192,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="**There are #{longFormattedNumber(glbl.length)} global [single-]accessory aliases.**\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]accessory aliases.**"
     if event.server.nil? && @shardizard==4
       str2="#{str2} - Due to being the debug version, I cannot show more information."
+    elsif event.server.nil? && @shardizard==-1
+      str2="#{str2} - Due to being the smol version, I cannot show more information."
     elsif event.server.nil?
       str2="#{str2} - Servers you and I share account for #{@aliases.reject{|q| q[0]!='Accessory' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
     else
@@ -4159,6 +4205,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="**There are #{longFormattedNumber(glbl.length)} global [single-]item aliases.**\n**There are #{longFormattedNumber(srv_spec.length)} server-specific [single-]item aliases.**"
     if event.server.nil? && @shardizard==4
       str2="#{str2} - Due to being the debug version, I cannot show more information."
+    elsif event.server.nil? && @shardizard==-1
+      str2="#{str2} - Due to being the smol version, I cannot show more information."
     elsif event.server.nil?
       str2="#{str2} - Servers you and I share account for #{@aliases.reject{|q| q[0]!='Item' || q[3].nil? || q[3].reject{|q2| q2==285663217261477889 || bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
     else
@@ -4193,6 +4241,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << "**There are #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups.**"
     if event.server.nil? && @shardizard==4
       event << "Due to being the debug version, I cannot show more information."
+    elsif event.server.nil? && @shardizard==-1
+      event << "Due to being the smol version, I cannot show more information."
     elsif event.server.nil?
       event << "Servers you and I share account for #{@groups.reject{|q| q[2].nil? || q[2].reject{|q2| bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
     else
@@ -4260,7 +4310,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     end
     return nil
   elsif event.user.id==167657750971547648 && !f.nil? && f.to_i.to_s==f
-    if @shardizard==4
+    if @shardizard==4 || @shardizard==-1
       s2="That server uses/would use #{shard_data(0,true)[(f.to_i >> 22) % @shards]} Shards."
     else
       srv=(bot.server(f.to_i) rescue nil)
@@ -4278,7 +4328,11 @@ def snagstats(event,bot,f=nil,f2=nil)
   extln=2 if f.downcase=="all"
   bot.servers.values(&:members)
   str="**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} *servers*, reaching #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} unique members.**"
-  str="#{str}\nThis shard is in #{longFormattedNumber(@server_data[0][@shardizard])} server#{"s" unless @server_data[0][@shardizard]==1}, reaching #{longFormattedNumber(bot.users.size)} unique members."
+  if @shardizard==-1
+    str="#{str}\nThis Smol version is in 3 servers, reaching #{longFormattedNumber(bot.users.size)} unique members."
+  else
+    str="#{str}\nThis shard is in #{longFormattedNumber(@server_data[0][@shardizard])} server#{"s" unless @server_data[0][@shardizard]==1}, reaching #{longFormattedNumber(bot.users.size)} unique members."
+  end
   str2="#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_units,all_units,-1)} *units*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
   if safe_to_spam?(event) || f.downcase=="all"
     str2="#{str2}\n#{filler(legal_units,all_units,9,0,'p',1)} summonable units"
@@ -4291,10 +4345,10 @@ def snagstats(event,bot,f=nil,f2=nil)
   str=extend_message(str,str2,event,2)
   str2="#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{filler(legal_skills,all_skills,-1)} *skills*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
   if safe_to_spam?(event) || f.downcase=="all"
-    str2="#{str2}\n#{filler(legal_skills,all_skills,4,-1,'Weapon')} Weapons"
-    str2="#{str2}\n#{filler(legal_skills,all_skills,4,-1,'Assist')} Assists"
-    str2="#{str2}\n#{filler(legal_skills,all_skills,4,-1,'Special')} Specials"
-    str2="#{str2}\n#{filler(legal_skills,all_skills,4,-1,['Weapon','Assist','Special'],3)} Passives"
+    str2="#{str2}\n#{filler(legal_skills,all_skills,6,-1,'Weapon')} Weapons"
+    str2="#{str2}\n#{filler(legal_skills,all_skills,6,-1,'Assist')} Assists"
+    str2="#{str2}\n#{filler(legal_skills,all_skills,6,-1,'Special')} Specials"
+    str2="#{str2}\n#{filler(legal_skills,all_skills,6,-1,['Weapon','Assist','Special'],3)} Passives"
   end
   str=extend_message(str,str2,event,extln)
   str2="#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{longFormattedNumber(@structures.map{|q| q[0]}.uniq.length)} *structures* with #{longFormattedNumber(@structures.length)} levels#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"

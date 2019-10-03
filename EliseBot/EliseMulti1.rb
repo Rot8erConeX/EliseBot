@@ -43,6 +43,13 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str='bluecina' if str2.include?('bluecina')
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Lucina(Bunny)','Lucina(Brave)','Lucina(Glorious)'],[str]]
+  elsif /bvero(ni(c|k)a|)/ =~ str1 || /broni/ =~ str1
+    str='bvero'
+    str='bveronica' if str2.include?('bveronica')
+    str='bveronika' if str2.include?('bveronika')
+    str='broni' if str2.include?('broni')
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Veronica(Brave)','Veronica(Bunny)'],[str]]
   elsif /ax(e|)(-|)(z|)ura/ =~ str1
     str='ax'
     str="#{str}e" if str2.include?('axe')
@@ -238,6 +245,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Reinhardt(Bonds)'],["bonds#{str}","#{str}bonds","b#{str}","#{str}b","sb#{str}","#{str}sb","mage#{str}","#{str}mage"]]
     elsif str2.include?('world') || str2.include?('warudo') || str2.include?("#{str}w") || str2.include?("w#{str}") || str2.include?('wot') || str2.include?('wt') || str2.include?("#{str}2")
       return [str,['Reinhardt(World)'],["world#{str}","#{str}world","warudo#{str}","#{str}warudo","w#{str}","#{str}w","wot#{str}","#{str}wot","wt#{str}","#{str}wt","#{str}2"]]
+    elsif str2.include?('soiree') || str2.include?('splendid') || str2.include?("#{str}ss") || str2.include?("ss#{str}") || str2.include?('dancer') || str2.include?('dancing') || str2.include?('dance') || str2.include?('performing')
+      return [str,['Reinhardt(Soiree)'],["soiree#{str}","#{str}soiree","splendid#{str}","#{str}splendid","ss#{str}","#{str}ss","dance#{str}","#{str}dance","dancer#{str}","#{str}dancer","dancing#{str}","#{str}dancing","performing#{str}","#{str}performing"]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Reinhardt(Bonds)','Reinhardt(World)'],[str]]
@@ -1320,6 +1329,18 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   else
     type=type.map{|q| q.gsub('*','')}
   end
+  if newname.include?("\\u{")
+    err=true
+    str="#{newname} contains an Extended Unicode character (a character with a Unicode ID beyond 65,535, almost all of which are emoji).\nDue to the way I store aliases and how Ruby parses strings from text files, I could theoretically store an Extended Unicode character but be unable to find a matching alias."
+  end
+  if err
+    str=["#{str}\nPlease try again.","#{str}\nTrying to list aliases instead."][mode]
+    event.respond str if str.length>0
+    args=event.message.text.downcase.split(' ')
+    args.shift
+    list_unit_aliases(event,args,bot) if mode==1
+    return nil
+  end
   checkstr=normalize(newname,true)
   if type[0]=='Alias' && type[1].gsub('*','')=='Unit'
     unt=find_unit(unit,event)
@@ -1350,6 +1371,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   end
   logchn=386658080257212417
   logchn=431862993194582036 if @shardizard==4
+  logchn=536307117301170187 if @shardizard==-1
   srv=0
   srv=event.server.id unless event.server.nil?
   srv=modifier.to_i if event.user.id==167657750971547648 && modifier.to_i.to_s==modifier
@@ -2654,6 +2676,9 @@ def combined_BST(event,args,bot)
     for i in 0...args.length
       unless s1.split(' ').nil? || s1.gsub(' ','').length<=0
         k=find_data_ex(:find_unit,s1,event,false,1)
+        for i2 in 0...i+1
+          k[1]=k[1][1,k[1].length-1] if k[1][0,1]==' '
+        end
         unless k.nil? || k.length<=0
           if k[0].is_a?(Array)
             if k[0][0].is_a?(Array)
@@ -2695,19 +2720,19 @@ def combined_BST(event,args,bot)
             ['Tempest', 0, 0],
             ['Yandere', 0, 0, ['Valter', 'Tharja', 'Rhajat', 'Camilla', 'Faye', 'Tharja(Winter)', 'Tharja(Bride)']],
             ['Lucina', 0, 0, ['Lucina', 'Lucina(Bunny)', 'Marth(Masked)', 'Lucina(Brave)', 'Lucina(Glorious)']],
-            ['Marth', 0, 0, ['Marth', 'Marth(Groom)', 'Marth(Masked)']],
+            ['Marth', 0, 0, ['Marth', 'Marth(Groom)', 'Marth(Masked)', 'Marth(King)']],
             ['Robin(F)', 0, 0, ['Robin(F)', 'Robin(F)(Summer)', 'Robin(F)(Fallen)']],
             ['Robin(M)', 0, 0, ['Robin(M)', 'Robin(M)(Winter)', 'Robin(M)(Fallen)', 'Tobin']],
             ['Corrin(F)', 0, 0, ['Corrin(F)(Launch)', 'Corrin(F)(Summer)', 'Corrin(F)(Adrift)', 'Corrin(F)(Fallen)']],
             ['Corrin(M)', 0, 0, ['Corrin(M)(Launch)', 'Corrin(M)(Winter)', 'Corrin(M)(Adrift)', 'Kamui']],
             ['Xander', 0, 0, ['Xander', 'Xander(Bunny)', 'Xander(Summer)', 'Xander(Festival)']],
             ['Tiki', 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)', 'Tiki(Young)(Fallen)']],
-            ['Lyn', 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)']],
+            ['Lyn', 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)', 'Lyn(Summer)']],
             ['Chrom', 0, 0, ['Chrom(Launch)', 'Chrom(Bunny)', 'Chrom(Winter)', 'Chrom(Branded)']],
             ['Azura', 0, 0, ['Azura', 'Azura(Performing)', 'Azura(Winter)', 'Azura(Adrift)', 'Azura(Vallite)']],
             ['Camilla', 0, 0, ['Camilla', 'Camilla(Bunny)', 'Camilla(Winter)', 'Camilla(Summer)', 'Camilla(Adrift)', 'Camilla(Bath)', 'Camilla(Brave)']],
-            ['Ike', 0, 0, ['Ike', 'Ike(Vanguard)', 'Ike(Brave)']],
-            ['Roy', 0, 0, ['Roy', 'Roy(Valentines)', 'Roy(Brave)']],
+            ['Ike', 0, 0, ['Ike', 'Ike(Vanguard)', 'Ike(Brave)', 'Ike(Valentines)']],
+            ['Roy', 0, 0, ['Roy', 'Roy(Valentines)', 'Roy(Brave)', 'Roy(Fire)']],
             ['Hector', 0, 0, ['Hector', 'Hector(Valentines)', 'Hector(Marquess)', 'Hector(Brave)']],
             ['Celica', 0, 0, ['Celica', 'Celica(Fallen)', 'Celica(Brave)']],
             ['Takumi', 0, 0, ['Takumi', 'Takumi(Fallen)', 'Takumi(Winter)', 'Takumi(Summer)']],
@@ -2716,15 +2741,16 @@ def combined_BST(event,args,bot)
             ['Cordelia', 0, 0, ['Cordelia', 'Cordelia(Bride)', 'Cordelia(Summer)', 'Caeldori']],
             ['Olivia', 0, 0, ['Olivia(Launch)', 'Olivia(Performing)', 'Olivia(Traveler)']],
             ['Ryoma', 0, 0, ['Ryoma', 'Ryoma(Supreme)', 'Ryoma(Festival)', 'Ryoma(Bath)']],
-            ['Marth', 0, 0, ['Marth', 'Marth(Masked)', 'Marth(Groom)', 'Marth(King)']],
             ['Eirika', 0, 0, ['Eirika(Bonds)', 'Eirika(Memories)', 'Eirika(Graceful)', 'Eirika(Winter)']],
             ['Sakura', 0, 0, ['Sakura', 'Sakura(Halloween)', 'Sakura(Bath)']],
             ['Elise', 0, 0, ['Elise', 'Elise(Summer)', 'Elise(Bath)']],
             ['Hinoka', 0, 0, ['Hinoka(Launch)', 'Hinoka(Wings)', 'Hinoka(Bath)']],
-            ['Veronica', 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)']],
+            ['Veronica', 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)', 'Thrasir']],
             ['Leo', 0, 0, ['Leo', 'Leo(Summer)', 'Leo(Picnic)']],
             ['Alm', 0, 0, ['Alm', 'Alm(Saint)', 'Alm(Brave)']],
-            ['Micaiah', 0, 0, ['Micaiah', 'Micaiah(Festival)', 'Micaiah(Brave)']]]
+            ['Micaiah', 0, 0, ['Micaiah', 'Micaiah(Festival)', 'Micaiah(Brave)']],
+            ['Berkut', 0, 0, ['Berkut', 'Berkut(Fallen)', 'Berkut(Soiree)']],
+            ['Reinhardt', 0, 0, ['Reinhardt(Bonds)', 'Reinhardt(World)', 'Reinhardt(Soiree)']]]
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0,0,0,0],[0,0,0,0,0]]
   m=false
@@ -2763,11 +2789,11 @@ def combined_BST(event,args,bot)
     elsif find_data_ex(:find_unit,sever(k[i]),event).length>0
       mxx=find_data_ex(:find_unit,sever(k[i]),event)
       name=mxx[0]
-      summon_type=mxx[9][0].downcase
+      summon_type=mxx[9][0].gsub('LU','').gsub('PF','').downcase
     elsif !x.nil? && !x[1].is_a?(Array)
       mxx=find_data_ex(:find_unit,x[1],event)
       name=mxx[0]
-      summon_type=mxx[9][0].downcase
+      summon_type=mxx[9][0].gsub('LU','').gsub('PF','').downcase
     elsif x.nil?
       if i>1 && !detect_multi_unit_alias(event,k[i-2],"#{k[i-2]} #{k[i-1]} #{k[i]}",1).nil?
       elsif i>0 && !detect_multi_unit_alias(event,k[i-1],"#{k[i-1]} #{k[i]}",1).nil?
@@ -4428,13 +4454,21 @@ def study_of_banners(event,name,bot)
       summon_type[6]=nil
     end
     summon_type.compact!
-    summon_type=['Unobtainable'] if summon_type.nil? || summon_type.length.zero?
-    summon_type=summon_type.join("\n")
-    banners.unshift(summon_type)
+    if j[9][1].nil?
+      summon_type=['Unobtainable'] if summon_type.nil? || summon_type.length.zero?
+      summon_type=summon_type.join("\n")
+      banners.unshift(summon_type)
+    else
+      summon_type=summon_type.join("\n")
+      banners.unshift(summon_type)
+    end
   end
   if banners.length>0
-    banners[0]="__**Debut:**__\n#{banners[0]}"
-    banners[0]="#{banners[0]}\n\n\n__**Joined the summon pool during:**__\n#{j[9][1]}" unless j[9][1].nil?
+    if j[9][1].nil?
+      banners[0]="__**Debut:**__\n#{banners[0]}"
+    else
+      banners[0]="__**Joined the summon pool during:**__\n#{j[9][1,j[9].length-1].join(', ')}"
+    end
     banners[1]="\n__**Other Banners:**__#{"\n" unless justnames}\n#{banners[1]}" if banners.length>1
     if justnames && !safe_to_spam?(event)
       banners.push("\n\n#{ftr}")
@@ -5581,71 +5615,73 @@ def dev_edit(bot,event,args=[],cmd='')
     return nil
   end
   data_load()
-  j3=find_data_ex(:find_unit,event.message.text,event,false,1)
+  j3=find_data_ex(:find_unit,args[0],event,true)
+  j3=find_data_ex(:find_unit,event.message.text,event,false,1) if j3.nil? || j3.length<=0
   j=j3[0]
+  j=j3 if j.length<=1
   if j.nil? || j.length<0
     event.respond 'There is no unit by that name.'
     return nil
   end
   if ['newwaifu','newaifu','addwaifu','new_waifu','add_waifu','waifu'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && args[0].downcase=='waifu')
-    if @dev_waifus.include?(j[0])
-      event.respond "#{j[0]} is already listed among your waifus."
+    if @dev_waifus.include?(j)
+      event.respond "#{j} is already listed among your waifus."
     else
-      @dev_waifus.push(j[0])
+      @dev_waifus.push(j)
       rfs=false
       ren=false
       for i in 0...@dev_somebodies.length
-        if @dev_somebodies[i]==j[0]
+        if @dev_somebodies[i]==j
           rfs=true
           @dev_somebodies[i]=nil
         end
       end
       @dev_somebodies.compact!
       for i in 0...@dev_nobodies.length
-        if @dev_nobodies[i]==j[0]
+        if @dev_nobodies[i]==j
           rfn=true
           @dev_nobodies[i]=nil
         end
       end
       @dev_nobodies.compact!
       devunits_save()
-      event.respond "#{j[0]} has been added to the list of your waifus.#{"\nI have also taken the liberty of removing #{j[0]} from your #{"\"somebodies\"" if rfs}#{" and " if rfs && rfn}#{'"nobodies"' if rfn} list#{'s' if rfs && rfn}." if rfs || rfn}"
+      event.respond "#{j} has been added to the list of your waifus.#{"\nI have also taken the liberty of removing #{j} from your #{"\"somebodies\"" if rfs}#{" and " if rfs && rfn}#{'"nobodies"' if rfn} list#{'s' if rfs && rfn}." if rfs || rfn}"
     end
     return nil
   elsif ['newsomebody','newsomeone','newsomebodies','addsomebody','addsomeone','addsomebodies','new_somebody','new_someone','new_somebodies','add_somebody','add_someone','add_somebodies','somebody','somebodies','someone'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && ['somebody','somebodies','someone'].include?(args[0].downcase))
-    if @dev_waifus.include?(j[0])
-      event.respond "#{j[0]} is already listed among your waifus."
-    elsif @dev_somebodies.include?(j[0])
-      event.respond "#{j[0]} is already listed among your \"somebodies\" list."
+    if @dev_waifus.include?(j)
+      event.respond "#{j} is already listed among your waifus."
+    elsif @dev_somebodies.include?(j)
+      event.respond "#{j} is already listed among your \"somebodies\" list."
     else
-      @dev_somebodies.push(j[0])
+      @dev_somebodies.push(j)
       ren=false
       for i in 0...@dev_nobodies.length
-        if @dev_nobodies[i]==j[0]
+        if @dev_nobodies[i]==j
           rfn=true
           @dev_nobodies[i]=nil
         end
       end
       @dev_nobodies.compact!
       devunits_save()
-      event.respond "#{j[0]} has been added to your \"somebodies\" list.#{"\nI have also taken the liberty of removing #{j[0]} from your \"nobodies\" list." if rfn}"
+      event.respond "#{j} has been added to your \"somebodies\" list.#{"\nI have also taken the liberty of removing #{j} from your \"nobodies\" list." if rfn}"
     end
     return nil
   elsif ['newnobody','newnoone','newnobodies','addnobody','addnoone','addnobodies','new_nobody','new_noone','new_nobodies','add_nobody','add_noone','add_nobodies','nobody','nobodies','noone'].include?(cmd.downcase) || (['new','add'].include?(cmd.downcase) && ['nobody','nobodies','noone'].include?(args[0].downcase))
-    if @dev_waifus.include?(j[0])
-      event.respond "#{j[0]} is already listed among your waifus."
-    elsif @dev_somebodies.include?(j[0])
-      event.respond "#{j[0]} is already listed among your \"somebodies\" list."
-    elsif @dev_nobodies.include?(j[0])
-      event.respond "#{j[0]} is already listed among your \"nobodies\" list."
+    if @dev_waifus.include?(j)
+      event.respond "#{j} is already listed among your waifus."
+    elsif @dev_somebodies.include?(j)
+      event.respond "#{j} is already listed among your \"somebodies\" list."
+    elsif @dev_nobodies.include?(j)
+      event.respond "#{j} is already listed among your \"nobodies\" list."
     else
-      @dev_nobodies.push(j[0])
+      @dev_nobodies.push(j)
       devunits_save()
-      event.respond "#{j[0]} has been added to your \"nobodies\" list."
+      event.respond "#{j} has been added to your \"nobodies\" list."
     end
     return nil
   end
-  j2=find_in_dev_units(j[0])
+  j2=find_in_dev_units(j)
   if j2<0
     args=event.message.text.downcase.split(' ')
     if cmd.downcase=='create'

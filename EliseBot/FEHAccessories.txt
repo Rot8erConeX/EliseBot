@@ -1,6 +1,10 @@
 Askran Hairpin\Hair\A hair accessory adorned with the emblem of the Kingdom of Askr.\Clear Floors 6-10 in Illusory Dungeon: Legendary Heroes.
+Clover Hairpin\Hair\A small hairpin from Norne. Made with a four-leaf clover.\Reach 100 orange friendship with Norne during Forging Bonds: A Time to Shine
+Clover Hairpin EX\Hair\A small hairpin from Norne. Made with good intentions and friendly wishes.\Reach 2500 orange friendship with Norne during Forging Bonds: A Time to Shine
 Damsel's Ribbon\Hair\A hair ribbon from Maribelle. It's made from the highest quality fabric.\Reach 100 green friendship with Maribelle during Forging Bonds: Defending Ylisse.
 Damsel's Ribbon EX\Hair\A hair ribbon from Maribelle. It's made from the highest quality fabric and is lightly perfumed.\Reach 2500 green friendship with Maribelle during Forging Bonds: Defending Ylisse.
+Dancer's Ribbon\Hair\A hair ribbon given by Phina. Made from a soft fabric that is gentle on long hair.\Reach 100 red friendship with Phina during Forging Bonds: A Time to Shine
+Dancer's Ribbon EX\Hair\A hair ribbon given by Phina. Features a lovely pink ombre.\Reach 2500 red friendship with Phina during Forging Bonds: A Time to Shine
 Deer Insignia\Hair\A gift from Claude. It is proof the wearer belongs to the Golden Deer.\Reach 100 orange friendship with Claude during Forging Bonds: Three Houses
 Deer Insignia EX\Hair\A gift from Claude. It is proof the wearer belongs to the Golden Deer.\Reach 2500 orange friendship with Claude during Forging Bonds: Three Houses
 Eagle Insignia\Hair\A gift from Edelgard. It is proof the wearer belongs to the Black Eagles.\Reach 100 green friendship with Edelgard during Forging Bonds: Three Houses
@@ -83,6 +87,7 @@ Favored Helm\Hat\A knight's helm given by Kjelle. Kept in perfect, shiny conditi
 Favored Helm EX\Hat\A knight's helm given by Kjelle. Colored beautifully by Kjelle herself.\Reach 2500 blue friendship with Kjelle during Forging Bonds: Spanning Time
 Floral Headband\Hat\A headband decorated with pink blooms.\Clear floors 81-85 in Illusory Dungeon: Carrying the Flame.
 Gold Armored Helmet\Hat\Proof of victory over Legendary Ryoma.\Beat Ryoma(Supreme)'s LHB at Abyssal difficulty.
+Gold Bat Ears\Hat\Proof of victory over Mythic Thrasir\Beat Thrasir's MHB at Abyssal difficulty.
 Golden Diadem\Hat\Proof of victory over Mythic Duma.\Beat Duma's MHB at Abyssal difficulty
 Gold Maid Headpiece\Hat\Proof of victory over Mythic Naga.\Beat Naga's MHB at Abyssal difficulty
 Gold Priest's Miter\Hat\Proof of victory over Grand Hero Xander.\Beat Xander's GHB at Abyssal difficulty.
@@ -121,6 +126,8 @@ Tactician's Hat EX\Hat\Those who wear this hat seem to find everyone bending to 
 White-Flower Crown\Hat\A crown made from the white flowers that grow in the mountains. Handmade by Heroes during their picnic outing.\Clear floors 76-80 in Illusiory Dungeon: Heartstring's Ties
 Worn-Out Doll\Hat\A stuffed animal from Keaton. It's all torn up, and the stuffing is falling out, but apparently that makes it great!\Reach 100 red friendship with Keaton during Forging Bonds: The Orb Case
 Worn-Out Doll EX\Hat\A stuffed animal from Keaton. It has all kinds of "treasures" stuck to it—a lizard tail, a hair ball, you name it.\Reach 2500 red friendship with Keaton during Forging Bonds: The Orb Case
+Concealing Mask\Mask\A mask previously carried by Sirius. The mask covers the wearer's eyes to hide their expression.\Reach 100 blue friendship with Sirius during Forging Bonds: A Time to Shine
+Concealing Mask EX\Mask\A mask previously carried by Sirius. Adorned with golden detailing.\Reach 2500 blue friendship with Sirius during Forging Bonds: A Time to Shine
 Dancer's Mask\Mask\A mask from Olivia. A dancer would wear this to project a mystical aura while performing.\Reach 100 red friendship with Olivia(Traveler) during Forging Bonds: Defending Ylisse.
 Dancer's Mask EX\Mask\A mask from Olivia. A dancer would wear this to project an alluring aura while performing.\Reach 2500 red friendship with Olivia(Traveler) during Forging Bonds: Defending Ylisse.
 Devil Horns\Mask\Equip these for a menacing aura.\Clear floors 81-85 in Illusory Dungeon: Heir of Light.
@@ -145,6 +152,8 @@ Dark Finery\Tiara\A head ornament bestowed by Idunn. It seems ancient, but it st
 Dark Finery EX\Tiara\A head ornament bestowed by Idunn. It seems ancient, but it still shimmers with a certain air of mystery.\Reach 2500 red friendship with Idunn during Forging Bonds: Reason to Fight
 Divine Tiara\Tiara\A tiara from Tiki. The unchecked power within gives it a disquieting aura.\Reach 100 orange friendship with Tiki(Young)(Fallen) during Forging Bonds: Power's Den.
 Divine Tiara EX\Tiara\A tiara from Tiki. The red jewel affixed to it is of remarkable clarity.\Reach 2500 orange friendship during Tiki(Young)(Fallen) during Forging Bonds: Power's Den.
+Ethereal Tiara\Tiara\A sacred headpiece handed down from Nagi. The shape recalls Tiki's tiara, but there are subtle differences.\Reach 100 green friendship with Nagi during Forging Bonds: A Time to Shine
+Ethereal Tiara EX\Tiara\A sacred headpiece handed down from Nagi. The power of the dragon divinity reborn hangs about it.\Reach 2500 green friendship with Nagi during Forging Bonds: A Time to Shine
 Gold Imperial Tiara\Tiara\Proof of victory over Legendary Roy.\Beat Roy's LHB at Abyssal difficulty.
 Hoshidan Headpiece\Tiara\This headwear is the exclusive hair ornament of the queen of Hoshido.\Clear floors 6-10 in Illusory Dungeon: Labyrinth of Despair.
 Ilian Wing Hairpin\Tiara\An ornament from Thea. It's a token of the Ilian pegasus knights, fashioned after a pegasus wing.\Reach 100 blue friendship with Thea during Forging Bonds: Reason to Fight
