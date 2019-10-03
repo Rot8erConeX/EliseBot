@@ -10,11 +10,16 @@ require 'tzinfo/data'                  # Downloaded with active_support below, b
 require 'rufus-scheduler'              # Download link: https://github.com/jmettraux/rufus-scheduler
 require 'active_support/core_ext/time' # Download link: https://rubygems.org/gems/activesupport/versions/5.0.0
 require_relative 'rot8er_functs'       # functions I use commonly in bots
-load 'C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb'
-load 'C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb'
+load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
 
-system("color 0#{shard_data(4)[@shardizard,1]}") # command prompt color and title determined by the shard
-system("title loading #{shard_data(2)[@shardizard]} EliseBot")
+if @shardizard==-1
+  system("color 09")
+  system("title loading EliseBot(Smol)")
+else
+  system("color 0#{shard_data(4)[@shardizard,1]}") # command prompt color and title determined by the shard
+  system("title loading #{shard_data(2)[@shardizard]} EliseBot")
+end
 
 # this is required to get her to change her avatar on certain holidays
 ENV['TZ'] = 'America/Chicago'
@@ -22,7 +27,7 @@ ENV['TZ'] = 'America/Chicago'
 
 # All the possible command prefixes
 @prefixes={}
-load 'C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb'
+load "C:/Users/#{@mash}/Desktop/devkit/FEHPrefix.rb"
 
 prefix_proc = proc do |message|
   next pseudocase(message.text[4..-1]) if message.text.downcase.start_with?('feh!')
@@ -30,7 +35,7 @@ prefix_proc = proc do |message|
   next pseudocase(message.text[2..-1]) if message.text.downcase.start_with?('f?')
   next pseudocase(message.text[2..-1]) if message.text.downcase.start_with?('e?')
   next pseudocase(message.text[2..-1]) if message.text.downcase.start_with?('h?')
-  load 'C:/Users/Mini-Matt/Desktop/devkit/FEHPrefix.rb'
+  load "C:/Users/#{@mash}/Desktop/devkit/FEHPrefix.rb"
   next if message.channel.server.nil? || @prefixes[message.channel.server.id].nil? || @prefixes[message.channel.server.id].length<=0
   prefix = @prefixes[message.channel.server.id]
   # We use [prefix.size..-1] so we can handle prefixes of any length
@@ -40,10 +45,12 @@ end
 # The bot's token is basically their password, so is censored for obvious reasons
 if @shardizard==4
   bot = Discordrb::Commands::CommandBot.new token: '>Debug Token<', client_id: 431895561193390090, prefix: prefix_proc
+elsif @shardizard<0
+  bot = Discordrb::Commands::CommandBot.new token: '>Smol Token<', client_id: 627511537237491715, prefix: prefix_proc
 elsif @shardizard<4
-  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: @shardizard, num_shards: 6, client_id: 312451658908958721, prefix: prefix_proc
+  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: @shardizard, num_shards: @shards, client_id: 312451658908958721, prefix: prefix_proc
 else
-  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: (@shardizard-1), num_shards: 6, client_id: 312451658908958721, prefix: prefix_proc
+  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: (@shardizard-1), num_shards: @shards, client_id: 312451658908958721, prefix: prefix_proc
 end
 bot.gateway.check_heartbeat_acks = false
 
@@ -599,9 +606,11 @@ def overlap_prevent(event) # used to prevent servers with both Elise and her deb
   if event.server.nil? # failsafe code catching PMs as not a server
     return false
   elsif event.message.text.downcase.split(' ').include?('debug') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388,572792502159933440].include?(event.server.id)
-    return @shardizard != 4 # the debug bot can be forced to be used in the emoji servers by including the word "debug" in your message
+    return ![4].include?(@shardizard) # the debug bot can be forced to be used in the emoji servers by including the word "debug" in your message
+  elsif event.message.text.downcase.split(' ').include?('smol') && [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388,572792502159933440].include?(event.server.id)
+    return ![-1].include?(@shardizard) # the debug bot can be forced to be used in the emoji servers by including the word "debug" in your message
   elsif [443172595580534784,443704357335203840,443181099494146068,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388,572792502159933440].include?(event.server.id) # emoji servers will use default Elise otherwise
-    return @shardizard == 4
+    return [4,-1].include?(@shardizard)
   elsif event.server.id==332249772180111360 # two identical commands cannot be used in the same minute in the FEHKeeper server
     canpost=true
     post=Time.now
@@ -860,7 +869,7 @@ def find_FGO_servant(name,event,fullname=false,bot=nil)
     b[i]=b[i][0,b[i].length-1] if b[i][-1,1]=='"'
     b[i]=b[i].gsub("\n",'').split('\\'[0])
     b[i][0]=b[i][0].to_f
-    b[i][0]=b[i][0].to_i if b[i][0]>1.9
+    b[i][0]=b[i][0].to_i if b[i][0]>1.9 && b[i][0].to_i != 81
     b[i][3]=b[i][3].to_i
     b[i][5]=b[i][5].to_i
     b[i][6]=b[i][6].split(', ').map{|q| q.to_i}
@@ -3429,7 +3438,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
   img='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   xtype=1
   xtype=-1 if skillstoo && u40[0]!='Robin (Shared stats)'
-  if skillstoo && mu && flds.length<=3
+  if skillstoo && mu && flds.length<=3 && sizex=='medium'
     flds.shift
   end
   flds=nil if flds.length<=0
@@ -5887,7 +5896,6 @@ def find_in_units(event,mode=0,paired=false,ignore_limit=false,args=nil)
                   elsif matches3[i][11].map{|q| q.downcase.gsub('(a)','')}.include?(games[j].downcase)
                     matches3[i][0]="#{matches3[i][0]} *[Amiibo]*"
                     matches4.push(matches3[i])
-                  elsif t.year*1000000+t.month*10000+t.day*100+t.hour<2018120623 && @shardizard != 4
                   elsif matches3[i][11].map{|q| q.downcase.gsub('(at)','')}.include?(games[j].downcase)
                     matches3[i][0]="#{matches3[i][0]} *[Assist Trophy]*"
                     matches4.push(matches3[i])
@@ -7214,7 +7222,6 @@ def comparison(event,args,bot)
     end
   else
     for i in 0...args.length
-      puts s1
       unless s1.nil? || s1.split(' ').length<=1 || s1.gsub(' ','').length<=0
         k=find_data_ex(:find_unit,s1,event,false,1)
         k[1]=k[1][1,k[1].length-1] if k[1][0,1]==' '
@@ -8214,17 +8221,15 @@ def parse_function_alts(callback,event,args,bot)
     weapon='-'
     weapon=k2[0] unless k2.length<=0
     name=find_data_ex(:find_unit,event.message.text,event,false,1)
+    puts name.map{|q| q.to_s}
     if name.is_a?(Array)
       xx=[]
-      if name[0].is_a?(Array)
+      if name[0][0].is_a?(Array)
         for i in 0...name[0].length
           xx.push(name[0][i][12].gsub('*','').split(', ')[0])
         end
       else
-        for i in 0...name[0].length
-          j2=find_unit(name[0][i],event)
-          xx.push(j[12].gsub('*','').split(', ')[0])
-        end
+        xx.push(name[0][12].gsub('*','').split(', ')[0])
       end
       method(callback).call(event,xx.uniq,bot) if xx.length>0
     elsif !detect_multi_unit_alias(event,name.downcase,event.message.text.downcase).nil?
@@ -10172,6 +10177,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
   @aliases.compact!
   logchn=386658080257212417
   logchn=431862993194582036 if @shardizard==4
+  logchn=536307117301170187 if @shardizard==-1
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname='PM with dev'
@@ -10244,6 +10250,7 @@ bot.command(:addgroup) do |event, groupname, *args|
   newgroup=false
   logchn=386658080257212417
   logchn=431862993194582036 if @shardizard==4
+  logchn=536307117301170187 if @shardizard==-1
   k=0
   k=event.server.id unless event.server.nil?
   srvname='PM with dev'
@@ -10376,6 +10383,7 @@ bot.command([:deletegroup,:removegroup]) do |event, name|
   event.respond "The group #{name} has been deleted."
   logchn=386658080257212417
   logchn=431862993194582036 if @shardizard==4
+  logchn=536307117301170187 if @shardizard==-1
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname='PM with dev'
@@ -10438,6 +10446,7 @@ bot.command([:removemember,:removefromgroup]) do |event, group, unit|
   @groups[j][1].compact!
   logchn=386658080257212417
   logchn=431862993194582036 if @shardizard==4
+  logchn=536307117301170187 if @shardizard==-1
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname='PM with dev'
@@ -10957,7 +10966,9 @@ bot.command(:shard) do |event, i, j|
   end
   if (i.to_i.to_s==i || i.to_i==i) && i.to_i>256*256
     srv=(bot.server(i.to_i) rescue nil)
-    if @shardizard ==4 && j != @shards
+    if @shardizard==-1
+      event.respond "This server uses Smol Shards."
+    elsif @shardizard ==4 && j != @shards
       event.respond "In a system of #{j} shards, that server would use #{shard_data(0,true,j)[(i.to_i >> 22) % j]} Shards."
     elsif @shardizard ==4
       event.respond "That server uses/would use #{shard_data(0,true,j)[(i.to_i >> 22) % j]} Shards."
@@ -10973,10 +10984,11 @@ bot.command(:shard) do |event, i, j|
     j=i.to_i*1
     i=0
   end
+  event.respond "This server uses Smol Shards." if @shardizard==-1
   event.respond "This is the debug mode, which uses #{shard_data(0,false,j)[4]} Shards." if @shardizard==4
-  event.respond "PMs always use #{shard_data(0,true,j)[0]} Shards." if event.server.nil? && @shardizard != 4
-  event.respond "In a system of #{j} shards, this server would use #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || @shardizard==4 || j == @shards
-  event.respond "This server uses #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || @shardizard==4 || j != @shards
+  event.respond "PMs always use #{shard_data(0,true,j)[0]} Shards." if event.server.nil? && @shardizard != 4 && @shardizard != -1
+  event.respond "In a system of #{j} shards, this server would use #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || [-1,4].include?(@shardizard) || j == @shards
+  event.respond "This server uses #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || [-1,4].include?(@shardizard) || j != @shards
 end
 
 bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily,:now]) do |event|
@@ -11183,6 +11195,7 @@ bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddu
   args=args.join(' ').split(' ')
   logchn=386658080257212417
   logchn=431862993194582036 if @shardizard==4
+  logchn=536307117301170187 if @shardizard==-1
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname='PM with dev'
@@ -11260,6 +11273,7 @@ bot.command([:deletemultialias,:deletedualalias,:deletemultiunitalias,:deletedua
   event.respond "The multi-unit alias **#{multi}** was deleted."
   logchn=386658080257212417
   logchn=431862993194582036 if @shardizard==4
+  logchn=536307117301170187 if @shardizard==-1
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname='PM with dev'
@@ -11314,6 +11328,7 @@ bot.command([:removefrommultialias,:removefromdualalias,:removefrommultiunitalia
   alz[j][2].compact!
   logchn=386658080257212417
   logchn=431862993194582036 if @shardizard==4
+  logchn=536307117301170187 if @shardizard==-1
   srv=0
   srv=event.server.id unless event.server.nil?
   srvname='PM with dev'
@@ -11378,6 +11393,9 @@ bot.command(:cleanupaliases, from: 167657750971547648) do |event|
   if @shardizard==4
     event.respond 'This command cannot be used by the debug version of me.  Please run this command in another server.'
     return nil
+  elsif @shardizard==-1
+    event.respond 'This command cannot be used by the smol version of me.  Please run this command in another server.'
+    return nil
   end
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
   nicknames_load()
@@ -11386,7 +11404,7 @@ bot.command(:cleanupaliases, from: 167657750971547648) do |event|
   for i in 0...nmz.length
     unless nmz[i][3].nil?
       for i2 in 0...nmz[i][3].length
-        unless nmz[i][3][i2]==285663217261477889
+        unless [285663217261477889,393775173095915521,295686580528742420].include?(nmz[i][3][i2])
           srv=(bot.server(nmz[i][3][i2]) rescue nil)
           if srv.nil? || bot.user(312451658908958721).on(srv.id).nil?
             k+=1
@@ -11608,7 +11626,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
           b=[]
           File.open("FEHTemp.txt").each_line.with_index do |line, idx|
             if idx<100
-              b.push(line.gsub('>Main Token<',b2[1]).gsub('>Debug Token<',b2[-1]))
+              b.push(line.gsub('>Main Token<',b2[1]).gsub('>Smol Token<',b2[-2]).gsub('>Debug Token<',b2[-1]))
             else
               b.push(line)
             end
@@ -11673,7 +11691,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
     if e.message.text.include?('6') && e.user.id==167657750971547648
       puts 'reloading EliseMulti1'
       load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
-      puts 'reloading EliseTexts'
+      puts 'reloading EliseText'
       load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
       t=Time.now
       @last_multi_reload[0]=t
@@ -11720,7 +11738,7 @@ bot.server_create do |event|
     (chn.send_message(get_debug_leave_message()) rescue nil)
     event.server.leave
   else
-    bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})\nAssigned to use #{shard_data(0,true)[(event.server.id >> 22) % @shards]} Shards")
+    bot.user(167657750971547648).pm("Joined server **#{event.server.name}** (#{event.server.id})\nOwner: #{event.server.owner.distinct} (#{event.server.owner.id})#{"\nAssigned to use #{shard_data(0,true)[(event.server.id >> 22) % @shards]} Shards" unless @shardizard<0}")
     metadata_load()
     @server_data[0][((event.server.id >> 22) % @shards)] += 1
     metadata_save()
@@ -11730,7 +11748,7 @@ end
 
 bot.server_delete do |event|
   unless @shardizard==4
-    bot.user(167657750971547648).pm("Left server **#{event.server.name}**\nThis server was using #{shard_data(0,true)[((event.server.id >> 22) % @shards)]} Shards")
+    bot.user(167657750971547648).pm("Left server **#{event.server.name}**#{"\nThis server was using #{shard_data(0,true)[((event.server.id >> 22) % @shards)]} Shards" unless @shardizard<0}")
     metadata_load()
     @server_data[0][((event.server.id >> 22) % @shards)] -= 1
     metadata_save()
@@ -11907,6 +11925,7 @@ bot.message do |event|
     s=remove_format(s,'```')              # remove large code blocks
     s=remove_format(s,'`')                # remove small code blocks
     s=remove_format(s,'~~')               # remove crossed-out text
+    s=remove_format(s,'||')               # remove spoiler tags
     s=s.gsub("\n",' ').gsub("  ",'')
     if s.split(' ').include?('kys') || s.split(' ').include?('KYS')
       k=0
@@ -12491,7 +12510,7 @@ def next_holiday(bot,mode=0)
     if k.length==1
       # Only one holiday is today.  Display new avatar, and set another check for midnight
       bot.game=k[0][4]
-      if @shardizard.zero?
+      if @shardizard.zero? || @shardizard==-1
         bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/EliseImages/#{k[0][3]}.png",'r')) rescue nil
       end
       @avvie_info=[k[0][3],k[0][4],k[0][5]]
@@ -12506,7 +12525,7 @@ def next_holiday(bot,mode=0)
       if t.hour>fcod[0] || (t.hour==fcod[0] && t.min>=fcod[1])
         # in last area of day.  Set avatar to the last one for the day, then set a check for tomorrow at midnight
         bot.game=k[k.length-1][4]
-        if @shardizard.zero?
+        if @shardizard.zero? || @shardizard==-1
           bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/EliseImages/#{k[k.length-1][3]}.png",'r')) rescue nil
         end
         @avvie_info=[k[k.length-1][3],k[k.length-1][4],k[k.length-1][5]]
@@ -12525,7 +12544,7 @@ def next_holiday(bot,mode=0)
         end
         # ...set avatar properly and set check for the beginning of the next chunk of the day
         bot.game=k[j][4]
-        if @shardizard.zero?
+        if @shardizard.zero? || @shardizard==-1
           bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/EliseImages/#{k[j][3]}.png",'r')) rescue nil
         end
         @avvie_info=[k[j][3],k[j][4],k[j][5]]
@@ -12540,14 +12559,17 @@ def next_holiday(bot,mode=0)
     t=Time.now
     t-=60*60*6
     bot.game='Fire Emblem Heroes (FEH!help for info)'
-    if [6,7].include?(t.month)
-      bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/Elise(Summer).png",'r')) rescue nil if @shardizard.zero?
+    if @shardizard==-1
+      bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/EliseBot(Smol).png",'r')) rescue nil
+      @avvie_info=['EliseBot(Smol)','*Fire Emblem Heroes*','']
+    elsif [6,7].include?(t.month)
+      bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/Elise(Summer).png",'r')) rescue nil if @shardizard.zero? || @shardizard==-1
       @avvie_info=['Elise(Summer)','*Fire Emblem Heroes*','']
     elsif [1,2].include?(t.month)
-      bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/Elise(Bath).png",'r')) rescue nil if @shardizard.zero?
+      bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/Elise(Bath).png",'r')) rescue nil if @shardizard.zero? || @shardizard==-1
       @avvie_info=['Elise(Bath)','*Fire Emblem Heroes*','']
     else
-      bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/Elise.png",'r')) rescue nil if @shardizard.zero?
+      bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/Elise.png",'r')) rescue nil if @shardizard.zero? || @shardizard==-1
       @avvie_info=['Elise','*Fire Emblem Heroes*','']
     end
     t+=24*60*60
@@ -12566,8 +12588,13 @@ bot.ready do |event|
       end
     end
   end
-  system("color #{'4' if shard_data(4)[@shardizard,1]=='5'}#{'5' unless shard_data(4)[@shardizard,1]=='5'}#{shard_data(4)[@shardizard,1]}")
-  system("title loading #{shard_data(2)[@shardizard]} EliseBot")
+  if @shardizard==-1
+    system("color 5E")
+    system("title loading EliseBot(Smol)")
+  else
+    system("color #{'4' if shard_data(4)[@shardizard,1]=='5'}#{'5' unless shard_data(4)[@shardizard,1]=='5'}#{shard_data(4)[@shardizard,1]}")
+    system("title loading #{shard_data(2)[@shardizard]} EliseBot")
+  end
   bot.game="Loading, please wait..."
   if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt")
     b=[]
@@ -12592,8 +12619,13 @@ bot.ready do |event|
   data_load()
   bonus_load()
   @last_multi_reload[0]=Time.now
-  system("color e#{shard_data(3)[@shardizard,1]}")
-  system("title #{shard_data(2)[@shardizard]} EliseBot")
+  if @shardizard==-1
+    system("color e5")
+    system("title EliseBot(Smol)")
+  else
+    system("color e#{shard_data(3)[@shardizard,1]}")
+    system("title #{shard_data(2)[@shardizard]} EliseBot")
+  end
   bot.game='Fire Emblem Heroes (FEH!help for info)'
   if @shardizard==4
     next_holiday(bot)
