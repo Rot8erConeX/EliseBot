@@ -2733,7 +2733,7 @@ def combined_BST(event,args,bot)
             ['Camilla', 0, 0, ['Camilla', 'Camilla(Bunny)', 'Camilla(Winter)', 'Camilla(Summer)', 'Camilla(Adrift)', 'Camilla(Bath)', 'Camilla(Brave)']],
             ['Ike', 0, 0, ['Ike', 'Ike(Vanguard)', 'Ike(Brave)', 'Ike(Valentines)']],
             ['Roy', 0, 0, ['Roy', 'Roy(Valentines)', 'Roy(Brave)', 'Roy(Fire)']],
-            ['Hector', 0, 0, ['Hector', 'Hector(Valentines)', 'Hector(Marquess)', 'Hector(Brave)']],
+            ['Hector', 0, 0, ['Hector', 'Hector(Valentines)', 'Hector(Marquess)', 'Hector(Brave)', 'Hector(Halloween)']],
             ['Celica', 0, 0, ['Celica', 'Celica(Fallen)', 'Celica(Brave)']],
             ['Takumi', 0, 0, ['Takumi', 'Takumi(Fallen)', 'Takumi(Winter)', 'Takumi(Summer)']],
             ['Ephraim', 0, 0, ['Ephraim', 'Ephraim(Fire)', 'Ephraim(Brave)', 'Ephraim(Winter)']],
@@ -2750,7 +2750,8 @@ def combined_BST(event,args,bot)
             ['Alm', 0, 0, ['Alm', 'Alm(Saint)', 'Alm(Brave)']],
             ['Micaiah', 0, 0, ['Micaiah', 'Micaiah(Festival)', 'Micaiah(Brave)']],
             ['Berkut', 0, 0, ['Berkut', 'Berkut(Fallen)', 'Berkut(Soiree)']],
-            ['Reinhardt', 0, 0, ['Reinhardt(Bonds)', 'Reinhardt(World)', 'Reinhardt(Soiree)']]]
+            ['Reinhardt', 0, 0, ['Reinhardt(Bonds)', 'Reinhardt(World)', 'Reinhardt(Soiree)']],
+            ['Lilina', 0, 0, ['Lilina', 'Lilina(Valentines)', 'Lilina(Summer)', 'Hector(Halloween)']]]
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0,0,0,0],[0,0,0,0,0]]
   m=false
@@ -5102,9 +5103,9 @@ def study_of_phases(event,name,bot,weapon=nil)
       end
     end
   end
-  if u40x[2].length>0 && u40x[2][1]=='Duel' && rarity>=5
-    bin=[bin,175].max
-  end
+    bin=[bin,175].max if u40x[2].length>0 && u40x[2][1]=='Duel' && rarity>=5
+    bin=[bin,185].max if u40x[2].length>0 && u40x[2][0]=='Duo' && rarity>=5
+    bin=[bin,185].max if u40x[2].length>0 && u40x[2][3]=='Duo' && rarity>=5
   pic=pick_thumbnail(event,u40x,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(' all')
@@ -5685,18 +5686,17 @@ def dev_edit(bot,event,args=[],cmd='')
   if j2<0
     args=event.message.text.downcase.split(' ')
     if cmd.downcase=='create'
-      jn=j[0]
-      sklz2=unit_skills(jn,event,true)
+      sklz2=unit_skills(j,event,true)
       flurp=find_stats_in_string(event)
-      @dev_units.push([jn,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],flurp[8],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
+      @dev_units.push([j,flurp[0],flurp[1],flurp[2],flurp[3],flurp[4],flurp[8],sklz2[0],sklz2[1],sklz2[2],sklz2[3],sklz2[4],sklz2[5],' '])
       for i in 0...@dev_nobodies.length
-        @dev_nobodies[i]=nil if @dev_nobodies[i]==jn
+        @dev_nobodies[i]=nil if @dev_nobodies[i]==j
       end
       @dev_nobodies.compact!
       devunits_save()
       congrate=false
-      congrats=true if @dev_waifus.include?(jn) || @dev_somebodies.include?(jn)
-      event.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{jn} to your collection.  #{'Congrats!' if congrats}"
+      congrats=true if @dev_waifus.include?(j) || @dev_somebodies.include?(j)
+      event.respond "You have added a #{flurp[0]}#{@rarity_stars[flurp[0]-1]}#{"+#{flurp[1]}" if flurp[0]>0} #{j} to your collection.  #{'Congrats!' if congrats}"
     elsif ['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase
       if @dev_waifus.include?(j[0])
         event.respond "Woah, you're getting rid of one of your waifus?!?  Who hacked your Discord and/or FEH account?"

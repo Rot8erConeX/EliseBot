@@ -8,6 +8,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
   end
   if command.downcase=='reboot'
     create_embed(event,'**reboot**',"Reboots this shard of the bot, installing any updates.\n\n**This command is only able to be used by Rot8er_ConeX**",0x008b8b)
+  elsif ['update'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}**",'Shows my data input person how to remotely update for during the period where my developer is gone.',0xED619A)
   elsif command.downcase=='sendmessage'
     create_embed(event,'**sendmessage** __channel id__ __*message__',"Sends the message `message` to the channel with id `channel`\n\n**This command is only able to be used by Rot8er_ConeX**, and only in PM.",0x008b8b)
   elsif command.downcase=='sendpm'
@@ -669,7 +671,7 @@ def sort_legendaries(event,bot,mode=0)
   data_load()
   nicknames_load()
   g=get_markers(event)
-  k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' '].include?(q[2][0]) || q[2].length<3}.uniq
+  k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Duo'].include?(q[2][0]) || q[2].length<3 || q[2][2].to_i<=0}.uniq
   c=[]
   for i in 0...k.length
     c.push([249,130,129]) if k[i][2][0]=='Fire'
@@ -1735,15 +1737,16 @@ def disp_unit_art(event,name,bot)
     disp="#{disp}\n**Artist:** #{m[m.length-1]}"
   end
   unless j[7][0].nil? || j[7][0].length<=0
-    m=j[7][0].split(' as ')
-    nammes[1]=m[0]
-    disp="#{disp}\n**VA (English):** #{m[m.length-1]}"
+    m=j[7][0].split(' & ').map{|q| q.split(' as ')}
+    nammes[1]=m.map{|q| q[0]}.join(' & ')
+    disp="#{disp}\n**VA (English):** #{m.map{|q| q[-1]}.join(' & ')}"
   end
   unless j[7][1].nil? || j[7][1].length<=0
-    m=j[7][1].split(' as ')
-    nammes[2]=m[0]
-    disp="#{disp}\n**VA (Japanese):** #{m[m.length-1]}"
+    m=j[7][1].split(' & ').map{|q| q.split(' as ')}
+    nammes[2]=m.map{|q| q[0]}.join(' & ')
+    disp="#{disp}\n**VA (Japanese):** #{m.map{|q| q[-1]}.join(' & ')}"
   end
+  crosspost=false
   if args.include?('just') || args.include?('justart') || args.include?('blank') || args.include?('noinfo')
     charsx=[[],[],[]]
   else
@@ -1772,19 +1775,58 @@ def disp_unit_art(event,name,bot)
         charsx[0].push(x[0]) if m[0]==nammes[0] && !charsx[2].include?(x[0])
       end
       unless x[7][0].nil? || x[7][0].length<=0 || x[7][1].nil? || x[7][1].length<=0
-        m=x[7][0].split(' as ')
-        m2=x[7][1].split(' as ')
-        charsx[1].push("#{x[0]} *[Both]*") if m[0]==nammes[1] && m2[0]==nammes[2] && !charsx[2].include?(x[0])
+        if nammes[1].include?(' & ') || nammes[2].include?(' & ')
+          nammes[1]=nammes[1].split(' & ')
+          nammes[2]=nammes[2].split(' & ')
+          nammes[1].push(nammes[1][0]) if nammes[1].length<nammes[2].length
+          nammes[2].push(nammes[2][0]) if nammes[2].length<nammes[1].length
+          m=x[7][0].split(' as ')
+          m2=x[7][1].split(' as ')
+          if charsx[2].include?(x[0])
+          elsif m[0]==nammes[1][0] && m2[0]==nammes[2][0]
+            charsx[1].push("#{x[0]} *[voice 1]*")
+          elsif m[0]==nammes[1][1] && m2[0]==nammes[2][1]
+            charsx[1].push("#{x[0]} *[voice 2]*")
+          elsif m[0]==nammes[1][0] && m2[0]==nammes[2][1]
+            charsx[1].push("#{x[0]} *[E1+J2]*")
+          elsif m[0]==nammes[1][1] && m2[0]==nammes[2][0]
+            charsx[1].push("#{x[0]} *[E2+J1]*")
+          end
+          nammes[1]=nammes[1].uniq.join(' & ')
+          nammes[2]=nammes[2].uniq.join(' & ')
+        else
+          m=x[7][0].split(' & ').map{|q| q.split(' as ')[0]}.join(' & ')
+          m2=x[7][1].split(' & ').map{|q| q.split(' as ')[0]}.join(' & ')
+          charsx[1].push("#{x[0]} *[Both]*") if m==nammes[1] && m2==nammes[2] && !charsx[2].include?(x[0])
+        end
       end
       unless x[7][0].nil? || x[7][0].length<=0
-        m=x[7][0].split(' as ')
-        charsx[1].push("#{x[0]} *[English]*") if m[0]==nammes[1] && !charsx[1].include?("#{x[0]} *[Both]*") && !charsx[2].include?(x[0])
+        m=x[7][0].split(' & ').map{|q| q.split(' as ')[0]}.join(' & ')
+        if nammes[1].include?(' & ')
+          m2=nammes[1].split(' & ')
+          for i2 in 0...m2.length
+            charsx[1].push("#{x[0]} *[English #{i2+1}]*") if m==m2[i2] && !charsx[1].map{|q| q.split(' *[')[0]}.include?(x[0]) && !charsx[2].include?(x[0])
+          end
+        else
+          charsx[1].push("#{x[0]} *[English]*") if m==nammes[1] && !charsx[1].map{|q| q.split(' *[')[0]}.include?(x[0]) && !charsx[2].include?(x[0])
+        end
       end
       unless x[7][1].nil? || x[7][1].length<=0
-        m=x[7][1].split(' as ')
-        charsx[1].push("#{x[0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("#{x[0]} *[Both]*") && !charsx[2].include?(x[0])
+        m=x[7][1].split(' & ').map{|q| q.split(' as ')[0]}.join(' & ')
+        if nammes[2].include?(' & ')
+          m2=nammes[2].split(' & ')
+          for i2 in 0...m2.length
+            charsx[1].push("#{x[0]} *[Japanese #{i2+1}]*") if m==m2[i2] && !charsx[1].map{|q| q.split(' *[')[0]}.include?(x[0]) && !charsx[2].include?(x[0])
+          end
+        else
+          charsx[1].push("#{x[0]} *[Japanese]*") if m==nammes[2] && !charsx[1].map{|q| q.split(' *[')[0]}.include?(x[0]) && !charsx[2].include?(x[0])
+        end
       end
     end
+    fgosrv=[]
+    dladv=[]
+    dldrg=[]
+    dlnpc=[]
     if event.server.nil? || !bot.user(502288364838322176).on(event.server.id).nil? || @shardizard==4
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FGOServants.txt')
         b=[]
@@ -1794,6 +1836,7 @@ def disp_unit_art(event,name,bot)
       else
         b=[]
       end
+      crosspost=true
       for i in 0...b.length
         b[i]=b[i].gsub("\n",'').split('\\'[0])
         unless nammes[0].nil? || nammes[0].length<=0 || b[i][24].nil? || b[i][24].length<=0
@@ -1803,6 +1846,7 @@ def disp_unit_art(event,name,bot)
           charsx[1].push("*[FGO]* Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} *[Japanese]*") if b[i][25].split(' & ').include?(nammes[2])
         end
       end
+      fgosrv=b.map{|q| q}
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FGOCraftEssances.txt')
         b=[]
         File.open('C:/Users/Mini-Matt/Desktop/devkit/FGOCraftEssances.txt').each_line do |line|
@@ -1827,6 +1871,7 @@ def disp_unit_art(event,name,bot)
       else
         b=[]
       end
+      crosspost=true
       for i in 0...b.length
         b[i]=b[i].gsub("\n",'').split('\\'[0])
         unless b[i][10].nil? || b[i][10].length<=0 || b[i][11].nil? || b[i][11].length<=0
@@ -1843,6 +1888,7 @@ def disp_unit_art(event,name,bot)
           charsx[1].push("*[DL-Adv]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("*[DL-Adv]* #{b[i][0]} *[Both]*")
         end
       end
+      dladv=b.map{|q| q}
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLDragons.txt')
         b=[]
         File.open('C:/Users/Mini-Matt/Desktop/devkit/DLDragons.txt').each_line do |line|
@@ -1867,6 +1913,7 @@ def disp_unit_art(event,name,bot)
           charsx[1].push("*[DL-Drg]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("*[DL-Drg]* #{b[i][0]} *[Both]*")
         end
       end
+      dldrg=b.map{|q| q}
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DL_NPCs.txt')
         b=[]
         File.open('C:/Users/Mini-Matt/Desktop/devkit/DL_NPCs.txt').each_line do |line|
@@ -1891,6 +1938,7 @@ def disp_unit_art(event,name,bot)
           charsx[1].push("*[DL-NPC]* #{b[i][0]} *[Japanese]*") if m[0]==nammes[2] && !charsx[1].include?("*[DL-NPC]* #{b[i][0]} *[Both]*")
         end
       end
+      dlnpc=b.map{|q| q}
       if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/DLWyrmprints.txt')
         b=[]
         File.open('C:/Users/Mini-Matt/Desktop/devkit/DLWyrmprints.txt').each_line do |line|
@@ -1905,6 +1953,39 @@ def disp_unit_art(event,name,bot)
           m=b[i][7].split(' as ')
           charsx[0].push("*[DL-Print]* #{b[i][0]}") if m[0]==nammes[0]
         end
+      end
+      if j[7][0].include?(' & ') || j[7][1].include?(' & ')
+        m=j[7][0].split(' & ')
+        m2=j[7][1].split(' & ')
+        m.push(m[0]) if m.length<m2.length
+        m2.push(m2[0]) if m2.length<m.length
+        m3=[[],[],[]]
+        for i in 0...m.length
+          fxx=fgosrv.reject{|q| q[25]!=m2[i]}.map{|q| "*[FGO]* Srv-#{q[0]}#{'.' if q[0].to_i>=2}) #{q[1]} *[Japanese #{i+1}]*"}
+          charsx[1].push(fxx)
+          fxx=dladv.reject{|q| q[10].nil? || q[10].length<=0 || q[10]!=m2[i] || q[11].nil? || q[11].length<=0 || q[11]!=m[i]}.map{|q| "*[DL-Adv]* #{q[0]} *[voice #{i+1}]*"}
+          m3[0].push(fxx) if fxx.length>0
+          fxx=dladv.reject{|q| q[10].nil? || q[10].length<=0 || q[10]==m2[i] || q[11].nil? || q[11].length<=0 || q[11]!=m[i]}.map{|q| "*[DL-Adv]* #{q[0]} *[English #{i+1}]*"}
+          m3[0].push(fxx) if fxx.length>0
+          fxx=dladv.reject{|q| q[10].nil? || q[10].length<=0 || q[10]!=m2[i] || q[11].nil? || q[11].length<=0 || q[11]==m[i]}.map{|q| "*[DL-Adv]* #{q[0]} *[Japanese #{i+1}]*"}
+          m3[0].push(fxx) if fxx.length>0
+          fxx=dldrg.reject{|q| q[13].nil? || q[13].length<=0 || q[13]!=m2[i] || q[14].nil? || q[14].length<=0 || q[14]!=m[i]}.map{|q| "*[DL-Drg]* #{q[0]} *[voice #{i+1}]*"}
+          m3[0].push(fxx) if fxx.length>0
+          fxx=dldrg.reject{|q| q[13].nil? || q[13].length<=0 || q[13]==m2[i] || q[14].nil? || q[14].length<=0 || q[14]!=m[i]}.map{|q| "*[DL-Drg]* #{q[0]} *[English #{i+1}]*"}
+          m3[0].push(fxx) if fxx.length>0
+          fxx=dldrg.reject{|q| q[13].nil? || q[13].length<=0 || q[13]!=m2[i] || q[14].nil? || q[14].length<=0 || q[14]==m[i]}.map{|q| "*[DL-Drg]* #{q[0]} *[Japanese #{i+1}]*"}
+          m3[0].push(fxx) if fxx.length>0
+          fxx=dlnpc.reject{|q| q[4].nil? || q[4].length<=0 || q[4]!=m2[i] || q[3].nil? || q[3].length<=0 || q[3]!=m[i]}.map{|q| "*[DL-NPC]* #{q[0]} *[voice #{i+1}]*"}
+          m3[0].push(fxx) if fxx.length>0
+          fxx=dlnpc.reject{|q| q[4].nil? || q[4].length<=0 || q[4]==m2[i] || q[3].nil? || q[3].length<=0 || q[3]!=m[i]}.map{|q| "*[DL-NPC]* #{q[0]} *[English #{i+1}]*"}
+          m3[0].push(fxx) if fxx.length>0
+          fxx=dlnpc.reject{|q| q[4].nil? || q[4].length<=0 || q[4]!=m2[i] || q[3].nil? || q[3].length<=0 || q[3]==m[i]}.map{|q| "*[DL-NPC]* #{q[0]} *[Japanese #{i+1}]*"}
+          m3[0].push(fxx) if fxx.length>0
+        end
+        m3=m3.map{|q| q.flatten.sort}
+        charsx[1].push(m3)
+        charsx[1].flatten!
+        charsx[1].compact!
       end
     end
     disp='>No information<' if disp.length<=0
@@ -1934,6 +2015,7 @@ def disp_unit_art(event,name,bot)
     disp=dispx if disp.length>=1900
     event.respond "#{disp}\n\n#{art}"
   else
+    ftr=nil
     flds=[]
     flds.push(['Same Artist',charsx[0].join("\n")]) if charsx[0].length>0
     if charsx[1].length>0
@@ -1967,7 +2049,7 @@ def disp_unit_art(event,name,bot)
       flds[-1][2]=nil if flds.length<3
       flds[-1].compact!
     end
-    create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art],flds)
+    create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),ftr,[nil,art],flds)
   end
   return nil
 end
@@ -2651,6 +2733,7 @@ def disp_current_events(mode=0,shift=false)
       c[i][1]='Tap Battle' if c[i][1]=='Illusory Dungeon'
       c[i][1]='Lost Lore' if c[i][1]=='Lore'
       c[i][1]='Log-In Bonus' if c[i][1]=='Log-In' || c[i][1]=='Login'
+      c[i][1]='Hall of Forms' if c[i][1]=='HoF' || c[i][1]=='HOF'
       c[i][2]=c[i][2].split(', ') unless c[i][2].nil?
       c[i]=nil if c[i][2].nil?
     end
@@ -2672,7 +2755,9 @@ def disp_current_events(mode=0,shift=false)
       elsif c2[i][1]=='Rokkr Sieges'
         n="Rokkr Sieges"
       elsif c2[i][1]=='Tap Battle'
-        n="Illusory Dungeon: #{n}"
+        n="Tap Battle: #{n}"
+      elsif c2[i][1]=='Hall of Forms'
+        n="Hall of Forms: #{n}"
       elsif c2[i][1]=='Update'
         n="#{n} Update"
       elsif c2[i][1]=='Orb Promo'
@@ -3796,7 +3881,7 @@ def snagstats(event,bot,f=nil,f2=nil)
   unless @shardizard==-1
     bot.servers.values(&:members)
     k=bot.servers.length
-    k+=4 if @shardizard==0
+    k+=5 if @shardizard==0
     k=1 if @shardizard==4 # Debug shard shares the six emote servers with the main account
     @server_data[0][@shardizard]=k
     @server_data[1][@shardizard]=bot.users.size
@@ -3825,7 +3910,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     end
     if @shardizard==-1
       bot.servers.values(&:members)
-      str=extend_message(str,"The Smol Shard is in 4 servers, reaching #{longFormattedNumber(bot.users.size)} unique members.",event)
+      str=extend_message(str,"The Smol Shard is in 5 servers, reaching #{longFormattedNumber(bot.users.size)} unique members.",event)
     end
     str=extend_message(str,"The #{shard_data(0)[4]} Shard is in 1 server, reaching #{longFormattedNumber(@server_data[1][4])} unique members.",event,2) if event.user.id==167657750971547648
     event.respond str
@@ -4421,4 +4506,37 @@ def snagstats(event,bot,f=nil,f2=nil)
   str2="#{str2}\nOf those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
   str=extend_message(str,str2,event,2)
   event.respond str
+end
+
+def update_howto(event,bot)
+  if ![78649866577780736,167657750971547648].include?(event.user.id)
+    t=Time.now
+    if t.month==10 && t.year==2019 && t.day>23 && t.day<30
+      event.respond "Please note that my developer is away for the weekend, and cannot do updates.  I have code that allows my data collector to update me remotely, but that may take longer than usual."
+    else
+      event.respond "This command is unavailable to you."
+    end
+    return nil
+  end
+  str="1.) Edit [the sheet](https://docs.google.com/spreadsheets/d/15eDswPz7xK6w3c5R9-iUq8pt22KMMby71hsDuH6HlBA/edit#gid=2081531433)."
+  str="#{str}\n- Any column whose header is a shade of grey, is formulaically calculated and thus you don't need to edit it.  Merely copy the formula from the cell above."
+  str="#{str}\n- In *Units*'s \"Rarities\" column:\n> `5p` is for normal summonable units (\"pool\")\n> `5s` is used for seasonals and legendaries\n> `3g4g4g` is used for GHBs\n> `4t5t` is used for TT units\n> There are all-caps duo markers, but they're used to mark Launch units + Book I 5\* units and are thus not relevant in Book III."
+  str="#{str}\n- In *Units*'s \"Game\" column, the game that FEH credits the unit with is listed first, but the remaining games are listed in chronological order."
+  str="#{str}\n- In *Skills*'s sheet, add new skills above the fake skills in the same group.  Fake skills are marked by having the font significantly smaller."
+  str="#{str}\n- Please note that when a skill that is obviously part of a stat-based family gets added, I add all stat variations immediately.  Thus, if a new skill in an existing family gets added, check to see if an entry for it already exists first."
+  create_embed(event,"**How to update Elise's data while Mathoo is unavailable.**",str,0xD49F61)
+  str="2.) Wait for the formulae to finish loading, then grab the EliseBot data column of the sheet you edited.  I generally highlight the lowest entry and CTRL+SHIFT+(up)."
+  str="#{str}\n\n3.) Copy the selection from step 2 to a text file, with the following names based on sheet:"
+  str="#{str}\n- *Units* should be copied to **FEHUnits.txt**"
+  str="#{str}\n- *Skills* should be copied to **FEHSkills.txt**"
+  str="#{str}\n- *Structures* should be copied to **FEHStructures.txt**"
+  str="#{str}\n- *Accessories* should be copied to **FEHAccessories.txt**"
+  str="#{str}\n- *Items* should be copied to **FEHItems.txt**"
+  str="#{str}\n\n4.) Upload the text file to [the GitHub page here](https://github.com/Rot8erConeX/EliseBot/tree/master/EliseBot).  You might need to make a GitHub account to do so."
+  str="#{str}\n\n5.) Wait probably five minutes for the file to settle on GitHub's servers, then use the command `FEH!reload` in my debug server."
+  str="#{str}\n\n6.) Type the number 2 to select reloading data based on GitHub files."
+  str="#{str}\n\n7.) Double-check that the edited data works.  It is important to remember that I will not be there to guide you to wherever any problems might be based on error codes."
+  str="#{str}\n\n8.) Add any relevant aliases to the new data."
+  create_embed(event,'',str,0xD49F61)
+  return nil
 end

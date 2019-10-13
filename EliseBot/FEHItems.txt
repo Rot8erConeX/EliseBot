@@ -51,8 +51,10 @@ Special Blade\Assault\99\Enables use of Specials for all allies.
 Aether Stone SP\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Multiple different Aether Raids-related events.
 Battle Flag\Event\9999\Used to participate in Voting Gauntlets.\Multiplies user score from a single battle by amount of flags spent.
 Conquest Lance\Event\99\Grants +8 stamina for Grand Conquests.\Grand Conquest stamina is different from stamina for other modes.
+Havoc Axe\Event\99\Grants +8 stamina for Rokkr Sieges.\Rokkr Sieges stamina is different from stamina for other modes.
+Forma Torch\Event\99\Used to extend stamina in the Hall of Forms.\Hall of Forms
 First Summon Ticket\Event\99\This ticket can be used only for the specified summoning event. It will let you start a summoning session without using Orbs.
 Frosty Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\New Year's 2019
-Havoc Axe\Event\99\Grants +8 stamina for Rokkr Sieges.\Rokkr Sieges stamina is different from stamina for other modes.
 Spring Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Spring 2019
 Summer Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Summer 2019
+Fall Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Fall 2019

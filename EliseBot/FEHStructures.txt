@@ -19,6 +19,10 @@ Cavalry School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-
 Cavalry School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 350, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\5\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-6 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 450, 0, 0\0\Only one school can be placed at a time.
 Dark Shrine\1\Offensive/Defensive\At start of turn, inflicts Def/Res-2 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 100, 0, 0\0
+Duo's Hindrance\1\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills between turn 1 and turn 3.\Yes\0, 100, 0, 0\0
+Duo's Hindrance\2\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills between turn 1 and turn 4.\Yes\0, 300, 0, 0\0
+Duo's Indulgence\1\Offensive\The first Duo skill used between turn 1 and turn 3 can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 100, 0, 0\0
+Duo's Indulgence\2\Offensive\The first Duo skill used between turn 1 and turn 4 can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 300, 0, 0\0
 Escape Ladder\1\Offensive\Restores Aether cost of one failed battle per season.\No\0, 100, 0, 0\0
 Escape Ladder\2\Offensive\Restores Aether cost of two failed battles per season.\No\0, 300, 0, 0\0
 Escape Ladder\3\Offensive\Restores Aether cost of three failed battles per season.\No\0, 500, 0, 0\0
@@ -51,6 +55,7 @@ Tactics Room\1\Offensive/Defensive\At start of turn, if any foes are within 7 ro
 Tactics Room\2\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 45 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 300, 0, 0\0
 Tactics Room\3\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 50 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 500, 0, 0\0
 Tactics Room\4\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 55 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 700, 0, 0\0
+Tactics Room\5\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 60 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 900, 0, 0\0
 Bolt Trap\1\Trap\If foe ends movement on this structure's space, deals 10 damage to target and units within 3 spaces. (Cancels foe's attack or Assist skill.)\-\0, 0, 0, 0\0
 Bolt Trap\2\Trap\If foe ends movement on this structure's space, deals 20 damage to target and units within 3 spaces. (Cancels foe's attack or Assist skill.)\-\0, 100, 0, 0\0
 Bolt Trap\3\Trap\If foe ends movement on this structure's space, deals 30 damage to target and units within 3 spaces. (Cancels foe's attack or Assist skill.)\-\0, 300, 0, 0\0
@@ -91,8 +96,12 @@ Word of Bonding\-\Ornament\For Heroes who like to deepen their bonds over tea or
 Black Eagle Flag\-\Ornament\Flag for the class led by Edelgard. It's an event item.\Yes\0, 0, 0, 500\0\Summer 2019
 Blue Lion Flag\-\Ornament\Flag for the class led by Dimitri. It's an event item.\Yes\0, 0, 0, 500\0\Summer 2019
 Golden Deer Flag\-\Ornament\Flag for the class led by Claude. It's an event item.\Yes\0, 0, 0, 500\0\Summer 2019
+Witch's Cauldron\-\Ornament\A cauldron bubbling away, full of unidentifiable ingredients.  Looks disgusting, but the smell is somehow alluring.  It's an event item.\Yes\0, 0, 0, 500\0\Fall 2019
+Haunted Coffin\-\Ornament\Even though it appears empty, a sinister aura eminates from within.  It's an event item.\Yes\0, 0, 0, 500\0\Fall 2019
+Pumpkin Lantern\-\Ornament\Expertly carved pumpkins.  They're brothers from the same patch.  The eldest is the base, and the youngest is on top.  It's an event item.\Yes\0, 0, 0, 500\0\Fall 2019
 Accessory Shop\-\Resort\A structure where Heroes can sample various accessories to find new looks that catch their fancy!\-\300, 0, 0, 0\0\Heroes cannot use this structure to change their equipped accessories.
 Armory\-\Resort\A structure that contains a collection of replica weapons for Heroes to sample.  The stock is updated periodically, too!\-\300, 0, 0, 0\0\Heroes cannot use this structure to learn new skills or change their equipped skills.
 Concert Hall\-\Resort\A structure for Heroes who enjoy music and dancing.  You can listen to music, change which songs are played in certain areas, and even order new tracks to listen to!\-\300, 0, 0, 0\0\This structure can be used to change music in Arena, on the lobby screen, and in Aether Raids.
+Dining Hall\-\Resort\A structure where dishes can be prepared with the ingredients harvested from your Field.  You can earn rewards based on the total rarities you reveive on those dishes.\-\0, 0, 0, 0\0
+Field\-\Resort\A place where Dragonflowers and food-crop ingredients for the Dining Hall are grown and harvested.  Planted crops can be harvested at the beginning of the following season.\-\0, 0, 0, 0\0
 Hot Spring\-\Resort\A structure where Heroes can relax in a nice hot spring.  Apparently it is a natural spring, too, which is especially incredible considering it is located within a floating island in the sky.\-\300, 0, 0, 0\0
-Inn\-\Resort\A structure where Heroes can rest.  Sometimes Heroes will even dream as they slumber\-\300, 0, 0, 0\0

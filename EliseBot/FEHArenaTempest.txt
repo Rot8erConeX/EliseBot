@@ -1,5 +1,4 @@
-Hubert, Petra, Mercedes, Hilda, Death Knight, Sigrun, Selena, Boey, Azura(Vallite), Alfonse\Arena\27/08/2019, 02/09/2019\Water, Earth
-Naga, Hubert, Petra, Mercedes, Hilda, Death Knight, Sigrun, Garon, Robin(F)(Fallen), Alfonse\Aether\27/08/2019, 02/09/2019\Astra, Anima\Panic Manor, Panic Manor
-Naga, Hubert, Petra, Mercedes, Hilda, Death Knight, Sigrun, Garon, Robin(F)(Fallen), Alfonse\Aether\03/09/2019, 09/09/2019\Light, Dark\Catapult, Catapult
-Duma, Alm(Brave), Micaiah(Brave), Eliwood(Brave), Camilla(Brave), Dorcas(Halloween), Aversa, Setsuna, Lyn(Wind), Sharena\Aether\10/09/2019, 16/09/2019\Light, Dark\Infantry School, Infantry School
-Duma, Alm(Brave), Micaiah(Brave), Eliwood(Brave), Camilla(Brave), Dorcas(Halloween), Aversa, Setsuna, Lyn(Wind), Sharena\Aether\17/09/2019, 23/09/2019\Astra, Anima\Unknown, Unknown
+Thrasir, Sirius, Phina, Norne, Nagi, Bantu, Astram, Jakob, Eliwood(Wind), Alfonse\Arena\08/10/2019, 14/10/2019\Water, Wind
+Thrasir, Sirius, Phina, Norne, Nagi, Bantu, Astram, Cecilia(Winter), Hector(Marquess), Fjorm\Aether\08/10/2019, 14/10/2019\Astra, Anima\Bright Shrine, Bright Shrine
+Hector(Halloween), L'Arachel(Halloween), Dozla(Halloween), Ilyana(Halloween), Rolf(Halloween), Hector, L'Arachel, Oscar\Tempest\14/10/2019, 23/10/2019
+Thrasir, Sirius, Phina, Norne, Nagi, Bantu, Astram, Cecilia(Winter), Hector(Marquess), Fjorm\Aether\15/10/2019, 21/10/2019\Light, Dark\Dark Shrine, Dark Shrine

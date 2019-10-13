@@ -143,7 +143,7 @@
 ['Damage', ['damage', 'unhp', 'unhealth', 'antihp', 'antihealth', 'debuffhp', 'debuffhealth', 'hpdebuff', 'healthdebuff'], 'Passive']
 ['StatDrops', ['stat-drops', 'statdrops'], 'Passive']
 ['Sweep', ['sweep', 'elementsweep'], 'Passive']
-['Opening', ['opening', 'open'], 'Passive']
+['Opening', ['opening', 'open', 'gap'], 'Passive']
 ['Buffstuffer', ['buffstuffer'], 'Passive']
 ['Ploy', ['ploy'], 'Passive']
 ['Feint', ['feint', 'faint'], 'Passive']

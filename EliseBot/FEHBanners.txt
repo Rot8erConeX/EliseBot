@@ -1,16 +1,25 @@
+New Heroes: >Unknown<\3\-\5\07/11/2019, 05/12/2019\NewUnits
+Alm & Fae's Battle\3\Alm, Faye\5\02/11/2019, 07/11/2019\BHB
+Heroes with Guard Skills\3\-\5\30/10/2019, 08/11/2019\SkillBanner
+Legendary Heroes: >Unknown<\-8\Alm(Saint), Azura(Vallite), Hector(Marquess), Lucina(Glorious), Ryoma(Supreme)\5\29/10/2019, 04/11/2019\Legendary
+Heroes with Null Skills\3\Nailah\5\22/10/2019, 29/10/2019\SkillBanner
 Book 1 Revival, Week 20\-4\Azura, Elise, Leo\5\20/10/2019, 26/10/2019\Book1
+New Heroes: >Unknown<\3\-\5\21/10/2019, 06/11/2019\NewUnits
+Trick or Defeat (October 2019 rerun)\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\16/10/2019, 14/11/2019\Seasonal, Halloween
+New Power (October 2019)\3\Frederick, Hawkeye, Lute, Virion\5\15/10/2019, 21/10/2019\NewPower
 Book 1 Revival, Week 19\-4\Gray, Ike(Brave), Lucina(Brave)\5\13/10/2019, 19/10/2019\Book1
-Special Heroes: >Unknown<\3\-\5\09/10/2019, 04/11/2019\Seasonal, Halloween
-Heroes with Hone Skills\3\-\5\07/10/2019, 21/10/2019\SkillBanner
-Book 1 Revival, Week 18\-4\Amelia, Nephenee, Sanaki\5\06/10/2019, 12/10/2019\Book1
-Mythic Heroes: Thrasir, Omnicidal Witch\-8\Corrin(F)(Fallen), Eir, Eirika(Graceful), Eliwood(Wind), Ephraim(Fire), Genny(Picnic), Hrid, Kjelle, Soren(Valentines), Thrasir, Veronica(Bunny), Yune\5\30/09/2019, 07/10/2019\Legendary
-Book 1 Revival, Week 17\-4\Elincia, Innes, Tana\5\29/09/2019, 05/10/2019\Book1
-Heroes with Fierce Stance\3\Dorcas, Kana(F), Zelgius\5\26/09/2019, 06/10/2019\SkillBanner
-The Chosen Ones\3\Nagi, Norne, Phina, Sirius\5\19/09/2019, 08/10/2019\NewUnits
-Performing Arts (September 2019 rerun)\3\Azura(Performing), Inigo(Performing), Olivia(Performing), Shigure(Performing)\5\07/09/2019, 06/10/2019\Seasonal, Fall
-A Splendid Soiree\3\Berkut(Soiree), Ishtar(Soiree), Nephenee(Soiree), Reinhardt(Soiree)\5\06/09/2019, 06/10/2019\Seasonal, Fall
+The Land's Bounty (October 2019 revival)\3\Kagero(Halloween), Mia(Halloween), Myrrh(Halloween), Niles(Halloween)\5\12/10/2019, 11/11/2019\Seasonal, Halloween
+A Monsterous Harvest\3\Dozla(Halloween), Hector(Halloween), Ilyana(Halloween), L'Arachel(Halloween)\5\09/10/2019, 08/11/2019\Seasonal, Halloween
+Heroes with Hone/Fortify\3\Kliff, Leanne, Lethe\5\07/10/2019, 14/10/2019\SkillBanner
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
+Book 1 Revival, Week 18\-4\Amelia, Nephenee, Sanaki\5\06/10/2019, 12/10/2019\Book1
+The Chosen Ones\3\Nagi, Norne, Phina, Sirius\5\19/09/2019, 08/10/2019\NewUnits
+Mythic Heroes: Thrasir, Omnicidal Witch\-8\Corrin(F)(Fallen), Eir, Eirika(Graceful), Eliwood(Wind), Ephraim(Fire), Genny(Picnic), Hrid, Kjelle, Soren(Valentines), Thrasir, Veronica(Bunny), Yune\5\30/09/2019, 07/10/2019\Legendary
+Heroes with Fierce Stance\3\Dorcas, Kana(F), Zelgius\5\26/09/2019, 06/10/2019\SkillBanner
+Book 1 Revival, Week 17\-4\Elincia, Innes, Tana\5\29/09/2019, 05/10/2019\Book1
+Performing Arts (September 2019 rerun)\3\Azura(Performing), Inigo(Performing), Olivia(Performing), Shigure(Performing)\5\07/09/2019, 06/10/2019\Seasonal, Fall
+A Splendid Soiree\3\Berkut(Soiree), Ishtar(Soiree), Nephenee(Soiree), Reinhardt(Soiree)\5\06/09/2019, 06/10/2019\Seasonal, Fall
 Book 1 Revival, Week 16\-4\Ephraim, Jaffar, Karel\5\22/09/2019, 28/09/2019\Book1
 Heroes with Bonfire\3\-\5\18/09/2019, 25/09/2019\SkillBanner
 Tibarn & Caineghis's Battle\3\Caineghis, Reyson, Tibarn\5\15/09/2019, 22/09/2019\BHB
@@ -141,7 +150,7 @@ New Power (November 2018)\3\Bartre, Florina, Saber, Shanna\5\14/11/2018, 23/11/2
 "Before We Met..." Tempest Trials+\3\Hinoka(Wings), Leo, Ryoma\5\10/11/2018, 21/11/2018\Tempest
 Adrift\3\Camilla(Adrift), Corrin(F)(Adrift), Corrin(M)(Adrift), Mikoto\5\09/11/2018, 20/11/2018
 Heroes with Drive Atk\3\Leif, Micaiah, Quan\5\06/11/2018, 13/11/2018\SkillBanner
-Trick or Defeat (October 2018 rerun)\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\15/10/2017, 14/11/2018\Seasonal, Halloween
+Trick or Defeat (October 2018 rerun)\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\15/10/2018, 14/11/2018\Seasonal, Halloween
 Brave Redux\3\Kliff, Loki, Owain\5\23/10/2018, 08/11/2018\CYL
 The Land's Bounty\3\Kagero(Halloween), Mia(Halloween), Myrrh(Halloween), Niles(Halloween)\5\10/10/2018, 08/11/2018\Seasonal, Halloween
 Clashing Thunderers (II)\3\Ishtar, Linde, Olwen(Bonds), Ophelia\5\28/10/2018, 07/11/2018\VotingGauntlet

@@ -1,5 +1,5 @@
 Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Fiora(Summer)\Fjorm\Fjorm(Bride)\Kaden\Kana(F)\Leanne\Lethe\Matthew\Ninian\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
+Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Fiora(Summer)\Fjorm\Fjorm(Bride)\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Matthew\Ninian\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
 Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
 
 Sakura
@@ -163,7 +163,7 @@ Def Ploy 1\Def Ploy 2\Def Ploy 3
 Res Ploy 3
 
 Ethlyn
-5\5\ \ \-\1\
+5\7\ \ \-\1\
 Assault\Fear\Fear+\Fear+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -262,6 +262,16 @@ Desperation 1\Desperation 2\Desperation 3
 Hone Spd 1\Hone Spd 2\Hone Spd 3\Joint Hone Spd
 Spd Ploy 3
 
+Hector(Halloween)
+5\0\Resistance\HP\-\0\
+Iron Sword\Steel Sword\Silver Sword\Conjurer Curios
+~~Swap~~
+Glowing Ember\Bonfire
+Distant Counter
+Odd Follow-Up 1\Odd Follow-Up 2\~~Odd Follow-Up 3~~
+Hone Atk 1\Hone Atk 2\~~Hone Atk 3~~\~~Hone Atk 4~~
+Drive Res 2
+
 Kaden
 5\0\Attack\Resistance\-\0\
 Whelp (Cavalry)\Yearling (Cavalry)\Adult (Cavalry)\Kitsune Fang
@@ -357,7 +367,7 @@ Ninian
 Fire Breath\Fire Breath+\Light Breath\Light Breath+
 Dance
 Chilling Wind\Glacies
-~~none~~
+Armored Blow 1\Armored Blow 2\Armored Blow 3
 Escape Route 1\Escape Route 2\Escape Route 3
 Fortify Def 1\Fortify Def 2\Fortify Dragons
 Fortress Def 3
@@ -417,7 +427,7 @@ Sakura(Bath)
 Assault\Grandscratcher\Grandscratcher+\Grandscratcher+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Still-Water Balm\Fireflood Balm\Fireflood Balm+
-Defiant Atk 1\Defiant Atk 2\Defiant Atk 3
+Brazen Atk/Def 1\Brazen Atk/Def 2\Brazen Atk/Def 3
 Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
 Spd Opening 1\Spd Opening 2\Spd Opening 3
 Atk/Spd Bond 2
