@@ -11601,7 +11601,7 @@ end
 
 bot.command(:reload, from: 167657750971547648) do |event|
   return nil if overlap_prevent(event)
-  return nil unless [167657750971547648].include?(event.user.id) || [285663217261477889,386658080257212417].include?(event.channel.id)
+  return nil unless [368976843883151362,167657750971547648].include?(event.user.id) || [285663217261477889,386658080257212417].include?(event.channel.id)
   event.respond "Reload what?\n1.) Aliases, from backups\n2.) Groups, from backups#{"\n3.) Data, from GitHub" if [167657750971547648,368976843883151362].include?(event.user.id)}#{"\n4.) Source code, from GitHub\n5.) Libraries, from GitHub\n6.) Libraries, from code" if event.user.id==167657750971547648}\nYou can include multiple numbers to load multiple things."
   event.channel.await(:bob, from: event.user.id) do |e|
     reload=false
@@ -12764,6 +12764,7 @@ bot.ready do |event|
     next_holiday(bot)
     puts 'Avatar loaded' if @shardizard.zero?
   end
+  bot.channel(285663217261477889).send_message("Lemme give you the happiest of hellos!") if @shardizard==4
 end
 
 bot.run
