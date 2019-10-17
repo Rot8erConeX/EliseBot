@@ -5321,15 +5321,6 @@ def nature_name(boon,bane)
   return nil
 end
 
-def skill_include?(table, skill)
-  for j in 0...table.length
-    unless table[j].nil?
-      return j if table[j][0]==skill && table[j][4]!='Passive(W)'
-    end
-  end
-  return -1
-end
-
 def sever(str,sklz=false)
   str="#{str.split('/').join(' / ')}#{" ``" if ['+','-','*'].include?(str[str.length-1,1])}"
   s=str.split(' ').join(' ')
