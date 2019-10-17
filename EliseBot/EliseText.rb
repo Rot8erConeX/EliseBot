@@ -3608,7 +3608,7 @@ def disp_FGO_based_stats(bot,event,srv=nil)
     hdr="#{hdr}\n**Movement:** <:Icon_Move_Cavalry:443331186530451466> Cavalry"
   elsif [2,5,24,25,59,64,90,175,192].include?(srv[0])
     hdr="#{hdr}\n**Movement:** <:Icon_Move_Infantry:443331187579289601> Infantry"
-  elsif [76,140,149,164,187,188,190,191,204,205,251,256].include?(srv[0])
+  elsif [76,140,149,154,164,187,188,190,191,204,205,251,256].include?(srv[0])
     mov='Armor'
     hdr="#{hdr}\n**Movement:** <:Icon_Move_Armor:443331186316673025> Armor"
   elsif has_any?(srv[13],['Greek','Roman','Soverign']) || srv[2]=='Ruler'
@@ -4509,7 +4509,7 @@ def snagstats(event,bot,f=nil,f2=nil)
 end
 
 def update_howto(event,bot)
-  if ![78649866577780736,167657750971547648].include?(event.user.id)
+  if ![368976843883151362,167657750971547648].include?(event.user.id)
     t=Time.now
     if t.month==10 && t.year==2019 && t.day>23 && t.day<30
       event.respond "Please note that my developer is away for the weekend, and cannot do updates.  I have code that allows my data collector to update me remotely, but that may take longer than usual."

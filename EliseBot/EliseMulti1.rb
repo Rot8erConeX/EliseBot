@@ -4324,6 +4324,7 @@ def study_of_banners(event,name,bot)
     other_color=[]
     if b[i][2].include?(j[0])
       for i2 in 0...b[i][2].length
+        # puts b[i][2][i2].to_s
         u=untz[untz.find_index{|q| q[0]==b[i][2][i2]}]
         if u[0]==j[0]
         elsif u[1][0]==j[1][0]
@@ -4468,7 +4469,39 @@ def study_of_banners(event,name,bot)
     if j[9][1].nil?
       banners[0]="__**Debut:**__\n#{banners[0]}"
     else
-      banners[0]="__**Joined the summon pool during:**__\n#{j[9][1,j[9].length-1].join(', ')}"
+      fgg=j[9][0].split('p')[0].split('s')[0]
+      ffgg=[]
+      if fgg.length>1
+        fgg=fgg[0,fgg.length-1]
+        summon_type=[[],[],[],[],[],[],[]]
+        for m in 1...@max_rarity_merge[0]+1
+          summon_type[1].push("#{m}#{@rarity_stars[m-1]}") if fgg.include?("#{m}d") # Daily Rotation Heroes
+          summon_type[2].push("#{m}#{@rarity_stars[m-1]}") if fgg.include?("#{m}g") # Grand Hero Battles
+          summon_type[3].push("#{m}#{@rarity_stars[m-1]}") if fgg.include?("#{m}f") # free heroes
+          summon_type[4].push("#{m}#{@rarity_stars[m-1]}") if fgg.include?("#{m}q") # quest rewards
+          summon_type[5].push("#{m}#{@rarity_stars[m-1]}") if fgg.include?("#{m}t") # Tempest Trials rewards
+          summon_type[6].push("Seasonal #{m}#{@rarity_stars[m-1]} summon") if fgg.include?("#{m}s")
+          summon_type[6].push("Story unit starting at #{m}#{@rarity_stars[m-1]}") if fgg.include?("#{m}y")
+          summon_type[6].push("Purchasable at #{m}#{@rarity_stars[m-1]}") if fgg.include?("#{m}b")
+          summon_type[6].push("Grail summon at #{m}#{@rarity_stars[m-1]}") if fgg.include?("#{m}r")
+        end
+        mz=['summon','daily rotation battles','Grand Hero Battle','free hero','quest reward','Tempest Trial reward']
+        for m in 0...6
+          if summon_type[m].length>0
+            summon_type[m]="#{summon_type[m].join('/')} #{mz[m]}"
+          else
+            summon_type[m]=nil
+          end
+        end
+        if summon_type[6].length>0
+          summon_type[6]=summon_type[6].join(', ')
+        else
+          summon_type[6]=nil
+        end
+        summon_type.compact!
+        ffgg=summon_type.map{|q| q}
+      end
+      banners[0]="#{"__**First appeared as**__\n#{ffgg.join("\n")}\n\n" if ffgg.length>0}__**Joined the summon pool during:**__\n#{j[9][1,j[9].length-1].join(', ')}"
     end
     banners[1]="\n__**Other Banners:**__#{"\n" unless justnames}\n#{banners[1]}" if banners.length>1
     if justnames && !safe_to_spam?(event)
