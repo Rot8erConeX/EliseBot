@@ -141,6 +141,19 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Lucina(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Lucina(Glorious)','Lucina(Brave)'],[str]]
+  elsif /(catria|(c|k)atua)/ =~ str1
+    str='catria'
+    str='catua' if str2.include?('catua')
+    str='katua' if str2.include?('katua')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch') || str2.include?('archenea') || str2.include?('archanea')
+      return [str,['Catria(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch","archenea#{str}","#{str}archenea","archanea#{str}","#{str}archanea"]]
+    elsif str2.include?('sov') || str2.include?('valentia') || str2.include?('zofia')
+      return [str,['Catria(SoV)'],["sov#{str}","#{str}sov","valentia#{str}","#{str}valentia","zofia#{str}","#{str}zofia"]]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Catria(Launch)','Catria(SoV)'],[str]]
   elsif /(camil(|l)a|kamira)/ =~ str1
     str='camilla'
     str='camila' if str2.include?('camila')

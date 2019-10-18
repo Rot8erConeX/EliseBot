@@ -4,7 +4,7 @@ Heroes with Guard Skills\3\-\5\30/10/2019, 08/11/2019\SkillBanner
 Legendary Heroes: >Unknown<\-8\Alm(Saint), Azura(Vallite), Hector(Marquess), Lucina(Glorious), Ryoma(Supreme)\5\29/10/2019, 04/11/2019\Legendary
 Heroes with Null Skills\3\Nailah\5\22/10/2019, 29/10/2019\SkillBanner
 Book 1 Revival, Week 20\-4\Azura, Elise, Leo\5\20/10/2019, 26/10/2019\Book1
-New Heroes: >Unknown<\3\-\5\21/10/2019, 06/11/2019\NewUnits
+Zofia's Call\3\Catria(SoV), Forsyth, Python, Silque\5\21/10/2019, 06/11/2019\NewUnits
 Trick or Defeat (October 2019 rerun)\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\16/10/2019, 14/11/2019\Seasonal, Halloween
 New Power (October 2019)\3\Frederick, Hawkeye, Lute, Virion\5\15/10/2019, 21/10/2019\NewPower
 Book 1 Revival, Week 19\-4\Gray, Ike(Brave), Lucina(Brave)\5\13/10/2019, 19/10/2019\Book1
@@ -56,7 +56,7 @@ Morgan and Morgan's Battle\3\Morgan(F), Morgan(M)\5\14/07/2019, 22/07/2019\BHB
 Book 1 Revival, Week 6\-4\Julia, Lucina, Lucina(Brave)\5\14/07/2019, 20/07/2019\Book1
 "Lessons Learned" Tempest Trials+\3\Cecilia, Gwendolyn, Roy\5\10/07/2019, 23/07/2019\Tempest
 Book 1 Revival, Week 5\-4\Ike, Ike(Brave), Mist\5\07/07/2019, 13/07/2019\Book1
-Marth & Caeda's Battle\3\Ceada, Catria, Marth\5\06/07/2019, 13/07/2019\BHB
+Marth & Caeda's Battle\3\Ceada, Catria(Launch), Marth\5\06/07/2019, 13/07/2019\BHB
 Heroes with Ignis\3\Hector(Brave), Leon, Thea\5\04/07/2019, 13/07/2019\SkillBanner
 Ylissean Summer (2019 rerun)\3\Frederick(Summer), Gaius(Summer), Robin(F)(Summer), Tiki(Adult)(Summer)\5\26/06/2019, 25/07/2019\Seasonal, Summer
 Summer's Arrival (2019 rerun)\3\Cordelia(Summer), Innes(Summer), Noire(Summer), Tana(Summer)\5\23/06/2019, 22/07/2019\Seasonal, Summer
@@ -121,7 +121,7 @@ Heroes with Link Skills\3\Laevatein, Nina, Sumia\5\01/02/2019, 12/02/2019\SkillB
 Hostile Springs\3\Elise(Bath), Hinoka(Bath), Ryoma(Bath), Sakura(Bath)\5\23/01/2019, 22/02/2019\Seasonal
 2nd Anniversary Celebration: 2017 Seasonal Mass Rerun\-100\Azura(Performing), Azura(Winter), Caeda(Bride), Camilla(Bunny), Camilla(Winter), Charlotte(Bride), Chrom(Bunny), Chrom(Winter), Cordelia(Bride), Corrin(F)(Summer), Elise(Summer), Frederick(Summer), Gaius(Summer), Henry(Halloween), Inigo(Performing), Jakob(Halloween), Leo(Summer), Lissa(Winter), Lucina(Bunny), Lyn(Bride), Nowi(Halloween), Olivia(Performing), Robin(F)(Summer), Robin(M)(Winter), Sakura(Halloween), Shigure(Performing), Takumi(Winter), Tharja(Winter), Tiki(Adult)(Summer), Xander(Bunny), Xander(Summer)\5\02/02/2019, 08/02/2019\Seasonal
 Mythic Heroes: Duma, God of Strength\-8\Duma, Eirika(Graceful), Elincia(Festival), Ephraim(Brave), Ike(Vanguard), Kliff, Laegjarn, Linde(Summer), Loki, Lyn(Wind), Ryoma(Festival), Tiki(Young)(Earth)\5\30/01/2019, 05/02/2019\Legendary
-Sons\3\Corrin(M)(Adrift), Lief, Owain\5\28/01/2019, 05/02/2019\VotingGauntlet
+Sons\3\Corrin(M)(Adrift), Leif, Owain\5\28/01/2019, 05/02/2019\VotingGauntlet
 Mothers\3\Cherche, Lissa, Mikoto\5\28/01/2019, 05/02/2019\VotingGauntlet
 Elincia & Nephenee's Battle\3\Elincia, Ike(Brave), Nephenee\5\27/01/2019, 03/02/2019\BHB
 "Heating Things Up" Tempest Trials\3\Leo, Takumi\5\24/01/2019, 04/02/2019\TT
@@ -136,7 +136,7 @@ Winter's Envoy (December 2018 rerun)\3\Chrom(Winter), Lissa(Winter), Robin(M)(Wi
 Gift of Winter\3\Eirika(Winter), Ephraim(Winter), Fae(Winter)\5\18/12/2018, 17/01/2019\Seasonal, Christmas
 Legendary Heroes: Azura, Vallite Songstress\-8\Azura(Vallite), Camilla(Summer), Eir, Fjorm, Flora, Hector(Marquess), Helbindi, Marth(King), Nino(Fangs), Takumi(Summer), Tiki(Young)(Summer), Veronica(Brave)\5\28/12/2018, 07/01/2019\Legendary
 Heroes with Fortress Skills\3\Innes, Kliff, Lukas\5\23/12/2018, 05/01/2019\SkillBanner
-New Power (December 2018), Part 2\3\Catria, Est, Palla\5\13/12/2018, 22/12/2018\NewPower
+New Power (December 2018), Part 2\3\Catria(Launch), Est, Palla\5\13/12/2018, 22/12/2018\NewPower
 New Power (December 2018), Part 1\3\Robin(M), Ogma\5\13/12/2018, 22/12/2018\NewPower
 Ike & Soren's Battle\3\Elincia, Ike, Soren\5\12/12/2018, 20/12/2018\BHB
 Hero Fest IV\5\Eir, Lewyn, Ophelia, Owain\5\11/12/2018, 17/12/2018\HeroFest
@@ -252,7 +252,7 @@ Tana & Amelia's Battle\3\Amelia, Eirika(Bonds), Tana\5\14/12/2017, 23/12/2017\BH
 Weapons to Refine (New Power, November 2017)\3\Ephraim, Lyn, Takumi\5\07/12/2017, 21/12/2017\NewPower
 Children of Fate\3\Shiro, Siegbert, Soleil\5\04/12/2017, 18/12/2017
 Unrequited Love, Block A\3\Faye, Priscilla, Rhajat, Tharja\5\02/12/2017, 12/12/2017\VotingGauntler
-Unrequited Love, Block B\3\Catria, Dorcas, Katarina, Sigurd\5\02/12/2017, 12/12/2017\VotingGauntler
+Unrequited Love, Block B\3\Catria(Launch), Dorcas, Katarina, Sigurd\5\02/12/2017, 12/12/2017\VotingGauntler
 Legendary Heroes - Fjorm\-8\Ayra, Caeda(Bride), Camilla(Bunny), Celica, Cordelia(Bride), Deirdre, Fjorm, Genny, Hector, Ike, Lyn(Brave), Xander(Bunny)\5\28/11/2017, 04/12/2017\Legendary
 Heroes with Powerful Specials\3\Karel, Nephenee, Sonya\5\23/11/2017, 07/12/2017\SkillBanner
 "Less Than Heroic" Tempest Trials\3\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5\18/11/2017, 05/12/2017\Tempest, CYL

@@ -30,7 +30,7 @@ Dragon Gaze\Draconic Aura
 Scendscale
 Wrath 1\Wrath 2\Wrath 3
 Threaten Atk 1\Threaten Atk Spd 1\Threaten Atk Spd 2\Threaten Atk Spd 3
-Sturdy Blow 1
+Sturdy Blow 2
 
 Alm(Saint)
 5\0\Resistance\Defense\-\0\Sakura
@@ -93,7 +93,7 @@ Hone Atk 1\Hone Atk 2\Hone Atk 3
 Spur Atk 3
 
 Cherche
-5\10\Attack\Speed\-\0\
+5\10\Attack\Speed\-\3\
 Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\__Slaying Hammer+ (+) Effect Mode__\Cherche's Axe\Cherche's Axe (+) Effect Mode
 Pivot
 New Moon\Luna
@@ -163,7 +163,7 @@ Def Ploy 1\Def Ploy 2\Def Ploy 3
 Res Ploy 3
 
 Ethlyn
-5\7\ \ \-\1\
+5\7\ \ \-\4\
 Assault\Fear\Fear+\Fear+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -265,11 +265,11 @@ Spd Ploy 3
 Hector(Halloween)
 5\0\Resistance\HP\-\0\
 Iron Sword\Steel Sword\Silver Sword\Conjurer Curios
-~~Swap~~
+Swap
 Glowing Ember\Bonfire
 Distant Counter
-Odd Follow-Up 1\Odd Follow-Up 2\~~Odd Follow-Up 3~~
-Hone Atk 1\Hone Atk 2\~~Hone Atk 3~~\~~Hone Atk 4~~
+Odd Follow-Up 1\Odd Follow-Up 2\Odd Follow-Up 3
+Hone Atk 1\Hone Atk 2\Hone Atk 3\Hone Atk 4
 Drive Res 2
 
 Kaden
@@ -277,7 +277,7 @@ Kaden
 Whelp (Cavalry)\Yearling (Cavalry)\Adult (Cavalry)\Kitsune Fang
 Pivot
 New Moon\Moonbow
-Distant Def 1\Distant Def 2\~~Distant Def 3~~
+Distant Def 1\Distant Def 2\Distant Def 3
 Spd/Res Link 1\Spd/Res Link 2\Spd/Res Link 3
 Spur Atk 1\Spur Atk 2\Goad Beasts
 Fortress Res 3

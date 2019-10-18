@@ -28,7 +28,7 @@ Beruka\Green, Blade\ \Flier\8, 6, 4, 9, 4\46, 29, 23, 37, 22\lack\Stephanie Sheh
 Caeda\Red, Blade\ \Flier\5, 5, 9, 5, 7\36, 25, 37, 24, 34\HAKO\Cherami Leigh;; Hayami Saori\27\3p4pLUPF\F\FE3, FE1, (st)SSBB, FE11, FE12, FEW, (s)SSBU\Caeda
 Cain\Red, Blade\ \Cavalry\7, 7, 8, 5, 3\42, 32, 32, 27, 21\Meka\T. Axelrod;; Masuda Toshiki\28\3p4pLUPF\M\FE3, FE1, FE11, FE12\Cain
 Camilla(Launch)\Green, Blade\ \Flier\5, 6, 7, 6, 7\37, 30, 32, 28, 31\Maeshima Shigeki\Misty Lee;; Sawashiro Miyuki\29\3p4pLUPF\F\FE14C, FEW, (s)SSBU\Camilla*
-Catria\Blue, Blade\ \Flier\6, 7, 7, 6, 5\39, 31, 34, 29, 25\Amagaitaro\Connor Kelley;; Nabatame Hitomi\30\3p4p3qLUPF\F\FE3, FE1, FE2, FE11, FE12, FE15, (s)SSBU\Catria
+Catria(Launch)\Blue, Blade\ \Flier\6, 7, 7, 6, 5\39, 31, 34, 29, 25\Amagaitaro\Connor Kelley;; Nabatame Hitomi\30\3p4p3qLUPF\F\FE3, FE1, FE2, FE11, FE12, FE15, (s)SSBU\Catria
 Cherche\Green, Blade\ \Flier\8, 9, 5, 7, 2\46, 38, 25, 32, 16\Wada Sachiko\Amanda Miller;; Takada Yuuki\31\3p4p3qLUPF\F\FE13\Cherche
 Chrom(Launch)\Red, Blade\ \Infantry\8, 9, 5, 7, 2\47, 37, 25, 31, 17\Ebila\Matt Mercer;; Sugita Tomokazu\32\3p4p3qLUPF\M\FE13, (m)SSB4, (t)SSB4, FEW, PXZ2, SSBU, (m)SSBU, (s)SSBU\Chrom*
 Clarine\Colorless, Healer\ \Cavalry\5, 5, 7, 4, 6\35, 25, 33, 22, 29\Amagaitaro\Hunter MacKenzie Austin;; Onodera Runa\33\3p4p3qLUPF\F\FE6\Clarine
@@ -435,8 +435,14 @@ Astram\Red, Blade\ \Infantry\8, 7, 8, 9, 4\44, 35, 36, 36, 21\AKIRA\Jamison Boaz
 L'Arachel(Halloween)\Green, Tome, Wind\ \Cavalry\6, 9, 8, 5, 2\39, 36, 34, 22, 20\Konfuzi Kokon\Carrie Keranen;; Nabatame Hitomi\434\5s\F\FE8\L'Arachel
 Dozla(Halloween)\Colorless, Dagger\ \Armor\7, 10, 6, 8, 5\45, 38, 29, 35, 27\Kita Senri\Josh Petersdorf;; \435\5s\M\FE8\Dozla
 Ilyana(Halloween)\Blue, Tome, Thunder\ \Armor\6, 10, 4, 6, 8\41, 38, 23, 30, 37\Fuzichoko\Ryan Bartley;; \436\5s\F\FE9, FE10\Ilyana
-Rolf(Halloween)\Colorless, Bow\ \Cavalry\6, 7, 8, 6, 5\40, 30, 36, 28, 23\\;; \437\4t5t0s\M\FE9, FE10\Rolf
+Rolf(Halloween)\Colorless, Bow\ \Cavalry\6, 7, 8, 6, 5\40, 30, 36, 28, 23\Mikuro\Erik Kimerer;; \437\4t5t0s\M\FE9, FE10\Rolf
 Hector(Halloween)\Red, Blade\Duo, Lilina, Lilina\Armor\7, 10, 6, 8, 6\47, 41, 26, 39, 27\Wada Sachiko\Patrick Seitz & Julie Kliewer;; Toriumi Kousuke & Ozawa Ari\438\5s\M\FE7, FE6\Hector
+Forsyth\Blue, Blade\ \Armor\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Sainosuke\Chris Cason;; \439\5p\M\FE15, FE2\Forsyth
+Python\Green, Bow\ \Cavalry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Suda Ayaka\Doug Erholz;; \440\5p\M\FE15, FE2\Python
+Catria(SoV)\Red, Blade\ \Flier\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Kakage\Connor Kelley;; Nabatame Hitomi\441\5p\F\FE15, FE1, FE2, FE3, FE11, FE12\Catria
+Silque\Colorless, Healer\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\lack\Bonnie Gordon;; \442\5p\F\FE15, FE2\Silque
+Conrad\Blue, Blade\ \Cavalry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\;; \443\3g4g4g\M\FE15\Conrad
+Valbar\Blue, Blade\ \Armor\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\;; \444\3p4p, Zofia's Call\M\FE15, FE2\Valbar
 Mathoo\Red, Blade\Duo, Naomi, Naomi\Infantry\8, 6, 4, 5, 10\45, 29, 24, 25, 39\\;; \1000\3p4pPF\M\FE14g\Mathoo\X167657750971547648
 Ace(C137)\Blue, Blade\ \Cavalry\8, 9, 2, 7, 4\41, 40, 17, 32, 24\\;; \1100\5pPF\M\\Ace(C137)\YFA78649866577780736
 Declan\Red, Tome, Dark\ \Infantry\4, 9, 8, 12, 3\27, 33, 32, 41, 22\\;; \1101\5pPF\M\\Declan\Y125624530692472832
