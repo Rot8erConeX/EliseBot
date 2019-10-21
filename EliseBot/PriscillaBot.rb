@@ -11886,7 +11886,7 @@ bot.message do |event|
     a=str.split(' ')
     if a[0].downcase=='reboot'
       event.respond 'Becoming Robin.  Please wait approximately ten seconds...'
-      exec "cd C:/Users/#{@mash}/Desktop/devkit && feindex.rb 4"
+      exec "cd C:/Users/#{@mash}/Desktop/devkit && RobinBot.rb 4"
     elsif event.server.nil? || event.server.id==285663217261477889
       event.respond 'I am not Robin right now.  Please use `FE!reboot` to turn me into Robin.'
     end
@@ -12755,7 +12755,20 @@ bot.ready do |event|
     next_holiday(bot)
     puts 'Avatar loaded' if @shardizard.zero?
   end
-  bot.channel(285663217261477889).send_message("Lemme give you the happiest of hellos!") if @shardizard==4
+  if @shardizard==4
+    if File.exist?("C:/Users/#{@mash}/Desktop/devkit/DebugSav.txt")
+      b=[]
+      File.open("C:/Users/#{@mash}/Desktop/devkit/DebugSav.txt").each_line do |line|
+        b.push(eval line)
+      end
+    else
+      b=[]
+    end
+    bot.channel(285663217261477889).send_message("Lemme give you the happiest of hellos!") if b[0]!='Elise'
+    open("C:/Users/#{@mash}/Desktop/devkit/DebugSav.txt", 'w') { |f|
+      f.puts '"Elise"'
+    }
+  end
 end
 
 bot.run
