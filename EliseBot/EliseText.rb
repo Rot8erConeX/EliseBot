@@ -2427,7 +2427,7 @@ def today_in_feh(event,bot,shift=false)
   str="#{str}\n#{'~~' if shift}Days since game release: #{longFormattedNumber(date)}#{'~~' if shift}"
   if event.user.id==167657750971547648 && @shardizard==4
     str="#{str}\n#{'~~' if shift}Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12#{'~~' if shift}"
-    str="#{str}\n#{'~~' if shift}Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)#{'~~' if shift}"
+    str="#{str}\n#{'~~' if shift}Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday) - #{week_from(date,3)%20+1}/20(Sunday)#{'~~' if shift}"
   end
   if shift
     t+=24*60*60
@@ -2438,7 +2438,7 @@ def today_in_feh(event,bot,shift=false)
     str="#{str}\nDays since game release, come tomorrow: #{longFormattedNumber(date)}"
     if event.user.id==167657750971547648 && @shardizard==4
       str="#{str}\nTomorrow's daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12"
-      str="#{str}\nTomorrow's weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)"
+      str="#{str}\nTomorrow's weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday) - #{week_from(date,3)%20+1}/20(Sunday)"
     end
     str2='__**Tomorrow in** ***Fire Emblem Heroes***__'
   else
@@ -2510,10 +2510,12 @@ def today_in_feh(event,bot,shift=false)
     c[i][2]=c[i][2].split(', ')
   end
   str=extend_message(str,str2,event,2)
+  str2=disp_current_events(bot,event,3,shift)
+  str=extend_message(str,str2,event)
   if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(' tomorrow ') || " #{event.message.text.downcase} ".include?(' next ')
-    str2=disp_current_events(1,shift)
+    str2=disp_current_events(bot,event,1,shift)
     str=extend_message(str,str2,event,2)
-    str2=disp_current_events(2,shift)
+    str2=disp_current_events(bot,event,2,shift)
     str=extend_message(str,str2,event,2)
     bonus_load()
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
@@ -2659,7 +2661,7 @@ def today_in_feh(event,bot,shift=false)
   event.respond str
 end
 
-def disp_current_events(mode=0,shift=false)
+def disp_current_events(bot,event,mode=0,shift=false)
   t=Time.now
   timeshift=8
   timeshift-=1 unless (t-24*60*60).dst?
@@ -2858,6 +2860,48 @@ def disp_current_events(mode=0,shift=false)
         end
       end
     end
+  elsif [3,4,-3,-4].include?(mode)
+    book1=["Amelia, Nephenee, Sanaki",
+           "Gray, Ike(Brave), Lucina(Brave)",
+           "Azura, Elise, Leo",
+           "Deirdre, Linde, Tiki(Young)",
+           "Cecilia, Delthea, Genny",
+           "Julia, Nephenee, Sigurd",
+           "Hector, Lyn, Lyn(Brave)",
+           "Ike, Ike(Brave), Mist",
+           "Julia, Lucina, Lucina(Brave)",
+           "Hinoka, Ryoma, Takumi",
+           "Genny, Katarina, Minerva",
+           "Alm, Delthea, Faye",
+           "Amelia, Ayra, Olwen(Bonds)",
+           "Lyn(Brave), Ninian, Roy(Brave)",
+           "Dorcas, Lute, Mia",
+           "Hector, Luke, Tana",
+           "Linde, Saber, Sonya",
+           "Azura, Deirdre, Eldigan",
+           "Ephraim, Jaffar, Karel",
+           "Elincia, Innes, Tana"]
+    t=Time.now
+    timeshift=8
+    timeshift-=1 unless t.dst?
+    t-=60*60*timeshift
+    t2=Time.new(2017,2,2)-60*60
+    t2=t-t2
+    date=(((t2.to_i/60)/60)/24)
+    if [3,4].include?(mode)
+      f=book1[week_from(date,3)%20].split(', ')
+      f=f.map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"}
+      f=f.join(', ')
+      return "#{'__**' if mode==4}Current Book 1 revival units#{"**__\n" if mode==4}#{': ' if mode==3}#{f}"
+    elsif [-3,-4].include?(mode)
+      book1=book1.rotate(1)
+      f=book1[week_from(date,3)%20].split(', ')
+      f=f.map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"}
+      f=f.join(', ')
+      return "#{'__**' if mode==4}Next Book 1 revival units#{"**__\n" if mode==4}#{': ' if mode==3}#{f}"
+    end
+    book1=book1.rotate(week_from(date,3)%20)
+    str2=book1[0]
   end
   return str2
 end
@@ -3045,8 +3089,9 @@ def next_events(event,bot,type)
   idx=12 if ['arena','bonus','arenabonus','arena_bonus'].include?(type.downcase)
   idx=13 if ['tempest','tempestbonus','tempest_bonus'].include?(type.downcase)
   idx=14 if ['aether','aetherbonus','aether_bonus','raid','raidbonus','raid_bonus','raids','raidsbonus','raids_bonus'].include?(type.downcase)
+  idx=15 if ['book1','book_one','bookone','book1revival','bookonerevival','book_onerevival','bookone_revival','book_one_revival'].include?(type.downcase)
   if idx<0 && !safe_to_spam?(event)
-    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nAether, AetherBonus, Aether_Bonus\nBonus"
+    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nAether, AetherBonus, Aether_Bonus\nBonus\nBook1, Book1Revival"
     return nil
   end
   t=Time.now
@@ -3062,7 +3107,7 @@ def next_events(event,bot,type)
   msg="#{msg}\nDays since game release: #{longFormattedNumber(date)}"
   if event.user.id==167657750971547648 && @shardizard==4
     msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
-    msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)",event)
+    msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday) - #{week_from(date,3)%20+1}/20(Sunday)",event)
   end
   if [-1,1].include?(idx)
     colors=['Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>',
@@ -3249,15 +3294,15 @@ def next_events(event,bot,type)
     msg=extend_message(msg,msg2,event,2)
   end
   if [-1,8].include?(idx)
-    str2=disp_current_events(1)
+    str2=disp_current_events(bot,event,1)
     msg=extend_message(msg,str2,event,2)
-    str2=disp_current_events(-1)
+    str2=disp_current_events(bot,event,-1)
     msg=extend_message(msg,str2,event,2)
   end
   if [-1,9].include?(idx)
-    str2=disp_current_events(2)
+    str2=disp_current_events(bot,event,2)
     msg=extend_message(msg,str2,event,2)
-    str2=disp_current_events(-2)
+    str2=disp_current_events(bot,event,-2)
     msg=extend_message(msg,str2,event,2)
   end
   if [-1].include?(idx)
@@ -3376,6 +3421,79 @@ def next_events(event,bot,type)
         moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{element}"}
         msg=extend_message(msg,"__**Next Aether Raids Season** (starting #{d[0]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][d[1]]} #{d[2]})__\n*Bonus Units:*#{"\n#{k2[0,k2.length/2+m].join(', ')}\n#{k2[k2.length/2+m,k2.length/2].join(', ')}" unless k2==k || k2.length<=1}#{'(same as current)' if k2==k}#{'(unknown)' if k2.length<=1}\n*Bonus Structures:* #{struct}\n*Elemental Season:* #{moji[0].mention unless moji[0].nil?}#{b[1][3][0]}, #{moji2[0].mention unless moji2[0].nil?}#{b[1][3][1]}",event,2)
       end
+    end
+  end
+  if [-1,15].include?(idx)
+    matz=["Amelia, Nephenee, Sanaki",
+          "Gray, Ike(Brave), Lucina(Brave)",
+          "Azura, Elise, Leo",
+          "Deirdre, Linde, Tiki(Young)",
+          "Cecilia, Delthea, Genny",
+          "Julia, Nephenee, Sigurd",
+          "Hector, Lyn, Lyn(Brave)",
+          "Ike, Ike(Brave), Mist",
+          "Julia, Lucina, Lucina(Brave)",
+          "Hinoka, Ryoma, Takumi",
+          "Genny, Katarina, Minerva",
+          "Alm, Delthea, Faye",
+          "Amelia, Ayra, Olwen(Bonds)",
+          "Lyn(Brave), Ninian, Roy(Brave)",
+          "Dorcas, Lute, Mia",
+          "Hector, Luke, Tana",
+          "Linde, Saber, Sonya",
+          "Azura, Deirdre, Eldigan",
+          "Ephraim, Jaffar, Karel",
+          "Elincia, Innes, Tana"]
+    matz=matz.rotate(week_from(date,3)%20)
+    if safe_to_spam?(event)
+      mmzz=[]
+      for i in 0...matz.length
+        m=matz[i].split(', ')
+        for i2 in 0...m.length
+          mmzz.push([m[i2],i])
+          mmzz.push([m[i2],20]) if i==0
+        end
+      end
+      mmzz.sort!{|a,b| (a[0]<=>b[0])==0 ? (a[1]<=>b[1]) : (a[0]<=>b[0])}
+      mmzz.reverse!
+      for i in 0...mmzz.length-1
+        if mmzz[i][0]==mmzz[i+1][0]
+          mmzz[i+1][2]=mmzz[i][1]*1 unless mmzz[i+1][1]>0
+          mmzz[i]=nil
+        end
+      end
+      mmzz.compact!
+      mmzz.reverse!
+      msg=extend_message(msg,"__**Units available in Book 1 revival banners**__",event,2)
+      strpost=false
+      tx=t-t.wday*24*60*60
+      for i in 0...mmzz.length
+        str2="*#{mmzz[i][0]}*#{unit_moji(bot,event,-1,mmzz[i][0])} -"
+        if mmzz[i][1]==0
+          str2="#{str2} **This week**#{' - Next available' unless mmzz[i][2].nil? || mmzz[i][2]<=0}"
+          if mmzz[i][2].nil? || mmzz[i][2]<=0
+          else
+            t_d=tx+mmzz[i][2]*7*24*60*60
+            if mmzz[i][2]==1
+              str2="#{str2} next week (#{disp_date(t_d,1)})"
+            else
+              str2="#{str2} #{mmzz[i][2]} weeks from now (#{disp_date(t_d,1)})"
+            end
+          end
+        else
+          t_d=tx+mmzz[i][1]*7*24*60*60
+          if mmzz[i][1]==1
+            str2="#{str2} Next week (#{disp_date(t_d,1)})"
+          else
+            str2="#{str2} #{mmzz[i][1]} weeks from now (#{disp_date(t_d,1)})"
+          end
+        end
+        msg=extend_message(msg,str2,event)
+      end
+    else
+      str2=matz[0].split(', ').map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"}.join(', ')
+      str3=matz[1].split(', ').map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"}.join(', ')
+      msg=extend_message(msg,"__**Units available in Book 1 revival banners**__\n*This week:* #{str2}\n*Next week:* #{str3}",event,2)
     end
   end
   event.respond msg unless [10,12,13,14].include?(idx)

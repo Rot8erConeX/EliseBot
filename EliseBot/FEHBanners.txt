@@ -1,18 +1,18 @@
 New Heroes: >Unknown<\3\-\5\07/11/2019, 05/12/2019\NewUnits
 Alm & Fae's Battle\3\Alm, Faye\5\02/11/2019, 07/11/2019\BHB
 Heroes with Guard Skills\3\-\5\30/10/2019, 08/11/2019\SkillBanner
-Legendary Heroes: >Unknown<\-8\Alm(Saint), Azura(Vallite), Hector(Marquess), Lucina(Glorious), Ryoma(Supreme)\5\29/10/2019, 04/11/2019\Legendary
-Heroes with Null Skills\3\Nailah\5\22/10/2019, 29/10/2019\SkillBanner
-Book 1 Revival, Week 20\-4\Azura, Elise, Leo\5\20/10/2019, 26/10/2019\Book1
+Legendary Heroes: Leif, Unifier of Thracia\-8\Alm(Saint), Azura(Vallite), Felicia(Picnic), Hector(Marquess), Ike(Valentines), Leif(Unifier), Lucina(Glorious), Marisa(Bunny), Palla(Bunny), Ranulf, Ryoma(Supreme), Tiki(Young)(Fallen)\5\29/10/2019, 04/11/2019\Legendary
 Zofia's Call\3\Catria(SoV), Forsyth, Python, Silque\5\21/10/2019, 06/11/2019\NewUnits
 Trick or Defeat (October 2019 rerun)\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\16/10/2019, 14/11/2019\Seasonal, Halloween
-New Power (October 2019)\3\Frederick, Hawkeye, Lute, Virion\5\15/10/2019, 21/10/2019\NewPower
-Book 1 Revival, Week 19\-4\Gray, Ike(Brave), Lucina(Brave)\5\13/10/2019, 19/10/2019\Book1
 The Land's Bounty (October 2019 revival)\3\Kagero(Halloween), Mia(Halloween), Myrrh(Halloween), Niles(Halloween)\5\12/10/2019, 11/11/2019\Seasonal, Halloween
 A Monsterous Harvest\3\Dozla(Halloween), Hector(Halloween), Ilyana(Halloween), L'Arachel(Halloween)\5\09/10/2019, 08/11/2019\Seasonal, Halloween
-Heroes with Hone/Fortify\3\Kliff, Leanne, Lethe\5\07/10/2019, 14/10/2019\SkillBanner
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
+Heroes with Null Skills\3\Nailah\5\22/10/2019, 29/10/2019\SkillBanner
+Book 1 Revival, Week 20\-4\Azura, Elise, Leo\5\20/10/2019, 26/10/2019\Book1
+New Power (October 2019)\3\Frederick, Hawkeye, Lute, Virion\5\15/10/2019, 21/10/2019\NewPower
+Book 1 Revival, Week 19\-4\Gray, Ike(Brave), Lucina(Brave)\5\13/10/2019, 19/10/2019\Book1
+Heroes with Hone/Fortify\3\Kliff, Leanne, Lethe\5\07/10/2019, 14/10/2019\SkillBanner
 Book 1 Revival, Week 18\-4\Amelia, Nephenee, Sanaki\5\06/10/2019, 12/10/2019\Book1
 The Chosen Ones\3\Nagi, Norne, Phina, Sirius\5\19/09/2019, 08/10/2019\NewUnits
 Mythic Heroes: Thrasir, Omnicidal Witch\-8\Corrin(F)(Fallen), Eir, Eirika(Graceful), Eliwood(Wind), Ephraim(Fire), Genny(Picnic), Hrid, Kjelle, Soren(Valentines), Thrasir, Veronica(Bunny), Yune\5\30/09/2019, 07/10/2019\Legendary
@@ -69,7 +69,7 @@ Heroes with Chill Skills\3\Celica(Fallen), Ophelia, Ranulf\5\25/06/2019, 03/07/2
 Book 1 Revival, Week 3\-4\Julia, Nephenee, Sigurd\5\23/06/2019, 29/06/2019\Book1
 From a Future Past\3\Brady, Kjelle, Nah, Yarne\5\11/06/2019, 30/06/2019\NewUnits
 New Power (June 2019)\3\Elincia, Kagero, Oscar, Saizo\5\16/06/2019, 25/06/2019\NewPower
-Book 1 Revival, Week 2\-4\Ceilica, Delthea, Genny\5\16/06/2019, 22/06/2019\Book1
+Book 1 Revival, Week 2\-4\Cecilia, Delthea, Genny\5\16/06/2019, 22/06/2019\Book1
 Book 1 Revival, Week 1\-4\Deirdre, Linde, Tiki(Young)\5\09/06/2019, 15/06/2019\Book1
 Heroes with Flier Formation\3\Elincia, Hinoka(Wings), Leanne\5\06/06/2019, 15/06/2019\SkillBanner
 Bridal Blessings (2019 Rerun)\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)\5\24/05/2019, 20/06/2019\Seasonal, Bride
