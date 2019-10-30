@@ -8429,9 +8429,11 @@ def parse_function(callback,event,args,bot,healers=nil)
         msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
         msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)",event)
       end
-      str2=disp_current_events(1)
+      str2=disp_current_events(bot,event,1)
       msg=extend_message(msg,str2,event,2)
-      str2=disp_current_events(-1)
+      str2=disp_current_events(bot,event,4)
+      msg=extend_message(msg,str2,event,2)
+      str2=disp_current_events(bot,event,-1)
       msg=extend_message(msg,str2,event,2)
       event.respond msg
       return -1
@@ -9303,9 +9305,11 @@ bot.command([:banners, :banner]) do |event, *args|
       msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
       msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)",event)
     end
-    str2=disp_current_events(1)
+    str2=disp_current_events(bot,event,1)
     msg=extend_message(msg,str2,event,2)
-    str2=disp_current_events(-1)
+    str2=disp_current_events(bot,event,4)
+    msg=extend_message(msg,str2,event,2)
+    str2=disp_current_events(bot,event,-1)
     msg=extend_message(msg,str2,event,2)
     event.respond msg
     return nil
@@ -11663,7 +11667,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
     end
     if e.message.text.include?('3') && [167657750971547648,368976843883151362].include?(e.user.id)
       event.channel.send_temporary_message('Loading.  Please wait 5 seconds...',3)
-      to_reload=['Units','Skills','Structures','StatSkills','SkillSubsets','EmblemTeams','Banners','Events','Games','ArenaTempest']
+      to_reload=['Units','Skills','Accessories','Structures','Items','StatSkills','SkillSubsets','Banners','Events','Games','ArenaTempest']
       for i in 0...to_reload.length
         download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEH#{to_reload[i]}.txt")
         IO.copy_stream(download, "FEHTemp.txt")
@@ -12189,9 +12193,11 @@ bot.mention do |event|
         msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
         msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%4+1}/4(Saturday) - #{week_from(date,0)%12+1}/12(Thursday)",event)
       end
-      str2=disp_current_events(1)
+      str2=disp_current_events(bot,event,1)
       msg=extend_message(msg,str2,event,2)
-      str2=disp_current_events(-1)
+      str2=disp_current_events(bot,event,4)
+      msg=extend_message(msg,str2,event,2)
+      str2=disp_current_events(bot,event,-1)
       msg=extend_message(msg,str2,event,2)
       event.respond msg
     else
