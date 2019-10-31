@@ -1,4 +1,5 @@
-Hector(Halloween), L'Arachel(Halloween), Dozla(Halloween), Ilyana(Halloween), Rolf(Halloween), Hector, L'Arachel, Oscar\Tempest\14/10/2019, 23/10/2019
-Thrasir, Sirius, Phina, Norne, Nagi, Bantu, Astram, Jakob, Eliwood(Wind), Alfonse\Arena\15/10/2019, 21/10/2019\Wind, Fire
-Thrasir, Sirius, Phina, Norne, Nagi, Bantu, Astram, Cecilia(Winter), Hector(Marquess), Fjorm\Aether\15/10/2019, 21/10/2019\Light, Dark\Dark Shrine, Dark Shrine
-Thrasir, Sirius, Phina, Norne, Nagi, Bantu, Astram, Cecilia(Winter), Hector(Marquess), Fjorm\Aether\22/10/2019, 28/10/2019\Astra, Anima\Bolt Tower, Bolt Tower
+Hector(Halloween), L'Arachel(Halloween), Dozla(Halloween), Ilyana(Halloween), Rutger, Camilla(Adrift), Frederick, Julia, Sharena\Arena\29/10/2019, 04/11/2019\Water, Fire
+Yune, Hector(Halloween), L'Arachel(Halloween), Dozla(Halloween), Ilyana(Halloween), Rolf(Halloween), Laegjarn(Winter), Naesala, Lucina(Glorious), Alfonse\Aether\29/10/2019, 04/11/2019\Light, Dark\Tactics Room, Tactics Room
+Leif(Unifier), Catria(SoV), Forsyth, Python, Silque, Valbar, Conrad, Hawkeye, Fjorm, Anna\Arena\05/11/2019, 11/11/2019\Water, Wind
+Yune, Hector(Halloween), L'Arachel(Halloween), Dozla(Halloween), Ilyana(Halloween), Rolf(Halloween), Laegjarn(Winter), Naesala, Lucina(Glorious), Alfonse\Aether\05/11/2019, 11/11/2019\Astra, Anima\Healing Tower, Healing Tower
+Leif(Unifier), Catria(SoV), Forsyth, Python, Silque, Valbar, Conrad, Hawkeye, Fjorm, Anna\Arena\12/11/2019, 18/11/2019\Water, Earth

@@ -1,29 +1,18 @@
-Harvest Party\Log-In Bonus\09/10/2019, 23/10/2019
-Special Heroes\Log-In Bonus\09/10/2019, 23/10/2019
-Valentia\Hall of Forms\10/10/2019, 23/10/2019
-Hector & Matthew\GHB\10/10/2019, 22/10/2019
-Cecelia & Lilina\GHB\10/10/2019, 22/10/2019
-October Edition\Orb Promo\10/10/2019, 22/10/2019
-Tempest Trials\Log-In Bonus\11/10/2019, 24/10/2019
-Rutger, Lone Swordsman (revival)\GHB\12/10/2019, 17/10/2019
-Three Heroes\Quests\12/10/2019, 19/10/2019
-A Child's Wish\Tempest Trials\14/10/2019, 23/10/2019
-Bartre & Fir (revival)\BHB\18/10/2019, 23/10/2019
 Encore!\Tap Battle\19/10/2019, 08/11/2019
->Unknown<\Forging Bonds\21/10/2019, 14/11/2019
+Conrad, Masked Knight\Forging Bonds\21/10/2019, 14/11/2019
 New Heroes\Log-In Bonus\21/10/2019, 14/11/2019
->Unknown<\GHB\24/10/2019, 01/11/2019
+Conrad, Masked Knight\GHB\24/10/2019, 01/11/2019
 -\Grand Conquests\25/10/2019, 31/10/2019
 Coliseum\Quests\26/10/2019, 08/11/2019
 Voting Gauntlet\Log-In Bonus\28/10/2019, 07/11/2019
->Unknown<\LHB\29/10/2019, 04/11/2019
+Leif, Unifier of Thracia\LHB\29/10/2019, 04/11/2019
 Ryoma, Supreme Samurai\LHB\29/10/2019, 04/11/2019
 Azura, Vallite Queen\LHB\29/10/2019, 04/11/2019
 Lucina, Glorious Archer\LHB\29/10/2019, 04/11/2019
 Hector, Marquess of Ostia\LHB\29/10/2019, 04/11/2019
 Alm, Saint King\LHB\29/10/2019, 04/11/2019
->Unknown<\Voting Gauntlet\31/10/2019, 05/11/2019
+Haunted Heroes\Voting Gauntlet\31/10/2019, 05/11/2019
 Alm & Fae\BHB\02/11/2019, 12/11/2019
 Cavalry Strike\Quests\04/11/2019, 19/11/2019
-New Heroes\Log-In Bonus\07/11/2019, 16/09/2019
->Unknown<\Forging Bonds\07/11/2019, 16/09/2019
+New Heroes\Log-In Bonus\07/11/2019, 16/11/2019
+>Unknown<\Forging Bonds\07/11/2019, 16/11/2019

@@ -66,8 +66,10 @@ Academy Cap\Hat\A gift from Byleth. It comes from the Garreg Mach Monastery.\Rea
 Academy Cap EX\Hat\A gift from Byleth. Only students who've left their mark on the Officers Academy can wear this.\Reach 2500 red friendship with Byleth(F) during Forging Bonds: Three Houses.
 Armored Helmet\Hat\This helmet from Hector was forged in Ostia. It's pretty heavy, but nothing an armored knight can't handle.\Reach 100 blue friendship with Hector(Brave) during Forging Bonds: Rejecting Destiny.
 Armored Helmet EX\Hat\The extravagant design of this Ostian helmet contrasts with its battle marks to paint a vivid picture of its history.\Reach 2500 blue friendship with Hector(Brave) during Forging Bonds: Rejecting Destiny.
+Baronial Heaume\Hat\A sturdy baron's helm previously worn by Forsyth.\Reach 100 blue friendship with Forsyth during Forging Bonds: Common Virtues.
+Baronial Heaume EX\Hat\A sturdy baron's helm previously worn by Forsyth. It is a keepsake marked with a lieutenant's rank.\Reach 2500 blue friendship with Forsyth during Forging Bonds: Common Virtues.
 Bat Ears\Hat\Aren't they cute?\Clear floors 6-10 in Illusory Dungeon: Farewells.
-Bath Bucket\Hat\When preparing to bathe in a hot spring, etiquette dictates washing with this bucket first. Don't splash!\
+Bath Bucket\Hat\When preparing to bathe in a hot spring, etiquette dictates washing with this bucket first. Don't splash!\Clear floors 81-85 in Illusory Dungeon: Kingdom of Nohr
 Beast Headband\Hat\Ranulf's favorite headband. Crafted from thick fabric, it protects the wearer's head quite well.\Reach 100 green friendship with Ranulf during Forging Bonds: A Trust Earned
 Beast Headband EX\Hat\This version of Ranulf's headband has very convincing fakes of his ears attached.\Reach 2500 green friendship with Ranulf during Forging Bonds: A Trust Earned
 Bird Nest\Hat\A bird nest Velouria found up in a tree. According to her, it's a treasure with a great scent.\Reach 100 orange friendship with Velouria during Forging Bonds: The Orb Case
@@ -81,6 +83,8 @@ Dire Notebook EX\Hat\Hubert's notebook. He's outlined some sort of scheme, it se
 Enigmatic Mask\Hat\A mask that looks an awful lot like one used by a mysterious man. Maybe this was his spare...\Enter the Equip Accessories Menu for the first time.
 Explorer's Hat\Hat\Kliff got this hat in preparation for his journeys into unknown realms.\Reach 100 blue friendship with Kliff during Forging Bonds: Dueling Desires.
 Explorer's Hat EX\Hat\When Kliff was but a boy, his father found this hat in a far-off land during his travels.\Reach 2500 blue friendship with Kliff during Forging Bonds: Dueling Desires.
+Falconine Helmet\Hat\A helmet from Catria. It is considered standard-issue for falcon knights.\Reach 100 red friendship with Catria(SoV) during Forging Bonds: Common Virtues.
+Falconine Helmet EX\Hat\A helmet from Catria. It is considered standard-issue for falcon knights. Its outer surface is pearlescent.\Reach 2500 red friendship with Catria(SoV) during Forging Bonds: Common Virtues.
 False Taguel Ears\Hat\A gift from Yarne, shaped like taguel ears. They are used to distract pursuers while escaping.\Reach 100 green friendship with Yarne during Forging Bonds: Spanning Time
 False Taguel Ears EX\Hat\A gift from Yarne, shaped like taguel ears. They increase height and make the wearer more intimidating.\Reach 2500 green friendship with Yarne during Forging Bonds: Spanning Time
 Favored Helm\Hat\A knight's helm given by Kjelle. Kept in perfect, shiny condition by Kjelle herself.\Reach 100 blue friendship with Kjelle during Forging Bonds: Spanning Time.
@@ -101,6 +105,8 @@ Kitty Ribbon\Hat\Lethe's green ribbon. The bells sewn to it create a lovely soun
 Kitty Ribbon EX\Hat\Lethe's green ribbon. The ears that are attached to it look surprisingly realistic.\Reach 2500 orange friendship with Lethe during Forging Bonds: A Trust Earned
 Knight Headpiece\Hat\A knight's headpiece from Silas. This gear is given to those who earn the title of knight.\Reach 100 blue friendship with Silas during Forging Bonds: High Tea Jinks.
 Knight Headpiece EX\Hat\A knight's headpiece from Silas. This special piece of gear is given to those who reach the title of paladin.\Reach 2500 blue friendship with Silas during Forging Bonds: High Tea Jinks.
+Knightly Helm\Hat\Headwear common among bow knights. Formerly Python's.\Reach 100 green friendship with Python during Forging Bonds: Common Virtues.
+Knightly Helm EX\Hat\Headwear common among bow knights. Formerly Python's. The feathers are tough yet flexible.\Reach 2500 green friendship with Python during Forging Bonds: Common Virtues.
 Lost Child's Hat\Hat\The hat worn by young Azura.\Clear floors 81-85 in Illusory Dungeon: Labyrinth of Despair.
 Mage Cap\Hat\A hat from Lugh. It's made for mages. Wearing it quiets the mind.\Reach 100 green friendship with Lugh during Forging Bonds: Reason to Fight
 Mage Cap EX\Hat\A hat from Lugh. It's made for mages. Wearing it expands the mind.\Reach 2500 green friendship with Lugh during Forging Bonds: Reason to Fight
@@ -116,8 +122,10 @@ Princess's Diadem EX\Hat\This was one of Celica's favorites in her younger days.
 Reindeer Horns\Hat\Get festive with this holiday accessory.\Clear floors 6-10 in Illusory Dungeon: Kingdom of Hoshido.
 Restoration Helm\Hat\The Restoration King's helmet, gifted by Ephraim. Forged in Renais, it's very solid but surprisingly light.\Reach 100 green friendship with Ephraim(Brave) during Forging Bonds: Rejecting Destiny.
 Restoration Helm EX\Hat\The Restoration King's many victories are recounted in the dents and dings that adorn this helmet.\Reach 2500 green friendship with Ephraim(Brave) during Forging Bonds: Rejecting Destiny.
+Saintly Ornament\Hat\A saint's headdress handed down from Silque. It radiates a holy aura.\Reach 100 orange friendship with Silque during Forging Bonds: Common Virtues.
+Saintly Ornament EX\Hat\A saint's headdress handed down from Silque. It matches hers in both style and sanctity.\Reach 2500 orange friendship with Silque during Forging Bonds: Common Virtues.
 Spring Bunny Hat\Hat\A hat once worn by a Hero tempted by sunny spring skies. The bunny's face has a lot of character.\Use cavalry ally to defeat foes level 30 or higher during June 2018 Quest "Yay, Accessories!".
-Steamed Buns\Hat\A famous delicacy from a Hoshidan hot spring. Doughy and filled with bean jam, and best served with tea.\
+Steamed Buns\Hat\A famous delicacy from a Hoshidan hot spring. Doughy and filled with bean jam, and best served with tea.\Clear floors 6-10 in Illusory Dungeon: Kingdom of Nohr.
 Summer Bunny Hat\Hat\A hat once worn by a Hero tempted by blue summer skies. The bunny's face has a lot of character.\Clear floors 81-85 in Illusory Dungeon: Farewells
 Symbol of Gallia\Hat\A headpiece bestowed by Caineghis. It's modeled on the royal insignia, and is quite heavy.\Reach 100 red friendship with Caineghis during Forging Bonds: A Trust Earned
 Symbol of Gallia EX\Hat\A headpiece bestowed by Caineghis. This shining symbol of the Lion King is said to grant strength to its wearer.\Reach 2500 red friendship with Caineghis during Forging Bonds: A Trust Earned
@@ -132,6 +140,7 @@ Dancer's Mask\Mask\A mask from Olivia. A dancer would wear this to project a mys
 Dancer's Mask EX\Mask\A mask from Olivia. A dancer would wear this to project an alluring aura while performing.\Reach 2500 red friendship with Olivia(Traveler) during Forging Bonds: Defending Ylisse.
 Devil Horns\Mask\Equip these for a menacing aura.\Clear floors 81-85 in Illusory Dungeon: Heir of Light.
 Gold Dancer's Mask\Mask\Proof of victory over Grand Hero Michalis.\Beat Michalis's GHB at Abyssal difficulty.
+Gold Devil Horns\Mask\Proof of victory over Legendary Leif.\Beat Leif(Unifier)'s LHB at Abyssal difficulty.
 Gold Enigmatic Mask\Mask\Proof of victory over Legendary Hector.\Beat Hector(Marquess)'s LHB at Abyssal difficulty.
 Gold Mysterious Mask\Mask\Proof of victory over Grand Hero Narcian.\Beat Narcian's GHB at Abyssal difficulty.
 Gold Reading Glasses\Mask\Proof of victory over Mythic Sothis.\Beat Sothis's MHB at Abyssal difficulty.
