@@ -9104,6 +9104,11 @@ def games_list(event,name,bot,weapon=nil)
     return nil
   end
   untz=@units.map{|q| q}
+  crd=1
+  for i in 0...j[11].length
+    crd+=1 if j[11][i][0,1]=='*'
+  end
+  j[11]=j[11].map{|q| q.gsub('*','')}
   rg=j[11].reject{|q| ['(a)','(m)','(t)','(t)'].include?(q[0,3]) || ['(at)','(st)'].include?(q[0,4])}
   ag=j[11].reject{|q| q[0,3]!='(a)'}.map{|q| q[3,q.length-3]}
   mg=j[11].reject{|q| q[0,3]!='(m)'}.map{|q| q[3,q.length-3]}
@@ -9123,9 +9128,11 @@ def games_list(event,name,bot,weapon=nil)
   pic=pick_thumbnail(event,j,bot)
   g2="#{g[0]}"
   g.shift
-  if j[0]=='Naga'
-    g2="#{g2}\n#{g[0]}"
-    g.shift
+  if crd>1
+    for i in 0...crd-1
+      g2="#{g2}\n#{g[0]}"
+      g.shift
+    end
   end
   name="#{j[0]}"
   if game_hybrid(j[0],event,bot).length>0
