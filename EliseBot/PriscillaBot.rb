@@ -264,7 +264,7 @@ def data_load() # loads the character and skill data from the files on my comput
   for i in 0...b.length
     bob4=[]
     b[i].each_line('\\'[0,1]) {|s| bob4.push(s[0,s.length-1])}
-    bob4[0]=bob4[0].to_i                     # SP cost should be stored as a number...
+    bob4[0]=bob4[0].to_i
     bob4[3]=bob4[3].to_i                     # SP cost should be stored as a number...
     bob4[4]=bob4[4].to_i unless bob4[4]=='-' || !['Weapon','Assist','Special'].include?(bob4[6]) # ...as should the Might or Cooldown
     bob4[11]=bob4[11].split('; ')   # the list of units that know a skill by default should be split into lists based on rarity...
@@ -6004,6 +6004,24 @@ def find_in_units(event,mode=0,paired=false,ignore_limit=false,args=nil)
     end
   end
   g=get_markers(event)
+  m=[]
+  m.push("*Weapon colors:* #{colors2.join(', ')}") if colors2.length>0
+  m.push("*Weapon types:* #{weapons.map{|q| q.gsub('Healer','Staff').gsub('Dragon','Breath')}.join(', ')}") if weapons.length>0
+  for i in 0...color_weapons.length
+    color_weapons[i]=color_weapons[i].join(' ').gsub('Healer','Staff')
+    color_weapons[i]='Sword (Red Blade)' if color_weapons[i]=='Red Blade'
+    color_weapons[i]='Lance (Blue Blade)' if color_weapons[i]=='Blue Blade'
+    color_weapons[i]='Axe (Green Blade)' if color_weapons[i]=='Green Blade'
+    color_weapons[i]='Rod (Colorless Blade)' if color_weapons[i]=='Colorless Blade'
+  end
+  m.push("*Complete weapons:* #{color_weapons.join(', ').gsub('Healer','Staff').gsub('Dragon','Breath')}") if color_weapons.length>0
+  m.push("*Movement:* #{movement.join(', ')}") if movement.length>0
+  m.push("*Complete classes:* #{clzz.map{|q| "#{q[0]} (#{q[1,q.length-1].compact.join(' ').gsub('Healer','Staff').gsub('Dragon','Breath')})"}.join(', ')}") if clzz.length>0
+  m.push("*Genders:* #{genders.map{|q| "#{q}#{'ale' if q=='M'}#{'emale' if q=='F'}"}.join(', ')}") if genders.length>0
+  m.push("*Games:* #{games.join(', ')}") if games.length>0
+  m.push("*Groups:* #{group.map{|q| q[0]}.join(', ')}") if group.length>0
+  m.push("*Stats:* #{statlimits.join(', ')}") if statlimits.length>0
+  m.push("*Supernatures:* #{supernatures.map{|q| "#{q[1,q.length-1]} #{q[0].gsub('+','boon').gsub('-','bane')}"}.join(', ')}") if supernatures.length>0
   if matches5.length==@units.reject{|q| has_any?(g, q[13][0])}.compact.length && !(args.nil? || args.length.zero?) && !safe_to_spam?(event) && mode != 3
     event.respond 'Your request is gibberish.' if ['hero','heroes','heros','unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
     return -1
@@ -6012,31 +6030,13 @@ def find_in_units(event,mode=0,paired=false,ignore_limit=false,args=nil)
   elsif matches5.length.zero? && mode != 13
     event.respond 'There were no units that matched your request.' unless paired
     return -2
-  elsif matches5.map{|k| k[0]}.join("\n").length>=1900 && !safe_to_spam?(event) && !ignore_limit && mode != 13
-    event.respond 'There were so many unit matches that I would prefer you use the command in PM.' unless paired
+  elsif (matches5.map{|k| k[0]}.join("\n").length>=1900 || matches5.length>=25) && !safe_to_spam?(event) && !ignore_limit && mode != 13 && !paired
+    event.respond "__**Unit search**__\n#{m.join("\n")}\n\n__**Note**__\nAt #{matches5.length} entries, there were so many unit matches that I would prefer you use the command in PM."
     return -2
   elsif mode==2
     return matches5
   elsif mode==1 || mode==13
     f=matches5.map{|k| k[0]}
-    m=[]
-    m.push("*Weapon colors:* #{colors2.join(', ')}") if colors2.length>0
-    m.push("*Weapon types:* #{weapons.map{|q| q.gsub('Healer','Staff').gsub('Dragon','Breath')}.join(', ')}") if weapons.length>0
-    for i in 0...color_weapons.length
-      color_weapons[i]=color_weapons[i].join(' ').gsub('Healer','Staff')
-      color_weapons[i]='Sword (Red Blade)' if color_weapons[i]=='Red Blade'
-      color_weapons[i]='Lance (Blue Blade)' if color_weapons[i]=='Blue Blade'
-      color_weapons[i]='Axe (Green Blade)' if color_weapons[i]=='Green Blade'
-      color_weapons[i]='Rod (Colorless Blade)' if color_weapons[i]=='Colorless Blade'
-    end
-    m.push("*Complete weapons:* #{color_weapons.join(', ').gsub('Healer','Staff').gsub('Dragon','Breath')}") if color_weapons.length>0
-    m.push("*Movement:* #{movement.join(', ')}") if movement.length>0
-    m.push("*Complete classes:* #{clzz.map{|q| "#{q[0]} (#{q[1,q.length-1].compact.join(' ').gsub('Healer','Staff').gsub('Dragon','Breath')})"}.join(', ')}") if clzz.length>0
-    m.push("*Genders:* #{genders.map{|q| "#{q}#{'ale' if q=='M'}#{'emale' if q=='F'}"}.join(', ')}") if genders.length>0
-    m.push("*Games:* #{games.join(', ')}") if games.length>0
-    m.push("*Groups:* #{group.map{|q| q[0]}.join(', ')}") if group.length>0
-    m.push("*Stats:* #{statlimits.join(', ')}") if statlimits.length>0
-    m.push("*Supernatures:* #{supernatures.map{|q| "#{q[1,q.length-1]} #{q[0].gsub('+','boon').gsub('-','bane')}"}.join(', ')}") if supernatures.length>0
     return [m,matches5] if mode==13
     return [m,f]
   end
@@ -6388,6 +6388,9 @@ def find_in_skills(event, mode=0, paired=false, brk=false)
   if matches4.length>=microskills.length && !(args.nil? || args.length.zero?) && !safe_to_spam?(event)
     event.respond 'Your request is gibberish.' if ['skill','skills'].include?(args[0].downcase)
     return -1
+  elsif (matches4.length>25 || matches4.map{|q| q[0]}.join("\n").length>=1900) && !safe_to_spam?(event) && mode==3 && !paired
+    event.respond "__**Skill search**__\n#{m.join("\n")}\n\n__**Note**__\nAt #{matches4.reject{|q| q[0]=='- - -'}.length} entries, there were so many skill matches that I would prefer you use the command in PM." unless paired
+    return -2
   elsif matches4.length.zero?
     event.respond 'There were no skills that matched your request.' unless paired
     return -2
@@ -6845,16 +6848,17 @@ def display_banners(event, args=nil, mode=0)
     b[i][4]=b[i][4].split(', ').map{|q| q.split('/')}.map{|q| "#{q[0]}#{['','Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'][q[1].to_i]}#{q[2]}"} unless b[i][4].nil?
   end
   b=b.map{|q| "#{q[0]}#{" (#{q[4].join(' - ')})" unless q[4].nil? || q[4].length<=0 || q[4]=='-'}"}.uniq
-  str="#{str}\n\n__**Results**__"
-  if b.length>20 && !safe_to_spam?(event)
-    event.respond "Too much data is trying to be displayed.  Please use this command in PM."
+  if (b.length>20 || str.length+b.join("\n").length>=1900) && !safe_to_spam?(event)
+    event.respond "#{str}\n\n__**Note**__\nAt #{b.length} entries, too much data is trying to be displayed.  Please use this command in PM."
   elsif str.length+b.join("\n").length>=1900
+    str="#{str}\n\n__**Results**__"
     for i in 0...b.length
       str=extend_message(str,b[i],event)
     end
     str=extend_message(str,"#{b.length} total.",event,2)
     event.respond str
   else
+    str="#{str}\n\n__**Results**__"
     create_embed(event,str,b.join("\n"),0x9400D3,"#{b.length} total.")
   end
 end
@@ -6901,10 +6905,14 @@ def display_units_and_skills(event,bot,args)
       display_skills(event, mode)
     elsif !p2.is_a?(Array)
       display_units(event, mode)
-    elsif p1.join("\n").length+p2.join("\n").length+m.join("\n").length<=1950
+    elsif p1.join("\n").length+p2.join("\n").length+m.join("\n").length<=1950 && (p1.length+p2.length<=25 || safe_to_spam?(event))
       create_embed(event,"#{"__**Unit search**__\n#{m[0].join("\n")}\n\n" if m[0].length>0}#{"__**Skill search**__\n#{m[1].join("\n")}\n\n" if m[1].length>0}__**Results**__",'',0x9400D3,"Totals: #{p1.reject{|q| q=='- - -'}.uniq.length} units, #{p2.reject{|q| q=='- - -'}.uniq.length} skills",nil,[['**Units**',p1.join("\n")],['**Skills**',p2.join("\n")]],2)
     elsif !safe_to_spam?(event)
-      event.respond 'My response would be so long that I would prefer you ask me in PM.'
+      str="__**Unit search**__\n#{m[0].join("\n")}"
+      str=extend_message(str,"__**Skill search**__\n#{m[1].join("\n")}",event,2)
+      str=extend_message(str,"__**Note**__\nToo much data is trying to be displayed.  Please use this command in PM.",event,2)
+      str=extend_message(str,"Totals: #{p1.reject{|q| q=='- - -'}.uniq.length} units, #{p2.reject{|q| q=='- - -'}.uniq.length} skills",event,2)
+      event.respond str
     else
       t="**Units:** #{p1[0]}"
       if p1.length>1
@@ -8323,11 +8331,12 @@ def find_alts(event,name,bot)
   for i in 0...k.length
     color.push(unit_color(event,find_unit(k[i][0],event),nil,1))
     m=[]
-    m.push('default') if name==k[i][12].split(', ')[0] || k[i][12].split(', ')[0][k[i][12].split(', ')[0].length-1,1]=='*'
-    m.push('default') if k[i][12].split(', ')[0][0,1]=='*' && k[i][12].split(', ').length>1
-    m.push('sensible') if k[i][12].split(', ')[0][0,1]=='*' && k[i][12].split(', ').length<2
+    fff=k[i][12].split(', ')[0]
+    m.push('default') if k[i][0]==fff || fff[fff.length-1,1]=='*'
+    m.push('default') if fff[0,1]=='*' && k[i][12].split(', ').length>1
+    m.push('sensible') if fff[0,1]=='*' && k[i][12].split(', ').length<2
     m.push('seasonal') if k[i][9][0].include?('s') && !(!k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1 && ['Fire','Water','Wind','Earth','Astra','Anima','Light','Dark'].include?(k[i][2][0]))
-    m.push('community-voted') if @aliases.reject{|q| q[2]!=k[i][0] || !q[3].nil?}.map{|q| q[1]}.include?("#{k[i][0].split('(')[0]}CYL")
+    m.push('community-voted') if k[i][0].include?('(Brave)')
     m.push('Legendary/Mythic') if !k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1 && ['Fire','Water','Wind','Earth','Astra','Anima','Light','Dark'].include?(k[i][2][0]) && !m.include?('default')
     m.push('Fallen') if k[i][0].include?('(Fallen)')
     if k[i][2][0]=='Duo'
@@ -11890,7 +11899,9 @@ bot.message do |event|
   data_load()
   str=event.message.text.downcase
   load "C:/Users/#{@mash}/Desktop/devkit/FEHPrefix.rb"
-  if @shardizard==4 && (['fea!','fef!','fea?','fef?'].include?(str[0,4]) || ['fe13!','fe14!','fe13?','fe14?'].include?(str[0,5]) || ['fe!','fe?'].include?(str[0,3])) && (event.server.nil? || event.server.id==285663217261477889)
+  if event.user.id==336561460920582144 && event.message.text.include?('rolled *Elise*') && event.message.text.include?('Series: *Fire Emblem')
+    event.respond 'It me!'
+  elsif @shardizard==4 && (['fea!','fef!','fea?','fef?'].include?(str[0,4]) || ['fe13!','fe14!','fe13?','fe14?'].include?(str[0,5]) || ['fe!','fe?'].include?(str[0,3])) && (event.server.nil? || event.server.id==285663217261477889)
     str=str[4,str.length-4] if ['fea!','fef!','fea?','fef?'].include?(str[0,4])
     str=str[5,str.length-5] if ['fe13!','fe14!','fe13?','fe14?'].include?(str[0,5])
     str=str[3,str.length-3] if ['fe!','fe?'].include?(str[0,3])
