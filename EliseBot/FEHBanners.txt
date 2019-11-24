@@ -1,13 +1,14 @@
-New Heroes: >Unknown<\3\-\5\07/11/2019, 05/12/2019\NewUnits
-Alm & Fae's Battle\3\Alm, Faye\5\02/11/2019, 07/11/2019\BHB
+Guardians of Peace\3\Echidna, Igrene, Larum, Perceval\5\19/11/2019, 09/12/2019\NewUnits
+Desert Mercenaries\3\Ephraim(Dynastic), Ewan, Gerik, Tethys\5\07/11/2019, 27/11/2019\NewUnits
 Heroes with Guard Skills\3\-\5\30/10/2019, 08/11/2019\SkillBanner
-Legendary Heroes: Leif, Unifier of Thracia\-8\Alm(Saint), Azura(Vallite), Felicia(Picnic), Hector(Marquess), Ike(Valentines), Leif(Unifier), Lucina(Glorious), Marisa(Bunny), Palla(Bunny), Ranulf, Ryoma(Supreme), Tiki(Young)(Fallen)\5\29/10/2019, 04/11/2019\Legendary
-Zofia's Call\3\Catria(SoV), Forsyth, Python, Silque\5\21/10/2019, 06/11/2019\NewUnits
+GHB Units\5\-\543\\Dynamic, GHB
+TT Units\5\-\54\\Dynamic, Tempest
 Trick or Defeat (October 2019 rerun)\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\16/10/2019, 14/11/2019\Seasonal, Halloween
 The Land's Bounty (October 2019 revival)\3\Kagero(Halloween), Mia(Halloween), Myrrh(Halloween), Niles(Halloween)\5\12/10/2019, 11/11/2019\Seasonal, Halloween
 A Monsterous Harvest\3\Dozla(Halloween), Hector(Halloween), Ilyana(Halloween), L'Arachel(Halloween)\5\09/10/2019, 08/11/2019\Seasonal, Halloween
-GHB Units\5\-\543\\Dynamic, GHB
-TT Units\5\-\54\\Dynamic, Tempest
+Alm & Faye's Battle\3\Alm, Celica(Brave), Faye\5\02/11/2019, 07/11/2019\BHB
+Zofia's Call\3\Catria(SoV), Forsyth, Python, Silque\5\21/10/2019, 06/11/2019\NewUnits
+Legendary Heroes: Leif, Unifier of Thracia\-8\Alm(Saint), Azura(Vallite), Felicia(Picnic), Hector(Marquess), Ike(Valentines), Leif(Unifier), Lucina(Glorious), Marisa(Bunny), Palla(Bunny), Ranulf, Ryoma(Supreme), Tiki(Young)(Fallen)\5\29/10/2019, 04/11/2019\Legendary
 Heroes with Null Skills\3\Nailah\5\22/10/2019, 29/10/2019\SkillBanner
 Book 1 Revival, Week 20\-4\Azura, Elise, Leo\5\20/10/2019, 26/10/2019\Book1
 New Power (October 2019)\3\Frederick, Hawkeye, Lute, Virion\5\15/10/2019, 21/10/2019\NewPower

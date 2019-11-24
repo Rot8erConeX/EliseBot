@@ -722,12 +722,16 @@ def embedless_swap(bot,event)
   metadata_save()
 end
 
-def dev_pm(bot,event,user_id)
+def dev_pm(bot,event,user_id,allowedids=[])
   return nil unless event.server.nil?
-  return nil unless event.user.id==167657750971547648 # only work when used by the developer
+  return nil unless event.user.id==167657750971547648 || allowedids.include?(event.user.id) # only work when used by the developer
   f=event.message.text.split(' ')
-  f="#{f[0]} #{f[1]} "
-  bot.user(user_id.to_i).pm(first_sub(event.message.text,f,'',1))
+  jke=false
+  jke=true if ['rcx','.','x'].include?(f[2].downcase) && event.user.id==167657750971547648
+  f="#{f[0]} #{f[1]} #{"#{f[2]} " if jke}"
+  sig="<:MCandleTop:642901964308480040>\n<:MCandleBottom:642901962005938181>"
+  sig="<:Smol_Ephraim:644015195710291968>" if event.user.id==78649866577780736
+  bot.user(user_id.to_i).pm("#{first_sub(event.message.text,f,'',1)}#{"\n#{sig}" unless jke}")
   event.respond 'Message sent.'
 end
 
@@ -742,17 +746,29 @@ def bliss_mode(bot,event,user_id)
   metadata_save()
 end
 
-def dev_message(bot,event,channel_id)
+def dev_message(bot,event,channel_id,allowedids=[])
   return nil unless event.server.nil? || [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,508792801455243266,508793141202255874,508793425664016395,572792502159933440,523830882453422120].include?(event.server.id)
-  if event.user.id==167657750971547648
+  if event.user.id==167657750971547648 || allowedids.include?(event.user.id)
   else
     event.respond 'Are you trying to use the `bugreport`, `suggestion`, or `feedback` command?'
     bot.user(167657750971547648).pm("#{event.user.distinct} (#{event.user.id}) tried to use the `sendmessage` command.")
     return nil
   end
   f=event.message.text.split(' ')
-  f="#{f[0]} #{f[1]} "
-  bot.channel(channel_id).send_message(first_sub(event.message.text,f,'',1))
+  jke=false
+  jke=true if ['rcx','.','x'].include?(f[2].downcase) && event.user.id==167657750971547648
+  f="#{f[0]} #{f[1]} #{"#{f[2]} " if jke}"
+  sig="<:MCandleTop:642901964308480040>\n<:MCandleBottom:642901962005938181>"
+  sig="<:Smol_Ephraim:644015195710291968>" if event.user.id==78649866577780736
+  if jke
+    bot.channel(channel_id).send_message("#{first_sub(event.message.text,f,'',1)}")
+  else
+    bot.channel(channel_id).send_message("#{first_sub(event.message.text,f,'',1)}\n#{sig}")
+    bot.user(167657750971547648).pm("**Channel:** #{bot.channel(channel_id).name} (#{channel_id})\n**Responder:** #{event.user.distinct} (#{event.user.id})\n**Message:** #{first_sub(event.message.text,f,'',1)}") unless event.user.id==167657750971547648
+    for i in 0...allowedids.length
+      bot.user(allowedids[i]).pm("**Channel:** #{bot.channel(channel_id).name} (#{channel_id})\n**Responder:** #{event.user.distinct} (#{event.user.id})\n**Message:** #{first_sub(event.message.text,f,'',1)}") unless event.user.id==allowedids[i]
+    end
+  end
   event.respond 'Message sent.'
 end
 

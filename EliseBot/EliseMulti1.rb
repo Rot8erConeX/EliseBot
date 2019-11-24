@@ -390,7 +390,6 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str='corrin'
     str='kamui' if str1.include?('kamui')
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
-    puts str2
     if str=='kamui' && (str2.include?('gaiden') || str2.include?('sov')) && find_unit('Kamui',event,true).length>0
       return [str,['Kamui'],['kamuigaiden','kamuisov','gaidenkamui','sovkamui']]
     elsif str2.include?('summer') || str2.include?('beach') || str2.include?('swimsuit') || str2.include?('ns')
@@ -1752,10 +1751,10 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return "~~#{w2}~~" unless ['Colorless'].include?(u[1][0])
     w2="Empty #{t}#{'+' if w[1].include?('+')}"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Safeguard','Vanguard'].include?(w[1].gsub('+',''))
+  elsif ['Safeguard','Vanguard','Rearguard'].include?(w[1].gsub('+',''))
     return weapon_legality(event,name,"Safeguard#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
     return weapon_legality(event,name,"Vanguard#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
-    return "~~#{w2}~~" unless ['Green'].include?(u[1][0])
+    return weapon_legality(event,name,"Rearguard#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
     w2="Midguard#{'+' if w[1].include?('+')}"
   elsif ['Lofty Blossoms','Cake Cutter'].include?(w[1].gsub('+',''))
     return weapon_legality(event,name,"Cake Cutter#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
@@ -1970,11 +1969,11 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
   end
   for i in 0...u.length # non-focus units
     unless u[i][9][0].include?('TD') && nu
-      bnr[3].push(u[i][0]) if u[i][9][0].include?('5p') && u[i][13][0].nil?
-      bnr[4].push(u[i][0]) if u[i][9][0].include?('4p') && u[i][13][0].nil?
-      bnr[5].push(u[i][0]) if u[i][9][0].include?('3p') && u[i][13][0].nil?
-      bnr[6].push(u[i][0]) if u[i][9][0].include?('2p') && u[i][13][0].nil?
-      bnr[7].push(u[i][0]) if u[i][9][0].include?('1p') && u[i][13][0].nil?
+      bnr[3].push(u[i][0]) if u[i][9][0].include?('5p') && u[i][13][0].nil? && u[i][2][0]!='Duo' && (u[i][2][3].nil? || u[i][2][3]!='Duo')
+      bnr[4].push(u[i][0]) if u[i][9][0].include?('4p') && u[i][13][0].nil? && u[i][2][0]!='Duo' && (u[i][2][3].nil? || u[i][2][3]!='Duo')
+      bnr[5].push(u[i][0]) if u[i][9][0].include?('3p') && u[i][13][0].nil? && u[i][2][0]!='Duo' && (u[i][2][3].nil? || u[i][2][3]!='Duo')
+      bnr[6].push(u[i][0]) if u[i][9][0].include?('2p') && u[i][13][0].nil? && u[i][2][0]!='Duo' && (u[i][2][3].nil? || u[i][2][3]!='Duo')
+      bnr[7].push(u[i][0]) if u[i][9][0].include?('1p') && u[i][13][0].nil? && u[i][2][0]!='Duo' && (u[i][2][3].nil? || u[i][2][3]!='Duo')
     end
   end
   return bnr
@@ -2689,10 +2688,10 @@ def combined_BST(event,args,bot)
     for i in 0...args.length
       unless s1.split(' ').nil? || s1.gsub(' ','').length<=0
         k=find_data_ex(:find_unit,s1,event,false,1)
-        for i2 in 0...i+1
-          k[1]=k[1][1,k[1].length-1] if k[1][0,1]==' '
-        end
         unless k.nil? || k.length<=0
+          for i2 in 0...i+1
+            k[1]=k[1][1,k[1].length-1] if k[1][0,1]==' '
+          end
           if k[0].is_a?(Array)
             if k[0][0].is_a?(Array)
               k[0]=k[0].map{|q| q[0]}
@@ -2749,7 +2748,7 @@ def combined_BST(event,args,bot)
             ['Hector', 0, 0, ['Hector', 'Hector(Valentines)', 'Hector(Marquess)', 'Hector(Brave)', 'Hector(Halloween)']],
             ['Celica', 0, 0, ['Celica', 'Celica(Fallen)', 'Celica(Brave)']],
             ['Takumi', 0, 0, ['Takumi', 'Takumi(Fallen)', 'Takumi(Winter)', 'Takumi(Summer)']],
-            ['Ephraim', 0, 0, ['Ephraim', 'Ephraim(Fire)', 'Ephraim(Brave)', 'Ephraim(Winter)']],
+            ['Ephraim', 0, 0, ['Ephraim', 'Ephraim(Fire)', 'Ephraim(Brave)', 'Ephraim(Winter)', 'Ephraim(Dynastic)']],
             ['Tharja', 0, 0, ['Tharja', 'Tharja(Winter)', 'Tharja(Bride)', 'Rhajat']],
             ['Cordelia', 0, 0, ['Cordelia', 'Cordelia(Bride)', 'Cordelia(Summer)', 'Caeldori']],
             ['Olivia', 0, 0, ['Olivia(Launch)', 'Olivia(Performing)', 'Olivia(Traveler)']],
@@ -4394,7 +4393,7 @@ def study_of_banners(event,name,bot)
     one_star=[0.0,0.0]
   end
   non_focus=[[],[]]
-  if j[9][0].include?('5p')
+  if j[9][0].include?('5p') && j[2][0]!='Duo' && (j[2][3].nil? || j[2][3]!='Duo')
     k=untz.reject{|q| !q[9][0].include?('5p') || !q[13][0].nil?}
     k.push(j) unless k.include?(j) || j[9][0].include?('TD')
     k2=untz.reject{|q| !q[9][0].include?('5p') || q[9][0].include?('TD') || !q[13][0].nil?}

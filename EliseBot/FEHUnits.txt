@@ -419,19 +419,19 @@ Hilda\Green, Blade\ \Infantry\7, 8, 8, 7, 5\43, 37, 37, 28, 23\Noy\Celeste Hende
 Hubert\Red, Tome, Dark\ \Infantry\7, 9, 7, 3, 5\41, 39, 32, 19, 25\PenekoR\Robbie Daymond;; \418\5p\M\FE16\Hubert
 Mercedes\Colorless, Healer\ \Infantry\6, 7, 7, 4, 7\39, 33, 30, 22, 33\Kakage\Dorothy Fahn;; \419\4p5p\F\FE16\Mercedes
 Petra\Blue, Dagger\ \Flier\6, 8, 9, 5, 3\40, 32, 38, 25, 20\Azusa\Faye Mata;; \420\5p\F\FE16\Petra
-Death Knight\Blue, Blade\ \Cavalry\6, 8, 5, 6, 6\40, 35, 25, 30, 27\Yamao\;; \421\3g4g4g\M\FE16\Death Knight
-Sigrun\Blue, Blade\ \Flier\5, 7, 8, 7, 7\37, 32, 36, 28, 34\pikomaro\Megan Lee;; \422\4t5t\F\FE10, FE9\Sigrun
+Death Knight\Blue, Blade\ \Cavalry\6, 8, 5, 6, 6\40, 35, 25, 30, 27\Yamao\;; \421\3g4g4g4r\M\FE16\Death Knight
+Sigrun\Blue, Blade\ \Flier\5, 7, 8, 7, 7\37, 32, 36, 28, 34\pikomaro\Megan Lee;; \422\4t5t4r\F\FE10, FE9\Sigrun
 Ishtar(Soiree)\Red, Tome, Fire\ \Flier\5, 9, 9, 2, 5\36, 34, 36, 16, 22\Chiko\Ratana;; Kadowaki Mai\423\5s\F\FE5, FE4\Ishtar
 Berkut(Soiree)\Blue, Blade\ \Infantry\7, 9, 4, 10, 5\41, 36, 23, 37, 24\Asatani Tomoyo\Ian Sinclair;; Suzuki Tatsuhisa\424\5s\M\FE15\Berkut
 Nephenee(Soiree)\Colorless, Bow\ \Infantry\6, 8, 9, 5, 6\37, 35, 36, 24, 25\HACCAN\Julie Ann Taylor;; Ohmoto Makiko\425\5s\F\FE9, FE10\Nephenee
 Reinhardt(Soiree)\Green, Tome, Wind\ \Flier\6, 8, 4, 7, 5\38, 34, 21, 27, 25\Yamada Kotaro\Chris Smith;; Tone Kentarou\426\5s\M\FE5, FE4\Reinhardt
-Rinea(Soiree)\Blue, Tome, Thunder\ \Infantry\6, 7, 8, 5, 6\38, 30, 33, 23, 28\Asatani Tomoyo\Dorothy Fahn;; \427\0s4t5t\F\FE15\Rinea
+Rinea(Soiree)\Blue, Tome, Thunder\ \Infantry\6, 7, 8, 5, 6\38, 30, 33, 23, 28\Asatani Tomoyo\Dorothy Fahn;; \427\0s4t5t4r\F\FE15\Rinea
 Phina\Red, Blade\ \Infantry\7, 9, 9, 5, 5\40, 35, 37, 26, 23\Mayo\Megan Harvey;; \428\5p\F\FE3, FE12\Phina
 Sirius\Blue, Blade\ \Cavalry\6, 8, 9, 8, 2\40, 34, 37, 35, 16\Suekane Kumiko\Patrick Seitz;; \429\5p\M\FE3, FE12\*Camus, MotE
 Norne\Colorless, Bow\ \Infantry\7, 7, 8, 7, 6\42, 32, 36, 31, 27\kaya8\Brittaney Harvey;; \430\4p5p\F\FE12, FE11\Norne
 Nagi\Green, Dragon\ \Armor\6, 8, 3, 10, 10\46, 37, 19, 36, 41\Okaya\Colleen O'Shaughnessey;; \431\5p\F\FE12, FE11\Nagi
 Bantu\Red, Dragon\ \Infantry\9, 7, 6, 8, 5\45, 34, 28, 35, 26\Yamada Akihiro\Joe J. Thomas;; \432\3p4p, The Chosen Ones\M\FE3, FE1, FE11, FE12\Bantu
-Astram\Red, Blade\ \Infantry\8, 7, 8, 9, 4\44, 35, 36, 36, 21\AKIRA\Jamison Boaz;; \433\3g4g4g\M\FE3, FE1, FE11, FE12\Astram
+Astram\Red, Blade\ \Infantry\8, 7, 8, 9, 4\44, 35, 36, 36, 21\AKIRA\Jamison Boaz;; \433\3g4g4g4r\M\FE3, FE1, FE11, FE12\Astram
 L'Arachel(Halloween)\Green, Tome, Wind\ \Cavalry\6, 9, 8, 5, 2\39, 36, 34, 22, 20\Konfuzi Kokon\Carrie Keranen;; Nabatame Hitomi\434\5s\F\FE8\L'Arachel
 Dozla(Halloween)\Colorless, Dagger\ \Armor\7, 10, 6, 8, 5\45, 38, 29, 35, 27\Kita Senri\Josh Petersdorf;; \435\5s\M\FE8\Dozla
 Ilyana(Halloween)\Blue, Tome, Thunder\ \Armor\6, 10, 4, 6, 8\41, 38, 23, 30, 37\Fuzichoko\Ryan Bartley;; \436\5s\F\FE9, FE10\Ilyana
@@ -444,6 +444,18 @@ Silque\Colorless, Healer\ \Infantry\6, 7, 5, 10, 5\39, 33, 23, 35, 31\lack\Bonni
 Conrad\Blue, Blade\ \Cavalry\6, 7, 4, 8, 8\40, 31, 22, 34, 35\Teita\Marc Diraison;; \443\3g4g4g\M\FE15\Conrad
 Valbar\Blue, Blade\ \Armor\9, 7, 5, 10, 4\49, 35, 25, 38, 26\Homazo\Kyle Hebert;; \444\3p4p, Zofia's Call\M\FE15, FE2\Valbar
 Leif(Unifier)\Colorless, Bow\Water, Duel, 21/02/2020\Cavalry\6, 10, 5, 6, 5\40, 38, 22, 29, 27\Hino Shinnosuke\Nicolas Roye;; Suzumura Kenichi\445\5s\M\FE4, *FE5\Leif
+Tethys\Colorless, Dagger\ \Infantry\6, 6, 8, 5, 9\38, 27, 35, 23, 34\tokki\Jennifer Losi;; \446\5p\F\FE8\Tethys
+Gerik\Green, Blade\ \Infantry\9, 8, 8, 6, 5\47, 37, 36, 30, 22\Suckane Kumiko\Nathaniel Lane;; \447\5p\M\FE8\Gerik
+Ewan\Red, Tome, Fire\ \Infantry\6, 10, 8, 5, 10\38, 37, 33, 23, 35\azu-taro\Andrew Buck;; \448\5p\M\FE8\Ewan
+Ephraim(Dynastic)\Blue, Blade\Duo, Lyon, Lyon\Infantry\6, 10, 6, 9, 5\41, 39, 30, 37, 25\Yamada Kotaro\Greg Chun & Mark P. Witten;; Yashiro Taku & Nakamura Yuichi\449\5p\M\FE8\Ephraim
+Ross\Green, Blade\ \Infantry\10, 10, 7, 9, 5\47, 38, 31, 32, 24\Meka\Zeno Robinson;; \450\3p4p, Desert Mercenaries\M\FE8\Ross
+Cormag\Blue, Blade\ \Flier\7, 8, 8, 6, 5\42, 36, 32, 34, 23\argon / Exys Inc.\Brad Venable;; \451\3g4g4g\M\FE8\Cormag
+Larum\Colorless, Dagger\ \Infantry\5, 8, 10, 3, 8\37, 32, 39, 18, 30\kawasumi\Elizabeth Simmons;; \452\5p\F\FE6\Larum
+Perceval\Blue, Blade\ \Cavalry\6, 7, 9, 5, 6\38, 32, 37, 28, 27\Yura\Chris Cason;; \453\5p\M\FE6\Perceval
+Echidna\Green, Blade\ \Infantry\8, 8, 8, 7, 5\45, 34, 36, 30, 27\PenekoR\Julia McIlvaine;; \454\5p\F\FE6\Echidna
+Igrene\Red, Bow\ \Infantry\7, 10, 9, 5, 4\42, 37, 37, 26, 24\cuboon\Krizia Bajos;; \455\5p\\FE6\Igrene
+Chad\Colorless, Dagger\ \Infantry\8, 7, 9, 5, 4\45, 30, 37, 26, 23\Himukai Yuji\Griffin Pautu;; \456\3p4p, Guardians of Peace\M\FE6\Chad
+Brunnya\Blue, Tome, Thunder\ \Infantry\7, 8, 7, 4, 7\42, 35, 31, 21, 33\Yoneko\Julia McIlvaine;; \457\3g4g4g\F\FE6\Brunnya
 Mathoo\Red, Blade\Duo, Naomi, Naomi\Infantry\8, 6, 4, 5, 10\45, 29, 24, 25, 39\\;; \1000\3p4pPF\M\FE14g\Mathoo\X167657750971547648
 Ace(C137)\Blue, Blade\ \Cavalry\8, 9, 2, 7, 4\41, 40, 17, 32, 24\\;; \1100\5pPF\M\\Ace(C137)\YFA78649866577780736
 Declan\Red, Tome, Dark\ \Infantry\4, 9, 8, 12, 3\27, 33, 32, 41, 22\\;; \1101\5pPF\M\\Declan\Y125624530692472832

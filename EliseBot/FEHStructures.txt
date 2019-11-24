@@ -8,11 +8,12 @@ Bolt Tower\1\Offensive/Defensive\At the start of turn 3, deals 10 damage to foes
 Bolt Tower\2\Offensive/Defensive\At the start of turn 3, deals 15 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 300, 0, 0\0
 Bolt Tower\3\Offensive/Defensive\At the start of turn 3, deals 20 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 500, 0, 0\0
 Bolt Tower\4\Offensive/Defensive\At the start of turn 3, deals 25 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 700, 0, 0\0
+Bolt Tower\5\Offensive/Defensive\At the start of turn 3, deals 30 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 900, 0, 0\0
 Catapult\1\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 100, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\2\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 300, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\3\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 500, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\4\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 700, 0, 0\0\Opposing fortresses cannot be destroyed
-Catapult\5\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 700, 0, 0\0\Opposing fortresses cannot be destroyed
+Catapult\5\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 900, 0, 0\0\Opposing fortresses cannot be destroyed
 Cavalry School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 50, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 150, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 250, 0, 0\0\Only one school can be placed at a time.
