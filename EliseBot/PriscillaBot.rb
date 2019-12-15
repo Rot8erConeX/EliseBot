@@ -1332,8 +1332,9 @@ end
 def get_weapon(str,event,mode=0) # used by the `stats` command and many derivations to find a weapon's name in the inputs that remain after the unit is decided
   return [] if str.gsub(' ','').length<=0
   skz=@skills.map{|q| q}
+  skz2=skz.reject{|q| ['Weapon','Assist','Special'].include?(q[6])}
   args=str.gsub('(','').gsub(')','').split(' ')
-  args=args.reject{|q| q.gsub('*','').gsub('+','').to_i.to_s==q.gsub('*','').gsub('+','') || skz.reject{|q2| ['Weapon','Assist','Special'].include?(q2[4])}.map{|q2| (stat_buffs(q2[1]).downcase.gsub(' ','') rescue "\u0F8F")}.include?((stat_buffs(q,nil,2).downcase rescue "\u0653")) || skz.reject{|q2| ['Weapon','Assist','Special'].include?(q2[6])}.map{|q2| q2[1].gsub('/','').downcase.gsub(' ','')}.include?(q.downcase) || ['+','-'].include?(q[0,1])} if args.length>1
+  args=args.reject{|q| q.gsub('*','').gsub('+','').to_i.to_s==q.gsub('*','').gsub('+','') || skz2.map{|q2| (stat_buffs(q2[1]).downcase.gsub(' ','') rescue "\u0F8F")}.include?((stat_buffs(q,nil,2).downcase rescue "\u0653")) || skz2.map{|q| q[1].gsub('/','').downcase.gsub(' ','')}.include?(q.downcase) || ['+','-'].include?(q[0,1])} if args.length>1
   args2=args.join(' ').split(' ')
   args4=args.join(' ').split(' ')
   name=args.join(' ')
