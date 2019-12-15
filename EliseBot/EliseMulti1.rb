@@ -226,7 +226,9 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str='nino'
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
-    if str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
+    if str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.gsub('flower','').include?('gg') || str2.include?('santa')
+      return [str,['Nino(Winter)'],["winter#{str}","#{str}winter","christmas#{str}","#{str}christmas","holiday#{str}","#{str}holiday","gg#{str}","#{str}gg","santa#{str}","#{str}santa"]]
+    elsif str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
       return [str,['Nino(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch"]]
     elsif str2.include?('fangs') || str2.include?('fanged') || str2.include?('fang') || str2.include?('sf') || str2.include?('pegasus')
       return [str,['Nino(Fangs)'],["wings#{str}","#{str}wings","kinshi#{str}","#{str}kinshi","winged#{str}","#{str}winged","#{str}2","#{str}sf","sf#{str}","#{str}pegasus","pegasus#{str}"]]
@@ -5665,6 +5667,7 @@ def dev_edit(bot,event,args=[],cmd='')
   j3=find_data_ex(:find_unit,event.message.text,event,false,1) if j3.nil? || j3.length<=0
   j=j3[0]
   j=j3 if j.length<=1
+  j=j[0] if j.is_a?(Array)
   if j.nil? || j.length<0
     event.respond 'There is no unit by that name.'
     return nil

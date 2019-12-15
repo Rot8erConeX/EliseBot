@@ -1949,7 +1949,7 @@ def disp_unit_art(event,name,bot)
       end
       for i in 0...b.length
         b[i]=b[i].gsub("\n",'').split('\\'[0])
-        unless b[i][7].nil? || b[i][7].length<=0
+        unless b[i][7].nil? || b[i][7].length<=0 || b[i][0].include?('Wily Warriors ')
           m=b[i][7].split(' as ')
           charsx[0].push("*[DL-Print]* #{b[i][0]}") if m[0]==nammes[0]
         end

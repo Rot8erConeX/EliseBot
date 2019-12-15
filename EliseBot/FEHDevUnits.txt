@@ -1,6 +1,6 @@
-Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Fiora(Summer)\Fjorm\Fjorm(Bride)\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Matthew\Ninian\Owain\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
-Alfonse\Arden\Black_Knight\Lyn(Brave)\Marth(Masked)\Nino(Launch)\Robin(F)\Sharena
+Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
+Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Fiora(Summer)\Fjorm\Fjorm(Bride)\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Matthew\Ninian\Owain\Peony\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
+Alfonse\Arden\Black_Knight\Lyn(Brave)\Nino(Launch)\Sharena
 
 Sakura
 5\10\Resistance\Defense\S\9\Alm(Saint)
@@ -203,7 +203,7 @@ Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Brazen Atk/Spd 3 
 
 Fjorm
-5\1\Attack\HP\-\0\
+5\2\Attack\HP\-\0\
 Iron Lance\Steel Lance\Silver Lance\Leiptr
 Rally Attack\Rally Atk/Def
 Holy Vestments\Sacred Cowl\Ice Mirror
@@ -292,6 +292,16 @@ Renewal 1\Renewal 2\Renewal 3
 Spur Atk 1\Drive Atk 1\Drive Atk 2
 Close Def 3
 
+Larum
+5\0\Attack\Resistance\-\0\
+Iron Dagger\Steel Dagger\Dragonslasher\Dragonslasher+\Dragonslasher+ (+) Attack Mode
+Dance
+Chilling Wind\Glacies
+Warding Stance 1\Mirror Stance 1\Mirror Stance 2
+Disarm Trap 1\Disarm Trap 2\Disarm Trap 3
+Spd/Res Gap 1\Spd/Res Gap 2\Spd/Res Gap 3
+Torrent Dance 3
+
 Lethe
 5\0\Resistance\HP\-\0\
 Whelp (Cavalry)\Yearling (Cavalry)\Adult (Cavalry)\Brazen Cat Fang
@@ -303,7 +313,7 @@ Hone Atk 1\Hone Atk 2\Hone Beasts
 Brazen Atk/Res 3
 
 Mae
-5\9\Attack\Defense\-\0\
+5\10\Attack\Defense\-\0\
 Light\Ellight\Blarowl\Blarowl+\__Blarowl+ (+) Attack Mode__\Book of Orchids\Book of Orchids (+) Effect Mode
 Draw Back
 Dragon Gaze\Draconic Aura
@@ -372,6 +382,16 @@ Escape Route 1\Escape Route 2\Escape Route 3
 Fortify Def 1\Fortify Def 2\Fortify Dragons
 Fortress Def 3
 
+Norne
+5\0\Attack\Resistance\-\0\
+Iron Bow\Steel Bow\Guard Bow\Guard Bow+\~~Guard Bow+ (+) Attack Mode~~
+Reposition
+Night Sky\Glimmer
+Brazen Spd/Def 1\Brazen Spd/Def 2\Brazen Spd/Def 3
+Spd/Def Link 1\Spd/Def Link 2\Spd/Def Link 3
+Odd Spd Wave 1\Odd Spd Wave 2\Odd Spd Wave 3
+Atk Feint 3
+
 Olivia(Performing)
 5\0\Defense\Resistance\-\0\
 Iron Dagger\Steel Dagger\Dancer's Fan\Dancer's Fan+\Dancer's Fan+ (+) Attack Mode
@@ -391,6 +411,16 @@ Atk/Def Bond 1\Atk/Def Bond 2\Atk/Def Bond 3
 Wrath 1\Wrath 2\Wrath 3
 Spur Spd 1\Spur Spd Def 1\Spur Spd Def 2
 Hardy Bearing 3
+
+Peony
+5\0\ \ \-\0\
+Light\Ellight\Shine\Flower of Joy
+Dance\Gentle Dream
+Chilling Wind/Glacies
+B Duel Flying 1\B Duel Flying 2\B Duel Flying 3
+Aerobatics 1\Aerobatics 2\Aerobatics 3
+Fortify Res 1\Fortify Res 2\Fortify Res 3\Fortify Res 4
+Def/Res Bond 2
 
 Priscilla
 5\10\Resistance\Defense\-\0\
@@ -481,6 +511,16 @@ Close Counter
 Vantage 1\Vantage 2\Vantage 3
 Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
 Quick Riposte 3
+
+Tethys
+5\0\Defense\Attack\-\0\
+Iron Dagger\Steel Dagger\The Cleaner\The Cleaner+\The Cleaner+ (+) Resistance Mode
+Dance
+Chilling Wind/Glacies
+Spd/Res Bond 1\Spd/Res Bond 2\Spd/Res Bond 3
+Torrent Dance 1\Fireflood Dance 1\Fireflood Dance 2
+Dagger Exp. 1\Dagger Exp. 2\Dagger Exp. 3
+Gale Dance 3
 
 Tiki(Young)(Earth)
 5\0\Resistance\HP\-\5\
