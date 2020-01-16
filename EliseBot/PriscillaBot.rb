@@ -1455,6 +1455,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   k=event.server.id unless event.server.nil?
   groups_load()
   name='BraveHeroes' if ['braveheroes','brave','cyl'].include?(name.downcase)
+  name='DuoUnits' if ['duounit','duounits','duo','paired','pair'].include?(name.downcase)
   name='FallenHeroes' if ['fallenheroes','fallen','dark','evil','alter'].include?(name.downcase)
   name='Winter' if ['winter','holiday'].include?(name.downcase)
   name='WorseThanLiki' if ['worsethanliki','liki'].include?(name.downcase)
@@ -1587,8 +1588,14 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
       elsif args[i][0,1].downcase=='f' && args[i][1,args[i].length-1].to_i.to_s==args[i][1,args[i].length-1]
         flowers=args[i][1,args[i].length-1].to_i if flowers.nil?
         args[i]=nil
+      elsif args[i][0,2].downcase=='df' && args[i][2,args[i].length-2].to_i.to_s==args[i][2,args[i].length-2]
+        flowers=args[i][2,args[i].length-2].to_i if flowers.nil?
+        args[i]=nil
       elsif args[i][0,6].downcase=='flower' && args[i][6,args[i].length-6].to_i.to_s==args[i][6,args[i].length-6]
         flowers=args[i][6,args[i].length-6].to_i if flowers.nil?
+        args[i]=nil
+      elsif args[i][0,12].downcase=='dragonflower' && args[i][12,args[i].length-12].to_i.to_s==args[i][12,args[i].length-12]
+        flowers=args[i][12,args[i].length-12].to_i if flowers.nil?
         args[i]=nil
       elsif args[i][0,3]=='(+)' # stat names preceeded by a plus sign in parentheses automatically fill the refinement variable
         x=stat_modify(args[i][3,args[i].length-3])
@@ -1663,8 +1670,8 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
           rarity=args[i-1].gsub('(','').gsub(')','').to_i
           args[i]=nil
           args[i-1]=nil
-        elsif ['flower','flowers'].include?(args[i].gsub('(','').gsub(')','').downcase) && args[i-1].gsub('(','').gsub(')','').to_i.to_s==args[i-1].gsub('(','').gsub(')','') && flowers.nil?
-          # the word "flower", if preceeded by a number, will automatically fill the flowers variable with that number
+        elsif ['dragonflower','dragonflowers'].include?(args[i].gsub('(','').gsub(')','').downcase) && args[i-1].gsub('(','').gsub(')','').to_i.to_s==args[i-1].gsub('(','').gsub(')','') && flowers.nil?
+          # the word "dragonflower", if preceeded by a number, will automatically fill the flowers variable with that number
           flowers=args[i-1].gsub('(','').gsub(')','').to_i
           args[i]=nil
           args[i-1]=nil
@@ -1719,13 +1726,21 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
     if refinement.nil? && args.length>0
       for i in 0...args.length
         if args[i][0,1]=='+'
-          x=stat_modify(args[i].gsub('(','').gsub(')','')[1,args[i].gsub('(','').gsub(')','').length-1])
-          if ['HP','Attack','Speed','Defense','Resistance'].include?(x) && refinement.nil?
-            refinement=x
+          x=args[i].gsub('(','').gsub(')','')[1,args[i].gsub('(','').gsub(')','').length-1]
+          if x.to_i.to_s==x && x.to_i>0 && x.to_i<11
+            if merges.nil?
+              merges=x.to_i
+              args[i]=nil
+            elsif flowers.nil?
+              flowers=x.to_i
+              args[i]=nil
+            end
+          elsif ['HP','Attack','Speed','Defense','Resistance'].include?(stat_modify(x)) && refinement.nil?
+            refinement=stat_modify(x)
             args[i]=nil
           end
         end
-        if i>0 && !args[i-1].gsub('(','').gsub(')','').nil? && !args[i].gsub('(','').gsub(')','').nil?
+        if i>0 && !args[i].nil? && !args[i-1].gsub('(','').gsub(')','').nil? && !args[i].gsub('(','').gsub(')','').nil?
           x=stat_modify(args[i-1].gsub('(','').gsub(')',''))
           y=stat_modify(args[i].gsub('(','').gsub(')',''))
           if args[i-1].gsub('(','').gsub(')','').downcase=='plus' && ['Attack','Speed','Defense','Resistance'].include?(y) && refinement.nil?
@@ -1769,7 +1784,7 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
       end
     end
     args.compact!
-    flowers=2*@max_rarity_merge[2] if has_any?(args.map{|q| q.downcase},['flower','flowers']) && flowers.nil?
+    flowers=2*@max_rarity_merge[2] if has_any?(args.map{|q| q.downcase},['dragonflower','dragonflowers','df']) && flowers.nil?
   end
   blessing=[] if blessing.nil?
   if args.map{|q| q.downcase}.include?('duel')
@@ -2362,7 +2377,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   dancer="\n<:Assist_Music:454462054959415296> *Dancer*" if !sklz.find_index{|q| q[1]=='Dance'}.nil? && sklz[sklz.find_index{|q| q[1]=='Dance'}][11].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   dancer="\n<:Assist_Music:454462054959415296> *Singer*" if !sklz.find_index{|q| q[1]=='Sing'}.nil? && sklz[sklz.find_index{|q| q[1]=='Sing'}][11].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   if jj[2].nil? || jj[2][0]==' '
-  elsif jj[2][1].nil?
+  elsif jj[2][1].nil? || jj[2][0]=='Idol'
   elsif jj[2][0]=='Duo'
     moji=bot.server(554231720698707979).emoji.values.reject{|q| q.name != 'Hero_Duo'}
     lemote1=moji[0].mention unless moji.length<=0
@@ -2392,7 +2407,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   lm='Legendary' if ['Fire','Water','Wind','Earth'].include?(jj[2][0])
   lm='Mythic' if ['Light','Dark','Astra','Anima'].include?(jj[2][0])
   str="#{wemote} #{w}\n#{memote} *#{m}*"
-  str="#{str}\n#{lemote1}*#{jj[2][0]}* / #{lemote2}*#{jj[2][1].gsub('Duel','Pair-Up')}* #{lm} Hero" unless jj[2].nil? || jj[2][0]==" " || jj[2][1].nil? || jj[2][0]=='Duo'
+  str="#{str}\n#{lemote1}*#{jj[2][0]}* / #{lemote2}*#{jj[2][1].gsub('Duel','Pair-Up')}* #{lm} Hero" unless jj[2].nil? || jj[2][0]==" " || jj[2][1].nil? || jj[2][0]=='Duo' || jj[2][0]=='Idol'
   str="#{str}\n#{lemote1}*#{lm} Hero*" unless jj[2].nil? || jj[2][0]==" " || !jj[2][1].nil?
   str="#{str}\n#{lemote1}*#{lm} Hero* with #{jj[2][1]}" if jj[2][0]=='Duo'
   str2="#{dancer}"
@@ -2450,7 +2465,7 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily b
   lemote2=''
   lemote3=''
   if jj[2].nil? || jj[2][0]==' '
-  elsif jj[2][1].nil?
+  elsif jj[2][1].nil? || jj[2][0]=='Idol'
   elsif jj[2][0]=='Duo'
     moji=bot.server(554231720698707979).emoji.values.reject{|q| q.name != 'Hero_Duo'}
     lemote1=moji[0].mention unless moji.length<=0
@@ -2708,23 +2723,6 @@ def get_unit_prf(name)
   end
   return [prfs[0][1]] if prfs.length>0
   return ['-']
-end
-
-def has_weapon_tag?(tag,wpn,refinement=nil,transformed=false)
-  return false if wpn.nil? || wpn.length<=0
-  return true if wpn[11].include?(tag)
-  return true if wpn[11].include?("(E)#{tag}") && refinement=='Effect'
-  return true if wpn[11].include?("(R)#{tag}") && !refinement.nil? && refinement.length>0
-  return true if wpn[11].include?("(T)#{tag}") && transformed
-  return true if wpn[11].include?("(TE)#{tag}") && transformed && refinement=='Effect'
-  return true if wpn[11].include?("(ET)#{tag}") && transformed && refinement=='Effect'
-  return true if wpn[11].include?("(T)(E)#{tag}") && transformed && refinement=='Effect'
-  return true if wpn[11].include?("(E)(T)#{tag}") && transformed && refinement=='Effect'
-  return true if wpn[11].include?("(TR)#{tag}") && transformed && !refinement.nil? && refinement.length>0
-  return true if wpn[11].include?("(RT)#{tag}") && transformed && !refinement.nil? && refinement.length>0
-  return true if wpn[11].include?("(T)(R)#{tag}") && transformed && !refinement.nil? && refinement.length>0
-  return true if wpn[11].include?("(R)(T)#{tag}") && transformed && !refinement.nil? && refinement.length>0
-  return false
 end
 
 def has_weapon_tag2?(tag,wpn,refinement=nil,transformed=false)
@@ -3347,8 +3345,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     end
     flp2=flp2.join('|')
     bin=[bin,175].max if unitz[2].length>0 && unitz[2][1]=='Duel' && rarity>=5
-    bin=[bin,185].max if unitz[2].length>0 && unitz[2][0]=='Duo' && rarity>=5
-    bin=[bin,185].max if unitz[2].length>0 && unitz[2][3]=='Duo' && rarity>=5
+    bin=[bin,185].max if unitz[2].length>0 && (unitz[2][0]=='Duo' || unitz[2][3]=='Duo') && rarity>=5
     mergetext="\u200B\u00A0#{staticons[0]}\u00A0\u200B\u00A0\u200B\u00A0#{atk.split('>')[0]}>\u00A0\u200B\u00A0\u200B\u00A0#{staticons[1]}\u00A0\u200B\u00A0\u200B\u00A0#{staticons[2]}\u00A0\u200B\u00A0\u200B\u00A0#{staticons[3]}\u00A0\u200B\u00A0\u200B\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u200B\u00A0\u200B\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}```#{flp}\n#{flp2}```"
   else
     flds.push(["**Level 1#{" +#{merges}" if merges>0}**",["#{staticons[0]} HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","#{staticons[1]} Speed: #{u1[3]}","#{staticons[2]} Defense: #{u1[4]}","#{staticons[3]} Resistance: #{u1[5]}","","BST: #{u1[6]}","Score: #{bin/5+merges*2+rarity*5+blessing.length*4+2+sp/100}#{"+`SP`/100" unless sp>0}"]])
@@ -3361,8 +3358,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
       end
     end
     bin=[bin,175].max if unitz[2].length>0 && unitz[2][1]=='Duel' && rarity>=5
-    bin=[bin,185].max if unitz[2].length>0 && unitz[2][0]=='Duo' && rarity>=5
-    bin=[bin,185].max if unitz[2].length>0 && unitz[2][3]=='Duo' && rarity>=5
+    bin=[bin,185].max if unitz[2].length>0 && (unitz[2][0]=='Duo' || unitz[2][3]=='Duo') && rarity>=5
     if dispgps || sizex=='giant'
       flds.push(["**Growth Rates**",["#{staticons[0]} HP: #{micronumber(u40[6])} / #{u40[6]*5+20}%","#{atk}: #{micronumber(u40[7])} / #{u40[7]*5+20}%","#{staticons[1]} Speed: #{micronumber(u40[8])} / #{u40[8]*5+20}%","#{staticons[2]} Defense: #{micronumber(u40[9])} / #{u40[9]*5+20}%","#{staticons[3]} Resistance: #{micronumber(u40[10])} / #{u40[10]*5+20}%","","\u0262\u1D18\u1D1B #{micronumber(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])} / GRT: #{(u40[6]+u40[7]+u40[8]+u40[9]+u40[10])*5+100}%"]])
     end
@@ -4159,6 +4155,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
             skill2[12][i2]=untz.join(', ')
           end
           str2="**It#{' also' if x} evolves from #{skill2[1]}, #{prev[i][1]} the following heroes:**"
+          str3="**It#{' also' if x} evolves from #{skill2[1]}, #{prev[i][1]} the following heroes:**"
           unitz=@units.map{|q| q}
           for i2 in 0...@max_rarity_merge[0]
             if skill2[12][i2]=='-' || skill2[12][i2]==''
@@ -4202,8 +4199,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
           str2="#{str2}\n*<:Orb_Colorless:455053002152083457> Colorless Limited:* #{clrz[8].join(', ')}" unless clrz[8].length<=0
           str2="#{str2}\n*<:Orb_Gold:455053002911514634> Limited:* #{clrz[9].join(', ')}" unless clrz[9].length<=0
           str2="#{str2}\n*<:Orb_Pink:549339019318788175> Free units:* #{clrz[10].join(', ')}" unless clrz[10].length<=0
-          if str2=="**It#{' also' if x} evolves from #{skill2[0]}, #{prev[i][1]} the following heroes:**"
-            str="#{str}\n\n**It#{' also' if x} evolves from #{skill2[0]}**"
+          if str2==str3
+            str="#{str}\n\n#{str3.split(', ')[0]}**"
           else
             str="#{str}\n\n#{str2}"
           end
@@ -4211,7 +4208,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         str2='**Evolution cost:** 300 SP (450 if inherited), 200<:Arena_Medal:453618312446738472> 20<:Refining_Stone:453618312165720086>'
         str2='**Evolution cost:** 300 SP (450 if inherited), 100<:Arena_Medal:453618312446738472> 10<:Refining_Stone:453618312165720086>' if skill[1]=='Candlelight+'
         str2='**Evolution cost:** 400 SP, 375<:Arena_Medal:453618312446738472> 150<:Divine_Dew:453618312434417691>' if skill[8]!='-'
-        str2='**Evolution cost:** 1 story-gift Gunnthra<:Green_Tome:467122927666593822><:Icon_Move_Cavalry:443331186530451466><:Legendary_Effect_Wind:443331186467536896><:Ally_Boost_Resistance:443331185783865355>' if skill[1]=='Chill Breidablik'
+        str2='**Evolution cost:** 1 story-gift Gunnthra<:Wind_Tome:499760605713137664><:Icon_Move_Cavalry:443331186530451466><:Legendary_Effect_Wind:443331186467536896><:Ally_Boost_Resistance:443331185783865355>' if skill[1]=='Chill Breidablik'
+        str2='**Evolution cost:** 1 Outrealm Askr' if skill[1]=='Dual Breidablik'
         str="#{str}\n#{"\n" if prev.length>1}#{str2}"
       end
     end
@@ -4743,7 +4741,6 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=fals
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
   args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
-  puts name
   if name.nil? || name.length.zero?
     char=find_data_ex(:find_unit,event.message.text,event)
     char=char[0] if char[0].is_a?(Array)
@@ -4944,7 +4941,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   end
   n=find_data_ex(:find_unit,event.message.text,event)
   if n=='Kiran'
-    sklz2=[['**Breidablik**','~~Chill Breidablik~~'],['~~none~~'],['~~none~~'],['~~none~~'],['~~none~~'],['~~none~~']]
+    sklz2=[s,['~~none~~'],['~~none~~'],['~~none~~'],['~~none~~'],['~~none~~']]
   else
     sklz2=unit_skills(name,event)
   end
@@ -4967,7 +4964,19 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   txt="#{@rarity_stars[rarity.to_i-1]*rarity.to_i}"
   ftrtoggles=[false,false,false,false]
   sklz2[0]=sklz2[0].reject {|a| ['Falchion','**Falchion**','Missiletainn','**Missiletainn**','Whelp (All)','**Whelp (All)**','Yearling (All)','**Yearling (All)**','Adult (All)','**Adult (All)**'].include?(a)}
-  if event.message.text.downcase.include?("mathoo's")
+  if j[0]=='Kiran'
+    data_load()
+    s=@skills.reject{|q| q[8]!='Kiran'}.map{|q| q[1]}
+    for i in 0...s.length
+      if i==0
+        s[i]="**#{s[i]}**"
+      else
+        s[i]="~~#{s[i]}~~"
+      end
+    end
+    ftrtoggles[0]=true
+    sklz2[0]=s.map{|q| "#{q}<:Prf_Sparkle:490307608973148180>"}
+  elsif event.message.text.downcase.include?("mathoo's")
     devunits_load()
     dv=find_in_dev_units(name)
     if dv>=0
@@ -5490,6 +5499,9 @@ def get_group(name,event)
   elsif ['legendary','legendaries','legends','legend','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(name.downcase)
     l=untz.reject{|q| !['Fire','Water','Wind','Earth','Astra','Anima','Light','Dark'].include?(q[2][0]) || !has_any?(g, q[13][0])}
     return ['Legendaries',l.map{|q| q[0]}]
+  elsif ['duounit','duounits','duo','paired','pair'].include?(name.downcase)
+    l=untz.reject{|q| (!['Duo'].include?(q[2][0]) && !['Duo'].include?(q[2][3])) || !has_any?(g, q[13][0])}
+    return ['DuoUnits',l.map{|q| q[0]}]
   elsif ['retro-prfs'].include?(name.downcase)
     r=sklz.reject{|q| !(q[10]=='-' && q[6]=='Weapon' && q[8]!='-')}
     b=[]
@@ -7043,8 +7055,7 @@ def sort_units(bot,event,args=[])
       k[i][5][7]=k[i][5][3]-k[i][5][4]
       k[i][5][8]=k[i][5][5]/5
       k[i][5][8]=35 if !k[i][2].nil? && k[i][2].length>1 && k[i][2][1]=='Duel'
-      k[i][5][8]=37 if !k[i][2].nil? && k[i][2].length>1 && k[i][2][0]=='Duo'
-      k[i][5][8]=37 if !k[i][2].nil? && k[i][2].length>1 && k[i][2][3]=='Duo'
+      k[i][5][8]=37 if !k[i][2].nil? && k[i][2].length>1 && (k[i][2][0]=='Duo' || k[i][2][3]=='Duo')
     end
   end
   k=k.reject{|q| !q[13][0].nil?} if t>0 || b>0
@@ -8090,6 +8101,13 @@ def disp_summon_pool(event,args)
 end
 
 def filler(list1,list2,n,m=-1,key='',type=0,mode='||',mode2='')
+  if type==100
+    key=[key] unless key.is_a?(Array)
+    key2=key.map{|q| "*#{q}"}
+    list1=list1.reject{|q| !key.include?(q[n][m]) && !has_any?(q[n],key2)}
+    list2=list2.reject{|q| !key.include?(q[n][m]) && !has_any?(q[n],key2)}
+    n=-1
+  end
   return "#{longFormattedNumber(list1.length)}#{" (#{longFormattedNumber(list2.length)})" unless list1.length==list2.length}" if n==-1
   if n.is_a?(Array)
     y=''
@@ -8253,8 +8271,8 @@ def parse_function_alts(callback,event,args,bot)
       for i in 0...x[1].length
         j2=find_unit(x[1][i],event)
         xx.push(j2[12].gsub('*','').split(', ')[0])
-        xx.push(j2[2][2].gsub('*','')) if j2[2][0]=='Duo'
-        xx.push(j2[2][5].gsub('*','')) if j2[2][3]=='Duo'
+        xx.push(j2[2][2].gsub('*','')) if j2[2][0]=='Duo' || j2[2][0]=='Idol'
+        xx.push(j2[2][5].gsub('*','')) if j2[2][3]=='Duo' || j2[2][3]=='Idol'
       end
       method(callback).call(event,xx.uniq,bot) if xx.length>0
       return 0
@@ -8273,13 +8291,13 @@ def parse_function_alts(callback,event,args,bot)
       if name[0][0].is_a?(Array)
         for i in 0...name[0].length
           xx.push(name[0][i][12].gsub('*','').split(', ')[0])
-          xx.push(name[0][i][2][2].gsub('*','')) if name[0][i][2][0]=='Duo'
-          xx.push(name[0][i][2][5].gsub('*','')) if name[0][i][2][3]=='Duo'
+          xx.push(name[0][i][2][2].gsub('*','')) if name[0][i][2][0]=='Duo' || name[0][i][2][0]=='Idol'
+          xx.push(name[0][i][2][5].gsub('*','')) if name[0][i][2][3]=='Duo' || name[0][i][2][3]=='Idol'
         end
       else
         xx.push(name[0][12].gsub('*','').split(', ')[0])
-        xx.push(name[0][2][2].gsub('*','')) if name[0][2][0]=='Duo'
-        xx.push(name[0][2][5].gsub('*','')) if name[0][2][3]=='Duo'
+        xx.push(name[0][2][2].gsub('*','')) if name[0][2][0]=='Duo' || name[0][2][0]=='Idol'
+        xx.push(name[0][2][5].gsub('*','')) if name[0][2][3]=='Duo' || name[0][2][3]=='Idol'
       end
       method(callback).call(event,xx.uniq,bot) if xx.length>0
     elsif !detect_multi_unit_alias(event,name.downcase,event.message.text.downcase).nil?
@@ -8291,8 +8309,8 @@ def parse_function_alts(callback,event,args,bot)
       for i in 0...x[1].length
         j2=find_unit(x[1][i],event)
         xx.push(j2[12].gsub('*','').split(', ')[0])
-        xx.push(j2[2][2].gsub('*','')) if j2[2][0]=='Duo'
-        xx.push(j2[2][5].gsub('*','')) if j2[2][3]=='Duo'
+        xx.push(j2[2][2].gsub('*','')) if j2[2][0]=='Duo' || j2[2][0]=='Idol'
+        xx.push(j2[2][5].gsub('*','')) if j2[2][3]=='Duo' || j2[2][3]=='Idol'
       end
       method(callback).call(event,xx.uniq,bot) if xx.length>0
     elsif !detect_multi_unit_alias(event,name.downcase,name.downcase).nil?
@@ -8304,8 +8322,8 @@ def parse_function_alts(callback,event,args,bot)
       for i in 0...x[1].length
         j2=find_unit(x[1][i],event)
         xx.push(j2[12].gsub('*','').split(', ')[0])
-        xx.push(j2[2][2].gsub('*','')) if j2[2][0]=='Duo'
-        xx.push(j2[2][5].gsub('*','')) if j2[2][3]=='Duo'
+        xx.push(j2[2][2].gsub('*','')) if j2[2][0]=='Duo' || j2[2][0]=='Idol'
+        xx.push(j2[2][5].gsub('*','')) if j2[2][3]=='Duo' || j2[2][3]=='Idol'
       end
       method(callback).call(event,xx.uniq,bot) if xx.length>0
     else
@@ -8326,15 +8344,18 @@ def find_alts(event,name,bot)
   data_load()
   nicknames_load()
   g=get_markers(event)
-  k=@units.reject{|q| !has_any?(g, q[13][0]) || (q[12].gsub('*','').split(', ')[0]!=name && !(q[2][0]=='Duo' && q[2][2].gsub('*','')==name) && !(q[2][3]=='Duo' && q[2][5].gsub('*','')==name))}.uniq
+  k=@units.map{|q| q}
+  k=@units.reject{|q| !has_any?(g, q[13][0]) || (q[12].gsub('*','').split(', ')[0]!=name && !(q[2][0]=='Duo' && q[2][2].gsub('*','')==name) && !(q[2][3]=='Duo' && q[2][5].gsub('*','')==name) && !(q[2][0]=='Idol' && q[2][2].gsub('*','')==name) && !(q[2][3]=='Idol' && q[2][5].gsub('*','')==name))}.uniq
   untz2=[]
   color=[]
   for i in 0...k.length
     color.push(unit_color(event,find_unit(k[i][0],event),nil,1))
     m=[]
     fff=k[i][12].split(', ')[0]
-    m.push('default') if k[i][0]==fff || fff[fff.length-1,1]=='*'
-    m.push('default') if fff[0,1]=='*' && k[i][12].split(', ').length>1
+    unless (k[i][2][0]=='Idol' || k[i][2][3]=='Idol') && k[i][0]!=name
+      m.push('default') if k[i][0]==fff || fff[fff.length-1,1]=='*'
+      m.push('default') if fff[0,1]=='*' && k[i][12].split(', ').length>1
+    end
     m.push('sensible') if fff[0,1]=='*' && k[i][12].split(', ').length<2
     m.push('seasonal') if k[i][9][0].include?('s') && !(!k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1 && ['Fire','Water','Wind','Earth','Astra','Anima','Light','Dark'].include?(k[i][2][0]))
     m.push('community-voted') if k[i][0].include?('(Brave)')
@@ -8351,6 +8372,14 @@ def find_alts(event,name,bot)
         m.push("Duo (to #{k[i][12].gsub('*','').split(', ')[0]})")
       else
         m.push("Duo (with #{k[i][2][5].gsub('*','')})")
+      end
+    elsif k[i][2][0]=='Idol'
+      if k[i][2][2].gsub('*','')==name
+        m.push("Persona (for #{k[i][12].gsub('*','').split(', ')[0]})")
+      end
+    elsif k[i][2][3]=='Idol'
+      if k[i][2][5].gsub('*','')==name
+        m.push("Persona (for #{k[i][12].gsub('*','').split(', ')[0]})")
       end
     end
     m.push('out-of-left-field') if m.length<=0
@@ -11001,6 +11030,7 @@ bot.command(:invite) do |event, user|
   usr=event.user
   txt="**To invite me to your server: <https://goo.gl/HEuQK2>**\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nTo follow my creator's development Twitter and learn of updates: <https://twitter.com/EliseBotDev>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/MarketingElise.png"
   user_to_name='you'
+  user=nil if event.message.mentions.length<=0 && user.to_i.to_s != user
   unless user.nil?
     if /<@!?(?:\d+)>/ =~ user
       usr=event.message.mentions[0]
@@ -11955,6 +11985,10 @@ bot.message do |event|
     if s.gsub(' ','').downcase=='laevatein'
       disp_stats(bot,'Laevatein',nil,event,'smol',true,true)
       disp_skill(bot,'Laevatein',event,true)
+    elsif s.gsub(' ','').downcase=='sirius'
+      disp_stats(bot,'Sirius',nil,event,'smol',true,true)
+      disp_skill(bot,'Sirius',event,true)
+      k=3
     elsif s.gsub(' ','').downcase=='naga'
       disp_stats(bot,'Naga',nil,event,'smol',true,true)
       disp_skill(bot,'Naga',event,true)
@@ -12063,6 +12097,9 @@ bot.message do |event|
         disp_stats(bot,x[1],w,event,'smol',true,true)
       end
     end
+  elsif !event.server.nil? && (above_memes().include?("s#{event.server.id}") || above_memes().include?(event.server.id))
+  elsif !event.channel.nil? && above_memes().include?("c#{event.channel.id}")
+  elsif above_memes().include?("u#{event.user.id}") || above_memes().include?(event.user.id)
   elsif event.message.text.downcase.include?('kys') && !event.user.bot_account?
     s=event.message.text
     s=remove_format(s,'```')              # remove large code blocks
@@ -12071,10 +12108,7 @@ bot.message do |event|
     s=remove_format(s,'||')               # remove spoiler tags
     s=s.gsub("\n",' ').gsub("  ",'')
     if s.split(' ').include?('kys') || s.split(' ').include?('KYS')
-      k=0
-      k=event.server.id unless event.server.nil?
-      if k==271642342153388034
-      elsif rand(1000)<13
+      if rand(1000)<13
         puts 'responded to KYS'
         event.respond "You're going down, scumbag!"
       else
@@ -12089,21 +12123,8 @@ bot.message do |event|
     s=remove_format(s,'||')               # remove spoiler tags
     s=s.gsub("\n",' ').gsub("  ",'')
     if s.split(' ').include?('0x4')
-      canpost=true
-      k=0
-      k=event.server.id unless event.server.nil?
-      if k==271642342153388034
-        post=Time.now
-        if (post - @zero_by_four[0]).to_f > 3600*3
-          @zero_by_four[0]=post
-        else
-          canpost=false
-        end
-      elsif event.channel.id==330850148261298176
-      elsif canpost
-        puts s
-        event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{['','Pair it with a Breath skill to get 0x8 even faster.'].sample}",'Be sure to include Astra to increase damage by 150%.','Be sure to use a dancer for 0x8.',"Be sure to use Sol, so you can heal for half of that.  #{['','Peck, Ephraim(Fire) heals for 80% with his Solar Brace.','Pair it with a Breath skill to get even more healing!'].sample}","#{['Be sure to use Galeforce for 0x8.','Be sure to use a dancer for 0x8.'].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}"
-      end
+      puts s
+      event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{['','Pair it with a Breath skill to get 0x8 even faster.'].sample}",'Be sure to include Astra to increase damage by 150%.','Be sure to use a dancer for 0x8.',"Be sure to use Sol, so you can heal for half of that.  #{['','Peck, Ephraim(Fire) heals for 80% with his Solar Brace.','Pair it with a Breath skill to get even more healing!'].sample}","#{['Be sure to use Galeforce for 0x8.','Be sure to use a dancer for 0x8.'].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}"
     end
   end
 end
