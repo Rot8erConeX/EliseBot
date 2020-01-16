@@ -70,6 +70,20 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Ephraim(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Ephraim(Fire)','Ephraim(Brave)'],[str]]
+  elsif /(cel(l|)ica|ant(eze|hesis|hiese))/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
+    str='celica'
+    str='cellica' if str2.include?('cellica')
+    str='anteze' if str2.include?('anteze')
+    str='anthesis' if str2.include?('anthesis')
+    str='anthiese' if str2.include?('anthiese')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('legendary') || str2.include?('saint') || str2.include?('queen')
+      return [str,['Celica(Queen)'],["legendary#{str}","#{str}legendary","saint#{str}","#{str}saint","queen#{str}","#{str}queen","queenly#{str}","#{str}queenly"]]
+    elsif str2.include?('brave') || str2.include?('cyl') || str2.include?('bh')
+      return [str,['Celica(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
+    end
+    return [str,['Celica(Brave)','Celica(Queen)'],[str]]
   elsif /alm/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
     str='alm'
     str='arum' if str2.include?('arum')
@@ -226,7 +240,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str='nino'
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
-    if str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.gsub('flower','').include?('gg') || str2.include?('santa')
+    if str2.include?('winter') || str2.include?('christmas') || str2.include?('holiday') || str2.include?('gg') || str2.include?('santa')
       return [str,['Nino(Winter)'],["winter#{str}","#{str}winter","christmas#{str}","#{str}christmas","holiday#{str}","#{str}holiday","gg#{str}","#{str}gg","santa#{str}","#{str}santa"]]
     elsif str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
       return [str,['Nino(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch"]]
@@ -248,6 +262,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Chrom(Launch)'],["launch#{str}","#{str}launch","vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","prince#{str}","#{str}prince"]]
     elsif str2.include?('branded') || str2.include?('brand') || str2.include?('exalted') || str2.include?('exalt') || str2.include?('king') || str2.include?('sealed') || str2.include?('horse') || str2.include?('knight')
       return [str,['Chrom(Branded)'],["branded#{str}","#{str}branded","brand#{str}","#{str}brand","exalted#{str}","#{str}exalted","exalt#{str}","#{str}exalt","king#{str}","#{str}king","sealed#{str}","#{str}sealed","horse#{str}","#{str}horse","knight#{str}","#{str}knight"]]
+    elsif str2.include?('popstar') || str2.include?('star') || str2.include?('idol')
+      return [str,['Itsuki'],["star#{str}","#{str}star","idol#{str}","#{str}idol","popstar#{str}","#{str}popstar"]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Chrom(Launch)','Chrom(Branded)'],[str]]
@@ -646,6 +662,7 @@ def list_unit_aliases(event,args,bot,mode=0)
   end
   f=[]
   n=@aliases.reject{|q| q[0]!='Unit' || q[2].is_a?(Array)}.map{|q| [q[1],q[2],q[3]]}
+  n=n.reject{|q| q[2].nil?} if mode==1
   m=@aliases.reject{|q| q[0]!='Unit' || !q[2].is_a?(Array)}.map{|q| [q[1],q[2]]}
   h=''
   skipmulti=false
@@ -810,7 +827,7 @@ def list_unit_aliases(event,args,bot,mode=0)
               uuu=@units[uu2][0] unless uu2.nil?
             end
           end
-          msg=extend_message(msg,"#{n[i][0]} = #{uuu}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event) unless mode==1 && !event.server.nil?
+          msg=extend_message(msg,"#{n[i][0]} = #{uuu}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event) unless n[i][0]==uuu
         end
         unless mode==1
           msg=extend_message(msg,'__**Multi-unit aliases**__',event,2)
@@ -3513,7 +3530,7 @@ def study_of_healing(event,name,bot,weapon=nil)
   atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
   atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
   zzzl=sklz[ww2]
-  atk='Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
+  atk='Freeze' if has_weapon_tag2?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
   unless n.nil?
     n=n[0] if atk=='Strength'
@@ -3934,7 +3951,7 @@ def study_of_procs(event,name,bot,weapon=nil)
   atk='Magic' if ['Tome','Dragon','Healer'].include?(u40x[1][1])
   atk='Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
   zzzl=sklz[ww2]
-  atk='Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
+  atk='Freeze' if has_weapon_tag2?('Frostbite',zzzl,refinement,transformed)
   n=nature_name(boon,bane)
   unless n.nil?
     n=n[0] if atk=='Strength'
@@ -4021,11 +4038,11 @@ def study_of_procs(event,name,bot,weapon=nil)
     wdamage2+=10
     stat_skills.push(wrathsub)
   end
-  wdamage+=10 if has_weapon_tag?('WoDao',sklz[ww2],refinement,transformed)
-  wdamage2+=10 if has_weapon_tag?('WoDao',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  wdamage+=10 if has_weapon_tag2?('WoDao',sklz[ww2],refinement,transformed)
+  wdamage2+=10 if has_weapon_tag2?('WoDao',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   cdwn=0
-  cdwn-=1 if has_weapon_tag?('Killer',sklz[ww2],refinement,transformed)
-  cdwn+=1 if has_weapon_tag?('SlowSpecial',sklz[ww2],refinement,transformed) || has_weapon_tag?('SpecialSlow',sklz[ww2],refinement,transformed)
+  cdwn-=1 if has_weapon_tag2?('Killer',sklz[ww2],refinement,transformed)
+  cdwn+=1 if has_weapon_tag2?('SlowSpecial',sklz[ww2],refinement,transformed) || has_weapon_tag2?('SpecialSlow',sklz[ww2],refinement,transformed)
   cdwn2=0
   cdwn2=cdwn unless wl.include?('~~')
   cdwns=cdwn
@@ -4035,8 +4052,8 @@ def study_of_procs(event,name,bot,weapon=nil)
   procs=@skills.reject{|q| !has_any?(g, q[15]) || q[6]!='Special'}
   czz=0
   czz2=0
-  czz+=10 if has_weapon_tag?('WoDao_Star',sklz[ww2],refinement,transformed)
-  czz2+=10 if has_weapon_tag?('WoDao_Star',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  czz+=10 if has_weapon_tag2?('WoDao_Star',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag2?('WoDao_Star',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Night Sky',1)[4],cdwns)
   d="`dmg /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
   d2="`dmg /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
@@ -4059,8 +4076,8 @@ def study_of_procs(event,name,bot,weapon=nil)
   staves[0].push("Glimmer - #{d}, cooldown of #{c}")
   czz=0
   czz2=0
-  czz+=10 if has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed)
-  czz2+=10 if has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  czz+=10 if has_weapon_tag2?('WoDao_Moon',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag2?('WoDao_Moon',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'New Moon',1)[4],cdwns)
   d="`3* eDR /10#{" +#{wdamage+czz}" if wdamage+czz2>0}`"
   d2="`3* eDR /10#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
@@ -4090,8 +4107,8 @@ def study_of_procs(event,name,bot,weapon=nil)
   wd="~~#{wdamage}~~ #{wdamage2}, " unless wdamage==wdamage2
   czz=0
   czz2=0
-  czz+=10 if has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed)
-  czz2+=10 if has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  czz+=10 if has_weapon_tag2?('WoDao_Sun',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag2?('WoDao_Sun',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Daylight',1)[4],cdwns)
   d="`3* #{"(" if wdamage+czz>0}dmg#{" +#{wdamage+czz})" if wdamage+czz>0} /10`"
   d2="`3* #{"(" if wdamage2+czz2>0}dmg#{" +#{wdamage2+czz2})" if wdamage2+czz2>0} /10`"
@@ -4117,8 +4134,8 @@ def study_of_procs(event,name,bot,weapon=nil)
   staves[3].push("**Sirius - #{d}, heals for #{h}, cooldown of #{c}**") if get_match_in_list(procs, 'Sirius',1)[8].split(', ').include?(u40[0])
   czz=0
   czz2=0
-  czz+=10 if has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Eclipse',sklz[ww2],refinement,transformed)
-  czz2+=10 if (has_weapon_tag?('WoDao_Sun',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Moon',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Eclipse',sklz[ww2],refinement,transformed)) && !wl.include?('~~')
+  czz+=10 if has_weapon_tag2?('WoDao_Sun',sklz[ww2],refinement,transformed) || has_weapon_tag2?('WoDao_Moon',sklz[ww2],refinement,transformed) || has_weapon_tag2?('WoDao_Eclipse',sklz[ww2],refinement,transformed)
+  czz2+=10 if (has_weapon_tag2?('WoDao_Sun',sklz[ww2],refinement,transformed) || has_weapon_tag2?('WoDao_Moon',sklz[ww2],refinement,transformed) || has_weapon_tag2?('WoDao_Eclipse',sklz[ww2],refinement,transformed)) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Aether',1)[4],cdwns)
   d="`eDR /2#{" +#{wdamage+czz}" if wdamage+czz>0}`"
   d2="`eDR /2#{" +#{wdamage2+czz2}" if wdamage2+czz2>0}`"
@@ -4131,8 +4148,8 @@ def study_of_procs(event,name,bot,weapon=nil)
   staves[3].push("**Radiant Aether - #{d}, heals for #{h}, cooldown of #{c}**") if get_match_in_list(procs, 'Radiant Aether',1)[8].split(', ').include?(u40[0])
   czz=0
   czz2=0
-  czz+=10 if has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed)
-  czz2+=10 if has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  czz+=10 if has_weapon_tag2?('WoDao_Fire',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag2?('WoDao_Fire',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Glowing Ember',1)[4],cdwns)
   d="#{deff/2+wdamage+czz}#{" (#{bldeff/2+wdamage+czz})" unless deff/2==bldeff/2}"
   cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
@@ -4148,6 +4165,14 @@ def study_of_procs(event,name,bot,weapon=nil)
   cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[4].push("Bonfire - #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Open the Future',1)[4],cdwns)
+  d="#{deff/2+wdamage+czz}#{" (#{bldeff/2+wdamage+czz})" unless deff/2==bldeff/2}"
+  cd="#{crdeff/2+wdamage2+czz2}#{" (#{crbldeff/2+wdamage2+czz2})" unless crdeff/2==crbldeff/2}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  h="#{deff/8+wdamage/4+czz/4}#{" (#{bldeff/8+wdamage/4+czz/4})" unless deff/8==bldeff/8}"
+  ch="#{crdeff/8+wdamage2/4+czz2/4}#{" (#{crbldeff/8+wdamage2/4+czz2/4})" unless crdeff/8==crbldeff/8}"
+  h="~~#{h}~~ #{ch}" unless h==ch
+  staves[4].push("**Open the Future** - #{d}, heals for `dmg/4+#{h}`, cooldown of #{c}") if get_match_in_list(procs, 'Open the Future',1)[8].split(', ').include?(u40[0])
   c=add_number_to_string(get_match_in_list(procs, 'Blue Flame',1)[4],cdwns)
   d="#{wdamage+czz}-#{10+wdamage+czz}"
   cd="#{wdamage2+czz2}-#{10+wdamage2+czz2}"
@@ -4159,8 +4184,8 @@ def study_of_procs(event,name,bot,weapon=nil)
   staves[4].push("Blue Flame - #{dx} (#{d} when adjacent to an ally), cooldown of #{c}")
   czz=0
   czz2=0
-  czz+=10 if has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed)
-  czz2+=10 if has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  czz+=10 if has_weapon_tag2?('WoDao_Ice',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag2?('WoDao_Ice',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Chilling Wind',1)[4],cdwns)
   d="#{ress/2+wdamage+czz}#{" (#{blress/2+wdamage+czz})" unless ress/2==blress/2}"
   cd="#{crress/2+wdamage2+czz2}#{" (#{crblress/2+wdamage2+czz2})" unless crress/2==crblress/2}"
@@ -4176,10 +4201,15 @@ def study_of_procs(event,name,bot,weapon=nil)
   cd="#{crress/2+wdamage2+czz2}#{" (#{crblress/2+wdamage2+czz2})" unless crress/2==crblress/2}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[5].push("Iceberg - #{d}, cooldown of #{c}")
+  c=add_number_to_string(get_match_in_list(procs, 'Twin Blades',1)[4],cdwns)
+  d="#{ress*2/5+wdamage+czz}#{" (#{blress*2/5+wdamage+czz})" unless ress*2/5==blress*2/5}"
+  cd="#{crress*2/5+wdamage2+czz2}#{" (#{crblress*2/5+wdamage2+czz2})" unless crress*2/5==crblress*2/5}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[5].push("**Twin Blades - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Twin Blades',1)[8].split(', ').include?(u40[0])
   czz=0
   czz2=0
-  czz+=10 if has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Freezeflame',sklz[ww2],refinement,transformed)
-  czz2+=10 if (has_weapon_tag?('WoDao_Fire',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Ice',sklz[ww2],refinement,transformed) || has_weapon_tag?('WoDao_Freezeflame',sklz[ww2],refinement,transformed)) && !wl.include?('~~')
+  czz+=10 if has_weapon_tag2?('WoDao_Fire',sklz[ww2],refinement,transformed) || has_weapon_tag2?('WoDao_Ice',sklz[ww2],refinement,transformed) || has_weapon_tag2?('WoDao_Freezeflame',sklz[ww2],refinement,transformed)
+  czz2+=10 if (has_weapon_tag2?('WoDao_Fire',sklz[ww2],refinement,transformed) || has_weapon_tag2?('WoDao_Ice',sklz[ww2],refinement,transformed) || has_weapon_tag2?('WoDao_Freezeflame',sklz[ww2],refinement,transformed)) && !wl.include?('~~')
   if procs.map{|q| q[1]}.include?('Freezeflame')
     c=add_number_to_string(get_match_in_list(procs, 'Freezeflame',1)[4],cdwns)
     d="#{deff/2+ress/2+wdamage+czz}#{" (#{bldeff/2+blress/2+wdamage+czz})" unless ress/2==blress/2}"
@@ -4189,8 +4219,8 @@ def study_of_procs(event,name,bot,weapon=nil)
   end
   czz=0
   czz2=0
-  czz+=10 if has_weapon_tag?('WoDao_Dragon',sklz[ww2],refinement,transformed)
-  czz2+=10 if has_weapon_tag?('WoDao_Dragon',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  czz+=10 if has_weapon_tag2?('WoDao_Dragon',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag2?('WoDao_Dragon',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Dragon Gaze',1)[4],cdwns)
   d="#{atkk*3/10+wdamage+czz}#{" (#{blatkk*3/10+wdamage+czz})" unless atkk*3/10==blatkk*3/10}"
   cd="#{cratkk*3/10+wdamage2+czz2}#{" (#{crblatkk*3/10+wdamage2+czz2})" unless cratkk*3/10==crblatkk*3/10}"
@@ -4213,8 +4243,8 @@ def study_of_procs(event,name,bot,weapon=nil)
   staves[7].push("**Fire Emblem - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Fire Emblem',1)[8].split(', ').include?(u40[0])
   czz=0
   czz2=0
-  czz+=10 if has_weapon_tag?('WoDao_Darkness',sklz[ww2],refinement,transformed)
-  czz2+=10 if has_weapon_tag?('WoDao_Darkness',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  czz+=10 if has_weapon_tag2?('WoDao_Darkness',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag2?('WoDao_Darkness',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Retribution',1)[4],cdwns)
   d="#{wdamage+czz}-#{3*hppp/10+wdamage+czz}#{" (#{wdamage+czz}-#{3*blhppp/10+wdamage+czz}) based on HP lost" if 3*hppp/10!=3*blhppp/10}"
   cd="#{wdamage2+czz2}-#{3*crhppp/10+wdamage2+czz2}#{" (#{wdamage2+czz2}-#{3*crblhppp/10+wdamage2+czz2}) based on HP lost" if 3*crhppp/10!=3*crblhppp/10}"
@@ -4232,8 +4262,8 @@ def study_of_procs(event,name,bot,weapon=nil)
   staves[8].push("Reprisal - #{d}, cooldown of #{c}")
   czz=0
   czz2=0
-  czz+=10 if has_weapon_tag?('WoDao_Rend',sklz[ww2],refinement,transformed)
-  czz2+=10 if has_weapon_tag?('WoDao_Rend',sklz[ww2],refinement,transformed) && !wl.include?('~~')
+  czz+=10 if has_weapon_tag2?('WoDao_Rend',sklz[ww2],refinement,transformed)
+  czz2+=10 if has_weapon_tag2?('WoDao_Rend',sklz[ww2],refinement,transformed) && !wl.include?('~~')
   c=add_number_to_string(get_match_in_list(procs, 'Ruptured Sky',1)[4],cdwns)
   d="`eAtk \* X /5#{" +#{wdamage+czz}" if wdamage+czz>0}`"
   cd="`eAtk \* X /5#{" +#{wdamage+czz}" if wdamage+czz>0}`"
@@ -4767,7 +4797,7 @@ def study_of_phases(event,name,bot,weapon=nil)
   atk='<:MagicS:514712247289774111> Magic' if ['Tome','Healer','Dragon'].include?(u40x[1][1])
   atk='<:StrengthS:514712248372166666> Strength' if ['Blade','Bow','Dagger','Beast'].include?(u40x[1][1])
   zzzl=sklz[ww2]
-  atk='<:FreezeS:514712247474585610> Freeze' if has_weapon_tag?('Frostbite',zzzl,refinement,transformed)
+  atk='<:FreezeS:514712247474585610> Freeze' if has_weapon_tag2?('Frostbite',zzzl,refinement,transformed)
   staticons=['<:HP_S:514712247503945739>','<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>','<:Death_Blow:514719899868856340>','<:Darting_Blow:514719899910668298>','<:Armored_Blow:514719899927576578>','<:Warding_Blow:514719900607053824>','<:Fierce_Stance:514719899873050624>','<:Darting_Stance:514719899919056926>','<:Steady_Stance:514719899856273408>','<:Warding_Stance:514719899562672138>']
   if u40x[11][0]=='DL'
     atk='<:Strength:573344931205349376> Attack'
@@ -4841,7 +4871,7 @@ def study_of_phases(event,name,bot,weapon=nil)
   ppu40xw=apply_combat_buffs(event,stat_skills_3,ppu40xw,'Player')
   epu40xw=crblu40.map{|q| q}
   epu40xw=apply_combat_buffs(event,stat_skills_3,epu40xw,'Enemy')
-  if has_weapon_tag?('Buffstuffer',zzzl,refinement,transformed) || stat_skills_3.include?('Bonus Doubler 3')
+  if has_weapon_tag2?('Buffstuffer',zzzl,refinement,transformed) || stat_skills_3.include?('Bonus Doubler 3')
     m=apply_stat_skills(event,stat_skills_2,[u40[0],0,0,0,0,0])
     for i in 2...6
       ppu40[i]+=m[i] if m[i]>0
@@ -4857,6 +4887,22 @@ def study_of_phases(event,name,bot,weapon=nil)
         epu40[i]+=m[i]*qq/4 if m[i]>0
       end
     end
+  end
+  if has_weapon_tag2?('BonusBoostAtk',zzzl,refinement,transformed) && stat_skills_2.length>0
+    ppu40[2]+=3
+    epu40[2]+=3
+  end
+  if has_weapon_tag2?('BonusBoostSpd',zzzl,refinement,transformed) && stat_skills_2.length>0
+    ppu40[3]+=3
+    epu40[3]+=3
+  end
+  if has_weapon_tag2?('BonusBoostDef',zzzl,refinement,transformed) && stat_skills_2.length>0
+    ppu40[4]+=3
+    epu40[4]+=3
+  end
+  if has_weapon_tag2?('BonusBoostRes',zzzl,refinement,transformed) && stat_skills_2.length>0
+    ppu40[5]+=3
+    epu40[5]+=3
   end
   unless weapon.nil? || weapon=='-'
     desc = /((((I|i)f|(w|W)hen) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (attack|combat)))|during combat(| (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat))))), |)((G|g)rants|((T|t)he u|U|u)nit receives) ((Atk|Spd|Def|Res)(\/|))+?\+\d ((if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (attack|combat)))|during combat(| (if|when) (the |)(foe (attacks|initiates (attack|combat))|unit (attacks|is (attacked|under attack)|initiates (the |)(attack|combat)))))/
@@ -5069,36 +5115,36 @@ def study_of_phases(event,name,bot,weapon=nil)
   ppu40[16]=ppu40[1]+ppu40[2]+ppu40[3]+ppu40[4]+ppu40[5]
   epu40[16]=epu40[1]+epu40[2]+epu40[3]+epu40[4]+epu40[5]
   zzzl=sklz[ww2]
-  if has_weapon_tag?('CloseStance',zzzl,refinement,transformed)
+  if has_weapon_tag2?('CloseStance',zzzl,refinement,transformed)
     close[2]+=4
     close[3]+=4
     close[4]+=4
     close[5]+=4
   end
-  if has_weapon_tag?('CloseDef',zzzl,refinement,transformed)
+  if has_weapon_tag2?('CloseDef',zzzl,refinement,transformed)
     close[4]+=6
     close[5]+=6
   end
-  if has_weapon_tag?('CloseAtk',zzzl,refinement,transformed)
+  if has_weapon_tag2?('CloseAtk',zzzl,refinement,transformed)
     close[2]+=6
   end
-  if has_weapon_tag?('CloseSpd',zzzl,refinement,transformed)
+  if has_weapon_tag2?('CloseSpd',zzzl,refinement,transformed)
     close[3]+=6
   end
-  if has_weapon_tag?('DistantStance',zzzl,refinement,transformed)
+  if has_weapon_tag2?('DistantStance',zzzl,refinement,transformed)
     distant[2]+=4
     distant[3]+=4
     distant[4]+=4
     distant[5]+=4
   end
-  if has_weapon_tag?('DistantDef',zzzl,refinement,transformed)
+  if has_weapon_tag2?('DistantDef',zzzl,refinement,transformed)
     distant[4]+=6
     distant[5]+=6
   end
-  if has_weapon_tag?('DistantAtk',zzzl,refinement,transformed)
+  if has_weapon_tag2?('DistantAtk',zzzl,refinement,transformed)
     distant[2]+=6
   end
-  if has_weapon_tag?('DistantSpd',zzzl,refinement,transformed)
+  if has_weapon_tag2?('DistantSpd',zzzl,refinement,transformed)
     distant[3]+=6
   end
   for i in 1...close.length
@@ -5150,9 +5196,8 @@ def study_of_phases(event,name,bot,weapon=nil)
       end
     end
   end
-    bin=[bin,175].max if u40x[2].length>0 && u40x[2][1]=='Duel' && rarity>=5
-    bin=[bin,185].max if u40x[2].length>0 && u40x[2][0]=='Duo' && rarity>=5
-    bin=[bin,185].max if u40x[2].length>0 && u40x[2][3]=='Duo' && rarity>=5
+  bin=[bin,175].max if u40x[2].length>0 && u40x[2][1]=='Duel' && rarity>=5
+  bin=[bin,185].max if u40x[2].length>0 && (u40x[2][0]=='Duo' || u40x[2][3]=='Duo') && rarity>=5
   pic=pick_thumbnail(event,u40x,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(' all')

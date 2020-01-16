@@ -1,3 +1,15 @@
+Heir of Light\3\Altena, Ced, Larcei, Shannon\5\\NewUnits
+Idunn & Fae's Battle\3\Fae, Idunn, Roy\5\04/01/2020, 11/01/2020\BHB
+Heroes with Brazen Skills\3\Ares, Mikoto, Tiki(Young)(Fallen)\5\02/01/2020, 12/01/2020\SkillBanner
+Renewed Spirit\3\Alfonse(Winter), Anna(Winter), Lethe(Winter), Selkie(Winter)\5\01/01/2020, 05/02/2020\Seasonal, NewYear's
+Happy New Year! (January 2020 rerun)\3\Azura(Winter), Camilla(Winter), Takumi(Winter)\5\01/01/2020, 31/01/2020\Seasonal, NewYear's
+New Year's of Fire and Ice (January 2020 rerun)\3\Fjorm(Winter), Gunnthra(Winter), Hrid(Winter), Laevatein(Winter)\5\01/01/2020, 31/01/2020\Seasonal, NewYear's
+"Mid-fest Digest" Tempest Trials\3\Lethe, Raunlf, Selkie\5\31/12/2019, 13/01/2020\Tempest
+"Kingdoms vs. Empires" Voting Gauntlet\3\Chrom(Branded), Hardin(Fallen), Veronica(Brave)\5\27/12/2019, 06/01/2020\VotingGauntlet
+Legendary Heroes: Celica, Queen of Valentia\-1\Celica(Queen), Claude, Dimitri, Edelgard, Eir, Hrid, Ike(Vanguard), Naga, Peony, Robin(F)(Fallen), Roy(Fire), Thrasir\5\25/12/2019, 06/01/2020\Legendary
+Heroes with Rally Skills\3\Corrin(F)(Adrift), Ophelia, Quan\5\21/12/2019, 02/01/2020\SkillBanner
+GHB Units\5\-\543\\Dynamic, GHB
+TT Units\5\-\54\\Dynamic, Tempest
 "For a Smile" Tempest Trials+\3\Jaffar, Marth, Nino(Fangs)\5\14/12/2019, 27/12/2019\Tempest
 Double Special Heroes\3\Elincia(Festival), Flora(Picnic), Lilina(Summer), Pent(Groom), Sanaki(Bride), Tanith(Bride), Ursula(Summer), Xander(Festival)\5\10/12/2019, 25/12/2019\Seasonal
 Book IV begins: Peony and More\3\Eyvel, Mareeta, Osian, Peony\5\06/12/2019, 25/12/2019\NewUnits
@@ -5,8 +17,6 @@ New Power (December 2019)\3\Arthur(Fates), Mathilda, Mia\5\09/12/2019, 21/12/201
 Innes & Eirika's Battle\3\Eirika(Bonda), Ephraim, Innes\5\04/12/2019, 11/12/2019\BHB
 Heroes with Link Skills\3\Camilla(Adrift), Kaden, Nina\5\30/11/2019, 09/12/2019\SkillBanner
 Guardians of Peace\3\Echidna, Igrene, Larum, Perceval\5\19/11/2019, 09/12/2019\NewUnits
-GHB Units\5\-\543\\Dynamic, GHB
-TT Units\5\-\54\\Dynamic, Tempest
 Battle of Brawn, Block A\3\Barst, Helbindi, Mordecai\5\25/11/2019, 05/12/2019\VotingGauntlet
 Battle of Brawn, Block B\3\Dorcas, Effie, Hawkeye\5\25/11/2019, 05/12/2019\VotingGauntlet
 Mythic Heroes: Altina, Dawn's Trueblade\-8\Altina, Duma, Fjorm, Fjorm(Bride), Gunnthra(Summer), Julia(Crusader), Laevatein(Summer), Lyn(Wind), Marth(King), Sothis, Tiki(Young)(Earth), Yarne\5\28/11/2019, 05/12/2019\Legendary

@@ -1,6 +1,6 @@
-Sakura\Anna\Celica\Celica(Brave)\Celica(Fallen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Fiora(Summer)\Fjorm\Fjorm(Bride)\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Matthew\Ninian\Owain\Peony\Reyson\Selkie\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
-Alfonse\Arden\Black_Knight\Lyn(Brave)\Nino(Launch)\Sharena
+Sakura\Anna\Anna(Winter)\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
+Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Fjorm(Bride)\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Matthew\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
+Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lyn(Brave)\Nino(Launch)\Sharena
 
 Sakura
 5\10\Resistance\Defense\S\9\Alm(Saint)
@@ -92,6 +92,16 @@ Chill Spd 1\Chill Spd 2\Chill Spd 3
 Hone Atk 1\Hone Atk 2\Hone Atk 3
 Spur Atk 3
 
+Celica(Queen)
+5\0\Speed\Attack\-\0\Fjorm(Bride)
+Wind\Elwind\Rexcalibur\Saintly Seraphim
+Draw Back
+Miracle
+Death Blow 1\Swift Sparrow 1\Swift Sparrow 2\Swift Sparrow 3
+Soul of Zofia
+Atk/Spd Oath 1\Atk/Spd Oath 2\Atk/Spd Oath 3
+Swift Sparrow 2
+
 Cherche
 5\10\Attack\Speed\-\3\
 Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\__Slaying Hammer+ (+) Effect Mode__\Cherche's Axe\Cherche's Axe (+) Effect Mode
@@ -104,7 +114,7 @@ Attack +3
 
 Cordelia
 5\10\Attack\HP\-\0\
-Iron Lance\Steel Lance\Brave Lance\Brave Lance+
+Iron Lance\Steel Lance\Brave Lance\__Brave Lance+__\Cordelia's Lance\~~Cordelia's Lance (+) Effect Mode~~
 Reposition
 Night Sky\Astra\Galeforce
 Triangle Adept 1\Triangle Adept 2\Triangle Adept 3
@@ -152,6 +162,16 @@ Mystic Boost 1\Mystic Boost 2\Mystic Boost 3
 Sparkling Boost
 Spd/Res Bond 2
 
+Eir(Winter)
+5\1\ \ \-\0\
+Iron Dagger\Steel Dagger\Temari\Temari+
+Shove
+Chilling Wind\Glacies
+Brazen Atk/Res 1\Brazen Atk/Res 2\Brazen Atk/Res 3
+Renewal 1\Renewal 2\Renewal 3
+Spd Tactic 1\Spd Tactic 2\Spd Tactic 3
+Atk Tactic 3
+
 Est
 4\10\Resistance\Attack\-\0\
 Iron Lance\Steel Lance\Heavy Spear\Heavy Spear+\Slaying Spear+\__Slaying Spear+ (+) Effect Mode__\Whitewing Spear\Whitewing Spear (+) Effect Mode
@@ -163,7 +183,7 @@ Def Ploy 1\Def Ploy 2\Def Ploy 3
 Res Ploy 3
 
 Ethlyn
-5\7\ \ \-\4\
+5\9\ \ \-\4\
 Assault\Fear\Fear+\Fear+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -183,7 +203,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Warding Stance 3
 
 Felicia(Picnic)
-5\0\Attack\Defense\-\1\
+5\0\Attack\Defense\-\4\
 Iron Axe\Steel Axe\Silver Axe\Eldhrmnir
 Swap
 Chilling Wind\Glacies
@@ -213,7 +233,7 @@ Spur Atk 1\Drive Atk 1\Drive Atk 2
 Drive Def 2
 
 Fjorm(Bride)
-5\0\Defense\Resistance\-\0\
+5\0\Defense\Resistance\-\0\Celica(Queen)
 Assault\Gjallarbru
 Heal\Mend\Restore\Restore+
 Imbue\Heavenly Light
@@ -233,7 +253,7 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Genny(Picnic)
-5\0\ \ \-\0\
+5\0\ \ \-\2\
 Assault\Toasty Skewer\Toasty Skewer+\Toasty Skewer+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Fireflood Balm\Fireflood Balm+
@@ -253,7 +273,7 @@ Res Ploy 1\Res Ploy 2\Res Ploy 3
 Darting Stance 3
 
 Gunnthra(Winter)
-5\0\Resistance\Speed\-\0\
+5\1\Resistance\Speed\-\0\
 Iron Sword\Steel Sword\Silver Sword\Hikami
 Reposition
 Night Sky\Glimmer
@@ -383,7 +403,7 @@ Fortify Def 1\Fortify Def 2\Fortify Dragons
 Fortress Def 3
 
 Norne
-5\0\Attack\Resistance\-\0\
+5\1\Attack\Resistance\-\0\
 Iron Bow\Steel Bow\Guard Bow\Guard Bow+\~~Guard Bow+ (+) Attack Mode~~
 Reposition
 Night Sky\Glimmer
@@ -434,12 +454,12 @@ HP +5
 
 Rebecca
 4\10\Speed\Resistance\-\0\
-Iron Bow\Steel Bow\Silver Bow
+Iron Bow\Steel Bow\Silver Bow\~~Silver Bow+~~\~~__Silver Bow+ (+) Speed Mode__~~\~~Rebecca's Bow~~\~~Rebecca's Bow (+) Effect Mode~~
 Rally Defense
 Chilling Wind\Iceberg
 Darting Blow 1\Darting Blow 2\Darting Blow 3
 Poison Strike 1\Poison Strike 2\Poison Strike 3
-Threaten Res 1\Threaten Res 2
+Threaten Res 1\Threaten Res 2\Threaten Res 3
 Distant Def 3
 
 Reyson
@@ -483,7 +503,7 @@ Even Res Wave 1\Even Res Wave 2\Even Res Wave 3
 Even Def Wave 2
 
 Soleil
-5\7\Speed\Attack\-\0\
+5\9\Speed\Attack\-\0\
 Iron Sword\Steel Sword\Slaying Edge\Slaying Edge+\Slaying Edge+ (+) Attack Mode
 Rally Speed
 New Moon\Luna\Aether
@@ -493,7 +513,7 @@ Spur Res 1\Drive Res 1\Drive Res 2
 Deflect Melee 3
 
 Tailtiu
-5\7\ \ \-\0\
+5\8\ \ \-\0\
 Thunder\Elthunder\Blarblade\__Blarblade+__\Tome of Thoron\Tome of Thoron (+) Effect Mode
 Rally Resistance\Rally Spd/Res
 Chilling Wind\Glacies
@@ -513,7 +533,7 @@ Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
 Quick Riposte 3
 
 Tethys
-5\0\Defense\Attack\-\0\
+5\2\Attack\Resistance\-\0\
 Iron Dagger\Steel Dagger\The Cleaner\The Cleaner+\The Cleaner+ (+) Resistance Mode
 Dance
 Chilling Wind/Glacies

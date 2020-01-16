@@ -1,0 +1,5 @@
+Hector(Halloween), L'Arachel(Halloween), Dozla(Halloween), Ilyana(Halloween), Rutger, Camilla(Adrift), Frederick, Julia, Sharena\Arena\29/10/2019, 04/11/2019\Water, Fire
+Yune, Hector(Halloween), L'Arachel(Halloween), Dozla(Halloween), Ilyana(Halloween), Rolf(Halloween), Laegjarn(Winter), Naesala, Lucina(Glorious), Alfonse\Aether\29/10/2019, 04/11/2019\Light, Dark\Tactics Room, Tactics Room
+Leif(Unifier), Catria(SoV), Forsyth, Python, Silque, Valbar, Conrad, Hawkeye, Fjorm, Anna\Arena\05/11/2019, 11/11/2019\Water, Wind
+Yune, Hector(Halloween), L'Arachel(Halloween), Dozla(Halloween), Ilyana(Halloween), Rolf(Halloween), Laegjarn(Winter), Naesala, Lucina(Glorious), Alfonse\Aether\05/11/2019, 11/11/2019\Astra, Anima\Healing Tower, Healing Tower
+Leif(Unifier), Catria(SoV), Forsyth, Python, Silque, Valbar, Conrad, Hawkeye, Fjorm, Anna\Arena\12/11/2019, 18/11/2019\Water, Earth

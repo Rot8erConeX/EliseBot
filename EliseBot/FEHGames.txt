@@ -20,6 +20,7 @@
 ['FE14C', ['FE14', 'if', 'FEif', 'FE:if', 'FE:f', 'FEf', 'Fates', 'FE14r', 'Revelation', 'Revelations'], 'FE14R - *Fire Emblem: Fates: Revelation*']
 ['FE14R', ['FE14', 'if', 'FEif', 'FE:if', 'FE:f', 'FEf', 'Fates', 'FE14r', 'Revelation', 'Revelations'], 'FE14R - *Fire Emblem: Fates: Revelation*']
 ['FE14g', ['FE14g', 'Gates'], 'FE14G - *Fire Emblem: Gates*']
+['TMS', ['TMS', 'TMSFE', 'TMS#FE'], '*Tokyo Mirage Sessions #FE*']
 ['FEH', ['FEH', 'Heroes'], 'FEH - *Fire Emblem: Heroes*']
 ['FE15', ['FE15', 'FEESoV', 'SoV', 'SV', 'ShadowsOfValentia'], 'FE15 - *Fire Emblem Echoes: Shadows of Valentia*']
 ['FEW', ['FEW', 'Warriors'], 'FEW - *Fire Emblem Warriors*']

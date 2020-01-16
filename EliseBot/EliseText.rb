@@ -171,7 +171,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
   elsif ['daily','dailies','today','todayinfeh','today_in_feh','now'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Shows the day's in-game daily events.\nIf in PM, will also show tomorrow's.",0xD49F61)
   elsif ['next','schedule'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nBonus",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nBonus\nBook1",0xD49F61)
   elsif ['deletealias','removealias'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __alias__","Removes `alias` from the list of aliases, regardless of who/what it was for.\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif ['addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti'].include?(command.downcase)
@@ -210,7 +210,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
   elsif ['average','mean'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then calculates their average in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
   elsif ['art','artist'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __unit__ __art type__","Displays `unit`'s character art.  Defaults to their normal portrait, but can be adjusted to other portraits with the following words:\n*Default Attacking Image:* Battle/Battling, Attack/Atk/Att\n*Special Proc Image:* Critical/Crit, Special, Proc\n*Damaged Art:* Damage/Damaged, LowHP/LowHealth, Injured",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __unit__ __art type__","Displays `unit`'s character art.  Defaults to their normal portrait, but can be adjusted to other portraits with the following words:\n*Default Attacking Image:* Battle/Battling, Attack/Atk/Att\n*Special Proc Image:* Critical/Crit, Special, Proc\n*Damaged Art:* Damage/Damaged, LowHP/LowHealth, Injured\n*In-game Sprite:* Sprite (only available for units who have profiles on the official website)",0xD49F61)
   elsif ['bestamong','bestin','beststats','higheststats','highest','best','highestamong','highestin'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then finds the unit(s) with the best in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
   elsif ['worstamong','worstin','worststats','loweststats','lowest','lowestamong','lowestin','worst'].include?(command.downcase)
@@ -528,15 +528,16 @@ def disp_more_info(event, mode=0) # used by the `help` command to display info t
       str="#{str}\n\n**Dragonflower stats**"
       str="#{str}\nProper format: Flower#{rand(5)+1}"
       str="#{str}\nSecondary format: F#{rand(5)+1}"
+      str="#{str}\nTertiary format: +#{rand(5)+1} ~~If merges are already accounted for~~"
       str="#{str}\nDefault: No flower stats"
-      str="#{str}\nNote: The simple word \"Flower\" will automatically equip the maximum number of flowers"
-      str="#{str}\n\n**Beast transformation**"
+      str="#{str}\nNote: The string \"Df\" will automatically equip the maximum number of flowers, as will the long word \"Dragonflower\".  The word \"Flower\" used to work, but then Peony<:Light_Tome:499760605381787650><:Icon_Move_Flier:443331186698354698><:Legendary_Effect_Light:521910176870039552><:Ally_Boost_Speed:443331186253889546><:Assist_Music:454462054959415296> and her weapon happened."
+      create_embed(event,"",str,0x40C0F0)
+      str="**Beast transformation**"
       str="#{str}\nBeast units, when equipped with a weapon, can take two forms."
       str="#{str}\nProper format: transformed ~~just include the word~~"
       str="#{str}\nSecondary format: (T)"
       str="#{str}\nDefault: Not applied, resulting in humanoid form"
-      create_embed(event,"",str,0x40C0F0)
-      str="**Refined Weapon**"
+      str="#{str}\n\n**Refined Weapon**"
       str="#{str}\nProper format: Falchion (+) #{['Atk','Spd','Def','Res','Effect'].sample}"
       str="#{str}\nSecondary format: Falchion #{['Atk','Spd','Def','Res','Effect'].sample} Mode"
       str="#{str}\nTertiary format: Falchion (#{['Atk','Spd','Def','Res','Effect'].sample})"
@@ -565,7 +566,8 @@ def disp_more_info(event, mode=0) # used by the `help` command to display info t
         str="#{str}\nDefault: Not applied"
       end
       unless mode==-3
-        str="#{str}\n\n**Stat buffs from Legendary Hero/Blessing interaction**"
+        create_embed(event,"",str,0x40C0F0)
+        str="**Stat buffs from Legendary Hero/Blessing interaction**"
         str="#{str}\nProper format: #{['Atk','Spd','Def','Res'].sample} Blessing ~~following the stat buffed by the word \"blessing\"~~"
         str="#{str}\nSecondary format: #{['Atk','Spd','Def','Res'].sample}Blessing ~~no space~~, Blessing#{['Atk','Spd','Def','Res'].sample}"
         str="#{str}\nDefault: No blessings applied"
@@ -671,7 +673,7 @@ def sort_legendaries(event,bot,mode=0)
   data_load()
   nicknames_load()
   g=get_markers(event)
-  k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Duo'].include?(q[2][0]) || q[2].length<3 || q[2][2].to_i<=0}.uniq
+  k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Duo','Idol'].include?(q[2][0]) || q[2].length<3 || q[2][2].to_i<=0}.uniq
   c=[]
   for i in 0...k.length
     c.push([249,130,129]) if k[i][2][0]=='Fire'
@@ -1670,7 +1672,11 @@ def disp_unit_art(event,name,bot)
   data_load()
   args=event.message.text.downcase.split(' ')
   artype=[]
-  if has_any?(args,['battle','attack','att','atk','attacking'])
+  if has_any?(args,['sprite'])
+    artype=['Sprite','In-game Sprite ~~with default weapon~~']
+    j[6]=''
+    j[7]=['','']
+  elsif has_any?(args,['battle','attack','att','atk','attacking'])
     artype=['BtlFace','Attack']
   elsif has_any?(args,['damage','damaged','lowhealth','lowhp','low_health','low_hp','injured']) || (args.include?('low') && has_any?(args,['health','hp']))
     artype=['BtlFace_D','Damaged']
@@ -1729,6 +1735,7 @@ def disp_unit_art(event,name,bot)
   artype=artype2.map{|q| q} if artype2.length>0
   artype=['Face','Default'] if artype.length<=0
   art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{charza}/#{artype[0]}.png"
+  art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{charza}.png" if artype[0]=='Sprite'
   disp=''
   nammes=['','','']
   unless j[6].nil? || j[6].length<=0
@@ -1738,12 +1745,12 @@ def disp_unit_art(event,name,bot)
   end
   unless j[7][0].nil? || j[7][0].length<=0
     m=j[7][0].split(' & ').map{|q| q.split(' as ')}
-    nammes[1]=m.map{|q| q[0]}.join(' & ')
+    nammes[1]=m.map{|q| q[0]}.reject{|q| q=='>unknown<'}.join(' & ')
     disp="#{disp}\n**VA (English):** #{m.map{|q| q[-1]}.join(' & ')}"
   end
   unless j[7][1].nil? || j[7][1].length<=0
     m=j[7][1].split(' & ').map{|q| q.split(' as ')}
-    nammes[2]=m.map{|q| q[0]}.join(' & ')
+    nammes[2]=m.map{|q| q[0]}.reject{|q| q=='>unknown<'}.join(' & ')
     disp="#{disp}\n**VA (Japanese):** #{m.map{|q| q[-1]}.join(' & ')}"
   end
   crosspost=false
@@ -1954,8 +1961,10 @@ def disp_unit_art(event,name,bot)
           charsx[0].push("*[DL-Print]* #{b[i][0]}") if m[0]==nammes[0]
         end
       end
-      if j[7][0].include?(' & ') || j[7][1].include?(' & ')
-        m=j[7][0].split(' & ')
+      if j[7].nil? || j[7][1].nil?
+      elsif (!j[7][0].nil? && j[7][0].include?(' & ')) || j[7][1].include?(' & ')
+        m=''
+        m=j[7][0].split(' & ') unless j[7][0].nil?
         m2=j[7][1].split(' & ')
         m.push(m[0]) if m.length<m2.length
         m2.push(m2[0]) if m2.length<m.length
@@ -1988,11 +1997,11 @@ def disp_unit_art(event,name,bot)
         charsx[1].compact!
       end
     end
-    disp='>No information<' if disp.length<=0
+    disp='>No information<' if disp.length<=0 && artype[0]!='Sprite'
   end
   dispx="#{disp}"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    disp="__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,6)}__\n#{artype[1]} art\n\n#{disp}"
+    disp="__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,6)}__\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}\n\n#{disp}"
     disp="#{disp}\n" if charsx.map{|q| q.length}.max>0
     disp="#{disp}\n**Same artist:** #{charsx[0].join(', ')}" if charsx[0].length>0
     if charsx[1].length>0
@@ -2033,7 +2042,7 @@ def disp_unit_art(event,name,bot)
     if flds.length.zero?
       flds=nil
     elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1500 && safe_to_spam?(event)
-      create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art])
+      create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art])
       if flds.map{|q| q.join("\n")}.join("\n\n").length>=1900
         for i in 0...flds.length
           create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,[flds[i]])
@@ -2049,7 +2058,7 @@ def disp_unit_art(event,name,bot)
       flds[-1][2]=nil if flds.length<3
       flds[-1].compact!
     end
-    create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]} art",disp,unit_color(event,find_unit(j[0],event),j[0],0),ftr,[nil,art],flds)
+    create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,unit_color(event,find_unit(j[0],event),j[0],0),ftr,[nil,art],flds)
   end
   return nil
 end
@@ -3546,21 +3555,24 @@ end
 
 def disp_FGO_based_stats(bot,event,srv=nil)
   hdr="**Availability:** #{['2<:FGO_icon_rarity_sickly:571937157095227402>','3<:FGO_icon_rarity_rust:523903558928826372>','3-4<:FGO_icon_rarity_mono:523903551144198145>','4<:FGO_icon_rarity_mono:523903551144198145>','4-5<:FGO_icon_rarity_gold:523858991571533825>','5<:FGO_icon_rarity_gold:523858991571533825>'][srv[3]]}"
-  if srv[20]=='Event'
+  srv[20]=srv[20].split(', ')
+  if srv[20].include?('Event')
     hdr="**Availability:** 3-4<:FGO_icon_rarity_mono:523903551144198145> GHB"
     hdr="**Availability:** 2-3<:FGO_icon_rarity_rust:523903558928826372> GHB" if srv[0]==174
-  elsif srv[20]=='Limited'
+  elsif srv[20].include?('Limited')
     hdr="#{hdr} Seasonal summon"
-  elsif srv[20]=='NonLimited'
+  elsif srv[20].include?('NonLimited') || srv[20].include?('FPSummon')
     hdr="#{hdr} Summon"
-  elsif srv[20]=='StoryLocked'
+  elsif srv[20].include?('StoryLocked')
     hdr="**Availability:** 4-5<:FGO_icon_rarity_gold:523858991571533825> Tempest Trial"
-  elsif srv[20]=='Starter'
+  elsif srv[20].include?('Starter')
     hdr="**Availability:** Story unit starting at 2<:FGO_icon_rarity_sickly:571937157095227402>"
-  elsif srv[20]=='StoryPromo'
+  elsif srv[20].include?('StoryPromo')
     hdr="**Availability:** Story unit starting at 4<:FGO_icon_rarity_mono:523903551144198145>"
-  elsif srv[20]=='Unavailable'
+  elsif srv[20].include?('Unavailable')
     hdr="**Availability:** Unobtainable"
+  else
+    hdr="#{hdr} Summon"
   end
   color='Colorless'
   wpn='Blade'
@@ -3618,12 +3630,12 @@ def disp_FGO_based_stats(bot,event,srv=nil)
   elsif [104,107,137].include?(srv[0])
     wpn='Dagger'
     wpname='Colorless Dagger'
-  elsif [29,77,79,83,96,118,139,166,167,168,169,170,173,177,182,189,190,191,194,195,198,199,200,204,215,216,220,224,229,230,237,240,241,242,247,248,253,260].include?(srv[0])
+  elsif [29,77,79,83,96,118,136,139,166,167,168,169,170,173,177,182,189,190,191,194,195,198,199,200,204,215,216,220,224,229,230,237,240,241,242,247,248,253,260].include?(srv[0])
     wpn='Tome'
     color='Green' if srv[17][6,1]=='Q'
     color='Blue' if srv[17][6,1]=='A'
     color='Red' if srv[17][6,1]=='B'
-    color='Blue' if [77,118,166,182,200,216,229,240,241,242,247,253].include?(srv[0])
+    color='Blue' if [77,118,136,166,182,200,216,229,240,241,242,247,253].include?(srv[0])
     color='Green' if [215,224].include?(srv[0])
     color='Red' if [83,96,167,168,170,177,190,191,195,199,204,220,230,248,260].include?(srv[0])
     color='Colorless' if [169,194,198,237].include?(srv[0])
@@ -3633,10 +3645,10 @@ def disp_FGO_based_stats(bot,event,srv=nil)
     typ=['Dark','Fire'][srv[0]%2] if srv[17][6,1]=='B' || ([79].include?(srv[0]) && color=='Red')
     typ=['Light','Thunder'][srv[0]%2] if srv[17][6,1]=='A' || ([79].include?(srv[0]) && color=='Blue')
     typ='Thunder' if [77,200].include?(srv[0])
-    typ='Light' if [118,139,166,173,182,216,229,240,241,242,247,253].include?(srv[0])
+    typ='Light' if [118,136,139,166,173,182,216,229,240,241,242,247,253].include?(srv[0])
     typ='Fire' if [190,191,195,248].include?(srv[0])
     typ='Ice' if [215,224].include?(srv[0])
-    typ='Dark' if [83,96,167,168,170,177,199,204,220,230,260].include?(srv[0])
+    typ='Dark' if [83,96,167,168,170,177,195,199,204,220,230,260].include?(srv[0])
     typ='Story' if [169,237].include?(srv[0])
     typ='Riddle' if [194].include?(srv[0])
     typ='Paint' if [198].include?(srv[0])
@@ -4178,40 +4190,40 @@ def snagstats(event,bot,f=nil,f2=nil)
     str=extend_message(str,str2,event,2)
     if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
       str2=''
-      m=filler(legal_units,all_units,11,-1,'FE1',1)
-      str2="#{m} units from *FE1*,    #{filler(legal_units,all_units,11,0,'FE1')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE2',1)
-      str2="#{str2}\n#{m} units from *FE2*,    #{filler(legal_units,all_units,11,0,'FE2')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE3',1)
-      str2="#{str2}\n#{m} units from *FE3*,    #{filler(legal_units,all_units,11,0,'FE3')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE4',1)
-      str2="#{str2}\n#{m} units from *FE4*,    #{filler(legal_units,all_units,11,0,'FE4')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE5',1)
-      str2="#{str2}\n#{m} units from *FE5*,    #{filler(legal_units,all_units,11,0,'FE5')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE6',1)
-      str2="#{str2}\n#{m} units from *FE6*,    #{filler(legal_units,all_units,11,0,'FE6')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE7',1)
-      str2="#{str2}\n#{m} units from *FE7*,    #{filler(legal_units,all_units,11,0,'FE7')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE8',1)
-      str2="#{str2}\n#{m} units from *FE8*,    #{filler(legal_units,all_units,11,0,'FE8')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE9',1)
-      str2="#{str2}\n#{m} units from *FE9*,    #{filler(legal_units,all_units,11,0,'FE9')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE10',1)
-      str2="#{str2}\n#{m} units from *FE10*,    #{filler(legal_units,all_units,11,0,'FE10')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE11',1)
-      str2="#{str2}\n#{m} units from *FE11*,    #{filler(legal_units,all_units,11,0,'FE11')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE12',1)
-      str2="#{str2}\n#{m} units from *FE12*,    #{filler(legal_units,all_units,11,0,'FE12')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE13',1)
-      str2="#{str2}\n#{m} units from *FE13*,    #{filler(legal_units,all_units,11,0,'FE13')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,['FE14','FE14B','FE14C','FE14R','FE14g'],4)
-      str2="#{str2}\n#{m} units from *FE14*,  #{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],-3)} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE15',1)
-      str2="#{str2}\n#{m} units from *FE15*,    #{filler(legal_units,all_units,11,0,'FE15')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FE16',1)
-      str2="#{str2}\n#{m} units from *FE16*,    #{filler(legal_units,all_units,11,0,'FE16')} of which are credited" unless m=='0'
-      m=filler(legal_units,all_units,11,-1,'FEH',1)
-      str2="#{str2}\n#{m} units from *FEH* itself,    #{filler(legal_units,all_units,11,0,'FEH')} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE1','*FE1'],4)
+      str2="#{m} units from *FE1*,    #{filler(legal_units,all_units,11,0,'FE1',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE2','*FE2'],4)
+      str2="#{str2}\n#{m} units from *FE2*,    #{filler(legal_units,all_units,11,0,'FE2',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE3','*FE3'],4)
+      str2="#{str2}\n#{m} units from *FE3*,    #{filler(legal_units,all_units,11,0,'FE3',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE4','*FE4'],4)
+      str2="#{str2}\n#{m} units from *FE4*,    #{filler(legal_units,all_units,11,0,'FE4',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE5','*FE5'],4)
+      str2="#{str2}\n#{m} units from *FE5*,    #{filler(legal_units,all_units,11,0,'FE5',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE6','*FE6'],4)
+      str2="#{str2}\n#{m} units from *FE6*,    #{filler(legal_units,all_units,11,0,'FE6',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE7','*FE7'],4)
+      str2="#{str2}\n#{m} units from *FE7*,    #{filler(legal_units,all_units,11,0,'FE7',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE8','*FE8'],4)
+      str2="#{str2}\n#{m} units from *FE8*,    #{filler(legal_units,all_units,11,0,'FE8',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE9','*FE9'],4)
+      str2="#{str2}\n#{m} units from *FE9*,    #{filler(legal_units,all_units,11,0,'FE9',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE10','*FE10'],4)
+      str2="#{str2}\n#{m} units from *FE10*,    #{filler(legal_units,all_units,11,0,'FE10',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE11','*FE11'],4)
+      str2="#{str2}\n#{m} units from *FE11*,    #{filler(legal_units,all_units,11,0,'FE11',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE12','*FE12'],4)
+      str2="#{str2}\n#{m} units from *FE12*,    #{filler(legal_units,all_units,11,0,'FE12',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE13','*FE13'],4)
+      str2="#{str2}\n#{m} units from *FE13*,    #{filler(legal_units,all_units,11,0,'FE13',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE14','FE14B','FE14C','FE14R','FE14g','*FE14','*FE14B','*FE14C','*FE14R','*FE14g'],4)
+      str2="#{str2}\n#{m} units from *FE14*,  #{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE15','*FE15'],4)
+      str2="#{str2}\n#{m} units from *FE15*,    #{filler(legal_units,all_units,11,0,'FE15',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FE16','*FE16'],4)
+      str2="#{str2}\n#{m} units from *FE16*,    #{filler(legal_units,all_units,11,0,'FE16',100)} of which are credited" unless m=='0'
+      m=filler(legal_units,all_units,11,-1,['FEH','*FEH'],4)
+      str2="#{str2}\n#{m} units from *FEH* itself,    #{filler(legal_units,all_units,11,0,'FEH',100)} of which are credited" unless m=='0'
       str2=str2[1,str2.length-1] if str2[0,1]=="\n"
       str2=str2[2,str2.length-2] if str2[0,2]=="\n"
       str=extend_message(str,str2,event,2)
@@ -4430,6 +4442,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << "*Fallen Heroes* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='FallenHeroes'}][1].length)} current members) - Any unit with the phrase *(Fallen)* in their internal name."
     event << "*GHB* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='GHB'}][1].length)} current members) - Any unit that can obtained via a Grand Hero Battle map."
     event << "*Legendaries* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Legendaries'}][1].length)} current members) - Any unit that gives a Legendary Hero Boost to blessed allies during specific seasons."
+    event << "*Duo Units* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='DuoUnits'}][1].length)} current members) - Any unit that is actually two characters."
     event << "*Retro-Prfs* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro-Prfs'}][1].length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything."
     event << "*Seasonals* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Seasonals'}][1].length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost."
     event << "    The following subsets of the Seasonals group are also dynamic: *Bathing* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bathing'}][1].length)}), *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Bunny* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Picnic* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Picnic'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})"
@@ -4638,7 +4651,7 @@ def update_howto(event,bot)
   end
   str="1.) Edit [the sheet](https://docs.google.com/spreadsheets/d/15eDswPz7xK6w3c5R9-iUq8pt22KMMby71hsDuH6HlBA/edit#gid=2081531433)."
   str="#{str}\n- Any column whose header is a shade of grey, is formulaically calculated and thus you don't need to edit it.  Merely copy the formula from the cell above."
-  str="#{str}\n- In *Units*'s \"Rarities\" column:\n> `5p` is for normal summonable units (\"pool\")\n> `5s` is used for seasonals and legendaries\n> `3g4g4g` is used for GHBs\n> `4t5t` is used for TT units\n> There are all-caps duo markers, but they're used to mark Launch units + Book I 5\* units and are thus not relevant in Book III."
+  str="#{str}\n- In *Units*'s \"Rarities\" column:\n> `5p` is for normal summonable units (\"pool\")\n> `5s` is used for seasonals and legendaries\n> `3g4g4g` is used for GHBs\n> `4t5t` is used for TT units\n> There are all-caps duo markers, but they're used to mark Launch units + Book I 5\* units and are thus not relevant in Book IV."
   str="#{str}\n- In *Units*'s \"Game\" column, the game that FEH credits the unit with is listed first, but the remaining games are listed in chronological order."
   str="#{str}\n- In *Skills*'s sheet, add new skills above the fake skills in the same group.  Fake skills are marked by having the font significantly smaller."
   str="#{str}\n- Please note that when a skill that is obviously part of a stat-based family gets added, I add all stat variations immediately.  Thus, if a new skill in an existing family gets added, check to see if an entry for it already exists first."

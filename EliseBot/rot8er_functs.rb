@@ -907,3 +907,24 @@ def disp_date(t,mode=0)
   return "#{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year}" if mode==1
   return "#{t.day} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][t.month]} #{t.year} (a #{['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][t.wday]})"
 end
+
+def above_memes()
+  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/ThoseWhoAreAboveMemes.txt")
+    b=[]
+    File.open("C:/Users/#{@mash}/Desktop/devkit/ThoseWhoAreAboveMemes.txt").each_line do |line|
+      b.push(line.downcase.gsub('-','').gsub("\n",''))
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    if b[i].nil?
+    elsif b[i].length<=0 || b[i][0,1]=='#'
+      b[i]=nil
+    else
+      b[i]=b[i].to_i if b[i].to_i.to_s==b[i]
+    end
+  end
+  b.compact!
+  return b
+end
