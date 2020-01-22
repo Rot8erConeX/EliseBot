@@ -1,15 +1,25 @@
-Heir of Light\3\Altena, Ced, Larcei, Shannon\5\\NewUnits
-Idunn & Fae's Battle\3\Fae, Idunn, Roy\5\04/01/2020, 11/01/2020\BHB
-Heroes with Brazen Skills\3\Ares, Mikoto, Tiki(Young)(Fallen)\5\02/01/2020, 12/01/2020\SkillBanner
+Special Heroes: >Unknown<\3\-\5\07/02/2020, 07/03/2020\Seasonal, Valentine's
+">Unknown<" Tempest Trials+\3\-\5\05/02/2020, 17/02/2020\Tempest
+Heroes with Valor\3\-\5\01/02/2020, 10/02/2020\SkillBanner
+Mythic Heroes: Lif, Lethal Swordsman\-8\Eliwood(Wind), Ephraim(Fire), Hector(Marquess), Leif(Unifier), Lif, Lucina(Glorious), Yune\5\30/01/2020, 05/02/2020\Legendary
+Hostile Springs (January 2020 rerun)\3\Elise(Bath), Hinoka(Bath), Ryoma(Bath), Sakura(Bath)\5\23/01/2020, 22/02/2020\Seasonal
+Heroes with Chill Skills\3\Hubert, Kliff, Sue\5\22/01/2020, 31/01/2020\SkillBanner
+A Star is Born\3\Eleonora, Kiria, Mamori, Tsubasa\5\21/01/2020, 19/02/2020\NewUnits
+Sigurd & Lewyn's Battle\3\Lewyn, Silvia, Sigurd\5\19/01/2020, 28/01/2020\BHB
+"Mirage Vortex" Tempest Trials+\3\Caeda, Chrom(Launch), Virion\5\18/01/2020, 30/01/2020\Tempest
+Heir of Light\3\Altena, Ced, Larcei, Shannon\5\09/01/2020, 29/01/2020\NewUnits
 Renewed Spirit\3\Alfonse(Winter), Anna(Winter), Lethe(Winter), Selkie(Winter)\5\01/01/2020, 05/02/2020\Seasonal, NewYear's
 Happy New Year! (January 2020 rerun)\3\Azura(Winter), Camilla(Winter), Takumi(Winter)\5\01/01/2020, 31/01/2020\Seasonal, NewYear's
 New Year's of Fire and Ice (January 2020 rerun)\3\Fjorm(Winter), Gunnthra(Winter), Hrid(Winter), Laevatein(Winter)\5\01/01/2020, 31/01/2020\Seasonal, NewYear's
+GHB Units\5\-\543\\Dynamic, GHB
+TT Units\5\-\54\\Dynamic, Tempest
+New Power (January 2020)\3\Cordelia, Henry, Leif, Rebecca\5\13/03/2020, 21/01/2020\NewPower
 "Mid-fest Digest" Tempest Trials\3\Lethe, Raunlf, Selkie\5\31/12/2019, 13/01/2020\Tempest
+Heroes with Brazen Skills\3\Ares, Mikoto, Tiki(Young)(Fallen)\5\02/01/2020, 12/01/2020\SkillBanner
+Idunn & Fae's Battle\3\Fae, Idunn, Roy\5\04/01/2020, 11/01/2020\BHB
 "Kingdoms vs. Empires" Voting Gauntlet\3\Chrom(Branded), Hardin(Fallen), Veronica(Brave)\5\27/12/2019, 06/01/2020\VotingGauntlet
 Legendary Heroes: Celica, Queen of Valentia\-1\Celica(Queen), Claude, Dimitri, Edelgard, Eir, Hrid, Ike(Vanguard), Naga, Peony, Robin(F)(Fallen), Roy(Fire), Thrasir\5\25/12/2019, 06/01/2020\Legendary
 Heroes with Rally Skills\3\Corrin(F)(Adrift), Ophelia, Quan\5\21/12/2019, 02/01/2020\SkillBanner
-GHB Units\5\-\543\\Dynamic, GHB
-TT Units\5\-\54\\Dynamic, Tempest
 "For a Smile" Tempest Trials+\3\Jaffar, Marth, Nino(Fangs)\5\14/12/2019, 27/12/2019\Tempest
 Double Special Heroes\3\Elincia(Festival), Flora(Picnic), Lilina(Summer), Pent(Groom), Sanaki(Bride), Tanith(Bride), Ursula(Summer), Xander(Festival)\5\10/12/2019, 25/12/2019\Seasonal
 Book IV begins: Peony and More\3\Eyvel, Mareeta, Osian, Peony\5\06/12/2019, 25/12/2019\NewUnits

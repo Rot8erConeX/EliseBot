@@ -1,5 +1,6 @@
-Hector(Halloween), L'Arachel(Halloween), Dozla(Halloween), Ilyana(Halloween), Rutger, Camilla(Adrift), Frederick, Julia, Sharena\Arena\29/10/2019, 04/11/2019\Water, Fire
-Yune, Hector(Halloween), L'Arachel(Halloween), Dozla(Halloween), Ilyana(Halloween), Rolf(Halloween), Laegjarn(Winter), Naesala, Lucina(Glorious), Alfonse\Aether\29/10/2019, 04/11/2019\Light, Dark\Tactics Room, Tactics Room
-Leif(Unifier), Catria(SoV), Forsyth, Python, Silque, Valbar, Conrad, Hawkeye, Fjorm, Anna\Arena\05/11/2019, 11/11/2019\Water, Wind
-Yune, Hector(Halloween), L'Arachel(Halloween), Dozla(Halloween), Ilyana(Halloween), Rolf(Halloween), Laegjarn(Winter), Naesala, Lucina(Glorious), Alfonse\Aether\05/11/2019, 11/11/2019\Astra, Anima\Healing Tower, Healing Tower
-Leif(Unifier), Catria(SoV), Forsyth, Python, Silque, Valbar, Conrad, Hawkeye, Fjorm, Anna\Arena\12/11/2019, 18/11/2019\Water, Earth
+Tsubasa, Mamori, Kiria, Eleonora, Itsuki, Chrom(Launch), Caeda, Virion\Tempest\20/01/2020, 30/01/2020
+Duma, Alfonse(Winter), Lethe(Winter), Selkie(Winter), Eir(Winter), Anna(Winter), Tanya, Osian, Hrid, Sharena\Aether\21/01/2020, 27/01/2020\Light, Dark\Healing Tower, Healing Tower
+Larcei, Shannan, Ced, Altena, Travant, Rebecca, Henry, Gunter, Ephraim(Fire), Sharena\Arena\21/01/2020, 27/01/2020\Fire, Water
+Eir, Larcei, Shannan, Ced, Altena, Travant, Rutger, Loki(Bunny), Azura(Vallite), Anna\Aether\28/01/2020, 03/02/2020\Astra, Anima\Panic Manor, Panic Manor
+Larcei, Shannan, Ced, Altena, Travant, Rebecca, Henry, Gunter, Ephraim(Fire), Sharena\Arena\28/01/2020, 03/02/2020\Fire, Wind
+Eir, Larcei, Shannan, Ced, Altena, Travant, Rutger, Loki(Bunny), Azura(Vallite), Anna\Aether\04/02/2020, 10/02/2020\Light, Dark\Unknown, Unknown

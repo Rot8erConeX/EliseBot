@@ -233,7 +233,7 @@ Spur Atk 1\Drive Atk 1\Drive Atk 2
 Drive Def 2
 
 Fjorm(Bride)
-5\0\Defense\Resistance\-\0\Celica(Queen)
+5\0\Defense\Resistance\-\1\Celica(Queen)
 Assault\Gjallarbru
 Heal\Mend\Restore\Restore+
 Imbue\Heavenly Light
@@ -503,7 +503,7 @@ Even Res Wave 1\Even Res Wave 2\Even Res Wave 3
 Even Def Wave 2
 
 Soleil
-5\9\Speed\Attack\-\0\
+5\10\Speed\Attack\-\0\
 Iron Sword\Steel Sword\Slaying Edge\Slaying Edge+\Slaying Edge+ (+) Attack Mode
 Rally Speed
 New Moon\Luna\Aether
