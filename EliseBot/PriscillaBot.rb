@@ -981,7 +981,7 @@ def find_skill(name,event,ignore=false,ignore2=false,untz=nil)
     buff=buff[2,buff.length-2] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,2].downcase=='gp'
     name=buff if find_skill(buff,event,ignore,ignore2).length>0
   end
-  name=name.gsub(' ','').gsub('_','').gsub('(','').gsub(')','') unless ignore2
+  name=name.gsub(' ','').gsub('_','').gsub('(','').gsub(')','').gsub('/','').gsub('\\'[0],'') unless ignore2
   untz=@skills.reject{|q| !has_any?(g, q[15])} if untz.nil? || untz.length<=0
   untz=untz.sort{|a,b| a[0]<=>b[0]}.uniq
   nicknames_load()
@@ -5072,7 +5072,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   if ftrtoggles[1]
     ftr='Crowns mark inheritable skills only this unit has.'
     ftr='Purple sparkles mark Prf skills.  Crowns mark unique inheritable skills.' if ftrtoggles[0]
-    ftr='Unique inheritable skills:  Crown = overall,   Gold orb = within Book 2-3 summon pool.' if ftrtoggles[3]
+    ftr='Unique inheritable skills:  Crown = overall,   Gold orb = within Book 2-4 summon pool.' if ftrtoggles[3]
     ftr='Unique inheritable skills:  Crown = overall,   Orb = within non-limited summon pool.' if ftrtoggles[2]
   elsif ftrtoggles[0]
     ftr='Purple sparkles mark skills Prf to this unit.'
@@ -5080,9 +5080,9 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
     ftr='Purple sparkles mark Prf skills.  Orbs mark semi-unique inheritable skills.' if ftrtoggles[2]
   elsif ftrtoggles[2]
     ftr='Orbs mark inheritable skills that within the non-limited summon pool, only this unit has.'
-    ftr='Unique inheritable skills:  Gold orb = within Book 2-3 summon pool,  Rainbow orb = within non-limited summon pool.' if ftrtoggles[3]
+    ftr='Unique inheritable skills:  Gold orb = within Book 2-4 summon pool,  Rainbow orb = within non-limited summon pool.' if ftrtoggles[3]
   elsif ftrtoggles[3]
-    ftr='Gold orbs mark inheritable skills that within the Book 2-3 summon pool, only this unit has.'
+    ftr='Gold orbs mark inheritable skills that within the Book 2-4 summon pool, only this unit has.'
   end
   ftr='"Pandering to the minority gets you nowhere." - Shylock#2166' if event.user.id==198201016984797184
   flds=[["<:Skill_Weapon:444078171114045450> **Weapons**",sklz2[0].join("\n")],["<:Skill_Assist:444078171025965066> **Assists**",sklz2[1].join("\n")],["<:Skill_Special:444078170665254929> **Specials**",sklz2[2].join("\n")],["<:Passive_A:443677024192823327> **A Passives**",sklz2[3].join("\n")],["<:Passive_B:443677023257493506> **B Passives**",sklz2[4].join("\n")],["<:Passive_C:443677023555026954> **C Passives**",sklz2[5].join("\n")]]
@@ -8375,11 +8375,11 @@ def find_alts(event,name,bot)
       end
     elsif k[i][2][0]=='Idol'
       if k[i][2][2].gsub('*','')==name
-        m.push("Persona (for #{k[i][12].gsub('*','').split(', ')[0]})")
+        m.push("Mirage Persona (for #{k[i][12].gsub('*','').split(', ')[0]})")
       end
     elsif k[i][2][3]=='Idol'
       if k[i][2][5].gsub('*','')==name
-        m.push("Persona (for #{k[i][12].gsub('*','').split(', ')[0]})")
+        m.push("Mirage Persona (for #{k[i][12].gsub('*','').split(', ')[0]})")
       end
     end
     m.push('out-of-left-field') if m.length<=0
