@@ -108,6 +108,7 @@ Gold Armored Helmet\Hat\Proof of victory over Legendary Ryoma.\Beat Ryoma(Suprem
 Gold Bat Ears\Hat\Proof of victory over Mythic Thrasir\Beat Thrasir's MHB at Abyssal difficulty.
 Gold Devil Horns\Hat\Proof of victory over Legendary Leif.\Beat Leif(Unifier)'s LHB at Abyssal difficulty.
 Golden Diadem\Hat\Proof of victory over Mythic Duma.\Beat Duma's MHB at Abyssal difficulty
+Gold Explorer's Hat\Hat\Proof of victory over Mythic Lif.\Beat Lif's MHB at Abyssal difficulty.
 Gold Knight's Headpiece\Hat\Proof of victory over Legendary Eliwood\Beat Eliwood(Wind)'s LHB at Abyssal difficulty
 Gold Maid Headpiece\Hat\Proof of victory over Mythic Naga.\Beat Naga's MHB at Abyssal difficulty
 Gold Plegian Crown\Hat\Proof of victory over Mythic Altena\Beat Altena's MHB at Abyssal difficulty
