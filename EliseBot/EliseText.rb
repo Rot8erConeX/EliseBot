@@ -82,6 +82,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}** __name__","Shows `name`'s weapon color/type, movement type, and stats, and skills.",0xD49F61)
   elsif ['attackicon','attackcolor','attackcolors','attackcolour','attackcolours','atkicon','atkcolor','atkcolors','atkcolour','atkcolours','atticon','attcolor','attcolors','attcolour','attcolours','staticon','statcolor','statcolors','statcolour','statcolours','iconcolor','iconcolors','iconcolour','iconcolours'].include?(command.downcase) || (['stats','stat'].include?(command.downcase) && ['color','colors','colour','colours'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['color','colors','colour','colours'].include?("#{subcommand}".downcase)}**","Explains the reasoning behind the multiple Attack stat icons - <:StrengthS:514712248372166666> <:MagicS:514712247289774111> <:FreezeS:514712247474585610>",0xD49F61)
+  elsif ['divine','devine','code','path'].include?(command.downcase)
+    create_embed(event,"**#{command.downcase}** __name__",'Shows all Divine Code paths that the unit named `name` can be found on.',0xD49F61)
   elsif ['struct','struncture'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows data on the Aether Raid structure named `name`.',0xD49F61)
   elsif ['aoe','area'].include?(command.downcase)
@@ -289,15 +291,25 @@ def help_text(event,bot,command=nil,subcommand=nil)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*skill name__","Equips the skill seal `skill name` on the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['refine','refinery','refinement'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*refinement__","Refines the weapon equipped by the donor unit with the name `unit`, using the refinement `refinement`\n\nIf no refinement is defined and the equipped weapon has an Effect Mode, defaults to that.\nOtherwise, throws an error message if no refinement is defined.\n\n**This command is only able to be used by certain people**.",0x9E682C)
-    elsif ['support','marry'].include?(subcommand.downcase)
-      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to change the support rank of the donor unit with the name `unit`.  If the donor unit has no rank, will wipe the other donor unit that has support.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['unsupport','unmarry','unmarriage','divorce'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to remove the support rank of the donor unit with the name `unit`.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['support','marry','marriage'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to change the support rank of the donor unit with the name `unit`.  More than three donor units cannot have support.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['pairup','pair','pair-up','paired'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit1__ __unit2__","Allows me to pair up the two listed donor units.  This can be shown when looking up either unit alongside the term \"pairup\".\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['resplendant','resplendent','ascension','ascend','resplend'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to Resplendently Ascend the donor unit with the name `unit`.\nIf the devunit cannot do so because either lack of ability, or having already done so, I inform you of this.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     else
-      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new donor unit\n`FEH!#{command.downcase} promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a donor unit's nature (*also `ivs`*)\n`FEH!#{command.downcase} support` - causes me to change support ranks of donor units (*also `marry`*)\n\n`FEH!#{command.downcase} equip` - equip skill (*also `skill`*)\n`FEH!#{command.downcase} seal` - equip seal\n`FEH!#{command.downcase} refine` - refine weapon\n`FEH!#{command.downcase} flower` - increases a donor unit's dragonflower count\n\n`FEH!#{command.downcase} send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
+      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new donor unit\n`FEH!#{command.downcase} promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a donor unit's nature (*also `ivs`*)\n`FEH!#{command.downcase} support` - causes me to change support ranks of donor units (*also `marry`*)\n`FEH!#{command.downcase} unsupport` - causes me to remove the support ranks of donor units (*also `divorce`*)\n\n`FEH!#{command.downcase} equip` - equip skill (*also `skill`*)\n`FEH!#{command.downcase} seal` - equip seal\n`FEH!#{command.downcase} refine` - refine weapon\n`FEH!#{command.downcase} flower` - increases a donor unit's dragonflower count\n`FEH!#{command.downcase} pairup` - pairs one donor unit up as another's cohort\n`FEH!#{command.downcase} resplendent` - Resplendently Ascends a donor unit\n\n`FEH!#{command.downcase} send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
     end
   elsif ['devedit','dev_edit'].include?(command.downcase)
     subcommand='' if subcommand.nil?
     if ['create'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*stats__","Allows me to create a new devunit with the character `unit` and stats described in `stats`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+    elsif ['resplendant','resplendent','ascension','ascend','resplend'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to Resplendently Ascend the devunit with the name `unit`.\nIf the devunit cannot do so because either lack of ability, or having already done so, I inform you of this.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+    elsif ['pairup','pair','pair-up','paired'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit1__ __unit2__","Allows me to pair up the two listed devunits.  This can be shown when looking up either unit alongside the term \"pairup\".\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['promote','rarity','feathers'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","Causes me to promote the devunit with the name `unit`.\n\nIf `number` is defined, I will promote the devunit that many times.\nIf not, I will promote them once.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['newwaifu','newaifu','addwaifu','new_waifu','add_waifu','waifu'].include?(subcommand.downcase)
@@ -317,7 +329,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     elsif ['learn','teach'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*skill types__","Causes me to teach the skills in slots `skill types` to the devunit with the name `unit`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     else
-      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the devunits.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new devunit\n`FEH!#{command.downcase} promote` - promotes an existing devunit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a devunit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a devunit's nature (*also `ivs`*)\n`FEH!#{command.downcase} teach` - teaches a new skill to a devunit (*also `learn`*)\n`FEH!#{command.downcase} flower` - increases a dev unit's dragonflower count\n\n`FEH!#{command.downcase} new_waifu` - adds a dev waifu (*also `add_waifu`*)\n`FEH!#{command.downcase} new_somebody` - adds a dev \"somebody\" (*also `add_somebody`*)\n`FEH!#{command.downcase} new_nobody` - adds a dev \"nobody\" (*also `add_nobody`*)\n\n`FEH!#{command.downcase} send_home` - removes the unit from either the devunits or the \"nobodies\" list (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the devunits.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new devunit\n`FEH!#{command.downcase} promote` - promotes an existing devunit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a devunit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a devunit's nature (*also `ivs`*)\n`FEH!#{command.downcase} teach` - teaches a new skill to a devunit (*also `learn`*)\n`FEH!#{command.downcase} flower` - increases a dev unit's dragonflower count\n`FEH!#{command.downcase} pairup` - pairs one devunit up as another's cohort\n`FEH!#{command.downcase} resplendent` - Resplendently Ascends a devunit\n\n`FEH!#{command.downcase} new_waifu` - adds a dev waifu (*also `add_waifu`*)\n`FEH!#{command.downcase} new_somebody` - adds a dev \"somebody\" (*also `add_somebody`*)\n`FEH!#{command.downcase} new_nobody` - adds a dev \"nobody\" (*also `add_nobody`*)\n\n`FEH!#{command.downcase} send_home` - removes the unit from either the devunits or the \"nobodies\" list (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     end
   elsif ['sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list in order based on their SP cost.\n\n#{disp_more_info(event,3)}",0xD49F61)
@@ -393,10 +405,9 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n`learnable` __unit__ - for a list of all learnable skills (*also `inheritable`*)"
     str="#{str}\n\n`games` __character__ - for a list of games the character is in"
     str="#{str}\n`alts` __character__ - for a list of all units this character has"
+    str="#{str}\n`path` __unit__ - for a list of all Divine Code paths the unit can be found in (*also `divine`*)"
     str="#{str}\n\n\n__**Skill Data**__"
     str="#{str}\n`skill` __skill name__ - used to show data on a specific skill"
-    str="#{str}\n\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)"
-    str="#{str}\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)"
     str="#{str}\n`AoE` __type__ - to show the range of all AoE skills (*also `area`*)"
     create_embed([event,x],"Global Command Prefixes: `FEH!` `FEH?` `F?` `E?` `H?`#{"\nServer Command Prefix: `#{@prefixes[event.server.id]}`" if !event.server.nil? && !@prefixes[event.server.id].nil? && @prefixes[event.server.id].length>0}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__",str,0xD49F61)
     str="__**Additional Index Data**__"
@@ -646,7 +657,7 @@ def skill_rarity(event) # this is used by the skillrarity command to display all
     xcolor=0xDC3461
   end
   if " #{event.message.text.downcase} ".include?(' progression ')
-    create_embed(event,"__**Non-healers**__","",xcolor,"Most non-healer units have at least one Scenario X passive and at least one Scenario Y passive",nil,[["__<:Skill_Weapon:444078171114045450> **Weapons**__","Tier 1 (*Iron, basic magic*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Steel, El- magic, Fire Breath+*) - Available at 2<:Icon_Rarity_2:448266417872044032>, Default at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 (*Silver, super magic*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Kana(M) has his unavailable until 4\\*~~, default at 4<:Icon_Rarity_4:448266418459377684>\nTier 4 (*+ weapons other than Fire Breath+, Prf weapons*) - default at 5<:Icon_Rarity_5:448266417553539104>\nRetro-Prfs (*Felicia's Plate*) - Available at 5<:Icon_Rarity_5:448266417553539104>, promotes from nothing",1],["__<:Skill_Assist:444078171025965066> **Assists**__","Tier 1 (*Rallies, Dance/Sing, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Sharena has hers default at 2\\*~~\nTier 2 (*Double Rallies*) - Available at 4<:Icon_Rarity_4:448266418459377684>\nPrf Assists (*Sacrifice*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Skill_Special:444078170665254929> **Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Daylight, New Moon, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Alfonse and Anna have theirs default at 2\\*~~\nTier 2 (*Sol, Luna, etc.*) - Available at 4<:Icon_Rarity_4:448266418459377684> ~~Jaffar and Saber have theirs also default at 5\\*~~\nTier 3 (*Galeforce, Aether, Prf Specials*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1]],2)
+    create_embed(event,"__**Non-healers**__","",xcolor,"Most non-healer units have at least one Scenario X passive and at least one Scenario Y passive",nil,[["__<:Skill_Weapon:444078171114045450> **Weapons**__","Tier 1 (*Iron, basic magic*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Steel, El- magic, Fire Breath+*) - Available at 2<:Icon_Rarity_2:448266417872044032>, Default at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 (*Silver, super magic*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Kana(M) has his unavailable until 4\\*~~, default at 4<:Icon_Rarity_4:448266418459377684>\nTier 4 (*+ weapons other than Fire Breath+, Prf weapons*) - default at 5<:Icon_Rarity_5:448266417553539104>\nRetro-Prfs (*Felicia's Plate*) - Available at 5<:Icon_Rarity_5:448266417553539104>, promotes from nothing",1],["__<:Skill_Assist:444078171025965066> **Assists**__","Tier 1 (*Rallies, Dance/Sing/Play, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Sharena has hers default at 2\\*~~\nTier 2 (*Double Rallies*) - Available at 4<:Icon_Rarity_4:448266418459377684>\nPrf Assists (*Sacrifice*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Skill_Special:444078170665254929> **Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Daylight, New Moon, etc.*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 4<:Icon_Rarity_4:448266418459377684> ~~Alfonse and Anna have theirs default at 2\\*~~\nTier 2 (*Sol, Luna, etc.*) - Available at 4<:Icon_Rarity_4:448266418459377684> ~~Jaffar and Saber have theirs also default at 5\\*~~\nTier 3 (*Galeforce, Aether, Prf Specials*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1]],2)
     create_embed(event,"__**Healers**__","",0x64757D,"Most healers have a Scenario Y passive",nil,[["__#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')}#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')} **Damaging Staves**__","Tier 1 (*only Assault*) - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*non-plus staves*) - Available at 3<:Icon_Rarity_3:448266417934958592> ~~Lyn(Bride) has hers default when summoned~~\nTier 3 (*+ staves, Prf weapons*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Assist_Staff:454451496831025162> **Healing Staves**__","Tier 1 (*Heal*) - Default at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 (*Mend, Reconcile*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 (*all other non-plus staves*) - Available at 4<:Icon_Rarity_4:448266418459377684>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 4 (*+ staves, Prf staves if healers got them*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1],["__<:Special_Healer:454451451805040640> **Healer Specials**__","Miracle - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 1 (*Imbue*) - Available at 2<:Icon_Rarity_2:448266417872044032>, default at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 (*single-stat Balms, Heavenly Light*) - Available at 3<:Icon_Rarity_3:448266417934958592>, default at 5<:Icon_Rarity_5:448266417553539104>\nTier 3 (*double-stat Balms*) - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 4 (*+ Balms*) - Available at 5<:Icon_Rarity_5:448266417553539104>\nPrf Specials (*no examples yet, but they may come*) - Available at 5<:Icon_Rarity_5:448266417553539104>",1]],2)
     create_embed(event,"__**Passives**__","",0x245265,nil,nil,[["__<:Passive_X:444078170900135936> **Scenario X**__","Tier 1 - Available at 1<:Icon_Rarity_1:448266417481973781>\nTier 2 - Available at 2<:Icon_Rarity_2:448266417872044032> or 3<:Icon_Rarity_3:448266417934958592>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>"],["__<:Passive_Y:444078171113914368> **Scenario Y**__","Tier 1 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 2 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 3 - Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Prf:444078170887553024> **Prf Passives**__","Available at 5<:Icon_Rarity_5:448266417553539104>"],["__<:Passive_Z:481922026903437312> **Scenario Z**__","Tier 1 - Available at 2<:Icon_Rarity_2:448266417872044032>\nTier 2 - Available at 3<:Icon_Rarity_3:448266417934958592>\nTier 3 - Available at 4<:Icon_Rarity_4:448266418459377684>\nTier 4 - Available at 5<:Icon_Rarity_5:448266417553539104>"]],2)
   else
@@ -1686,6 +1697,9 @@ def disp_unit_art(event,name,bot)
     artype=['Face_Load','Title Screen']
     j[6]=''
   end
+  resp=false
+  resp=true if has_any?(args.map{|q| q.downcase},['resplendant','resplendent','ascension','ascend','resplend','ex'])
+  resp=false unless j[9][0].include?('RA')
   lookout=lookout_load('SkillSubsets')
   lookout=lookout.reject{|q| q[2]!='Art'}
   charza=j[0].gsub(' ','_')
@@ -1725,6 +1739,7 @@ def disp_unit_art(event,name,bot)
     zart.compact!
   end
   artype2=[]
+  charza="#{charza}/Resplendent" if resp
   for i in 0...zart.length
     m=false
     IO.copy_stream(open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{charza}/Face_#{zart[i]}.png"), "C:/Users/Mini-Matt/Desktop/devkit/FEHTemp#{@shardizard}.png") rescue m=true
@@ -1735,11 +1750,16 @@ def disp_unit_art(event,name,bot)
   artype=artype2.map{|q| q} if artype2.length>0
   artype=['Face','Default'] if artype.length<=0
   art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{charza}/#{artype[0]}.png"
-  art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{charza}.png" if artype[0]=='Sprite'
+  if artype[0]=='Sprite'
+    charza=charza.gsub('/','_')
+    art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{charza}.png"
+  end
   disp=''
   nammes=['','','']
-  unless j[6].nil? || j[6].length<=0
-    m=j[6].split(' as ')
+  pos=0
+  pos=1 if resp && j[6].length>1
+  unless j[6][pos].nil? || j[6][pos].length<=0
+    m=j[6][pos].split(' as ')
     nammes[0]=m[0]
     disp="#{disp}\n**Artist:** #{m[m.length-1]}"
   end
@@ -1772,14 +1792,18 @@ def disp_unit_art(event,name,bot)
     for i in 0...chars.length
       x=chars[i]
       unless x[6].nil? || x[6].length<=0 || x[7][0].nil? || x[7][0].length<=0 || x[7][1].nil? || x[7][1].length<=0
-        m=x[6].split(' as ')
+        m=x[6][0].split(' as ')
         m2=x[7][0].split(' as ')
         m3=x[7][1].split(' as ')
         charsx[2].push("#{x[0]}") if m[0]==nammes[0] && m2[0]==nammes[1] && m3[0]==nammes[2]
       end
-      unless x[6].nil? || x[6].length<=0
-        m=x[6].split(' as ')
+      unless x[6][0].nil? || x[6][0].length<=0
+        m=x[6][0].split(' as ')
         charsx[0].push(x[0]) if m[0]==nammes[0] && !charsx[2].include?(x[0])
+      end
+      unless x[6][1].nil? || x[6][1].length<=0
+        m=x[6][1].split(' as ')
+        charsx[0].push("#{x[0]} - Resplendent") if m[0]==nammes[0] && !charsx[2].include?(x[0])
       end
       unless x[7][0].nil? || x[7][0].length<=0 || x[7][1].nil? || x[7][1].length<=0
         if nammes[1].include?(' & ') || nammes[2].include?(' & ')
@@ -2023,8 +2047,10 @@ def disp_unit_art(event,name,bot)
     disp="#{disp}\n**Same __everything__:** #{charsx[2].join(', ')}" if charsx[2].length>0
     disp=dispx if disp.length>=1900
     event.respond "#{disp}\n\n#{art}"
+    event.respond "This unit has a Resplendent Ascension.  Include the word \"Resplendent\" to look at that art." if j[9][0].include?('RA') && !resp
   else
     ftr=nil
+    ftr="This unit has a Resplendent Ascension.  Include the word \"Resplendent\" to look at that art." if j[9][0].include?('RA') && !resp
     flds=[]
     flds.push(['Same Artist',charsx[0].join("\n")]) if charsx[0].length>0
     if charsx[1].length>0
@@ -2042,7 +2068,7 @@ def disp_unit_art(event,name,bot)
     if flds.length.zero?
       flds=nil
     elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1500 && safe_to_spam?(event)
-      create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art])
+      create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__#{"\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art])
       if flds.map{|q| q.join("\n")}.join("\n\n").length>=1900
         for i in 0...flds.length
           create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,[flds[i]])
@@ -2058,7 +2084,7 @@ def disp_unit_art(event,name,bot)
       flds[-1][2]=nil if flds.length<3
       flds[-1].compact!
     end
-    create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,unit_color(event,find_unit(j[0],event),j[0],0),ftr,[nil,art],flds)
+    create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__#{"\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,unit_color(event,find_unit(j[0],event),j[0],0),ftr,[nil,art],flds)
   end
   return nil
 end
@@ -2172,6 +2198,17 @@ def disp_learnable_skills(event,name,bot)
         end
         if k2[i2].include?('Singers')
           u2=sklz[sklz.find_index{|q| q[1]=='Sing'}]
+          b=[]
+          for i3 in 0...@max_rarity_merge[0]
+            u=u2[9][i3].split(', ')
+            for j2 in 0...u.length
+              b.push(u[j2]) unless b.include?(u[j2]) || u[j2].include?('-')
+            end
+          end
+          k4=true if b.include?(j[0])
+        end
+        if k2[i2].include?('Bards')
+          u2=sklz[sklz.find_index{|q| q[1]=='Play'}]
           b=[]
           for i3 in 0...@max_rarity_merge[0]
             u=u2[9][i3].split(', ')
@@ -3989,8 +4026,8 @@ def disp_FGO_based_stats(bot,event,srv=nil)
   dispnum="0014" if srv[0]<2 && art==4
   unless art<=1
     m=false
-    IO.copy_stream(open("http://fate-go.cirnopedia.org/icons/servant/servant_#{dispnum}.png"), "C:/Users/#{@mash}/Desktop/devkit/FEHTemp#{@shardizard}.png") rescue m=true
-    art=1 if File.size("C:/Users/#{@mash}/Desktop/devkit/FEHTemp#{@shardizard}.png")<=10 || m
+    IO.copy_stream(open("http://fate-go.cirnopedia.org/icons/servant/servant_#{dispnum}.png"), "#{@location}devkit/FEHTemp#{@shardizard}.png") rescue m=true
+    art=1 if File.size("#{@location}devkit/FEHTemp#{@shardizard}.png")<=10 || m
   end
   dispnum="#{'0' if srv[0]<100}#{'0' if srv[0]<10}#{srv[0].to_i}#{art}"
   dispnum="#{'0' if srv[0]<100}#{'0' if srv[0]<10}#{srv[0].to_i}2" if srv[0]==74 && event.user.id==167657750971547648
@@ -4437,7 +4474,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << "*Bannerless* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bannerless'}][1].length)} current members) - Any unit that has never been a focus unit on a banner."
     event << "*Brave Heroes* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='BraveHeroes'}][1].length)} current members) - Any unit with the phrase *(Brave)* in their internal name."
     event << "*Daily Rotation* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Daily_Rotation'}][1].length)} current members) - Any unit that can be obtained via the twelve rotating Daily Hero Battle maps."
-    event << "*Dancers/Singers* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Dancers&Singers'}][1].length)} current members) - Any unit that can learn the skill Dance or the skill Sing."
+    event << "*Refreshers* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Refreshers'}][1].length)} current members) - Any unit that can learn any of the skills: Dance, Sing, or Play."
     event << "*Falchion Users* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Falchion_Users'}][1].length)} current members) - Any unit that can use one of the three Falchions, or any of their evolutions."
     event << "*Fallen Heroes* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='FallenHeroes'}][1].length)} current members) - Any unit with the phrase *(Fallen)* in their internal name."
     event << "*GHB* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='GHB'}][1].length)} current members) - Any unit that can obtained via a Grand Hero Battle map."
@@ -4670,4 +4707,98 @@ def update_howto(event,bot)
   str="#{str}\n\n8.) Add any relevant aliases to the new data."
   create_embed(event,'',str,0xD49F61)
   return nil
+end
+
+def support_order(x)
+  return 4 if x=='S'
+  return 3 if x=='A'
+  return 2 if x=='B'
+  return 1 if x=='C'
+  return 0
+end
+
+def flower_list(event,bot,args=[])
+  movement=[]
+  completex=false
+  for i in 0...args.length
+    movement.push('Flier') if ['flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi'].include?(args[i].downcase)
+    movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs'].include?(args[i].downcase)
+    movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
+    movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
+    completex=true if ['complete','completed','finished','finish','done'].include?(args[i].downcase)
+  end
+  if movement.length<=0 && !completex && !safe_to_spam?(event)
+    event.respond "<:Dragonflower_Infantry:541170819980722176><:Dragonflower_Orange:552648156790390796><:Dragonflower_Cavalry:541170819955556352><:Dragonflower_Armor:541170820001824778><:Dragonflower_Cyan:552648156202926097><:Dragonflower_Flier:541170820089774091><:Dragonflower_Purple:552648232673607701><:Dragonflower_Pink:552648232510160897>\nI won't post a list of all your units here, so instead, look at all the pretty flowers!\nhttps://www.getrandomthings.com/list-flowers.php"
+    return nil
+  end
+  load_devunits()
+  data_load()
+  untz=@units.map{|q| q}
+  m=@dev_units.reject{|q| untz.find_index{|q2| q2[0]==q[0]}.nil? || !untz[untz.find_index{|q2| q2[0]==q[0]}][13][0].nil?}.map{|q| [q[0],q[1],q[2],q[6],q[5]]}
+  m=m.sort{|b,a| ((support_order(a[4]) <=> support_order(b[4]))) == 0? ((a[3] <=> b[3]) == 0 ? (b[0] <=> a[0]) : (a[3] <=> b[3])) : (support_order(a[4]) <=> support_order(b[4]))}
+  f=[['<:Dragonflower_Infantry:541170819980722176>Infantry<:Icon_Move_Infantry:443331187579289601>',[]],
+     ['<:Dragonflower_Cavalry:541170819955556352>Cavalry<:Icon_Move_Cavalry:443331186530451466>',[]],
+     ['<:Dragonflower_Flier:541170820089774091>Fliers<:Icon_Move_Flier:443331186698354698>',[]],
+     ['<:Dragonflower_Armor:541170820001824778>Armored<:Icon_Move_Armor:443331186316673025>',[]],
+     ['Completed Projects',[]]]
+  for i in 0...m.length
+    x=untz.find_index{|q| q[0]==m[i][0]}
+    unless x.nil?
+      x=untz[x]
+      xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}"
+      xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}" if m[i][4]!='-'
+      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}" if m[i][1].to_i==5 && m[i][2].to_i==10
+      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
+      complete=false
+      if x[3]=='Infantry' && x[9][0].include?('PF')
+        complete=true if m[i][3]>=10
+      else
+        complete=true if m[i][3]>=5 
+      end
+      if movement.length>0 && x[3]!=movement[0]
+      elsif complete && !safe_to_spam?(event) && !completex
+      elsif complete
+        xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**"
+        xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**" if m[i][4]!='-'
+        xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10
+        xx="**5<:Icon_Rarity_Sp10:448272715653054485> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
+        f[4][1].push(xx)
+      elsif completex
+      else
+        f[0][1].push(xx) if x[3]=='Infantry'
+        f[1][1].push(xx) if x[3]=='Cavalry'
+        f[2][1].push(xx) if x[3]=='Flier'
+        f[3][1].push(xx) if x[3]=='Armor'
+      end
+    end
+  end
+  f=f.reject{|q| q[1].length<=0}
+  if f[0][1].length>16 && !safe_to_spam?(event)
+    if f[0][1].reject{|q| !q.include?('** df+')}.length>0
+      f[0][1]=f[0][1].reject{|q| !q.include?('** df+') && !q.include?('Alm') && !q.include?('Sakura')}
+    elsif f[0][1].reject{|q| !q.include?('p10:')}.length>0
+      f[0][1]=f[0][1].reject{|q| !q.include?('p10') && !q.include?('Alm') && !q.include?('Sakura')}
+    elsif f[0][1].reject{|q| !q.include?('>+')}.length>0
+      f[0][1]=f[0][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
+    end
+  end
+  if f.length<=0
+    event.respond "Empty list"
+  elsif f.map{|q| "#{q[0]}\n#{q[1].join("\n")}"}.join("\n\n").length>1800
+    if f.reject{|q| q[0].include?('Infantry')}.map{|q| "#{q[0]}\n#{q[1].join("\n")}"}.join("\n\n").length>1800
+      for i in 0...f.length
+        create_embed(event,f[i][0],'',0x008b8b,nil,nil,triple_finish(f[i][1]))
+      end
+    else
+      create_embed(event,f[0][0],'',0x008b8b,nil,nil,triple_finish(f[0][1]))
+      create_embed(event,'','',0x008b8b,nil,nil,f.reject{|q| q[0].include?('Infantry')}.map{|q| [q[0],q[1].join("\n")]})
+    end
+  else
+    title=''
+    if movement.length>0 && f.length>1
+      title="#{f[0][0]}"
+      f[0][0]='Incomplete Projects'
+    end
+    create_embed(event,title,'',0x008b8b,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
+  end
 end

@@ -1,6 +1,7 @@
-Tsubasa, Mamori, Kiria, Eleonora, Itsuki, Chrom(Launch), Caeda, Virion\Tempest\20/01/2020, 30/01/2020
-Duma, Alfonse(Winter), Lethe(Winter), Selkie(Winter), Eir(Winter), Anna(Winter), Tanya, Osian, Hrid, Sharena\Aether\21/01/2020, 27/01/2020\Light, Dark\Healing Tower, Healing Tower
-Larcei, Shannan, Ced, Altena, Travant, Rebecca, Henry, Gunter, Ephraim(Fire), Sharena\Arena\21/01/2020, 27/01/2020\Fire, Water
-Eir, Larcei, Shannan, Ced, Altena, Travant, Rutger, Loki(Bunny), Azura(Vallite), Anna\Aether\28/01/2020, 03/02/2020\Astra, Anima\Panic Manor, Panic Manor
-Larcei, Shannan, Ced, Altena, Travant, Rebecca, Henry, Gunter, Ephraim(Fire), Sharena\Arena\28/01/2020, 03/02/2020\Fire, Wind
-Eir, Larcei, Shannan, Ced, Altena, Travant, Rutger, Loki(Bunny), Azura(Vallite), Anna\Aether\04/02/2020, 10/02/2020\Light, Dark\Unknown, Unknown
+Thrasir, Alm(Valentines), Rudolf(Valentines), Faye(Valentines), Conrad(Valentines), Silque(Valentines), Delthea(Fallen), Louise(Bride), Alm(Saint), Alfonse\Aether\25/02/2020, 02/03/2020\Astra, Anima\Cavalry School, Cavalry School
+Alm(Valentines), Rudolf(Valentines), Faye(Valentines), Conrad(Valentines), Silque(Valentines), Lyon, Abel, Barst, Lyn(Wind), Alfonse\Arena\25/02/2020, 02/03/2020\Water, Earth
+Thrasir, Alm(Valentines), Rudolf(Valentines), Faye(Valentines), Conrad(Valentines), Silque(Valentines), Delthea(Fallen), Louise(Bride), Alm(Saint), Alfonse\Aether\03/03/2020, 09/03/2020\Light, Dark\Flier School, Flier School
+Chrom(Crowned), Leila, Nils, Fiora, Rath, Heath, Laslow, Byleth(F), Ryoma(Supreme), Sharena\Arena\03/03/2020, 09/03/2020\Water, Wind
+Yune, Leila, Nils, Fiora, Rath, Heath, Cynthia, Ylgr(Summer), Roy(Fire), Anna\Aether\10/03/2020, 16/03/2020\Astra, Anima\Bright Shrine, Bright Shrine
+Chrom(Crowned), Leila, Nils, Fiora, Rath, Heath, Laslow, Byleth(F), Ryoma(Supreme), Sharena\Arena\10/03/2020, 16/03/2020\Water, Fire
+Yune, Leila, Nils, Fiora, Rath, Heath, Cynthia, Ylgr(Summer), Roy(Fire), Anna\Aether\17/03/2020, 23/03/2020\Light, Dark\Dark Shrine, Dark Shrine

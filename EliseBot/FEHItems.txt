@@ -1,12 +1,14 @@
 Aether Stone\Main\999\Used in Aether Raids to build and improve structures.
 Arena Crown\Main\infinite\A crown awarded to a legendary summoner.\Actual maximum is based on how many Arena seasons have occured since 13 August 2018.
 Arena Medal\Main\999999\Used in the Weapon Refinery.
+Divine Code\Main\999999\A scrap of paper with otherworldy power.\Used when compiling Hero Manuals.
 Divine Dew\Main\999\Used in the Weapon Refinery to refine some special weapons.\"Special" weapons refers to weapons that cannot be inherited, what is commonly referred to as Prf weapons.
 Dueling Crest\Main\999999\Restores all Dueling Swords.\Cannot be used unless current Dueling Sword count is 0.
 Heavenly Dew\Main\9999\Used in Aether Raids to strengthen Fortress (O/D), and resources.
 Hero Feather\Main\999999\Used to unlock potential in allies.\Costs `2*10^x` feathers to promote an ally to the next rarity, where x is the current rarity of that ally.
 Heroic Grail\Main\999999\Used to summon from a selection of Heroes.  In the Allies menu, tap Use Heroic Grails.\Used to summon Grand Hero Battle and Tempest Trials units.
 Light's Blessing\Main\999999\Used during battle.  Restores all allies' HP, movement, and use of Specials.\Not to be confused with Light Blessing.
+Midgard Gem\Main\999999\Used in Mjolnir's Strike to build and improve your structures for Midgard's Shield.
 Orb\Main\infinite\Used for summoning and various other features.\Can be used as a replacement for: Stamina Potions, Dueling Crests, Light's Blessings.  Can also be used to upgrade the castle and increase the global Exp. modifier, or to increase barracks size.  Actual maximum is 99,999 f2p orbs and indefinite paid orbs.
 Refining Stone\Main\999\Used in the Weapon Refinery to refine normal weapons.\"Normal" weapons refers to weapons that can be inherited.
 Sacred Coin\Main\999\A valuable ceremonial coin for the Sacred Seal Forge used in antiquity.\Cost of creating and promoting Sacred Seals.
@@ -53,7 +55,7 @@ Battle Flag\Event\9999\Used to participate in Voting Gauntlets.\Multiplies user 
 Conquest Lance\Event\99\Grants +8 stamina for Grand Conquests.\Grand Conquest stamina is different from stamina for other modes.
 Havoc Axe\Event\99\Grants +8 stamina for Rokkr Sieges.\Rokkr Sieges stamina is different from stamina for other modes.
 Forma Torch\Event\99\Used to extend stamina in the Hall of Forms.\Hall of Forms
-First Summon Ticket\Event\99\This ticket can be used only for the specified summoning event. It will let you start a summoning session without using Orbs.
+First Summon Ticket\Event\99\This ticket can be used only for the specified summoning event. It will let you start a summoning session without using Orbs.\Each type of ticket is limited to its own specific banner.  Eight types of tickets have been seen so far.
 Frosty Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\New Year's 2019
 Spring Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Spring 2019
 Summer Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Summer 2019

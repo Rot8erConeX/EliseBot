@@ -1,9 +1,9 @@
 Sakura\Anna\Anna(Winter)\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Fjorm(Bride)\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Matthew\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
-Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lyn(Brave)\Nino(Launch)\Sharena
+Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Fjorm(Bride)\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Matthew\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
+Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lyn(Brave)\Nino(Fangs)\Nino(Launch)\Sharena
 
 Sakura
-5\10\Resistance\Defense\S\9\Alm(Saint)
+5\10\Resistance\Defense\S\10\Alm(Saint)
 Assault\Absorb\Absorb+\Absorb+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -11,6 +11,26 @@ C Duel Infantry 1\C Duel Infantry 2\C Duel Infantry 3
 Wings of Mercy 1\Wings of Mercy 2\Wings of Mercy 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Live to Serve 3
+
+Fjorm(Bride)
+5\0\Defense\Resistance\S\3\Celica(Queen)
+Assault\Gjallarbru
+Heal\Mend\Restore\Restore+
+Imbue\Heavenly Light
+HP +3\HP Atk 1\HP Atk 2
+Dazzling Staff 1\Dazzling Staff 2\Dazzling Staff 3
+Ground Orders 1\Ground Orders 2\Ground Orders 3
+Aerobatics 2
+
+Sakura(Bath)
+5\2\Resistance\HP\S\5\
+Assault\Grandscratcher\Grandscratcher+\Grandscratcher+ (+) Dazzling Mode
+Heal\Reconcile\Rehabilitate\Rehabilitate+
+Imbue\Still-Water Balm\Fireflood Balm\Fireflood Balm+
+Brazen Atk/Def 1\Brazen Atk/Def 2\Brazen Atk/Def 3
+Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
+Spd Opening 1\Spd Opening 2\Spd Opening 3
+Atk/Spd Bond 2
 
 Alm
 5\0\Speed\Resistance\-\0\
@@ -41,6 +61,16 @@ Darting Blow 1\Darting Blow 2\Darting Blow 3\Darting Blow 4
 Null Follow-up 1\Null Follow-up 2\Null Follow-up 3
 Odd Atk Wave 1\Odd Atk Wave 2\Odd Atk Wave 3
 Even Res Wave 3
+
+Alm(Valentines)
+5\0\HP\Speed\-\0\
+Iron Axe\Steel Axe\Silver Axe\Scepter of Love
+Reciprocal Aid
+New Moon\Moonbow\Lunar Flash
+Bonus Doubler 1\Bonus Doubler 2\Bonus Doubler 3
+Lull Atk/Spd 1\Lull Atk/Spd 2\Lull Atk/Spd 3
+Rouse Spd/Res 1\Rouse Spd/Res 2\Rouse Spd/Res 3
+Deflect Magic 3
 
 Anna
 5\0\ \ \-\0\
@@ -103,7 +133,7 @@ Atk/Spd Oath 1\Atk/Spd Oath 2\Atk/Spd Oath 3
 Swift Sparrow 2
 
 Cherche
-5\10\Attack\Speed\-\3\
+5\10\Attack\Speed\-\5\
 Iron Axe\Steel Axe\Hammer\Hammer+\Slaying Hammer+\__Slaying Hammer+ (+) Effect Mode__\Cherche's Axe\Cherche's Axe (+) Effect Mode
 Pivot
 New Moon\Luna
@@ -113,8 +143,8 @@ Fortify Def 1\Fortify Def 2\Fortify Def 3
 Attack +3
 
 Cordelia
-5\10\Attack\HP\-\0\
-Iron Lance\Steel Lance\Brave Lance\__Brave Lance+__\Cordelia's Lance\~~Cordelia's Lance (+) Effect Mode~~
+5r\10\Attack\HP\-\0\
+Iron Lance\Steel Lance\Brave Lance\__Brave Lance+__\Cordelia's Lance\Cordelia's Lance (+) Effect Mode
 Reposition
 Night Sky\Astra\Galeforce
 Triangle Adept 1\Triangle Adept 2\Triangle Adept 3
@@ -123,7 +153,7 @@ Threaten Spd 1\Threaten Spd 2\Threaten Spd 3
 Quickened Pulse
 
 Cordelia(Bride)
-5\1\Speed\Defense\-\0\
+5\1\Speed\Defense\-\8\
 Iron Bow\Steel Bow\Brave Bow\Brave Bow+
 Rally Attack\Rally Atk/Spd\Rally Atk/Spd+
 New Moon\Moonbow
@@ -183,7 +213,7 @@ Def Ploy 1\Def Ploy 2\Def Ploy 3
 Res Ploy 3
 
 Ethlyn
-5\9\ \ \-\4\
+5\10\ \ \-\5\
 Assault\Fear\Fear+\Fear+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -217,7 +247,7 @@ Fiora(Summer)
 Iron Sword\Steel Sword\Petal Parasol\Petal Parasol+\Petal Parasol+ (+) Attack Mode
 Swap
 Chilling Wind\Glacies
-Death Blow 1\Death Blow 2\~~Death Blow 3~~
+Death Blow 1\Death Blow 2\Death Blow 3
 Spd/Res Link 1\Spd/Res Link 2\Spd/Res Link 3
 Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Brazen Atk/Spd 3 
@@ -231,16 +261,6 @@ Atk/Def Bond 1\Atk/Def Bond 2\Atk/Def Bond 3
 Shield Pulse 1\Shield Pulse 2\Shield Pulse 3
 Spur Atk 1\Drive Atk 1\Drive Atk 2
 Drive Def 2
-
-Fjorm(Bride)
-5\0\Defense\Resistance\-\1\Celica(Queen)
-Assault\Gjallarbru
-Heal\Mend\Restore\Restore+
-Imbue\Heavenly Light
-HP +3\HP Atk 1\HP Atk 2
-Dazzling Staff 1\Dazzling Staff 2\Dazzling Staff 3
-Ground Orders 1\Ground Orders 2\Ground Orders 3
-Aerobatics 2
 
 Genny
 5\0\HP\Defense\-\0\
@@ -321,6 +341,16 @@ Warding Stance 1\Mirror Stance 1\Mirror Stance 2
 Disarm Trap 1\Disarm Trap 2\Disarm Trap 3
 Spd/Res Gap 1\Spd/Res Gap 2\Spd/Res Gap 3
 Torrent Dance 3
+
+Leila
+5\0\HP\Resistance\-\0\
+Iron Dagger\Steel Dagger\Silver Dagger\Constant Dagger
+Rally Speed\~~Rally Atk/Spd~~\~~Rally Atk/Spd+~~
+Night Sky\~~Glimmer~~
+Life and Death 1\Life and Death 2\Life and Death 3\~~Life and Death 4~~
+Atk/Def Ruse 1\Atk/Def Ruse 2\Atk/Def Ruse 3
+Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
+Fortify Res 3
 
 Lethe
 5\0\Resistance\HP\-\0\
@@ -404,7 +434,7 @@ Fortress Def 3
 
 Norne
 5\1\Attack\Resistance\-\0\
-Iron Bow\Steel Bow\Guard Bow\Guard Bow+\~~Guard Bow+ (+) Attack Mode~~
+Iron Bow\Steel Bow\Guard Bow\Guard Bow+\Guard Bow+ (+) Attack Mode
 Reposition
 Night Sky\Glimmer
 Brazen Spd/Def 1\Brazen Spd/Def 2\Brazen Spd/Def 3
@@ -472,16 +502,6 @@ Vantage 1\Vantage 2\Vantage 3
 Fortify Res 1\Fortify Res 2\~~Fortify Res 3~~
 Iote's Shield
 
-Sakura(Bath)
-5\0\Resistance\HP\-\5\
-Assault\Grandscratcher\Grandscratcher+\Grandscratcher+ (+) Dazzling Mode
-Heal\Reconcile\Rehabilitate\Rehabilitate+
-Imbue\Still-Water Balm\Fireflood Balm\Fireflood Balm+
-Brazen Atk/Def 1\Brazen Atk/Def 2\Brazen Atk/Def 3
-Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
-Spd Opening 1\Spd Opening 2\Spd Opening 3
-Atk/Spd Bond 2
-
 Sakura(Halloween)
 5\0\Defense\Speed\-\0\
 Iron Dagger\Steel Dagger\Kitty Paddle\Kitty Paddle+
@@ -533,7 +553,7 @@ Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
 Quick Riposte 3
 
 Tethys
-5\2\Attack\Resistance\-\0\
+5\4\Attack\Resistance\-\0\
 Iron Dagger\Steel Dagger\The Cleaner\The Cleaner+\The Cleaner+ (+) Resistance Mode
 Dance
 Chilling Wind/Glacies

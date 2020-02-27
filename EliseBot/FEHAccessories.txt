@@ -62,6 +62,8 @@ Star of Nifl EX\Hair\A good luck charm that belongs to Ylgr. It has been blessed
 Summer Festival Mask\Hair\A mask found at Hoshidan festivals. The dragon-face motif is pretty cute!\Clear floors 81-85 in Illusory Dungeon: Festival of Heroes.
 Wind Charm\Hair\A charm given by Ced. It's so light, the wearer is likely to forget they have it on.\Reach 100 green friendship with Ced during Forging Bonds: Beyond Blood.
 Wind Charm EX\Hair\A charm given by Ced. It makes a pretty sound when the wind blows through it.\Reach 2500 green friendship with Ced during Forging Bonds: Beyond Blood
+Wing-Leader Icon\Hair\A hair ornament from Fiora.  It has the shape of a pegasus's feathers, marking the wearer as a wing commander.\Reach 100 blue friendship with Fiora during Forging Bonds: Study in Crimson.
+Wing-Leader Icon EX\Hair\A hair ornament from Fiora.  Marks the wearer as the commander of a wing of pegasus knights.  Polished to a shine.\Reach 2500 blue friendship with Fiora during Forging Bonds: Study in Crimson.
 Winglet Hairpin\Hair\A hairpin once owned by Mareeta. It shines with a sinister luster, perhaps due to a curse.\Reach 100 red friendship with Mareeta(Fallen) during Forging Bonds: Power's Den
 Winglet Hairpin EX\Hair\A hairpin once owned by Mareeta, it was a gift from a friend. It is both delicate and soft.\Reach 2500 red friendship with Mareeta(Fallen) during Forging Bonds: Power's Den
 Wistful Hairpin\Hair\Berkut made a gift of this ornament. The flower's somewhat charred.\Reach 100 blue friendship with Berkut(Fallen) during Forging Bonds: Power's Den
@@ -75,6 +77,8 @@ Armored Helmet\Hat\This helmet from Hector was forged in Ostia. It's pretty heav
 Armored Helmet EX\Hat\The extravagant design of this Ostian helmet contrasts with its battle marks to paint a vivid picture of its history.\Reach 2500 blue friendship with Hector(Brave) during Forging Bonds: Rejecting Destiny.
 Axeman Bandana\Hat\A bandana of Osian's. It's made of tough material.\Reach 100 green friendship with Osian during Forging Bonds: Path to the Future.
 Axeman Bandana EX\Hat\A bandana of Osian's. It's made of tough material and was designed to be tied and retied.\Reach 2500 green friendship with Osian during Forging Bonds: Path to the Future.
+Bard Torse\Hat\A ring-shaped headpiece from Nils.  Styled with the express purpose of commanding attention.\Reach 100 green friendship with Nils during Forging Bonds: Study in Crimson.
+Bard Torse EX\Hat\A ring-shaped headpiece from Nils.  The decorative features are stunning to behold.\Reach 2500 green friendship with Nils during Forging Bonds: Study in Crimson.
 Baronial Heaume\Hat\A sturdy baron's helm previously worn by Forsyth.\Reach 100 blue friendship with Forsyth during Forging Bonds: Common Virtues.
 Baronial Heaume EX\Hat\A sturdy baron's helm previously worn by Forsyth. It is a keepsake marked with a lieutenant's rank.\Reach 2500 blue friendship with Forsyth during Forging Bonds: Common Virtues.
 Bat Ears\Hat\Aren't they cute?\Clear floors 6-10 in Illusory Dungeon: Farewells.
@@ -135,6 +139,8 @@ Maid Headpiece\Hat\A maid's headpiece from Flora. This is the authentic Nohrian 
 Maid Headpiece EX\Hat\A maid's headpiece from Flora. Only the head maid is allowed to wear this superior-quality item.\Reach 2500 red friendship with Flora during Forging Bonds: High Tea Jinks.
 Mistress Band\Hat\A headband handed down from Eyvel. It is lightweight, but sturdy.\Reach 100 orange friendship with Eyvel during Forging Bonds: Path ot the Future.
 Mistress Band EX\Hat\A headband handed down from Eyvel. It is lightweight, but sturdy. It appears to have not been worn for some time.\Reach 2500 orange friendship with Eyvel during Forging Bonds: Path to the Future.
+Nomad Bandana\Hat\A thick bandana from Rath.  Made from sturdy cloth that is difficult to cut, even when pulled taut.\Reach 100 red friendship with Rath during Forging Bonds: Study in Crimson.
+Nomad Bandana EX\Hat\A thick bandana from Rath.  It was woven with a beautiful pattern adorning its surface.\Reach 2500 red friendship with Rath during Forging Bonds: Study in Crimson.
 Picnic Lunch\Hat\A set with handmade sandwiches from Flora, tea brewed by Lukas, and some tomatoes carefully prepared by Leo.\Clear floors 16-20 in Illusioray Dungeon:Heartstring's Ties
 Plegian Crown\Hat\A crown said to be worn by members of the Grimleal. Aversa had it in her possession.\Reach 100 orange friendship with Aversa during Forging Bonds: Dueling Desires.
 Plegian Crown EX\Hat\An impressive crown made of pure gold. Aversa had it in her possession.\Reach 2500 orange friendship with Aversa during Forging Bonds: Dueling Desires.
@@ -180,6 +186,8 @@ Master Eye Patch\Mask\An eye patch worn by the Mirage Master Kiria.\Clear floors
 Mysterious Mask\Mask\A mask once worn by a swordsman claiming to be the Hero-King Marth.\Use lance ally to defeat foes level 10 or higher during June 2018 Quest "Yay, Accessories!".
 Reading Glasses\Mask\According to Nina, your eyes won't get tired if you wear these—no matter how much, or what, you read.\Reach 100 orange friendship with Nina during Forging Bonds: High Tea Jinks.
 Reading Glasses EX\Mask\Nina says that these glasses will let you keep reading into the dead of night.\Reach 2500 orange friendship with Nina during Forging Bonds: High Tea Jinks.
+Spy Mask\Mask\A cloth mask given by Leila.  Useful when attempting to avoid drawing unwanted attention.\Reach 100 orange friendship with Leila during Forging Bonds: Study in Crimson.
+Spy Mask EX\Mask\A cloth mask given by Leila.  Perfect for protecting against dusts, powders, and vapors.\Reach 2500 orange friendship with Leila during Forging Bonds: Study in Crimson.
 Swim Goggles\Mask\Use these to see clearly underwater. The added snorkel means you can take your time watching sea life.\Clear floors 81-85 in Illusory Dungeon: Summer of Heroes.
 Tinted Glasses\Mask\Spectacles with colored lenses from Brady. Good for blocking out the bright teatime sun.\Reach 100 orange friendship with Brady during Forging Bonds: Spanning Time.
 Tinted Glasses EX\Mask\Spectacles with colored lenses from Brady. If worn into battle, your foe will take you more seriously.\Reach 2500 orange friendship with Brady during Forging Bonds: Spanning Time.
@@ -193,7 +201,8 @@ Divine Tiara\Tiara\A tiara from Tiki. The unchecked power within gives it a disq
 Divine Tiara EX\Tiara\A tiara from Tiki. The red jewel affixed to it is of remarkable clarity.\Reach 2500 orange friendship during Tiki(Young)(Fallen) during Forging Bonds: Power's Den.
 Ethereal Tiara\Tiara\A sacred headpiece handed down from Nagi. The shape recalls Tiki's tiara, but there are subtle differences.\Reach 100 green friendship with Nagi during Forging Bonds: A Time to Shine
 Ethereal Tiara EX\Tiara\A sacred headpiece handed down from Nagi. The power of the dragon divinity reborn hangs about it.\Reach 2500 green friendship with Nagi during Forging Bonds: A Time to Shine
-Gold Imperial Tiara\Tiara\Proof of victory over Legendary Roy.\Beat Roy's LHB at Abyssal difficulty.
+Gold Imperial Tiara\Tiara\Proof of victory over Legendary Roy.\Beat Roy(Fire)'s LHB at Abyssal difficulty.
+Gold Wings of Darkness\Tiara\Proof of victory over Legendary Chrom.\Beat Chrom(Crowned)'s LHB at Abyssal difficulty.
 Hoshidan Headpiece\Tiara\This headwear is the exclusive hair ornament of the queen of Hoshido.\Clear floors 6-10 in Illusory Dungeon: Labyrinth of Despair.
 Ilian Wing Hairpin\Tiara\An ornament from Thea. It's a token of the Ilian pegasus knights, fashioned after a pegasus wing.\Reach 100 blue friendship with Thea during Forging Bonds: Reason to Fight
 Ilian Wing Hairpin EX\Tiara\An ornament from Thea. It's a token of the Ilian pegasus knights, said to also serve as a protective charm.\Reach 2500 blue friendship with Thea during Forging Bonds: Reason to Fight

@@ -1,0 +1,4 @@
+Askr Path\Anna; 4; 2, 0\Sharena; 4; 3, 0\Alfonse; 4; 4, 0
+Whitewing Path\Palla; 4; 2, 0\Catria; 4; 3, 0\Est; 5; 6, 0
+Path 1\Alfonse(Bunny); 5; 20, 0\Ylgr; 5; 35, 0\Bruno(Bunny); 5; 30, 0\Fjorm(Winter); 5; 35, 0\Laevatein(Summer); 5; 40, 0
+Path 2\Caeda(Bride); 5; 20, 0\Celica; 5; 25, 0\Genny(Picnic); 5; 30, 0\Palla(Bunny); 5; 35, 0\Kliff; 5; 40, 0
