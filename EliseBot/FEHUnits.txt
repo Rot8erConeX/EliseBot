@@ -480,13 +480,13 @@ Shannan\Red, Blade\ \Infantry\7, 10, 9, 8, 2\43, 38, 36, 37, 18\Okuma Yugo\Ted S
 Altena\Blue, Blade\ \Flier\8, 9, 5, 10, 2\45, 37, 25, 39, 20\Kibayashi Senri\Morgan Berry;; \479\4p5p\F\FE4\Altena
 Ced\Green, Tome, Wind\ \Infantry\5, 9, 9, 3, 7\37, 35, 39, 19, 31\Suda Ayaka\Phil Reich;; \480\5p\M\FE4, FE5\Ced
 Larcei\Red, Blade\ \Infantry\7, 9, 10, 6, 4\41, 36, 40, 30, 25\Asatani Tomoyo\Lizzie Freeman;; \481\5p\F\FE4\Larcei
-Travant\Blue, Blade\ \Flier\8, 9, 5, 10, 2\46, 36, 26, 40, 18\Soeda Ippei\Jason Marnocha;; \482\3g4g4g\M\FE4\Travant
+Travant\Blue, Blade\ \Flier\8, 9, 5, 10, 2\46, 36, 26, 40, 18\Soeda Ippei\Jason Marnocha;; \482\3g4g4g4r\M\FE4\Travant
 Plumeria\Red, Tome, Fire\ \Flier\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Yoshiku\;; \483\-\F\FEH\Plumeria
 Eleonora\Colorless, Bow\Idol, Virion, Virion\Infantry\7, 10, 10, 4, 4\42, 37, 38, 25, 24\Kakage\Jenny Yokobori & Taylor Henry;; >unknown< & Kogami Hiromichi\484\5p\F\TMS\Eleonora
 Kiria\Red, Tome, Dark\Idol, Tharja, Tharja\Infantry\6, 10, 3, 6, 8\38, 41, 20, 29, 34\cuboon\Megan Harvey & Stephanie Sheh;; >unknown< & Takada Yuuki\485\5p\F\TMS\Kiria
 Mamori\Green, Blade\Idol, Draug, Draug\Armor\7, 8, 5, 10, 7\43, 37, 24, 42, 33\Himukai Yuji\Elisabeth Simmons & Patrick Seitz;; >unknown< & Takeuchi Ryouta\486\5p\F\TMS\Mamori
 Tsubasa\Blue, Blade\Idol, Caeda, Caeda\Flier\6, 7, 10, 5, 6\39, 32, 40, 26, 30\azu-taro\Kayli Mills & Cherami Leigh;; >unknown< & Hayami Saori\487\5p\F\TMS\Tsubasa
-Itsuki\Red, Blade\Idol, Chrom, Chrom\Infantry\6, 9, 6, 8, 7\41, 37, 30, 33, 32\Mikuro\Chris Patten & Matt Mercer;; >unknown< & Sugita Tomokazu\488\4t5t\M\TMS\Itsuki
+Itsuki\Red, Blade\Idol, Chrom, Chrom\Infantry\6, 9, 6, 8, 7\41, 37, 30, 33, 32\Mikuro\Chris Patten & Matt Mercer;; >unknown< & Sugita Tomokazu\488\4t5t4r\M\TMS\Itsuki
 Alm(Valentines)\Green, Blade\Duo, Celica, Celica\Infantry\6, 7, 10, 8, 5\40, 35, 40, 32, 25\Tsukkii\Kyle McCarley & Erica Lindbeck;; Hanae Natsuki & Touyama Nao\489\5s\M\FE15, FE2\Alm
 Faye(Valentines)\Colorless, Bow\ \Armor\7, 11, 5, 9, 10\43, 40, 23, 35, 38\Tobi\Amber Connor;; Tanezaki Atsumi\490\5s\F\FE15\Faye
 Conrad(Valentines)\Red, Blade\ \Cavalry\6, 7, 4, 8, 8\39, 32, 23, 33, 35\argon / Exys Inc.\Marc Diraison;; \491\4s5s\M\FE15\Conrad

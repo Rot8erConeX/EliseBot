@@ -1,4 +1,10 @@
-Askr Path\Anna; 4; 2, 0\Sharena; 4; 3, 0\Alfonse; 4; 4, 0
-Whitewing Path\Palla; 4; 2, 0\Catria; 4; 3, 0\Est; 5; 6, 0
-Path 1\Alfonse(Bunny); 5; 20, 0\Ylgr; 5; 35, 0\Bruno(Bunny); 5; 30, 0\Fjorm(Winter); 5; 35, 0\Laevatein(Summer); 5; 40, 0
-Path 2\Caeda(Bride); 5; 20, 0\Celica; 5; 25, 0\Genny(Picnic); 5; 30, 0\Palla(Bunny); 5; 35, 0\Kliff; 5; 40, 0
+Awakening / Fates\Cordelia(Summer); 5; 400, 0\Robin(M)(Fallen); 5; 800, 0\Owain; 5; 1200, 0\Xander(Festival); 5; 1600, 0\Corrin(M)(Adrift); 5; 2000, 0
+Radiance\Leanne; 5; 400, 0\Elincia(Festival); 5; 800, 0\Lethe; 5; 1200, 0\Tanith(Bride); 5; 1600, 0\Greil(Valentines); 5; 2000, 0
+Blades / Sacred Stones\Lillina(Valentines); 5; 400\Amelia; 5; 800, 0\Nino(Fangs); 5; 1200, 0\Ephraim(Winter); 5; 1600, 0\Hector(Valentines); 5; 2000, 0
+Ephemera 1 (March 2020)\Camilla(Spring); 5; 0, 300
+Ephemera 2 (March 2020)\Kagero(Spring); 5; 0, 300
+Ephemera 3 (March 2020)\Barst; 4; 0, 100
+Ephemera 4 (March 2020)\Shanna; 4; 0, 100
+Ephemera 5 (March 2020)\Silvia; 4; 0, 100
+Ephemera 6 (March 2020)\Oscar; 4; 0, 100
+Ephemera 7 (March 2020)\Soleil; 4; 0, 100

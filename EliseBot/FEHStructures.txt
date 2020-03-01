@@ -4,6 +4,7 @@ Armor School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 
 Armor School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 350, 0, 0\0\Only one school can be placed at a time.
 Armor School\5\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-6 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 450, 0, 0\0\Only one school can be placed at a time.
 Armor School\6\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 1500, 0\0\Only one school can be placed at a time.
+Armor School\7\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 3000, 0\0\Only one school can be placed at a time.
 Bright Shrine\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd-2 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 100, 0, 0\0
 Bright Shrine\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd-3 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 300, 0, 0\0
 Bright Shrine\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd-4 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 500, 0, 0\0
@@ -28,6 +29,7 @@ Cavalry School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-
 Cavalry School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 350, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\5\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-6 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 450, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\6\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 1500, 0\0\Only one school can be placed at a time.
+Cavalry School\7\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 3000, 0\0\Only one school can be placed at a time.
 Dark Shrine\1\Offensive/Defensive\At start of turn, inflicts Def/Res-2 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 100, 0, 0\0
 Dark Shrine\2\Offensive/Defensive\At start of turn, inflicts Def/Res-3 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 300, 0, 0\0
 Dark Shrine\3\Offensive/Defensive\At start of turn, inflicts Def/Res-4 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 500, 0, 0\0
@@ -48,6 +50,7 @@ Flier School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 
 Flier School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 350, 0, 0\0\Only one school can be placed at a time.
 Flier School\5\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-6 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 450, 0, 0\0\Only one school can be placed at a time.
 Flier School\6\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 1500, 0\0\Only one school can be placed at a time.
+Flier School\7\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 3000, 0\0\Only one school can be placed at a time.
 Fortress\1\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 0, 0\0\Cannot be removed.
 Fortress\2\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 500, 0\4\Cannot be removed.
 Fortress\3\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 1000, 0\7\Cannot be removed.
@@ -65,6 +68,7 @@ Infantry School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res
 Infantry School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 350, 0, 0\0\Only one school can be placed at a time.
 Infantry School\5\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-6 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 450, 0, 0\0\Only one school can be placed at a time.
 Infantry School\6\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 1500, 0\0\Only one school can be placed at a time.
+Infantry School\7\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 3000, 0\0\Only one school can be placed at a time.
 Panic Manor\1\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 40, converts bonuses on those foes into penalties through their next actions.\Yes\0, 100, 0, 0\0
 Panic Manor\2\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 45, converts bonuses on those foes into penalties through their next actions.\Yes\0, 300, 0, 0\0
 Panic Manor\3\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 50, converts bonuses on those foes into penalties through their next actions.\Yes\0, 500, 0, 0\0

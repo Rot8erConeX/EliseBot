@@ -37,6 +37,7 @@
 ["Picnic", []]
 ["PKEmblem", ["Hector", "Hector(Marquess)", "Hector(Brave)", "Hector(Valentines)"], [485532538731757588]]
 ["Refreshers", []]
+["Resplendent", []]
 ["Retro-Prfs", []]
 ["Seasonals", []]
 ["Summer", []]

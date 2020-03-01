@@ -345,8 +345,8 @@ Torrent Dance 3
 Leila
 5\0\HP\Resistance\-\0\
 Iron Dagger\Steel Dagger\Silver Dagger\Constant Dagger
-Rally Speed\~~Rally Atk/Spd~~\~~Rally Atk/Spd+~~
-Night Sky\~~Glimmer~~
+Rally Speed\Rally Atk/Spd\~~Rally Atk/Spd+~~
+Night Sky\Glimmer
 Life and Death 1\Life and Death 2\Life and Death 3\~~Life and Death 4~~
 Atk/Def Ruse 1\Atk/Def Ruse 2\Atk/Def Ruse 3
 Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
@@ -553,7 +553,7 @@ Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
 Quick Riposte 3
 
 Tethys
-5\4\Attack\Resistance\-\0\
+5\5\Attack\Resistance\-\0\
 Iron Dagger\Steel Dagger\The Cleaner\The Cleaner+\The Cleaner+ (+) Resistance Mode
 Dance
 Chilling Wind/Glacies

@@ -27,9 +27,9 @@ def pseudocase(str)
 end
 
 def get_donor_list()
-  if File.exist?('C:/Users/Mini-Matt/Desktop/devkit/FEHDonorList.txt')
+  if File.exist?("#{@location}devkit/FEHDonorList.txt")
     b=[]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/FEHDonorList.txt').each_line do |line|
+    File.open("#{@location}devkit/FEHDonorList.txt").each_line do |line|
       b.push(line.gsub("\n",'').split('\\'[0]))
     end
     for i in 0...b.length
@@ -693,7 +693,7 @@ def embedless_swap(bot,event)
 end
 
 def dev_pm(bot,event,user_id,allowedids=[])
-  return nil unless event.server.nil?
+  return nil unless event.server.nil? || [532083509083373583,502288368777035777].include?(event.channel.id)
   return nil unless event.user.id==167657750971547648 || allowedids.include?(event.user.id) # only work when used by the developer
   f=event.message.text.split(' ')
   jke=false
@@ -701,6 +701,7 @@ def dev_pm(bot,event,user_id,allowedids=[])
   f="#{f[0]} #{f[1]} #{"#{f[2]} " if jke}"
   sig="<:MCandleTop:642901964308480040>\n<:MCandleBottom:642901962005938181>"
   sig="<:Smol_Ephraim:644015195710291968>" if event.user.id==78649866577780736
+  sig="<:cornslep:669319246647525412>" if event.user.id==141260274144509952
   bot.user(user_id.to_i).pm("#{first_sub(event.message.text,f,'',1)}#{"\n#{sig}" unless jke}")
   event.respond 'Message sent.'
 end
@@ -717,7 +718,7 @@ def bliss_mode(bot,event,user_id)
 end
 
 def dev_message(bot,event,channel_id,allowedids=[])
-  return nil unless event.server.nil? || [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,508792801455243266,508793141202255874,508793425664016395,572792502159933440,523830882453422120].include?(event.server.id)
+  return nil unless event.server.nil? || [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,508792801455243266,508793141202255874,508793425664016395,572792502159933440,523830882453422120].include?(event.server.id) || [532083509083373583,502288368777035777].include?(event.channel.id)
   if event.user.id==167657750971547648 || allowedids.include?(event.user.id)
   else
     event.respond 'Are you trying to use the `bugreport`, `suggestion`, or `feedback` command?'
@@ -880,9 +881,9 @@ def disp_date(t,mode=0)
 end
 
 def above_memes()
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/ThoseWhoAreAboveMemes.txt")
+  if File.exist?("#{@location}devkit/ThoseWhoAreAboveMemes.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/ThoseWhoAreAboveMemes.txt").each_line do |line|
+    File.open("#{@location}devkit/ThoseWhoAreAboveMemes.txt").each_line do |line|
       b.push(line.downcase.gsub('-','').gsub("\n",''))
     end
   else
