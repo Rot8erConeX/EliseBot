@@ -174,13 +174,13 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'headpat','pat','patpat','randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats','edit','bonus','arena','tt',
      'arenabonus','arena_bonus','bonusarena','bonus_arena','tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','ttbonus','tt_bonus','skils',
      'bonustt','bonus_tt','oregano','whoisoregano','statsskils','statskils','stats_skils','stat_skils','statsandskils','statandskils','stats_and_skils','skil',
-     'stat_and_skils','statsskil','statskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil','sortskil','skilsort',
+     'stat_and_skils','statsskil','statskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil','sortskil','skilsort','ghb',
      'sortskils','skilssort','listskil','skilist','skilist','listskils','skilslist','artist','channellist','chanelist','spamchannels','spamlist','aetherbonus',
      'aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids',
      'aether','bonus_raids','structure','struct','tool','link','resources','resources','mythical','mythic','mythicals','mythics','mystic','mystics','legend',
      'legends','legendarys','item','accessory','acc','accessorie','alias','s2s','dailies','tomorrow','tommorrow','tomorow','tommorow','aoe','area','prf','prfs',
      'prefix','shards','hero','aliashift','fu','pairup','pair','cleanupaliases','sendmessage','ignoreuser','removefrommulti','removefromdualunitalias','backup',
-     'removefrommultiunitalias','removefromdualalias','removefrommultialias','skilload','update']
+     'removefrommultiunitalias','removefromdualalias','removefrommultialias','skilload','update','code','divine','path','devine','grail','greil']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -198,9 +198,9 @@ end
 
 def data_load() # loads the character and skill data from the files on my computer
   # UNIT DATA
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHUnits.txt")
+  if File.exist?("#{@location}devkit/FEHUnits.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHUnits.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHUnits.txt").each_line do |line|
       b.push(line)
     end
   else
@@ -222,6 +222,11 @@ def data_load() # loads the character and skill data from the files on my comput
     for j in 0...5 # growth rates and level 40 stats should be stored as numbers, not strings
       bob4[4][j]=bob4[4][j].to_i
       bob4[5][j]=bob4[5][j].to_i
+    end
+    if bob4[6].length<=0
+      bob4[6]=['']
+    else
+      bob4[6]=bob4[6].split(';; ')
     end
     if bob4[7].length<=0
       bob4[7]=['','']
@@ -251,9 +256,9 @@ def data_load() # loads the character and skill data from the files on my comput
     @units.push(bob4)
   end
   # SKILL DATA
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHSkills.txt")
+  if File.exist?("#{@location}devkit/FEHSkills.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHSkills.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHSkills.txt").each_line do |line|
       b.push(line)
     end
   else
@@ -277,9 +282,9 @@ def data_load() # loads the character and skill data from the files on my comput
     @skills.push(bob4)
   end
   # STRUCTURE DATA
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHStructures.txt")
+  if File.exist?("#{@location}devkit/FEHStructures.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHStructures.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHStructures.txt").each_line do |line|
       b.push(line)
     end
   else
@@ -293,9 +298,9 @@ def data_load() # loads the character and skill data from the files on my comput
   end
   @structures=b.map{|q| q}
   # ACCESSORY DATA
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHAccessories.txt")
+  if File.exist?("#{@location}devkit/FEHAccessories.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHAccessories.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHAccessories.txt").each_line do |line|
       b.push(line)
     end
   else
@@ -306,9 +311,9 @@ def data_load() # loads the character and skill data from the files on my comput
   end
   @accessories=b.map{|q| q}
   # ITEM DATA
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHItems.txt")
+  if File.exist?("#{@location}devkit/FEHItems.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHItems.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHItems.txt").each_line do |line|
       b.push(line)
     end
   else
@@ -323,15 +328,15 @@ end
 
 def prefixes_save()
   x=@prefixes
-  open("C:/Users/#{@mash}/Desktop/devkit/FEHPrefix.rb", 'w') { |f|
+  open("#{@location}devkit/FEHPrefix.rb", 'w') { |f|
     f.puts x.to_s.gsub('=>',' => ').gsub(', ',",\n  ").gsub('{',"@prefixes = {\n  ").gsub('}',"\n}")
   }
 end
 
 def nicknames_load() # loads the nickname list
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt")
+  if File.exist?("#{@location}devkit/FEHNames.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHNames.txt").each_line do |line|
       b.push(eval line)
     end
   else
@@ -344,9 +349,9 @@ def nicknames_load() # loads the nickname list
     @last_multi_reload[2]=t
     puts 'reloading and checking Alias list'
     if !@aliases[-1][2].is_a?(String) || @aliases[-1][2]<'Verdant Shard'
-      if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHNames2.txt")
+      if File.exist?("#{@location}devkit/FEHNames2.txt")
         b=[]
-        File.open("C:/Users/#{@mash}/Desktop/devkit/FEHNames2.txt").each_line do |line|
+        File.open("#{@location}devkit/FEHNames2.txt").each_line do |line|
           b.push(eval line)
         end
       else
@@ -356,9 +361,9 @@ def nicknames_load() # loads the nickname list
       b.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
       if !b[-1][2].is_a?(String) || b[-1][2]<'Verdant Shard'
         puts 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
-        if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHNames3.txt")
+        if File.exist?("#{@location}devkit/FEHNames3.txt")
           b=[]
-          File.open("C:/Users/#{@mash}/Desktop/devkit/FEHNames3.txt").each_line do |line|
+          File.open("#{@location}devkit/FEHNames3.txt").each_line do |line|
             b.push(eval line)
           end
         else
@@ -368,7 +373,7 @@ def nicknames_load() # loads the nickname list
       else
         puts 'Last backup of the alias list being used.'
       end
-      open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt", 'w') { |f|
+      open("#{@location}devkit/FEHNames.txt", 'w') { |f|
         for i in 0...b.length
           f.puts "#{b[i].to_s}"
         end
@@ -379,9 +384,9 @@ def nicknames_load() # loads the nickname list
 end
 
 def groups_load() # loads the groups list
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHGroups.txt")
+  if File.exist?("#{@location}devkit/FEHGroups.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHGroups.txt").each_line do |line|
       b.push(eval line)
     end
   else
@@ -391,9 +396,9 @@ def groups_load() # loads the groups list
 end
 
 def metadata_load() # loads the metadata - users who choose to see plaintext over embeds, data regarding each shard's server count, number of headpats received, etc.
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHSave.txt")
+  if File.exist?("#{@location}devkit/FEHSave.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHSave.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHSave.txt").each_line do |line|
       b.push(eval line)
     end
   else
@@ -436,7 +441,7 @@ def metadata_save() # saves the metadata
     end
   end
   x=[@embedless.map{|q| q}, @ignored.map{|q| q}, @summon_rate.map{|q| q}, @server_data.map{|q| q}, @headpats.map{|q| q}, @server_markers.map{|q| q}, @x_markers.map{|q| q}, @spam_channels.map{|q| q}]
-  open("C:/Users/#{@mash}/Desktop/devkit/FEHSave.txt", 'w') { |f|
+  open("#{@location}devkit/FEHSave.txt", 'w') { |f|
     f.puts x[0].to_s
     f.puts x[1].to_s
     f.puts x[2].to_s
@@ -453,7 +458,7 @@ def devunits_load() # loads information regarding the devunits
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   return load_devunits()
@@ -463,16 +468,16 @@ def devunits_save() # used by the devedit command to save the devunits
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   return save_devunits()
 end
 
 def bonus_load()
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHArenaTempest.txt")
+  if File.exist?("#{@location}devkit/FEHArenaTempest.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHArenaTempest.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHArenaTempest.txt").each_line do |line|
       b.push(line.gsub("\n",''))
     end
   else
@@ -490,8 +495,8 @@ end
 
 def lookout_load(sheet='StatSkills',types=[],mode=0)
   lookout=[]
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEH#{sheet}.txt")
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEH#{sheet}.txt").each_line do |line|
+  if File.exist?("#{@location}devkit/FEH#{sheet}.txt")
+    File.open("#{@location}devkit/FEH#{sheet}.txt").each_line do |line|
       lookout.push(eval line)
     end
     if mode==1
@@ -508,7 +513,7 @@ bot.command([:help,:commands,:command_list,:commandlist,:Help]) do |event, comma
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   help_text(event,bot,command,subcommand)
@@ -519,7 +524,7 @@ bot.command(:reboot, from: 167657750971547648) do |event| # reboots Elise
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
   puts 'FEH!reboot'
-  exec "cd C:/Users/#{@mash}/Desktop/devkit && PriscillaBot.rb #{@shardizard}"
+  exec "cd #{@location}devkit && PriscillaBot.rb #{@shardizard}"
 end
 
 def safe_to_spam?(event,chn=nil) # determines whether or not it is safe to send extremely long messages
@@ -541,9 +546,9 @@ def safe_to_spam?(event,chn=nil) # determines whether or not it is safe to send 
 end
 
 def donate_trigger_word(event,str=nil,mode=0)
-  if !str.is_a?(String) && File.exist?("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/#{str}.txt")
+  if !str.is_a?(String) && File.exist?("#{@location}devkit/EliseUserSaves/#{str}.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/#{str}.txt").each_line do |line|
+    File.open("#{@location}devkit/EliseUserSaves/#{str}.txt").each_line do |line|
       b.push(line.gsub("\n",''))
     end
     f=[b[0].split('\\'[0])[0],str,b[0].split('\\'[0])[1],b[0].split('\\'[0])[2]]
@@ -555,14 +560,14 @@ def donate_trigger_word(event,str=nil,mode=0)
       str=remove_prefix(str,event)
     end
     str=str.downcase
-    d=Dir["C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/*.txt"]
+    d=Dir["#{@location}devkit/EliseUserSaves/*.txt"]
     f=[]
     for i in 0...d.length
       b=[]
       File.open(d[i]).each_line do |line|
         b.push(line.gsub("\n",''))
       end
-      f.push([b[0].split('\\'[0])[0],d[i].gsub("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/",'').gsub('.txt','').to_i,b[0].split('\\'[0])[1],b[0].split('\\'[0])[2]])
+      f.push([b[0].split('\\'[0])[0],d[i].gsub("#{@location}devkit/EliseUserSaves/",'').gsub('.txt','').to_i,b[0].split('\\'[0])[1],b[0].split('\\'[0])[2]])
       f[-1][2]=f[-1][2].hex unless f[-1][2].nil?
       if !get_donor_list().reject{|q| q[2][0]<4}.map{|q| q[0]}.include?(f[-1][1])
         f[-1]=nil
@@ -586,7 +591,7 @@ def donor_unit_list(uid,mode=0)
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   load_donorunits(uid,mode)
@@ -596,7 +601,7 @@ def donor_unit_save(uid,table) # used by the edit command to save the donorunits
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   save_donorunits(uid,table)
@@ -642,7 +647,7 @@ def get_markers(event) # used to determine whether a server-specific unit/skill 
   return g
 end
 
-def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='',flowers=0) # used by multiple commands to calculate a unit's stats
+def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='',flowers=0,resplendant=false) # used by multiple commands to calculate a unit's stats
   data_load()
   # find neutral five-star level 40 stats
   unit=@units.map{|q| q}
@@ -651,6 +656,7 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='',flowers=0) #
   else
     f=unit[unit.find_index{|q| q[0]==name}]
   end
+  resplendant=false unless f[9][0].include?('RA')
   flowers=[flowers,@max_rarity_merge[2]].min unless f[9][0].include?('PF') && f[3]=='Infantry'
   sttz=['hp','attack','speed','defense','resistance']
   for i in 0...sttz.length
@@ -709,6 +715,11 @@ def get_stats(event,name,level=40,rarity=5,merges=0,boon='',bane='',flowers=0) #
     m=rates.map{|q| (0.39*(((q*5+20)*(0.79+(0.07*rarity))).to_i)).to_i}
     unit=[unit[0],unit[1]+m[0],unit[2]+m[1],unit[3]+m[2],unit[4]+m[3],unit[5]+m[4],rates[0],rates[1],rates[2],rates[3],rates[4],m[0],m[1],m[2],m[3],m[4]]
     # apply the difference above
+  end
+  if resplendant
+    for i in 1...6
+      unit[i]+=2
+    end
   end
   if merges>0 || flowers>0
     # every five merges results in +2 to each stat
@@ -856,9 +867,9 @@ end
 
 def find_FGO_servant(name,event,fullname=false,bot=nil)
   return [] unless event.server.nil? || !bot.user(502288364838322176).on(event.server.id).nil? || @shardizard==4
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FGOServants.txt")
+  if File.exist?("#{@location}devkit/FGOServants.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FGOServants.txt").each_line do |line|
+    File.open("#{@location}devkit/FGOServants.txt").each_line do |line|
       b.push(line)
     end
   else
@@ -940,9 +951,9 @@ def find_FGO_servant(name,event,fullname=false,bot=nil)
   return [] if name.length<2
   k=@servants.find_index{|q| q[1].downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')==name}
   return @servants[k] unless k.nil?
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FGONames.txt")
+  if File.exist?("#{@location}devkit/FGONames.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FGONames.txt").each_line do |line|
+    File.open("#{@location}devkit/FGONames.txt").each_line do |line|
       b.push(eval line)
     end
   else
@@ -1194,6 +1205,27 @@ def find_data_ex(callback,name,event,fullname=false,mode=0)
       end
     end
     return []
+  elsif [:find_weapon].include?(callback)
+    k=method(callback).call(name,event,true,false,mode)
+    return k if k.length>0
+    args=name.split(' ')
+    for i in 0...args.length
+      for i2 in 0...args.length-i
+        k=method(callback).call(args[i,args.length-i-i2].join(' '),event,true,false,mode)
+        return k if k.length>0 && args[i,args.length-i-i2].length>0
+      end
+    end
+    return [] if fullname || name.length<=2
+    k=method(callback).call(name,event,false,false,mode)
+    return k if k.length>0
+    args=name.split(' ')
+    for i in 0...args.length
+      for i2 in 0...args.length-i
+        k=method(callback).call(args[i,args.length-i-i2].join(' '),event,false,false,mode)
+        return k if k.length>0 && args[i,args.length-i-i2].length>0
+      end
+    end
+    return []
   elsif [:find_unit,:find_skill,:find_skill,:find_accessory,:find_item_feh].include?(callback)
     k=method(callback).call(name,event,true)
     return [k,name] if k.length>0 && mode==1
@@ -1325,7 +1357,7 @@ end
 
 def find_weapon(name,event,ignore=false,ignore2=false,mode=0) # used by the `get_weapon` function
   sklz=@skills.map{|q| q}
-  sklz=@skills.reject{|q| q[6]!='Weapon'} unless mode==0
+  sklz=@skills.reject{|q| q[6]!='Weapon'}
   return find_skill(name,event,ignore,ignore2,sklz)
 end
 
@@ -1466,7 +1498,8 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name="NewYear's" if ['newyears',"newyear's",'newyear'].include?(name.downcase)
   name='Wedding' if ['brides','grooms','bride','groom','wedding'].include?(name.downcase)
   name='Falchion_Users' if ['falchionusers'].include?(name.downcase.gsub('-','').gsub('_',''))
-  name='Dancers&Singers' if ['dancers','singers'].include?(name.downcase)
+  name='Refreshers' if ['dancers','singers','bards','refreshers'].include?(name.downcase)
+  name='Resplendent' if ['resplendant','resplendent','ascension','ascend','resplend','ex'].include?(name.downcase)
   name='Helspawn' if ['hellspawn'].include?(name.downcase)
   name='Daily_Rotation' if ['daily_rotation','dailyrotation','daily'].include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(name.downcase)
@@ -1488,7 +1521,8 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name="NewYear's" if ['newyears',"newyear's",'newyear'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Wedding' if name.length<6 && ['brides','grooms','bride','groom','wedding'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Falchion_Users' if ['falchionusers'].map{|q| q[0,name.gsub('-','').gsub('_','').length]}.include?(name.downcase.gsub('-','').gsub('_',''))
-  name='Dancers&Singers' if ['dancers','singers'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='Refreshers' if ['dancers','singers','bards','refreshers'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='Resplendent' if ['resplendant','resplendent','ascension','ascend','resplend','ex'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Helspawn' if ['hellspawn'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','retroprfs','retro-prfs'].map{|q| q[0,name.length]}.include?(name.downcase)
@@ -1808,7 +1842,9 @@ def find_stats_in_string(event,stringx=nil,mode=0,name=nil) # used to find the r
   rarity=@max_rarity_merge[0] if !rarity.nil? && rarity>@max_rarity_merge[0]
   merges=@max_rarity_merge[1] if !merges.nil? && merges>@max_rarity_merge[1]
   flowers=2*@max_rarity_merge[1] if !flowers.nil? && flowers>2*@max_rarity_merge[2]
-  return [rarity,merges,boon,bane,summoner,refinement,blessing,transformed,flowers]
+  resp=false
+  resp=true if has_any?(args.map{|q| q.downcase},['resplendant','resplendent','ascension','ascend','resplend','ex'])
+  return [rarity,merges,boon,bane,summoner,refinement,blessing,transformed,flowers,resp]
 end
 
 def apply_stat_skills(event,skillls,stats,tempest='',summoner='-',weapon='',refinement='',blessing=[],transformed=false,ignoremax=false) # used to add skill stat increases to a unit's stats
@@ -2248,7 +2284,7 @@ def make_combat_skill_list(name,event,args) # this is for skills that apply in-c
   return stat_skills_3
 end
 
-def pick_thumbnail(event,j,bot) # used to choose the thumbnail used by most embeds involving units
+def pick_thumbnail(event,j,bot,resp=false) # used to choose the thumbnail used by most embeds involving units
   data_load()
   d=@units[j] unless j.is_a?(Array)
   d=j.map{|q| q} if j.is_a?(Array)
@@ -2267,6 +2303,7 @@ def pick_thumbnail(event,j,bot) # used to choose the thumbnail used by most embe
   return 'https://cdn.discordapp.com/emojis/437519293240836106.png' if d[0]=='Arden' && (event.message.text.downcase.include?('woke') || rand(100).zero?)
   return 'https://cdn.discordapp.com/emojis/420360385862828052.png' if d[0]=='Sakura' && event.message.text.downcase.include?("mathoo's")
   dd=d[0].gsub(' ','_')
+  dd="#{dd}/Resplendent" if (resp || has_any?(event.message.text.downcase.split(' '),['resplendant','resplendent','ascension','ascend','resplend','ex'])) && d[9][0].include?('RA')
   args=event.message.text.downcase.split(' ')
   if has_any?(args,['battle','attacking'])
     return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{dd}/BtlFace_BU.png"
@@ -2376,6 +2413,7 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   sklz=@skills.map{|q| q}
   dancer="\n<:Assist_Music:454462054959415296> *Dancer*" if !sklz.find_index{|q| q[1]=='Dance'}.nil? && sklz[sklz.find_index{|q| q[1]=='Dance'}][11].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   dancer="\n<:Assist_Music:454462054959415296> *Singer*" if !sklz.find_index{|q| q[1]=='Sing'}.nil? && sklz[sklz.find_index{|q| q[1]=='Sing'}][11].map{|q| q.split(', ').include?(jj[0])}.include?(true)
+  dancer="\n<:Assist_Music:454462054959415296> *Bard*" if !sklz.find_index{|q| q[1]=='Play'}.nil? && sklz[sklz.find_index{|q| q[1]=='Play'}][11].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   if jj[2].nil? || jj[2][0]==' '
   elsif jj[2][1].nil? || jj[2][0]=='Idol'
   elsif jj[2][0]=='Duo'
@@ -2461,6 +2499,7 @@ def unit_moji(bot,event,j=-1,name=nil,m=false,mode=0,uuid=-1) # used primarily b
   sklz=@skills.map{|q| q}
   dancer='<:Assist_Music:454462054959415296>' if !sklz.find_index{|q| q[1]=='Dance'}.nil? && sklz[sklz.find_index{|q| q[1]=='Dance'}][11].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   dancer='<:Assist_Music:454462054959415296>' if !sklz.find_index{|q| q[1]=='Sing'}.nil? && sklz[sklz.find_index{|q| q[1]=='Sing'}][11].map{|q| q.split(', ').include?(jj[0])}.include?(true)
+  dancer='<:Assist_Music:454462054959415296>' if !sklz.find_index{|q| q[1]=='Play'}.nil? && sklz[sklz.find_index{|q| q[1]=='Play'}][11].map{|q| q.split(', ').include?(jj[0])}.include?(true)
   lemote1=''
   lemote2=''
   lemote3=''
@@ -2585,7 +2624,7 @@ def get_bonus_type(event) # used to determine if the embed header should say Tem
   return x2.join('/')
 end
 
-def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,transformed=false,weapon='-',expandedmode=false,modemode=false) # used by the stats command and any derivatives to display which skills are affecting the stats being displayed
+def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,tempest='',blessing=nil,transformed=false,weapon='-',expandedmode=false,modemode=false,resp=false) # used by the stats command and any derivatives to display which skills are affecting the stats being displayed
   j=@units[j] unless j.is_a?(Array)
   blessing=[] if blessing.nil?
   stat_skills=[] if stat_skills.nil?
@@ -2662,6 +2701,8 @@ def display_stat_skills(j,stat_skills=nil,stat_skills_2=nil,stat_skills_3=nil,te
   str=''
   str="#{tempest} Bonus unit\n" if tempest.length>0
   str="Not a bonus unit\n" if tempest.length<=0 && expandedmode
+  str="Resplendent Ascension<:Resplendent_Ascension:678748961607122945>\n#{str}" if resp && j[9][0].include?('RA')
+  str="Normal Ascension\n#{str}" if expandedmode && !resp && j[9][0].include?('RA')
   str="#{str}Blessings applied: #{blessing.join(', ')}\n" if blessing.length>0
   str="#{str}No Blessings applied\n" if blessing.length<=0 && expandedmode
   str="#{str}Stat-affecting skills: #{stat_skills.join(', ')}\n" if stat_skills.length>0
@@ -2781,7 +2822,6 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     return nil
   end
   data_load()
-  weapon='-' if weapon.nil?
   s=event.message.text
   s=remove_prefix(s,event)
   a=s.split(' ')
@@ -2795,6 +2835,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
       return nil
     end
   end
+  weapon='-' if weapon.nil?
   untz=@units.map{|q| q}
   flurp=find_stats_in_string(event,nil,0,name)
   rarity=flurp[0]
@@ -2807,6 +2848,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
   blessing=blessing[0,8] if blessing.length>8
   transformed=flurp[7]
   flowers=flurp[8]
+  resp=flurp[9]
   unitz=find_unit(name,event)
   if name=='Robin' && unitz[0].is_a?(Array)
     unitz=unitz[0]
@@ -2848,7 +2890,8 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     if dv>=0
       mu=true
       spec_wpn=true
-      rarity=@dev_units[dv][1]
+      rarity=@dev_units[dv][1].to_i
+      resp=(@dev_units[dv][1].include?('r'))
       merges=@dev_units[dv][2]
       boon=@dev_units[dv][3].gsub(' ','')
       bane=@dev_units[dv][4].gsub(' ','')
@@ -2878,7 +2921,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
         if dv2>=0
           pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],true,2)}",'Pair-Up cohort']
           pair_up[0][2]='Pocket companion' if pair_up[0][0].include?('Sakura')
-          pair_up.push(@dev_units[dv2][1])
+          pair_up.push(@dev_units[dv2][1].to_i)
           pair_up.push(@dev_units[dv2][2])
           pair_up.push(@dev_units[dv2][3].gsub(' ',''))
           pair_up.push(@dev_units[dv2][4].gsub(' ',''))
@@ -2896,6 +2939,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
             pair_up.push('')
             pair_up.push('')
           end
+          pair_up.push(@dev_units[dv2][1].include?('r'))
           lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
           a=@dev_units[dv2][10].reject{|q| q.include?('~~')}
           x=[a[a.length-1],@dev_units[dv2][13]]
@@ -2920,7 +2964,8 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     if x2.nil?
       event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
     else
-      rarity=x[x2][1]
+      rarity=x[x2][1].to_i
+      resp=x[x2][1].include?('r')
       merges=x[x2][2]
       boon=x[x2][3].gsub(' ','')
       bane=x[x2][4].gsub(' ','')
@@ -2954,7 +2999,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
         unless x3.nil?
           pair_up=[x[x2][14]]
           pair_up[0]=[pair_up[0],"**#{pair_up[0]}**#{unit_moji(bot,event,-1,pair_up[0],false,2,uid)}",'Pair-Up cohort']
-          pair_up.push(x[x3][1])
+          pair_up.push(x[x3][1].to_i)
           pair_up.push(x[x3][2])
           pair_up.push(x[x3][3].gsub(' ',''))
           pair_up.push(x[x3][4].gsub(' ',''))
@@ -2972,6 +3017,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
             pair_up.push('')
             pair_up.push('')
           end
+          pair_up.push(x[x3][1].include?('r'))
           lookout=lookout_load('StatSkills',['Stat-Affecting 1']).map{|q| q[0]}
           a=x[x3][10].reject{|q| q.include?('~~')}
           x=[a[a.length-1],x[x3][13]]
@@ -3076,7 +3122,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
   elsif (unitz[4].nil? || (unitz[4].max<=0 && unitz[5].max<=0)) && unitz[0]!='Kiran' # unknown stats
     data_load()
     xcolor=unit_color(event,unitz,unitz[0],0,mu)
-    create_embed(event,["__**#{unitz[0]}**__",unit_clss(bot,event,unitz)],'',xcolor,'Stats currently unknown',pick_thumbnail(event,unitz,bot))
+    create_embed(event,["__**#{unitz[0]}**__",unit_clss(bot,event,unitz)],'',xcolor,'Stats currently unknown',pick_thumbnail(event,unitz,bot,resp))
     disp_unit_skills(bot,unitz[0],event) if skillstoo || sizex=='giant'
     return nil
   elsif unitz[0]=='Kiran'
@@ -3099,7 +3145,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
       n=n.join(' / ')
     end
     if ['smol','xsmol'].include?(sizex)
-      create_embed(event,["__**#{j[0]}**__",unit_clss(bot,event,j)],"#{display_stars(bot,event,rarity,merges,'-',[j[3],flowers],false,j[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n\n**<:HP_S:514712247503945739>0 | <:StrengthS:514712248372166666>0 | <:SpeedS:514712247625580555>0 | <:DefenseS:514712247461871616>0 | <:ResistanceS:514712247574986752>0** (0 BST, Score: #{115+2*merges})",0x9400D3,nil,pick_thumbnail(event,j,bot),nil,1)
+      create_embed(event,["__**#{j[0]}**__",unit_clss(bot,event,j)],"#{display_stars(bot,event,rarity,merges,'-',[j[3],flowers],false,j[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n\n**<:HP_S:514712247503945739>0 | <:StrengthS:514712248372166666>0 | <:SpeedS:514712247625580555>0 | <:DefenseS:514712247461871616>0 | <:ResistanceS:514712247574986752>0** (0 BST, Score: #{115+2*merges})",0x9400D3,nil,pick_thumbnail(event,j,bot,resp),nil,1)
     else
       flds=[["**Level 1#{" +#{merges}" if merges>0}**","<:HP_S:514712247503945739> HP: 0\n<:StrengthS:514712248372166666> Attack: 0\n<:SpeedS:514712247625580555> Speed: 0\n<:DefenseS:514712247461871616> Defense: 0\n<:ResistanceS:514712247574986752> Resistance: 0\n\nBST: 0\nScore: #{27+2*merges}"],["**Level 40#{" +#{merges}" if merges>0}**","<:HP_S:514712247503945739> HP: 0\n<:StrengthS:514712248372166666> Attack: 0\n<:SpeedS:514712247625580555> Speed: 0\n<:DefenseS:514712247461871616> Defense: 0\n<:ResistanceS:514712247574986752> Resistance: 0\n\nBST: 0\nScore: #{115+2*merges}"]]
       if skillstoo
@@ -3112,7 +3158,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
         uskl=uskl.map{|q| q[q.length-1]}
         flds.push(['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"])
       end
-      create_embed(event,["__**#{untz[j][0]}**__",unit_clss(bot,event,j)],"#{display_stars(bot,event,rarity,merges,'-',[untz[j][3],flowers],sizex=='giant',j[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n",0x9400D3,"Please note that the Attack stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot),flds,1)
+      create_embed(event,["__**#{untz[j][0]}**__",unit_clss(bot,event,j)],"#{display_stars(bot,event,rarity,merges,'-',[untz[j][3],flowers],sizex=='giant',j[11][0])}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n",0x9400D3,"Please note that the Attack stat displayed here does not include weapon might.  The Attack stat in-game does.",pick_thumbnail(event,j,bot,resp),flds,1)
     end
     return nil
   elsif unitz[4].max<=0 # level 40 stats are known but not level 1
@@ -3196,7 +3242,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     if ['smol','xsmol'].include?(sizex)
       bb=0
       bb=3 if merges>0
-      create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,unitz,u40[0],mu,2)}**__","#{display_stars(bot,event,5,merges,summoner,[unitz[3],flowers],false,unitz[11][0],mu)}\n*Neutral Nature only so far*\n#{display_stat_skills(unitz,stat_skills,[],nil,tempest,blessing,transformed,wl,false,true)}\n**#{staticons[0]}#{u40[1]} | #{atk}#{u40[2]} | #{staticons[1]}#{u40[3]} | #{staticons[2]}#{u40[4]} | #{staticons[3]}#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Score: #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5+25+merges*2+90+blessing.length*4})#{mergetext}",xcolor,nil,pick_thumbnail(event,unitz,bot),nil,1)
+      create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,unitz,u40[0],mu,2)}**__","#{display_stars(bot,event,5,merges,summoner,[unitz[3],flowers],false,unitz[11][0],mu)}\n*Neutral Nature only so far*\n#{display_stat_skills(unitz,stat_skills,[],nil,tempest,blessing,transformed,wl,false,true)}\n**#{staticons[0]}#{u40[1]} | #{atk}#{u40[2]} | #{staticons[1]}#{u40[3]} | #{staticons[2]}#{u40[4]} | #{staticons[3]}#{u40[5]}** (#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]} BST, Score: #{(u40x2[1]+u40x2[2]+u40x2[3]+u40x2[4]+u40x2[5]+bb)/5+25+merges*2+90+blessing.length*4})#{mergetext}",xcolor,nil,pick_thumbnail(event,unitz,bot,resp),nil,1)
     else
       ftr="Please note that the #{atk.split('> ')[1]} stat displayed here does not include weapon might.  The Attack stat in-game does."
       ftr=nil if weapon != '-'
@@ -3213,7 +3259,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
         flds.shift
       end
       j=untz.find_index{|q| q[0]==unitz[0]}
-      create_embed(event,["__#{"Mathoo's " if mu}**#{u40[0]}**__",unit_clss(bot,event,j)],"#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0 || sizex=='giant'}#{"  \u2764 **#{summoner}**" unless summoner=='-'}#{"\nNo Summoner Support" if summoner =='-' && sizex=='giant'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant')}\n#{mergetext}",xcolor,ftr,pick_thumbnail(event,j,bot),flds,1)
+      create_embed(event,["__#{"Mathoo's " if mu}**#{u40[0]}**__",unit_clss(bot,event,j)],"#{"<:Icon_Rarity_5:448266417553539104>"*5}#{"**+#{merges}**" if merges>0 || sizex=='giant'}#{"  \u2764 **#{summoner}**" unless summoner=='-'}#{"\nNo Summoner Support" if summoner =='-' && sizex=='giant'}\n*Neutral Nature only so far*\n#{display_stat_skills(j,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant')}\n#{mergetext}",xcolor,ftr,pick_thumbnail(event,j,bot,resp),flds,1)
     end
     return nil
   end
@@ -3231,18 +3277,24 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     event.respond "I can't do rarities that high"
     rarity=10000000
   end
-  u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
+  u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers,resp)
   bane2="#{bane}"
   bane2='' if merges>0
   u40x2=get_stats(event,name,40,5,0,boon,bane2)
-  u1=get_stats(event,name,1,rarity,merges,boon,bane,flowers)
+  u1=get_stats(event,name,1,rarity,merges,boon,bane,flowers,resp)
   if !pair_up.nil? && pair_up.length>0
     u40cu=get_stats(event,pair_up[0][0],40,pair_up[1],pair_up[2],pair_up[3],pair_up[4],pair_up[6])
     u1cu=get_stats(event,pair_up[0][0],1,pair_up[1],pair_up[2],pair_up[3],pair_up[4],pair_up[6])
-    m=pair_up[9,pair_up.length-9]
+    m=pair_up[10,pair_up.length-10]
     m=[] if m.nil?
     u1cu=apply_stat_skills(event,m,u1cu,'',pair_up[5],pair_up[7],pair_up[8])
     u40cu=apply_stat_skills(event,m,u40cu,'',pair_up[5],pair_up[7],pair_up[8])
+    if pair_up[9]
+      for i in 2...6
+        u1cu[i]+=2
+        u40cu[i]+=2
+      end
+    end
     u1[2]+=(u1cu[2]-25)/10
     u1[3]+=(u1cu[3]-10)/10
     u1[4]+=(u1cu[4]-10)/10
@@ -3305,6 +3357,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
   u1=make_stat_string_list(u1,cru1,2) if wl.include?('~~')
   ftr="Please note that the #{atk.split('> ')[1]} stat displayed here does not include weapon might.  The Attack stat in-game does."
   ftr="Score does not include SP from skills." if rand(10)<5 || ['smol','xsmol'].include?(sizex)
+  ftr="Include the word \"Resplendent\" to show the Ascended stats." if unitz[9][0].include?('RA') && !resp
   ggg=''
   ggg='Arena' if get_bonus_units('Arena').include?(u40[0])
   ggg='Tempest' if get_bonus_units('Tempest').include?(u40[0])
@@ -3472,7 +3525,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     flds.push(["<:Passive_C:443677023555026954> **C Passives**",uskl[5].join("\n")])
     flds.push(["<:Passive_S:443677023626330122> **Sacred Seal**",uskl[6].join("\n")]) if uskl.length>6
   end
-  img=pick_thumbnail(event,unitz,bot)
+  img=pick_thumbnail(event,unitz,bot,resp)
   img='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   xtype=1
   xtype=-1 if skillstoo && u40[0]!='Robin (Shared stats)'
@@ -3480,7 +3533,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     flds.shift
   end
   flds=nil if flds.length<=0
-  create_embed(event,["__#{"Mathoo's " if mu}**#{u40[0]}**__",unit_clss(bot,event,unitz,u40[0])],"#{display_stars(bot,event,rarity,merges,summoner,[unitz[3],flowers],sizex=='giant',unitz[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(unitz,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant')}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{mergetext}",xcolor,ftr,img,flds,xtype)
+  create_embed(event,["__#{"Mathoo's " if mu}**#{u40[0]}**__",unit_clss(bot,event,unitz,u40[0])],"#{display_stars(bot,event,rarity,merges,summoner,[unitz[3],flowers],sizex=='giant',unitz[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(unitz,stat_skills,stat_skills_2,nil,tempest,blessing,transformed,wl,sizex=='giant',false,resp)}#{"#{pair_up[0][2]}: #{pair_up[0][1]}\n" unless pair_up.nil? || pair_up.length<=0}\n#{mergetext}",xcolor,ftr,img,flds,xtype)
   if (skillstoo || sizex=='giant') && u40[0]=='Robin (Shared stats)' # due to the two Robins having different skills, a second embed is displayed with both their skills
     usklm=unit_skills('Robin(M)',event)
     usklf=unit_skills('Robin(F)',event)
@@ -3680,7 +3733,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')}**Weapon Type:** Staff"
         str="**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
       elsif skill[7]=='Dragons Only'
-        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[4]}\n<:Gold_Dragon:443172811641454592>**Weapon Type:** Breath (Dragons)"
+        title="<:Skill_Weapon:444078171114045450>**Skill Slot:** #{skill[6]}\n<:Gold_Dragon:443172811641454592>**Weapon Type:** Breath (Dragons)"
         str="**Might:** #{skill[4]}  \u200B  \u200B  \u200B  **Range:** #{skill[5]}"
       elsif ['Whelp (All)','Yearling (All)','Adult (All)'].include?(skill[1])
         m=skill[1].split(' (')[0]
@@ -3774,6 +3827,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       elsif ['Whelp (All)','Yearling (All)','Adult (All)'].include?(skill[0])
       else
         str="#{str}\n**Effect:** #{skill[9]}" unless skill[9]=='-'
+        str="#{str}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if skill[7]=='Dragons Only' && skill[0]>=31040 && !skill[13].include?('UnFrostbite')
       end
       str="#{str}\n**Stats affected#{' (humanoid)' if skill[7].split(', ')[0]=='Beasts Only'}:** #{skill[14][0,5].map{|q| "#{'+' if q>0}#{q}"}.join('/')}" unless ['Missiletainn','Umbra Burst'].include?(skill[1])
       if skill[7].split(', ')[0]=='Beasts Only'
@@ -4236,9 +4290,9 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       end
     end
     lookoutx=[]
-    if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHStatSkills.txt")
+    if File.exist?("#{@location}devkit/FEHStatSkills.txt")
       lookoutx=[]
-      File.open("C:/Users/#{@mash}/Desktop/devkit/FEHStatSkills.txt").each_line do |line|
+      File.open("#{@location}devkit/FEHStatSkills.txt").each_line do |line|
         lookoutx.push(eval line)
       end
     end
@@ -4583,7 +4637,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         else
           str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{outer_skill}"
         end
-        str="#{str}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if skill[13].include?("(R)Frostbite") || skill[13].include?("(E)Frostbite")
+        str="#{str}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if skill[13].include?("(R)Frostbite") || skill[13].include?("(E)Frostbite") || (skill[7]=='Dragons Only' && !skill[13].include?('UnFrostbite'))
         str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{sttz[i][6]}" unless sttz[i][6].nil?
         str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{inner_skill}" if inner_skill.length>1
       elsif safe_to_spam?(event)
@@ -4620,7 +4674,7 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
       else
         str="#{str}#{"\n" unless [str[str.length-1,1],str[str.length-2,2]].include?("\n")}#{outer_skill}"
       end
-      str="#{str}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if skill[13].include?("(R)Frostbite")
+      str="#{str}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if skill[13].include?("(R)Frostbite") || (skill[7]=='Dragons Only' && !skill[13].include?('UnFrostbite'))
     end
     ftr='All refinements cost: 350 SP (525 if inherited), 500<:Arena_Medal:453618312446738472> 50<:Refining_Stone:453618312165720086>'
     ftr='All refinements cost: 400 SP, 500<:Arena_Medal:453618312446738472> 200<:Divine_Dew:453618312434417691>' if skill[8]!='-'
@@ -4964,6 +5018,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   txt="#{@rarity_stars[rarity.to_i-1]*rarity.to_i}"
   ftrtoggles=[false,false,false,false]
   sklz2[0]=sklz2[0].reject {|a| ['Falchion','**Falchion**','Missiletainn','**Missiletainn**','Whelp (All)','**Whelp (All)**','Yearling (All)','**Yearling (All)**','Adult (All)','**Adult (All)**'].include?(a)}
+  resp=false
   if j[0]=='Kiran'
     data_load()
     s=@skills.reject{|q| q[8]!='Kiran'}.map{|q| q[1]}
@@ -4981,7 +5036,8 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
     dv=find_in_dev_units(name)
     if dv>=0
       mu=true
-      rarity=@dev_units[dv][1]
+      rarity=@dev_units[dv][1].to_i
+      resp=(@dev_units[dv][1].include?('r'))
       txt=display_stars(bot,event,rarity,@dev_units[dv][2],@dev_units[dv][5],['Infantry',0],false,j[11][0],true).split('  ')[0]
       sklz2=[@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],@dev_units[dv][12],[@dev_units[dv][13]]]
     elsif @dev_nobodies.include?(j[0])
@@ -4998,7 +5054,8 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
     if x2.nil?
       event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral skills."
     else
-      rarity=x[x2][1]
+      rarity=x[x2][1].to_i
+      resp=(x[x2][1].include?('r'))
       txt=display_stars(bot,event,rarity,x[x2][2],x[x2][5],['Infantry',0],false,j[11][0]).split('  ')[0]
       sklz2=[x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],x[x2][12],[x[x2][13]]]
     end
@@ -5089,7 +5146,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
   flds.push(["<:Passive_S:443677023626330122> **Sacred Seal**",sklz2[6][0]]) unless sklz2[6].nil? || sklz2[6][0].length.zero? || sklz2[6][0]==" "
   title=unit_clss(bot,event,j)
   title=nil if chain
-  create_embed(event,["#{"__#{"Mathoo's " if mu}**#{j[0]}**__" unless f}",title],txt,xcolor,ftr,pick_thumbnail(event,j,bot),flds)
+  create_embed(event,["#{"__#{"Mathoo's " if mu}**#{j[0]}**__" unless f}",title],txt,xcolor,ftr,pick_thumbnail(event,j,bot,resp),flds)
 end
 
 def disp_struct(bot,name,event,ignore=false)
@@ -5146,23 +5203,29 @@ def disp_struct(bot,name,event,ignore=false)
   else
     title="**Type:** Unknown"
   end
-  title="#{title}\n**#{x2}:** #{k[0][3]}" if k.map{|q| q[3]}.uniq.length<2
   title="#{title}\n<:Current_Aether_Bonus:510022809741950986>**Offense/Defense Aether Bonus Structure**" if b[0][3][0]==k[0][0] && b[0][3][1]==k[0][0]
   title="#{title}\n<:Current_Aether_Bonus:510022809741950986>**Offense Aether Bonus Structure**" if b[0][3][0]==k[0][0] && b[0][3][1]!=k[0][0]
   title="#{title}\n<:Current_Aether_Bonus:510022809741950986>**Defense Aether Bonus Structure**" if b[0][3][0]!=k[0][0] && b[0][3][1]==k[0][0]
   text=''
+  text="#{text}\n**#{x2}:** #{k[0][3]}" if k.map{|q| q[3]}.uniq.length<2
   if k.length>1
     for i in 0...k.length
       x=' '
       x="\n" if k.map{|q| q[3]}.uniq.length>1 || k.map{|q| q[4]}.uniq.length>1 || k.map{|q| q[7]}.uniq.length>1
       text="#{text}\n" if k.map{|q| q[3]}.uniq.length>1 || k.map{|q| q[4]}.uniq.length>1 || k.map{|q| q[7]}.uniq.length>1 || i.zero?
       text="#{text}\n**Level #{k[i][1]}:**"
-      text="#{text}#{x}*Cost:* "
-      text="#{text}#{k[i][5][0]}<:RRAffinity:565064751780986890>" if k[i][5][0]>0
-      text="#{text}#{k[i][5][1]}<:Aether_Stone:510776805746278421>" if k[i][5][1]>0
-      text="#{text}#{k[i][5][2]}<:Heavenly_Dew:510776806396395530>" if k[i][5][2]>0
-      text="#{text}#{k[i][5][3]}<:Aether_Stone_SP:513982883560423425>" if k[i][5][3]>0
-      text="#{text} (Requires reaching AR Tier #{k[i][6]})" if k[i][6]>0
+      if k[0][2]=='Offensive/Defensive' && k[i][5][1]>0 && k[i][5][2]>0
+        text="#{text}#{x}<:Offensive_Structure:510774545997758464>*Offensive cost:* #{k[i][5][2]}<:Heavenly_Dew:510776806396395530>"
+        text="#{text}\n<:Defensive_Structure:510774545108566016>*Defensive cost:* #{k[i][5][1]}<:Aether_Stone:510776805746278421>"
+        text="#{text}\n(Requires reaching AR Tier #{k[i][6]})" if k[i][6]>0
+      else
+        text="#{text}#{x}*Cost:* "
+        text="#{text}#{k[i][5][0]}<:RRAffinity:565064751780986890>" if k[i][5][0]>0
+        text="#{text}#{k[i][5][1]}<:Aether_Stone:510776805746278421>" if k[i][5][1]>0
+        text="#{text}#{k[i][5][2]}<:Heavenly_Dew:510776806396395530>" if k[i][5][2]>0
+        text="#{text}#{k[i][5][3]}<:Aether_Stone_SP:513982883560423425>" if k[i][5][3]>0
+        text="#{text} (Requires reaching AR Tier #{k[i][6]})" if k[i][6]>0
+      end
       text="#{text}~~nothing~~" if k[i][6]<=0 && k[i][5].max<=0
       text="#{text}\n*#{x2}:* #{k[i][3]}" unless k.map{|q| q[3]}.uniq.length<2
       unless k.map{|q| q[4]}.uniq.length<2
@@ -5182,6 +5245,9 @@ def disp_struct(bot,name,event,ignore=false)
     text="#{text}#{k.map{|q| q[5][2]}.inject(0){|sum,x| sum + x }}<:Heavenly_Dew:510776806396395530>" if k.map{|q| q[5][2]}.inject(0){|sum,x| sum + x }>0
     text="#{text}#{k.map{|q| q[5][3]}.inject(0){|sum,x| sum + x }}<:Aether_Stone_SP:513982883560423425>" if k.map{|q| q[5][3]}.inject(0){|sum,x| sum + x }>0
     text="#{text} (Requires reaching AR Tier #{k.map{|q| q[6]}.max})" if k.map{|q| q[6]}.max>0
+  elsif k[0][2]=='Offensive/Defensive' && k[0][5][1]>0 && k[0][5][2]>0
+    text="#{text}\n\n<:Offensive_Structure:510774545997758464>*Offensive cost:* #{k[0][5][2]}<:Heavenly_Dew:510776806396395530>"
+    text="#{text}\n<:Defensive_Structure:510774545108566016>*Defensive cost:* #{k[0][5][1]}<:Aether_Stone:510776805746278421>"
   else
     text="#{text}\n\n**Cost:** " if k[0][5].max>0
     text="#{text}#{k[0][5][0]}<:RRAffinity:565064751780986890>" if k[0][5][0]>0
@@ -5248,7 +5314,7 @@ def disp_itemu(bot,name,event,ignore=false)
   args=s.split(' ')
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   name=args.join(' ') if name.nil?
-  k=find_data_ex(:find_item_feh,args.join(' '),event)
+  k=find_data_ex(:find_item_feh,name,event)
   if k.length<=0
     event.respond 'No matches found.' unless ignore
     return nil
@@ -5441,9 +5507,10 @@ def get_group(name,event)
   g=get_markers(event)
   sklz=@skills.map{|q| q}
   untz=@units.map{|q| q}
-  if ['dancer','singer','refresher','dancers','singers','refreshers','dancers&singers'].include?(name.downcase)
+  if ['dancer','singer','bard','refresher','dancers','singers','bards','refreshers','dancers&singers'].include?(name.downcase)
     k=sklz[sklz.find_index{|q| q[1]=='Dance'}]
     k2=sklz[sklz.find_index{|q| q[1]=='Sing'}]
+    k3=sklz[sklz.find_index{|q| q[1]=='Play'}]
     b=[]
     for i in 0...@max_rarity_merge[0]
       u=k[12][i].split(', ')
@@ -5454,37 +5521,44 @@ def get_group(name,event)
       for j in 0...u2.length
         b.push(u2[j]) unless b.include?(u2[j]) || u2[j].include?('-') || !has_any?(g, untz[untz.find_index{|q| q[0]==u2[j]}][13][0])
       end
+      u3=k3[12][i].split(', ')
+      for j in 0...u3.length
+        b.push(u3[j]) unless b.include?(u3[j]) || u3[j].include?('-') || !has_any?(g, untz[untz.find_index{|q| q[0]==u3[j]}][13][0])
+      end
     end
-    return ['Dancer/Singer',b]
+    return ['Refreshers',b]
   elsif ['braveheroes','brave','cyl'].include?(name.downcase)
     l=untz.reject{|q| !has_any?(g, q[13][0]) || !q[0].include?('(Brave)')}
     return ['BraveHeroes',l.map{|q| q[0]}]
+  elsif ['resplendant','resplendent','ascension','ascend','resplend','ex'].include?(name.downcase)
+    l=untz.reject{|q| !has_any?(g, q[13][0]) || !q[9][0].include?('RA')}
+    return ['Resplendent',l.map{|q| q[0]}]
   elsif ['fallenheroes','fallen','dark','evil','alter'].include?(name.downcase)
     l=untz.reject{|q| !has_any?(g, q[13][0]) || !q[0].include?('(Fallen)')}
     return ['FallenHeroes',l.map{|q| q[0]}]
   elsif ['valentines',"valentine's"].include?(name.downcase)
-    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Valentines)')}
+    l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Valentines)')}
     return ["Valentine's",l.map{|q| q[0]}]
   elsif ['bathing'].include?(name.downcase)
-    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Bath)')}
+    l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Bath)')}
     return ['Bathing',l.map{|q| q[0]}]
   elsif ['bunnies'].include?(name.downcase)
-    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || (!q[0].include?('(Spring)') && !q[0].include?('(Bunny)'))}
+    l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || (!q[0].include?('(Spring)') && !q[0].include?('(Bunny)'))}
     return ['Bunnies',l.map{|q| q[0]}]
   elsif ['picnic','lunch'].include?(name.downcase)
-    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || (!q[0].include?('(Picnic)'))}
+    l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || (!q[0].include?('(Picnic)'))}
     return ['Picnic',l.map{|q| q[0]}]
   elsif ['wedding','bride','brides','groom','grooms'].include?(name.downcase)
-    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !(q[0].include?('(Bride)') || q[0].include?('(Groom)'))}
+    l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !(q[0].include?('(Bride)') || q[0].include?('(Groom)'))}
     return ['Wedding',l.map{|q| q[0]}]
   elsif ['summer'].include?(name.downcase)
-    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Summer)')}
+    l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Summer)')}
     return ['Summer',l.map{|q| q[0]}]
   elsif ['halloween'].include?(name.downcase)
-    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Halloween)')}
+    l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Halloween)')}
     return ['Halloween',l.map{|q| q[0]}]
   elsif ['winter','holiday'].include?(name.downcase)
-    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Winter)')}
+    l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !q[0].include?('(Winter)')}
     return ['Winter',l.map{|q| q[0]}]
   elsif ['worsethanliki','wtl'].include?(name.downcase)
     liki=untz[untz.find_index{|q| q[0]=='Tiki(Young)(Earth)'}]
@@ -5494,7 +5568,7 @@ def get_group(name,event)
     end
     return ['WorseThanLiki',l.map{|q| q[0]}]
   elsif ['seasonal','seasonals'].include?(name.downcase)
-    l=untz.reject{|q| q[2][0]!=' ' || !q[9][0].include?('s') || !has_any?(g, q[13][0])}
+    l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0])}
     return ['Seasonals',l.map{|q| q[0]}]
   elsif ['legendary','legendaries','legends','legend','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(name.downcase)
     l=untz.reject{|q| !['Fire','Water','Wind','Earth','Astra','Anima','Light','Dark'].include?(q[2][0]) || !has_any?(g, q[13][0])}
@@ -5559,9 +5633,9 @@ def get_group(name,event)
   elsif name.downcase=='bannerless'
     b=[]
     b2=[]
-    if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHBanners.txt")
+    if File.exist?("#{@location}devkit/FEHBanners.txt")
       b2=[]
-      File.open("C:/Users/#{@mash}/Desktop/devkit/FEHBanners.txt").each_line do |line|
+      File.open("#{@location}devkit/FEHBanners.txt").each_line do |line|
         b2.push(line.gsub("\n",''))
       end
     else
@@ -5689,7 +5763,7 @@ def collapse_skill_list_2(list,mode=0)
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   return list_collapse(list,mode)
@@ -6821,9 +6895,9 @@ def display_banners(event, args=nil, mode=0)
     end
   end
   tags.uniq!
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHBanners.txt")
+  if File.exist?("#{@location}devkit/FEHBanners.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHBanners.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHBanners.txt").each_line do |line|
       b.push(line.gsub("\n",''))
     end
   else
@@ -7185,9 +7259,9 @@ def sort_skills(bot,event,args=[])
 end
 
 def get_bond_name(event)
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHBondNames.txt")
+  if File.exist?("#{@location}devkit/FEHBondNames.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHBondNames.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHBondNames.txt").each_line do |line|
       b.push(line)
     end
   else
@@ -7216,6 +7290,7 @@ def comparison(event,args,bot)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   s1=args.join(' ').gsub(',','').gsub('/','').downcase
   s2=args.join(' ').gsub(',','').gsub('/','').downcase
+  resp=[]
   if s1.include?('|')
     f=s1.gsub(' |','|').gsub('| ','|').split('|')
     b=[]
@@ -7248,7 +7323,8 @@ def comparison(event,args,bot)
         if f[i].downcase.split(' ').include?("mathoo's") && find_in_dev_units(name)>=0
           m=true
           dv=@dev_units[find_in_dev_units(name)]
-          r[0]=dv[1]
+          r[0]=dv[1].to_i
+          resp.push((dv[1].include?('r')).to_s[0])
           r[1]=dv[2]
           r[2]=dv[3].gsub(' ','')
           r[3]=dv[4].gsub(' ','')
@@ -7259,17 +7335,22 @@ def comparison(event,args,bot)
           x=donor_unit_list(uid)
           x2=x.find_index{|q| q[0]==name}
           unless x2.nil?
-            r[0]=x[x2][1]
+            r[0]=x[x2][1].to_i
+            resp.push((x[x2][1].include?('r')).to_s[0])
             r[1]=x[x2][2]
             r[2]=x[x2][3].gsub(' ','')
             r[3]=x[x2][4].gsub(' ','')
             r[2]='' if r[2].nil?
             r[3]='' if r[3].nil?
           end
+        elsif u[9][0].include?('RA')
+          resp.push('b')
+        else
+          resp.push('f')
         end
         st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
         uemoji=unit_moji(bot,event,-1,name,m,2,uid)
-        b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{uemoji if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0],uemoji,r[1]])
+        b.push([st,"#{r[0]}#{@rarity_stars[r[0]-1]}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{uemoji if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0],uemoji,r[1],resp[-1]])
         c.push(unit_color(event,-1,name,1,m))
         atkstat.push('Strength') if ['Blade','Bow','Dagger','Beast'].include?(u[1][1])
         atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
@@ -7280,8 +7361,8 @@ def comparison(event,args,bot)
     for i in 0...args.length
       unless s1.nil? || s1.split(' ').length<=1 || s1.gsub(' ','').length<=0
         k=find_data_ex(:find_unit,s1,event,false,1)
-        k[1]=k[1][1,k[1].length-1] if k[1][0,1]==' '
         unless k.nil? || k.length<=0
+          k[1]=k[1][1,k[1].length-1] if k[1][0,1]==' '
           if k[0].is_a?(Array)
             if k[0][0].is_a?(Array)
               k[0]=k[0].map{|q| q[0]}.join(' ')
@@ -7344,7 +7425,8 @@ def comparison(event,args,bot)
         sup='-'
         if m && find_in_dev_units(name)>=0
           dv=@dev_units[find_in_dev_units(name)]
-          r[0]=dv[1]
+          r[0]=dv[1].to_i
+          resp.push((dv[1].include?('r')).to_s[0])
           r[1]=dv[2]
           r[2]=dv[3].gsub(' ','')
           r[3]=dv[4].gsub(' ','')
@@ -7355,7 +7437,8 @@ def comparison(event,args,bot)
           x=donor_unit_list(did)
           x2=x.find_index{|q| q[0]==name}
           unless x2.nil?
-            r[0]=x[x2][1]
+            r[0]=x[x2][1].to_i
+            resp.push((x[x2][1].include?('r')).to_s[0])
             r[1]=x[x2][2]
             r[2]=x[x2][3].gsub(' ','')
             r[3]=x[x2][4].gsub(' ','')
@@ -7363,6 +7446,10 @@ def comparison(event,args,bot)
             r[2]='' if r[2].nil?
             r[3]='' if r[3].nil?
           end
+        elsif u[9][0].include?('RA')
+          resp.push('b')
+        else
+          resp.push('f')
         end
         st=get_stats(event,name,40,r[0],r[1],r[2],r[3])
         uemoji=unit_moji(bot,event,-1,name,m,2,did)
@@ -7370,7 +7457,7 @@ def comparison(event,args,bot)
         rstar=['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>','<:Icon_Rarity_4p10:448272714210476033>','<:Icon_Rarity_5p10:448272715099406336>','<:Icon_Rarity_6p10:491487784822112256>'][r[0]-1] if r[1]>=10
         rstar='<:Icon_Rarity_S:448266418035621888>' unless sup=='-'
         rstar='<:Icon_Rarity_Sp10:448272715653054485>' if sup != '-' && r[1]>=10
-        b.push([st,"#{r[0]}#{rstar}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{uemoji if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0],uemoji,r[1]])
+        b.push([st,"#{r[0]}#{rstar}#{' ' unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}#{name}#{uemoji if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} #{"+#{r[1]}" if r[1]>0} #{"(+#{r[2]}, -#{r[3]})" unless ['',' '].include?(r[2]) && ['',' '].include?(r[3])}#{"(neutral)" if ['',' '].include?(r[2]) && ['',' '].include?(r[3])}",(m && find_in_dev_units(name)>=0),r[0],uemoji,r[1],resp[-1]])
         c.push(unit_color(event,find_data_ex(:find_unit,sever(k[i]),event),nil,1,m))
         atkstat.push('Strength') if ['Blade','Bow','Dagger','Beast'].include?(u[1][1])
         atkstat.push('Magic') if ['Tome','Healer'].include?(u[1][1])
@@ -7416,6 +7503,7 @@ def comparison(event,args,bot)
       czz.push(c[iz])
       for jz in 1...6
         stz=b[iz][0][jz]
+        stz+=2 if b[iz][6]=='t'
         dzz[iz][2]+=stz
         s=''
         s=' (+)' if [-3,1,5,10,14].include?(b[iz][0][jz+5]) && b[iz][3]==5
@@ -7424,7 +7512,7 @@ def comparison(event,args,bot)
         s=' (-)' if [-1,11].include?(b[iz][0][jz+5]) && b[iz][3]==4
         s='' if s==' (-)' && b[iz][5]>0
         s='' unless b.reject{|q| q[1][q[1].length-10,10]==' (neutral)'}.length<=0
-        dzz[iz][1].push("#{stzzz[jz]}: #{stz}#{s}")
+        dzz[iz][1].push("#{stzzz[jz]}: #{stz}#{" / #{stz+2}" if b[iz][6]=='b'}#{s}")
         if stz>hstats[jz][0]
           hstats[jz][0]=stz
           hstats[jz][1]=[b[iz][0][0]]
@@ -7432,7 +7520,7 @@ def comparison(event,args,bot)
           hstats[jz][1].push(b[iz][0][0])
         end
       end
-      dzz[iz][1]="#{dzz[iz][1].join("\n")}\n\nBST: #{dzz[iz][2]}"
+      dzz[iz][1]="#{dzz[iz][1].join("\n")}\n\nBST: #{dzz[iz][2]}#{" / #{dzz[iz][2]+10}\ndefault / Resplendent" if b[iz][6]=='b'}"
       if dzz[iz][2]>hstats[0][0]
         hstats[0][0]=dzz[iz][2]
         hstats[0][1]=[b[iz][0][0]]
@@ -7457,6 +7545,10 @@ def comparison(event,args,bot)
       dzz[dzz.length-1][1].push("Highest BST: #{hstats[0][0]} (#{hstats[0][1].join(', ')})")
     end
     dzz[dzz.length-1][1].push("BST of highest stats: #{hstats[1][0]+hstats[2][0]+hstats[3][0]+hstats[4][0]+hstats[5][0]}")
+    if b.map{|q| q[6]}.include?('b') && b.map{|q| q[6]}.uniq.length>1
+      dzz[dzz.length-1][1].push('')
+      dzz[dzz.length-1][1].push("Analysis was performed using units' default stats.")
+    end
     dzz[dzz.length-1][1]=dzz[dzz.length-1][1].join("\n")
     ftr=nil
     if bse.include?('Elise') && bse.include?('Nino') && bse.reject{|q| ['Elise','Nino'].include?(q)}.length<=0
@@ -7512,6 +7604,8 @@ def comparison(event,args,bot)
     end
   end
   for i in 1...6
+    b[0][0][i]+=2 if b[0][6]=='t'
+    b[1][0][i]+=2 if b[1][6]=='t'
     s=''
     s=' (+)' if [-3,1,5,10,14].include?(b[0][0][i+5]) && b[0][3]==5
     s=' (-)' if [-2,2,6,11,15].include?(b[0][0][i+5]) && b[0][3]==5
@@ -7519,7 +7613,7 @@ def comparison(event,args,bot)
     s=' (-)' if [-1,11].include?(b[0][0][i+5]) && b[0][3]==4
     s='' if s==' (-)' && b[0][5]>0
     s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)' && !names[0].include?("Mathoo's ")
-    d1[1].push("#{stzzz[i]}: #{b[0][0][i]}#{s}")
+    d1[1].push("#{stzzz[i]}: #{b[0][0][i]}#{" / #{b[0][0][i]+2}" if b[0][6]=='b'}#{s}")
     s=''
     s=' (+)' if [-3,1,5,10,14].include?(b[1][0][i+5]) && b[1][3]==5
     s=' (-)' if [-2,2,6,11,15].include?(b[1][0][i+5]) && b[1][3]==5
@@ -7527,7 +7621,7 @@ def comparison(event,args,bot)
     s=' (-)' if [-1,11].include?(b[1][0][i+5]) && b[1][3]==4
     s='' if s==' (-)' && b[1][5]>0
     s='' unless b[0][1][b[0][1].length-10,10]==' (neutral)' && b[1][1][b[1][1].length-10,10]==' (neutral)' && !names[1].include?("Mathoo's ")
-    d2[1].push("#{stzzz[i]}: #{b[1][0][i]}#{s}")
+    d2[1].push("#{stzzz[i]}: #{b[1][0][i]}#{" / #{b[1][0][i]+2}" if b[1][6]=='b'}#{s}")
     d1[2]+=b[0][0][i]
     d2[2]+=b[1][0][i]
     if b[0][0][i]==b[1][0][i]
@@ -7543,8 +7637,8 @@ def comparison(event,args,bot)
   d1[1].push('')
   d2[1].push('')
   d3[1].push('')
-  d1[1].push("BST: #{d1[2]}")
-  d2[1].push("BST: #{d2[2]}")
+  d1[1].push("BST: #{d1[2]}#{" / #{d1[2]+10}\ndefault / Resplendent" if b[0][6]=='b'}")
+  d2[1].push("BST: #{d2[2]}#{" / #{d2[2]+10}\ndefault / Resplendent" if b[1][6]=='b'}")
   if d1[2]==d2[2]
     d3[1].push('Equal BST')
   elsif d1[2]>d2[2]
@@ -7553,6 +7647,10 @@ def comparison(event,args,bot)
     d3[1].push("#{names[1]} has #{d2[2]-d1[2]} more BST")
   else
     d3[1].push("BST calculation error")
+  end
+  if b.map{|q| q[6]}.include?('b') && b.map{|q| q[6]}.uniq.length>1
+    d3[1].push('')
+    d3[1].push("Analysis was performed using units' default stats.")
   end
   d1[1]=d1[1].join("\n")
   d2[1]=d2[1].join("\n")
@@ -7578,7 +7676,7 @@ def detect_multi_unit_alias(event,str1,str2,robinmode=0)
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   return multi_for_units(event,str1,str2,robinmode)
@@ -7677,7 +7775,7 @@ def skill_comparison(event,args,bot)
         if f[i].downcase.split(' ').include?("mathoo's") && find_in_dev_units(name)>=0
           m=true
           dv=@dev_units[find_in_dev_units(name)]
-          r[0]=dv[1]
+          r[0]=dv[1].to_i
           r[1]=dv[2]
           r[2]=dv[3].gsub(' ','')
           r[3]=dv[4].gsub(' ','')
@@ -7768,7 +7866,7 @@ def skill_comparison(event,args,bot)
         sup='-'
         if m && find_in_dev_units(name)>=0
           dv=@dev_units[find_in_dev_units(name)]
-          r[0]=dv[1]
+          r[0]=dv[1].to_i
           r[1]=dv[2]
           r[2]=dv[3].gsub(' ','')
           r[3]=dv[4].gsub(' ','')
@@ -7858,7 +7956,7 @@ def weapon_legality(event,name,weapon,refinement='-',recursion=false)
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   return legal_weapon(event,name,weapon,refinement,recursion)
@@ -7916,6 +8014,17 @@ def skill_legality(event,unit,skill)
       end
       if k22[i2].include?('Singers')
         u2=sklz[sklz.find_index{|q| q[0]=='Sing'}]
+        b=[]
+        for i3 in 0...@max_rarity_merge[0]
+          u=u2[9][i3].split(', ')
+          for j2 in 0...u.length
+            b.push(u[j2]) unless b.include?(u[j2]) || u[j2].include?('-')
+          end
+        end
+        k4=true if b.include?(u[0])
+      end
+      if k22[i2].include?('Bards')
+        u2=sklz[sklz.find_index{|q| q[0]=='Play'}]
         b=[]
         for i3 in 0...@max_rarity_merge[0]
           u=u2[9][i3].split(', ')
@@ -8198,7 +8307,7 @@ def generate_random_unit(event,args,bot)
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   return make_random_unit(event,args,bot)
@@ -8453,7 +8562,7 @@ def parse_function(callback,event,args,bot,healers=nil)
       t=Time.now
       if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
         puts 'reloading EliseText'
-        load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+        load "#{@location}devkit/EliseText.rb"
         @last_multi_reload[1]=t
       end
       timeshift=8
@@ -8480,7 +8589,7 @@ def parse_function(callback,event,args,bot,healers=nil)
       t=Time.now
       if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
         puts 'reloading EliseText'
-        load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+        load "#{@location}devkit/EliseText.rb"
         @last_multi_reload[1]=t
       end
       disp_generic_art(event,'',bot)
@@ -8492,7 +8601,7 @@ def parse_function(callback,event,args,bot,healers=nil)
     t=Time.now
     if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
       puts 'reloading EliseText'
-      load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+      load "#{@location}devkit/EliseText.rb"
       @last_multi_reload[1]=t
     end
     disp_generic_art(event,'',bot)
@@ -8603,7 +8712,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   return get_effHP(event,name,bot,weapon)
@@ -8646,6 +8755,7 @@ def pair_up(event,name,bot,weapon=nil)
   blessing=blessing[0,8] if blessing.length>8
   transformed=flurp[7]
   flowers=flurp[8]
+  resp=flurp[9]
   untz=@units.map{|q| q}
   blessing=[]
   unless name=='Robin'
@@ -8665,7 +8775,8 @@ def pair_up(event,name,bot,weapon=nil)
     dv=find_in_dev_units(name)
     if dv>=0
       mu=true
-      rarity=@dev_units[dv][1]
+      rarity=@dev_units[dv][1].to_i
+      resp=(@dev_units[dv][1].include?('r'))
       merges=@dev_units[dv][2]
       boon=@dev_units[dv][3].gsub(' ','')
       bane=@dev_units[dv][4].gsub(' ','')
@@ -8694,7 +8805,8 @@ def pair_up(event,name,bot,weapon=nil)
     if x2.nil?
       event.respond "#{bot.user(uid).name} does not have that character, or did not feel like adding that character.  Showing neutral stats."
     else
-      rarity=x[x2][1]
+      rarity=x[x2][1].to_i
+      resp=(x[x2][1].include?('r'))
       merges=x[x2][2]
       boon=x[x2][3].gsub(' ','')
       bane=x[x2][4].gsub(' ','')
@@ -8759,7 +8871,7 @@ def pair_up(event,name,bot,weapon=nil)
     n=n.join(' / ') if ['Attack','Freeze'].include?(atk)
   end
   atk='Attack'
-  u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers)
+  u40=get_stats(event,name,40,rarity,merges,boon,bane,flowers,resp)
   spec_wpn=false
   if name=='Robin'
     u40[0]='Robin (Shared stats)'
@@ -8800,11 +8912,11 @@ def pair_up(event,name,bot,weapon=nil)
   for i in 2...6
     u40[i]="#{"~~#{cru40[i]}~~ " unless cru40[i]==u40[i] || !wl.include?('~~')}#{u40[i]}"
   end
-  pic=pick_thumbnail(event,u40x,bot)
+  pic=pick_thumbnail(event,u40x,bot,resp)
   staticons=['<:StrengthS:514712248372166666>','<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>']
   staticons=['<:Strength:573344931205349376>','<:Speed:573366907357495296>','<:FEHDefense:574702109325262878>','<:Defense:573344832282689567>'] if u40x[11][0]=='DL'
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
-  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,-1,u40[0],mu,6)}** as cohort unit__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,[],nil,'',blessing,transformed,wl)}\n#{staticons[0]}Attack: #{u40[2]}\n#{staticons[1]}Speed: #{u40[3]}\n#{staticons[2]}Defense: #{u40[4]}\n#{staticons[3]}Resistance: #{u40[5]}",xcolor,nil,pic,nil,5)
+  create_embed(event,"__#{"Mathoo's " if mu}**#{u40[0]}#{unit_moji(bot,event,-1,u40[0],mu,6)}** as cohort unit__","#{display_stars(bot,event,rarity,merges,summoner,[u40x[3],flowers],false,u40x[11][0],mu)}#{"\n+#{boon}, -#{bane} #{"(#{n})" unless n.nil?}" unless boon=="" && bane==""}\n#{display_stat_skills(u40x,stat_skills,[],nil,'',blessing,transformed,wl,false,false,resp)}\n#{staticons[0]}Attack: #{u40[2]}\n#{staticons[1]}Speed: #{u40[3]}\n#{staticons[2]}Defense: #{u40[4]}\n#{staticons[3]}Resistance: #{u40[5]}",xcolor,nil,pic,nil,5)
 end
 
 def unit_study(event,name,bot,weapon=nil)
@@ -8974,7 +9086,7 @@ def heal_study(event,name,bot,weapon=nil)
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   return study_of_healing(event,name,bot,weapon)
@@ -8998,7 +9110,7 @@ def proc_study(event,name,bot,weapon=nil)
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   return study_of_procs(event,name,bot,weapon)
@@ -9022,7 +9134,7 @@ def phase_study(event,name,bot,weapon=nil)
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   return study_of_phases(event,name,bot,weapon)
@@ -9046,7 +9158,7 @@ def disp_art(event,name,bot,weapon=nil)
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   return disp_unit_art(event,name,bot)
@@ -9057,7 +9169,7 @@ def disp_stats_for_FGO(bot,event,srv=nil)
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   return disp_FGO_based_stats(bot,event,srv)
@@ -9081,7 +9193,7 @@ def learnable_skills(event,name,bot,weapon=nil)
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   return disp_learnable_skills(event,name,bot)
@@ -9105,7 +9217,7 @@ def banner_list(event,name,bot,weapon=nil)
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   return study_of_banners(event,name,bot)
@@ -9115,7 +9227,7 @@ def games_list(event,name,bot,weapon=nil)
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   name=game_adjust(name)
@@ -9239,6 +9351,84 @@ def games_list(event,name,bot,weapon=nil)
   create_embed(event,"__#{"Mathoo's " if mu}**#{name}**__","#{"**Credit in FEH**\n" unless g2=="No games"}#{g2}#{"\n\n**Other games**\n#{g.join("\n")}" unless g.length<1}#{"\n\n**Also appears via Amiibo functionality in**\n#{ga.join("\n")}" unless ga.length<1}#{"\n\n**Appears as an Assist Trophy in**\n#{gat.join("\n")}" unless gat.length<1}#{"\n\n**Appears as a Mii Costume in**\n#{gm.join("\n")}" unless gm.length<1}#{"\n\n**Appears as a Spirit in**\n#{gs.join("\n")}" unless gs.length<1}#{"\n\n**Appears as a standard Trophy in**\n#{gt.join("\n")}" unless gt.length<1}#{"\n\n**Appears as a Sticker in**\n#{gst.join("\n")}" unless gst.length<1}",xcolor,nil,pic)
 end
 
+def disp_path(event,name,bot,weapon=nil)
+  if name.nil?
+    name=find_data_ex(:find_unit,event.message.text,event)
+    name=name[0]
+  end
+  name=['Robin(M)','Robin(F)'] if name=='Robin'
+  if name.is_a?(Array)
+    g=get_markers(event)
+    u=@units.reject{|q| !has_any?(g, q[13][0])}.map{|q| q[0]}
+    name=name.reject{|q| !u.include?(q) && 'Robin'!=q}
+    for i in 0...name.length
+      disp_path(event,name[i],bot)
+    end
+    return nil
+  end
+  t=Time.now
+  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
+    puts 'reloading EliseMulti1'
+    load "#{@location}devkit/EliseMulti1.rb"
+    @last_multi_reload[0]=t
+  end
+  return divine_path(event,name,bot)
+end
+
+def dev_flower_list(event,bot,args=[])
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
+    puts 'reloading EliseText'
+    load "#{@location}devkit/EliseText.rb"
+    @last_multi_reload[1]=t
+  end
+  return flower_list(event,bot,args)
+end
+
+def dev_grail_list(event,bot,args=[])
+  t=Time.now
+  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
+    puts 'reloading EliseText'
+    load "#{@location}devkit/EliseText.rb"
+    @last_multi_reload[1]=t
+  end
+  return grail_list(event,bot,args)
+end
+
+bot.command(:grail) do |event, *args|
+  return nil if overlap_prevent(event)
+  if args.nil? || args.length<=0
+  elsif event.user.id==167657750971547648 && ['list'].include?(args[0])
+    args.shift
+    dev_grail_list(event,bot,args)
+    return nil
+  end
+  disp_itemu(bot,'Heroic Grail',event)
+end
+
+bot.command(:greil) do |event, *args|
+  return nil if overlap_prevent(event)
+  if args.nil? || args.length<=0
+  elsif event.user.id==167657750971547648 && ['list'].include?(args[0])
+    args.shift
+    dev_grail_list(event,bot,args)
+    return nil
+  end
+  args=[] if args.nil?
+  args.unshift('Greil')
+  disp_unit_stats_and_skills(event,args,bot)
+end
+
+bot.command([:divine,:devine,:code,:path]) do |event, *args|
+  return nil if overlap_prevent(event)
+  if args.nil? || args.length<1
+    event.respond 'No unit was included'
+    return nil
+  end
+  parse_function(:disp_path,event,args,bot)
+  return nil
+end
+
 bot.command([:structure,:struct]) do |event, *args|
   return nil if overlap_prevent(event)
   disp_struct(bot,args.join(' '),event)
@@ -9336,7 +9526,7 @@ bot.command([:banners, :banner]) do |event, *args|
     t=Time.now
     if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
       puts 'reloading EliseText'
-      load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+      load "#{@location}devkit/EliseText.rb"
       @last_multi_reload[1]=t
     end
     timeshift=8
@@ -9395,7 +9585,7 @@ bot.command([:mythic,:mythical,:mythics,:mythicals,:mystic,:mystical,:mystics,:m
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   disp_legendary_mythical(event,bot,args,'Mythic')
@@ -9407,7 +9597,7 @@ bot.command([:legendary,:legendaries,:legendarys,:legend,:legends]) do |event, *
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   disp_legendary_mythical(event,bot,args,'Legendary')
@@ -9419,7 +9609,7 @@ bot.command([:refinery,:refine,:effect]) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   disp_all_refines(event,bot)
@@ -9430,7 +9620,7 @@ bot.command([:prf,:prfs,:PRF]) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   disp_all_prfs(event,bot)
@@ -9441,7 +9631,7 @@ bot.command([:attackicon, :attackcolor, :attackcolors, :attackcolour, :attackcol
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   attack_icon(event)
@@ -9470,7 +9660,7 @@ bot.command(:whyelise) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseTexts'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   why_elise(event,bot)
@@ -9482,7 +9672,7 @@ bot.command([:skillrarity,:onestar,:twostar,:threestar,:fourstar,:fivestar,:skil
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   skill_rarity(event)
@@ -9505,7 +9695,7 @@ bot.command(:summon) do |event, *colors|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   summon_sim(bot,event,colors)
@@ -9603,7 +9793,7 @@ bot.command([:bst, :BST]) do |event, *args|
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   combined_BST(event,args,bot)
@@ -9615,7 +9805,7 @@ bot.command(:bonus) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   x=event.message.text.downcase.split(' ')
@@ -9638,7 +9828,7 @@ bot.command([:arena,:arenabonus,:arena_bonus,:bonusarena,:bonus_arena]) do |even
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   show_bonus_units(event,'Arena',bot)
@@ -9647,13 +9837,30 @@ end
 
 bot.command([:tempest,:tempestbonus,:tempest_bonus,:bonustempest,:bonus_tempest,:tt,:ttbonus,:tt_bonus,:bonustt,:bonus_tt]) do |event|
   return nil if overlap_prevent(event)
+  if args.nil? || args.length<=0
+  elsif event.user.id==167657750971547648 && ['list'].include?(args[0])
+    args.shift
+    dev_grail_list(event,bot,args,'Tempest')
+    return nil
+  end
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   show_bonus_units(event,'Tempest',bot)
+  return nil
+end
+
+bot.command([:ghb]) do |event|
+  return nil if overlap_prevent(event)
+  if args.nil? || args.length<=0
+  elsif event.user.id==167657750971547648 && ['list'].include?(args[0])
+    args.shift
+    dev_grail_list(event,bot,args,'GHB')
+    return nil
+  end
   return nil
 end
 
@@ -9662,7 +9869,7 @@ bot.command([:aether,:aetherbonus,:aether_bonus,:aethertempest,:aether_tempest,:
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   show_bonus_units(event,'Aether',bot)
@@ -9709,7 +9916,7 @@ bot.command([:skill,:skil]) do |event, *args|
     t=Time.now
     if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
       puts 'reloading EliseText'
-      load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+      load "#{@location}devkit/EliseText.rb"
       @last_multi_reload[1]=t
     end
     skill_rarity(event)
@@ -10144,8 +10351,14 @@ bot.command([:hero, :unit, :data, :statsskills, :statskills, :stats_skills, :sta
   disp_unit_stats_and_skills(event,args,bot)
 end
 
-bot.command([:flowers,:flower]) do |event|
+bot.command([:flowers,:flower]) do |event, *args|
   return nil if overlap_prevent(event)
+  if args.nil? || args.length<=0
+  elsif event.user.id==167657750971547648 && ['list'].include?(args[0])
+    args.shift
+    dev_flower_list(event,bot,args)
+    return nil
+  end
   event << "<:Dragonflower_Infantry:541170819980722176><:Dragonflower_Orange:552648156790390796><:Dragonflower_Cavalry:541170819955556352><:Dragonflower_Armor:541170820001824778><:Dragonflower_Cyan:552648156202926097><:Dragonflower_Flier:541170820089774091><:Dragonflower_Purple:552648232673607701><:Dragonflower_Pink:552648232510160897>"
   event << 'Look at all the pretty flowers!'
   event << "https://www.getrandomthings.com/list-flowers.php"
@@ -10176,7 +10389,7 @@ bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   add_new_alias(bot,event,newname,unit,modifier,modifier2)
@@ -10188,7 +10401,7 @@ bot.command(:alias) do |event, newname, unit, modifier, modifier2|
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   add_new_alias(bot,event,newname,unit,modifier,modifier2,1)
@@ -10200,7 +10413,7 @@ bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   list_unit_aliases(event,args,bot)
@@ -10212,7 +10425,7 @@ bot.command([:serveraliases,:saliases]) do |event, *args|
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   list_unit_aliases(event,args,bot,1)
@@ -10295,7 +10508,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
   baseunt="#{j[1]}#{"#{' ' unless j[1][-1,1]=='+'}#{j[2]}" unless ['-','example'].include?(j[2]) || ['Weapon','Assist','Special'].include?(j[6])}" if jjj=='Skill'
   bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**#{jjj} Alias:** #{name} for #{baseunt}~~ **DELETED**.")
   @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-  open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt", 'w') { |f|
+  open("#{@location}devkit/FEHNames.txt", 'w') { |f|
     for i in 0...@aliases.length
       f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
     end
@@ -10304,7 +10517,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
   event.respond "#{name} has been removed from #{baseunt}'s aliases."
   unless !@aliases[-1][2].is_a?(String) || @aliases[-1][2]<'Verdant Shard'
     bot.channel(logchn).send_message('Alias list saved.')
-    open("C:/Users/#{@mash}/Desktop/devkit/FEHNames2.txt", 'w') { |f|
+    open("#{@location}devkit/FEHNames2.txt", 'w') { |f|
       for i in 0...@aliases.length
         f.puts "#{@aliases[i].to_s}"
       end
@@ -10386,7 +10599,7 @@ bot.command(:addgroup) do |event, groupname, *args|
   end
   @groups.uniq!
   @groups.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? (a[2][0] <=> b[2][0]) : (a[0].downcase <=> b[0].downcase)}
-  open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups.txt", 'w') { |f|
+  open("#{@location}devkit/FEHGroups.txt", 'w') { |f|
     for i in 0...@groups.length
       f.puts "#{@groups[i].to_s}#{"\n" if i<@groups.length-1}"
     end
@@ -10400,7 +10613,7 @@ bot.command(:addgroup) do |event, groupname, *args|
   nzzz=@groups.map{|a| a}
   if nzzz[nzzz.length-1].length>0 && nzzz[nzzz.length-1][0]>='Tempest'
     bot.channel(logchn).send_message('Group list saved.')
-    open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups2.txt", 'w') { |f|
+    open("#{@location}devkit/FEHGroups2.txt", 'w') { |f|
       for i in 0...nzzz.length
         f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
       end
@@ -10430,8 +10643,8 @@ bot.command([:seegroups,:checkgroups,:groups]) do |event|
   end
   msg=''
   for i in 0...@groups.length
-    if @groups[i][0].downcase=='dancers&singers'
-      msg=extend_message(msg,"**Dancers/Singers**\n#{get_group('dancers&singers',event)[1].sort.join(', ')}",event,2)
+    if @groups[i][0].downcase=='refreshers'
+      msg=extend_message(msg,"**Refreshers (Dancers/Singers/Bards)**\n#{get_group('refreshers',event)[1].sort.join(', ')}",event,2)
     elsif @groups[i][2].nil?
       display=true
       display=false if @groups[i][0].downcase=="mathoo'swaifus"
@@ -10441,7 +10654,7 @@ bot.command([:seegroups,:checkgroups,:groups]) do |event|
         if get_group(@groups[i][0],event)[1].length>50
           msg=extend_message(msg,"**#{@groups[i][0]}** (#{get_group(@groups[i][0],event)[1].length} members)",event,2) if event.user.id==167657750971547648 || @groups[i][0].downcase != "mathoo'swaifus"
         elsif @groups[i][1].length<=0
-          msg=extend_message(msg,"**#{@groups[i][0]}**\n#{get_group(@groups[i][0],event)[1]}.sort.join(', ')}",event,2) if event.user.id==167657750971547648 || @groups[i][0].downcase != "mathoo'swaifus"
+          msg=extend_message(msg,"**#{@groups[i][0]}**\n#{get_group(@groups[i][0],event)[1].sort.join(', ')}",event,2) if event.user.id==167657750971547648 || @groups[i][0].downcase != "mathoo'swaifus"
         else
           msg=extend_message(msg,"**#{@groups[i][0]}**\n#{@groups[i][1].sort.join(', ')}",event,2)
         end
@@ -10499,7 +10712,7 @@ bot.command([:deletegroup,:removegroup]) do |event, name|
   srvname=bot.server(srv).name unless event.server.nil? && srv.zero?
   bot.channel(logchn).send_message("**Server:** #{srvname} (#{k})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**Group:** #{name}~~\n**DELETED**")
   @groups.compact!
-  open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups.txt", 'w') { |f|
+  open("#{@location}devkit/FEHGroups.txt", 'w') { |f|
     for i in 0...@groups.length
       f.puts "#{@groups[i].to_s}#{"\n" if i<@groups.length-1}"
     end
@@ -10508,7 +10721,7 @@ bot.command([:deletegroup,:removegroup]) do |event, name|
   nzzz=@groups.map{|a| a}
   if nzzz[nzzz.length-1].length>0 && nzzz[nzzz.length-1][0]>='Tempest'
     bot.channel(logchn).send_message('Group list saved.')
-    open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups2.txt", 'w') { |f|
+    open("#{@location}devkit/FEHGroups2.txt", 'w') { |f|
       for i in 0...nzzz.length
         f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
       end
@@ -10570,7 +10783,7 @@ bot.command([:removemember,:removefromgroup]) do |event, group, unit|
     else
       bot.channel(logchn).send_message("**Server:** #{srvname} (#{k})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n**Group:** #{@groups[j][0]}\n**Units removed:** #{i[0]}")
     end
-    open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups.txt", 'w') { |f|
+    open("#{@location}devkit/FEHGroups.txt", 'w') { |f|
       for i in 0...@groups.length
         f.puts "#{@groups[i].to_s}#{"\n" if i<@groups.length-1}"
       end
@@ -10579,7 +10792,7 @@ bot.command([:removemember,:removefromgroup]) do |event, group, unit|
     nzzz=@groups.map{|a| a}
     if nzzz[nzzz.length-1].length>0 && nzzz[nzzz.length-1][0]>='Tempest'
       bot.channel(logchn).send_message('Group list saved.')
-      open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups2.txt", 'w') { |f|
+      open("#{@location}devkit/FEHGroups2.txt", 'w') { |f|
         for i in 0...nzzz.length
           f.puts "#{nzzz[i].to_s}#{"\n" if i<nzzz.length-1}"
         end
@@ -10600,12 +10813,20 @@ end
 bot.command([:sort,:list]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args[0].nil?
+  elsif event.user.id==167657750971547648 && ['flower','flowers'].include?(args[0])
+    args.shift
+    dev_flower_list(event,bot,args)
+    return nil
+  elsif event.user.id==167657750971547648 && ['grail','greil'].include?(args[0])
+    args.shift
+    dev_grail_list(event,bot,args)
+    return nil
   elsif (event.user.id==167657750971547648 || event.channel.id==386658080257212417) && ['group','groups'].include?(args[0].downcase)
     data_load()
     groups_load()
     @groups.uniq!
     @groups.sort! {|a,b| (a[0].downcase <=> b[0].downcase) == 0 ? (a[2][0] <=> b[2][0]) : (a[0].downcase <=> b[0].downcase)}
-    open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups.txt", 'w') { |f|
+    open("#{@location}devkit/FEHGroups.txt", 'w') { |f|
       for i in 0...@aliases.length
         f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
       end
@@ -10617,7 +10838,7 @@ bot.command([:sort,:list]) do |event, *args|
     nicknames_load()
     @aliases.uniq!
     @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-    open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt", 'w') { |f|
+    open("#{@location}devkit/FEHNames.txt", 'w') { |f|
       for i in 0...@aliases.length
         f.puts "#{@aliases[i].to_s}#{"\n" if i<@aliases.length-1}"
       end
@@ -10806,7 +11027,7 @@ bot.command([:aoe,:AOE,:AoE,:area]) do |event, *args|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   aoe(event,bot,args)
@@ -10967,7 +11188,7 @@ bot.command([:growths, :gps, :growth, :gp]) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   growth_explain(event,bot)
@@ -10986,7 +11207,7 @@ bot.command([:oregano, :Oregano]) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseTexts'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   oregano_explain(event,bot)
@@ -10997,7 +11218,7 @@ bot.command([:whoisoregano, :whoIsOregano, :whoisOregano]) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseTexts'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   oregano_explain(event,bot)
@@ -11008,7 +11229,7 @@ bot.command(:merges) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   merge_explain(event,bot)
@@ -11019,7 +11240,7 @@ bot.command(:score) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   score_explain(event,bot)
@@ -11056,7 +11277,7 @@ bot.command([:tools,:links,:tool,:link,:resources,:resources]) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseText'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   show_tools(event,bot)
@@ -11106,7 +11327,7 @@ bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily,:
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseTexts'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   today_in_feh(event,bot)
@@ -11118,7 +11339,7 @@ bot.command([:tomorrow,:tomorow,:tommorrow,:tommorow]) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseTexts'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   today_in_feh(event,bot,true)
@@ -11130,7 +11351,7 @@ bot.command([:next,:schedule]) do |event, type|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseTexts'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   next_events(event,bot,type)
@@ -11142,7 +11363,7 @@ bot.command([:update]) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseTexts'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   update_howto(event,bot)
@@ -11217,21 +11438,21 @@ bot.command([:donation, :donate]) do |event, uid|
         str="#{str}\n\n**Tier 3:** Birthday avatar\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
       elsif g[4][0]=='-'
         str="#{str}\n\n**Tier 3:** Birthday avatar\n\u2713 May be given via another bot."
-      elsif !File.exist?("C:/Users/#{@mash}/Desktop/devkit/EliseImages/#{g[4][0]}.png")
+      elsif !File.exist?("#{@location}devkit/EliseImages/#{g[4][0]}.png")
         str="#{str}\n\n**Tier 3:** Birthday avatar\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected.\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4][0]}"
       else
         str="#{str}\n\n**Tier 3:** Birthday avatar\n\u2713 Given\n*Birthday:* #{g[3][1]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][g[3][0]]}\n*Character:* #{g[4][0]}"
       end
     end
     if g[2][0]>=4
-      if !File.exist?("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+      if !File.exist?("#{@location}devkit/EliseUserSaves/#{uid}.txt")
         str="#{str}\n\n**Tier 4:** Unit tracking\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
       else
         str="#{str}\n\n**Tier 4:** Unit tracking\n\u2713 Given\n*Trigger word:* #{donor_unit_list(uid,1)[0].split('\\'[0])[0]}'s"
       end
     end
     if g[2][0]>=5
-      if !File.exist?("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/#{uid}.txt")
+      if !File.exist?("#{@location}devkit/EliseUserSaves/#{uid}.txt")
         str="#{str}\n\n**Tier 5:** __*Colored*__ unit tracking\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
       elsif donor_unit_list(uid,1)[0].split('\\'[0])[1].nil?
         str="#{str}\n\n**Tier 5:** __*Colored*__ unit tracking\n\u2717 Not given.  Please contact <@167657750971547648> to have this corrected."
@@ -11251,7 +11472,7 @@ bot.command(:edit) do |event, cmd, *args|
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   donor_edit(bot,event,args,cmd)
@@ -11361,7 +11582,7 @@ bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddu
   end
   alz.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
   alz.uniq!
-  open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt", 'w') { |f|
+  open("#{@location}devkit/FEHNames.txt", 'w') { |f|
     for i in 0...alz.length
       f.puts "#{alz[i].to_s}#{"\n" if i<alz.length-1}"
     end
@@ -11370,7 +11591,7 @@ bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddu
   nzzz=@aliases.map{|q| q}
   if nzzz[-1].length>1 && nzzz[-1][2].is_a?(String) && nzzz[-1][2]>='Verdant Shard'
     bot.channel(logchn).send_message('Alias list saved.')
-    open("C:/Users/#{@mash}/Desktop/devkit/FEHNames2.txt", 'w') { |f|
+    open("#{@location}devkit/FEHNames2.txt", 'w') { |f|
       for i in 0...nzzz.length
         f.puts "#{nzzz[i].to_s}"
       end
@@ -11403,7 +11624,7 @@ bot.command([:deletemultialias,:deletedualalias,:deletemultiunitalias,:deletedua
   bot.channel(logchn).send_message("**Server:** #{srvname} (#{srv})\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:** #{event.user.distinct} (#{event.user.id})\n~~**Multi-unit alias:** #{multi}~~\n**DELETED**")
   alz.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
   alz.uniq!
-  open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt", 'w') { |f|
+  open("#{@location}devkit/FEHNames.txt", 'w') { |f|
     for i in 0...alz.length
       f.puts "#{alz[i].to_s}#{"\n" if i<alz.length-1}"
     end
@@ -11412,7 +11633,7 @@ bot.command([:deletemultialias,:deletedualalias,:deletemultiunitalias,:deletedua
   nzzz=@aliases.map{|q| q}
   if nzzz[-1].length>1 && nzzz[-1][2].is_a?(String) && nzzz[-1][2]>='Verdant Shard'
     bot.channel(logchn).send_message('Alias list saved.')
-    open("C:/Users/#{@mash}/Desktop/devkit/FEHNames2.txt", 'w') { |f|
+    open("#{@location}devkit/FEHNames2.txt", 'w') { |f|
       for i in 0...nzzz.length
         f.puts "#{nzzz[i].to_s}"
       end
@@ -11467,7 +11688,7 @@ bot.command([:removefrommultialias,:removefromdualalias,:removefrommultiunitalia
     end
     alz.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
     alz.uniq!
-    open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt", 'w') { |f|
+    open("#{@location}devkit/FEHNames.txt", 'w') { |f|
       for i in 0...alz.length
         f.puts "#{alz[i].to_s}#{"\n" if i<alz.length-1}"
       end
@@ -11476,7 +11697,7 @@ bot.command([:removefrommultialias,:removefromdualalias,:removefrommultiunitalia
     nzzz=@aliases.map{|q| q}
     if nzzz[-1].length>1 && nzzz[-1][2].is_a?(String) && nzzz[-1][2]>='Verdant Shard'
       bot.channel(logchn).send_message('Alias list saved.')
-      open("C:/Users/#{@mash}/Desktop/devkit/FEHNames2.txt", 'w') { |f|
+      open("#{@location}devkit/FEHNames2.txt", 'w') { |f|
         for i in 0...nzzz.length
           f.puts "#{nzzz[i].to_s}"
         end
@@ -11540,7 +11761,7 @@ bot.command(:cleanupaliases, from: 167657750971547648) do |event|
   end
   nmz.compact!
   nmz.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-  open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt", 'w') { |f|
+  open("#{@location}devkit/FEHNames.txt", 'w') { |f|
     for i in 0...nmz.length
       f.puts "#{nmz[i].to_s}#{"\n" if i<nmz.length-1}"
     end
@@ -11562,7 +11783,7 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
       return nil
     end
     nzzzzz=@aliases.map{|a| a}
-    open("C:/Users/#{@mash}/Desktop/devkit/FEHNames2.txt", 'w') { |f|
+    open("#{@location}devkit/FEHNames2.txt", 'w') { |f|
       for i in 0...nzzzzz.length
         f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
       end
@@ -11571,7 +11792,7 @@ bot.command(:backup, from: 167657750971547648) do |event, trigger|
   elsif ['groups','group'].include?(trigger.downcase)
     groups_load()
     nzzzzz=@groups.map{|a| a}
-    open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups2.txt", 'w') { |f|
+    open("#{@location}devkit/FEHGroups2.txt", 'w') { |f|
       for i in 0...nzzzzz.length
         f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
       end
@@ -11585,14 +11806,14 @@ end
 
 bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *args|
   return nil if overlap_prevent(event)
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/EliseUserSaves/#{event.user.id}.txt")
+  if File.exist?("#{@location}devkit/EliseUserSaves/#{event.user.id}.txt")
     event.respond "This command is to allow the developer to edit his units.  Your version of the command is `FEH!edit`"
   end
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
   t=Time.now
   if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
     puts 'reloading EliseMulti1'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+    load "#{@location}devkit/EliseMulti1.rb"
     @last_multi_reload[0]=t
   end
   dev_edit(bot,event,args,cmd)
@@ -11634,7 +11855,7 @@ bot.command(:snagstats) do |event, f, f2|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseTexts'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   snagstats(event,bot,f,f2)
@@ -11648,9 +11869,9 @@ bot.command(:reload, from: 167657750971547648) do |event|
   event.channel.await(:bob, from: event.user.id) do |e|
     reload=false
     if e.message.text.include?('1')
-      if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHNames2.txt")
+      if File.exist?("#{@location}devkit/FEHNames2.txt")
         b=[]
-        File.open("C:/Users/#{@mash}/Desktop/devkit/FEHNames2.txt").each_line do |line|
+        File.open("#{@location}devkit/FEHNames2.txt").each_line do |line|
           b.push(eval line)
         end
       else
@@ -11659,9 +11880,9 @@ bot.command(:reload, from: 167657750971547648) do |event|
       nzzzzz=b.uniq
       if !nzzzzz[-1][2].is_a?(String) || nzzzzz[-1][2]<'Verdant Shard'
         event << 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
-        if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHNames3.txt")
+        if File.exist?("#{@location}devkit/FEHNames3.txt")
           b=[]
-          File.open("C:/Users/#{@mash}/Desktop/devkit/FEHNames3.txt").each_line do |line|
+          File.open("#{@location}devkit/FEHNames3.txt").each_line do |line|
             b.push(eval line)
           end
         else
@@ -11672,7 +11893,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
         e << 'Last backup of the alias list being used.'
       end
       nzzzzz.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-      open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt", 'w') { |f|
+      open("#{@location}devkit/FEHNames.txt", 'w') { |f|
         for i in 0...nzzzzz.length
           f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
         end
@@ -11681,9 +11902,9 @@ bot.command(:reload, from: 167657750971547648) do |event|
       reload=true
     end
     if e.message.text.include?('2')
-      if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHGroups2.txt")
+      if File.exist?("#{@location}devkit/FEHGroups2.txt")
         b=[]
-        File.open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups2.txt").each_line do |line|
+        File.open("#{@location}devkit/FEHGroups2.txt").each_line do |line|
           b.push(eval line)
         end
       else
@@ -11692,9 +11913,9 @@ bot.command(:reload, from: 167657750971547648) do |event|
       nzzzzz=b.uniq
       if nzzzzz.length<10
         e << 'Last backup of the group list has been corrupted.  Restoring from manually-created backup.'
-        if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHGroups3.txt")
+        if File.exist?("#{@location}devkit/FEHGroups3.txt")
           b=[]
-          File.open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups3.txt").each_line do |line|
+          File.open("#{@location}devkit/FEHGroups3.txt").each_line do |line|
             b.push(eval line)
           end
         else
@@ -11704,7 +11925,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
       else
         e << 'Last backup of the group list being used.'
       end
-      open("C:/Users/#{@mash}/Desktop/devkit/FEHGroups.txt", 'w') { |f|
+      open("#{@location}devkit/FEHGroups.txt", 'w') { |f|
         for i in 0...nzzzzz.length
           f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
         end
@@ -11714,7 +11935,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
     end
     if e.message.text.include?('3') && [167657750971547648,368976843883151362].include?(e.user.id)
       event.channel.send_temporary_message('Loading.  Please wait 5 seconds...',3)
-      to_reload=['Units','Skills','Accessories','Structures','Items','StatSkills','SkillSubsets','Banners','Events','Games','ArenaTempest']
+      to_reload=['Units','Skills','Accessories','Structures','Items','StatSkills','SkillSubsets','Banners','Events','Games','ArenaTempest','Path']
       for i in 0...to_reload.length
         download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEH#{to_reload[i]}.txt")
         IO.copy_stream(download, "FEHTemp.txt")
@@ -11751,7 +11972,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
         end
       end
       n.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-      open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt", 'w') { |f|
+      open("#{@location}devkit/FEHNames.txt", 'w') { |f|
         for i in 0...n.length
           f.puts "#{n[i].to_s}#{"\n" if i<n.length-1}"
         end
@@ -11760,7 +11981,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
       nzzz=@aliases.map{|q| q}
       if nzzz[-1].length>1 && nzzz[-1][2].is_a?(String) && nzzz[-1][2]>='Verdant Shard'
         e.respond 'Alias list saved.'
-        open("C:/Users/#{@mash}/Desktop/devkit/FEHNames2.txt", 'w') { |f|
+        open("#{@location}devkit/FEHNames2.txt", 'w') { |f|
           for i in 0...nzzz.length
             f.puts "#{nzzz[i].to_s}"
           end
@@ -11773,9 +11994,9 @@ bot.command(:reload, from: 167657750971547648) do |event|
       download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/PriscillaBot.rb")
       IO.copy_stream(download, "FEHTemp.txt")
       if File.size("FEHTemp.txt")>100
-        if File.exist?("C:/Users/#{@mash}/Desktop/devkit/BotTokens.txt")
+        if File.exist?("#{@location}devkit/BotTokens.txt")
           b2=[]
-          File.open("C:/Users/#{@mash}/Desktop/devkit/BotTokens.txt").each_line do |line|
+          File.open("#{@location}devkit/BotTokens.txt").each_line do |line|
             b2.push(line.split(' # ')[0])
           end
         else
@@ -11849,9 +12070,9 @@ bot.command(:reload, from: 167657750971547648) do |event|
     end
     if e.message.text.include?('6') && e.user.id==167657750971547648
       puts 'reloading EliseMulti1'
-      load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+      load "#{@location}devkit/EliseMulti1.rb"
       puts 'reloading EliseText'
-      load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+      load "#{@location}devkit/EliseText.rb"
       t=Time.now
       @last_multi_reload[0]=t
       @last_multi_reload[1]=t
@@ -11868,7 +12089,7 @@ bot.command(:update) do |event|
   t=Time.now
   if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
     puts 'reloading EliseTexts'
-    load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+    load "#{@location}devkit/EliseText.rb"
     @last_multi_reload[1]=t
   end
   update_howto(event,bot)
@@ -11929,7 +12150,7 @@ end
 bot.message do |event|
   data_load()
   str=event.message.text.downcase
-  load "C:/Users/#{@mash}/Desktop/devkit/FEHPrefix.rb"
+  load "#{@location}devkit/FEHPrefix.rb"
   if event.user.id==336561460920582144 && event.message.text.include?('rolled *Elise*') && event.message.text.include?('Series: *Fire Emblem')
     event.respond 'It me!'
   elsif @shardizard==4 && (['fea!','fef!','fea?','fef?'].include?(str[0,4]) || ['fe13!','fe14!','fe13?','fe14?'].include?(str[0,5]) || ['fe!','fe?'].include?(str[0,3])) && (event.server.nil? || event.server.id==285663217261477889)
@@ -11939,7 +12160,7 @@ bot.message do |event|
     a=str.split(' ')
     if a[0].downcase=='reboot'
       event.respond 'Becoming Robin.  Please wait approximately ten seconds...'
-      exec "cd C:/Users/#{@mash}/Desktop/devkit && RobinBot.rb 4"
+      exec "cd #{@location}devkit && RobinBot.rb 4"
     elsif event.server.nil? || event.server.id==285663217261477889
       event.respond 'I am not Robin right now.  Please use `FE!reboot` to turn me into Robin.'
     end
@@ -11950,7 +12171,7 @@ bot.message do |event|
     a=s.split(' ')
     if a[0].downcase=='reboot'
       event.respond "Becoming Liz.  Please wait approximately ten seconds..."
-      exec "cd C:/Users/#{@mash}/Desktop/devkit && LizBot.rb 4"
+      exec "cd #{@location}devkit && LizBot.rb 4"
     elsif event.server.nil? || event.server.id==285663217261477889
       event.respond "I am not Liz right now.  Please use `FGO!reboot` to turn me into Liz."
     end
@@ -11960,7 +12181,7 @@ bot.message do |event|
     a=s.split(' ')
     if a[0].downcase=='reboot'
       event.respond "Becoming Botan.  Please wait approximately ten seconds..."
-      exec "cd C:/Users/#{@mash}/Desktop/devkit && BotanBot.rb 4"
+      exec "cd #{@location}devkit && BotanBot.rb 4"
     elsif event.server.nil? || event.server.id==285663217261477889
       event.respond "I am not Botan right now.  Please use `DL!reboot` to turn me into Botan."
     end
@@ -12189,7 +12410,7 @@ bot.mention do |event|
     t=Time.now
     if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
       puts 'reloading EliseMulti1'
-      load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+      load "#{@location}devkit/EliseMulti1.rb"
       @last_multi_reload[0]=t
     end
     a.shift
@@ -12199,7 +12420,7 @@ bot.mention do |event|
     t=Time.now
     if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
       puts 'reloading EliseMulti1'
-      load "C:/Users/#{@mash}/Desktop/devkit/EliseMulti1.rb"
+      load "#{@location}devkit/EliseMulti1.rb"
       @last_multi_reload[0]=t
     end
     a.shift
@@ -12218,7 +12439,7 @@ bot.mention do |event|
       t=Time.now
       if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
         puts 'reloading EliseText'
-        load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+        load "#{@location}devkit/EliseText.rb"
         @last_multi_reload[1]=t
       end
       timeshift=8
@@ -12247,6 +12468,10 @@ bot.mention do |event|
   elsif ['art'].include?(a[0].downcase)
     a.shift
     k=parse_function(:disp_art,event,a,bot)
+    k=1
+  elsif ['divine','devine','code','path'].include?(a[0].downcase)
+    a.shift
+    k=parse_function(:disp_path,event,a,bot)
     k=1
   elsif ['struct','structure'].include?(a[0].downcase)
     a.shift
@@ -12418,6 +12643,12 @@ bot.mention do |event|
     if ['skill','skil','skills','skils'].include?(a[0].downcase)
       a.shift
       sort_skills(bot,event,a)
+    elsif event.user.id==167657750971547648 && ['grail','greil'].include?(a[0])
+      args.shift
+      dev_grail_list(event,bot,a)
+    elsif event.user.id==167657750971547648 && ['flower','flowers'].include?(a[0])
+      args.shift
+      dev_flower_list(event,bot,a)
     else
       sort_units(bot,event,a)
     end
@@ -12597,7 +12828,7 @@ def next_holiday(bot,mode=0)
   t=Time.now
   t-=60*60*6
   puts 'reloading EliseText'
-  load "C:/Users/#{@mash}/Desktop/devkit/EliseText.rb"
+  load "#{@location}devkit/EliseText.rb"
   @last_multi_reload[1]=t
   holidays=[[0,1,1,'Tiki(Young)','as Babby New Year',"New Year's Day"],
             [0,2,2,'Feh','the best gacha game ever!','Game Release Anniversary'],
@@ -12677,7 +12908,7 @@ def next_holiday(bot,mode=0)
       # Only one holiday is today.  Display new avatar, and set another check for midnight
       bot.game=k[0][4]
       if @shardizard.zero? || @shardizard==-1
-        bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/EliseImages/#{k[0][3]}.png",'r')) rescue nil
+        bot.profile.avatar=(File.open("#{@location}devkit/EliseImages/#{k[0][3]}.png",'r')) rescue nil
       end
       @avvie_info=[k[0][3],k[0][4],k[0][5]]
       t2= Time.now + 18*60*60
@@ -12692,7 +12923,7 @@ def next_holiday(bot,mode=0)
         # in last area of day.  Set avatar to the last one for the day, then set a check for tomorrow at midnight
         bot.game=k[k.length-1][4]
         if @shardizard.zero? || @shardizard==-1
-          bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/EliseImages/#{k[k.length-1][3]}.png",'r')) rescue nil
+          bot.profile.avatar=(File.open("#{@location}devkit/EliseImages/#{k[k.length-1][3]}.png",'r')) rescue nil
         end
         @avvie_info=[k[k.length-1][3],k[k.length-1][4],k[k.length-1][5]]
         t2= Time.now + 18*60*60
@@ -12711,7 +12942,7 @@ def next_holiday(bot,mode=0)
         # ...set avatar properly and set check for the beginning of the next chunk of the day
         bot.game=k[j][4]
         if @shardizard.zero? || @shardizard==-1
-          bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/EliseImages/#{k[j][3]}.png",'r')) rescue nil
+          bot.profile.avatar=(File.open("#{@location}devkit/EliseImages/#{k[j][3]}.png",'r')) rescue nil
         end
         @avvie_info=[k[j][3],k[j][4],k[j][5]]
         t=Time.now
@@ -12726,16 +12957,16 @@ def next_holiday(bot,mode=0)
     t-=60*60*6
     bot.game='Fire Emblem Heroes (FEH!help for info)'
     if @shardizard==-1
-      bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/EliseBot(Smol).png",'r')) rescue nil
+      bot.profile.avatar=(File.open("#{@location}devkit/EliseBot(Smol).png",'r')) rescue nil
       @avvie_info=['EliseBot(Smol)','*Fire Emblem Heroes*','']
     elsif [6,7].include?(t.month)
-      bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/Elise(Summer).png",'r')) rescue nil if @shardizard.zero? || @shardizard==-1
+      bot.profile.avatar=(File.open("#{@location}devkit/Elise(Summer).png",'r')) rescue nil if @shardizard.zero? || @shardizard==-1
       @avvie_info=['Elise(Summer)','*Fire Emblem Heroes*','']
     elsif [1,2].include?(t.month)
-      bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/Elise(Bath).png",'r')) rescue nil if @shardizard.zero? || @shardizard==-1
+      bot.profile.avatar=(File.open("#{@location}devkit/Elise(Bath).png",'r')) rescue nil if @shardizard.zero? || @shardizard==-1
       @avvie_info=['Elise(Bath)','*Fire Emblem Heroes*','']
     else
-      bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/Elise.png",'r')) rescue nil if @shardizard.zero? || @shardizard==-1
+      bot.profile.avatar=(File.open("#{@location}devkit/Elise.png",'r')) rescue nil if @shardizard.zero? || @shardizard==-1
       @avvie_info=['Elise','*Fire Emblem Heroes*','']
     end
     t+=24*60*60
@@ -12762,9 +12993,9 @@ bot.ready do |event|
     system("title loading #{shard_data(2)[@shardizard]} EliseBot")
   end
   bot.game="Loading, please wait..."
-  if File.exist?("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt")
+  if File.exist?("#{@location}devkit/FEHNames.txt")
     b=[]
-    File.open("C:/Users/#{@mash}/Desktop/devkit/FEHNames.txt").each_line do |line|
+    File.open("#{@location}devkit/FEHNames.txt").each_line do |line|
       b.push(eval line)
     end
   else
@@ -12796,22 +13027,22 @@ bot.ready do |event|
   if @shardizard==4
     next_holiday(bot)
     bot.user(bot.profile.id).on(285663217261477889).nickname='EliseBot (Debug)'
-    bot.profile.avatar=(File.open("C:/Users/#{@mash}/Desktop/devkit/DebugElise.png",'r'))
+    bot.profile.avatar=(File.open("#{@location}devkit/DebugElise.png",'r'))
   else
     next_holiday(bot)
     puts 'Avatar loaded' if @shardizard.zero?
   end
   if @shardizard==4
-    if File.exist?("C:/Users/#{@mash}/Desktop/devkit/DebugSav.txt")
+    if File.exist?("#{@location}devkit/DebugSav.txt")
       b=[]
-      File.open("C:/Users/#{@mash}/Desktop/devkit/DebugSav.txt").each_line do |line|
+      File.open("#{@location}devkit/DebugSav.txt").each_line do |line|
         b.push(eval line)
       end
     else
       b=[]
     end
     bot.channel(285663217261477889).send_message("Lemme give you the happiest of hellos!") if b[0]!='Elise'
-    open("C:/Users/#{@mash}/Desktop/devkit/DebugSav.txt", 'w') { |f|
+    open("#{@location}devkit/DebugSav.txt", 'w') { |f|
       f.puts '"Elise"'
     }
   end
