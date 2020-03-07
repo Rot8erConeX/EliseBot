@@ -1,7 +1,7 @@
-Thrasir, Alm(Valentines), Rudolf(Valentines), Faye(Valentines), Conrad(Valentines), Silque(Valentines), Delthea(Fallen), Louise(Bride), Alm(Saint), Alfonse\Aether\25/02/2020, 02/03/2020\Astra, Anima\Cavalry School, Cavalry School
-Alm(Valentines), Rudolf(Valentines), Faye(Valentines), Conrad(Valentines), Silque(Valentines), Lyon, Abel, Barst, Lyn(Wind), Alfonse\Arena\25/02/2020, 02/03/2020\Water, Earth
 Thrasir, Alm(Valentines), Rudolf(Valentines), Faye(Valentines), Conrad(Valentines), Silque(Valentines), Delthea(Fallen), Louise(Bride), Alm(Saint), Alfonse\Aether\03/03/2020, 09/03/2020\Light, Dark\Flier School, Flier School
 Chrom(Crowned), Leila, Nils, Fiora, Rath, Heath, Laslow, Byleth(F), Ryoma(Supreme), Sharena\Arena\03/03/2020, 09/03/2020\Water, Wind
 Yune, Leila, Nils, Fiora, Rath, Heath, Cynthia, Ylgr(Summer), Roy(Fire), Anna\Aether\10/03/2020, 16/03/2020\Astra, Anima\Bright Shrine, Bright Shrine
 Chrom(Crowned), Leila, Nils, Fiora, Rath, Heath, Laslow, Byleth(F), Ryoma(Supreme), Sharena\Arena\10/03/2020, 16/03/2020\Water, Fire
 Yune, Leila, Nils, Fiora, Rath, Heath, Cynthia, Ylgr(Summer), Roy(Fire), Anna\Aether\17/03/2020, 23/03/2020\Light, Dark\Dark Shrine, Dark Shrine
+Ferdinand von Aegir, Lysithea, Bernie, Annette, Flame Emperor, Dimitri, Claude, Edelgard, Hector(Marquess), Anna\Arena\17/03/2020, 23/03/2020\Unknown, Unknown
+Ferdinand von Aegir, Lysithea, Bernie, Annette, Flame Emperor, Dimitri, Claude, Edelgard, Hector(Marquess), Anna\Arena\24/03/2020, 30/03/2020\Unknown, Unknown

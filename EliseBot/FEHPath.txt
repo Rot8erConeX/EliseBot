@@ -1,6 +1,9 @@
 Awakening / Fates\Cordelia(Summer); 5; 400, 0\Robin(M)(Fallen); 5; 800, 0\Owain; 5; 1200, 0\Xander(Festival); 5; 1600, 0\Corrin(M)(Adrift); 5; 2000, 0
 Radiance\Leanne; 5; 400, 0\Elincia(Festival); 5; 800, 0\Lethe; 5; 1200, 0\Tanith(Bride); 5; 1600, 0\Greil(Valentines); 5; 2000, 0
 Blades / Sacred Stones\Lillina(Valentines); 5; 400\Amelia; 5; 800, 0\Nino(Fangs); 5; 1200, 0\Ephraim(Winter); 5; 1600, 0\Hector(Valentines); 5; 2000, 0
+Holy War\Leif; 5; 400, 0\Deirdre; 5; 800, 0\Sigurd; 5; 1200, 0\Lewyn; 5; 1600, 0\Ishtar(Soiree); 5; 2000, 0
+Mystery / Shadows\Caeda(Bride); 5; 400, 0\Celica; 5; 800, 0\Genny(Picnic); 5; 1200, 0\Palla(Bunny); 5; 1600, 0\Kliff; 5; 2000, 0
+Heroes\Alfonse(Bunny); 5; 400, 0\Ylgr; 5; 800, 0\Bruno(Bunny); 5; 1200, 0\Fjorm(Winter); 5; 1600, 0\Laevatein(Summer); 5; 2000, 0
 Ephemera 1 (March 2020)\Camilla(Spring); 5; 0, 300
 Ephemera 2 (March 2020)\Kagero(Spring); 5; 0, 300
 Ephemera 3 (March 2020)\Barst; 4; 0, 100

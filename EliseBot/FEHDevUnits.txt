@@ -1,5 +1,5 @@
-Sakura\Anna\Anna(Winter)\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Fjorm(Bride)\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Matthew\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
+Sakura\Anna\Anna(Winter)\Annette\Annette(War)\Bernie\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
+Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Lysithea\Matthew\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
 Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lyn(Brave)\Nino(Fangs)\Nino(Launch)\Sharena
 
 Sakura
@@ -82,8 +82,18 @@ Vantage 1\Vantage 2\Vantage 3
 Savage Blow 1\Savage Blow 2\Savage Blow 3
 Breath of Life 3
 
+Annette
+5\0\HP\Attack\-\0\
+Iron Axe\Steel Axe\Silver Axe\Crusher
+Rally Attack\Rally Atk/Spd\Rally Atk/Spd+
+Daylight\Sol
+Atk/Spd Bond 1\Atk/Spd Bond 2\Atk/Spd Bond 3
+Def/Res Ruse 1\Def/Res Ruse 2\Def/Res Ruse 3
+Atk/Def Gap 1\Atk/Def Gap 2\Atk/Def Gap 3
+Even Atk Wave 2
+
 Azura(Adrift)
-5\0\ \ \-\0\
+5\1\ \ \-\0\
 Wind\Elwind\Rexcalibur\Book of Shadows
 Sing
 Night Sky\Glimmer
@@ -93,7 +103,7 @@ Spur Def 1\Drive Def 1\Drive Def 2
 Blaze Dance 2
 
 Celica
-5\2\Speed\Resistance\-\0\
+5\3\Speed\Resistance\-\0\
 Fire\Elfire\Bolganone\Ragnarok\Ragnarok (+) Effect Mode
 Draw Back
 Dragon Gaze\Draconic Aura
@@ -163,7 +173,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Speed +2
 
 Cordelia(Summer)
-5\1\Resistance\Speed\-\0\
+5\2\Resistance\Speed\-\0\
 Iron Lance\Steel Lance\Shell Lance\Shell Lance+\Shell Lance+ (+) Defense Mode
 Harsh Command
 Glowing Ember\Ignis
@@ -273,7 +283,7 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Genny(Picnic)
-5\0\ \ \-\3\
+5\0\ \ \-\4\
 Assault\Toasty Skewer\Toasty Skewer+\Toasty Skewer+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Fireflood Balm\Fireflood Balm+
@@ -345,9 +355,9 @@ Torrent Dance 3
 Leila
 5\0\HP\Resistance\-\0\
 Iron Dagger\Steel Dagger\Silver Dagger\Constant Dagger
-Rally Speed\Rally Atk/Spd\~~Rally Atk/Spd+~~
+Rally Speed\Rally Atk/Spd\Rally Atk/Spd+
 Night Sky\Glimmer
-Life and Death 1\Life and Death 2\Life and Death 3\~~Life and Death 4~~
+Life and Death 1\Life and Death 2\Life and Death 3\Life and Death 4
 Atk/Def Ruse 1\Atk/Def Ruse 2\Atk/Def Ruse 3
 Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Fortify Res 3
@@ -361,6 +371,16 @@ Spd/Def Solo 1\Spd/Def Solo 2\Spd/Def Solo 3
 Pass 1\Pass 2\Pass 3
 Hone Atk 1\Hone Atk 2\Hone Beasts
 Brazen Atk/Res 3
+
+Lysithea
+5\0\Resistance\Speed\-\0\
+Flux\Ruin\Fenrir\Hades Omega
+Swap
+New Moon\Moonbow
+Death Blow 1\Death Blow 2\Death Blow 3\Death Blow 4
+Lull Spd/Res 1\Lull Spd/Res 2\Lull Spd/Res 3
+Time's Pulse 1\Time's Pulse 2\Time's Pulse 3
+Warding Blow 3
 
 Mae
 5\10\Attack\Defense\-\0\
@@ -403,7 +423,7 @@ Flier Guidance 1\Flier Guidance 2\Flier Guidance 3
 Fierce Stance 2
 
 Matthew
-4\10\Resistance\Speed\-\0\
+5\10\Resistance\Speed\-\0\
 Iron Dagger\Steel Dagger\Lethal Carrot\Lethal Carrot+\Lethal Carrot+ (+) Resistance Mode
 Reciprocal Aid
 Chilling Wind\Glacies
@@ -483,7 +503,7 @@ Spur Def 1\Spur Def 2\Spur Def 3
 HP +5
 
 Rebecca
-4\10\Speed\Resistance\-\0\
+5\10\Speed\Resistance\-\0\
 Iron Bow\Steel Bow\Silver Bow\~~Silver Bow+~~\~~__Silver Bow+ (+) Speed Mode__~~\~~Rebecca's Bow~~\~~Rebecca's Bow (+) Effect Mode~~
 Rally Defense
 Chilling Wind\Iceberg

@@ -3551,7 +3551,7 @@ def skill_data(legal_skills,all_skills,event,mode=0)
     ls2=legal_skills.reject{|q| q[6]!='Weapon' || ['Whelp (All)','Yearling (All)','Adult (All)','Falchion','Missiletainn'].include?(q[1])}
     as2=all_skills.reject{|q| q[6]!='Weapon' || ['Whelp (All)','Yearling (All)','Adult (All)','Falchion','Missiletainn'].include?(q[1])}
     str="#{str}\n<:Gold_Blade:443172811620745236> #{filler(ls2,as2,7,-1,['Sword Users Only','Lance Users Only','Axe Users Only'],-3)} blades   <:Red_Blade:443172811830198282> #{filler(ls2,as2,7,-1,'Sword Users Only')} swords, <:Blue_Blade:467112472768151562> #{filler(ls2,as2,7,-1,'Lance Users Only')} lances, <:Green_Blade:467122927230386207> #{filler(ls2,as2,7,-1,'Axe Users Only')} axes"
-    str="#{str}\n<:Gold_Tome:443172812413337620> #{filler(ls2,as2,7,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes   <:Red_Tome:443172811826003968> #{filler(ls2,as2,7,-1,'Red Tome Users Only')} red, <:Blue_Tome:467112472394858508> #{filler(ls2,as2,7,-1,'Blue Tome Users Only')} blue, <:Green_Tome:467122927666593822> #{filler(ls2,as2,7,-1,'Green Tome Users Only')} green"
+    str="#{str}\n<:Gold_Tome:443172812413337620> #{filler(ls2,as2,7,-1,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only'],-3)} tomes   <:Red_Tome:443172811826003968> #{filler(ls2,as2,7,-1,'Red Tome Users Only')} red, <:Blue_Tome:467112472394858508> #{filler(ls2,as2,7,-1,'Blue Tome Users Only')} blue, <:Green_Tome:467122927666593822> #{filler(ls2,as2,7,-1,'Green Tome Users Only')} green, <:Colorless_Tome:443692133317345290> #{filler(ls2,as2,7,-1,'Colorless Tome Users Only')} colorless"
     str="#{str}\n<:Gold_Dragon:443172811641454592> #{filler(ls2,as2,7,-1,'Dragons Only')} dragonstones"
     str="#{str}\n<:Gold_Bow:443172812492898314> #{filler(ls2,as2,7,-1,'Bow Users Only')} bows"
     str="#{str}\n<:Gold_Dagger:443172811461230603> #{filler(ls2,as2,7,-1,'Dagger Users Only')} daggers"
@@ -3564,14 +3564,18 @@ def skill_data(legal_skills,all_skills,event,mode=0)
     str="#{str}\n<:Assist_Music:454462054959415296> #{filler(ls2,as2,13,-1,'Music',1)} musical assists"
     str="#{str}\n<:Assist_Health:454462054636584981> #{filler(ls2,as2,13,[-1,-1],['Health','Staff'],[1,-1])} health-based assists"
     str="#{str}\n<:Assist_Staff:454451496831025162> #{filler(ls2,as2,13,-1,'Staff',1)} healing staves"
-    str="#{str}\n__<:Assist_Unknown:454451496482897921> #{filler(ls2,as2,13,-1,['Rally','Move','Health','Music','Staff'],-1)} misc. assists__"
+    ls2=legal_skills.reject{|q| q[6]!='Assist' || q[0]>=110000}
+    as2=all_skills.reject{|q| q[6]!='Assist' || q[0]>=110000}
+    str="#{str}\n__<:Assist_Unknown:454451496482897921> #{ls2.length}#{" (#{as2.length})" unless ls2.length==as2.length} misc. assists__"
     ls2=legal_skills.reject{|q| q[6]!='Special'}
     as2=all_skills.reject{|q| q[6]!='Special'}
     str="#{str}\n<:Special_Offensive:454460020793278475> #{filler(ls2,as2,13,[-1,-1],['Offensive','Defensive'],[1,-1])} offensive specials"
     str="#{str}\n<:Special_Defensive:454460020591951884> #{filler(ls2,as2,13,-1,'Defensive',1)} defensive specials"
     str="#{str}\n<:Special_AoE:454460021665693696> #{filler(ls2,as2,13,-1,'AoE',1)} Area-of-Effect specials"
     str="#{str}\n<:Special_Healer:454451451805040640> #{filler(ls2,as2,13,-1,'Staff',1)} healer specials"
-    str="#{str}\n__<:Special_Unknown:454451451603976192> #{filler(ls2,as2,13,-1,['Damage','Defense','AoE','Staff'],-1)} misc. specials__"
+    ls2=legal_skills.reject{|q| q[6]!='Special' || q[0]>=210000}
+    as2=all_skills.reject{|q| q[6]!='Special' || q[0]>=210000}
+    str="#{str}\n__<:Special_Unknown:454451451603976192> #{ls2.length}#{" (#{as2.length})" unless ls2.length==as2.length} misc. specials__"
   else
     str="#{str}\n<:Skill_Weapon:444078171114045450> #{filler(legal_skills,all_skills,6,-1,'Weapon')} Weapons"
     str="#{str}\n<:Skill_Assist:444078171025965066> #{filler(legal_skills,all_skills,6,-1,'Assist')} Assists"
@@ -3586,6 +3590,11 @@ def skill_data(legal_skills,all_skills,event,mode=0)
     str="#{str}\n<:Passive_S:443677023626330122> #{filler(ls2,as2,6,-1,'Seal')} Passive Seals"
   else
     str="#{str}\n<:Passive_S:443677023626330122> #{filler(ls2,as2,6,-1,'Seal',1)} Passive Seals   #{filler(ls2,as2,6,-1,'Seal')} of which are exclusive to the Seal slot"
+  end
+  if mode==2
+    str="#{str}\n<:Passive_W:443677023706152960> #{filler(ls2,as2,6,-1,'Passive(W)')} Weapon-refine Passives"
+  else
+    str="#{str}\n<:Passive_W:443677023706152960> #{filler(ls2,as2,6,-1,'Passive(W)',1)} Weapon-refine Passives   #{filler(ls2,as2,6,-1,'Passive(W)')} of which are exclusive to the Weapon-refine slot"
   end
   return str
 end
@@ -4199,7 +4208,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     m=filler(legal_units,all_units,1,1,'Blade')
     str2="<:Gold_Blade:443172811620745236> #{m} blade users:   <:Red_Blade:443172811830198282> #{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, <:Blue_Blade:467112472768151562> #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, <:Green_Blade:467122927230386207> #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes" unless m=='0'
     m=filler(legal_units,all_units,1,1,'Tome')
-    str2="#{str2}\n<:Gold_Tome:443172812413337620> #{m} tome users:   <:Red_Tome:443172811826003968> #{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, <:Blue_Tome:467112472394858508> #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, <:Green_Tome:467122927666593822> #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green" unless m=='0'
+    str2="#{str2}\n<:Gold_Tome:443172812413337620> #{m} tome users:   <:Red_Tome:443172811826003968> #{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, <:Blue_Tome:467112472394858508> #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, <:Green_Tome:467122927666593822> #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green, <:Colorless_Tome:443692133317345290> #{filler(legal_units,all_units,1,-1,[['Colorless','Tome','X'],['Colorless','Tome','X']],-3)} colorless" unless m=='0'
     m=filler(legal_units,all_units,1,1,'Dragon')
     str2="#{str2}\n<:Gold_Dragon:443172811641454592> #{m} dragon units" unless m=='0'
     m=filler(legal_units,all_units,1,1,'Bow')
@@ -4801,5 +4810,97 @@ def flower_list(event,bot,args=[])
       f[0][0]='Incomplete Projects'
     end
     create_embed(event,title,'',0x008b8b,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
+  end
+end
+
+def grail_list(event,bot,args=[],subcategory=nil)
+  movement=[]
+  completex=false
+  for i in 0...args.length
+    movement.push('GHB') if ['ghb','grandherobattle','battle'].include?(args[i].downcase)
+    movement.push('Tempest') if ['tempest','tempesttrials','tempestrials','trials','trial'].include?(args[i].downcase)
+    movement.push('Extra') if ['extra','ex'].include?(args[i].downcase)
+    completex=true if ['complete','completed','finished','finish','done'].include?(args[i].downcase)
+  end
+  movement=[subcategory] unless subcategory.nil? || subcategory.length<=0
+  load_devunits()
+  data_load()
+  untz=@units.map{|q| q}
+  m=@dev_units.reject{|q| untz.find_index{|q2| q2[0]==q[0]}.nil? || !untz[untz.find_index{|q2| q2[0]==q[0]}][13][0].nil?}.map{|q| [q[0],q[1],q[2],q[6],q[5]]}
+  m=m.sort{|b,a| ((a[2] <=> b[2])) == 0? ((a[3] <=> b[3]) == 0 ? (b[0] <=> a[0]) : (a[3] <=> b[3])) : (a[2] <=> b[2])}
+  ftr=nil
+  f=[['Grand Hero Battles',[]],
+     ['Tempest Trials',[]],
+     ['Other Grail units',[]],
+     ['Completed Projects',[]]]
+  for i in 0...m.length
+    x=untz.find_index{|q| q[0]==m[i][0]}
+    unless x.nil?
+      x=untz[x]
+      xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**"
+      xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**" if m[i][4]!='-'
+      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10
+      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
+      complete=false
+      complete=true if m[i][1].to_i==5 && m[i][2].to_i==10
+      ftr2=nil
+      unless x[9][0].include?('r') || (m[i][1].to_i==5 && m[i][2].to_i==10)
+        xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} #{m[i][0]}"
+        xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} #{m[i][0]}" if m[i][4]!='-'
+        xx="**5<:Icon_Rarity_5p10:448272715099406336>** #{m[i][0]}" if m[i][1].to_i==5 && m[i][2].to_i==10
+        xx="**5<:Icon_Rarity_5p10:448272715099406336>** #{m[i][0]}" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
+        xx="~~#{xx}~~"
+        ftr2='Crossed out units cannot be summoned through grails at this time'
+      end
+      if complete && !safe_to_spam?(event) && !completex
+      elsif !x[9][0].include?('g') && !x[9][0].include?('t') && !x[9][0].include?('r')
+      elsif x[9][0].include?('g') && movement.length>0 && movement[0]!='GHB'
+      elsif x[9][0].include?('t') && movement.length>0 && movement[0]!='Tempest'
+      elsif complete
+        f[3][1].push(xx)
+        ftr="#{ftr2}" unless ftr2.nil?
+      elsif x[9][0].include?('g')
+        f[0][1].push(xx)
+        ftr="#{ftr2}" unless ftr2.nil?
+      elsif x[9][0].include?('t')
+        f[1][1].push(xx)
+        ftr="#{ftr2}" unless ftr2.nil?
+      else
+        f[2][1].push(xx) unless movement.length>0 && movement[0]!='Extra'
+        ftr="#{ftr2}" unless ftr2.nil?
+      end
+    end
+  end
+  if f[0][1].length>16 && !safe_to_spam?(event)
+    if f[0][1].reject{|q| !q.include?('>+')}.length>0
+      f[0][1]=f[0][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
+    end
+  end
+  if f[1][1].length>16 && !safe_to_spam?(event)
+    if f[1][1].reject{|q| !q.include?('>+')}.length>0
+      f[1][1]=f[1][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
+    end
+  end
+  if f[2][1].length>16 && !safe_to_spam?(event)
+    if f[2][1].reject{|q| !q.include?('>+')}.length>0
+      f[2][1]=f[2][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
+    end
+  end
+  f=f.reject{|q| q[1].length<=0}
+  if f.length<=0
+    event.respond "Empty list"
+  elsif f.map{|q| "#{q[0]}\n#{q[1].join("\n")}"}.join("\n\n").length>1800
+    for i in 0...f.length
+      m=nil
+      m=ftr if i==f.length-1
+      create_embed(event,f[i][0],'',0x008b8b,ftr,nil,triple_finish(f[i][1]))
+    end
+  else
+    title=''
+    if movement.length>0 && f.length>1
+      title="#{f[0][0]}"
+      f[0][0]='Incomplete Projects'
+    end
+    create_embed(event,title,'',0x008b8b,ftr,nil,f.map{|q| [q[0],q[1].join("\n")]})
   end
 end

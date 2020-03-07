@@ -1,6 +1,8 @@
 Askran Hairpin\Hair\A hair accessory adorned with the emblem of the Kingdom of Askr.\Clear Floors 6-10 in Illusory Dungeon: Legendary Heroes.
 Astral Hairpin\Hair\A hairpin from Mareeta. An accessory adorned with a moon and star.\Reach 100 red friendship with Mareeta during Forging Bonds: Path to the Future
 Astral Hairpin EX\Hair\A hairpin from Mareeta. An accessory adorned with a moon and star. Has an impressive quality, however slight.\Reach 2500 red friendship with Mareeta during Forging Bonds: Path to the Future.
+Bear Pin\Hair\A cute hair clip from Lysithea that features a little teddy-bear face.\Reach 100 orange friendship with Lysithea during Forging Bonds: Harmony amid Chaos
+Bear Pin EX\Hair\A cute hair clip from Lysithea. The little teddy bear has a bow tie, for extra cuteness!\Reach 2500 orange friendship with Lysithea during Forging Bonds: Harmony amid Chaos
 Clover Hairpin\Hair\A small hairpin from Norne. Made with a four-leaf clover.\Reach 100 orange friendship with Norne during Forging Bonds: A Time to Shine
 Clover Hairpin EX\Hair\A small hairpin from Norne. Made with good intentions and friendly wishes.\Reach 2500 orange friendship with Norne during Forging Bonds: A Time to Shine
 Damsel's Ribbon\Hair\A hair ribbon from Maribelle. It's made from the highest quality fabric.\Reach 100 green friendship with Maribelle during Forging Bonds: Defending Ylisse.
@@ -47,6 +49,8 @@ Kitsune Ears EX\Hair\A headpiece from Kaden that's shaped like kitsune ears. It'
 Lion Insignia\Hair\A gift from Dimtri. It is proof the wearer belongs to the Blue Lions.\Reach 100 blue friendship with Dimitri during Forging Bonds: Three Houses
 Lion Insignia EX\Hair\A gift from Dimtri. It is proof the wearer belongs to the Blue Lions.\Reach 2500 blue friendship with Dimitri during Forging Bonds: Three Houses
 Master Ornament\Hair\A hair ornament worn by the Mirage Master Tsubasa.\Clear floors 16-20 in Illusory Dungeon: Wings Carry Me
+Melody Pin\Hair\A hair clip from Annette, featuring a tasteful music-note motif.\Reach 100 blue friendship with Annette during Forging Bonds: Harmony amid Chaos
+Melody Pin EX\Hair\A hair clip from Annette, featuring a rather refined musical motif.\Reach 2500 blue friendship with Annette during Forging Bonds: Harmony amid Chaos
 Nohrian Hairpin\Hair\Corrin cherished this hairpin. The wild power within takes the form of a butterfly that radiates strange light.\Reach 100 green friendship with Corrin(F)(Fallen) during Forging Bonds: Power's Den
 Nohrian Hairpin EX\Hair\Corrin cherished this hairpin. It is delicately crafted into the shape of a butterfly.\Reach 2500 green friendship with Corrin(F)(Fallen) during Forging Bonds: Power's Den
 Peach Ducky\Hair\A duck-shaped toy that floats on water. The way it bobs up and down is very soothing.\Clear floors 6-10 in Illusory Dungeon: Farewells.
@@ -87,6 +91,8 @@ Beast Headband\Hat\Ranulf's favorite headband. Crafted from thick fabric, it pro
 Beast Headband EX\Hat\This version of Ranulf's headband has very convincing fakes of his ears attached.\Reach 2500 green friendship with Ranulf during Forging Bonds: A Trust Earned
 Bird Nest\Hat\A bird nest Velouria found up in a tree. According to her, it's a treasure with a great scent.\Reach 100 orange friendship with Velouria during Forging Bonds: The Orb Case
 Bird Nest EX\Hat\A bird nest Velouria found up in a tree. It's a treasure with a great scent. And what's this? Something's in the nest!\Reach 2500 orange friendship with Velouria during Forging Bonds: The Orb Case
+Cavalier Cap\Hat\Fancy equestrian headgear from Ferdinand [von Aegir]. Suitable for hunting or an afternoon ride.\Reach 100 red friendship with Ferdinand von Aegir during Forging Bonds: Harmony amid Chaos
+Cavalier Cap EX\Hat\An expensive piece of equestrian headgear from Ferdinand [von Aegir]. The ear flaps are perfect for winter riding.\Reach 2500 red friendship with Ferdinand von Aegir during Forging Bonds: Harmony amid Chaos
 Chief's Headband\Hat\A headband from Gerik. It is made of tough leather, bearing marks earned over many battles.\Reach 100 green friendship with Gerik during Forging Bonds: Mercenary Matters.
 Chief's Headband EX\Hat\A headband from Gerik. It is identical to the one he always wears.\Reach 2500 green friendship with Gerik during Forging Bonds: Mercenary Matters.
 Chilly Tiara\Hat\Fjorm's tiara. Though it is of exquisite workmanship, it was damaged in the battle against Surtr.\Reach 100 blue friendship with Fjorm during Forging Bonds: The Sworn Oath.
@@ -108,6 +114,8 @@ False Taguel Ears EX\Hat\A gift from Yarne, shaped like taguel ears. They increa
 Favored Helm\Hat\A knight's helm given by Kjelle. Kept in perfect, shiny condition by Kjelle herself.\Reach 100 blue friendship with Kjelle during Forging Bonds: Spanning Time.
 Favored Helm EX\Hat\A knight's helm given by Kjelle. Colored beautifully by Kjelle herself.\Reach 2500 blue friendship with Kjelle during Forging Bonds: Spanning Time
 Floral Headband\Hat\A headband decorated with pink blooms.\Clear floors 81-85 in Illusory Dungeon: Carrying the Flame.
+Flytrap Doll\Hat\A handmade doll from ~~Bernadetta~~ Bernie. She made it herself! It's a carnivorous plant. It's...cute?\Reach 100 green friendship with Bernie during Forging Bonds: Harmony amid Chaos
+Flytrap Doll EX\Hat\A handmade doll from ~~Bernadetta~~ Bernie. She made it herself! It's a carnivorous plant. It's...super cute?\Reach 2500 green friendship with Bernie during Forging Bonds: Harmony amid Chaos
 Gold Armored Helmet\Hat\Proof of victory over Legendary Ryoma.\Beat Ryoma(Supreme)'s LHB at Abyssal difficulty.
 Gold Bat Ears\Hat\Proof of victory over Mythic Thrasir\Beat Thrasir's MHB at Abyssal difficulty.
 Gold Devil Horns\Hat\Proof of victory over Legendary Leif.\Beat Leif(Unifier)'s LHB at Abyssal difficulty.

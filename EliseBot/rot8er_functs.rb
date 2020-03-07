@@ -754,6 +754,7 @@ def donor_embed(bot,event,str='')
     event << 'However, there are other options:'
     event << "- My Amazon wish list: http://a.co/0p3sBec (Items purchased from this list will be delivered to me)"
     event << '- You can also purchase an Amazon gift card and have it delivered via email to **rot8er.conex@gmail.com**.  (Quicklink: <https://goo.gl/femEcw>)'
+    event << "You can use your Nitro Boost on either Elise's (<https://discord.gg/9TaRd2h>) or Liz's (<https://discord.gg/bcRcanR>) primary emote servers, which will count as a $5 donation per boost."
     event << ''
     event << '~~Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.~~'
     event << ''
@@ -766,7 +767,7 @@ def donor_embed(bot,event,str='')
     str2="#{str2}\n\nHowever, there are other options:"
     str2="#{str2}\n- You can purchase items from [this list](http://a.co/0p3sBec) and they will be delivered to me."
     str2="#{str2}\n- You can [purchase an Amazon gift card](https://goo.gl/femEcw) and have it delivered via email to **rot8er.conex@gmail.com**."
-    str2="#{str2}\n- You can use your Nitro Boost on either [Elise's](https://discord.gg/9TaRd2h) or [Liz's](https://discord.gg/bcRcanR) primary emote servers, which will count as a $5 donation per month."
+    str2="#{str2}\n- You can use your Nitro Boost on either [Elise's](https://discord.gg/9TaRd2h) or [Liz's](https://discord.gg/bcRcanR) primary emote servers, which will count as a $5 donation per boost."
     str2="#{str2}\n\n[Donor List](https://tinyurl.com/y5m8dv6k)"
     str2="#{str2}\n[Donor Perks](https://urlzs.com/kthnr)"
     str2="#{str2}\n\n#{str}"

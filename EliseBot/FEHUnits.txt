@@ -492,13 +492,17 @@ Faye(Valentines)\Colorless, Bow\ \Armor\7, 11, 5, 9, 10\43, 40, 23, 35, 38\Tobi\
 Conrad(Valentines)\Red, Blade\ \Cavalry\6, 7, 4, 8, 8\39, 32, 23, 33, 35\argon / Exys Inc.\Marc Diraison;; \491\4s5s\M\FE15\Conrad
 Rudolf(Valentines)\Blue, Blade\ \Armor\6, 11, 4, 10, 6\46, 43, 21, 41, 29\Miyamoto Satoru\Taylor Henry;; \492\5s\M\FE15, FE2\Rudolf
 Silque(Valentines)\Colorless, Healer\ \Cavalry\7, 5, 5, 7, 6\40, 28, 22, 32, 29\HAKO\Bonnie Gordon;; \493\4t5t0s\F\FE15, FE2\Silque
-Lysithea\Gold, Tome, Dark\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\Janice Kawaye;; Aoi Yuki\494\5p\F\FE17\Lysithea
+Lysithea\Red, Tome, Dark\ \Infantry\5, 10, 9, 4, 4\37, 41, 37, 21, 24\Enkyo Yuichiro\Janice Kawaye as Janice Roman Roku;; Aoi Yuki\494\5p\F\FE16\Lysithea
 Nils\Blue, Dragon\ \Infantry\9, 7, 8, 6, 5\45, 31, 35, 26, 25\Kippu\Khoi Dao;; \495\5p\M\FE7\Nils
 Rath\Green, Bow\ \Infantry\7, 8, 9, 3, 5\41, 33, 35, 23, 24\Shimomura Watari\Jacob Craner;; \496\3p4p\M\FE7\Rath
 Fiora\Blue, Blade\ \Flier\5, 7, 9, 3, 10\38, 32, 38, 21, 37\Konfuzi Kokon\Marianne Miller;; \497\5p\F\FE7\Fiora
 Leila\Colorless, Dagger\ \Infantry\6, 9, 10, 5, 5\40, 36, 41, 23, 26\PenekoR\Rebeka Thomas;; \498\5p\F\FE7\Leila
 Heath\Blue, Blade\ \Flier\6, 8, 8, 6, 6\40, 35, 33, 33, 27\Meka\Nethaniel Lane;; \499\3g4g4g\M\FE7\Heath
 Chrom(Crowned)\Blue, Bow\Water, Duel, 21/06/2020\Infantry\7, 11, 5, 6, 6\41, 42, 26, 34, 25\Hino Shinnosuke\Matt Mercer;; Sugita Tomokazu\500\5s\M\FE13, (m)SSB4, (t)SSB4, FEW, PXZ2, SSBU, (m)SSBU, (s)SSBU\Chrom
+Bernie\Colorless, Bow\ \Cavalry\6, 7, 10, 4, 5\38, 32, 38, 22, 26\nekomochi\Erica Mendez;; \501\5p\F\FE16\Bernie
+Annette\Green, Blade\ \Infantry\6, 10, 8, 6, 6\40, 39, 36, 28, 30\Tsukito\Abby Trott;; \502\5p\F\FE16\Annette
+Ferdinand von Aegir\Blue, Blade\ \Cavalry\6, 7, 8, 7, 5\41, 32, 35, 30, 24\Sainosuke\Billy Kametz;; \503\3p4p\M\FE16\Ferdinand von Aegir
+Flame Emperor\Green, Blade\ \Armor\10, 9, 5, 8, 5\50, 40, 25, 37, 26\DAI-XT\;; \504\3g4g4g\M\FE16\Flame Emperor
 Mathoo\Red, Blade\Duo, Naomi, Naomi\Infantry\8, 6, 4, 5, 10\45, 29, 24, 25, 39\\;; \1000\3p4pPF\M\FE14g\Mathoo\X167657750971547648
 Ace(C137)\Blue, Blade\ \Cavalry\8, 9, 2, 7, 4\41, 40, 17, 32, 24\Igston\;; \1100\5pPF\M\\Ace(C137)\YFA78649866577780736
 Declan\Red, Tome, Dark\ \Infantry\4, 9, 8, 12, 3\27, 33, 32, 41, 22\\;; \1101\5pPF\M\\Declan\Y125624530692472832
