@@ -398,7 +398,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n`healstudy` __unit__ - to see what how much each healing staff does (*also `studyheal`*)"
     str="#{str}\n`procstudy` __unit__ - to see what how much each damaging Special does (*also `studyproc`*)"
     str="#{str}\n`phasestudy` __unit__ - to see what the actual stats the unit has during combat (*also `studyphase`*)"
-    str="#{str}\n`phairup` __unit__ - to see the stats the unit gives during pair-up (*also `pair`*)"
+    str="#{str}\n`pairup` __unit__ - to see the stats the unit gives during pair-up (*also `pair`*)"
     str="#{str}\n~~The above commands are collectively referred to as \"the `study` suite\"~~"
     str="#{str}\n\n`banners` __unit__ - for a list of banners the unit has been a focus unit on"
     str="#{str}\n`art` __unit__ __art type__ - for the character's art"
@@ -597,7 +597,7 @@ def disp_more_info(event, mode=0) # used by the `help` command to display info t
   elsif [2,3,4].include?(mode)
     str="__**Allowed#{" unit" if mode==2}#{" skill" if mode==3} descriptions**__"
     str="#{str}\n*Colors*: Red(s), Blue(s), Green(s), Colo(u)rless(es), Gray(s), Grey(s)"
-    str="#{str}\n*Weapon Types*: Physical, Blade(s), Tome(s), Mage(s), Spell(s), Dragon(s), Manakete(s), Breath, Bow(s), Arrow(s), Archer(s), Dagger(s), Shuriken, Knive(s), Ninja(s), Thief/Thieves, Healer(s), Cleric(s), Staff/Staves#{', Beast(s), Laguz' if alter_classes(event,'Beasts')}"
+    str="#{str}\n*Weapon Types*: Physical, Blade(s), Tome(s), Mage(s), Spell(s), Dragon(s), Manakete(s), Breath, Bow(s), Arrow(s), Archer(s), Dagger(s), Shuriken, Knive(s), Ninja(s), Thief/Thieves, Healer(s), Cleric(s), Staff/Staves, Beast(s), Laguz"
     str="#{str}\n*Combined color and weapon type*: Sword(s), Katana, Spear(s), Lance(s), Naginata, Axe(s), Ax, Club(s), Redtome(s), Redmage(s), Bluetome(s), Bluemage(s), Greentome(s), Greenmage(s)"
     str="#{str}\n\n*Movement*: Flier(s), Flyer(s), Flying, Pegasus/Pegasi, Wyvern(s), Cavalry, Cavalier(s), Cav(s), Horse(s), Pony/Ponies, Horsie(s), Infantry, Foot/Feet, Armo(u)r(s), Armo(u)red" if mode==2
     str="#{str}\n\n*Assists*: Health, HP, Move, Movement, Moving, Arrangement, Positioning, Position(s), Healer(s), Staff/Staves, Cleric(s), Rally/Rallies, Stat(s), Buff(s)" if mode==3
@@ -732,7 +732,7 @@ def sort_legendaries(event,bot,mode=0)
     k2[i][1].push([2,'<:Orb_Blue:455053001971859477> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=2}.length>0
     k2[i][1].push([3,'<:Orb_Green:455053002311467048> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=3}.length>0
     k2[i][1].push([4,'<:Orb_Colorless:455053002152083457> - *unknown*']) unless k2[i][1].reject{|q| q[0]!=4}.length>0
-    k2[i][1]=k2[i][1].sort{|a,b| a[0]<=>b[0]}.map{|q| q[1]}.join("\n")
+    k2[i][1]=k2[i][1].sort{|a,b| (a[0]<=>b[0])==0 ? (a[1]<=>b[1]) : (a[0]<=>b[0])}.map{|q| q[1]}.join("\n")
   end
   bonus_load()
   bx=@bonus_units.reject{|q| q[1]!='Arena'}
@@ -846,7 +846,9 @@ def sort_legendaries(event,bot,mode=0)
       event.respond msg
     elsif k2.length>5 || k2.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n").length>1500
       k2=k2[0,6] if k2.length>6 && !safe_to_spam?(event)
-      for i in 0...k2.length/3+1
+      m=k2.length/3
+      m+=1 unless k2.length%3==0
+      for i in 0...m
         x=''
         x="__**Legendary and Mythic Heroes' Appearances**__" if i==0
         create_embed(event,x,'',avg_color(c),nil,nil,k2[3*i,[3,k2.length-3*i].min],2)
@@ -1238,7 +1240,7 @@ def disp_all_refines(event,bot)
     if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Colorless_Tome:443692133317345290> Colorless Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...dew.length
           k2="#{skkz[skkz.find_index{|q| q[1]==dew[i].gsub('~~','').split(" \u2192 ")[0]}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -1254,7 +1256,7 @@ def disp_all_refines(event,bot)
       end
       if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Colorless_Tome:443692133317345290> Colorless Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...stones.length
           k2="#{skkz[skkz.find_index{|q| q[1]==stones[i].gsub('~~','').split(" \u2192 ")[0]}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -1311,15 +1313,19 @@ def disp_all_refines(event,bot)
       end
     end
   end
+  stones=stones.uniq
   stones.sort!{|a,b| a.gsub('~~','') <=> b.gsub('~~','')}
+  stones2=stones2.uniq
   stones2.sort!{|a,b| a.gsub('~~','') <=> b.gsub('~~','')}
+  dew=dew.uniq
   dew.sort!{|a,b| a.gsub('~~','') <=> b.gsub('~~','')}
+  dew2=dew2.uniq
   dew2.sort!{|a,b| a.gsub('~~','') <=> b.gsub('~~','')}
   if stones.join("\n").length+dew.join("\n").length+stones2.join("\n").length+dew2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     if dew2.join("\n").length+stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Colorless_Tome:443692133317345290> Colorless Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...dew2.length
           k2="#{skkz[skkz.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==stat_buffs(dew2[i].gsub('~~',''))}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -1335,7 +1341,7 @@ def disp_all_refines(event,bot)
       end
       if stones2.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Colorless_Tome:443692133317345290> Colorless Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...stones2.length
           k2="#{skkz[skkz.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==stat_buffs(stones2[i].gsub('~~',''))}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -1355,7 +1361,7 @@ def disp_all_refines(event,bot)
     if stones.join("\n").length+dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       if dew.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines: Divine Dew <:Divine_Dew:453618312434417691>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Colorless_Tome:443692133317345290> Colorless Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...dew.length
           k2="#{skkz[skkz.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==stat_buffs(dew[i].gsub('~~',''))}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
@@ -1371,9 +1377,9 @@ def disp_all_refines(event,bot)
       end
       if stones.join("\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         msg='__**Weapon Refines: Refining Stones <:Refining_Stone:453618312165720086>**__'
-        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
+        k=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],['<:Colorless_Tome:443692133317345290> Colorless Tomes',[]],['<:Gold_Dragon:443172811641454592> Dragonstones',[]],['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],["#{'<:Gold_Staff:443172811628871720>' if alter_classes(event,'Colored Healers')}#{'<:Colorless_Staff:443692132323295243>' unless alter_classes(event,'Colored Healers')} Staves",[]],['<:Gold_Beast:532854442299752469> Beaststones',[]]]
         for i in 0...stones.length
-          k2="#{skkz[skkz.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}"==stat_buffs(stones[i].gsub('~~',''))}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
+          k2="#{skkz[skkz.find_index{|q| "#{q[1]}#{"#{' ' unless q[1][-1,1]=='+'}#{q[2]}" unless ['Weapon','Assist','Special'].include?(q[6]) || ['-','example'].include?(q[2])}".gsub(' ','').downcase==stat_buffs(stones[i].gsub('~~','')).downcase}][7].gsub(' Only','').gsub(' Users','').gsub('Dragons','Dragonstone').gsub('Beasts','Beaststone')}s"
           for j in 0...k.length
             k[j][1].push(stones[i]) if k2==k[j][0].split('> ')[1]
           end
@@ -1438,6 +1444,7 @@ def disp_all_prfs(event,bot)
   f=[['<:Red_Blade:443172811830198282> Swords',[]],['<:Red_Tome:443172811826003968> Red Tomes',[]],
      ['<:Blue_Blade:467112472768151562> Lances',[]],['<:Blue_Tome:467112472394858508> Blue Tomes',[]],
      ['<:Green_Blade:467122927230386207> Axes',[]],['<:Green_Tome:467122927666593822> Green Tomes',[]],
+     ['<:Colorless_Tome:443692133317345290> Colorless Tomes',[]],
      ['<:Gold_Dragon:443172811641454592> Dragon Breaths',[]],['<:Gold_Beast:532854442299752469> Beast Damage',[]],
      ['<:Gold_Bow:443172812492898314> Bows',[]],['<:Gold_Dagger:443172811461230603> Daggers',[]],
      ["#{"<:Gold_Staff:443172811628871720>" if alter_classes(event,'Colored Healers')}#{"<:Colorless_Staff:443692132323295243>" unless alter_classes(event,'Colored Healers')} Damaging Staves",[]]]
@@ -1448,11 +1455,12 @@ def disp_all_prfs(event,bot)
     f[3][1].push(k[i][1]) if k[i][7]=='Blue Tome Users Only'
     f[4][1].push(k[i][1]) if k[i][7]=='Axe Users Only'
     f[5][1].push(k[i][1]) if k[i][7]=='Green Tome Users Only'
-    f[6][1].push(k[i][1]) if k[i][7]=='Dragons Only'
-    f[7][1].push(k[i][1]) if k[i][7].split(', ').include?('Beasts Only')
-    f[8][1].push(k[i][1]) if k[i][7]=='Bow Users Only'
-    f[9][1].push(k[i][1]) if k[i][7]=='Dagger Users Only'
-    f[10][1].push(k[i][1]) if k[i][7]=='Staff Users Only'
+    f[6][1].push(k[i][1]) if k[i][7]=='Colorless Tome Users Only'
+    f[7][1].push(k[i][1]) if k[i][7]=='Dragons Only'
+    f[8][1].push(k[i][1]) if k[i][7].split(', ').include?('Beasts Only')
+    f[9][1].push(k[i][1]) if k[i][7]=='Bow Users Only'
+    f[10][1].push(k[i][1]) if k[i][7]=='Dagger Users Only'
+    f[12][1].push(k[i][1]) if k[i][7]=='Staff Users Only'
   end
   f=f.reject{|q| q[1].nil? || q[1].length<=0}
   if f.map{|q| "__*#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
@@ -1684,9 +1692,16 @@ def disp_unit_art(event,name,bot)
   args=event.message.text.downcase.split(' ')
   artype=[]
   if has_any?(args,['sprite'])
-    artype=['Sprite','In-game Sprite ~~with default weapon~~']
-    j[6]=''
-    j[7]=['','']
+    art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{j[0]}.png"
+    m=false
+    IO.copy_stream(open(art),"C:/Users/Mini-Matt/Desktop/devkit/FEHTemp#{@shardizard}.png") rescue m=true
+    if File.size("C:/Users/Mini-Matt/Desktop/devkit/FEHTemp#{@shardizard}.png")>100 && !m
+      artype=['Sprite','In-game Sprite ~~with default weapon~~']
+      j[6]=''
+      j[7]=['','']
+    else
+      artype=['Face',"~~Sprite not yet on site~~\nDefault"]
+    end
   elsif has_any?(args,['battle','attack','att','atk','attacking'])
     artype=['BtlFace','Attack']
   elsif has_any?(args,['damage','damaged','lowhealth','lowhp','low_health','low_hp','injured']) || (args.include?('low') && has_any?(args,['health','hp']))
@@ -1758,10 +1773,33 @@ def disp_unit_art(event,name,bot)
   nammes=['','','']
   pos=0
   pos=1 if resp && j[6].length>1
+  xcolor=unit_color(event,find_unit(j[0],event),j[0],0)
+  mathooz=false
+  if args.map{|q| q.downcase}.include?("mathoo's") && find_in_dev_units(j[0])>0
+    mathooz=true
+    xcolor=0x00DAFA
+    xcolor=0xFFABAF if j[0]=='Sakura'
+  end
   unless j[6][pos].nil? || j[6][pos].length<=0
     m=j[6][pos].split(' as ')
     nammes[0]=m[0]
     disp="#{disp}\n**Artist:** #{m[m.length-1]}"
+    if j[0]=='Alm(Saint)' && mathooz
+      artype[0]="#{artype[0]}_Mathoo"
+      artype[1]="*Pocket companion:* **Sakura**#{unit_moji(bot,event,-1,'Sakura',true,4)}\n#{artype[1]}"
+      art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{charza}/#{artype[0]}.png"
+      if artype[0]=='Sprite'
+        charza=charza.gsub('/','_')
+        art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{charza}_Mathoo.png"
+      else
+        j2=untz.find_index{|q| q[0]=='Sakura'}
+        unless j2.nil?
+          j2=untz[j2]
+          m2=j2[6][0].split(' as ')
+          disp="#{disp}\n*Smol contribution from:* #{m2[m2.length-1]}"
+        end
+      end
+    end
   end
   unless j[7][0].nil? || j[7][0].length<=0
     m=j[7][0].split(' & ').map{|q| q.split(' as ')}
@@ -2068,7 +2106,7 @@ def disp_unit_art(event,name,bot)
     if flds.length.zero?
       flds=nil
     elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1500 && safe_to_spam?(event)
-      create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__#{"\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,unit_color(event,find_unit(j[0],event),j[0],0),nil,[nil,art])
+      create_embed(event,"__#{"Mathoo's " if mathooz}**#{j[0]}**#{unit_moji(bot,event,-1,j[0],mathooz,4)}__#{"\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,xcolor,nil,[nil,art])
       if flds.map{|q| q.join("\n")}.join("\n\n").length>=1900
         for i in 0...flds.length
           create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,[flds[i]])
@@ -2084,7 +2122,7 @@ def disp_unit_art(event,name,bot)
       flds[-1][2]=nil if flds.length<3
       flds[-1].compact!
     end
-    create_embed(event,"__**#{j[0]}**#{unit_moji(bot,event,-1,j[0],false,4)}__#{"\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,unit_color(event,find_unit(j[0],event),j[0],0),ftr,[nil,art],flds)
+    create_embed(event,"__#{"Mathoo's " if mathooz}**#{j[0]}**#{unit_moji(bot,event,-1,j[0],mathooz,4)}__#{"\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,xcolor,ftr,[nil,art],flds)
   end
   return nil
 end
@@ -4046,6 +4084,226 @@ def disp_FGO_based_stats(bot,event,srv=nil)
   create_embed(event,["__**#{srv[1]}** [FGO Unit-##{srv[0]}]__",hdr],str,xcolor,nil,xpic)
 end
 
+def update_howto(event,bot)
+  if ![368976843883151362,167657750971547648].include?(event.user.id)
+    t=Time.now
+    if t.month==10 && t.year==2019 && t.day>23 && t.day<30
+      event.respond "Please note that my developer is away for the weekend, and cannot do updates.  I have code that allows my data collector to update me remotely, but that may take longer than usual."
+    else
+      event.respond "This command is unavailable to you."
+    end
+    return nil
+  end
+  str="1.) Edit [the sheet](https://docs.google.com/spreadsheets/d/15eDswPz7xK6w3c5R9-iUq8pt22KMMby71hsDuH6HlBA/edit#gid=2081531433)."
+  str="#{str}\n- Any column whose header is a shade of grey, is formulaically calculated and thus you don't need to edit it.  Merely copy the formula from the cell above."
+  str="#{str}\n- In *Units*'s \"Rarities\" column:\n> `5p` is for normal summonable units (\"pool\")\n> `5s` is used for seasonals and legendaries\n> `3g4g4g` is used for GHBs\n> `4t5t` is used for TT units\n> There are all-caps duo markers, but they're used to mark Launch units + Book I 5\* units and are thus not relevant in Book IV."
+  str="#{str}\n- In *Units*'s \"Game\" column, the game that FEH credits the unit with is listed first, but the remaining games are listed in chronological order."
+  str="#{str}\n- In *Skills*'s sheet, add new skills above the fake skills in the same group.  Fake skills are marked by having the font significantly smaller."
+  str="#{str}\n- Please note that when a skill that is obviously part of a stat-based family gets added, I add all stat variations immediately.  Thus, if a new skill in an existing family gets added, check to see if an entry for it already exists first."
+  create_embed(event,"**How to update Elise's data while Mathoo is unavailable.**",str,0xD49F61)
+  str="2.) Wait for the formulae to finish loading, then grab the EliseBot data column of the sheet you edited.  I generally highlight the lowest entry and CTRL+SHIFT+(up)."
+  str="#{str}\n\n3.) Copy the selection from step 2 to a text file, with the following names based on sheet:"
+  str="#{str}\n- *Units* should be copied to **FEHUnits.txt**"
+  str="#{str}\n- *Skills* should be copied to **FEHSkills.txt**"
+  str="#{str}\n- *Structures* should be copied to **FEHStructures.txt**"
+  str="#{str}\n- *Accessories* should be copied to **FEHAccessories.txt**"
+  str="#{str}\n- *Items* should be copied to **FEHItems.txt**"
+  str="#{str}\n\n4.) Upload the text file to [the GitHub page here](https://github.com/Rot8erConeX/EliseBot/tree/master/EliseBot).  You might need to make a GitHub account to do so."
+  str="#{str}\n\n5.) Wait probably five minutes for the file to settle on GitHub's servers, then use the command `FEH!reload` in my debug server."
+  str="#{str}\n\n6.) Type the number 2 to select reloading data based on GitHub files."
+  str="#{str}\n\n7.) Double-check that the edited data works.  It is important to remember that I will not be there to guide you to wherever any problems might be based on error codes."
+  str="#{str}\n\n8.) Add any relevant aliases to the new data."
+  create_embed(event,'',str,0xD49F61)
+  return nil
+end
+
+def support_order(x)
+  return 4 if x=='S'
+  return 3 if x=='A'
+  return 2 if x=='B'
+  return 1 if x=='C'
+  return 0
+end
+
+def flower_list(event,bot,args=[])
+  movement=[]
+  completex=false
+  for i in 0...args.length
+    movement.push('Flier') if ['flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi'].include?(args[i].downcase)
+    movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs'].include?(args[i].downcase)
+    movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
+    movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
+    completex=true if ['complete','completed','finished','finish','done'].include?(args[i].downcase)
+  end
+  if movement.length<=0 && !completex && !safe_to_spam?(event)
+    event.respond "<:Dragonflower_Infantry:541170819980722176><:Dragonflower_Orange:552648156790390796><:Dragonflower_Cavalry:541170819955556352><:Dragonflower_Armor:541170820001824778><:Dragonflower_Cyan:552648156202926097><:Dragonflower_Flier:541170820089774091><:Dragonflower_Purple:552648232673607701><:Dragonflower_Pink:552648232510160897>\nI won't post a list of all your units here, so instead, look at all the pretty flowers!\nhttps://www.getrandomthings.com/list-flowers.php"
+    return nil
+  end
+  load_devunits()
+  data_load()
+  untz=@units.map{|q| q}
+  m=@dev_units.reject{|q| untz.find_index{|q2| q2[0]==q[0]}.nil? || !untz[untz.find_index{|q2| q2[0]==q[0]}][13][0].nil?}.map{|q| [q[0],q[1],q[2],q[6],q[5]]}
+  m=m.sort{|b,a| ((support_order(a[4]) <=> support_order(b[4]))) == 0? ((a[3] <=> b[3]) == 0 ? (b[0] <=> a[0]) : (a[3] <=> b[3])) : (support_order(a[4]) <=> support_order(b[4]))}
+  f=[['<:Dragonflower_Infantry:541170819980722176>Infantry<:Icon_Move_Infantry:443331187579289601>',[]],
+     ['<:Dragonflower_Cavalry:541170819955556352>Cavalry<:Icon_Move_Cavalry:443331186530451466>',[]],
+     ['<:Dragonflower_Flier:541170820089774091>Fliers<:Icon_Move_Flier:443331186698354698>',[]],
+     ['<:Dragonflower_Armor:541170820001824778>Armored<:Icon_Move_Armor:443331186316673025>',[]],
+     ['Completed Projects',[]]]
+  for i in 0...m.length
+    x=untz.find_index{|q| q[0]==m[i][0]}
+    unless x.nil?
+      x=untz[x]
+      m[i][4]='-' if m[i][4].include?('(')
+      xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}"
+      xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}" if m[i][4]!='-'
+      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}" if m[i][1].to_i==5 && m[i][2].to_i==10
+      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
+      complete=false
+      if x[3]=='Infantry' && x[9][0].include?('PF')
+        complete=true if m[i][3]>=10
+      else
+        complete=true if m[i][3]>=5 
+      end
+      if movement.length>0 && x[3]!=movement[0]
+      elsif complete && !safe_to_spam?(event) && !completex
+      elsif complete
+        xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**"
+        xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**" if m[i][4]!='-'
+        xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10
+        xx="**5<:Icon_Rarity_Sp10:448272715653054485> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
+        f[4][1].push(xx)
+      elsif completex
+      else
+        f[0][1].push(xx) if x[3]=='Infantry'
+        f[1][1].push(xx) if x[3]=='Cavalry'
+        f[2][1].push(xx) if x[3]=='Flier'
+        f[3][1].push(xx) if x[3]=='Armor'
+      end
+    end
+  end
+  f=f.reject{|q| q[1].length<=0}
+  if f[0][1].length>16 && !safe_to_spam?(event)
+    if f[0][1].reject{|q| !q.include?('** df+')}.length>0
+      f[0][1]=f[0][1].reject{|q| !q.include?('** df+') && !q.include?('Alm') && !q.include?('Sakura')}
+    elsif f[0][1].reject{|q| !q.include?('p10:')}.length>0
+      f[0][1]=f[0][1].reject{|q| !q.include?('p10') && !q.include?('Alm') && !q.include?('Sakura')}
+    elsif f[0][1].reject{|q| !q.include?('>+')}.length>0
+      f[0][1]=f[0][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
+    end
+  end
+  if f.length<=0
+    event.respond "Empty list"
+  elsif f.map{|q| "#{q[0]}\n#{q[1].join("\n")}"}.join("\n\n").length>1800
+    if f.reject{|q| q[0].include?('Infantry')}.map{|q| "#{q[0]}\n#{q[1].join("\n")}"}.join("\n\n").length>1800
+      for i in 0...f.length
+        create_embed(event,f[i][0],'',0x008b8b,nil,nil,triple_finish(f[i][1]))
+      end
+    else
+      create_embed(event,f[0][0],'',0x008b8b,nil,nil,triple_finish(f[0][1]))
+      create_embed(event,'','',0x008b8b,nil,nil,f.reject{|q| q[0].include?('Infantry')}.map{|q| [q[0],q[1].join("\n")]})
+    end
+  else
+    title=''
+    if movement.length>0 && f.length>1
+      title="#{f[0][0]}"
+      f[0][0]='Incomplete Projects'
+    end
+    create_embed(event,title,'',0x008b8b,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
+  end
+end
+
+def grail_list(event,bot,args=[],subcategory=nil)
+  movement=[]
+  completex=false
+  for i in 0...args.length
+    movement.push('GHB') if ['ghb','grandherobattle','battle'].include?(args[i].downcase)
+    movement.push('Tempest') if ['tempest','tempesttrials','tempestrials','trials','trial'].include?(args[i].downcase)
+    movement.push('Extra') if ['extra','ex'].include?(args[i].downcase)
+    completex=true if ['complete','completed','finished','finish','done'].include?(args[i].downcase)
+  end
+  movement=[subcategory] unless subcategory.nil? || subcategory.length<=0
+  load_devunits()
+  data_load()
+  untz=@units.map{|q| q}
+  m=@dev_units.reject{|q| untz.find_index{|q2| q2[0]==q[0]}.nil? || !untz[untz.find_index{|q2| q2[0]==q[0]}][13][0].nil?}.map{|q| [q[0],q[1],q[2],q[6],q[5]]}
+  m=m.sort{|b,a| ((a[2] <=> b[2])) == 0? ((a[3] <=> b[3]) == 0 ? (b[0] <=> a[0]) : (a[3] <=> b[3])) : (a[2] <=> b[2])}
+  ftr=nil
+  f=[['Grand Hero Battles',[]],
+     ['Tempest Trials',[]],
+     ['Other Grail units',[]],
+     ['Completed Projects',[]]]
+  for i in 0...m.length
+    x=untz.find_index{|q| q[0]==m[i][0]}
+    unless x.nil?
+      x=untz[x]
+      xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**"
+      xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**" if m[i][4]!='-'
+      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10
+      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
+      complete=false
+      complete=true if m[i][1].to_i==5 && m[i][2].to_i==10
+      ftr2=nil
+      unless x[9][0].include?('r') || (m[i][1].to_i==5 && m[i][2].to_i==10)
+        xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} #{m[i][0]}"
+        xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} #{m[i][0]}" if m[i][4]!='-'
+        xx="**5<:Icon_Rarity_5p10:448272715099406336>** #{m[i][0]}" if m[i][1].to_i==5 && m[i][2].to_i==10
+        xx="**5<:Icon_Rarity_5p10:448272715099406336>** #{m[i][0]}" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
+        xx="~~#{xx}~~"
+        ftr2='Crossed out units cannot be summoned through grails at this time'
+      end
+      if complete && !safe_to_spam?(event) && !completex
+      elsif !x[9][0].include?('g') && !x[9][0].include?('t') && !x[9][0].include?('r')
+      elsif x[9][0].include?('g') && movement.length>0 && movement[0]!='GHB'
+      elsif x[9][0].include?('t') && movement.length>0 && movement[0]!='Tempest'
+      elsif complete
+        f[3][1].push(xx)
+        ftr="#{ftr2}" unless ftr2.nil?
+      elsif x[9][0].include?('g')
+        f[0][1].push(xx)
+        ftr="#{ftr2}" unless ftr2.nil?
+      elsif x[9][0].include?('t')
+        f[1][1].push(xx)
+        ftr="#{ftr2}" unless ftr2.nil?
+      else
+        f[2][1].push(xx) unless movement.length>0 && movement[0]!='Extra'
+        ftr="#{ftr2}" unless ftr2.nil?
+      end
+    end
+  end
+  if f[0][1].length>16 && !safe_to_spam?(event)
+    if f[0][1].reject{|q| !q.include?('>+')}.length>0
+      f[0][1]=f[0][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
+    end
+  end
+  if f[1][1].length>16 && !safe_to_spam?(event)
+    if f[1][1].reject{|q| !q.include?('>+')}.length>0
+      f[1][1]=f[1][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
+    end
+  end
+  if f[2][1].length>16 && !safe_to_spam?(event)
+    if f[2][1].reject{|q| !q.include?('>+')}.length>0
+      f[2][1]=f[2][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
+    end
+  end
+  f=f.reject{|q| q[1].length<=0}
+  if f.length<=0
+    event.respond "Empty list"
+  elsif f.map{|q| "#{q[0]}\n#{q[1].join("\n")}"}.join("\n\n").length>1800
+    for i in 0...f.length
+      m=nil
+      m=ftr if i==f.length-1
+      create_embed(event,f[i][0],'',0x008b8b,ftr,nil,triple_finish(f[i][1]))
+    end
+  else
+    title=''
+    if movement.length>0 && f.length>1
+      title="#{f[0][0]}"
+      f[0][0]='Incomplete Projects'
+    end
+    create_embed(event,title,'',0x008b8b,ftr,nil,f.map{|q| [q[0],q[1].join("\n")]})
+  end
+end
+
 def snagstats(event,bot,f=nil,f2=nil)
   nicknames_load()
   groups_load()
@@ -4684,223 +4942,4 @@ def snagstats(event,bot,f=nil,f2=nil)
   str2="#{str2}\nOf those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
   str=extend_message(str,str2,event,2)
   event.respond str
-end
-
-def update_howto(event,bot)
-  if ![368976843883151362,167657750971547648].include?(event.user.id)
-    t=Time.now
-    if t.month==10 && t.year==2019 && t.day>23 && t.day<30
-      event.respond "Please note that my developer is away for the weekend, and cannot do updates.  I have code that allows my data collector to update me remotely, but that may take longer than usual."
-    else
-      event.respond "This command is unavailable to you."
-    end
-    return nil
-  end
-  str="1.) Edit [the sheet](https://docs.google.com/spreadsheets/d/15eDswPz7xK6w3c5R9-iUq8pt22KMMby71hsDuH6HlBA/edit#gid=2081531433)."
-  str="#{str}\n- Any column whose header is a shade of grey, is formulaically calculated and thus you don't need to edit it.  Merely copy the formula from the cell above."
-  str="#{str}\n- In *Units*'s \"Rarities\" column:\n> `5p` is for normal summonable units (\"pool\")\n> `5s` is used for seasonals and legendaries\n> `3g4g4g` is used for GHBs\n> `4t5t` is used for TT units\n> There are all-caps duo markers, but they're used to mark Launch units + Book I 5\* units and are thus not relevant in Book IV."
-  str="#{str}\n- In *Units*'s \"Game\" column, the game that FEH credits the unit with is listed first, but the remaining games are listed in chronological order."
-  str="#{str}\n- In *Skills*'s sheet, add new skills above the fake skills in the same group.  Fake skills are marked by having the font significantly smaller."
-  str="#{str}\n- Please note that when a skill that is obviously part of a stat-based family gets added, I add all stat variations immediately.  Thus, if a new skill in an existing family gets added, check to see if an entry for it already exists first."
-  create_embed(event,"**How to update Elise's data while Mathoo is unavailable.**",str,0xD49F61)
-  str="2.) Wait for the formulae to finish loading, then grab the EliseBot data column of the sheet you edited.  I generally highlight the lowest entry and CTRL+SHIFT+(up)."
-  str="#{str}\n\n3.) Copy the selection from step 2 to a text file, with the following names based on sheet:"
-  str="#{str}\n- *Units* should be copied to **FEHUnits.txt**"
-  str="#{str}\n- *Skills* should be copied to **FEHSkills.txt**"
-  str="#{str}\n- *Structures* should be copied to **FEHStructures.txt**"
-  str="#{str}\n- *Accessories* should be copied to **FEHAccessories.txt**"
-  str="#{str}\n- *Items* should be copied to **FEHItems.txt**"
-  str="#{str}\n\n4.) Upload the text file to [the GitHub page here](https://github.com/Rot8erConeX/EliseBot/tree/master/EliseBot).  You might need to make a GitHub account to do so."
-  str="#{str}\n\n5.) Wait probably five minutes for the file to settle on GitHub's servers, then use the command `FEH!reload` in my debug server."
-  str="#{str}\n\n6.) Type the number 2 to select reloading data based on GitHub files."
-  str="#{str}\n\n7.) Double-check that the edited data works.  It is important to remember that I will not be there to guide you to wherever any problems might be based on error codes."
-  str="#{str}\n\n8.) Add any relevant aliases to the new data."
-  create_embed(event,'',str,0xD49F61)
-  return nil
-end
-
-def support_order(x)
-  return 4 if x=='S'
-  return 3 if x=='A'
-  return 2 if x=='B'
-  return 1 if x=='C'
-  return 0
-end
-
-def flower_list(event,bot,args=[])
-  movement=[]
-  completex=false
-  for i in 0...args.length
-    movement.push('Flier') if ['flier','flying','flyer','fly','pegasus','wyvern','fliers','flyers','wyverns','pegasi'].include?(args[i].downcase)
-    movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs'].include?(args[i].downcase)
-    movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
-    movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
-    completex=true if ['complete','completed','finished','finish','done'].include?(args[i].downcase)
-  end
-  if movement.length<=0 && !completex && !safe_to_spam?(event)
-    event.respond "<:Dragonflower_Infantry:541170819980722176><:Dragonflower_Orange:552648156790390796><:Dragonflower_Cavalry:541170819955556352><:Dragonflower_Armor:541170820001824778><:Dragonflower_Cyan:552648156202926097><:Dragonflower_Flier:541170820089774091><:Dragonflower_Purple:552648232673607701><:Dragonflower_Pink:552648232510160897>\nI won't post a list of all your units here, so instead, look at all the pretty flowers!\nhttps://www.getrandomthings.com/list-flowers.php"
-    return nil
-  end
-  load_devunits()
-  data_load()
-  untz=@units.map{|q| q}
-  m=@dev_units.reject{|q| untz.find_index{|q2| q2[0]==q[0]}.nil? || !untz[untz.find_index{|q2| q2[0]==q[0]}][13][0].nil?}.map{|q| [q[0],q[1],q[2],q[6],q[5]]}
-  m=m.sort{|b,a| ((support_order(a[4]) <=> support_order(b[4]))) == 0? ((a[3] <=> b[3]) == 0 ? (b[0] <=> a[0]) : (a[3] <=> b[3])) : (support_order(a[4]) <=> support_order(b[4]))}
-  f=[['<:Dragonflower_Infantry:541170819980722176>Infantry<:Icon_Move_Infantry:443331187579289601>',[]],
-     ['<:Dragonflower_Cavalry:541170819955556352>Cavalry<:Icon_Move_Cavalry:443331186530451466>',[]],
-     ['<:Dragonflower_Flier:541170820089774091>Fliers<:Icon_Move_Flier:443331186698354698>',[]],
-     ['<:Dragonflower_Armor:541170820001824778>Armored<:Icon_Move_Armor:443331186316673025>',[]],
-     ['Completed Projects',[]]]
-  for i in 0...m.length
-    x=untz.find_index{|q| q[0]==m[i][0]}
-    unless x.nil?
-      x=untz[x]
-      xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}"
-      xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}" if m[i][4]!='-'
-      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}" if m[i][1].to_i==5 && m[i][2].to_i==10
-      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**#{" df+#{m[i][3]}" if m[i][3].to_i>0}" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
-      complete=false
-      if x[3]=='Infantry' && x[9][0].include?('PF')
-        complete=true if m[i][3]>=10
-      else
-        complete=true if m[i][3]>=5 
-      end
-      if movement.length>0 && x[3]!=movement[0]
-      elsif complete && !safe_to_spam?(event) && !completex
-      elsif complete
-        xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**"
-        xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**" if m[i][4]!='-'
-        xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10
-        xx="**5<:Icon_Rarity_Sp10:448272715653054485> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
-        f[4][1].push(xx)
-      elsif completex
-      else
-        f[0][1].push(xx) if x[3]=='Infantry'
-        f[1][1].push(xx) if x[3]=='Cavalry'
-        f[2][1].push(xx) if x[3]=='Flier'
-        f[3][1].push(xx) if x[3]=='Armor'
-      end
-    end
-  end
-  f=f.reject{|q| q[1].length<=0}
-  if f[0][1].length>16 && !safe_to_spam?(event)
-    if f[0][1].reject{|q| !q.include?('** df+')}.length>0
-      f[0][1]=f[0][1].reject{|q| !q.include?('** df+') && !q.include?('Alm') && !q.include?('Sakura')}
-    elsif f[0][1].reject{|q| !q.include?('p10:')}.length>0
-      f[0][1]=f[0][1].reject{|q| !q.include?('p10') && !q.include?('Alm') && !q.include?('Sakura')}
-    elsif f[0][1].reject{|q| !q.include?('>+')}.length>0
-      f[0][1]=f[0][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
-    end
-  end
-  if f.length<=0
-    event.respond "Empty list"
-  elsif f.map{|q| "#{q[0]}\n#{q[1].join("\n")}"}.join("\n\n").length>1800
-    if f.reject{|q| q[0].include?('Infantry')}.map{|q| "#{q[0]}\n#{q[1].join("\n")}"}.join("\n\n").length>1800
-      for i in 0...f.length
-        create_embed(event,f[i][0],'',0x008b8b,nil,nil,triple_finish(f[i][1]))
-      end
-    else
-      create_embed(event,f[0][0],'',0x008b8b,nil,nil,triple_finish(f[0][1]))
-      create_embed(event,'','',0x008b8b,nil,nil,f.reject{|q| q[0].include?('Infantry')}.map{|q| [q[0],q[1].join("\n")]})
-    end
-  else
-    title=''
-    if movement.length>0 && f.length>1
-      title="#{f[0][0]}"
-      f[0][0]='Incomplete Projects'
-    end
-    create_embed(event,title,'',0x008b8b,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
-  end
-end
-
-def grail_list(event,bot,args=[],subcategory=nil)
-  movement=[]
-  completex=false
-  for i in 0...args.length
-    movement.push('GHB') if ['ghb','grandherobattle','battle'].include?(args[i].downcase)
-    movement.push('Tempest') if ['tempest','tempesttrials','tempestrials','trials','trial'].include?(args[i].downcase)
-    movement.push('Extra') if ['extra','ex'].include?(args[i].downcase)
-    completex=true if ['complete','completed','finished','finish','done'].include?(args[i].downcase)
-  end
-  movement=[subcategory] unless subcategory.nil? || subcategory.length<=0
-  load_devunits()
-  data_load()
-  untz=@units.map{|q| q}
-  m=@dev_units.reject{|q| untz.find_index{|q2| q2[0]==q[0]}.nil? || !untz[untz.find_index{|q2| q2[0]==q[0]}][13][0].nil?}.map{|q| [q[0],q[1],q[2],q[6],q[5]]}
-  m=m.sort{|b,a| ((a[2] <=> b[2])) == 0? ((a[3] <=> b[3]) == 0 ? (b[0] <=> a[0]) : (a[3] <=> b[3])) : (a[2] <=> b[2])}
-  ftr=nil
-  f=[['Grand Hero Battles',[]],
-     ['Tempest Trials',[]],
-     ['Other Grail units',[]],
-     ['Completed Projects',[]]]
-  for i in 0...m.length
-    x=untz.find_index{|q| q[0]==m[i][0]}
-    unless x.nil?
-      x=untz[x]
-      xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**"
-      xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} **#{m[i][0]}**" if m[i][4]!='-'
-      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10
-      xx="**5<:Icon_Rarity_5p10:448272715099406336> #{m[i][0]}**" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
-      complete=false
-      complete=true if m[i][1].to_i==5 && m[i][2].to_i==10
-      ftr2=nil
-      unless x[9][0].include?('r') || (m[i][1].to_i==5 && m[i][2].to_i==10)
-        xx="#{m[i][1].to_i}#{@rarity_stars[m[i][1].to_i-1]}#{"+#{m[i][2]}" if m[i][2].to_i>0} #{m[i][0]}"
-        xx="#{m[i][1].to_i}<:Icon_Rarity_S:448266418035621888>#{"+#{m[i][2]}" if m[i][2].to_i>0} #{m[i][0]}" if m[i][4]!='-'
-        xx="**5<:Icon_Rarity_5p10:448272715099406336>** #{m[i][0]}" if m[i][1].to_i==5 && m[i][2].to_i==10
-        xx="**5<:Icon_Rarity_5p10:448272715099406336>** #{m[i][0]}" if m[i][1].to_i==5 && m[i][2].to_i==10 && m[i][4]!='-'
-        xx="~~#{xx}~~"
-        ftr2='Crossed out units cannot be summoned through grails at this time'
-      end
-      if complete && !safe_to_spam?(event) && !completex
-      elsif !x[9][0].include?('g') && !x[9][0].include?('t') && !x[9][0].include?('r')
-      elsif x[9][0].include?('g') && movement.length>0 && movement[0]!='GHB'
-      elsif x[9][0].include?('t') && movement.length>0 && movement[0]!='Tempest'
-      elsif complete
-        f[3][1].push(xx)
-        ftr="#{ftr2}" unless ftr2.nil?
-      elsif x[9][0].include?('g')
-        f[0][1].push(xx)
-        ftr="#{ftr2}" unless ftr2.nil?
-      elsif x[9][0].include?('t')
-        f[1][1].push(xx)
-        ftr="#{ftr2}" unless ftr2.nil?
-      else
-        f[2][1].push(xx) unless movement.length>0 && movement[0]!='Extra'
-        ftr="#{ftr2}" unless ftr2.nil?
-      end
-    end
-  end
-  if f[0][1].length>16 && !safe_to_spam?(event)
-    if f[0][1].reject{|q| !q.include?('>+')}.length>0
-      f[0][1]=f[0][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
-    end
-  end
-  if f[1][1].length>16 && !safe_to_spam?(event)
-    if f[1][1].reject{|q| !q.include?('>+')}.length>0
-      f[1][1]=f[1][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
-    end
-  end
-  if f[2][1].length>16 && !safe_to_spam?(event)
-    if f[2][1].reject{|q| !q.include?('>+')}.length>0
-      f[2][1]=f[2][1].reject{|q| !q.include?('>+') && !q.include?('Alm') && !q.include?('Sakura')}
-    end
-  end
-  f=f.reject{|q| q[1].length<=0}
-  if f.length<=0
-    event.respond "Empty list"
-  elsif f.map{|q| "#{q[0]}\n#{q[1].join("\n")}"}.join("\n\n").length>1800
-    for i in 0...f.length
-      m=nil
-      m=ftr if i==f.length-1
-      create_embed(event,f[i][0],'',0x008b8b,ftr,nil,triple_finish(f[i][1]))
-    end
-  else
-    title=''
-    if movement.length>0 && f.length>1
-      title="#{f[0][0]}"
-      f[0][0]='Incomplete Projects'
-    end
-    create_embed(event,title,'',0x008b8b,ftr,nil,f.map{|q| [q[0],q[1].join("\n")]})
-  end
 end

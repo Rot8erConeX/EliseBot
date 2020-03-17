@@ -1,15 +1,28 @@
-Harmony amid Chaos\3\Annette, Bernie, Ferdinand von Aegir, Lysithea\5\06/03/2020, 05/04/2020\NewUnits
+New Power (April 2020)\3\-\5\10/04/2020, 20/04/2020\NewPower
+New Heroes: >Unknown<\3\-\5\08/04/2020, 03/05/2020\NewHeroes
+Heroes with Orders Skills\3\-\5\03/04/2020, 10/04/2020\SkillBanner
+Mythic Heroes: >Unknown<\-8\Altina, Fjorm, Peony, Robin(F)(Fallen), Roy(Fire), Thrasir, Tiki(Young)(Earth)\5\31/03/2020, 09/04/2020\Legendary
+Heroes with Even Wave Skills\3\-\5\27/03/2020, 02/04/2020\SkillBanner
+Spring Festival (March 2020 rerun)\3\Camilla(Bunny), Chrom(Bunny), Lucina(Bunny), Xander(Bunny)\5\30/03/2020, 13/04/2020\Seasonal, Spring
+Hares at the Fair (March 2020 rerun)\3\Alfonse(Bunny), Catria(Bunny), Kagero(Bunny), Sharena(Bunny)\5\25/03/2020, 08/04/2020\Seasonal, Spring
+Regal Rabbits (March 2020 rerun)\3\Bruno(Bunny), Marisa(Bunny), Palla(Bunny), Veronica(Bunny)\5\23/03/2020, 06/04/2020\Seasonal, Spring
+Heroes with Aerobatics\3\Catria(SoV), Nino(Fangs), Petra\5\21/03/2020, 27/03/2020\SkillBanner
+Edelgard & Dimitri's Battle\3\Claude, Dimitri, Edelgard\5\19/03/2020, 30/03/2020\BHB
+Special Heroes: Familial Festivities\3\Est(Bunny), Fir(Bunny), Idunn(Bunny), Narcian(Bunny)\5\18/03/2020, 15/04/2020\Seasonal, Spring
+"Full-Bloom Bout" Tempest Trials+\3\Bartre, Fae, Idunn\5\17/03/2020, 30/03/2020\Tempest
+New Power (March 2020)\3\Grey, Jagen, Olwen(World)\5\11/03/2020, 21/03/2020\NewPower
+Harmony amid Chaos\3\Annette, Bernie, Ferdinand von Aegir, Lysithea\5\06/03/2020, 01/04/2020\NewUnits
 Heroes with Blazing Wind\3\Hinoka(Launch), Igrene, Olwen(World)\5\01/03/2020, 10/03/2020\SkillBanner
-Legendary Heroes: Chrom, Crowned King\3\Alm(Saint), Azura(Vallite), Chrom(Crowned), Corrin(F)(Fallen), Duma, Eirika(Graceful), Gerik, Gunnthra, Julia(Crusader), Lyn(Wind), Phina, Sothis\5\27/02/2020, 04/03/2020\Legendary
-Heroes with Stance Skills\3\Ewan, Surtr, Thea\5\21/02/2020, 28/02/2020\SkillBanner
-Double Special Heroes (February 2020)\3\Helbindi(Summer), Laevatein(Summer), Lyn(Summer), Nephenee(Soiree), Mia(Halloween), Reinhardt(Soiree), Sigrun(Bride), Wolt(Summer)\5\19/02/2020, 03/03/2020\Seasonal
-The Dread Isle\3\Fiora, Leila, Nils, Rath\5\17/02/2020, 05/03/2020\NewUnits
 Love Abounds (2020 rerun)\3\Hector(Valentines), Lilina(Valentines), Lyn(Valentines), Roy(Valentines)\5\15/02/2020, 15/03/2020\Seasonal, Valentine's
 Greil's Devoted (2020 rerun)\3\Greil(Valentines), Ike(Valentines), Mist(Valentines), Soren(Valentines)\5\13/02/2020, 13/03/2020\Seasonal, Valentine's
-Lovely Gifts\3\Alm(Valentines), Conrad(Valentines), Faye(Valentines), Rudolf(Valentines)\5\07/02/2020, 07/03/2020\Seasonal, Valentine's
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
+Lovely Gifts\3\Alm(Valentines), Conrad(Valentines), Faye(Valentines), Rudolf(Valentines)\5\07/02/2020, 07/03/2020\Seasonal, Valentine's
+The Dread Isle\3\Fiora, Leila, Nils, Rath\5\17/02/2020, 05/03/2020\NewUnits
+Legendary Heroes: Chrom, Crowned King\-8\Alm(Saint), Azura(Vallite), Chrom(Crowned), Corrin(F)(Fallen), Duma, Eirika(Graceful), Gerik, Gunnthra, Julia(Crusader), Lyn(Wind), Phina, Sothis\5\27/02/2020, 04/03/2020\Legendary
+Double Special Heroes (February 2020)\3\Helbindi(Summer), Laevatein(Summer), Lyn(Summer), Nephenee(Soiree), Mia(Halloween), Reinhardt(Soiree), Sigrun(Bride), Wolt(Summer)\5\19/02/2020, 03/03/2020\Seasonal
 3rd Anniversary Celebration: 2019 Seasonal Mass Rerun\-100\Alfonse(Winter), Anna(Winter), Berkut(Soiree), Bruno(Bunny), Dozla(Halloween), Elise(Bath), Felicia(Picnic), Fjorm(Bride), Flora(Picnic), Genny(Picnic), Greil(Valentines), Gunnthra(Summer), Hector(Halloween), Helbindi(Summer), Hinoka(Bath), Ike(Valentines), Ilyana(Halloween), Ishtar(Soiree), Laegjarn(Summer), Laevatein(Summer), L'Arachel(Halloween), Lethe(Winter), Lilina(Summer), Lyn(Summer), Lukas(Picnic), Marisa(Bunny), Marth(Winter), Mist(Valentines), Nephenee(Soiree), Nino(Winter), Pent(Groom), Palla(Bunny), Reinhardt(Soiree), Ryoma(Bath), Sakura(Bath), Selkie(Winter), Sigrun(Bride), Soren(Valentines), Sothis(Winter), Tanith(Bride), Ursula(Summer), Veronica(Bunny), Wolt(Summer), Zephiel(Winter)\5\02/02/2020, 01/03/2020\Seasonal
+Heroes with Stance Skills\3\Ewan, Surtr, Thea\5\21/02/2020, 28/02/2020\SkillBanner
 3rd Anniversary: Hero Fest, Part 3\5\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5\16/02/2020, 22/02/2020\CYL, HeroFest
 New Power (February 2020)\3\Barst, Jakob, Laslow, Morgan(F)\5\11/02/2020, 20/02/2020\NewPower
 3rd Anniversary: Daily BHB reruns\3\Amelia, Azura, Camilla(Launch), Cecilia, Chrom(Launch), Clair, Corrin(M)(Launch), Deirdre, Eirika(Bonds), Eirika(Memories), Elise, Eliwood, Ephraim, Genny, Hawkeye, Hector, Hinoka(Launch), Ishtar, Julia, Kagero, Kana(F), Leo, Lilina, Lissa, Lucius, Lukas, Maria, Matthew, Micaiah, Minerva, Myrrh, Ninian, Nowi, Palla, Priscilla, Raven, Reinhardt(Bonds), Reinhardt(World), Robin(M), Robin(M)(Fallen), Roy, Sakura, Sanaki, Seliph, Serra, Seth, Silas, Sothe, Takumi, Tana, Tiki(Adult)\50\02/02/2020, 19/02/2020\BHB
@@ -193,7 +206,7 @@ New Power (December 2018), Part 2\3\Catria(Launch), Est, Palla\5\13/12/2018, 22/
 New Power (December 2018), Part 1\3\Robin(M), Ogma\5\13/12/2018, 22/12/2018\NewPower
 Ike & Soren's Battle\3\Elincia, Ike, Soren\5\12/12/2018, 20/12/2018\BHB
 Hero Fest IV\5\Eir, Lewyn, Ophelia, Owain\5\11/12/2018, 17/12/2018\HeroFest
-Heroes with Ward Skills\3\Ike(Brave), Lyn(Brave), Sigurd\5\02/12/2018, 12/12/2018\SkillBanner
+Heroes with ~~Ward~~ (Protective B prf) Skills\3\Ike(Brave), Lyn(Brave), Sigurd\5\02/12/2018, 12/12/2018\SkillBanner
 Legendary Heroes: Hrid, Icy Blade\-8\Cordelia(Summer), Gunnthra, Hector(Brave), Hrid, Innes(Summer), Kana(F), Laevatein, Lucina(Glorious), Nina, Noire(Summer), Robin(F)(Fallen), Ryoma(Supreme)\5\28/11/2018, 04/12/2018\Legendary
 "Nifl vs. Muspell" Voting Gauntlet\3\Helbindi, Laegjarn\5\30/11/2018, 10/12/2018\VotingGauntlet
 Heroes with Vantage (v2)\3\Ishtar, Mia, Reinhardt(World)\5\24/11/2018, 01/12/2018\SkillBanner

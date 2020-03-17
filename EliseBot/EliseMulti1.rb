@@ -1784,6 +1784,11 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return weapon_legality(event,name,"Lofty Blossoms#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
     return "~~#{w2}~~" unless ['Green'].include?(u[1][0])
     w2="Bouncer's Axe#{'+' if w[1].include?('+')}"
+  elsif ['Carrot Cudgel','Gilt Fork'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Carrot Cudgel#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Gilt Fork#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
+    return "~~#{w2}~~" unless ['Green'].include?(u[1][0])
+    w2="Gilt Axe#{'+' if w[1].include?('+')}"
   elsif ['Melon Crusher','Deft Harpoon'].include?(w[1].gsub('+',''))
     return weapon_legality(event,name,"Deft Harpoon#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
     return weapon_legality(event,name,"Melon Crusher#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
@@ -5441,7 +5446,7 @@ def make_random_unit(event,args,bot)
   for i in 0...colors.length
     for j in 0...weapons.length
       if colors[i]=='Colorless'
-        color_weapons.push([colors[i],weapons[j]]) unless (weapons[j]=='Blade' && !alter_classes(event,'Colorless Blades')) || (weapons[j]=='Tome' && !alter_classes(event,'Colorless Tomes'))
+        color_weapons.push([colors[i],weapons[j]]) unless (weapons[j]=='Blade' && !alter_classes(event,'Colorless Blades'))
       elsif weapons[j]=='Healer' && !alter_classes(event,'Colored Healers')
       else
         color_weapons.push([colors[i],weapons[j]])
@@ -5449,12 +5454,11 @@ def make_random_unit(event,args,bot)
     end
   end
   if color_weapons.length<=0
-    color_weapons=[['Red', 'Blade'],  ['Red', 'Tome'],  ['Red', 'Breath'],      ['Red', 'Bow'],      ['Red', 'Dagger'],      ['Red','Beast'],
-                   ['Blue', 'Blade'], ['Blue', 'Tome'], ['Blue', 'Breath'],     ['Blue', 'Bow'],     ['Blue', 'Dagger'],     ['Blue','Beast'],
-                   ['Green', 'Blade'],['Green', 'Tome'],['Green', 'Breath'],    ['Green', 'Bow'],    ['Green', 'Dagger'],    ['Green','Beast'],
-                                                        ['Colorless', 'Breath'],['Colorless', 'Bow'],['Colorless', 'Dagger'],['Colorless','Beast']]
+    color_weapons=[['Red', 'Blade'],  ['Red', 'Tome'],      ['Red', 'Breath'],      ['Red', 'Bow'],      ['Red', 'Dagger'],      ['Red','Beast'],
+                   ['Blue', 'Blade'], ['Blue', 'Tome'],     ['Blue', 'Breath'],     ['Blue', 'Bow'],     ['Blue', 'Dagger'],     ['Blue','Beast'],
+                   ['Green', 'Blade'],['Green', 'Tome'],    ['Green', 'Breath'],    ['Green', 'Bow'],    ['Green', 'Dagger'],    ['Green','Beast'],
+                                      ['Colorless', 'Tome'],['Colorless', 'Breath'],['Colorless', 'Bow'],['Colorless', 'Dagger'],['Colorless','Beast']]
     color_weapons.push(['Colorless', 'Blade']) if alter_classes(event,'Colorless Blades')
-    color_weapons.push(['Colorless', 'Tome']) if alter_classes(event,'Colorless Tomes')
     unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
       color_weapons.push(['Red', 'Healer']) if alter_classes(event,'Colored Healers')
       color_weapons.push(['Blue', 'Healer']) if alter_classes(event,'Colored Healers')
@@ -5754,6 +5758,11 @@ def load_devunits()
   @dev_waifus=b[0].split('\\'[0])
   @dev_somebodies=b[1].split('\\'[0])
   @dev_nobodies=b[2].split('\\'[0])
+  devpass=false
+  devpass=true if b[3].downcase=='pass'
+  devpass=true if b[3].downcase=='feh pass'
+  devpass=true if b[3].downcase=='fehpass'
+  b.shift
   b.shift
   b.shift
   b.shift
@@ -5767,7 +5776,11 @@ def load_devunits()
     @dev_units[i].push(k[1].to_i)
     @dev_units[i].push(k[2])
     @dev_units[i].push(k[3])
-    @dev_units[i].push(k[4])
+    if devpass
+      @dev_units[i].push(k[4].gsub('(','').gsub(')',''))
+    else
+      @dev_units[i].push(k[4])
+    end
     @dev_units[i].push(k[5].to_i)
     @dev_units[i].push(b[i*10+2].split('\\'[0]))
     @dev_units[i].push(b[i*10+3].split('\\'[0]))
@@ -5781,6 +5794,11 @@ def load_devunits()
 end
 
 def save_devunits()
+  b=[]
+  File.open("#{@location}devkit/FEHDevUnits.txt").each_line do |line|
+    b.push(line.gsub("\n",''))
+  end
+  devpass=b[3]
   # sort the waifu list alphabetically, but move Sakura to the front of the list
   k=@dev_waifus.map{|q| q}
   for i in 0...k.length
@@ -5808,7 +5826,10 @@ def save_devunits()
   # sort the unit list alphabetically, but move Sakura to the front of the line
   k=@dev_units.map{|q| q}
   saku=nil
+  alm=nil
   supported=[]
+  subsupported=[]
+  subsupported2=[]
   for i in 0...k.length
     if k[i][0]=='Sakura' && saku.nil?
       saku=k[i].map{|q| q}
@@ -5816,19 +5837,30 @@ def save_devunits()
     elsif k[i][5].length>0 && k[i][5]!='-'
       supported.push(k[i].map{|q| q})
       k[i]=nil
+    elsif k[i][0]=='Alm(Saint)' && k[i][14]=='Sakura' && alm.nil?
+      alm=k[i].map{|q| q}
+      k[i]=nil
+    elsif k[i][0][0,3]=='Alm' || k[i][0][0,6]=='Sakura' || k[i][0][0,6]=='Bernie'
+      subsupported.push(k[i].map{|q| q})
+      k[i]=nil
     end
   end
   k.compact!
   k=k.sort{|a,b| a[0]<=>b[0]}
   supported=supported.sort{|a,b| a[0]<=>b[0]}
+  subsupported=subsupported.sort{|a,b| a[0]<=>b[0]}
   untz=[saku.map{|q| q}]
+  untz.push(alm.map{|q| q}) unless alm.nil?
   for i in 0...supported.length
     untz.push(supported[i].map{|q| q})
+  end
+  for i in 0...subsupported.length
+    untz.push(subsupported[i].map{|q| q})
   end
   for i in 0...k.length
     untz.push(k[i].map{|q| q})
   end
-  s="#{w.join('\\'[0])}\n#{sb.join('\\'[0])}\n#{nb.join('\\'[0])}"
+  s="#{w.join('\\'[0])}\n#{sb.join('\\'[0])}\n#{nb.join('\\'[0])}\n#{devpass}"
   for i in 0...untz.length
     s="#{s}\n\n#{untz[i][0]}\n#{untz[i][1]}\\#{untz[i][2]}\\#{untz[i][3]}\\#{untz[i][4]}\\#{untz[i][5]}\\#{untz[i][6]}\\#{untz[i][14]}\n#{untz[i][7].join('\\'[0])}\n#{untz[i][8].join('\\'[0])}\n#{untz[i][9].join('\\'[0])}\n#{untz[i][10].join('\\'[0])}\n#{untz[i][11].join('\\'[0])}\n#{untz[i][12].join('\\'[0])}\n#{untz[i][13]}"
   end

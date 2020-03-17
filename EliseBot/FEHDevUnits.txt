@@ -1,6 +1,7 @@
-Sakura\Anna\Anna(Winter)\Annette\Annette(War)\Bernie\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Ethlyn\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
+Sakura\Anna\Anna(Winter)\Annette\Annette(War)\Bernie\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Est(Bunny)\Ethlyn\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
 Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Lysithea\Matthew\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
 Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lyn(Brave)\Nino(Fangs)\Nino(Launch)\Sharena
+f2p
 
 Sakura
 5\10\Resistance\Defense\S\10\Alm(Saint)
@@ -12,8 +13,18 @@ Wings of Mercy 1\Wings of Mercy 2\Wings of Mercy 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Live to Serve 3
 
+Alm(Saint)
+5\0\Resistance\Defense\-\0\Sakura
+Iron Bow\Steel Bow\Silver Bow\Luna Arc
+Reciprocal Aid
+New Moon\Moonbow\Lunar Flash
+Darting Blow 1\Darting Blow 2\Darting Blow 3\Darting Blow 4
+Null Follow-up 1\Null Follow-up 2\Null Follow-up 3
+Odd Atk Wave 1\Odd Atk Wave 2\Odd Atk Wave 3
+Even Res Wave 3
+
 Fjorm(Bride)
-5\0\Defense\Resistance\S\3\Celica(Queen)
+5\0\Defense\Resistance\(S)\3\Celica(Queen)
 Assault\Gjallarbru
 Heal\Mend\Restore\Restore+
 Imbue\Heavenly Light
@@ -23,7 +34,7 @@ Ground Orders 1\Ground Orders 2\Ground Orders 3
 Aerobatics 2
 
 Sakura(Bath)
-5\2\Resistance\HP\S\5\
+5\2\Resistance\HP\(S)\5\
 Assault\Grandscratcher\Grandscratcher+\Grandscratcher+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Still-Water Balm\Fireflood Balm\Fireflood Balm+
@@ -52,16 +63,6 @@ Wrath 1\Wrath 2\Wrath 3
 Threaten Atk 1\Threaten Atk Spd 1\Threaten Atk Spd 2\Threaten Atk Spd 3
 Sturdy Blow 2
 
-Alm(Saint)
-5\0\Resistance\Defense\-\0\Sakura
-Iron Bow\Steel Bow\Silver Bow\Luna Arc
-Reciprocal Aid
-New Moon\Moonbow\Lunar Flash
-Darting Blow 1\Darting Blow 2\Darting Blow 3\Darting Blow 4
-Null Follow-up 1\Null Follow-up 2\Null Follow-up 3
-Odd Atk Wave 1\Odd Atk Wave 2\Odd Atk Wave 3
-Even Res Wave 3
-
 Alm(Valentines)
 5\0\HP\Speed\-\0\
 Iron Axe\Steel Axe\Silver Axe\Scepter of Love
@@ -71,6 +72,16 @@ Bonus Doubler 1\Bonus Doubler 2\Bonus Doubler 3
 Lull Atk/Spd 1\Lull Atk/Spd 2\Lull Atk/Spd 3
 Rouse Spd/Res 1\Rouse Spd/Res 2\Rouse Spd/Res 3
 Deflect Magic 3
+
+Sakura(Halloween)
+5\0\Defense\Speed\-\0\
+Iron Dagger\Steel Dagger\Kitty Paddle\Kitty Paddle+
+Rally Resistance\Rally Def/Res
+Chilling Wind\Glacies
+Warding Stance 1\Warding Stance 2\Warding Stance 3
+Guard 1\Guard 2\Guard 3
+Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
+Def Ploy 2
 
 Anna
 5\0\ \ \-\0\
@@ -93,7 +104,7 @@ Atk/Def Gap 1\Atk/Def Gap 2\Atk/Def Gap 3
 Even Atk Wave 2
 
 Azura(Adrift)
-5\1\ \ \-\0\
+5\2\ \ \-\0\
 Wind\Elwind\Rexcalibur\Book of Shadows
 Sing
 Night Sky\Glimmer
@@ -163,7 +174,7 @@ Threaten Spd 1\Threaten Spd 2\Threaten Spd 3
 Quickened Pulse
 
 Cordelia(Bride)
-5\1\Speed\Defense\-\8\
+5\1\Speed\Defense\-\9\
 Iron Bow\Steel Bow\Brave Bow\Brave Bow+
 Rally Attack\Rally Atk/Spd\Rally Atk/Spd+
 New Moon\Moonbow
@@ -243,7 +254,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Warding Stance 3
 
 Felicia(Picnic)
-5\0\Attack\Defense\-\4\
+5\0\Attack\Defense\-\5\
 Iron Axe\Steel Axe\Silver Axe\Eldhrmnir
 Swap
 Chilling Wind\Glacies
@@ -313,7 +324,7 @@ Hone Spd 1\Hone Spd 2\Hone Spd 3\Joint Hone Spd
 Spd Ploy 3
 
 Hector(Halloween)
-5\0\Resistance\HP\-\0\
+5\0\Resistance\HP\-\1\
 Iron Sword\Steel Sword\Silver Sword\Conjurer Curios
 Swap
 Glowing Ember\Bonfire
@@ -453,7 +464,7 @@ Fortify Def 1\Fortify Def 2\Fortify Dragons
 Fortress Def 3
 
 Norne
-5\1\Attack\Resistance\-\0\
+5\2\Attack\Resistance\-\0\
 Iron Bow\Steel Bow\Guard Bow\Guard Bow+\Guard Bow+ (+) Attack Mode
 Reposition
 Night Sky\Glimmer
@@ -521,16 +532,6 @@ Darting Stance 1\Steady Posture 1\Steady Posture 2
 Vantage 1\Vantage 2\Vantage 3
 Fortify Res 1\Fortify Res 2\~~Fortify Res 3~~
 Iote's Shield
-
-Sakura(Halloween)
-5\0\Defense\Speed\-\0\
-Iron Dagger\Steel Dagger\Kitty Paddle\Kitty Paddle+
-Rally Resistance\Rally Def/Res
-Chilling Wind\Glacies
-Warding Stance 1\Warding Stance 2\Warding Stance 3
-Guard 1\Guard 2\Guard 3
-Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
-Def Ploy 2
 
 Selkie
 5\0\Speed\HP\-\0\
