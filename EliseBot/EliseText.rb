@@ -69,7 +69,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
   elsif command.downcase=='invite'
     create_embed(event,'**invite**','PMs the invoker with a link to invite me to their server.',0x40C0F0)
   elsif command.downcase=='addalias'
-    create_embed(event,'**addalias** __new alias__ __name__',"Adds `new alias` to `name`'s aliases.\nIf the arguments are listed in the opposite order, the command will auto-switch them.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nInforms you if the alias already belongs to someone/something.\nAlso informs you if the unit you wish to give the alias to does not exist.\n\n**This command can only be used by server mods.**",0xC31C19)
+    create_embed(event,'**addalias** __new alias__ __name__',"Adds `new alias` to `name`'s aliases.\nIf the arguments are listed in the opposite order, the command will auto-switch them.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- Structures\n- Accessories\n- Items\n\nInforms you if the alias already belongs to someone/something.\nAlso informs you if the unit you wish to give the alias to does not exist.\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif command.downcase=='prefix'
     create_embed(event,'**prefix** __new prefix__',"Sets the server's custom prefix to `prefix`.\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif ['oregano','whoisoregano'].include?(command.downcase)
@@ -85,7 +85,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
   elsif ['divine','devine','code','path'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows all Divine Code paths that the unit named `name` can be found on.',0xD49F61)
   elsif ['struct','struncture'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__",'Shows data on the Aether Raid structure named `name`.',0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__",'Shows data on the Aether Raids or Mjolnir Strike structure named `name`.',0xD49F61)
   elsif ['aoe','area'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __type__","Shows the range of all AoE specials of the type `type`.\nIf `type` is unspecified in PM, shows the range of all AoE specials.",0xD49F61)
   elsif ['item'].include?(command.downcase)
@@ -167,13 +167,13 @@ def help_text(event,bot,command=nil,subcommand=nil)
     end
     return nil
   elsif ['aliases','checkaliases','seealiases','alias'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s aliases.\nIf no name is listed, responds with a list of all aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s aliases.\nIf no name is listed, responds with a list of all aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- Structures\n- Accessories\n- Items\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
   elsif ['saliases','serveraliases'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s server-specific aliases.\nIf no name is listed, responds with a list of all server-specific aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","Responds with a list of all `names`'s server-specific aliases.\nIf no name is listed, responds with a list of all server-specific aliases and who/what they are for.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- Structures\n- Accessories\n- Items\n\nPlease note that if more than 50 aliases are to be listed, I will - for the sake of the sanity of other server members - only allow you to use the command in PM.",0xD49F61)
   elsif ['daily','dailies','today','todayinfeh','today_in_feh','now'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Shows the day's in-game daily events.\nIf in PM, will also show tomorrow's.",0xD49F61)
   elsif ['next','schedule'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nBonus\nBook1",0xD49F61)
+    create_embed(event,"**#{command.downcase}** __type__","Shows the next time in-game daily events of the type `type` will happen.\nIf in PM and `type` is unspecified, shows the entire schedule.\n\n__*Accepted Inputs*__\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nBonus\nBook1, Book1Revival\nDivine, Path, Ephemura",0xD49F61)
   elsif ['deletealias','removealias'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __alias__","Removes `alias` from the list of aliases, regardless of who/what it was for.\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif ['addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti'].include?(command.downcase)
@@ -411,7 +411,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n`AoE` __type__ - to show the range of all AoE skills (*also `area`*)"
     create_embed([event,x],"Global Command Prefixes: `FEH!` `FEH?` `F?` `E?` `H?`#{"\nServer Command Prefix: `#{@prefixes[event.server.id]}`" if !event.server.nil? && !@prefixes[event.server.id].nil? && @prefixes[event.server.id].length>0}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__",str,0xD49F61)
     str="__**Additional Index Data**__"
-    str="#{str}\n`structure` __structure name__ - used to show data on a specific Aether Raid structure"
+    str="#{str}\n`structure` __structure name__ - used to show data on a specific structure"
     str="#{str}\n`accessory` __accessory name__ - used to show data on a specific accessory"
     str="#{str}\n`item` __item name__ - used to show data on a specific item"
     str="#{str}\n\n__**Current Events**__"
@@ -1827,6 +1827,12 @@ def disp_unit_art(event,name,bot)
     g=get_markers(event)
     chars=untz.reject{|q| q[0]==j[0] || !has_any?(g, q[13][0]) || ((q[6].nil? || q[6].length<=0) && (q[7][0].nil? || q[7][0].length<=0) && (q[7][1].nil? || q[7][1].length<=0))}
     charsx=[[],[],[]]
+    charsx[1].push('Feh the Owl *[both]*') if nammes[1]=='Kimberly Tierney' && nammes[2]=='Kimura Juri'
+    charsx[1].push('Feh the Owl *[English]*') if nammes[1]=='Kimberly Tierney' && nammes[2]!='Kimura Juri'
+    charsx[1].push('Feh the Owl *[Japanese]*') if nammes[1]!='Kimberly Tierney' && nammes[2]=='Kimura Juri'
+    charsx[1].push('Fehnix *[both]*') if nammes[1]=='Patrick Seitz' && nammes[2]=='Koyasu Takehito'
+    charsx[1].push('Fehnix *[English]*') if nammes[1]=='Patrick Seitz' && nammes[2]!='Koyasu Takehito'
+    charsx[1].push('Fehnix *[Japanese]*') if nammes[1]!='Patrick Seitz' && nammes[2]=='Koyasu Takehito'
     for i in 0...chars.length
       x=chars[i]
       unless x[6].nil? || x[6].length<=0 || x[7][0].nil? || x[7][0].length<=0 || x[7][1].nil? || x[7][1].length<=0
@@ -2601,6 +2607,12 @@ def today_in_feh(event,bot,shift=false)
     str=extend_message(str,str2,event,2)
     str2=disp_current_events(bot,event,2,shift)
     str=extend_message(str,str2,event,2)
+    str2=current_paths(event,bot,1)
+    str2="__**Current Ephemura Paths**__\n#{str2}".split("\n")
+    str=extend_message(str,str2[0],event,2)
+    for i in 1...str2.length
+      str=extend_message(str,str2[i],event,1)
+    end
     bonus_load()
     tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
     b=@bonus_units.reject{|q| q[1]!='Arena' || q[2][1].split('/').reverse.join('').to_i<tm}
@@ -3174,8 +3186,9 @@ def next_events(event,bot,type)
   idx=13 if ['tempest','tempestbonus','tempest_bonus'].include?(type.downcase)
   idx=14 if ['aether','aetherbonus','aether_bonus','raid','raidbonus','raid_bonus','raids','raidsbonus','raids_bonus'].include?(type.downcase)
   idx=15 if ['book1','book_one','bookone','book1revival','bookonerevival','book_onerevival','bookone_revival','book_one_revival'].include?(type.downcase)
+  idx=16 if ['divine','devine','path','ephemura','divines','devines','paths','ephemuras'].include?(type.downcase)
   if idx<0 && !safe_to_spam?(event)
-    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nAether, AetherBonus, Aether_Bonus\nBonus\nBook1, Book1Revival"
+    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nAether, AetherBonus, Aether_Bonus\nBonus\nBook1, Book1Revival\nDivine, Path, Ephemura"
     return nil
   end
   t=Time.now
@@ -3394,6 +3407,16 @@ def next_events(event,bot,type)
   elsif [10].include?(idx)
     sort_legendaries(event,bot)
   end
+  if [-1].include?(idx)
+    str2=current_paths(event,bot,1)
+    str2="__**Current Ephemura Paths**__\n#{str2}".split("\n")
+    msg=extend_message(msg,str2[0],event,2)
+    for i in 1...str2.length
+      msg=extend_message(msg,str2[i],event,1)
+    end
+  elsif [16].include?(idx)
+    current_paths(event,bot)
+  end
   if idx==12
     show_bonus_units(event,'Arena',bot)
   elsif idx==-1
@@ -3580,7 +3603,7 @@ def next_events(event,bot,type)
       msg=extend_message(msg,"__**Units available in Book 1 revival banners**__\n*This week:* #{str2}\n*Next week:* #{str3}",event,2)
     end
   end
-  event.respond msg unless [10,12,13,14].include?(idx)
+  event.respond msg unless [10,12,13,14,16].include?(idx)
 end
 
 def skill_data(legal_skills,all_skills,event,mode=0)
@@ -4557,6 +4580,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     str="#{str}\n<:Trap_Structure:510774545179869194> #{longFormattedNumber(m.reject{|q| !q[2].include?('Trap')}.length)} Trap levels"
     str="#{str}\n<:Resource_Structure:510774545154572298> #{longFormattedNumber(m.reject{|q| !q[2].include?('Resources')}.length)} Resource structure levels"
     str="#{str}\n<:Ornamental_Structure:510774545150640128> #{longFormattedNumber(m.reject{|q| !q[2].include?('Ornament')}.length)} Ornament levels"
+    str="#{str}\n<:Mjolnir_Structure:691254233588301866> #{longFormattedNumber(m.reject{|q| !q[2].include?('Mjolnir')}.length)} Mjolnir Strike levels"
     m=m.map{|q| [q[0],0,q[2]]}.uniq
     str2="**There are #{longFormattedNumber(m.length)} structures, including:**"
     str2="#{str2}\n<:Offensive_Structure:510774545997758464> #{longFormattedNumber(m.reject{|q| !q[2].include?('Offensive')}.length)} Offensive structures"
@@ -4564,6 +4588,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="#{str2}\n<:Trap_Structure:510774545179869194> #{longFormattedNumber(m.reject{|q| !q[2].include?('Trap')}.length)} Traps"
     str2="#{str2}\n<:Resource_Structure:510774545154572298> #{longFormattedNumber(m.reject{|q| !q[2].include?('Resources')}.length)} Resource structures"
     str2="#{str2}\n<:Ornamental_Structure:510774545150640128> #{longFormattedNumber(m.reject{|q| !q[2].include?('Ornament')}.length)} Ornaments"
+    str2="#{str2}\n<:Mjolnir_Structure:691254233588301866> #{longFormattedNumber(m.reject{|q| !q[2].include?('Mjolnir')}.length)} Mjolnir Strike structures"
     str=extend_message(str,str2,event,2)
     event.respond str
     return nil

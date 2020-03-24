@@ -31,7 +31,7 @@ Lyn & Florina's Battle\3\Florina, Hector, Lyn\5\11/02/2020, 18/02/2020\BHB
 3rd Anniversary: Hero Fest, Part 2\5\Celica(Brave), Ephraim(Brave), Hector(Brave), Veronica(Brave)\5\09/02/2020, 15/02/202\CYL, HeroFest
 3rd Anniversary: Hero Fest, Part 1\5\Alm(Brave), Camilla(Brave), Eliwood(Brave), Micaiah(Brave)\5\02/02/2020, 08/02/2020\CYL, HeroFest
 Heroes with Valor\3\Lethe, Maribelle, Nagi\5\01/02/2020, 10/02/2020\SkillBanner
-Mythic Heroes: Lif, Lethal Swordsman\-8\Byleth(F), Caineghis, Eliwood(Wind), Ephraim(Fire), Hector(Marquess), Hilda, Leif(Unifier), Lif, Loki, Lucina(Glorious), Lukas(Picnic), Yune\5\30/01/2020, 05/02/2020\Legendary
+Mythic Heroes: Lif, Lethal Swordsman\-8\Byleth(F), Caineghis, Eliwood(Wind), Ephraim(Fire), Hector(Marquess), Hilda(3H), Leif(Unifier), Lif, Loki, Lucina(Glorious), Lukas(Picnic), Yune\5\30/01/2020, 05/02/2020\Legendary
 Hostile Springs (January 2020 rerun)\3\Elise(Bath), Hinoka(Bath), Ryoma(Bath), Sakura(Bath)\5\23/01/2020, 22/02/2020\Seasonal
 A Star is Born\3\Eleonora, Kiria, Mamori, Tsubasa\5\21/01/2020, 07/02/2020\NewUnits
 Renewed Spirit\3\Alfonse(Winter), Anna(Winter), Lethe(Winter), Selkie(Winter)\5\01/01/2020, 05/02/2020\Seasonal, NewUnits, NewYear's
@@ -103,7 +103,7 @@ Brave Heroes 2019\3\Alm(Brave), Camilla(Brave), Eliwood(Brave), Micaiah(Brave)\5
 New Power (August 2019)\3\Beruka, Boey, Mae, Selena\5\14/08/2019, 31/08/2019\NewPower
 Book 1 Revival, Week 10\-4\Amelia, Ayra, Olwen(Bonds)\5\11/08/2019, 17/08/2019\Book1
 Festival in Hoshido (August 2019 rerun)\3\Elincia(Festival), Micaiah(Festival), Ryoma(Festival), Xander(Festival)\5\09/08/2019, 09/09/2019\Seasonal, Fall
-New Heroes: Changing Winds\3\Hilda, Hubert, Mercedes, Petra\5\07/08/2019, 06/09/2019\NewUnits
+New Heroes: Changing Winds\3\Hilda(3H), Hubert, Mercedes, Petra\5\07/08/2019, 06/09/2019\NewUnits
 Heroes with Savage Blow\3\Camilla(Launch), Leo, Rhajat\5\05/08/2019, 14/08/2019\SkillBanner
 Book 1 Revival, Week 9\-4\Alm, Delthea, Faye\5\04/08/2019, 10/08/2019\Book1
 Feh's Summer Celebration (2019): Daily Summoning Events\3\Amelia, Ares, Ayra, Celica, Celica(Fallen), Chrom(Launch), Deirdre, Delthea, Dorcas, Effie, Eirika(Memories), Eldigan, Elincia, Hardin(Fallen), Hector, Hinoka(Wings), Ike, Ike(Brave), Innes, Ishtar, Kana(F), Karla, Katarina, Kaze, Kliff, L'Arachel, Leif, Lukas, Lute, Lyn(Brave), Mia, Mist, Micaiah, Morgan(F), Myrrh, Nephenee, Nino(Fangs), Nowi, Olwen(World), Quan, Reinhardt(World), Rhajat, Robin(M)(Fallen), Ryoma, Shiro, Siegbert, Sigurd, Sonya, Takumi, Tana, Zelgius\50\02/08/2019, 23/08/2019\SkillBanner

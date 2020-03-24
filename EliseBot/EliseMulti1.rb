@@ -643,7 +643,7 @@ def list_unit_aliases(event,args,bot,mode=0)
     elsif find_unit(args.join(''),event).length<=0 && find_skill(args.join(''),event).length<=0 && find_accessory(args.join(''),event).length<=0 && find_item_feh(args.join(''),event).length<=0 && find_structure(args.join(''),event).length<=0 && !has_any?(args,['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils','structures','structure','struct','structs','item','items','accessorys','accessory','accessories'])
       alz=args.join(' ')
       alz='>censored mention<' if alz.include?('@')
-      event.respond "The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\n#{alz} does not fall into any of these categories."
+      event.respond "The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- Structures\n- Accessories\n- Items\n\n#{alz} does not fall into any of these categories."
       return nil
     end
   end
@@ -752,7 +752,7 @@ def list_unit_aliases(event,args,bot,mode=0)
     elsif has_any?(args,['structures','structure','struct','structs'])
       n=@aliases.reject{|q| q[0]!='Structure'}.map{|q| [q[1],q[2],q[3]]}
       n=n.reject{|q| q[2].nil?} if mode==1
-      f.push('__**[Aether Raids] Structure aliases**__')
+      f.push('__**Structure aliases**__')
       for i in 0...n.length
         if n[i][2].nil?
           f.push("#{n[i][0]} = #{n[i][1]}")
@@ -868,7 +868,7 @@ def list_unit_aliases(event,args,bot,mode=0)
         end
         n=@aliases.reject{|q| q[0]!='Structure'}.map{|q| [q[1],q[2],q[3]]}
         n=n.reject{|q| q[2].nil? || !q[2].include?(event.server.id)} if mode==1
-        msg=extend_message(msg,'__**[Aether Raids] Structure aliases**__',event,2)
+        msg=extend_message(msg,'__**Structure aliases**__',event,2)
         for i in 0...n.length
           msg=extend_message(msg,"#{n[i][0]} = #{n[i][1]}#{' *(in this server only)*' unless n[i][2].nil? || mode==1}",event) unless mode==1 && !event.server.nil? && !n[i][2].nil? && !n[i][2].include?(event.server.id)
         end
@@ -965,7 +965,7 @@ def list_unit_aliases(event,args,bot,mode=0)
       end
       n=@aliases.reject{|q| q[0]!='Structure'}.map{|q| [q[1],q[2],q[3]]}
       n=n.reject{|q| q[2].nil?} if mode==1
-      f.push("\n__**[Aether Raids] Structure aliases**__")
+      f.push("\n__**Structure aliases**__")
       for i in 0...n.length
         if n[i][2].nil?
           f.push("#{n[i][0]} = #{n[i][1]}")
@@ -1024,7 +1024,7 @@ def list_unit_aliases(event,args,bot,mode=0)
         end
       end
     else
-      event.respond "The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\Please either specify a member of one of these categories or use this command in PM."
+      event.respond "The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- Structures\n- Accessories\n- Items\n\Please either specify a member of one of these categories or use this command in PM."
       return nil
     end
   elsif !unit.nil? || !skill.nil?
@@ -1255,7 +1255,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
   err=false
   str=''
   if newname.nil? || unit.nil?
-    str="The alias system can cover:\n- Units\n- Skills (Weapons, Assists, Specials, Passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nYou must specify both:\n- one of the above\n- an alias you wish to give that object"
+    str="The alias system can cover:\n- Units\n- Skills (Weapons, Assists, Specials, Passives)\n- Structures\n- Accessories\n- Items\n\nYou must specify both:\n- one of the above\n- an alias you wish to give that object"
     err=true
   elsif event.user.id != 167657750971547648 && event.server.nil?
     str='Only my developer is allowed to use this command in PM.'
@@ -1335,7 +1335,7 @@ def add_new_alias(bot,event,newname=nil,unit=nil,modifier=nil,modifier2=nil,mode
     alz2=unit
     alz1='>Censored mention<' if alz1.include?('@')
     alz2='>Censored mention<' if alz2.include?('@')
-    str="The alias system can cover:\n- Units\n- Skills (Weapons, Assists, Specials, Passives)\n- [Aether Raids] Structures\n- Accessories\n- Items\n\nNeither #{newname} nor #{unit} is any of the above."
+    str="The alias system can cover:\n- Units\n- Skills (Weapons, Assists, Specials, Passives)\n- Structures\n- Accessories\n- Items\n\nNeither #{newname} nor #{unit} is any of the above."
     err=true
   elsif type.reject{|q| q != 'Alias'}.length<=0
     alz1=newname
@@ -2311,7 +2311,7 @@ def summon_sim(bot,event,colors)
     k=[[],[],[],[],[]]
     untz=@units.map{|q| q}
     for i in 0...bnr[2].length
-      k2=untz[untz.find_index{|q| q[0]==bnr[2][i]}][1][0]
+      k2=untz[untz.find_index{|q| q[0].gsub(' ','')==bnr[2][i].gsub(' ','')}][1][0]
       midname="#{bnr[2][i]}"
       midname="#{bnr[2][i]}<:Icon_Rarity_5p10:448272715099406336>" if !bnr[8].nil? && bnr[8]!=bnr[2]
       midname="#{midname}<:Icon_Rarity_4p10:448272714210476033>" if !bnr[8].nil? && bnr[8]!=bnr[2] && bnr[8].include?(bnr[2][i])
@@ -3055,6 +3055,32 @@ def combined_BST(event,args,bot)
   event.respond msg
 end
 
+def unload_path()
+  if File.exist?("#{@location}devkit/FEHPath.txt")
+    b=[]
+    File.open("#{@location}devkit/FEHPath.txt").each_line do |line|
+      b.push(line)
+    end
+  else
+    b=[]
+  end
+  for i in 0...b.length
+    b[i]=b[i].gsub("\n",'').split('\\'[0])
+    if b[i][0][0,10]=='Ephemera (' && b[i][0][b[i][0].length-3,3]==') 0'
+      b[i][1]=b[i][1].split(', ').map{|q| q.split('/')}
+      b[i][2]=b[i][1][1].map{|q| q}
+      b[i][1]=b[i][1][0].map{|q| q}
+    else
+      for i2 in 1...b[i].length
+        b[i][i2]=b[i][i2].split('; ')
+        b[i][i2][1]=b[i][i2][1].to_i
+        b[i][i2][2]=b[i][i2][2].split(', ').map{|q| q.to_i}
+      end
+    end
+  end
+  return b
+end
+
 def divine_path(event,name,bot,weapon=nil)
   data_load()
   s=event.message.text
@@ -3073,24 +3099,9 @@ def divine_path(event,name,bot,weapon=nil)
     end
     return nil
   end
-  if File.exist?("#{@location}devkit/FEHPath.txt")
-    b=[]
-    File.open("#{@location}devkit/FEHPath.txt").each_line do |line|
-      b.push(line)
-    end
-  else
-    b=[]
-  end
-  b2=[]
-  for i in 0...b.length
-    b[i]=b[i].gsub("\n",'').split('\\'[0])
-    for i2 in 1...b[i].length
-      b[i][i2]=b[i][i2].split('; ')
-      b[i][i2][1]=b[i][i2][1].to_i
-      b[i][i2][2]=b[i][i2][2].split(', ').map{|q| q.to_i}
-    end
-    b2.push(b[i]) if b[i][1,b[i].length-1].map{|q| q[0]}.include?(u40x[0])
-  end
+  b=unload_path()
+  b2=b.reject{|q| q[0][0,10]=='Ephemera (' && q[0][q[0].length-3,3]==') 0'}
+  b2=b2.reject{|q2| !q2[1,q2.length-1].map{|q| q[0]}.include?(u40x[0])}
   if b2.length<=0
     event.respond "#{u40x[0]} is unavailable through Divine Paths"
     return nil
@@ -3144,6 +3155,85 @@ def divine_path(event,name,bot,weapon=nil)
   pic=pick_thumbnail(event,u40x,bot)
   xcolor=unit_color(event,u40x,u40x[0],0)
   create_embed(event,"__#{'the ' if f.length==1}Divine Path#{'s' unless f.length==1} that **#{u40x[0]}** is on__",'',xcolor,nil,pic,f)
+end
+
+def current_paths(event,bot,mode=0)
+  t=Time.now
+  timeshift=8
+  timeshift-=1 unless (t-24*60*60).dst?
+  t-=60*60*timeshift
+  tm="#{t.year}#{'0' if t.month<10}#{t.month}#{'0' if t.day<10}#{t.day}".to_i
+  b=unload_path()
+  b2=b.reject{|q| q[0][0,10]!='Ephemera (' || q[0][q[0].length-3,3]!=') 0'}
+  b2=b2.reject{|q| q[1].reverse.join('').to_i>tm || q[2].reverse.join('').to_i<tm}
+  if b2.length<=0
+    event.respond "No Ephemura is currently available."
+    return nil
+  end
+  for i in 0...b2.length
+    b2[i][0]="#{b2[i][0].split(')')[0]})"
+  end
+  b3=b.reject{|q| q[0][0,10]!='Ephemera (' || q[0][-1]==')' || q[0][q[0].length-3,3]==') 0' || !b2.map{|q2| q2[0]}.include?("#{q[0].split(')')[0]})")}
+  for i in 0...b3.length
+    b3[i][0]="#{b3[i][0].split(')')[0]})"
+  end
+  f=[]
+  c=[]
+  c2=[]
+  b6=b3.map{|q| q[1,q.length-1].map{|q2| q2[2][0]}}.flatten
+  b7=false
+  b7=true if b6.max==b6.min && b6.max==0
+  for i in 0...b2.length
+    m=[]
+    cx=[]
+    b4=b3.reject{|q| q[0]!=b2[i][0]}
+    for i2 in 0...b4.length
+      b5=b4.map{|q| q.length}.max
+      for i3 in 1...b4[i2].length
+        b4[i2][i3][3]="#{b4[i2][i3][1]}#{@rarity_stars[b4[i2][i3][1]-1]} #{b4[i2][i3][0]}#{unit_moji(bot,event,-1,b4[i2][i3][0],false,4)}"
+        for i4 in 0...b4[i2][i3][1]
+          cx.push(unit_color(event,-1,b4[i2][i3][0]))
+          c2.push(unit_color(event,-1,b4[i2][i3][0]))
+        end
+        if mode==0
+          b4[i2][i3][4]=[]
+          b4[i2][i3][4].push("#{b4[i2][i3][2][0]}<:Divine_Code:675118366788419584>") if b4[i2][i3][2][0]>0
+          b4[i2][i3][4].push("#{b4[i2][i3][2][1]}<:Divine_Code_2:676545832903770117>") if b4[i2][i3][2][1]>0 && !b7
+          b4[i2][i3][4].push("#{b4[i2][i3][2][1]}") if b4[i2][i3][2][1]>0 && b7
+          b4[i2][i3][3]="#{b4[i2][i3][3]} - #{b4[i2][i3][4].join(', ')}" if b4[i2][i3][4].length>0
+          b4[i2][i3][3]="__#{b4[i2][i3][3]}__" if b5>2 && i3==b4[i2].length-1 && i2 != b4.length-1
+        else
+          b4[i2][i3][3]="#{b4[i2][i3][3]}, " if b5>2 && i3==b4[i2].length-1 && i2 != b4.length-1
+        end
+        m.push(b4[i2][i3][3])
+      end
+    end
+    c.push(avg_color(cx))
+    if mode==0
+      f.push([b2[i][0],m.join("\n")])
+    elsif m.join('').include?(', ')
+      f.push(m.join(' / ').gsub(', / ',', '))
+    else
+      f.push(m.join(', '))
+    end
+  end
+  if mode==1 
+    if f.join('').include?(' / ')
+      for i in 0...f.length
+        f[i]=f[i].gsub(', ',' / ') unless f[i].include?(' / ')
+      end
+    end
+    return f.join("\n")
+  end
+  xpic=nil
+  xpic='https://gamepedia.cursecdn.com/feheroes_gamepedia_en/9/9d/Divine_Code_Ephemera.png' if b7
+  if b7 && f.map{|q| "#{q[0]}\n\n#{q[1]}".length}.max<1000 && f.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n").length<1900
+    create_embed(event,'Current Ephemura Paths','',avg_color(c2),nil,xpic,f)
+  else
+    for i in 0...f.length
+      create_embed(event,f[i][0],f[i][1],c[i],nil,xpic)
+    end
+  end
 end
 
 def get_effHP(event,name,bot,weapon=nil)

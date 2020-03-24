@@ -1,5 +1,5 @@
 Sakura\Anna\Anna(Winter)\Annette\Annette(War)\Bernie\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Est(Bunny)\Ethlyn\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Lysithea\Matthew\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Ylgr\Ylgr(Summer)
+Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Lysithea\Matthew\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Tiki(Young)(Fallen)\Ylgr\Ylgr(Summer)
 Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lyn(Brave)\Nino(Fangs)\Nino(Launch)\Sharena
 f2p
 
@@ -21,7 +21,7 @@ New Moon\Moonbow\Lunar Flash
 Darting Blow 1\Darting Blow 2\Darting Blow 3\Darting Blow 4
 Null Follow-up 1\Null Follow-up 2\Null Follow-up 3
 Odd Atk Wave 1\Odd Atk Wave 2\Odd Atk Wave 3
-Even Res Wave 3
+Renewal 3
 
 Fjorm(Bride)
 5\0\Defense\Resistance\(S)\3\Celica(Queen)
@@ -104,7 +104,7 @@ Atk/Def Gap 1\Atk/Def Gap 2\Atk/Def Gap 3
 Even Atk Wave 2
 
 Azura(Adrift)
-5\2\ \ \-\0\
+5\4\ \ \-\0\
 Wind\Elwind\Rexcalibur\Book of Shadows
 Sing
 Night Sky\Glimmer
@@ -301,7 +301,7 @@ Imbue\Fireflood Balm\Fireflood Balm+
 Brazen Atk/Res 1\Brazen Atk/Res 2\Brazen Atk/Res 3
 Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
 Def Opening 1\Def Opening 2\Def Opening 3
-Renewal 2
+Deflect Missile 3
 
 Gunnthra
 5\1\Attack\Speed\-\5\
@@ -324,7 +324,7 @@ Hone Spd 1\Hone Spd 2\Hone Spd 3\Joint Hone Spd
 Spd Ploy 3
 
 Hector(Halloween)
-5\0\Resistance\HP\-\1\
+5\0\Resistance\HP\-\2\
 Iron Sword\Steel Sword\Silver Sword\Conjurer Curios
 Swap
 Glowing Ember\Bonfire
@@ -515,7 +515,7 @@ HP +5
 
 Rebecca
 5\10\Speed\Resistance\-\0\
-Iron Bow\Steel Bow\Silver Bow\~~Silver Bow+~~\~~__Silver Bow+ (+) Speed Mode__~~\~~Rebecca's Bow~~\~~Rebecca's Bow (+) Effect Mode~~
+Iron Bow\Steel Bow\Silver Bow\Silver Bow+\__Silver Bow+ (+) Speed Mode__\Rebecca's Bow\Rebecca's Bow (+) Effect Mode
 Rally Defense
 Chilling Wind\Iceberg
 Darting Blow 1\Darting Blow 2\Darting Blow 3
@@ -592,6 +592,16 @@ Fierce Stance 1\Fierce Stance 2\Fierce Breath
 Bold Fighter 1\Bold Fighter 2\Bold Fighter 3
 With Everyone!
 Atk Ploy 2
+
+Tiki(Young)(Fallen)
+5\0\Speed\Resistance\-\0\
+Fire Breath\Fire Breath+\Flametongue\Razing Breath
+Swap
+Glowing Ember\Ignis
+Brazen Atk/Spd 1\Brazen Atk/Spd 2\Brazen Atk/Spd 3
+Special Fighter 1\Special Fighter 2\Special Fighter 3
+Solitary Dream
+Chill Atk 3
 
 Titania(Valentines)
 5\1\ \ \-\0\
