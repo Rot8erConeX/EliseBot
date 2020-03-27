@@ -14,14 +14,14 @@ Gunter\Green, Blade\ \Cavalry\6, 6, 4, 6, 2\43, 32, 24, 33, 18\Yamada Akihiro\DC
 Hana\Red, Blade\ \Infantry\5, 8, 8, 4, 6\37, 35, 36, 23, 26\Fuzichoco\Karen Strassman;; Sugaya Yayoi\13\1d2d3p4p3qLUPF\F\FE14B\Hana
 Lissa\Colorless, Healer\ \Infantry\6, 5, 5, 6, 6\39, 26, 25, 28, 30\Zaza\Kate Davis;; Asumi Kana\14\1d2d3p4pLUPF\F\FE13, FEW, (t)SSB4, (s)SSBU\Lissa
 Olivia(Launch)\Red, Blade\ \Infantry\5, 6, 8, 6, 6\36, 28, 33, 27, 26\AKIRA\Karen Strassman;; Matsuzaki Rei\15\1d2d3p4p3qLUPF\F\FE13, FEW\Olivia*
-Sophia\Red, Tome, Dark\ \Infantry\6, 7, 3, 6, 6\40, 33, 19, 28, 29\Zaza\Wendee Lee;; Oonishi Saori\16\1d2d3p4p3qLUPFRA\F\FE6, FE7\Sophia
+Sophia\Red, Tome, Dark\ \Infantry\6, 7, 3, 6, 6\40, 33, 19, 28, 29\Zaza;; Miwabe Sakura\Wendee Lee;; Oonishi Saori\16\1d2d3p4p3qLUPFRA\F\FE6, FE7\Sophia
 Stahl\Red, Blade\ \Cavalry\8, 7, 5, 6, 4\45, 31, 26, 30, 22\Mayo\Sam Regal;; Shingaki Tarusuke\17\1d2d3p4p3qLUPF\M\FE13\Stahl
 Subaki\Blue, Blade\ \Flier\6, 5, 8, 8, 4\40, 25, 35, 35, 22\Yura\Walden James;; Mogi Takamasa\18\1d2d3p4p3qLUPF\M\FE14B\Subaki
 Wrys\Colorless, Healer\ \Infantry\7, 5, 4, 4, 8\42, 24, 23, 22, 36\pikomaro\DC Douglas;; Tone Kentarou\19\1d2d3p4p3qLUPF\M\FE1, FE11, FE12, (s)SSBU\Wrys
 Abel\Blue, Blade\ \Cavalry\6, 8, 7, 4, 5\39, 33, 32, 25, 25\Sasashima Suisei\Mick Wingert;; Satou Takuya\20\3p4pLUPF\M\FE3, FE1, FE11, FE12\Abel
 Arthur(Fates)\Green, Blade\ \Infantry\7, 7, 6, 6, 5\43, 32, 29, 30, 24\Mendako\Cam Clarke;; Kitazawa Riki\21\3p4p3qLUPF\M\FE14C\Arthur(Fates)
 Azama\Colorless, Healer\ \Infantry\7, 4, 5, 7, 5\43, 21, 26, 32, 25\Okaya\Matt Mercer;; Hamada Kenji\22\3p4p3qLUPF\M\FE14B\Azama
-Azura\Blue, Blade\ \Infantry\5, 8, 8, 4, 6\36, 31, 33, 21, 28\kaya8\Rena Strober;; Lynn\23\5pLUPFTD\F\FE14, FEW, (s)SSBU\Azura
+Azura\Blue, Blade\ \Infantry\5, 8, 8, 4, 6\36, 31, 33, 21, 28\kaya8\Rena Strober;; Lynn\23\5pLUPFTDRA\F\FE14, FEW, (s)SSBU\Azura
 Barst\Green, Blade\ \Infantry\8, 7, 7, 7, 2\46, 33, 32, 30, 17\Wada Sachiko\DC Douglas;; Hamano Daiki\24\3p4p3q3q3qLUPF\M\FE3, FE1, FE11, FE12, (s)SSBU\Barst
 Bartre\Green, Blade\ \Infantry\9, 8, 5, 8, 1\49, 36, 25, 33, 13\Okaya\Kyle Hebert;; Tone Kentarou\25\3p4p3qLUPF\M\FE6, FE7\Bartre
 Beruka\Green, Blade\ \Flier\8, 6, 4, 9, 4\46, 29, 23, 37, 22\lack\Stephanie Sheh;; Tazawa Masumi\26\3p4p3qLUPF\F\FE14C\Beruka
@@ -492,7 +492,7 @@ Faye(Valentines)\Colorless, Bow\ \Armor\7, 11, 5, 9, 10\43, 40, 23, 35, 38\Tobi\
 Conrad(Valentines)\Red, Blade\ \Cavalry\6, 7, 4, 8, 8\39, 32, 23, 33, 35\argon / Exys Inc.\Marc Diraison;; Satou Takuya\491\4s5s\M\FE15\Conrad
 Rudolf(Valentines)\Blue, Blade\ \Armor\6, 11, 4, 10, 6\46, 43, 21, 41, 29\Miyamoto Satoru\Taylor Henry;; Sugou Takayuki\492\5s\M\FE15, FE2\Rudolf
 Silque(Valentines)\Colorless, Healer\ \Cavalry\7, 5, 5, 7, 6\40, 28, 22, 32, 29\HAKO\Bonnie Gordon;; Inokuchi Yuka\493\4t5t0s\F\FE15, FE2\Silque
-Lysithea\Red, Tome, Dark\ \Infantry\5, 10, 9, 4, 4\37, 41, 37, 21, 24\Enkyo Yuichiro\Janice Kawaye as Janice Roman Roku;; Aoi Yuki\494\5p\F\FE16\Lysithea
+Lysithea\Red, Tome, Dark\ \Infantry\5, 10, 9, 4, 4\37, 41, 37, 21, 24\Enkyo Yuichiro\Janice Kawaye as Janice Roman Roku;; Yuuki Aoi\494\5p\F\FE16\Lysithea
 Nils\Blue, Dragon\ \Infantry\9, 7, 8, 6, 5\45, 31, 35, 26, 25\Kippu\Khoi Dao;; Sakura Ayane\495\5p\M\FE7\Nils
 Rath\Green, Bow\ \Infantry\7, 8, 9, 3, 5\41, 33, 35, 23, 24\Shimomura Watari\Jacob Craner;; Tsuda Kenjiro\496\3p4p\M\FE7\Rath
 Fiora\Blue, Blade\ \Flier\5, 7, 9, 3, 10\38, 32, 38, 21, 37\Konfuzi Kokon\Marianne Miller;; Inoue Marina\497\5p\F\FE7\Fiora
