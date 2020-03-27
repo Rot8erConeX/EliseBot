@@ -788,6 +788,7 @@ def walk_away(bot,event,server_id)
     chn=chnn[0] if chnn.length>0
   end
   chn.send_message("My coder would rather that I not associate with you guys.  I'm sorry.  If you would like me back, please take it up with him.") rescue nil
+  bot.user(167657750971547648).pm("Left server *#{bot.server(server_id.to_i).name}* (#{server_id.to_i})")
   bot.server(server_id.to_i).leave
 end
 
