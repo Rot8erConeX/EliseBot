@@ -1,86 +1,115 @@
+Armor School\example\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-`(level+1)` on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 3000, 0\0\Only one school can be placed at a time.
 Armor School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 50, 0, 0\0\Only one school can be placed at a time.
 Armor School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 150, 0, 0\0\Only one school can be placed at a time.
 Armor School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 250, 0, 0\0\Only one school can be placed at a time.
 Armor School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 350, 0, 0\0\Only one school can be placed at a time.
 Armor School\5\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-6 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 450, 0, 0\0\Only one school can be placed at a time.
-Armor School\6\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 1500, 0\0\Only one school can be placed at a time.
-Armor School\7\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 3000, 0\0\Only one school can be placed at a time.
+Armor School\6\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 0, 1500, 0\0\Only one school can be placed at a time.
+Armor School\6\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 0, 0\0\Only one school can be placed at a time.
+Armor School\7\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 0, 3000, 0\0\Only one school can be placed at a time.
+Armor School\7\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 0, 0\0\Only one school can be placed at a time.
+Bright Shrine\example\Offensive/Defensive\At start of turn, inflicts Atk/Spd-`(level+1)` on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 1500, 1500, 0\0
 Bright Shrine\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd-2 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 100, 0, 0\0
 Bright Shrine\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd-3 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 300, 0, 0\0
 Bright Shrine\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd-4 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 500, 0, 0\0
 Bright Shrine\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd-5 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 700, 0, 0\0
 Bright Shrine\5\Offensive/Defensive\At start of turn, inflicts Atk/Spd-6 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 900, 0, 0\0
-Bright Shrine\6\Offensive/Defensive\At start of turn, inflicts Atk/Spd-7 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 1500, 1500, 0\0
+Bright Shrine\6\Offensive\At start of turn, inflicts Atk/Spd-7 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 0, 1500, 0\0
+Bright Shrine\6\Defensive\At start of turn, inflicts Atk/Spd-7 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 1500, 0, 0\0
+Bolt Tower\example\Offensive/Defensive\At the start of turn 3, deals `(5*level+5)` damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 100, 0, 0\0
 Bolt Tower\1\Offensive/Defensive\At the start of turn 3, deals 10 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 100, 0, 0\0
 Bolt Tower\2\Offensive/Defensive\At the start of turn 3, deals 15 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 300, 0, 0\0
 Bolt Tower\3\Offensive/Defensive\At the start of turn 3, deals 20 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 500, 0, 0\0
 Bolt Tower\4\Offensive/Defensive\At the start of turn 3, deals 25 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 700, 0, 0\0
 Bolt Tower\5\Offensive/Defensive\At the start of turn 3, deals 30 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 900, 0, 0\0
-Bolt Tower\6\Offensive/Defensive\At the start of turn 3, deals 35 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 1500, 1500, 0\0
+Bolt Tower\6\Offensive\At the start of turn 3, deals 35 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 0, 1500, 0\0
+Bolt Tower\6\Defensive\At the start of turn 3, deals 35 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 1500, 0, 0\0
+Catapult\example\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 1500, 1500, 0\0\Opposing fortresses cannot be destroyed
 Catapult\1\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 100, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\2\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 300, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\3\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 500, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\4\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 700, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\5\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 900, 0, 0\0\Opposing fortresses cannot be destroyed
-Catapult\6\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 1500, 1500, 0\0\Opposing fortresses cannot be destroyed
+Catapult\6\Offensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 0, 1500, 0\0\Opposing fortresses cannot be destroyed
+Catapult\6\Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 1500, 0, 0\0\Opposing fortresses cannot be destroyed
+Cavalry School\example\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-`(level+1)` on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 3000, 0\0\Only one school can be placed at a time.
 Cavalry School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 50, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 150, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 250, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 350, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\5\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-6 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 450, 0, 0\0\Only one school can be placed at a time.
-Cavalry School\6\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 1500, 0\0\Only one school can be placed at a time.
-Cavalry School\7\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 3000, 0\0\Only one school can be placed at a time.
+Cavalry School\6\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 0, 1500, 0\0\Only one school can be placed at a time.
+Cavalry School\6\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 0, 0\0\Only one school can be placed at a time.
+Cavalry School\7\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 0, 3000, 0\0\Only one school can be placed at a time.
+Cavalry School\7\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 0, 0\0\Only one school can be placed at a time.
+Dark Shrine\example\Offensive/Defensive\At start of turn, inflicts Def/Res-`(level+1)` on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 1500, 1500, 0\0
 Dark Shrine\1\Offensive/Defensive\At start of turn, inflicts Def/Res-2 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 100, 0, 0\0
 Dark Shrine\2\Offensive/Defensive\At start of turn, inflicts Def/Res-3 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 300, 0, 0\0
 Dark Shrine\3\Offensive/Defensive\At start of turn, inflicts Def/Res-4 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 500, 0, 0\0
 Dark Shrine\4\Offensive/Defensive\At start of turn, inflicts Def/Res-5 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 700, 0, 0\0
 Dark Shrine\5\Offensive/Defensive\At start of turn, inflicts Def/Res-6 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 900, 0, 0\0
-Dark Shrine\6\Offensive/Defensive\At start of turn, inflicts Def/Res-7 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 1500, 1500, 0\0
+Dark Shrine\6\Offensive\At start of turn, inflicts Def/Res-7 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 0, 1500, 0\0
+Dark Shrine\6\Defensive\At start of turn, inflicts Def/Res-7 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 1500, 0, 0\0
+Duo's Hindrance\example\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills between turn 1 and turn `(level+2)`.\Yes\0, 300, 0, 0\0
 Duo's Hindrance\1\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills between turn 1 and turn 3.\Yes\0, 100, 0, 0\0
 Duo's Hindrance\2\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills between turn 1 and turn 4.\Yes\0, 300, 0, 0\0
+Duo's Indulgence\example\Offensive\The first Duo skill used between turn 1 and turn `(level+2)` can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 300, 0, 0\0
 Duo's Indulgence\1\Offensive\The first Duo skill used between turn 1 and turn 3 can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 100, 0, 0\0
 Duo's Indulgence\2\Offensive\The first Duo skill used between turn 1 and turn 4 can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 300, 0, 0\0
+Escape Ladder\example\Offensive\Restores Aether cost of `(level)` failed battles per season.\No\0, 700, 0, 0\0
 Escape Ladder\1\Offensive\Restores Aether cost of one failed battle per season.\No\0, 100, 0, 0\0
 Escape Ladder\2\Offensive\Restores Aether cost of two failed battles per season.\No\0, 300, 0, 0\0
 Escape Ladder\3\Offensive\Restores Aether cost of three failed battles per season.\No\0, 500, 0, 0\0
 Escape Ladder\4\Offensive\Restores Aether cost of four failed battles per season.\No\0, 700, 0, 0\0
+Flier School\example\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-`(level+1)` on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 3000, 0\0\Only one school can be placed at a time.
 Flier School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 50, 0, 0\0\Only one school can be placed at a time.
 Flier School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 150, 0, 0\0\Only one school can be placed at a time.
 Flier School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 250, 0, 0\0\Only one school can be placed at a time.
 Flier School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 350, 0, 0\0\Only one school can be placed at a time.
 Flier School\5\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-6 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 450, 0, 0\0\Only one school can be placed at a time.
-Flier School\6\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 1500, 0\0\Only one school can be placed at a time.
-Flier School\7\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 3000, 0\0\Only one school can be placed at a time.
+Flier School\6\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 0, 1500, 0\0\Only one school can be placed at a time.
+Flier School\6\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 0, 0\0\Only one school can be placed at a time.
+Flier School\7\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 0, 3000, 0\0\Only one school can be placed at a time.
+Flier School\7\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on flying foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 0, 0\0\Only one school can be placed at a time.
+Fortress\example\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 2000, 0\13\Cannot be removed.
 Fortress\1\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 0, 0\0\Cannot be removed.
 Fortress\2\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 500, 0\4\Cannot be removed.
 Fortress\3\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 1000, 0\7\Cannot be removed.
 Fortress\4\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 1500, 0\10\Cannot be removed.
 Fortress\5\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 2000, 0\13\Cannot be removed.
+Healing Tower\example\Offensive/Defensive\At start of turn, restores `(5*level+5)` HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 100, 0, 0\0
 Healing Tower\1\Offensive/Defensive\At start of turn, restores 10 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 100, 0, 0\0
 Healing Tower\2\Offensive/Defensive\At start of turn, restores 15 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 300, 0, 0\0
 Healing Tower\3\Offensive/Defensive\At start of turn, restores 20 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 500, 0, 0\0
 Healing Tower\4\Offensive/Defensive\At start of turn, restores 25 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 700, 0, 0\0
 Healing Tower\5\Offensive/Defensive\At start of turn, restores 30 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 900, 0, 0\0
 Healing Tower\6\Offensive/Defensive\At start of turn, restores 35 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 1500, 1500, 0\0
+Infantry School\example\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-`(level+1)` on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 50, 0, 0\0\Only one school can be placed at a time.
 Infantry School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 50, 0, 0\0\Only one school can be placed at a time.
 Infantry School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 150, 0, 0\0\Only one school can be placed at a time.
 Infantry School\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-4 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 250, 0, 0\0\Only one school can be placed at a time.
 Infantry School\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-5 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 350, 0, 0\0\Only one school can be placed at a time.
 Infantry School\5\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-6 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 450, 0, 0\0\Only one school can be placed at a time.
-Infantry School\6\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 1500, 0\0\Only one school can be placed at a time.
-Infantry School\7\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 3000, 0\0\Only one school can be placed at a time.
+Infantry School\6\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 0, 1500, 0\0\Only one school can be placed at a time.
+Infantry School\6\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 0, 0\0\Only one school can be placed at a time.
+Infantry School\7\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 0, 3000, 0\0\Only one school can be placed at a time.
+Infantry School\7\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 0, 0\0\Only one school can be placed at a time.
+Panic Manor\example\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ `(5*level+35)`, converts bonuses on those foes into penalties through their next actions.\Yes\0, 1500, 1500, 0\0
 Panic Manor\1\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 40, converts bonuses on those foes into penalties through their next actions.\Yes\0, 100, 0, 0\0
 Panic Manor\2\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 45, converts bonuses on those foes into penalties through their next actions.\Yes\0, 300, 0, 0\0
 Panic Manor\3\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 50, converts bonuses on those foes into penalties through their next actions.\Yes\0, 500, 0, 0\0
 Panic Manor\4\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 55, converts bonuses on those foes into penalties through their next actions.\Yes\0, 700, 0, 0\0
 Panic Manor\5\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 60, converts bonuses on those foes into penalties through their next actions.\Yes\0, 900, 0, 0\0
-Panic Manor\6\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 65, converts bonuses on those foes into penalties through their next actions.\Yes\0, 1500, 1500, 0\0
+Panic Manor\6\Offensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 65, converts bonuses on those foes into penalties through their next actions.\Yes\0, 0, 1500, 0\0
+Panic Manor\6\Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 65, converts bonuses on those foes into penalties through their next actions.\Yes\0, 1500, 0, 0\0
+Tactics Room\example\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ `(5*level+35)` and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 1500, 1500, 0\0
 Tactics Room\1\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 40 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 100, 0, 0\0
 Tactics Room\2\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 45 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 300, 0, 0\0
 Tactics Room\3\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 50 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 500, 0, 0\0
 Tactics Room\4\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 55 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 700, 0, 0\0
 Tactics Room\5\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 60 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 900, 0, 0\0
 Tactics Room\6\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 65 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 1500, 1500, 0\0
+Bolt Trap\example\Trap\If foe ends movement on this structure's space, deals `(10*level)` damage to target and units within 3 spaces. (Cancels foe's attack or Assist skill.)\-\0, 700, 0, 0\0
 Bolt Trap\1\Trap\If foe ends movement on this structure's space, deals 10 damage to target and units within 3 spaces. (Cancels foe's attack or Assist skill.)\-\0, 0, 0, 0\0
 Bolt Trap\2\Trap\If foe ends movement on this structure's space, deals 20 damage to target and units within 3 spaces. (Cancels foe's attack or Assist skill.)\-\0, 100, 0, 0\0
 Bolt Trap\3\Trap\If foe ends movement on this structure's space, deals 30 damage to target and units within 3 spaces. (Cancels foe's attack or Assist skill.)\-\0, 300, 0, 0\0
@@ -88,15 +117,18 @@ Bolt Trap\4\Trap\If foe ends movement on this structure's space, deals 40 damage
 Bolt Trap\5\Trap\If foe ends movement on this structure's space, deals 50 damage to target and units within 3 spaces. (Cancels foe's attack or Assist skill.)\-\0, 700, 0, 0\0
 False Bolt Trap\-\Trap\This looks like a Bolt Trap, but it's just a fake.\-\0, 0, 0, 0\0
 False Heavy Trap\-\Trap\This looks like a Heavy Trap, but it's just a fake.\-\0, 0, 0, 0\0
+Heavy Trap\example\Trap\If foe ends movement on this structure's space, restricts movement of target and units within 2 spaces with HP __<__ `(5*level+35)` to 1 space through their next actions. (Cancels foe's attack and Assist skills.)\-\0, 700, 0, 0\0
 Heavy Trap\1\Trap\If foe ends movement on this structure's space, restricts movement of target and units within 2 spaces with HP __<__ 40 to 1 space through their next actions. (Cancels foe's attack and Assist skills.)\-\0, 0, 0, 0\0
 Heavy Trap\2\Trap\If foe ends movement on this structure's space, restricts movement of target and units within 2 spaces with HP __<__ 45 to 1 space through their next actions. (Cancels foe's attack and Assist skills.)\-\0, 100, 0, 0\0
 Heavy Trap\3\Trap\If foe ends movement on this structure's space, restricts movement of target and units within 2 spaces with HP __<__ 50 to 1 space through their next actions. (Cancels foe's attack and Assist skills.)\-\0, 300, 0, 0\0
 Heavy Trap\4\Trap\If foe ends movement on this structure's space, restricts movement of target and units within 2 spaces with HP __<__ 55 to 1 space through their next actions. (Cancels foe's attack and Assist skills.)\-\0, 500, 0, 0\0
 Heavy Trap\5\Trap\If foe ends movement on this structure's space, restricts movement of target and units within 2 spaces with HP __<__ 60 to 1 space through their next actions. (Cancels foe's attack and Assist skills.)\-\0, 700, 0, 0\0
+Aether Amphorae\example\Resources\Stores up to `(50*level+50)` Aether.  If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 0, 500, 0\0\Cannot be removed.
 Aether Amphorae\1\Resources\Stores up to 100 Aether.  If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 0, 0, 0\0\Cannot be removed.
 Aether Amphorae\2\Resources\Stores up to 150 Aether.  If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 0, 100, 0\0\Cannot be removed.
 Aether Amphorae\3\Resources\Stores up to 200 Aether.  If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 0, 300, 0\0\Cannot be removed.
 Aether Amphorae\4\Resources\Stores up to 250 Aether.  If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 0, 500, 0\0\Cannot be removed.
+Aether Fountain\example\Resources\Restores `(10*level+40)` Aether to the Aether Keep each day. If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 0, 300, 0\0\Cannot be removed.
 Aether Fountain\1\Resources\Restores 50 Aether to the Aether Keep each day. If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 0, 0, 0\0\Cannot be removed.
 Aether Fountain\2\Resources\Restores 60 Aether to the Aether Keep each day. If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 0, 100, 0\0\Cannot be removed.
 Aether Fountain\3\Resources\Restores 70 Aether to the Aether Keep each day. If destroyed in an attack, it restores Aether to the raiding party (if they win).\Yes\0, 0, 300, 0\0\Cannot be removed.
@@ -134,3 +166,47 @@ Concert Hall\-\Resort\A structure for Heroes who enjoy music and dancing.  You c
 Dining Hall\-\Resort\A structure where dishes can be prepared with the ingredients harvested from your Field.  You can earn rewards based on the total rarities you reveive on those dishes.\-\0, 0, 0, 0\0
 Field\-\Resort\A place where Dragonflowers and food-crop ingredients for the Dining Hall are grown and harvested.  Planted crops can be harvested at the beginning of the following season.\-\0, 0, 0, 0\0
 Hot Spring\-\Resort\A structure where Heroes can relax in a nice hot spring.  Apparently it is a natural spring, too, which is especially incredible considering it is located within a floating island in the sky.\-\300, 0, 0, 0\0
+Gateway\-\Mjolnir\The battle will be lost if your foe destroys all of your Gateways.\Yes\0, 0, 0, 0\0
+Askran Seal\example\Mjolnir\Grants Atk/Spd/Def/Res+`(2*level)` to allies within 5 rows and 5 columns centered on structure.\No\0, 100, 0, 0\2
+Askran Seal\1\Mjolnir\Grants Atk/Spd/Def/Res+2 to allies within 5 rows and 5 columns centered on structure.\No\0, 100, 0, 0\2
+Askran Seal\2\Mjolnir\Grants Atk/Spd/Def/Res+4 to allies within 5 rows and 5 columns centered on structure.\No\0, 300, 0, 0\2
+Askran Seal\3\Mjolnir\Grants Atk/Spd/Def/Res+6 to allies within 5 rows and 5 columns centered on structure.\No\0, 500, 0, 0\2
+Death's Throne\example\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ `(10*level+35)` through that foe's next action.\No\0, 500, 0, 0\3
+Death's Throne\1\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 35 through that foe's next action.\No\0, 100, 0, 0\3
+Death's Throne\2\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 45 through that foe's next action.\No\0, 300, 0, 0\3
+Death's Throne\3\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 55 through that foe's next action.\No\0, 500, 0, 0\3
+Deluge Fountain\example\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ `(10*level+25)` back by 2 spaces, toward the top of the map.\No\0, 500, 0, 0\3
+Deluge Fountain\1\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ 35 back by 2 spaces, toward the top of the map.\No\0, 100, 0, 0\3
+Deluge Fountain\2\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ 45 back by 2 spaces, toward the top of the map.\No\0, 300, 0, 0\3
+Deluge Fountain\3\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ 55 back by 2 spaces, toward the top of the map.\No\0, 500, 0, 0\3
+Dokkalfar Briar\example\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ `(10*level+25)` through that foe's next action.\No\0, 900, 0, 0\3
+Dokkalfar Briar\1\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 35 through that foe's next action.\No\0, 100, 0, 0\3
+Dokkalfar Briar\2\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 45 through that foe's next action.\No\0, 300, 0, 0\3
+Dokkalfar Briar\3\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 55 through that foe's next action.\No\0, 500, 0, 0\3
+Dokkalfar Briar\4\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 65 through that foe's next action.\No\0, 900, 0, 0\3
+Emblian Seal\example\Mjolnir\Inflicts Atk/Spd/Def/Res-`(2*level)` on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 500, 0, 0\2
+Emblian Seal\1\Mjolnir\Inflicts Atk/Spd/Def/Res-2 on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 100, 0, 0\2
+Emblian Seal\2\Mjolnir\Inflicts Atk/Spd/Def/Res-4 on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 300, 0, 0\2
+Emblian Seal\3\Mjolnir\Inflicts Atk/Spd/Def/Res-6 on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 500, 0, 0\2
+Heroic Banner\example\Mjolnir\Grants bonus to Atk/Spd/Def/Res during combat = current bonus on each of ally's stats to allies within level-based range centered on structure. Calculates each stat bonus independently. (That turn only.)\No\0, 500, 0, 0\3
+Heroic Banner\1\Mjolnir\Grants bonus to Atk/Spd/Def/Res during combat = current bonus on each of ally's stats to allies within 3 rows and 3 columns centered on structure. Calculates each stat bonus independently. (That turn only.)\No\0, 100, 0, 0\3
+Heroic Banner\2\Mjolnir\Grants bonus to Atk/Spd/Def/Res during combat = current bonus on each of ally's stats to allies within 2 spaces of structure. Calculates each stat bonus independently. (That turn only.)\No\0, 300, 0, 0\3
+Heroic Banner\3\Mjolnir\Grants bonus to Atk/Spd/Def/Res during combat = current bonus on each of ally's stats to allies within 5 rows and 5 columns centered on structure. Calculates each stat bonus independently. (That turn only.)\No\0, 500, 0, 0\3
+Life's Jewel\example\Mjolnir\Restores `(10*level+10)` HP to allies within 5 rows and 5 columns centered on structure.\No\0, 900, 0, 0\3
+Life's Jewel\1\Mjolnir\Restores 20 HP to allies within 5 rows and 5 columns centered on structure.\No\0, 100, 0, 0\3
+Life's Jewel\2\Mjolnir\Restores 30 HP to allies within 5 rows and 5 columns centered on structure.\No\0, 300, 0, 0\3
+Life's Jewel\3\Mjolnir\Restores 40 HP to allies within 5 rows and 5 columns centered on structure.\No\0, 500, 0, 0\3
+Life's Jewel\4\Mjolnir\Restores 50 HP to allies within 5 rows and 5 columns centered on structure.\No\0, 900, 0, 0\3
+Ljosalfar Garden\example\Mjolnir\Allies within a level-based range centered on structure can move 1 extra space. (That turn only. Does not stack.)\No\0, 100, 0, 0\3
+Ljosalfar Garden\1\Mjolnir\Allies within 3 rows and 3 columns centered on structure can move 1 extra space. (That turn only. Does not stack.)\No\0, 100, 0, 0\3
+Ljosalfar Garden\2\Mjolnir\Allies within 2 spaces of structure can move 1 extra space. (That turn only. Does not stack.)\No\0, 300, 0, 0\3
+Ljosalfar Garden\3\Mjolnir\Allies within 5 rows and 5 columns centered on structure can move 1 extra space. (That turn only. Does not stack.)\No\0, 500, 0, 0\3
+Muspell Pyre\example\Mjolnir\Deals `(10*level+10)` damage to foes within 9 rows and 3 columns centered on structure.\No\0, 900, 0, 0\2
+Muspell Pyre\1\Mjolnir\Deals 20 damage to foes within 9 rows and 3 columns centered on structure.\No\0, 100, 0, 0\2
+Muspell Pyre\2\Mjolnir\Deals 30 damage to foes within 9 rows and 3 columns centered on structure.\No\0, 300, 0, 0\2
+Muspell Pyre\3\Mjolnir\Deals 40 damage to foes within 9 rows and 3 columns centered on structure.\No\0, 500, 0, 0\2
+Muspell Pyre\4\Mjolnir\Deals 50 damage to foes within 9 rows and 3 columns centered on structure.\No\0, 900, 0, 0\2
+Nifl Icicle\example\Mjolnir\Grants Special cooldown count-`(level)` to allies within 5 rows and 5 columns centered on structure.\No\0, 500, 0, 0\2
+Nifl Icicle\1\Mjolnir\Grants Special cooldown count-1 to allies within 5 rows and 5 columns centered on structure.\No\0, 100, 0, 0\2
+Nifl Icicle\2\Mjolnir\Grants Special cooldown count-2 to allies within 5 rows and 5 columns centered on structure.\No\0, 300, 0, 0\2
+Nifl Icicle\3\Mjolnir\Grants Special cooldown count-3 to allies within 5 rows and 5 columns centered on structure.\No\0, 500, 0, 0\2

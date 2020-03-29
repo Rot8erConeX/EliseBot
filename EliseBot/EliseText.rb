@@ -4452,7 +4452,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
     legal_units=@units.reject{|q| !q[13][0].nil?}
     unless f2.nil?
-      k=find_in_units(event,3,false,false,[f2])
+      k=find_in_units(bot,event,3,false,false,[f2])
       all_units=all_units.reject{|q| !k.include?(q)}.uniq
       legal_units=legal_units.reject{|q| !k.include?(q)}.uniq
     end
@@ -4573,7 +4573,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event.respond msg
     return nil
   elsif ['structure','structures','structs','struct'].include?(f.downcase)
-    m=@structures.map{|q| q}
+    m=@structures.reject{|q| q[2]=='example'}.map{|q| "#{q[0]} #{q[1]} / #{q[2] unless q[2].include?('Offensive') || q[2].include?('Defensive')}"}.uniq
     str="**There are #{longFormattedNumber(m.length)} structure levels, including:**"
     str="#{str}\n<:Offensive_Structure:510774545997758464> #{longFormattedNumber(m.reject{|q| !q[2].include?('Offensive')}.length)} Offensive structure levels"
     str="#{str}\n<:Defensive_Structure:510774545108566016> #{longFormattedNumber(m.reject{|q| !q[2].include?('Defensive')}.length)} Defensive structure levels"
@@ -4581,7 +4581,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     str="#{str}\n<:Resource_Structure:510774545154572298> #{longFormattedNumber(m.reject{|q| !q[2].include?('Resources')}.length)} Resource structure levels"
     str="#{str}\n<:Ornamental_Structure:510774545150640128> #{longFormattedNumber(m.reject{|q| !q[2].include?('Ornament')}.length)} Ornament levels"
     str="#{str}\n<:Mjolnir_Structure:691254233588301866> #{longFormattedNumber(m.reject{|q| !q[2].include?('Mjolnir')}.length)} Mjolnir Strike levels"
-    m=m.map{|q| [q[0],0,q[2]]}.uniq
+    m=@structures.reject{|q| q[2]=='example'}.map{|q| [q[0],0,q[2]]}.uniq
     str2="**There are #{longFormattedNumber(m.length)} structures, including:**"
     str2="#{str2}\n<:Offensive_Structure:510774545997758464> #{longFormattedNumber(m.reject{|q| !q[2].include?('Offensive')}.length)} Offensive structures"
     str2="#{str2}\n<:Defensive_Structure:510774545108566016> #{longFormattedNumber(m.reject{|q| !q[2].include?('Defensive')}.length)} Defensive structures"
@@ -4760,40 +4760,45 @@ def snagstats(event,bot,f=nil,f2=nil)
     event.respond str
     return nil
   elsif ['groups','group','groupings','grouping'].include?(f.downcase)
-    event.channel.send_temporary_message('Calculating data, please wait...',3)
-    event << "**There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global groups**, including the following dynamic ones:"
-    gg=@groups.reject{|q| !q[2].nil? || q[1].length>0}.map{|q| [q[0],get_group(q[0],event)[1].reject{|q2| all_units.find_index{|q3| q3[0]==q2}.nil?}]}
-    event << "*Bannerless* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bannerless'}][1].length)} current members) - Any unit that has never been a focus unit on a banner."
-    event << "*Brave Heroes* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='BraveHeroes'}][1].length)} current members) - Any unit with the phrase *(Brave)* in their internal name."
-    event << "*Daily Rotation* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Daily_Rotation'}][1].length)} current members) - Any unit that can be obtained via the twelve rotating Daily Hero Battle maps."
-    event << "*Refreshers* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Refreshers'}][1].length)} current members) - Any unit that can learn any of the skills: Dance, Sing, or Play."
-    event << "*Falchion Users* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Falchion_Users'}][1].length)} current members) - Any unit that can use one of the three Falchions, or any of their evolutions."
-    event << "*Fallen Heroes* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='FallenHeroes'}][1].length)} current members) - Any unit with the phrase *(Fallen)* in their internal name."
-    event << "*GHB* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='GHB'}][1].length)} current members) - Any unit that can obtained via a Grand Hero Battle map."
-    event << "*Legendaries* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Legendaries'}][1].length)} current members) - Any unit that gives a Legendary Hero Boost to blessed allies during specific seasons."
-    event << "*Duo Units* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='DuoUnits'}][1].length)} current members) - Any unit that is actually two characters."
-    event << "*Retro-Prfs* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro-Prfs'}][1].length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything."
-    event << "*Seasonals* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Seasonals'}][1].length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost."
-    event << "    The following subsets of the Seasonals group are also dynamic: *Bathing* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bathing'}][1].length)}), *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Bunny* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Picnic* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Picnic'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})"
-    event << "*Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can be obtained via a Tempest Trials event."
-    event << "*Resplendent* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Resplendent'}][1].length)} current members) - Any unit that has a Resplendent Ascension."
-    event << "*Worse Than Liki* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='WorseThanLiki'}][1].length)} current members) - Any unit with every stat equal to or less than the same stat on Tiki(Young)(Earth), excluding Tiki(Young)(Earth) herself."
-    display=false
-    display=true if event.user.id==167657750971547648
-    display=true if !event.server.nil? && !bot.user(167657750971547648).on(event.server.id).nil? && rand(100).zero?
-    display=true if !event.server.nil? && bot.user(167657750971547648).on(event.server.id).nil? && rand(10000).zero?
-    event << "*Mathoo's Waifus* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Mathoo'sWaifus"}][1].length)} current members) - Any unit that my developer would enjoy cuddling." if display
-    event << ''
-    event << "**There are #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups.**"
-    if event.server.nil? && @shardizard==4
-      event << "Due to being the debug version, I cannot show more information."
-    elsif event.server.nil? && @shardizard==-1
-      event << "Due to being the smol version, I cannot show more information."
-    elsif event.server.nil?
-      event << "Servers you and I share account for #{@groups.reject{|q| q[2].nil? || q[2].reject{|q2| bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those."
-    else
-      event << "This server accounts for #{@groups.reject{|q| q[2].nil? || !q[2].include?(event.server.id)}.length} of those."
+    event.channel.send_temporary_message('Calculating data, please wait...',3) if safe_to_spam?(event)
+    str="**There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global groups**"
+    if safe_to_spam?(event)
+      str="**There are #{longFormattedNumber(@groups.reject{|q| !q[2].nil?}.length-1)} global groups**, including the following dynamic ones:"
+      gg=@groups.reject{|q| !q[2].nil? || q[1].length>0}.map{|q| [q[0],get_group(q[0],event)[1].reject{|q2| all_units.find_index{|q3| q3[0]==q2}.nil?}]}
+      str=extend_message(str,"*AetherBonus* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='AetherBonus'}][1].length)} current members) - Any unit that is a bonus unit for the current Aether Raids season.",event)
+      str=extend_message(str,"*ArenaBonus* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='ArenaBonus'}][1].length)} current members) - Any unit that is a bonus unit for the current Arena season.",event)
+      str=extend_message(str,"*Bannerless* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bannerless'}][1].length)} current members) - Any unit that has never been a focus unit on a banner.",event)
+      str=extend_message(str,"*Brave Heroes* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='BraveHeroes'}][1].length)} current members) - Any unit with the phrase *(Brave)* in their internal name.",event)
+      str=extend_message(str,"*Daily Rotation* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Daily_Rotation'}][1].length)} current members) - Any unit that can be obtained via the twelve rotating Daily Hero Battle maps.",event)
+      str=extend_message(str,"*Refreshers* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Refreshers'}][1].length)} current members) - Any unit that can learn any of the skills: Dance, Sing, or Play.",event)
+      str=extend_message(str,"*Falchion Users* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Falchion_Users'}][1].length)} current members) - Any unit that can use one of the three Falchions, or any of their evolutions.",event)
+      str=extend_message(str,"*Fallen Heroes* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='FallenHeroes'}][1].length)} current members) - Any unit with the phrase *(Fallen)* in their internal name.",event)
+      str=extend_message(str,"*GHB* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='GHB'}][1].length)} current members) - Any unit that can obtained via a Grand Hero Battle map.",event)
+      str=extend_message(str,"*Legendaries* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Legendaries'}][1].length)} current members) - Any unit that gives a Legendary Hero Boost to blessed allies during specific seasons.",event)
+      str=extend_message(str,"*Duo Units* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='DuoUnits'}][1].length)} current members) - Any unit that is actually two characters.",event)
+      str=extend_message(str,"*Retro-Prfs* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro-Prfs'}][1].length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything.",event)
+      str=extend_message(str,"*Seasonals* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Seasonals'}][1].length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost.\n    The following subsets of the Seasonals group are also dynamic: *Bathing* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bathing'}][1].length)}), *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Bunny* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Picnic* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Picnic'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})",event)
+      str=extend_message(str,"*Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can be obtained via a Tempest Trials event.",event)
+      str=extend_message(str,"*TempestBonus* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='TempestBonus'}][1].length)} current members) - Any unit that is a bonus unit for the current Tempest Trials event.",event)
+      str=extend_message(str,"*Resplendent* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Resplendent'}][1].length)} current members) - Any unit that has a Resplendent Ascension.",event)
+      str=extend_message(str,"*Worse Than Liki* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='WorseThanLiki'}][1].length)} current members) - Any unit with every stat equal to or less than the same stat on Tiki(Young)(Earth), excluding Tiki(Young)(Earth) herself.",event)
+      display=false
+      display=true if event.user.id==167657750971547648
+      display=true if !event.server.nil? && !bot.user(167657750971547648).on(event.server.id).nil? && rand(100).zero?
+      display=true if !event.server.nil? && bot.user(167657750971547648).on(event.server.id).nil? && rand(10000).zero?
+      str=extend_message(str,"*Mathoo's Waifus* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Mathoo'sWaifus"}][1].length)} current members) - Any unit that my developer would enjoy cuddling.",event) if display
     end
+    str=extend_message(str,"**There are #{longFormattedNumber(@groups.reject{|q| q[2].nil?}.length)} server-specific groups.**",event,2)
+    if event.server.nil? && @shardizard==4
+      str=extend_message(str,"Due to being the debug version, I cannot show more information.",event)
+    elsif event.server.nil? && @shardizard==-1
+      str=extend_message(str,"Due to being the smol version, I cannot show more information.",event)
+    elsif event.server.nil?
+      str=extend_message(str,"Servers you and I share account for #{@groups.reject{|q| q[2].nil? || q[2].reject{|q2| bot.user(event.user.id).on(q2).nil?}.length<=0}.length} of those.",event)
+    else
+      str=extend_message(str,"This server accounts for #{@groups.reject{|q| q[2].nil? || !q[2].include?(event.server.id)}.length} of those.",event)
+    end
+    event.respond str
     return nil
   elsif ['code','lines','line','sloc'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',3)
