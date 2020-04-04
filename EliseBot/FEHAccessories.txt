@@ -211,6 +211,7 @@ Ethereal Tiara\Tiara\A sacred headpiece handed down from Nagi. The shape recalls
 Ethereal Tiara EX\Tiara\A sacred headpiece handed down from Nagi. The power of the dragon divinity reborn hangs about it.\Reach 2500 green friendship with Nagi during Forging Bonds: A Time to Shine
 Gold Imperial Tiara\Tiara\Proof of victory over Legendary Roy.\Beat Roy(Fire)'s LHB at Abyssal difficulty.
 Gold Wings of Darkness\Tiara\Proof of victory over Legendary Chrom.\Beat Chrom(Crowned)'s LHB at Abyssal difficulty.
+Golden Headpiece\Tiara\Proof of victory over Mythic Bramimond.\Beat Bramimond's MHB at Abyssal difficulty.
 Hoshidan Headpiece\Tiara\This headwear is the exclusive hair ornament of the queen of Hoshido.\Clear floors 6-10 in Illusory Dungeon: Labyrinth of Despair.
 Ilian Wing Hairpin\Tiara\An ornament from Thea. It's a token of the Ilian pegasus knights, fashioned after a pegasus wing.\Reach 100 blue friendship with Thea during Forging Bonds: Reason to Fight
 Ilian Wing Hairpin EX\Tiara\An ornament from Thea. It's a token of the Ilian pegasus knights, said to also serve as a protective charm.\Reach 2500 blue friendship with Thea during Forging Bonds: Reason to Fight
@@ -221,3 +222,8 @@ Kutolah Band EX\Tiara\A headband from Sue. It's adorned with a tuft of soft fur,
 Tropical Garland\Tiara\Tropical flowers strung together to form a crown. They have a lovely, subtle scent.\Clear floors 81-85 during Illusory Dungeon: Three Houses.
 Wings of Darkness\Tiara\Wings held by Owain. He says they have a unique power useful for fighting the darkness.\Reach 100 green friendship with Owain during Forging Bonds: Dueling Desires.
 Wings of Darkness EX\Tiara\Wings held by Owain. He says that sacred powers changed them to the purest white.\Reach 2500 green friendship with Owain during Forging Bonds: Dueling Desires.
+8-Bit Alfonse\Unknown\An accessory made to look like an 8-bit rendition of Alfonse.\Beat the Retrospective map on Normal difficulty.
+8-Bit Sharena\Unknown\An accessory made to look like an 8-bit rendition of Sharena.\Beat the Retrospective map on Hard difficulty.
+8-Bit Anna\Unknown\An accessory made to look like an 8-bit rendition of Anna.\Beat the Retrospective map on Infernal difficulty.  (This may be a mistake and intended to say Lunatic.)
+8-Bit Messenger Owl\Unknown\An accessory made to look like an 8-bit rendition of Feh.\Log in during the Fire Emblem 30th anniversary event.
+8-Bit Messenger Chief\Unknown\An accessory made to look like an 8-bit rendition of Fehnix\Log in during the Fire Emblem 30th anniversary event.

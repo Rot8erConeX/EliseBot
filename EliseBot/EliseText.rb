@@ -796,7 +796,7 @@ def sort_legendaries(event,bot,mode=0)
     end
     m.uniq!
     data_load()
-    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || q[2][0]==' ' || q[2].length<2}.uniq
+    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Duo','Idol'].include?(q[2][0]) || q[2].length<2}.uniq
     m=m.reject{|q| !k.map{|q2| q2[0]}.include?(q)}
     k=k.reject{|q| !m.include?(q[0])}
     for i in 0...k.length
@@ -821,7 +821,7 @@ def sort_legendaries(event,bot,mode=0)
     end
     m.uniq!
     data_load()
-    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || q[2][0]==' ' || q[2].length<2}.uniq
+    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Duo','Idol'].include?(q[2][0]) || q[2].length<2}.uniq
     m=m.reject{|q| !k.map{|q2| q2[0]}.include?(q)}
     k=k.reject{|q| !m.include?(q[0])}
     for i in 0...k.length
@@ -1040,9 +1040,9 @@ def disp_legendary_mythical(event,bot,args=[],dispmode='',forcesplit=false)
   args=args.map{|q| q.downcase}
   data_load()
   g=get_markers(event)
-  l=@units.reject{|q| q[2][0]==' ' || !has_any?(g, q[13][0])}
-  l=@units.reject{|q| [' ','Light','Dark','Astra','Anima'].include?(q[2][0]) || !has_any?(g, q[13][0])} if dispmode=='Legendary' && (!safe_to_spam?(event) || forcesplit)
-  l=@units.reject{|q| [' ','Fire','Water','Wind','Earth'].include?(q[2][0]) || !has_any?(g, q[13][0])} if dispmode=='Mythic' && (!safe_to_spam?(event) || forcesplit)
+  l=@units.reject{|q| [' ','Duo','Idol'].include?(q[2][0]) || !has_any?(g, q[13][0])}
+  l=@units.reject{|q| [' ','Duo','Idol','Light','Dark','Astra','Anima'].include?(q[2][0]) || !has_any?(g, q[13][0])} if dispmode=='Legendary' && (!safe_to_spam?(event) || forcesplit)
+  l=@units.reject{|q| [' ','Duo','Idol','Fire','Water','Wind','Earth'].include?(q[2][0]) || !has_any?(g, q[13][0])} if dispmode=='Mythic' && (!safe_to_spam?(event) || forcesplit)
   l.sort!{|a,b| a[0]<=>b[0]}
   c=[]
   for i in 0...l.length
@@ -1827,9 +1827,11 @@ def disp_unit_art(event,name,bot)
     g=get_markers(event)
     chars=untz.reject{|q| q[0]==j[0] || !has_any?(g, q[13][0]) || ((q[6].nil? || q[6].length<=0) && (q[7][0].nil? || q[7][0].length<=0) && (q[7][1].nil? || q[7][1].length<=0))}
     charsx=[[],[],[]]
-    charsx[1].push('Feh the Owl *[both]*') if nammes[1]=='Kimberly Tierney' && nammes[2]=='Kimura Juri'
-    charsx[1].push('Feh the Owl *[English]*') if nammes[1]=='Kimberly Tierney' && nammes[2]!='Kimura Juri'
-    charsx[1].push('Feh the Owl *[Japanese]*') if nammes[1]!='Kimberly Tierney' && nammes[2]=='Kimura Juri'
+    charsx[1].push('Feh the Owl *[voice 1]*') if nammes[1]=='Kimberly Tierney' && nammes[2]=='Kimura Juri'
+    charsx[1].push('Feh the Owl *[voice 2]*') if nammes[1]=='Cassandra Lee Morris' && nammes[2]=='Kimura Juri'
+    charsx[1].push('Feh the Owl *[English 1]*') if nammes[1]=='Kimberly Tierney' && nammes[2]!='Kimura Juri'
+    charsx[1].push('Feh the Owl *[English 2]*') if nammes[1]=='Cassandra Lee Morris' && nammes[2]!='Kimura Juri'
+    charsx[1].push('Feh the Owl *[Japanese]*') if nammes[1]!='Kimberly Tierney' && nammes[1]!='Cassandra Lee Morris' && nammes[2]=='Kimura Juri'
     charsx[1].push('Fehnix *[both]*') if nammes[1]=='Patrick Seitz' && nammes[2]=='Koyasu Takehito'
     charsx[1].push('Fehnix *[English]*') if nammes[1]=='Patrick Seitz' && nammes[2]!='Koyasu Takehito'
     charsx[1].push('Fehnix *[Japanese]*') if nammes[1]!='Patrick Seitz' && nammes[2]=='Koyasu Takehito'
@@ -1853,26 +1855,39 @@ def disp_unit_art(event,name,bot)
         if nammes[1].include?(' & ') || nammes[2].include?(' & ')
           nammes[1]=nammes[1].split(' & ')
           nammes[2]=nammes[2].split(' & ')
-          nammes[1].push(nammes[1][0]) if nammes[1].length<nammes[2].length
-          nammes[2].push(nammes[2][0]) if nammes[2].length<nammes[1].length
+          for i2 in 0...[nammes[1].length,nammes[2].length].max
+            nammes[1].push(nammes[1][0]) if nammes[1].length<nammes[2].length
+            nammes[2].push(nammes[2][0]) if nammes[2].length<nammes[1].length
+          end
           m=x[7][0].split(' as ')
           m2=x[7][1].split(' as ')
-          if charsx[2].include?(x[0])
-          elsif m[0]==nammes[1][0] && m2[0]==nammes[2][0]
-            charsx[1].push("#{x[0]} *[voice 1]*")
-          elsif m[0]==nammes[1][1] && m2[0]==nammes[2][1]
-            charsx[1].push("#{x[0]} *[voice 2]*")
-          elsif m[0]==nammes[1][0] && m2[0]==nammes[2][1]
-            charsx[1].push("#{x[0]} *[E1+J2]*")
-          elsif m[0]==nammes[1][1] && m2[0]==nammes[2][0]
-            charsx[1].push("#{x[0]} *[E2+J1]*")
+          if [nammes[1].length,nammes[2].length].max>2
+            m3=[]
+            for i2 in 0...[nammes[1].length,nammes[2].length].max
+              m3.push("v#{i2+1}") if m[0]==nammes[1][i2] && m2[0]==nammes[2][i2]
+              m3.push("E#{i2+1}") if m[0]==nammes[1][i2] && m2[0]!=nammes[2][i2]
+              m3.push("J#{i2+1}") if m[0]!=nammes[1][i2] && m2[0]==nammes[2][i2]
+            end
+            charsx[1].push("#{x[0]} *[#{m3.join('+')}]*") if m3.length>3
+            charsx[1].push("#{x[0]} *[#{m3[0].gsub('E','English ').gsub('J','Japanese ').gsub('v','voice ')}]*") if m3.length==1
+          else
+            if charsx[2].include?(x[0])
+            elsif m[0]==nammes[1][0] && m2[0]==nammes[2][0]
+              charsx[1].push("#{x[0]} *[voice 1]*")
+            elsif m[0]==nammes[1][1] && m2[0]==nammes[2][1]
+              charsx[1].push("#{x[0]} *[voice 2]*")
+            elsif m[0]==nammes[1][0] && m2[0]==nammes[2][1]
+              charsx[1].push("#{x[0]} *[E1+J2]*")
+            elsif m[0]==nammes[1][1] && m2[0]==nammes[2][0]
+              charsx[1].push("#{x[0]} *[E2+J1]*")
+            end
           end
           nammes[1]=nammes[1].uniq.join(' & ')
           nammes[2]=nammes[2].uniq.join(' & ')
         else
           m=x[7][0].split(' & ').map{|q| q.split(' as ')[0]}.join(' & ')
           m2=x[7][1].split(' & ').map{|q| q.split(' as ')[0]}.join(' & ')
-          charsx[1].push("#{x[0]} *[Both]*") if m==nammes[1] && m2==nammes[2] && !charsx[2].include?(x[0])
+          charsx[1].push("#{x[0]} *[Both]*") if [m.length,m2.length].max<3 && m==nammes[1] && m2==nammes[2] && !charsx[2].include?(x[0])
         end
       end
       unless x[7][0].nil? || x[7][0].length<=0
@@ -2034,8 +2049,10 @@ def disp_unit_art(event,name,bot)
         m=''
         m=j[7][0].split(' & ') unless j[7][0].nil?
         m2=j[7][1].split(' & ')
-        m.push(m[0]) if m.length<m2.length
-        m2.push(m2[0]) if m2.length<m.length
+        for i in 0...([m.length,m2.length].max-[m.length,m2.length].min)
+          m.push(m[0]) if m.length<m2.length
+          m2.push(m2[0]) if m2.length<m.length
+        end
         m3=[[],[],[]]
         for i in 0...m.length
           fxx=fgosrv.reject{|q| q[25]!=m2[i]}.map{|q| "*[FGO]* Srv-#{q[0]}#{'.' if q[0].to_i>=2}) #{q[1]} *[Japanese #{i+1}]*"}
@@ -2112,16 +2129,27 @@ def disp_unit_art(event,name,bot)
     if flds.length.zero?
       flds=nil
     elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1500 && safe_to_spam?(event)
-      create_embed(event,"__#{"Mathoo's " if mathooz}**#{j[0]}**#{unit_moji(bot,event,-1,j[0],mathooz,4)}__#{"\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,xcolor,nil,[nil,art])
-      if flds.map{|q| q.join("\n")}.join("\n\n").length>=1900
+      if flds.map{|q| q.join("\n")}.join("\n\n").length>=1500
         for i in 0...flds.length
-          create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,[flds[i]])
+          if "__**#{flds[i][0]}**__\n#{flds[i][1]}".length>1900
+            x="__**#{flds[i][0]}**__"
+            x2=flds[i][1].split("\n")
+            for i2 in 0...x2.length
+              x=extend_message(x,x2[i2],event)
+            end
+            event.respond x
+          elsif "__**#{flds[i][0]}**__\n#{flds[i][1]}".length>1500
+            create_embed(event,"__**#{flds[i][0]}**__",flds[i][1],unit_color(event,find_unit(j[0],event),j[0],0))
+          else
+            create_embed(event,"__**#{flds[i][0]}**__",'',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,triple_finish(flds[i][1].split("\n"),true))
+          end
         end
       else
         create_embed(event,'','',unit_color(event,find_unit(j[0],event),j[0],0),nil,nil,flds)
       end
+      create_embed(event,"__#{"Mathoo's " if mathooz}**#{j[0]}**#{unit_moji(bot,event,-1,j[0],mathooz,4)}__#{"\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}#{' art' unless artype[0]=='Sprite'}",disp,xcolor,nil,[nil,art])
       return nil
-    elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1800
+    elsif flds.map{|q| q.join("\n")}.join("\n\n").length>=1500
       disp="#{disp}\nThe list of units with the same artist and/or VA is so long that I cannot fit it into a single embed. Please use this command in PM."
       flds=nil
     else
@@ -2270,7 +2298,7 @@ def disp_learnable_skills(event,name,bot)
   g=get_markers(event)
   matches3=sklz.reject{|q| !bbb.include?(q[7]) || !has_any?(g, q[15]) || (q[8]!='-' && !q[8].split(', ').include?(j[0])) || q[1].include?('Squad Ace ') || q[1].include?('Initiate Seal ') || (q[6].split(', ').include?('Passive(W)') && !q[6].split(', ').include?('Passive(S)') && !q[6].split(', ').include?('Seal') && q[12].map{|q2| q2.split(', ').length}.max<2)}
   q=sklz[sklz.length-1]
-  matches4=collapse_skill_list_2(matches3,3)
+  matches4=collapse_skill_list(matches3,3)
   matches4=split_list(event,matches4,['Weapon','Assist','Special','Passive(A)','Passive(B)','Passive(C)','Passive(S)'],6,true,'Skills')
   p1=[[]]
   p2=0
@@ -4565,10 +4593,10 @@ def snagstats(event,bot,f=nil,f2=nil)
     legal_skills_1=@skills.reject{|q| !q[15].nil?}
     msg=skill_data(legal_skills,all_skills,event,0)
     legal_skills=legal_skills_1.reject{|q| !q[15].nil? || q[1].include?('Initiate Seal ') || q[1].include?('Squad Ace ')}
-    legal_skills=collapse_skill_list_2(legal_skills,6)
+    legal_skills=collapse_skill_list(legal_skills,6)
     all_skills=all_skills_1.reject{|q| !has_any?(g, q[15]) || q[1].include?('Initiate Seal ') || q[1].include?('Squad Ace ')}
     all_skills=all_skills_1.reject{|q| q[1].include?('Initiate Seal ') || q[1].include?('Squad Ace ')} if event.server.nil? && event.user.id==167657750971547648
-    all_skills=collapse_skill_list_2(all_skills,6)
+    all_skills=collapse_skill_list(all_skills,6)
     msg=extend_message(msg,skill_data(legal_skills,all_skills,event,1),event,2)
     event.respond msg
     return nil

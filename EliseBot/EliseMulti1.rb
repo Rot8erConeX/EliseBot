@@ -1542,7 +1542,7 @@ def list_collapse(list,mode=0)
         n[1]="#{x[0]}/Flametongue" if x.include?('Flametongue')
         n[1]="#{x[0]}/Flametongue+" if x.include?('Flametongue+')
         n[1]="#{x[0]}/Flametongue[+]" if x.include?('Flametongue') && x.include?('Flametongue+')
-      elsif (mode/2)%2==0 && ['Ruin','Flux','Fenrir','Fenrir+','Fire','Elfire','Bolganone','Bolganone+','Thunder','Elthunder','Thoron','Thoron+','Light','Ellight','Shine','Shine+','Wind','Elwind','Rexcalibur','Rexcalibur+'].include?(x[0])
+      elsif (mode/2)%2==0 && ['Ruin','Flux','Fenrir','Fenrir+','Fire','Elfire','Bolganone','Bolganone+','Thunder','Elthunder','Thoron','Thoron+','Light','Ellight','Shine','Shine+','Wind','Elwind','Rexcalibur','Rexcalibur+','Stone','Elstone','Atlas','Atlas+'].include?(x[0])
         for i2 in 0...m.length
           list3.push(m[i2]) unless m[i2][1].gsub('+','')==n[1].gsub('+','')
         end
@@ -1609,6 +1609,19 @@ def list_collapse(list,mode=0)
             n[1]="#{n[1]}[+]"
           else
             n[1]="#{n[1]}/Rexcalibur+"
+          end
+        end
+      elsif ['Stone','Elstone','Atlas','Atlas+'].include?(x[0])
+        n[1]=''
+        n[1]="Stone" if x.include?('Stone')
+        n[1]="Elstone" if x.include?('Elstone')
+        n[1]="[El]Stone" if x.include?('Stone') && x.include?('Elstone')
+        n[1]="#{n[1]}/Atlas" if x.include?('Atlas')
+        if x.include?('Atlas+')
+          if n[1].include?('Atlas')
+            n[1]="#{n[1]}[+]"
+          else
+            n[1]="#{n[1]}/Atlas+"
           end
         end
       elsif x[0][0,5]=='Iron ' || x[0][0,6]=='Steel '
@@ -1959,7 +1972,7 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
     w=true if bnr[3].include?('1') # banner has 1* Focus Units
     bnr[3]=nil
   end
-  bnr[0]=[bnr[0],bnr[4]]
+  bnr[0]=[bnr[0],bnr[4],(bnr[5].include?('NewUnits'))]
   bnr[4]=nil
   nu=false
   nu=true if bnr[5].include?('NewUnits')
@@ -1980,10 +1993,11 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
   if x # 4* Focus Units
     bnr.push(bnr[2].map{|q| q}) # clone the list of 5* Focus Units
   elsif nu && (bnr[0][1].split(', ')[0].split('/')[2].to_i>2020 || (bnr[0][1].split(', ')[0].split('/')[2].to_i==2020 && bnr[0][1].split(', ')[0].split('/')[1].to_i>1))
+    puts 'x'
     # New Heroes and Seasonal banners after Februaury 2020 all have a 4* Focus unit
     fourstar=[]
     for i in 0...u.length
-      fourstar.push(u[i][0]) if bnr[2].include?(u[i][0]) && (u[i][9][0].include?('4s') || u[i][9][0].include?('4p'))
+      fourstar.push(u[i][0].gsub(' ','')) if bnr[2].include?(u[i][0].gsub(' ','')) && (u[i][9][0].include?('4s') || u[i][9][0].include?('4p'))
     end
     fourstar=nil if fourstar.length<=0
     bnr.push(fourstar)
@@ -2082,6 +2096,10 @@ def multi_summon(bot,event,e,user,list,str2='',wheel=0,srate=nil)
   srate[0]+=summons
   srate[1]+=[0,5,9,13,17,20][summons]
   str2="#{str2}\nSince the last 5\* summons, Breidablik has been fired #{srate[0]} time#{'s' unless srate[0]==1} and #{srate[1]} orbs have been expended."
+  if !five_star && @banner[0][2] && srate[0]>=40 && (@banner[0][1].split(', ')[0].split('/')[2].to_i>2020 || (@banner[0][1].split(', ')[0].split('/')[2].to_i==2020 && @banner[0][1].split(', ')[0].split('/')[1].to_i>3))
+    five_star=true
+    str2="#{str2}\nBecause Breidablik has been fired #{srate[0]} times, you are now given the option of any focus unit on this banner.  (Not included in this sim.)"
+  end
   e.respond str2 if safe_to_spam?(e) || five_star
   event.channel.send_temporary_message('Calculating data, please wait...',3) if !safe_to_spam?(e) && wheel==1
   if five_star
@@ -2311,15 +2329,16 @@ def summon_sim(bot,event,colors)
     k=[[],[],[],[],[]]
     untz=@units.map{|q| q}
     for i in 0...bnr[2].length
-      k2=untz[untz.find_index{|q| q[0].gsub(' ','')==bnr[2][i].gsub(' ','')}][1][0]
-      midname="#{bnr[2][i]}"
-      midname="#{bnr[2][i]}<:Icon_Rarity_5p10:448272715099406336>" if !bnr[8].nil? && bnr[8]!=bnr[2]
+      k2=untz[untz.find_index{|q| q[0].gsub(' ','')==bnr[2][i].gsub(' ','')}]
+      midname="#{k2[0]}"
+      midname="#{k2[0]}<:Icon_Rarity_5p10:448272715099406336>" if !bnr[8].nil? && bnr[8]!=bnr[2]
       midname="#{midname}<:Icon_Rarity_4p10:448272714210476033>" if !bnr[8].nil? && bnr[8]!=bnr[2] && bnr[8].include?(bnr[2][i])
-      k[0].push(midname) if k2=='Red'
-      k[1].push(midname) if k2=='Blue'
-      k[2].push(midname) if k2=='Green'
-      k[3].push(midname) if k2=='Colorless'
-      k[4].push(midname) unless ['Red','Blue','Green','Colorless'].include?(k2)
+      midname="#{k2[0]}" if bnr[1]==-100 || bnr[1]==100
+      k[0].push(midname) if k2[1][0]=='Red'
+      k[1].push(midname) if k2[1][0]=='Blue'
+      k[2].push(midname) if k2[1][0]=='Green'
+      k[3].push(midname) if k2[1][0]=='Colorless'
+      k[4].push(midname) unless ['Red','Blue','Green','Colorless'].include?(k2[1][0])
     end
     unless bnr[8].nil?
       midname=bnr[8].reject{|q| bnr[2].include?(q)}
@@ -2334,11 +2353,11 @@ def summon_sim(bot,event,colors)
       end
     end
     str="#{str}\n**Focus Heroes:**"
-    str="#{str}\n<:Orb_Red:455053002256941056> *Red*:  #{k[0].join(', ')}" if k[0].length>0
-    str="#{str}\n<:Orb_Blue:455053001971859477> *Blue*:  #{k[1].join(', ')}" if k[1].length>0
-    str="#{str}\n<:Orb_Green:455053002311467048> *Green*:  #{k[2].join(', ')}" if k[2].length>0
-    str="#{str}\n<:Orb_Colorless:455053002152083457> *Colorless*:  #{k[3].join(', ')}" if k[3].length>0
-    str="#{str}\n<:Orb_Gold:549338084102111250> *Gold*:  #{k[4].join(', ')}" if k[4].length>0
+    str=extend_message(str,"<:Orb_Red:455053002256941056> *Red*:  #{k[0].join(', ')}",event) if k[0].length>0
+    str=extend_message(str,"<:Orb_Blue:455053001971859477> *Blue*:  #{k[1].join(', ')}",event) if k[1].length>0
+    str=extend_message(str,"<:Orb_Green:455053002311467048> *Green*:  #{k[2].join(', ')}",event) if k[2].length>0
+    str=extend_message(str,"<:Orb_Colorless:455053002152083457> *Colorless*:  #{k[3].join(', ')}",event) if k[3].length>0
+    str=extend_message(str,"<:Orb_Gold:549338084102111250> *Gold*:  #{k[4].join(', ')}",event) if k[4].length>0
     str2="**Summon rates:**"
     @banner=[[event.user.id,Time.now,event.server.id]]
     if bnr[1]<0 # negative "starting focus" numbers indicate there is no non-focus rate
@@ -2520,9 +2539,9 @@ def summon_sim(bot,event,colors)
         for i in 1...@banner.length
           cracked_orbs.push([@banner[i],i]) if trucolors.include?(find_unit(@banner[i][1],event)[1][0])
         end
-        str2="#{str2}\nNone of the colors you requested appeared.  Here are your **Orb options:**" if cracked_orbs.length.zero?
+        str2="None of the colors you requested appeared.  Here are your **Orb options:**" if cracked_orbs.length.zero?
       else
-        str2="#{str2}\n**Orb options:**"
+        str2="**Orb options:**"
       end
     end
     if cracked_orbs.length>0
@@ -2551,7 +2570,6 @@ def summon_sim(bot,event,colors)
       metadata_save()
       @banner=[]
     else
-      str2=''
       for i in 1...@banner.length
         k=untz[untz.find_index{|q| q[0]==@banner[i][1]}][1][0]
         str2="#{str2}\n#{i}.) <:Orb_Red:455053002256941056> *Red*" if k=='Red'
@@ -2560,7 +2578,7 @@ def summon_sim(bot,event,colors)
         str2="#{str2}\n#{i}.) <:Orb_Colorless:455053002152083457> *Colorless*" if k=='Colorless'
         str2="#{str2}\n#{i}.) <:Orb_Gold:549338084102111250> *Gold*" unless ['Red','Blue','Green','Colorless'].include?(k)
       end
-      str=extend_message(str,str2,event)
+      str=extend_message(str,str2,event,2)
       str2="To open orbs, please respond - in a single message - with the number of each orb you want to crack, or the colors of those orbs."
       str2="#{str2}\nYou can also just say \"Summon all\" to open all orbs."
       str2="#{str2}\nInclude the word \"Multisummon\" (with optional colors) to continue summoning until you pull a 5<:Icon_Rarity_5:448266417553539104>."
@@ -2615,10 +2633,10 @@ def shard_data(mode=0,ignoredebug=false,s=nil)
     k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Blue:443733396741554181> Azure','<:Shard_Green:443733397190344714> Verdant','<:Shard_Gold:443733396913520640> Golden','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Purple:443733396401946625> Violet'] if s==7
     k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet'] if s==8
     k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s==9
-    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Pink:554109520906027018> Bubblegum','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s==10
-    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Black:554090555932540941> Onyx','<:Shard_Pink:554109520906027018> Bubblegum','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s==11
-    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Black:554090555932540941> Onyx','<:Shard_Grey:554090554963525639> Steel','<:Shard_Pink:554109520906027018> Bubblegum','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s==12
-    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Black:554090555932540941> Onyx','<:Shard_Grey:554090554963525639> Steel','<:Shard_Platinum:554109521182588957> Platinum','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Pink:554109520906027018> Bubblegum','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s>=13
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Pink:694402484365688874> Bubblegum','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s==10
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Black:694402483606257694> Onyx','<:Shard_Pink:694402484365688874> Bubblegum','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s==11
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Black:694402483606257694> Onyx','<:Shard_Grey:554090554963525639> Steel','<:Shard_Pink:694402484365688874> Bubblegum','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s==12
+    k=['<:Shard_Colorless:443733396921909248> Transparent','<:Shard_Black:694402483606257694> Onyx','<:Shard_Grey:554090554963525639> Steel','<:Shard_Platinum:694402484470284370> Platinum','<:Shard_Rot8er:443733397223768084> Hybrid','<:Shard_Pink:694402484365688874> Bubblegum','<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta'] if s>=13
     if k.length<s
       k2=['<:Shard_Red:443733396842348545> Scarlet','<:Shard_Orange:552681863962165258> Citrus','<:Shard_Gold:443733396913520640> Golden','<:Shard_Green:443733397190344714> Verdant','<:Shard_Cyan:552681863995588628> Sky','<:Shard_Blue:443733396741554181> Azure','<:Shard_Purple:443733396401946625> Violet','<:Shard_Magenta:554090555533950986> Magenta']
       i=2
@@ -2637,10 +2655,10 @@ def shard_data(mode=0,ignoredebug=false,s=nil)
     k=['<:Shard_Colorless:443733396921909248>','<:Shard_Red:443733396842348545>','<:Shard_Blue:443733396741554181>','<:Shard_Green:443733397190344714>','<:Shard_Gold:443733396913520640>','<:Shard_Orange:552681863962165258>','<:Shard_Cyan:552681863995588628>','<:Shard_Purple:443733396401946625>'] if s==7
     k=['<:Shard_Colorless:443733396921909248>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Rot8er:443733397223768084>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>'] if s==8
     k=['<:Shard_Colorless:443733396921909248>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Rot8er:443733397223768084>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s==9
-    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Pink:554109520906027018>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Rot8er:443733397223768084>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s==10
-    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Black:554090555932540941>','<:Shard_Pink:554109520906027018>','<:Shard_Red:443733396842348545>','<:Shard_Rot8er:443733397223768084>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s==11
-    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Black:554090555932540941>','<:Shard_Grey:554090554963525639>','<:Shard_Pink:554109520906027018>','<:Shard_Rot8er:443733397223768084>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s==12
-    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Black:554090555932540941>','<:Shard_Grey:554090554963525639>','<:Shard_Platinum:554109521182588957>','<:Shard_Rot8er:443733397223768084>','<:Shard_Pink:554109520906027018>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s>=13
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Pink:694402484365688874>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Rot8er:443733397223768084>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s==10
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Black:694402483606257694>','<:Shard_Pink:694402484365688874>','<:Shard_Red:443733396842348545>','<:Shard_Rot8er:443733397223768084>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s==11
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Black:694402483606257694>','<:Shard_Grey:554090554963525639>','<:Shard_Pink:694402484365688874>','<:Shard_Rot8er:443733397223768084>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s==12
+    k=['<:Shard_Colorless:443733396921909248>','<:Shard_Black:694402483606257694>','<:Shard_Grey:554090554963525639>','<:Shard_Platinum:694402484470284370>','<:Shard_Rot8er:443733397223768084>','<:Shard_Pink:694402484365688874>','<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>'] if s>=13
     if k.length<s
       k2=['<:Shard_Red:443733396842348545>','<:Shard_Orange:552681863962165258>','<:Shard_Gold:443733396913520640>','<:Shard_Green:443733397190344714>','<:Shard_Cyan:552681863995588628>','<:Shard_Blue:443733396741554181>','<:Shard_Purple:443733396401946625>','<:Shard_Magenta:554090555533950986>']
       i=2
@@ -5784,12 +5802,15 @@ def make_random_unit(event,args,bot)
   if w=='*Red Tome*'
     wx=['Fire','Dark'].sample
     w="*#{wx} Mage* (Red Tome)"
-  elsif w=='*Green Tome*'
-    wx=['Wind'].sample
-    w="*#{wx} Mage* (Green Tome)"
   elsif w=='*Blue Tome*'
     wx=['Thunder','Light'].sample
     w="*#{wx} Mage* (Blue Tome)"
+  elsif w=='*Green Tome*'
+    wx=['Wind'].sample
+    w="*#{wx} Mage* (Green Tome)"
+  elsif w=='*Colorless Tome*'
+    wx=['Stone'].sample
+    w="*#{wx} Mage* (Colorless Tome)"
   end
   atk='<:GenericAttackS:514712247587569664> Attack'
   atk='<:MagicS:514712247289774111> Magic' if ['Tome','Healer'].include?(clazz[1])
