@@ -347,7 +347,7 @@ def nicknames_load() # loads the nickname list
   @aliases=b.reject{|q| q.nil? || q[1].nil?}.uniq
   t=Time.now
   @aliases.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-  if t-@last_multi_reload[2]<=10*60 || (@shardizard==4 && t-@last_multi_reload[2]<=60)
+  if t-@last_multi_reload[2]>10*60 || (@shardizard==4 && t-@last_multi_reload[2]>60)
     @last_multi_reload[2]=t
     puts 'reloading and checking Alias list'
     if !@aliases[-1][2].is_a?(String) || @aliases[-1][2]<'Verdant Shard'
@@ -456,23 +456,31 @@ def metadata_save() # saves the metadata
   }
 end
 
-def devunits_load() # loads information regarding the devunits
+def reload_library(size='')
   t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
+  if ['','fast'].include?(size)
+    if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]>60)
+      puts 'reloading EliseMulti1'
+      load "#{@location}devkit/EliseMulti1.rb"
+      @last_multi_reload[0]=t
+    end
   end
+  if ['','slow'].include?(size)
+    if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]>60)
+      puts 'reloading EliseText'
+      load "#{@location}devkit/EliseText.rb"
+      @last_multi_reload[1]=t
+    end
+  end
+end
+
+def devunits_load() # loads information regarding the devunits
+  reload_library('fast')
   return load_devunits()
 end
 
 def devunits_save() # used by the devedit command to save the devunits
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   return save_devunits()
 end
 
@@ -512,12 +520,7 @@ end
 
 bot.command([:help,:commands,:command_list,:commandlist,:Help]) do |event, command, subcommand| # used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   help_text(event,bot,command,subcommand)
   return nil
 end
@@ -590,22 +593,12 @@ def donate_trigger_word(event,str=nil,mode=0)
 end
 
 def donor_unit_list(uid,mode=0)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   load_donorunits(uid,mode)
 end
 
 def donor_unit_save(uid,table) # used by the edit command to save the donorunits
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   save_donorunits(uid,table)
 end
 
@@ -800,12 +793,6 @@ def get_season(type='Arena',mode=0)
   return [] if b.length<=0
   return b[mode-1][3] if mode>=1
   return b.map{|q| q[3]}.join(', ').split(', ')
-end
-
-bot.command(:boop2) do |event|
-  f=get_season('Arena')
-  puts f.to_s
-  event.respond 'x'
 end
 
 def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's data entry based on their name
@@ -4439,32 +4426,32 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   end
   if skill[6]=="Assist" && skill[13].include?('Music')
     w=sklz.reject{|q| !q[13].include?('DanceRally') || !has_any?(g, q[15])}
-    w=collapse_skill_list_2(w)
+    w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}#{q[1]}#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}"}
     create_embed(event,'',"The following skills are triggered when their holder uses #{skill[1]}:",0x40C0F0,nil,nil,triple_finish(w))
   elsif skill[6]=="Assist" && skill[13].include?('Move') && skill[13].include?('Rally')
     w=sklz.reject{|q| !(q[13].include?('Link') || q[13].include?('Feint')) || !has_any?(g, q[15])}
-    w=collapse_skill_list_2(w)
+    w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}#{q[1]}#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}"}
     create_embed(event,'',"The following skills are triggered when their holder uses or is targeted by #{skill[1]}:",0x40C0F0,nil,nil,triple_finish(w))
   elsif skill[6]=="Assist" && skill[13].include?('Move')
     w=sklz.reject{|q| !q[13].include?('Link') || !has_any?(g, q[15])}
-    w=collapse_skill_list_2(w)
+    w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}#{q[1]}#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}"}
     create_embed(event,'',"The following skills are triggered when their holder uses or is targeted by #{skill[1]}:",0x40C0F0,nil,nil,triple_finish(w))
   elsif skill[6]=="Assist" && skill[13].include?('Rally')
     w=sklz.reject{|q| !q[13].include?('Feint') || !has_any?(g, q[15])}
-    w=collapse_skill_list_2(w)
+    w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}#{q[1]}#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}"}
     create_embed(event,'',"The following skills are triggered when their holder uses or is targeted by #{skill[1]}:",0x40C0F0,nil,nil,triple_finish(w))
   elsif !['Weapon','Assist','Special'].include?(skill[6]) && skill[13].include?('Link')
     w=sklz.reject{|q| q[4]!='Assist' || !q[13].include?('Move') || q[13].include?('Music') || !has_any?(g, q[15])}
-    w=collapse_skill_list_2(w)
+    w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}#{q[1]}#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}"}
     create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[1]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
   elsif !['Weapon','Assist','Special'].include?(skill[6]) && skill[13].include?('Feint')
     w=sklz.reject{|q| q[4]!='Assist' || !q[13].include?('Rally') || !has_any?(g, q[15])}
-    w=collapse_skill_list_2(w)
+    w=collapse_skill_list(w)
     w=w.map{|q| "#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}#{q[1]}#{'~~' unless q[15].nil? || q[15][0].nil? || q[15][0].length.zero?}"}
     create_embed(event,'',"The following skills, when used on or by the unit holding #{skill[1]}, will trigger it:",0x40C0F0,nil,nil,triple_finish(w))
   elsif event.message.text.downcase.split(' ').include?('refined') && (skill[17].nil? || skill[17].length<=0) && skill[6]=="Weapon"
@@ -4893,7 +4880,7 @@ def unit_skills(name,event,justdefault=false,r=0,ignoretro=false,justweapon=fals
   box=[[],[],[],[],[],[]]
   clss="#{char[1][0]} #{char[1][1]}"
   clss="#{char[1][1]}" if char[1][0]=='Colorless' || char[1][1]=='Bow' || char[1][1]=='Dagger'
-  clss="#{char[1][2]} Tome" if clss=='Red Tome' || clss=='Blue Tome' || clss=='Green Tome'
+  clss="#{char[1][2]} Tome" if char[1][1]=='Tome'
   clss='Staff' if clss=='Healer'
   if char[1][1]=='Blade'
     clss='Sword' if char[1][0]=='Red'
@@ -5899,13 +5886,8 @@ def split_list(event,list,headers,mode=0,x=true,loads='Units')
   return list.uniq
 end
 
-def collapse_skill_list_2(list,mode=0)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+def collapse_skill_list(list,mode=0)
+  reload_library('fast')
   return list_collapse(list,mode)
 end
 
@@ -6558,7 +6540,7 @@ def find_in_skills(bot,event, mode=0, paired=false, brk=false)
     end
   end
   g=get_markers(event)
-  matches4=collapse_skill_list_2(matches3.reject{|q| !has_any?(g, q[15])},3)
+  matches4=collapse_skill_list(matches3.reject{|q| !has_any?(g, q[15])},3)
   skill_types=skill_types.reject{|q| q.include?('*')}
   if mode==2
   elsif skill_types.length<=0 && weapons==['Staff'] && assists==['Staff'] && specials==['Staff']
@@ -6616,7 +6598,7 @@ def find_in_skills(bot,event, mode=0, paired=false, brk=false)
     end
   end
   data_load()
-  microskills=collapse_skill_list_2(@skills.map{|q| q},4)
+  microskills=collapse_skill_list(@skills.map{|q| q},4)
   k=0
   k=event.server.id unless event.server.nil?
   g=get_markers(event)
@@ -7893,12 +7875,7 @@ def comparison(event,args,bot)
 end
 
 def detect_multi_unit_alias(event,str1,str2,robinmode=0)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   return multi_for_units(event,str1,str2,robinmode)
 end
 
@@ -8173,12 +8150,7 @@ def skill_comparison(event,args,bot)
 end
 
 def weapon_legality(event,name,weapon,refinement='-',recursion=false)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   return legal_weapon(event,name,weapon,refinement,recursion)
 end
 
@@ -8524,12 +8496,7 @@ def get_match_in_list(list, str, m=0)
 end
 
 def generate_random_unit(event,args,bot)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   return make_random_unit(event,args,bot)
 end
 
@@ -8678,7 +8645,6 @@ def find_alts(event,name,bot)
   untz2=[]
   color=[]
   for i in 0...k.length
-    puts k.to_s
     color.push(unit_color(event,find_unit(k[i][0],event),nil,1))
     m=[]
     fff=k[i][12].split(', ')[0]
@@ -8780,12 +8746,7 @@ def parse_function(callback,event,args,bot,healers=nil)
       method(callback).call(event,xx,bot,weapon) if xx.length>0
       return 0
     elsif callback==:banner_list
-      t=Time.now
-      if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-        puts 'reloading EliseText'
-        load "#{@location}devkit/EliseText.rb"
-        @last_multi_reload[1]=t
-      end
+      reload_library('slow')
       timeshift=8
       timeshift-=1 unless t.dst?
       t-=60*60*timeshift
@@ -8807,32 +8768,17 @@ def parse_function(callback,event,args,bot,healers=nil)
       event.respond msg
       return -1
     elsif callback==:disp_art
-      t=Time.now
-      if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-        puts 'reloading EliseText'
-        load "#{@location}devkit/EliseText.rb"
-        @last_multi_reload[1]=t
-      end
+      reload_library('slow')
       disp_generic_art(event,'',bot)
     elsif callback==:disp_path
-      t=Time.now
-      if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-        puts 'reloading EliseMulti1'
-        load "#{@location}devkit/EliseMulti1.rb"
-        @last_multi_reload[0]=t
-      end
+      reload_library('fast')
       current_paths(event,bot)
     else
       event.respond 'No unit was included'
       return -1
     end
   elsif ['red','reds','blue','blues','green','greens','grean','greans','colorless','colourless','colorlesses','colourlesses','clear','clears','physical','blade','blades','tome','mage','spell','tomes','mages','spells','dragon','dragons','breath','manakete','manaketes','beast','beasts','laguz','bow','arrow','bows','arrows','archer','archers','dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thiefs','thieves','healer','staff','cleric','healers','clerics','staves','sword','swords','katana','lance','lances','spear','spears','naginata','axe','axes','ax','club','clubs','redtome','redtomes','redmage','redmages','bluetome','bluetomes','bluemage','bluemages','greentome','greentomes','greenmage','greenmages','flier','flying','flyer','fly','pegasus','fliers','flyers','pegasi','wyvern','wyverns','cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs','infantry','foot','feet','armor','armour','armors','armours','armored','armoured'].include?(k[1]) && callback==:disp_art
-    t=Time.now
-    if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-      puts 'reloading EliseText'
-      load "#{@location}devkit/EliseText.rb"
-      @last_multi_reload[1]=t
-    end
+    reload_library('slow')
     disp_generic_art(event,'',bot)
   else
     str=k[0]
@@ -8939,11 +8885,7 @@ def calculate_effective_HP(event,name,bot,weapon=nil)
     return nil
   end
   t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   return get_effHP(event,name,bot,weapon)
 end
 
@@ -9312,12 +9254,7 @@ def heal_study(event,name,bot,weapon=nil)
     end
     return nil
   end
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   return study_of_healing(event,name,bot,weapon)
 end
 
@@ -9336,12 +9273,7 @@ def proc_study(event,name,bot,weapon=nil)
     end
     return nil
   end
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   return study_of_procs(event,name,bot,weapon)
 end
 
@@ -9360,12 +9292,7 @@ def phase_study(event,name,bot,weapon=nil)
     end
     return nil
   end
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   return study_of_phases(event,name,bot,weapon)
 end
 
@@ -9384,23 +9311,13 @@ def disp_art(event,name,bot,weapon=nil)
     end
     return nil
   end
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   return disp_unit_art(event,name,bot)
 end
 
 def disp_stats_for_FGO(bot,event,srv=nil)
   srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot) if srv.nil?
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   return disp_FGO_based_stats(bot,event,srv)
 end
 
@@ -9419,12 +9336,7 @@ def learnable_skills(event,name,bot,weapon=nil)
     end
     return nil
   end
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   return disp_learnable_skills(event,name,bot)
 end
 
@@ -9443,22 +9355,12 @@ def banner_list(event,name,bot,weapon=nil)
     end
     return nil
   end
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   return study_of_banners(event,name,bot)
 end
 
 def games_list(event,name,bot,weapon=nil)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   name=game_adjust(name)
   if name.is_a?(Array)
     g=get_markers(event)
@@ -9595,32 +9497,17 @@ def disp_path(event,name,bot,weapon=nil)
     end
     return nil
   end
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   return divine_path(event,name,bot)
 end
 
 def dev_flower_list(event,bot,args=[])
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   return flower_list(event,bot,args)
 end
 
 def dev_grail_list(event,bot,args=[])
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   return grail_list(event,bot,args)
 end
 
@@ -9752,12 +9639,7 @@ bot.command([:banners, :banner]) do |event, *args|
     display_banners(event,args)
     return nil
   elsif args.nil? || args.length<1 || ['next','schedule'].include?(args[0].downcase)
-    t=Time.now
-    if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-      puts 'reloading EliseText'
-      load "#{@location}devkit/EliseText.rb"
-      @last_multi_reload[1]=t
-    end
+    reload_library('slow')
     timeshift=8
     timeshift-=1 unless t.dst?
     t-=60*60*timeshift
@@ -9811,58 +9693,33 @@ end
 
 bot.command([:mythic,:mythical,:mythics,:mythicals,:mystic,:mystical,:mystics,:mysticals]) do |event, *args|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   disp_legendary_mythical(event,bot,args,'Mythic')
   return nil
 end
 
 bot.command([:legendary,:legendaries,:legendarys,:legend,:legends]) do |event, *args|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   disp_legendary_mythical(event,bot,args,'Legendary')
   return nil
 end
 
 bot.command([:refinery,:refine,:effect]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   disp_all_refines(event,bot)
 end
 
 bot.command([:prf,:prfs,:PRF]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   disp_all_prfs(event,bot)
 end
 
 bot.command([:attackicon, :attackcolor, :attackcolors, :attackcolour, :attackcolours, :atkicon, :atkcolor, :atkcolors, :atkcolour, :atkcolours, :atticon, :attcolor, :attcolors, :attcolour, :attcolours, :staticon, :statcolor, :statcolors, :statcolour, :statcolours, :iconcolor, :iconcolors, :iconcolour, :iconcolours]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   attack_icon(event)
   return nil
 end
@@ -9886,24 +9743,14 @@ end
 
 bot.command(:whyelise) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseTexts'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   why_elise(event,bot)
   return nil
 end
 
 bot.command([:skillrarity,:onestar,:twostar,:threestar,:fourstar,:fivestar,:skill_rarity,:one_star,:two_star,:three_star,:four_star,:five_star]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   skill_rarity(event)
   return nil
 end
@@ -9921,12 +9768,7 @@ bot.command(:summon) do |event, *colors|
     disp_summon_pool(event,args)
     return nil
   end
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   summon_sim(bot,event,colors)
 end
 
@@ -10019,24 +9861,14 @@ end
 
 bot.command([:bst, :BST]) do |event, *args|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   combined_BST(event,args,bot)
   return nil
 end
 
 bot.command(:bonus) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   x=event.message.text.downcase.split(' ')
   if x.include?('arena') && (x.include?('tempest') || x.include?('tt')) && (x.include?('aether') || x.include?('raid') || x.include?('raids'))
     show_bonus_units(event,'',bot)
@@ -10054,12 +9886,7 @@ end
 
 bot.command([:arena,:arenabonus,:arena_bonus,:bonusarena,:bonus_arena]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   show_bonus_units(event,'Arena',bot)
   return nil
 end
@@ -10072,12 +9899,7 @@ bot.command([:tempest,:tempestbonus,:tempest_bonus,:bonustempest,:bonus_tempest,
     dev_grail_list(event,bot,args,'Tempest')
     return nil
   end
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   show_bonus_units(event,'Tempest',bot)
   return nil
 end
@@ -10095,12 +9917,7 @@ end
 
 bot.command([:aether,:aetherbonus,:aether_bonus,:aethertempest,:aether_tempest,:raid,:raidbonus,:raid_bonus,:bonusraid,:bonus_raid,:raids,:raidsbonus,:raids_bonus,:bonusraids,:bonus_raids]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   show_bonus_units(event,'Aether',bot)
   return nil
 end
@@ -10142,12 +9959,7 @@ bot.command([:skill,:skil]) do |event, *args|
     skill_comparison(event,args,bot)
     return nil
   elsif ['rarity','rarities'].include?(args[0].downcase)
-    t=Time.now
-    if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-      puts 'reloading EliseText'
-      load "#{@location}devkit/EliseText.rb"
-      @last_multi_reload[1]=t
-    end
+    reload_library('slow')
     skill_rarity(event)
     return nil
   elsif ['color','colors','colour','colours'].include?(args[0].downcase)
@@ -10615,48 +10427,28 @@ end
 
 bot.command(:addalias) do |event, newname, unit, modifier, modifier2|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   add_new_alias(bot,event,newname,unit,modifier,modifier2)
   return nil
 end
 
 bot.command(:alias) do |event, newname, unit, modifier, modifier2|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   add_new_alias(bot,event,newname,unit,modifier,modifier2,1)
   return nil
 end
 
 bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   list_unit_aliases(event,args,bot)
   return nil
 end
 
 bot.command([:serveraliases,:saliases]) do |event, *args|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   list_unit_aliases(event,args,bot,1)
   return nil
 end
@@ -11253,12 +11045,7 @@ end
 
 bot.command([:aoe,:AOE,:AoE,:area]) do |event, *args|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   aoe(event,bot,args)
 end
 
@@ -11414,12 +11201,7 @@ end
 
 bot.command([:growths, :gps, :growth, :gp]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   growth_explain(event,bot)
 end
 
@@ -11433,45 +11215,25 @@ bot.command([:oregano, :Oregano]) do |event|
     disp_stats(bot,'Oregano',w,event,'smol',false,true)
     return nil
   end
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseTexts'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   oregano_explain(event,bot)
 end
 
 bot.command([:whoisoregano, :whoIsOregano, :whoisOregano]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseTexts'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   oregano_explain(event,bot)
 end
 
 bot.command(:merges) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   merge_explain(event,bot)
 end
 
 bot.command(:score) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   score_explain(event,bot)
 end
 
@@ -11505,12 +11267,7 @@ end
 
 bot.command([:tools,:links,:tool,:link,:resources,:resources]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseText'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   show_tools(event,bot)
 end
 
@@ -11555,48 +11312,28 @@ end
 
 bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily,:now]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseTexts'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   today_in_feh(event,bot)
   return nil
 end
 
 bot.command([:tomorrow,:tomorow,:tommorrow,:tommorow]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseTexts'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   today_in_feh(event,bot,true)
   return nil
 end
 
 bot.command([:next,:schedule]) do |event, type|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseTexts'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   next_events(event,bot,type)
   return nil
 end
 
 bot.command([:update]) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseTexts'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   update_howto(event,bot)
   return nil
 end
@@ -11700,12 +11437,7 @@ end
 
 bot.command(:edit) do |event, cmd, *args|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   donor_edit(bot,event,args,cmd)
 end
 
@@ -12041,12 +11773,7 @@ bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *ar
     event.respond "This command is to allow the developer to edit his units.  Your version of the command is `FEH!edit`"
   end
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
-  t=Time.now
-  if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[0]<=60)
-    puts 'reloading EliseMulti1'
-    load "#{@location}devkit/EliseMulti1.rb"
-    @last_multi_reload[0]=t
-  end
+  reload_library('fast')
   dev_edit(bot,event,args,cmd)
 end
 
@@ -12083,12 +11810,7 @@ end
 
 bot.command(:snagstats) do |event, f, f2|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseTexts'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   snagstats(event,bot,f,f2)
   return nil
 end
@@ -12096,73 +11818,111 @@ end
 bot.command(:reload, from: 167657750971547648) do |event|
   return nil if overlap_prevent(event)
   return nil unless [368976843883151362,167657750971547648].include?(event.user.id) || [285663217261477889,386658080257212417].include?(event.channel.id)
-  event.respond "Reload what?\n1.) Aliases, from backups\n2.) Groups, from backups#{"\n3.) Data, from GitHub" if [167657750971547648,368976843883151362].include?(event.user.id)}#{"\n4.) Source code, from GitHub\n5.) Libraries, from GitHub\n6.) Libraries, from code" if event.user.id==167657750971547648}\nYou can include multiple numbers to load multiple things."
+  event.respond "Reload what?\n1.) Aliases, from backups#{' (unless includes the word "git")' if [167657750971547648,368976843883151362].include?(event.user.id)}\n2.) Groups, from backups#{" (unless includes the word \"git\")\n3.) Data, from GitHub (include \"subset\" in your message to also reload FEHSkillSubsets)" if [167657750971547648,368976843883151362].include?(event.user.id)}#{"\n4.) Source code, from GitHub (include the word \"all\" to also reload rot8er_functs.rb)\n5.) Crossover data\n6.) Libraries, from code" if event.user.id==167657750971547648}\nYou can include multiple numbers to load multiple things."
   event.channel.await(:bob, from: event.user.id) do |e|
     reload=false
     if e.message.text.include?('1')
-      if File.exist?("#{@location}devkit/FEHNames2.txt")
-        b=[]
-        File.open("#{@location}devkit/FEHNames2.txt").each_line do |line|
-          b.push(eval line)
-        end
-      else
-        b=[]
-      end
-      nzzzzz=b.uniq
-      if !nzzzzz[-1][2].is_a?(String) || nzzzzz[-1][2]<'Verdant Shard'
-        event << 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
-        if File.exist?("#{@location}devkit/FEHNames3.txt")
+      if e.message.text.include?('git') && [167657750971547648,368976843883151362].include?(event.user.id)
+        download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHNames.txt")
+        IO.copy_stream(download, "FEHTemp.txt")
+        if File.size("FEHTemp.txt")>100
           b=[]
-          File.open("#{@location}devkit/FEHNames3.txt").each_line do |line|
+          File.open("FEHTemp.txt").each_line.with_index do |line, idx|
+            b.push(line)
+          end
+          open("FEHNames.txt", 'w') { |f|
+            f.puts b.join('')
+          }
+          open("FEHNames2.txt", 'w') { |f|
+            f.puts b.join('')
+          }
+        end
+        e.respond 'Alias list has been restored from GitHub, and placed in the backup as well.'
+        reload=true
+      else
+        if File.exist?("#{@location}devkit/FEHNames2.txt")
+          b=[]
+          File.open("#{@location}devkit/FEHNames2.txt").each_line do |line|
             b.push(eval line)
           end
         else
           b=[]
         end
         nzzzzz=b.uniq
-      else
-        e << 'Last backup of the alias list being used.'
-      end
-      nzzzzz.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
-      open("#{@location}devkit/FEHNames.txt", 'w') { |f|
-        for i in 0...nzzzzz.length
-          f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
+        if !nzzzzz[-1][2].is_a?(String) || nzzzzz[-1][2]<'Verdant Shard'
+          event << 'Last backup of the alias list has been corrupted.  Restoring from manually-created backup.'
+          if File.exist?("#{@location}devkit/FEHNames3.txt")
+            b=[]
+            File.open("#{@location}devkit/FEHNames3.txt").each_line do |line|
+              b.push(eval line)
+            end
+          else
+            b=[]
+          end
+          nzzzzz=b.uniq
+        else
+          e.respond 'Last backup of the alias list being used.'
         end
-      }
-      e << 'Alias list has been restored from backup.'
-      reload=true
+        nzzzzz.sort! {|a,b| (spaceship_order(a[0]) <=> spaceship_order(b[0])) == 0 ? (supersort(a,b,2,nil,1) == 0 ? (a[1].downcase <=> b[1].downcase) : supersort(a,b,2,nil,1)) : (spaceship_order(a[0]) <=> spaceship_order(b[0]))}
+        open("#{@location}devkit/FEHNames.txt", 'w') { |f|
+          for i in 0...nzzzzz.length
+            f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
+          end
+        }
+        e.respond 'Alias list has been restored from backup.'
+        reload=true
+      end
     end
     if e.message.text.include?('2')
-      if File.exist?("#{@location}devkit/FEHGroups2.txt")
-        b=[]
-        File.open("#{@location}devkit/FEHGroups2.txt").each_line do |line|
-          b.push(eval line)
-        end
-      else
-        b=[]
-      end
-      nzzzzz=b.uniq
-      if nzzzzz.length<10
-        e << 'Last backup of the group list has been corrupted.  Restoring from manually-created backup.'
-        if File.exist?("#{@location}devkit/FEHGroups3.txt")
+      if e.message.text.include?('git') && [167657750971547648,368976843883151362].include?(event.user.id)
+        download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHGroups.txt")
+        IO.copy_stream(download, "FEHTemp.txt")
+        if File.size("FEHTemp.txt")>100
           b=[]
-          File.open("#{@location}devkit/FEHGroups3.txt").each_line do |line|
+          File.open("FEHTemp.txt").each_line.with_index do |line, idx|
+            b.push(line)
+          end
+          open("FEHGroups.txt", 'w') { |f|
+            f.puts b.join('')
+          }
+          open("FEHGroups2.txt", 'w') { |f|
+            f.puts b.join('')
+          }
+        end
+        e.respond 'Alias list has been restored from GitHub, and placed in the backup as well.'
+        reload=true
+      else
+        if File.exist?("#{@location}devkit/FEHGroups2.txt")
+          b=[]
+          File.open("#{@location}devkit/FEHGroups2.txt").each_line do |line|
             b.push(eval line)
           end
         else
           b=[]
         end
         nzzzzz=b.uniq
-      else
-        e << 'Last backup of the group list being used.'
-      end
-      open("#{@location}devkit/FEHGroups.txt", 'w') { |f|
-        for i in 0...nzzzzz.length
-          f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
+        if nzzzzz.length<10
+          e.respond 'Last backup of the group list has been corrupted.  Restoring from manually-created backup.'
+          if File.exist?("#{@location}devkit/FEHGroups3.txt")
+            b=[]
+            File.open("#{@location}devkit/FEHGroups3.txt").each_line do |line|
+              b.push(eval line)
+            end
+          else
+            b=[]
+          end
+          nzzzzz=b.uniq
+        else
+          e.respond 'Last backup of the group list being used.'
         end
-      }
-      e << 'Group list has been restored from backup.'
-      reload=true
+        open("#{@location}devkit/FEHGroups.txt", 'w') { |f|
+          for i in 0...nzzzzz.length
+            f.puts "#{nzzzzz[i].to_s}#{"\n" if i<nzzzzz.length-1}"
+          end
+        }
+        e.respond 'Group list has been restored from backup.'
+        reload=true
+      end
     end
     if e.message.text.include?('3') && [167657750971547648,368976843883151362].include?(e.user.id)
       event.channel.send_temporary_message('Loading.  Please wait 5 seconds...',3)
@@ -12170,7 +11930,8 @@ bot.command(:reload, from: 167657750971547648) do |event|
       for i in 0...to_reload.length
         download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEH#{to_reload[i]}.txt")
         IO.copy_stream(download, "FEHTemp.txt")
-        if File.size("FEHTemp.txt")>100
+        if to_reload[i]=='SkillSubsets' && File.size("FEHTemp.txt")<File.size("FEHSkillSubsets.txt") && !e.message.text.include?('subset')
+        elsif File.size("FEHTemp.txt")>100
           b=[]
           File.open("FEHTemp.txt").each_line.with_index do |line, idx|
             b.push(line)
@@ -12180,7 +11941,8 @@ bot.command(:reload, from: 167657750971547648) do |event|
           }
         end
       end
-      e.respond 'New data loaded.  Now creating aliases for new units and skills...'
+      strx="#{strx}#{"\n" if strx.length>0}FEHSkillSubsets also reloaded\n" if e.message.text.include?('subset')
+      e.respond "New data loaded.\n#{stx}Now creating aliases for new units and skills..."
       data_load()
       nicknames_load()
       n=@aliases.map{|q| q}
@@ -12249,8 +12011,6 @@ bot.command(:reload, from: 167657750971547648) do |event|
           reload=true
         end
       end
-    end
-    if e.message.text.include?('5') && e.user.id==167657750971547648
       puts 'reloading EliseMulti1'
       download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/EliseMulti1.rb")
       IO.copy_stream(download, "FEHTemp.txt")
@@ -12282,7 +12042,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
       end
       download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/rot8er_functs.rb")
       IO.copy_stream(download, "FEHTemp.txt")
-      if File.size("FEHTemp.txt")>100
+      if File.size("FEHTemp.txt")>100 && e.message.text.include?('all')
         b=[]
         File.open("FEHTemp.txt").each_line.with_index do |line, idx|
           b.push(line.gsub('Mini-Matt',@mash))
@@ -12297,6 +12057,24 @@ bot.command(:reload, from: 167657750971547648) do |event|
       @last_multi_reload[0]=t
       @last_multi_reload[1]=t
       e.respond str
+      reload=true
+    end
+    if e.message.text.include?('5') && e.user.id==167657750971547648
+      to_reload=['Adventurers','Dragons','Wyrmprints']
+      for i in 0...to_reload.length
+        download = open("https://raw.githubusercontent.com/Rot8erConeX/BotanBot/master/DL#{to_reload[i]}.txt")
+        IO.copy_stream(download, "DLTemp.txt")
+        if File.size("DLTemp.txt")>100
+          b=[]
+          File.open("DLTemp.txt").each_line.with_index do |line, idx|
+            b.push(line)
+          end
+          open("DL#{to_reload[i]}.txt", 'w') { |f|
+            f.puts b.join('')
+          }
+        end
+      end
+      e.respond "New cross-data loaded."
       reload=true
     end
     if e.message.text.include?('6') && e.user.id==167657750971547648
@@ -12317,12 +12095,7 @@ end
 
 bot.command(:update) do |event|
   return nil if overlap_prevent(event)
-  t=Time.now
-  if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-    puts 'reloading EliseTexts'
-    load "#{@location}devkit/EliseText.rb"
-    @last_multi_reload[1]=t
-  end
+  reload_library('slow')
   update_howto(event,bot)
   return nil
 end
@@ -12638,22 +12411,12 @@ bot.mention do |event|
     k=list_unit_aliases(event,a,bot,1)
     k=1
   elsif ['bst'].include?(a[0].downcase)
-    t=Time.now
-    if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-      puts 'reloading EliseMulti1'
-      load "#{@location}devkit/EliseMulti1.rb"
-      @last_multi_reload[0]=t
-    end
+    reload_library('fast')
     a.shift
     combined_BST(event,a,bot)
     k=1
   elsif ['checkaliases','seealiases','aliases'].include?(a[0].downcase)
-    t=Time.now
-    if t-@last_multi_reload[0]>5*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-      puts 'reloading EliseMulti1'
-      load "#{@location}devkit/EliseMulti1.rb"
-      @last_multi_reload[0]=t
-    end
+    reload_library('fast')
     a.shift
     k=list_unit_aliases(event,a,bot)
     k=1
@@ -12667,12 +12430,7 @@ bot.mention do |event|
       a.shift
       display_banners(event,a)
     elsif a.length.zero? || ['next','schedule'].include?(a[0].downcase)
-      t=Time.now
-      if t-@last_multi_reload[1]>60*60 || (@shardizard==4 && t-@last_multi_reload[1]<=60)
-        puts 'reloading EliseText'
-        load "#{@location}devkit/EliseText.rb"
-        @last_multi_reload[1]=t
-      end
+      reload_library('slow')
       timeshift=8
       timeshift-=1 unless t.dst?
       t-=60*60*timeshift
