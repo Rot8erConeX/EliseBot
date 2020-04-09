@@ -170,7 +170,7 @@ def all_commands(include_nil=false,permissions=-1) # a list of all the command n
      'smallstat','smolstat','microstat','squashedstat','tiny','small','micro','smol','squashed','littlestats','littlestat','statslittle','statlittle','little',
      'giantstats','bigstats','tolstats','macrostats','largestats','hugestats','massivestats','giantstat','bigstat','tolstat','macrostat','largestat','hugestat',
      'massivestat','statsgiant','statsbig','statstol','statsmacro','statslarge','statshuge','statsmassive','statgiant','statbig','stattol','statmacro','large',
-     'statlarge','stathuge','statmassive','statol','giant','massive','spam','safetospam','safe2spam','listunits','sortunits','unitssort','liststat','rand',
+     'statlarge','stathuge','statmassive','statol','massive','spam','safetospam','safe2spam','listunits','sortunits','unitssort','liststat','rand',
      'longreplies','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort','worst',
      'sortstat','statsort','liststats','statslist','highest','best','highestamong','highestin','lowest','lowestamong','lowestin','manual','book','combatmanual',
      'headpat','pat','patpat','randomunit','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats','edit','bonus','arena','tt',
@@ -534,7 +534,7 @@ end
 
 def safe_to_spam?(event,chn=nil) # determines whether or not it is safe to send extremely long messages
   return true if event.server.nil? # it is safe to spam in PM
-  return true if event.user.id==167657750971547648 && event.message.text.split(' ').include?('RCX')
+  return false if event.user.id==213048998678888448
   return false if event.message.text.downcase.split(' ').include?('smol') && @shardizard==4
   return true if [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,691616574393811004,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388].include?(event.server.id) # it is safe to spam in the emoji servers
   return true if @shardizard==4 # it is safe to spam during debugging
@@ -3156,9 +3156,9 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     end
   end
   dispgps=false
-  dispgps=true if has_any?(args.map{|q| q.downcase},['gps','gp','growths','growth'])
+  dispgps=true if sizex=='giant' || has_any?(args.map{|q| q.downcase},['gps','gp','growths','growth'])
   sizex='smol' if sizex != 'medium' && !wl.include?('~~') && (stat_skills_2.length<=0 || unitz[0]=='Kiran') && !dispgps && !(event.server.nil? || event.server.id==238059616028590080) && event.channel.id != 362017071862775810
-  sizex='medium' if (wl.include?('~~') || (stat_skills_2.length>0 && unitz[0]!='Kiran') || dispgps) && sizex != 'xsmol'
+  sizex='medium' if (wl.include?('~~') || (stat_skills_2.length>0 && unitz[0]!='Kiran') || dispgps) && !['xsmol','giant'].include?(sizex)
   if unitz.length<=0
     smol_err(bot,event,ignore,['smol','xsmol'].include?(sizex))
     return nil
@@ -3521,8 +3521,12 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
       mergetext="#{mergetext}#{chrr}\nWhen transformed: #{sttttz.join(', ')}\nInclude the word \"Transformed\" to apply this directly."
     end
   end
+  duoicon="<:Hero_Duo:631431055420948480>"
+  duoicon="<:Hero_Duo_Mathoo:631431055513092106>" if u40[0]=='Mathoo'
   if skillstoo && u40[0]!='Robin (Shared stats)' # when invoked any way except the main stats command, will also display the unit's top level skills
     uskl=unit_skills(name,event)
+    duo=uskl[7]
+    duo=duo[0] unless duo.nil?
     for i in 0...3
       if uskl[i][0].include?('**') && uskl[i]!=uskl[i].reject{|q| !q.include?('**')}
         uskl[i][-1]="#{uskl[i].reject{|q| !q.include?('**')}[-1].gsub('__','')} / #{uskl[i][-1]}"
@@ -3534,6 +3538,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
       dv=find_in_dev_units(name)
       if dv>=0
         mu=true
+        duo=duo.gsub('**','') unless duo.nil?
         sklz2=[@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],@dev_units[dv][12],[@dev_units[dv][13]]]
         uskl=sklz2.map{|q| q.reject{|q2| q2.include?('~~')}}.map{|q| q[q.length-1]}
       end
@@ -3542,13 +3547,15 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
       x=donor_unit_list(uid)
       x2=x.find_index{|q| q[0]==name}
       unless x2.nil?
+        duo=duo.gsub('**','') unless duo.nil?
         sklz2=[x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],x[x2][12],[x[x2][13]]]
         uskl=sklz2.map{|q| q.reject{|q2| q2.include?('~~')}}.map{|q| q[q.length-1]}
       end
     end
-    flds.push(['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}"])
+    flds.push(['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}#{"\n<:Passive_S:443677023626330122> #{uskl[6]}" unless uskl[6].nil?}#{"\n#{duoicon} #{duo}" unless duo.nil? || duo.length<=0}"])
   elsif sizex=='giant' && u40[0]!='Robin (Shared stats)'
     uskl=unit_skills(name,event)
+    duo=uskl[7]
     if event.message.text.downcase.include?("mathoo's")
       devunits_load()
       dv=find_in_dev_units(name)
@@ -3570,7 +3577,8 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     flds.push(["<:Passive_A:443677024192823327> **A Passives**",uskl[3].join("\n")])
     flds.push(["<:Passive_B:443677023257493506> **B Passives**",uskl[4].join("\n")])
     flds.push(["<:Passive_C:443677023555026954> **C Passives**",uskl[5].join("\n")])
-    flds.push(["<:Passive_S:443677023626330122> **Sacred Seal**",uskl[6].join("\n")]) if uskl.length>6
+    flds.push(["<:Passive_S:443677023626330122> **Sacred Seal**",uskl[6].join("\n")]) if uskl.length>6 && uskl[6].length>0 && uskl[6][0].length>0 && uskl[6][0]!=' '
+    flds.push(["#{duoicon} **Duo Skill**",duo.join("\n")]) unless duo.nil? || duo.length<=0
   end
   img=pick_thumbnail(event,unitz,bot,resp)
   img='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
