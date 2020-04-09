@@ -3246,7 +3246,7 @@ def current_paths(event,bot,mode=0)
   xpic=nil
   xpic='https://gamepedia.cursecdn.com/feheroes_gamepedia_en/9/9d/Divine_Code_Ephemera.png' if b7
   if b7 && f.map{|q| "#{q[0]}\n\n#{q[1]}".length}.max<1000 && f.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n").length<1900
-    create_embed(event,'Current Ephemura Paths','',avg_color(c2),nil,xpic,f)
+    create_embed(event,'Current Ephemera Paths','',avg_color(c2),nil,xpic,f)
   else
     for i in 0...f.length
       create_embed(event,f[i][0],f[i][1],c[i],nil,xpic)

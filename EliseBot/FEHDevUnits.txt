@@ -435,7 +435,7 @@ Fierce Stance 2
 
 Matthew
 5\10\Resistance\Speed\-\0\
-Iron Dagger\Steel Dagger\Lethal Carrot\Lethal Carrot+\Lethal Carrot+ (+) Resistance Mode
+Iron Dagger\Steel Dagger\Lethal Carrot\Lethal Carrot+\__Lethal Carrot+ (+) Resistance Mode__\Spy's Dagger\~~Spy's Dagger (+) Effect Mode~~
 Reciprocal Aid
 Chilling Wind\Glacies
 Fortress Def 1\Fort. Def/Res 1\Fort. Def/Res 2\Fort. Def/Res 3

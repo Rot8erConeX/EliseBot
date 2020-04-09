@@ -175,6 +175,7 @@ Death's Throne\example\Mjolnir\Prevents counterattacks from any foe within 9 row
 Death's Throne\1\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 35 through that foe's next action.\No\0, 100, 0, 0\3
 Death's Throne\2\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 45 through that foe's next action.\No\0, 300, 0, 0\3
 Death's Throne\3\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 55 through that foe's next action.\No\0, 500, 0, 0\3
+Death's Throne\4\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 65 through that foe's next action.\No\0, 700, 0, 0\3
 Deluge Fountain\example\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ `(10*level+25)` back by 2 spaces, toward the top of the map.\No\0, 500, 0, 0\3
 Deluge Fountain\1\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ 35 back by 2 spaces, toward the top of the map.\No\0, 100, 0, 0\3
 Deluge Fountain\2\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ 45 back by 2 spaces, toward the top of the map.\No\0, 300, 0, 0\3

@@ -12,3 +12,11 @@ Ephemera (March 2020) 4\Shanna; 4; 0, 100
 Ephemera (March 2020) 5\Silvia; 4; 0, 100
 Ephemera (March 2020) 6\Oscar; 4; 0, 100
 Ephemera (March 2020) 7\Soleil; 4; 0, 100
+Ephemera (April 2020) 0\06/04/2020, 27/05/2020
+Ephemera (April 2020) 1\Alm; 5; 0, 300
+Ephemera (April 2020) 2\Olwen(World); 5; 0, 300
+Ephemera (April 2020) 3\Effie; 4; 0, 100
+Ephemera (April 2020) 4\Hinata; 4; 0, 100
+Ephemera (April 2020) 5\Shigure; 4; 0, 100
+Ephemera (April 2020) 6\Tailtiu; 4; 0, 100
+Ephemera (April 2020) 7\Python; 4; 0, 100

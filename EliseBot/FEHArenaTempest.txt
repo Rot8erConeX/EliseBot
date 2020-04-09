@@ -2,4 +2,6 @@ Sothis, Ferdinand von Aegir, Lysithea, Bernie, Annette, Flame Emperor, Fiora(Sum
 Ferdinand von Aegir, Lysithea, Bernie, Annette, Flame Emperor, Dimitri, Claude, Edelgard, Hector(Marquess), Anna\Arena\31/03/2020, 06/04/2020\Earth, Fire
 Sothis, Ferdinand von Aegir, Lysithea, Bernie, Annette, Flame Emperor, Fiora(Summer), Julia(Crusader), Anna\Aether\07/04/2020, 13/04/2020\Astra, Anima\Healing Tower, Healing Tower
 Bramimond, Idunn(Bunny), Est(Bunny), Fir(Bunny), Narcian(Bunny), Bartre(Bunny), Kronya, Hilda(3H), Lucina(Glorious), Alfonse\Arena\07/04/2020, 13/04/2020\Earth, Wind
+Bramimond, Idunn(Bunny), Est(Bunny), Fir(Bunny), Narcian(Bunny), Bartre(Bunny), Death Knight, Sigrun, Leif(Unifier), Fjorm\Aether\14/04/2020, 20/04/2020\Light, Dark\Panic Manor, Panic Manor
 Bramimond, Idunn(Bunny), Est(Bunny), Fir(Bunny), Narcian(Bunny), Bartre(Bunny), Kronya, Hilda(3H), Lucina(Glorious), Alfonse\Arena\14/04/2020, 20/04/2020\Earth, Water
+Bramimond, Idunn(Bunny), Est(Bunny), Fir(Bunny), Narcian(Bunny), Bartre(Bunny), Death Knight, Sigrun, Leif(Unifier), Fjorm\Aether\21/04/2020, 27/04/2020\Astra, Anima\Catapult, Catapult
