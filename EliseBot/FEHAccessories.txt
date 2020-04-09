@@ -1,3 +1,8 @@
+8-Bit Alfonse\Hair\An accessory made to look like an 8-bit rendition of Alfonse.\Beat the Retrospective map on Normal difficulty.
+8-Bit Sharena\Hair\An accessory made to look like an 8-bit rendition of Sharena.\Beat the Retrospective map on Hard difficulty.
+8-Bit Anna\Hair\An accessory made to look like an 8-bit rendition of Anna.\Beat the Retrospective map on Infernal difficulty.  (This may be a mistake and intended to say Lunatic.)
+8-Bit Messenger Owl\Hair\An accessory made to look like an 8-bit rendition of Feh.\Log in during the Fire Emblem 30th anniversary event.
+8-Bit Messenger Chief\Hair\An accessory made to look like an 8-bit rendition of Fehnix\Log in during the Fire Emblem 30th anniversary event.
 Askran Hairpin\Hair\A hair accessory adorned with the emblem of the Kingdom of Askr.\Clear Floors 6-10 in Illusory Dungeon: Legendary Heroes.
 Astral Hairpin\Hair\A hairpin from Mareeta. An accessory adorned with a moon and star.\Reach 100 red friendship with Mareeta during Forging Bonds: Path to the Future
 Astral Hairpin EX\Hair\A hairpin from Mareeta. An accessory adorned with a moon and star. Has an impressive quality, however slight.\Reach 2500 red friendship with Mareeta during Forging Bonds: Path to the Future.
@@ -131,9 +136,13 @@ Gold Sun-Bun Heat\Hat\Proof of victory over Legendary Alm.\Beat Alm(Saint)'s LHB
 Gold Tactician's Hat\Hat\Proof of victory over Legendary Celica\Beat Celica(Queen)'s LHB at Abyssal difficulty
 Handmade Clip\Hat\Hilda made this hair decoration by hand.\Reach 100 green friendship with Hilda during Forging Bonds: Changing Winds
 Handmade Clip EX\Hat\Hilda made this hair decoration by hand. There's a red ribbon!\Reach 2500 green friendship with Hilda during Forging Bonds: Changing Winds
+Hand-Sewn Hood\Hat\A hand-sewn hood courtesy of Lilith. Looks like she broke it in for you...\Reach 100 blue friendship with Lilith during Forging Bonds: the Fire Within.
+Hand-Sewn Hood EX\Hat\A hand-sewn hood courtesy of Lilith. Fresh from the seamstress!\Reach 2500 blue friendship with Lilith during Forging Bonds: the Fire Within.
 Head-Orb\Hat\Feh likes to balance this accessory, which resembles an Orb, on her head.\April Fool's 2019 log-in bonus
 Heron Circlet\Hat\A circlet bestowed by Reyson. Elegant and intricate, it gives off an air of refinement.\Reach 100 green friendship with Reyson during Forging Bonds: Hearts as One
 Heron Circlet EX\Hat\A headband bestowed by Reyson. Elegant and intricate, it gives off an air of refinement and seems fragile.\Reach 2500 green friendship with Reyson during Forging Bonds: Hearts as One
+Hoshidan Hat\Hat\A round hat from Midori. Woven from dried grass, it's light but tough. Works great in the rain.\Reach 100 red friendship with Midori during Forging Bonds: the Fire Within.
+Hoshidan Hat EX\Hat\A round hat from Midori. Even when adorned with such expensive-looking tassles, it still works great in the rain!\Reach 2500 red friendship with Midori during Forging Bonds: the Fire Within.
 Kitty Ribbon\Hat\Lethe's green ribbon. The bells sewn to it create a lovely sound when the wearer moves.\Reach 100 orange friendship with Lethe during Forging Bonds: A Trust Earned
 Kitty Ribbon EX\Hat\Lethe's green ribbon. The ears that are attached to it look surprisingly realistic.\Reach 2500 orange friendship with Lethe during Forging Bonds: A Trust Earned
 Knight Headpiece\Hat\A knight's headpiece from Silas. This gear is given to those who earn the title of knight.\Reach 100 blue friendship with Silas during Forging Bonds: High Tea Jinks.
@@ -141,6 +150,8 @@ Knight Headpiece EX\Hat\A knight's headpiece from Silas. This special piece of g
 Knightly Helm\Hat\Headwear common among bow knights. Formerly Python's.\Reach 100 green friendship with Python during Forging Bonds: Common Virtues.
 Knightly Helm EX\Hat\Headwear common among bow knights. Formerly Python's. The feathers are tough yet flexible.\Reach 2500 green friendship with Python during Forging Bonds: Common Virtues.
 Lost Child's Hat\Hat\The hat worn by young Azura.\Clear floors 81-85 in Illusory Dungeon: Labyrinth of Despair.
+Lovely Hat\Hat\Forrest's favorite hat. It cuts a cute silhouette that complements any style.\Reach 100 orange friendship with Forrest during Forging Bonds: the Fire Within.
+Lovely Hat EX\Hat\Forrest's favoritest hat. With a cute ribbon, the loveliness never stops!\Reach 2500 orange friendship with Forrest during Forging Bonds: the Fire Within.
 Mage Cap\Hat\A hat from Lugh. It's made for mages. Wearing it quiets the mind.\Reach 100 green friendship with Lugh during Forging Bonds: Reason to Fight
 Mage Cap EX\Hat\A hat from Lugh. It's made for mages. Wearing it expands the mind.\Reach 2500 green friendship with Lugh during Forging Bonds: Reason to Fight
 Maid Headpiece\Hat\A maid's headpiece from Flora. This is the authentic Nohrian object, straight from Castle Krakenburg.\Reach 100 red friendship with Flora during Forging Bonds: High Tea Jinks.
@@ -149,7 +160,9 @@ Mistress Band\Hat\A headband handed down from Eyvel. It is lightweight, but stur
 Mistress Band EX\Hat\A headband handed down from Eyvel. It is lightweight, but sturdy. It appears to have not been worn for some time.\Reach 2500 orange friendship with Eyvel during Forging Bonds: Path to the Future.
 Nomad Bandana\Hat\A thick bandana from Rath.  Made from sturdy cloth that is difficult to cut, even when pulled taut.\Reach 100 red friendship with Rath during Forging Bonds: Study in Crimson.
 Nomad Bandana EX\Hat\A thick bandana from Rath.  It was woven with a beautiful pattern adorning its surface.\Reach 2500 red friendship with Rath during Forging Bonds: Study in Crimson.
-Picnic Lunch\Hat\A set with handmade sandwiches from Flora, tea brewed by Lukas, and some tomatoes carefully prepared by Leo.\Clear floors 16-20 in Illusioray Dungeon:Heartstring's Ties
+Oni Savage Mask\Hat\A fierce-looking mask given to you by Rinkah. It was supposedly worn by the Oni Savages in Hoshido.\Reach 100 green friendship with Rinkah during Forging Bonds: the Fire Within.
+Oni Savage Mask EX\Hat\A fierce-looking mask given to you by Rinkah. The Flame Tribe considers it to be a legendary item.\Reach 2500 green friendship with Rinkah during Forging Bonds: the Fire Within.
+Picnic Lunch\Hat\A set with handmade sandwiches from Flora, tea brewed by Lukas, and some tomatoes carefully prepared by Leo.\Clear floors 16-20 in Illusioray Dungeon:Heartstring's Ties.
 Plegian Crown\Hat\A crown said to be worn by members of the Grimleal. Aversa had it in her possession.\Reach 100 orange friendship with Aversa during Forging Bonds: Dueling Desires.
 Plegian Crown EX\Hat\An impressive crown made of pure gold. Aversa had it in her possession.\Reach 2500 orange friendship with Aversa during Forging Bonds: Dueling Desires.
 Priest's Miter\Hat\A hat from Libra. Worn in sacred places, it can bring peace of mind.\Reach 100 blue friendship with Libra during Forging Bonds: Defending Ylisse.
@@ -222,8 +235,3 @@ Kutolah Band EX\Tiara\A headband from Sue. It's adorned with a tuft of soft fur,
 Tropical Garland\Tiara\Tropical flowers strung together to form a crown. They have a lovely, subtle scent.\Clear floors 81-85 during Illusory Dungeon: Three Houses.
 Wings of Darkness\Tiara\Wings held by Owain. He says they have a unique power useful for fighting the darkness.\Reach 100 green friendship with Owain during Forging Bonds: Dueling Desires.
 Wings of Darkness EX\Tiara\Wings held by Owain. He says that sacred powers changed them to the purest white.\Reach 2500 green friendship with Owain during Forging Bonds: Dueling Desires.
-8-Bit Alfonse\Unknown\An accessory made to look like an 8-bit rendition of Alfonse.\Beat the Retrospective map on Normal difficulty.
-8-Bit Sharena\Unknown\An accessory made to look like an 8-bit rendition of Sharena.\Beat the Retrospective map on Hard difficulty.
-8-Bit Anna\Unknown\An accessory made to look like an 8-bit rendition of Anna.\Beat the Retrospective map on Infernal difficulty.  (This may be a mistake and intended to say Lunatic.)
-8-Bit Messenger Owl\Unknown\An accessory made to look like an 8-bit rendition of Feh.\Log in during the Fire Emblem 30th anniversary event.
-8-Bit Messenger Chief\Unknown\An accessory made to look like an 8-bit rendition of Fehnix\Log in during the Fire Emblem 30th anniversary event.
