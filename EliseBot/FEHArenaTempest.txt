@@ -1,7 +1,8 @@
-Sothis, Ferdinand von Aegir, Lysithea, Bernie, Annette, Flame Emperor, Fiora(Summer), Julia(Crusader), Anna\Aether\31/03/2020, 06/04/2020\Light, Dark\Tactics Room, Tactics Room
-Ferdinand von Aegir, Lysithea, Bernie, Annette, Flame Emperor, Dimitri, Claude, Edelgard, Hector(Marquess), Anna\Arena\31/03/2020, 06/04/2020\Earth, Fire
-Sothis, Ferdinand von Aegir, Lysithea, Bernie, Annette, Flame Emperor, Fiora(Summer), Julia(Crusader), Anna\Aether\07/04/2020, 13/04/2020\Astra, Anima\Healing Tower, Healing Tower
-Bramimond, Idunn(Bunny), Est(Bunny), Fir(Bunny), Narcian(Bunny), Bartre(Bunny), Kronya, Hilda(3H), Lucina(Glorious), Alfonse\Arena\07/04/2020, 13/04/2020\Earth, Wind
 Bramimond, Idunn(Bunny), Est(Bunny), Fir(Bunny), Narcian(Bunny), Bartre(Bunny), Death Knight, Sigrun, Leif(Unifier), Fjorm\Aether\14/04/2020, 20/04/2020\Light, Dark\Panic Manor, Panic Manor
 Bramimond, Idunn(Bunny), Est(Bunny), Fir(Bunny), Narcian(Bunny), Bartre(Bunny), Kronya, Hilda(3H), Lucina(Glorious), Alfonse\Arena\14/04/2020, 20/04/2020\Earth, Water
 Bramimond, Idunn(Bunny), Est(Bunny), Fir(Bunny), Narcian(Bunny), Bartre(Bunny), Death Knight, Sigrun, Leif(Unifier), Fjorm\Aether\21/04/2020, 27/04/2020\Astra, Anima\Catapult, Catapult
+Rinkah, Lilith, Midori, Forrest, Iago, Jagen, Stahl, Merric, Marth(King), Sharena\Arena\21/04/2020, 27/04/2020\Unknown, Unknown
+Marth(Retro), Caeda(Retro), Merric(Retro), Palla(Retro), Minerva(Retro), Marth, Caeda, Minerva\Tempest\21/04/2020, 30/04/2020
+Naga, Rinkah, Lilith, Midori, Forrest, Iago, Rinea(Soiree), Astram, Celica(Queen), Anna\Aether\28/04/2020, 04/05/2020\Light, Dark\Infantry School, Infantry School
+Rinkah, Lilith, Midori, Forrest, Iago, Jagen, Stahl, Merric, Marth(King), Sharena\Arena\28/04/2020, 04/05/2020\Unknown, Unknown
+Naga, Rinkah, Lilith, Midori, Forrest, Iago, Rinea(Soiree), Astram, Celica(Queen), Anna\Aether\28/04/2020, 04/05/2020\Astra, Anima\Unknown, Unknown

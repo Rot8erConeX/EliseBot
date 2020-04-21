@@ -165,6 +165,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Catria(Launch)'],["vanilla#{str}","#{str}vanilla","default#{str}","#{str}default","og#{str}","#{str}og","launch#{str}","#{str}launch","archenea#{str}","#{str}archenea","archanea#{str}","#{str}archanea"]]
     elsif str2.include?('sov') || str2.include?('valentia') || str2.include?('zofia')
       return [str,['Catria(SoV)'],["sov#{str}","#{str}sov","valentia#{str}","#{str}valentia","zofia#{str}","#{str}zofia"]]
+    elsif str2.include?('loli') || str2.include?('retro') || str2.include?('smol') || str2.include?('mini') || str2.include?('young') || str2.include?('lily') || str2.include?('lilly') || str2.include?('riry') || str2.include?('begin') || str2.include?('start') || str2.include?('child') || str2.include?('kid') || str2.include?('duo') || str2.include?('trio')
+      return [str,['Palla(Retro)'],["loli#{str}","#{str}loli","retro#{str}","#{str}retro","smol#{str}","#{str}smol","mini#{str}","#{str}mini","young#{str}","#{str}young","lily#{str}","#{str}lily","lilly#{str}","#{str}lilly","riry#{str}","#{str}riry","riry#{str}","#{str}riry","begin#{str}","#{str}begin","start#{str}","#{str}start","child#{str}","#{str}child","kid#{str}","#{str}kid","duo#{str}","#{str}duo","trio#{str}","#{str}trio"]]
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Catria(Launch)','Catria(SoV)'],[str]]
@@ -2832,9 +2834,8 @@ def combined_BST(event,args,bot)
             ['Story', 0, 0],
             ['GHB', 0, 0],
             ['Tempest', 0, 0],
-            ['Yandere', 0, 0, ['Valter', 'Tharja', 'Rhajat', 'Camilla', 'Faye', 'Tharja(Winter)', 'Tharja(Bride)']],
             ['Lucina', 0, 0, ['Lucina', 'Lucina(Bunny)', 'Marth(Masked)', 'Lucina(Brave)', 'Lucina(Glorious)']],
-            ['Marth', 0, 0, ['Marth', 'Marth(Groom)', 'Marth(Masked)', 'Marth(King)']],
+            ['Marth', 0, 0, ['Marth', 'Marth(Groom)', 'Marth(Masked)', 'Marth(King)', 'Marth(Winter)', 'Marth(Retro)']],
             ['Robin(F)', 0, 0, ['Robin(F)', 'Robin(F)(Summer)', 'Robin(F)(Fallen)']],
             ['Robin(M)', 0, 0, ['Robin(M)', 'Robin(M)(Winter)', 'Robin(M)(Fallen)', 'Tobin']],
             ['Corrin(F)', 0, 0, ['Corrin(F)(Launch)', 'Corrin(F)(Summer)', 'Corrin(F)(Adrift)', 'Corrin(F)(Fallen)']],
@@ -2842,16 +2843,16 @@ def combined_BST(event,args,bot)
             ['Xander', 0, 0, ['Xander', 'Xander(Bunny)', 'Xander(Summer)', 'Xander(Festival)']],
             ['Tiki', 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)', 'Tiki(Young)(Fallen)']],
             ['Lyn', 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)', 'Lyn(Summer)']],
-            ['Chrom', 0, 0, ['Chrom(Launch)', 'Chrom(Bunny)', 'Chrom(Winter)', 'Chrom(Branded)']],
+            ['Chrom', 0, 0, ['Chrom(Launch)', 'Chrom(Bunny)', 'Chrom(Winter)', 'Chrom(Branded)', 'Itsuki', 'Chrom(Crowned)']],
             ['Azura', 0, 0, ['Azura', 'Azura(Performing)', 'Azura(Winter)', 'Azura(Adrift)', 'Azura(Vallite)']],
             ['Camilla', 0, 0, ['Camilla', 'Camilla(Bunny)', 'Camilla(Winter)', 'Camilla(Summer)', 'Camilla(Adrift)', 'Camilla(Bath)', 'Camilla(Brave)']],
             ['Ike', 0, 0, ['Ike', 'Ike(Vanguard)', 'Ike(Brave)', 'Ike(Valentines)']],
             ['Roy', 0, 0, ['Roy', 'Roy(Valentines)', 'Roy(Brave)', 'Roy(Fire)']],
             ['Hector', 0, 0, ['Hector', 'Hector(Valentines)', 'Hector(Marquess)', 'Hector(Brave)', 'Hector(Halloween)']],
-            ['Celica', 0, 0, ['Celica', 'Celica(Fallen)', 'Celica(Brave)']],
+            ['Celica', 0, 0, ['Celica', 'Celica(Fallen)', 'Celica(Brave)', 'Alm(Valentines)']],
             ['Takumi', 0, 0, ['Takumi', 'Takumi(Fallen)', 'Takumi(Winter)', 'Takumi(Summer)']],
             ['Ephraim', 0, 0, ['Ephraim', 'Ephraim(Fire)', 'Ephraim(Brave)', 'Ephraim(Winter)', 'Ephraim(Dynastic)']],
-            ['Tharja', 0, 0, ['Tharja', 'Tharja(Winter)', 'Tharja(Bride)', 'Rhajat']],
+            ['Tharja', 0, 0, ['Tharja', 'Tharja(Winter)', 'Tharja(Bride)', 'Rhajat', 'Kiria']],
             ['Cordelia', 0, 0, ['Cordelia', 'Cordelia(Bride)', 'Cordelia(Summer)', 'Caeldori']],
             ['Olivia', 0, 0, ['Olivia(Launch)', 'Olivia(Performing)', 'Olivia(Traveler)']],
             ['Ryoma', 0, 0, ['Ryoma', 'Ryoma(Supreme)', 'Ryoma(Festival)', 'Ryoma(Bath)']],
@@ -2861,11 +2862,22 @@ def combined_BST(event,args,bot)
             ['Hinoka', 0, 0, ['Hinoka(Launch)', 'Hinoka(Wings)', 'Hinoka(Bath)']],
             ['Veronica', 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)', 'Thrasir']],
             ['Leo', 0, 0, ['Leo', 'Leo(Summer)', 'Leo(Picnic)']],
-            ['Alm', 0, 0, ['Alm', 'Alm(Saint)', 'Alm(Brave)']],
+            ['Alm', 0, 0, ['Alm', 'Alm(Saint)', 'Alm(Brave)', 'Alm(Valentines)']],
             ['Micaiah', 0, 0, ['Micaiah', 'Micaiah(Festival)', 'Micaiah(Brave)']],
             ['Berkut', 0, 0, ['Berkut', 'Berkut(Fallen)', 'Berkut(Soiree)']],
             ['Reinhardt', 0, 0, ['Reinhardt(Bonds)', 'Reinhardt(World)', 'Reinhardt(Soiree)']],
-            ['Lilina', 0, 0, ['Lilina', 'Lilina(Valentines)', 'Lilina(Summer)', 'Hector(Halloween)']]]
+            ['Lilina', 0, 0, ['Lilina', 'Lilina(Valentines)', 'Lilina(Summer)', 'Hector(Halloween)']],
+            ['Alfonse', 0, 0, ['Alfonse', 'Alfonse(Bunny)', 'Lif', 'Alfonse(Winter)']],
+            ['Sharena', 0, 0, ['Sharena', 'Sharena(Bunny)', 'Alfonse(Winter)']],
+            ['Fjorm', 0, 0, ['Fjorm', 'Fjorm(Winter)', 'Fjorm(Bride)']],
+            ['Gunnthra', 0, 0, ['Gunnthra', 'Gunnthra(Winter)', 'Gunnthra(Summer)']],
+            ['Laevatein', 0, 0, ['Laevatein', 'Laevatein(Winter)', 'Laevatein(Summer)']],
+            ['Laegjarn', 0, 0, ['Laegjarn', 'Laegjarn(Winter)', 'Laegjarn(Summer)']],
+            ['Nino', 0, 0, ['Nino(Launch)', 'Nino(Fangs)', 'Nino(Winter)']],
+            ['Caeda', 0, 0, ['Caeda', 'Caeda(Bride)', 'Tsubasa', 'Caeda(Retro)']],
+            ['Palla', 0, 0, ['Palla', 'Palla(Bunny)', 'Palla(Retro)']],
+            ['Catria', 0, 0, ['Catria(Launch)', 'Catria(SoV)', 'Catria(Bunny)', 'Palla(Retro)']],
+            ['Est', 0, 0, ['Est', 'Est(Bunny)', 'Palla(Retro)']]]
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0,0,0,0],[0,0,0,0,0]]
   m=false
@@ -2946,6 +2958,7 @@ def combined_BST(event,args,bot)
             braves[i2][0]+=1 if ['Ike(Brave)','Lucina(Brave)','Lyn(Brave)','Roy(Brave)'].include?(name)
             braves[i2][1]+=1 if ['Celica(Brave)','Ephraim(Brave)','Hector(Brave)','Veronica(Brave)'].include?(name)
             braves[i2][2]+=1 if ['Micaiah(Brave)','Camilla(Brave)','Alm(Brave)','Eliwood(Brave)'].include?(name)
+            braves[i2][3]+=1 if ['Claude(Brave)','Dimitri(Brave)','Edelgard(Brave)','Lysithea(Brave)'].include?(name)
           end
           counters[16][i2]+=1 if [summon_type].include?('y')
           counters[17][i2]+=1 if [summon_type].include?('g')
@@ -4542,6 +4555,11 @@ def study_of_procs(event,name,bot,weapon=nil)
   cd="#{crspdd*3/10+wdamage2+czz2}#{" (#{crblspdd*3/10+wdamage2+czz2})" unless crspdd*3/10==crblspdd*3/10}"
   d="~~#{d}~~ #{cd}" unless d==cd
   staves[7].push("**Fire Emblem - #{d}, cooldown of #{c}**") if get_match_in_list(procs, 'Fire Emblem',1)[8].split(', ').include?(u40[0])
+  c=add_number_to_string(get_match_in_list(procs, "Hero's Blood",1)[4],cdwns)
+  d="#{spdd*3/10+wdamage+czz}#{" (#{blspdd*3/10+wdamage+czz})" unless spdd*3/10==blspdd*3/10}"
+  cd="#{crspdd*3/10+wdamage2+czz2}#{" (#{crblspdd*3/10+wdamage2+czz2})" unless crspdd*3/10==crblspdd*3/10}"
+  d="~~#{d}~~ #{cd}" unless d==cd
+  staves[7].push("**Hero's Blood - #{d}, cooldown of #{c}**") if get_match_in_list(procs, "Hero's Blood",1)[8].split(', ').include?(u40[0])
   czz=0
   czz2=0
   czz+=10 if has_weapon_tag2?('WoDao_Darkness',sklz[ww2],refinement,transformed)

@@ -736,9 +736,13 @@ def dev_message(bot,event,channel_id,allowedids=[])
     bot.channel(channel_id).send_message("#{first_sub(event.message.text,f,'',1)}")
   else
     bot.channel(channel_id).send_message("#{first_sub(event.message.text,f,'',1)}\n#{sig}")
-    bot.user(167657750971547648).pm("**Channel:** #{bot.channel(channel_id).name} (#{channel_id})\n**Responder:** #{event.user.distinct} (#{event.user.id})\n**Message:** #{first_sub(event.message.text,f,'',1)}") unless event.user.id==167657750971547648
+    unless event.user.id==167657750971547648
+      bot.user(167657750971547648).pm("**Channel:** #{bot.channel(channel_id).name} (#{channel_id})\n**Responder:** #{event.user.distinct} (#{event.user.id})\n**Message:** #{first_sub(event.message.text,f,'',1)}") rescue nil
+    end
     for i in 0...allowedids.length
-      bot.user(allowedids[i]).pm("**Channel:** #{bot.channel(channel_id).name} (#{channel_id})\n**Responder:** #{event.user.distinct} (#{event.user.id})\n**Message:** #{first_sub(event.message.text,f,'',1)}") unless event.user.id==allowedids[i]
+      unless event.user.id==allowedids[i]
+        bot.user(allowedids[i]).pm("**Channel:** #{bot.channel(channel_id).name} (#{channel_id})\n**Responder:** #{event.user.distinct} (#{event.user.id})\n**Message:** #{first_sub(event.message.text,f,'',1)}") rescue nil
+      end
     end
   end
   event.respond 'Message sent.'
@@ -819,6 +823,7 @@ def bug_report(bot,event,args,shrd_num,shrd_names,shrd_type,pref,echo=nil)
   end
   f=event.message.text.split(' ')
   f="#{f[0]} "
+  echo=431862993194582036 if !@shardizard.nil? && @shardizard==4 && !echo.nil?
   bot.user(167657750971547648).pm("#{s}\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{s3}:** #{first_sub(event.message.text,f,'',1)}")
   bot.channel(echo).send_message("#{s}\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{s3}:** #{first_sub(event.message.text,f,'',1)}") unless echo.nil? || bot.channel(echo).nil?
   s3='Bug' if s3=='Bug Report'
