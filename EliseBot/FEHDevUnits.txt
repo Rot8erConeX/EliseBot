@@ -1,5 +1,5 @@
 Sakura\Anna\Anna(Winter)\Annette\Annette(War)\Bernie\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Est(Bunny)\Ethlyn\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Olivia(Traveler)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Forrest\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Lysithea\Matthew\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Tiki(Young)(Fallen)\Ylgr\Ylgr(Summer)
+Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Forrest\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Lysithea\Matthew\Minerva(Retro)\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Tiki(Young)(Fallen)\Ylgr\Ylgr(Summer)
 Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lyn(Brave)\Nino(Fangs)\Nino(Launch)\Sharena
 f2p
 
@@ -472,6 +472,16 @@ HP +3\HP +4\HP +5
 Live to Serve 1\Live to Serve 2\Live to Serve 3
 Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
+
+Minerva(Retro)
+5\1\ \ \-\0\
+Iron Axe\Steel Axe\Silver Axe\Dragoon Axe
+Smite
+Dragon Gaze\Draconic Aura
+Dragoon Shield
+Flier Formation 1\Flier Formation 2\Flier Formation 3
+Odd Atk Wave 1\Odd Atk Wave 2\Odd Atk Wave 3
+Even Res Wave 3
 
 Ninian
 5\0\ \ \-\1\
