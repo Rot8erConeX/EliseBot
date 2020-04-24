@@ -1517,6 +1517,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='WorseThanLiki' if ['worsethanliki','liki'].include?(name.downcase)
   name='Bunnies' if ['bunnies','bunny','spring'].include?(name.downcase)
   name='Picnic' if ['picnic','lunch'].include?(name.downcase)
+  name='Retro' if ['retro','baby','lilly','lily','oldschool'].include?(name.downcase)
   name='Bathing' if ['bathers','bathhouse','bathouse','bath','bathing'].include?(name.downcase)
   name="Valentine's" if ['valentines',"valentine's"].include?(name.downcase)
   name="NewYear's" if ['newyears',"newyear's",'newyear'].include?(name.downcase)
@@ -1528,6 +1529,7 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='Daily_Rotation' if ['daily_rotation','dailyrotation','daily'].include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends','mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(name.downcase)
   name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','retroprfs','retro-prfs'].include?(name.downcase)
+  name='HallOfForms' if ['hallofforms','halloforms','hallofforma','halloforna','hallofform','halloform','halloffjorm','halloffjorms','hallofjorm','hallofjorms'].include?(name.downcase)
   j=-1
   # try full-name matches first...
   g=@groups.map{|q| q}
@@ -1553,7 +1555,9 @@ def find_group(name,event) # used to find a group's data entry based on their na
   name='Resplendent' if ['resplendant','resplendent','ascension','ascend','resplend','ex'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Helspawn' if ['hellspawn'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Legendaries' if ['legendary','legend','legends'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='Retro' if ['retro','baby','lilly','lily','oldschool'].map{|q| q[0,name.length]}.include?(name.downcase)
   name='Retro-Prfs' if ['retroprf','retro-prf','retroactive','retroprfs','retro-prfs'].map{|q| q[0,name.length]}.include?(name.downcase)
+  name='HallOfForms' if ['hallofforms','halloforms','hallofforma','halloforna','hallofform','halloform','halloffjorm','halloffjorms','hallofjorm','hallofjorms'].map{|q| q[0,name.length]}.include?(name.downcase)
   for i in 0...g.length
     j=i if g[i][0][0,name.length].downcase==name.downcase && (g[i][2].nil? || g[i][2].include?(k))
   end
@@ -2486,10 +2490,10 @@ def unit_clss(bot,event,j,name=nil) # used by almost every command involving a u
   str="#{str} - Offense season" if get_season('Aether')[0]==jj[2][0]
   str="#{str} - Defense season" if get_season('Aether')[1]==jj[2][0]
   str="#{str}\n#{lemote1}*#{lm} Hero*" unless jj[2].nil? || jj[2][0]==" " || !jj[2][1].nil?
-  str="#{str}\n#{lemote1}*#{lm} Hero* with #{jj[2][1]}" if jj[2][0]=='Duo'
+  str="#{str}\n#{lemote1}*#{lm} Hero* with #{jj[2][1]}#{" and #{jj[2][4]}" if jj[2][3]=='Duo'}" if jj[2][0]=='Duo'
   str2="#{dancer}"
   lm="#{jj[2][0]}"
-  str2="#{str2}\n#{lemote3}*#{lm} Hero* with #{jj[2][4]}" if jj[2][3]=='Duo'
+  str2="#{str2}\n#{lemote3}*#{lm} Hero* with #{jj[2][4]}" if jj[2][0]!='Duo' && jj[2][3]=='Duo'
   str2="#{str2}\n<:Current_Arena_Bonus:498797967042412544> Current Arena Bonus unit" if get_bonus_units('Arena').include?(jj[0])
   str2="#{str2}\n<:Current_Tempest_Bonus:498797966740422656> Current Tempest Bonus unit" if get_bonus_units('Tempest').include?(jj[0])
   str2="#{str2}\n<:Current_Aether_Bonus:510022809741950986> Current Aether Bonus unit" if get_bonus_units('Aether').include?(jj[0])
@@ -3446,7 +3450,7 @@ def disp_stats(bot,name,weapon,event,sizex='smol',ignore=false,skillstoo=false) 
     flp2=flp2.join('|')
     bin=[bin,175].max if unitz[2].length>0 && unitz[2][1]=='Duel' && rarity>=5
     bin=[bin,185].max if unitz[2].length>0 && (unitz[2][0]=='Duo' || unitz[2][3]=='Duo') && rarity>=5
-    mergetext="\u200B\u00A0#{staticons[0]}\u00A0\u200B\u00A0\u200B\u00A0#{atk.split('>')[0]}>\u00A0\u200B\u00A0\u200B\u00A0#{staticons[1]}\u00A0\u200B\u00A0\u200B\u00A0#{staticons[2]}\u00A0\u200B\u00A0\u200B\u00A0#{staticons[3]}\u00A0\u200B\u00A0\u200B\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u200B\u00A0\u200B\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}```#{flp}\n#{flp2}```"
+    mergetext="\u200B\u00A0#{staticons[0]}\u00A0\u00A0\u00B7\u00A0\u00A0#{atk.split('>')[0]}>\u00A0\u00A0\u00B7\u00A0\u00A0#{staticons[1]}\u00A0\u00A0\u00B7\u00A0\u00A0#{staticons[2]}\u00A0\u00A0\u00B7\u00A0\u00A0#{staticons[3]}  \u00B7  #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080\u00A0\u00A0\u00B7\u00A0\u00A0Score:\u00A0#{bin/5+merges*2+rarity*5+blessing.length*4+90+sp/100}```#{flp}\n#{flp2}```"
   else
     flds.push(["**Level 1#{" +#{merges}" if merges>0}**",["#{staticons[0]} HP: #{u1[1]}","#{atk}: #{u1[2]}#{"(#{diff_num[1]}) / #{u1[2]-diff_num[0]}(#{diff_num[2]})" unless diff_num[0]<=0}","#{staticons[1]} Speed: #{u1[3]}","#{staticons[2]} Defense: #{u1[4]}","#{staticons[3]} Resistance: #{u1[5]}","","BST: #{u1[6]}","Score: #{bin/5+merges*2+rarity*5+blessing.length*4+2+sp/100}#{"+`SP`/100" unless sp>0}"]])
     if rarity>=5 && !stat_skills.nil? && !stat_skills.length.zero?
@@ -3695,6 +3699,8 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
   sklz=@skills.map{|q| q}
   g=get_markers(event)
   unitz=@units.reject{|q| !has_any?(g, q[13][0])}
+  unitz2=@units.reject{|q| !q[13][0].nil?}
+  unitz3=unitz2.reject{|q| q[3]!='Armor' && !((q[1][1]=='Blade' && ['Red','Blue','Green'].include?(q[1][0])) || q[1]=='Colorless' && q[1][1]=='Bow')}
   if skill[0].is_a?(Array)
   elsif skill[6]=='Weapon' && has_any?(event.message.text.downcase.split(' '),['refinement','refinements','(w)'])
     if skill[1]=='Falchion'
@@ -3877,6 +3883,10 @@ def disp_skill(bot,name,event,ignore=false,dispcolors=false)
         effective.push(lookout2[i][3]) if skill[13].include?(lookout2[i][0])
       end
       str="#{str}\n**Effective against:** #{effective.join('')}" if effective.length>0 && skill[1]!='Mana Cat'
+      if effective.length>0 && skill[1]=='Feather Sword'
+        perc=100.00*unitz3.length/unitz2.length
+        str="#{str}  \u200B  \u200B  \u200B  #{'%.2f' % perc}% of cast  (#{unitz3.length}/#{unitz2.length})"
+      end
       if skill[9].is_a?(Array)
         if skill[9][1].nil?
           str="#{str}\n**Debuff:**  \u200B  \u200B  \u200B  *None*"
@@ -5524,7 +5534,16 @@ def nature_name(boon,bane)
 end
 
 def sever(str,sklz=false)
-  str="#{str.split('/').join(' / ')}#{" ``" if ['+','-','*'].include?(str[str.length-1,1])}"
+  ssx=str.split(' ')
+  for i in 0...ssx.length
+    if ssx[i].include?('/')
+      if ssx[i][-1].to_i.to_s==ssx[i][-1]
+      elsif ssx[i].split('/').reject{|q| ['+','-'].include?(q[0])}.length != ssx[i].split('/').length
+        ssx[i]=ssx[i].gsub('/',' / ')
+      end
+    end
+  end
+  str="#{ssx.join(' ')}#{" ``" if ['+','-','*'].include?(str[str.length-1,1])}"
   s=str.split(' ').join(' ')
   k=str.split('*')
   k2=1
@@ -5683,6 +5702,9 @@ def get_group(name,event)
   elsif ['picnic','lunch'].include?(name.downcase)
     l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || (!q[0].include?('(Picnic)'))}
     return ['Picnic',l.map{|q| q[0]}]
+  elsif ['retro','baby','lilly','lily','oldschool'].include?(name.downcase)
+    l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || (!q[0].include?('(Retro)'))}
+    return ['Retro',l.map{|q| q[0]}]
   elsif ['wedding','bride','brides','groom','grooms'].include?(name.downcase)
     l=untz.reject{|q| !(q[2].nil? || q[2].length<=0 || q[2][0].length<=0 || q[2][0]==' ' || q[2][0]=='Duo') || !q[9][0].include?('s') || !has_any?(g, q[13][0]) || !(q[0].include?('(Bride)') || q[0].include?('(Groom)'))}
     return ['Wedding',l.map{|q| q[0]}]
@@ -5700,6 +5722,7 @@ def get_group(name,event)
     l=untz.reject{|q| q[0]=='Tiki(Young)(Earth)' || q[1][0]=='Purple' || !has_any?(g, q[13][0])}
     for i in 0...liki[5].length
       l=l.reject{|q| q[5][i]>liki[5][i]}
+      l=l.reject{|q| q[5][i]+2>liki[5][i] && q[9][0].include?('RA')}
     end
     return ['WorseThanLiki',l.map{|q| q[0]}]
   elsif ['seasonal','seasonals'].include?(name.downcase)
@@ -5753,6 +5776,20 @@ def get_group(name,event)
       b.push(untz[i][0]) if untz[i][9][0].include?('g') && has_any?(g, untz[i][13][0])
     end
     return ['GHB',b]
+  elsif name.downcase=='forma'
+    b=[]
+    for i in 0...untz.length
+      for i2 in 0...@max_rarity_merge[0]
+        b.push(untz[i][0]) if untz[i][9][0].include?("#{i2+1}o") && has_any?(g, untz[i][13][0])
+      end
+    end
+    return ['Forma',b]
+  elsif name.downcase=='hallofforms'
+    b=[]
+    for i in 0...untz.length
+      b.push(untz[i][0]) if untz[i][9][0].include?('o') && has_any?(g, untz[i][13][0])
+    end
+    return ['Hall of Forms',b]
   elsif name.downcase=='tempest'
     b=[]
     for i in 0...untz.length
@@ -6253,14 +6290,23 @@ def find_in_units(bot,event,mode=0,paired=false,ignore_limit=false,args=nil)
   for i in 0...group.length
     group[i][0]='<:Hero_Duo:631431055420948480> DuoUnits' if group[i][0]=='DuoUnits'
     group[i][0]='<:Godly_Grail:612717339611496450> Tempest' if group[i][0]=='Tempest'
+    group[i][0]='<:Bannerless:701268588270714901> Bannerless' if group[i][0]=='Bannerless'
+    group[i][0]='\u{1F4C5} DailyRotation' if group[i][0]=='Daily_Rotation'
+    group[i][0]='<:Divine_Mist:701285239611195432> WorseThanLiki' if group[i][0]=='WorseThanLiki'
+    group[i][0]='<:DragonEff:701301177370804296> FalchionUsers' if group[i][0]=='Falchion_Users'
+    group[i][0]='<:PurpleFire:701271290987806790> FallenHeroes' if group[i][0]=='FallenHeroes'
+    group[i][0]='<:BraveHero:701268588266520578> BraveHeroes' if group[i][0]=='BraveHeroes'
     group[i][0]='<:Current_Tempest_Bonus:498797966740422656> TempestBonus' if group[i][0]=='TempestBonus'
     group[i][0]='<:Current_Arena_Bonus:498797967042412544> ArenaBonus' if group[i][0]=='ArenaBonus'
     group[i][0]='<:Current_Aether_Bonus:510022809741950986> AetherBonus' if group[i][0]=='AetherBonus'
     group[i][0]='<:Ally_Boost_Spectrum:443337604054646804> Legendaries/Mythics' if group[i][0]=='Legendaries'
+    group[i][0]='<:Seasonal:701278992677732442> Seasonal' if group[i][0]=='Seasonal'
     group[i][0]='<:Assist_Music:454462054959415296> Refreshers' if group[i][0]=='Refreshers'
     group[i][0]='<:Divine_Dew:453618312434417691> Retro-Prfs' if group[i][0]=='Retro-Prfs'
     group[i][0]='<:Heroic_Grail:574798333898653696> GHB' if group[i][0]=='GHB'
     group[i][0]='<:Resplendent_Ascension:678748961607122945> Resplendent' if group[i][0]=='Resplendent'
+    group[i][0]='<:Forma_Soul:699042073176965241> Forma' if group[i][0]=='Forma'
+    group[i][0]='<:Forma_Soulless:699085674724327516> Hall of Forms' if group[i][0]=='HallOfForms'
     group[i][0]="<:Icon_Support:448293527642701824> Mathoo'sWaifus" if group[i][0]=="Mathoo'sWaifus"
   end
   m.push("*Groups:* #{group.map{|q| q[0]}.join(', ')}") if group.length>0
@@ -6788,10 +6834,11 @@ def display_units(bot,event, mode)
       if mode==1
         create_embed(event,"#{"__**Unit Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__",'',0x9400D3,"#{p1.map{|q| q[1].length}.inject(0){|sum,x| sum + x }} total",nil,p1.map{|q| [q[0],q[1].join("\n")]})
       else
-        msg=''
+        msg="#{"__**Unit Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__"
         for i in 0...p1.length
           msg=extend_message(msg,"**#{p1[i][0]}** - #{p1[i][1].join(', ')}",event,2)
         end
+        msg=extend_message(msg,"#{k.length} total",event,2)
         event.respond msg
       end
     else
@@ -6806,12 +6853,13 @@ def display_units(bot,event, mode)
       elsif !safe_to_spam?(event)
         event.respond 'There are so many unit results that I would prefer that you post this in PM.'
       else
-        t=k[0]
+        t="#{"__**Unit Search**__\n#{mk.join("\n")}\n\n" if mk.length>0}__**Results**__"
         if k.length>1
-          for i in 1...k.length
+          for i in 0...k.length
             t=extend_message(t,k[i],event)
           end
         end
+        t=extend_message(t,"#{k.length} total",event,2)
         event.respond t
       end
     end
@@ -8550,7 +8598,7 @@ def pick_random_unit(event,args,bot)
     end
   end
   uskl=uskl.map{|q| q[q.length-1]}
-  create_embed(event,"__**#{u40[0]}#{unit_moji(bot,event,j,u40[0],false,2)}**__","#{display_stars(bot,event,5,0,'-',['Infantry',0],false,j[11][0])}\n\n#{staticons[0]}\u00A0\u200B\u00A0\u200B\u00A0#{atk}\u00A0\u200B\u00A0\u200B\u00A0#{staticons[1]}\u00A0\u200B\u00A0\u200B\u00A0#{staticons[2]}\u00A0\u200B\u00A0\u200B\u00A0#{staticons[3]}\u00A0\u200B\u00A0\u200B\u00A0#{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,nil,img,[['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}"]])
+  create_embed(event,"__**#{u40[0]}#{unit_moji(bot,event,j,u40[0],false,2)}**__","#{display_stars(bot,event,5,0,'-',['Infantry',0],false,j[11][0])}\n\n#{staticons[0]}\u00A0\u00A0\u00B7\u00A0\u00A0#{atk}\u00A0\u00A0\u00B7\u00A0\u00A0#{staticons[1]}\u00A0\u00A0\u00B7\u00A0\u00A0#{staticons[2]}\u00A0\u00A0\u00B7\u00A0\u00A0#{staticons[3]}  \u00B7  #{u40[1]+u40[2]+u40[3]+u40[4]+u40[5]}\u00A0BST\u2084\u2080```#{flds[0][1].join("\u00A0|")}\n#{flds[1][1].join('|')}```",xcolor,nil,img,[['Skills',"<:Skill_Weapon:444078171114045450> #{uskl[0]}\n<:Skill_Assist:444078171025965066> #{uskl[1]}\n<:Skill_Special:444078170665254929> #{uskl[2]}\n<:Passive_A:443677024192823327> #{uskl[3]}\n<:Passive_B:443677023257493506> #{uskl[4]}\n<:Passive_C:443677023555026954> #{uskl[5]}"]])
 end
 
 def spaceship_order(x)
@@ -8666,10 +8714,10 @@ def find_alts(event,name,bot)
     m.push('Legendary/Mythic') if !k[i][2].nil? && !k[i][2][0].nil? && k[i][2][0].length>1 && ['Fire','Water','Wind','Earth','Astra','Anima','Light','Dark'].include?(k[i][2][0]) && !m.include?('default')
     m.push('Fallen') if k[i][0].include?('(Fallen)')
     if k[i][2][0]=='Duo'
-      if k[i][2][2].gsub('*','')==name
+      if k[i][2][2].gsub('*','')==name || (k[i][2][3]=='Duo' && k[i][2][5].gsub('*','')==name)
         m.push("Duo (to #{k[i][12].gsub('*','').split(', ')[0]})")
       else
-        m.push("Duo (with #{k[i][2][2].gsub('*','')})")
+        m.push("Duo (with #{k[i][2][2].gsub('*','')}#{" and #{k[i][2][5].gsub('*','')}" if k[i][2][3]=='Duo'})")
       end
     elsif k[i][2][3]=='Duo'
       if k[i][2][5].gsub('*','')==name
@@ -9172,6 +9220,7 @@ def unit_study(event,name,bot,weapon=nil)
     summon_type[4].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}q") # quest rewards
     summon_type[5].push("#{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}t") # Tempest Trials rewards
     summon_type[6].push("Seasonal #{m}#{@rarity_stars[m-1]} summon") if rardata.include?("#{m}s")
+    summon_type[6].push("#{m}<:Icon_Rarity_Forma:699042072526585927> Forma Soul") if rardata.include?("#{m}o")
     summon_type[6].push("Story unit starting at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}y")
     summon_type[6].push("Purchasable at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}b")
     summon_type[6].push("Grail summon at #{m}#{@rarity_stars[m-1]}") if rardata.include?("#{m}r")
@@ -9648,6 +9697,7 @@ bot.command([:banners, :banner]) do |event, *args|
     return nil
   elsif args.nil? || args.length<1 || ['next','schedule'].include?(args[0].downcase)
     reload_library('slow')
+    t=Time.now
     timeshift=8
     timeshift-=1 unless t.dst?
     t-=60*60*timeshift
