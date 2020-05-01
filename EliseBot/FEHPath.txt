@@ -20,3 +20,11 @@ Ephemera (April 2020) 4\Hinata; 4; 0, 100
 Ephemera (April 2020) 5\Shigure; 4; 0, 100
 Ephemera (April 2020) 6\Tailtiu; 4; 0, 100
 Ephemera (April 2020) 7\Python; 4; 0, 100
+Ephemera (May 2020) 0\06/05/2020, 27/06/2020
+Ephemera (May 2020) 1\Ninian(Bride); 5; 0, 300
+Ephemera (May 2020) 2\Cordelia(Bride); 5; 0, 300
+Ephemera (May 2020) 3\Selena(Fates); 4; 0, 100
+Ephemera (May 2020) 4\Henry; 4; 0, 100
+Ephemera (May 2020) 5\L'Arachel; 4; 0, 100
+Ephemera (May 2020) 6\Sothe; 4; 0, 100
+Ephemera (May 2020) 7\Mercedes; 4; 0, 100

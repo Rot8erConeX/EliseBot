@@ -3197,72 +3197,135 @@ def current_paths(event,bot,mode=0)
   b=unload_path()
   b2=b.reject{|q| q[0][0,10]!='Ephemera (' || q[0][q[0].length-3,3]!=') 0'}
   b2=b2.reject{|q| q[1].reverse.join('').to_i>tm || q[2].reverse.join('').to_i<tm}
+  futurepic=false
   if b2.length<=0
-    event.respond "No Ephemura is currently available."
-    return nil
-  end
-  for i in 0...b2.length
-    b2[i][0]="#{b2[i][0].split(')')[0]})"
-  end
-  b3=b.reject{|q| q[0][0,10]!='Ephemera (' || q[0][-1]==')' || q[0][q[0].length-3,3]==') 0' || !b2.map{|q2| q2[0]}.include?("#{q[0].split(')')[0]})")}
-  for i in 0...b3.length
-    b3[i][0]="#{b3[i][0].split(')')[0]})"
-  end
-  f=[]
-  c=[]
-  c2=[]
-  b6=b3.map{|q| q[1,q.length-1].map{|q2| q2[2][0]}}.flatten
-  b7=false
-  b7=true if b6.max==b6.min && b6.max==0
-  for i in 0...b2.length
-    m=[]
-    cx=[]
-    b4=b3.reject{|q| q[0]!=b2[i][0]}
-    for i2 in 0...b4.length
-      b5=b4.map{|q| q.length}.max
-      for i3 in 1...b4[i2].length
-        b4[i2][i3][3]="#{b4[i2][i3][1]}#{@rarity_stars[b4[i2][i3][1]-1]} #{b4[i2][i3][0]}#{unit_moji(bot,event,-1,b4[i2][i3][0],false,4)}"
-        for i4 in 0...b4[i2][i3][1]
-          cx.push(unit_color(event,-1,b4[i2][i3][0]))
-          c2.push(unit_color(event,-1,b4[i2][i3][0]))
-        end
-        if mode==0
-          b4[i2][i3][4]=[]
-          b4[i2][i3][4].push("#{b4[i2][i3][2][0]}<:Divine_Code:675118366788419584>") if b4[i2][i3][2][0]>0
-          b4[i2][i3][4].push("#{b4[i2][i3][2][1]}<:Divine_Code_2:676545832903770117>") if b4[i2][i3][2][1]>0 && !b7
-          b4[i2][i3][4].push("#{b4[i2][i3][2][1]}") if b4[i2][i3][2][1]>0 && b7
-          b4[i2][i3][3]="#{b4[i2][i3][3]} - #{b4[i2][i3][4].join(', ')}" if b4[i2][i3][4].length>0
-          b4[i2][i3][3]="__#{b4[i2][i3][3]}__" if b5>2 && i3==b4[i2].length-1 && i2 != b4.length-1
-        else
-          b4[i2][i3][3]="#{b4[i2][i3][3]}, " if b5>2 && i3==b4[i2].length-1 && i2 != b4.length-1
-        end
-        m.push(b4[i2][i3][3])
-      end
-    end
-    c.push(avg_color(cx))
-    if mode==0
-      f.push([b2[i][0],m.join("\n")])
-    elsif m.join('').include?(', ')
-      f.push(m.join(' / ').gsub(', / ',', '))
-    else
-      f.push(m.join(', '))
-    end
-  end
-  if mode==1 
-    if f.join('').include?(' / ')
-      for i in 0...f.length
-        f[i]=f[i].gsub(', ',' / ') unless f[i].include?(' / ')
-      end
-    end
-    return f.join("\n")
-  end
-  xpic=nil
-  xpic='https://gamepedia.cursecdn.com/feheroes_gamepedia_en/9/9d/Divine_Code_Ephemera.png' if b7
-  if b7 && f.map{|q| "#{q[0]}\n\n#{q[1]}".length}.max<1000 && f.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n").length<1900
-    create_embed(event,'Current Ephemera Paths','',avg_color(c2),nil,xpic,f)
+    event.respond "No Ephemera is currently available."
+    futurepic=true
   else
-    for i in 0...f.length
-      create_embed(event,f[i][0],f[i][1],c[i],nil,xpic)
+    for i in 0...b2.length
+      b2[i][0]="#{b2[i][0].split(')')[0]})"
+    end
+    b3=b.reject{|q| q[0][0,10]!='Ephemera (' || q[0][-1]==')' || q[0][q[0].length-3,3]==') 0' || !b2.map{|q2| q2[0]}.include?("#{q[0].split(')')[0]})")}
+    for i in 0...b3.length
+      b3[i][0]="#{b3[i][0].split(')')[0]})"
+    end
+    f=[]
+    c=[]
+    c2=[]
+    b6=b3.map{|q| q[1,q.length-1].map{|q2| q2[2][0]}}.flatten
+    b7=false
+    b7=true if b6.max==b6.min && b6.max==0
+    for i in 0...b2.length
+      m=[]
+      cx=[]
+      b4=b3.reject{|q| q[0]!=b2[i][0]}
+      for i2 in 0...b4.length
+        b5=b4.map{|q| q.length}.max
+        for i3 in 1...b4[i2].length
+          b4[i2][i3][3]="#{b4[i2][i3][1]}#{@rarity_stars[b4[i2][i3][1]-1]} #{b4[i2][i3][0]}#{unit_moji(bot,event,-1,b4[i2][i3][0],false,4)}"
+          for i4 in 0...b4[i2][i3][1]
+            cx.push(unit_color(event,-1,b4[i2][i3][0]))
+            c2.push(unit_color(event,-1,b4[i2][i3][0]))
+          end
+          if mode==0
+            b4[i2][i3][4]=[]
+            b4[i2][i3][4].push("#{b4[i2][i3][2][0]}<:Divine_Code:675118366788419584>") if b4[i2][i3][2][0]>0
+            b4[i2][i3][4].push("#{b4[i2][i3][2][1]}<:Divine_Code_2:676545832903770117>") if b4[i2][i3][2][1]>0 && !b7
+            b4[i2][i3][4].push("#{b4[i2][i3][2][1]}") if b4[i2][i3][2][1]>0 && b7
+            b4[i2][i3][3]="#{b4[i2][i3][3]} - #{b4[i2][i3][4].join(', ')}" if b4[i2][i3][4].length>0
+            b4[i2][i3][3]="__#{b4[i2][i3][3]}__" if b5>2 && i3==b4[i2].length-1 && i2 != b4.length-1
+          else
+            b4[i2][i3][3]="#{b4[i2][i3][3]}, " if b5>2 && i3==b4[i2].length-1 && i2 != b4.length-1
+          end
+          m.push(b4[i2][i3][3])
+        end
+      end
+      c.push(avg_color(cx))
+      if mode==0
+        f.push([b2[i][0],m.join("\n")])
+      elsif m.join('').include?(', ')
+        f.push(m.join(' / ').gsub(', / ',', '))
+      else
+        f.push(m.join(', '))
+      end
+    end
+    if mode==1 
+      if f.join('').include?(' / ')
+        for i in 0...f.length
+          f[i]=f[i].gsub(', ',' / ') unless f[i].include?(' / ')
+        end
+      end
+      return f.join("\n")
+    end
+    xpic=nil
+    xpic='https://gamepedia.cursecdn.com/feheroes_gamepedia_en/9/9d/Divine_Code_Ephemera.png' if b7
+    if b7 && f.map{|q| "#{q[0]}\n\n#{q[1]}".length}.max<1000 && f.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n").length<1900
+      create_embed(event,'Current Ephemera Paths','',avg_color(c2),nil,xpic,f)
+    else
+      for i in 0...f.length
+        create_embed(event,f[i][0],f[i][1],c[i],nil,xpic)
+      end
+    end
+  end
+  if safe_to_spam?(event)
+    b2=b.reject{|q| q[0][0,10]!='Ephemera (' || q[0][q[0].length-3,3]!=') 0'}
+    b2=b2.reject{|q| q[1].reverse.join('').to_i<=tm}
+    return nil if b2.length<=0
+    for i in 0...b2.length
+      b2[i][0]="#{b2[i][0].split(')')[0]})"
+    end
+    b3=b.reject{|q| q[0][0,10]!='Ephemera (' || q[0][-1]==')' || q[0][q[0].length-3,3]==') 0' || !b2.map{|q2| q2[0]}.include?("#{q[0].split(')')[0]})")}
+    for i in 0...b3.length
+      b3[i][0]="#{b3[i][0].split(')')[0]})"
+    end
+    f=[]
+    c=[]
+    c2=[]
+    b6=b3.map{|q| q[1,q.length-1].map{|q2| q2[2][0]}}.flatten
+    b7=false
+    b7=true if b6.max==b6.min && b6.max==0
+    for i in 0...b2.length
+      m=[]
+      cx=[]
+      b4=b3.reject{|q| q[0]!=b2[i][0]}
+      for i2 in 0...b4.length
+        b5=b4.map{|q| q.length}.max
+        for i3 in 1...b4[i2].length
+          b4[i2][i3][3]="#{b4[i2][i3][1]}#{@rarity_stars[b4[i2][i3][1]-1]} #{b4[i2][i3][0]}#{unit_moji(bot,event,-1,b4[i2][i3][0],false,4)}"
+          for i4 in 0...b4[i2][i3][1]
+            cx.push(unit_color(event,-1,b4[i2][i3][0]))
+            c2.push(unit_color(event,-1,b4[i2][i3][0]))
+          end
+          if mode==0
+            b4[i2][i3][4]=[]
+            b4[i2][i3][4].push("#{b4[i2][i3][2][0]}<:Divine_Code:675118366788419584>") if b4[i2][i3][2][0]>0
+            b4[i2][i3][4].push("#{b4[i2][i3][2][1]}<:Divine_Code_2:676545832903770117>") if b4[i2][i3][2][1]>0 && !b7
+            b4[i2][i3][4].push("#{b4[i2][i3][2][1]}") if b4[i2][i3][2][1]>0 && b7
+            b4[i2][i3][3]="#{b4[i2][i3][3]} - #{b4[i2][i3][4].join(', ')}" if b4[i2][i3][4].length>0
+            b4[i2][i3][3]="__#{b4[i2][i3][3]}__" if b5>2 && i3==b4[i2].length-1 && i2 != b4.length-1
+          else
+            b4[i2][i3][3]="#{b4[i2][i3][3]}, " if b5>2 && i3==b4[i2].length-1 && i2 != b4.length-1
+          end
+          m.push(b4[i2][i3][3])
+        end
+      end
+      c.push(avg_color(cx))
+      if mode==0
+        f.push([b2[i][0],m.join("\n")])
+      elsif m.join('').include?(', ')
+      f.push(m.join(' / ').gsub(', / ',', '))
+      else
+        f.push(m.join(', '))
+      end
+    end
+    xpic=nil
+    xpic='https://gamepedia.cursecdn.com/feheroes_gamepedia_en/9/9d/Divine_Code_Ephemera.png' if b7 && futurepic
+    if b7 && f.map{|q| "#{q[0]}\n\n#{q[1]}".length}.max<1000 && f.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n").length<1900
+      create_embed(event,'Future Ephemera Paths','',avg_color(c2),nil,xpic,f)
+    else
+      for i in 0...f.length
+        create_embed(event,f[i][0],f[i][1],c[i],nil,xpic)
+      end
     end
   end
 end
@@ -5844,17 +5907,12 @@ def make_random_unit(event,args,bot)
   text='Neutral Nature'
   if flds.length<=2 && !(event.server.nil? || event.server.id==238059616028590080) && event.channel.id != 362017071862775810
     flds=nil
-    text="\n<:HP_S:514712247503945739>\u00A0\u200B\u00A0\u200B\u00A0#{atk.split('>')[0]}>\u00A0\u200B\u00A0\u200B\u00A0<:SpeedS:514712247625580555>\u00A0\u200B\u00A0\u200B\u00A0<:DefenseS:514712247461871616>\u00A0\u200B\u00A0\u200B\u00A0<:ResistanceS:514712247574986752>\u00A0\u200B\u00A0\u200B\u00A0#{stats[11]}\u00A0L#{micronumber(40)}\u00A0BST\n```#{stats[12]}\n#{stats[13]}```"
+    text="\n<:HP_S:514712247503945739>\u00A0\u00A0\u00B7\u00A0\u00A0#{atk.split('>')[0]}>\u00A0\u00A0\u00B7\u00A0\u00A0<:SpeedS:514712247625580555>\u00A0\u00A0\u00B7\u00A0\u00A0<:DefenseS:514712247461871616>\u00A0\u00A0\u00B7\u00A0\u00A0<:ResistanceS:514712247574986752>\u00A0\u00A0\u00B7\u00A0\u00A0#{stats[11]}\u00A0L#{micronumber(40)}\u00A0BST\n```#{stats[12]}\n#{stats[13]}```"
   end
-  img=nil
-  ftr=nil
-  unless event.server.nil?
-    imgx=event.server.users.sample
-    imgx=event.user if rand(100).zero? && event.server.users.length>100
-    img=imgx.avatar_url
-    ftr="Unit profile provided by #{imgx.distinct}"
-  end
-  if event.message.mentions.length>0 && rand(100)<[event.message.mentions.length*10,50].min
+  imgx=event.user
+  img=imgx.avatar_url
+  ftr="Unit profile provided by #{imgx.distinct}"
+  if event.message.mentions.length>0
     imgx=event.message.mentions.sample
     img=imgx.avatar_url
     ftr="Unit profile provided by #{imgx.distinct}"

@@ -43,10 +43,10 @@ Verdant Shard\Growth\999999\Used for leveling up.  Can be used on green-type all
 Dancer's Veil\Assault\99\Allows one random ally that has already acted to take another action.
 Elixir\Assault\99\Restores 99 HP to all allies.
 Fear Charm\Assault\99\All enemies are prevented from counterattacking until each foe's next action.
-Fortifying Horn\Assault\99\Grants all allies Atk/Spd/Def/Res+3 for 1 turn.
+Fortifying Horn\Assault\99\Grants all allies Atk/Spd/Def/Res+6 for 1 turn.
 Infantry Boots\Assault\99\Grants +1 movement to all allies for 1 turn.
 Lightning Charm\Assault\99\Inflicts 20 damage to all enemies.
-Naga's Tear\Assault\99\Grants Atk/Spd/Def/Res+3 to two allies who have yet to act, effective for 1 turn.  Specials are also enabled.
+Naga's Tear\Assault\99\Grants Atk/Spd/Def/Res+6 to two allies who have yet to act, effective for 1 turn.  Specials are also enabled.
 Panic Charm\Assault\99\Bonuses on all enemies become penalties through each foe's next action.
 Pressure Charm\Assault\99\Limits all enemy movement to 1 space through each foe's next action.
 Special Blade\Assault\99\Enables use of Specials for all allies.
