@@ -12194,6 +12194,39 @@ bot.command(:reload, from: 167657750971547648) do |event|
       e.respond 'Libraries force-reloaded'
       reload=true
     end
+    if e.message.text.include?('7') && [167657750971547648].include?(event.user.id)
+      download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHDonorList.txt")
+      IO.copy_stream(download, "DLTemp.txt")
+      if File.size("FEHTemp.txt")>100
+        b=[]
+        File.open("FEHTemp.txt").each_line.with_index do |line, idx|
+          b.push(line)
+        end
+        open("FEHDonorList.txt", 'w') { |f|
+          f.puts b.join('')
+        }
+      end
+      download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHBotArtList.txt")
+      IO.copy_stream(download, "FEHTemp.txt")
+      x=[]
+      if File.size("FEHTemp.txt")>100
+        b=[]
+        File.open("FEHTemp.txt").each_line.with_index do |line, idx|
+          b.push(line)
+        end
+        x=b[0].gsub("\n",'').split('\\'[0])
+        for i in 0...x.length
+          download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/EliseImages/#{x[i]}.png")
+          IO.copy_stream(download, "FEHTemp#{@shardizard}.png")
+          if File.size("FEHTemp#{@sharizard}.png")>100
+            download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/EliseImages/#{x[i]}.png")
+            IO.copy_stream(download, "EliseImages/#{x[i]}.png")
+          end
+        end
+      end
+      e.respond 'Avatars reloaded'
+      reload=true
+    end
     e.respond 'Nothing reloaded.  If you meant to use the command, please try it again.' unless reload
   end
   return nil
@@ -12981,6 +13014,7 @@ def next_holiday(bot,mode=0)
             [0,4,1,'Priscilla','tribute to Xander for making this possible.',"April Fool's Day"],
             [0,4,24,'Sakura(BDay)','dressup as my best friend.',"Coder's birthday"],
             [0,4,29,'Anna',"with all the money you're giving me",'Golden Week'],
+            [0,5,10,'Felicia(Maid)','errand-girl for Master','Maid Day'],
             [0,7,4,'Arthur','for freedom and justice.','Independance Day'],
             [0,7,20,'Celica(Fallen)','in the darkest timeline',"...let's just say that this is a sad day for my dev"],
             [0,10,31,'Henry(Halloween)','with a dead Emblian. Nyahaha!','Halloween'],
