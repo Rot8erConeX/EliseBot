@@ -70,6 +70,22 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Ephraim(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Ephraim(Fire)','Ephraim(Brave)'],[str]]
+  elsif /(ed(l|el|ge)ga(u|)rd|edie)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
+    str='edelgard'
+    str='edelguard' if str2.include?('edelguard')
+    str='edlgard' if str2.include?('edlgard')
+    str='edlguard' if str2.include?('edlguard')
+    str='edgegard' if str2.include?('edgegard')
+    str='edgeguard' if str2.include?('edgeguard')
+    str='edie' if str2.include?('edie')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?('legendary') || str2.include?('emperor') || str2.include?('flame') || str2.include?('fire')
+      return [str,['Edelgard(Emperor'],["legendary#{str}","#{str}legendary","emperor#{str}","#{str}emperor","flame#{str}","#{str}flame","fire#{str}","#{str}fire"]]
+    elsif str2.include?('brave') || str2.include?('cyl')
+      return [str,['Edelgard(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
+    end
+    return [str,['Edelgard(Emperor)','Edelgard(Brave)'],[str]]
   elsif /(cel(l|)ica|ant(eze|hesis|hiese))/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
     str='celica'
     str='cellica' if str2.include?('cellica')
@@ -429,7 +445,20 @@ def multi_for_units(event,str1,str2,robinmode=0)
       strx='fh' if str2.include?('fh')
       str2=str3.gsub(strx,'').gsub("#{str} ",str).gsub(" #{str}",str)
       m=["#{strx}#{str}","#{str}#{strx}","#{strx} #{str}","#{str} #{strx}"]
-      return [str,['Corrin(F)(Fallen)'],m]
+      if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("#{str}f") || str2.include?("f#{str}")
+        for i in 0...m.length
+          return [m[i],['Corrin(F)(Fallen)'],m] if event.message.text.downcase.include?(m[i])
+        end
+        return [str,['Corrin(F)(Fallen)'],m]
+      elsif str2.include?("male#{str}") || str2.include?("#{str}male") || str2.include?("#{str}m") || str2.include?("m#{str}")
+        for i in 0...m.length
+          return [m[i],['Corrin(M)(Fallen)'],m] if event.message.text.downcase.include?(m[i])
+        end
+        return [str,['Corrin(M)(Fallen)'],m]
+      end
+      for i in 0...m.length
+        return [m[i],['Corrin(M)(Fallen)','Corrin(F)(Fallen)'],m] if event.message.text.downcase.include?(m[i])
+      end
     elsif str2.include?('default') || str2.include?('vanilla') || str2.include?('og') || str2.include?('launch')
       strx='default'
       strx='vanilla' if str2.include?('vanilla')
@@ -2839,14 +2868,14 @@ def combined_BST(event,args,bot)
             ['Robin(F)', 0, 0, ['Robin(F)', 'Robin(F)(Summer)', 'Robin(F)(Fallen)']],
             ['Robin(M)', 0, 0, ['Robin(M)', 'Robin(M)(Winter)', 'Robin(M)(Fallen)', 'Tobin']],
             ['Corrin(F)', 0, 0, ['Corrin(F)(Launch)', 'Corrin(F)(Summer)', 'Corrin(F)(Adrift)', 'Corrin(F)(Fallen)']],
-            ['Corrin(M)', 0, 0, ['Corrin(M)(Launch)', 'Corrin(M)(Winter)', 'Corrin(M)(Adrift)', 'Kamui']],
+            ['Corrin(M)', 0, 0, ['Corrin(M)(Launch)', 'Corrin(M)(Winter)', 'Corrin(M)(Adrift)', 'Corrin(M)(Fallen)', 'Kamui']],
             ['Xander', 0, 0, ['Xander', 'Xander(Bunny)', 'Xander(Summer)', 'Xander(Festival)']],
             ['Tiki', 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)', 'Tiki(Young)(Fallen)']],
             ['Lyn', 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)', 'Lyn(Summer)']],
             ['Chrom', 0, 0, ['Chrom(Launch)', 'Chrom(Bunny)', 'Chrom(Winter)', 'Chrom(Branded)', 'Itsuki', 'Chrom(Crowned)']],
             ['Azura', 0, 0, ['Azura', 'Azura(Performing)', 'Azura(Winter)', 'Azura(Adrift)', 'Azura(Vallite)']],
             ['Camilla', 0, 0, ['Camilla', 'Camilla(Bunny)', 'Camilla(Winter)', 'Camilla(Summer)', 'Camilla(Adrift)', 'Camilla(Bath)', 'Camilla(Brave)']],
-            ['Ike', 0, 0, ['Ike', 'Ike(Vanguard)', 'Ike(Brave)', 'Ike(Valentines)']],
+            ['Ike', 0, 0, ['Ike', 'Ike(Vanguard)', 'Ike(Brave)', 'Ike(Valentines)', 'Ike(Fallen)']],
             ['Roy', 0, 0, ['Roy', 'Roy(Valentines)', 'Roy(Brave)', 'Roy(Fire)']],
             ['Hector', 0, 0, ['Hector', 'Hector(Valentines)', 'Hector(Marquess)', 'Hector(Brave)', 'Hector(Halloween)']],
             ['Celica', 0, 0, ['Celica', 'Celica(Fallen)', 'Celica(Brave)', 'Alm(Valentines)']],
@@ -2877,7 +2906,8 @@ def combined_BST(event,args,bot)
             ['Caeda', 0, 0, ['Caeda', 'Caeda(Bride)', 'Tsubasa', 'Caeda(Retro)']],
             ['Palla', 0, 0, ['Palla', 'Palla(Bunny)', 'Palla(Retro)']],
             ['Catria', 0, 0, ['Catria(Launch)', 'Catria(SoV)', 'Catria(Bunny)', 'Palla(Retro)']],
-            ['Est', 0, 0, ['Est', 'Est(Bunny)', 'Palla(Retro)']]]
+            ['Est', 0, 0, ['Est', 'Est(Bunny)', 'Palla(Retro)']],
+            ['Julia', 0, 0, ['Julia', 'Julia(Crusader)', 'Julia(Fallen)']]]
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0,0,0,0],[0,0,0,0,0]]
   m=false
@@ -3659,7 +3689,7 @@ def get_effHP(event,name,bot,weapon=nil)
   else
     x.push(['Frostbite',rd])
   end
-  x.push(['Misc.',"Defense + Resistance = #{rdr}#{"\n\n#{u40[0]} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0]}:\n#{rs}#{"\nFull HP" if weapon=='Fell Breath'}#{"\n#{u40[4]+5}+#{" (#{blu40[4]+5}+)" if blu40[4]!=u40[4]} Defense" if weapon=='Great Flame'}#{"\nOutnumber #{u40[0]}'s allies within 2 spaces" if weapon=='Thunder Armads'}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless u40x[1][1]=='Healer'}",1])
+  x.push(['Misc.',"Defense + Resistance = #{rdr}#{"\n\n#{u40[0]} will take #{photon} extra Photon damage" unless photon=="0"}\n\nRequired to double #{u40[0]}:\n#{rs}#{"\n\nMoonbow becomes better than Glimmer when:\nThe enemy has #{rmg} #{'Defense' if atk=="Strength"}#{'Resistance' if atk=="Magic"}#{'as the lower of Def/Res' if atk=="Freeze"}#{'as their targeted defense stat' if atk=="Attack"}" unless u40x[1][1]=='Healer'}",1])
   ftr="\"Frostbite\" is weapons like Felicia's Plate"
   ftr="#{ftr} and refined dragonstones" if ['Healer','Tome','Bow','Dagger'].include?(u40x[1][1])
   if photon=="0"
@@ -4523,6 +4553,8 @@ def study_of_procs(event,name,bot,weapon=nil)
   staves[3].push("Aether - #{d}, heals for #{h}, cooldown of #{c}")
   c=add_number_to_string(get_match_in_list(procs, 'Radiant Aether',1)[4],cdwns)
   staves[3].push("**Radiant Aether - #{d}, heals for #{h}, cooldown of #{c}**") if get_match_in_list(procs, 'Radiant Aether',1)[8].split(', ').include?(u40[0])
+  c=add_number_to_string(get_match_in_list(procs, 'Mayhem Aether',1)[4],cdwns)
+  staves[3].push("**Mayhem Aether - #{d}, heals for #{h}, cooldown of #{c}**") if get_match_in_list(procs, 'Mayhem Aether',1)[8].split(', ').include?(u40[0])
   czz=0
   czz2=0
   czz+=10 if has_weapon_tag2?('WoDao_Fire',sklz[ww2],refinement,transformed)
@@ -5580,6 +5612,7 @@ def study_of_phases(event,name,bot,weapon=nil)
     end
   end
   bin=[bin,175].max if u40x[2].length>0 && u40x[2][1]=='Duel' && rarity>=5
+  bin=[bin,180].max if u40x[2].length>0 && u40x[2][1]=='Duel' && u40x[8]>=500 && rarity>=5
   bin=[bin,185].max if u40x[2].length>0 && (u40x[2][0]=='Duo' || u40x[2][3]=='Duo') && rarity>=5
   pic=pick_thumbnail(event,u40x,bot,resp)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'

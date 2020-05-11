@@ -1,8 +1,7 @@
-Marth(Retro), Caeda(Retro), Merric(Retro), Palla(Retro), Minerva(Retro), Marth, Caeda, Minerva\Tempest\21/04/2020, 30/04/2020
-Naga, Rinkah, Lilith, Midori, Forrest, Iago, Rinea(Soiree), Astram, Celica(Queen), Anna\Aether\28/04/2020, 04/05/2020\Light, Dark\Infantry School, Infantry School
-Rinkah, Lilith, Midori, Forrest, Iago, Jagen, Stahl, Merric, Marth(King), Sharena\Arena\28/04/2020, 04/05/2020\Fire, Wind
 Naga, Rinkah, Lilith, Midori, Forrest, Iago, Rinea(Soiree), Astram, Celica(Queen), Anna\Aether\05/05/2020, 11/05/2020\Astra, Anima\Armor School, Armor School
 Edelgard(Emperor), Palla(Retro), Marth(Retro), Caeda(Retro), Merric(Retro), Minerva(Retro), Death Knight, Jeorge, Tiki(Young)(Earth), Anna\Arena\05/05/2020, 11/05/2020\Fire, Earth
 Altina, Palla(Retro), Marth(Retro), Caeda(Retro), Merric(Retro), Minerva(Retro), Rolf(Halloween), Conrad, Chrom(Crowned), Anna\Aether\12/05/2020, 18/05/2020\Light, Dark\Cavalry School, Cavalry School
-Edelgard(Emperor), Palla(Retro), Marth(Retro), Caeda(Retro), Merric(Retro), Minerva(Retro), Death Knight, Jeorge, Tiki(Young)(Earth), Anna\Arena\12/05/2020, 18/05/2020\Fire, Unknown
+Edelgard(Emperor), Palla(Retro), Marth(Retro), Caeda(Retro), Merric(Retro), Minerva(Retro), Death Knight, Jeorge, Tiki(Young)(Earth), Anna\Arena\12/05/2020, 18/05/2020\Fire, Water
 Altina, Palla(Retro), Marth(Retro), Caeda(Retro), Merric(Retro), Minerva(Retro), Rolf(Halloween), Conrad, Chrom(Crowned), Anna\Aether\19/05/2020, 25/05/2020\Light, Dark\Unknown, Unknown
+Ike(Fallen), Julia(Fallen), Lyon(Fallen), Corrin(M)(Fallen), Ashnard(Fallen), Gwendolyn, Libra, Lyon, Eirika(Graceful), Alfonse\Arena\19/05/2020, 25/05/2020\Fire, Wind
+Ike(Fallen), Julia(Fallen), Lyon(Fallen), Corrin(M)(Fallen), Ashnard(Fallen), Gwendolyn, Libra, Lyon, Eirika(Graceful), Alfonse\Arena\26/05/2020, 01/06/2020\Wind, Earth

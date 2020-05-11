@@ -1692,8 +1692,11 @@ def disp_unit_art(event,name,bot)
   data_load()
   args=event.message.text.downcase.split(' ')
   artype=[]
+  resp=false
+  resp=true if has_any?(args.map{|q| q.downcase},['resplendant','resplendent','ascension','ascend','resplend','ex'])
+  resp=false unless j[9][0].include?('RA')
   if has_any?(args,['sprite'])
-    art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{j[0]}.png"
+    art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{j[0]}#{'_Resplendent' if resp}.png"
     m=false
     IO.copy_stream(open(art),"C:/Users/Mini-Matt/Desktop/devkit/FEHTemp#{@shardizard}.png") rescue m=true
     if File.size("C:/Users/Mini-Matt/Desktop/devkit/FEHTemp#{@shardizard}.png")>100 && !m
@@ -1713,9 +1716,6 @@ def disp_unit_art(event,name,bot)
     artype=['Face_Load','Title Screen']
     j[6]=''
   end
-  resp=false
-  resp=true if has_any?(args.map{|q| q.downcase},['resplendant','resplendent','ascension','ascend','resplend','ex'])
-  resp=false unless j[9][0].include?('RA')
   lookout=lookout_load('SkillSubsets')
   lookout=lookout.reject{|q| q[2]!='Art'}
   charza=j[0].gsub(' ','_')
@@ -1935,13 +1935,30 @@ def disp_unit_art(event,name,bot)
         b=[]
       end
       crosspost=true
+      b=b.map{|q| q.gsub("\n",'').split('\\'[0])}
       for i in 0...b.length
-        b[i]=b[i].gsub("\n",'').split('\\'[0])
+        if b[i][0].include?('.')
+          b[i][0]=[b[i][0].to_f,true]
+        else
+          b[i][0]=[b[i][0].to_i,false]
+        end
+      end
+      for i in 0...b.length
+        dispnum="#{b[i][0][0]}#{'.' unless b[i][0][1]}"
+        if b[i][0][1]
+          b2=b.reject{|q| q[0][0].to_i != b[i][0][0].to_i}.map{|q| [q[24],q[25]]}.uniq
+          if b[i][0][0].to_i==b[i][0][0]
+            dispnum="#{b[i][0][0].to_i}." if b2.length<2
+            b[i][0][1]=false
+          else
+            b[i][0][1]=false if b2.length>1
+          end
+        end
         unless nammes[0].nil? || nammes[0].length<=0 || b[i][24].nil? || b[i][24].length<=0
-          charsx[0].push("*[FGO]* Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)}") if b[i][24]==nammes[0]
+          charsx[0].push("*[FGO]* Srv-#{dispnum}) #{b[i][1]}") if b[i][24]==nammes[0] && !b[i][0][1]
         end
         unless nammes[2].nil? || nammes[2].length<=0 || b[i][25].nil? || b[i][25].length<=0
-          charsx[1].push("*[FGO]* Srv-#{b[i][0]}#{"#{'.' if b[i][0].to_i>=2}) #{b[i][1]}" unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)} *[Japanese]*") if b[i][25].split(' & ').include?(nammes[2])
+          charsx[1].push("*[FGO]* Srv-#{dispnum}) #{b[i][1]} *[Japanese]*") if b[i][25].split(' & ').include?(nammes[2]) && !b[i][0][1]
         end
       end
       fgosrv=b.map{|q| q}
@@ -4488,106 +4505,109 @@ def snagstats(event,bot,f=nil,f2=nil)
     all_units=@units.reject{|q| !has_any?(g, q[13][0])}
     all_units=@units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
     legal_units=@units.reject{|q| !q[13][0].nil?}
-    unless f2.nil?
-      k=find_in_units(bot,event,3,false,false,[f2])
-      all_units=all_units.reject{|q| !k.include?(q)}.uniq
-      legal_units=legal_units.reject{|q| !k.include?(q)}.uniq
-    end
     str="**There are #{filler(legal_units,all_units,-1)} units, including:**"
+    unless f2.nil?
+      k=find_in_units(bot,event,13,false,false,[f2])
+      all_units=all_units.reject{|q| !k[1].include?(q)}.uniq
+      legal_units=legal_units.reject{|q| !k[1].include?(q)}.uniq
+      str="#{k[0].join("\n")}\n\n**With these filters, there are #{filler(legal_units,all_units,-1)} units, including:**"
+    end
     m=filler(legal_units,all_units,9,0,'p',1)
     str2=''
-    str2="#{m} summonable units" unless m=='0'
+    str2="#{m} summonable unit#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,9,0,'g',1)
-    str2="#{str2}\n#{m} Grand Hero Battle reward units" unless m=='0'
+    str2="#{str2}\n#{m} Grand Hero Battle reward unit#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,9,0,'t',1)
-    str2="#{str2}\n#{m} Tempest Trials reward units" unless m=='0'
+    str2="#{str2}\n#{m} Tempest Trials reward unit#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,[9,2],[0,0],['s',2],[1,-2])
-    str2="#{str2}\n#{m} seasonal units" unless m=='0'
-    m=filler(legal_units,all_units,2,0,2,2)
-    str2="#{str2}\n#{m} legendary units" unless m=='0'
+    str2="#{str2}\n#{m} seasonal unit#{'s' unless m=='1'}" unless m=='0'
+    m=filler(legal_units,all_units,2,0,['Fire','Earth','Water','Wind','Astra','Anima','Light','Dark'],-3)
+    str2="#{str2}\n#{m} legendary/mythic unit#{'s' unless m=='1'}" unless m=='0'
+    m=filler(legal_units,all_units,[2,2],[0,3],['Duo','Duo'],[0,0],'&&')
+    str2="#{str2}\n#{m} Duo unit#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,9,0,'-',1)
-    str2="#{str2}\n#{m} unobtainable units" unless m=='0'
+    str2="#{str2}\n#{m} unobtainable unit#{'s' unless m=='1'}" unless m=='0'
     str2=str2[1,str2.length-1] if str2[0,1]=="\n"
     str2=str2[2,str2.length-2] if str2[0,2]=="\n"
     str=extend_message(str,str2,event,2)
     str2=''
     m=filler(legal_units,all_units,1,0,'Red')
-    str2="<:Red_Unknown:443172811486396417> #{m} red units,   <:Orb_Red:455053002256941056> with #{filler(legal_units,all_units,[1,9],[0,0],['Red','p'],[0,1])} in the main summon pool" unless m=='0'
+    str2="<:Red_Unknown:443172811486396417> #{m} red unit#{'s' unless m=='1'},   <:Orb_Red:455053002256941056> with #{filler(legal_units,all_units,[1,9],[0,0],['Red','p'],[0,1])} in the main summon pool" unless m=='0'
     m=filler(legal_units,all_units,1,0,'Blue')
-    str2="#{str2}\n<:Blue_Unknown:467112473980305418> #{m} blue units,   <:Orb_Blue:455053001971859477> with #{filler(legal_units,all_units,[1,9],[0,0],['Blue','p'],[0,1])} in the main summon pool" unless m=='0'
+    str2="#{str2}\n<:Blue_Unknown:467112473980305418> #{m} blue unit#{'s' unless m=='1'},   <:Orb_Blue:455053001971859477> with #{filler(legal_units,all_units,[1,9],[0,0],['Blue','p'],[0,1])} in the main summon pool" unless m=='0'
     m=filler(legal_units,all_units,1,0,'Green')
-    str2="#{str2}\n<:Green_Unknown:467122926785921044> #{m} green units,   <:Orb_Green:455053002311467048> with #{filler(legal_units,all_units,[1,9],[0,0],['Green','p'],[0,1])} in the main summon pool" unless m=='0'
+    str2="#{str2}\n<:Green_Unknown:467122926785921044> #{m} green unit#{'s' unless m=='1'},   <:Orb_Green:455053002311467048> with #{filler(legal_units,all_units,[1,9],[0,0],['Green','p'],[0,1])} in the main summon pool" unless m=='0'
     m=filler(legal_units,all_units,1,0,'Colorless')
-    str2="#{str2}\n<:Colorless_Unknown:443692132738531328> #{m} colorless units,   <:Orb_Colorless:455053002152083457> with #{filler(legal_units,all_units,[1,9],[0,0],['Colorless','p'],[0,1])} in the main summon pool" unless m=='0'
+    str2="#{str2}\n<:Colorless_Unknown:443692132738531328> #{m} colorless unit#{'s' unless m=='1'},   <:Orb_Colorless:455053002152083457> with #{filler(legal_units,all_units,[1,9],[0,0],['Colorless','p'],[0,1])} in the main summon pool" unless m=='0'
     str2=str2[1,str2.length-1] if str2[0,1]=="\n"
     str2=str2[2,str2.length-2] if str2[0,2]=="\n"
     str=extend_message(str,str2,event,2)
     str2=''
     m=filler(legal_units,all_units,1,1,'Blade')
-    str2="<:Gold_Blade:443172811620745236> #{m} blade users:   <:Red_Blade:443172811830198282> #{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, <:Blue_Blade:467112472768151562> #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, <:Green_Blade:467122927230386207> #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes" unless m=='0'
+    str2="<:Gold_Blade:443172811620745236> #{m} blade user#{'s' unless m=='1'}:   <:Red_Blade:443172811830198282> #{filler(legal_units,all_units,1,-1,['Red','Blade'])} swords, <:Blue_Blade:467112472768151562> #{filler(legal_units,all_units,1,-1,['Blue','Blade'])} lances, <:Green_Blade:467122927230386207> #{filler(legal_units,all_units,1,-1,['Green','Blade'])} axes" unless m=='0'
     m=filler(legal_units,all_units,1,1,'Tome')
-    str2="#{str2}\n<:Gold_Tome:443172812413337620> #{m} tome users:   <:Red_Tome:443172811826003968> #{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, <:Blue_Tome:467112472394858508> #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, <:Green_Tome:467122927666593822> #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green, <:Colorless_Tome:443692133317345290> #{filler(legal_units,all_units,1,-1,[['Colorless','Tome','X'],['Colorless','Tome','X']],-3)} colorless" unless m=='0'
+    str2="#{str2}\n<:Gold_Tome:443172812413337620> #{m} tome user#{'s' unless m=='1'}:   <:Red_Tome:443172811826003968> #{filler(legal_units,all_units,1,-1,[['Red','Tome','Fire'],['Red','Tome','Dark']],-3)} red, <:Blue_Tome:467112472394858508> #{filler(legal_units,all_units,1,-1,[['Blue','Tome','Thunder'],['Blue','Tome','Light']],-3)} blue, <:Green_Tome:467122927666593822> #{filler(legal_units,all_units,1,-1,[['Green','Tome','Wind'],['Green','Tome','Wind']],-3)} green, <:Colorless_Tome:443692133317345290> #{filler(legal_units,all_units,1,-1,[['Colorless','Tome','Stone'],['Colorless','Tome','Stone']],-3)} colorless" unless m=='0'
     m=filler(legal_units,all_units,1,1,'Dragon')
-    str2="#{str2}\n<:Gold_Dragon:443172811641454592> #{m} dragon units" unless m=='0'
+    str2="#{str2}\n<:Gold_Dragon:443172811641454592> #{m} dragon unit#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,1,1,'Bow')
-    str2="#{str2}\n<:Gold_Bow:443172812492898314> #{m} bow users" unless m=='0'
+    str2="#{str2}\n<:Gold_Bow:443172812492898314> #{m} bow user#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,1,1,'Dagger')
-    str2="#{str2}\n<:Gold_Dagger:443172811461230603> #{m} dagger users" unless m=='0'
+    str2="#{str2}\n<:Gold_Dagger:443172811461230603> #{m} dagger user#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,1,1,'Healer')
-    str2="#{str2}\n<:Gold_Staff:443172811628871720> #{m} staff users" unless m=='0'
+    str2="#{str2}\n<:Gold_Staff:443172811628871720> #{m} staff user#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,1,1,'Beast')
-    str2="#{str2}\n<:Gold_Beast:532854442299752469> #{m} beast units" unless m=='0'
+    str2="#{str2}\n<:Gold_Beast:532854442299752469> #{m} beast unit#{'s' unless m=='1'}" unless m=='0'
     str2=str2[1,str2.length-1] if str2[0,1]=="\n"
     str2=str2[2,str2.length-2] if str2[0,2]=="\n"
     str=extend_message(str,str2,event,2)
     str2=''
     m=filler(legal_units,all_units,3,-1,'Infantry')
-    str2="<:Icon_Move_Infantry:443331187579289601> #{m} infantry units" unless m=='0'
+    str2="<:Icon_Move_Infantry:443331187579289601> #{m} infantry unit#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,3,-1,'Cavalry')
-    str2="#{str2}\n<:Icon_Move_Cavalry:443331186530451466> #{m} cavalry units" unless m=='0'
+    str2="#{str2}\n<:Icon_Move_Cavalry:443331186530451466> #{m} cavalry unit#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,3,-1,'Flier')
-    str2="#{str2}\n<:Icon_Move_Flier:443331186698354698> #{m} flying units" unless m=='0'
+    str2="#{str2}\n<:Icon_Move_Flier:443331186698354698> #{m} flying unit#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,3,-1,'Armor')
-    str2="#{str2}\n<:Icon_Move_Armor:443331186316673025> #{m} armored units" unless m=='0'
+    str2="#{str2}\n<:Icon_Move_Armor:443331186316673025> #{m} armored unit#{'s' unless m=='1'}" unless m=='0'
     str2=str2[1,str2.length-1] if str2[0,1]=="\n"
     str2=str2[2,str2.length-2] if str2[0,2]=="\n"
     str=extend_message(str,str2,event,2)
     if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")
       str2=''
       m=filler(legal_units,all_units,11,-1,['FE1','*FE1'],4)
-      str2="#{m} units from *FE1*,    #{filler(legal_units,all_units,11,0,'FE1',100)} of which are credited" unless m=='0'
+      str2="#{m} unit#{'s' unless m=='1'} from *FE1*,    #{filler(legal_units,all_units,11,0,'FE1',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE2','*FE2'],4)
-      str2="#{str2}\n#{m} units from *FE2*,    #{filler(legal_units,all_units,11,0,'FE2',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE2*,    #{filler(legal_units,all_units,11,0,'FE2',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE3','*FE3'],4)
-      str2="#{str2}\n#{m} units from *FE3*,    #{filler(legal_units,all_units,11,0,'FE3',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE3*,    #{filler(legal_units,all_units,11,0,'FE3',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE4','*FE4'],4)
-      str2="#{str2}\n#{m} units from *FE4*,    #{filler(legal_units,all_units,11,0,'FE4',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE4*,    #{filler(legal_units,all_units,11,0,'FE4',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE5','*FE5'],4)
-      str2="#{str2}\n#{m} units from *FE5*,    #{filler(legal_units,all_units,11,0,'FE5',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE5*,    #{filler(legal_units,all_units,11,0,'FE5',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE6','*FE6'],4)
-      str2="#{str2}\n#{m} units from *FE6*,    #{filler(legal_units,all_units,11,0,'FE6',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE6*,    #{filler(legal_units,all_units,11,0,'FE6',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE7','*FE7'],4)
-      str2="#{str2}\n#{m} units from *FE7*,    #{filler(legal_units,all_units,11,0,'FE7',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE7*,    #{filler(legal_units,all_units,11,0,'FE7',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE8','*FE8'],4)
-      str2="#{str2}\n#{m} units from *FE8*,    #{filler(legal_units,all_units,11,0,'FE8',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE8*,    #{filler(legal_units,all_units,11,0,'FE8',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE9','*FE9'],4)
-      str2="#{str2}\n#{m} units from *FE9*,    #{filler(legal_units,all_units,11,0,'FE9',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE9*,    #{filler(legal_units,all_units,11,0,'FE9',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE10','*FE10'],4)
-      str2="#{str2}\n#{m} units from *FE10*,    #{filler(legal_units,all_units,11,0,'FE10',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE10*,    #{filler(legal_units,all_units,11,0,'FE10',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE11','*FE11'],4)
-      str2="#{str2}\n#{m} units from *FE11*,    #{filler(legal_units,all_units,11,0,'FE11',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE11*,    #{filler(legal_units,all_units,11,0,'FE11',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE12','*FE12'],4)
-      str2="#{str2}\n#{m} units from *FE12*,    #{filler(legal_units,all_units,11,0,'FE12',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE12*,    #{filler(legal_units,all_units,11,0,'FE12',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE13','*FE13'],4)
-      str2="#{str2}\n#{m} units from *FE13*,    #{filler(legal_units,all_units,11,0,'FE13',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE13*,    #{filler(legal_units,all_units,11,0,'FE13',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE14','FE14B','FE14C','FE14R','FE14g','*FE14','*FE14B','*FE14C','*FE14R','*FE14g'],4)
-      str2="#{str2}\n#{m} units from *FE14*,  #{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE14*,  #{filler(legal_units,all_units,11,0,['FE14','FE14B','FE14C','FE14R','FE14g'],100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE15','*FE15'],4)
-      str2="#{str2}\n#{m} units from *FE15*,    #{filler(legal_units,all_units,11,0,'FE15',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE15*,    #{filler(legal_units,all_units,11,0,'FE15',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FE16','*FE16'],4)
-      str2="#{str2}\n#{m} units from *FE16*,    #{filler(legal_units,all_units,11,0,'FE16',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE16*,    #{filler(legal_units,all_units,11,0,'FE16',100)} of which are credited" unless m=='0'
       m=filler(legal_units,all_units,11,-1,['FEH','*FEH'],4)
-      str2="#{str2}\n#{m} units from *FEH* itself,    #{filler(legal_units,all_units,11,0,'FEH',100)} of which are credited" unless m=='0'
+      str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FEH* itself,    #{filler(legal_units,all_units,11,0,'FEH',100)} of which are credited" unless m=='0'
       str2=str2[1,str2.length-1] if str2[0,1]=="\n"
       str2=str2[2,str2.length-2] if str2[0,2]=="\n"
       str=extend_message(str,str2,event,2)

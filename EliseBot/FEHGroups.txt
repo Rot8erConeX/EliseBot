@@ -15,7 +15,7 @@
 ["Christmas", ["Chrom(Winter)", "Lissa(Winter)", "Robin(M)(Winter)", "Tharja(Winter)", "Cecilia(Winter)", "Eirika(Winter)", "Ephraim(Winter)", "Fae(Winter)", "Nino(Winter)", "Sothis(Winter)", "Zephiel(Winter)", "Marth(Winter)", "Jaffar(Winter)"]]
 ["Dad'sWaifus", ["Soleil", "Ophelia", "Azura(Winter)", "Effie", "Cordelia", "Cordelia(Bride)", "Cordelia(Summer)", "Sakura", "Sakura(Halloween)", "Ninian", "Ninian(Bride)", "Lucina", "Lucina(Spring)", "Lucina(Brave)", "Micaiah", "Micaiah(Festival)", "Linde", "Linde(Summer)", "Tiki(Adult)", "Tiki(Adult)(Summer)", "Corrin(F)", "Corrin(F)(Summer)", "Camilla", "Camilla(Spring)", "Camilla(Winter)", "Robin(F)", "Robin(F)(Summer)", "Kagero", "Kagero(Spring)", "Tana", "Tana(Summer)", "Eirika(Bonds)", "Eirika(Memories)", "Ethlyn", "Mae", "Catria", "Catria(Spring)", "Camilla(Summer)"], [393775173095915521]]
 ["Daily_Rotation", []]
-["DreamFairies", ["Plumeria", "Peony", "Triandra"]]
+["DreamFairies", ["Mirabilis", "Plumeria", "Peony", "Triandra"]]
 ["DuoUnits", []]
 ["Embla", ["Veronica", "Bruno", "Thrasir"]]
 ["Falchion_Users", []]

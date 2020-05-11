@@ -1,8 +1,16 @@
 8-Bit Alfonse\Hair\An accessory made to look like an 8-bit rendition of Alfonse.\Beat the Retrospective map on Normal difficulty.
-8-Bit Sharena\Hair\An accessory made to look like an 8-bit rendition of Sharena.\Beat the Retrospective map on Hard difficulty.
 8-Bit Anna\Hair\An accessory made to look like an 8-bit rendition of Anna.\Beat the Retrospective map on Infernal difficulty.  (This may be a mistake and intended to say Lunatic.)
+8-Bit Claude\Hair\An accessory made to look like an 8-bit rendition of Claude.\
+8-Bit Edelgard\Hair\An accessory made to look like an 8-bit rendition of Edelgard.\
+8-Bit Ike\Hair\An accessory made to look like an 8-bit rendition of Ike.\
+8-Bit Leif\Hair\An accessory made to look like an 8-bit rendition of Leif.\
+8-Bit Lucina\Hair\An accessory made to look like an 8-bit rendition of Lucina.\
+8-Bit Marth\Hair\An accessory made to look like an 8-bit rendition of Marth.\
 8-Bit Messenger Owl\Hair\An accessory made to look like an 8-bit rendition of Feh.\Log in during the Fire Emblem 30th anniversary event.
 8-Bit Messenger Chief\Hair\An accessory made to look like an 8-bit rendition of Fehnix\Log in during the Fire Emblem 30th anniversary event.
+8-Bit Roy\Hair\An accessory made to look like an 8-bit rendition of Roy.\
+8-Bit Sharena\Hair\An accessory made to look like an 8-bit rendition of Sharena.\Beat the Retrospective map on Hard difficulty.
+8-Bit Veronica\Hair\An accessory made to look like an 8-bit rendition of Veronica.\
 Askran Hairpin\Hair\A hair accessory adorned with the emblem of the Kingdom of Askr.\Clear Floors 6-10 in Illusory Dungeon: Legendary Heroes.
 Astral Hairpin\Hair\A hairpin from Mareeta. An accessory adorned with a moon and star.\Reach 100 red friendship with Mareeta during Forging Bonds: Path to the Future
 Astral Hairpin EX\Hair\A hairpin from Mareeta. An accessory adorned with a moon and star. Has an impressive quality, however slight.\Reach 2500 red friendship with Mareeta during Forging Bonds: Path to the Future.
@@ -65,6 +73,8 @@ Renewal Charm\Hair\A bejeweled headpiece bestowed by Ephraim. Lyon picked it out
 Renewal Charm EX\Hair\A bejeweled headpiece bestowed by Ephraim. Infused with magical power, the wearer feels well protected.\Reach 2500 blue friendship with Ephraim(Dynastic) during Forging Bonds: Mercenary Matters.
 Sacred Stardust\Hair\Ophelia claims this stardust holds great power. (It's really just a hairpin, but you're nice for humoring her.)\Reach 100 green friendship with Ophelia during Forging Bonds: High Tea Jinks.
 Sacred Stardust EX\Hair\According to Ophelia, only the chosen may touch this stardust. (Actually just a hairpin, but don't dash her dreams.)\Reach 2500 green friendship with Ophelia during Forging Bonds: High Tea Jinks.
+Saintdom Pin\Hair\A striking hairpin bestowed by Julia. Its presence is disquieting, somehow.\Reach 100 orange friendship with Julia(Fallen) during Forging Bonds: Peaceful Ends.
+Saintdom Pin EX\Hair\A beautiful hairpin bestowed by Julia. The embellishments are breathtaking.\Reach 2500 orange friendship with Julia(Fallen) during Forging Bonds: Peaceful Ends.
 Seashell Hairpin\Hair\A hair accessory made from a beautiful seashell.\KO an enemy during June 2018 Quest "Yay, Accessories!".
 Star of Nifl\Hair\A good luck charm that belongs to Ylgr. The decoration comes from Nifl's coat of arms.\Reach 100 red friendship with Ylgr during Forging Bonds: The Sworn Oath.
 Star of Nifl EX\Hair\A good luck charm that belongs to Ylgr. It has been blessed to ensure the safety of its bearer.\Reach 2500 red friendship with Ylgr during Forging Bonds: The Sworn Oath.
@@ -128,8 +138,8 @@ Golden Diadem\Hat\Proof of victory over Mythic Duma.\Beat Duma's MHB at Abyssal 
 Gold Explorer's Hat\Hat\Proof of victory over Mythic Lif.\Beat Lif's MHB at Abyssal difficulty.
 Gold Knight's Headpiece\Hat\Proof of victory over Legendary Eliwood\Beat Eliwood(Wind)'s LHB at Abyssal difficulty.
 Gold Lost Child's Hat\Hat\Proof of victory over Legendary Edelgard\Beat Edelgard(Emperor)'s LHB at Abyssal difficulty.
-Gold Maid Headpiece\Hat\Proof of victory over Mythic Naga.\Beat Naga's MHB at Abyssal difficulty
-Gold Plegian Crown\Hat\Proof of victory over Mythic Altena\Beat Altena's MHB at Abyssal difficulty
+Gold Maid Headpiece\Hat\Proof of victory over Mythic Naga.\Beat Naga's MHB at Abyssal difficulty.
+Gold Plegian Crown\Hat\Proof of victory over Mythic Altena\Beat Altena's MHB at Abyssal difficulty.
 Gold Priest's Miter\Hat\Proof of victory over Grand Hero Xander.\Beat Xander's GHB at Abyssal difficulty.
 Gold Restoration Helm\Hat\Proof of victory over Legendary Azura.\Beat Azura(Vallite)'s LHB at Abyssal difficulty.
 Gold Spring Bunny Hat\Hat\Proof of victory over Legendary Lyn.\Beat Lyn(Wind)'s LHB at Abyssal difficulty.
@@ -159,6 +169,8 @@ Maid Headpiece\Hat\A maid's headpiece from Flora. This is the authentic Nohrian 
 Maid Headpiece EX\Hat\A maid's headpiece from Flora. Only the head maid is allowed to wear this superior-quality item.\Reach 2500 red friendship with Flora during Forging Bonds: High Tea Jinks.
 Mistress Band\Hat\A headband handed down from Eyvel. It is lightweight, but sturdy.\Reach 100 orange friendship with Eyvel during Forging Bonds: Path ot the Future.
 Mistress Band EX\Hat\A headband handed down from Eyvel. It is lightweight, but sturdy. It appears to have not been worn for some time.\Reach 2500 orange friendship with Eyvel during Forging Bonds: Path to the Future.
+Necromancy Orb\Hat\A jeweled diadem bestowed by Lyon. Its presence is disquieting, somehow.\Reach 100 green friendship with Lyon(Fallen) during Forging Bonds: the Peaceful Ends.
+Necromancy Orb EX\Hat\An elegant diadem bestowed by Lyon. Adorned with jewels so bright and deep, one could get lost in their color.\Reach 2500 green friendship with Lyon(Fallen) during Forging Bonds: the Peaceful Ends.
 Nomad Bandana\Hat\A thick bandana from Rath.  Made from sturdy cloth that is difficult to cut, even when pulled taut.\Reach 100 red friendship with Rath during Forging Bonds: Study in Crimson.
 Nomad Bandana EX\Hat\A thick bandana from Rath.  It was woven with a beautiful pattern adorning its surface.\Reach 2500 red friendship with Rath during Forging Bonds: Study in Crimson.
 Oni Savage Mask\Hat\A fierce-looking mask given to you by Rinkah. It was supposedly worn by the Oni Savages in Hoshido.\Reach 100 green friendship with Rinkah during Forging Bonds: the Fire Within.
@@ -187,6 +199,8 @@ Symbol of Gallia\Hat\A headpiece bestowed by Caineghis. It's modeled on the roya
 Symbol of Gallia EX\Hat\A headpiece bestowed by Caineghis. This shining symbol of the Lion King is said to grant strength to its wearer.\Reach 2500 red friendship with Caineghis during Forging Bonds: A Trust Earned
 Tactician's Hat\Hat\Those who wear this hat gain an air that lulls companions into following their orders. It's Loki's.\Reach 100 red friendship with Loki during Forging Bonds: Dueling Desires.
 Tactician's Hat EX\Hat\Those who wear this hat seem to find everyone bending to their whims. It's Loki's.\Reach 2500 red friendship with Loki during Forging Bonds: Dueling Desires.
+Vanguard's Band\Hat\A headband given by Ike. Its presence is disquieting, somehow.\Reach 100 red friendship with Ike(Fallen) during Forging Bonds: Peaceful Ends.
+Vanguard's Band EX\Hat\A red headband given by Ike. Its thick fabric soaks up plenty of sweat.\Reach 2500 red friendship with Ike(Fallen) during Forging Bonds: Peaceful Ends.
 White-Flower Crown\Hat\A crown made from the white flowers that grow in the mountains. Handmade by Heroes during their picnic outing.\Clear floors 76-80 in Illusiory Dungeon: Heartstring's Ties
 Worn-Out Doll\Hat\A stuffed animal from Keaton. It's all torn up, and the stuffing is falling out, but apparently that makes it great!\Reach 100 red friendship with Keaton during Forging Bonds: The Orb Case
 Worn-Out Doll EX\Hat\A stuffed animal from Keaton. It has all kinds of "treasures" stuck to it—a lizard tail, a hair ball, you name it.\Reach 2500 red friendship with Keaton during Forging Bonds: The Orb Case
@@ -196,6 +210,8 @@ Concealing Mask\Mask\A mask previously carried by Sirius. The mask covers the we
 Concealing Mask EX\Mask\A mask previously carried by Sirius. Adorned with golden detailing.\Reach 2500 blue friendship with Sirius during Forging Bonds: A Time to Shine
 Dancer's Mask\Mask\A mask from Olivia. A dancer would wear this to project a mystical aura while performing.\Reach 100 red friendship with Olivia(Traveler) during Forging Bonds: Defending Ylisse.
 Dancer's Mask EX\Mask\A mask from Olivia. A dancer would wear this to project an alluring aura while performing.\Reach 2500 red friendship with Olivia(Traveler) during Forging Bonds: Defending Ylisse.
+Draconic Mask\Mask\An eerie mask granted by Corrin. Its presence is disquieting, somehow.\Reach 100 blue friendship with Corrin(M)(Fallen) during Forging Bonds: Peaceful Ends.
+Draconic Mask EX\Mask\A mysterious mask granted by Corrin. It seems as if it is made from the same material as his clothes.\Reach 2500 blue friendship with Corrin(M)(Fallen) during Forging Bonds: Peaceful Ends.
 Gold Dancer's Mask\Mask\Proof of victory over Grand Hero Michalis.\Beat Michalis's GHB at Abyssal difficulty.
 Gold Enigmatic Mask\Mask\Proof of victory over Legendary Hector.\Beat Hector(Marquess)'s LHB at Abyssal difficulty.
 Gold Mysterious Mask\Mask\Proof of victory over Grand Hero Narcian.\Beat Narcian's GHB at Abyssal difficulty.

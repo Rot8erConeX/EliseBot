@@ -1,15 +1,15 @@
-New Units: >Unknown<\3\-\5\08/05/2020, 03/06/2020\NewUnits
-Heroes with Glimmer\3\-\5\02/05/2020, 11/05/2020\SkillBanner
+Dark Burdens\3\Corrin(M)(Fallen), Ike(Fallen), Julia(Fallen), Lyon(Fallen)\5\08/05/2020, 03/06/2020\NewUnits, Fallen
+Heroes with Glimmer\3\Claude, Rath, Ylgr\5\02/05/2020, 11/05/2020\SkillBanner
 A Season of Picnics (2020 revival)\3\Felicia(Picnic), Flora(Picnic), Genny(Picnic), Lukas(Picnic)\5\01/05/2020, 18/05/2020\Seasonal, NewUnits
-Legendary Heroes: Edelgard, Flame Emperor\-8\Celica(Queen), Edelgard(Emperor), Eir, Ephraim(Dynastic), Hrid, Larum, Marth(King), Naga, Nagi, Ryoma(Supreme), Silque, Tsubasa\5\30/04/2020, 06/05/2020\Legendary
-Green Grapple, Block A\3\Ced, Lugh, Nino(Launch), Sue\5\27/04/2020, 07/05/2020\VotingGauntlet
-Green Grapple, Block B\3\Cecilia, Lewyn, Merric, Nagi\5\27/04/2020, 07/05/2020\VotingGauntlet
-Heroes with Solo Skills\3\Mareeta, Perceval, Yarne\5\24/04/2020, 01/05/2020\SkillBanner
-Ryoma & Sakura's Battle\3\Hinoka(Launch), Ryoma, Sakura\5\22/04/2020, 28/04/2020\BHB
 The Start of it All\3\Caeda(Retro), Marth(Retro), Merric(Retro), Palla(Retro)\5\20/04/2020, 20/05/2020\Seasonal, Retro
-Journey Begins\3\Forrest, Lilith, Midori, Rinkah\5\08/04/2020, 03/05/2020\NewUnits
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
+Green Grapple, Block A\3\Ced, Lugh, Nino(Launch), Sue\5\27/04/2020, 07/05/2020\VotingGauntlet
+Green Grapple, Block B\3\Cecilia, Lewyn, Merric, Nagi\5\27/04/2020, 07/05/2020\VotingGauntlet
+Legendary Heroes: Edelgard, Flame Emperor\-8\Celica(Queen), Edelgard(Emperor), Eir, Ephraim(Dynastic), Hrid, Larum, Marth(King), Naga, Nagi, Ryoma(Supreme), Silque, Tsubasa\5\30/04/2020, 06/05/2020\Legendary
+Journey Begins\3\Forrest, Lilith, Midori, Rinkah\5\08/04/2020, 03/05/2020\NewUnits
+Heroes with Solo Skills\3\Mareeta, Perceval, Yarne\5\24/04/2020, 01/05/2020\SkillBanner
+Ryoma & Sakura's Battle\3\Hinoka(Launch), Ryoma, Sakura\5\22/04/2020, 28/04/2020\BHB
 "Iote's Return" Tempest Trials+\3\Caeda, Marth, Minerva\5\18/04/2020, 30/04/2020\Tempest
 30 Years of Fire Emblem\-100\Alm, Azura, Byleth(F), Byleth(M), Caeda, Celica, Chrom(Launch), Corrin(F)(Launch), Corrin(M)(Launch), Deirdre, Elincia, Eliwood, Ephraim, Eirika(Bonds), Hector, Ike, Leif, Lilina, Lucina, Lyn, Julia, Marth, Micaiah, Nanna, Ninian, Robin(M), Roy, Seliph, Sigurd, Sothe, Tsubasa\5\08/04/2020, 30/04/2020\30th
 Double Special Heroes (April 2020)\-6\Berkut(Soiree), Dozla(Halloween), Eirika(Winter), Fae(Winter), Hector(Halloween), Ilyana(Halloween), Ishtar(Soiree), L'Arachel(Halloween)\5\14/04/2020, 27/04/2020\Seasonal

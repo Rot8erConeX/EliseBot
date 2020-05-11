@@ -1,4 +1,4 @@
-Sakura\Anna\Anna(Winter)\Annette\Annette(War)\Bernie\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Est(Bunny)\Ethlyn\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(Performing)\Olivia(Traveler)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
+Sakura\Anna\Anna(Winter)\Annette\Annette(War)\Bernie\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Est(Bunny)\Ethlyn\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Mirabilis\Norne\Olivia(Performing)\Olivia(Traveler)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
 Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Forrest\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Lysithea\Matthew\Minerva(Retro)\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Tiki(Young)(Fallen)\Ylgr\Ylgr(Summer)
 Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lyn(Brave)\Nino(Fangs)\Nino(Launch)\Sharena
 f2p
@@ -44,7 +44,7 @@ Spd Opening 1\Spd Opening 2\Spd Opening 3
 Atk/Spd Bond 2
 
 Alm
-5\0\Speed\Resistance\-\2\
+5\1\Speed\Resistance\-\4\
 Iron Sword\Steel Sword\Silver Sword\Falchion (Valentia)\Falchion (Valentia) (+) Effect Mode
 Reciprocal Aid
 Dragon Gaze\Draconic Aura
@@ -104,7 +104,7 @@ Atk/Def Gap 1\Atk/Def Gap 2\Atk/Def Gap 3
 Even Atk Wave 2
 
 Azura(Adrift)
-5\5\ \ \-\0\
+5\6\ \ \-\0\
 Wind\Elwind\Rexcalibur\Book of Shadows
 Sing
 Night Sky\Glimmer
@@ -194,7 +194,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Speed +2
 
 Cordelia(Summer)
-5\2\Resistance\Speed\-\0\
+5\2\Resistance\Speed\-\1\
 Iron Lance\Steel Lance\Shell Lance\Shell Lance+\Shell Lance+ (+) Defense Mode
 Harsh Command
 Glowing Ember\Ignis
@@ -314,7 +314,7 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Genny(Picnic)
-5\1\ \ \-\4\
+5\3\Attack\Resistance\-\5\
 Assault\Toasty Skewer\Toasty Skewer+\Toasty Skewer+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Fireflood Balm\Fireflood Balm+
