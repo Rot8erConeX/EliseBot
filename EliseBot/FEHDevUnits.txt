@@ -144,7 +144,7 @@ Atk Tactic 1\Atk Tactic 2\Atk Tactic 3
 Flashing Blade 3
 
 Celica(Fallen)
-5\0\HP\Speed\-\0\
+5\1\Attack\HP\-\0\
 Iron Sword\Steel Sword\Silver Sword\Beloved Zofia
 Rally Attack\Rally Up Atk\Rally Up Atk+
 New Moon\Luna
@@ -194,7 +194,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Speed +2
 
 Cordelia(Summer)
-5\2\Resistance\Speed\-\1\
+5\2\Resistance\Speed\-\2\
 Iron Lance\Steel Lance\Shell Lance\Shell Lance+\Shell Lance+ (+) Defense Mode
 Harsh Command
 Glowing Ember\Ignis
@@ -344,7 +344,7 @@ Hone Spd 1\Hone Spd 2\Hone Spd 3\Joint Hone Spd
 Spd Ploy 3
 
 Hector(Halloween)
-5\0\Resistance\HP\-\3\
+5\0\Resistance\HP\-\4\
 Iron Sword\Steel Sword\Silver Sword\Conjurer Curios
 Swap
 Glowing Ember\Bonfire
@@ -494,7 +494,7 @@ Fortify Def 1\Fortify Def 2\Fortify Dragons
 Fortress Def 3
 
 Norne
-5\2\Attack\Resistance\-\0\
+5\4\Attack\Resistance\-\0\
 Iron Bow\Steel Bow\Guard Bow\Guard Bow+\Guard Bow+ (+) Attack Mode
 Reposition
 Night Sky\Glimmer
@@ -614,7 +614,7 @@ Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
 Quick Riposte 3
 
 Tethys
-5\5\Attack\Resistance\-\0\
+5\6\Attack\Resistance\-\0\
 Iron Dagger\Steel Dagger\The Cleaner\The Cleaner+\The Cleaner+ (+) Resistance Mode
 Dance
 Chilling Wind/Glacies

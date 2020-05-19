@@ -1,7 +1,6 @@
-Naga, Rinkah, Lilith, Midori, Forrest, Iago, Rinea(Soiree), Astram, Celica(Queen), Anna\Aether\05/05/2020, 11/05/2020\Astra, Anima\Armor School, Armor School
-Edelgard(Emperor), Palla(Retro), Marth(Retro), Caeda(Retro), Merric(Retro), Minerva(Retro), Death Knight, Jeorge, Tiki(Young)(Earth), Anna\Arena\05/05/2020, 11/05/2020\Fire, Earth
-Altina, Palla(Retro), Marth(Retro), Caeda(Retro), Merric(Retro), Minerva(Retro), Rolf(Halloween), Conrad, Chrom(Crowned), Anna\Aether\12/05/2020, 18/05/2020\Light, Dark\Cavalry School, Cavalry School
-Edelgard(Emperor), Palla(Retro), Marth(Retro), Caeda(Retro), Merric(Retro), Minerva(Retro), Death Knight, Jeorge, Tiki(Young)(Earth), Anna\Arena\12/05/2020, 18/05/2020\Fire, Water
-Altina, Palla(Retro), Marth(Retro), Caeda(Retro), Merric(Retro), Minerva(Retro), Rolf(Halloween), Conrad, Chrom(Crowned), Anna\Aether\19/05/2020, 25/05/2020\Light, Dark\Unknown, Unknown
+Altina, Palla(Retro), Marth(Retro), Caeda(Retro), Merric(Retro), Minerva(Retro), Rolf(Halloween), Conrad, Chrom(Crowned), Anna\Aether\19/05/2020, 25/05/2020\Light, Dark\Flier School, Flier School
 Ike(Fallen), Julia(Fallen), Lyon(Fallen), Corrin(M)(Fallen), Ashnard(Fallen), Gwendolyn, Libra, Lyon, Eirika(Graceful), Alfonse\Arena\19/05/2020, 25/05/2020\Fire, Wind
+Micaiah(Bride), Nailah(Bride), Rafiel(Groom), Oboro(Bride), Hinata(Groom), Micaiah, Sothe, Nailah\Tempest\22/05/2020, 29/05/2020
+Peony, Ike(Fallen), Julia(Fallen), Lyon(Fallen), Corrin(M)(Fallen), Ashnard(Fallen), Cormag, Sonya, Edelgard(Emperor), Anna\Aether\26/05/2020, 01/06/2020\Astra, Anima\Bright Shrine, Bright Shrine
 Ike(Fallen), Julia(Fallen), Lyon(Fallen), Corrin(M)(Fallen), Ashnard(Fallen), Gwendolyn, Libra, Lyon, Eirika(Graceful), Alfonse\Arena\26/05/2020, 01/06/2020\Wind, Earth
+Peony, Ike(Fallen), Julia(Fallen), Lyon(Fallen), Corrin(M)(Fallen), Ashnard(Fallen), Cormag, Sonya, Edelgard(Emperor), Anna\Aether\02/06/2020, 08/06/2020\Light, Dark\Dark Shrine, Dark Shrine

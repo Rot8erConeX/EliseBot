@@ -511,8 +511,8 @@ Bartre(Bunny)\Red, Blade\ \Infantry\8, 10, 6, 7, 5\46, 40, 26, 35, 25\DAI-XT\Kyl
 Bramimond\Colorless, Tome, Stone\Dark, Attack, 21/08/2020\Infantry\6, 10, 6, 3, 8\39, 40, 27, 21, 35\Wada Sachiko\Yuri Lowenthal & Patrick Seitz & Wendee Le & Ray Chase;; Sakurai Takahiro & Toriumi Kousuke & Ohmoto Makiko & Suzuki Tatsuhisa\510\5s\M\FE7\Bramimond
 Marth(Retro)\Red, Blade\ \Infantry\6, 9, 9, 7, 5\41, 36, 37, 32, 26\Wada Sachiko\Yuri Lowenthal;; Midorikawa Hikaru\511\4s5s\M\FE1, *FE3, FE11, FE12, SSBM, SSBB, SSB4, SSBU\Marth
 Caeda(Retro)\Red, Blade\ \Flier\5, 8, 10, 5, 6\36, 33, 42, 25, 30\HAKO\Jenny Yokobori;; Shimamoto Sumi\512\5s\F\FE1, *FE3, FE11, FE12, FEW, (st)SSBB, (s)SSBU\Caeda
-Rinkah\Green, Blade\ \Infantry\6, 8, 10, 10, 2\40, 34, 39, 41, 18\Kusakihara Toshiyuki\Sara Cravens;; Ishikawa Yui\513\5p\F\FE14b\Rinkah
-Forrest\Colorless, Healer\ \Cavalry\6, 8, 5, 3, 8\39, 32, 26, 19, 35\Tobi\Max Mittelman;; Takahashi Yuuta\514\3p4p\M\FE14c\Forrest
+Rinkah\Green, Blade\ \Infantry\6, 8, 10, 10, 2\40, 34, 39, 41, 18\Kusakihara Toshiyuki\Sara Cravens;; Ishikawa Yui\513\5p\F\FE14B\Rinkah
+Forrest\Colorless, Healer\ \Cavalry\6, 8, 5, 3, 8\39, 32, 26, 19, 35\Tobi\Max Mittelman;; Takahashi Yuuta\514\3p4p\M\FE14C\Forrest
 Lilith\Blue, Dragon\ \Flier\6, 10, 11, 6, 7\39, 36, 41, 27, 30\Kousei Horiguchi\Danielle Judovitz;; Murai Kazusa\515\5p\F\FE14\Lilith
 Midori\Red, Bow\ \Infantry\7, 10, 7, 7, 4\41, 41, 30, 34, 21\Mikuro\Sarah Blandy;; Kouno Marika\516\5p\F\FE14\Midori
 Iago\Red, Tome, Dark\ \Infantry\7, 9, 6, 4, 7\42, 38, 27, 23, 32\PenekoR\Ron Allen;; Egoshi Akinori\517\3g4g4g\M\FE14\Iago
@@ -520,12 +520,17 @@ Merric(Retro)\Green, Tome, Wind\ \Infantry\6, 8, 10, 3, 6\41, 34, 41, 21, 25\May
 Palla(Retro)\Blue, Blade\Duo, Catria, Catria, Duo, Est, Est\Flier\6, 10, 6, 8, 4\40, 39, 31, 33, 24\hanekoto\Alexis Tipton & Connor Kelley & Brianna Knickerbocker;; Taneda Risa & Nabatame Hitomi & Murakawa Rie\519\5s\F\FE1, *FE3, FE2, FE11, FE12, FE15, (s)SSBU\Palla
 Minerva(Retro)\Green, Blade\ \Flier\6, 9, 9, 7, 3\40, 36, 37, 35, 19\Meka\Cindy Robinson;; Sakura Ayane\520\4t5t\F\FE1, *FE3, FE11, FE12, FEW, (s)SSBU\Minerva
 Edelgard(Emperor)\Green, Blade\Fire, Duel, 21/07/2020\Armor\8, 10, 2, 8, 9\45, 42, 17, 39, 36\HACCAN\Tara Platt;; Kakuma Ai\521\5s\F\FE16\Edelgard
-Corrin(M)(Fallen)\Blue, Dragon\ \Infantry\7, 10, 10, 9, 6\42, 38, 38, 33, 26\argon / Exys Inc.\Cam Clarke;; Shimazaki Nobunaga\522\5p\M\FE14b, *FE14c, FE14r, FEW\Corrin, M
+Corrin(M)(Fallen)\Blue, Dragon\ \Infantry\7, 10, 10, 9, 6\42, 38, 38, 33, 26\argon / Exys Inc.\Cam Clarke;; Shimazaki Nobunaga\522\5p\M\FE14,, FEW\Corrin, M
 Lyon(Fallen)\Green, Tome, Wind\ \Infantry\6, 11, 2, 7, 7\40, 40, 16, 32, 35\Yone Kazuki\Mark P. Witten;; Nakamura Yuichi\523\5p\M\FE8\Lyon
 Julia(Fallen)\Red, Tome, Dark\ \Infantry\6, 10, 5, 2, 10\39, 41, 24, 17, 40\sachie\Cassandra Lee Morris;; Sakura Ayane\524\5p\F\FE4\Julia
 Ike(Fallen)\Red, Blade\ \Infantry\6, 8, 10, 8, 4\40, 35, 42, 32, 23\Fujisaka Kimihiko\Greg Chun;; Hagi Michihiko\525\5p\M\FE10, FE9, (a)FE14, (a)FE15, (a)STEAM\Ike
 Ashnard(Fallen)\Red, Blade\ \Flier\8, 9, 3, 8, 6\43, 37, 21, 35, 31\Daisuke Izuka\Brook Chalmers;; Satoshi Hino\526\3g4g4g\M\FE9\Ashnard
 Mirabilis\Gold, Unknown\ \Flier\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\;; \527\-\F\FEH\Mirabilis
+Nailah(Bride)\Green, Beast, Wolf\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\PenekoR\Rachel Robinson;; Saiga Mitsuki\528\5s\F\FE10\Nailah
+Oboro(Bride)\Red, Blade\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Noy\Marisha Ray;; Sasaki Nozomi\529\5s\F\FE14B\Oboro
+Rafiel(Groom)\Blue, Beast, Heron\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Shimomura Watari\Vernon Dew;; \530\4s5s\M\FE10\Radiel
+Micaiah(Bride)\Colorless, Tome, Stone\Duo, Sothe, Sothe\Flier\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\teffish\Veronica Taylor & Nicolas Roye;; Kuwatani Natsuko & Majima Junji\531\5s\F\FE10\Micaiah
+Hinata(Groom)\Green, Blade\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\Cam Clarke as Delem Donaldson;; Ichiki Mitsuhiro\532\4t5t0s\M\FE14B\Hinata
 Mathoo\Red, Blade\Duo, Naomi, Naomi\Infantry\8, 7, 4, 5, 11\45, 31, 24, 25, 42\\;; \1000\3p4pPF\M\FE14g\Mathoo\X167657750971547648
 Ace(C137)\Blue, Blade\ \Cavalry\8, 9, 2, 7, 4\41, 40, 17, 32, 24\Igston\;; \1100\5pPF\M\\Ace(C137)\YFA78649866577780736
 Declan\Red, Tome, Dark\ \Infantry\4, 9, 8, 12, 3\27, 33, 32, 41, 22\\;; \1101\5pPF\M\\Declan\Y125624530692472832

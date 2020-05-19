@@ -1694,6 +1694,9 @@ def disp_unit_art(event,name,bot)
   artype=[]
   resp=false
   resp=true if has_any?(args.map{|q| q.downcase},['resplendant','resplendent','ascension','ascend','resplend','ex'])
+  resp=true if args.join(' ').include?('resplend')
+  resp=true if args.join(' ').include?('ascend')
+  resp=true if args.join(' ').include?('ascension')
   resp=false unless j[9][0].include?('RA')
   if has_any?(args,['sprite'])
     art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{j[0]}#{'_Resplendent' if resp}.png"
@@ -2589,7 +2592,7 @@ def today_in_feh(event,bot,shift=false)
   end
   str2="#{str2}\nTraining Tower color: #{colors[date%colors.length]}"
   str2="#{str2}\nDaily Hero Battle: #{dhb[date%dhb.length]}"
-  str2="#{str2}\nWeekend SP bonus!" if [1,2].include?(date%7)
+  str2="#{str2}\nWeekend SP bonus!" if [1,2,3].include?(date%7)
   str2="#{str2}\nSpecial Training map: #{['Magic','The Workout','Melee','Ranged','Bows'][date%5]}"
   str2="#{str2}\nGrand Hero Battle revival: #{ghb[date%ghb.length].split(' / ')[0]}"
   str2="#{str2}\nGrand Hero Battle revival 2: #{ghb[date%ghb.length].split(' / ')[1]}"
