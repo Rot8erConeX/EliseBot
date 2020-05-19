@@ -876,6 +876,24 @@ def find_unit(name,event,ignore=false,ignore2=false) # used to find a unit's dat
       return untz[b[k][2]] if !b[k][2].is_a?(Array) && b[k][2]<100 && untz[b[k][2]][9][0].include?('LU')
     end
   end
+  name2=nil
+  unless ignore2 || !name.downcase.include?('resplendent')
+    name2=name.downcase.gsub('resplendent','')
+  end
+  unless ignore2 || !name.downcase.include?('resplendant')
+    name2=name.downcase.gsub('resplendant','')
+  end
+  unless ignore2 || name2.nil?
+    b.reject!{|q| q[1].length<name2.length}
+    k=b.bsearch_index{|q| name2.downcase<=>q[1].downcase}
+    unless k.nil?
+      return untz[b[k][2]] if !b[k][2].is_a?(Array) && untz[b[k][2]][9][0].include?('RA')
+    end
+    k=b.bsearch_index{|q| q[1].gsub('||','').downcase<=>name2.downcase}
+    unless k.nil?
+      return untz[b[k][2]] if !b[k][2].is_a?(Array) && untz[b[k][2]][9][0].include?('RA')
+    end
+  end
   return []
 end
 
@@ -5145,6 +5163,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
       rarity=@dev_units[dv][1].to_i
       resp=(@dev_units[dv][1].include?('r'))
       txt="#{display_stars(bot,event,rarity,@dev_units[dv][2],@dev_units[dv][5],['Infantry',0],false,j[11][0],true).split('  ')[0]}#{'<:Blank:676220519690928179>'*(@max_rarity_merge[0]+1-rarity) unless @dev_units[dv][2]>0}"
+      sklz2[7]=[] if sklz2[7].nil?
       sklz2=[@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],@dev_units[dv][12],[@dev_units[dv][13]],sklz2[7].reject{|q| !q.include?('**')}.map{|q| q.gsub('**','')}]
       sklz2=[@dev_units[dv][7],@dev_units[dv][8],@dev_units[dv][9],@dev_units[dv][10],@dev_units[dv][11],@dev_units[dv][12],[@dev_units[dv][13]],sklz2[7]] unless safe_to_spam?(event)
     elsif @dev_nobodies.include?(j[0])
@@ -5164,6 +5183,7 @@ def disp_unit_skills(bot,name,event,chain=false,doubleunit=false)
       rarity=x[x2][1].to_i
       resp=(x[x2][1].include?('r'))
       txt="#{display_stars(bot,event,rarity,x[x2][2],x[x2][5],['Infantry',0],false,j[11][0]).split('  ')[0]}#{'<:Blank:676220519690928179>'*(@max_rarity_merge[0]+1-rarity)}"
+      sklz2[7]=[] if sklz2[7].nil?
       sklz2=[x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],x[x2][12],[x[x2][13]],sklz2[7].reject{|q| !q.include?('**')}.map{|q| q.gsub('**','')}]
       sklz2=[x[x2][7],x[x2][8],x[x2][9],x[x2][10],x[x2][11],x[x2][12],[x[x2][13]],sklz2[7]] unless safe_to_spam?(event)
     end
@@ -7340,7 +7360,8 @@ def sort_units(bot,event,args=[])
     mk=k2[0]
     k2=k2[1]
   end
-  mk.push("*Sorted by:* #{f[0,10].uniq.map{|q| ['Name','HP','Atk','Spd','Def','Res','BST','FrzProtect','Photon Points',nil][q]}.compact.join(', ')}")
+  s=['Name','<:HP_S:514712247503945739>HP','<:StrengthS:514712248372166666>Attack','<:SpeedS:514712247625580555>Speed','<:DefenseS:514712247461871616>Defense','<:ResistanceS:514712247574986752>Resistance','<:Arena_Medal:453618312446738472>BST','<:FreezePrtS:712371368037187655>FrzProtect','<:Divine_Dew:453618312434417691>Photon Points','<:Current_Arena_Bonus:498797967042412544>Bin']
+  mk.push("*Sorted by:* #{f[0,10].uniq.map{|q| s[q]}.compact.join(', ')}")
   v=mk.find_index{|q| q[0,8]=='*Stats:*'}
   unless v.nil?
     v=mk[v]
@@ -7384,7 +7405,6 @@ def sort_units(bot,event,args=[])
   for i in 0...k.length # remove any units who don't have known stats yet
     k[i]=nil if k[i][5].nil? || k[i][5].max<=0
   end
-  s=['','HP','Attack','Speed','Defense','Resistance','BST','FrzProtect','Photon Points','Bin']
   k.compact!
   k=k.reject {|q| find_unit(q[0],event).length<=0}
   for i in 0...k.length
@@ -7426,6 +7446,7 @@ def sort_units(bot,event,args=[])
     return false
   end
   m2=[]
+  s=['','HP','Attack','Speed','Defense','Resistance','BST','FrzProtect','Photon Points','Bin']
   for i in display[0]...display[1]
     ls=[]
     for j in 0...f.length
@@ -9330,9 +9351,11 @@ def unit_study(event,name,bot,weapon=nil)
   end
   grails=0
   grailist=[100,150,200,250,300,350,400,450,500,500,500]
-  if highest_merge<@max_rarity_merge[1] && rardata.include?('r') && merges<@max_rarity_merge[1]
-    grails=grailist[0,@max_rarity_merge[1]-highest_merge].inject(0){|sum,x| sum + x }
-    grails-=grailist[0,merges-highest_merge].inject(0){|sum,x| sum + x } if merges>highest_merge
+  if highest_merge<@max_rarity_merge[1] && rardata.include?('r') && merges<@max_rarity_merge[1] && merges>-1
+    x=0
+    x=1 if mu && u40[0]=='Azura(Adrift)'
+    grails=grailist[0,@max_rarity_merge[1]+x-highest_merge].inject(0){|sum,x| sum + x }
+    grails-=grailist[0,merges+x-highest_merge].inject(0){|sum,x| sum + x } unless merges<highest_merge
   end
   pic=pick_thumbnail(event,u40,bot)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
