@@ -1807,6 +1807,10 @@ def disp_unit_art(event,name,bot)
   end
   unless j[7][0].nil? || j[7][0].length<=0
     m=j[7][0].split(' & ').map{|q| q.split(' as ')}
+    for i in 0...m.length
+      m[i]=['Sara Beth'] if j[8]==110 && resp
+      m[i]=['Alexis Tipton'] if resp && m[i]=='Laura Bailey'
+    end
     nammes[1]=m.map{|q| q[0]}.reject{|q| q=='>unknown<'}.join(' & ')
     disp="#{disp}\n**VA (English):** #{m.map{|q| q[-1]}.join(' & ')}"
   end
@@ -1890,26 +1894,50 @@ def disp_unit_art(event,name,bot)
           nammes[2]=nammes[2].uniq.join(' & ')
         else
           m=x[7][0].split(' & ').map{|q| q.split(' as ')[0]}.join(' & ')
+          xx="#{x[0]}"
+          if nammes[1]=='Sara Beth' && x[8]==110
+            m='Sara Beth'
+            xx="#{xx} - Resplendent"
+          elsif nammes[1]=='Alexis Tipton' && m=='Laura Bailey' && x[9][0].include?('RA')
+            m='Alexis Tipton'
+            xx="#{xx} - Resplendent"
+          end
           m2=x[7][1].split(' & ').map{|q| q.split(' as ')[0]}.join(' & ')
-          charsx[1].push("#{x[0]} *[Both]*") if [m.length,m2.length].max<3 && m==nammes[1] && m2==nammes[2] && !charsx[2].include?(x[0])
+          charsx[1].push("#{xx} *[Both]*") if [m.length,m2.length].max<3 && m==nammes[1] && m2==nammes[2] && !charsx[2].include?(x[0])
         end
       end
       unless x[7][0].nil? || x[7][0].length<=0 || x[7][1].nil? || x[7][1].length<=0
         m=x[7][0].split(' & ').map{|q| q.split(' as ')[0]}.join(' & ')
+        xx="#{x[0]}"
+        if nammes[1]=='Sara Beth' && x[8]==110
+          m='Sara Beth'
+          xx="#{xx} - Resplendent"
+        elsif nammes[1]=='Alexis Tipton' && m=='Laura Bailey' && x[9][0].include?('RA')
+          m='Alexis Tipton'
+          xx="#{xx} - Resplendent"
+        end
         m2=x[7][1].split(' & ').map{|q| q.split(' as ')[0]}.join(' & ')
         unless nammes[1].include?(' & ') || nammes[2].include?(' & ')
-          charsx[1].push("#{x[0]} *[Both]*") if m==nammes[1] && m2==nammes[2] && !charsx[1].map{|q| q.split(' *[')[0]}.include?(x[0]) && !charsx[2].include?(x[0])
+          charsx[1].push("#{xx} *[Both]*") if m==nammes[1] && m2==nammes[2] && !charsx[1].map{|q| q.split(' *[')[0]}.include?(x[0]) && !charsx[2].include?(x[0])
         end
       end
       unless x[7][0].nil? || x[7][0].length<=0
         m=x[7][0].split(' & ').map{|q| q.split(' as ')[0]}.join(' & ')
+        xx="#{x[0]}"
+        if nammes[1]=='Sara Beth' && x[8]==110
+          m='Sara Beth'
+          xx="#{xx} - Resplendent"
+        elsif nammes[1]=='Alexis Tipton' && m=='Laura Bailey' && x[9][0].include?('RA')
+          m='Alexis Tipton'
+          xx="#{xx} - Resplendent"
+        end
         if nammes[1].include?(' & ')
           m2=nammes[1].split(' & ')
           for i2 in 0...m2.length
-            charsx[1].push("#{x[0]} *[English #{i2+1}]*") if m==m2[i2] && !charsx[1].map{|q| q.split(' *[')[0]}.include?(x[0]) && !charsx[2].include?(x[0])
+            charsx[1].push("#{xx} *[English #{i2+1}]*") if m==m2[i2] && !charsx[1].map{|q| q.split(' *[')[0]}.include?(x[0]) && !charsx[2].include?(x[0])
           end
         else
-          charsx[1].push("#{x[0]} *[English]*") if m==nammes[1] && !charsx[1].map{|q| q.split(' *[')[0]}.include?(x[0]) && !charsx[2].include?(x[0])
+          charsx[1].push("#{xx} *[English]*") if m==nammes[1] && !charsx[1].map{|q| q.split(' *[')[0]}.include?(xx) && !charsx[2].include?(xx)
         end
       end
       unless x[7][1].nil? || x[7][1].length<=0

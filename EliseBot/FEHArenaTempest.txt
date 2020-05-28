@@ -4,3 +4,5 @@ Micaiah(Bride), Nailah(Bride), Rafiel(Groom), Oboro(Bride), Hinata(Groom), Micai
 Peony, Ike(Fallen), Julia(Fallen), Lyon(Fallen), Corrin(M)(Fallen), Ashnard(Fallen), Cormag, Sonya, Edelgard(Emperor), Anna\Aether\26/05/2020, 01/06/2020\Astra, Anima\Bright Shrine, Bright Shrine
 Ike(Fallen), Julia(Fallen), Lyon(Fallen), Corrin(M)(Fallen), Ashnard(Fallen), Gwendolyn, Libra, Lyon, Eirika(Graceful), Alfonse\Arena\26/05/2020, 01/06/2020\Wind, Earth
 Peony, Ike(Fallen), Julia(Fallen), Lyon(Fallen), Corrin(M)(Fallen), Ashnard(Fallen), Cormag, Sonya, Edelgard(Emperor), Anna\Aether\02/06/2020, 08/06/2020\Light, Dark\Dark Shrine, Dark Shrine
+Unknown<:Mythic_Effect_Unknown:523328368079273984>, Micaiah(Bride), Nailah(Bride), Rafiel(Groom), Oboro(Bride), Hinata(Groom), Kempf, Jaffar(Winter), Ike(Vanguard), Fjorm\Aether\09/06/2020, 15/06/2020\Astra, Anima\Unknown, Unknown
+Unknown<:Mythic_Effect_Unknown:523328368079273984>, Micaiah(Bride), Nailah(Bride), Rafiel(Groom), Oboro(Bride), Hinata(Groom), Kempf, Jaffar(Winter), Ike(Vanguard), Fjorm\Aether\16/06/2020, 22/06/2020\Light, Dark\Unknown, Unknown

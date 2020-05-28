@@ -24,7 +24,7 @@ Odd Atk Wave 1\Odd Atk Wave 2\Odd Atk Wave 3
 Renewal 3
 
 Fjorm(Bride)
-5\0\Defense\Resistance\(S)\4\Celica(Queen)
+5\0\Defense\Resistance\(S)\5\Celica(Queen)
 Assault\Gjallarbru
 Heal\Mend\Restore\Restore+
 Imbue\Heavenly Light
@@ -44,7 +44,7 @@ Spd Opening 1\Spd Opening 2\Spd Opening 3
 Atk/Spd Bond 2
 
 Alm
-5\1\Speed\Resistance\-\4\
+5\1\Speed\Resistance\-\5\
 Iron Sword\Steel Sword\Silver Sword\Falchion (Valentia)\Falchion (Valentia) (+) Effect Mode
 Reciprocal Aid
 Dragon Gaze\Draconic Aura
@@ -72,6 +72,16 @@ Bonus Doubler 1\Bonus Doubler 2\Bonus Doubler 3
 Lull Atk/Spd 1\Lull Atk/Spd 2\Lull Atk/Spd 3
 Rouse Spd/Res 1\Rouse Spd/Res 2\Rouse Spd/Res 3
 Deflect Magic 3
+
+Bernie
+5\2\Attack\Defense\-\0\
+Iron Bow\Steel Bow\Silver Bow\Persecution Bow
+Draw Back
+New Moon\Luna\Aether
+Atk/Spd Push 1\Atk/Spd Push 2\Atk/Spd Push 3\Atk/Spd Push 4
+Renewal 1\Renewal 2\Renewal 3
+Close Guard 1\Close Guard 2\Close Guard 3
+Death Blow 3
 
 Sakura(Halloween)
 5\0\Defense\Speed\-\0\
@@ -104,7 +114,7 @@ Atk/Def Gap 1\Atk/Def Gap 2\Atk/Def Gap 3
 Even Atk Wave 2
 
 Azura(Adrift)
-5\6\ \ \-\0\
+5\7\ \ \-\0\
 Wind\Elwind\Rexcalibur\Book of Shadows
 Sing
 Night Sky\Glimmer
@@ -149,7 +159,7 @@ Iron Sword\Steel Sword\Silver Sword\Beloved Zofia
 Rally Attack\Rally Up Atk\Rally Up Atk+
 New Moon\Luna
 Death Blow 1\Death Blow 2\Death Blow 3
-Chill Spd 1\Chill Spd 2\Chill Spd 3
+Renewal 1\Renewal 2\Renewal 3
 Hone Atk 1\Hone Atk 2\Hone Atk 3
 Spur Atk 3
 

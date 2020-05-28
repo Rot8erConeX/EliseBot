@@ -28,3 +28,11 @@ Ephemera (May 2020) 4\Henry; 4; 0, 100
 Ephemera (May 2020) 5\L'Arachel; 4; 0, 100
 Ephemera (May 2020) 6\Sothe; 4; 0, 100
 Ephemera (May 2020) 7\Mercedes; 4; 0, 100
+Ephemera (June 2020) 0\06/06/2020, 28/07/2020
+Ephemera (June 2020) 1\Robin(F)(Summer); 5; 0, 300
+Ephemera (June 2020) 2\Innes(Summer); 5; 0, 300
+Ephemera (June 2020) 3\Lon'qu; 4; 0, 100
+Ephemera (June 2020) 4\Ares; 4; 0, 100
+Ephemera (June 2020) 5\Sully; 4; 0, 100
+Ephemera (June 2020) 6\Klein; 4; 0, 100
+Ephemera (June 2020) 7\Kaze; 4; 0, 100
