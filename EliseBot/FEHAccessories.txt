@@ -1,21 +1,23 @@
 8-Bit Alfonse\Hair\An accessory made to look like an 8-bit rendition of Alfonse.\Beat the Retrospective map on Normal difficulty.
 8-Bit Anna\Hair\An accessory made to look like an 8-bit rendition of Anna.\Beat the Retrospective map on Infernal difficulty.  (This may be a mistake and intended to say Lunatic.)
-8-Bit Claude\Hair\An accessory made to look like an 8-bit rendition of Claude.\
-8-Bit Edelgard\Hair\An accessory made to look like an 8-bit rendition of Edelgard.\
-8-Bit Ike\Hair\An accessory made to look like an 8-bit rendition of Ike.\
-8-Bit Leif\Hair\An accessory made to look like an 8-bit rendition of Leif.\
-8-Bit Lucina\Hair\An accessory made to look like an 8-bit rendition of Lucina.\
-8-Bit Marth\Hair\An accessory made to look like an 8-bit rendition of Marth.\
+8-Bit Claude\Hair\An accessory made to look like an 8-bit rendition of Claude.\Accessory Shop from May 2020 onwards
+8-Bit Edelgard\Hair\An accessory made to look like an 8-bit rendition of Edelgard.\Accessory Shop from May 2020 onwards
+8-Bit Ike\Hair\An accessory made to look like an 8-bit rendition of Ike.\Accessory Shop from May 2020 onwards
+8-Bit Leif\Hair\An accessory made to look like an 8-bit rendition of Leif.\Accessory Shop from May 2020 onwards
+8-Bit Lucina\Hair\An accessory made to look like an 8-bit rendition of Lucina.\Accessory Shop from May 2020 onwards
+8-Bit Marth\Hair\An accessory made to look like an 8-bit rendition of Marth.\Accessory Shop from May 2020 onwards
 8-Bit Messenger Owl\Hair\An accessory made to look like an 8-bit rendition of Feh.\Log in during the Fire Emblem 30th anniversary event.
 8-Bit Messenger Chief\Hair\An accessory made to look like an 8-bit rendition of Fehnix\Log in during the Fire Emblem 30th anniversary event.
-8-Bit Roy\Hair\An accessory made to look like an 8-bit rendition of Roy.\
+8-Bit Roy\Hair\An accessory made to look like an 8-bit rendition of Roy.\Accessory Shop from May 2020 onwards
 8-Bit Sharena\Hair\An accessory made to look like an 8-bit rendition of Sharena.\Beat the Retrospective map on Hard difficulty.
-8-Bit Veronica\Hair\An accessory made to look like an 8-bit rendition of Veronica.\
+8-Bit Veronica\Hair\An accessory made to look like an 8-bit rendition of Veronica.\Accessory Shop from May 2020 onwards
 Askran Hairpin\Hair\A hair accessory adorned with the emblem of the Kingdom of Askr.\Clear Floors 6-10 in Illusory Dungeon: Legendary Heroes.
 Astral Hairpin\Hair\A hairpin from Mareeta. An accessory adorned with a moon and star.\Reach 100 red friendship with Mareeta during Forging Bonds: Path to the Future
 Astral Hairpin EX\Hair\A hairpin from Mareeta. An accessory adorned with a moon and star. Has an impressive quality, however slight.\Reach 2500 red friendship with Mareeta during Forging Bonds: Path to the Future.
 Bear Pin\Hair\A cute hair clip from Lysithea that features a little teddy-bear face.\Reach 100 orange friendship with Lysithea during Forging Bonds: Harmony amid Chaos
 Bear Pin EX\Hair\A cute hair clip from Lysithea. The little teddy bear has a bow tie, for extra cuteness!\Reach 2500 orange friendship with Lysithea during Forging Bonds: Harmony amid Chaos
+Chon'sin Band\Hair\An armored headband from Say'ri.  Simple, but effective, with a metal plate sewn in for protection.\Reach 100 red friendship with Say'ri during Forging Bonds: Renewed Resolve.
+Chon'sin Band EX\Hair\An armored headband from Say'ri.  In Chon'sin culture, only nobles of high status are allowed one.\Reach 2500 red friendship with Say'ri during Forging Bonds: Renewed Resolve.
 Clover Hairpin\Hair\A small hairpin from Norne. Made with a four-leaf clover.\Reach 100 orange friendship with Norne during Forging Bonds: A Time to Shine
 Clover Hairpin EX\Hair\A small hairpin from Norne. Made with good intentions and friendly wishes.\Reach 2500 orange friendship with Norne during Forging Bonds: A Time to Shine
 Damsel's Ribbon\Hair\A hair ribbon from Maribelle. It's made from the highest quality fabric.\Reach 100 green friendship with Maribelle during Forging Bonds: Defending Ylisse.
@@ -26,6 +28,8 @@ Deer Insignia\Hair\A gift from Claude. It is proof the wearer belongs to the Gol
 Deer Insignia EX\Hair\A gift from Claude. It is proof the wearer belongs to the Golden Deer.\Reach 2500 orange friendship with Claude during Forging Bonds: Three Houses
 Eagle Insignia\Hair\A gift from Edelgard. It is proof the wearer belongs to the Black Eagles.\Reach 100 green friendship with Edelgard during Forging Bonds: Three Houses
 Eagle Insignia EX\Hair\A gift from Edelgard. It is proof the wearer belongs to the Black Eagles.\Reach 2500 green friendship with Edelgard during Forging Bonds: Three Houses
+Exalt Headpiece\Hair\A beautiful headpiece from Emmeryn.  The seemingly simple design has a certain dignified elegance.\Reach 100 orange friendship with Emmeryn during Forging Bonds: Renewed Resolve.
+Exalt Headpiece EX\Hair\A beautiful headpiece from Emmeryn.  Its appearance reminds onlookers of a saintly halo.\Reach 2500 orange friendship with Emmeryn during Forging Bonds: Renewed Resolve.
 Exotic Plume\Hair\A hairpiece granted by Petra. Crafted using a feather from a bird native to a distant country.\Reach 100 blue friendship with Petra during Forging Bonds: Changing Winds
 Exotic Plume EX\Hair\A hairpiece granted by Petra. Crafted using a feather from a rare bird that is highly sought after in Brigid.\Reach 2500 blue friendship with Petra during Forging Bonds: Changing Winds
 Feh Doll\Hair\A doll that looks amazingly similar to Feh, messenger owl for the Order of Heroes. So fluffy!\Enter the Equip Accessories Menu for the first time.
@@ -134,6 +138,7 @@ Flytrap Doll EX\Hat\A handmade doll from ~~Bernadetta~~ Bernie. She made it hers
 Gold Armored Helmet\Hat\Proof of victory over Legendary Ryoma.\Beat Ryoma(Supreme)'s LHB at Abyssal difficulty.
 Gold Bat Ears\Hat\Proof of victory over Mythic Thrasir\Beat Thrasir's MHB at Abyssal difficulty.
 Gold Devil Horns\Hat\Proof of victory over Legendary Leif.\Beat Leif(Unifier)'s LHB at Abyssal difficulty.
+Gold Nifl Crown\Hat\Proof of victory over Mythic Mila\Beat Mila's MHB at Abyssal difficulty.
 Golden Diadem\Hat\Proof of victory over Mythic Duma.\Beat Duma's MHB at Abyssal difficulty
 Gold Explorer's Hat\Hat\Proof of victory over Mythic Lif.\Beat Lif's MHB at Abyssal difficulty.
 Gold Knight's Headpiece\Hat\Proof of victory over Legendary Eliwood\Beat Eliwood(Wind)'s LHB at Abyssal difficulty.
@@ -222,6 +227,8 @@ Hawk Guard EX\Mask\A feathered protector bestowed by Tibarn. The feathers are hi
 Mad Spectacles\Mask\A fancy pair of eyeglasses worn only for fashion. They are part of a costume.\Clear floors 16-20 in Illusory Dungeon: Driven to Madness
 Master Eye Patch\Mask\An eye patch worn by the Mirage Master Kiria.\Clear floors 76-80 in Illusory Dungeon: Wings Carry Me
 Mysterious Mask\Mask\A mask once worn by a swordsman claiming to be the Hero-King Marth.\Use lance ally to defeat foes level 10 or higher during June 2018 Quest "Yay, Accessories!".
+Power Postiche\Mask\A glorious fake ~~beard~~ moustache from Mustafa.  The dignified whiskers demand the respect of all.  Doubles as a disguise.\Reach 100 green friendship with Mustafa during Forging Bonds: Renewed Resolve
+Power Postiche EX\Mask\A glorious fake beard from Mustafa.  The supreme fullness demands the respect of all.  Complicates eating.\Reach 2500 green friendship with Mustafa during Forging Bonds: Renewed Resolve
 Reading Glasses\Mask\According to Nina, your eyes won't get tired if you wear these—no matter how much, or what, you read.\Reach 100 orange friendship with Nina during Forging Bonds: High Tea Jinks.
 Reading Glasses EX\Mask\Nina says that these glasses will let you keep reading into the dead of night.\Reach 2500 orange friendship with Nina during Forging Bonds: High Tea Jinks.
 Spy Mask\Mask\A cloth mask given by Leila.  Useful when attempting to avoid drawing unwanted attention.\Reach 100 orange friendship with Leila during Forging Bonds: Study in Crimson.
@@ -231,6 +238,8 @@ Tinted Glasses\Mask\Spectacles with colored lenses from Brady. Good for blocking
 Tinted Glasses EX\Mask\Spectacles with colored lenses from Brady. If worn into battle, your foe will take you more seriously.\Reach 2500 orange friendship with Brady during Forging Bonds: Spanning Time.
 Wolf Eyepatch\Mask\An eyepatch bestowed by Nailah. The fabric is exquisite and conveys to its wearer an air of intrigue.\Reach 100 blue friendship with Nailah during Forging Bonds: Hearts as One
 Wolf Eyepatch EX\Mask\An eyepatch bestowed by Nailah. The fabric is exquisite and conveys to its wearer unquestionable charisma.\Reach 2500 blue friendship with Nailah during Forging Bonds: Hearts as One
+Artisan Bullion\Tiara\A gold bar from Anna!  But it's hollow, made from paper mache.  The color isn't very convincing, either...\Reach 100 blue friendship with Thea during Forging Bonds: Reason to Fight
+Artisan Bullion EX\Tiara\A gold bar from Anna!  It's made from gilded paper mache... and nearly as heavy as the real thing.\Reach 2500 blue friendship with Thea during Forging Bonds: Reason to Fight
 Chosen Circlet\Tiara\A circlet that glimmers with an air of dawn's mystery.\Clear floors 81-85 in Illusory Dungeon: Brave Heroes (2019)
 Chosen Diadem\Tiara\A diadem that radiates with an air of saintly majesty.\Clear floors 6-10 in Illusory Dungeon: Brave Heroes (2019)
 Dark Finery\Tiara\A head ornament bestowed by Idunn. It seems ancient, but it still sparkles with a certain mystique.\Reach 100 red friendship with Idunn during Forging Bonds: Reason to Fight

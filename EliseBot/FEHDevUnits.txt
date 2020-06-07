@@ -1,4 +1,4 @@
-Sakura\Anna\Anna(Winter)\Annette\Annette(War)\Bernie\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Est(Bunny)\Ethlyn\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Mirabilis\Norne\Olivia(Performing)\Olivia(Traveler)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
+Sakura\Anna\Anna(Apotheosis)\Anna(Winter)\Annette\Annette(War)\Bernie\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Est(Bunny)\Ethlyn\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(Winter)\Larum\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Mirabilis\Norne\Olivia(Performing)\Olivia(Traveler)\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
 Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Delthea\Eir\Eir(Winter)\Fiora(Summer)\Fjorm\Forrest\Hector(Halloween)\Kaden\Kana(F)\Leanne\Lethe\Lethe(Winter)\Lysithea\Matthew\Minerva(Retro)\Ninian\Owain\Peony\Reyson\Selkie\Selkie(Winter)\Tailtiu\Tiki(Young)(Earth)\Tiki(Young)(Fallen)\Ylgr\Ylgr(Summer)
 Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lyn(Brave)\Nino(Fangs)\Nino(Launch)\Sharena
 f2p
@@ -102,6 +102,16 @@ Fierce Stance 1\Fierce Stance 2\Fierce Stance 3
 Vantage 1\Vantage 2\Vantage 3
 Savage Blow 1\Savage Blow 2\Savage Blow 3
 Breath of Life 3
+
+Anna(Apotheosis)
+5\1\Speed\Resistance\-\0\
+Iron Lance\Steel Lance\Silver Lance\Apotheosis Spear
+Rally Atk\Rally Atk/Spd\Rally Atk/Spd+
+Chilling Wind\Iceberg
+Atk/Spd Form 1\Atk/Spd Form 2\Atk/Spd Form 3
+Atk/Spd Ruse 1\Atk/Spd Ruse 2\Atk/Spd Ruse 3
+Spur Spd 1\Drive Spd 1\Drive Spd 2\Joint Drive Spd
+Mirror Stance 1
 
 Annette
 5\0\HP\Attack\-\0\
@@ -454,7 +464,7 @@ Infantry Pulse 1\Infantry Pulse 2\Infantry Pulse 3
 Heavy Blade 3
 
 Marisa(Bunny)
-5\0\HP\Speed\-\0\
+5\0\HP\Speed\-\1\
 Iron Lance\Steel Lance\Flashing Carrot\Flashing Carrot+
 Reposition
 Dragon Gaze\Draconic Aura
@@ -492,6 +502,16 @@ Dragoon Shield
 Flier Formation 1\Flier Formation 2\Flier Formation 3
 Odd Atk Wave 1\Odd Atk Wave 2\Odd Atk Wave 3
 Even Res Wave 3
+
+Mirabilis
+5\0\HP\Attack\-\0\
+Iron Sword\Steel Sword\Silver Sword\Flower of Ease
+Dance\Whimsical Dream
+Chilling Wind\Iceberg
+Fortress Res 1\Fort. Def/Res 1\Fort. Def/Res 2\Fort. Def/Res 3
+Sabotage Def 1\Sabotage Def 2\Sabotage Def 3
+Def/Res Gap 1\Def/Res Gap 2\Def/Res Gap 3
+Guidance 2
 
 Ninian
 5\0\ \ \-\1\
@@ -624,7 +644,7 @@ Spd Smoke 1\Spd Smoke 2\Spd Smoke 3
 Quick Riposte 3
 
 Tethys
-5\6\Attack\Resistance\-\0\
+5\8\Attack\Resistance\-\0\
 Iron Dagger\Steel Dagger\The Cleaner\The Cleaner+\The Cleaner+ (+) Resistance Mode
 Dance
 Chilling Wind/Glacies

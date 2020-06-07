@@ -1,16 +1,16 @@
 Bridal Blessings (2020 Rerun)\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)\5\10/06/2020, 27/06/2020\Seasonal, Bride
-New Power (June 2020)\3\-\5\09/06/2020, 26/06/2020\NewPower
-New Heroes: >Unknown<\3\-\5\05/06/2020, 22/06/2020\NewUnits
+New Power (June 2020)\3\Donnel, Draug, Myrrh\5\09/06/2020, 26/06/2020\NewPower
+Book IV Midpoint\3\Anna(Apotheosis), Mirabilis, Mustafa, Say'ri\5\05/06/2020, 22/06/2020\NewUnits
 Bridal Bloom (2020 rerun)\3\Ninian(Bride), Sanaki(Bride), Tharja(Bride)\5\03/06/2020, 20/06/2020\Seasonal, Bride
-Heroes with Bond Skills\3\-\5\01/06/2020, 08/06/2020\SkillBanner
+Heroes with Bond Skills (v2)\3\Forsyth, Owain, Tethys\5\01/06/2020, 08/06/2020\SkillBanner
 Mythic Heroes: Mila, Goddess of Love\-8\Alm(Saint), Annette, Eliwood(Wind), Ephraim(Fire), Hector(Marquess), Julia(Crusader), Larcei, Leif(Unifer), Lif, Lucina(Glorious), Mila, Osian\5\29/05/2020, 05/06/2020\Legendary
 Bridal Belonging (2020 rerun)\3\Fjorm(Bride), Pent(Groom), Sigrun(Bride), Tanith(Bride)\5\27/05/2020, 06/06/2020\Seasonal, Bride
-Heroes with Lull Skills\3\Bernie, Kiria, Sirius\5\22/05/2020, 31/05/2020\SkillBanner
-Three Houses (Rerun with sparking)\3\Byleth(F), Claude, Dimitri, Edelgard\5\25/05/2020, 01/06/2020\NewUnits
 Bridal Beloveds\3\Micaiah(Bride), Nailah(Bride), Oboro(Bride), Rafiel(Groom)\5\20/05/2020, 20/06/2020\Seasonal, Bride
-"A Waltz Unending" Tempest Trials+\3\Micaiah, Nailah, Sothe\5\19/05/2020, 31/05/2020\Tempest
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
+Three Houses (Rerun with sparking)\3\Byleth(F), Claude, Dimitri, Edelgard\5\25/05/2020, 01/06/2020\NewUnits
+Heroes with Lull Skills\3\Bernie, Kiria, Sirius\5\22/05/2020, 31/05/2020\SkillBanner
+"A Waltz Unending" Tempest Trials+\3\Micaiah, Nailah, Sothe\5\19/05/2020, 31/05/2020\Tempest
 Dark Burdens\3\Corrin(M)(Fallen), Ike(Fallen), Julia(Fallen), Lyon(Fallen)\5\08/05/2020, 28/05/2020\NewUnits, Fallen
 Robin & Corrin's Battle\3\Celica(Fallen), Corrin(F)(Fallen), Robin(M)(Fallen)\5\16/05/2020, 22/05/2020\BHB, Fallen
 New Power (May 2020)\3\Gwendolyn, Leon, Siegbert\5\12/05/2020, 21/05/2020\NewPower
@@ -191,7 +191,7 @@ Regal Rabbits\3\Bruno(Bunny), Marisa(Bunny), Palla(Bunny), Veronica(Bunny)\5\19/
 Mythic Heroes: Yune, Chaos Goddess\-8\Azura(Vallite), Celica(Brave), Eir, Kagero(Halloween), Lewyn, Lucina(Glorious), Lyn(Brave), Mia(Halloween), Myrrh(Halloween), Ophelia, Ryoma(Supreme), Yune\5\29/03/2019, 04/04/2019\Legendary
 Destructive Forces\3\Hardin(Fallen), Robin(M)(Fallen), Surtr\5\28/03/2019, 06/04/2019\VotingGauntlet
 Bartre & Fir's Battle\3\Barte, Fir, Karla\5\26/03/2019, 02/04/2019\BHB
-Heroes with Bond Skills\3\Corrin(F)(Adrift), Corrin(M)(Adrift), Hinoka(Wings)\5\24/03/2019, 04/04/2019\SkillBanner
+Heroes with Bond Skills (v1)\3\Corrin(F)(Adrift), Corrin(M)(Adrift), Hinoka(Wings)\5\24/03/2019, 04/04/2019\SkillBanner
 New Power (March 2019)\3\Delthea, Klein, Sonya, Sophia\5\13/03/2019, 23/03/2019\NewPower
 Beyond Darkness\3\Idunn, Lugh, Sue, Thea\5\08/03/2019, 10/04/2019
 Heroes with Sweep Skills\3\Alm, Soren\5\04/03/2019, 12/03/2019\SkillBanner

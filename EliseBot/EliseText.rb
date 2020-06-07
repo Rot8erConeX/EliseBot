@@ -1805,6 +1805,11 @@ def disp_unit_art(event,name,bot)
       end
     end
   end
+  if j[0]=='Alm(Saint)' && mathooz && artype[0]=='Sprite'
+    charza=charza.gsub('/','_')
+    artype[1]="*Pocket companion:* **Sakura**#{unit_moji(bot,event,-1,'Sakura',true,4)}\n#{artype[1]}"
+    art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{charza}_Mathoo.png"
+  end
   unless j[7][0].nil? || j[7][0].length<=0
     m=j[7][0].split(' & ').map{|q| q.split(' as ')}
     for i in 0...m.length
