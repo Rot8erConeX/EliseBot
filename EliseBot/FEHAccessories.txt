@@ -45,6 +45,7 @@ Gold Askran Hairpin\Hair\Proof of victory over Legendary Tiki.\Beat Tiki(Young)(
 Gold Damsel's Ribbon\Hair\Proof of victory over Grand Hero Lloyd.\Beat Lloyd's GHB at Abyssal difficulty
 Gold Feh Doll\Hair\Proof of victory over Legendary Eirika.\Beat Eirika(Graceful)'s LHB at Abyssal difficulty
 Gold Flower Hairpin\Hair\Proof of victory over Legendary Hríd.\Beat Hrid's LHB at Abyssal difficulty
+Gold Frostflower Band\Hair\Proof of victory over Mythic Hel.\Beat Hel's MHB at Abyssal difficulty.
 Gold Hand Towel\Hair\Proof of victory over Grand Hero Robin.\Beat Robin(F)'s GHB at Abyssal difficulty
 Gold Peach Ducky\Hair\Proof of victory over Mythic Yune.\Beat Yune's MHB at Abyssal difficulty
 Gold Sacred Stardust\Hair\Proof of victory over Legendary Julia.\Beat Julia(Crusader)'s LHB at Abyssal difficulty
@@ -52,6 +53,7 @@ Gold Seashell Hairpin\Hair\Proof of victory over Legendary Marth.\Beat Marth(Kin
 Gold Summer Mask\Hair\Proof of victory over Legendary Lucina.\Beat Lucina(Glorious)'s LHB at Abyssal difficulty
 Golden Ducky\Hair\Proof of victory over Grand Hero Navarre.\Beat Navarre's GHB at Abyssal difficulty
 Golden Fortune Pin\Hair\Proof of victory over Grand Hero Ursula.\Beat Ursula's GHB at Abyssal difficulty
+Golden Star of Nifl\Hair\Proof of victory over Legendary Seliph.\Beat Seliph(Scion)'s LHB at Abyssal difficulty.
 Hand Towel\Hair\A hand towel commonly used in hot springs. Make sure to keep it dry!\Clear floors 81-85 in Illusory Dungeon: Summer of Heroes.
 Happy Hibiscus\Hair\A hair accessory crafted from a tropical flower.\Clear floors 6-10 during Illusory Dungeon: Three Houses.
 Heart Charm\Hair\A heart-shaped hairpiece given by Nah. Childish, yet somehow reflects an adult personality.\Reach 100 red friendship with Nah during Forging Bonds: Spanning Time.
@@ -116,6 +118,8 @@ Chief's Headband\Hat\A headband from Gerik. It is made of tough leather, bearing
 Chief's Headband EX\Hat\A headband from Gerik. It is identical to the one he always wears.\Reach 2500 green friendship with Gerik during Forging Bonds: Mercenary Matters.
 Chilly Tiara\Hat\Fjorm's tiara. Though it is of exquisite workmanship, it was damaged in the battle against Surtr.\Reach 100 blue friendship with Fjorm during Forging Bonds: The Sworn Oath.
 Chilly Tiara EX\Hat\Fjorm's tiara. The gems that decorate it are clear and cold, and they come from Nifl.\Reach 2500 blue friendship with Fjorm during Forging Bonds: The Sworn Oath.
+Cleric's Hairpin\Hat\A beautiful hair decoration from Lena.  The dainty ornamentation includes a red jewel.\Reach 100 green friendship with Lena during Forging Bonds: Shape of a Spirit.
+Cleric's Hairpin EX\Hat\A beautiful hair decoration from Lena.  The breathtaking ornamentation is completed by a red jewel.\Reach 2500 green friendship with Lena during Forging Bonds: Shape of a Spirit.
 Crown of Nifl\Hat\Hríd's crown. It's always cold to the touch, and if you place it on your head, your demeanor will remain cool.\Reach 100 orange friendship with Hrid during Forging Bonds: The Sworn Oath.
 Crown of Nifl EX\Hat\Hríd's crown. It has been passed down in the royal family of Nifl for generations, or so it is said.\Reach 2500 orange friendship with Hrid during Forging Bonds: The Sworn Oath.
 Dancer's Frill\Hat\A headpiece given by Tethys. It's an elegant item made for dancers with refined taste.\Reach 100 orange friendship with Tethys during Forging Bonds: Mercenary Matters.
@@ -211,6 +215,8 @@ Worn-Out Doll\Hat\A stuffed animal from Keaton. It's all torn up, and the stuffi
 Worn-Out Doll EX\Hat\A stuffed animal from Keaton. It has all kinds of "treasures" stuck to it—a lizard tail, a hair ball, you name it.\Reach 2500 red friendship with Keaton during Forging Bonds: The Orb Case
 Wyvern Tiara\Hat\A tiara granted by Altena. It serves as proof of one's recognition as a wyvern knight.\Reach 100 blue friendship with Altena during Forging Bonds: Beyond Blood.
 Wyvern Tiara EX\Hat\A tiara granted by Altena. It is adorned with a polished green stone.\Reach 2500 blue friendship with Altena during Forging Bonds: Beyond Blood.
+Ymir's Cap\Hat\A wild hat Kris had.  Made with wolf skin, even its smell is wild.\Reach 100 red friendship with Kris(M) during Forging Bonds: Shape of a Spirit
+Ymir's Cap EX\Hat\A wild hat Kris had.  Made with fine wolf skin.  It has its own ear coverings attached and keeps its wearer warm.\Reach 2500 red friendship with Kris(M) during Forging Bonds: Shape of a Spirit
 Concealing Mask\Mask\A mask previously carried by Sirius. The mask covers the wearer's eyes to hide their expression.\Reach 100 blue friendship with Sirius during Forging Bonds: A Time to Shine
 Concealing Mask EX\Mask\A mask previously carried by Sirius. Adorned with golden detailing.\Reach 2500 blue friendship with Sirius during Forging Bonds: A Time to Shine
 Dancer's Mask\Mask\A mask from Olivia. A dancer would wear this to project a mystical aura while performing.\Reach 100 red friendship with Olivia(Traveler) during Forging Bonds: Defending Ylisse.
@@ -226,6 +232,8 @@ Hawk Guard\Mask\A feathered protector bestowed by Tibarn. It's made from the sam
 Hawk Guard EX\Mask\A feathered protector bestowed by Tibarn. The feathers are his and those of his companions.\Reach 2500 red friendship with Tibarn during Forging Bonds: Hearts as One
 Mad Spectacles\Mask\A fancy pair of eyeglasses worn only for fashion. They are part of a costume.\Clear floors 16-20 in Illusory Dungeon: Driven to Madness
 Master Eye Patch\Mask\An eye patch worn by the Mirage Master Kiria.\Clear floors 76-80 in Illusory Dungeon: Wings Carry Me
+Masque Mask\Mask\A gaudy mask from Kris.  Featuring a butterfly design and a velvety finish.  Have you checked the dress code?\Reach 100 blue friendship with Kris(F) during Forging Bonds: Shape of a Spirit.
+Masque Mask EX\Mask\A gaudy mask from Kris.  High quality and detailed in decoration.  Required attire for attending a masqerade ball.\Reach 2500 blue friendship with Kris(F) during Forging Bonds: Shape of a Spirit.
 Mysterious Mask\Mask\A mask once worn by a swordsman claiming to be the Hero-King Marth.\Use lance ally to defeat foes level 10 or higher during June 2018 Quest "Yay, Accessories!".
 Power Postiche\Mask\A glorious fake ~~beard~~ moustache from Mustafa.  The dignified whiskers demand the respect of all.  Doubles as a disguise.\Reach 100 green friendship with Mustafa during Forging Bonds: Renewed Resolve
 Power Postiche EX\Mask\A glorious fake beard from Mustafa.  The supreme fullness demands the respect of all.  Complicates eating.\Reach 2500 green friendship with Mustafa during Forging Bonds: Renewed Resolve
@@ -234,6 +242,8 @@ Reading Glasses EX\Mask\Nina says that these glasses will let you keep reading i
 Spy Mask\Mask\A cloth mask given by Leila.  Useful when attempting to avoid drawing unwanted attention.\Reach 100 orange friendship with Leila during Forging Bonds: Study in Crimson.
 Spy Mask EX\Mask\A cloth mask given by Leila.  Perfect for protecting against dusts, powders, and vapors.\Reach 2500 orange friendship with Leila during Forging Bonds: Study in Crimson.
 Swim Goggles\Mask\Use these to see clearly underwater. The added snorkel means you can take your time watching sea life.\Clear floors 81-85 in Illusory Dungeon: Summer of Heroes.
+Thief's Mask\Mask\A cool mask given by Julian.  It was designed to obscure the identity.  Said to be worn by the Soothsires.\Reach 100 orange friendship with Julian during Forging Bonds: Shape of the Spirit.
+Thief's Mask EX\Mask\A cool mask given by Julian.  It was designed to obscure the identity.  The red style is worn by leaders.\Reach 2500 orange friendship with Julian during Forging Bonds: Shape of the Spirit.
 Tinted Glasses\Mask\Spectacles with colored lenses from Brady. Good for blocking out the bright teatime sun.\Reach 100 orange friendship with Brady during Forging Bonds: Spanning Time.
 Tinted Glasses EX\Mask\Spectacles with colored lenses from Brady. If worn into battle, your foe will take you more seriously.\Reach 2500 orange friendship with Brady during Forging Bonds: Spanning Time.
 Wolf Eyepatch\Mask\An eyepatch bestowed by Nailah. The fabric is exquisite and conveys to its wearer an air of intrigue.\Reach 100 blue friendship with Nailah during Forging Bonds: Hearts as One

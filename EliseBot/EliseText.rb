@@ -72,7 +72,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,'**addalias** __new alias__ __name__',"Adds `new alias` to `name`'s aliases.\nIf the arguments are listed in the opposite order, the command will auto-switch them.\n\nAliases can be added to:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- Structures\n- Accessories\n- Items\n\nInforms you if the alias already belongs to someone/something.\nAlso informs you if the unit you wish to give the alias to does not exist.\n\n**This command can only be used by server mods.**",0xC31C19)
   elsif command.downcase=='prefix'
     create_embed(event,'**prefix** __new prefix__',"Sets the server's custom prefix to `prefix`.\n\n**This command can only be used by server mods.**",0xC31C19)
-  elsif ['oregano','whoisoregano'].include?(command.downcase)
+  elsif ['oregano','whoisoregano','whyoregano'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**","Answers the question of who Oregano is.",0xD49F61)
   elsif ['allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','learn','inheritance','learnable','inheritable','skillearn','skillearnable'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows all the skills that `name`can learn.\n\nIn servers, will only show the weapons, assists, and specials.\nIn PM, will also show the passive skills.",0xD49F61)
@@ -684,7 +684,7 @@ def sort_legendaries(event,bot,mode=0)
   data_load()
   nicknames_load()
   g=get_markers(event)
-  k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Duo','Idol'].include?(q[2][0]) || q[2].length<3 || q[2][2].to_i<=0}.uniq
+  k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Duo','Harmonic','Idol'].include?(q[2][0]) || q[2].length<3 || q[2][2].to_i<=0}.uniq
   c=[]
   for i in 0...k.length
     c.push([249,130,129]) if k[i][2][0]=='Fire'
@@ -796,7 +796,7 @@ def sort_legendaries(event,bot,mode=0)
     end
     m.uniq!
     data_load()
-    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Duo','Idol'].include?(q[2][0]) || q[2].length<2}.uniq
+    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Duo','Harmonic','Idol'].include?(q[2][0]) || q[2].length<2}.uniq
     m=m.reject{|q| !k.map{|q2| q2[0]}.include?(q)}
     k=k.reject{|q| !m.include?(q[0])}
     for i in 0...k.length
@@ -821,7 +821,7 @@ def sort_legendaries(event,bot,mode=0)
     end
     m.uniq!
     data_load()
-    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Duo','Idol'].include?(q[2][0]) || q[2].length<2}.uniq
+    k=@units.reject{|q| !has_any?(g, q[13][0]) || q[2].nil? || [' ','Duo','Harmonic','Idol'].include?(q[2][0]) || q[2].length<2}.uniq
     m=m.reject{|q| !k.map{|q2| q2[0]}.include?(q)}
     k=k.reject{|q| !m.include?(q[0])}
     for i in 0...k.length
@@ -857,7 +857,7 @@ def sort_legendaries(event,bot,mode=0)
       create_embed(event,"__**Legendary and Mythic Heroes' Appearances**__",'',avg_color(c),nil,nil,k2,2)
     end
     if safe_to_spam?(event)
-      b2=b.reject{|q| q[5].nil? || !q[5].split(', ').include?('Legendary')}
+      b2=b.reject{|q| q[5].nil? || !has_any?(q[5].split(', '),['Legendary','DoubleSpecial'])}
       m=[]
       for i in 0...b2.length
         for j in 0...b2[i][2].length
@@ -882,7 +882,7 @@ def sort_legendaries(event,bot,mode=0)
         m2[i][1]=m2[i][1].join(j)
       end
       if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-        msg="__**Seasonal units that have not yet been on a Legendary or Mythic Banner**__"
+        msg="__**Seasonal units that have not yet been on a Legendary/Mythic or DoubleSpecial Banner**__"
         tolongs=[]
         for i in 0...m2.length
           if m2[i][1].length>1900
@@ -896,10 +896,10 @@ def sort_legendaries(event,bot,mode=0)
       elsif m2.map{|q| "*#{q[0]}*: #{q[1]}"}.join("\n\n").length>1700
         tolongs=[]
         if m2[0][1].length>1900
-          event.respond "__**Seasonal units that have not yet been on a Legendary or Mythic Banner**__"
+          event.respond "__**Seasonal units that have not yet been on a Legendary/Mythic or DoubleSpecial Banner**__"
           tolongs.push('Red')
         else
-          create_embed(event,"__**Seasonal units that have not yet been on a Legendary or Mythic Banner**__",'',0xE22141,nil,nil,triple_finish(m2[0][1].split("\n")),2)
+          create_embed(event,"__**Seasonal units that have not yet been on a Legendary/Mythic or DoubleSpecial Banner**__",'',0xE22141,nil,nil,triple_finish(m2[0][1].split("\n")),2)
         end
         if m2[1][1].length>1900
           tolongs.push('Blue')
@@ -918,7 +918,7 @@ def sort_legendaries(event,bot,mode=0)
         end
         event.respond "There are too many seasonal #{list_lift(tolongs,'and')} heroes to display." if tolongs.length>0
       else
-        create_embed(event,"__**Seasonal units that have not yet been on a Legendary or Mythic Banner**__",'',0xAA937A,nil,nil,m2,2)
+        create_embed(event,"__**Seasonal units that have not yet been on a Legendary/Mythic or DoubleSpecial Banner**__",'',0xAA937A,nil,nil,m2,2)
       end
       data_load()
       k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('p') || q[9][0].include?('4p') || q[9][0].include?('3p') || q[9][0].include?('2p') || q[9][0].include?('1p') || !q[9][0].include?('TD') || m.include?(q[0])}.uniq
@@ -937,7 +937,7 @@ def sort_legendaries(event,bot,mode=0)
         m2[i][1]=m2[i][1].join(j)
       end
       if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-        msg="__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from Book 1 that have not yet been on a Legendary or Mythic Banner**__"
+        msg="__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from revival banners that have not yet been on a Legendary or Mythic Banner**__"
         tolongs=[]
         for i in 0...m2.length
           if m2[i][1].length>1900
@@ -946,15 +946,15 @@ def sort_legendaries(event,bot,mode=0)
             msg=extend_message(msg,"*#{m2[i][0]}*: #{m2[i][1]}",event)
           end
         end
-        msg=extend_message(msg,"There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes from Book 1 to display.",event) if tolongs.length>0
+        msg=extend_message(msg,"There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes from revival banners to display.",event) if tolongs.length>0
         event.respond msg
       elsif m2.map{|q| "*#{q[0]}*: #{q[1]}"}.join("\n\n").length>1700
         tolongs=[]
         if m2[0][1].length>1900
-          event.respond "__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from Book 1 that have not yet been on a Legendary or Mythic Banner**__"
+          event.respond "__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from revival banners that have not yet been on a Legendary or Mythic Banner**__"
           tolongs.push('Red')
         else
-          create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from Book 1 that have not yet been on a Legendary or Mythic Banner**__",'',0xE22141,nil,nil,triple_finish(m2[0][1].split("\n")),2)
+          create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from revival banners that have not yet been on a Legendary or Mythic Banner**__",'',0xE22141,nil,nil,triple_finish(m2[0][1].split("\n")),2)
         end
         if m2[1][1].length>1900
           tolongs.push('Blue')
@@ -971,9 +971,9 @@ def sort_legendaries(event,bot,mode=0)
         else
           create_embed(event,'','',0x64757D,nil,nil,triple_finish(m2[3][1].split("\n")),2)
         end
-        event.respond "There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes from Book 1 to display." if tolongs.length>0
+        event.respond "There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes from revival banners to display." if tolongs.length>0
       else
-        create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from Book 1 that have not yet been on a Legendary Banner**__",'',avg_color([book_color(1,1)]),nil,nil,m2,2)
+        create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units from revival banners that have not yet been on a Legendary Banner**__",'',avg_color([book_color(1,1),book_color(2,1)]),nil,nil,m2,2)
       end
       data_load()
       k=@units.reject{|q| !q[13][0].nil? || q[2].nil? || q[2][0]!=' ' || !q[9][0].include?('p') || q[9][0].include?('4p') || q[9][0].include?('3p') || q[9][0].include?('2p') || q[9][0].include?('1p') || q[9][0].include?('TD') || m.include?(q[0])}.uniq
@@ -1028,7 +1028,7 @@ def sort_legendaries(event,bot,mode=0)
         end
         event.respond "There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive #{list_lift(tolongs,'and')} heroes to display." if tolongs.length>0
       else
-        create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__",'',avg_color([book_color(2,1),book_color(3,1)]),nil,nil,m2,2)
+        create_embed(event,"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary Banner**__",'',avg_color([book_color(3,1)]),nil,nil,m2,2)
       end
     end
   end
@@ -1040,9 +1040,9 @@ def disp_legendary_mythical(event,bot,args=[],dispmode='',forcesplit=false)
   args=args.map{|q| q.downcase}
   data_load()
   g=get_markers(event)
-  l=@units.reject{|q| [' ','Duo','Idol'].include?(q[2][0]) || !has_any?(g, q[13][0])}
-  l=@units.reject{|q| [' ','Duo','Idol','Light','Dark','Astra','Anima'].include?(q[2][0]) || !has_any?(g, q[13][0])} if dispmode=='Legendary' && (!safe_to_spam?(event) || forcesplit)
-  l=@units.reject{|q| [' ','Duo','Idol','Fire','Water','Wind','Earth'].include?(q[2][0]) || !has_any?(g, q[13][0])} if dispmode=='Mythic' && (!safe_to_spam?(event) || forcesplit)
+  l=@units.reject{|q| [' ','Duo','Harmonic','Idol'].include?(q[2][0]) || !has_any?(g, q[13][0])}
+  l=@units.reject{|q| [' ','Duo','Harmonic','Idol','Light','Dark','Astra','Anima'].include?(q[2][0]) || !has_any?(g, q[13][0])} if dispmode=='Legendary' && (!safe_to_spam?(event) || forcesplit)
+  l=@units.reject{|q| [' ','Duo','Harmonic','Idol','Fire','Water','Wind','Earth'].include?(q[2][0]) || !has_any?(g, q[13][0])} if dispmode=='Mythic' && (!safe_to_spam?(event) || forcesplit)
   l.sort!{|a,b| a[0]<=>b[0]}
   c=[]
   for i in 0...l.length
@@ -2606,7 +2606,7 @@ def today_in_feh(event,bot,shift=false)
   str="#{str}\n#{'~~' if shift}Days since game release: #{longFormattedNumber(date)}#{'~~' if shift}"
   if event.user.id==167657750971547648 && @shardizard==4
     str="#{str}\n#{'~~' if shift}Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12#{'~~' if shift}"
-    str="#{str}\n#{'~~' if shift}Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday) - #{week_from(date,3)%20+1}/20(Sunday)#{'~~' if shift}"
+    str="#{str}\n#{'~~' if shift}Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday) - #{week_from(date,3)%31+1}/31(Sunday)#{'~~' if shift}"
   end
   if shift
     t+=24*60*60
@@ -3047,26 +3047,37 @@ def disp_current_events(bot,event,mode=0,shift=false)
       end
     end
   elsif [3,4,-3,-4].include?(mode)
-    book1=["Amelia, Nephenee, Sanaki",
-           "Gray, Ike(Brave), Lucina(Brave)",
-           "Azura, Elise, Leo",
-           "Deirdre, Linde, Tiki(Young)",
-           "Cecilia, Delthea, Genny",
+    book1=["Celica, Delthea, Genny",
+           "Eirika(Memories), Hector(Brave), Myrrh",
            "Julia, Nephenee, Sigurd",
+           "Hinoka(Wings), Kana(F), Siegbert",
            "Hector, Lyn, Lyn(Brave)",
+           "Chrom(Branded), Maribelle, Sumia",
            "Ike, Ike(Brave), Mist",
+           "Ishtar, Lene, Robin(F)(Fallen)",
            "Julia, Lucina, Lucina(Brave)",
+           "Celica(Brave), Ephraim(Brave), Veronica(Brave)",
            "Hinoka, Ryoma, Takumi",
+           "Hardin(Fallen), Olwen(World), Reinhardt(World)",
            "Genny, Katarina, Minerva",
+           "Hector(Brave), Karla, Nino(Fangs)",
            "Alm, Delthea, Faye",
+           "Morgan(F), Olivia(Traveler), Robin(F)(Fallen)",
            "Amelia, Ayra, Olwen(Bonds)",
+           "Leif, Rhajat, Shiro",
            "Lyn(Brave), Ninian, Roy(Brave)",
            "Dorcas, Lute, Mia",
            "Hector, Luke, Tana",
            "Linde, Saber, Sonya",
            "Azura, Deirdre, Eldigan",
            "Ephraim, Jaffar, Karel",
-           "Elincia, Innes, Tana"]
+           "Elincia, Innes, Tana",
+           "Amelia, Nephenee, Sanaki",
+           "Gray, Ike(Brave), Lucina(Brave)",
+           "Azura, Elise, Leo",
+           "Celica(Fallen), Ephraim(Brave), Hardin(Fallen)",
+           "Deirdre, Linde, Tiki(Young)",
+           "Micaiah, Veronica(Brave), Zelgius"]
     t=Time.now
     timeshift=8
     timeshift-=1 unless t.dst?
@@ -3075,16 +3086,16 @@ def disp_current_events(bot,event,mode=0,shift=false)
     t2=t-t2
     date=(((t2.to_i/60)/60)/24)
     if [3,4].include?(mode)
-      f=book1[week_from(date,3)%20].split(', ')
+      f=book1[week_from(date,3)%book1.length].split(', ')
       f=f.map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"}
       f=f.join(', ')
-      return "#{'__**' if mode==4}Current Book 1 revival units#{"**__\n" if mode==4}#{': ' if mode==3}#{f}"
+      return "#{'__**' if mode==4}Current Book 1+2 revival units#{"**__\n" if mode==4}#{': ' if mode==3}#{f}"
     elsif [-3,-4].include?(mode)
       book1=book1.rotate(1)
-      f=book1[week_from(date,3)%20].split(', ')
+      f=book1[week_from(date,3)%book1.length].split(', ')
       f=f.map{|q| "#{q}#{unit_moji(bot,event,-1,q)}"}
       f=f.join(', ')
-      return "#{'__**' if mode==4}Next Book 1 revival units#{"**__\n" if mode==4}#{': ' if mode==3}#{f}"
+      return "#{'__**' if mode==4}Next Book 1+2 revival units#{"**__\n" if mode==4}#{': ' if mode==3}#{f}"
     end
     book1=book1.rotate(week_from(date,3)%20)
     str2=book1[0]
@@ -3276,9 +3287,10 @@ def next_events(event,bot,type)
   idx=13 if ['tempest','tempestbonus','tempest_bonus'].include?(type.downcase)
   idx=14 if ['aether','aetherbonus','aether_bonus','raid','raidbonus','raid_bonus','raids','raidsbonus','raids_bonus'].include?(type.downcase)
   idx=15 if ['book1','book_one','bookone','book1revival','bookonerevival','book_onerevival','bookone_revival','book_one_revival'].include?(type.downcase)
+  idx=15 if ['book2','book_two','booktwo','book2revival','booktworevival','book_tworevival','booktwo_revival','book_two_revival'].include?(type.downcase)
   idx=16 if ['divine','devine','path','ephemura','divines','devines','paths','ephemuras'].include?(type.downcase)
   if idx<0 && !safe_to_spam?(event)
-    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nAether, AetherBonus, Aether_Bonus\nBonus\nBook1, Book1Revival\nDivine, Path, Ephemura"
+    event.respond "I will not show everything at once.  Please use this command in PM, or narrow your search using one of the following terms:\nTower, Training_Tower, Color, Shard, Crystal\nFree, 1\\*, 2\\*, F2P, FreeHero\nSpecial, Special_Training\nGHB\nGHB2\nRival, Domain(s), RD, Rival_Domain(s)\nBlessed, Garden(s), Blessing, Blessed_Garden(s)\nTactics_Drills, Tactic(s), Drill(s)\nBanner(s), Summon(ing)(s)\nEvent(s)\nLegendary/Legendaries, Legend(s)\nArena, ArenaBonus, Arena_Bonus\nTempest, TempestBonus, Tempest_Bonus\nAether, AetherBonus, Aether_Bonus\nBonus\nBook1, Book1Revival, Book2, Book2Revival\nDivine, Path, Ephemura"
     return nil
   end
   t=Time.now
@@ -3294,7 +3306,7 @@ def next_events(event,bot,type)
   msg="#{msg}\nDays since game release: #{longFormattedNumber(date)}"
   if event.user.id==167657750971547648 && @shardizard==4
     msg=extend_message(msg,"Daycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12",event)
-    msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday) - #{week_from(date,3)%20+1}/20(Sunday)",event)
+    msg=extend_message(msg,"Weekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday) - #{week_from(date,3)%31+1}/31(Sunday)",event)
   end
   if [-1,1].include?(idx)
     colors=['Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>',
@@ -3621,27 +3633,38 @@ def next_events(event,bot,type)
     end
   end
   if [-1,15].include?(idx)
-    matz=["Amelia, Nephenee, Sanaki",
-          "Gray, Ike(Brave), Lucina(Brave)",
-          "Azura, Elise, Leo",
-          "Deirdre, Linde, Tiki(Young)",
-          "Cecilia, Delthea, Genny",
+    matz=["Celica, Delthea, Genny",
+          "Eirika(Memories), Hector(Brave), Myrrh",
           "Julia, Nephenee, Sigurd",
+          "Hinoka(Wings), Kana(F), Siegbert",
           "Hector, Lyn, Lyn(Brave)",
+          "Chrom(Branded), Maribelle, Sumia",
           "Ike, Ike(Brave), Mist",
+          "Ishtar, Lene, Robin(F)(Fallen)",
           "Julia, Lucina, Lucina(Brave)",
+          "Celica(Brave), Ephraim(Brave), Veronica(Brave)",
           "Hinoka, Ryoma, Takumi",
+          "Hardin(Fallen), Olwen(World), Reinhardt(World)",
           "Genny, Katarina, Minerva",
+          "Hector(Brave), Karla, Nino(Fangs)",
           "Alm, Delthea, Faye",
+          "Morgan(F), Olivia(Traveler), Robin(F)(Fallen)",
           "Amelia, Ayra, Olwen(Bonds)",
+          "Leif, Rhajat, Shiro",
           "Lyn(Brave), Ninian, Roy(Brave)",
           "Dorcas, Lute, Mia",
           "Hector, Luke, Tana",
           "Linde, Saber, Sonya",
           "Azura, Deirdre, Eldigan",
           "Ephraim, Jaffar, Karel",
-          "Elincia, Innes, Tana"]
-    matz=matz.rotate(week_from(date,3)%20)
+          "Elincia, Innes, Tana",
+          "Amelia, Nephenee, Sanaki",
+          "Gray, Ike(Brave), Lucina(Brave)",
+          "Azura, Elise, Leo",
+          "Celica(Fallen), Ephraim(Brave), Hardin(Fallen)",
+          "Deirdre, Linde, Tiki(Young)",
+          "Micaiah, Veronica(Brave), Zelgius"]
+    matz=matz.rotate(week_from(date,3)%31)
     if safe_to_spam?(event)
       mmzz=[]
       for i in 0...matz.length
@@ -3661,7 +3684,7 @@ def next_events(event,bot,type)
       end
       mmzz.compact!
       mmzz.reverse!
-      msg=extend_message(msg,"__**Units available in Book 1 revival banners**__",event,2)
+      msg=extend_message(msg,"__**Units available in Book 1+2 revival banners**__",event,2)
       strpost=false
       tx=t-t.wday*24*60*60
       for i in 0...mmzz.length
@@ -4209,7 +4232,7 @@ def update_howto(event,bot)
   end
   str="1.) Edit [the sheet](https://docs.google.com/spreadsheets/d/15eDswPz7xK6w3c5R9-iUq8pt22KMMby71hsDuH6HlBA/edit#gid=2081531433)."
   str="#{str}\n- Any column whose header is a shade of grey, is formulaically calculated and thus you don't need to edit it.  Merely copy the formula from the cell above."
-  str="#{str}\n- In *Units*'s \"Rarities\" column:\n> `5p` is for normal summonable units (\"pool\")\n> `5s` is used for seasonals and legendaries\n> `3g4g4g` is used for GHBs\n> `4t5t` is used for TT units\n> There are all-caps duo markers, but they're used to mark Launch units + Book I 5\* units and are thus not relevant in Book IV."
+  str="#{str}\n- In *Units*'s \"Rarities\" column:\n> `5p` is for normal summonable units (\"pool\")\n> `5s` is used for seasonals and legendaries\n> `3g4g4g` is used for GHBs\n> `4t5t` is used for TT units\n> There are all-caps two-character markers, but they're used to mark Launch units + Book I 5\* units and are thus not relevant in Book IV."
   str="#{str}\n- In *Units*'s \"Game\" column, the game that FEH credits the unit with is listed first, but the remaining games are listed in chronological order."
   str="#{str}\n- In *Skills*'s sheet, add new skills above the fake skills in the same group.  Fake skills are marked by having the font significantly smaller."
   str="#{str}\n- Please note that when a skill that is obviously part of a stat-based family gets added, I add all stat variations immediately.  Thus, if a new skill in an existing family gets added, check to see if an entry for it already exists first."
@@ -4223,7 +4246,7 @@ def update_howto(event,bot)
   str="#{str}\n- *Items* should be copied to **FEHItems.txt**"
   str="#{str}\n\n4.) Upload the text file to [the GitHub page here](https://github.com/Rot8erConeX/EliseBot/tree/master/EliseBot).  You might need to make a GitHub account to do so."
   str="#{str}\n\n5.) Wait probably five minutes for the file to settle on GitHub's servers, then use the command `FEH!reload` in my debug server."
-  str="#{str}\n\n6.) Type the number 2 to select reloading data based on GitHub files."
+  str="#{str}\n\n6.) Type the number 3 to select reloading data based on GitHub files."
   str="#{str}\n\n7.) Double-check that the edited data works.  It is important to remember that I will not be there to guide you to wherever any problems might be based on error codes."
   str="#{str}\n\n8.) Add any relevant aliases to the new data."
   create_embed(event,'',str,0xD49F61)
@@ -4561,6 +4584,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="#{str2}\n#{m} legendary/mythic unit#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,[2,2],[0,3],['Duo','Duo'],[0,0],'&&')
     str2="#{str2}\n#{m} Duo unit#{'s' unless m=='1'}" unless m=='0'
+    m=filler(legal_units,all_units,[2,2],[0,3],['Harmonic','Harmonic'],[0,0],'&&')
+    str2="#{str2}\n#{m} Harmonic unit#{'s' unless m=='1'}" unless m=='0'
     m=filler(legal_units,all_units,9,0,'-',1)
     str2="#{str2}\n#{m} unobtainable unit#{'s' unless m=='1'}" unless m=='0'
     str2=str2[1,str2.length-1] if str2[0,1]=="\n"
@@ -4697,6 +4722,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="#{str2}\n<:Accessory_Type_Tiara:531733130734731284> #{longFormattedNumber(m.length)} tiaras and other back-of-head accessories"
     m=@accessories.reject{|q| !q[2].include?('Proof of victory over')}
     str2="#{str2}\n\n#{longFormattedNumber(m.length)} Golden Accessories"
+    m=@accessories.reject{|q| !q[0].include?('8-Bit ')}
+    str2="#{str2}\n#{longFormattedNumber(m.length)} 8-Bit Accessories"
     m=@accessories.reject{|q| !q[0].include?(' EX')}
     str2="#{str2}\n#{longFormattedNumber(m.length*2)} Forging Bonds Accessories (#{longFormattedNumber(m.length)} pairs)"
     m=@accessories.reject{|q| q[3].nil? || !q[3].include?('Illusory Dungeon')}
@@ -4869,11 +4896,12 @@ def snagstats(event,bot,f=nil,f2=nil)
       str=extend_message(str,"<:Forma_Soul:699042073176965241> *Forma* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Forma'}][1].length)} current members) - Any unit that was part of a Hall of Forms event released after the introduction of Forma Souls.",event)
       str=extend_message(str,"<:Heroic_Grail:574798333898653696> *GHB* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='GHB'}][1].length)} current members) - Any unit that can obtained via a Grand Hero Battle map.",event)
       str=extend_message(str,"<:Forma_Soulless:699085674724327516> *Hall of Forms* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='HallOfForms'}][1].length)} current members) - Any unit was part of a Hall of Forms event.",event)
+      str=extend_message(str,"<:Hero_Harmonic:722436762248413234> *Harmonic Units* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='HarmonicUnits'}][1].length)} current members) - Any unit that is actually two characters.",event)
       str=extend_message(str,"<:Ally_Boost_Spectrum:443337604054646804> *Legendaries/Mythics* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Legendaries'}][1].length)} current members) - Any unit that gives a Legendary Hero Boost to blessed allies during specific seasons, or any unit that gives a Mythic Boost to blessed allies in Aether Raids during specific seasons.",event)
       str=extend_message(str,"<:Assist_Music:454462054959415296> *Refreshers* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Refreshers'}][1].length)} current members) - Any unit that can learn any of the skills: Dance, Sing, or Play.",event)
       str=extend_message(str,"<:Resplendent_Ascension:678748961607122945> *Resplendent* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Resplendent'}][1].length)} current members) - Any unit that has a Resplendent Ascension.",event)
       str=extend_message(str,"<:Divine_Dew:453618312434417691> *Retro-Prfs* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro-Prfs'}][1].length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything.",event)
-      str=extend_message(str,"<:Seasonal:701278992677732442> *Seasonals* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Seasonals'}][1].length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost.\n      The following subsets of the Seasonals group are also dynamic: *Bathing* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bathing'}][1].length)}), *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Bunny* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Picnic* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Picnic'}][1].length)}), *Retro* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})",event)
+      str=extend_message(str,"<:Seasonal:701278992677732442> *Seasonals* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Seasonals'}][1].length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost.\n      The following subsets of the Seasonals group are also dynamic: *Bathing* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bathing'}][1].length)}), *Valentine's* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=="Valentine's"}][1].length)}), *Bunny* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Bunnies'}][1].length)}), *Picnic* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Picnic'}][1].length)}), *Retro* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Retro'}][1].length)}), *Wedding* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Wedding'}][1].length)}), *Summer* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Summer'}][1].length)}), *Pirate* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Pirate'}][1].length)}), *Halloween* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Halloween'}][1].length)}), *Winter* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Winter'}][1].length)})",event)
       str=extend_message(str,"<:Godly_Grail:612717339611496450> *Tempest* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='Tempest'}][1].length)} current members) - Any unit that can be obtained via a Tempest Trials event.",event)
       str=extend_message(str,"<:Current_Tempest_Bonus:498797966740422656> *Tempest Bonus* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='TempestBonus'}][1].length)} current members) - Any unit that is a bonus unit for the current Tempest Trials event.",event)
       str=extend_message(str,"<:Divine_Mist:701285239611195432> *Worse Than Liki* (#{longFormattedNumber(gg[gg.find_index{|q| q[0]=='WorseThanLiki'}][1].length)} current members) - Any unit with every stat equal to or less than the same stat on Tiki(Young)(Earth), excluding Tiki(Young)(Earth) herself.",event)

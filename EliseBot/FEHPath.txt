@@ -36,3 +36,19 @@ Ephemera (June 2020) 4\Ares; 4; 0, 100
 Ephemera (June 2020) 5\Sully; 4; 0, 100
 Ephemera (June 2020) 6\Klein; 4; 0, 100
 Ephemera (June 2020) 7\Kaze; 4; 0, 100
+Ephemera (July 2020) 0\06/07/2020, 28/08/2020
+Ephemera (July 2020) 1\Leo(Summer); 5; 0, 300
+Ephemera (July 2020) 2\Linde(Summer); 5; 0, 300
+Ephemera (July 2020) 3\Roy; 4; 0, 100
+Ephemera (July 2020) 4\Silas; 4; 0, 100
+Ephemera (July 2020) 5\Odin; 4; 0, 100
+Ephemera (July 2020) 6\Echidna; 4; 0, 100
+Ephemera (July 2020) 7\Legault; 4; 0, 100
+Ephemera (August 2020) 0\05/08/2020, 28/09/2020
+Ephemera (August 2020) 1\Tana; 5; 0, 300
+Ephemera (August 2020) 2\Ryoma(Festival); 5; 0, 300
+Ephemera (August 2020) 3\Subaki; 4; 0, 100
+Ephemera (August 2020) 4\Bantu; 4; 0, 100
+Ephemera (August 2020) 5\Laslow; 4; 0, 100
+Ephemera (August 2020) 6\Abel; 4; 0, 100
+Ephemera (August 2020) 7\Cain; 4; 0, 100

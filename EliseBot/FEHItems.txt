@@ -32,6 +32,7 @@ Great Verdant Badge\Growth\999999\Used to unlock potential in allies.  Increase 
 Scarlet Badge\Growth\999999\Used to unlock potential in allies.  Increase rarity for a 3<:Icon_Rarity_3:448266417934958592> or lower red-type ally.  Also used in the Sacred Seal Forge.
 Scarlet Crystal\Growth\999999\Used for leveling up.  Can be used on red-type allies level 20 and higher.
 Scarlet Shard\Growth\999999\Used for leveling up.  Can be used on red-type allies up to level 19.
+Trait Fruit\Growth\999999\Used for changing units' assets and flaws (boons and banes)
 Transparent Badge\Growth\999999\Used to unlock potential in allies.  Increase rarity for a 3<:Icon_Rarity_3:448266417934958592> or lower colorless-type ally.  Also used in the Sacred Seal Forge.
 Transparent Crystal\Growth\999999\Used for leveling up.  Can be used on colorless-type allies level 20 and higher.
 Transparent Shard\Growth\999999\Used for leveling up.  Can be used on colorless-type allies up to level 19.
@@ -60,3 +61,4 @@ Frosty Aether Stone\Event\999\Used in Aether Raids to build structures that are 
 Spring Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Spring 2019
 Summer Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Summer 2019
 Fall Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Fall 2019
+Guardian Shield\Event\999\

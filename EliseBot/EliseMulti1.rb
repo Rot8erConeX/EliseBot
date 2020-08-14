@@ -112,7 +112,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
       return [str,['Alm(Brave)'],["brave#{str}","#{str}brave","cyl#{str}","#{str}cyl","bh#{str}","#{str}bh"]]
     end
     return [str,['Alm(Saint)','Alm(Brave)'],[str]]
-  elsif /(eliwood|eliweed|elioud)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
+  elsif /eli(wood|weed|oud)/ =~ str1 && str1.include?('legend') && !str1.include?('legendary')
     str='eliwood'
     str='eliweed' if str2.include?('eliweed')
     str='elioud' if str2.include?('elioud')
@@ -209,7 +209,7 @@ def multi_for_units(event,str1,str2,robinmode=0)
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Camilla(Launch)','Camilla(Adrift)'],[str]]
-  elsif /(eirika|eirik|eiriku|erika|eirica)/ =~ str1
+  elsif /e(i(rik(a|u|)|rica)|rika)/ =~ str1
     str='eirik'
     str='eiriku' if str2.include?('eiriku')
     str='eirika' if str2.include?('eirika')
@@ -539,6 +539,8 @@ def multi_for_units(event,str1,str2,robinmode=0)
     str='byleth'
     str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
     str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    elsif str2.include?('summer') || str2.include?('beach') || str2.include?('swimsuit') || str2.include?('om')
+      return [str,['Byleth(F)(Summer)'],["summer#{str}","beach#{str}","swimsuit#{str}","om#{str}","#{str}summer","#{str}beach","#{str}swimsuit","#{str}om"]]
     if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("lass#{str}") || str2.include?("#{str}lass") || str2.include?("#{str}f") || str2.include?("f#{str}")
       return [str,['Byleth(F)'],["female#{str}","f#{str}","#{str}female","#{str}f"]]
     elsif str2.include?("male#{str}") || str2.include?("#{str}male") || str2.include?("lad#{str}") || str2.include?("#{str}lad") || str2.include?("#{str}m") || str2.include?("m#{str}")
@@ -558,6 +560,19 @@ def multi_for_units(event,str1,str2,robinmode=0)
     end
     return nil if robinmode==2 && str2.downcase != str.downcase
     return [str,['Kana(M)','Kana(F)'],[str]]
+  elsif /(k|ch)ris/ =~ str1 || /kurisu/ =~ str1
+    str='kris'
+    str='chris' if str2.include?('chris')
+    str='kurisu' if str2.include?('kurisu')
+    str2=str2.gsub("#{str} ",str).gsub(" #{str}",str).gsub(str,'')
+    str2=str3.gsub("#{str} ",str).gsub(" #{str}",str)
+    if str2.include?("female#{str}") || str2.include?("#{str}female") || str2.include?("#{str}f") || str2.include?("f#{str}")
+      return [str,['Kris(F)'],["female#{str}","f#{str}","#{str}female","#{str}f"]]
+    elsif str2.include?("male#{str}") || str2.include?("#{str}male") || str2.include?("#{str}m") || str2.include?("m#{str}")
+      return [str,['Kris(M)'],["male#{str}","m#{str}","#{str}male","#{str}m"]]
+    end
+    return nil if robinmode==2 && str2.downcase != str.downcase
+    return [str,['Kris(M)','Kris(F)'],[str]]
   elsif /(lyn(dis||)|rin(disu|))/ =~ str1
     return nil if find_data_ex(:find_unit,event.message.text,event).length>0
     str='lyn'
@@ -1724,7 +1739,7 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     elsif ['FE13'].include?(u[11][0])
       weapon='Missiletainn (Dark)'
     elsif ['Red Blade'].include?("#{u[1][0]} #{u[1][1]}")
-      weapon='Missiletainn (Dusk)'
+      weapon='Missiletainn (Dark)'
     elsif ['Blue Tome'].include?("#{u[1][0]} #{u[1][1]}")
       weapon='Missiletainn (Dusk)'
     elsif u[11].map{|q| q[0,4]}.include?('FE14')
@@ -1780,6 +1795,12 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return weapon_legality(event,name,"Dancer's Ring#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
     return "~~#{w2}~~" unless u[1][0]=='Red'
     w2="Dancer's Ribbon#{'+' if w[1].include?('+')}"
+    w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
+  elsif ['Conch Bouquet','Melon Float'].include?(w[1].gsub('+',''))
+    return weapon_legality(event,name,"Conch Bouquet#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Melon Float#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
+    return "~~#{w2}~~" unless u[1][0]=='Blue'
+    w2="Palm Fruit Tome#{'+' if w[0].include?('+')}"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
   elsif ['Kadomatsu','Hagoita'].include?(w[1].gsub('+',''))
     return weapon_legality(event,name,"Kadomatsu#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
@@ -1889,7 +1910,7 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return "~~#{w2}~~" unless u[1][0]=='Colorless'
     w2="#{t} Rod"
     w2="#{w2} (+) #{refinement} Mode" unless refinement.nil? || refinement.length<=0 || refinement=='-'
-  elsif ['Fire','Flux','Thunder','Light','Wind'].include?(w[1].gsub('+',''))
+  elsif ['Fire','Flux','Thunder','Light','Wind','Stone'].include?(w[1].gsub('+',''))
     return weapon_legality(event,name,'Fire',refinement,true) if u[1][2]=='Fire'
     return weapon_legality(event,name,'Flux',refinement,true) if u[1][2]=='Dark'
     return weapon_legality(event,name,['Fire','Flux'].sample,refinement,true) if u[1][0]=='Red'
@@ -1898,7 +1919,7 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return weapon_legality(event,name,['Thunder','Light'].sample,refinement,true) if u[1][0]=='Blue'
     return weapon_legality(event,name,'Wind',refinement,true) if u[1][2]=='Wind'
     return weapon_legality(event,name,['Wind'].sample,refinement,true) if u[1][0]=='Green'
-  elsif ['Elfire','Ruin','Elthunder','Ellight','Elwind'].include?(w[1].gsub('+',''))
+  elsif ['Elfire','Ruin','Elthunder','Ellight','Elwind','Elstone'].include?(w[1].gsub('+',''))
     return weapon_legality(event,name,'Elfire',refinement,true) if u[1][2]=='Fire'
     return weapon_legality(event,name,'Ruin',refinement,true) if u[1][2]=='Dark'
     return weapon_legality(event,name,['Elfire','Ruin'].sample,refinement,true) if u[1][0]=='Red'
@@ -1907,7 +1928,7 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return weapon_legality(event,name,['Elthunder','Ellight'].sample,refinement,true) if u[1][0]=='Blue'
     return weapon_legality(event,name,'Elwind',refinement,true) if u[1][2]=='Wind'
     return weapon_legality(event,name,['Elwind'].sample,refinement,true) if u[1][0]=='Green'
-  elsif ['Bolganone','Fenrir','Thoron','Shine','Rexcalibur'].include?(w[1].gsub('+',''))
+  elsif ['Bolganone','Fenrir','Thoron','Shine','Rexcalibur','Atlus'].include?(w[1].gsub('+',''))
     return weapon_legality(event,name,"Bolganone#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Fire'
     return weapon_legality(event,name,"Fenrir#{'+' if w[1].include?('+')}",refinement,true) if u[1][2]=='Dark'
     return weapon_legality(event,name,"#{['Bolganone','Fenrir'].sample}#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
@@ -1932,15 +1953,19 @@ def legal_weapon(event,name,weapon,refinement='-',recursion=false)
     return weapon_legality(event,name,"Wo Dao#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Red'
     return weapon_legality(event,name,"Harmonic Lance#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Blue'
     return weapon_legality(event,name,"Wo Gun#{'+' if w[1].include?('+')}",refinement,true) if u[1][0]=='Green'
-  elsif ['Whelp (Infantry)','Hatchling (Flier)'].include?(w[1])
-    return weapon_legality(event,name,"Whelp (Infantry)",refinement,true) if u[3]=='Infantry'
+  elsif ['Whelp (Infantry)','Hatchling (Flier)','Whelp (Cavalry)','Whelp (Armor)'].include?(w[1])
     return weapon_legality(event,name,"Hatchling (Flier)",refinement,true) if u[3]=='Flier'
-  elsif ['Yearling (Infantry)','Fledgeling (Flier)'].include?(w[1])
-    return weapon_legality(event,name,"Yearling (Infantry)",refinement,true) if u[3]=='Infantry'
+    return weapon_legality(event,name,"Whelp (#{u[3]})",refinement,true)
+  elsif ['Yearling (Infantry)','Fledgeling (Flier)','Yearling (Cavalry)','Yearling (Armor)'].include?(w[1])
     return weapon_legality(event,name,"Fledgeling (Flier)",refinement,true) if u[3]=='Flier'
-  elsif ['Adult (Infantry)','Adult (Flier)'].include?(w[1])
-    return weapon_legality(event,name,"Adult (Infantry)",refinement,true) if u[3]=='Infantry'
-    return weapon_legality(event,name,"Adult (Flier)",refinement,true) if u[3]=='Flier'
+    return weapon_legality(event,name,"Yearling (#{u[3]})",refinement,true)
+  elsif ['Adult (Infantry)','Adult (Flier)','Adult (Cavalry)','Adult (Armor)'].include?(w[1])
+    return weapon_legality(event,name,"Adult (#{u[3]})",refinement,true)
+  elsif ['Sword of Shadow','Spear of Shadow'].include?(w[1])
+    return weapon_legality(event,name,"Sword of Shadow",refinement,true) if u[1][0]=='Red'
+    return weapon_legality(event,name,"Spear of Shadow",refinement,true) if u[1][0]=='Blue'
+    return "~~Axe of Shadow~~" if u[1][0]=='Green'
+    return "~~#{['Sword','Spear'].sample} of Shadow~~" if u[1][0]=='Colorless'
   end
   return "~~#{w2}~~"
 end
@@ -2051,12 +2076,12 @@ def make_banner(event) # used by the `summon` command to pick a random banner an
     bnr.push(nil)
   end
   for i in 0...u.length # non-focus units
-    unless u[i][9][0].include?('TD') && nu
-      bnr[3].push(u[i][0]) if u[i][9][0].include?('5p') && u[i][13][0].nil? && u[i][2][0]!='Duo' && (u[i][2][3].nil? || u[i][2][3]!='Duo')
-      bnr[4].push(u[i][0]) if u[i][9][0].include?('4p') && u[i][13][0].nil? && u[i][2][0]!='Duo' && (u[i][2][3].nil? || u[i][2][3]!='Duo')
-      bnr[5].push(u[i][0]) if u[i][9][0].include?('3p') && u[i][13][0].nil? && u[i][2][0]!='Duo' && (u[i][2][3].nil? || u[i][2][3]!='Duo')
-      bnr[6].push(u[i][0]) if u[i][9][0].include?('2p') && u[i][13][0].nil? && u[i][2][0]!='Duo' && (u[i][2][3].nil? || u[i][2][3]!='Duo')
-      bnr[7].push(u[i][0]) if u[i][9][0].include?('1p') && u[i][13][0].nil? && u[i][2][0]!='Duo' && (u[i][2][3].nil? || u[i][2][3]!='Duo')
+    unless (u[i][9][0].include?('TD') && nu) || !u[i][13][0].nil? || ['Duo','Harmonic'].include?(u[i][2][0]) || ['Duo','Harmonic'].include?(u[i][2][3])
+      bnr[3].push(u[i][0]) if u[i][9][0].include?('5p')
+      bnr[4].push(u[i][0]) if u[i][9][0].include?('4p')
+      bnr[5].push(u[i][0]) if u[i][9][0].include?('3p')
+      bnr[6].push(u[i][0]) if u[i][9][0].include?('2p')
+      bnr[7].push(u[i][0]) if u[i][9][0].include?('1p')
     end
   end
   return bnr
@@ -2863,13 +2888,13 @@ def combined_BST(event,args,bot)
             ['Story', 0, 0],
             ['GHB', 0, 0],
             ['Tempest', 0, 0],
-            ['Lucina', 0, 0, ['Lucina', 'Lucina(Bunny)', 'Marth(Masked)', 'Lucina(Brave)', 'Lucina(Glorious)']],
+            ['Lucina', 0, 0, ['Lucina', 'Lucina(Bunny)', 'Marth(Masked)', 'Lucina(Brave)', 'Lucina(Glorious)', 'Mia(Summer)']],
             ['Marth', 0, 0, ['Marth', 'Marth(Groom)', 'Marth(Masked)', 'Marth(King)', 'Marth(Winter)', 'Marth(Retro)']],
             ['Robin(F)', 0, 0, ['Robin(F)', 'Robin(F)(Summer)', 'Robin(F)(Fallen)']],
             ['Robin(M)', 0, 0, ['Robin(M)', 'Robin(M)(Winter)', 'Robin(M)(Fallen)', 'Tobin']],
             ['Corrin(F)', 0, 0, ['Corrin(F)(Launch)', 'Corrin(F)(Summer)', 'Corrin(F)(Adrift)', 'Corrin(F)(Fallen)']],
             ['Corrin(M)', 0, 0, ['Corrin(M)(Launch)', 'Corrin(M)(Winter)', 'Corrin(M)(Adrift)', 'Corrin(M)(Fallen)', 'Kamui']],
-            ['Xander', 0, 0, ['Xander', 'Xander(Bunny)', 'Xander(Summer)', 'Xander(Festival)']],
+            ['Xander', 0, 0, ['Xander', 'Xander(Bunny)', 'Xander(Summer)', 'Xander(Festival)', 'Veronica(Pirate)']],
             ['Tiki', 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)', 'Tiki(Young)(Fallen)']],
             ['Lyn', 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)', 'Lyn(Summer)']],
             ['Chrom', 0, 0, ['Chrom(Launch)', 'Chrom(Bunny)', 'Chrom(Winter)', 'Chrom(Branded)', 'Itsuki', 'Chrom(Crowned)']],
@@ -2889,7 +2914,7 @@ def combined_BST(event,args,bot)
             ['Sakura', 0, 0, ['Sakura', 'Sakura(Halloween)', 'Sakura(Bath)']],
             ['Elise', 0, 0, ['Elise', 'Elise(Summer)', 'Elise(Bath)']],
             ['Hinoka', 0, 0, ['Hinoka(Launch)', 'Hinoka(Wings)', 'Hinoka(Bath)']],
-            ['Veronica', 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)', 'Thrasir']],
+            ['Veronica', 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)', 'Thrasir', 'Veronica(Pirate)']],
             ['Leo', 0, 0, ['Leo', 'Leo(Summer)', 'Leo(Picnic)']],
             ['Alm', 0, 0, ['Alm', 'Alm(Saint)', 'Alm(Brave)', 'Alm(Valentines)']],
             ['Micaiah', 0, 0, ['Micaiah', 'Micaiah(Festival)', 'Micaiah(Brave)']],
@@ -2907,7 +2932,8 @@ def combined_BST(event,args,bot)
             ['Palla', 0, 0, ['Palla', 'Palla(Bunny)', 'Palla(Retro)']],
             ['Catria', 0, 0, ['Catria(Launch)', 'Catria(SoV)', 'Catria(Bunny)', 'Palla(Retro)']],
             ['Est', 0, 0, ['Est', 'Est(Bunny)', 'Palla(Retro)']],
-            ['Julia', 0, 0, ['Julia', 'Julia(Crusader)', 'Julia(Fallen)']]]
+            ['Julia', 0, 0, ['Julia', 'Julia(Crusader)', 'Julia(Fallen)']],
+            ['Byleth', 0, 0, ['Byleth(M)', 'Byleth(F)', 'Byleth(F)(Summer)']]]
   colors=[[],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0,0,0,0],[0,0,0,0,0]]
   m=false
@@ -3047,11 +3073,11 @@ def combined_BST(event,args,bot)
   end
   event.channel.send_temporary_message("#{event.user.mention} Units found, calculating BST and arena score...",8)
   if braves[1].max==1
-    counters[15][1]+=braves[1][1]+braves[1][0]
+    counters[15][1]+=braves[1].inject(0){|sum,x| sum + x }
     counters[15][0][1]='Pseudo-F2P'
   end
   if braves[2].max==1
-    counters[15][2]+=braves[2][1]+braves[2][0]
+    counters[15][2]+=braves[2].inject(0){|sum,x| sum + x }
     counters[15][0][2]='Pseudo-F2P'
   end
   event << ''
@@ -3396,7 +3422,8 @@ def get_effHP(event,name,bot,weapon=nil)
   end
   blessing.compact!
   unless name=='Robin'
-    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+    flowers=[2*@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+    flowers=[@max_rarity_merge[2],flowers].min if untz[untz.find_index{|q| q[0]==name}][9][0].include?('XF') && untz[untz.find_index{|q| q[0]==name}][8]=='Infantry'
   end
   args.compact!
   if u40x[4].nil? || (u40x[4].max<=0 && u40x[5].max<=0)
@@ -3749,7 +3776,8 @@ def study_of_healing(event,name,bot,weapon=nil)
   end
   blessing.compact!
   unless name=='Robin'
-    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+    flowers=[2*@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+    flowers=[@max_rarity_merge[2],flowers].min if untz[untz.find_index{|q| q[0]==name}][9][0].include?('XF') && untz[untz.find_index{|q| q[0]==name}][8]=='Infantry'
   end
   args.compact!
   if args.nil? || args.length<1
@@ -4130,7 +4158,8 @@ def study_of_procs(event,name,bot,weapon=nil)
   end
   blessing.compact!
   unless name=='Robin'
-    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+    flowers=[2*@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+    flowers=[@max_rarity_merge[2],flowers].min if untz[untz.find_index{|q| q[0]==name}][9][0].include?('XF') && untz[untz.find_index{|q| q[0]==name}][8]=='Infantry'
   end
   args.compact!
   if args.nil? || args.length<1
@@ -4839,7 +4868,7 @@ def study_of_banners(event,name,bot)
     one_star=[0.0,0.0]
   end
   non_focus=[[],[]]
-  if j[9][0].include?('5p') && j[2][0]!='Duo' && (j[2][3].nil? || j[2][3]!='Duo')
+  if j[9][0].include?('5p') && !['Duo','Harmonic'].include?(j[2][0]) && !['Duo','Harmonic'].include?(j[2][3])
     k=untz.reject{|q| !q[9][0].include?('5p') || !q[13][0].nil?}
     k.push(j) unless k.include?(j) || j[9][0].include?('TD')
     k2=untz.reject{|q| !q[9][0].include?('5p') || q[9][0].include?('TD') || !q[13][0].nil?}
@@ -5032,7 +5061,8 @@ def study_of_phases(event,name,bot,weapon=nil)
   end
   blessing.compact!
   unless name=='Robin'
-    flowers=[@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+    flowers=[2*@max_rarity_merge[2],flowers].min unless untz[untz.find_index{|q| q[0]==name}][9][0].include?('PF') && untz[untz.find_index{|q| q[0]==name}][3]=='Infantry'
+    flowers=[@max_rarity_merge[2],flowers].min if untz[untz.find_index{|q| q[0]==name}][9][0].include?('XF') && untz[untz.find_index{|q| q[0]==name}][8]=='Infantry'
   end
   args.compact!
   if args.nil? || args.length<1
@@ -5614,6 +5644,7 @@ def study_of_phases(event,name,bot,weapon=nil)
   bin=[bin,175].max if u40x[2].length>0 && u40x[2][1]=='Duel' && rarity>=5
   bin=[bin,180].max if u40x[2].length>0 && u40x[2][1]=='Duel' && u40x[8]>=500 && rarity>=5
   bin=[bin,185].max if u40x[2].length>0 && (u40x[2][0]=='Duo' || u40x[2][3]=='Duo') && rarity>=5
+  bin=[bin,185].max if u40x[2].length>0 && (u40x[2][0]=='Resonant' || u40x[2][3]=='Resonant') && rarity>=5
   pic=pick_thumbnail(event,u40x,bot,resp)
   pic='https://orig00.deviantart.net/bcc0/f/2018/025/b/1/robin_by_rot8erconex-dc140bw.png' if u40[0]=='Robin (Shared stats)'
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?(' all')
@@ -6386,8 +6417,9 @@ def dev_edit(bot,event,args=[],cmd='')
     else
       @dev_units[j2][6]+=1
     end
-    @dev_units[j2][6]=[@dev_units[j2][6],2*@max_rarity_merge[2]].min
-    @dev_units[j2][6]=[@dev_units[j2][6],@max_rarity_merge[2]].min unless j3[3]=='Infantry' && j3[9][0].include?('PF')
+    @dev_units[j2][6]=[@dev_units[j2][6],3*@max_rarity_merge[2]].min
+    @dev_units[j2][6]=[@dev_units[j2][6],2*@max_rarity_merge[2]].min unless j3[3]=='Infantry' && j3[9][0].include?('PF')
+    @dev_units[j2][6]=[@dev_units[j2][6],@max_rarity_merge[2]].min if j3[8]>560 || j3[9][0].include?('XF')
     devunits_save()
     event.respond "You have given #{@dev_units[j2][0]} their #{longFormattedNumber(@dev_units[j2][6],true)} flower!"
   elsif ['nature','ivs'].include?(cmd.downcase)
@@ -6834,8 +6866,9 @@ def donor_edit(bot,event,args=[],cmd='')
     else
       donor_units[j2][6]+=1
     end
-    donor_units[j2][6]=[donor_units[j2][6],2*@max_rarity_merge[2]].min
-    donor_units[j2][6]=[donor_units[j2][6],@max_rarity_merge[2]].min unless j[3]=='Infantry' && j[9][0].include?('PF')
+    donor_units[j2][6]=[donor_units[j2][6],3*@max_rarity_merge[2]].min
+    donor_units[j2][6]=[donor_units[j2][6],2*@max_rarity_merge[2]].min unless j[3]=='Infantry' && j[9][0].include?('PF')
+    donor_units[j2][6]=[donor_units[j2][6],@max_rarity_merge[2]].min if j3[8]>560 || j3[9][0].include?('XF')
     donor_unit_save(uid,donor_units)
     event.respond "You have given #{donor_units[j2][0]} their #{longFormattedNumber(donor_units[j2][6],true)} flower!"
   elsif ['nature','ivs'].include?(cmd.downcase)

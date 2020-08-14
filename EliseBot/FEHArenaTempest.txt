@@ -1,5 +1,6 @@
-Mila, Micaiah(Bride), Nailah(Bride), Rafiel(Groom), Oboro(Bride), Hinata(Groom), Kempf, Jaffar(Winter), Ike(Vanguard), Fjorm\Aether\02/06/2020, 08/06/2020\Light, Dark\Dark Shrine, Dark Shrine
-Mila, Micaiah(Bride), Nailah(Bride), Rafiel(Groom), Oboro(Bride), Hinata(Groom), Astram, Oboro, Hrid, Sharena\Arena\02/06/2020, 08/06/2020\Water, Wind, Fire, Wind
-Mila, Micaiah(Bride), Nailah(Bride), Rafiel(Groom), Oboro(Bride), Hinata(Groom), Kempf, Jaffar(Winter), Ike(Vanguard), Fjorm\Aether\09/06/2020, 15/06/2020\Astra, Anima\Bolt Tower, Bolt Tower
-Mirabilis, Anna(Apotheosis), Say'ri, Mustafa, Emmeryn, Gangrel, Draug, Donnel, Azura(Vallite), Anna\Arena\09/06/2020, 15/06/2020\Fire, Wind
-Mirabilis, Anna(Apotheosis), Say'ri, Mustafa, Emmeryn, Gangrel, Draug, Donnel, Azura(Vallite), Anna\Arena\16/06/2020, 22/06/2020\Unknown, Unknown
+Hel, Kris(M), Kris(F), Julian, Lena, Eremiya, Mathilda, Petra, Roy(Fire), Anna\Arena\04/08/2020, 10/08/2020\Water, Wind
+Eir, Byleth(F)(Summer), Dorothea(Summer), Ingrid(Summer), Sylvain(Summer), Lorenz(Summer), Heath, Flame Emperor, Lyn(Wind), Anna\Aether\04/08/2020, 10/08/2020\Light, Dark\Flier School, Flier School
+Veronica(Pirate), Geese(Pirate), Brigid(Pirate), Tibarn(Pirate), Darros(Pirate), Veronica(Brave), Eyvel, Tibarn\Tempest\08/08/2020, 18/08/2020\Phantom Res, Hone Dragons
+Hel, Kris(M), Kris(F), Julian, Lena, Eremiya, Mathilda, Petra, Roy(Fire), Anna\Arena\11/08/2020, 17/08/2020\Water, Unknown
+Hel, Kris(M), Kris(F), Julian, Lena, Eremiya, Bartre, Iago, Ryoma(Supreme), Fjorm\Aether\11/08/2020, 17/08/2020\Astra, Anima\Bright Shrine, Bright Shrine
+Hel, Kris(M), Kris(F), Julian, Lena, Eremiya, Bartre, Iago, Ryoma(Supreme), Fjorm\Aether\18/08/2020, 24/08/2020\Light, Dark\Dark Shrine, Dark Shrine
