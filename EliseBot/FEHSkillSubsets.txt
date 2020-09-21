@@ -3,6 +3,7 @@
 ['Special', ['special', 'specials'], 'Type']
 ['Passive', ['passive', 'passives', 'apassives', 'apassive', 'passivea', 'passivesa', 'a_passives', 'a_passive', 'passive_a', 'passives_a', 'bpassives', 'bpassive', 'passiveb', 'passivesb', 'b_passives', 'b_passive', 'passive_b', 'passives_b', 'cpassives', 'cpassive', 'passivec', 'passivesc', 'c_passives', 'c_passive', 'passive_c', 'passives_c', 'spassives', 'spassive', 'passives', 'passivess', 's_passives', 's_passive', 'passive_s', 'passives_s', 'sealpassives', 'sealpassive', 'passiveseal', 'passivesseal', 'seal_passives', 'seal_passive', 'passive_seal', 'passives_seal', 'sealspassives', 'sealspassive', 'passiveseals', 'passivesseals', 'seals_passives', 'seals_passive', 'passive_seals', 'passives_seals', 'wpassives', 'wpassive', 'passivew', 'passivesw', 'w_passives', 'w_passive', 'passive_w', 'passives_w', 'a', 'b', 'c', 's', 'w'], 'Type']
 ['Duo', ['duo', 'duos'], 'Type']
+['Harmonic', ['harmonic', 'harmonics', 'resonant', 'resonants', 'resonance', 'resonances'], 'Type']
 ['Red', ['red', 'reds'], 'Color']
 ['Blue', ['blue', 'blues'], 'Color']
 ['Green', ['green', 'greens'], 'Color']

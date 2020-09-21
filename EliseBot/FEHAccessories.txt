@@ -16,10 +16,14 @@ Astral Hairpin\Hair\A hairpin from Mareeta. An accessory adorned with a moon and
 Astral Hairpin EX\Hair\A hairpin from Mareeta. An accessory adorned with a moon and star. Has an impressive quality, however slight.\Reach 2500 red friendship with Mareeta during Forging Bonds: Path to the Future.
 Bear Pin\Hair\A cute hair clip from Lysithea that features a little teddy-bear face.\Reach 100 orange friendship with Lysithea during Forging Bonds: Harmony amid Chaos
 Bear Pin EX\Hair\A cute hair clip from Lysithea. The little teddy bear has a bow tie, for extra cuteness!\Reach 2500 orange friendship with Lysithea during Forging Bonds: Harmony amid Chaos
+Bone-In Pin\Hair\A hair ornament from Ilyana.  It might look tasty, but it's wax.  Still, the sight of it could make your mouth water.\Reach 100 orange friendship with Ilyana during Forging Bonds: Timeless Ties
+Bone-In Pin EX\Hair\A hair ornament from Ilyana.  It might look delicious, but it's wax.  Still, it'd be a filling meal either way!\Reach 2500 orange friendship with Ilyana during Forging Bonds: Timeless Ties
 Chon'sin Band\Hair\An armored headband from Say'ri.  Simple, but effective, with a metal plate sewn in for protection.\Reach 100 red friendship with Say'ri during Forging Bonds: Renewed Resolve.
 Chon'sin Band EX\Hair\An armored headband from Say'ri.  In Chon'sin culture, only nobles of high status are allowed one.\Reach 2500 red friendship with Say'ri during Forging Bonds: Renewed Resolve.
 Clover Hairpin\Hair\A small hairpin from Norne. Made with a four-leaf clover.\Reach 100 orange friendship with Norne during Forging Bonds: A Time to Shine
 Clover Hairpin EX\Hair\A small hairpin from Norne. Made with good intentions and friendly wishes.\Reach 2500 orange friendship with Norne during Forging Bonds: A Time to Shine
+Coin Pouch\Hair\A small leather bag given by Gatrie.  It has a few coins inside, so shaking it produces a satisfying jingle.\Reach 100 blue friendship with Gatrie during Forging Bonds: Timeless Ties
+Coin Pouch EX\Hair\A small leather bag given by Gatrie.  It is packed full of coins, so shaking it produces a satisfying jingle.\Reach 2500 blue friendship with Gatrie during Forging Bonds: Timeless Ties
 Damsel's Ribbon\Hair\A hair ribbon from Maribelle. It's made from the highest quality fabric.\Reach 100 green friendship with Maribelle during Forging Bonds: Defending Ylisse.
 Damsel's Ribbon EX\Hair\A hair ribbon from Maribelle. It's made from the highest quality fabric and is lightly perfumed.\Reach 2500 green friendship with Maribelle during Forging Bonds: Defending Ylisse.
 Dancer's Ribbon\Hair\A hair ribbon given by Phina. Made from a soft fabric that is gentle on long hair.\Reach 100 red friendship with Phina during Forging Bonds: A Time to Shine
@@ -128,6 +132,8 @@ Devil Horns\Hat\Equip these for a menacing aura.\Clear floors 81-85 in Illusory
 Dire Notebook\Hat\Hubert's notebook. He's been keeping tabs on someone.\Reach 100 red friendship with Hubert during Forging Bonds: Changing Winds
 Dire Notebook EX\Hat\Hubert's notebook. He's outlined some sort of scheme, it seems. It ought to be returned to its owner, but…\Reach 2500 red friendship with Hubert during Forging Bonds: Changing Winds
 Enigmatic Mask\Hat\A mask that looks an awful lot like one used by a mysterious man. Maybe this was his spare...\Enter the Equip Accessories Menu for the first time.
+Exotic Cap\Hat\A stylish bandana from Claude.  Said to have been made with fancy imported fabrics.\Reach 100 orange friendship with Claude(Brave) during Forging Bonds: A New Future
+Exotic Cap EX\Hat\A stylish bandana from Claude.  Woven from imported wools and yarns into a lovely pattern.\Reach 2500 orange friendship with Claude(Brave) during Forging Bonds: A New Future
 Explorer's Hat\Hat\Kliff got this hat in preparation for his journeys into unknown realms.\Reach 100 blue friendship with Kliff during Forging Bonds: Dueling Desires.
 Explorer's Hat EX\Hat\When Kliff was but a boy, his father found this hat in a far-off land during his travels.\Reach 2500 blue friendship with Kliff during Forging Bonds: Dueling Desires.
 Falconine Helmet\Hat\A helmet from Catria. It is considered standard-issue for falcon knights.\Reach 100 red friendship with Catria(SoV) during Forging Bonds: Common Virtues.
@@ -161,6 +167,8 @@ Hand-Sewn Hood EX\Hat\A hand-sewn hood courtesy of Lilith. Fresh from the seamst
 Head-Orb\Hat\Feh likes to balance this accessory, which resembles an Orb, on her head.\April Fool's 2019 log-in bonus
 Heron Circlet\Hat\A circlet bestowed by Reyson. Elegant and intricate, it gives off an air of refinement.\Reach 100 green friendship with Reyson during Forging Bonds: Hearts as One
 Heron Circlet EX\Hat\A headband bestowed by Reyson. Elegant and intricate, it gives off an air of refinement and seems fragile.\Reach 2500 green friendship with Reyson during Forging Bonds: Hearts as One
+Horned Crown\Hat\A fine horned crown from Edelgard.  Made in the image of the Adrestian Empire's guardian.\Reach 100 green friendship with Edelgard(Brave) during Forging Bonds: A New Future
+Horned Crown EX\Hat\A fine horned crown from Edelgard.  Of the same design as the crowns worn by Adrestian Empires of old.\Reach 2500 green friendship with Edelgard(Brave) during Forging Bonds: A New Future
 Hoshidan Hat\Hat\A round hat from Midori. Woven from dried grass, it's light but tough. Works great in the rain.\Reach 100 red friendship with Midori during Forging Bonds: the Fire Within.
 Hoshidan Hat EX\Hat\A round hat from Midori. Even when adorned with such expensive-looking tassles, it still works great in the rain!\Reach 2500 red friendship with Midori during Forging Bonds: the Fire Within.
 Kitty Ribbon\Hat\Lethe's green ribbon. The bells sewn to it create a lovely sound when the wearer moves.\Reach 100 orange friendship with Lethe during Forging Bonds: A Trust Earned
@@ -195,6 +203,8 @@ Pumpkin Cake\Hat\A cake frosted with pumpkin cream. It's a tasty treat straight 
 Reindeer Horns\Hat\Get festive with this holiday accessory.\Clear floors 6-10 in Illusory Dungeon: Kingdom of Hoshido.
 Restoration Helm\Hat\The Restoration King's helmet, gifted by Ephraim. Forged in Renais, it's very solid but surprisingly light.\Reach 100 green friendship with Ephraim(Brave) during Forging Bonds: Rejecting Destiny.
 Restoration Helm EX\Hat\The Restoration King's many victories are recounted in the dents and dings that adorn this helmet.\Reach 2500 green friendship with Ephraim(Brave) during Forging Bonds: Rejecting Destiny.
+Sage's Cap\Hat\A splendid cap from Lysithea.  Said to be given to those who are recognized as brilliant sages.\Reach 100 red friendship with Lysithea(Brave) during Forging Bonds: A New Future
+Sage's Cap EX\Hat\A splendid cap from Lysithea.  Said to be worn by those sages seen as examples of Fodlain excellence.\Reach 2500 red friendship with Lysithea(Brave) during Forging Bonds: A New Future
 Sage's Ornament\Hat\Headwear Ewan had. It was given to him by his teacher, Saleh.\Reach 100 red friendship with Ewan during Forging Bonds: Mercenary Matters.
 Sage's Ornament EX\Hat\Headwear Ewan had. Bells have been added to it by his older sister, Tethys.\Reach 2500 red friendship with Ewan during Forging Bonds: Mercenary Matters.
 Saintly Ornament\Hat\A saint's headdress handed down from Silque. It radiates a holy aura.\Reach 100 orange friendship with Silque during Forging Bonds: Common Virtues.
@@ -210,6 +220,8 @@ Tactician's Hat\Hat\Those who wear this hat gain an air that lulls companions in
 Tactician's Hat EX\Hat\Those who wear this hat seem to find everyone bending to their whims. It's Loki's.\Reach 2500 red friendship with Loki during Forging Bonds: Dueling Desires.
 Vanguard's Band\Hat\A headband given by Ike. Its presence is disquieting, somehow.\Reach 100 red friendship with Ike(Fallen) during Forging Bonds: Peaceful Ends.
 Vanguard's Band EX\Hat\A red headband given by Ike. Its thick fabric soaks up plenty of sweat.\Reach 2500 red friendship with Ike(Fallen) during Forging Bonds: Peaceful Ends.
+Verdant Cord\Hat\A hair tie given by Shinon, made of leather that has been dyed green.  Adds a casual accent to any outfit.\Reach 100 red friendship with Shinon during Forging Bonds: Timeless Ties
+Verdant Cord EX\Hat\A hair tie given by Shinon, made of leather that has been dyed green.  Includes extra length, just in case.\Reach 2500 red friendship with Shinon during Forging Bonds: Timeless Ties
 White-Flower Crown\Hat\A crown made from the white flowers that grow in the mountains. Handmade by Heroes during their picnic outing.\Clear floors 76-80 in Illusiory Dungeon: Heartstring's Ties
 Worn-Out Doll\Hat\A stuffed animal from Keaton. It's all torn up, and the stuffing is falling out, but apparently that makes it great!\Reach 100 red friendship with Keaton during Forging Bonds: The Orb Case
 Worn-Out Doll EX\Hat\A stuffed animal from Keaton. It has all kinds of "treasures" stuck to it—a lizard tail, a hair ball, you name it.\Reach 2500 red friendship with Keaton during Forging Bonds: The Orb Case
@@ -230,6 +242,8 @@ Gold Reading Glasses\Mask\Proof of victory over Mythic Sothis.\Beat Sothis's MHB
 Gold Swim Goggles\Mask\Proof of victory over Legendary Robin.\Beat Robin(F)(Fallen)'s LHB at Abyssal difficulty.
 Hawk Guard\Mask\A feathered protector bestowed by Tibarn. It's made from the same sort of feathers as his necklace.\Reach 100 red friendship with Tibarn during Forging Bonds: Hearts as One
 Hawk Guard EX\Mask\A feathered protector bestowed by Tibarn. The feathers are his and those of his companions.\Reach 2500 red friendship with Tibarn during Forging Bonds: Hearts as One
+Lion's Eye Patch\Mask\A cool-looking eye patch from Dimitri.  Made from thick, high-quality leather.\Reach 100 blue friendship with Dimitri(Brave) during Forging Bonds: A New Future
+Lion's Eye Patch EX\Mask\A cool-looking eye patch from Dimitri.  Rare jewels add a beautiful blue color.\Reach 2500 blue friendship with Dimitri(Brave) during Forging Bonds: A New Future
 Mad Spectacles\Mask\A fancy pair of eyeglasses worn only for fashion. They are part of a costume.\Clear floors 16-20 in Illusory Dungeon: Driven to Madness
 Master Eye Patch\Mask\An eye patch worn by the Mirage Master Kiria.\Clear floors 76-80 in Illusory Dungeon: Wings Carry Me
 Masque Mask\Mask\A gaudy mask from Kris.  Featuring a butterfly design and a velvety finish.  Have you checked the dress code?\Reach 100 blue friendship with Kris(F) during Forging Bonds: Shape of a Spirit.
@@ -268,6 +282,8 @@ Imperial Tiara\Tiara\This imperial headpiece from Veronica was forged in the Emb
 Imperial Tiara EX\Tiara\An imperial headpiece from Veronica, forged in the Emblian Empire. Passed down by imperial princesses for ages.\Reach 2500 orange friendship with Veronica(Brave) during Forging Bonds: Rejecting Destiny.
 Kutolah Band\Tiara\A headband from Sue. It's a red cloth, velvety soft and embroidered with a golden thread.\Reach 100 orange friendship with Sue during Forging Bonds: Reason to Fight.
 Kutolah Band EX\Tiara\A headband from Sue. It's adorned with a tuft of soft fur, the mark of a nomad trooper.\Reach 2500 orange friendship with Sue during Forging Bonds: Reason to Fight.
+Red Ponytail\Tiara\A fancy wig from Jill.  Put it on when you need a quick change in your mentality.  Surprisingly heavy.\Reach 100 green friendship with Jill during Forging Bonds: Timeless Ties
+Red Ponytail EX\Tiara\A fancy wig from Jill.  Something about the yellow tie pulls at a deep nostalgia.\Reach 2500 green friendship with Owain during Forging Bonds: Timeless Ties
 Tropical Garland\Tiara\Tropical flowers strung together to form a crown. They have a lovely, subtle scent.\Clear floors 81-85 during Illusory Dungeon: Three Houses.
 Wings of Darkness\Tiara\Wings held by Owain. He says they have a unique power useful for fighting the darkness.\Reach 100 green friendship with Owain during Forging Bonds: Dueling Desires.
 Wings of Darkness EX\Tiara\Wings held by Owain. He says that sacred powers changed them to the purest white.\Reach 2500 green friendship with Owain during Forging Bonds: Dueling Desires.

@@ -1,6 +1,8 @@
-Hel, Kris(M), Kris(F), Julian, Lena, Eremiya, Mathilda, Petra, Roy(Fire), Anna\Arena\04/08/2020, 10/08/2020\Water, Wind
-Eir, Byleth(F)(Summer), Dorothea(Summer), Ingrid(Summer), Sylvain(Summer), Lorenz(Summer), Heath, Flame Emperor, Lyn(Wind), Anna\Aether\04/08/2020, 10/08/2020\Light, Dark\Flier School, Flier School
-Veronica(Pirate), Geese(Pirate), Brigid(Pirate), Tibarn(Pirate), Darros(Pirate), Veronica(Brave), Eyvel, Tibarn\Tempest\08/08/2020, 18/08/2020\Phantom Res, Hone Dragons
-Hel, Kris(M), Kris(F), Julian, Lena, Eremiya, Mathilda, Petra, Roy(Fire), Anna\Arena\11/08/2020, 17/08/2020\Water, Unknown
-Hel, Kris(M), Kris(F), Julian, Lena, Eremiya, Bartre, Iago, Ryoma(Supreme), Fjorm\Aether\11/08/2020, 17/08/2020\Astra, Anima\Bright Shrine, Bright Shrine
-Hel, Kris(M), Kris(F), Julian, Lena, Eremiya, Bartre, Iago, Ryoma(Supreme), Fjorm\Aether\18/08/2020, 24/08/2020\Light, Dark\Dark Shrine, Dark Shrine
+Corrin(F)(Dusk), Dimitri(Brave), Claude(Brave), Edelgard(Brave), Lysithea(Brave), Jorge, Ogma, Fir, Leif(Unifier), Sharena\Arena\08/09/2020, 14/09/2020\Wind, Earth
+Thrasir, Dimitri(Brave), Claude(Brave), Edelgard(Brave), Lysithea(Brave), Jorge, Hinata(Groom), Gangrel, Hector(Marquess), Sharena\Aether\08/09/2020, 14/09/2020\Astra, Anima\Healing Tower, Healing Tower
+Sigurd(AwaOdori), Quan(AwaOdori), Ethlyn(AwaOdori), Lachesis(AwaOdori), Eldigan(AwaOdori), Sigurd, Deirdre, Eldigan\Tempest\09/09/2020, 19/09/2020\Res Feint 1, Armor March 1
+Sigurd(AwaOdori), Quan(AwaOdori), Ethlyn(AwaOdori), Lachesis(AwaOdori), Eldigan(AwaOdori), Kempf, Hana, Azama, Celica(Queen), Anna\Arena\15/09/2020, 21/09/2020\Wind, Water
+Thrasir, Dimitri(Brave), Claude(Brave), Edelgard(Brave), Lysithea(Brave), Jorge, Hinata(Groom), Gangrel, Hector(Marquess), Sharena\Aether\15/09/2020, 21/09/2020\Light, Dark\Panic Manor, Panic Manor
+Sigurd(AwaOdori), Quan(AwaOdori), Ethlyn(AwaOdori), Lachesis(AwaOdori), Eldigan(AwaOdori), Kempf, Hana, Azama, Celica(Queen), Anna\Arena\22/09/2020, 28/09/2020\Unknown, Unknown
+Yune, Sigurd(AwaOdori), Quan(AwaOdori), Ethlyn(AwaOdori), Lachesis(AwaOdori), Eldigan(AwaOdori), Sylvain(Summer), Lorenz(Summer)\Aether\22/09/2020, 28/09/2020\Astra, Anima\Catapult, Catapult
+Yune, Sigurd(AwaOdori), Quan(AwaOdori), Ethlyn(AwaOdori), Lachesis(AwaOdori), Eldigan(AwaOdori), Sylvain(Summer), Lorenz(Summer)\Aether\29/09/2020, 05/10/2020\Light, Dark\Infantry School, Infantry School

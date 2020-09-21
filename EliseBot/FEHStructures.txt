@@ -8,7 +8,7 @@ Armor School\6\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on armored
 Armor School\6\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-7 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 1500, 0, 0\0\Only one school can be placed at a time.
 Armor School\7\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 0, 3000, 0\0\Only one school can be placed at a time.
 Armor School\7\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on armored foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 0, 0\0\Only one school can be placed at a time.
-Bright Shrine\example\Offensive/Defensive\At start of turn, inflicts Atk/Spd-`(level+1)` on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 1500, 1500, 0\0
+Bright Shrine\example\Offensive/Defensive\At start of turn, inflicts Atk/Spd-`(level+1)` on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 3000, 3000, 0\0
 Bright Shrine\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd-2 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 100, 0, 0\0
 Bright Shrine\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd-3 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 300, 0, 0\0
 Bright Shrine\3\Offensive/Defensive\At start of turn, inflicts Atk/Spd-4 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 500, 0, 0\0
@@ -16,6 +16,8 @@ Bright Shrine\4\Offensive/Defensive\At start of turn, inflicts Atk/Spd-5 on foe 
 Bright Shrine\5\Offensive/Defensive\At start of turn, inflicts Atk/Spd-6 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 900, 0, 0\0
 Bright Shrine\6\Offensive\At start of turn, inflicts Atk/Spd-7 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 0, 1500, 0\0
 Bright Shrine\6\Defensive\At start of turn, inflicts Atk/Spd-7 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 1500, 0, 0\0
+Bright Shrine\7\Offensive\At start of turn, inflicts Atk/Spd-8 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 0, 3000, 0\0
+Bright Shrine\7\Defensive\At start of turn, inflicts Atk/Spd-8 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 3000, 0, 0\0
 Bolt Tower\example\Offensive/Defensive\At the start of turn 3, deals `(5*level+5)` damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 100, 0, 0\0
 Bolt Tower\1\Offensive/Defensive\At the start of turn 3, deals 10 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 100, 0, 0\0
 Bolt Tower\2\Offensive/Defensive\At the start of turn 3, deals 15 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 300, 0, 0\0
@@ -177,10 +179,11 @@ Dining Hall\-\Resort\A structure where dishes can be prepared with the ingredien
 Field\-\Resort\A place where Dragonflowers and food-crop ingredients for the Dining Hall are grown and harvested.  Planted crops can be harvested at the beginning of the following season.\-\0, 0, 0, 0\0
 Hot Spring\-\Resort\A structure where Heroes can relax in a nice hot spring.  Apparently it is a natural spring, too, which is especially incredible considering it is located within a floating island in the sky.\-\300, 0, 0, 0\0
 Gateway\-\Mjolnir\The battle will be lost if your foe destroys all of your Gateways.\Yes\0, 0, 0, 0\0
-Askran Seal\example\Mjolnir\Grants Atk/Spd/Def/Res+`(2*level)` to allies within 5 rows and 5 columns centered on structure.\No\0, 100, 0, 0\2
+Askran Seal\example\Mjolnir\Grants Atk/Spd/Def/Res+`(2*level)` to allies within 5 rows and 5 columns centered on structure.\No\0, 700, 0, 0\2
 Askran Seal\1\Mjolnir\Grants Atk/Spd/Def/Res+2 to allies within 5 rows and 5 columns centered on structure.\No\0, 100, 0, 0\2
 Askran Seal\2\Mjolnir\Grants Atk/Spd/Def/Res+4 to allies within 5 rows and 5 columns centered on structure.\No\0, 300, 0, 0\2
 Askran Seal\3\Mjolnir\Grants Atk/Spd/Def/Res+6 to allies within 5 rows and 5 columns centered on structure.\No\0, 500, 0, 0\2
+Askran Seal\4\Mjolnir\Grants Atk/Spd/Def/Res+8 to allies within 5 rows and 5 columns centered on structure.\No\0, 700, 0, 0\2
 Death's Throne\example\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ `(10*level+35)` through that foe's next action.\No\0, 500, 0, 0\3
 Death's Throne\1\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 35 through that foe's next action.\No\0, 100, 0, 0\3
 Death's Throne\2\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 45 through that foe's next action.\No\0, 300, 0, 0\3

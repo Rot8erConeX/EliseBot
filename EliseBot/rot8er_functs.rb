@@ -27,7 +27,18 @@ def pseudocase(str)
 end
 
 def get_donor_list()
-  if File.exist?("#{@location}devkit/FEHDonorList.txt")
+  if !$location.nil? && File.exist?("#{$location}devkit/FEHDonorList.txt")
+    b=[]
+    File.open("#{$location}devkit/FEHDonorList.txt").each_line do |line|
+      b.push(line.gsub("\n",'').split('\\'[0]))
+    end
+    for i in 0...b.length
+      b[i][0]=b[i][0].to_i
+      b[i][2]=b[i][2].split(', ').map{|q| q.to_i}
+      b[i][3]=b[i][3].split('/').map{|q| q.to_i} unless b[i][3].nil?
+      b[i][4]=b[i][4].split(', ') unless b[i][4].nil?
+    end
+  elsif File.exist?("#{@location}devkit/FEHDonorList.txt")
     b=[]
     File.open("#{@location}devkit/FEHDonorList.txt").each_line do |line|
       b.push(line.gsub("\n",'').split('\\'[0]))
@@ -45,10 +56,10 @@ def get_donor_list()
 end
 
 def is_mod?(user,server,channel,mode=0) # used by certain commands to determine if a user can use them
-  return true if user.id==167657750971547648 # bot developer is always an EliseMod
-  return false if server.nil? # no one is a EliseMod in PMs
-  return true if user.id==server.owner.id # server owners are EliseMods by default
-  for i in 0...user.roles.length # certain role names will count as EliseMods even if they don't have legitimate mod powers
+  return true if user.id==167657750971547648 # bot developer is always a Mod
+  return false if server.nil? # no one is a Mod in PMs
+  return true if user.id==server.owner.id # server owners are Mods by default
+  for i in 0...user.roles.length # certain role names will count as Mods even if they don't have legitimate mod powers
     return true if ['mod','mods','moderator','moderators','admin','admins','administrator','administrators','owner','owners'].include?(user.roles[i].name.downcase.gsub(' ',''))
   end
   return true if user.permission?(:manage_messages,channel) # legitimate mod powers also confer BotMod powers
@@ -190,7 +201,13 @@ def supersort(a,b,m,n=nil,mode=0)
       return a[m][n] <=> b[m][n]
     end
   end
-  if a[m].is_a?(String) && b[m].is_a?(String) && mode==1
+  if a[m].nil? && b[m].nil?
+    return 0
+  elsif a[m].nil?
+    return 1
+  elsif b[m].nil?
+    return -1
+  elsif a[m].is_a?(String) && b[m].is_a?(String) && mode==1
     return a[m].downcase <=> b[m].downcase
   elsif a[m].is_a?(String) && b[m].is_a?(String)
     return b[m].downcase <=> a[m].downcase
@@ -636,7 +653,7 @@ def triple_weakness(bot,event)
     inv=true if ['inverse','reverse','backwards'].include?(args[i])
   end
   tpz=tpz.uniq
-  if @shardizard==4
+  if @shardizard==4 || Shardizard==4
   elsif !event.server.nil? && event.server.id==330850148261298176 && bot.user(206147275775279104).on(event.server.id).nil?
   else
     return nil if tpz.length<3 && !inv
@@ -807,7 +824,7 @@ def bug_report(bot,event,args,shrd_num,shrd_names,shrd_type,pref,echo=nil)
   s3='Suggestion' if a[0]=='suggestion'
   s3='Feedback' if a[0]=='feedback'
   if args.nil? || args.length.zero?
-    event.respond "You did not include a description of your #{s3.downcase}.  Please retry the command like this:\n```#{event.message.text} here is where you type the description of your #{s3.downcase}```"
+    event.respond "You did not include a description of your #{s3.downcase}.  Please retry the command like this:\n```#{event.message.text} here is where you type the description of your #{s3.downcase}```  Please note that images cannot be relayed to my developer through this command."
     if event.server.nil?
       s="**#{s3} sent by PM**"
     else

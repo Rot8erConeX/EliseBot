@@ -6,7 +6,6 @@ Alexa
 Althaea
 Amber
 Andreas
-Anette
 Anise
 Anzu
 Ariyoshi
@@ -38,7 +37,6 @@ Daisuke
 Daisy
 Damien
 Dillan
-Dimitri
 Dora
 Edsel
 Elmar
@@ -47,7 +45,6 @@ Ernesta
 Eva
 Fenn
 Flint
-Freyja
 Fritz
 Fuchsia
 Fumi
@@ -68,13 +65,11 @@ Hendrik
 Hibari
 Hideaki
 Hidetora
-Hilda
 Himawari
 Hiroe
 Hiromi
 Hiroyuki
 Hotaru
-Hubert
 Hunter
 Ibuki
 Ilse
@@ -123,7 +118,6 @@ Marta
 Masahiko
 Mikasa
 Minato
-Mint
 Mitsuru
 Miyabi
 Mizuki
@@ -146,7 +140,6 @@ Pepper
 Perilla
 Peter
 Primrose
-Quill
 Ren
 Renga
 Rhoda
@@ -162,7 +155,6 @@ Rumi
 Rusty
 Saburo
 Saffron
-Sage
 Sango
 Saya
 Sequoia

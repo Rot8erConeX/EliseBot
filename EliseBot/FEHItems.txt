@@ -11,6 +11,7 @@ Light's Blessing\Main\999999\Used during battle.  Restores all allies' HP, movem
 Midgard Gem\Main\999999\Used in Mjolnir's Strike to build and improve your structures for Midgard's Shield.
 Orb\Main\infinite\Used for summoning and various other features.\Can be used as a replacement for: Stamina Potions, Dueling Crests, Light's Blessings.  Can also be used to upgrade the castle and increase the global Exp. modifier, or to increase barracks size.  Actual maximum is 99,999 f2p orbs and indefinite paid orbs.
 Refining Stone\Main\999\Used in the Weapon Refinery to refine normal weapons.\"Normal" weapons refers to weapons that can be inherited.
+R&R Affinity\Main\999\Used in Aether Resort to create structures.
 Sacred Coin\Main\999\A valuable ceremonial coin for the Sacred Seal Forge used in antiquity.\Cost of creating and promoting Sacred Seals.
 Stamina Potion\Main\999999\Grants stamina +99
 Dueling Sword\Implied\3\Price of entering Arena.
@@ -25,6 +26,10 @@ Wind Blessing\Blessing\999\Used in Confer Blessing.  Confers the wind blessing o
 Azure Badge\Growth\999999\Used to unlock potential in allies.  Increase rarity for a 3<:Icon_Rarity_3:448266417934958592> or lower blue-type ally.  Also used in the Sacred Seal Forge.
 Azure Crystal\Growth\999999\Used for leveling up.  Can be used on blue-type allies level 20 and higher.
 Azure Shard\Growth\999999\Used for leveling up.  Can be used on blue-type allies up to level 19.
+Dragonflower (A)\Growth\999999\Used in Use Dragonflowers to boost the stats of an armored ally.
+Dragonflower (C)\Growth\999999\Used in Use Dragonflowers to boost the stats of a cavalry ally.
+Dragonflower (F)\Growth\999999\Used in Use Dragonflowers to boost the stats of a flying ally.
+Dragonflower (I)\Growth\999999\Used in Use Dragonflowers to boost the stats of an infantry ally.
 Great Azure Badge\Growth\999999\Used to unlock potential in allies.  Increase a 4<:Icon_Rarity_4:448266418459377684> blue-type ally to 5<:Icon_Rarity_5:448266417553539104>.  Also used in the Sacred Seal Forge.
 Great Scarlet Badge\Growth\999999\Used to unlock potential in allies.  Increase a 4<:Icon_Rarity_4:448266418459377684> red-type ally to 5<:Icon_Rarity_5:448266417553539104>.  Also used in the Sacred Seal Forge.
 Great Transparent Badge\Growth\999999\Used to unlock potential in allies.  Increase a 4<:Icon_Rarity_4:448266418459377684> colorless-type ally to 5<:Icon_Rarity_5:448266417553539104>.  Also used in the Sacred Seal Forge.
@@ -56,6 +61,7 @@ Battle Flag\Event\9999\Used to participate in Voting Gauntlets.\Multiplies user 
 Conquest Lance\Event\99\Grants +8 stamina for Grand Conquests.\Grand Conquest stamina is different from stamina for other modes.
 Havoc Axe\Event\99\Grants +8 stamina for Rokkr Sieges.\Rokkr Sieges stamina is different from stamina for other modes.
 Forma Torch\Event\99\Used to extend stamina in the Hall of Forms.\Hall of Forms
+Forma Soul\Event\999999\An enigmatic treasure used to transform Forma units into allies by imbuing them with souls.\Actual maximum is limited to the number of months since March 2020, inclusive.
 First Summon Ticket\Event\99\This ticket can be used only for the specified summoning event. It will let you start a summoning session without using Orbs.\Each type of ticket is limited to its own specific banner.  Eight types of tickets have been seen so far.
 Frosty Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\New Year's 2019
 Spring Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Spring 2019
