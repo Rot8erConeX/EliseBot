@@ -1,9 +1,9 @@
-Awakening / Fates\Cordelia(Summer); 5; 400, 0\Robin(M)(Fallen); 5; 800, 0\Owain; 5; 1200, 0\Xander(Festival); 5; 1600, 0\Corrin(M)(Adrift); 5; 2000, 0
-Radiance\Leanne; 5; 400, 0\Elincia(Festival); 5; 800, 0\Lethe; 5; 1200, 0\Tanith(Bride); 5; 1600, 0\Greil(Valentines); 5; 2000, 0
-Blades / Sacred Stones\Lillina(Valentines); 5; 400\Amelia; 5; 800, 0\Nino(Fangs); 5; 1200, 0\Ephraim(Winter); 5; 1600, 0\Hector(Valentines); 5; 2000, 0
-Holy War\Leif; 5; 400, 0\Deirdre; 5; 800, 0\Sigurd; 5; 1200, 0\Lewyn; 5; 1600, 0\Ishtar(Soiree); 5; 2000, 0
+Awakening / Fates\Cordelia(Summer); 5; 400, 0\Robin(M)(Fallen); 5; 800, 0\Owain; 5; 1200, 0\Xander(AwaOdori); 5; 1600, 0\Corrin(M)(Adrift); 5; 2000, 0
+Radiance\Leanne; 5; 400, 0\Elincia(AwaOdori); 5; 800, 0\Lethe; 5; 1200, 0\Tanith(Bride); 5; 1600, 0\Greil(Valentines); 5; 2000, 0
+Blades / Sacred Stones\Lillina(Valentines); 5; 400\Amelia; 5; 800, 0\Nino(Fangs); 5; 1200, 0\Ephraim(Christmas); 5; 1600, 0\Hector(Valentines); 5; 2000, 0
+Holy War\Leif; 5; 400, 0\Deirdre; 5; 800, 0\Sigurd; 5; 1200, 0\Lewyn; 5; 1600, 0\Ishtar(AwaOdori); 5; 2000, 0
 Mystery / Shadows\Caeda(Bride); 5; 400, 0\Celica; 5; 800, 0\Genny(Picnic); 5; 1200, 0\Palla(Bunny); 5; 1600, 0\Kliff; 5; 2000, 0
-Heroes\Alfonse(Bunny); 5; 400, 0\Ylgr; 5; 800, 0\Bruno(Bunny); 5; 1200, 0\Fjorm(Winter); 5; 1600, 0\Laevatein(Summer); 5; 2000, 0
+Heroes\Alfonse(Bunny); 5; 400, 0\Ylgr; 5; 800, 0\Bruno(Bunny); 5; 1200, 0\Fjorm(NewYears); 5; 1600, 0\Laevatein(Summer); 5; 2000, 0
 Ephemura (March 2020) 0\05/03/2020, 27/04/2020
 Ephemura (March 2020) 1\Camilla(Bunny); 5; 0, 300
 Ephemura (March 2020) 2\Kagero(Bunny); 5; 0, 300
@@ -46,7 +46,7 @@ Ephemura (July 2020) 6\Echidna; 4; 0, 100
 Ephemura (July 2020) 7\Legault; 4; 0, 100
 Ephemura (August 2020) 0\05/08/2020, 27/09/2020
 Ephemura (August 2020) 1\Tana; 5; 0, 300
-Ephemura (August 2020) 2\Ryoma(Festival); 5; 0, 300
+Ephemura (August 2020) 2\Ryoma(AwaOdori); 5; 0, 300
 Ephemura (August 2020) 3\Subaki; 4; 0, 100
 Ephemura (August 2020) 4\Bantu; 4; 0, 100
 Ephemura (August 2020) 5\Laslow; 4; 0, 100
@@ -54,9 +54,33 @@ Ephemura (August 2020) 6\Abel; 4; 0, 100
 Ephemura (August 2020) 7\Cain; 4; 0, 100
 Ephemura (September 2020) 0\05/09/2020, 27/10/2020
 Ephemura (September 2020) 1\Quan; 5; 0, 300
-Ephemura (September 2020) 2\Olivia(Performing); 5; 0, 300
+Ephemura (September 2020) 2\Olivia(AwaOdori); 5; 0, 300
 Ephemura (September 2020) 3\Draug; 4; 0, 100
 Ephemura (September 2020) 4\Mae; 4; 0, 100
 Ephemura (September 2020) 5\Norne; 4; 0, 100
 Ephemura (September 2020) 6\Setsuna; 4; 0, 100
 Ephemura (September 2020) 7\Tethys; 4; 0, 100
+Ephemura (October 2020) 0\05/10/2020, 27/11/2020
+Ephemura (October 2020) 1\Niles(Halloween); 5; 0, 300
+Ephemura (October 2020) 2\Jakob(Halloween); 5; 0, 300
+Ephemura (October 2020) 3\Hinata; 4; 0, 100
+Ephemura (October 2020) 4\Mordecai; 4; 0, 100
+Ephemura (October 2020) 5\Gunter; 4; 0, 100
+Ephemura (October 2020) 6\Tanya; 4; 0, 100
+Ephemura (October 2020) 7\Kagero; 4; 0, 100
+Ephemura (November 2020) 0\05/11/2020, 27/12/2020
+Ephemura (November 2020) 1\Chrom(Christmas); 5; 0, 300
+Ephemura (November 2020) 2\Fae(Christmas); 5; 0, 300
+Ephemura (November 2020) 3\Palla; 4; 0, 100
+Ephemura (November 2020) 4\Abel; 4; 0, 100
+Ephemura (November 2020) 5\Ferdinand von Aegir; 4; 0, 100
+Ephemura (November 2020) 6\Reinhardt(Bonds); 4; 0, 100
+Ephemura (November 2020) 7\Brady; 4; 0, 100
+Ephemura (December 2020) 0\08/12/2020, 27/01/2021
+Ephemura (December 2020) 1\Takumi(NewYears); 5; 0, 300
+Ephemura (December 2020) 2\Laevatein(NewYears); 5; 0, 300
+Ephemura (December 2020) 3\Henry; 4; 0, 100
+Ephemura (December 2020) 4\Gwendolyn; 4; 0, 100
+Ephemura (December 2020) 5\Ross; 4; 0, 100
+Ephemura (December 2020) 6\Klein; 4; 0, 100
+Ephemura (December 2020) 7\Chad; 4; 0, 100
