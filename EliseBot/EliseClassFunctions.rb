@@ -669,12 +669,13 @@ class DevUnit
   end
   
   def sortPriority
-    return 6 if @name=='Sakura'
-    return 5 if @name=='Bernie'
-    return 4 if ['Sakura','Bernie','Cordelia'].include?(@cohort)
-    return 3 unless @support.nil? || @support.length<=0 || @support=='-'
-    return 4 unless @true_support.nil? || @true_support.length<=0 || @true_support=='-'
-    return 1 if ['Sakura','Bernie','Alm','Cordelia'].include?(@alts[0])
+    return 42 if @name=='Sakura'
+    return 41 if @name=='Bernie'
+    return 40 if @name=='Mirabilis'
+    return 30 if ['Sakura','Bernie','Cordelia','Mirabilis'].include?(@cohort)
+    return 21 unless @support.nil? || @support.length<=0 || @support=='-'
+    return 20 unless @true_support.nil? || @true_support.length<=0 || @true_support=='-'
+    return 10 if ['Sakura','Bernie','Alm','Cordelia','Mirabilis'].include?(@alts[0])
     return 0
   end
 end
@@ -9064,7 +9065,7 @@ def disp_unit_art(bot,event,args=[],xname=nil)
         e=[]
         for i2 in 0...vana.length
           e.push("#{i2+1}") if vana[i2]==vana2
-          e.push("#{i2+1}R") if u[i].hasResplendent? && vana[i2]==respvana[0] && !e.include?("#{i2+1}")
+          e.push("#{i2+1}R") if u[i].hasResplendent? && !respvana.nil? && vana[i2]==respvana[0] && !e.include?("#{i2+1}")
         end
         j=[]
         for i2 in 0...vajp.length
@@ -9244,6 +9245,9 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     f=f.map{|q| q[0,2]} if f.length<3
     if m.inject(0){|sum,x2| sum + x2 }>25 && !safe_to_spam?(event)
       str="#{str}\n\nThere were too many units with the same artist and/or VA to list them all.  Please use this command in PM."
+      f=nil
+    elsif f.length<=1 && !(@embedless.include?(event.user.id) || was_embedless_mentioned?(event)) && f[0][1].split("\n").length<=5
+      str="#{str}\n\n__*#{f[0][0]}*__\n#{f[0][1]}"
       f=nil
     elsif f.length<=1 && !(@embedless.include?(event.user.id) || was_embedless_mentioned?(event))
       str="#{str}\n\n#{f[0][0]}"
@@ -10271,7 +10275,7 @@ def dev_flower_list(event,bot,args=[])
     x[i].sort_data[0]="**#{x[i].sort_data[0]}**" if x[i].merge_count>=Max_rarity_merge[1]
     x[i].sort_data[0]="#{x[i].sort_data[0]}"
     if x[i].dragonflowers>=x[i].dragonflowerMax
-      x[i].sort_data[1]="**#{x[i].name}** - max"
+      x[i].sort_data[1]="**#{x[i].name}**"
     elsif x[i].dragonflowers==0
       x[i].sort_data[1]="#{x[i].name}"
     else
@@ -10279,7 +10283,7 @@ def dev_flower_list(event,bot,args=[])
     end
     x[i].sort_data=x[i].sort_data.join(' ')
   end
-  x=x.sort{|a,b| (a.dragonflowers<=>b.dragonflowers)==0 ? (a.name<=>b.name) : (b.dragonflowers<=>a.dragonflowers)}
+  x=x.sort{|a,b| (a.dragonflowers<=>b.dragonflowers)==0 ? ((a.sortPriority<=>b.sortPriority)==0 ? (a.name<=>b.name) : (b.sortPriority<=>a.sortPriority)) : (b.dragonflowers<=>a.dragonflowers)}
   f=[]
   y=x.reject{|q| q.movement != 'Infantry' || q.dragonflowers>=q.dragonflowerMax}
   f.push(['<:Dragonflower_Infantry:541170819980722176>Infantry<:Icon_Move_Infantry:443331187579289601>',y.map{|q| q.sort_data}.join("\n"),0xF79FA0]) if y.length>0
@@ -10289,7 +10293,7 @@ def dev_flower_list(event,bot,args=[])
   f.push(['<:Dragonflower_Flier:541170820089774091>Fliers<:Icon_Move_Flier:443331186698354698>',y.map{|q| q.sort_data}.join("\n"),0x90C0F5]) if y.length>0
   y=x.reject{|q| q.movement != 'Armor' || q.dragonflowers>=q.dragonflowerMax}
   f.push(['<:Dragonflower_Armor:541170820001824778>Armored<:Icon_Move_Armor:443331186316673025>',y.map{|q| q.sort_data}.join("\n"),0x9FE0B3]) if y.length>0
-  y=x.reject{|q| q.dragonflowers<q.dragonflowerMax}
+  y=x.reject{|q| q.dragonflowers<q.dragonflowerMax}.sort{|a,b| (a.sortPriority<=>b.sortPriority)==0 ? (a.name<=>b.name) : (b.sortPriority<=>a.sortPriority)}
   f.push(['Completed Projects',y.map{|q| q.sort_data}.join("\n"),0x008b8b]) if y.length>0
   if f.map{|q| "__**#{q[0]}**__\n#{q[1]}"}.join("\n\n").length>1900
     for i in 0...f.length
@@ -10313,7 +10317,7 @@ def dev_grail_list(event,bot,args=[],mode='')
   x=$dev_units.reject{|q| !q.availability[0].include?('r') && !q.availability[0].include?('g') && !q.availability[0].include?('t')}
   x=$dev_units.reject{|q| !q.availability[0].include?('g')} if mode=='GHB'
   x=$dev_units.reject{|q| !q.availability[0].include?('t')} if mode=='Tempest'
-  x=x.sort{|a,b| (a.merge_count<=>b.merge_count)==0 ? (a.name<=>b.name) : (b.merge_count<=>a.merge_count)}
+  x=x.sort{|a,b| (a.merge_count<=>b.merge_count)==0 ? ((a.sortPriority<=>b.sortPriority)==0 ? (a.name<=>b.name) : (b.sortPriority<=>a.sortPriority)) : (b.merge_count<=>a.merge_count)}
   f=[]
   z=x.reject{|q| q.availability[0].include?('r') || (q.rarity>=Max_rarity_merge[0] && q.merge_count>=Max_rarity_merge[1])}
   f.push(['Currently ungrailable',z.map{|q| "#{q.rarity}#{Rarity_stars[0][q.rarity-1]}+#{q.merge_count} #{q.name}#{'<:Heroic_Grail:574798333898653696>' if q.availability[0].include?('g')}#{'<:Current_Tempest_Bonus:498797966740422656>' if q.availability[0].include?('t')}"}.join("\n")]) if z.length>0

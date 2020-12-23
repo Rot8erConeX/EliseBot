@@ -719,7 +719,9 @@ def dev_pm(bot,event,user_id,allowedids=[])
   sig="<:MCandleTop:642901964308480040>\n<:MCandleBottom:642901962005938181>"
   sig="<:Smol_Ephraim:644015195710291968>" if event.user.id==78649866577780736
   sig="<:cornslep:669319246647525412>" if event.user.id==141260274144509952
-  bot.user(user_id.to_i).pm("#{first_sub(event.message.text,f,'',1)}#{"\n#{sig}" unless jke}")
+  text2send=event.message.text.gsub("\n"," \n")
+  text2send=first_sub(text2send,f,'',1)
+  bot.user(user_id.to_i).pm("#{text2send}#{"\n#{sig}" unless jke}")
   event.respond 'Message sent.'
 end
 
@@ -749,16 +751,18 @@ def dev_message(bot,event,channel_id,allowedids=[])
   sig="<:MCandleTop:642901964308480040>\n<:MCandleBottom:642901962005938181>"
   sig="<:Smol_Ephraim:644015195710291968>" if event.user.id==78649866577780736
   sig="<:cornslep:669319246647525412>" if event.user.id==141260274144509952
+  text2send=event.message.text.gsub("\n"," \n")
+  text2send=first_sub(text2send,f,'',1)
   if jke
-    bot.channel(channel_id).send_message("#{first_sub(event.message.text,f,'',1)}")
+    bot.channel(channel_id).send_message(text2send)
   else
-    bot.channel(channel_id).send_message("#{first_sub(event.message.text,f,'',1)}\n#{sig}")
+    bot.channel(channel_id).send_message("#{text2send}\n#{sig}")
     unless event.user.id==167657750971547648
-      bot.user(167657750971547648).pm("**Channel:** #{bot.channel(channel_id).name} (#{channel_id})\n**Responder:** #{event.user.distinct} (#{event.user.id})\n**Message:** #{first_sub(event.message.text,f,'',1)}") rescue nil
+      bot.user(167657750971547648).pm("**Channel:** #{bot.channel(channel_id).name} (#{channel_id})\n**Responder:** #{event.user.distinct} (#{event.user.id})\n**Message:** #{text2send}") rescue nil
     end
     for i in 0...allowedids.length
       unless event.user.id==allowedids[i]
-        bot.user(allowedids[i]).pm("**Channel:** #{bot.channel(channel_id).name} (#{channel_id})\n**Responder:** #{event.user.distinct} (#{event.user.id})\n**Message:** #{first_sub(event.message.text,f,'',1)}") rescue nil
+        bot.user(allowedids[i]).pm("**Channel:** #{bot.channel(channel_id).name} (#{channel_id})\n**Responder:** #{event.user.distinct} (#{event.user.id})\n**Message:** #{text2send}") rescue nil
       end
     end
   end
@@ -775,7 +779,8 @@ def donor_embed(bot,event,str='')
     event << 'However, there are other options:'
     event << "- My Amazon wish list: http://a.co/0p3sBec (Items purchased from this list will be delivered to me)"
     event << '- You can also purchase an Amazon gift card and have it delivered via email to **rot8er.conex@gmail.com**.  (Quicklink: <https://goo.gl/femEcw>)'
-    event << "You can use your Nitro Boost on either Elise's (<https://discord.gg/9TaRd2h>) or Liz's (<https://discord.gg/bcRcanR>) primary emote servers, which will count as a $5 donation per boost."
+    event << "- I am saving to replace my laptop again, though this time it's nowhere near as urgent as before.  You can purchase a NewEgg giftcard to be delivered via email to **rot8er.conex@gmail.com**.  (Quicklink: <https://rb.gy/dmh9gf>)"
+    event << "- You can use your Nitro Boost on either Elise's (<https://discord.gg/9TaRd2h>) or Liz's (<https://discord.gg/bcRcanR>) primary emote servers, which will count as a $5 donation per boost."
     event << ''
     event << '~~Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.~~'
     event << ''
@@ -788,6 +793,7 @@ def donor_embed(bot,event,str='')
     str2="#{str2}\n\nHowever, there are other options:"
     str2="#{str2}\n- You can purchase items from [this list](http://a.co/0p3sBec) and they will be delivered to me."
     str2="#{str2}\n- You can [purchase an Amazon gift card](https://goo.gl/femEcw) and have it delivered via email to **rot8er.conex@gmail.com**."
+    str2="#{str2}\n- You can [purchase a NewEgg gift card](https://rb.gy/dmh9gf) and have it delivered via email to **rot8er.conex@gmail.com**.  I am aiming to replace my laptop again, though this time it's nowhere near as urgent, so I can afford to be smarter about finding the features I need."
     str2="#{str2}\n- You can use your Nitro Boost on either [Elise's](https://discord.gg/9TaRd2h) or [Liz's](https://discord.gg/bcRcanR) primary emote servers, which will count as a $5 donation per boost."
     str2="#{str2}\n\n[Donor List](https://tinyurl.com/y5m8dv6k)"
     str2="#{str2}\n[Donor Perks](https://urlzs.com/kthnr)"
@@ -840,9 +846,11 @@ def bug_report(bot,event,args,shrd_num,shrd_names,shrd_type,pref,echo=nil)
   end
   f=event.message.text.split(' ')
   f="#{f[0]} "
+  text2send=event.message.text.gsub("\n"," \n")
+  text2send=first_sub(text2send,f,'',1)
   echo=431862993194582036 if !@shardizard.nil? && @shardizard==4 && !echo.nil?
-  bot.user(167657750971547648).pm("#{s}\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{s3}:** #{first_sub(event.message.text,f,'',1)}")
-  bot.channel(echo).send_message("#{s}\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{s3}:** #{first_sub(event.message.text,f,'',1)}") unless echo.nil? || bot.channel(echo).nil?
+  bot.user(167657750971547648).pm("#{s}\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{s3}:** #{text2send}")
+  bot.channel(echo).send_message("#{s}\n**User:** #{event.user.distinct} (#{event.user.id})\n**#{s3}:** #{text2send}") unless echo.nil? || bot.channel(echo).nil?
   s3='Bug' if s3=='Bug Report'
   t=Time.now
   event << "Your #{s3.downcase} has been logged."

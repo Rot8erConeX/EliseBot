@@ -20,6 +20,7 @@ Bear Pin\Hair\A cute hair clip from Lysithea that features a little teddy-bear f
 Bear Pin EX\Hair\A cute hair clip from Lysithea. The little teddy bear has a bow tie, for extra cuteness!\Reach 2500 orange friendship with Lysithea during Forging Bonds: Harmony amid Chaos
 Bone-In Pin\Hair\A hair ornament from Ilyana.  It might look tasty, but it's wax.  Still, the sight of it could make your mouth water.\Reach 100 orange friendship with Ilyana during Forging Bonds: Timeless Ties
 Bone-In Pin EX\Hair\A hair ornament from Ilyana.  It might look delicious, but it's wax.  Still, it'd be a filling meal either way!\Reach 2500 orange friendship with Ilyana during Forging Bonds: Timeless Ties
+Bronze Pawns Trophy\Hair\Proof of great results in Pawns of Loki\Reach Tier 8 in a Pawns of Loki event.
 Chon'sin Band\Hair\An armored headband from Say'ri.  Simple, but effective, with a metal plate sewn in for protection.\Reach 100 red friendship with Say'ri during Forging Bonds: Renewed Resolve.
 Chon'sin Band EX\Hair\An armored headband from Say'ri.  In Chon'sin culture, only nobles of high status are allowed one.\Reach 2500 red friendship with Say'ri during Forging Bonds: Renewed Resolve.
 Clover Hairpin\Hair\A small hairpin from Norne. Made with a four-leaf clover.\Reach 100 orange friendship with Norne during Forging Bonds: A Time to Shine
@@ -56,6 +57,7 @@ Gold Flower Hairpin\Hair\Proof of victory over Legendary Hríd.\Beat Hrid's LHB 
 Gold Frostflower Band\Hair\Proof of victory over Mythic Hel.\Beat Hel's MHB at Abyssal difficulty.
 Gold Hand Towel\Hair\Proof of victory over Grand Hero Robin.\Beat Robin(F)'s GHB at Abyssal difficulty
 Gold Kagami Mochi\Hair\Proof of victory over Legendary Dimitri.\Beat Dimitri(Savior)'s LHB at Abyssal difficulty.
+Gold Pawns Trophy\Hair\Proof of amazing results in Pawns of Loki.\Reach Tier 10 in a Pawns of Loki event.
 Gold Peach Ducky\Hair\Proof of victory over Mythic Yune.\Beat Yune's MHB at Abyssal difficulty
 Gold Sacred Stardust\Hair\Proof of victory over Legendary Julia.\Beat Julia(Crusader)'s LHB at Abyssal difficulty
 Gold Seashell Hairpin\Hair\Proof of victory over Legendary Marth.\Beat Marth(King)'s LHB at Abyssal difficulty
@@ -91,6 +93,7 @@ Sacred Stardust EX\Hair\According to Ophelia, only the chosen may touch this sta
 Saintdom Pin\Hair\A striking hairpin bestowed by Julia. Its presence is disquieting, somehow.\Reach 100 orange friendship with Julia(Fallen) during Forging Bonds: Peaceful Ends.
 Saintdom Pin EX\Hair\A beautiful hairpin bestowed by Julia. The embellishments are breathtaking.\Reach 2500 orange friendship with Julia(Fallen) during Forging Bonds: Peaceful Ends.
 Seashell Hairpin\Hair\A hair accessory made from a beautiful seashell.\KO an enemy during June 2018 Quest "Yay, Accessories!".
+Silver Pawns Trophy\Hair\Proof of excellent results in Pawns of Loki.\Reach Tier 9 in a Pawns of Loki event.
 Star of Nifl\Hair\A good luck charm that belongs to Ylgr. The decoration comes from Nifl's coat of arms.\Reach 100 red friendship with Ylgr during Forging Bonds: The Sworn Oath.
 Star of Nifl EX\Hair\A good luck charm that belongs to Ylgr. It has been blessed to ensure the safety of its bearer.\Reach 2500 red friendship with Ylgr during Forging Bonds: The Sworn Oath.
 Summer Festival Mask\Hair\A mask found at Hoshidan festivals. The dragon-face motif is pretty cute!\Clear floors 81-85 in Illusory Dungeon: Festival of Heroes.

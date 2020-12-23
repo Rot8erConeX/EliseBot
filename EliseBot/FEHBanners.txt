@@ -1,17 +1,32 @@
+New Heroes: >unknown<\3\-\5\08/01/2021, 07/02/2021\NewHeroes
+Heroes with Draconic Aura (v3)\3\-\5\05/01/2021, 11/01/2021\SkillBanner
+New Year's of Fire and Ice (January 2021 rerun)\3\Fjorm(NewYears), Gunnthra(NewYears), Hrid(NewYears), Laevatein(NewYears)\5\01/01/2021, 31/01/2021\Seasonal, NewYear's
+Happy New Year! (January 2021 rerun)\3\Azura(NewYears), Camilla(NewYears), Takumi(NewYears)\5\01/01/2021, 31/01/2021\Seasonal, NewYear's
+Winter's Envoy (January 2021 rerun)\3\Chrom(Christmas), Lissa(Christmas), Robin(M)(Christmas), Tharja(Christmas)\5\31/12/2020, 31/01/2021\Seasonal, Christmas
+>Unknown< Tempest Trials+\3\-\5\29/12/2020, 11/01/2021\Tempest
+Heroes with Luna (v2)\3\-\5\28/12/2020, 04/01/2021\SkillBanner
+Gift of Winter (December 2020 rerun)\3\Eirika(Christmas), Ephraim(Christmas), Fae(Christmas)\5\25/12/2020, 24/01/2021\Seasonal, Christmas
+Glorious Gifts (December 2020 rerun)\3\Marth(Christmas), Nino(Christmas), Sothis(Christmas), Zephiel(Christmas)\5\25/12/2020, 24/01/2021\Seasonal, Christmas
+Legendary Hero: >unknown<\-8\Bramimond, Celica(Queen), Duma, Peony, Plumeria\5\25/12/2020, 03/01/2021\Legendary
+Heroes with Chill Skills (v3)\3\Alm(Brave), Kliff, Tsubasa\5\21/12/2020, 27/12/2020\SkillBanner
+Lyon & Eirika's Battle\3\Eirika(Memories), Lyon(Fallen)\5\19/12/2020, 26/12/2020\BHB
 Book 2 Revival, Week 11\-4\Leif, Rhajat, Shiro\5\19/12/2020, 25/12/2020\Book2
+A Festival Miracle\3\Altina(Christmas), Bernie(Christmas), Hilda(3H)(Christmas), Sephiran(Christmas)\5\17/12/2020, 16/01/2021\Seasonal, NewHeroes, Christmas
+"Burden of Gifts" Tempest Trials+\3\Bernie, Hilda(3H), Sanaki\5\16/12/2020, 27/12/2020\Tempest
+New Power (December 2020)\3\Chrom(Branded), Lucina, Mist, Nowi\5\11/12/2020, 20/12/2020\NewPower
 Book V Begins: Reginn and More\3\Duessel, Natasha, Reginn, Selena(Sacred)\5\08/12/2020, 06/01/2021\NewHeroes
-Book 2 Revival, Week 10\-4\Morgan(F), Olivia(Traveler), Robin(M)(Fallen)\5\05/12/2020, 11/12/2020\Book2
-Heroes with Infantry Pulse\3\Gerik, Helbindi, Nils\5\02/12/2020, 10/12/2020\SkillBanner
-Swift-Shadow Series\3\Jaffar, Kaze, Leila\5\28/11/2020, 06/12/2020\VotingGauntlet
-Mythic Heroes: Freyja & Triandra\-8\Anna(Apotheosis), Azura(Vallite), Corrin(F)(Dusk), Eliwood(Wind), Freyja, Hel, Leif(Unifier), Lysithea(Brave), Shinon, Sothis, Tiki(Young)(Earth), Triandra\5\27/11/2020, 06/12/2020\Legendary
-Lugh and Raigh's Battle\3\Lugh, Raigh\5\26/11/2020, 02/11/2020\BHB
-Heroes with Spurn or Repel\3\Kris(F), Kris(M), Larcei\5\25/11/2020, 01/12/2020\SkillBanner
-Book 2 Revival, Week 9\-4\Hector(Brave), Karla, Nino(Fangs)\5\21/10/2020, 27/10/2020\Book2
-Double Special Heroes (November 2020)\-6\Byleth(F)(Summer), Caeda(Retro), Dorothea(Summer), Fjorm(Bride), Ingrid(Summer), Palla(Retro), Selena(Sacred)(Summer), Sylvain(Summer)\5\20/11/2020, 09/12/2020\DoubleSpecial
-Princess of Bern\3\Dieck, Guinivere, Melady, Merlinus\5\17/11/2020, 07/12/2020\NewHeroes
-In the Moment\3\Laevatein(Ninja), Lyn(Ninja), Navarre(Ninja), Zihark(Ninja)\5\05/11/2020, 05/12/2020\Seasonal, NewHeroes
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
+Book 2 Revival, Week 10\-4\Morgan(F), Olivia(Traveler), Robin(M)(Fallen)\5\05/12/2020, 11/12/2020\Book2
+Heroes with Infantry Pulse\3\Gerik, Helbindi, Nils\5\02/12/2020, 10/12/2020\SkillBanner
+Double Special Heroes (November 2020)\-6\Byleth(F)(Summer), Caeda(Retro), Dorothea(Summer), Fjorm(Bride), Ingrid(Summer), Palla(Retro), Selena(Sacred)(Summer), Sylvain(Summer)\5\20/11/2020, 09/12/2020\DoubleSpecial
+Princess of Bern\3\Dieck, Guinivere, Melady, Merlinus\5\17/11/2020, 07/12/2020\NewHeroes
+Swift-Shadow Series\3\Jaffar, Kaze, Leila\5\28/11/2020, 06/12/2020\VotingGauntlet
+Mythic Heroes: Freyja & Triandra\-8\Anna(Apotheosis), Azura(Vallite), Corrin(F)(Dusk), Eliwood(Wind), Freyja, Hel, Leif(Unifier), Lysithea(Brave), Shinon, Sothis, Tiki(Young)(Earth), Triandra\5\27/11/2020, 06/12/2020\Legendary
+In the Moment\3\Laevatein(Ninja), Lyn(Ninja), Navarre(Ninja), Zihark(Ninja)\5\05/11/2020, 05/12/2020\Seasonal, NewHeroes
+Lugh and Raigh's Battle\3\Lugh, Raigh\5\26/11/2020, 02/11/2020\BHB
+Heroes with Spurn or Repel\3\Kris(F), Kris(M), Larcei\5\25/11/2020, 01/12/2020\SkillBanner
+Book 2 Revival, Week 9\-4\Hector(Brave), Karla, Nino(Fangs)\5\21/11/2020, 27/11/2020\Book2
 Heroes with Foil Skills\3\Julian, Midori, Rinkah\5\19/11/2020, 25/11/2020\SkillBanner
 Trick or Defeat (October 2020 rerun)\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\08/11/2019, 20/11/2019\Seasonal, Halloween
 Pawns of Loki: Skill banner reruns\3\Eyvel, Forsyth, Hubert, Kliff, Lene, Mareeta, Maribelle, Nagi, Osian, Owain, Percival, Petra, Phina, Selkie, Shannan, Sue, Tethys, Yarne\50\12/11/2020, 19/11/2020\SkillBanner
@@ -155,9 +170,9 @@ Mythic Heroes - Lif, Lethal Swordsman\-8\Byleth(F), Caineghis, Eliwood(Wind), Ep
 Hostile Springs (January 2020 rerun)\3\Elise(Bath), Hinoka(Bath), Ryoma(Bath), Sakura(Bath)\5\23/01/2020, 22/02/2020\Seasonal
 A Star is Born\3\Eleonora, Kiria, Mamori, Tsubasa\5\21/01/2020, 07/02/2020\NewUnits
 Renewed Spirit\3\Alfonse(NewYears), Anna(NewYears), Lethe(NewYears), Selkie(NewYears)\5\01/01/2020, 05/02/2020\Seasonal, NewUnits, NewYear's
-Clash of the Claws\3\Keaton, Nailah, Tibarn\5\27/01/2020, 04/02/2020\VotingGauntlet?
+Clash of the Claws\3\Keaton, Nailah, Tibarn\5\27/01/2020, 04/02/2020\VotingGauntlet
 Happy New Year! (January 2020 rerun)\3\Azura(NewYears), Camilla(NewYears), Takumi(NewYears)\5\01/01/2020, 31/01/2020\Seasonal, NewYear's
-Heroes with Chill Skills\3\Hubert, Kliff, Sue\5\22/01/2020, 31/01/2020\SkillBanner
+Heroes with Chill Skills (v2)\3\Hubert, Kliff, Sue\5\22/01/2020, 31/01/2020\SkillBanner
 New Year's of Fire and Ice (January 2020 rerun)\3\Fjorm(NewYears), Gunnthra(NewYears), Hrid(NewYears), Laevatein(NewYears)\5\01/01/2020, 31/01/2020\Seasonal, NewYear's
 "Mirage Vortex" Tempest Trials+\3\Caeda, Chrom(Launch), Virion\5\18/01/2020, 30/01/2020\Tempest
 Heir of Light\3\Altena, Ced, Larcei, Shannan\5\09/01/2020, 29/01/2020\NewUnits
@@ -251,7 +266,7 @@ Book 1 Revival, Week 4\-4\Hector, Lyn, Lyn(Brave)\5\30/06/2019, 06/07/2019\Book1
 Legendary Heroes - Eliwood, Blazing Knight\-8\Eliwood(Wind), Ephraim(Fire), Gunnthra, Hinoka(Bath), Hrid(NewYears), Lucina(Glorious), Robin(F)(Fallen), Ryoma(Supreme), Sakura(Bath), Selkie, Veronica(Brave), Yune\5\28/06/2019, 04/07/2019\Legendary
 Headband Brawl (Block B)\3\Barst, Gray, Jeorge, Tibarn\5\27/06/2019, 06/07/2019\VotingGauntlet
 Headband Brawl (Block A)\3\Mia, Olivia(Traveler), Sanaki, Sue\5\27/06/2019, 06/07/2019\VotingGauntlet
-Heroes with Chill Skills\3\Celica(Fallen), Ophelia, Ranulf\5\25/06/2019, 03/07/2019\SkillBanner
+Heroes with Chill Skills (v1)\3\Celica(Fallen), Ophelia, Ranulf\5\25/06/2019, 03/07/2019\SkillBanner
 Book 1 Revival, Week 3\-4\Julia, Nephenee, Sigurd\5\23/06/2019, 29/06/2019\Book1
 From a Future Past\3\Brady, Kjelle, Nah, Yarne\5\11/06/2019, 30/06/2019\NewUnits
 New Power (June 2019)\3\Elincia, Kagero, Oscar, Saizo\5\16/06/2019, 25/06/2019\NewPower
@@ -365,7 +380,7 @@ Legendary Heroes - Marth, Hero King\-8\Alfonse(Bunny), Faye, Fjorm, Gunnthra, He
 Festival in Hoshido\3\Elincia(AwaOdori), Micaiah(AwaOdori), Ryoma(AwaOdori), Xander(AwaOdori)\5\10/08/2018, 06/09/2018\Seasonal, Fall
 Heroes with Healing Skills\3\Leif, L'Arachel, Micaiah\5\26/08/2018, 05/09/2018\SkillBanner
 Micaiah & Sothe's Battle\3\Micaiah, Sanaki, Sothe\5\20/08/2018, 27/08/2018\BHB
-Heroes with Draconic Aura\3\Ares, Kana(F), Karla\5\16/08/2018, 25/08/2018\SkillBanner
+Heroes with Draconic Aura (v1)\3\Ares, Kana(F), Karla\5\16/08/2018, 25/08/2018\SkillBanner
 Heroes with Fighter skills\3\Effie, Hardin(Fallen), Robin(M)(Fallen)\5\07/08/2018, 17/08/2018\SkillBanner
 Feh's Summer Celebration (2018): Daily Summoning Events\3\Azura, Bartre, Caeda, Cecilia, Corrin(F)(Launch), Delthea, Effie, Eldigan, Elincia, Ephraim, Gordin, Hana, Hawkeye, Hinata, Hinoka(Launch), Jagen, Jaffar, Karel, Klein, Leo, Lon'qu, Lyn, Minerva, Nephenee, Nino(Launch), Odin, Peri, Tharja, Titania, Raven, Reinhardt(Bonds), Sanaki, Shanna, Sonya, Subaki, Takumi\50\02/08/2018, 16/08/2018\SkillBanner
 Legendary Heroes - Lucina, Glorious Archer\-8\Azura, Camilla(NewYears), Chrom(Branded), Hinoka(Wings), Ishtar, Lilina(Valentines), Lissa(Christmas), Lucina(Glorious), Lyn(Brave), Lyn(Wind), Robin(F)(Fallen), Ryoma(Supreme)\5\31/07/2018, 06/08/2018\Legendary
@@ -376,7 +391,7 @@ Leo & Elise's Battle\3\Camilla(Launch), Elise, Leo\5\22/07/2018, 28/07/2018\BHB
 New Power (July 2018)\3\Katarina, Nephenee, Titania\5\15/07/2018, 26/07/2018\NewPower
 Ylissean Summer (2018 rerun)\3\Frederick(Summer), Gaius(Summer), Robin(F)(Summer), Tiki(Adult)(Summer)\5\25/06/2018, 24/07/2018\Seasonal, Summer
 Nohrian Summer (2018 rerun)\3\Corrin(F)(Summer), Elise(Summer), Leo(Summer), Xander(Summer)\5\25/06/2018, 24/07/2018\Seasonal, Summer
-Heroes with Luna\3\Celica(Fallen), Hinoka(Wings), Mia\5\06/07/2018, 16/07/2018\SkillBanner
+Heroes with Luna (v1)\3\Celica(Fallen), Hinoka(Wings), Mia\5\06/07/2018, 16/07/2018\SkillBanner
 Hector & Matthew's Battle\3\Hector, Matthew, Serra\5\05/07/2018, 11/07/2018\BHB
 Fated Battles\3\Hardin(Fallen), Marth, Sigurd, Zelgius\5\29/6/2018, 07/07/2018\VotingGauntlet
 Heroes with Death Blow (v3)\3\Delthea, Reinhardt(World), Siegbert\5\23/06/2018, 05/07/2018\SkillBanner

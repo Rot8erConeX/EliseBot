@@ -1,3 +1,7 @@
-Freyja, Triandra, Guinivere, Melady, Dieck, Merlinus, Galle, Zephiel, Azura(Vallite), Fjorm\Aether\08/12/2020, 14/12/2020\Light, Dark\Catapult
-Freyja, Triandra, Guinivere, Melady, Dieck, Merlinus, Galle, Athena, Dimitri(Savior), Sharena\Arena\08/12/2020, 14/12/2020\Water, Earth
+Freyja, Triandra, Guinivere, Melady, Dieck, Merlinus, Galle, Athena, Dimitri(Savior), Sharena\Arena\15/12/2020, 21/12/2020\Wind, Earth
 Reginn, Duma, Guinivere, Melady, Dieck, Merlinus, Galle, Zephiel, Azura(Vallite), Fjorm\Aether\15/12/2020, 21/12/2020\Astra, Anima\Infantry School
+Altina(Christmas), Sephiran(Christmas), Bernie(Christmas), Hilda(3H)(Christmas), Felix(Christmas), Sanaki, Bernie, Hilda(3H)\Tempest\18/12/2020, 27/12/2020\Fort. Def/Res 1, Mystic Boost 1
+Reginn, Altina(Christmas), Hilda(3H)(Christmas), Bernie(Christmas), Sephiran(Christmas), Felix(Christmas), Caellach, Natasha, Knoll, Anna\Arena\22/12/2020, 28/12/2020\Earth, Fire
+Freyja, Yune, Guinivere, Melady, Dieck, Merlinus, Galle, Zephiel, Azura(Vallite), Fjorm\Aether\22/12/2020, 28/12/2020\Light, Dark\Armor School
+Reginn, Altina(Christmas), Hilda(3H)(Christmas), Bernie(Christmas), Sephiran(Christmas), Felix(Christmas), Caellach, Natasha, Knoll, Anna\Arena\29/12/2020, 04/01/2021\Fire, Water
+Naga, Thrasir, Altina(Christmas), Hilda(3H)(Christmas), Bernie(Christmas), Felix(Christmas), Sephiran(Christmas), Caellach, Natasha, Alfonse\Aether\29/12/2020, 04/01/2021\Astra, Anima\Cavalry School
