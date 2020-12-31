@@ -1155,7 +1155,7 @@ class FEHGroup
     x=['retro','baby','lilly','lily','oldschool'] if @name=='Retro'
     x=['bathers','bathhouse','bathouse','bath','bathing'] if @name=='Bathing'
     x=['valentines',"valentine's",'vday','v-day'] if @name=="Valentine's"
-    x=['newyears',"newyear's",'newyear'] if @name=="New Year's"
+    x=['newyears',"newyear's",'newyear'] if @name=="NewYear's"
     x=['performing','awaodori','festival','soiree'] if @name=='AwaOdori'
     x=['brides','grooms','bride','groom','wedding'] if @name=='Wedding'
     x=['halloween','spoopy','spooky','scary'] if @name=='Halloween'
@@ -1163,6 +1163,8 @@ class FEHGroup
     x=['hellspawn'] if @name=='Helspawn'
     x=['fairies','elves','fairy','dreamfairy','elf'] if @name=='DreamFairies'
     x=['daily_rotation','dailyrotation','daily'] if @name=='Daily_Rotation'
+    x=['noprf','prf-less','prfless'] if @name=='Prfless'
+    x=['upforprf','up4prf','prfsoon'] if @name=='Up4Prf'
     x=['retroprf','retro-prf','retroactive','retroprfs','retro-prfs'] if @name=='Retro-Prfs'
     x=['hallofforms','halloforms','hallofforma','halloforna','hallofform','halloform','halloffjorm','halloffjorms','hallofjorm','hallofjorms'] if @name=='HallOfForms'
     x=['worsethanliki','wtl'] if @name=='WorseThanLiki'
@@ -1177,7 +1179,7 @@ class FEHGroup
     x=$units.reject{|q| !q.isBonusUnit?('Tempest')} if @name=='TempestBonus'
     x=$units.reject{|q| !q.name.include?('(Brave)')} if @name=='BraveHeroes'
     x=$units.reject{|q| !q.name.include?('(Fallen)')} if @name=='FallenHeroes'
-    x=$units.reject{|q| !q.name.include?('(NewYears)')} if @name=="New Year's"
+    x=$units.reject{|q| !q.name.include?('(NewYears)')} if @name=="NewYear's"
     x=$units.reject{|q| !q.name.include?('(Bath)')} if @name=='Bathing'
     x=$units.reject{|q| !q.name.include?('(Valentines)')} if @name=="Valentine's"
     x=$units.reject{|q| !q.name.include?('(Bunny)') && !q.name.include?('(Spring)')} if @name=='Bunnies'
@@ -1202,6 +1204,18 @@ class FEHGroup
       x=$units.reject{|q| !q.availability[0].include?('p')}
       x2=$banners.map{|q| q.banner_units}.flatten.uniq
       x=x.reject{|q| x2.include?(q.name)}
+    elsif @name=='Prfless'
+      x2=$skills.reject{|q| !q.type.include?('Weapon') || q.exclusivity.nil?}.map{|q| q.exclusivity}.flatten.uniq
+      x=$units.reject{|q| x2.include?(q.name) || q.availability[0].include?('s') || q.availability[0].include?('-')}
+    elsif @name=='Up4Prf'
+      x2=$groups.find_index{|q| q.name=='Retro-Prfs'}
+      x3=$groups.find_index{|q| q.name=='Prfless'}
+      x=[]
+      unless x2.nil? || x3.nil?
+        x2=$groups[x2].unit_list.reject{|q| !q.fake.nil?}.map{|q| q.id}.max+10
+        x3=$groups[x3].unit_list.reject{|q| !q.fake.nil?}.map{|q| q.name}
+        x=$units.reject{|q| q.id>x2 || !x3.include?(q.name)}
+      end
     elsif @name=='Retro-Prfs'
       x2=$skills.reject{|q| !q.type.include?('Weapon') || q.exclusivity.nil? || !q.prerequisite.nil?}.map{|q| q.exclusivity}.flatten.uniq
       x=$units.reject{|q| !x2.include?(q.name)}
@@ -1262,7 +1276,9 @@ class FEHGroup
     x='<:Godly_Grail:612717339611496450> Tempest' if @name=='Tempest'
     x='<:Forma_Soulless:699085674724327516> Hall of Forms' if @name=='HallOfForms'
     x='<:Forma_Soul:699042073176965241> Forma' if @name=='Forma'
-    x='<:Bannerless:701268588270714901> Bannerless' if @name=='Bannerless'
+    x='<:Bannerless:793294155865784380> Bannerless' if @name=='Bannerless'
+    x='<:Prfless:793294156114034738> Prfless' if @name=='Prfless'
+    x='<:UpForPrf:793294156004982836> Up4Prf' if @name=='Up4Prf'
     # seasonal groups
     x="\u{1F458} New Year's" if @name=="NewYear's" # kimono
     x=':hotsprings: Bathing' if @name=='Bathing'
@@ -1850,8 +1866,10 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   legendaries=false; mythics=false
   duos=false; harmonics=false
   resplendents=false
+  launch=false
   statlimits=[[-100,100],[-100,100],[-100,100],[-100,100],[-100,100]]
   for i in 0...args.length
+    launch=true if ['launch'].include?(args[i].downcase)
     args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
     dancers=true if ['dancers','singers','bards','dancer','singer','bard','refreshers','refresher'].include?(args[i].downcase)
     legendaries=true if ['legendary','legend','legends'].include?(args[i].downcase)
@@ -2137,6 +2155,7 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
     untz=matches4.map{|q| q}
   end
   untz=untz.reject{|q| !group.map{|q2| q2.unit_list.map{|q3| q3.name}}.flatten.include?(q.name)} if group.length>0
+  untz=untz.reject{|q| !q.availability[0].include?('LU')} if launch
   untz=untz.reject{|q| !q.isRefresher?} if dancers
   if legendaries && mythics
     untz=untz.reject{|q| q.legendary.nil?}
@@ -2197,6 +2216,7 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   end
   m.push("*Movement:* #{movements.join(', ')}") if movements.length>0
   m.push("*Complete classes:* #{clzz.map{|q| "#{q[0]} (#{q[1,q.length-1].compact.join(' ').gsub('Healer','Staff').gsub('Dragon','Breath')})"}.join(', ')}") if clzz.length>0
+  m.push("\u{1F680} *Launch Units*") if launch
   m.push('<:Assist_Music:454462054959415296> *Refreshers*') if dancers
   if legendaries && mythics
     m.push('<:Legendary_Effect_Unknown:443337603945857024><:Mythic_Effect_Unknown:523328368079273984> *Legendaries/Mythics*')
@@ -2219,14 +2239,20 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   m.push("*Stats:* #{statlimits.join(', ')}") if statlimits.length>0
   m.push("*Supernatures:* #{supernatures.map{|q| "#{q[1,q.length-1]} #{q[0].gsub('+','boon').gsub('-','bane')}"}.join(', ')}") if supernatures.length>0
   m.push("~~Xane's non-HP stats have little meaning when his weapon is equipped~~") if markxane
-  if (untz.map{|k| k.postName}.join("\n").length>=1900 || untz.length>=25) && !safe_to_spam?(event) && !ignore_limit && mode != 13 && !paired
-    event.respond "__**Unit search**__\n#{m.join("\n")}\n\n__**Note**__\nAt #{untz.length} entries, there were so many unit matches that I would prefer you use the command in PM."
+  ulength=untz.length
+  ulength*=2 if group.map{|q| q.name}.include?('HallOfForms') && !group.map{|q| q.name}.include?('Forma')
+  ulength*=2 if group.map{|q| q.name}.include?('Prfless') && !group.map{|q| q.name}.include?('Up4Prf')
+  if (untz.map{|k| k.postName}.join("\n").length>=1900 || ulength>=25) && !safe_to_spam?(event) && !ignore_limit && mode != 13 && !paired
+    str="__**Unit search**__\n#{m.join("\n")}\n\n__**Note**__\nAt #{untz.length} entries, there were so many unit matches that I would prefer you use the command in PM."
+    str="#{str}\n\nI have noticed you are using the \"Hall of Forms\" group, which is a list of all units that appeared as playable in an HoF event.\nYou can reduce the number of units displayed by using the \"Forma\" group instead, as that's the list of units available with Forma Souls." if group.map{|q| q.name}.include?('HallOfForms') && !group.map{|q| q.name}.include?('Forma')
+    str="#{str}\n\nI have noticed you are using the \"Prfless\" group, which is a list of all non-seasonal units without a Prf weapon.\nYou can reduce the number of units displayed by using the \"Up4Prf\" group instead, as that's the list of all such units who are likely to receive a retro-Prf soon." if group.map{|q| q.name}.include?('Prfless') && !group.map{|q| q.name}.include?('Up4Prf')
+    event.respond str
     return -2
   elsif mode==2
     return untz
-  elsif mode==1 || mode==13
+  elsif mode==1 || mode>=13
     f=untz.map{|k| k.name}
-    return [m,untz] if mode==13
+    return [m,untz] if mode>=13
     return [m,f]
   end
   return 1
@@ -2544,7 +2570,7 @@ def display_units(bot,event,args=nil,mode=0)
     args.shift
   end
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
-  k=find_in_units(bot,event,args,13)
+  k=find_in_units(bot,event,args,14)
   return nil unless k.is_a?(Array)
   mk=k[0]
   k=k[1]
@@ -11802,16 +11828,16 @@ def snagstats(event,bot,f=nil,f2=nil)
       str="**There are #{longFormattedNumber($groups.reject{|q| !q.fake.nil?}.length-1)} global groups**, including the following dynamic ones:"
       str=extend_message(str,"<:Current_Aether_Bonus:510022809741950986> *Aether Bonus* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='AetherBonus'}].unit_list.length)} current members) - Any unit that is a bonus unit for the current Aether Raids season.",event)
       str=extend_message(str,"<:Current_Arena_Bonus:498797967042412544> *Arena Bonus* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='ArenaBonus'}].unit_list.length)} current members) - Any unit that is a bonus unit for the current Arena season.",event)
-      str=extend_message(str,"<:Bannerless:701268588270714901> *Bannerless* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Bannerless'}].unit_list.length)} current members) - Any unit that has never been a focus unit on a banner.",event)
+      str=extend_message(str,"<:Bannerless:793294155865784380> *Bannerless* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Bannerless'}].unit_list.length)} current members) - Any unit that has never been a focus unit on a banner.",event)
       str=extend_message(str,"<:BraveHero:701268588266520578> *Brave Heroes* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='BraveHeroes'}].unit_list.length)} current members) - Any unit with the phrase *(Brave)* in their internal name.",event)
       str=extend_message(str,"\u{1F4C5} *Daily Rotation* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Daily_Rotation'}].unit_list.length)} current members) - Any unit that can be obtained via the twelve rotating Daily Hero Battle maps.",event)
       str=extend_message(str,"<:DragonEff:701301177370804296> *Falchion Users* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Falchion_Users'}].unit_list.length)} current members) - Any unit that can use one of the three Falchions, or any of their evolutions.",event)
       str=extend_message(str,"<:PurpleFire:701271290987806790> *Fallen Heroes* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='FallenHeroes'}].unit_list.length)} current members) - Any unit with the phrase *(Fallen)* in their internal name.",event)
-      str=extend_message(str,"<:Forma_Soul:699042073176965241> *Forma* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Forma'}].unit_list.length)} current members) - Any unit that was part of a Hall of Forms event released after the introduction of Forma Souls.",event)
       str=extend_message(str,"<:Heroic_Grail:574798333898653696> *GHB* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='GHB'}].unit_list.length)} current members) - Any unit that can obtained via a Grand Hero Battle map.",event)
-      str=extend_message(str,"<:Forma_Soulless:699085674724327516> *Hall of Forms* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='HallOfForms'}].unit_list.length)} current members) - Any unit was part of a Hall of Forms event.",event)
+      str=extend_message(str,"<:Forma_Soulless:699085674724327516> *Hall of Forms* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='HallOfForms'}].unit_list.length)} current members) - Any unit was part of a Hall of Forms event.\n      <:Forma_Soul:699042073176965241> *Forma* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Forma'}].unit_list.length)} current members) - Any unit that was part of a Hall of Forms event released after the introduction of Forma Souls.",event)
+      str=extend_message(str,"<:Prfless:793294156114034738> *Prfless* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Prfless'}].unit_list.length)} current members) - Any non-seasonal unit that lacks a prf weapon.\n      <:UpForPrf:793294156004982836> *Up4Prf* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Up4Prf'}].unit_list.length)} current members) - The subset of the Prfless group that joined the game either before, or within two banners of, the most recently-released unit to have received a retro-prf, and as such are the most likely considerations for retro-prfs.",event)
       str=extend_message(str,"<:Divine_Dew:453618312434417691> *Retro-Prfs* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Retro-Prfs'}].unit_list.length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything.",event)
-      str=extend_message(str,"<:Seasonal:701278992677732442> *Seasonals* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Seasonals'}].unit_list.length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost.\n      The following subsets of the Seasonals group are also dynamic: *Bathing* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Bathing'}].unit_list.length)}), *Valentine's* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=="Valentine's"}].unit_list.length)}), *Bunny* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Bunnies'}].unit_list.length)}), *Picnic* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Picnic'}].unit_list.length)}), *Retro* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Retro'}].unit_list.length)}), *Wedding* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Wedding'}].unit_list.length)}), *Summer* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Summer'}].unit_list.length)}), *Awa Odori* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='AwaOdori'}].unit_list.length)}), *Pirate* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Pirate'}].unit_list.length)}), *Halloween* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Halloween'}].unit_list.length)}), *Ninja* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Ninja'}].unit_list.length)}), *Winter* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Winter'}].unit_list.length)})",event)
+      str=extend_message(str,"<:Seasonal:701278992677732442> *Seasonals* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Seasonals'}].unit_list.length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost.\n      \u{1F458} *New Year's* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=="NewYear's"}].unit_list.length)})\n      :hotsprings: *Bathing* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Bathing'}].unit_list.length)})\n      \u{1F498} *Valentine's* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=="Valentine's"}].unit_list.length)})\n      :rabbit: *Bunny* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Bunnies'}].unit_list.length)})\n      \u{1F9FA} *Picnic* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Picnic'}].unit_list.length)})\n      <:RetroMarth:746670895992668181> *Retro* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Retro'}].unit_list.length)})\n      \u{1F470} *Wedding* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Wedding'}].unit_list.length)})\n      :sunny: *Summer* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Summer'}].unit_list.length)})\n      \u{1F483} *Awa Odori* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='AwaOdori'}].unit_list.length)})\n      \u{1F3F4}\u200D\u2620\uFE0F *Pirate* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Pirate'}].unit_list.length)})\n      \u{1F383} *Halloween* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Halloween'}].unit_list.length)})\n      \u{1F977} *Ninja* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Ninja'}].unit_list.length)})\n      \u{1F384} *Christmas* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Christmas'}].unit_list.length)})",event)
       str=extend_message(str,"<:Godly_Grail:612717339611496450> *Tempest* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Tempest'}].unit_list.length)} current members) - Any unit that can be obtained via a Tempest Trials event.",event)
       str=extend_message(str,"<:Current_Tempest_Bonus:498797966740422656> *Tempest Bonus* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='TempestBonus'}].unit_list.length)} current members) - Any unit that is a bonus unit for the current Tempest Trials event.",event)
       str=extend_message(str,"<:Divine_Mist:701285239611195432> *Worse Than Liki* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='WorseThanLiki'}].unit_list.length)} current members) - Any unit with every stat equal to or less than the same stat on Tiki(Young)(Earth), excluding Tiki(Young)(Earth) herself.",event)
