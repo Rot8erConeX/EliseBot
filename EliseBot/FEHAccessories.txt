@@ -161,6 +161,7 @@ Gladiator Helm\Hat\A steel helmet from Dieck.  Having been used in the arena, it
 Gladiator Helm EX\Hat\A steel helmet from Dieck.  Being from his days in the arena, it's of quality steel and has supurb plating.\Reach 2500 green friendship with Dieck during Forging Bonds: Principled Acts
 Gold Armored Helmet\Hat\Proof of victory over Legendary Ryoma.\Beat Ryoma(Supreme)'s LHB at Abyssal difficulty.
 Gold Bat Ears\Hat\Proof of victory over Mythic Thrasir\Beat Thrasir's MHB at Abyssal difficulty.
+Gold Bath Bucket\Hat\Proof of victory over Legendary Lilina\Beat Lilina(Firelight)'s LHB at Abyssal difficulty.
 Gold Devil Horns\Hat\Proof of victory over Legendary Leif.\Beat Leif(Unifier)'s LHB at Abyssal difficulty.
 Gold Nifl Crown\Hat\Proof of victory over Mythic Mila\Beat Mila's MHB at Abyssal difficulty.
 Golden Diadem\Hat\Proof of victory over Mythic Duma.\Beat Duma's MHB at Abyssal difficulty
