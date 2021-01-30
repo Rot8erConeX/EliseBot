@@ -166,9 +166,9 @@ if Shardizard==4
 elsif Shardizard<0
   bot = Discordrb::Commands::CommandBot.new token: '>Smol Token<', client_id: 627511537237491715, prefix: prefix_proc
 elsif Shardizard<4
-  bot = Discordrb::Commands::CommandBot.new token: '>Token<', shard_id: Shardizard, num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
+  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: Shardizard, num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
 else
-  bot = Discordrb::Commands::CommandBot.new token: '>Token<', shard_id: (Shardizard-1), num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
+  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: (Shardizard-1), num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
 end
 bot.gateway.check_heartbeat_acks = false
 
