@@ -1,7 +1,9 @@
-Freyja, Triandra, Guinivere, Melady, Dieck, Merlinus, Galle, Athena, Dimitri(Savior), Sharena\Arena\15/12/2020, 21/12/2020\Wind, Earth
-Reginn, Duma, Guinivere, Melady, Dieck, Merlinus, Galle, Zephiel, Azura(Vallite), Fjorm\Aether\15/12/2020, 21/12/2020\Astra, Anima\Infantry School
-Altina(Christmas), Sephiran(Christmas), Bernie(Christmas), Hilda(3H)(Christmas), Felix(Christmas), Sanaki, Bernie, Hilda(3H)\Tempest\18/12/2020, 27/12/2020\Fort. Def/Res 1, Mystic Boost 1
-Reginn, Altina(Christmas), Hilda(3H)(Christmas), Bernie(Christmas), Sephiran(Christmas), Felix(Christmas), Caellach, Natasha, Knoll, Anna\Arena\22/12/2020, 28/12/2020\Earth, Fire
-Freyja, Yune, Guinivere, Melady, Dieck, Merlinus, Galle, Zephiel, Azura(Vallite), Fjorm\Aether\22/12/2020, 28/12/2020\Light, Dark\Armor School
-Reginn, Altina(Christmas), Hilda(3H)(Christmas), Bernie(Christmas), Sephiran(Christmas), Felix(Christmas), Caellach, Natasha, Knoll, Anna\Arena\29/12/2020, 04/01/2021\Fire, Water
-Naga, Thrasir, Altina(Christmas), Hilda(3H)(Christmas), Bernie(Christmas), Felix(Christmas), Sephiran(Christmas), Caellach, Natasha, Alfonse\Aether\29/12/2020, 04/01/2021\Astra, Anima\Cavalry School
+Dorothea(Plegian), Raphael(Plegian), Tharja(Plegian), Katarina(Plegian), Kris(M)(Plegian), Heath, Shigure, Gunnthra, Anna\Arena\02/02/2021, 08/02/2021\Wind, Water
+Mila, Bramimond, Sara, Asbel, Ronan, Miranda, Veld, Knoll, Eliwood(Wind), Anna\Aether\02/02/2021, 08/02/2021\Light, Dark\Tactics Room
+FE9, FE16\Resonant\02/02/2021, 08/02/2021
+Lif(Valentines), Gustav(Valentines), Henriette(Valentines), Alfonse(Valentines), Veronica(Valentines), Alfonse, Sharena, Anna\Tempest\05/02/2021, 15/02/2021\Bracing Stance 1, Life and Death 1
+Dorothea(Plegian), Raphael(Plegian), Tharja(Plegian), Katarina(Plegian), Kris(M)(Plegian), Heath, Shigure, Gunnthra, Anna\Arena\09/02/2021, 15/02/2021\Wind, Fire
+Reginn, Seiros, Dorothea(Plegian), Katarina(Plegian), Kris(M)(Plegian), Raphael(Plegian), Tharja(Plegian), Xander, Corrin(F)(Dusk), Fjorm\Aether\09/02/2021, 15/02/2021\Astra, Anima\Healing Tower
+FE4, FE10\Resonant\09/02/2021, 15/02/2021
+Freyja, Hel, Dorothea(Plegian), Katarina(Plegian), Kris(M)(Plegian), Raphael(Plegian), Tharja(Plegian), Xander, Corrin(F)(Dusk), Fjorm\Aether\16/02/2021, 22/02/2021\Light, Dark\Panic Manor
+Seiros, Lif(Valentines), Gustav(Valentines), Henriette(Valentines), Alfonse(Valentines), Veronica(Valentines)\Arena\16/02/2021, 22/02/2021\Wind, Earth

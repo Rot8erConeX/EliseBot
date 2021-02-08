@@ -62,12 +62,18 @@ Dark Shrine\6\Offensive\At start of turn, inflicts Def/Res-7 on foe on the enemy
 Dark Shrine\6\Defensive\At start of turn, inflicts Def/Res-7 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 1500, 0, 0\0
 Dark Shrine\7\Offensive\At start of turn, inflicts Def/Res-8 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 0, 3000, 0\0
 Dark Shrine\7\Defensive\At start of turn, inflicts Def/Res-8 on foe on the enemy team with the highest Def+Res total through its next action.\Yes\0, 3000, 0, 0\0
-Duo's Hindrance\example\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills between turn 1 and turn `(level+2)`.\Yes\0, 300, 0, 0\0
+Duo's Hindrance\example\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills between turn 1 and turn `(level+2)`.\Yes\0, 900, 0, 0\0
 Duo's Hindrance\1\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills between turn 1 and turn 3.\Yes\0, 100, 0, 0\0
 Duo's Hindrance\2\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills between turn 1 and turn 4.\Yes\0, 300, 0, 0\0
-Duo's Indulgence\example\Offensive\The first Duo skill used between turn 1 and turn `(level+2)` can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 300, 0, 0\0
+Duo's Hindrance\3\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills between turn 1 and turn 5.\Yes\0, 500, 0, 0\0
+Duo's Hindrance\4\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills between turn 1 and turn 6.\Yes\0, 700, 0, 0\0
+Duo's Hindrance\5\Defensive\If a Duo Hero is on the defensive team, foe cannot use Duo skills.\Yes\0, 900, 0, 0\0
+Duo's Indulgence\example\Offensive\The first Duo skill used between turn 1 and turn `(level+2)` can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 900, 0, 0\0
 Duo's Indulgence\1\Offensive\The first Duo skill used between turn 1 and turn 3 can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 100, 0, 0\0
 Duo's Indulgence\2\Offensive\The first Duo skill used between turn 1 and turn 4 can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 300, 0, 0\0
+Duo's Indulgence\3\Offensive\The first Duo skill used between turn 1 and turn 5 can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 500, 0, 0\0
+Duo's Indulgence\4\Offensive\The first Duo skill used between turn 1 and turn 6 can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 700, 0, 0\0
+Duo's Indulgence\5\Offensive\The first Duo skill used between turn 1 and turn 7 can be used a second time. (Max of two uses.  Only one use per turn.)\Yes\0, 900, 0, 0\0
 Escape Ladder\example\Offensive\Restores Aether cost of `(level)` failed battles per season.\No\0, 700, 0, 0\0
 Escape Ladder\1\Offensive\Restores Aether cost of one failed battle per season.\No\0, 100, 0, 0\0
 Escape Ladder\2\Offensive\Restores Aether cost of two failed battles per season.\No\0, 300, 0, 0\0
@@ -113,7 +119,7 @@ Infantry School\7\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on infa
 Infantry School\7\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-8 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 3000, 0, 0\0\Only one school can be placed at a time.
 Infantry School\8\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-9 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 0, 5000, 0\0\Only one school can be placed at a time.
 Infantry School\8\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-9 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 5000, 0, 0\0\Only one school can be placed at a time.
-Panic Manor\example\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ `(5*level+35)`, converts bonuses on those foes into penalties through their next actions.\Yes\0, 3000, 3000, 0\0
+Panic Manor\example\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ `(5*level+35)`, converts bonuses on those foes into penalties through their next actions.\Yes\0, 5000, 5000, 0\0
 Panic Manor\1\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 40, converts bonuses on those foes into penalties through their next actions.\Yes\0, 100, 0, 0\0
 Panic Manor\2\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 45, converts bonuses on those foes into penalties through their next actions.\Yes\0, 300, 0, 0\0
 Panic Manor\3\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 50, converts bonuses on those foes into penalties through their next actions.\Yes\0, 500, 0, 0\0
@@ -123,6 +129,8 @@ Panic Manor\6\Offensive\At start of turn, if any foes are within 7 rows and 3 co
 Panic Manor\6\Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 65, converts bonuses on those foes into penalties through their next actions.\Yes\0, 1500, 0, 0\0
 Panic Manor\7\Offensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 70, converts bonuses on those foes into penalties through their next actions.\Yes\0, 0, 3000, 0\0
 Panic Manor\7\Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 70, converts bonuses on those foes into penalties through their next actions.\Yes\0, 3000, 0, 0\0
+Panic Manor\8\Offensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 75, converts bonuses on those foes into penalties through their next actions.\Yes\0, 0, 5000, 0\0
+Panic Manor\8\Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 75, converts bonuses on those foes into penalties through their next actions.\Yes\0, 5000, 0, 0\0
 Tactics Room\example\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ `(5*level+35)` and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 1500, 1500, 0\0
 Tactics Room\1\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 40 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 100, 0, 0\0
 Tactics Room\2\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 45 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 300, 0, 0\0
@@ -165,7 +173,7 @@ Streetlamp\-\Ornament\A lamp in an elegant, classic design. It's an event item.\
 Feh Kagami Mochi\-\Ornament\Not the real Feh! It's a decoration that brings good luck for the New Year. It's an event item.\Yes\0, 0, 0, 500\0\New Year's 2019
 Fireplace\-\Ornament\If it's cold where you are, this item should help you feel a little bit warmer. It's an event item.\Yes\0, 0, 0, 500\0\New Year's 2019
 Snow Family\-\Ornament\It seems they're brother and sister. It's an event item.\Yes\0, 0, 0, 500\0\New Year's 2019
-Anniversary Cake\-\Ornament\A massive cake baked to celebrate the second anniversary. It's an event item.\Yes\0, 0, 0, 500\0\2nd Anniversary Celebration
+Anniversary Cake (2)\-\Ornament\A massive cake baked to celebrate the second anniversary. It's an event item.\Yes\0, 0, 0, 500\0\2nd Anniversary Celebration
 Anniversary Arch\-\Ornament\An arch built to welcome well-wishers during the second anniversary. It's an event item.\Yes\0, 0, 0, 500\0\2nd Anniversary Celebration
 Heart Garland\-\Ornament\A decoration that symbolizes overflowing love. It's an event item.\Yes\0, 0, 0, 500\0\2nd Anniversary Celebration
 Iron Fence\-\Ornament\Used to separate what's inside from what's outside. It's an event item.\Yes\0, 0, 0, 500\0\Spring 2019
@@ -187,6 +195,7 @@ Anniversary Treat\-\Ornament\A gigantic cupcake whipped up to celebrate the thir
 Mirror of Nidavellir\-\Ornament\A mirror of hidden power that hangs above the throne of Nidavellir - or rather, an imitation modeled after the real thing.  It's an event item.\Yes\0, 0, 0, 500\0\Book 5 Release Celebration
 Gullinbursti Figure\-\Ornament\A commemorative figure built to put dvergr craftsmanship on display, its design meant to aid in combating larger foes.  It's an event item.\Yes\0, 0, 0, 500\0\Book 5 Release Celebration
 Seidjarn Gearwork\-\Ornament\Structure common to Nidavellir, its mechanism driven by magic.  It's an event item.\Yes\0, 0, 0, 500\0\Book 5 Release Celebration
+Anniversary Cake (4)\-\Ornament\A massive cake baked to celebrate the fourth anniversary. It's an event item.\Yes\0, 0, 0, 500\0\4th Anniversary Celebration
 Accessory Shop\-\Resort\A structure where Heroes can sample various accessories to find new looks that catch their fancy!\-\300, 0, 0, 0\0\Heroes cannot use this structure to change their equipped accessories.
 Armory\-\Resort\A structure that contains a collection of replica weapons for Heroes to sample.  The stock is updated periodically, too!\-\300, 0, 0, 0\0\Heroes cannot use this structure to learn new skills or change their equipped skills.
 Concert Hall\-\Resort\A structure for Heroes who enjoy music and dancing.  You can listen to music, change which songs are played in certain areas, and even order new tracks to listen to!\-\300, 0, 0, 0\0\This structure can be used to change music in Arena, on the lobby screen, and in Aether Raids.
@@ -209,11 +218,12 @@ Deluge Fountain\1\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on
 Deluge Fountain\2\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ 45 back by 2 spaces, toward the top of the map.\No\0, 300, 0, 0\3
 Deluge Fountain\3\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ 55 back by 2 spaces, toward the top of the map.\No\0, 500, 0, 0\3
 Deluge Fountain\4\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ 65 back by 2 spaces, toward the top of the map.\No\0, 700, 0, 0\3
-Dokkalfar Briar\example\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ `(10*level+25)` through that foe's next action.\No\0, 900, 0, 0\3
+Dokkalfar Briar\example\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ `(10*level+25)` through that foe's next action.\No\0, 1300, 0, 0\3
 Dokkalfar Briar\1\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 35 through that foe's next action.\No\0, 100, 0, 0\3
 Dokkalfar Briar\2\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 45 through that foe's next action.\No\0, 300, 0, 0\3
 Dokkalfar Briar\3\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 55 through that foe's next action.\No\0, 500, 0, 0\3
 Dokkalfar Briar\4\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 65 through that foe's next action.\No\0, 900, 0, 0\3
+Dokkalfar Briar\5\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 75 through that foe's next action.\No\0, 1300, 0, 0\3
 Emblian Seal\example\Mjolnir\Inflicts Atk/Spd/Def/Res-`(2*level)` on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 700, 0, 0\2
 Emblian Seal\1\Mjolnir\Inflicts Atk/Spd/Def/Res-2 on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 100, 0, 0\2
 Emblian Seal\2\Mjolnir\Inflicts Atk/Spd/Def/Res-4 on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 300, 0, 0\2

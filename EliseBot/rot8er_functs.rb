@@ -233,7 +233,9 @@ def not_both(a,b)
 end
 
 def list_lift(a,c)
-  if a.length==1
+  if a.length<=0
+    return ''
+  elsif a.length==1
     return a[0]
   elsif a.length==2
     return "#{a[0]} #{c} #{a[1]}"
@@ -328,7 +330,13 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
     text="#{title[1]}\n\n#{text}"
     title=title[0]
   end
-  if @embedless.include?(event.user.id) || (was_embedless_mentioned?(event) && ch_id==0)
+  mbd=false
+  if !@embedless.nil? 
+    mbd=true if @embedless.include?(event.user.id) || (was_embedless_mentioned?(event) && ch_id==0)
+  elsif $embedless.nil?
+    mbd=true if $embedless.include?(event.user.id) || (was_embedless_mentioned?(event) && ch_id==0)
+  end
+  if mbd
     str=''
     if header.length>0
       if header.include?('*') || header.include?('_')

@@ -1,3 +1,4 @@
+['FE0', ['FE0', 'Cipher'], 'FE0 - *Fire Emblem Cipher*']
 ['FE1', ['FE1', 'BladeOfLight'], 'FE1 - *Fire Emblem: Shadow Dragon and the Blade of Light*']
 ['FE2', ['FE2', 'Gaiden'], 'FE2 - *Fire Emblem: Gaiden*']
 ['FE3', ['FE3', 'Mystery', 'mote', 'mysteryoftheemblem'], 'FE3 - *Fire Emblem: Mystery of the Emblem*']

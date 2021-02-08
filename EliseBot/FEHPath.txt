@@ -84,3 +84,19 @@ Ephemura (December 2020) 4\Gwendolyn; 4; 0, 100
 Ephemura (December 2020) 5\Ross; 4; 0, 100
 Ephemura (December 2020) 6\Klein; 4; 0, 100
 Ephemura (December 2020) 7\Chad; 4; 0, 100
+Ephemura (January 2021) 0\08/01/2021, 27/02/2021
+Ephemura (January 2021) 1\Ryoma(Bath); 5; 0, 300
+Ephemura (January 2021) 2\Myrrh; 5; 0, 300
+Ephemura (January 2021) 3\Eliwood; 4; 0, 100
+Ephemura (January 2021) 4\Oscar; 4; 0, 100
+Ephemura (January 2021) 5\Altena; 4; 0, 100
+Ephemura (January 2021) 6\Barst; 4; 0, 100
+Ephemura (January 2021) 7\Fae; 4; 0, 100
+Ephemura (February 2021) 0\05/02/2021, 27/03/2021
+Ephemura (February 2021) 1\Lyn(Valentines); 5; 0, 300
+Ephemura (February 2021) 2\Soren(Valentines); 5; 0, 300
+Ephemura (February 2021) 3\Seth; 4; 0, 100
+Ephemura (February 2021) 4\Cain; 4; 0, 100
+Ephemura (February 2021) 5\Caeda; 4; 0, 100
+Ephemura (February 2021) 6\Odin; 4; 0, 100
+Ephemura (February 2021) 7\Rath; 4; 0, 100

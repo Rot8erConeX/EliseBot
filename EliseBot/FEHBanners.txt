@@ -1,22 +1,38 @@
-New Heroes: >unknown<\3\-\5\08/01/2021, 07/02/2021\NewHeroes
-Heroes with Draconic Aura (v3)\3\-\5\05/01/2021, 11/01/2021\SkillBanner
+Legendary Hero Remix: Fjorm & Ike\-6\Anna(Apotheosis), Bernie, Fjorm, Hector(Marquess), Ike(Vanguard), Kris(M), Lyn(Wind), Robin(F)(Fallen)\5\12/02/2021, 19/02/2021\LegendaryRemix
+New Power (February 2021)\3\Nina, Nino(Fangs), Reinhardt(World)\5\09/02/2021, 19/02/2021\NewPower
+Hero Fest VIII\4\Ephraim(Dynastic), Shamir, Shinon, Sothis\5\05/02/2021, 15/02/2021\HeroFest
+Love of a King\3\Alfonse(Valentines), Gustav(Valentines), Henriette(Valentines), Lif(Valentines)\5\05/02/2021, 04/03/2021\Seasonal, NewUnits, Valentines
+4th Anniversary Celebration: 2020 Seasonal Mass Rerun\-100\Alm(Valentines), Altina(Christmas), Bernie(Christmas), Brigid(Pirate), Byleth(F)(Summer), Caeda(Retro), Conrad(Valentines), Dheginsea(Halloween), Dorothea(Plegian), Dorothea(Summer), Est(Bunny), Ethlyn(AwaOdori), Faye(Valentines), Fir(Bunny), Geese(Pirate), Hilda(3H)(Christmas), Idunn(Bunny), Ingrid(Summer), Joshua(Summer), Kaden(NewYears), Katarina(Plegian), Lachesis(AwaOdori), Laevatein(Ninja), Lute(Summer), Lyn(Ninja), Marth(Retro), Merric(Retro), Mia(Summer), Narcian(Bunny), Navarre(Ninja), Palla(Retro), Peony(NewYears), Plumeria(NewYears), Quan(AwaOdori), Raphael(Plegian), Robin(F)(Fallen)(Halloween), Rudolf(Valentines), Selena(Sacred)(Summer), Sephiran(Christmas), Sigurd(AwaOdori), Sylvain(Summer), Tharja(Plegian), Tibarn(Pirate), Tiki(Young)(Halloween), Velouria(NewYears), Veronica(Pirate), Xane(Halloween), Zihark(Ninja)\50\02/02/2021, 01/03/2021\Seasonal
+Heroes with Wrath\3\Ephraim, Jaffar, Karel\5\30/01/2021, 08/02/2021\SkillBanner
+Mythic Heroes: Seiros, Saint of Legend\-8\Alm(Saint), Catherine, Dieck, Dimitri(Savior), Eir, Flayn, Julia(Crusader), Lif, Roy(Fire), Seiros, Thrasir, Yune\5\28/01/2021, 04/02/2021\Legendary
+Mercenary Matchups\3\Ogma, Raven, Saber, Titania\5\26/01/2021, 03/02/2021\VotingGauntlet
+Dark Desert Rituals\3\Dorothea(Plegian), Katarina(Plegian), Raphael(Plegian), Tharja(Plegian)\5\18/01/2021, 17/02/2021\Seasonal
+omega Special Heroes\6\Alfonse(NewYears), Anna(NewYears), Kaden(NewYears), Lethe(NewYears), Peony(NewYears), Plumeria(NewYears), Selkie(NewYears), Velouria(NewYears)\5\01/01/2021, 31/01/2021\Seasonal, NewYear's, NewUnits
 New Year's of Fire and Ice (January 2021 rerun)\3\Fjorm(NewYears), Gunnthra(NewYears), Hrid(NewYears), Laevatein(NewYears)\5\01/01/2021, 31/01/2021\Seasonal, NewYear's
 Happy New Year! (January 2021 rerun)\3\Azura(NewYears), Camilla(NewYears), Takumi(NewYears)\5\01/01/2021, 31/01/2021\Seasonal, NewYear's
-Winter's Envoy (January 2021 rerun)\3\Chrom(Christmas), Lissa(Christmas), Robin(M)(Christmas), Tharja(Christmas)\5\31/12/2020, 31/01/2021\Seasonal, Christmas
->Unknown< Tempest Trials+\3\-\5\29/12/2020, 11/01/2021\Tempest
-Heroes with Luna (v2)\3\-\5\28/12/2020, 04/01/2021\SkillBanner
-Gift of Winter (December 2020 rerun)\3\Eirika(Christmas), Ephraim(Christmas), Fae(Christmas)\5\25/12/2020, 24/01/2021\Seasonal, Christmas
-Glorious Gifts (December 2020 rerun)\3\Marth(Christmas), Nino(Christmas), Sothis(Christmas), Zephiel(Christmas)\5\25/12/2020, 24/01/2021\Seasonal, Christmas
-Legendary Hero: Lilina, Firelight Leader\-8\Bramimond, Celica(Queen), Claude(Brave), Dimitri(Brave), Duma, Edelgard(Brave), Gatrie, Jill, Lilina(Firelight), Peony, Plumeria, Reginn\5\25/12/2020, 03/01/2021\Legendary
-Heroes with Chill Skills (v3)\3\Alm(Brave), Kliff, Tsubasa\5\21/12/2020, 27/12/2020\SkillBanner
-Lyon & Eirika's Battle\3\Eirika(Memories), Lyon(Fallen)\5\19/12/2020, 26/12/2020\BHB
-Book 2 Revival, Week 11\-4\Leif, Rhajat, Shiro\5\19/12/2020, 25/12/2020\Book2
-A Festival Miracle\3\Altina(Christmas), Bernie(Christmas), Hilda(3H)(Christmas), Sephiran(Christmas)\5\17/12/2020, 16/01/2021\Seasonal, NewHeroes, Christmas
-"Burden of Gifts" Tempest Trials+\3\Bernie, Hilda(3H), Sanaki\5\16/12/2020, 27/12/2020\Tempest
-New Power (December 2020)\3\Chrom(Branded), Lucina, Mist, Nowi\5\11/12/2020, 20/12/2020\NewPower
-Book V Begins: Reginn and More\3\Duessel, Natasha, Reginn, Selena(Sacred)\5\08/12/2020, 06/01/2021\NewHeroes
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
+Dark Burdens (rerun with sparking)\3\Corrin(M)(Fallen), Ike(Fallen), Julia(Fallen), Lyon(Fallen)\5\22/01/2021, 29/01/2021\NewUnits, Fallen
+Heroes with Combat Boosts\3\Dimitri, Gerik, Lysithea\5\20/01/2021, 29/01/2021\SkillBanner
+"Love of Family" Tempest Trials+\3\Katarina, Kris(F), Lene\5\17/01/2021, 28/01/2021\Tempest
+Hostile Springs (January 2021 rerun)\3\Elise(Bath), Hinoka(Bath), Ryoma(Bath), Sakura(Bath)\5\14/01/2021, 27/01/2021\Seasonal
+Shared Purpose\3\Asbel, Miranda, Ronan, Sara\5\08/01/2021, 27/01/2021\NewHeroes
+Winter's Envoy (January 2021 rerun)\3\Chrom(Christmas), Lissa(Christmas), Robin(M)(Christmas), Tharja(Christmas)\5\31/12/2020, 26/01/2021\Seasonal, Christmas
+Glorious Gifts (December 2020 rerun)\3\Marth(Christmas), Nino(Christmas), Sothis(Christmas), Zephiel(Christmas)\5\25/12/2020, 24/01/2021\Seasonal, Christmas
+Gift of Winter (December 2020 rerun)\3\Eirika(Christmas), Ephraim(Christmas), Fae(Christmas)\5\25/12/2020, 24/01/2021\Seasonal, Christmas
+Tanya & Osian's Battle\3\Mareeta, Osian, Tanya\5\16/01/2021, 23/01/2021\BHB
+New Power (January 2021)\3\Genny, Hinoka(Wings), Lewyn\5\12/01/2021, 19/01/2021\NewPower
+A Festival Miracle\3\Altina(Christmas), Bernie(Christmas), Hilda(3H)(Christmas), Sephiran(Christmas)\5\17/12/2020, 16/01/2021\Seasonal, NewUnits, Christmas
+Heroes with Draconic Aura (v3)\3\Corrin(F)(Adrift), Kjelle, Quan\5\05/01/2021, 11/01/2021\SkillBanner
+"New Treasures" Tempest Trials+\3\Kaden, Selkie, Velouria\5\29/12/2020, 11/01/2021\Tempest
+Book V Begins: Reginn and More\3\Duessel, Natasha, Reginn, Selena(Sacred)\5\08/12/2020, 06/01/2021\NewUnits
+Heroes with Luna (v2)\3\Ced, Mareeta(Fallen), Sirius\5\28/12/2020, 04/01/2021\SkillBanner
+Legendary Hero: Lilina, Firelight Leader\-8\Bramimond, Celica(Queen), Claude(Brave), Dimitri(Brave), Duma, Edelgard(Brave), Gatrie, Jill, Lilina(Firelight), Peony, Plumeria, Reginn\5\25/12/2020, 03/01/2021\Legendary
+Heroes with Chill Skills (v3)\3\Alm(Brave), Kliff, Tsubasa\5\21/12/2020, 27/12/2020\SkillBanner
+"Burden of Gifts" Tempest Trials+\3\Bernie, Hilda(3H), Sanaki\5\16/12/2020, 27/12/2020\Tempest
+Lyon & Eirika's Battle\3\Eirika(Memories), Lyon(Fallen)\5\19/12/2020, 26/12/2020\BHB
+Book 2 Revival, Week 11\-4\Leif, Rhajat, Shiro\5\19/12/2020, 25/12/2020\Book2
+New Power (December 2020)\3\Chrom(Branded), Lucina, Mist, Nowi\5\11/12/2020, 20/12/2020\NewPower
 Book 2 Revival, Week 10\-4\Morgan(F), Olivia(Traveler), Robin(M)(Fallen)\5\05/12/2020, 11/12/2020\Book2
 Heroes with Infantry Pulse\3\Gerik, Helbindi, Nils\5\02/12/2020, 10/12/2020\SkillBanner
 Double Special Heroes (November 2020)\-6\Byleth(F)(Summer), Caeda(Retro), Dorothea(Summer), Fjorm(Bride), Ingrid(Summer), Palla(Retro), Selena(Sacred)(Summer), Sylvain(Summer)\5\20/11/2020, 09/12/2020\DoubleSpecial
@@ -54,7 +70,7 @@ Performing Arts (September 2020 rerun)\3\Azura(AwaOdori), Inigo(AwaOdori), Olivi
 Pigtails vs. Ponytails, Block A\3\Hilda(3H), Kiria, Kris(F)\5\28/09/2020, 07/10/2020\VotingGauntlet
 Pigtails vs. Ponytails, Block B\3\Eyvel, Laevatein, Mikoto\5\28/09/2020, 07/10/2020\VotingGauntlet
 Despair and Hope\3\Gatrie, Ilyana, Jill, Shinon\5\18/09/2020, 07/10/2020\NewUnits
-To Stay Dancing\3\Ethlyn(AwaOdori), Lachesis(AwaOdori), Quan(AwaOdori), Sigurd(AwaOdori)\5\08/09/2020, 07/10/2020\Seasonal, NewUnits
+To Stay Dancing\3\Ethlyn(AwaOdori), Lachesis(AwaOdori), Quan(AwaOdori), Sigurd(AwaOdori)\5\08/09/2020, 07/10/2020\Seasonal, NewUnits, Fall
 Mythic Heroes: Plumeria, Lewd Dream\-8\Celica(Queen), Duma, Ephraim(Fire), Julian, Leif(Unifier), Lif, Lilith, Lucina(Glorious), Micaiah(Brave), Plumeria, Seliph(Scion), Yune\5\30/09/2020, 06/10/2020\Legendary
 Ranulf & Lethe's Battle\3\Lethe, Ranulf\5\29/09/2020, 06/10/2020\BHB
 Book 2 Revival, Week 5\-4\Chrom(Branded), Maribelle, Sumia\5\27/09/2020, 03/10/2020\Book2
@@ -101,7 +117,7 @@ Summer Passing\3\Joshua(Summer), Lute(Summer), Mia(Summer), Selena(Sacred)(Summe
 Heroes with Draconic Aura (v2)\3\Corrin(F)(Adrift), Keaton, Kjelle\5\03/07/2020, 09/07/2020\SkillBanner
 Father-Complex Fray\3\Altena, Annette, Mareeta, Ross\5\27/06/2020, 07/07/2020\VotingGauntlet
 Legendary Heroes - Seliph, Scion of Light\-8\Azura(Vallite), Ced, Chrom(Crowned), Duma, Eleonora, Lyn(Wind), Mirabilis, Peony, Robin(F)(Fallen), Seliph(Scion), Sothis, Yune\5\30/06/2020, 06/07/2020\Legendary
-Summer Returns (2020 Rerun)\3\Gunnthra(Summer), Helbindi(Summer), Laegjarn(Summer), Laevatein(Summer)\5\23/06/2020, 05/07/2020\Seasonal, NewUnits, Summer
+Summer Returns (2020 Rerun)\3\Gunnthra(Summer), Helbindi(Summer), Laegjarn(Summer), Laevatein(Summer)\5\23/06/2020, 05/07/2020\Seasonal, Summer
 Call of the Sea\-100\Camilla(Summer), Cordelia(Summer), Corrin(F)(Summer), Elise(Summer), Frederick(Summer), Gaius(Summer), Gunnthra(Summer), Helbindi(Summer), Innes(Summer), Laegjarn(Summer), Laevatein(Summer), Leo(Summer), Lilina(Summer), Linde(Summer), Lyn(Summer), Noire(Summer), Robin(F)(Summer), Takumi(Summer), Tana(Summer), Tiki(Adult)(Summer), Tiki(Young)(Summer), Ursula(Summer), Wolt(Summer), Xander(Summer)\5\18/06/2020, 02/07/2020\Seasonal
 Heroes with Form Skills\3\Eyvel, Petra, Phina\5\26/06/2020, 02/07/2020\SkillBanner
 Bridal Blessings (2020 Rerun)\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)\5\10/06/2020, 27/06/2020\Seasonal, Bride

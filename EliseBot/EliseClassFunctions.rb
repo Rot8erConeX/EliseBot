@@ -296,6 +296,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit1__ __unit2__","Allows me to pair up the two listed donor units.  This can be shown when looking up either unit alongside the term \"pairup\".\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['resplendant','resplendent','ascension','ascend','resplend'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to Resplendently Ascend the donor unit with the name `unit`.\nIf the donor unit cannot do so, I inform you of this.\nIf the donor unit is already Resplendently Ascended, toggles off their art but keeps their stats.\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['kiranface','kiran','face','summoner','summonerface'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to edit the face used by the donor unit based on the summoner.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['forma'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to toggle the donor unit with the name `unit` into or out of being a Forma Unit.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     else
@@ -329,6 +331,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*effects__","Causes me to change the nature of the devunit with the name `unit`\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['learn','teach'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*skill types__","Causes me to teach the skills in slots `skill types` to the devunit with the name `unit`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+    elsif ['kiranface','kiran','face','summoner','summonerface'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to edit the face used by the dev unit based on the summoner.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     else
       create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the devunits.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new devunit\n`FEH!#{command.downcase} promote` - promotes an existing devunit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a devunit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a devunit's nature (*also `ivs`*)\n`FEH!#{command.downcase} teach` - teaches a new skill to a devunit (*also `learn`*)\n`FEH!#{command.downcase} flower` - increases a dev unit's dragonflower count\n`FEH!#{command.downcase} pairup` - pairs one devunit up as another's cohort\n`FEH!#{command.downcase} resplendent` - Resplendently Ascends a devunit\n`FEH!#{command.downcase} forma` - gives a devunit a Forma Soul\n\n`FEH!#{command.downcase} new_waifu` - adds a dev waifu (*also `add_waifu`*)\n`FEH!#{command.downcase} new_somebody` - adds a dev \"somebody\" (*also `add_somebody`*)\n`FEH!#{command.downcase} new_nobody` - adds a dev \"nobody\" (*also `add_nobody`*)\n\n`FEH!#{command.downcase} send_home` - removes the unit from either the devunits or the \"nobodies\" list (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     end
@@ -628,12 +632,13 @@ class FEHUnit
     return flwr
   end
   
-  def portrait(event,bot,artype='Face',resp=false)
+  def portrait(artype='Face',resp=false)
     return 'https://i.redd.it/pdeqrncp21r01.png' if @name=='Reinhardt(World)' && artype.length<=0
     charza=@name.gsub(' ','_')
     charza="#{charza}_Resplendent" if resp && artype=='Sprite'
     charza="#{charza}/Resplendent" if resp && artype != 'Sprite'
     return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{charza}.png" if artype=='Sprite'
+    return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{charza}/#{artype}/Face.png" if @name=='Kiran'
     return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{charza}/#{artype}.png"
   end
   
@@ -657,30 +662,59 @@ class FEHUnit
     return false if s.nil?
     return true
   end
+  
+  def isRevival?
+    return false if !@availability[0].include?('TD')
+    return false if @id<319
+    return true
+  end
+  
+  def is4Special?
+    return false if !@availability[0].include?('TD')
+    return true if @id<319
+    return false
+  end
+end
+
+class SuperUnit
+  def pronoun(possessive=nil)
+    @gender=@face[0] unless @face.nil? || @face=='Default'
+    return super(possessive)
+  end
 end
 
 class DevUnit
-  def portrait(event,bot,artype='Face',resp=false)
+  def portrait(artype='Face',resp=false)
     return 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/Alm(Saint)_Mathoo.png' if @name=='Alm(Saint)' && artype=='Sprite'
+    return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{@name}/#{@face}/Face.png" if @name=='Kiran' && !@face.nil?
     artype="#{artype}_Mathoo" if @name=='Alm(Saint)'
     x=false
     x=true if @resplendent.downcase=='r'
-    return super(event,bot,artype,x)
+    return super(artype,x)
   end
   
   def sortPriority
-    return 42 if @name=='Sakura'
-    return 41 if @name=='Bernie'
-    return 40 if @name=='Mirabilis'
-    return 30 if ['Sakura','Bernie','Cordelia','Mirabilis'].include?(@cohort)
+    return 52 if @name=='Sakura'
+    return 51 if @name=='Bernie'
+    return 50 if @name=='Mirabilis'
+    return 40 if ['Sakura','Bernie','Cordelia','Mirabilis'].include?(@cohort)
+    return 30 if @name=='Kiran'
     return 21 unless @support.nil? || @support.length<=0 || @support=='-'
     return 20 unless @true_support.nil? || @true_support.length<=0 || @true_support=='-'
+    return 11 if ['Fjorm(Bride)','Cordelia(Bride)'].include?(@name)
     return 10 if ['Sakura','Bernie','Alm','Cordelia','Mirabilis'].include?(@alts[0])
     return 0
   end
 end
 
 class DonorUnit
+  def portrait(artype='Face',resp=false)
+    return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{@name}/#{@face}/Face.png" if @name=='Kiran' && !@face.nil?
+    x=false
+    x=true if @resplendent.downcase=='r'
+    return super(artype,x)
+  end
+  
   def sortPriority
     return 3 unless @support.nil? || @support.length<=0 || @support=='-'
     return 4 unless @true_support.nil? || @true_support.length<=0 || @true_support=='-'
@@ -829,6 +863,11 @@ class FEHSkill
       nme='Wo Dao' if unit.weapon_color=='Red'
       nme='Harmonic Lance' if unit.weapon_color=='Blue'
       nme='Wo Gun' if unit.weapon_color=='Green' && @name.gsub('+','')!='Giant Spoon'
+      nme="#{nme}+" if !nme.nil? && @name[-1]=='+'
+    elsif ['Unity Blooms','Pact Blooms','Amity Blooms'].include?(@name.gsub('+',''))
+      nme='Unity Blooms' if unit.weapon_color=='Red'
+      nme='Pact Blooms' if unit.weapon_color=='Blue'
+      nme='Amity Blooms' if unit.weapon_color=='Green'
       nme="#{nme}+" if !nme.nil? && @name[-1]=='+'
     elsif ['Safeguard','Vanguard','Rearguard'].include?(@name.gsub('+',''))
       nme='Safeguard' if unit.weapon_color=='Red'
@@ -1127,6 +1166,7 @@ class FEHItem
     return '<:Midgard_Gem:675118366352211988>' if @name=='Midgard Gem'
     return '<:Divine_Code:675118366788419584>' if @name=='Divine Code'
     return '<:Divine_Code_2:676545832903770117>' if @name=='Divine Code 2'
+    return '<:Special_Blade:800880639540068353>' if @name=='Special Blade'
     if @type=='Blessing'
       moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "Boost_#{@name.gsub(' Blessing','')}"}
       return moji[0].mention unless moji.length<=0
@@ -1142,6 +1182,7 @@ class FEHGroup
     x=['bunnywhitewings','whitewingsbunny','easterwhitewings','whitewingseaster','springwhitewings','whitewingsspring','rabbitwhitewings','whitewingsrabbit','bunnywhitewing','whitewingbunny','easterwhitewing','whitewingeaster','springwhitewing','whitewingspring','rabbitwhitewing','whitewingrabbit'] if @name=='Whitewings(Bunny)'
     x=['arenabonus','bonusarena','arena'] if @name=='ArenaBonus'
     x=['aetherbonus','bonusaether','aether'] if @name=='AetherBonus'
+    x=['resonantbonus','bonusresonant','resonantblades','resonantbladesbonus','bonusresonantblades'] if @name=='ResonantBonus'
     x=['tempestbonus','bonustempest'] if @name=='TempestBonus'
     x=['braveheroes','brave','cyl'] if @name=='BraveHeroes'
     x=['fallenheroes','fallen','dark','evil','alter'] if @name=='FallenHeroes'
@@ -1161,7 +1202,8 @@ class FEHGroup
     x=['halloween','spoopy','spooky','scary'] if @name=='Halloween'
     x=['christmas','xmas','x-mas'] if @name=='Christmas'
     x=['hellspawn'] if @name=='Helspawn'
-    x=['fairies','elves','fairy','dreamfairy','elf'] if @name=='DreamFairies'
+    x=['fairies','elves','fairy','dreamfairy','elf','bug','bugs','butterfly','butterflys','butterflies'] if @name=='DreamFairies'
+    x=['dwarf','dwarves','dwarfs','mecha','mechadwarf','mechadwarves','mechadwarfs'] if @name=='MechaDwarves'
     x=['daily_rotation','dailyrotation','daily'] if @name=='Daily_Rotation'
     x=['noprf','prf-less','prfless'] if @name=='Prfless'
     x=['upforprf','up4prf','prfsoon'] if @name=='Up4Prf'
@@ -1177,6 +1219,7 @@ class FEHGroup
     x=$units.reject{|q| !q.isBonusUnit?('Arena')} if @name=='ArenaBonus'
     x=$units.reject{|q| !q.isBonusUnit?('Aether')} if @name=='AetherBonus'
     x=$units.reject{|q| !q.isBonusUnit?('Tempest')} if @name=='TempestBonus'
+    x=$units.reject{|q| !q.isBonusUnit?('Resonant')} if @name=='ResonantBonus'
     x=$units.reject{|q| !q.name.include?('(Brave)')} if @name=='BraveHeroes'
     x=$units.reject{|q| !q.name.include?('(Fallen)')} if @name=='FallenHeroes'
     x=$units.reject{|q| !q.name.include?('(NewYears)')} if @name=="NewYear's"
@@ -1267,6 +1310,7 @@ class FEHGroup
     x='<:Special_Offensive_Fire:454473651861979156> Muspell' if @name=='Muspell'
     x='<:Hel:746671718235635743> Helspawn' if @name=='Helspawn'
     x="\u{1F9DA} Dream Fairies" if @name=='DreamFairies'
+    x="\u{1F474}\u{1F3FD} Mecha Dwarves" if @name=='MechaDwarves'
     x='<:WhiteWing:746668045199736853> Whitewings' if @name=='Whitewings'
     x='<:WingedBunny:746668044763398174> Whitewings(Bunny)' if @name=='Whitewings(Bunny)'
     # obtainment groups
@@ -1299,9 +1343,10 @@ class FEHGroup
     x='<:PurpleFire:701271290987806790> Fallen Heroes' if @name=='FallenHeroes'
     x='<:BraveHero:701268588266520578> Brave Heroes' if @name=='BraveHeroes'
     # Bonus Units
-    x='<:Current_Tempest_Bonus:498797966740422656> Tempest Bonus' if @name=='TempestBonus'
     x='<:Current_Arena_Bonus:498797967042412544> Arena Bonus' if @name=='ArenaBonus'
     x='<:Current_Aether_Bonus:510022809741950986> Aether Bonus' if @name=='AetherBonus'
+    x='<:Special_Blade:800880639540068353> Resonant Blades Bonus' if @name=='ResonantBonus'
+    x='<:Current_Tempest_Bonus:498797966740422656> Tempest Bonus' if @name=='TempestBonus'
     # other groups
     x='<:Divine_Dew:453618312434417691> Retro-Prfs' if @name=='Retro-Prfs'
     x="<:Icon_Support_Cyan:497430896249405450> Mathoo's Waifus" if @name=="Mathoo'sWaifus"
@@ -1367,6 +1412,7 @@ class FEHBanner
       end
       four_star = (100.00 - five_focus - five_star) * 58.00 / (100.00 - b)
       four_focus = 3.00 * four_star / 58.00 if newunits
+      four_special = 3.00 * four_star / 58.00
       three_star = 100.00 - five_focus - five_star - four_star
     else
       sr=(x/5)*0.5
@@ -1379,16 +1425,18 @@ class FEHBanner
       end
       four_star = (100.00 - five_focus - five_star) * 58.00 / (100.00 - @starting_focus - 3)
       four_focus = 3.00 * four_star / 58.00 if newunits
+      four_special = 3.00 * four_star / 58.00
       three_star = 100.00 - five_focus - five_star - four_star
     end
     six_star=0 if six_focus>=100
     five_focus=0 if six_focus+six_star>=100
     five_star=0 if six_focus+six_star+five_focus>=100
-    four_focus=0 if six_focus+six_star+five_focus+five_star>=100
-    four_star=0 if six_focus+six_star+five_focus+five_star+four_focus>=100
-    three_star=0 if six_focus+six_star+five_focus+five_star+four_focus+four_star>=100
-    two_star=0 if six_focus+six_star+five_focus+five_star+four_focus+four_star+three_star>=100
-    one_star=0 if six_focus+six_star+five_focus+five_star+four_focus+four_star+three_star+two_star>=100
+    four_focus=0 if six_focus+six_star+five_focus+five_star>=100 || self.unit_list.reject{|q| !q.availability[0].include?('4p') && !q.availability[0].include?('4s')}.length<=0
+    four_special=0 if six_focus+six_star+five_focus+five_star+four_focus>=100
+    four_star=0 if six_focus+six_star+five_focus+five_star+four_focus+four_special>=100
+    three_star=0 if six_focus+six_star+five_focus+five_star+four_focus+four_special+four_star>=100
+    two_star=0 if six_focus+six_star+five_focus+five_star+four_focus+four_special+four_star+three_star>=100
+    one_star=0 if six_focus+six_star+five_focus+five_star+four_focus+four_special+four_star+three_star+two_star>=100
     four_focus=four_star/2.0 if @focus_rarities.include?('4') && four_focus<=0
     three_focus=three_star/2.0 if @focus_rarities.include?('3') && three_focus<=0
     two_focus=two_star/2.0 if @focus_rarities.include?('2') && two_focus<=0
@@ -1398,10 +1446,11 @@ class FEHBanner
     two_focus=0 if self.unit_list.reject{|q| !q.availability[0].include?('2p') && !q.availability[0].include?('2s')}.length<=0
     one_focus=0 if self.unit_list.reject{|q| !q.availability[0].include?('1p') && !q.availability[0].include?('1s')}.length<=0
     four_star-=four_focus if four_focus>0
+    four_star-=four_special if four_special>0
     three_star-=three_focus if three_focus>0
     two_star-=two_focus if two_focus>0
     one_star-=one_focus if one_focus>0
-    return [six_focus,six_star,five_focus,five_star,four_focus,four_star,three_focus,three_star,two_focus,two_star,one_focus,one_star]
+    return [six_focus,six_star,five_focus,five_star,four_focus,four_special,four_star,three_focus,three_star,two_focus,two_star,one_focus,one_star]
   end
   
   def description(unit,chance)
@@ -1421,16 +1470,16 @@ class FEHBanner
     x2=self.calc_pity(0)
     str="#{str}\n*Starting Focus Chance:* #{"#{len % x2[0]}% (6<:Icon_Rarity_6p10:491487784822112256>), " unless x2[0]<=0}#{len % x2[2]}% (5<:Icon_Rarity_5p10:448272715099406336>)"
     str="#{str}, #{len % x2[4]}% (4<:Icon_Rarity_4p10:448272714210476033>)" unless x2[4]<=0
-    str="#{str}, #{len % x2[6]}% (3<:Icon_Rarity_3:448266417934958592>)" unless x2[6]<=0
-    str="#{str}, #{len % x2[8]}% (2<:Icon_Rarity_2:448266417872044032>)" unless x2[8]<=0
-    str="#{str}, #{len % x2[10]}% (1<:Icon_Rarity_1:448266417481973781>)" unless x2[10]<=0
+    str="#{str}, #{len % x2[7]}% (3<:Icon_Rarity_3:448266417934958592>)" unless x2[7]<=0
+    str="#{str}, #{len % x2[9]}% (2<:Icon_Rarity_2:448266417872044032>)" unless x2[9]<=0
+    str="#{str}, #{len % x2[11]}% (1<:Icon_Rarity_1:448266417481973781>)" unless x2[11]<=0
     unless chance<=0
       x2=self.calc_pity(chance)
       str="#{str}\n*Current Focus Chance:* #{"#{len % x2[0]}% (6<:Icon_Rarity_6p10:491487784822112256>), " unless x2[0]<=0}#{len % x2[2]}% (5<:Icon_Rarity_5p10:448272715099406336>)"
       str="#{str}, #{len % x2[4]}% (4<:Icon_Rarity_4p10:448272714210476033>)" unless x2[4]<=0
-      str="#{str}, #{len % x2[6]}% (3<:Icon_Rarity_3:448266417934958592>)" unless x2[6]<=0
-      str="#{str}, #{len % x2[8]}% (2<:Icon_Rarity_2:448266417872044032>)" unless x2[8]<=0
-      str="#{str}, #{len % x2[10]}% (1<:Icon_Rarity_1:448266417481973781>)" unless x2[10]<=0
+      str="#{str}, #{len % x2[7]}% (3<:Icon_Rarity_3:448266417934958592>)" unless x2[7]<=0
+      str="#{str}, #{len % x2[9]}% (2<:Icon_Rarity_2:448266417872044032>)" unless x2[9]<=0
+      str="#{str}, #{len % x2[11]}% (1<:Icon_Rarity_1:448266417481973781>)" unless x2[11]<=0
     end
     if x2[0]>0 && (unit.availability[0].include?('6p') || unit.availability[0].include?('6s'))
       m=x2[0]/(self.same_color(unit).reject{|q| !q.availability[0].include?('6p') && !q.availability[0].include?('6s')}.length+1)
@@ -1442,54 +1491,56 @@ class FEHBanner
         str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
       end
     end
-    if x2[2]>0 && (unit.availability[0].include?('5p') || unit.availability[0].include?('5s') || x2[0]+x2[1]<=0)
-      m=x2[2]/(self.same_color(unit).length+1)
-      m2=x2[2]/self.unit_list.length
-      str="#{str}\n*5<:Icon_Rarity_5p10:448272715099406336> #{'Start ' if chance<=0}Chance:* "
-      if m<=m2
-        str="#{str}#{len % m}%"
-      else
-        str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+    unless @focus_rarities.include?('0')
+      if x2[2]>0 && (unit.availability[0].include?('5p') || unit.availability[0].include?('5s') || x2[0]+x2[1]<=0)
+        m=x2[2]/(self.same_color(unit).length+1)
+        m2=x2[2]/self.unit_list.length
+        str="#{str}\n*5<:Icon_Rarity_5p10:448272715099406336> #{'Start ' if chance<=0}Chance:* "
+        if m<=m2
+          str="#{str}#{len % m}%"
+        else
+          str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+        end
       end
-    end
-    if x2[4]>0 && (unit.availability[0].include?('4p') || unit.availability[0].include?('4s'))
-      m=x2[4]/(self.same_color(unit).reject{|q| !q.availability[0].include?('4p') && !q.availability[0].include?('4s')}.length+1)
-      m2=x2[4]/self.unit_list.reject{|q| !q.availability[0].include?('4p') && !q.availability[0].include?('4s')}.length
-      str="#{str}\n*4<:Icon_Rarity_4p10:448272714210476033> #{'Start ' if chance<=0}Chance:* "
-      if m<=m2
-        str="#{str}#{len % m}%"
-      else
-        str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+      if x2[4]>0 && (unit.availability[0].include?('4p') || unit.availability[0].include?('4s'))
+        m=x2[4]/(self.same_color(unit).reject{|q| !q.availability[0].include?('4p') && !q.availability[0].include?('4s')}.length+1)
+        m2=x2[4]/self.unit_list.reject{|q| !q.availability[0].include?('4p') && !q.availability[0].include?('4s')}.length
+        str="#{str}\n*4<:Icon_Rarity_4p10:448272714210476033> #{'Start ' if chance<=0}Chance:* "
+        if m<=m2
+          str="#{str}#{len % m}%"
+        else
+          str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+        end
       end
-    end
-    if x2[6]>0 && (unit.availability[0].include?('3p') || unit.availability[0].include?('3s'))
-      m=x2[6]/(self.same_color(unit).reject{|q| !q.availability[0].include?('3p') && !q.availability[0].include?('3s')}.length+1)
-      m2=x2[6]/self.unit_list.reject{|q| !q.availability[0].include?('3p') && !q.availability[0].include?('3s')}.length
-      str="#{str}\n*3<:Icon_Rarity_3:448266417934958592> #{'Start ' if chance<=0}Chance:* "
-      if m<=m2
-        str="#{str}#{len % m}%"
-      else
-        str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+      if x2[7]>0 && (unit.availability[0].include?('3p') || unit.availability[0].include?('3s'))
+        m=x2[7]/(self.same_color(unit).reject{|q| !q.availability[0].include?('3p') && !q.availability[0].include?('3s')}.length+1)
+        m2=x2[7]/self.unit_list.reject{|q| !q.availability[0].include?('3p') && !q.availability[0].include?('3s')}.length
+        str="#{str}\n*3<:Icon_Rarity_3:448266417934958592> #{'Start ' if chance<=0}Chance:* "
+        if m<=m2
+          str="#{str}#{len % m}%"
+        else
+          str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+        end
       end
-    end
-    if x2[8]>0 && (unit.availability[0].include?('3p') || unit.availability[0].include?('2s'))
-      m=x2[8]/(self.same_color(unit).reject{|q| !q.availability[0].include?('2p') && !q.availability[0].include?('2s')}.length+1)
-      m2=x2[8]/self.unit_list.reject{|q| !q.availability[0].include?('2p') && !q.availability[0].include?('2s')}.length
-      str="#{str}\n*2<:Icon_Rarity_2:448266417872044032> #{'Start ' if chance<=0}Chance:* "
-      if m<=m2
-        str="#{str}#{len % m}%"
-      else
-        str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+      if x2[9]>0 && (unit.availability[0].include?('3p') || unit.availability[0].include?('2s'))
+        m=x2[9]/(self.same_color(unit).reject{|q| !q.availability[0].include?('2p') && !q.availability[0].include?('2s')}.length+1)
+        m2=x2[9]/self.unit_list.reject{|q| !q.availability[0].include?('2p') && !q.availability[0].include?('2s')}.length
+        str="#{str}\n*2<:Icon_Rarity_2:448266417872044032> #{'Start ' if chance<=0}Chance:* "
+        if m<=m2
+          str="#{str}#{len % m}%"
+        else
+          str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+        end
       end
-    end
-    if x2[10]>0 && (unit.availability[0].include?('1p') || unit.availability[0].include?('1s'))
-      m=x2[10]/(self.same_color(unit).reject{|q| !q.availability[0].include?('1p') && !q.availability[0].include?('1s')}.length+1)
-      m2=x2[10]/self.unit_list.reject{|q| !q.availability[0].include?('1p') && !q.availability[0].include?('1s')}.length
-      str="#{str}\n*1<:Icon_Rarity_1:448266417481973781> #{'Start ' if chance<=0}Chance:* "
-      if m<=m2
-        str="#{str}#{len % m}%"
-      else
-        str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+      if x2[11]>0 && (unit.availability[0].include?('1p') || unit.availability[0].include?('1s'))
+        m=x2[11]/(self.same_color(unit).reject{|q| !q.availability[0].include?('1p') && !q.availability[0].include?('1s')}.length+1)
+        m2=x2[11]/self.unit_list.reject{|q| !q.availability[0].include?('1p') && !q.availability[0].include?('1s')}.length
+        str="#{str}\n*1<:Icon_Rarity_1:448266417481973781> #{'Start ' if chance<=0}Chance:* "
+        if m<=m2
+          str="#{str}#{len % m}%"
+        else
+          str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+        end
       end
     end
     return str
@@ -1507,9 +1558,18 @@ class FEHBanner
       nu=false if @start_date[2]<2020
       nu=false if @start_date[2]==2020 && @start_date[1]<2
     end
+    nu2=true if @start_date[2]>2021
+    nu2=true if @start_date[2]==2020 && @start_date[1]>2
+    nu2=true if @start_date[2]==2020 && @start_date[1]==2 && @start_date[0]>2
+    nu=true if nu2
     f.push($units.reject{|q| !q.fake.nil? || !q.duo.nil? || !q.availability[0].include?('5p') || (q.availability[0].include?('TD') && nu)})
     if self.calc_pity(0)[4]>0
       f.push(self.unit_list.reject{|q| !q.availability[0].include?('4p') && !q.availability[0].include?('4s')})
+    else
+      f.push([])
+    end
+    if nu2
+      f.push($units.reject{|q| !q.fake.nil? || !q.duo.nil? || !q.availability[0].include?('5p') || !q.availability[0].include?('TD')})
     else
       f.push([])
     end
@@ -1520,13 +1580,13 @@ class FEHBanner
       f.push([])
     end
     f.push($units.reject{|q| !q.fake.nil? || !q.availability[0].include?('3p')})
-    if self.calc_pity(0)[8]>0
+    if self.calc_pity(0)[9]>0
       f.push(self.unit_list.reject{|q| !q.availability[0].include?('2p') && !q.availability[0].include?('2s')})
     else
       f.push([])
     end
     f.push($units.reject{|q| !q.fake.nil? || !q.availability[0].include?('2p')})
-    if self.calc_pity(0)[10]>0
+    if self.calc_pity(0)[11]>0
       f.push(self.unit_list.reject{|q| !q.availability[0].include?('1p') && !q.availability[0].include?('1s')})
     else
       f.push([])
@@ -1852,6 +1912,21 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
     args.shift
   end
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  crsoff=nil
+  if args.join(' ').include?('~~')
+    s=args.join(' ')
+    sy=args.join(' ')
+    while sy.include?('~~')
+      sy=remove_format(sy,'~~')
+    end
+    args=sy.split(' ')
+    sn="~~#{s.gsub('~~',' ~~ ')}~~"
+    while sn.include?('~~')
+      sn=remove_format(sn,'~~')
+    end
+    crsoff=find_in_units(bot,event,sn.split(' '),13,true,true)
+    crsoff=nil unless crsoff.is_a?(Array)
+  end
   colors=[]
   weapons=[]
   color_weapons=[]
@@ -1900,8 +1975,8 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
     movements.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs'].include?(args[i].downcase)
     movements.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
     movements.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
-    genders.push('M') if ['male','boy','m','males','boys','man'].include?(args[i].downcase)
-    genders.push('F') if ['female','woman','girl','f','females','women','girls'].include?(args[i].downcase)
+    genders.push('M') if ['male','boy','m','males','boys','man','men','mans'].include?(args[i].downcase)
+    genders.push('F') if ['female','woman','girl','f','females','women','girls','womans'].include?(args[i].downcase)
     supernatures.push('+HP') if ['hpboon','healthboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     supernatures.push('+Atk') if ['atkboon','attboon','attackboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     supernatures.push('+Spd') if ['spdboon','speedboon'].include?(args[i].downcase.gsub('+','').gsub('-',''))
@@ -2172,7 +2247,7 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
     untz=untz.reject{|q| q.duo.nil? || q.duo[0][0]=='Duo'}
   end
   untz=untz.reject{|q| !q.hasResplendent?} if resplendents
-  if ignore_limit
+  if ignore_limit || !crsoff.nil?
   elsif untz.length>=untz2.length
     event.respond 'Your request is gibberish.' if ['hero','heroes','heros','unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
     return -1
@@ -2239,6 +2314,13 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   m.push("*Stats:* #{statlimits.join(', ')}") if statlimits.length>0
   m.push("*Supernatures:* #{supernatures.map{|q| "#{q[1,q.length-1]} #{q[0].gsub('+','boon').gsub('-','bane')}"}.join(', ')}") if supernatures.length>0
   m.push("~~Xane's non-HP stats have little meaning when his weapon is equipped~~") if markxane
+  unless crsoff.nil?
+    m.push('')
+    m.push('__**Excludes matches from this search**__')
+    m.push(crsoff[0])
+    m.flatten!
+    untz=untz.reject{|q| crsoff[1].map{|q| q.name}.include?(q.name)}
+  end
   ulength=untz.length
   ulength*=2 if group.map{|q| q.name}.include?('HallOfForms') && !group.map{|q| q.name}.include?('Forma')
   ulength*=2 if group.map{|q| q.name}.include?('Prfless') && !group.map{|q| q.name}.include?('Up4Prf')
@@ -2265,6 +2347,21 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
     args.shift
   end
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
+  crsoff=nil
+  if args.join(' ').include?('~~')
+    s=args.join(' ')
+    sy=args.join(' ')
+    while sy.include?('~~')
+      sy=remove_format(sy,'~~')
+    end
+    args=sy.split(' ')
+    sn="~~#{s.gsub('~~',' ~~ ')}~~"
+    while sn.include?('~~')
+      sn=remove_format(sn,'~~')
+    end
+    crsoff=find_in_skills(bot,event,sn.split(' '),3,true,true)
+    crsoff=nil unless crsoff.is_a?(Array)
+  end
   colors=[]
   weapons=[]
   skill_types=[]
@@ -2374,6 +2471,7 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
     for i in 0...matches1.length
       if has_any?(weapon_subsets,matches1[i].tags)
       elsif weapon_subsets.include?('Prf') && !matches1[i].exclusivity.nil?
+      elsif weapon_subsets.include?('Inheritable') && matches1[i].exclusivity.nil?
       elsif weapon_subsets.include?('Retro-Prf') && !matches1[i].exclusivity.nil? && matches1[i].prerequisite.nil?
       elsif weapon_subsets.include?('Pega-killer') && !weapon_subsets.include?('Effective') && matches1[i].tags.include?('Bow') && !matches1[i].tags.include?('UnBow')
       elsif has_any?(weapon_subsets.map{|q| "(E)#{q}"},matches1[i].tags)
@@ -2406,7 +2504,7 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
   sklz=sklz.reject{|q| (q.isPassive? || has_any?(q.type,['Duo','Harmonic'])) && !has_any?(passive_subsets,q.tags)} if passive_subsets.length>0
   sklz=sklz.reject{|q| q.type.include?('Duo')} unless passives.length>0 || passive_subsets.length>0 || skill_types.include?('Duo')
   sklz=sklz.reject{|q| q.type.include?('Harmonic')} unless passives.length>0 || passive_subsets.length>0 || skill_types.include?('Harmonic')
-  if sklz.length>=sklz2.length
+  if sklz.length>=sklz2.length && !crsoff.nil?
     event.respond 'Your request is gibberish.' unless ['skill','skills'].include?(args[0].downcase)
     return -1
   end
@@ -2465,6 +2563,13 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
   f2=sklz.map{|q| q}
   # display passive lines with multiple entries in the list as only one entry
   sklz=sklz.reject{|q| q.isPassive? && !q.level.nil? && !['-','example'].include?(q.level) && sklz.reject{|q2| q2.id/10!=q.id/10}.length>1}
+  unless crsoff.nil?
+    m.push('')
+    m.push('__**Excludes matches from this search**__')
+    m.push(crsoff[0])
+    m.flatten!
+    sklz=sklz.reject{|q| crsoff[2].map{|q| q.fullName}.include?(q.fullName)}
+  end
   unless sklz.length<=100
     f2x=sklz.length
     sklz=sklz.reject{|q| 'Squad Ace '==q.name[0,10]} unless has_any?(args.map{|q| q.downcase},['squadace','squad','all'])
@@ -3696,8 +3801,6 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
     if k[0].is_a?(FEHUnit) && k.length>1 && k.reject{|q| ['Robin(F)','Robin(M)','Kris(F)','Kris(M)'].include?(q.name)}.length<=0
       k=k[0].clone
       k.name=k.name.split('(')[0]
-      k.weapon[0]='Cyan'
-      k.weapon[0]='Purple' if k.name=='Kris'
       f=k.alias_list(bot,event,saliases)
       k2=find_data_ex(:find_skill,event,args,nil,bot)
       unless k2.nil? || ![k.name,"#{k.name}'s"].include?(k2.name.split(' ')[0])
@@ -3724,6 +3827,7 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
         f.push(k2)
       end
       k2=find_data_ex(:find_skill,event,args,nil,bot)
+      puts k2.to_s
       unless k2.nil? || ![k[0].name,"#{k[0].name}'s"].include?(k2.name.split(' ')[0])
         f.push(' ')
         f.push(k2.alias_list(bot,event,saliases))
@@ -3742,6 +3846,8 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
       f.push(k2.map{|q| q[1]})
       f.flatten!
     end
+    args=["arden's"] if k.name=='Arden' # Without this line, Ardent Durandal will overwrite Arden's Blade when looking up the unit Arden, and the skill won't display
+                                        # While technically intended behavior, since Ardent Durandal came first, it is not what users would expect given things like Berkut's Lance
     k2=find_data_ex(:find_skill,event,args,nil,bot)
     unless k2.nil? || ![k.name,"#{k.name}'s"].include?(k2.name.split(' ')[0])
       f.push(' ')
@@ -4124,13 +4230,15 @@ def show_bonus_units(event,args=[],bot=nil,mode=0)
     x.push('Arena') if b.reject{|q| q.type != 'Arena'}.length<=0
     x.push('Tempest Trials') if b.reject{|q| q.type != 'Tempest'}.length<=0
     x.push('Aether Raids') if b.reject{|q| q.type != 'Aether'}.length<=0
+    x.push('Resonant Battles') if b.reject{|q| q.type != 'Resonant'}.length<=0
     return ["There are no known quantities about #{list_lift(x,'or')}"] if x.length>0 && mode>0
     event.respond "There are no known quantities about #{list_lift(x,'or')}" if x.length>0
   elsif b.length<=0 && mode>0
     x=[]
     x.push('Arena') if args.include?('Arena')
     x.push('Tempest Trials') if args.include?('Tempest')
-    x.push('Aether Raids') if args.include?('Aether Raid')
+    x.push('Aether Raids') if args.include?('Aether')
+    x.push('Resonant Battles') if args.include?('Resonant')
     return ["There are no known quantities about #{list_lift(x,'or')}"]
   end
   if mode>0
@@ -4159,27 +4267,39 @@ def show_bonus_units(event,args=[],bot=nil,mode=0)
         elsif b3[i2].type=='Tempest'
           str2="*Seals:* #{b3[i2].seals.uniq.map{|q| "#{q.fullName('')}#{q.emotes(bot,true)}"}.join(', ')}"
         end
-        str="#{str}\n#{str2}"
+        str="#{str}\n#{str2}" unless b3[i2].type=='Resonant'
       end
       b2[i]=str
     end
     return b2
   end
-  x=b.map{|q| [q.type,q.unit_list]}.uniq
+  x=b.map{|q| [q.type,q.unit_list,q.bonuses]}.uniq
   y=''
   for i in 0...x.length
-    m=x[i][1].map{|q| "#{q.name}#{q.emotes(bot,false) unless !safe_to_spam?(event)}"}.join("\n")
+    if x[i][0]=='Resonant'
+      m=get_games_list(x[i][2],false).join("\n")
+    else
+      m=x[i][1].map{|q| "#{q.name}#{q.emotes(bot,false) unless !safe_to_spam?(event)}"}.join("\n")
+    end
     xcolor=0xD49F61
     xcolor=0x002837 if x[i][0]=='Arena'
     xcolor=0x5ED0CF if x[i][0]=='Tempest'
     xcolor=0x54C571 if x[i][0]=='Aether'
+    xcolor=0xC0EEB6 if x[i][0]=='Resonant'
     hdr="__**#{x[i][0]} Bonus Units**__"
     hdr="__**Tempest Trials Bonus Units**__" if x[i][0]=='Tempest'
     hdr="__**Aether Raids Bonus Units**__" if x[i][0]=='Aether'
+    hdr="__**Resonant Battles Bonus Games**__" if x[i][0]=='Resonant'
     xf=b.reject{|q| q.type != x[i][0] || q.unit_list != x[i][1]}
+    xf=b.reject{|q| q.type != x[i][0] || q.bonuses != x[i][2]} if x[i][0]=='Resonant'
     yy=10
     for i2 in 0...xf.length
-      if ['Arena','Aether'].include?(x[i][0])
+      if ['Resonant'].include?(x[i][0])
+        xx=[]
+        xx.push('**Current week**') if xf[i2].isCurrent?(false)
+        xx.push('**Next week**') if xf[i2].isNext?(false)
+        m="#{xx.join("\n")}\n#{m}"
+      elsif ['Arena','Aether'].include?(x[i][0])
         xx=[]
         xx.push('*Current week*') if xf[i2].isCurrent?(false)
         xx.push('*Next week*') if xf[i2].isNext?(false)
@@ -4733,7 +4853,7 @@ def avail_text(fgg='',includegrails=false,unt=nil,mode=0)
       summon_type[7].push("Grail summon at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}r")
       lowest_rarity=[lowest_rarity,m].min if fgg.include?("#{m}d") || fgg.include?("#{m}g") || fgg.include?("#{m}f") || fgg.include?("#{m}q") || fgg.include?("#{m}t") || fgg.include?("#{m}s") || fgg.include?("#{m}p") || fgg.include?("#{m}o") || fgg.include?("#{m}y") || fgg.include?("#{m}b") || fgg.include?("#{m}r")
     end
-    summon_type[7].push("~~Unavailable on New/Special Heroes banners~~") if fgg.include?('TD')
+    summon_type[7].push("~~Unavailable on New/Special Heroes banners~~") if fgg.include?('TD') && !unt.nil? && unt.id>318
     if summon_type[7].include?('Story unit starting at 2<:Icon_Rarity_2:448266417872044032>') && summon_type[7].include?('Story unit starting at 4<:Icon_Rarity_4:448266418459377684>')
       for i in 0...summon_type[7].length
         if summon_type[7][i]=='Story unit starting at 2<:Icon_Rarity_2:448266417872044032>'
@@ -4906,9 +5026,19 @@ def banner_list(event,bot,args=[],xname=nil)
       y2=$units.reject{|q| !q.availability[0].include?('5p') || q.availability[0].include?('TD') || !q.duo.nil? || !q.fake.nil?}.length
       y=x[3]/y
       y2=x[3]/y2
-      m.push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (New/Special Heroes) - #{len % y}% (Perceived), #{len % y2}% (Actual)")
+      has_revival=false
+      has_revival=true if $units.reject{|q| !q.isRevival?}.length>0
+      m.push("5<:Icon_Rarity_5:448266417553539104> Non-Focus#{' (New/Special Heroes)' if has_revival} - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
-    if unit.availability[0].include?('5p') && unit.duo.nil?
+    if unit.is4Special?
+      x=$banners.reject{|q| q.start_date.nil? || q.start_date[2]<2021 || q.start_date[1]<2 || q.start_date[0]<2}.sample.calc_pity(star_buff*5)
+      y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.is4Special? || !q.duo.nil? || !q.fake.nil?}.length
+      y2=$units.reject{|q| !q.is4Special? || !q.duo.nil? || !q.fake.nil?}.length
+      y=x[3]/y
+      y2=x[3]/y2
+      m.push("4<:Icon_Rarity_4:448266418459377684> Special - #{len % y}% (Perceived), #{len % y2}% (Actual)")
+    end
+    if unit.availability[0].include?('5p') && unit.duo.nil? && $units.reject{|q| !q.isRevival?}.length>0
       x=$banners.reject{|q| !q.tags.include?('GHB')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('5p') || !q.duo.nil? || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('5p') || !q.duo.nil? || !q.fake.nil?}.length
@@ -4920,41 +5050,41 @@ def banner_list(event,bot,args=[],xname=nil)
       x=$banners.reject{|q| !q.tags.include?('NewHeroes') || q.start_date.nil? || q.start_date[2]<2020 || q.start_date[1]<3}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('4p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('4p') || !q.fake.nil?}.length
-      y3=[x[5]/y,x[5]/y2]
+      y3=[x[6]/y,x[6]/y2]
       m.push("4<:Icon_Rarity_4:448266418459377684> Non-Focus (New/Special Heroes) - #{len % y3[0]}% (Perceived), #{len % y3[1]}% (Actual)")
       x=$banners.reject{|q| !q.tags.include?('GHB')}.sample.calc_pity(star_buff*5)
-      y=x[5]/y
-      y2=x[5]/y2
+      y=x[6]/y
+      y2=x[6]/y2
       m.push("4<:Icon_Rarity_4:448266418459377684> (standard banner) - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
     if unit.availability[0].include?('3p')
       x=$banners.reject{|q| !q.tags.include?('GHB')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('3p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('3p') || !q.fake.nil?}.length
-      y=x[7]/y
-      y2=x[7]/y2
+      y=x[8]/y
+      y2=x[8]/y2
       m.push("3<:Icon_Rarity_3:448266417934958592> all the time - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
     if unit.availability[0].include?('2p')
       x=$banners.reject{|q| !q.tags.include?('GHB')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('2p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('2p') || !q.fake.nil?}.length
-      y=x[7]/y
-      y2=x[7]/y2
+      y=x[10]/y
+      y2=x[10]/y2
       m.push("2<:Icon_Rarity_2:448266417872044032> all the time - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
     if unit.availability[0].include?('1p')
       x=$banners.reject{|q| !q.tags.include?('GHB')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('1p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('1p') || !q.fake.nil?}.length
-      y=x[9]/y
-      y2=x[9]/y2
+      y=x[12]/y
+      y2=x[12]/y2
       m.push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
     str3=[]
     str3.push("__*Standard 3% banners*__\n#{m.join("\n")}") if m.length>0
     m=[]
-    if unit.availability[0].include?('5p') && unit.duo.nil?
+    if unit.availability[0].include?('5p') && !unit.is4Special? && unit.duo.nil?
       x=$banners.reject{|q| !q.tags.include?('HeroFest')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('5p') || !q.duo.nil? || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('5p') || !q.duo.nil? || !q.fake.nil?}.length
@@ -4963,43 +5093,43 @@ def banner_list(event,bot,args=[],xname=nil)
       x=$banners.reject{|q| !q.tags.include?('Book2')}.sample.calc_pity(star_buff*5)
       y=x[3]/y
       y2=x[3]/y2
-      m.push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Book 1+2 Revival banner) - #{len % y}% (Perceived), #{len % y2}% (Actual)")
+      m.push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Revival banner) - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
     if unit.availability[0].include?('4p')
       x=$banners.reject{|q| !q.tags.include?('4Star')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('4p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('4p') || !q.fake.nil?}.length
-      y3=[x[5]/y,x[5]/y2]
+      y3=[x[6]/y,x[6]/y2]
       m.push("4<:Icon_Rarity_4:448266418459377684> Non-Focus (4+5 star focus banners) - #{len % y3[0]}% (Perceived), #{len % y3[1]}% (Actual)")
       x=$banners.reject{|q| !q.tags.include?('GHB')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('4p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('4p') || !q.fake.nil?}.length
-      y=x[5]/y
-      y2=x[5]/y2
+      y=x[6]/y
+      y2=x[6]/y2
       m.push("4<:Icon_Rarity_4:448266418459377684> (standard banner) - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
     if unit.availability[0].include?('3p')
       x=$banners.reject{|q| !q.tags.include?('GHB')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('3p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('3p') || !q.fake.nil?}.length
-      y=x[7]/y
-      y2=x[7]/y2
+      y=x[8]/y
+      y2=x[8]/y2
       m.push("3<:Icon_Rarity_3:448266417934958592> all the time - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
     if unit.availability[0].include?('2p')
       x=$banners.reject{|q| !q.tags.include?('GHB')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('2p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('2p') || !q.fake.nil?}.length
-      y=x[9]/y
-      y2=x[9]/y2
+      y=x[10]/y
+      y2=x[10]/y2
       m.push("2<:Icon_Rarity_2:448266417872044032> all the time - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
     if unit.availability[0].include?('1p')
       x=$banners.reject{|q| !q.tags.include?('GHB')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('1p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('1p') || !q.fake.nil?}.length
-      y=x[11]/y
-      y2=x[11]/y2
+      y=x[12]/y
+      y2=x[12]/y2
       m.push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
     str3.push("__*Other banners*__\n#{m.join("\n")}") if m.length>0
@@ -5220,6 +5350,7 @@ def summon_sim(bot,event,args=[])
   b=find_in_banners(bot,event,args,1,false,true)
   b=b[1]
   b=$banners.map{|q| q} if b.length<=0
+  b=b.reject{|q| q.unit_list.length<=0}
   b=b.sample
   str="**Summoner:** #{event.user.distinct}\n\n**Banner:** #{b.name}"
   natures=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP','+Def -Atk',
@@ -5268,27 +5399,31 @@ def summon_sim(bot,event,args=[])
   end
   if x[4]>0
     str2="#{str2}\n4<:Icon_Rarity_4p10:448272714210476033> Focus:  #{'%.2f' % (x[4])}%"
-    str2="#{str2}\nOther 4<:Icon_Rarity_4:448266418459377684>:  #{'%.2f' % x[5]}%" unless x[5]<=0
+    str2="#{str2}\n4<:Icon_Rarity_4:448266418459377684> Special:  #{'%.2f' % x[5]}%" unless x[5]<=0
+    str2="#{str2}\nOther 4<:Icon_Rarity_4:448266418459377684>:  #{'%.2f' % x[6]}%" unless x[6]<=0
   elsif x[5]>0
-    str2="#{str2}\n4<:Icon_Rarity_4:448266418459377684> Unit:  #{'%.2f' % x[5]}%"
+    str2="#{str2}\n4<:Icon_Rarity_4:448266418459377684> Special:  #{'%.2f' % x[5]}%"
+    str2="#{str2}\nOther 4<:Icon_Rarity_4:448266418459377684>:  #{'%.2f' % x[6]}%" unless x[6]<=0
+  elsif x[6]>0
+    str2="#{str2}\n4<:Icon_Rarity_4:448266418459377684> Unit:  #{'%.2f' % x[6]}%"
   end
-  if x[6]>0
-    str2="#{str2}\n3<:Icon_Rarity_3p10:448294378293952513> Focus:  #{'%.2f' % (x[6])}%"
-    str2="#{str2}\nOther 3<:Icon_Rarity_3:448266417934958592>:  #{'%.2f' % x[7]}%" unless x[7]<=0
-  elsif x[7]>0
-    str2="#{str2}\n3<:Icon_Rarity_3:448266417934958592> Unit:  #{'%.2f' % x[7]}%"
+  if x[7]>0
+    str2="#{str2}\n3<:Icon_Rarity_3p10:448294378293952513> Focus:  #{'%.2f' % (x[7])}%"
+    str2="#{str2}\nOther 3<:Icon_Rarity_3:448266417934958592>:  #{'%.2f' % x[8]}%" unless x[8]<=0
+  elsif x[8]>0
+    str2="#{str2}\n3<:Icon_Rarity_3:448266417934958592> Unit:  #{'%.2f' % x[8]}%"
   end
-  if x[8]>0
-    str2="#{str2}\n2<:Icon_Rarity_2p10:448294378205872130> Focus:  #{'%.2f' % (x[8])}%"
-    str2="#{str2}\nOther 2<:Icon_Rarity_2:448266417872044032>:  #{'%.2f' % x[9]}%" unless x[9]<=0
-  elsif x[9]>0
-    str2="#{str2}\n2<:Icon_Rarity_2:448266417872044032> Unit:  #{'%.2f' % x[9]}%"
+  if x[9]>0
+    str2="#{str2}\n2<:Icon_Rarity_2p10:448294378205872130> Focus:  #{'%.2f' % (x[9])}%"
+    str2="#{str2}\nOther 2<:Icon_Rarity_2:448266417872044032>:  #{'%.2f' % x[10]}%" unless x[10]<=0
+  elsif x[10]>0
+    str2="#{str2}\n2<:Icon_Rarity_2:448266417872044032> Unit:  #{'%.2f' % x[10]}%"
   end
-  if x[10]>0
-    str2="#{str2}\n1<:Icon_Rarity_1p10:448294377878716417> Focus:  #{'%.2f' % (x[10])}%"
-    str2="#{str2}\nOther 1<:Icon_Rarity_1:448266417481973781>:  #{'%.2f' % x[11]}%" unless x[11]<=0
+  if x[11]>0
+    str2="#{str2}\n1<:Icon_Rarity_1p10:448294377878716417> Focus:  #{'%.2f' % (x[11])}%"
+    str2="#{str2}\nOther 1<:Icon_Rarity_1:448266417481973781>:  #{'%.2f' % x[12]}%" unless x[12]<=0
   elsif x[11]>0
-    str2="#{str2}\n1<:Icon_Rarity_1:448266417481973781> Unit:  #{'%.2f' % x[11]}%"
+    str2="#{str2}\n1<:Icon_Rarity_1:448266417481973781> Unit:  #{'%.2f' % x[12]}%"
   end
   if $summon_rate[0]>=120 && $summon_rate[2]%3==0
     str2=str2.gsub('4<:Icon_Rarity_4p10:448272714210476033>',"~~4\\*~~ 5<:Icon_Rarity_5p10:448272715099406336>").gsub('4<:Icon_Rarity_4:448266418459377684>',"~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>")
@@ -5298,14 +5433,15 @@ def summon_sim(bot,event,args=[])
   end
   str=extend_message(str,str2,event,2)
   r=[]
-  rar=[6,6,5,5,4,4,3,3,2,2,1,1]
+  rar=[6,6,5,5,4,4,4,3,3,2,2,1,1]
   rarities=['6<:Icon_Rarity_6p10:491487784822112256>','6<:Icon_Rarity_6:491487784650145812>','5<:Icon_Rarity_5p10:448272715099406336>','5<:Icon_Rarity_5:448266417553539104>',
-            '4<:Icon_Rarity_4p10:448272714210476033>','4<:Icon_Rarity_4:448266418459377684>','3<:Icon_Rarity_3:448266417934958592>F','3<:Icon_Rarity_3:448266417934958592>',
-            '2<:Icon_Rarity_2:448266417872044032>F','2<:Icon_Rarity_2:448266417872044032>','1<:Icon_Rarity_1:448266417481973781>F','1<:Icon_Rarity_1:448266417481973781>']
+            '4<:Icon_Rarity_4p10:448272714210476033>','~~4\\*S~~ 5<:Icon_Rarity_5:448266417553539104>','4<:Icon_Rarity_4:448266418459377684>','3<:Icon_Rarity_3:448266417934958592>F',
+            '3<:Icon_Rarity_3:448266417934958592>','2<:Icon_Rarity_2:448266417872044032>F','2<:Icon_Rarity_2:448266417872044032>','1<:Icon_Rarity_1:448266417481973781>F',
+            '1<:Icon_Rarity_1:448266417481973781>']
   superrarities=['6<:Icon_Rarity_6p10:491487784822112256>','6<:Icon_Rarity_6:491487784650145812>','5<:Icon_Rarity_5p10:448272715099406336>','5<:Icon_Rarity_5:448266417553539104>',
-                 '~~4\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>','~~3\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>',
-                 '~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>','~~2\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>',
-                 '~~1\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>']
+                 '~~4\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~4\\*(s)~~ 5<:Icon_Rarity_5:448266417553539104>','~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>',
+                 '~~3\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>','~~2\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>',
+                 '~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>','~~1\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>']
   for i in 0...5
     k=rand(1000000)
     united=false
@@ -5538,27 +5674,31 @@ def multi_summon(bot,event,e,user,list,str='',wheel=0,srate=nil,bnr=nil,w2=nil)
   end
   if x[4]>0
     str2="#{str2}\n4<:Icon_Rarity_4p10:448272714210476033> Focus:  #{'%.2f' % (x[4])}%"
-    str2="#{str2}\nOther 4<:Icon_Rarity_4:448266418459377684>:  #{'%.2f' % x[5]}%" unless x[5]<=0
+    str2="#{str2}\n4<:Icon_Rarity_4:448266418459377684> Special:  #{'%.2f' % x[5]}%" unless x[5]<=0
+    str2="#{str2}\nOther 4<:Icon_Rarity_4:448266418459377684>:  #{'%.2f' % x[6]}%" unless x[6]<=0
   elsif x[5]>0
-    str2="#{str2}\n4<:Icon_Rarity_4:448266418459377684> Unit:  #{'%.2f' % x[5]}%"
+    str2="#{str2}\n4<:Icon_Rarity_4:448266418459377684> Special:  #{'%.2f' % x[5]}%" unless x[5]<=0
+    str2="#{str2}\nOther 4<:Icon_Rarity_4:448266418459377684>:  #{'%.2f' % x[6]}%" unless x[6]<=0
+  elsif x[6]>0
+    str2="#{str2}\n4<:Icon_Rarity_4:448266418459377684> Unit:  #{'%.2f' % x[6]}%"
   end
-  if x[6]>0
-    str2="#{str2}\n3<:Icon_Rarity_3p10:448294378293952513> Focus:  #{'%.2f' % (x[6])}%"
-    str2="#{str2}\nOther 3<:Icon_Rarity_3:448266417934958592>:  #{'%.2f' % x[7]}%" unless x[7]<=0
-  elsif x[7]>0
-    str2="#{str2}\n3<:Icon_Rarity_3:448266417934958592> Unit:  #{'%.2f' % x[7]}%"
+  if x[7]>0
+    str2="#{str2}\n3<:Icon_Rarity_3p10:448294378293952513> Focus:  #{'%.2f' % (x[7])}%"
+    str2="#{str2}\nOther 3<:Icon_Rarity_3:448266417934958592>:  #{'%.2f' % x[8]}%" unless x[8]<=0
+  elsif x[8]>0
+    str2="#{str2}\n3<:Icon_Rarity_3:448266417934958592> Unit:  #{'%.2f' % x[8]}%"
   end
-  if x[8]>0
-    str2="#{str2}\n2<:Icon_Rarity_2p10:448294378205872130> Focus:  #{'%.2f' % (x[8])}%"
-    str2="#{str2}\nOther 2<:Icon_Rarity_2:448266417872044032>:  #{'%.2f' % x[9]}%" unless x[9]<=0
-  elsif x[9]>0
-    str2="#{str2}\n2<:Icon_Rarity_2:448266417872044032> Unit:  #{'%.2f' % x[9]}%"
+  if x[9]>0
+    str2="#{str2}\n2<:Icon_Rarity_2p10:448294378205872130> Focus:  #{'%.2f' % (x[9])}%"
+    str2="#{str2}\nOther 2<:Icon_Rarity_2:448266417872044032>:  #{'%.2f' % x[10]}%" unless x[10]<=0
+  elsif x[10]>0
+    str2="#{str2}\n2<:Icon_Rarity_2:448266417872044032> Unit:  #{'%.2f' % x[10]}%"
   end
-  if x[10]>0
-    str2="#{str2}\n1<:Icon_Rarity_1p10:448294377878716417> Focus:  #{'%.2f' % (x[10])}%"
-    str2="#{str2}\nOther 1<:Icon_Rarity_1:448266417481973781>:  #{'%.2f' % x[11]}%" unless x[11]<=0
-  elsif x[11]>0
-    str2="#{str2}\n1<:Icon_Rarity_1:448266417481973781> Unit:  #{'%.2f' % x[11]}%"
+  if x[11]>0
+    str2="#{str2}\n1<:Icon_Rarity_1p10:448294377878716417> Focus:  #{'%.2f' % (x[11])}%"
+    str2="#{str2}\nOther 1<:Icon_Rarity_1:448266417481973781>:  #{'%.2f' % x[12]}%" unless x[12]<=0
+  elsif x[12]>0
+    str2="#{str2}\n1<:Icon_Rarity_1:448266417481973781> Unit:  #{'%.2f' % x[12]}%"
   end
   if srate[0]>=120 && srate[2]%3==0
     str2=str2.gsub('4<:Icon_Rarity_4p10:448272714210476033>',"~~4\\*~~ 5<:Icon_Rarity_5p10:448272715099406336>").gsub('4<:Icon_Rarity_4:448266418459377684>',"~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>")
@@ -5567,18 +5707,19 @@ def multi_summon(bot,event,e,user,list,str='',wheel=0,srate=nil,bnr=nil,w2=nil)
     str2=str2.gsub('1<:Icon_Rarity_1p10:448294377878716417>',"~~1\\*~~ 5<:Icon_Rarity_5p10:448272715099406336>").gsub('1<:Icon_Rarity_1:448266417481973781>',"~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>")
   end
   r=[]
-  rar=[6,6,5,5,4,4,3,3,2,2,1,1]
+  rar=[6,6,5,5,4,4,4,3,3,2,2,1,1]
   natures=['+HP -Atk','+HP -Spd','+HP -Def','+HP -Res','+Atk -HP','+Atk -Spd','+Atk -Def','+Atk -Res','+Spd -HP','+Spd -Atk','+Spd -Def','+Spd -Res','+Def -HP','+Def -Atk',
            '+Def -Spd','+Def -Res','+Res -HP','+Res -Atk','+Res -Spd','+Res -Def','Neutral']
   natures2=natures.map{|q| q}
   natures=['Neutral'] if ['TT Units','GHB Units'].include?(bnr.name)
   rarities=['6<:Icon_Rarity_6p10:491487784822112256>','6<:Icon_Rarity_6:491487784650145812>','5<:Icon_Rarity_5p10:448272715099406336>','5<:Icon_Rarity_5:448266417553539104>',
-            '4<:Icon_Rarity_4p10:448272714210476033>','4<:Icon_Rarity_4:448266418459377684>','3<:Icon_Rarity_3:448266417934958592>F','3<:Icon_Rarity_3:448266417934958592>',
-            '2<:Icon_Rarity_2:448266417872044032>F','2<:Icon_Rarity_2:448266417872044032>','1<:Icon_Rarity_1:448266417481973781>F','1<:Icon_Rarity_1:448266417481973781>']
+            '4<:Icon_Rarity_4p10:448272714210476033>','~~4\\*S~~ 5<:Icon_Rarity_5:448266417553539104>','4<:Icon_Rarity_4:448266418459377684>','3<:Icon_Rarity_3:448266417934958592>F',
+            '3<:Icon_Rarity_3:448266417934958592>','2<:Icon_Rarity_2:448266417872044032>F','2<:Icon_Rarity_2:448266417872044032>','1<:Icon_Rarity_1:448266417481973781>F',
+            '1<:Icon_Rarity_1:448266417481973781>']
   superrarities=['6<:Icon_Rarity_6p10:491487784822112256>','6<:Icon_Rarity_6:491487784650145812>','5<:Icon_Rarity_5p10:448272715099406336>','5<:Icon_Rarity_5:448266417553539104>',
-                 '~~4\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>','~~3\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>',
-                 '~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>','~~2\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>',
-                 '~~1\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>']
+                 '~~4\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~4\\*(s)~~ 5<:Icon_Rarity_5:448266417553539104>','~~4\\*~~ 5<:Icon_Rarity_5:448266417553539104>',
+                 '~~3\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~3\\*~~ 5<:Icon_Rarity_5:448266417553539104>','~~2\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>',
+                 '~~2\\*~~ 5<:Icon_Rarity_5:448266417553539104>','~~1\\*(f)~~ 5<:Icon_Rarity_5p10:448272715099406336>','~~1\\*~~ 5<:Icon_Rarity_5:448266417553539104>']
   for i in 0...5
     k=rand(1000000)
     united=false
@@ -6254,6 +6395,7 @@ def combined_BST(bot,event,args=[])
             ['Hinoka', 0, 0, 0, ['Hinoka(Launch)', 'Hinoka(Wings)', 'Hinoka(Bath)']],
             ['Ike', 0, 0, 0, ['Ike', 'Ike(Vanguard)', 'Ike(Brave)', 'Ike(Valentines)', 'Ike(Fallen)']],
             ['Julia', 0, 0, 0, ['Julia', 'Julia(Crusader)', 'Julia(Fallen)']],
+            ['Kris', 0, 0, 0, ['Fris(F)', 'Kris(M)', 'Kris(M)(Plegian)']],
             ['Laegjarn', 0, 0, 0, ['Laegjarn', 'Laegjarn(Winter)', 'Laegjarn(Summer)']],
             ['Laevatein', 0, 0, 0, ['Laevatein', 'Laevatein(Winter)', 'Laevatein(Summer)']],
             ['Leo', 0, 0, 0, ['Leo', 'Leo(Summer)', 'Leo(Picnic)']],
@@ -6275,7 +6417,7 @@ def combined_BST(bot,event,args=[])
             ['Sakura', 0, 0, 0, ['Sakura', 'Sakura(Halloween)', 'Sakura(Bath)']],
             ['Sharena', 0, 0, 0, ['Sharena', 'Sharena(Bunny)', 'Alfonse(Winter)']],
             ['Takumi', 0, 0, 0, ['Takumi', 'Takumi(Fallen)', 'Takumi(Winter)', 'Takumi(Summer)']],
-            ['Tharja', 0, 0, 0, ['Tharja', 'Tharja(Winter)', 'Tharja(Bride)', 'Rhajat', 'Kiria']],
+            ['Tharja', 0, 0, 0, ['Tharja', 'Tharja(Winter)', 'Tharja(Bride)', 'Rhajat', 'Kiria', 'Tharja(Plegian)']],
             ['Tiki(Young)', 0, 0, 0, ['Tiki(Young)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)', 'Tiki(Young)(Fallen)', 'Tiki(Young)(Halloween)']],
             ['Tiki', 0, 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)', 'Tiki(Young)(Fallen)', 'Tiki(Young)(Halloween)']],
             ['Veronica', 0, 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)', 'Thrasir', 'Veronica(Pirate)']],
@@ -6319,6 +6461,7 @@ def combined_BST(bot,event,args=[])
           braves[i2][1]+=1 if ['Celica(Brave)','Ephraim(Brave)','Hector(Brave)','Veronica(Brave)'].include?(x[i][0].name)
           braves[i2][2]+=1 if ['Micaiah(Brave)','Camilla(Brave)','Alm(Brave)','Eliwood(Brave)'].include?(x[i][0].name)
           braves[i2][3]+=1 if ['Claude(Brave)','Dimitri(Brave)','Edelgard(Brave)','Lysithea(Brave)'].include?(x[i][0].name)
+          braves[i2][4]+=1 if [].include?(x[i][0].name)
           counters[15][i2]+=1 if summon_type.include?('y')
           counters[16][i2]+=1 if summon_type.include?('g')
           counters[17][i2]+=1 if summon_type.include?('t')
@@ -6736,9 +6879,11 @@ def find_alts(bot,event,args=[])
   end
   a.uniq!
   for i in 0...a.length
-    x=$units.reject{|q| q.alts[0].gsub('*','')!=a[i]}
-    x2=$units.reject{|q| q.duo.nil? || !q.duo.map{|q2| q2[1].split('[')[0]==a[i]}.include?(true)}
-    x3=$units.reject{|q| q.awonk.nil? || q.awonk[1].split('[')[0]!=a[i]}
+    b=["#{a[i].split('[')[0]}"]
+    b=['Tharja','Rhajat'] if ['Tharja','Rhajat'].include?(a[i])
+    x=$units.reject{|q| !b.include?(q.alts[0].gsub('*',''))}
+    x2=$units.reject{|q| q.duo.nil? || !q.duo.map{|q2| b.include?(q2[1].split('[')[0])}.include?(true)}
+    x3=$units.reject{|q| q.awonk.nil? || !b.include?(q.awonk[1].split('[')[0])}
     data_load()
     for i2 in 0...x.length
       x[i2].sort_data=x[i2].alts.map{|q| q}
@@ -6746,12 +6891,12 @@ def find_alts(bot,event,args=[])
     end
     f=[]
     y=[]
-    if x.reject{|q| q.alts.length<=1}.length>0
+    if x.reject{|q| q.alts.length<=1}.length>0 || b.length>1
       y=x.map{|q| q.sort_data}.uniq
     else
       y=[[a[i]]]
     end
-    y=y.sort{|a,b| supersort(a,b,1)}
+    y=y.sort{|aa,bb| supersort(aa,bb,1)}
     for i2 in 0...y.length
       z=x.reject{|q| q.sort_data != y[i2]}
       m=[]
@@ -6763,7 +6908,7 @@ def find_alts(bot,event,args=[])
         m2.push('community-voted') if z[i3].name.include?('(Brave)')
         m2.push('Fallen') if z[i3].name.include?('(Fallen)')
         m2.push('Legendary/Mythical') unless z[i3].legendary.nil?
-        m2.push("#{z[i3].duo[0][0]} (with #{list_lift(z[i3].duo.map{|q| q[1]},'and')})") unless z[i3].duo.nil?
+        m2.push("#{z[i3].duo[0][0]} (with #{list_lift(z[i3].duo.map{|q| q[2]},'and')})") unless z[i3].duo.nil?
         m2.push('out-of-left-field') if m2.length<=0
         m2.push('~~IntSys why~~') if count_in(z[i3].name,'(')>2
         m.push("#{z[i3].name}#{z[i3].emotes(bot,false)} - #{m2.join(', ')}") if m2.length>0
@@ -6778,7 +6923,7 @@ def find_alts(bot,event,args=[])
         m2.push('Fallen') if z2[i3].name.include?('(Fallen)')
         m2.push('Legendary/Mythical') unless z2[i3].legendary.nil?
         m2.push('~~IntSys why~~') if count_in(z2[i3].name,'(')>2
-        m2.push("#{z2[i3].duo[0][0]} (to #{z2[i3].alts[0].gsub('*','')}#{"(#{z2[i3].alts[1]})" if z2[i3].alts.length>1})")
+        m2.push("#{z2[i3].duo[0][0]} (to #{z2[i3].alts[0].gsub('*','')}#{"[#{z2[i3].alts[1].gsub('Alfonse(Hel)','Lif')}]".gsub('Alfonse[Hel]','Lif') if z2[i3].alts.length>1})")
         m.push("#{z2[i3].name}#{z2[i3].emotes(bot,false)} - #{m2.join(', ')}")
       end
       z3=x3.reject{|q| q.awonk[1]!=str2}
@@ -6789,14 +6934,16 @@ def find_alts(bot,event,args=[])
         m2.push('Fallen') if z3[i3].name.include?('(Fallen)')
         m2.push('Legendary/Mythical') unless z3[i3].legendary.nil?
         m2.push('~~IntSys why~~') if count_in(z3[i3].name,'(')>2
+        z3i3=z3[i3].emotes(bot,false)
         if z3[i3].awonk[0]=='Idol'
+          z3i3="#{z3i3}<:Sharp:800585155320348732>"
           m2.push("Mirage Persona (to #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1})")
         elsif z3[i3].awonk[0]=='Dream'
           m2.push("Dream Illusion (actually #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1 && z3[i3].alts[1]!='Dream'})")
         else
           m2.push("#{z3[i3].awonk[0]} (to #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1})")
         end
-        m.push("#{z3[i3].name}#{z3[i3].emotes(bot,false)} - #{m2.join(', ')}")
+        m.push("#{z3[i3].name}#{z3i3} - #{m2.join(', ')}")
       end
       f.push([str2,m.join("\n"),1]) if m.length>0
     end
@@ -6806,16 +6953,62 @@ def find_alts(bot,event,args=[])
     str=''
     f.reverse! if f[-1][0].include?('[Academy]')
     f.reverse! if f[-1][0].include?('[Awakening]') && f[-2][0].include?('[Fates]')
-    if f[0][0].include?('[') && !f.find_index{|q| q[0]==a[i]}.nil?
-      m=f[f.find_index{|q| q[0]==a[i]}].map{|q| q}
-      f=f.reject{|q| q[0]==a[i]}
+    if f[0][0].include?('[') && !f.find_index{|q| q[0]==a[i].split('[')[0]}.nil?
+      m=f[f.find_index{|q| q[0]==a[i].split('[')[0]}].map{|q| q}
+      f=f.reject{|q| q[0]==a[i].split('[')[0]}
       f.unshift(m.map{|q| q})
     end
     if f.length==1 && f[0][0]==a[i]
       str="#{f[0][1]}"
       f=nil
     end
-    create_embed(event,"__**#{a[i]}**__",str,avg_color(x.map{|q| q.disp_color(0,1)}),nil,nil,f)
+    b="__**#{a[i].split('[')[0]}**__"
+    b="__Just **#{a[i].split('[')[0]}**__" if ['Tharja','Rhajat'].include?(a[i])
+    if x.length>1
+      y=x.map{|q| q.emotes(bot,false).split('>').map{|q2| "#{q2}>"}}
+      z=y[0]
+      for i in 1...y.length
+        z=z.reject{|q| !y[i].include?(q)}
+      end
+      xx=x.map{|q| q.name}.uniq
+      if xx.include?('Robin(M)') && xx.include?('Robin(F)') && xx.reject{|q| ['Robin(M)','Robin(F)'].include?(q)}.length<=0
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "Cyan_#{x[0].weapon_type}"}
+        z.unshift(moji[0].mention) unless moji.length<=0
+      elsif xx.include?('Kris(M)') && xx.include?('Kris(F)') && xx.reject{|q| ['Kris(M)','Kris(F)'].include?(q)}.length<=0
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "Purple_#{x[0].weapon_type}"}
+        z.unshift(moji[0].mention) unless moji.length<=0
+      elsif x.map{|q| q.weapon_color}.uniq.length<=1 && x.map{|q| q.weapon_type}.uniq.length<=1 && x[0].weapon_type=='Tome' && x.map{|q| q.tome_tree}.uniq.length>1
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{x[0].weapon_color}_#{x[0].weapon_type}"}
+        z.unshift(moji[0].mention) unless moji.length<=0
+      elsif x.map{|q| q.weapon_color}.uniq.length<=1 && x.map{|q| q.weapon_type}.uniq.length>1
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{x[0].weapon_color}_Unknown"}
+        z.unshift(moji[0].mention) unless moji.length<=0
+      elsif x.map{|q| q.weapon_color}.uniq.length>1 && x.map{|q| q.weapon_type}.uniq.length<=1
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "Gold_#{x[0].weapon_type}"}
+        z.unshift(moji[0].mention) unless moji.length<=0
+      end
+      z2=''
+      if x.reject{|q| !q.legendary.nil?}.length<=0 && x.map{|q| q.legendary[0]}.uniq.length>1 && z[-1].include?('Ally_Boost_')
+        z2="#{z[-1]}"
+        z.pop
+      end
+      if x.reject{|q| !q.legendary.nil? && q.legendary[3]=='Legendary'}.length<=0 && x.map{|q| q.legendary[0]}.uniq.length>1
+        z.push('<:Legendary_Effect_Unknown:443337603945857024>')
+      elsif x.reject{|q| !q.legendary.nil? && q.legendary[3]=='Mythic'}.length<=0 && x.map{|q| q.legendary[0]}.uniq.length>1
+        z.push('<:Mythic_Effect_Unknown:523328368079273984>')
+      end
+      z.push(z2) if z2.length>0
+      for i in 0...z.length
+        str=str.gsub(z[i],'')
+        unless f.nil? || f.length<=0
+          for i2 in 0...f.length
+            f[i2][1]=f[i2][1].gsub(z[i],'')
+          end
+        end
+      end
+      b="#{b}#{z.join('')}"
+    end
+    create_embed(event,b,str,avg_color(x.map{|q| q.disp_color(0,1)}),nil,nil,f)
   end
   return nil
 end
@@ -7001,6 +7194,34 @@ def path_data(bot,event,args=[],xname=nil)
     end
     create_embed(event,hdr,str,x.disp_color(0,1),nil,x.thumbnail(event,bot),f)
   end
+end
+
+def apply_combat_buffs(event,skillls,stats,phase,nerfs=[]) # used to apply in-combat buffs
+  k=0
+  k=event.server.id unless event.server.nil?
+  skillls=skillls.map{|q| q}
+  lookout=$statskills.reject{|q| !['Enemy Phase','Player Phase','In-Combat Buffs 1','In-Combat Buffs 2'].include?(q[3])}
+  for i in 0...skillls.length
+    statskl=lookout.find_index{|q| q[0]==skillls[i]}
+    unless statskl.nil?
+      statskl=lookout[statskl]
+      if statskl[3]=='Player Phase' && phase=='Enemy'
+      elsif statskl[3]=='Enemy Phase' && phase=='Player'
+      elsif skillls[i][-6,6]==' Unity' && !nerfs.nil? && nerfs.length>4
+        stats[1]+=5-2*nerfs[1] if skillls[i].include?('Atk')
+        stats[2]+=5-2*nerfs[2] if skillls[i].include?('Spd')
+        stats[3]+=5-2*nerfs[3] if skillls[i].include?('Def')
+        stats[4]+=5-2*nerfs[4] if skillls[i].include?('Res')
+      else
+        stats[0]+=statskl[4][0]
+        stats[1]+=statskl[4][1]
+        stats[2]+=statskl[4][2]
+        stats[3]+=statskl[4][3]
+        stats[4]+=statskl[4][4]
+      end
+    end
+  end
+  return stats
 end
 
 def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
@@ -8348,34 +8569,6 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
   return 1
 end
 
-def apply_combat_buffs(event,skillls,stats,phase,nerfs=[]) # used to apply in-combat buffs
-  k=0
-  k=event.server.id unless event.server.nil?
-  skillls=skillls.map{|q| q}
-  lookout=$statskills.reject{|q| !['Enemy Phase','Player Phase','In-Combat Buffs 1','In-Combat Buffs 2'].include?(q[3])}
-  for i in 0...skillls.length
-    statskl=lookout.find_index{|q| q[0]==skillls[i]}
-    unless statskl.nil?
-      statskl=lookout[statskl]
-      if statskl[3]=='Player Phase' && phase=='Enemy'
-      elsif statskl[3]=='Enemy Phase' && phase=='Player'
-      elsif skillls[i][-6,6]==' Unity' && !nerfs.nil? && nerfs.length>4
-        stats[1]+=5-2*nerfs[1] if skillls[i].include?('Atk')
-        stats[2]+=5-2*nerfs[2] if skillls[i].include?('Spd')
-        stats[3]+=5-2*nerfs[3] if skillls[i].include?('Def')
-        stats[4]+=5-2*nerfs[4] if skillls[i].include?('Res')
-      else
-        stats[0]+=statskl[4][0]
-        stats[1]+=statskl[4][1]
-        stats[2]+=statskl[4][2]
-        stats[3]+=statskl[4][3]
-        stats[4]+=statskl[4][4]
-      end
-    end
-  end
-  return stats
-end
-
 def proc_study(bot,event,args=[],xname=nil); return study_suite('Proc',bot,event,args,xname); end
 def heal_study(bot,event,args=[],xname=nil); return study_suite('Heal',bot,event,args,xname); end
 def phase_study(bot,event,args=[],xname=nil); return study_suite('Phase',bot,event,args,xname); end
@@ -8426,23 +8619,6 @@ def learnable_skills(bot,event,args=[],xname=nil)
   elsif unit.is_a?(Array)
     event.respond "That is multiple units.  Please choose one of the following:\n#{unit.map{|q| "#{q.name}#{q.emotes(bot)}"}.join("\n")}"
     return nil
-  elsif unit.name=='Kiran'
-    sklz=$skills.reject{|q| !q.isPostable?(event) || 'Umbra '==q.name[0,6] || ['Whelp (All)','Yearling (All)','Adult (All)','Missiletainn','Falchion','Ragnarok+'].include?(q.name) || !q.can_inherit?(unit) || !q.type.include?('Weapon')}
-    for i in 0...sklz.length
-      if sklz[i].id==0
-        sklz[i]="**#{sklz[i].name}**"
-      elsif !sklz[i].fake.nil?
-        sklz[i]="~~#{sklz[i].name}~~"
-      else
-        sklz[i]="#{sklz[i].name}"
-      end
-    end
-    sklz=sklz.sort{|a,b| a.gsub('**','').gsub('~~','')<=>b.gsub('**','').gsub('~~','')}
-    f=[]
-    f.push(["#{Skill_Slots[0][0]} #{Skill_Slots[1][0]}s",sklz.join("\n")])
-    f.push(["<:Offensive_Structure:510774545997758464> Dream #{Skill_Slots[1][0]}s",'Folkvangr'])
-    create_embed(event,"__Skills that **#{unit.name}**#{unit.emotes(bot)} can learn__",'',unit.disp_color,nil,unit.thumbnail(event,bot),f)
-    return nil
   end
   sklz=$skills.reject{|q| !q.isPostable?(event) || 'Umbra '==q.name[0,6] || ['Whelp (All)','Yearling (All)','Adult (All)','Missiletainn','Falchion','Ragnarok+'].include?(q.name) || !q.can_inherit?(unit) || q.type==['Passive(W)']}
   m=[]
@@ -8468,7 +8644,8 @@ def learnable_skills(bot,event,args=[],xname=nil)
   y=[]
   for i in 0...x.length
     z=sklz.reject{|q| q.id/10 != x[i]}.sort{|a,b| a.id<=>b.id}
-    if z[0].name[0,10]=='Falchion ('
+    if z[0].name[0,10]=='Falchion (' || (unit.name=='Kiran')
+      z[0].name="**#{z[0].name}**" if z[0].type.include?('Weapon') && unit.name=='Kiran'
       y.push(z)
       y.flatten!
     elsif has_any?(z.map{|q| q.tags}.flatten,['Iron','Steel','Silver']) && z[-1].name.split(' ').length>1 && !z[0].restrictions.include?('Dragons Only')
@@ -8479,7 +8656,8 @@ def learnable_skills(bot,event,args=[],xname=nil)
       y.push(z[-1])
     end
     unless y[-1].exclusivity.nil?
-      if y[-1].prevos.nil? && !y[-1].learn.flatten.include?(unit.name)
+      if unit.name=='Kiran'
+      elsif y[-1].prevos.nil? && !y[-1].learn.flatten.include?(unit.name)
         y[-1].name="~~*#{y[-1].name}*~~"
       elsif y[-1].learn.flatten.include?(unit.name)
         y[-1].name="**#{y[-1].name}**"
@@ -8856,6 +9034,45 @@ def unit_study(bot,event,args=[],xname=nil)
   return nil
 end
 
+def find_kiran_face(event,forcemathoo=false)
+  args=event.message.text.downcase.split(' ')
+  face=''
+  face='Default' if has_any?(args,['default','og','hood'])
+  face='Male 1' if has_any?(args,['male1','boy1','m1','man1'])
+  face='Male 2' if has_any?(args,['male2','boy2','m2','man2'])
+  face='Male 3' if has_any?(args,['male3','boy3','m3','man3'])
+  face='Female 1' if has_any?(args,['female0','woman0','girl0','f0']) && event.user.id==167657750971547648
+  face='Female 1' if has_any?(args,['female1','woman1','girl1','f1'])
+  face='Female 2' if has_any?(args,['female2','woman2','girl2','f2'])
+  face='Female 3' if has_any?(args,['female3','woman3','girl3','f3'])
+  if face.length<=0
+    gender=''; level=-1
+    m=1
+    for i in 0...args.length
+      level=args[i].to_i if args[i].to_i.to_s==args[i] && args[i].to_i>=m && args[i].to_i<=7
+      gender='Male' if ['male','boy','m','man'].include?(args[i])
+      gender='Female' if ['female','woman','girl','f'].include?(args[i])
+    end
+    if gender.length<=0 && level<0
+      face='Default'
+      face='Mathoo' if event.user.id==167657750971547648 && forcemathoo
+    elsif gender.length<=0
+      level=1 if level<1 && event.user.id != 167657750971547648
+      level=0 if level<0
+      face=['Female 0','Default','Male 1','Male 2','Male3','Female 1','Female 2','Female 3'][level]
+    elsif level<0
+      level=1
+      level=0 if gender=='Female' && event.user.id==167657750971547648
+    else
+      level-=4 if level>3 && gender=='Female'
+      level=1 if level<1 && gender=='Male'
+      level=3 if level>3
+    end
+    face="#{gender} #{level}" unless gender.length<=0
+  end
+  return face
+end
+
 def disp_unit_art(bot,event,args=[],xname=nil)
   event.channel.send_temporary_message('Calculating data, please wait...',1) if xname.nil?
   data_load()
@@ -8944,17 +9161,20 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     else
       artype=['Face',"~~Sprite not yet on site~~\nDefault"]
     end
+  elsif x.name=='Kiran'
+    face=find_kiran_face(event)
+    artype=[face.gsub(' ',''),face]
   elsif has_any?(args,['battle','attack','att','atk','attacking'])
     artype=['BtlFace','Attack']
   elsif has_any?(args,['damage','damaged','lowhealth','lowhp','low_health','low_hp','injured']) || (args.include?('low') && has_any?(args,['health','hp']))
     artype=['BtlFace_D','Damaged']
   elsif has_any?(args,['critical','special','crit','proc'])
     artype=['BtlFace_C','Special']
-  elsif has_any?(args,['loading','load','title']) && ['Alfonse','Sharena','Veronica','Eirika(Bonds)','Marth','Roy','Ike','Chrom(Launch)','Camilla(Launch)','Takumi','Lyn','Marth(Launch)','Roy(Launch)','Ike(World)','Takumi(Launch)','Lyn(Launch)'].include?(x.name)
+  elsif has_any?(args,['loading','load','title']) && ['Alfonse','Sharena','Veronica','Eirika(Bonds)','Marth','Roy','Ike','Chrom(Launch)','Camilla(Launch)','Takumi','Lyn','Marth(Launch)','Roy(Launch)','Ike(World)','Takumi(Launch)','Lyn(Launch)','Reginn'].include?(x.name)
     artype=['Face_Load','Title Screen']
     x.artist=nil
   end
-  if has_any?(args,["mathoo's"])
+  if has_any?(args,["mathoo's"]) || (has_any?(args,['my']) && event.user.id==167657750971547648)
     u=$dev_units.find_index{|q| q.name==x.name}
     if u.nil?
       if $dev_nobodies.include?(unit.name)
@@ -8966,6 +9186,14 @@ def disp_unit_art(bot,event,args=[],xname=nil)
       end
     else
       x=$dev_units[u].clone
+      resp=false
+      resp=true if x.resplendent=='r'
+    end
+  elsif donate_trigger_word(event)>0
+    m=donate_trigger_word(event)
+    u=$donor_units.find_index{|q| q.name==x.name && q.owner_id==m}
+    unless u.nil?
+      x=$donor_units[u].clone
       resp=false
       resp=true if x.resplendent=='r'
     end
@@ -9024,8 +9252,14 @@ def disp_unit_art(bot,event,args=[],xname=nil)
   end
   str=''
   str="#{str}\n**Artist:** #{x.artist[av].split(' as ')[-1]}" unless x.artist.nil?
-  str="#{str}\n**VA (English):** #{x.voice_na.map{|q| q.split(' as ')[-1]}.join(' & ')}" unless x.voice_na.nil? || x.voice_na.length<=0
-  str="#{str}\n**VA (Japanese):** #{x.voice_jp.map{|q| q.split(' as ')[-1]}.join(' & ')}" unless x.voice_jp.nil? || x.voice_jp.length<=0
+  if x.name=='Kiran' && x.owner.nil?
+    str="#{str}\n**VA:** >Player<"
+  elsif x.name=='Kiran'
+    str="#{str}\n**VA:** #{x.owner}"
+  else
+    str="#{str}\n**VA (English):** #{x.voice_na.map{|q| q.split(' as ')[-1]}.join(' & ')}" unless x.voice_na.nil? || x.voice_na.length<=0
+    str="#{str}\n**VA (Japanese):** #{x.voice_jp.map{|q| q.split(' as ')[-1]}.join(' & ')}" unless x.voice_jp.nil? || x.voice_jp.length<=0
+  end
   artist=''
   vana=[]
   vajp=[]
@@ -9272,6 +9506,7 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     if m.inject(0){|sum,x2| sum + x2 }>25 && !safe_to_spam?(event)
       str="#{str}\n\nThere were too many units with the same artist and/or VA to list them all.  Please use this command in PM."
       f=nil
+    elsif f.length<=0
     elsif f.length<=1 && !(@embedless.include?(event.user.id) || was_embedless_mentioned?(event)) && f[0][1].split("\n").length<=5
       str="#{str}\n\n__*#{f[0][0]}*__\n#{f[0][1]}"
       f=nil
@@ -9302,18 +9537,36 @@ def disp_unit_art(bot,event,args=[],xname=nil)
       x2=$dev_units[x2]
       hdr="#{hdr}\nPocket companion: *#{x2.name}*#{x2.emotes(bot)}"
     end
+  elsif x.is_a?(DevUnit) && x.name=='Kiran' && x.face=='Mathoo'
+    h=[]
+    x2=$dev_units.find_index{|q| q.name=='Sakura'}
+    unless x2.nil?
+      x2=$dev_units[x2]
+      h.push("*#{x2.name}*#{x2.emotes(bot)}")
+    end
+    x2=$dev_units.find_index{|q| q.name=='Bernie'}
+    unless x2.nil?
+      x2=$dev_units[x2]
+      h.push("*#{x2.name}*#{x2.emotes(bot)}")
+    end
+    x2=$dev_units.find_index{|q| q.name=='Mirabilis'}
+    unless x2.nil?
+      x2=$dev_units[x2]
+      h.push("*#{x2.name}*#{x2.emotes(bot)}")
+    end
+    hdr="#{hdr}\nPocket companions: #{list_lift(h,'and')}" unless h.length<=0
   end
   hdr="#{hdr}\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp
   hdr="#{hdr}\n#{artype[1]}"
   if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     str="#{hdr}\n#{str}"
-    str="#{str}\n\n#{x.portrait(event,bot,artype[0],resp)}"
-    str="#{str}\n\nThis unit has a Resplendent Ascension.  Include the word \"Resplendent\" to look at that art." if x.hasResplendent? && !resp
+    str="#{str}\n\n#{x.portrait(artype[0],resp)}"
+    str="#{str}\n\nThis unit has a Resplendent Ascension.  Include the word \"Resplendent\" to look at that art." if x.hasResplendent? && !resp && artype[0]!='Face_Load'
     event.respond str
   else
     ftr=nil
-    ftr="This unit has a Resplendent Ascension.  Include the word \"Resplendent\" to look at that art." if x.hasResplendent? && !resp
-    create_embed(event,hdr,str,x.disp_color(0,1),ftr,[nil,x.portrait(event,bot,artype[0],resp)],f)
+    ftr="This unit has a Resplendent Ascension.  Include the word \"Resplendent\" to look at that art." if x.hasResplendent? && !resp && artype[0]!='Face_Load'
+    create_embed(event,hdr,str,x.disp_color(0,1),ftr,[nil,x.portrait(artype[0],resp)],f)
   end
 end
 
@@ -10287,6 +10540,7 @@ def dev_flower_list(event,bot,args=[])
   x=$dev_units.map{|q| q}
   x=$dev_units.reject{|q| mov[0]!=q.movement} if mov.length>0
   x=x.reject{|q| q.dragonflowers<q.dragonflowerMax} if completex
+  x=x.reject{|q| !q.fake.nil?}
   for i in 0...x.length
     x[i].sort_data=['',x[i].name]
     x[i].sort_data[0]="#{x[i].rarity}#{Rarity_stars[0][x[i].rarity-1]}"
@@ -10380,7 +10634,7 @@ def devunits_save()
   devpass='pass' if b[3].downcase=='feh pass'
   devpass='pass' if b[3].downcase=='fehpass'
   du=$dev_units.sort{|b,a| (a.sortPriority<=>b.sortPriority)==0 ? (b.name<=>a.name) : (a.sortPriority<=>b.sortPriority)}
-  dw=$dev_waifus.reject{|q| ['Sakura','Bernie'].include?(q)}.sort; dw.unshift('Bernie'); dw.unshift('Sakura')
+  dw=$dev_waifus.reject{|q| ['Sakura','Bernie','Mirabilis'].include?(q)}.sort; dw.unshift('Mirabilis'); dw.unshift('Bernie'); dw.unshift('Sakura')
   open("#{$location}devkit/FEHDevUnits.txt", 'w') { |f|
     f.puts dw.join('\\'[0])
     f.puts $dev_somebodies.reject{|q| $dev_waifus.include?(q)}.sort.join('\\'[0])
@@ -10425,9 +10679,12 @@ def new_devunit(bot,event,xname,flurp=[])
   bob4.dragonflowers=0
   bob4.dragonflowers=flurp[8] unless flurp[8].nil?
   bob4.resplendent=flurp[9] if flurp[9]
+  bob4.face=find_kiran_face(event,true).gsub(' ','') if bob4.name=='Kiran'
   $dev_units.push(bob4.clone)
   str="You have added a **#{bob4.creation_string(bot)}** to your collection."
   str="#{str}  Congrats!" if [$dev_waifus,$dev_somebodies].flatten.include?(xname)
+  p=bob4.pronoun(false)
+  str="#{str}\n#{p[0,1].upcase}#{p[1,p.length-1]} is currently using the #{bob4.face} portraits.  Use `FEH!devedit KiranFace` to change that." if bob4.name=='Kiran'
   devunits_save()
   event.respond str
   return nil
@@ -10442,6 +10699,14 @@ def dev_edit(bot,event,args=[],cmd='')
     return nil
   end
   data_load()
+  if ['kiranface','kiran','face','summoner','summonerface'].include?(cmd.downcase) && !$dev_units.find_index{|q| q.name=='Kiran'}.nil?
+    dunit=$dev_units.find_index{|q| q.name=='Kiran'}
+    $dev_units[dunit].face=find_kiran_face(event,true).gsub(' ','')
+    str="Your #{$dev_units[dunit].name}#{$dev_units[dunit].emotes(bot,false)}'s face has been changed to #{$dev_units[dunit].face}."
+    devunits_save()
+    event.respond str
+    return nil
+  end
   unt=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
   unt[1]=first_sub(args.join(' ').downcase,unt[1].downcase,'') unless unt.nil?
   if unt.nil?
@@ -10541,7 +10806,7 @@ def dev_edit(bot,event,args=[],cmd='')
   elsif dunit.nil?
     $stored_event=[event,unt,dunit,flurp]
     if $dev_nobodies.include?(unt.name)
-      event.respond "You Have this unit but previously stated you don't want to input their data.  Do you wish to add them to your collection?"
+      event.respond "You have this unit but previously stated you don't want to input their data.  Do you wish to add them to your collection?"
     else
       event.respond 'You do not have this unit.  Do you wish to add them to your collection?'
     end
@@ -10820,8 +11085,11 @@ def new_donorunit(bot,event,id,xname,flurp=[])
   bob4.dragonflowers=0
   bob4.dragonflowers=flurp[8] unless flurp[8].nil?
   bob4.resplendent=flurp[9] if flurp[9]
+  bob4.face=find_kiran_face(event).gsub(' ','') if bob4.name=='Kiran'
   tbl.push(bob4.clone)
   str="You have added a **#{bob4.creation_string(bot)}** to your collection."
+  p=bob4.pronoun(false)
+  str="#{str}\n#{p[0,1].upcase}#{p[1,p.length-1]} is currently using the #{bob4.face} portraits.  Use `FEH!edit KiranFace` to change that." if bob4.name=='Kiran'
   donorunits_save(id,tbl)
   event.respond str
   return nil
@@ -10847,6 +11115,15 @@ def donor_edit(bot,event,args=[],cmd='')
     return nil
   end
   data_load()
+  dulx=$donor_units.reject{|q| q.owner_id != uid}
+  if ['kiranface','kiran','face','summoner','summonerface'].include?(cmd.downcase) && !dulx.find_index{|q| q.name=='Kiran'}.nil?
+    dunit=dulx.find_index{|q| q.name=='Kiran'}
+    dulx[dunit].face=find_kiran_face(event).gsub(' ','')
+    str="Your #{dulx[dunit].name}#{dulx[dunit].emotes(bot,false)}'s face has been changed to #{dulx[dunit].face}."
+    donorunits_save(uid,dulx)
+    event.respond str
+    return nil
+  end
   unt=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
   unt[1]=first_sub(args.join(' ').downcase,unt[1].downcase,'') unless unt.nil?
   if unt.nil?
@@ -10858,7 +11135,6 @@ def donor_edit(bot,event,args=[],cmd='')
   end
   extstr="#{unt[1]}"
   unt=unt[0].clone
-  dulx=$donor_units.reject{|q| q.owner_id != uid}
   dunit=dulx.find_index{|q| q.name==unt.name}
   flurp=find_stats_in_string(event,extstr,1,unt.name)
   supdel=false
@@ -11407,7 +11683,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     all_units=$units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
     legal_units=$units.reject{|q| !q.fake.nil?}
     str="**There are #{longFormattedNumber(legal_units.length)}#{" (#{longFormattedNumber(all_units.length)})" unless legal_units.length==all_units.length} units, including:**"
-    unless f2.nil?
+    unless f2.nil? || f2.length<=0
       k=find_in_units(bot,event,[f2],13,false,true)
       all_units=all_units.reject{|q| !k[1].map{|q2| q2.name}.include?(q.name)}.uniq
       legal_units=legal_units.reject{|q| !k[1].map{|q2| q2.name}.include?(q.name)}.uniq
@@ -11578,7 +11854,7 @@ def snagstats(event,bot,f=nil,f2=nil)
         l=legal_units.reject{|q| !q.from_game(x[i],true)}
         a=all_units.reject{|q| !q.from_game(x[i],true)}
         m2="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"; m2='all' if m2==m; m2='none' if m2=='0'
-        str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *FE1*,    #{m2} of which are credited" unless m=='0'
+        str2="#{str2}\n#{m} unit#{'s' unless m=='1'} from *#{x[i]}*,    #{m2} of which are credited" unless m=='0'
       end
       l=legal_units.reject{|q| !q.from_game('FEH')}
       a=all_units.reject{|q| !q.from_game('FEH')}
@@ -11685,6 +11961,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="#{str2}\n#{longFormattedNumber(m.length*2)} Forging Bonds Accessories (#{longFormattedNumber(m.length)} pairs)"
     m=$accessories.reject{|q| q.obtain.nil? || !q.obtain.include?('Illusory Dungeon')}
     str2="#{str2}\n#{longFormattedNumber(m.length*2)} Tap Battle Accessories"
+    m=$accessories.reject{|q| q.name[0,4]!='(S) '}
+    str2="#{str2}\n\n<:Summon_Gun:467557566050861074> #{longFormattedNumber(m.length)} Summoner-exclusive Accessories"
     event.respond str2
     return nil
   elsif ['alias','aliases','name','names','nickname','nicknames'].include?(f.downcase)
@@ -11836,6 +12114,7 @@ def snagstats(event,bot,f=nil,f2=nil)
       str=extend_message(str,"<:Heroic_Grail:574798333898653696> *GHB* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='GHB'}].unit_list.length)} current members) - Any unit that can obtained via a Grand Hero Battle map.",event)
       str=extend_message(str,"<:Forma_Soulless:699085674724327516> *Hall of Forms* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='HallOfForms'}].unit_list.length)} current members) - Any unit was part of a Hall of Forms event.\n      <:Forma_Soul:699042073176965241> *Forma* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Forma'}].unit_list.length)} current members) - Any unit that was part of a Hall of Forms event released after the introduction of Forma Souls.",event)
       str=extend_message(str,"<:Prfless:793294156114034738> *Prfless* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Prfless'}].unit_list.length)} current members) - Any non-seasonal unit that lacks a prf weapon.\n      <:UpForPrf:793294156004982836> *Up4Prf* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Up4Prf'}].unit_list.length)} current members) - The subset of the Prfless group that joined the game either before, or within two banners of, the most recently-released unit to have received a retro-prf, and as such are the most likely considerations for retro-prfs.",event)
+      str=extend_message(str,"<:Special_Blade:800880639540068353> *Resonant Bonus* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='ResonantBonus'}].unit_list.length)} current members) - Any unit that is a bonus unit for the current Resonant Blades season.",event)
       str=extend_message(str,"<:Divine_Dew:453618312434417691> *Retro-Prfs* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Retro-Prfs'}].unit_list.length)} current members) - Any unit that has access to a Prf weapon that does not promote from anything.",event)
       str=extend_message(str,"<:Seasonal:701278992677732442> *Seasonals* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Seasonals'}].unit_list.length)} current members) - Any unit that is limited summonable (or related to such an event), but does not give a Legendary Hero boost.\n      \u{1F458} *New Year's* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=="NewYear's"}].unit_list.length)})\n      :hotsprings: *Bathing* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Bathing'}].unit_list.length)})\n      \u{1F498} *Valentine's* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=="Valentine's"}].unit_list.length)})\n      :rabbit: *Bunny* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Bunnies'}].unit_list.length)})\n      \u{1F9FA} *Picnic* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Picnic'}].unit_list.length)})\n      <:RetroMarth:746670895992668181> *Retro* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Retro'}].unit_list.length)})\n      \u{1F470} *Wedding* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Wedding'}].unit_list.length)})\n      :sunny: *Summer* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Summer'}].unit_list.length)})\n      \u{1F483} *Awa Odori* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='AwaOdori'}].unit_list.length)})\n      \u{1F3F4}\u200D\u2620\uFE0F *Pirate* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Pirate'}].unit_list.length)})\n      \u{1F383} *Halloween* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Halloween'}].unit_list.length)})\n      \u{1F977} *Ninja* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Ninja'}].unit_list.length)})\n      \u{1F384} *Christmas* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Christmas'}].unit_list.length)})",event)
       str=extend_message(str,"<:Godly_Grail:612717339611496450> *Tempest* (#{longFormattedNumber($groups[$groups.find_index{|q| q.name=='Tempest'}].unit_list.length)} current members) - Any unit that can be obtained via a Tempest Trials event.",event)
