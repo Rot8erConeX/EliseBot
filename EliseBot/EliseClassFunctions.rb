@@ -162,7 +162,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     event << ''
     event << 'Toggles whether I post as embeds or plaintext when the invoker triggers a response from me.  By default, I display embeds for everyone.'
     event << 'This command is useful for people who, in an attempt to conserve phone data, disable the automatic loading of images, as this setting also affects their ability to see embeds.'
-    unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    unless $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event << ''
       event << 'This help window is not in an embed so that people who need this command can see it.'
     end
@@ -301,7 +301,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     elsif ['forma'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to toggle the donor unit with the name `unit` into or out of being a Forma Unit.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     else
-      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new donor unit\n`FEH!#{command.downcase} promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a donor unit's nature (*also `ivs`*)\n`FEH!#{command.downcase} support` - causes me to change support ranks of donor units (*also `marry`*)\n`FEH!#{command.downcase} unsupport` - causes me to remove the support ranks of donor units (*also `divorce`*)\n\n`FEH!#{command.downcase} equip` - equip skill (*also `skill`*)\n`FEH!#{command.downcase} seal` - equip seal\n`FEH!#{command.downcase} refine` - refine weapon\n`FEH!#{command.downcase} flower` - increases a donor unit's dragonflower count\n`FEH!#{command.downcase} pairup` - pairs one donor unit up as another's cohort\n`FEH!#{command.downcase} resplendent` - Resplendently Ascends a donor unit\n`FEH!#{command.downcase} forma` - gives a donor unit a Forma Soul\n\n`FEH!#{command.downcase} send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
+      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the donor units.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new donor unit\n`FEH!#{command.downcase} promote` - promotes an existing donor unit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a donor unit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a donor unit's nature (*also `ivs`*)\n`FEH!#{command.downcase} support` - causes me to change support ranks of donor units (*also `marry`*)\n`FEH!#{command.downcase} unsupport` - causes me to remove the support ranks of donor units (*also `divorce`*)\n\n`FEH!#{command.downcase} equip` - equip skill (*also `skill`*)\n`FEH!#{command.downcase} seal` - equip seal\n`FEH!#{command.downcase} refine` - refine weapon\n`FEH!#{command.downcase} flower` - increases a donor unit's dragonflower count\n`FEH!#{command.downcase} pairup` - pairs one donor unit up as another's cohort\n`FEH!#{command.downcase} resplendent` - Resplendently Ascends a donor unit\n`FEH!#{command.downcase} kiranface` - Edits the Kiran donor unit's face\n`FEH!#{command.downcase} forma` - gives a donor unit a Forma Soul\n\n`FEH!#{command.downcase} send_home` - removes the unit from the donor units attached to the invoker (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by certain people**.",0x9E682C)
     end
   elsif ['devedit','dev_edit'].include?(command.downcase)
     subcommand='' if subcommand.nil?
@@ -334,7 +334,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     elsif ['kiranface','kiran','face','summoner','summonerface'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__","Causes me to edit the face used by the dev unit based on the summoner.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     else
-      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the devunits.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new devunit\n`FEH!#{command.downcase} promote` - promotes an existing devunit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a devunit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a devunit's nature (*also `ivs`*)\n`FEH!#{command.downcase} teach` - teaches a new skill to a devunit (*also `learn`*)\n`FEH!#{command.downcase} flower` - increases a dev unit's dragonflower count\n`FEH!#{command.downcase} pairup` - pairs one devunit up as another's cohort\n`FEH!#{command.downcase} resplendent` - Resplendently Ascends a devunit\n`FEH!#{command.downcase} forma` - gives a devunit a Forma Soul\n\n`FEH!#{command.downcase} new_waifu` - adds a dev waifu (*also `add_waifu`*)\n`FEH!#{command.downcase} new_somebody` - adds a dev \"somebody\" (*also `add_somebody`*)\n`FEH!#{command.downcase} new_nobody` - adds a dev \"nobody\" (*also `add_nobody`*)\n\n`FEH!#{command.downcase} send_home` - removes the unit from either the devunits or the \"nobodies\" list (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+      create_embed(event,"**#{command.downcase}** __subcommand__ __unit__ __\*effects__","Allows me to create and edit the devunits.\n\nAvailable subcommands include:\n`FEH!#{command.downcase} create` - creates a new devunit\n`FEH!#{command.downcase} promote` - promotes an existing devunit (*also `rarity` and `feathers`*)\n`FEH!#{command.downcase} merge` - increases a devunit's merge count (*also `combine`*)\n`FEH!#{command.downcase} nature` - changes a devunit's nature (*also `ivs`*)\n`FEH!#{command.downcase} teach` - teaches a new skill to a devunit (*also `learn`*)\n`FEH!#{command.downcase} flower` - increases a dev unit's dragonflower count\n`FEH!#{command.downcase} pairup` - pairs one devunit up as another's cohort\n`FEH!#{command.downcase} resplendent` - Resplendently Ascends a devunit\n`FEH!#{command.downcase} kiranface` - Edits the Kiran devunit's face\n`FEH!#{command.downcase} forma` - gives a devunit a Forma Soul\n\n`FEH!#{command.downcase} new_waifu` - adds a dev waifu (*also `add_waifu`*)\n`FEH!#{command.downcase} new_somebody` - adds a dev \"somebody\" (*also `add_somebody`*)\n`FEH!#{command.downcase} new_nobody` - adds a dev \"nobody\" (*also `add_nobody`*)\n\n`FEH!#{command.downcase} send_home` - removes the unit from either the devunits or the \"nobodies\" list (*also `fodder` or `remove` or `delete`*)\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     end
   elsif ['sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all skills which match your defined filters, then displays the resulting list in order based on their SP cost.\n\n#{disp_more_info(event,3)}",0xD49F61)
@@ -2682,7 +2682,7 @@ def display_units(bot,event,args=nil,mode=0)
   k2=k.reject{|q| !q.fake.nil?}
   f=nil
   f=triple_finish(k.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}) unless k.length<=0
-  if k.length<=0 && (@embedless.include?(event.user.id) || was_embedless_mentioned?(event))
+  if k.length<=0 && ($embedless.include?(event.user.id) || was_embedless_mentioned?(event))
     event.respond "__**Unit search**__\n#{mk.join("\n")}\n\n__**Results**__\nNo matches found"
     return nil
   elsif k.length<=0
@@ -2754,7 +2754,7 @@ def display_units(bot,event,args=nil,mode=0)
     end
   end
   metadata_load()
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__**Unit search**__\n#{mk.join("\n")}\n\n__**Results**__\n#{f.map{|q| "*#{q[0]}:* #{q[1].gsub("\n",', ')}"}}\n\n#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}".length>=1900
+  if $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__**Unit search**__\n#{mk.join("\n")}\n\n__**Results**__\n#{f.map{|q| "*#{q[0]}:* #{q[1].gsub("\n",', ')}"}}\n\n#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}".length>=1900
     str="__**Unit search**__\n#{mk.join("\n")}\n\n__**Results**__"
     if f.length<=1
       f=f[0][1].split("\n")
@@ -2802,7 +2802,7 @@ def display_skills(bot,event,args=nil,mode=0)
   k2=k.reject{|q| !q.fake.nil?}
   f=nil
   f=triple_finish(k.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}) unless k.length<=0
-  if k.length<=0 && (@embedless.include?(event.user.id) || was_embedless_mentioned?(event))
+  if k.length<=0 && ($embedless.include?(event.user.id) || was_embedless_mentioned?(event))
     event.respond "__**Skill search**__\n#{mk.join("\n")}\n\n__**Results**__\nNo matches found"
     return nil
   elsif k.length<=0
@@ -2999,7 +2999,7 @@ def display_skills(bot,event,args=nil,mode=0)
     x=k.reject{|q| !q.type.include?('Harmonic')}
     f.push(['<:Hero_Harmonic:722436762248413234> Harmonic Skills',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
   end
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__**Skill search**__\n#{mk.join("\n")}\n\n__**Results**__\n#{f.map{|q| "*#{q[0]}:* #{q[1].gsub("\n",', ')}"}}\n\n#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}".length>=1900
+  if $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__**Skill search**__\n#{mk.join("\n")}\n\n__**Results**__\n#{f.map{|q| "*#{q[0]}:* #{q[1].gsub("\n",', ')}"}}\n\n#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}".length>=1900
     str="__**Skill search**__\n#{mk.join("\n")}\n\n__**Results**__"
     if f.length<=1
       f=f[0][1].split("\n")
@@ -3073,7 +3073,7 @@ def display_units_and_skills(bot,event,args=nil,xmode=0)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   metadata_load()
   mode=1
-  mode=0 if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+  mode=0 if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
   event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
   if args.nil? || args.length.zero?
     p1=find_in_units(bot,event,args,13,true)
@@ -3139,7 +3139,7 @@ def display_units_and_skills(bot,event,args=nil,xmode=0)
     hdr.push("__**Skill Search**__\n#{m[1].join("\n")}") if m[1].length>0
     hdr=hdr.join("\n\n")
     if p1.map{|q| q.postName(true)}.join("\n").length+p2.map{|q| q.postName(x,false,true)}.join("\n").length+hdr.length<=1950 && (p1.length+p2.length<=25 || safe_to_spam?(event))
-      unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      unless $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         untz=p1.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")
         sklz=p2.map{|q| q.postName(x,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")
         if p2.reject{|q| q.type.include?('Weapon')}.length<=0 # weapons only
@@ -3627,16 +3627,21 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
     str="#{str}\n\nPlease include what you wish to look up the aliases for, or use this command in PM.\nBut if you do that, prepare to be getting messages for a long time.  There's #{longFormattedNumber($aliases.length)} of them." if alz.length<=0
     event.respond str
     return nil
-  elsif ['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars'].include?(args[0].downcase)
-    x=$aliases.reject{|q| q[0]!='Unit' || q[2].is_a?(Array)}
+  elsif ['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils'].include?(args[0].downcase)
+    alztyp=''
+    alztyp='Unit' if ['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars'].include?(args[0].downcase)
+    alztyp='Skill' if ['skill','skills','skil','skils'].include?(args[0].downcase)
+    x=$aliases.reject{|q| q[0]!=alztyp || q[2].is_a?(Array)}
     x=x.reject{|q| !q[3].nil? && !q[3].include?(event.server.id)} unless event.server.nil?
     x=x.reject{|q| q[3].nil?} if saliases
-    u=$units.map{|q| q}
+    u=[]
+    u=$units.map{|q| q} if alztyp=='Unit'
+    u=$skills.map{|q| q} if alztyp=='Skill'
     x=x.reject{|q| !q[2].is_a?(String) && (u.find_index{|q2| q2.id==q[2]}.nil? || !u[u.find_index{|q2| q2.id==q[2]}].name==q[2] || !u[u.find_index{|q2| q2.id==q[2]}].isPostable?(event))}
-    f=["__**#{'Server-specific ' if saliases}Unit Aliases**__"]
+    f=["__**#{'Server-specific ' if saliases}#{alztyp} Aliases**__"]
     if event.server.nil?
       for i in 0...x.length
-        str="#{x[i][1].gsub('`',"\`")} = "
+        str="#{x[i][1].gsub('`',"\`").gsub('*',"\*")} = "
         if x[i][2].is_a?(String)
           str="#{str}#{x[i][2]}"
         else
@@ -3656,36 +3661,33 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
         end
       end
     else
-      f=x.map{|q| "#{q[1]} = #{q[2] if q[2].is_a?(String)}#{u[u.find_index{|q2| q2.id==q[2]}].name if !q[2].is_a?(String)}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
-      f.unshift("__**#{'Server-specific ' if saliases}Unit Aliases**__")
+      f=x.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")} = #{q[2] if q[2].is_a?(String)}#{u[u.find_index{|q2| q2.id==q[2]}].name if !q[2].is_a?(String)}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
+      f.unshift("__**#{'Server-specific ' if saliases}#{alztyp} Aliases**__")
     end
-    unless saliases
+    unless saliases || alztyp != 'Unit'
       f.push(' ')
       f.push("__**Multi-Unit Aliases**__")
       x=$aliases.reject{|q| q[0]!='Unit' || !q[2].is_a?(Array)}
       for i in 0...x.length
         if x[i][2].reject{|q| !q.is_a?(String)}.length<=0 # purely unit names
-          f.push("#{x[i][1]} = #{x[i][2].map{|q| u[u.find_index{|q2| q2.id==q}].name}.join(', ')}")
+          f.push("#{x[i][1].gsub('`',"\`").gsub('*',"\*")} = #{x[i][2].map{|q| u[u.find_index{|q2| q2.id==q}].name}.join(', ')}")
         elsif x[i][2].reject{|q| q.is_a?(String)}.length<=0 # purely unit IDs
-          f.push("#{x[i][1]} = #{x[i][2].join(', ')}")
+          f.push("#{x[i][1].gsub('`',"\`").gsub('*',"\*")} = #{x[i][2].join(', ')}")
         end
       end
     end
-  elsif ['skill','skills','skil','skils'].include?(args[0].downcase)
-    x=$aliases.reject{|q| q[0]!='Skill'}
+  elsif ['structures','structure','struct','structs','items','item','accessorys','accessory','accessories'].include?(args[0].downcase)
+    alztyp=''
+    alztyp='Structure' if ['structures','structure','struct','structs'].include?(args[0].downcase)
+    alztyp='Item' if ['items','item'].include?(args[0].downcase)
+    alztyp='Accessory' if ['accessorys','accessory','accessories'].include?(args[0].downcase)
+    x=$aliases.reject{|q| q[0]!=alztyp}
     x=x.reject{|q| !q[3].nil? && !q[3].include?(event.server.id)} unless event.server.nil?
     x=x.reject{|q| q[3].nil?} if saliases
-    u=$skills.map{|q| q}
-    x=x.reject{|q| !q[2].is_a?(String) && (u.find_index{|q2| q2.id==q[2]}.nil? || !u[u.find_index{|q2| q2.id==q[2]}].name==q[2] || !u[u.find_index{|q2| q2.id==q[2]}].isPostable?(event))}
-    f=["__**#{'Server-specific ' if saliases}Skill Aliases**__"]
+    f=["__**#{'Server-specific ' if saliases}#{alztyp} Aliases**__"]
     if event.server.nil?
       for i in 0...x.length
-        str="#{x[i][1].gsub('`',"\`")} = "
-        if x[i][2].is_a?(String)
-          str="#{str}#{x[i][2]}"
-        else
-          str="#{str}#{u[u.find_index{|q2| q2.id==x[i][2]}].name}"
-        end
+        str="#{x[i][1].gsub('`',"\`").gsub('*',"\*")} = #{x[i][2]}"
         if q[3].nil?
           f.push(str)
         else
@@ -3700,85 +3702,10 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
         end
       end
     else
-      f=x.map{|q| "#{q[1]} = #{q[2] if q[2].is_a?(String)}#{u[u.find_index{|q2| q2.id==q[2]}].name if !q[2].is_a?(String)}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
-      f.unshift("__**#{'Server-specific ' if saliases}Skill Aliases**__")
+      f=x.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")} = #{q[2]}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
+      f.unshift("__**#{'Server-specific ' if saliases}#{alztyp} Aliases**__")
     end
-  elsif ['structures','structure','struct','structs'].include?(args[0].downcase)
-    x=$aliases.reject{|q| q[0]!='Structure'}
-    x=x.reject{|q| !q[3].nil? && !q[3].include?(event.server.id)} unless event.server.nil?
-    x=x.reject{|q| q[3].nil?} if saliases
-    f=["__**#{'Server-specific ' if saliases}Structure Aliases**__"]
-    if event.server.nil?
-      for i in 0...x.length
-        str="#{x[i][1].gsub('`',"\`")} = #{x[i][2]}"
-        if q[3].nil?
-          f.push(str)
-        else
-          f2=[]
-          for j in 0...x[i][3].length
-            srv=(bot.server(x[i][3][j]) rescue nil)
-            unless srv.nil? || bot.user(bot.profile.id).on(srv.id).nil?
-              f2.push("*#{bot.server(x[i][3][j]).name}*") unless event.user.on(x[i][3][j]).nil?
-            end
-          end
-          f.push("#{str} (in the following servers: #{list_lift(f2,'and')})") unless f2.length<=0
-        end
-      end
-    else
-      f=x.map{|q| "#{q[1]} = #{q[2]}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
-      f.unshift("__**#{'Server-specific ' if saliases}Structure Aliases**__")
-    end
-  elsif ['items','item'].include?(args[0].downcase)
-    x=$aliases.reject{|q| q[0]!='Item'}
-    x=x.reject{|q| !q[3].nil? && !q[3].include?(event.server.id)} unless event.server.nil?
-    x=x.reject{|q| q[3].nil?} if saliases
-    f=["__**#{'Server-specific ' if saliases}Item Aliases**__"]
-    if event.server.nil?
-      for i in 0...x.length
-        str="#{x[i][1].gsub('`',"\`")} = #{x[i][2]}"
-        if q[3].nil?
-          f.push(str)
-        else
-          f2=[]
-          for j in 0...x[i][3].length
-            srv=(bot.server(x[i][3][j]) rescue nil)
-            unless srv.nil? || bot.user(bot.profile.id).on(srv.id).nil?
-              f2.push("*#{bot.server(x[i][3][j]).name}*") unless event.user.on(x[i][3][j]).nil?
-            end
-          end
-          f.push("#{str} (in the following servers: #{list_lift(f2,'and')})") unless f2.length<=0
-        end
-      end
-    else
-      f=x.map{|q| "#{q[1]} = #{q[2]}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
-      f.unshift("__**#{'Server-specific ' if saliases}Item Aliases**__")
-    end
-  elsif ['accessorys','accessory','accessories'].include?(args[0].downcase)
-    x=$aliases.reject{|q| q[0]!='Accessory'}
-    x=x.reject{|q| !q[3].nil? && !q[3].include?(event.server.id)} unless event.server.nil?
-    x=x.reject{|q| q[3].nil?} if saliases
-    f=["__**#{'Server-specific ' if saliases}Accessory Aliases**__"]
-    if event.server.nil?
-      for i in 0...x.length
-        str="#{x[i][1].gsub('`',"\`")} = #{x[i][2]}"
-        if q[3].nil?
-          f.push(str)
-        else
-          f2=[]
-          for j in 0...x[i][3].length
-            srv=(bot.server(x[i][3][j]) rescue nil)
-            unless srv.nil? || bot.user(bot.profile.id).on(srv.id).nil?
-              f2.push("*#{bot.server(x[i][3][j]).name}*") unless event.user.on(x[i][3][j]).nil?
-            end
-          end
-          f.push("#{str} (in the following servers: #{list_lift(f2,'and')})") unless f2.length<=0
-        end
-      end
-    else
-      f=x.map{|q| "#{q[1]} = #{q[2]}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
-      f.unshift("__**#{'Server-specific ' if saliases}Accessory Aliases**__")
-    end
-  elsif args.length>0 && k.nil?
+  elsif args.length>0 && args[0].length>0 && k.nil?
     alz=args.join(' ')
     alz='>censored mention<' if alz.include?('@')
     str="The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- Structures\n- Items\n- Accessories"
@@ -3967,7 +3894,7 @@ def growth_explain(event,bot)
   disp="#{disp}\n- These are marked by the thin blue and red arrows."
   if !safe_to_spam?(event)
     event.respond 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Growths.png'
-  elsif @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+  elsif $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     event << disp
     event << ''
     event << 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Growths.png'
@@ -4028,7 +3955,7 @@ def score_explain(event,bot)
 end
 
 def show_tools(event,bot)
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
+  if $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
     event << '**Useful tools for players of** ***Fire Emblem Heroes***'
     event << '__Download the game__'
     event << 'Google Play: <https://play.google.com/store/apps/details?id=com.nintendo.zaba&hl=en>'
@@ -4104,7 +4031,7 @@ def oregano_explain(event,bot)
     str="#{str}\n\nThe code has since been changed in such a way that typewriter jams are less likely (if not outright impossible, though I want to avoid claiming such since code sometimes likes to do things that you don't tell it to do).  This means Oregano is less likely to appear outside the server she is supposed to appear in."
     str="#{str}\n\n**Q5.) What does her real-world father think of this?**"
     str="#{str}\nA.) IRL, Draco is a memelord, and he loves the fact that his daughter - who he designed to be a glass cannon to the utmost extreme - is legitimately \"breaking everything\" to the point that she is breaking my code and appearing places she shouldn't be."
-    str="#{str}\n\n**Q6.) That thumbnail, who I presume is Oregano, is adorable.  Where do I find it?**\nMy friend BluechanXD, from the same server, made it based on Draco's description.  [Here's a link](https://www.deviantart.com/bluechanxd/art/FE-OC-Oregano-V2-765406579)." unless @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    str="#{str}\n\n**Q6.) That thumbnail, who I presume is Oregano, is adorable.  Where do I find it?**\nMy friend BluechanXD, from the same server, made it based on Draco's description.  [Here's a link](https://www.deviantart.com/bluechanxd/art/FE-OC-Oregano-V2-765406579)." unless $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     create_embed(event,'',str,0x759371)
   else
     str="**Q1.) Who is Oregano?**"
@@ -4787,7 +4714,7 @@ def disp_current_paths(event,bot,mode=0,shift=false)
           ign=true
           ign=false if b3[i2].codes.map{|q2| q2.cost[0]}.max<=0
           ign=false if b3[i2].codes.map{|q2| q2.cost[1]}.max<=0
-          ign=true if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+          ign=true if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
           b3[i2]=b3[i2].codes.map{|q2| "#{q2.rarity}#{Rarity_stars[0][q2.rarity-1]} #{q2.unit_name}#{"#{q2.emotes(bot,false)} - #{q2.dispCost(ign)}" if mode<0}"}.join(' > ')
         end
         str="#{str}\n#{"\n" unless i==0}__*#{b2[i]}*__\n#{b3.join("\n")}" unless mode<0
@@ -4819,7 +4746,7 @@ def disp_current_paths(event,bot,mode=0,shift=false)
   end
   if mode<0
     if b.length<=0
-    elsif f.map{|q| "__**#{q[0]}**__\n#{q[1]}"}.join("\n\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    elsif f.map{|q| "__**#{q[0]}**__\n#{q[1]}"}.join("\n\n").length>1900 || $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       f[0][0]="#{str}\n#{f[0][0]}"
       xpic='https://gamepedia.cursecdn.com/feheroes_gamepedia_en/9/9d/Divine_Code_Ephemera.png'
       for i in 0...f.length
@@ -5002,7 +4929,7 @@ def banner_list(event,bot,args=[],xname=nil)
     str2=bnrz[i].name
     str2="__*#{bnrz[i].name}*__\n#{bnrz[i].description(unit,5*star_buff)}" unless justnames || !safe_to_spam?(event)
     if "#{str}\n#{xf unless i<=0}#{str2}".length>1900
-      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         event.respond str
       else
         create_embed(event,hdr,str,unit.disp_color(c),nil,xpic)
@@ -5136,7 +5063,7 @@ def banner_list(event,bot,args=[],xname=nil)
     str2="__**#{'Starting ' if star_buff<=0}Non-Focus Chances**__\n#{str3.join("\n\n")}" if str3.length>0
     if str2.length<=0
     elsif "#{str}\n#{xf*2}#{str2}".length>1900
-      if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
         event.respond str
       else
         create_embed(event,hdr,str,unit.disp_color(c),nil,xpic)
@@ -5151,7 +5078,7 @@ def banner_list(event,bot,args=[],xname=nil)
   end
   if otherstr.length<=0
   elsif "#{str}\n#{xf*2}__**Other Appearances**__\n#{otherstr.join("\n")}".length>1900
-    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond str
     else
       create_embed(event,hdr,str,unit.disp_color(c),nil,xpic)
@@ -5163,7 +5090,7 @@ def banner_list(event,bot,args=[],xname=nil)
   else
     str="#{str}\n#{xf*2}__**Other Appearances**__\n#{otherstr.join("\n")}"
   end
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+  if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     str=extend_message(str,"#{unit.focus_banners.length} total",event,2)
     event.respond str
   else
@@ -5265,7 +5192,7 @@ def disp_summon_pool(event,args=[])
   if colors.include?('Red')
     r=k.reject{|q| q.weapon_color !='Red'}
     r=create_summon_list(r,pooltype)
-    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
     else
       create_embed(event,"",'',0xE22141,nil,nil,r,4)
@@ -5274,7 +5201,7 @@ def disp_summon_pool(event,args=[])
   if colors.include?('Blue')
     r=k.reject{|q| q.weapon_color !='Blue'}
     r=create_summon_list(r,pooltype)
-    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
     else
       create_embed(event,"",'',0x2764DE,nil,nil,r,4)
@@ -5283,7 +5210,7 @@ def disp_summon_pool(event,args=[])
   if colors.include?('Green')
     r=k.reject{|q| q.weapon_color !='Green'}
     r=create_summon_list(r,pooltype)
-    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
     else
       create_embed(event,"",'',0x09AA24,nil,nil,r,4)
@@ -5292,7 +5219,7 @@ def disp_summon_pool(event,args=[])
   if colors.include?('Colorless')
     r=k.reject{|q| q.weapon_color !='Colorless'}
     r=create_summon_list(r,pooltype)
-    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
     else
       create_embed(event,"",'',0x64757D,nil,nil,r,4)
@@ -6889,10 +6816,17 @@ def find_alts(bot,event,args=[])
       x[i2].sort_data=x[i2].alts.map{|q| q}
       x[i2].sort_data[0]=x[i2].sort_data[0].gsub('*','')
     end
+    for i2 in 0...x2.length
+      m=x2[i2].duo.find_index{|q| b.include?(q[1].split('[')[0])}
+      x2[i2].sort_data=x2[i2].duo[m][1].gsub(']','').split('[')
+    end
+    for i2 in 0...x3.length
+      x3[i2].sort_data=x3[i2].awonk[1].gsub(']','').split('[')
+    end
     f=[]
     y=[]
     if x.reject{|q| q.alts.length<=1}.length>0 || b.length>1
-      y=x.map{|q| q.sort_data}.uniq
+      y=[x,x2,x3].flatten.map{|q| q.sort_data}.uniq
     else
       y=[[a[i]]]
     end
@@ -7108,7 +7042,7 @@ def game_data(bot,event,args=[],xname=nil)
       end
     end
     create_embed(event,hdr,str[z],x.disp_color(clr),ftr,thumb)
-  elsif @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+  elsif $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     event.respond "__Games **#{x.name}#{x.emotes(bot,false)}** appears in__\n\n#{str.gsub('__','')}\n\n#{ftr}"
   else
     create_embed(event,"__Games **#{x.name}#{x.emotes(bot,false)}** appears in__",str,x.disp_color(0,1),ftr,x.thumbnail(event,bot))
@@ -7179,7 +7113,7 @@ def path_data(bot,event,args=[],xname=nil)
   hdr="__Divine Paths that **#{x.name}#{x.emotes(bot,false)}** is on__"
   hdr="__the Divine Path that **#{x.name}#{x.emotes(bot,false)}** is on__" if m.length==1
   hdr="__Divine Paths and **#{x.name}#{x.emotes(bot,false)}**__" if m.length<=0
-  if f.map{|q| "__*#{q[0]}*__\n#{q[1]}"}.join("\n\n").length>1900 || @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+  if f.map{|q| "__*#{q[0]}*__\n#{q[1]}"}.join("\n\n").length>1900 || $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     f=f.map{|q| ["__*#{q[0]}*__",q[1].gsub("\n\n","\n")]}
     f[0][0]="#{hdr}\n#{f[0][0]}"
     thm=x.thumbnail(event,bot)
@@ -9130,7 +9064,7 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     movement=['Infantry'] if movement.length<=0
     movement[0]='Flier' if color_weapons[0][color_weapons[0].length-6,6]=='Dragon' && ['Pegasus','Wyvern'].include?(movement[0])
     art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/GENERICS/#{color_weapons[0]}_#{movement[0]}/BtlFace.png"
-    if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond art
     else
       create_embed(event,"__Generic: **#{color_weapons[0]}_#{movement[0]}**__",'',0x800000,nil,[nil,art])
@@ -9507,13 +9441,13 @@ def disp_unit_art(bot,event,args=[],xname=nil)
       str="#{str}\n\nThere were too many units with the same artist and/or VA to list them all.  Please use this command in PM."
       f=nil
     elsif f.length<=0
-    elsif f.length<=1 && !(@embedless.include?(event.user.id) || was_embedless_mentioned?(event)) && f[0][1].split("\n").length<=5
+    elsif f.length<=1 && !($embedless.include?(event.user.id) || was_embedless_mentioned?(event)) && f[0][1].split("\n").length<=5
       str="#{str}\n\n__*#{f[0][0]}*__\n#{f[0][1]}"
       f=nil
-    elsif f.length<=1 && !(@embedless.include?(event.user.id) || was_embedless_mentioned?(event))
+    elsif f.length<=1 && !($embedless.include?(event.user.id) || was_embedless_mentioned?(event))
       str="#{str}\n\n#{f[0][0]}"
       f=triple_finish(f[0][1].split("\n"),true)
-    elsif @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__#{"#{x.owner}'s " unless x.owner.nil?}**#{x.name}#{x.emotes(bot)}**__#{"\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}".length+str.length+f.map{|q| "__*#{q[0]}*__\n#{q[1]}"}.join("\n\n").length>1900 || m.max>25
+    elsif $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__#{"#{x.owner}'s " unless x.owner.nil?}**#{x.name}#{x.emotes(bot)}**__#{"\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}".length+str.length+f.map{|q| "__*#{q[0]}*__\n#{q[1]}"}.join("\n\n").length>1900 || m.max>25
       str2=''
       for i in 0...f.length
         if "**#{f[i][0]}:** #{f[i][1].gsub("\n",' - ')}".length>1500
@@ -9558,7 +9492,7 @@ def disp_unit_art(bot,event,args=[],xname=nil)
   end
   hdr="#{hdr}\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp
   hdr="#{hdr}\n#{artype[1]}"
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+  if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     str="#{hdr}\n#{str}"
     str="#{str}\n\n#{x.portrait(artype[0],resp)}"
     str="#{str}\n\nThis unit has a Resplendent Ascension.  Include the word \"Resplendent\" to look at that art." if x.hasResplendent? && !resp && artype[0]!='Face_Load'

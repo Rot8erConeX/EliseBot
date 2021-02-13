@@ -163,7 +163,7 @@ Xander(Summer)\Green, Blade\ \Infantry\7, 7, 7, 9, 1\43, 32, 30, 36, 16\PenekoR\
 Amelia\Green, Blade\ \Armor\9, 9, 8, 8, 5\47, 34, 34, 35, 23\Amagaitaro\Liv Strander;; Nagano Ai\162\5pPFTD\F\FE8\Amelia
 Innes\Colorless, Bow\ \Infantry\5, 7, 8, 1, 7\35, 33, 34, 14, 31\Teita\Xander Mobus;; Fukuyama Jun\163\5pPFTD\M\FE8\Innes
 Seth\Red, Blade\ \Cavalry\5, 7, 7, 7, 4\37, 32, 31, 32, 22\Fujiwara Ryo\Chris Smith;; Koyama Rikiya\164\3p4pPF\M\FE8\Seth
-Tana\Blue, Blade\ \Flier\5, 8, 8, 5, 5\36, 34, 36, 25, 25\cuboon\Melissa Fahn;; Tanaka Kumi\165\5pPFTD\F\FE8\Tana
+Tana\Blue, Blade\ \Flier\5, 8, 8, 5, 5\36, 34, 36, 25, 25\cuboon;; Yamada Kotaro\Melissa Fahn;; Tanaka Kumi\165\5pPFTDRA\F\FE8\Tana
 Valter\Blue, Blade\ \Flier\7, 7, 6, 8, 3\42, 32, 31, 34, 19\PenekoR\Imari;; Ohkawa Toru\166\3g4g4g3q4q4rPF\M\FE8\Valter
 Ike(Brave)\Green, Blade\ \Infantry\8, 8, 6, 8, 3\43, 36, 28, 35, 20\Kita Senri\Greg Chun;; Hagi Michihiko\167\5p5qPFTDRA\M\FE9, FE10, (a)FE14, (a)FE15, (a)STEAM\Ike
 Lucina(Brave)\Blue, Blade\ \Infantry\7, 8, 8, 5, 3\41, 34, 36, 27, 19\Kozaki Yusuke\Alexis Tipton;; Kobayashi Yuu\168\5p5oPFTD\F\FE13, FEW, PXZ2, (a)FE14, (a)FE15, (a)STEAM\Lucina
@@ -546,7 +546,7 @@ Seliph(Scion)\Red, Blade\Earth, Duel, 21/02/2021\Cavalry\6, 10, 2, 9, 6\41, 41, 
 Ingrid(Summer)\Blue, Blade\ \Flier\6, 9, 10, 5, 4\39, 34, 42, 25, 26\Sencha\Brittany Cox;; \545\5s\F\FE16\Ingrid, Academy
 Dorothea(Summer)\Colorless, Dagger\ \Infantry\6, 10, 9, 2, 7\38, 37, 36, 16, 30\Azusa\Allegra Clark;; Juri Nagatsuma\546\5s\F\FE16\Dorothea, Academy
 Sylvain(Summer)\Green, Tome, Wind\ \Cavalry\7, 7, 8, 6, 2\42, 32, 35, 27, 16\argon as argon / Exys Inc.\Joe Brogie;; \547\4s5s\M\FE16\Sylvain, Academy
-Byleth(F)(Summer)\Red, Tome, Fire\Duo, Rhea, Rhea\Flier\6, 9, 10, 2, 4\40, 36, 42, 16, 21\cuboon\Jeanne Tirado & Cherami Leigh;; Itou Shizuka & Kikuko Inoue\548\5s\F\FE16\Byleth, F
+Byleth(F)(Summer)\Red, Tome, Fire\Duo, Rhea[Archbishop], Rhea\Flier\6, 9, 10, 2, 4\40, 36, 42, 16, 21\cuboon\Jeanne Tirado & Cherami Leigh;; Itou Shizuka & Kikuko Inoue\548\5s\F\FE16\Byleth, F
 Lorenz(Summer)\Red, Tome, Fire\ \Infantry\8, 7, 7, 5, 6\45, 32, 31, 25, 29\PenekoR\Ben Diskin;; \549\4t5t4r0s\M\FE16\Lorenz, Academy
 Kris(M)\Red, Blade\ \Infantry\6, 9, 10, 6, 5\40, 37, 40, 30, 25\Daisuke Izuka\Phillip Reich;; \550\5p\M\FE12\Kris*, M
 Julian\Colorless, Dagger\ \Infantry\6, 10, 9, 8, 2\40, 38, 38, 33, 18\Yamada Kotaro\Shannan McKain;; \551\5p\M\FE3, FE1, FE11, FE12\Julian
@@ -628,7 +628,7 @@ Katarina(Plegian)\Blue, Tome, Thunder\ \Flier\6, 8, 11, 2, 6\39, 37, 43, 16, 28\
 Raphael(Plegian)\Colorless, Bow\ \Armor\9, 10, 6, 9, 4\48, 42, 28, 38, 23\DAI-XT\Zachery T. Rice;; \627\4s5s\M\FE16\Raphael
 Dorothea(Plegian)\Red, Tome, Dark\Harmonic, Lene, Lene\Flier\6, 10, 8, 2, 6\37, 38, 35, 16, 26\ekao\Allegra Clark & Faye Mata;; Juri Nagatsuma & Takahashi Mikako\628\5s\F\FE16, *FE4\Dorothea, Academy
 Kris(M)(Plegian)\Green, Blade\ \Cavalry\6, 9, 9, 7, 4\41, 37, 37, 31, 22\Mikuro\Phillip Reich;; \629\4t5t0s\M\FE12\Kris, M
-Seiros\Blue, Dragon\Anima, Attack Slot, 21/04/2021\Infantry\6, 11, 2, 9, 9\40, 42, 18, 37, 40\Nikishi Areku\Cherami Leigh;; Kikuko Inoue\630\5s\F\FE16\Seiros
+Seiros\Blue, Dragon\Anima, Attack Slot, 21/04/2021\Infantry\6, 11, 2, 9, 9\40, 42, 18, 37, 40\Nikishi Areku\Cherami Leigh;; Kikuko Inoue\630\5s\F\FE16\Rhea*, Empire
 Gustav(Valentines)\Green, Blade\ \Armor\9, 10, 2, 11, 7\49, 41, 18, 46, 31\Daisuke Izuka\Edward Bosco;; Nakata Jouji\631\5s\M\FEH\Gustav
 Henriette(Valentines)\Red, Tome, Fire\ \Armor\6, 11, 2, 7, 10\42, 40, 18, 35, 40\Yoshiro Ambe\Mona Marshall;; \632\5s\F\FEH\Henriette
 Alfonse(Valentines)\Green, Tome, Wind\ \Armor\6, 10, 5, 9, 6\43, 38, 25, 37, 31\argon\Ray Chase;; Suzuki Tatsuhisa\633\5s\M\FEH\Alfonse

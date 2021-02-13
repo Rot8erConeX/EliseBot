@@ -114,7 +114,7 @@ Threaten Spd 1\Threaten Spd 2\Threaten Spd 3
 Quickened Pulse
 
 Cordelia(Summer)
-5\2\Resistance\Speed\-\5
+5\2\Resistance\Speed\-\6
 Iron Lance\Steel Lance\Shell Lance\Shell Lance+\Shell Lance+ (+) Defense Mode
 Harsh Command
 Glowing Ember\Ignis
@@ -874,7 +874,7 @@ Solitary Dream
 Chill Atk 3
 
 Titania(Valentines)
-5\8\\\-\0
+5\9\\\-\0
 Fire\Elfire\Loyal Wreath\Loyal Wreath+
 Swap
 New Moon\Moonbow

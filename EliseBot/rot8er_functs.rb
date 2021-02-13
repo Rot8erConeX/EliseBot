@@ -304,10 +304,18 @@ def prio(arr,o)
 end
 
 def was_embedless_mentioned?(event) # used to detect if someone who wishes to see responses as plaintext is relevant to the information being displayed
-  for i in 0...@embedless.length
-    return true if event.user.id==@embedless[i]
-    return true if event.message.text.include?("<@#{@embedless[i].to_s}>")
-    return true if event.message.text.include?("<@!#{@embedless[i].to_s}>")
+  if !@embedless.nil?
+    for i in 0...@embedless.length
+      return true if event.user.id==@embedless[i]
+      return true if event.message.text.include?("<@#{@embedless[i].to_s}>")
+      return true if event.message.text.include?("<@!#{@embedless[i].to_s}>")
+    end
+  elsif !$embedless.nil?
+    for i in 0...$embedless.length
+      return true if event.user.id==$embedless[i]
+      return true if event.message.text.include?("<@#{$embedless[i].to_s}>")
+      return true if event.message.text.include?("<@!#{$embedless[i].to_s}>")
+    end
   end
   return false
 end
