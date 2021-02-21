@@ -12,6 +12,39 @@ require 'active_support/core_ext/time' # Download link: https://rubygems.org/gem
 require_relative 'rot8er_functs'       # functions I use commonly in bots
 $location="C:/Users/#{@mash}/Desktop/"
 
+# this is required to get her to change her avatar on certain holidays
+ENV['TZ'] = 'America/Chicago'
+@scheduler = Rufus::Scheduler.new
+
+# All the possible command prefixes
+@prefixes={}
+load "#{$location}devkit/FEHPrefix.rb"
+
+prefix_proc = proc do |message|
+  next pseudocase(message.text[4..-1]) if message.text.downcase.start_with?('feh!') && pseudocase(message.text[4..-1]).split(' ')[0]!='reboot'
+  next pseudocase(message.text[4..-1]) if message.text.downcase.start_with?('feh?') && pseudocase(message.text[4..-1]).split(' ')[0]!='reboot'
+  next pseudocase(message.text[2..-1]) if message.text.downcase.start_with?('f?')
+  next pseudocase(message.text[2..-1]) if message.text.downcase.start_with?('e?')
+  next pseudocase(message.text[2..-1]) if message.text.downcase.start_with?('h?')
+  load "#{$location}devkit/FEHPrefix.rb"
+  next if message.channel.server.nil? || @prefixes[message.channel.server.id].nil? || @prefixes[message.channel.server.id].length<=0
+  prefix = @prefixes[message.channel.server.id]
+  # We use [prefix.size..-1] so we can handle prefixes of any length
+  next pseudocase(message.text[prefix.size..-1]) if message.text.downcase.start_with?(prefix.downcase)
+end
+
+# The bot's token is basically their password, so is censored for obvious reasons
+if Shardizard==4
+  bot = Discordrb::Commands::CommandBot.new token: '>Debug Token<', client_id: 431895561193390090, prefix: prefix_proc
+elsif Shardizard<0
+  bot = Discordrb::Commands::CommandBot.new token: '>Smol Token<', client_id: 627511537237491715, prefix: prefix_proc
+elsif Shardizard<4
+  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: Shardizard, num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
+else
+  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: (Shardizard-1), num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
+end
+bot.gateway.check_heartbeat_acks = false
+
 def shard_data(mode=0,ignoredebug=false,s=nil)
   s=Shards*1 if s.nil?
   if mode==0 # shard icons + names
@@ -138,39 +171,6 @@ else
   system("color 0#{shard_data(4)[Shardizard,1]}") # command prompt color and title determined by the shard
   system("title loading #{shard_data(2)[Shardizard]} EliseBot")
 end
-
-# this is required to get her to change her avatar on certain holidays
-ENV['TZ'] = 'America/Chicago'
-@scheduler = Rufus::Scheduler.new
-
-# All the possible command prefixes
-@prefixes={}
-load "#{$location}devkit/FEHPrefix.rb"
-
-prefix_proc = proc do |message|
-  next pseudocase(message.text[4..-1]) if message.text.downcase.start_with?('feh!') && pseudocase(message.text[4..-1]).split(' ')[0]!='reboot'
-  next pseudocase(message.text[4..-1]) if message.text.downcase.start_with?('feh?') && pseudocase(message.text[4..-1]).split(' ')[0]!='reboot'
-  next pseudocase(message.text[2..-1]) if message.text.downcase.start_with?('f?')
-  next pseudocase(message.text[2..-1]) if message.text.downcase.start_with?('e?')
-  next pseudocase(message.text[2..-1]) if message.text.downcase.start_with?('h?')
-  load "#{$location}devkit/FEHPrefix.rb"
-  next if message.channel.server.nil? || @prefixes[message.channel.server.id].nil? || @prefixes[message.channel.server.id].length<=0
-  prefix = @prefixes[message.channel.server.id]
-  # We use [prefix.size..-1] so we can handle prefixes of any length
-  next pseudocase(message.text[prefix.size..-1]) if message.text.downcase.start_with?(prefix.downcase)
-end
-
-# The bot's token is basically their password, so is censored for obvious reasons
-if Shardizard==4
-  bot = Discordrb::Commands::CommandBot.new token: '>Debug Token<', client_id: 431895561193390090, prefix: prefix_proc
-elsif Shardizard<0
-  bot = Discordrb::Commands::CommandBot.new token: '>Smol Token<', client_id: 627511537237491715, prefix: prefix_proc
-elsif Shardizard<4
-  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: Shardizard, num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
-else
-  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: (Shardizard-1), num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
-end
-bot.gateway.check_heartbeat_acks = false
 
 $units=[]
 $dev_units=[]
@@ -1405,7 +1405,9 @@ class FEHUnit
     lookout=$statskills.reject{|q| !['Stat-Affecting 1','Stat-Affecting 2'].include?(q[3])}
     for i in 0...skill_list.length
       x2=lookout.find_index{|q| q[0]==skill_list[i]}
-      x=[x,lookout[x2][4][5]].max if !x2.nil? && rarity>=5 && level>=40 && lookout[x2][4].length>5
+      x3=lookout[x2][4][5]
+      x3=[lookout[x2][4][5],170].min unless @legendary.nil?
+      x=[x,x3].max if !x2.nil? && rarity>=5 && level>=40 && lookout[x2][4].length>5
     end
     x/=5
     x+=rarity*5+merges*2
@@ -3524,7 +3526,12 @@ class DLPrint
 end
 
 def data_load(to_reload=[])
-  to_reload=[] if to_reload.is_a?(String)
+  to_reload=[to_reload] if to_reload.is_a?(String)
+  reload_everything=false
+  if has_any?(to_reload.map{|q| q.downcase},['everything','all'])
+    reload_everything=true
+    to_reload=[]
+  end
   if to_reload.length<=0 || has_any?(to_reload.map{|q| q.downcase},['units','unit'])
     # UNIT DATA
     if File.exist?("#{$location}devkit/FEHUnits.txt")
@@ -3773,8 +3780,11 @@ def data_load(to_reload=[])
     end
   end
   if to_reload.length<=0 || has_any?(to_reload.map{|q| q.downcase},['libraries','library','librarys'])
+    rtime=5
+    rtime=1 if Shardizard==4
+    rtime=60 if to_reload.length<=0 && !reload_everything
     t=Time.now
-    if t-@last_multi_reload[0]>5*60 || (Shardizard==4 && t-@last_multi_reload[0]>60)
+    if t-@last_multi_reload[0]>rtime*60
       puts 'reloading EliseClassFunctions'
       load "#{$location}devkit/EliseClassFunctions.rb"
       @last_multi_reload[0]=t
@@ -4315,6 +4325,7 @@ def find_best_match(event,args=nil,xname=nil,bot=nil,fullname=false,mode=1)
 end
 
 def find_unit(event,args=nil,xname=nil,bot=nil,fullname=false,ext=0)
+  data_load(['unit'])
   args=event.message.text.split(' ') if args.nil?
   xname=args.join('') if xname.nil?
   xname=normalize(xname.gsub('!',''))
@@ -4406,6 +4417,7 @@ def find_unit(event,args=nil,xname=nil,bot=nil,fullname=false,ext=0)
 end
 
 def find_skill(event,args=nil,xname=nil,bot=nil,fullname=false,weaponsonly=false)
+  data_load(['skill'])
   args=event.message.text.split(' ') if args.nil?
   xname=args.join('') if xname.nil?
   xname=normalize(xname.gsub('!',''))
@@ -4457,7 +4469,7 @@ def find_skill(event,args=nil,xname=nil,bot=nil,fullname=false,weaponsonly=false
 end
 
 def find_structure(event,args=nil,xname=nil,bot=nil,fullname=false,ext=0)
-  data_load()
+  data_load(['structure'])
   strct=$structures.map{|q| q}
   xname=args.join('') if xname.nil?
   xname=xname.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
@@ -4514,7 +4526,7 @@ def find_structure(event,args=nil,xname=nil,bot=nil,fullname=false,ext=0)
 end
 
 def find_item_feh(event,args=nil,xname=nil,bot=nil,fullname=false,ext=0)
-  data_load()
+  data_load(['item'])
   itmu=$itemus.map{|q| q}
   xname=args.join('') if xname.nil?
   xname=xname.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
@@ -4539,7 +4551,7 @@ def find_item_feh(event,args=nil,xname=nil,bot=nil,fullname=false,ext=0)
 end
 
 def find_accessory(event,args=nil,xname=nil,bot=nil,fullname=false,ext=0)
-  data_load()
+  data_load(['accessory'])
   itmu=$accessories.map{|q| q}
   xname=args.join('') if xname.nil?
   xname=xname.downcase.gsub(' ','').gsub('(','').gsub(')','').gsub('!','').gsub('?','').gsub('_','').gsub("'",'').gsub('"','').gsub(':','')
@@ -5251,7 +5263,7 @@ def disp_legendary_list(bot,event,args=nil,dispmode='',forcesplit=false)
     sort_legendaries(event,bot)
     return nil
   end
-  data_load()
+  data_load(['unit','banner'])
   l=$units.reject{|q| q.legendary.nil? || !q.isPostable?(event)}
   l=l.reject{|q| q.legendary[3]!=dispmode} unless safe_to_spam?(event) && !forcesplit
   l.sort!{|a,b| a.name<=>b.name}
@@ -5439,7 +5451,7 @@ def book_color(n,mode=0)
 end
 
 def sort_legendaries(event,bot,mode=0)
-  data_load()
+  data_load(['unit','banner'])
   legendaries=$units.reject{|q| q.legendary.nil? || q.legendary[2].nil? || !q.fake.nil? || q.legendary_timing.nil?}.uniq
   c=legendaries.map{|q| q.disp_color(0)}
   x=legendaries.map{|q| [q.legendary_timing,q.legendary_timing(true)]}.uniq.sort{|a,b| a[1]<=>b[1]}.map{|q| q[0]}
@@ -5677,7 +5689,6 @@ def log_channel
 end
 
 def add_new_alias(bot,event,newname,unit,modifier=nil,modifier2=nil,mode=0)
-  data_load()
   nicknames_load()
   err=false
   str=''
@@ -7076,7 +7087,7 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
 end
 
 def disp_struct(bot,event,xname,ignore=false)
-  data_load()
+  data_load(['structure','bonus'])
   s=event.message.text
   s=remove_prefix(s,event)
   a=s.split(' ').reject{ |q| q.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
@@ -7194,7 +7205,7 @@ def disp_struct(bot,event,xname,ignore=false)
 end
 
 def disp_itemu(bot,event,xname,ignore=false)
-  data_load()
+  data_load(['item'])
   s=event.message.text
   s=remove_prefix(s,event)
   a=s.split(' ').reject{ |q| q.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
@@ -7221,7 +7232,7 @@ def disp_itemu(bot,event,xname,ignore=false)
 end
 
 def disp_accessory(bot,event,xname,ignore=false)
-  data_load()
+  data_load(['accessory'])
   s=event.message.text
   s=remove_prefix(s,event)
   a=s.split(' ').reject{ |q| q.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
@@ -7246,6 +7257,7 @@ end
 bot.command([:stats,:stat]) do |event, *args|
   return nil if overlap_prevent(event)
   skills=false
+  data_load()
   if args.nil? || args.length<=0
     event.respond 'No matches found.'
     return nil
@@ -7320,7 +7332,6 @@ bot.command([:stats,:stat]) do |event, *args|
   args.shift if ['big','tol','macro','large','huge','massive'].include?(args[0].downcase)
   skills=true if ['skill','skills','skil','skils'].include?(args[0].downcase)
   args.shift if ['skill','skills','skil','skils'].include?(args[0].downcase)
-  data_load()
   args=sever(args.join(' ')).split(' ')
   x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
   x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
@@ -7467,6 +7478,7 @@ end
 
 bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstats,:statstiny,:statssmall,:statssmol,:statsmicro,:statssquashed,:statss,:stattiny,:statsmall,:statsmol,:statmicro,:statsquashed,:sstat,:tinystat,:smallstat,:smolstat,:microstat,:squashedstat,:tiny,:small,:micro,:smol,:squashed,:littlestats,:littlestat,:statslittle,:statlittle,:little]) do |event, *args|
   return nil if overlap_prevent(event)
+  data_load()
   if args.nil? || args.length<=0
     event.channel.send_embed("__**No unit was included.  Have a smol me instead.**__") do |embed|
       embed.color = 0xD49F61
@@ -7479,7 +7491,6 @@ bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstat
     pick_random_unit(event,args,bot)
     return nil
   end
-  data_load()
   args=sever(args.join(' ')).split(' ')
   x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
   x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
@@ -7495,6 +7506,7 @@ end
 
 bot.command([:big,:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:largestats,:bigstat,:tolstat,:macrostat,:largestat,:statsbig,:statstol,:statsmacro,:statslarge,:statbig,:stattol,:statmacro,:statlarge,:statol]) do |event, *args|
   return nil if overlap_prevent(event)
+  data_load()
   if args.nil? || args.length<=0
     event.respond 'No matches found.'
     return nil
@@ -7510,7 +7522,6 @@ bot.command([:big,:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:largestats
     pick_random_unit(event,args,bot)
     return nil
   end
-  data_load()
   args=sever(args.join(' ')).split(' ')
   x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
   x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
@@ -7526,6 +7537,7 @@ end
 
 bot.command([:huge,:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hugestat,:massivestat,:statsgiant,:statshuge,:statsmassive,:statgiant,:stathuge,:statmassive]) do |event, *args|
   return nil if overlap_prevent(event)
+  data_load()
   if args.nil? || args.length<=0
     event.respond 'No matches found.'
     return nil
@@ -7541,7 +7553,6 @@ bot.command([:huge,:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hug
     pick_random_unit(event,args,bot)
     return nil
   end
-  data_load()
   args=sever(args.join(' ')).split(' ')
   x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
   x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
@@ -8438,8 +8449,9 @@ bot.command(:bonus) do |event, *args|
   x.push('Arena') if args.include?('arena')
   x.push('Tempest') if has_any?(args,['tempest','tt'])
   x.push('Aether') if has_any?(args,['aether','raid','raids','aetherraids','aetherraid','aether_raids','aether_raid','aetheraids','aetheraid'])
+  x.push('Resonant') if has_any?(args,['resonant','resonance','resonence'])
   if !safe_to_spam?(event) && x.length<=0
-    event.respond "I will not show all bonus units at once.  Please use this command in PM or refine your search with one of the subcommands: `FEH!arena`, `FEH!tempest`, or `FEH!aether`."
+    event.respond "I will not show all bonus units at once.  Please use this command in PM or refine your search with one of the subcommands: `FEH!arena`, `FEH!tempest`, `FEH!aether`, or `FEH!resonant`."
     return nil
   end
   x=[x[0]] unless safe_to_spam?(event)
@@ -8490,7 +8502,7 @@ bot.command(:grail) do |event, *args|
   if args.nil? || args.length<=0
   elsif event.user.id==167657750971547648 && ['list'].include?(args[0])
     args.shift
-    data_load()
+    data_load(['library','devunits'])
     dev_grail_list(event,bot,args)
     return nil
   end
@@ -8502,7 +8514,7 @@ bot.command(:greil) do |event, *args|
   if args.nil? || args.length<=0
   elsif event.user.id==167657750971547648 && ['list'].include?(args[0])
     args.shift
-    data_load()
+    data_load(['library','devunits'])
     dev_grail_list(event,bot,args)
     return nil
   end
@@ -8668,7 +8680,7 @@ end
 
 bot.command([:oregano]) do |event, *args|
   return nil if overlap_prevent(event)
-  data_load()
+  data_load(['unit','library'])
   x=$units.find_index{|q| q.name=='Oregano'}
   if !x.nil? && $units[x].isPostable?(event)
     args=[] if args.nil?
@@ -8757,7 +8769,7 @@ bot.command([:flowers,:flower]) do |event, *args|
   if args.nil? || args.length<=0
   elsif event.user.id==167657750971547648 && ['list'].include?(args[0])
     args.shift
-    data_load()
+    data_load(['library','devunits'])
     dev_flower_list(event,bot,args)
     return nil
   end
@@ -9002,7 +9014,7 @@ end
 
 bot.command(:update) do |event|
   return nil if overlap_prevent(event)
-  data_load()
+  data_load(['library'])
   update_howto(event,bot)
 end
 
@@ -9028,7 +9040,7 @@ end
 
 bot.command(:cleanupaliases, from: 167657750971547648) do |event|
   return nil if overlap_prevent(event)
-  event.channel.send_temporary_message('Please wait...',10)
+  event.channel.send_temporary_message('Please wait...',10) rescue nil
   if Shardizard==4
     event.respond 'This command cannot be used by the debug version of me.  Please run this command in another server.'
     return nil
@@ -9133,12 +9145,12 @@ end
 
 bot.command(:reload, from: 167657750971547648) do |event|
   return nil if overlap_prevent(event)
-  return nil unless [368976843883151362,167657750971547648].include?(event.user.id) || [285663217261477889,386658080257212417].include?(event.channel.id)
-  event.respond "Reload what?\n1.) Aliases, from backups#{' (unless includes the word "git")' if [167657750971547648,368976843883151362].include?(event.user.id)}\n2.) Groups, from backups#{" (unless includes the word \"git\")\n3.) Data, from GitHub (include \"subset\" in your message to also reload FEHSkillSubsets)" if [167657750971547648,368976843883151362].include?(event.user.id)}#{"\n4.) Source code, from GitHub (include the word \"all\" to also reload rot8er_functs.rb)\n5.) Crossover data\n6.) Libraries, from code\n7.) Avatars, from GitHub" if event.user.id==167657750971547648}\nYou can include multiple numbers to load multiple things."
+  return nil unless [167657750971547648].include?(event.user.id) || [285663217261477889,386658080257212417].include?(event.channel.id)
+  event.respond "Reload what?\n1.) Aliases, from backups#{' (unless includes the word "git")' if [167657750971547648].include?(event.user.id)}\n2.) Groups, from backups#{" (unless includes the word \"git\")\n3.) Data, from GitHub (include \"subset\" in your message to also reload FEHSkillSubsets)\n4.) Source code, from GitHub (include the word \"all\" to also reload rot8er_functs.rb)\n5.) Crossover data\n6.) Libraries, from code\n7.) Avatars, from GitHub" if event.user.id==167657750971547648}\nYou can include multiple numbers to load multiple things."
   event.channel.await(:bob, from: event.user.id) do |e|
     reload=false
-    if e.message.text.include?('1')
-      if e.message.text.downcase.include?('git') && [167657750971547648,368976843883151362].include?(event.user.id)
+    if e.message.text.include?('1')                                                 # Aliases
+      if e.message.text.downcase.include?('git') && [167657750971547648].include?(event.user.id)
         download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHNames.txt")
         IO.copy_stream(download, "FEHTemp.txt")
         if File.size("FEHTemp.txt")>100
@@ -9189,8 +9201,8 @@ bot.command(:reload, from: 167657750971547648) do |event|
         reload=true
       end
     end
-    if e.message.text.include?('2')
-      if e.message.text.include?('git') && [167657750971547648,368976843883151362].include?(event.user.id)
+    if e.message.text.include?('2')                                                 # Groups
+      if e.message.text.include?('git') && [167657750971547648].include?(event.user.id)
         download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHGroups.txt")
         IO.copy_stream(download, "FEHTemp.txt")
         if File.size("FEHTemp.txt")>100
@@ -9240,8 +9252,8 @@ bot.command(:reload, from: 167657750971547648) do |event|
         reload=true
       end
     end
-    if e.message.text.include?('3') && [167657750971547648,368976843883151362].include?(e.user.id)
-      event.channel.send_temporary_message('Loading.  Please wait 5 seconds...',3)
+    if e.message.text.include?('3') && [167657750971547648].include?(event.user.id) # Data
+      event.channel.send_temporary_message('Loading.  Please wait 5 seconds...',3) rescue nil
       to_reload=['Units','Skills','Accessories','Structures','Items','StatSkills','SkillSubsets','Banners','Events','Games','ArenaTempest','Path']
       for i in 0...to_reload.length
         download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEH#{to_reload[i]}.txt")
@@ -9299,7 +9311,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
       end
       reload=true
     end
-    if e.message.text.include?('4') && e.user.id==167657750971547648
+    if e.message.text.include?('4') && [167657750971547648].include?(event.user.id) # Source Code
       download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/PriscillaBot.rb")
       IO.copy_stream(download, "FEHTemp.txt")
       if File.size("FEHTemp.txt")>100
@@ -9361,7 +9373,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
       e.respond str
       reload=true
     end
-    if e.message.text.include?('5') && e.user.id==167657750971547648
+    if e.message.text.include?('5') && [167657750971547648].include?(event.user.id) # Crossdata
       to_reload=['Adventurers','Dragons','Wyrmprints']
       for i in 0...to_reload.length
         download = open("https://raw.githubusercontent.com/Rot8erConeX/BotanBot/master/DL#{to_reload[i]}.txt")
@@ -9379,7 +9391,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
       e.respond "New cross-data loaded."
       reload=true
     end
-    if e.message.text.include?('6') && e.user.id==167657750971547648
+    if e.message.text.include?('6') && [167657750971547648].include?(event.user.id) # Library
       puts 'reloading EliseClassFunctions'
       load "#{$location}devkit/EliseClassFunctions.rb"
       t=Time.now
@@ -9387,7 +9399,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
       e.respond 'Libraries force-reloaded'
       reload=true
     end
-    if e.message.text.include?('7') && [167657750971547648].include?(event.user.id)
+    if e.message.text.include?('7') && [167657750971547648].include?(event.user.id) # Avatars
       download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHDonorList.txt")
       IO.copy_stream(download, "FEHTemp.txt")
       if File.size("FEHTemp.txt")>100
@@ -9578,7 +9590,7 @@ bot.message do |event|
 end
 
 bot.mention do |event|
-  data_load()
+  data_load(['everything'])
   puts event.message.text
   s=event.message.text.downcase
   args=s.split(' ')
@@ -9870,7 +9882,7 @@ def next_holiday(bot,mode=0)
   d=get_donor_list().reject{|q| q[2][0]<3 || q[4][0]=='-'}
   for i in 0...d.length
     if d[i][4][0]!='-'
-      holidays.push([0,d[i][3][0],d[i][3][1],d[i][4][0],"in recognition of #{bot.user(d[i][0]).distinct}","Donator's birthday"])
+      holidays.push([0,d[i][3][0],d[i][3][1],d[i][4][0],"in recognition of contributions provided by #{bot.user(d[i][0]).distinct}","Donator's birthday"])
       holidays[-1][5]="Donator's Day" if d[i][0]==189235935563481088
     end
   end
@@ -10027,7 +10039,7 @@ bot.ready do |event|
     system("color e#{shard_data(3)[Shardizard,1]}")
     system("title #{shard_data(2)[Shardizard]} EliseBot")
   end
-  data_load(['library'])
+  data_load(['everything'])
   next_holiday(bot)
   metadata_load()
   if @ignored.length>0
