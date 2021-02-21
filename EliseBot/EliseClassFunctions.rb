@@ -655,10 +655,11 @@ class FEHUnit
   
   def stats40x(val); @stats40=val; end
   
-  def hasDuelAccess?
+  def hasDuelAccess?(xlevel=0)
     return false unless @duo.nil? || @duo[0][0]=='Harmonic'
     return false if !@legendary.nil? && @legendary[1]=='Duel'
     s=$skills.find_index{|q| q.name=="#{self.weapon_color[0,1]} Duel #{@movement.gsub('Flier','Flying')}"}
+    s=$skills.find_index{|q| q.name=="#{self.weapon_color[0,1]} Duel #{@movement.gsub('Flier','Flying')}" && q.level==xlevel} if xlevel>0
     return false if s.nil?
     return true
   end
@@ -1906,7 +1907,7 @@ class FGOServant
 end
 
 def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
-  data_load()
+  data_load(['unit'])
   if args.nil?
     args=event.message.text.gsub(',','').split(' ')
     args.shift
@@ -2341,7 +2342,7 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
 end
 
 def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,norename=false)
-  data_load()
+  data_load(['skill'])
   if args.nil?
     args=event.message.text.gsub(',','').split(' ')
     args.shift
@@ -2615,7 +2616,7 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
 end
 
 def find_in_banners(bot,event,args=nil,mode=0,ff=false,ignore_limit=false)
-  data_load()
+  data_load(['banner'])
   if args.nil?
     args=event.message.text.gsub(',','').split(' ')
     args.shift
@@ -3033,7 +3034,7 @@ def display_skills(bot,event,args=nil,mode=0)
 end
 
 def display_banners(bot,event,args=nil,mode=0)
-  data_load()
+  data_load(['banner'])
   if args.nil?
     args=event.message.text.gsub(',','').split(' ')
     args.shift
@@ -3074,7 +3075,7 @@ def display_units_and_skills(bot,event,args=nil,xmode=0)
   metadata_load()
   mode=1
   mode=0 if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-  event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+  (event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) rescue nil) if event.message.text.length>90
   if args.nil? || args.length.zero?
     p1=find_in_units(bot,event,args,13,true)
     p2=find_in_skills(bot,event,args,3,true)
@@ -3265,7 +3266,7 @@ end
 
 def sort_units(bot,event,args=nil)
   args=event.message.text.downcase.split(' ') if args.nil? || args.length.zero?
-  event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+  (event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) rescue nil) if event.message.text.length>90
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   f=[0,0,0,0,0,0,0,0,0,0,0]
   supernatures=[]
@@ -3338,7 +3339,7 @@ def sort_units(bot,event,args=nil)
     f.push(4) unless f.include?(4)
     f.push(5) unless f.include?(5)
   end
-  event.channel.send_temporary_message('Units found, sorting now...',3)
+  event.channel.send_temporary_message('Units found, sorting now...',3) rescue nil
   k=k.reject{|q| q.stats40.max<=0} # remove units for whom stats are unknown
   t=0
   b=0
@@ -3357,6 +3358,7 @@ def sort_units(bot,event,args=nil)
     k[i].sort_data.push(k[i].sort_data[3]-k[i].sort_data[4])
     k[i].sort_data.push(k[i].sort_data[5]/5)
     k[i].sort_data[-1]+=0.1 if k[i].hasDuelAccess? && k[i].sort_data[-1]<34
+    k[i].sort_data[-1]+=0.2 if k[i].hasDuelAccess?(4) && k[i].sort_data[-1]<36 && k[i].legendary.nil?
     k[i].sort_data[-1]=35 if !k[i].legendary.nil? && k[i].legendary[1]=='Duel'
     k[i].sort_data[-1]=36 if !k[i].legendary.nil? && k[i].legendary[1]=='Duel' && k[i].id>=500
     k[i].sort_data[-1]=37 unless k[i].duo.nil? || k[i].duo[0][0]=='Harmonic'
@@ -3423,7 +3425,7 @@ def sort_units(bot,event,args=nil)
     mk.push("(-) marks units for whom an unmerged bane would decrease a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.")
   end
   mk.push("<:Resplendent_Ascension:678748961607122945> marks units who have a Resplendent Ascension.  This increases all their stats by 2, which is reflected in the stats displayed here.") if k.reject{|q| !q.hasResplendent?}.length>0
-  mk.push("<:P_Duel_Unknown:770193543935295490> marks units who have access to a Duel skill.  This increases their Bin to 34 (Phantom BST of 170-174) if equipped.") if m2.join("\n").include?('<:P_Duel_Unknown:770193543935295490>')
+  mk.push("<:P_Duel_Unknown:770193543935295490> marks units who have access to a Duel skill.  This increases their Bin to 34 (Phantom BST of 170-174) if equipped.\nNon-legendary, non-mythic units who have access to a T4 Duel skill have their Bin increased to 36 (Phantom BST of 180-184) instead.") if m2.join("\n").include?('<:P_Duel_Unknown:770193543935295490>')
   if has_any?(f,[7,8,9])
     mm=[]
     mm.push("FrzProtect is the lower of the units' Defense and Resistance stats, used by dragonstones when attacking ranged units and by Felicia's Plate all the time.") if f.include?(7)
@@ -3447,7 +3449,7 @@ end
 
 def sort_skills(bot,event,args=[])
   args=event.message.text.downcase.split(' ') if args.nil? || args.length.zero?
-  event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+  (event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) rescue nil) if event.message.text.length>90
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   k=find_in_skills(bot,event,args,3,false,true)
   return nil unless k.is_a?(Array)
@@ -3514,7 +3516,7 @@ def stats_of_multiunits(bot,event,args=nil,mode=0)
     k=args.map{|q| q[0].clone}
   else
     args=event.message.text.downcase.split(' ') if args.nil? || args.length.zero?
-    event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) if event.message.text.length>90
+    (event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) rescue nil) if event.message.text.length>90
     args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
     k=find_in_units(bot,event,args,13,false,true)
     return nil unless k.is_a?(Array)
@@ -3614,7 +3616,7 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
   data_load()
   len=3
   len=5 if (args.length<=0 || ['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils','structures','structure','struct','structs','items','item','accessorys','accessory','accessories'].include?(args[0].downcase)) && safe_to_spam?(event) && !dispdata
-  event.channel.send_temporary_message('Calculating data, please wait...',len) unless dispdata
+  (event.channel.send_temporary_message('Calculating data, please wait...',len) rescue nil) unless dispdata
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   k=nil
   k=find_best_match(event,args,nil,bot,false,0) unless (args.length<=0 || ['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils','structures','structure','struct','structs','items','item','accessorys','accessory','accessories'].include?(args[0].downcase))
@@ -4118,7 +4120,7 @@ def aoe(event,bot,args=nil)
   args=event.message.downcase.split(' ') if args.nil?
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   args=args.map{|q| q.downcase}
-  data_load()
+  data_load(['skill'])
   sklz=$skills.map{|q| q}
   mode=0
   for i in 0...args.length
@@ -4147,7 +4149,7 @@ def aoe(event,bot,args=nil)
 end
 
 def show_bonus_units(event,args=[],bot=nil,mode=0)
-  data_load()
+  data_load(['unit','bonus'])
   b=$bonus_units.reject{|q| q.isPast?(false) || (args.length>0 && !args.include?(q.type))}
   b=b.reject{|q| !q.isCurrent?(false)} if mode==2
   b=b.reject{|q| !q.isNext?(false)} if mode==3
@@ -4535,7 +4537,7 @@ def make_random_unit(event,args,bot)
 end
 
 def disp_current_banners(event,bot,str='',returnlist=false,mode=0)
-  data_load()
+  data_load(['banner'])
   t=Time.now
   timeshift=8
   timeshift-=1 unless t.dst?
@@ -4676,7 +4678,7 @@ def disp_current_events(event,bot,mode=0,shift=false)
 end
 
 def disp_current_paths(event,bot,mode=0,shift=false)
-  data_load()
+  data_load(['unit','path'])
   b=$paths.reject{|q| !q.isCurrent?(true,shift)}
   b=$paths.reject{|q| !q.isFuture?} if [-2,1].include?(mode)
   b=$paths.reject{|q| !q.startsTomorrow?} if mode==2
@@ -5166,7 +5168,7 @@ end
 def disp_summon_pool(event,args=[])
   args=event.message.text.downcase.split(' ') if args.nil? || args.length<=0
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
-  data_load()
+  data_load(['unit'])
   k=$units.reject{|q| !q.availability[0].include?('p') || !q.fake.nil? || !q.duo.nil?}
   k=k.reject{|q| !q.availability[0].include?('LU')} if args.map{|q| q.downcase}.include?('launch')
   colors=[]
@@ -5273,7 +5275,7 @@ def summon_sim(bot,event,args=[])
   end
   args=event.message.text.downcase.split(' ') if args.nil? || args.length<=0
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
-  data_load()
+  data_load(['unit','banner'])
   b=find_in_banners(bot,event,args,1,false,true)
   b=b[1]
   b=$banners.map{|q| q} if b.length<=0
@@ -5840,8 +5842,8 @@ def disp_all_prfs(event,bot)
     event.respond "There is a lot of data being displayed.  Please use this command in PM."
     return nil
   end
-  event.channel.send_temporary_message('Calculating data, please wait...',1)
-  data_load()
+  event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil
+  data_load(['unit','skill'])
   sklz=$skills.reject{|q| ['Falchion','Ragnarok+','Missiletainn','Whelp (All)','Yearling (All)','Adult (All)'].include?(q.name) || !q.type.include?('Weapon') || q.exclusivity.nil? || !q.isPostable?(event)}.map{|q| q.clone}
   untz=$units.map{|q| q}
   for i in 0...sklz.length
@@ -5979,8 +5981,8 @@ def disp_all_refines(event,bot,effect=false)
     return nil
   end
   effect=true if event.message.text.downcase.split(' ').include?('effect')
-  event.channel.send_temporary_message('Calculating data, please wait...',1)
-  data_load()
+  event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil
+  data_load(['skill'])
   stones=[]
   dew=[]
   if effect
@@ -6169,11 +6171,11 @@ end
 def get_multiple_units(bot,event,args=[],includestats=true,isbst=false,maxunits=0)
   args=event.message.text.downcase.split(' ') if args.nil? || args.length<=0
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
-  data_load()
+  data_load(['unit'])
   if includestats
-    event.channel.send_temporary_message('Parsing message, please wait...',5)
+    event.channel.send_temporary_message('Parsing message, please wait...',5) rescue nil
   else
-    event.channel.send_temporary_message('Calculating data, please wait...',5)
+    event.channel.send_temporary_message('Calculating data, please wait...',5) rescue nil
   end
   a=true
   s=args.join(' ')
@@ -6203,7 +6205,7 @@ def get_multiple_units(bot,event,args=[],includestats=true,isbst=false,maxunits=
   s2=splice(s2)
   m=0
   k2=0
-  event.channel.send_temporary_message('Message parsed, calculating units...',2)
+  event.channel.send_temporary_message('Message parsed, calculating units...',2) rescue nil
   for i in 0...s2.length
     x=sever(s2[i])
     y=find_data_ex(:find_unit,event,x.split(' '),nil,bot,false,0,1)
@@ -6238,7 +6240,7 @@ def get_multiple_units(bot,event,args=[],includestats=true,isbst=false,maxunits=
     end
   end
   k2=[]
-  event.channel.send_temporary_message('Units calculated, generating response...',2)
+  event.channel.send_temporary_message('Units calculated, generating response...',2) rescue nil
   mu=0
   for i in 0...k.length
     if k[i][0].is_a?(Array) && (k[i][0].map{|q| q.name}.reject{|q| ['Robin(M)','Robin(F)'].include?(q)}.length<=0 || k[i][0].map{|q| q.name}.reject{|q| ['Kris(M)','Kris(F)'].include?(q)}.length<=0) && (k.length>1 || isbst)
@@ -6264,10 +6266,10 @@ def get_multiple_units(bot,event,args=[],includestats=true,isbst=false,maxunits=
 end
 
 def combined_BST(bot,event,args=[])
-  data_load()
+  data_load(['unit'])
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } unless args.nil?
   x=get_multiple_units(bot,event,args,true,true)
-  data_load()
+  data_load(['unit'])
   str=''
   if !safe_to_spam?(event) && (x.length>8 || x.reject{|q| q.is_a?(String)}.length>4)
     str="I'm not going to list all that data here.  Reducing to first four units.  If you want to see more, use this command in PM.\n"
@@ -6494,10 +6496,10 @@ def shortstat(x)
 end
 
 def comparison(bot,event,args=[])
-  data_load()
+  data_load(['unit'])
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } unless args.nil?
   x=get_multiple_units(bot,event,args)
-  data_load()
+  data_load(['unit'])
   hdr="__Comparing #{x.length} units__"
   err=''
   if x.length>x.uniq.length
@@ -6723,10 +6725,10 @@ def comparison(bot,event,args=[])
 end
 
 def skill_comparison(bot,event,args=[])
-  data_load()
+  data_load(['unit'])
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } unless args.nil?
   x=get_multiple_units(bot,event,args,true,false,2)
-  data_load()
+  data_load(['unit'])
   str="#{x[0][1]}#{Rarity_stars[0][x[0][1]-1]}"
   str="#{x[0][1]}#{Rarity_stars[1][x[0][1]-1]}" if x[0][2]>=Max_rarity_merge[1]
   str="#{str} #{x[0][0].name}#{x[0][0].emotes(bot,false)}"
@@ -6777,8 +6779,8 @@ def skill_comparison(bot,event,args=[])
 end
 
 def find_alts(bot,event,args=[])
-  event.channel.send_temporary_message('Calculating data, please wait...',1)
-  data_load()
+  event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil
+  data_load(['unit'])
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } unless args.nil?
   x=find_data_ex(:find_unit,event,args,nil,bot)
   a=[]
@@ -6960,11 +6962,11 @@ def get_games_list(arr,includefeh=true)
 end
 
 def game_data(bot,event,args=[],xname=nil)
-  event.channel.send_temporary_message('Calculating data, please wait...',1) if xname.nil?
-  data_load()
+  (event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil) if xname.nil?
+  data_load(['unit','game'])
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } unless args.nil?
   x=find_data_ex(:find_unit,event,args,xname,bot,true)
-  data_load()
+  data_load(['unit','game'])
   if x.nil?
     event.respond "No matches found."
     return nil
@@ -7050,11 +7052,11 @@ def game_data(bot,event,args=[],xname=nil)
 end
 
 def path_data(bot,event,args=[],xname=nil)
-  event.channel.send_temporary_message('Calculating data, please wait...',1) if xname.nil?
-  data_load()
+  (event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil) if xname.nil?
+  data_load(['unit','path'])
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } unless args.nil?
   x=find_data_ex(:find_unit,event,args,xname,bot,true)
-  data_load()
+  data_load(['unit','path'])
   if x.nil?
     disp_current_paths(event,bot,-1)
     return nil
@@ -7163,7 +7165,7 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
   s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
-  event.channel.send_temporary_message('Calculating data, please wait...',1) if xname.nil?
+  (event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil) if xname.nil?
   data_load()
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } unless args.nil?
   if args.nil?
@@ -8529,8 +8531,8 @@ def learnable_skills(bot,event,args=[],xname=nil)
   s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
-  event.channel.send_temporary_message('Calculating data, please wait...',1) if xname.nil?
-  data_load()
+  (event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil) if xname.nil?
+  data_load(['unit','skill'])
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } unless args.nil?
   if args.nil?
     args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
@@ -8538,7 +8540,7 @@ def learnable_skills(bot,event,args=[],xname=nil)
     args.compact!
   end
   unit=find_data_ex(:find_unit,event,args,xname,bot,false,0,1)
-  data_load()
+  data_load(['unit','skill'])
   atext=''
   if unit.nil?
     event.respond 'No unit found.'
@@ -8780,8 +8782,8 @@ def unit_study(bot,event,args=[],xname=nil)
   s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
-  event.channel.send_temporary_message('Calculating data, please wait...',1) if xname.nil?
-  data_load()
+  (event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil) if xname.nil?
+  data_load(['unit'])
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } unless args.nil?
   if args.nil?
     args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
@@ -8789,7 +8791,7 @@ def unit_study(bot,event,args=[],xname=nil)
     args.compact!
   end
   unit=find_data_ex(:find_unit,event,args,xname,bot,true)
-  data_load()
+  data_load(['unit'])
   atext=''
   if unit.nil?
     event.respond 'No unit found.'
@@ -9008,7 +9010,7 @@ def find_kiran_face(event,forcemathoo=false)
 end
 
 def disp_unit_art(bot,event,args=[],xname=nil)
-  event.channel.send_temporary_message('Calculating data, please wait...',1) if xname.nil?
+  (event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil) if xname.nil?
   data_load()
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } unless args.nil?
   x=find_data_ex(:find_unit,event,args,xname,bot,true)
@@ -9952,7 +9954,6 @@ def next_events(bot,event,args=[])
     end
   end
   event.respond msg unless [10,12,13,14,16].include?(idx)
-  data_load()
   return nil
 end
 
@@ -11506,8 +11507,8 @@ def snagstats(event,bot,f=nil,f2=nil)
     event.respond str
     return nil
   elsif ['alts','alt','alternate','alternates','alternative','alternatives'].include?(f.downcase)
-    event.channel.send_temporary_message('Calculating data, please wait...',3)
-    data_load()
+    event.channel.send_temporary_message('Calculating data, please wait...',3) rescue nil
+    data_load(['unit'])
     nicknames_load()
     untz=$units.map{|q| q}
     untz2=[]
@@ -11612,7 +11613,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event.respond str
     return nil
   elsif ['hero','heroes','heros','units','characters','unit','character','charas','chara','chars','char'].include?(f.downcase)
-    event.channel.send_temporary_message('Calculating data, please wait...',1)
+    event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil
     all_units=$units.reject{|q| !q.isPostable?(event)}
     all_units=$units.map{|q| q} if event.server.nil? && event.user.id==167657750971547648
     legal_units=$units.reject{|q| !q.fake.nil?}
@@ -11804,7 +11805,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event.respond str
     return nil
   elsif ['skill','skills','weapon','weapons','assist','assists','special','specials','passive','passives'].include?(f.downcase)
-    event.channel.send_temporary_message('Calculating data, please wait...',3)
+    event.channel.send_temporary_message('Calculating data, please wait...',3) rescue nil
     legal_skills=$skills.reject{|q| q.level=='example' || !q.fake.nil?}
     all_skills=$skills.reject{|q| q.level=='example' || !q.isPostable?(event)}
     all_skills=$skills.reject{|q| q.level=='example'} if event.server.nil? && event.user.id==167657750971547648
@@ -11900,7 +11901,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event.respond str2
     return nil
   elsif ['alias','aliases','name','names','nickname','nicknames'].include?(f.downcase)
-    event.channel.send_temporary_message('Calculating data, please wait...',1)
+    event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil
     glbl=$aliases.reject{|q| q[0]!='Unit' || q[2].is_a?(Array) || !q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
     srv_spec=$aliases.reject{|q| q[0]!='Unit' || q[2].is_a?(Array) || q[3].nil?}.map{|q| [q[1],q[2],q[3]]}
     all_units=$units.reject{|q| !q.isPostable?(event)}
@@ -12034,7 +12035,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event.respond str
     return nil
   elsif ['groups','group','groupings','grouping'].include?(f.downcase)
-    event.channel.send_temporary_message('Calculating data, please wait...',3) if safe_to_spam?(event)
+    (event.channel.send_temporary_message('Calculating data, please wait...',3) rescue nil) if safe_to_spam?(event)
     str="**There are #{longFormattedNumber($groups.reject{|q| !q.fake.nil?}.length-1)} global groups**"
     if safe_to_spam?(event)
       str="**There are #{longFormattedNumber($groups.reject{|q| !q.fake.nil?}.length-1)} global groups**, including the following dynamic ones:"
@@ -12073,7 +12074,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event.respond str
     return nil
   elsif ['code','lines','line','sloc'].include?(f.downcase)
-    event.channel.send_temporary_message('Calculating data, please wait...',3)
+    event.channel.send_temporary_message('Calculating data, please wait...',3) rescue nil
     b=[[],[],[],[],[]]
     File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
       l=line.gsub("\n",'')

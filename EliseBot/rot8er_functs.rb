@@ -712,7 +712,18 @@ end
 
 def embedless_swap(bot,event)
   metadata_load()
-  if @embedless.include?(event.user.id)
+  if !$embedless.nil?
+    if $embedless.include?(event.user.id)
+      for i in 0...$embedless.length
+        $embedless[i]=nil if $embedless[i]==event.user.id
+      end
+      $embedless.compact!
+      event.respond 'You will now see my replies as embeds again.'
+    else
+      $embedless.push(event.user.id)
+      event.respond 'You will now see my replies as plaintext.'
+    end
+  elsif @embedless.include?(event.user.id)
     for i in 0...@embedless.length
       @embedless[i]=nil if @embedless[i]==event.user.id
     end
