@@ -4218,6 +4218,7 @@ bot.command(:reboot, from: 167657750971547648) do |event| # reboots Elise
 end
 
 def find_data_ex(callback,event,args=nil,xname=nil,bot=nil,fullname=false,ext=false,mode=0)
+  args=event.message.text.split(' ') if args.nil?
   xname=args.join(' ') if xname.nil?
   if [:find_unit,:find_skill,:find_skill,:find_structure,:find_item_feh,:find_accessory,:find_FGO_servant].include?(callback)
     k=method(callback).call(event,args,xname,bot,true,ext)
@@ -4689,8 +4690,8 @@ def spaceship_order(x)
 end
 
 def smol_err(bot,event,ignore=false,smol=false)
-  if !find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot).nil?
-    srv=find_data_ex(:find_FGO_servant,event.message.text.downcase,event,false,bot)
+  if !find_data_ex(:find_FGO_servant,event,nil,nil,bot).nil?
+    srv=find_data_ex(:find_FGO_servant,event,nil,nil,bot)
     event.respond "FGO servant found: #{srv.name} [Srv-##{srv.id}]\nTry `FEH!stats FGO #{srv.name}` if you wish to see what this servant's stats would be in FEH."
   elsif !smol || $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     event.respond 'No unit was included' unless ignore
@@ -6741,7 +6742,7 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
             else
               y=y.map{|q| q.fullName('')}
             end
-            text2.push("**Level #{skz[i].level} gained via weapon refinement on:** #{y.join(', ')}")
+            text2.push("**Level #{skz[i].level} gained via weapon refinement on:** #{y.join(', ')}") if y.length>0
           end
           text="#{text}\n\n#{text2.join("\n")}" unless text2.length<=0
         else
@@ -9550,7 +9551,9 @@ bot.message do |event|
     elsif ['laevatein','naga','sirius','fury','forseti'].include?(s.gsub(' ','').downcase)
       s=s.gsub(' ','').downcase
       s="#{s[0].upcase}#{s[1,s.length-1].downcase}"
-      disp_unit_stats(bot,event,s,nil,'smol',true) unless find_unit(event,a,s,bot,true).nil?
+      s2="#{s}"
+      s2='Erinys' if s2=='Fury'
+      disp_unit_stats(bot,event,s2,nil,'smol',true) unless find_unit(event,a,s2,bot,true).nil?
       disp_skill_data(bot,event,s)
     elsif s.gsub(' ','').gsub('?','').gsub('!','').length<2
     elsif !all_commands(true).include?(a[0])
@@ -9696,7 +9699,9 @@ bot.mention do |event|
   elsif ['laevatein','naga','sirius','fury','forseti'].include?(s.gsub(' ','').downcase)
     s=s.gsub(' ','').downcase
     s="#{s[0].upcase}#{s[1,s.length-1].downcase}"
-    disp_unit_stats(bot,event,s,nil,'smol',true) unless find_unit(event,args,s,bot,true).nil?
+    s2="#{s}"
+    s2='Erinys' if s2=='Fury'
+    disp_unit_stats(bot,event,s2,nil,'smol',true) unless find_unit(event,args,s2,bot,true).nil?
     disp_skill_data(bot,event,s)
     k=1
   elsif ['unit'].include?(args[0].downcase)
