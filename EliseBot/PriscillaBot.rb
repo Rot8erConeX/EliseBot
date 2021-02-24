@@ -4334,7 +4334,7 @@ def find_unit(event,args=nil,xname=nil,bot=nil,fullname=false,ext=0)
     buff=xname.split(':')[1]
     buff=buff[3,buff.length-3] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,3].downcase=='gp_'
     buff=buff[2,buff.length-2] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,2].downcase=='gp'
-    xname=buff if find_unit(buff,event,fullname).length>0
+    xname=buff unless find_unit(event,args,buff,bot,fullname).nil?
   end
   xname=xname.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')
   untz=$units.reject{|q| !q.isPostable?(event)}
@@ -4426,7 +4426,7 @@ def find_skill(event,args=nil,xname=nil,bot=nil,fullname=false,weaponsonly=false
     buff=xname.split(':')[1]
     buff=buff[3,buff.length-3] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,3].downcase=='gp_'
     buff=buff[2,buff.length-2] if !event.server.nil? && event.server.id==350067448583553024 && buff[0,2].downcase=='gp'
-    xname=buff if find_unit(buff,event,fullname).length>0
+    xname=buff unless find_skill(event,args,buff,bot,fullname).nil?
   end
   xname=xname.gsub('(','').gsub(')','').gsub(' ','').gsub('_','').gsub('!','').gsub('.','').gsub('/','')
   untz=$skills.reject{|q| !q.isPostable?(event)}
@@ -6316,7 +6316,7 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
     else
       xname=''
       x=find_data_ex(:find_skill,event,args,nil,bot,true)
-      xname=x.name unless x.nil?
+      xname=x.fullName unless x.nil?
     end
   end
   skill=$skills.find_index{|q| q.fullName==xname}
