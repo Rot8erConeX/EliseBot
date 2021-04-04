@@ -657,7 +657,7 @@ class FEHUnit
   
   def hasDuelAccess?(xlevel=0)
     return false unless @duo.nil? || @duo[0][0]=='Harmonic'
-    return false if !@legendary.nil? && @legendary[1]=='Duel'
+    return false if !@legendary.nil? && (@legendary[1]=='Duel' || xlevel>3)
     s=$skills.find_index{|q| q.name=="#{self.weapon_color[0,1]} Duel #{@movement.gsub('Flier','Flying')}"}
     s=$skills.find_index{|q| q.name=="#{self.weapon_color[0,1]} Duel #{@movement.gsub('Flier','Flying')}" && q.level==xlevel} if xlevel>0
     return false if s.nil?
@@ -776,7 +776,7 @@ class FEHSkill
       nme="Fledgling (#{unit.movement})" if unit.movement=='Flier'
     elsif @name[0,7]=='Adult ('
       nme="Adult (#{unit.movement})"
-    elsif ['Iron Sword','Iron Lance','Iron Axe','Iron Dagger','Iron Bow','Steel Sword','Steel Lance','Steel Axe','Steel Dagger','Steel Bow','Silver Sword','Silver Lance','Silver Axe','Silver Dagger','Silver Bow','Brave Sword','Brave Lance','Brave Axe','Brave Bow','Firesweep Sword','Firesweep Lance','Firesweep Axe','Firesweep Bow','Guard Sword','Guard Lance','Guard Axe','Barrier Blade','Barrier Lance','Barrier Axe','Killing Edge','Killer Lance','Killer Axe','Slaying Edge','Slaying Lance','Slaying Axe','Reprisal Lance','Reprisal Axe','Reprisal Edge'].include?(@name.gsub('+',''))
+    elsif ['Iron Sword','Iron Lance','Iron Axe','Iron Dagger','Iron Bow','Steel Sword','Steel Lance','Steel Axe','Steel Dagger','Steel Bow','Silver Sword','Silver Lance','Silver Axe','Silver Dagger','Silver Bow','Brave Sword','Brave Lance','Brave Axe','Brave Bow','Firesweep Sword','Firesweep Lance','Firesweep Axe','Firesweep Bow','Guard Sword','Guard Lance','Guard Axe','Barrier Blade','Barrier Lance','Barrier Axe','Killing Edge','Killer Lance','Killer Axe','Slaying Edge','Slaying Lance','Slaying Axe','Reprisal Lance','Reprisal Axe','Reprisal Sword'].include?(@name.gsub('+',''))
       t='Iron'
       t='Steel' if 'Steel '==@name[0,6]
       t='Silver' if 'Silver '==@name[0,7]
@@ -796,6 +796,13 @@ class FEHSkill
       nme="#{t} Rod" if unit.weapon_color=='Colorless'
       nme="#{t} Dagger" if unit.weapon_type=='Dagger' && ['Iron','Steel','Silver'].include?(t)
       nme="#{t} Bow" if unit.weapon_type=='Bow' && ['Iron','Steel','Silver','Brave','Firesweep','Killing','Killer','Slaying'].include?(t)
+      nme="#{nme}+" if !nme.nil? && @name[-1]=='+'
+    elsif ['Carrot Lance','Carrot Axe','Springy Lance','Springy Axe'].include?(@name.gsub('+',''))
+      t='Carrot'
+      t='Springy' if 'Springy '==@name[0,8]
+      nme="#{t} Sword" if unit.weapon_color=='Red'
+      nme="#{t} Lance" if unit.weapon_color=='Blue'
+      nme="#{t} Axe" if unit.weapon_color=='Green'
       nme="#{nme}+" if !nme.nil? && @name[-1]=='+'
     elsif @name[0,5]=='Raudr' || @name[0,4]=='Blar' || @name[0,5]=='Gronn' || @name[0,10]=='Keen Raudr' || @name[0,9]=='Keen Blar' || @name[0,10]=='Keen Gronn'
       x="#{@name}"
@@ -908,11 +915,6 @@ class FEHSkill
       nme='Kadomatsu' if unit.weapon_color=='Red'
       nme='Hagoita' if unit.weapon_color=='Green'
       nme="#{nme}+" if !nme.nil? && @name[-1]=='+'
-    elsif ['Carrot Lance','Carrot Axe'].include?(@name.gsub('+',''))
-      nme='Carrot Sword' if unit.weapon_color=='Red'
-      nme='Carrot Lance' if unit.weapon_color=='Blue'
-      nme='Carrot Axe' if unit.weapon_color=='Green'
-      nme="#{nme}+" if !nme.nil? && @name[-1]=='+'
     elsif ['Faithful Axe',"Heart's Blade"].include?(@name.gsub('+',''))
       nme="Heart's Blade" if unit.weapon_color=='Red'
       nme='Faithful Axe' if unit.weapon_color=='Green'
@@ -941,9 +943,6 @@ class FEHSkill
       if unit.norsetome=='Hoss' && x.nil? && nrse
         checkwpn.name=nme
         checkwpn.restrictions='Colorless Tome Users Only'
-      elsif nme.gsub('+','')=='Reprisal Sword' && x.nil?
-        checkwpn.name=nme
-        checkwpn.restrictions='Sword Users Only'
       end
     end
     if !checkwpn.exclusivity.nil? && !checkwpn.exclusivity.include?(unit.name)
@@ -1116,11 +1115,28 @@ class FEHSkill
       elsif ['CTome-killer','CDragon-killer','CBeast-killer','CBow-killer','CDagger-killer','CStaff-killer'].include?(lookout[i])
         m.push(k.reject{|q| q.weapon_type != lookout[i].gsub('-killer','')} || q.weapon_color != 'Colorless')
       end
+      # units whose weapons or prf skills either grant or remove weaknesses
+      if lookout[i]=='Pega-killer'
+        m[-1]=m[-1].reject{|q| ['Ashnard(Fallen)','Hel','Robin(F)(Fallen)','Altina','Robin(F)(Fallen)(Halloween)','Minerva(Retro)'].include?(q.name)}
+      elsif lookout[i]=='Armor-killer'
+        m[-1]=m[-1].reject{|q| ['Hector(Brave)'].include?(q.name)}
+      elsif ['Dragon-killer','DDragon-killer','RDragon-killer','BDragon-killer','GDragon-killer','CDragon-killer'].include?(lookout[i])
+        m[-1]=m[-1].reject{|q| ['Sothis','Sothis(Christmas)','Garon'].include?(q.name)}
+        m[-1].push(k.reject{|q| !['Julius'].include?(q.name)})
+        m[-1].flatten!; m[-1].uniq!
+      end
     end
     m.flatten!; m.uniq!
     f=m.length*100.0/k.length
     return "#{'%.2f' % f}% (#{m.length}/#{k.length}) of playable roster" if !event.nil? && safe_to_spam?(event)
     return "#{'%.2f' % f}% of playable roster"
+  end
+  
+  def level_equal
+    return '' unless @level.include?('W')
+    return '5' if @name=='Quick Riposte'
+    return '5.5' if @name=='Brash Assault'
+    return ''
   end
 end
 
@@ -1205,6 +1221,7 @@ class FEHGroup
     x=['hellspawn'] if @name=='Helspawn'
     x=['fairies','elves','fairy','dreamfairy','elf','bug','bugs','butterfly','butterflys','butterflies'] if @name=='DreamFairies'
     x=['dwarf','dwarves','dwarfs','mecha','mechadwarf','mechadwarves','mechadwarfs'] if @name=='MechaDwarves'
+    x=['giant','giants','giantess','giantesses','giantesss','titan','titans'] if @name=='Giants'
     x=['daily_rotation','dailyrotation','daily'] if @name=='Daily_Rotation'
     x=['noprf','prf-less','prfless'] if @name=='Prfless'
     x=['upforprf','up4prf','prfsoon'] if @name=='Up4Prf'
@@ -1903,6 +1920,22 @@ class FGOServant
     @crit_star=val.split(', ')
     @crit_star[0]=@crit_star[0].to_i
     @crit_star[1]=@crit_star[1].to_f
+  end
+end
+
+class FEHBonus
+  def colosseum_season
+    return -1 if @type=='Tempest' || @start_date.nil?
+    t=Time.new(2017,2,2)
+    t2=Time.new(@start_date[2],@start_date[1],@start_date[0])
+    return ((t2-t)/(24*60*60)/7).to_i+2
+  end
+  
+  def elements
+    return @elements unless @elements.nil? || @elements.length<=0
+    return @elements unless @type=='Aether'
+    return ['Astra', 'Anima'] if self.colosseum_season%2==1
+    return ['Light', 'Dark']
   end
 end
 
@@ -3361,6 +3394,7 @@ def sort_units(bot,event,args=nil)
     k[i].sort_data[-1]+=0.2 if k[i].hasDuelAccess?(4) && k[i].sort_data[-1]<36 && k[i].legendary.nil?
     k[i].sort_data[-1]=35 if !k[i].legendary.nil? && k[i].legendary[1]=='Duel'
     k[i].sort_data[-1]=36 if !k[i].legendary.nil? && k[i].legendary[1]=='Duel' && k[i].id>=500
+    k[i].sort_data[-1]=37 if !k[i].legendary.nil? && k[i].legendary[1]=='Duel' && k[i].id>=640
     k[i].sort_data[-1]=37 unless k[i].duo.nil? || k[i].duo[0][0]=='Harmonic'
     k[i].sort_data[-1]=38 unless k[i].duo.nil? || k[i].duo[0][0]=='Harmonic' || k[i].id<=590
     k[i].sort_data.push(k[i].focus_banners.length)
@@ -3778,7 +3812,7 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
     args=["arden's"] if k.name=='Arden' # Without this line, Ardent Durandal will overwrite Arden's Blade when looking up the unit Arden, and the skill won't display
                                         # While technically intended behavior, since Ardent Durandal came first, it is not what users would expect given things like Berkut's Lance
     k2=find_data_ex(:find_skill,event,args,nil,bot)
-    unless k2.nil? || ![k.name,"#{k.name}'s"].include?(k2.name.split(' ')[0])
+    unless k2.nil? || !([k.name,"#{k.name}'s"].include?(k2.name.split(' ')[0]) || (k.name=='Erinys' && k2.name=='Fury'))
       f.push(' ')
       f.push(k2.alias_list(bot,event,saliases))
       f.flatten!
@@ -4148,6 +4182,48 @@ def aoe(event,bot,args=nil)
   event.respond str2
 end
 
+def show_bonus_smol(event,args=[],bot=nil,mode=0)
+  data_load(['unit','bonus'])
+  b=$bonus_units.reject{|q| !q.isCurrent?(false) || (args.length>0 && !args.include?(q.type))}
+  b=$bonus_units.reject{|q| !q.isNext?(false,true) || (args.length>0 && !args.include?(q.type))} if mode==1
+  b=$bonus_units.reject{|q| !q.isFuture? || q.isNext?(false) || (args.length>0 && !args.include?(q.type))} if mode==2
+  return nil if b.length<=0
+  f=[]
+  season=0
+  x=b.reject{|q| q.type != 'Arena'}
+  unless x.length<=0
+    season=x[0].colosseum_season unless x[0].colosseum_season<0
+    moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{x[0].elements[0]}"}
+    moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{x[0].elements[1]}"}
+    f.push(["#{moji[0].mention unless moji.length<=0}#{moji2[0].mention unless moji2.length<=0}**Arena**",x[0].unit_list.map{|q| "#{q.name}"}.join("\n")])
+  end
+  x=b.reject{|q| q.type != 'Aether'}
+  unless x.length<=0
+    season=x[0].colosseum_season unless x[0].colosseum_season<0 || season>0
+    moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{x[0].elements[0]}"}
+    moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{x[0].elements[1]}"}
+    str=x[0].unit_list.map{|q| "#{q.name}"}.join("\n")
+    if x[0].offense_structure==x[0].defense_structure
+      str="#{str}\n\n#{x[0].offense_structure} (O/D)"
+    else
+      str="#{str}\n\n#{x[0].offense_structure} (O)\n#{x[0].defense_structure} (D)"
+    end
+    f.push(["#{moji[0].mention unless moji.length<=0}#{moji2[0].mention unless moji2.length<=0}**Aether Raids**",str])
+  end
+  x=b.reject{|q| q.type != 'Tempest'}
+  unless x.length<=0
+    str=x[0].unit_list.map{|q| "#{q.name}"}.join("\n")
+    str="#{str}\n\n#{x[0].seals.uniq.map{|q| "#{q.fullName('')}#{q.emotes(bot,true)}"}.join("\n")}"
+    f.push(['<:Current_Tempest_Bonus:498797966740422656>**Tempest Trials**',str])
+  end
+  x=b.reject{|q| q.type != 'Resonant'}
+  f.push(['<:Special_Blade:800880639540068353>Resonant Blades',get_games_list(x[0].bonuses,false).join("\n")]) unless x.length<=0
+  str="__**Colosseum Season #{season}**__"
+  str="__*Colosseum Season #{season}* - **Current week**__" if mode==0
+  str="__*Colosseum Season #{season}* - **Next week**__" if mode==1
+  create_embed(event,str,'',0xD49F61,nil,nil,f)
+end
+
 def show_bonus_units(event,args=[],bot=nil,mode=0)
   data_load(['unit','bonus'])
   b=$bonus_units.reject{|q| q.isPast?(false) || (args.length>0 && !args.include?(q.type))}
@@ -4223,15 +4299,18 @@ def show_bonus_units(event,args=[],bot=nil,mode=0)
     xf=b.reject{|q| q.type != x[i][0] || q.bonuses != x[i][2]} if x[i][0]=='Resonant'
     yy=10
     for i2 in 0...xf.length
+      xx=[]
+      xx.push("Colosseum #{xf[i2].colosseum_season}")
+      if xf[i2].isCurrent?(false)
+        xx[-1]="#{xx[-1]} - **Current week**"
+      elsif xf[i2].isNext?(false)
+        xx[-1]="#{xx[-1]} - *Next week*"
+      else
+        xx[-1]="*#{xx[-1]}*"
+      end
       if ['Resonant'].include?(x[i][0])
-        xx=[]
-        xx.push('**Current week**') if xf[i2].isCurrent?(false)
-        xx.push('**Next week**') if xf[i2].isNext?(false)
         m="#{xx.join("\n")}\n#{m}"
       elsif ['Arena','Aether'].include?(x[i][0])
-        xx=[]
-        xx.push('*Current week*') if xf[i2].isCurrent?(false)
-        xx.push('*Next week*') if xf[i2].isNext?(false)
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{xf[i2].elements[0]}"}
         moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{xf[i2].elements[1]}"}
         moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{xf[i2].elements[1]}"} if x[i][0]=='Arena'
@@ -4310,8 +4389,8 @@ def make_random_unit(event,args,bot)
   for i in 0...colors.length
     for j in 0...weapons.length
       if colors[i]=='Colorless'
-        color_weapons.push([colors[i],weapons[j]]) unless (weapons[j]=='Blade' && !alter_classes(event,'Colorless Blades'))
-      elsif weapons[j]=='Healer' && !alter_classes(event,'Colored Healers')
+        color_weapons.push([colors[i],weapons[j]]) unless (weapons[j]=='Blade' && $units.reject{|q| q.weapon_type != 'Blade' || q.weapon_color != 'Colorless'}.length<=0)
+      elsif weapons[j]=='Healer' && $units.reject{|q| q.weapon_type != 'Healer' || q.weapon_color=='Colorless'}.length<=0
       else
         color_weapons.push([colors[i],weapons[j]])
       end
@@ -4325,9 +4404,9 @@ def make_random_unit(event,args,bot)
     color_weapons.push(['Colorless', 'Blade']) if $units.reject{|q| q.weapon[0,2]!=['Colorless','Blade']}.length>0
     unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
       if $units.reject{|q| q.weapon_type != 'Healer' || q.weapon_color=='Colorless'}.length>0
-        color_weapons.push(['Red', 'Healer']) if alter_classes(event,'Colored Healers')
-        color_weapons.push(['Blue', 'Healer']) if alter_classes(event,'Colored Healers')
-        color_weapons.push(['Green', 'Healer']) if alter_classes(event,'Colored Healers')
+        color_weapons.push(['Red', 'Healer'])
+        color_weapons.push(['Blue', 'Healer'])
+        color_weapons.push(['Green', 'Healer'])
       end
       color_weapons.push(['Colorless', 'Healer'])
     end
@@ -6565,7 +6644,8 @@ def comparison(bot,event,args=[])
   a=x.map{|q| q[0].alts[0]}.uniq
   if a.include?('Elise') && a.include?('Nino') && a.length<=2
     metadata_load()
-    ftr="Heyday Coefficient: #{(@server_data[0].inject(0){|sum,x2| sum + x2 }/701.0).round(4)}"
+    hdc=@server_data[0].inject(0){|sum,x2| sum + x2 }/701.0
+    ftr="Heyday Coefficient: #{hdc.round(4)}" if hdc>1
   end
   xlx=2
   xlx=9 if safe_to_spam?(event)
@@ -8516,12 +8596,12 @@ def get_eff_hp(arr=[0,0,0,0,0,0],slot=3,div=1)
 end
 
 def generate_rarity_row(rarity=5,merges=0,games=[])
+  stars="**#{rarity}-star**" if rarity==0 || rarity-1>Rarity_stars[0].length
   stars=Rarity_stars[0][rarity-1]*rarity
   stars=Rarity_stars[1][rarity-1]*rarity if merges>=Max_rarity_merge[1]
   stars=['<:FGO_icon_rarity_dark:571937156981981184>','<:FGO_icon_rarity_sickly:571937157095227402>','<:FGO_icon_rarity_rust:523903558928826372>','<:FGO_icon_rarity_mono:523903551144198145>','<:FGO_icon_rarity_gold:523858991571533825>'][rarity-1]*rarity if games[0]=='FGO'
   stars="#{stars}#{'<:Blank:676220519690928179>'*(6-rarity)}" if rarity<6
   stars="#{['','<:Rarity_1:532086056594440231>','<:Rarity_2:532086056254963713>','<:Rarity_3:532086056519204864>','<:Rarity_4:532086056301101067>','<:Rarity_5:532086056737177600>'][rarity]*rarity}#{['','<:Rarity_1_Blank:555459856476274691>','<:Rarity_2_Blank:555459856400908299>','<:Rarity_3_Blank:555459856568418314>','<:Rarity_4_Blank:555459856497246218>','<:Rarity_5_Blank:555459856190930955>'][rarity]*(Max_rarity_merge[0]-rarity)}#{'<:Blank:676220519690928179>' if Max_rarity_merge[0]<6}" if games[0]=='DL'
-  stars="**#{rarity}-star**" if rarity==0 || rarity>6
   stars="#{stars.gsub('<:Blank:676220519690928179>','')}**+#{merges}**" if merges>=Max_rarity_merge[1]
   return stars
 end

@@ -1,4 +1,4 @@
-@mash='Mini-Matt'
+@mash='rot8e'
 
 def triple_finish(list,forcetwo=false) # used to split a list into three roughly-equal parts for use in embeds
   return [['.',list.join("\n")]] if list.length<5
@@ -341,7 +341,7 @@ def create_embed(event,header,text,xcolor=nil,xfooter=nil,xpic=nil,xfields=nil,m
   mbd=false
   if !@embedless.nil? 
     mbd=true if @embedless.include?(event.user.id) || (was_embedless_mentioned?(event) && ch_id==0)
-  elsif $embedless.nil?
+  elsif !$embedless.nil?
     mbd=true if $embedless.include?(event.user.id) || (was_embedless_mentioned?(event) && ch_id==0)
   end
   if mbd
@@ -926,10 +926,12 @@ def get_debug_leave_message()
   str="I am Mathoo's personal debug bot.  As such, I do not belong here.  You may be looking for one of my facets, so I'll drop all the invite links here."
   str="#{str}\n\n**EliseBot** allows you to look up stats and skill data for characters in *Fire Emblem: Heroes*"
   str="#{str}\nHere's her invite link: <https://goo.gl/Hf9RNj>"
-  str="#{str}\n\n**RobinBot**, also known as **FEIndex**, is for *Fire Emblem: Awakening* and *Fire Emblem Fates*."
-  str="#{str}\nHere's her invite link: <https://goo.gl/f1wSGd>"
   str="#{str}\n\n**LizBot** allows you to look up stats, mats, and skill data in *Fate/Grand Order*"
   str="#{str}\nHere's her invite link: <https://goo.gl/ox9CxB>"
+  str="#{str}\n\n**BotanBot** allows you to look up stats, mats, and skill data in *Dragalia Lost*"
+  str="#{str}\nHere's her invite link: <https://goo.gl/mp77kQ>"
+  str="#{str}\n\n**RobinBot**, also known as **FEIndex**, is for *Fire Emblem: Awakening*, *Fire Emblem Fates*, and *Fire Emblem: Three Houses*."
+  str="#{str}\nHere's her invite link: <https://goo.gl/f1wSGd>"
   return str
 end
 

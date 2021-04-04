@@ -12,7 +12,7 @@
 8-Bit Sharena\Hair\An accessory made to look like an 8-bit rendition of Sharena.\Beat the Retrospective map on Hard difficulty.
 8-Bit Veronica\Hair\An accessory made to look like an 8-bit rendition of Veronica.\Accessory Shop from May 2020 onwards
 Antique Clasp\Hair\A hair decoration given by Flayn. It is an excellent example of fine wirework. Apparently very old.\Reach 100 orange friendship with Flayn during Forging Bonds: In Her Service
-"Antique Clasp EX\Hair\An exquisite hair decoration given by Flayn. Excellent wirework created with skilled hands. Said to be ""special.""\Reach 2500 orange friendship with Flayn during Forging Bonds: In Her Service"
+Antique Clasp EX\Hair\An exquisite hair decoration given by Flayn. Excellent wirework created with skilled hands. Said to be "special."\Reach 2500 orange friendship with Flayn during Forging Bonds: In Her Service
 Askran Hairpin\Hair\A hair accessory adorned with the emblem of the Kingdom of Askr.\Clear Floors 6-10 in Illusory Dungeon: Legendary Heroes.
 Astral Hairpin\Hair\A hairpin from Mareeta. An accessory adorned with a moon and star.\Reach 100 red friendship with Mareeta during Forging Bonds: Path to the Future
 Astral Hairpin EX\Hair\A hairpin from Mareeta. An accessory adorned with a moon and star. Has an impressive quality, however slight.\Reach 2500 red friendship with Mareeta during Forging Bonds: Path to the Future.
@@ -98,7 +98,7 @@ Sacred Stardust\Hair\Ophelia claims this stardust holds great power. (It's reall
 Sacred Stardust EX\Hair\According to Ophelia, only the chosen may touch this stardust. (Actually just a hairpin, but don't dash her dreams.)\Reach 2500 green friendship with Ophelia during Forging Bonds: High Tea Jinks.
 Saintdom Pin\Hair\A striking hairpin bestowed by Julia. Its presence is disquieting, somehow.\Reach 100 orange friendship with Julia(Fallen) during Forging Bonds: Peaceful Ends.
 Saintdom Pin EX\Hair\A beautiful hairpin bestowed by Julia. The embellishments are breathtaking.\Reach 2500 orange friendship with Julia(Fallen) during Forging Bonds: Peaceful Ends.
-"Seashell Hairpin\Hair\A hair accessory made from a beautiful seashell.\KO an enemy during June 2018 Quest ""Yay, Accessories!""."
+Seashell Hairpin\Hair\A hair accessory made from a beautiful seashell.\KO an enemy during June 2018 Quest "Yay, Accessories!".
 Silver Pawns Trophy\Hair\Proof of excellent results in Pawns of Loki.\Reach Tier 9 in a Pawns of Loki event.
 Star of Nifl\Hair\A good luck charm that belongs to Ylgr. The decoration comes from Nifl's coat of arms.\Reach 100 red friendship with Ylgr during Forging Bonds: The Sworn Oath.
 Star of Nifl EX\Hair\A good luck charm that belongs to Ylgr. It has been blessed to ensure the safety of its bearer.\Reach 2500 red friendship with Ylgr during Forging Bonds: The Sworn Oath.
@@ -264,7 +264,7 @@ Saintly Ornament\Hat\A saint's headdress handed down from Silque. It radiates a 
 Saintly Ornament EX\Hat\A saint's headdress handed down from Silque. It matches hers in both style and sanctity.\Reach 2500 orange friendship with Silque during Forging Bonds: Common Virtues.
 Sister's Cowl\Hat\A handmade hat from Natasha.  Made from cloth she took from her own shawl.\Reach 100 orange friendship with Natasha during Forging Bonds: Driven by Vision.
 Sister's Cowl EX\Hat\A handmade hat from Natasha.  Subtle accents mark its quality, and convey relaxed confidance.\Reach 2500 orange friendship with Natasha during Forging Bonds: Driven by Vision.
-"Spring Bunny Hat\Hat\A hat once worn by a Hero tempted by sunny spring skies. The bunny's face has a lot of character.\Use cavalry ally to defeat foes level 30 or higher during June 2018 Quest ""Yay, Accessories!""."
+Spring Bunny Hat\Hat\A hat once worn by a Hero tempted by sunny spring skies. The bunny's face has a lot of character.\Use cavalry ally to defeat foes level 30 or higher during June 2018 Quest "Yay, Accessories!".
 Steamed Buns\Hat\A famous delicacy from a Hoshidan hot spring. Doughy and filled with bean jam, and best served with tea.\Clear floors 6-10 in Illusory Dungeon: Kingdom of Nohr.
 Summer Bunny Hat\Hat\A hat once worn by a Hero tempted by blue summer skies. The bunny's face has a lot of character.\Clear floors 81-85 in Illusory Dungeon: Farewells
 Swordmaster Tie\Hat\A thin hairband bestowed by Shannan. It has an extremely simple design that won't get in the way.\Reach 100 orange friendship with Shannan during Forging Bonds: Beyond Blood.
@@ -283,7 +283,7 @@ White Bandana\Hat\A white bandana from Ronan. Fashioned of simple, clean cotton 
 White Bandana EX\Hat\A white bandana from Ronan. The extra cloth looks dashing blowing in the breeze.\Reach 2500 blue friendship with Ronan during Forging Bonds: Shared Purpose.
 White-Flower Crown\Hat\A crown made from the white flowers that grow in the mountains. Handmade by Heroes during their picnic outing.\Clear floors 76-80 in Illusiory Dungeon: Heartstring's Ties
 Worn-Out Doll\Hat\A stuffed animal from Keaton. It's all torn up, and the stuffing is falling out, but apparently that makes it great!\Reach 100 red friendship with Keaton during Forging Bonds: The Orb Case
-"Worn-Out Doll EX\Hat\A stuffed animal from Keaton. It has all kinds of ""treasures"" stuck to it—a lizard tail, a hair ball, you name it.\Reach 2500 red friendship with Keaton during Forging Bonds: The Orb Case"
+Worn-Out Doll EX\Hat\A stuffed animal from Keaton. It has all kinds of "treasures" stuck to it—a lizard tail, a hair ball, you name it.\Reach 2500 red friendship with Keaton during Forging Bonds: The Orb Case
 Wyvern Tiara\Hat\A tiara granted by Altena. It serves as proof of one's recognition as a wyvern knight.\Reach 100 blue friendship with Altena during Forging Bonds: Beyond Blood.
 Wyvern Tiara EX\Hat\A tiara granted by Altena. It is adorned with a polished green stone.\Reach 2500 blue friendship with Altena during Forging Bonds: Beyond Blood.
 Ymir's Cap\Hat\A wild hat Kris had.  Made with wolf skin, even its smell is wild.\Reach 100 red friendship with Kris(M) during Forging Bonds: Shape of a Spirit
@@ -308,7 +308,7 @@ Mad Spectacles\Mask\A fancy pair of eyeglasses worn only for fashion. They are p
 Master Eye Patch\Mask\An eye patch worn by the Mirage Master Kiria.\Clear floors 76-80 in Illusory Dungeon: Wings Carry Me
 Masque Mask\Mask\A gaudy mask from Kris.  Featuring a butterfly design and a velvety finish.  Have you checked the dress code?\Reach 100 blue friendship with Kris(F) during Forging Bonds: Shape of a Spirit.
 Masque Mask EX\Mask\A gaudy mask from Kris.  High quality and detailed in decoration.  Required attire for attending a masqerade ball.\Reach 2500 blue friendship with Kris(F) during Forging Bonds: Shape of a Spirit.
-"Mysterious Mask\Mask\A mask once worn by a swordsman claiming to be the Hero-King Marth.\Use lance ally to defeat foes level 10 or higher during June 2018 Quest ""Yay, Accessories!""."
+Mysterious Mask\Mask\A mask once worn by a swordsman claiming to be the Hero-King Marth.\Use lance ally to defeat foes level 10 or higher during June 2018 Quest "Yay, Accessories!".
 Power Postiche\Mask\A glorious fake ~~beard~~ moustache from Mustafa.  The dignified whiskers demand the respect of all.  Doubles as a disguise.\Reach 100 green friendship with Mustafa during Forging Bonds: Renewed Resolve
 Power Postiche EX\Mask\A glorious fake beard from Mustafa.  The supreme fullness demands the respect of all.  Complicates eating.\Reach 2500 green friendship with Mustafa during Forging Bonds: Renewed Resolve
 Reading Glasses\Mask\According to Nina, your eyes won't get tired if you wear these—no matter how much, or what, you read.\Reach 100 orange friendship with Nina during Forging Bonds: High Tea Jinks.
