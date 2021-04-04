@@ -9257,17 +9257,19 @@ bot.command(:reload, from: 167657750971547648) do |event|
       event.channel.send_temporary_message('Loading.  Please wait 5 seconds...',3) rescue nil
       to_reload=['Units','Skills','Accessories','Structures','Items','StatSkills','SkillSubsets','Banners','Events','Games','ArenaTempest','Path']
       for i in 0...to_reload.length
-        download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEH#{to_reload[i]}.txt")
-        IO.copy_stream(download, "FEHTemp.txt")
-        if to_reload[i]=='SkillSubsets' && File.size("FEHTemp.txt")<File.size("FEHSkillSubsets.txt") && !e.message.text.downcase.include?('subset')
-        elsif File.size("FEHTemp.txt")>100
-          b=[]
-          File.open("FEHTemp.txt").each_line.with_index do |line, idx|
-            b.push(line)
+        download = (open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEH#{to_reload[i]}.txt") rescue nil)
+        unless download.nil?
+          IO.copy_stream(download, "FEHTemp.txt")
+          if to_reload[i]=='SkillSubsets' && File.size("FEHTemp.txt")<File.size("FEHSkillSubsets.txt") && !e.message.text.downcase.include?('subset')
+          elsif File.size("FEHTemp.txt")>100
+            b=[]
+            File.open("FEHTemp.txt").each_line.with_index do |line, idx|
+              b.push(line)
+            end
+            open("FEH#{to_reload[i]}.txt", 'w') { |f|
+              f.puts b.join('')
+            }
           end
-          open("FEH#{to_reload[i]}.txt", 'w') { |f|
-            f.puts b.join('')
-          }
         end
       end
       strx="#{strx}#{"\n" if strx.length>0}FEHSkillSubsets also reloaded\n" if e.message.text.include?('subset')
