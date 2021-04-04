@@ -1400,13 +1400,16 @@ class FEHUnit
     x+=3 if boon.length<=0 && bane.length<=0 && merges>0
     x=[x,175].max if rarity>=5 && level>=40 && !@legendary.nil? && @legendary[1]=='Duel'
     x=[x,180].max if rarity>=5 && level>=40 && !@legendary.nil? && @legendary[1]=='Duel' && (@movement=='Armor' || @id>=500)
+    x=[x,185].max if rarity>=5 && level>=40 && !@legendary.nil? && @legendary[1]=='Duel' && @id>=640
     x=[x,185].max if rarity>=5 && level>=40 && !@duo.nil? && @duo[0][0]=='Duo'
     x=[x,190].max if rarity>=5 && level>=40 && !@duo.nil? && @duo[0][0]=='Duo' && @id>590
     lookout=$statskills.reject{|q| !['Stat-Affecting 1','Stat-Affecting 2'].include?(q[3])}
     for i in 0...skill_list.length
       x2=lookout.find_index{|q| q[0]==skill_list[i]}
-      x3=lookout[x2][4][5]
-      x3=[lookout[x2][4][5],170].min unless @legendary.nil?
+      if lookout[x2][4].length>5
+        x3=lookout[x2][4][5]
+        x3=[lookout[x2][4][5],170].min unless @legendary.nil?
+      end
       x=[x,x3].max if !x2.nil? && rarity>=5 && level>=40 && lookout[x2][4].length>5
     end
     x/=5
@@ -3267,9 +3270,9 @@ class FEHTimer
     return false
   end
   
-  def isNext?(includempty=true)
+  def isNext?(includempty=true,ignorecurrency=false)
     return false if @start_date.nil?
-    return false if self.isCurrent?(true)
+    return false if self.isCurrent?(true) && !ignorecurrency
     t=Time.now
     timeshift=8
     timeshift-=1 unless t.dst?
@@ -3332,7 +3335,7 @@ class FEHBonus < FEHTimer
     return x
   end
   
-  def elements=(val)
+  def subdata=(val)
     if val.nil?
     elsif @type=='Tempest'
       x=val.split(', ')
@@ -3342,17 +3345,12 @@ class FEHBonus < FEHTimer
         @seals.push($skills[f].clone) unless f.nil?
       end
       @seals=nil if @seals.length<=0
-    else
-      @elements=val.split(', ')
-    end
-  end
-  
-  def structures=(val)
-    if val.nil?
     elsif @type=='Aether'
       x=val.split(', ')
       @offense_structure=x[0]
       @defense_structure=x[-1]
+    else
+      @elements=val.split(', ')
     end
   end
   
@@ -3691,8 +3689,7 @@ def data_load(to_reload=[])
       bob4.bonuses=b[i][0]
       bob4.type=b[i][1]
       bob4.date=b[i][2]
-      bob4.elements=b[i][3]
-      bob4.structures=b[i][4]
+      bob4.subdata=b[i][3]
       $bonus_units.push(bob4)
     end
   end
@@ -4162,13 +4159,13 @@ def all_commands(include_nil=false,permissions=-1)
      'unit','data','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','statskil',
      'stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','statsskils','statskils','stats_skils','stat_skils','statsandskils','statandskils',
      'stats_and_skils','stat_and_skils','statsskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil','bugreport','suggestion','feedback','shard',
-     'status','avatar','avvie','donation','donate','sendpm','ignoreuser','sendmessage','leaveserver','cleanupaliases','backup','setmarker','legendary','legendaries','legendarys','gps',
+     'status','avatar','avvie','donation','donate','sendpm','ignoreuser','sendmessage','leaveserver','cleanupaliases','backup','setmarker','legendary','legendaries','legendarys',
      'legend','legends','mythic','mythical','mythics','mythicals','mystic','mystical','mystics','mysticals','invite','score','merges','whoisoregano','whyoregano','oregano','growths',
      'growth','gp','natures','headpat','patpat','pat','embeds','embed','groups','seegroups','checkgroups','find','search','lookup','update','sort','list','tools','links','tool','bst',
      'link','resources','resource','aoe','area','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort',
      'sortstat','statsort','liststats','statslist','statlist','liststat','sortunits','unitssort','sortunit','unitsort','listunits','unitslist','unitlist','listunit','average','mean',
-     'bestamong','bestin','beststats','higheststats','highest','best','highestamong','highestin','worstamong','worstin','worststats','loweststats','lowest','worst','lowestamong','alt',
-     'lowestin','arena','arenabonus','arena_bonus','bonusarena','bonus_arena','tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','tt','ttbonus','tt_bonus','raids',
+     'bestamong','bestin','beststats','higheststats','highest','best','highestamong','highestin','worstamong','worstin','worststats','loweststats','lowest','worst','lowestamong',
+     'lowestin','arena','arenabonus','arena_bonus','bonusarena','bonus_arena','tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','tt','ttbonus','tt_bonus',
      'bonustt','bonus_tt','aether','aetherbonus','aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raidsbonus','bonusraids',
      'raids_bonus','bonus_raids','bonus','attackicon','attackcolor','attackcolors','attackcolour','attackcolours','atkicon','atkcolor','atkcolors','atkcolour','atkcolours','atticon',
      'attcolor','attcolors','attcolour','attcolours','staticon','statcolor','statcolors','statcolour','statcolours','iconcolor','iconcolors','iconcolour','iconcolours','whyelise',
@@ -4180,15 +4177,15 @@ def all_commands(include_nil=false,permissions=-1)
      'skill_comparison','skills_comparison','skillsincommon','commonskills','addgroup','removemember','removefromgroup','removefrommultialias','removefromdualalias','removefrommulti',
      'removefrommultiunitalias','removefromdualunitalias','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','artist',
      'dualalias','addmulti','deletegroup','removegroup','alts','games','next','schedule','today','tomorrow','tomorow','tommorrow','tommorow','todayinfeh','today_in_feh','daily','now',
-     'divine','devine','code','path','greil','grail','ghb','study','statstudy','statsstudy','studystats','effhp','eff_hp','bulk','allinheritance','allinherit','allinheritable','learn',
+     'divine','devine','code','path','greil','grail','ghb','study','statstudy','statsstudy','studystats','effhp','eff_hp','bulk','allinheritance','allinherit','allinheritable',
      'skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','pair',
-     'inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','proc',
+     'inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills',
      'all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit',
      'skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','pair_up',
      'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','inheritance','learnable','inheritable','skillearn','skillearnable','pairup','pocket','heal',
      'healstudy','heal_study','studyheal','study_heal','procstudy','proc_study','studyproc','study_proc','phasestudy','studyphase','phase_study','study_phase','phase','dev_edit',
      'edit','devedit','saliases','resonantbonus','resonant_bonus','bonusresonant','bonus_resonant','resonance','resonancebonus','resonance_bonus','bonusresonance','bonus_resonance',
-     'resonant']
+     'gps','raids','learn','proc','alt','resonant']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -4704,7 +4701,7 @@ def smol_err(bot,event,ignore=false,smol=false)
   end
 end
 
-def sever(str,sklz=false)
+def sever(str,sklz=false,ignorenums=false)
   ssx=str.split(' ')
   for i in 0...ssx.length
     if ssx[i].include?('/')
@@ -4724,8 +4721,10 @@ def sever(str,sklz=false)
     k3=k3[k3.length-1]
     k2=0 if k3[0,1].to_i.to_s==k3[0,1]
   end
-  for i in 0...k.length-k2
-    k[i]="#{k[i]}*"
+  unless ignorenums
+    for i in 0...k.length-k2
+      k[i]="#{k[i]}*"
+    end
   end
   str=k.join(' ')
   str=str.gsub('(+)','(``)')
@@ -5487,7 +5486,7 @@ def sort_legendaries(event,bot,mode=0)
     topbnr=f.map{|q| q} if i==0
     lemoji1='<:Legendary_Effect_Unknown:443337603945857024>'
     lemoji1='<:Mythic_Effect_Unknown:523328368079273984>' if x[i].include?('January') || x[i].include?('March') || x[i].include?('May') || x[i].include?('July') || x[i].include?('September') || x[i].include?('November')
-    lemoji1='' if x[i]=='Remix'
+    lemoji1='' if x[i]=='Remix' || x[i].include?('Mid-')
     y.push(["#{x[i]} #{lemoji1}",f.join("\n")])
   end
   future_banner=$banners.reject{|q| !has_any?(q.tags,['Legendary','LegendaryRemix']) || !q.isFuture?}.uniq
@@ -6304,7 +6303,7 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
   s=remove_prefix(s,event)
   a=s.split(' ')
   s=event.message.text if all_commands().include?(a[0])
-  args=sever(s.gsub(',','').gsub('/',''),true).split(' ')
+  args=sever(s.gsub(',','').gsub('/',''),true,true).split(' ')
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   args.compact!
   errstr="No matches found."
@@ -6742,7 +6741,9 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
             else
               y=y.map{|q| q.fullName('')}
             end
-            text2.push("**Level #{skz[i].level} gained via weapon refinement on:** #{y.join(', ')}") if y.length>0
+            xtratext=''
+            xtratext=" (#{skz[i].level_equal})" if skz[i].level.include?('W') && skz[i].level_equal.length>0
+            text2.push("**Level #{skz[i].level}#{xtratext} gained via weapon refinement on:** #{y.join(', ')}") if y.length>0
           end
           text="#{text}\n\n#{text2.join("\n")}" unless text2.length<=0
         else
@@ -8451,8 +8452,12 @@ bot.command(:bonus) do |event, *args|
   x.push('Tempest') if has_any?(args,['tempest','tt'])
   x.push('Aether') if has_any?(args,['aether','raid','raids','aetherraids','aetherraid','aether_raids','aether_raid','aetheraids','aetheraid'])
   x.push('Resonant') if has_any?(args,['resonant','resonance','resonence'])
-  if !safe_to_spam?(event) && x.length<=0
-    event.respond "I will not show all bonus units at once.  Please use this command in PM or refine your search with one of the subcommands: `FEH!arena`, `FEH!tempest`, `FEH!aether`, or `FEH!resonant`."
+  if x.length<=0
+    show_bonus_smol(event,x,bot)
+    if safe_to_spam?(event)
+      show_bonus_smol(event,x,bot,1)
+      show_bonus_smol(event,x,bot,2)
+    end
     return nil
   end
   x=[x[0]] unless safe_to_spam?(event)
