@@ -1,9 +1,0 @@
-Dorothea(Plegian), Raphael(Plegian), Tharja(Plegian), Katarina(Plegian), Kris(M)(Plegian), Heath, Shigure, Gunnthra, Anna\Arena\02/02/2021, 08/02/2021\Wind, Water
-Mila, Bramimond, Sara, Asbel, Ronan, Miranda, Veld, Knoll, Eliwood(Wind), Anna\Aether\02/02/2021, 08/02/2021\Light, Dark\Tactics Room
-FE9, FE16\Resonant\02/02/2021, 08/02/2021
-Lif(Valentines), Gustav(Valentines), Henriette(Valentines), Alfonse(Valentines), Veronica(Valentines), Alfonse, Sharena, Anna\Tempest\05/02/2021, 15/02/2021\Bracing Stance 1, Life and Death 1
-Dorothea(Plegian), Raphael(Plegian), Tharja(Plegian), Katarina(Plegian), Kris(M)(Plegian), Heath, Shigure, Gunnthra, Anna\Arena\09/02/2021, 15/02/2021\Wind, Fire
-Reginn, Seiros, Dorothea(Plegian), Katarina(Plegian), Kris(M)(Plegian), Raphael(Plegian), Tharja(Plegian), Xander, Corrin(F)(Dusk), Fjorm\Aether\09/02/2021, 15/02/2021\Astra, Anima\Healing Tower
-FE4, FE10\Resonant\09/02/2021, 15/02/2021
-Freyja, Hel, Dorothea(Plegian), Katarina(Plegian), Kris(M)(Plegian), Raphael(Plegian), Tharja(Plegian), Xander, Corrin(F)(Dusk), Fjorm\Aether\16/02/2021, 22/02/2021\Light, Dark\Panic Manor
-Seiros, Lif(Valentines), Gustav(Valentines), Henriette(Valentines), Alfonse(Valentines), Veronica(Valentines)\Arena\16/02/2021, 22/02/2021\Wind, Earth
