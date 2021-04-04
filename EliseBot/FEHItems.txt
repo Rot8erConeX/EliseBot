@@ -1,0 +1,70 @@
+Aether Stone\Main\999\Used in Aether Raids to build and improve structures.
+Arena Crown\Main\infinite\A crown awarded to a legendary summoner.\Actual maximum is based on how many Arena seasons have occured since 13 August 2018.
+Arena Medal\Main\999999\Used in the Weapon Refinery.
+Divine Code\Main\999999\A scrap of paper with otherworldy power.\Used when compiling Hero Manuals.
+"Divine Dew\Main\999\Used in the Weapon Refinery to refine some special weapons.\""Special"" weapons refers to weapons that cannot be inherited, what is commonly referred to as Prf weapons."
+Dueling Crest\Main\999999\Restores all Dueling Swords.\Cannot be used unless current Dueling Sword count is 0.
+Heavenly Dew\Main\9999\Used in Aether Raids to strengthen Fortress (O/D), and resources.
+Hero Feather\Main\999999\Used to unlock potential in allies.\Costs `2*10^x` feathers to promote an ally to the next rarity, where x is the current rarity of that ally.
+Heroic Grail\Main\999999\Used to summon from a selection of Heroes.  In the Allies menu, tap Use Heroic Grails.\Used to summon Grand Hero Battle and Tempest Trials units.
+Light's Blessing\Main\999999\Used during battle.  Restores all allies' HP, movement, and use of Specials.\Not to be confused with Light Blessing.
+Midgard Gem\Main\999999\Used in Mjolnir's Strike to build and improve your structures for Midgard's Shield.
+Orb\Main\infinite\Used for summoning and various other features.\Can be used as a replacement for: Stamina Potions, Dueling Crests, Light's Blessings.  Can also be used to upgrade the castle and increase the global Exp. modifier, or to increase barracks size.  Actual maximum is 99,999 f2p orbs and indefinite paid orbs.
+"Refining Stone\Main\999\Used in the Weapon Refinery to refine normal weapons.\""Normal"" weapons refers to weapons that can be inherited."
+R&R Affinity\Main\999\Used in Aether Resort to create structures.
+Sacred Coin\Main\999\A valuable ceremonial coin for the Sacred Seal Forge used in antiquity.\Cost of creating and promoting Sacred Seals.
+Stamina Potion\Main\999999\Grants stamina +99
+Dueling Sword\Implied\3\Price of entering Arena.
+Anima Blessing\Blessing\999\Used in Confer Blessing.  Confers the anima blessing on an ally.\Anima blessed heroes will gain a stat boost in Aether Raids when paired with Anima Mythic Heroes during Anima season.
+Astra Blessing\Blessing\999\Used in Confer Blessing.  Confers the astra blessing on an ally.\Astra blessed heroes will gain a stat boost in Aether Raids when paired with Astra Mythic Heroes during Astra season.
+Dark Blessing\Blessing\999\Used in Confer Blessing.  Confers the dark blessing on an ally.\Dark blessed heroes will gain a stat boost in Aether Raids when paired with Dark Mythic Heroes during Dark season.
+Earth Blessing\Blessing\999\Used in Confer Blessing.  Confers the earth blessing on an ally.\Earth blessed heroes will gain a stat boost when paired with Earth Legendary Heroes during Earth season.
+Fire Blessing\Blessing\999\Used in Confer Blessing.  Confers the fire blessing on an ally.\Fire blessed heroes will gain a stat boost when paired with Fire Legendary Heroes during Fire season.
+Light Blessing\Blessing\999\Used in Confer Blessing.  Confers the light blessing on an ally.\Light blessed heroes will gain a stat boost in Aether Raids when paired with Light Mythic Heroes during Light season.  Not to be confused with Light's Blessing.
+Water Blessing\Blessing\999\Used in Confer Blessing.  Confers the water blessing on an ally.\Water blessed heroes will gain a stat boost when paired with Water Legendary Heroes during Water season.
+Wind Blessing\Blessing\999\Used in Confer Blessing.  Confers the wind blessing on an ally.\Wind blessed heroes will gain a stat boost when paired with Wind Legendary Heroes during Wind season.
+Azure Badge\Growth\999999\Used to unlock potential in allies.  Increase rarity for a 3<:Icon_Rarity_3:448266417934958592> or lower blue-type ally.  Also used in the Sacred Seal Forge.
+Azure Crystal\Growth\999999\Used for leveling up.  Can be used on blue-type allies level 20 and higher.
+Azure Shard\Growth\999999\Used for leveling up.  Can be used on blue-type allies up to level 19.
+Dragonflower (A)\Growth\999999\Used in Use Dragonflowers to boost the stats of an armored ally.
+Dragonflower (C)\Growth\999999\Used in Use Dragonflowers to boost the stats of a cavalry ally.
+Dragonflower (F)\Growth\999999\Used in Use Dragonflowers to boost the stats of a flying ally.
+Dragonflower (I)\Growth\999999\Used in Use Dragonflowers to boost the stats of an infantry ally.
+Great Azure Badge\Growth\999999\Used to unlock potential in allies.  Increase a 4<:Icon_Rarity_4:448266418459377684> blue-type ally to 5<:Icon_Rarity_5:448266417553539104>.  Also used in the Sacred Seal Forge.
+Great Scarlet Badge\Growth\999999\Used to unlock potential in allies.  Increase a 4<:Icon_Rarity_4:448266418459377684> red-type ally to 5<:Icon_Rarity_5:448266417553539104>.  Also used in the Sacred Seal Forge.
+Great Transparent Badge\Growth\999999\Used to unlock potential in allies.  Increase a 4<:Icon_Rarity_4:448266418459377684> colorless-type ally to 5<:Icon_Rarity_5:448266417553539104>.  Also used in the Sacred Seal Forge.
+Great Verdant Badge\Growth\999999\Used to unlock potential in allies.  Increase a 4<:Icon_Rarity_4:448266418459377684> green-type ally to 5<:Icon_Rarity_5:448266417553539104>.  Also used in the Sacred Seal Forge.
+Scarlet Badge\Growth\999999\Used to unlock potential in allies.  Increase rarity for a 3<:Icon_Rarity_3:448266417934958592> or lower red-type ally.  Also used in the Sacred Seal Forge.
+Scarlet Crystal\Growth\999999\Used for leveling up.  Can be used on red-type allies level 20 and higher.
+Scarlet Shard\Growth\999999\Used for leveling up.  Can be used on red-type allies up to level 19.
+Trait Fruit\Growth\999999\Used for changing units' assets and flaws (boons and banes)
+Transparent Badge\Growth\999999\Used to unlock potential in allies.  Increase rarity for a 3<:Icon_Rarity_3:448266417934958592> or lower colorless-type ally.  Also used in the Sacred Seal Forge.
+Transparent Crystal\Growth\999999\Used for leveling up.  Can be used on colorless-type allies level 20 and higher.
+Transparent Shard\Growth\999999\Used for leveling up.  Can be used on colorless-type allies up to level 19.
+Universal Crystal\Growth\999999\Used for leveling up.  Can be used on any ally level 20 and higher.
+Universal Shard\Growth\999999\Used for leveling up.  Can be used on any ally up to level 19.
+Verdant Badge\Growth\999999\Used to unlock potential in allies.  Increase rarity for a 3<:Icon_Rarity_3:448266417934958592> or lower green-type ally.  Also used in the Sacred Seal Forge.
+Verdant Crystal\Growth\999999\Used for leveling up.  Can be used on green-type allies level 20 and higher.
+Verdant Shard\Growth\999999\Used for leveling up.  Can be used on green-type allies up to level 19.
+Dancer's Veil\Assault\99\Allows one random ally that has already acted to take another action.
+Elixir\Assault\99\Restores 99 HP to all allies.
+Fear Charm\Assault\99\All enemies are prevented from counterattacking until each foe's next action.
+Fortifying Horn\Assault\99\Grants all allies Atk/Spd/Def/Res+6 for 1 turn.
+Infantry Boots\Assault\99\Grants +1 movement to all allies for 1 turn.
+Lightning Charm\Assault\99\Inflicts 20 damage to all enemies.
+Naga's Tear\Assault\99\Grants Atk/Spd/Def/Res+6 to two allies who have yet to act, effective for 1 turn.  Specials are also enabled.
+Panic Charm\Assault\99\Bonuses on all enemies become penalties through each foe's next action.
+Pressure Charm\Assault\99\Limits all enemy movement to 1 space through each foe's next action.
+Special Blade\Assault\99\Enables use of Specials for all allies.
+Aether Stone SP\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Multiple different Aether Raids-related events.
+Battle Flag\Event\9999\Used to participate in Voting Gauntlets.\Multiplies user score from a single battle by amount of flags spent.
+Conquest Lance\Event\99\Grants +8 stamina for Grand Conquests.\Grand Conquest stamina is different from stamina for other modes.
+Havoc Axe\Event\99\Grants +8 stamina for Rokkr Sieges.\Rokkr Sieges stamina is different from stamina for other modes.
+Forma Torch\Event\99\Used to extend stamina in the Hall of Forms.\Hall of Forms
+Forma Soul\Event\999999\An enigmatic treasure used to transform Forma units into allies by imbuing them with souls.\Actual maximum is limited to the number of months since March 2020, inclusive.
+First Summon Ticket\Event\99\This ticket can be used only for the specified summoning event. It will let you start a summoning session without using Orbs.\Each type of ticket is limited to its own specific banner.  Eight types of tickets have been seen so far.
+Frosty Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\New Year's 2019
+Spring Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Spring 2019
+Summer Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Summer 2019
+Fall Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Fall 2019
+Guardian Shield\Event\999\
