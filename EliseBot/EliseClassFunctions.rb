@@ -596,7 +596,7 @@ def disp_more_info(event,mode=0) # used by the `help` command to display info th
     end
     create_embed(event,"",str,0x40C0F0)
   elsif mode==1
-    u=[$dev_units,$donor_units].flatten.reject{|q| q.boon==' ' || q.bane==' '}.sample.clone
+    u=[$dev_units,$donor_units].flatten.reject{|q| q.boon==' ' || q.bane==' ' || q.boon=='' || q.bane==''}.sample.clone
     return "**IMPORRTANT NOTE**\nUnlike my other commands, this one is heavily context based.  Please format all allies like the example below:\n```#{u.rarity}* #{u.name} +#{u.merge_count} +#{u.boon} -#{u.bane} +#{u.dragonflowers}``` (first +# is merges, second is dragonflowers)\nAny field with the exception of unit name can be ignored, but unlike my other commands the order is important."
   elsif [2,3,4].include?(mode)
     str="__**Allowed#{" unit" if mode==2}#{" skill" if mode==3} descriptions**__"
@@ -962,6 +962,7 @@ class FEHSkill
     end
     return false if @restrictions.map{|q| q.downcase}.include?('no one')
     return true if @restrictions.map{|q| q.downcase}.include?('everyone')
+    return true if @type.include?('Weapon') && has_any?(@tags,['Blade','Tome']) && unit.name=='Kiran' && unit.owner.nil?
     for i in 0...@restrictions.length
       x="#{@restrictions[i]}"
       if x=='Tome Users Only'
@@ -1845,6 +1846,22 @@ class FEHPath
   end
 end
 
+class FEHBonus
+  def colosseum_season
+    return -1 if @type=='Tempest' || @start_date.nil?
+    t=Time.new(2017,2,2)
+    t2=Time.new(@start_date[2],@start_date[1],@start_date[0])
+    return ((t2-t)/(24*60*60)/7).to_i+2
+  end
+  
+  def elements
+    return @elements unless @elements.nil? || @elements.length<=0
+    return @elements unless @type=='Aether'
+    return ['Astra', 'Anima'] if self.colosseum_season%2==1
+    return ['Light', 'Dark']
+  end
+end
+
 class FEHCode
   def dispCost(ign=true)
     m=[]
@@ -1920,22 +1937,6 @@ class FGOServant
     @crit_star=val.split(', ')
     @crit_star[0]=@crit_star[0].to_i
     @crit_star[1]=@crit_star[1].to_f
-  end
-end
-
-class FEHBonus
-  def colosseum_season
-    return -1 if @type=='Tempest' || @start_date.nil?
-    t=Time.new(2017,2,2)
-    t2=Time.new(@start_date[2],@start_date[1],@start_date[0])
-    return ((t2-t)/(24*60*60)/7).to_i+2
-  end
-  
-  def elements
-    return @elements unless @elements.nil? || @elements.length<=0
-    return @elements unless @type=='Aether'
-    return ['Astra', 'Anima'] if self.colosseum_season%2==1
-    return ['Light', 'Dark']
   end
 end
 
@@ -2100,7 +2101,7 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   stt=['HP','Atk','Spd','Def','Res']
   markxane=false
   for i in 0...statlimits.length
-    untz=untz.reject{|q| q.stats40[i]<=statlimits[i][0] || q.stats40[i]>=statlimits[i][1]}
+    untz=untz.reject{|q| q.stats40.nil? || q.stats40[1].nil? || q.stats40[i]<=statlimits[i][0] || q.stats40[i]>=statlimits[i][1]}
     if statlimits[i][0]>statlimits[i][1]
       tmp=statlimits[i][0]*1
       statlimits[i][0]=statlimits[i][1]*1
@@ -3374,6 +3375,7 @@ def sort_units(bot,event,args=nil)
   end
   event.channel.send_temporary_message('Units found, sorting now...',3) rescue nil
   k=k.reject{|q| q.stats40.max<=0} # remove units for whom stats are unknown
+  k=k.reject{|q| q.stats40[0,5].max<=0} unless has_any?(args,['enemy','enemies'])
   t=0
   b=0
   for i in 0...args.length
@@ -3384,7 +3386,8 @@ def sort_units(bot,event,args=nil)
     end
   end
   for i in 0...k.length
-    k[i].sort_data=k[i].stats40.map{|q| q}
+    k[i].sort_data=k[i].stats40[0,5]
+    k[i].sort_data=k[i].stats40[5,5] if k[i].stats40[0,5].max<=0
     k[i].sort_data=k[i].sort_data.map{|q| q+2} if k[i].hasResplendent?
     k[i].sort_data.push(k[i].sort_data[0,5].inject(0){|sum,x| sum + x })
     k[i].sort_data.push([k[i].sort_data[3],k[i].sort_data[4]].min)
@@ -6392,8 +6395,9 @@ def combined_BST(bot,event,args=[])
             ['Corrin(F)', 0, 0, 0, ['Corrin(F)(Launch)', 'Corrin(F)(Summer)', 'Corrin(F)(Adrift)', 'Corrin(F)(Fallen)', 'Corrin(F)(Dusk)']],
             ['Corrin(M)', 0, 0, 0, ['Corrin(M)(Launch)', 'Corrin(M)(Winter)', 'Corrin(M)(Adrift)', 'Corrin(M)(Fallen)', 'Kamui']],
             ['Corrin', 0, 0, 0, ['Corrin(F)(Launch)', 'Corrin(F)(Summer)', 'Corrin(F)(Adrift)', 'Corrin(F)(Fallen)', 'Corrin(F)(Dusk)', 'Corrin(M)(Launch)', 'Corrin(M)(Winter)', 'Corrin(M)(Adrift)', 'Corrin(M)(Fallen)', 'Kamui']],
-            ['Edelgard', 0, 0, 0, ['Edelgard', 'Flame Emperor', 'Edelgard(Emperor)', 'Edelgard(Brave)']],
-            ['Eirika', 0, 0, 0, ['Eirika(Bonds)', 'Eirika(Memories)', 'Eirika(Graceful)', 'Eirika(Winter)']],
+            ['Dimitri', 0, 0, 0, ['Dimitri', 'Dimitri(Brave)', 'Dimitri(Savior)', 'Dimitri(Fallen)']],
+            ['Edelgard', 0, 0, 0, ['Edelgard', 'Flame Emperor', 'Edelgard(Emperor)', 'Edelgard(Brave)', 'Edelgard(Fallen)']],
+            ['Eirika', 0, 0, 0, ['Eirika(Bonds)', 'Eirika(Memories)', 'Eirika(Graceful)', 'Eirika(Winter)', 'Eirika(Brave)']],
             ['Elise', 0, 0, 0, ['Elise', 'Elise(Summer)', 'Elise(Bath)']],
             ['Ephraim', 0, 0, 0, ['Ephraim', 'Ephraim(Fire)', 'Ephraim(Brave)', 'Ephraim(Winter)', 'Ephraim(Dynastic)']],
             ['Est', 0, 0, 0, ['Est', 'Est(Bunny)', 'Palla(Retro)']],
@@ -6412,6 +6416,7 @@ def combined_BST(bot,event,args=[])
             ['Lyn', 0, 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)', 'Lyn(Summer)']],
             ['Marth', 0, 0, 0, ['Marth', 'Marth(Groom)', 'Marth(Masked)', 'Marth(King)', 'Marth(Winter)', 'Marth(Retro)']],
             ['Micaiah', 0, 0, 0, ['Micaiah', 'Micaiah(Festival)', 'Micaiah(Brave)']],
+            ['Morgan', 0, 0, 0, ['Morgan(M)', 'Morgan(F)', 'Morgan(M)(Fallen)', 'Morgan(F)(Fallen)']],
             ['Ninian', 0, 0, 0, ['Ninian', 'Ninian(Bride)', 'Tiki(Young)(Halloween)']],
             ['Nino', 0, 0, 0, ['Nino(Launch)', 'Nino(Fangs)', 'Nino(Winter)']],
             ['Olivia', 0, 0, 0, ['Olivia(Launch)', 'Olivia(Performing)', 'Olivia(Traveler)']],
@@ -6469,7 +6474,7 @@ def combined_BST(bot,event,args=[])
           braves[i2][1]+=1 if ['Celica(Brave)','Ephraim(Brave)','Hector(Brave)','Veronica(Brave)'].include?(x[i][0].name)
           braves[i2][2]+=1 if ['Micaiah(Brave)','Camilla(Brave)','Alm(Brave)','Eliwood(Brave)'].include?(x[i][0].name)
           braves[i2][3]+=1 if ['Claude(Brave)','Dimitri(Brave)','Edelgard(Brave)','Lysithea(Brave)'].include?(x[i][0].name)
-          braves[i2][4]+=1 if [].include?(x[i][0].name)
+          braves[i2][4]+=1 if ['Marianne(Brave)','Gatekeeper(Brave)','Marth(Brave)','Eirika(Brave)'].include?(x[i][0].name)
           counters[15][i2]+=1 if summon_type.include?('y')
           counters[16][i2]+=1 if summon_type.include?('g')
           counters[17][i2]+=1 if summon_type.include?('t')
@@ -6972,6 +6977,10 @@ def find_alts(bot,event,args=[])
     if f[0][0].include?('[') && !f.find_index{|q| q[0]==a[i].split('[')[0]}.nil?
       m=f[f.find_index{|q| q[0]==a[i].split('[')[0]}].map{|q| q}
       f=f.reject{|q| q[0]==a[i].split('[')[0]}
+      f.unshift(m.map{|q| q})
+    elsif a[i].split('[')[0]=='Camus'
+      m=f[f.find_index{|q| q[0]=="#{a[i].split('[')[0]}[SD]"}].map{|q| q}
+      f=f.reject{|q| q[0]=="#{a[i].split('[')[0]}[SD]"}
       f.unshift(m.map{|q| q})
     end
     if f.length==1 && f[0][0]==a[i]
@@ -9057,15 +9066,17 @@ def find_kiran_face(event,forcemathoo=false)
   face='Male 1' if has_any?(args,['male1','boy1','m1','man1'])
   face='Male 2' if has_any?(args,['male2','boy2','m2','man2'])
   face='Male 3' if has_any?(args,['male3','boy3','m3','man3'])
+  face='Male 3' if has_any?(args,['male4','boy4','m4','man4'])
   face='Female 1' if has_any?(args,['female0','woman0','girl0','f0']) && event.user.id==167657750971547648
   face='Female 1' if has_any?(args,['female1','woman1','girl1','f1'])
   face='Female 2' if has_any?(args,['female2','woman2','girl2','f2'])
   face='Female 3' if has_any?(args,['female3','woman3','girl3','f3'])
+  face='Female 3' if has_any?(args,['female4','woman4','girl4','f4'])
   if face.length<=0
     gender=''; level=-1
     m=1
     for i in 0...args.length
-      level=args[i].to_i if args[i].to_i.to_s==args[i] && args[i].to_i>=m && args[i].to_i<=7
+      level=args[i].to_i if args[i].to_i.to_s==args[i] && args[i].to_i>=m && args[i].to_i<=9
       gender='Male' if ['male','boy','m','man'].include?(args[i])
       gender='Female' if ['female','woman','girl','f'].include?(args[i])
     end
@@ -9075,14 +9086,14 @@ def find_kiran_face(event,forcemathoo=false)
     elsif gender.length<=0
       level=1 if level<1 && event.user.id != 167657750971547648
       level=0 if level<0
-      face=['Female 0','Default','Male 1','Male 2','Male3','Female 1','Female 2','Female 3'][level]
+      face=['Female 0','Default','Male 1','Male 2','Male3','Female 1','Female 2','Female 3','Male 4','Female 4'][level]
     elsif level<0
       level=1
       level=0 if gender=='Female' && event.user.id==167657750971547648
     else
-      level-=4 if level>3 && gender=='Female'
+      level-=5 if level>4 && gender=='Female'
       level=1 if level<1 && gender=='Male'
-      level=3 if level>3
+      level=4 if level>4
     end
     face="#{gender} #{level}" unless gender.length<=0
   end
@@ -9121,6 +9132,7 @@ def disp_unit_art(bot,event,args=[],xname=nil)
       movement.push('Pegasus') if ['flier','flying','flyer','fly','pegasus','fliers','flyers','pegasi'].include?(args[i].downcase)
       movement.push('Wyvern') if ['wyvern','wyverns'].include?(args[i].downcase)
       movement.push('Cavalry') if ['cavalry','horse','pony','horsie','horses','horsies','ponies','cavalier','cavaliers','cav','cavs'].include?(args[i].downcase)
+      movement.push('Steam') if ['steam','mecha','mech','robot'].include?(args[i].downcase)
       movement.push('Infantry') if ['infantry','foot','feet'].include?(args[i].downcase)
       movement.push('Armor') if ['armor','armour','armors','armours','armored','armoured'].include?(args[i].downcase)
     end
@@ -9145,11 +9157,14 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     color_weapons=["#{colors[0]}_#{weapons[0]}".gsub('Red_Blade','Sword').gsub('Blue_Blade','Lance').gsub('Green_Blade','Axe')] if color_weapons.length<=0
     movement=['Infantry'] if movement.length<=0
     movement[0]='Flier' if color_weapons[0][color_weapons[0].length-6,6]=='Dragon' && ['Pegasus','Wyvern'].include?(movement[0])
+    movement[0]='Cavalry' if movement[0]=='Steam' && !['Sword','Axe','Lance'].include?(color_weapons[0])
     art="https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/GENERICS/#{color_weapons[0]}_#{movement[0]}/BtlFace.png"
     if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond art
     else
-      create_embed(event,"__Generic: **#{color_weapons[0]}_#{movement[0]}**__",'',0x800000,nil,[nil,art])
+      str="__Generic: **#{color_weapons[0]}_#{movement[0]}**__"
+      str="__Generic: **#{movement[0]}_#{color_weapons[0]}**__" if movement[0]=='Steam'
+      create_embed(event,str,'',0x800000,nil,[nil,art])
     end
     return nil
   elsif x.is_a?(Array)
@@ -9168,8 +9183,8 @@ def disp_unit_art(bot,event,args=[],xname=nil)
   resp=false unless x.hasResplendent?
   if has_any?(args,['sprite'])
     m=false
-    IO.copy_stream(open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{x.name.gsub(' ','_')}#{'_Resplendent' if resp}.png"),"C:/Users/Mini-Matt/Desktop/devkit/FEHTemp#{Shardizard}.png") rescue m=true
-    if File.size("C:/Users/Mini-Matt/Desktop/devkit/FEHTemp#{Shardizard}.png")>100 && !m
+    IO.copy_stream(open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{x.name.gsub(' ','_')}#{'_Resplendent' if resp}.png"),"#{$location}devkit/FEHTemp#{Shardizard}.png") rescue m=true
+    if File.size("#{$location}devkit/FEHTemp#{Shardizard}.png")>100 && !m
       artype=['Sprite','In-game Sprite ~~with default weapon~~']
       x.artist=nil
       x.voice_na=nil
@@ -9253,8 +9268,8 @@ def disp_unit_art(bot,event,args=[],xname=nil)
   for i in 0...zart.length
     charza=x.name.gsub(' ','_')
     m=false
-    IO.copy_stream(open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{charza}/Face_#{zart[i]}.png"), "C:/Users/Mini-Matt/Desktop/devkit/FEHTemp#{Shardizard}.png") rescue m=true
-    unless File.size("C:/Users/Mini-Matt/Desktop/devkit/FEHTemp#{Shardizard}.png")<=100 || m || artype2.length>1
+    IO.copy_stream(open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{charza}/Face_#{zart[i]}.png"), "#{$location}devkit/FEHTemp#{Shardizard}.png") rescue m=true
+    unless File.size("#{$location}devkit/FEHTemp#{Shardizard}.png")<=100 || m || artype2.length>1
       artype2=["Face_#{zart[i]}","#{zart[i].gsub('_',' ')}"]
     end
   end
@@ -10552,8 +10567,8 @@ def dev_flower_list(event,bot,args=[])
     event.respond "<:Dragonflower_Infantry:541170819980722176><:Dragonflower_Orange:552648156790390796><:Dragonflower_Cavalry:541170819955556352><:Dragonflower_Armor:541170820001824778><:Dragonflower_Cyan:552648156202926097><:Dragonflower_Flier:541170820089774091><:Dragonflower_Purple:552648232673607701><:Dragonflower_Pink:552648232510160897>\nI won't post a list of all your units here, so instead, look at all the pretty flowers!\nhttps://www.getrandomthings.com/list-flowers.php"
     return nil
   end
-  x=$dev_units.map{|q| q}
-  x=$dev_units.reject{|q| mov[0]!=q.movement} if mov.length>0
+  x=$dev_units.reject{|q| q.name=='Kiran'}
+  x=$dev_units.reject{|q| mov[0]!=q.movement || q.name=='Kiran'} if mov.length>0
   x=x.reject{|q| q.dragonflowers<q.dragonflowerMax} if completex
   x=x.reject{|q| !q.fake.nil?}
   for i in 0...x.length
@@ -10705,6 +10720,18 @@ def new_devunit(bot,event,xname,flurp=[])
   return nil
 end
 
+def kiran_weapon(m)
+  m=m[0,2] if m.length>0
+  return 'Sword Breidablik' if m==['Red', 'Blade']
+  return 'Lance Breidablik' if m==['Blue', 'Blade']
+  return 'Axe Breidablik' if m==['Green', 'Blade']
+  return 'Scarlet Breidablik' if m==['Red', 'Tome']
+  return 'Azure Breidablik' if m==['Blue', 'Tome']
+  return 'Jade Breidablik' if m==['Green', 'Tome']
+  return 'Dire Breidablik' if m==['Colorless', 'Tome']
+  return 'Breidablik'
+end
+
 def dev_edit(bot,event,args=[],cmd='')
   if ((cmd.nil? || cmd.length.zero?) && (args.nil? || args.length.zero?)) || cmd.downcase=='help'
     subcommand=nil
@@ -10773,6 +10800,62 @@ def dev_edit(bot,event,args=[],cmd='')
       str="#{unt.name}#{unt.emotes(bot,false)} has been added to your \"nobodies\" list."
       devunits_save()
       event.respond str
+    end
+    return nil
+  elsif ['kiranweapon','kirantype','summonerweapon','summonertype'].include?(cmd.downcase) || (unt.name=='Kiran' && cmd.downcase=='weapon')
+    dunit=$dev_units.find_index{|q| q.name==unt.name}
+    if dunit.nil?
+      $stored_event=[event,unt,dunit,flurp]
+      event.respond 'You do not have this unit.  Do you wish to add them to your collection?'
+      event.channel.await(:bob, contains: /(yes)|(no)/i, from: 167657750971547648) do |e|
+        if e.message.text.downcase.include?('no')
+          e.respond 'Okay.'
+        else
+          new_devunit(bot,e,$stored_event[1].name,$stored_event[3])
+        end
+      end
+      return nil
+    end
+    m=['', '']
+    m[0]='Red' if has_any?(['red','reds'],args.map{|q| q.downcase})
+    m[0]='Blue' if has_any?(['blue','blues'],args.map{|q| q.downcase})
+    m[0]='Green' if has_any?(['green','greens','grean','greans'],args.map{|q| q.downcase})
+    m[0]='Colorless' if has_any?(['colorless','colourless','colorlesses','colourlesses','clear','clears'],args.map{|q| q.downcase})
+    m[1]='Blade' if has_any?(['physical','blade','blades','close','closerange'],args.map{|q| q.downcase})
+    m[1]='Tome' if has_any?(['tome','mage','spell','tomes','mages','spells','range','ranged','distance','distant'],args.map{|q| q.downcase})
+    m=['Red','Blade'] if has_any?(['sword','swords','katana'],args.map{|q| q.downcase})
+    m=['Blue','Blade'] if has_any?(['lance','lances','lancer','lancers','spear','spears','naginata'],args.map{|q| q.downcase})
+    m=['Green','Blade'] if has_any?(['axe','axes','ax','club','clubs'],args.map{|q| q.downcase})
+    m=['Red','Tome'] if has_any?(['redtome','redtomes','redmage','redmages'],args.map{|q| q.downcase})
+    m=['Blue','Tome'] if has_any?(['bluetome','bluetomes','bluemage','bluemages'],args.map{|q| q.downcase})
+    m=['Green','Tome'] if has_any?(['greentome','greentomes','greenmage','greenmages'],args.map{|q| q.downcase})
+    if m.map{|q| q.length}.max<=0
+      event.respond "Please specify the type of weapon you would like Kiran to use."
+      return nil
+    end
+    m[0]='Colorless' if m[0].length<=0
+    m[1]='Tome' if m[1].length<=0
+    m[0]='Red' if m[0]=='Colorless' && m[1]=='Blade'
+    if m==$dev_units[dunit].weapon
+      event.respond "Your **#{$dev_units[dunit].name}#{$dev_units[dunit].emotes(bot,false)}** is already using that weapon type."
+    else
+      x=kiran_weapon($dev_units[dunit].weapon)
+      $dev_units[dunit].weapon=m
+      xx=false
+      for i in 0...$dev_units[dunit].skills[0].length
+        if $dev_units[dunit].skills[0][i]==x
+          $dev_units[dunit].skills[0][i]=kiran_weapon(m)
+          xx=true
+        end
+      end
+      devunits_save()
+      m="#{m.join(' ')}s"
+      m='Swords' if m=='Red Blades'
+      m='Lances' if m=='Blue Blades'
+      m='Axes' if m=='Green Blades'
+      str="You will need to edit #{$dev_units[dunit].pronoun(true)} weapon and skills yourself."
+      str="You will need to edit #{$dev_units[dunit].pronoun(true)} non-weapon skills yourself." if xx
+      event.respond "Your **#{$dev_units[dunit].name}#{$dev_units[dunit].emotes(bot,false)}** is now using #{m}.\n#{str}"
     end
     return nil
   end
@@ -11159,6 +11242,49 @@ def donor_edit(bot,event,args=[],cmd='')
   supdel=false if dunit.nil?
   if cmd.downcase=='create'
     new_donorunit(bot,event,uid,unt.name,flurp)
+  elsif ['kiranweapon','kirantype','summonerweapon','summonertype'].include?(cmd.downcase) || (unt.name=='Kiran' && cmd.downcase=='weapon')
+    m=['', '']
+    m[0]='Red' if has_any?(['red','reds'],args.map{|q| q.downcase})
+    m[0]='Blue' if has_any?(['blue','blues'],args.map{|q| q.downcase})
+    m[0]='Green' if has_any?(['green','greens','grean','greans'],args.map{|q| q.downcase})
+    m[0]='Colorless' if has_any?(['colorless','colourless','colorlesses','colourlesses','clear','clears'],args.map{|q| q.downcase})
+    m[1]='Blade' if has_any?(['physical','blade','blades','close','closerange'],args.map{|q| q.downcase})
+    m[1]='Tome' if has_any?(['tome','mage','spell','tomes','mages','spells','range','ranged','distance','distant'],args.map{|q| q.downcase})
+    m=['Red','Blade'] if has_any?(['sword','swords','katana'],args.map{|q| q.downcase})
+    m=['Blue','Blade'] if has_any?(['lance','lances','lancer','lancers','spear','spears','naginata'],args.map{|q| q.downcase})
+    m=['Green','Blade'] if has_any?(['axe','axes','ax','club','clubs'],args.map{|q| q.downcase})
+    m=['Red','Tome'] if has_any?(['redtome','redtomes','redmage','redmages'],args.map{|q| q.downcase})
+    m=['Blue','Tome'] if has_any?(['bluetome','bluetomes','bluemage','bluemages'],args.map{|q| q.downcase})
+    m=['Green','Tome'] if has_any?(['greentome','greentomes','greenmage','greenmages'],args.map{|q| q.downcase})
+    if m.map{|q| q.length}.max<=0
+      event.respond "Please specify the type of weapon you would like Kiran to use."
+      return nil
+    end
+    m[0]='Colorless' if m[0].length<=0
+    m[1]='Tome' if m[1].length<=0
+    m[0]='Red' if m[0]=='Colorless' && m[1]=='Blade'
+    if m==dulx[dunit].weapon
+      event.respond "Your **#{dulx[dunit].name}#{dulx[dunit].emotes(bot,false)}** is already using that weapon type."
+    else
+      x=kiran_weapon(dulx[dunit].weapon)
+      dulx[dunit].weapon=m
+      xx=false
+      for i in 0...dulx[dunit].skills[0].length
+        if dulx[dunit].skills[0][i]==x
+          dulx[dunit].skills[0][i]=kiran_weapon(m)
+          xx=true
+        end
+      end
+      devunits_save()
+      m="#{m.join(' ')}s"
+      m='Swords' if m=='Red Blades'
+      m='Lances' if m=='Blue Blades'
+      m='Axes' if m=='Green Blades'
+      str="You will need to edit #{dulx[dunit].pronoun(true)} weapon and skills yourself."
+      str="You will need to edit #{dulx[dunit].pronoun(true)} non-weapon skills yourself." if xx
+      event.respond "Your **#{dulx[dunit].name}#{dulx[dunit].emotes(bot,false)}** is now using #{m}.\n#{str}"
+    end
+    return nil
   elsif (['remove','delete','send_home','sendhome','fodder'].include?(cmd.downcase) || 'send home'=="#{cmd} #{args[0]}".downcase) && !supdel
     if !dunit.nil?
       dunit=dulx[dunit]
@@ -11357,6 +11483,21 @@ def donor_edit(bot,event,args=[],cmd='')
     end
     if skl.type.include?('Weapon')
       dulx[dunit].skills[0]=mm.map{|q| q}
+      if dulx[dunit].name=='Kiran'
+        newclz=nil
+        newclz=['Red', 'Blade'] if m[-1].weapon_class=='Sword (Red Blade)'
+        newclz=['Red', 'Tome'] if m[-1].weapon_class=='Sword (Red Blade)'
+        newclz=['Blue', 'Blade'] if m[-1].weapon_class=='Sword (Red Blade)'
+        newclz=['Blue', 'Tome'] if m[-1].weapon_class=='Sword (Red Blade)'
+        newclz=['Green', 'Blade'] if m[-1].weapon_class=='Sword (Red Blade)'
+        newclz=['Green', 'Tome'] if m[-1].weapon_class=='Sword (Red Blade)'
+        newclz=['Purple', 'Summon Gun'] if m[-1].weapon_class=='Summon Gun'
+        if dulx[dunit].weapon.nil?
+          event.respond "#{dulx[dunit].name}#{dulx[dunit].emotes(bot,false)} cannot equip that weapon.  Please try again."
+          return nil
+        end
+        dulx[dunit].weapon=newclz
+      end
     elsif skl.type.include?('Assist')
       dulx[dunit].skills[1]=mm.map{|q| q}
     elsif skl.type.include?('Special')
@@ -12156,30 +12297,30 @@ def snagstats(event,bot,f=nil,f2=nil)
   elsif ['code','lines','line','sloc'].include?(f.downcase)
     event.channel.send_temporary_message('Calculating data, please wait...',3) rescue nil
     b=[[],[],[],[],[]]
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
+    File.open("#{$location}devkit/PriscillaBot.rb").each_line do |line|
       l=line.gsub("\n",'')
       b[0].push(l)
       b[3].push(l)
       l=line.gsub("\n",'').gsub(' ','')
       b[1].push(l) unless l.length<=0
     end
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/rot8er_functs.rb').each_line do |line|
+    File.open("#{$location}devkit/rot8er_functs.rb").each_line do |line|
       l=line.gsub("\n",'')
       b[0].push(l)
       l=line.gsub("\n",'').gsub(' ','')
       b[2].push(l) unless l.length<=0
     end
-    File.open('C:/Users/Mini-Matt/Desktop/devkit/EliseClassFunctions.rb').each_line do |line|
+    File.open("#{$location}devkit/EliseClassFunctions.rb").each_line do |line|
       l=line.gsub("\n",'')
       b[0].push(l)
       l=line.gsub("\n",'').gsub(' ','')
       b[2].push(l) unless l.length<=0
     end
-    event << "**I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long.**"
+    event << "**I am #{longFormattedNumber(File.foreach("#{$location}devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of code long.**"
     event << "Of those, #{longFormattedNumber(b[1].length)} are SLOC (non-empty)."
     event << "~~When fully collapsed, I appear to be #{longFormattedNumber(b[3].reject{|q| q.length>0 && (q[0,2]=='  ' || q[0,3]=='end' || q[0,4]=='else')}.length)} lines of code long.~~"
     event << ''
-    event << "**I rely on multiple libraries that in total are #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/rot8er_functs.rb").inject(0) {|c, line| c+1}+File.foreach("C:/Users/Mini-Matt/Desktop/devkit/EliseMulti1.rb").inject(0) {|c, line| c+1}+File.foreach("C:/Users/Mini-Matt/Desktop/devkit/EliseText.rb").inject(0) {|c, line| c+1})} lines of code long.**"
+    event << "**I rely on multiple libraries that in total are #{longFormattedNumber(File.foreach("#{$location}devkit/rot8er_functs.rb").inject(0) {|c, line| c+1}+File.foreach("#{$location}devkit/EliseMulti1.rb").inject(0) {|c, line| c+1}+File.foreach("#{$location}devkit/EliseText.rb").inject(0) {|c, line| c+1})} lines of code long.**"
     event << "Of those, #{longFormattedNumber(b[2].length)} are SLOC (non-empty)."
     event << ''
     event << "**There are #{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command('}.length)} commands, invoked with #{longFormattedNumber(all_commands().length)} different phrases.**"
@@ -12241,7 +12382,7 @@ def snagstats(event,bot,f=nil,f2=nil)
   all_skills=$skills.reject{|q| q.level=='example'} if event.server.nil? && event.user.id==167657750971547648
   legal_skills=$skills.reject{|q| q.level=='example' || !q.fake.nil?}
   b=[]
-  File.open('C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb').each_line do |line|
+  File.open("#{$location}devkit/PriscillaBot.rb").each_line do |line|
     l=line.gsub(' ','').gsub("\n",'')
     b.push(l) unless l.length<=0
   end
@@ -12365,7 +12506,7 @@ def snagstats(event,bot,f=nil,f2=nil)
   str2="#{str2}\nThere are #{longFormattedNumber(glbl.length)} global and #{longFormattedNumber(srv_spec.length)} server-specific [single-]accessory aliases."
   str=extend_message(str,str2,event,2)
   str=extend_message(str,"**There are #{longFormattedNumber($groups.reject{|q| !q.fake.nil?}.length-1)} global and #{longFormattedNumber($groups.reject{|q| q.fake.nil?}.length)} server-specific *groups*.**",event,2)
-  str2="**I am #{longFormattedNumber(File.foreach("C:/Users/Mini-Matt/Desktop/devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of *code* long.**"
+  str2="**I am #{longFormattedNumber(File.foreach("#{$location}devkit/PriscillaBot.rb").inject(0) {|c, line| c+1})} lines of *code* long.**"
   str2="#{str2}\nOf those, #{longFormattedNumber(b.length)} are SLOC (non-empty)."
   str=extend_message(str,str2,event,2)
   event.respond str

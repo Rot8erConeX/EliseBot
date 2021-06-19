@@ -20,7 +20,7 @@ Bright Shrine\6\Offensive\At start of turn, inflicts Atk/Spd-7 on foe on the ene
 Bright Shrine\6\Defensive\At start of turn, inflicts Atk/Spd-7 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 1500, 0, 0\0
 Bright Shrine\7\Offensive\At start of turn, inflicts Atk/Spd-8 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 0, 3000, 0\0
 Bright Shrine\7\Defensive\At start of turn, inflicts Atk/Spd-8 on foe on the enemy team with the highest Atk+Spd total through its next action.\Yes\0, 3000, 0, 0\0
-Bolt Tower\example\Offensive/Defensive\At the start of turn 3, deals `(5*level+5)` damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 100, 0, 0\0
+Bolt Tower\example\Offensive/Defensive\At the start of turn 3, deals `(5*level+5)` damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 5000, 5000, 0\0
 Bolt Tower\1\Offensive/Defensive\At the start of turn 3, deals 10 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 100, 0, 0\0
 Bolt Tower\2\Offensive/Defensive\At the start of turn 3, deals 15 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 300, 0, 0\0
 Bolt Tower\3\Offensive/Defensive\At the start of turn 3, deals 20 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 500, 0, 0\0
@@ -28,6 +28,10 @@ Bolt Tower\4\Offensive/Defensive\At the start of turn 3, deals 25 damage to foes
 Bolt Tower\5\Offensive/Defensive\At the start of turn 3, deals 30 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 900, 0, 0\0
 Bolt Tower\6\Offensive\At the start of turn 3, deals 35 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 0, 1500, 0\0
 Bolt Tower\6\Defensive\At the start of turn 3, deals 35 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 1500, 0, 0\0
+Bolt Tower\7\Offensive\At the start of turn 3, deals 40 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 0, 3000, 0\0
+Bolt Tower\7\Defensive\At the start of turn 3, deals 40 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 3000, 0, 0\0
+Bolt Tower\8\Offensive\At the start of turn 3, deals 45 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 0, 5000, 0\0
+Bolt Tower\8\Defensive\At the start of turn 3, deals 45 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 5000, 0, 0\0
 Catapult\example\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 5000, 5000, 0\0\Opposing fortresses cannot be destroyed
 Catapult\1\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 100, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\2\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 300, 0, 0\0\Opposing fortresses cannot be destroyed

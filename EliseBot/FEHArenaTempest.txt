@@ -1,8 +1,40 @@
-Ingrid, Marianne, Dedue, Linhardt, Solon, Nowi(Halloween), L'Arachel, Matthew, Ike(Vanguard), Anna\Arena\16/03/2021, 22/03/2021\Water, Earth
-Peony, Yune, Annand, Erinys, Azelle, Lex, Dithorba, Camus, Julia(Crusader), Sharena\Aether\16/03/2021, 22/03/2021\Cavalry School
-FEH, FE16\Resonant\16/03/2021, 22/03/2021
-Myrrh(Bunny), Severa(Bunny), Inigo(Bunny), Minerva(Bunny), Saleh(Bunny), Myrrh, Nah, Minerva\Tempest\17/03/2021, 27/09/2021\Bracing Blow 1, Spd/Def Solo 1
-Ingrid, Marianne, Dedue, Linhardt, Solon, Nowi(Halloween), L'Arachel, Matthew, Ike(Vanguard), Anna\Arena\23/03/2021, 29/03/2021\Fire, Earth
-Plumeria, Thrasir, Ingrid, Marianne, Dedue, Linhardt, Solon, Marth(Masked), Chrom(Branded), Anna\Aether\23/03/2021, 29/03/2021\Flier School
-FE1, FE3, FE11, FE12, FE8\Resonant\23/03/2021, 29/03/2021
-Mila, Sothis, Ingrid, Marianne, Dedue, Linhardt, Solon, Marth(Masked), Chrom(Branded), Anna\Aether\30/03/2021, 05/04/2021\Bright Shrine
+Nott, Palla(SoV), Zeke, Tatiana, Luthier, Fernand, Sharena(Bunny), Sothe, Marth(King), Anna\Arena\15/06/2021, 21/06/2021\Fire, Earth
+Ashera, Lif, Catria(Bride), Shanna(Bride), Juno(Bride), Saul(Groom), Zelot(Groom), Clive, Roy(Fire), Fjorm\Aether\15/06/2021, 21/06/2021\Bright Shrine
+FEH, FE6\Resonant\15/06/2021, 21/06/2021
+Nott, Palla(SoV), Zeke, Tatiana, Luthier, Fernand, Sharena(Bunny), Sothe, Marth(King), Anna\Arena\22/06/2021, 28/06/2021\Fire, Water
+Mila, Nott, Palla(SoV), Zeke, Tatiana, Luthier, Fernand, Valter, Celica(Queen), Alfonse\Aether\22/06/2021, 28/06/2021\Dark Shrine
+Hilda(3H)(Summer), Mercedes(Summer), Ashe(Summer), Caspar(Summer), Leonie(Summer), Hilda(3H), Marianne, Mercedes\Tempest\22/06/2021, 02/07/2021\Atk/Def Push 1, Def/Res Solo 1
+Nott, Palla(SoV), Zeke, Tatiana, Luthier, Fernand, Sharena(Bunny), Sothe, Marth(King), Anna\Arena\29/06/2021, 05/07/2021\Water, Wind
+-\Arena\06/07/2021, 12/07/2021\Water, Earth
+-\Arena\13/07/2021, 19/07/2021\Water, Fire
+-\Arena\20/07/2021, 26/07/2021\Water, Wind
+-\Arena\27/07/2021, 02/08/2021\Water, Earth
+-\Arena\03/08/2021, 07/08/2021\Earth, Fire
+-\Arena\10/08/2021, 16/08/2021\Earth, Wind
+-\Arena\17/08/2021, 23/08/2021\Earth, Water
+-\Arena\24/08/2021, 30/08/2021\Wind, Fire
+-\Arena\31/08/2021, 06/09/2021\Wind, Water
+-\Arena\07/09/2021, 13/09/2021\Wind, Earth
+-\Arena\14/09/2021, 20/09/2021\Wind, Fire
+-\Arena\21/09/2021, 27/09/2021\Wind, Water
+-\Arena\28/09/2021, 03/10/2021\Fire, Earth
+-\Arena\04/10/2021, 10/10/2021\Fire, Wind
+-\Arena\11/10/2021, 17/10/2021\Fire, Water
+-\Arena\18/10/2021, 24/10/2021\Fire, Earth
+-\Arena\25/10/2021, 31/10/2021\Earth, Wind
+-\Arena\01/11/2021, 07/11/2021\Earth, Fire
+-\Arena\08/11/2021, 14/11/2021\Earth, Water
+-\Arena\15/11/2021, 21/11/2021\Earth, Wind
+-\Arena\22/11/2021, 28/11/2021\Water, Fire
+-\Arena\29/11/2021, 05/12/2021\Water, Earth
+-\Arena\06/12/2021, 12/12/2021\Water, Wind
+-\Arena\13/12/2021, 19/12/2021\Water, Fire
+-\Arena\20/12/2021, 26/12/2021\Water, Earth
+-\Arena\27/12/2021, 02/01/2022\Wind, Fire
+-\Arena\03/01/2022, 09/01/2022\Wind, Earth
+-\Arena\10/01/2022, 16/01/2022\Wind, Water
+-\Arena\17/01/2022, 23/01/2022\Wind, Fire
+-\Arena\24/01/2022, 30/01/2022\Fire, Earth
+-\Arena\31/01/2022, 06/02/2022\Fire, Water
+-\Arena\07/02/2022, 13/02/2022\Fire, Wind
+-\Arena\14/02/2022, 20/02/2022\Fire, Earth

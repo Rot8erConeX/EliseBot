@@ -114,7 +114,7 @@ Ephemura (March 2021) 4\Shanna; 4; 0, 100
 Ephemura (March 2021) 5\Barst; 4; 0, 100
 Ephemura (March 2021) 6\Echidna; 4; 0, 100
 Ephemura (March 2021) 7\Forrest; 4; 0, 100
-Ephemura (April 2021) 0\05/04/2021, 27/04/2021
+Ephemura (April 2021) 0\05/04/2021, 10/05/2021
 Ephemura (April 2021) 1\Lukas(Picnic); 5; 0, 300
 Ephemura (April 2021) 2\Kana(F); 5; 0, 300
 Ephemura (April 2021) 3\Hinata; 4; 0, 100
@@ -122,3 +122,19 @@ Ephemura (April 2021) 4\Ena(Halloween); 4; 0, 100
 Ephemura (April 2021) 5\Tailtiu; 4; 0, 100
 Ephemura (April 2021) 6\Bartre; 4; 0, 100
 Ephemura (April 2021) 7\Mustafa; 4; 0, 100
+Ephemura (May 2021) 0\06/05/2021, 10/06/2021
+Ephemura (May 2021) 1\Sigrun(Bride); 5; 0, 300
+Ephemura (May 2021) 2\Ishtar; 5; 0, 300
+Ephemura (May 2021) 3\Selena(Fates); 4; 0, 100
+Ephemura (May 2021) 4\Hana(Ninja); 4; 0, 100
+Ephemura (May 2021) 5\Sothe; 4; 0, 100
+Ephemura (May 2021) 6\Nanna; 4; 0, 100
+Ephemura (May 2021) 7\Lena; 4; 0, 100
+Ephemura (June 2021) 0\06/06/2021, 10/07/2021
+Ephemura (June 2021) 1\Helbindi(Summer); 5; 0, 300
+Ephemura (June 2021) 2\Noire(Summer); 5; 0, 300
+Ephemura (June 2021) 3\Felix(Christmas); 4; 0, 100
+Ephemura (June 2021) 4\Ilyana; 4; 0, 100
+Ephemura (June 2021) 5\Nino(Launch); 4; 0, 100
+Ephemura (June 2021) 6\Keaton(NewYears); 4; 0, 100
+Ephemura (June 2021) 7\Klein; 4; 0, 100

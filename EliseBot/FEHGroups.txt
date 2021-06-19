@@ -54,7 +54,7 @@
 ["Van'sWaifus", ["Tharja", "Tharja(Winter)", "Tharja(Bride)", "Camilla", "Camilla(Spring)", "Camilla(Summer)", "Camilla(Winter)", "Corrin(F)", "Corrin(F)(Summer)", "Tiki(Adult)", "Tiki(Adult)(Summer)", "Cordelia", "Cordelia(Bride)", "Cordelia(Summer)", "Marisa", "Celica", "Felicia", "Cherche", "Genny", "Effie", "Linde", "Linde(Summer)", "Celica(Brave)"], [393775173095915521]]
 ["Waifus", ["Lilina(Valentines)", "Mae", "Minerva"], [356146569239855104]]
 ["Wedding", []]
-["Whitewings", ["Palla", "Catria(Launch)", "Est", "Narcian"]]
+["Whitewings", ["Palla(Launch)", "Catria(Launch)", "Est", "Palla(SoV)", "Catria(SoV)", "Narcian"]]
 ["Whitewings(Bunny)", ["Palla(Bunny)", "Catria(Bunny)", "Est(Bunny)", "Narcian(Bunny)"]]
 ["Winter", []]
 ["WorseThanLiki", []]

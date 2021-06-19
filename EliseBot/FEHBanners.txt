@@ -1,18 +1,57 @@
+Summer Vibrance\3\Ashe(Summer), Caspar(Summer), Hilda(3H)(Summer), Mercedes(Summer)\5\20/06/2021, 02/07/2021\Seasonal, Summer, NewUnits
+"Angling to Win" Tempest Trials+\3\Hilda(3H), Marianne, Mercedes\5\19/06/2021, 02/07/2021\Tempest
+Heroes with Special Fighter\3\Ephraim(Brave), Nagi, Tiki(Young)(Fallen)\5\18/06/2021, 25/06/2021\SkillBanner
+Ike & Julia's Battle\3\Ike(Fallen), Julia(Fallen), Lyon(Fallen)\5\17/06/2021, 25/06/2021\BHB
+Double Special Heroes (June 2021)\6\Altina(Christmas), Bernie(Christmas), Hilda(Christmas), Dheginsea(Halloween), Navarre(Ninja), Peony(NewYears), Sephiran(Christmas), Xane(Halloween)\5\15/06/2021, 29/06/2021\DoubleSpecial
+New Power (June 2021)\3\Flora, Karla, Sharena(Bunny), Sothe\5\10/06/2021, 16/06/2021\NewPower
+Book 5 Midpoint: Nott and More\3\Luthier, Nott, Palla(SoV), Zeke\5\08/06/2021, 30/06/2021\NewUnits
+Book V Midpoint: Daily Summoning Events\3\Bernie, Caineghis, Camilla(Adrift), Catria(SoV), Ced, Corrin(F)(Adrift), Fiora, Forsyth, Gerik, Helbindi, Hubert, Igrene, Julia(Fallen), Julian, Kaden, Keaton, Kiria, Kjelle, Kliff, Lilith, Mareeta, Mareeta(Fallen), Midori, Nils, Nino(Fangs), Olwen(World), Osian, Percival, Petra, Rinkah, Say'ri, Selkie, Shannan, Sirius, Sue, Surtr, Yarne\50\08/06/2021, 20/06/2021\Daily
+Bridal Blessings (2021 Rerun)\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)\5\07/06/2020, 24/06/2020\Seasonal, Bride
+Heroes with Form Skills (v2)\3\Anna(Apotheosis), Eyvel, Phina\5\03/06/2021, 09/06/2021\SkillBanner
+Bridal Bloom (2021 rerun)\3\Ninian(Bride), Sanaki(Bride), Tharja(Bride)\5\05/06/2021, 19/06/2021\Seasonal, Bride
+Mythic Heroes - Ashera: Order Goddess\-8\Ashera, Azelle, Azura(Vallite), Claude(Unification), Corrin(F)(Dusk), Dedue, Eliwood(Wind), Freyja, Peony, Ronan, Roy(Fire), Triandra\5\31/05/2021, 06/06/2021\Legendary
+Bridal Beloveds (2021 rerun)\3\Micaiah(Bride), Nailah(Bride), Oboro(Bride), Rafiel(Groom)\5\25/05/2021, 08/06/2021\Seasonal, Bride
+Bridal Grace\3\Catria(Bride), Juno(Bride), Saul(Groom), Shanna(Bride)\5\20/05/2021, 18/06/2021\Seasonal, Bride, NewUnits
+GHB Units\5\-\543\\Dynamic, GHB
+TT Units\5\-\54\\Dynamic, Tempest
+"Engagement" Tempest Trials+\3\Catria(SoV), Shanna, Thea\5\18/05/2021, 31/05/2021\Tempest
+Forces of Will\3\Dimitri(Fallen), Edelgard(Fallen), Morgan(F)(Fallen), Morgan(M)(Fallen)\5\07/05/2021, 31/05/2021\Fallen, NewUnits
+Maternal Matchups, part 1\3\Corrin(M)(Fallen), Larcei, Mercedes\5\28/05/2021, 07/06/2021\VotingGauntlet
+Maternal Matchups, part 2\3\Ewan, Klein, Ylgr\5\28/05/2021, 07/06/2021\VotingGauntlet
+Heroes with Joint Drive Skills\3\Kris(M), Lilith, Sara\5\17/05/2021, 28/05/2021\SkillBanner
+Leila & Matthew's Battle\3\Hector, Leila, Matthew\5\15/05/2021, 24/05/2021\BHB
+Legendary Hero Remix: Ryoma & Gunnthra\-6\Annette, Byleth(F), Ephraim(Fire), Gunnthra, Julian, Robin(F)(Fallen), Ryoma(Supreme), Tsubasa\5\13/05/2021, 20/05/2021\LegendaryRemix
+The Start of it All (April 2021 rerun)\3\Caeda(Retro), Marth(Retro), Merric(Retro), Palla(Retro)\5\20/04/2021, 19/05/2021\Seasonal, Retro
+Childhood Encounter\3\Eirika(Retro), L'Arachel(Retro), Lyon(Retro), Tana(Retro)\5\19/04/2021, 19/05/2021\Seasonal, Retro, NewUnits
+A Season of Picnics (2021 rerun)\3\Felicia(Picnic), Flora(Picnic), Genny(Picnic), Lukas(Picnic)\5\04/05/2021, 18/05/2021\Seasonal
+New Power (May 2021)\3\Hardin(Fallen), Ike, Ryoma, Zelgius\5\11/05/2021, 17/05/2021\NewPower
+Heroes with Resonance Shields\3\Camilla(Adrift), Idunn, Ranulf\5\03/05/2021, 11/05/2021\SkillBanner
+Golden Week (2021): Hero Fest, Part 4\5\Claude(Brave), Dimitri(Brave), Edelgard(Brave), Lysithea(Brave)\5\26/04/2021, 09/05/2021\CYL, HeroFest
+Golden Week (2021): Hero Fest, Part 3\5\Alm(Brave), Camilla(Brave), Eliwood(Brave), Micaiah(Brave)\5\26/04/2021, 09/05/2021\CYL, HeroFest
+Golden Week (2021): Hero Fest, Part 2\5\Celica(Brave), Ephraim(Brave), Hector(Brave), Veronica(Brave)\5\26/04/2021, 09/05/2021\CYL, HeroFest
+Golden Week (2021): Hero Fest, Part 1\5\Ike(Brave), Lucina(Brave), Lyn(Brave), Roy(Brave)\5\26/04/2021, 09/05/2021\CYL, HeroFest
+Shamire & Catherine's BHB\3\Catherine, Flayn, Shamir\5\01/05/2021, 08/05/2021\BHB
+Heroes with Bonfire (v3)\3\Mamori, Melady, Owain\5\23/04/2021, 03/05/2021\SkillBanner
+Legendary Heroes: Sigurd, Fated Holy Knight\-8\Asbel, Celica(Queen), Chrom(Crowned), Duma, Eir, Eleonora, Lilina(Firelight), Mirabilis, Seiros, Selena(Sacred), Sigurd(Fated), Thrasir\5\28/04/2021, 03/05/2021\Legendary
+"Princess's Gloom" Tempest Trials+\3\Ephraim, L'Arachel, Tana\5\17/04/2021, 30/04/2021\Tempest
+Bond of Trust\3\Erk, Farina, Louise, Pent\5\06/04/2021, 28/04/2021\NewUnits
+Double Special Heroes (April 2021)\6\Brigid(Pirate), Laevatein(Ninja), Lachesis(AwaOdori), Lyn(Ninja), Quan(AwaOdori), Tibarn(Pirate), Tiki(Young)(Halloween), Zihark(Ninja)\5\13/04/2021, 27/04/2021\DoubleSpecial
+Spring Festival (April 2021 rerun)\3\Camilla(Bunny), Chrom(Bunny), Lucina(Bunny), Xander(Bunny)\5\10/04/2021, 24/04/2021\Seasonal, Spring
+Heroes with Gap Skills\3\Annette, Larum, Miranda\5\16/04/2021, 22/04/2021\SkillBanner
+New Power (April 2021)\3\Hector(Valentines), Morgan(M), Quan, Sumia\5\08/04/2021, 16/04/2021\NewPower
+Wilful Rabbits\3\Inigo(Bunny), Minerva(Bunny), Myrrh(Bunny), Severa(Bunny)\5\17/03/2021, 14/04/2021\Seasonal, Bunny, NewUnits
 Heroes with Rally+ skills (v2)\3\Lugh, Midori, Ophelia\5\01/04/2021, 07/04/2021\SkillBanner
-Mythic Heroes: Dagr, Sun's Radiance\-8\Bramimond, Corrin(F)(Dusk), Dagr, Duessel, Edelgard(Emperor), Eirika(Graceful), Frejya, Guinivere, Lucina(Glorious), Marth(Hero), Reginn, Sara\5\30/03/2021, 05/04/2021\Legendary
+Familial Festivities (2021 revival)\3\Est(Bunny), Fir(Bunny), Idunn(Bunny), Narcian(Bunny)\5\24/03/2021, 07/04/2021\Seasonal, Spring
 Healer Royale! Part 1\3\Flayn, Natasha, Silque\8\27/03/2021, 06/04/2021\VotingGauntlet
 Healer Royale! Part 2\3\Brady, Forrest, Wrys\8\27/03/2021, 06/04/2021\VotingGauntlet
+Mythic Heroes: Dagr, Sun's Radiance\-8\Bramimond, Corrin(F)(Dusk), Dagr, Duessel, Edelgard(Emperor), Eirika(Graceful), Frejya, Guinivere, Lucina(Glorious), Marth(Hero), Reginn, Sara\5\30/03/2021, 05/04/2021\Legendary
 Heroes, Light and Shadow (rerun with sparking)\3\Julian, Kris(F), Kris(M), Lena\5\27/03/2021, 03/04/2021\NewHeroes
 Heroes with Rouse Skills (v2)\3\Corrin(M)(Fallen), Edelgard, Mareeta\5\25/03/2021, 01/04/2021\SkillBanner
-Familial Festivities (2021 revival)\3\Est(Bunny), Fir(Bunny), Idunn(Bunny), Narcian(Bunny)\5\24/03/2021, 07/04/2021\Seasonal, Spring
-AHR 2021 Top 4\3\Corrin(F)(Dusk), Dimitri(Savior), Lyn(Ninja), Seiros\5\22/03/2021, 28/03/2021
-Heroes with Null Skills\3\Corrin(M)(Adrift), Lyon(Fallen), Mareeta(Fallen)\5\19/03/2021, 25/03/2021\SkillBanner
-Wilful Rabbits\3\Inigo(Bunny), Minerva(Bunny), Myrrh(Bunny), Severa(Bunny)\5\17/03/2021, 14/04/2021\Seasonal, Bunny, NewUnits
 "Familiar Stranger" Tempest Trials+\3\Minerva, Myrrh, Nah\5\15/03/2021, 29/03/2021\Tempest
 Seeds of Fodlan\3\Dedue, Ingrid, Linhardt, Marianne\5\04/03/2021, 29/03/2021\NewUnits
 Love Abounds (2021 rerun)\3\Hector(Valentines), Lilina(Valentines), Lyn(Valentines), Roy(Valentines)\5\01/03/2021, 29/03/2021\Seasonal, Valentine's
-GHB Units\5\-\543\\Dynamic, GHB
-TT Units\5\-\54\\Dynamic, Tempest
+AHR 2021 Top 4\3\Corrin(F)(Dusk), Dimitri(Savior), Lyn(Ninja), Seiros\5\22/03/2021, 28/03/2021
+Heroes with Null Skills\3\Corrin(M)(Adrift), Lyon(Fallen), Mareeta(Fallen)\5\19/03/2021, 25/03/2021\SkillBanner
 Seliph & Deirdre's Battle\3\Deirdre, Seliph, Sigurd\5\12/03/2021, 20/03/2021\BHB
 New Power (February 2021)\3\Ayra, Ishtar, L'Arachel, Nowi(Halloween)\5\07/03/2021, 19/03/2021\NewPower
 Enduring Legacy\3\Annand, Azelle, Erinys, Lex\5\16/02/2021, 15/03/2021\NewUnits
@@ -142,7 +181,7 @@ Father-Complex Fray\3\Altena, Annette, Mareeta, Ross\5\27/06/2020, 07/07/2020\Vo
 Legendary Heroes - Seliph, Scion of Light\-8\Azura(Vallite), Ced, Chrom(Crowned), Duma, Eleonora, Lyn(Wind), Mirabilis, Peony, Robin(F)(Fallen), Seliph(Scion), Sothis, Yune\5\30/06/2020, 06/07/2020\Legendary
 Summer Returns (2020 Rerun)\3\Gunnthra(Summer), Helbindi(Summer), Laegjarn(Summer), Laevatein(Summer)\5\23/06/2020, 05/07/2020\Seasonal, Summer
 Call of the Sea\-100\Camilla(Summer), Cordelia(Summer), Corrin(F)(Summer), Elise(Summer), Frederick(Summer), Gaius(Summer), Gunnthra(Summer), Helbindi(Summer), Innes(Summer), Laegjarn(Summer), Laevatein(Summer), Leo(Summer), Lilina(Summer), Linde(Summer), Lyn(Summer), Noire(Summer), Robin(F)(Summer), Takumi(Summer), Tana(Summer), Tiki(Adult)(Summer), Tiki(Young)(Summer), Ursula(Summer), Wolt(Summer), Xander(Summer)\5\18/06/2020, 02/07/2020\Seasonal
-Heroes with Form Skills\3\Eyvel, Petra, Phina\5\26/06/2020, 02/07/2020\SkillBanner
+Heroes with Form Skills (v1)\3\Eyvel, Petra, Phina\5\26/06/2020, 02/07/2020\SkillBanner
 Bridal Blessings (2020 Rerun)\3\Caeda(Bride), Charlotte(Bride), Cordelia(Bride), Lyn(Bride)\5\10/06/2020, 27/06/2020\Seasonal, Bride
 Sully & Stahl's Battle\3\Frederick, Stahl, Sully\5\17/06/2020, 23/06/2020\BHB
 "Summer Two-Piece" Tempest Trials+\3\Lucina, Lute, Mia\5\16/06/2020, 29/06/2020\Tempest
@@ -202,7 +241,7 @@ New Power (February 2020)\3\Barst, Jakob, Laslow, Morgan(F)\5\11/02/2020, 20/02/
 3rd Anniversary: Daily BHB reruns\3\Amelia, Azura, Camilla(Launch), Cecilia, Chrom(Launch), Clair, Corrin(M)(Launch), Deirdre, Eirika(Bonds), Eirika(Memories), Elise, Eliwood, Ephraim, Genny, Hawkeye, Hector, Hinoka(Launch), Ishtar, Julia, Kagero, Kana(F), Leo, Lilina, Lissa, Lucius, Lukas, Maria, Matthew, Micaiah, Minerva, Myrrh, Ninian, Nowi, Palla, Priscilla, Raven, Reinhardt(Bonds), Reinhardt(World), Robin(M), Robin(M)(Fallen), Roy, Sakura, Sanaki, Seliph, Serra, Seth, Silas, Sothe, Takumi, Tana, Tiki(Adult)\50\02/02/2020, 19/02/2020\BHB
 Lyn & Florina's Battle\3\Florina, Hector, Lyn\5\11/02/2020, 18/02/2020\BHB
 "Romance Whirlwind" Tempest Trials+\3\Alm, Celica, Silque\5\05/02/2020, 17/02/2020\Tempest
-3rd Anniversary: Hero Fest, Part 2\5\Celica(Brave), Ephraim(Brave), Hector(Brave), Veronica(Brave)\5\09/02/2020, 15/02/202\CYL, HeroFest
+3rd Anniversary: Hero Fest, Part 2\5\Celica(Brave), Ephraim(Brave), Hector(Brave), Veronica(Brave)\5\09/02/2020, 15/02/2020\CYL, HeroFest
 3rd Anniversary: Hero Fest, Part 1\5\Alm(Brave), Camilla(Brave), Eliwood(Brave), Micaiah(Brave)\5\02/02/2020, 08/02/2020\CYL, HeroFest
 Heroes with Valor\3\Lethe, Maribelle, Nagi\5\01/02/2020, 10/02/2020\SkillBanner
 Mythic Heroes - Lif, Lethal Swordsman\-8\Byleth(F), Caineghis, Eliwood(Wind), Ephraim(Fire), Hector(Marquess), Hilda(3H), Leif(Unifier), Lif, Loki, Lucina(Glorious), Lukas(Picnic), Yune\5\30/01/2020, 05/02/2020\Legendary
