@@ -691,6 +691,7 @@ class DevUnit
     artype="#{artype}_Mathoo" if @name=='Alm(Saint)'
     x=false
     x=true if @resplendent.downcase=='r'
+    return 'https://pbs.twimg.com/media/E3hGgX4VoAIQhCk?format=png' if @name=='Celica' && x
     return super(artype,x)
   end
   
@@ -8609,8 +8610,8 @@ def generate_rarity_row(rarity=5,merges=0,games=[])
   stars=Rarity_stars[0][rarity-1]*rarity
   stars=Rarity_stars[1][rarity-1]*rarity if merges>=Max_rarity_merge[1]
   stars=['<:FGO_icon_rarity_dark:571937156981981184>','<:FGO_icon_rarity_sickly:571937157095227402>','<:FGO_icon_rarity_rust:523903558928826372>','<:FGO_icon_rarity_mono:523903551144198145>','<:FGO_icon_rarity_gold:523858991571533825>'][rarity-1]*rarity if games[0]=='FGO'
-  stars="#{stars}#{'<:Blank:676220519690928179>'*(6-rarity)}" if rarity<6
-  stars="#{['','<:Rarity_1:532086056594440231>','<:Rarity_2:532086056254963713>','<:Rarity_3:532086056519204864>','<:Rarity_4:532086056301101067>','<:Rarity_5:532086056737177600>'][rarity]*rarity}#{['','<:Rarity_1_Blank:555459856476274691>','<:Rarity_2_Blank:555459856400908299>','<:Rarity_3_Blank:555459856568418314>','<:Rarity_4_Blank:555459856497246218>','<:Rarity_5_Blank:555459856190930955>'][rarity]*(Max_rarity_merge[0]-rarity)}#{'<:Blank:676220519690928179>' if Max_rarity_merge[0]<6}" if games[0]=='DL'
+  stars="\u200B#{stars}\u200B#{'<:Blank:676220519690928179>'*(6-rarity)}\u200B" if rarity<6
+  stars="\u200B#{['','<:Rarity_1:532086056594440231>','<:Rarity_2:532086056254963713>','<:Rarity_3:532086056519204864>','<:Rarity_4:532086056301101067>','<:Rarity_5:532086056737177600>'][rarity]*rarity}\u200B#{['','<:Rarity_1_Blank:555459856476274691>','<:Rarity_2_Blank:555459856400908299>','<:Rarity_3_Blank:555459856568418314>','<:Rarity_4_Blank:555459856497246218>','<:Rarity_5_Blank:555459856190930955>'][rarity]*(Max_rarity_merge[0]-rarity)}\u200B#{'<:Blank:676220519690928179>' if Max_rarity_merge[0]<6}" if games[0]=='DL'
   stars="#{stars.gsub('<:Blank:676220519690928179>','')}**+#{merges}**" if merges>=Max_rarity_merge[1]
   return stars
 end
@@ -9233,6 +9234,9 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     resp=false
     artype=['','Meme Zelda']
     x.artist[0]="u/ZachminSSB (ft. #{x.artist[0]})"
+  elsif x.name=='Celica' && x.is_a?(DevUnit)
+    artype=['','Smol Fairy']
+    x.artist[1]='Twitter: @c0_nes'
   end
   lookout=$skilltags.reject{|q| q[2]!='Art'}
   zart=[]
@@ -9290,6 +9294,13 @@ def disp_unit_art(bot,event,args=[],xname=nil)
   else
     str="#{str}\n**VA (English):** #{x.voice_na.map{|q| q.split(' as ')[-1]}.join(' & ')}" unless x.voice_na.nil? || x.voice_na.length<=0
     str="#{str}\n**VA (Japanese):** #{x.voice_jp.map{|q| q.split(' as ')[-1]}.join(' & ')}" unless x.voice_jp.nil? || x.voice_jp.length<=0
+  end
+  if x.name=='Celica' && x.is_a?(DevUnit) && resp
+    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+      str="#{str}\nSource: <https://twitter.com/c0_nes/status/1402948852399804418>"
+    else
+      str="#{str}\n\n[Source](https://twitter.com/c0_nes/status/1402948852399804418)"
+    end
   end
   artist=''
   vana=[]
