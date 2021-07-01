@@ -269,7 +269,7 @@ $spam_channels=[]
 $summon_rate=[0,0,0]; $banner=[]
 @server_data=[]
 @headpats=[0,0,0]
-@last_multi_reload=[0,0,0]
+$last_multi_reload=[0,0,0]
 @zero_by_four=[0,0,0]
 @avvie_info=['Elise','*Fire Emblem Heroes*','N/A']
 Summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,
@@ -494,9 +494,9 @@ class FEHUnit
   
   def skill_list(rarity=5)
     x=$skills.reject{|q| !has_any?(q.learn[0,rarity].flatten,[@name,"All #{self.unit_group}"]) || q.level=='example' || ['Falchion','Missiletainn','Whelp (All)','Yearling (All)','Adult (All)'].include?(q.name)}.map{|q| q.clone}
-    x=x.reject{|q| q.type.include?('Weapon')} if self.weapon_type=='Staff' && !@weapon[2].nil? && @weapon[2].include?('Ignore: ') && @weapon[2].include?('We')
-    x=x.reject{|q| q.type.include?('Assist')} if self.weapon_type=='Staff' && !@weapon[2].nil? && @weapon[2].include?('Ignore: ') && @weapon[2].include?('As')
-    x=x.reject{|q| q.type.include?('Special')} if self.weapon_type=='Staff' && !@weapon[2].nil? && @weapon[2].include?('Ignore: ') && @weapon[2].include?('Sp')
+    x=x.reject{|q| q.type.include?('Weapon') && q.learn[0,rarity].flatten.include?("All #{self.unit_group}")} if self.weapon_type=='Staff' && !@weapon[2].nil? && @weapon[2].include?('Ignore: ') && @weapon[2].include?('We')
+    x=x.reject{|q| q.type.include?('Assist') && q.learn[0,rarity].flatten.include?("All #{self.unit_group}")} if self.weapon_type=='Staff' && !@weapon[2].nil? && @weapon[2].include?('Ignore: ') && @weapon[2].include?('As')
+    x=x.reject{|q| q.type.include?('Special') && q.learn[0,rarity].flatten.include?("All #{self.unit_group}")} if self.weapon_type=='Staff' && !@weapon[2].nil? && @weapon[2].include?('Ignore: ') && @weapon[2].include?('Sp')
     return x
   end
   
@@ -667,6 +667,11 @@ class FEHUnit
     l1=@stats1[posit,5].map{|q| q}
     l2=@stats1[posit,5].map{|q| q}
     gr=@growths[posit,5].map{|q| q}
+    if @name=='Kiran' && (@weapon[1]=='Blade' || (@weapon[0]=='Gold' && support.length>0))
+      l1[1]+=1; l1[2]+=1; l1[3]+=1; l1[4]+=1
+      l2[1]+=1; l2[2]+=1; l2[3]+=1; l2[4]+=1
+      gr[0]+=1; gr[3]+=1; gr[4]+=1
+    end
     flowers=[flowers,self.dragonflowerMax].min
     unless rarity==5
       xx=2-((rarity-1)/2)
@@ -723,7 +728,7 @@ class FEHUnit
     end
     l1=@stats40.map{|q| q} if @growths.max<=0
     l1=[0,0,0,0,0] if @growths.max<=0 && level==1
-    unless support.length<=0
+    unless support.length<=0 || @name=='Kiran'
       l1[0]+=5 if support=='S'
       l1[0]+=4 if ['A','B'].include?(support)
       l1[0]+=3 if support=='C'
@@ -845,14 +850,15 @@ class FEHUnit
     x=self.skill_list(rarity).clone
     x2=self.summoned(rarity).clone
     retroprf=nil
+    extraskills=[]
     for i in 0...x.length
       x[i].name="**#{x[i].name}**" if x2.map{|q| q.name}.include?(x[i].name)
       x[i].name="#{x[i].name}\n#{x[i].description}" if has_any?(['Duo','Harmonic'],x[i].tags) && !smol
       if x[i].type.include?('Weapon') && !x[i].exclusivity.nil? && x[i].exclusivity.include?(@name) && x[i].prerequisite.nil? && x[i].id>=20
         retroprf=x[i].clone
         x[i]=nil
-      elsif x[i].name.gsub('*','')=='Dire Breidablik'
-        retroprf=x[i].clone
+      elsif x[i].name.gsub('*','').split(' ')[-1]=='Breidablik' && x[i].id>999
+        extraskills.push(x[i].clone)
         x[i]=nil
       end
       x[i].id+=50000 if !x[i].nil? && x[i].type.include?('Special') && x[i].id<210000
@@ -868,8 +874,13 @@ class FEHUnit
         end
       elsif @name=='Ike(Vanguard)' && x[i].type.include?('Passive(C)') && x[i].name != 'Def Tactic'
         x[i].id+=10000
+      elsif @name=='Bluezie' && x[i].type.include?('Passive(A)') && x[i].name == 'Atk/Spd Bond'
+        x[i].id+=100
       end
       x[i].name="__#{x[i].name}__" if !x[i].nil? && x[i].name=='Def Tactic' && x[i].level.to_i==3 && @name=='Ike(Vanguard)'
+      x[i].name="__#{x[i].name}__" if !x[i].nil? && x[i].name=='Spd/Def Bond' && x[i].level.to_i==3 && @name=='Bluezie'
+      x[i].name="__#{x[i].name}__" if !x[i].nil? && x[i].name=='Guidance' && x[i].level.to_i==3 && @name=='Ryoma(Supreme)'
+      x[i].name="__#{x[i].name}__" if !x[i].nil? && x[i].name=='Fortress Res' && x[i].level.to_i==3 && @name=='Gunnthra'
     end
     x.compact!
     x=x.sort{|a,b| a.id<=>b.id}
@@ -913,19 +924,12 @@ class FEHUnit
     end
     if zelgiused
     elsif @name=='Kiran'
-      y[0][-1].name="__#{y[0][-1].name}__" unless smol
-      m=y[0][-1].clone
-      m.name='**Stone**'
-      m.exclusivity=nil
-      y[0].push(m.clone)
-      m.name='**Elstone**'
-      y[0].push(m.clone) if rarity>1
-      m.name='Atlas'
-      y[0].push(m.clone) if rarity==3
-      m.name='**Atlas**'
-      y[0].push(m.clone) if rarity>3
-      m.name='**Dire Breidablik**'
-      y[0].push(m.clone) if rarity>4
+      unless smol
+        y[0][-1].name="__#{y[0][-1].name}__"
+        for i in 0...extraskills.length
+          y[0].push(extraskills[i].clone)
+        end
+      end
     elsif !retroprf.nil?
       y[0][-1].name="__#{y[0][-1].name}__" unless smol
       y[0].push(retroprf)
@@ -958,7 +962,8 @@ class FEHUnit
         else
           y2[i]="#{em}#{y4}"
         end
-        if emotes && y[i].length>0 && !y[i][-1].exclusivity.nil?
+        if @name=='Kiran'
+        elsif emotes && y[i].length>0 && !y[i][-1].exclusivity.nil?
           y2[i]="#{y2[i]} <:Prf_Sparkle:490307608973148180>"
           emotes2Bexplained[0]=true
         end
@@ -979,10 +984,12 @@ class FEHUnit
       em='<:Hero_Duo_Mathoo:631431055513092106>Duo' if Skill_Slots[1][i]=='Duo/Harmonic' && @name=='Mathoo'
       if Skill_Slots[1][i]=='Weapon' && y[i].length>0 && emotes
         for i2 in 0...y2[i].length
-          if !y[i][i2].exclusivity.nil?
+          if @name=='Kiran' && y[i][i2].id>999
+            y2[i][i2]="#{y[i][i2].class_header(bot,true,true)}#{y2[i][i2]}"
+          elsif !y[i][i2].exclusivity.nil?
             y2[i][i2]="#{y2[i][i2]}<:Prf_Sparkle:490307608973148180>"
             emotes2Bexplained[0]=true
-          elsif y[i][i2].learn.join(', ').include?('All ') || @name=='Kiran'
+          elsif y[i][i2].learn.join(', ').include?('All ')
           elsif y[i][i2].learn.join(', ').split(', ').reject{|q| $units.find_index{|q2| q2.name==q}.nil? || !$units[$units.find_index{|q2| q2.name==q}].fake.nil? || @name==q}.length==0
             y2[i][i2]="#{y2[i][i2]}<:Arena_Crown:490334177124810772>"
             emotes2Bexplained[1]=true
@@ -1200,7 +1207,13 @@ class FEHUnit
     atk='<:StrengthS:514712248372166666>'
     atk='<:FreezeS:514712247474585610>' if self.weapon_type=='Dragon'
     atk='<:MagicS:514712247289774111>' if ['Tome','Staff'].include?(self.weapon_type)
-    atk='<:FreezeS:514712247474585610>' if !weapon.nil? && weapon.has_tag?('Frostbite',refine,transformed)
+    if weapon.nil?
+    elsif weapon.is_a?(FEHSkill)
+      atk='<:FreezeS:514712247474585610>' if weapon.has_tag?('Frostbite',refine,transformed)
+    else
+      atk='<:MagicS:514712247289774111>' if ['Tome','Staff'].include?(weapon)
+      atk='<:FreezeS:514712247474585610>' if weapon=='Dragon'
+    end
     return ['<:HP_S:514712247503945739>HP',"#{atk}#{atk.split(':')[1][0,atk.split(':')[1].length-1].gsub('Generic','')}",'<:SpeedS:514712247625580555>Speed','<:DefenseS:514712247461871616>Defense','<:ResistanceS:514712247574986752>Resistance'] if includename
     return ['<:HP_S:514712247503945739>',atk,'<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>']
   end
@@ -1250,6 +1263,10 @@ class FEHUnit
       xx.push("#{'+' if weapon.weapon_stats[8]>0}#{weapon.weapon_stats[8]} Def") unless weapon.weapon_stats[8]==0
       xx.push("#{'+' if weapon.weapon_stats[9]>0}#{weapon.weapon_stats[9]} Res") unless weapon.weapon_stats[9]==0
       trns="\nWhen transformed: #{xx.join(', ')}\nInclude the word \"transformed\" to apply this directly." if xx.length>0
+    end
+    if @name=='Kiran' && @owner.nil?
+      return "__**Blade equipped**__<:Red_Blade:443172811830198282><:Blue_Blade:467112472768151562><:Green_Blade:467122927230386207>\n#{self.statEmotes('Blade',refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0Score: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}" if support.length>0
+      return "__**Tome equipped**<:Red_Tome:443172811826003968><:Blue_Tome:467112472394858508><:Green_Tome:467122927666593822><:Colorless_Tome:443692133317345290>__\n#{self.statEmotes('Tome',refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0Score: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}"
     end
     return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\n#{self.statEmotes(weapon,refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0Score: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}"
   end
@@ -1397,6 +1414,7 @@ class FEHUnit
     xbane="#{bane}"
     xbane='' if merges>0
     x=dispStats(bot,40,rarity,boon,xbane,0,0).inject(0){|sum,x| sum + x }
+    x=dispStats(bot,40,rarity,boon,xbane,0,0,'x').inject(0){|sum,x| sum + x } if @name=='Kiran' && (@weapon[1]=='Blade' || (@weapon[0]=='Gold' && support.length>0))
     x+=3 if boon.length<=0 && bane.length<=0 && merges>0
     x=[x,175].max if rarity>=5 && level>=40 && !@legendary.nil? && @legendary[1]=='Duel'
     x=[x,180].max if rarity>=5 && level>=40 && !@legendary.nil? && @legendary[1]=='Duel' && (@movement=='Armor' || @id>=500)
@@ -1765,7 +1783,7 @@ class SuperUnit < FEHUnit # attributes shared by Dev- and Donor- Units but not i
   
   def storage_string
     x="#{@name}"
-    x="#{x}\\#{@face}" if @name=='Kiran' && !@face.nil?
+    x="#{x}\\#{@face}\\#{@weapon.join(', ')}" if @name=='Kiran' && !@face.nil?
     x="#{x}\n#{@rarity}#{@resplendent}#{'f' if @forma}"
     x="#{x}\\#{@merge_count}"
     x="#{x}\\#{@boon.gsub(' ','')}"
@@ -1843,7 +1861,11 @@ class DevUnit < SuperUnit
       end
       @skills.push([])
     end
-    @weapon=@base_unit.weapon.map{|q| q}
+    if val.include?('\\'[0]) && val.split('\\'[0]).length>2
+      @weapon=val.split('\\'[0])[2].split(', ')
+    else
+      @weapon=@base_unit.weapon.map{|q| q}
+    end
     @movement="#{@base_unit.movement}"
     @growths=@base_unit.growths.map{|q| q}
     @stats40=@base_unit.stats40.map{|q| q}
@@ -1884,7 +1906,7 @@ class DevUnit < SuperUnit
   def disp_color(chain=0,mode=0)
     f=super(-1,mode).map{|q| q}
     f.unshift(0x00DAFA)
-    f.unshift(0xFFABAF) if self.sortPriority>39
+    f.unshift(0xFFABAF) if self.sortPriority>49
     xcolor=f[chain]
     xcolor=f[0] if chain>=f.length || chain<0
     return [xcolor/256/256, (xcolor/256)%256, xcolor%256] if mode==1 # in mode 1, return as three single-channel numbers - used when averaging colors
@@ -2054,7 +2076,11 @@ class DonorUnit < SuperUnit
       end
       @skills.push([])
     end
-    @weapon=@base_unit.weapon.map{|q| q}
+    if val.include?('\\'[0]) && val.split('\\'[0]).length>2
+      @weapon=val.split('\\'[0])[2].split(', ')
+    else
+      @weapon=@base_unit.weapon.map{|q| q}
+    end
     @movement="#{@base_unit.movement}"
     @growths=@base_unit.growths.map{|q| q}
     @stats40=@base_unit.stats40.map{|q| q}
@@ -2450,7 +2476,7 @@ class FEHSkill
   
   def class_header(bot,emotesonly=false,justseal=false)
     emo=[]
-    emo.push('<:Skill_Weapon:444078171114045450>') if @type.include?('Weapon')
+    emo.push('<:Skill_Weapon:444078171114045450>') if @type.include?('Weapon') && !justseal
     emo.push('<:Skill_Assist:444078171025965066>') if @type.include?('Assist')
     emo.push('<:Skill_Special:444078170665254929>') if @type.include?('Special')
     emo.push('<:Passive_A:443677024192823327>') if @type.include?('Passive(A)')
@@ -2547,7 +2573,7 @@ class FEHSkill
       dispname="#{subname}#{' ' unless @name[-1]=='+'}#{skz[-1].level.to_i}"
     end
     dispname="#{subname} W" if (!@level.nil? && @level[0,1]=='W') || has_any?(event.message.text.downcase.split(' '),['refinement','refinements','(w)'])
-    dispname=dispname.gsub(' ','_').gsub('.','').gsub('/','_').gsub('!','')
+    dispname=dispname.gsub(' ','_').gsub('.','').gsub('/','_').gsub('!','').gsub(':','')
     dispname=dispname.gsub('+','') unless subname[-1]=='+' && self.isPassive?
     return "https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Weapons/#{dispname}.png?raw=true" if @type.include?('Weapon')
     return "https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Assists/#{dispname}.png?raw=true" if @type.include?('Assist')
@@ -3781,10 +3807,10 @@ def data_load(to_reload=[])
     rtime=1 if Shardizard==4
     rtime=60 if to_reload.length<=0 && !reload_everything
     t=Time.now
-    if t-@last_multi_reload[0]>rtime*60
+    if t-$last_multi_reload[0]>rtime*60
       puts 'reloading EliseClassFunctions'
       load "#{$location}devkit/EliseClassFunctions.rb"
-      @last_multi_reload[0]=t
+      $last_multi_reload[0]=t
     end
   end
   if to_reload.length<=0 || has_any?(to_reload.map{|q| q.downcase},['path','code','paths','codes'])
@@ -4200,7 +4226,7 @@ def all_commands(include_nil=false,permissions=-1)
   return k
 end
 
-bot.command([:help,:commands,:command_list,:commandlist,:Help]) do |event, command, subcommand| # used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
+bot.command(:help, aliases: [:commands,:command_list,:commandlist,:Help]) do |event, command, subcommand| # used to show tooltips regarding each command.  If no command name is given, shows a list of all commands
   return nil if overlap_prevent(event)
   data_load()
   help_text(event,bot,command,subcommand)
@@ -5798,8 +5824,8 @@ def add_new_alias(bot,event,newname,unit,modifier=nil,modifier2=nil,mode=0)
       err=true
     elsif k2[0].is_a?(FEHUnit)
       type[1]='Unit'
-      matches[1]=k.map{|q| q.id}
-      matchnames[1]=k.map{|q| q.name}.join('/')
+      matches[1]=k2.map{|q| q.id}
+      matchnames[1]=k2.map{|q| q.name}.join('/')
     elsif k2[0].nil?
     else
       k2=k2[0]
@@ -5871,7 +5897,7 @@ def add_new_alias(bot,event,newname,unit,modifier=nil,modifier2=nil,mode=0)
     str2="**Server:** #{event.server.name} (#{event.server.id}) - #{shard_data(0)[Shardizard]} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:**"
   end
   str2="#{str2} #{event.user.distinct} (#{event.user.id})"
-  if type[1].gsub('*','')=='Unit' && first_sub(newname,kk2.alts[0].gsub('*',''),'').length<=1 && event.user.id != 167657750971547648
+  if type[1].gsub('*','')=='Unit' && kk2.is_a?(FEHUnit) && first_sub(newname,kk2.alts[0].gsub('*',''),'').length<=1 && event.user.id != 167657750971547648
     event.respond "#{newname} has __***NOT***__ been added to #{matchnames[1]}'s aliases.\nOne need look no farther than BCamilla, SCamilla, BLucina, BLyn, LLyn, or SXander to understand why single-letter alias differentiation is a bad idea.  Especially BLucina and LLyn."
     bot.channel(logchn).send_message("#{str2}\n~~**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Single-letter differentiation.")
     return nil
@@ -6157,8 +6183,14 @@ def disp_unit_stats(bot,event,xname,extrastr=nil,sizex='smol',includeskills=fals
   lvlvl=79 if has_any?(event.message.text.downcase.split(' '),['79','level79','lv79','l79'])
   lvlvl=99 if has_any?(event.message.text.downcase.split(' '),['99','level99','lv99','l99'])
   text=unit.statGrid(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,pairup,lvlvl)
-  text=unit.starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,skill_list_2,wpnlegal,pairup,2) unless ['smol','xsmol'].include?(sizex)
-  text=unit.starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,skill_list_2,wpnlegal,pairup) if ['medium'].include?(sizex)
+  if unit.name=='Kiran' && unit.owner.nil?
+    text=unit.starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,skill_list_2,wpnlegal,pairup)
+    text="#{text}\n\n#{unit.statGrid(bot,rarity,boon,bane,merges,flowers,'',bonus,blessing,resp,weapon,refinement,transformed,skill_list,pairup,lvlvl)}"
+    text="#{text}\n#{unit.statGrid(bot,rarity,boon,bane,merges,flowers,'x',bonus,blessing,resp,weapon,refinement,transformed,skill_list,pairup,lvlvl)}"
+  else
+    text=unit.starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,skill_list_2,wpnlegal,pairup,2) unless ['smol','xsmol'].include?(sizex)
+    text=unit.starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,skill_list_2,wpnlegal,pairup) if ['medium'].include?(sizex)
+  end
   if unit.weapon_type=='Beast' && !weapon.nil? && weapon.weapon_stats.length>5 && !['smol','xsmol'].include?(sizex)
     xx=[]
     xx.push("#{'+' if weapon.weapon_stats[5]>0}#{weapon.weapon_stats[5]} HP") unless weapon.weapon_stats[5]==0
@@ -6204,10 +6236,10 @@ def disp_unit_skills(bot,event,xname)
   xname='Kris' if xname==['Kris(M)', 'Kris(F)'] || xname==['Kris(F)', 'Kris(M)']
   if xname.is_a?(Array)
     g=get_markers(event)
-    u=@units.reject{|q| !q.fake.nil? && q.fake[0]!=g}.map{|q| q.name}
+    u=$units.reject{|q| !q.fake.nil? && q.fake[0]!=g}.map{|q| q.name}
     xname=xname.reject{|q| !u.include?(q) && !['Robin','Kris'].include?(q)}
-    for i in 0...name.length
-      disp_unit_skills(bot,event,xname[i],event,sizex)
+    for i in 0...xname.length
+      disp_unit_skills(bot,event,xname[i])
     end
     return nil
   end
@@ -6947,7 +6979,7 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
             text="#{text}\n*Buff:* #{skill.dagger_buff.join('   *Target:* ')}" unless skill.dagger_buff.nil?
           elsif r.outer.include?(' *** ')
             x=r.outer.split(' *** ')
-            text="#{text}\n#{x[0]}" unless x[0].nil? || x[0].length<=0
+            text="#{text}\n#{x[0]}" unless x[0].nil? || x[0].length<=0 || x[0]=='-'
             x=x.map{|q| q.split(', ')}
             text="#{text}\n*Debuff:* #{x[1].join('   *Target:* ')}" unless x[1].nil?
             text="#{text}\n*Buff:* #{x[2].join('   *Target:* ')}" unless x[2].nil?
@@ -6972,8 +7004,9 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
         every.push("*Buff:* #{skill.dagger_buff.join('   *Target:* ')}") unless skill.dagger_buff.nil?
       elsif r.outer.include?(' *** ')
         x=r.outer.split(' *** ')
-        every.push(x[0]) unless x[0].nil? || x[0].length<=0
+        every.push(x[0]) unless x[0].nil? || x[0].length<=0 || x[0]=='-'
         x=x.map{|q| q.split(', ')}
+        x=x.map{|q| [q[0].split(' (')[0],q[1]]} if skill.name=='Peshkatz'
         every.push("*Debuff:* #{x[1].join('   *Target:* ')}") unless x[1].nil?
         every.push("*Buff:* #{x[2].join('   *Target:* ')}") unless x[2].nil?
       else
@@ -7256,7 +7289,7 @@ def disp_accessory(bot,event,xname,ignore=false)
   create_embed(event,["__**#{k.name}**__",k.class_header(bot)],str,k.disp_color,nil,k.thumbnail(event,bot))
 end
 
-bot.command([:stats,:stat]) do |event, *args|
+bot.command(:stats, aliases: [:stat]) do |event, *args|
   return nil if overlap_prevent(event)
   skills=false
   data_load()
@@ -7347,7 +7380,7 @@ bot.command([:stats,:stat]) do |event, *args|
   return nil
 end
 
-bot.command([:skills,:skils,:fodder,:manual,:book,:combatmanual]) do |event, *args|
+bot.command(:skills, aliases: [:skils,:fodder,:manual,:book,:combatmanual]) do |event, *args|
   return nil if overlap_prevent(event)
   s=event.message.text
   s=remove_prefix(s,event)
@@ -7412,7 +7445,7 @@ bot.command([:skills,:skils,:fodder,:manual,:book,:combatmanual]) do |event, *ar
   return nil
 end
 
-bot.command([:skill,:skil]) do |event, *args|
+bot.command(:skill, aliases: [:skil]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   clr=false
@@ -7465,7 +7498,7 @@ bot.command([:skill,:skil]) do |event, *args|
   return nil
 end
 
-bot.command([:colors,:color,:colours,:colour]) do |event, *args|
+bot.command(:colors, aliases: [:color,:colours,:colour]) do |event, *args|
   return nil if overlap_prevent(event)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   data_load()
@@ -7478,7 +7511,7 @@ bot.command([:colors,:color,:colours,:colour]) do |event, *args|
   return nil
 end
 
-bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstats,:statstiny,:statssmall,:statssmol,:statsmicro,:statssquashed,:statss,:stattiny,:statsmall,:statsmol,:statmicro,:statsquashed,:sstat,:tinystat,:smallstat,:smolstat,:microstat,:squashedstat,:tiny,:small,:micro,:smol,:squashed,:littlestats,:littlestat,:statslittle,:statlittle,:little]) do |event, *args|
+bot.command(:tinystats, aliases: [:smallstats,:smolstats,:microstats,:squashedstats,:sstats,:statstiny,:statssmall,:statssmol,:statsmicro,:statssquashed,:statss,:stattiny,:statsmall,:statsmol,:statmicro,:statsquashed,:sstat,:tinystat,:smallstat,:smolstat,:microstat,:squashedstat,:tiny,:small,:micro,:smol,:squashed,:littlestats,:littlestat,:statslittle,:statlittle,:little]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args.length<=0
@@ -7506,7 +7539,7 @@ bot.command([:tinystats,:smallstats,:smolstats,:microstats,:squashedstats,:sstat
   return nil
 end
 
-bot.command([:big,:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:largestats,:bigstat,:tolstat,:macrostat,:largestat,:statsbig,:statstol,:statsmacro,:statslarge,:statbig,:stattol,:statmacro,:statlarge,:statol]) do |event, *args|
+bot.command(:big, aliases: [:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:largestats,:bigstat,:tolstat,:macrostat,:largestat,:statsbig,:statstol,:statsmacro,:statslarge,:statbig,:stattol,:statmacro,:statlarge,:statol]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args.length<=0
@@ -7537,7 +7570,7 @@ bot.command([:big,:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:largestats
   return nil
 end
 
-bot.command([:huge,:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hugestat,:massivestat,:statsgiant,:statshuge,:statsmassive,:statgiant,:stathuge,:statmassive]) do |event, *args|
+bot.command(:huge, aliases: [:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hugestat,:massivestat,:statsgiant,:statshuge,:statsmassive,:statgiant,:stathuge,:statmassive]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args.length<=0
@@ -7568,7 +7601,7 @@ bot.command([:huge,:massive,:giantstats,:hugestats,:massivestats,:giantstat,:hug
   return nil
 end
 
-bot.command([:hero,:unit,:data,:statsskills,:statskills,:stats_skills,:stat_skills,:statsandskills,:statandskills,:stats_and_skills,:stat_and_skills,:statsskill,:statskill,:stats_skill,:stat_skill,:statsandskill,:statandskill,:stats_and_skill,:stat_and_skill,:statsskils,:statskils,:stats_skils,:stat_skils,:statsandskils,:statandskils,:stats_and_skils,:stat_and_skils,:statsskil,:statskil,:stats_skil,:stat_skil,:statsandskil,:statandskil,:stats_and_skil,:stat_and_skil]) do |event, *args|
+bot.command(:hero, aliases: [:unit,:data,:statsskills,:statskills,:stats_skills,:stat_skills,:statsandskills,:statandskills,:stats_and_skills,:stat_and_skills,:statsskill,:statskill,:stats_skill,:stat_skill,:statsandskill,:statandskill,:stats_and_skill,:stat_and_skill,:statsskils,:statskils,:stats_skils,:stat_skils,:statsandskils,:statandskils,:stats_and_skils,:stat_and_skils,:statsskil,:statskil,:stats_skil,:stat_skil,:statsandskil,:statandskil,:stats_and_skil,:stat_and_skil]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args.length<=0
@@ -7649,52 +7682,52 @@ bot.command([:hero,:unit,:data,:statsskills,:statskills,:stats_skills,:stat_skil
   return nil
 end
 
-bot.command([:structure,:struct]) do |event, *args|
+bot.command(:structure, aliases: [:struct]) do |event, *args|
   return nil if overlap_prevent(event)
   disp_struct(bot,event,args.join(' '))
 end
 
-bot.command([:item]) do |event, *args|
+bot.command(:item) do |event, *args|
   return nil if overlap_prevent(event)
   disp_itemu(bot,event,args.join(' '))
 end
 
-bot.command([:acc,:accessory,:accessorie]) do |event, *args|
+bot.command(:acc, aliases: [:accessory,:accessorie]) do |event, *args|
   return nil if overlap_prevent(event)
   disp_accessory(bot,event,args.join(' '))
 end
 
 # primary entities end here
 
-bot.command([:today,:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily,:now]) do |event|
+bot.command(:today, aliases: [:todayinfeh,:todayInFEH,:today_in_feh,:today_in_FEH,:daily,:now]) do |event|
   return nil if overlap_prevent(event)
   data_load(['library'])
   today_in_feh(event,bot)
   return nil
 end
 
-bot.command([:tomorrow,:tomorow,:tommorrow,:tommorow]) do |event|
+bot.command(:tomorrow, aliases: [:tomorow,:tommorrow,:tommorow]) do |event|
   return nil if overlap_prevent(event)
   data_load(['library'])
   today_in_feh(event,bot,true)
   return nil
 end
 
-bot.command([:next,:schedule]) do |event, *args|
+bot.command(:next, aliases: [:schedule]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load(['library'])
   next_events(bot,event,args)
   return nil
 end
 
-bot.command([:checkaliases,:aliases,:seealiases]) do |event, *args|
+bot.command(:aliases, aliases: [:checkaliases,:seealiases]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load(['library'])
   list_aliases(bot,event,args)
   return nil
 end
 
-bot.command([:serveraliases,:saliases]) do |event, *args|
+bot.command(:saliases, aliases: [:serveraliases]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load(['library'])
   list_aliases(bot,event,args,1)
@@ -7822,7 +7855,7 @@ bot.command([:deletealias,:removealias]) do |event, name|
   return nil
 end
 
-bot.command([:seegroups,:checkgroups,:groups]) do |event|
+bot.command(:groups, aliases: [:seegroups,:checkgroups]) do |event|
   return nil if overlap_prevent(event)
   data_load()
   disp_groups(event,bot)
@@ -7905,7 +7938,7 @@ bot.command(:addgroup) do |event, groupname, *args|
   return nil
 end
 
-bot.command([:removemember,:removefromgroup]) do |event, groupname, unit|
+bot.command(:removemember, aliases: [:removefromgroup]) do |event, groupname, unit|
   return nil if overlap_prevent(event)
   data_load()
   if event.server.nil? && event.user.id != 167657750971547648
@@ -7982,7 +8015,7 @@ bot.command([:removemember,:removefromgroup]) do |event, groupname, unit|
   return nil
 end
 
-bot.command([:deletegroup,:removegroup]) do |event, xname|
+bot.command(:deletegroup, aliases: [:removegroup]) do |event, xname|
   return nil if overlap_prevent(event)
   data_load()
   if event.server.nil? && event.user.id != 167657750971547648
@@ -8034,7 +8067,7 @@ bot.command([:deletegroup,:removegroup]) do |event, xname|
   return nil
 end
 
-bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddualunitalias,:addualunitalias,:multialias,:dualalias,:addmulti], from: 167657750971547648) do |event, multi, *args|
+bot.command(:addmultialias, aliases: [:adddualalias,:addualalias,:addmultiunitalias,:adddualunitalias,:addualunitalias,:multialias,:dualalias,:addmulti], from: 167657750971547648) do |event, multi, *args|
   return nil if overlap_prevent(event)
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
   data_load()
@@ -8099,7 +8132,7 @@ bot.command([:addmultialias,:adddualalias,:addualalias,:addmultiunitalias,:adddu
   return nil
 end
 
-bot.command([:removefrommultialias,:removefromdualalias,:removefrommultiunitalias,:removefromdualunitalias,:removefrommulti], from: 167657750971547648) do |event, multi, unit|
+bot.command(:removefrommultialias, aliases: [:removefromdualalias,:removefrommultiunitalias,:removefromdualunitalias,:removefrommulti], from: 167657750971547648) do |event, multi, unit|
   return nil if overlap_prevent(event)
   data_load()
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
@@ -8120,7 +8153,7 @@ bot.command([:removefrommultialias,:removefromdualalias,:removefrommultiunitalia
   return nil
 end
 
-bot.command([:study,:statstudy,:studystats,:statsstudy]) do |event, *args|
+bot.command(:study, aliases: [:statstudy,:studystats,:statsstudy]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
     event.respond 'No unit was included'
@@ -8147,7 +8180,7 @@ bot.command([:study,:statstudy,:studystats,:statsstudy]) do |event, *args|
   unit_study(bot,event,args)
 end
 
-bot.command([:heal_study,:healstudy,:studyheal,:study_heal,:heal]) do |event, *args|
+bot.command(:heal_study, aliases: [:healstudy,:studyheal,:study_heal,:heal]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
     event.respond 'No unit was included'
@@ -8158,7 +8191,7 @@ bot.command([:heal_study,:healstudy,:studyheal,:study_heal,:heal]) do |event, *a
   return nil
 end
 
-bot.command([:proc_study,:procstudy,:studyproc,:study_proc,:proc]) do |event, *args|
+bot.command(:proc_study, aliases: [:procstudy,:studyproc,:study_proc,:proc]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
     event.respond 'No unit was included'
@@ -8168,7 +8201,7 @@ bot.command([:proc_study,:procstudy,:studyproc,:study_proc,:proc]) do |event, *a
   return nil
 end
 
-bot.command([:phase_study,:phasestudy,:studyphase,:study_phase,:phase]) do |event, *args|
+bot.command(:phase_study, aliases: [:phasestudy,:studyphase,:study_phase,:phase]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
     event.respond 'No unit was included'
@@ -8178,7 +8211,7 @@ bot.command([:phase_study,:phasestudy,:studyphase,:study_phase,:phase]) do |even
   return nil
 end
 
-bot.command([:effhp,:effHP,:eff_hp,:eff_HP,:bulk]) do |event, *args|
+bot.command(:effhp, aliases: [:effHP,:eff_hp,:eff_HP,:bulk]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
     event.respond 'No unit was included'
@@ -8189,7 +8222,7 @@ bot.command([:effhp,:effHP,:eff_hp,:eff_HP,:bulk]) do |event, *args|
   return nil
 end
 
-bot.command([:pairup,:pair_up,:pair,:pocket]) do |event, *args|
+bot.command(:pairup, aliases: [:pair_up,:pair,:pocket]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
     event.respond 'No unit was included'
@@ -8200,7 +8233,7 @@ bot.command([:pairup,:pair_up,:pair,:pocket]) do |event, *args|
   return nil
 end
 
-bot.command([:alts,:alt]) do |event, *args|
+bot.command(:alts, aliases: [:alt]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load(['library'])
   if args.nil? || args.length<1
@@ -8210,7 +8243,7 @@ bot.command([:alts,:alt]) do |event, *args|
   find_alts(bot,event,args)
 end
 
-bot.command([:art,:artist]) do |event, *args|
+bot.command(:art, aliases: [:artist]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load(['library'])
   if args.nil? || args.length<1
@@ -8230,7 +8263,7 @@ bot.command(:games) do |event, *args|
   return nil
 end
 
-bot.command([:divine,:devine,:code,:path]) do |event, *args|
+bot.command(:divine, aliases: [:devine,:code,:path]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load(['library'])
   if args.nil? || args[0].nil? || ['next','schedule'].include?(args[0].downcase)
@@ -8242,7 +8275,7 @@ bot.command([:divine,:devine,:code,:path]) do |event, *args|
   return nil
 end
 
-bot.command([:banners,:banner]) do |event, *args|
+bot.command(:banners, aliases: [:banner]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args[0].nil? || ['next','schedule'].include?(args[0].downcase)
@@ -8263,7 +8296,7 @@ bot.command([:banners,:banner]) do |event, *args|
   banner_list(event,bot,args,x)
 end
 
-bot.command([:allinheritance,:allinherit,:allinheritable,:skillinheritance,:skillinherit,:skillinheritable,:skilllearn,:skilllearnable,:skillsinheritance,:skillsinherit,:skillsinheritable,:skillslearn,:skillslearnable,:inheritanceskills,:inheritskill,:inheritableskill,:learnskill,:learnableskill,:inheritanceskills,:inheritskills,:inheritableskills,:learnskills,:learnableskills,:all_inheritance,:all_inherit,:all_inheritable,:skill_inheritance,:skill_inherit,:skill_inheritable,:skill_learn,:skill_learnable,:skills_inheritance,:skills_inherit,:skills_inheritable,:skills_learn,:skills_learnable,:inheritance_skills,:inherit_skill,:inheritable_skill,:learn_skill,:learnable_skill,:inheritance_skills,:inherit_skills,:inheritable_skills,:learn_skills,:learnable_skills,:inherit,:learn,:inheritance,:learnable,:inheritable,:skillearn,:skillearnable]) do |event, *args|
+bot.command(:allinheritance, aliases: [:allinherit,:allinheritable,:skillinheritance,:skillinherit,:skillinheritable,:skilllearn,:skilllearnable,:skillsinheritance,:skillsinherit,:skillsinheritable,:skillslearn,:skillslearnable,:inheritanceskills,:inheritskill,:inheritableskill,:learnskill,:learnableskill,:inheritanceskills,:inheritskills,:inheritableskills,:learnskills,:learnableskills,:all_inheritance,:all_inherit,:all_inheritable,:skill_inheritance,:skill_inherit,:skill_inheritable,:skill_learn,:skill_learnable,:skills_inheritance,:skills_inherit,:skills_inheritable,:skills_learn,:skills_learnable,:inheritance_skills,:inherit_skill,:inheritable_skill,:learn_skill,:learnable_skill,:inheritance_skills,:inherit_skills,:inheritable_skills,:learn_skills,:learnable_skills,:inherit,:learn,:inheritance,:learnable,:inheritable,:skillearn,:skillearnable]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
     event.respond 'No unit was included'
@@ -8274,14 +8307,14 @@ bot.command([:allinheritance,:allinherit,:allinheritable,:skillinheritance,:skil
   return nil
 end
 
-bot.command([:bst,:BST]) do |event, *args|
+bot.command(:bst) do |event, *args|
   return nil if overlap_prevent(event)
   data_load(['library'])
   combined_BST(bot,event,args)
   return nil
 end
 
-bot.command([:compare,:comparison]) do |event, *args|
+bot.command(:compare, aliases: [:comparison]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load(['library'])
   if ['skills','skill'].include?(args[0].downcase)
@@ -8293,20 +8326,20 @@ bot.command([:compare,:comparison]) do |event, *args|
   return nil
 end
 
-bot.command([:compareskills,:compareskill,:skillcompare,:skillscompare,:comparisonskills,:comparisonskill,:skillcomparison,:skillscomparison,:compare_skills,:compare_skill,:skill_compare,:skills_compare,:comparison_skills,:comparison_skill,:skill_comparison,:skills_comparison,:skillsincommon,:skills_in_common,:commonskills,:common_skills]) do |event, *args|
+bot.command(:compareskills, aliases: [:compareskill,:skillcompare,:skillscompare,:comparisonskills,:comparisonskill,:skillcomparison,:skillscomparison,:compare_skills,:compare_skill,:skill_compare,:skills_compare,:comparison_skills,:comparison_skill,:skill_comparison,:skills_comparison,:skillsincommon,:skills_in_common,:commonskills,:common_skills]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load(['library'])
   skill_comparison(bot,event,args)
   return nil
 end
 
-bot.command([:find,:search,:lookup]) do |event, *args|
+bot.command(:find, aliases: [:search,:lookup]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   display_units_and_skills(bot,event,args)
 end
 
-bot.command([:sort,:list]) do |event, *args|
+bot.command(:sort, aliases: [:list]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args[0].nil?
@@ -8343,37 +8376,37 @@ bot.command([:sort,:list]) do |event, *args|
   sort_units(bot,event,args)
 end
 
-bot.command([:sortskill,:skillsort,:sortskills,:skillssort,:listskill,:skillist,:skillist,:listskills,:skillslist]) do |event, *args|
+bot.command(:sortskill, aliases: [:skillsort,:sortskills,:skillssort,:listskill,:skillist,:skillist,:listskills,:skillslist]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   sort_skills(bot,event,args)
 end
 
-bot.command([:sortstats,:statssort,:sortstat,:statsort,:liststats,:statslist,:statlist,:liststat,:sortunits,:unitssort,:sortunit,:unitsort,:listunits,:unitslist,:unitlist,:listunit]) do |event, *args|
+bot.command(:sortstats, aliases: [:statssort,:sortstat,:statsort,:liststats,:statslist,:statlist,:liststat,:sortunits,:unitssort,:sortunit,:unitsort,:listunits,:unitslist,:unitlist,:listunit]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   sort_units(bot,event,args)
 end
 
-bot.command([:average,:mean]) do |event, *args|
+bot.command(:average, aliases: [:mean]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   stats_of_multiunits(bot,event,args,0)
 end
 
-bot.command([:bestamong,:bestin,:beststats,:higheststats,:highest,:best,:highestamong,:highestin]) do |event, *args|
+bot.command(:bestamong, aliases: [:bestin,:beststats,:higheststats,:highest,:best,:highestamong,:highestin]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   stats_of_multiunits(bot,event,args,1)
 end
 
-bot.command([:worstamong,:worstin,:worststats,:loweststats,:lowest,:worst,:lowestamong,:lowestin]) do |event, *args|
+bot.command(:worstamong, aliases: [:worstin,:worststats,:loweststats,:lowest,:worst,:lowestamong,:lowestin]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   stats_of_multiunits(bot,event,args,-1)
 end
 
-bot.command([:random,:rand]) do |event, *args|
+bot.command(:random, aliases: [:rand]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args.length.zero?
@@ -8389,37 +8422,37 @@ bot.command([:random,:rand]) do |event, *args|
   make_random_unit(event,args,bot)
 end
 
-bot.command([:randomunit,:randunit,:unitrandom,:unitrand,:randomstats,:statsrand,:statsrandom,:randstats]) do |event, *args|
+bot.command(:randomunit, aliases: [:randunit,:unitrandom,:unitrand,:randomstats,:statsrand,:statsrandom,:randstats]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   pick_random_unit(event,args,bot)
 end
 
-bot.command([:randomskill,:randskill,:skillrandom,:skillrand,:randomskil,:skilrand,:skilrandom,:randskil]) do |event, *args|
+bot.command(:randomskill, aliases: [:randskill,:skillrandom,:skillrand,:randomskil,:skilrand,:skilrandom,:randskil]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   pick_random_skill(event,args,bot)
 end
 
-bot.command([:prf,:prfs,:PRF]) do |event|
+bot.command(:prf, aliases: [:prfs]) do |event|
   return nil if overlap_prevent(event)
   data_load(['library'])
   disp_all_prfs(event,bot)
 end
 
-bot.command([:refinery,:refine]) do |event|
+bot.command(:refine, aliases: [:refinery]) do |event|
   return nil if overlap_prevent(event)
   data_load(['library'])
   disp_all_refines(event,bot)
 end
 
-bot.command([:effect]) do |event|
+bot.command(:effect) do |event|
   return nil if overlap_prevent(event)
   data_load(['library'])
   disp_all_refines(event,bot,true)
 end
 
-bot.command([:summonpool,:summon_pool,:pool]) do |event, *args|
+bot.command(:summonpool, aliases: [:summon_pool,:pool]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   disp_summon_pool(event,args)
@@ -8464,13 +8497,13 @@ bot.command(:bonus) do |event, *args|
   show_bonus_units(event,x,bot)
 end
 
-bot.command([:arena,:arenabonus,:arena_bonus,:bonusarena,:bonus_arena]) do |event|
+bot.command(:arena, aliases: [:arenabonus,:arena_bonus,:bonusarena,:bonus_arena]) do |event|
   return nil if overlap_prevent(event)
   data_load()
   show_bonus_units(event,['Arena'],bot)
 end
 
-bot.command([:tempest,:tempestbonus,:tempest_bonus,:bonustempest,:bonus_tempest,:tt,:ttbonus,:tt_bonus,:bonustt,:bonus_tt]) do |event, *args|
+bot.command(:tempest, aliases: [:tempestbonus,:tempest_bonus,:bonustempest,:bonus_tempest,:tt,:ttbonus,:tt_bonus,:bonustt,:bonus_tt]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<=0
   elsif event.user.id==167657750971547648 && ['list'].include?(args[0])
@@ -8483,19 +8516,19 @@ bot.command([:tempest,:tempestbonus,:tempest_bonus,:bonustempest,:bonus_tempest,
   show_bonus_units(event,['Tempest'],bot)
 end
 
-bot.command([:aether,:aetherbonus,:aether_bonus,:aethertempest,:aether_tempest,:raid,:raidbonus,:raid_bonus,:bonusraid,:bonus_raid,:raids,:raidsbonus,:raids_bonus,:bonusraids,:bonus_raids]) do |event|
+bot.command(:aether, aliases: [:aetherbonus,:aether_bonus,:aethertempest,:aether_tempest,:raid,:raidbonus,:raid_bonus,:bonusraid,:bonus_raid,:raids,:raidsbonus,:raids_bonus,:bonusraids,:bonus_raids]) do |event|
   return nil if overlap_prevent(event)
   data_load()
   show_bonus_units(event,['Aether'],bot)
 end
 
-bot.command([:resonant,:resonantbonus,:resonant_bonus,:bonusresonant,:bonus_resonant,:resonance,:resonancebonus,:resonance_bonus,:bonusresonance,:bonus_resonance]) do |event|
+bot.command(:resonant, aliases: [:resonantbonus,:resonant_bonus,:bonusresonant,:bonus_resonant,:resonance,:resonancebonus,:resonance_bonus,:bonusresonance,:bonus_resonance]) do |event|
   return nil if overlap_prevent(event)
   data_load()
   show_bonus_units(event,['Resonant'],bot)
 end
 
-bot.command([:ghb]) do |event, *args|
+bot.command(:ghb) do |event, *args|
   return nil if overlap_prevent(event) || args.nil? || args.length<=0 || !['list'].include?(args[0])
   return nil unless event.user.id==167657750971547648
   args.shift
@@ -8528,12 +8561,12 @@ bot.command(:greil) do |event, *args|
   disp_unit_stats(bot,event,'Greil',args.join(' '),'smol',true)
 end
 
-bot.command([:embeds,:embed]) do |event|
+bot.command(:embeds, aliases: [:embed]) do |event|
   return nil if overlap_prevent(event)
   embedless_swap(bot,event)
 end
 
-bot.command([:headpat,:patpat,:pat]) do |event|
+bot.command(:headpat, aliases: [:patpat,:pat]) do |event|
   return nil if overlap_prevent(event)
   canpost=true
   if event.server.nil?
@@ -8678,13 +8711,13 @@ bot.command(:natures) do |event|
   event << 'https://orig00.deviantart.net/d88e/f/2018/047/9/2/nature_names_by_rot8erconex-dc3e1fj.png'
 end
 
-bot.command([:growths,:gps,:growth,:gp]) do |event|
+bot.command(:growths, aliases: [:gps,:growth,:gp]) do |event|
   return nil if overlap_prevent(event)
   data_load(['library'])
   growth_explain(event,bot)
 end
 
-bot.command([:oregano]) do |event, *args|
+bot.command(:oregano) do |event, *args|
   return nil if overlap_prevent(event)
   data_load(['unit','library'])
   x=$units.find_index{|q| q.name=='Oregano'}
@@ -8696,7 +8729,7 @@ bot.command([:oregano]) do |event, *args|
   oregano_explain(event,bot)
 end
 
-bot.command([:whoisoregano,:whyoregano]) do |event|
+bot.command(:whoisoregano, aliases: [:whyoregano]) do |event|
   return nil if overlap_prevent(event)
   data_load(['library'])
   oregano_explain(event,bot)
@@ -8720,13 +8753,13 @@ bot.command(:whyelise) do |event|
   why_elise(event,bot)
 end
 
-bot.command([:skillrarity,:onestar,:twostar,:threestar,:fourstar,:fivestar,:skill_rarity,:one_star,:two_star,:three_star,:four_star,:five_star]) do |event|
+bot.command(:skillrarity, aliases: [:onestar,:twostar,:threestar,:fourstar,:fivestar,:skill_rarity,:one_star,:two_star,:three_star,:four_star,:five_star]) do |event|
   return nil if overlap_prevent(event)
   data_load(['library'])
   skill_rarity(event)
 end
 
-bot.command([:attackicon,:attackcolor,:attackcolors,:attackcolour,:attackcolours,:atkicon,:atkcolor,:atkcolors,:atkcolour,:atkcolours,:atticon,:attcolor,:attcolors,:attcolour,:attcolours,:staticon,:statcolor,:statcolors,:statcolour,:statcolours,:iconcolor,:iconcolors,:iconcolour,:iconcolours]) do |event|
+bot.command(:attackicon, aliases: [:attackcolor,:attackcolors,:attackcolour,:attackcolours,:atkicon,:atkcolor,:atkcolors,:atkcolour,:atkcolours,:atticon,:attcolor,:attcolors,:attcolour,:attcolours,:staticon,:statcolor,:statcolors,:statcolour,:statcolours,:iconcolor,:iconcolors,:iconcolour,:iconcolours]) do |event|
   return nil if overlap_prevent(event)
   data_load(['library'])
   attack_icon(event)
@@ -8753,24 +8786,24 @@ bot.command(:invite) do |event, user|
   event.respond "A PM was sent to #{user_to_name}." unless event.server.nil? && user_to_name=="you"
 end
 
-bot.command([:mythic,:mythical,:mythics,:mythicals,:mystic,:mystical,:mystics,:mysticals]) do |event, *args|
+bot.command(:mythic, aliases: [:mythical,:mythics,:mythicals,:mystic,:mystical,:mystics,:mysticals]) do |event, *args|
   return nil if overlap_prevent(event)
   disp_legendary_list(bot,event,args,'Mythic')
   return nil
 end
 
-bot.command([:legendary,:legendaries,:legendarys,:legend,:legends]) do |event, *args|
+bot.command(:legendary, aliases: [:legendaries,:legendarys,:legend,:legends]) do |event, *args|
   return nil if overlap_prevent(event)
   disp_legendary_list(bot,event,args,'Legendary')
   return nil
 end
 
-bot.command([:aoe,:AOE,:AoE,:area]) do |event, *args|
+bot.command(:aoe, aliases: [:area]) do |event, *args|
   return nil if overlap_prevent(event)
   aoe(event,bot,args)
 end
 
-bot.command([:flowers,:flower]) do |event, *args|
+bot.command(:flowers, aliases: [:flower]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<=0
   elsif event.user.id==167657750971547648 && ['list'].include?(args[0])
@@ -8823,7 +8856,7 @@ bot.command(:shard) do |event, i, j|
   event.respond "This server uses #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || [-1,4].include?(Shardizard) || j != Shards
 end
 
-bot.command([:status,:avatar,:avvie]) do |event, *args|
+bot.command(:status, aliases: [:avatar,:avvie]) do |event, *args|
   return nil if overlap_prevent(event)
   t=Time.now
   timeshift=6
@@ -8849,14 +8882,14 @@ bot.command([:status,:avatar,:avvie]) do |event, *args|
   return nil
 end
 
-bot.command([:bugreport,:suggestion,:feedback]) do |event, *args|
+bot.command(:bugreport, aliases: [:suggestion,:feedback]) do |event, *args|
   return nil if overlap_prevent(event)
   x=['feh!','feh?','f?','e?','h?']
   x.push(@prefixes[event.server.id]) unless event.server.nil? || @prefixes[event.server.id].nil?
   bug_report(bot,event,args,Shards,shard_data(0,true),'Shard',x)
 end
 
-bot.command([:donation,:donate]) do |event, uid|
+bot.command(:donation, aliases: [:donate]) do |event, uid|
   return nil if overlap_prevent(event)
   uid="#{event.user.id}" if uid.nil? || uid.length.zero?
   if /<@!?(?:\d+)>/ =~ uid
@@ -8951,12 +8984,12 @@ bot.command(:prefix) do |event, prefix|
   event.respond "This server's prefix has been saved as **#{prefix}**"
 end
 
-bot.command([:tools,:links,:tool,:link,:resources,:resources]) do |event|
+bot.command(:tools, aliases: [:links,:tool,:link,:resources,:resources]) do |event|
   return nil if overlap_prevent(event)
   show_tools(event,bot)
 end
 
-bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, f|
+bot.command(:safe, aliases: [:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, f|
   return nil if overlap_prevent(event)
   f='' if f.nil?
   if event.server.nil?
@@ -9001,7 +9034,7 @@ bot.command([:safe,:spam,:safetospam,:safe2spam,:long,:longreplies]) do |event, 
   end
 end
 
-bot.command([:channellist,:chanelist,:spamchannels,:spamlist]) do |event|
+bot.command(:channellist, aliases: [:chanelist,:spamchannels,:spamlist]) do |event|
   if event.server.nil?
     event.respond "Yes, it is safe to spam here."
     return nil
@@ -9376,8 +9409,8 @@ bot.command(:reload, from: 167657750971547648) do |event|
         reload=true
       end
       t=Time.now
-      @last_multi_reload[0]=t
-      @last_multi_reload[1]=t
+      $last_multi_reload[0]=t
+      $last_multi_reload[1]=t
       e.respond str
       reload=true
     end
@@ -9403,7 +9436,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
       puts 'reloading EliseClassFunctions'
       load "#{$location}devkit/EliseClassFunctions.rb"
       t=Time.now
-      @last_multi_reload[0]=t
+      $last_multi_reload[0]=t
       e.respond 'Libraries force-reloaded'
       reload=true
     end
@@ -9445,7 +9478,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
   return nil
 end
 
-bot.command([:devedit, :dev_edit], from: 167657750971547648) do |event, cmd, *args|
+bot.command(:devedit, aliases: [:dev_edit], from: 167657750971547648) do |event, cmd, *args|
   return nil if overlap_prevent(event)
   event.respond "This command is to allow the developer to edit his units.  Your version of the command is `FEH!edit`" if File.exist?("#{$location}devkit/EliseUserSaves/#{event.user.id}.txt")
   return nil unless event.user.id==167657750971547648 # only work when used by the developer
@@ -9878,7 +9911,7 @@ def next_holiday(bot,mode=0)
   t-=60*60*6
   puts 'reloading EliseClassFunctions'
   load "#{$location}devkit/EliseClassFunctions.rb"
-  @last_multi_reload[1]=t
+  $last_multi_reload[1]=t
   holidays=[[0,1,1,'Tiki(Young)','as Babby New Year',"New Year's Day"],
             [0,2,2,'Feh','the best gacha game ever!','Game Release Anniversary'],
             [0,2,14,'Cordelia(Bride)','with your heartstrings.',"Valentine's Day"],
