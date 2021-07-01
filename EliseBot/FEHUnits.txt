@@ -65,7 +65,7 @@ Lucina\Red, Blade\ \Infantry\7, 8, 8, 5, 3\43, 34, 36, 25, 19\Maiponpon;; Himuka
 Lyn\Red, Blade\ \Infantry\5, 6, 8, 5, 7\37, 28, 37, 26, 29\Yamada Kotaro;; cuboon\Wendee Lee;; Ohmoto Makiko\64\5pLUPFTDRA\F\FE7, (at)SSBB, (st)SSBB, SSBProM, (at)SSB4, (t)SSB4, FEW, (at)SSBU, (s)SSBU\Lyn
 Maria\Colorless, Healer\ \Infantry\5, 6, 8, 3, 6\36, 27, 34, 19, 32\kaya8\Wendee Lee;; Suzaki Aya\65\3p4pLUPF\F\FE3, FE1, FE11, FE12\Maria
 Marth\Red, Blade\ \Infantry\6, 7, 8, 6, 4\41, 31, 34, 29, 23\Wada Sachiko;; Tobi\Yuri Lowenthal;; Midorikawa Hikaru\66\3p4p3qLUPFRA\M\FE3, FE1, SSBM, SSBB, (st)SSBB, FE11, FE12, SSBProM, SSB4, FEW, (a)FE14, (a)FE15, (a)STEAM, SSBU, (s)SSBU, DL\Marth
-Merric\Green, Tome, Wind\ \Infantry\7, 5, 7, 6, 3\43, 26, 32, 28, 19\Mizuno Kana\Yuri Lowenthal;; Hoshi Souichirou\67\3p4p0oLUPF\M\FE3, FE1, FE11, FE12, (s)SSBU\Merric
+Merric\Green, Tome, Wind\ \Infantry\7, 5, 7, 6, 3\43, 26, 32, 28, 19\Mizuno Kana;; nekomochi\Yuri Lowenthal;; Hoshi Souichirou\67\3p4p0oLUPFRA\M\FE3, FE1, FE11, FE12, (s)SSBU\Merric
 Minerva\Green, Blade\ \Flier\6, 7, 7, 7, 4\40, 31, 33, 32, 22\Daisuke Izuka;; yoshihisa\Cindy Robinson;; Sakura Ayane\68\5pLUPFTDRA\F\FE3, FE1, FE11, FE12, FEW, (s)SSBU\Minerva
 Niles\Colorless, Bow\ \Infantry\5, 5, 8, 2, 8\37, 25, 34, 17, 34\Yura;; Suekane Kumiko\Michael Sinterniklaas;; Koyasu Takehito\69\3p4p3qLUPFRA\M\FE14C, FEW\Niles
 Nino(Launch)\Green, Tome, Wind\ \Infantry\4, 8, 8, 3, 5\33, 33, 36, 19, 26\Amagaitaro;; Shiori Sakura\Sarah Blandy;; Yuuki Kana\70\3p4p3qLUPFRA\F\FE7, (s)SSBU\Nino*
@@ -128,7 +128,7 @@ Mist\Colorless, Healer\ \Infantry\6, 5, 6, 3, 8\39, 27, 28, 20, 34\Miwabe Sakura
 Soren\Green, Tome, Wind\ \Infantry\5, 8, 7, 2, 6\36, 33, 33, 17, 29\Miyajima Haru\Kyle McCarley;; Murase Ayumu\127\3p4pPF\M\FE9, FE10, (s)SSBU\Soren
 Titania\Green, Blade\ \Cavalry\5, 6, 8, 5, 6\37, 28, 34, 25, 30\Wada Sachiko\Misty Lee;; Miyagawa Miho\128\3p4pPF\F\FE9, FE10, (s)SSBU\Titania
 Boey\Green, Tome, Wind\ \Infantry\7, 6, 6, 7, 2\43, 29, 27, 32, 18\Aoji\Chris Hackney;; Sasaki Takuma\129\3p4p0oPF\M\FE15, FE2\Boey
-Celica\Red, Tome, Fire\ \Infantry\6, 7, 8, 4, 3\39, 32, 33, 22, 22\Fujikawa Akira\Erica Lindbeck;; Touyama Nao\130\5p0oPFTDRA\F\FE15, FE2, FEW, (s)SSBU\Celica
+Celica\Red, Tome, Fire\ \Infantry\6, 7, 8, 4, 3\39, 32, 33, 22, 22\Fujikawa Akira;; kae yamaguchi\Erica Lindbeck;; Touyama Nao\130\5p0oPFTDRA\F\FE15, FE2, FEW, (s)SSBU\Celica
 Genny\Colorless, Healer\ \Infantry\3, 8, 5, 4, 8\32, 35, 25, 21, 34\Amagaitaro\Eden Riegel as Claudia Lenz;; Horinaka Yuki\131\5pPFTD\F\FE15, FE2\Genny
 Mae\Blue, Tome, Thunder\ \Infantry\5, 8, 7, 2, 6\35, 36, 31, 16, 30\Gaou\Cherami Leigh;; Inagawa Eri\132\3p4p0oPF\F\FE15, FE2\Mae
 Lloyd\Red, Blade\ \Infantry\7, 7, 8, 3, 6\41, 32, 35, 20, 30\pikomaro\Kaiji Tang;; Matsuda Kenichirou\133\3g4g4g3q4q4rPF\M\FE7\Lloyd
@@ -681,11 +681,12 @@ Zeke\Blue, Blade\ \Cavalry\6, 11, 1, 10, 7\40, 40, 15, 38, 35\Yamada Kotaro\Patr
 Luthier\Green, Tome, Wind\ \Infantry\7, 9, 9, 2, 7\43, 37, 36, 20, 30\maCo / Trys Inc.\Brian Beacock;; \680\3p4p\M\FE15, FE2\Luthier
 Fernand\Blue, Blade\ \Cavalry\8, 10, 5, 7, 5\45, 41, 26, 32, 23\Asatani Tomoyo\Ray Chase;; \681\3g4g4g\M\FE15\Fernand
 Tatiana\Blue, Tome, Light\ \Infantry\6, 9, 8, 1, 10\40, 37, 34, 15, 39\ichikawa Halu\Christina Vee;; \682\5q4p5p\F\FE15, FE2\Titania
-Ashe(Summer)\Blue, Blade\ \Cavalry\0, 0, 0, 0, 0\45, 39, 43, 34, 20\azu-taro\Shannon McKain;; \683\5s\M\FE16\Ashe, Academy
-Mercedes(Summer)\Red, Tome, Fire\ \Cavalry\0, 0, 0, 0, 0\38, 37, 25, 17, 38\Kippu\Dorothy Fahn;; Hanamori Yumiri\684\5s\F\FE16\Mercedes, Academy
-Caspar(Summer)\Green, Blade\ \Infantry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\Meka\Ben Diskin;; \685\4s5s\M\FE16\Caspar, Academy
-Hilda(3H)(Summer)\Colorless, Healer, Ignore: Sp\Duo, Marianne[Academy], Marianne\Flier\0, 0, 0, 0, 0\39, 37, 40, 20, 25\Niji Hayashi\Celeste Henderson & Xanthe Huynh;; Kuwahara Yuuki & >Unknown<\686\5s\F\FE16\Hilda(3H), Academy
-Leonie(Summer)\Colorless, Bow\ \Cavalry\-4, -4, -4, -4, -4\0, 0, 0, 0, 0\\;; \687\4t5t0s\F\FE16\Leonie, Academy
+Ashe(Summer)\Blue, Blade\ \Cavalry\6, 9, 10, 8, 2\40, 37, 41, 32, 18\azu-taro\Shannon McKain;; \683\5s\M\FE16\Ashe, Academy
+Mercedes(Summer)\Red, Tome, Fire\ \Cavalry\6, 10, 4, 2, 10\38, 39, 25, 17, 38\Kippu\Dorothy Fahn;; Hanamori Yumiri\684\5s\F\FE16\Mercedes, Academy
+Caspar(Summer)\Green, Blade\ \Infantry\8, 10, 8, 6, 5\46, 41, 36, 30, 23\Meka\Ben Diskin;; \685\4s5s\M\FE16\Caspar, Academy
+Hilda(3H)(Summer)\Colorless, Healer, Ignore: Sp\Duo, Marianne[Academy], Marianne\Flier\6, 9, 10, 3, 5\39, 37, 40, 20, 25\Niji Hayashi\Celeste Henderson & Xanthe Huynh;; Kuwahara Yuuki & >Unknown<\686\5s\F\FE16\Hilda(3H), Academy
+Leonie(Summer)\Colorless, Bow\ \Cavalry\7, 9, 10, 5, 3\41, 36, 39, 27, 19\Wada Sachiko\Ratana;; \687\4t5t0s\F\FE16\Leonie, Academy
+Byleth(M)(Sublime)\Green, Tome, Wind\Water, Duel, 21/06/2021\Infantry\6, 10, 10, 6, 2\40, 39, 41, 25, 21\HAGIYA Kaoru\Zach Aguilar;; Kobayashi Yuusuke\688\5s\M\FE16\*Byleth, M
 Mathoo\Red, Blade\Duo, Naomi, Naomi\Infantry\8, 7, 4, 5, 11\45, 31, 24, 25, 42\\;; \10000\3p4pPF\M\FE14g\Mathoo\X167657750971547648
 Ace(C137)\Blue, Blade\ \Cavalry\8, 9, 2, 7, 4\41, 40, 17, 32, 24\Igston\;; \11000\5pPF\M\\Ace(C137)\YFA78649866577780736
 Declan\Red, Tome, Dark\ \Infantry\4, 9, 8, 12, 3\27, 33, 32, 41, 22\\;; \11001\5pPF\M\\Declan\Y125624530692472832

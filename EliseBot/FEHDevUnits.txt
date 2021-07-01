@@ -1,7 +1,7 @@
 Sakura\Bernie\Mirabilis\Anna\Anna(Apotheosis)\Anna(NewYears)\Annette\Annette(War)\Bernie(Christmas)\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Est(Bunny)\Ethlyn\Ethlyn(AwaOdori)\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(NewYears)\Larum\Lena\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Olivia(AwaOdori)\Olivia(Traveler)\Phina\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
 Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Claude(Brave)\Delthea\Dimitri(Brave)\Dorothea(Summer)\Eir\Eir(NewYears)\Ena(Halloween)\Felix(Christmas)\Fiora(Summer)\Fjorm\Forrest\Hector(Halloween)\Hilda(3H)\Hilda(3H)(Christmas)\Kaden\Kana(F)\Leanne\Lethe\Lethe(NewYears)\Lysithea\Lysithea(Brave)\Mamori\Marianne\Matthew\Melady\Minerva(Retro)\Ninian\Owain\Peony\Reginn\Reyson\Selkie\Selkie(NewYears)\Sothis\Tailtiu\Tiki(Young)(Earth)\Tiki(Young)(Fallen)\Veronica(Valentines)\Xane\Xane(Halloween)\Ylgr\Ylgr(Summer)
 Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lyn(Brave)\Nino(Fangs)\Nino(Launch)\Sharena
-f2p
+pass
 
 Sakura
 5\10\Resistance\Defense\S\15\Alm(Saint)
@@ -24,7 +24,7 @@ Close Guard 1\Close Guard 2\Close Guard 3
 Fierce Stance 3
 
 Mirabilis
-5\1\Defense\Speed\-\2
+5\1\Defense\Speed\(S)\2
 Iron Sword\Steel Sword\Silver Sword\Flower of Ease
 Dance\Whimsical Dream
 Chilling Wind\Iceberg
@@ -53,16 +53,6 @@ Wrath 1\Wrath 2\Wrath 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Fort. Def/Res 2
 
-Fjorm(Bride)
-5\1\Defense\Resistance\(S)\10\Celica(Queen)
-Assault\Gjallarbru
-Heal\Mend\Restore\Restore+
-Imbue\Heavenly Light
-HP +3\HP Atk 1\HP Atk 2
-Dazzling Staff 1\Dazzling Staff 2\Dazzling Staff 3
-Ground Orders 1\Ground Orders 2\Ground Orders 3
-Aerobatics 2
-
 Cordelia(Bride)
 5\1\Speed\Defense\-\15
 Iron Bow\Steel Bow\Brave Bow\Brave Bow+
@@ -72,6 +62,16 @@ Death Blow 1\Death Blow 2\Death Blow 3
 Escape Route 1\Escape Route 2\Escape Route 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Speed +2
+
+Fjorm(Bride)
+5\1\Defense\Resistance\-\10\Celica(Queen)
+Assault\Gjallarbru
+Heal\Mend\Restore\Restore+
+Imbue\Heavenly Light
+HP +3\HP Atk 1\HP Atk 2
+Dazzling Staff 1\Dazzling Staff 2\Dazzling Staff 3
+Ground Orders 1\Ground Orders 2\Ground Orders 3
+Aerobatics 2
 
 Alm
 5u\3\Speed\Resistance\-\15
@@ -204,7 +204,7 @@ Odd Spd Wave 1\Odd Spd Wave 2\Odd Spd Wave 3
 Swift Stance 1
 
 Celica
-5\3\Speed\Resistance\-\0
+5r\4\Speed\Resistance\-\0
 Fire\Elfire\Bolganone\Ragnarok\Ragnarok (+) Effect Mode
 Draw Back
 Dragon Gaze\Draconic Aura
@@ -322,6 +322,16 @@ Brazen Atk/Res 1\Brazen Atk/Res 2\Brazen Atk/Res 3
 Renewal 1\Renewal 2\Renewal 3
 Spd Tactic 1\Spd Tactic 2\Spd Tactic 3
 Atk Tactic 3
+
+Elise
+5\1\Defense\Attack\-\0
+~~Assault~~\~~Gravity~~\~~__Gravity+__~~\~~Elise's Staff~~
+Heal\Mend\Recover\~~Recover+~~
+Imbue\Kindled-Fire Balm
+~~none~~
+~~Live to Serve 1~~\~~Live to Serve 2~~\~~Live to Serve 3~~
+~~none~~
+
 
 Ena(Halloween)
 5\2\\\-\0
@@ -544,7 +554,7 @@ Atk Smoke 1\Atk Smoke 2\Atk Smoke 3
 Fortify Res 3
 
 Lena
-5\8\Speed\Defense\-\0
+5\10\Speed\Defense\-\0
 Assault\Gravity\Gravity+
 Heal\Mend\Recover\Recover+
 Imbue\Heavenly Light
@@ -684,7 +694,7 @@ Spur Spd 1\Spur Spd/Res 1\Spur Spd/Res 2
 Spd/Res Solo 2
 
 Minerva(Retro)
-5\6\\\-\0
+5\7\\\-\0
 Iron Axe\Steel Axe\Silver Axe\Dragoon Axe
 Smite
 Dragon Gaze\Draconic Aura
@@ -884,7 +894,7 @@ With Everyone!
 Atk Ploy 2
 
 Tiki(Young)(Fallen)
-5\0\Speed\Resistance\-\6
+5\0\Speed\Resistance\-\7
 Fire Breath\Fire Breath+\Flametongue\Razing Breath
 Swap
 Glowing Ember\Ignis

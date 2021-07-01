@@ -204,6 +204,7 @@ Gold Heron Circlet\Hat\Proof of victory over Legendary Claude\Beat Claude(Unific
 Gold Nifl Crown\Hat\Proof of victory over Mythic Mila\Beat Mila's MHB at Abyssal difficulty.
 Golden Diadem\Hat\Proof of victory over Mythic Duma.\Beat Duma's MHB at Abyssal difficulty
 Gold Explorer's Hat\Hat\Proof of victory over Mythic Lif.\Beat Lif's MHB at Abyssal difficulty.
+Gold Floral Headband\Hat\Proof of victory over Legendary Byleth\Beat Byleth(M)(Sublime)'s LHB at Abyssal difficulty.
 Gold Knight's Headpiece\Hat\Proof of victory over Legendary Eliwood\Beat Eliwood(Wind)'s LHB at Abyssal difficulty.
 Gold Lost Child's Hat\Hat\Proof of victory over Legendary Edelgard\Beat Edelgard(Emperor)'s LHB at Abyssal difficulty.
 Gold Maid Headpiece\Hat\Proof of victory over Mythic Naga.\Beat Naga's MHB at Abyssal difficulty.
