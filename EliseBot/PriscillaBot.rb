@@ -5741,7 +5741,7 @@ def add_new_alias(bot,event,newname,unit,modifier=nil,modifier2=nil,mode=0)
     event.respond str if str.length>0 && mode==0
     args=event.message.text.downcase.split(' ')
     args.shift
-    list_unit_aliases(event,args,bot) if mode==1
+    list_aliases(event,args,bot) if mode==1
     return nil
   end
   str=''
@@ -5886,7 +5886,7 @@ def add_new_alias(bot,event,newname,unit,modifier=nil,modifier2=nil,mode=0)
     event.respond str if str.length>0
     args=event.message.text.downcase.split(' ')
     args.shift
-    list_unit_aliases(event,args,bot) if mode==1
+    list_aliases(event,args,bot) if mode==1
     return nil
   end
   logchn=log_channel()
