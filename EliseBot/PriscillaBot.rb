@@ -9664,7 +9664,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
         reload=true
       end
       puts 'reloading Elispanol'
-      download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Elisepanol.rb")
+      download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Elispanol.rb")
       IO.copy_stream(download, "FEHTemp.txt")
       str=''
       if File.size("FEHTemp.txt")>100
@@ -9672,10 +9672,10 @@ bot.command(:reload, from: 167657750971547648) do |event|
         File.open("FEHTemp.txt").each_line.with_index do |line, idx|
           b.push(line)
         end
-        open("Elisepanol.rb", 'w') { |f|
+        open("Elispanol.rb", 'w') { |f|
           f.puts b.join('')
         }
-        str="#{str}\nElisepanol loaded."
+        str="#{str}\nElispanol loaded."
         reload=true
       end
       download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/rot8er_functs.rb")
