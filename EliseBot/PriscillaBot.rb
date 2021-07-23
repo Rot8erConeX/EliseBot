@@ -1,6 +1,7 @@
 Shardizard = ARGV.first.to_i # taking a single variable from the command prompt to get the shard value
 system('color 0F')
-Shards = 6                   # total number of shards
+Shards = 4                   # total number of shards
+$spanishShard=nil
 
 require 'discordrb'                    # Download link: https://github.com/meew0/discordrb
 require 'open-uri'                     # pre-installed with Ruby in Windows
@@ -36,12 +37,13 @@ end
 # The bot's token is basically their password, so is censored for obvious reasons
 if Shardizard==4
   bot = Discordrb::Commands::CommandBot.new token: '>Debug Token<', client_id: 431895561193390090, prefix: prefix_proc
+elsif Shardizard==-2
 elsif Shardizard<0
   bot = Discordrb::Commands::CommandBot.new token: '>Smol Token<', client_id: 627511537237491715, prefix: prefix_proc
 elsif Shardizard<4
-  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: Shardizard, num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
+  bot = Discordrb::Commands::CommandBot.new token: '>Token<', shard_id: Shardizard, num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
 else
-  bot = Discordrb::Commands::CommandBot.new token: '>Main Token<', shard_id: (Shardizard-1), num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
+  bot = Discordrb::Commands::CommandBot.new token: '>Token<', shard_id: (Shardizard-1), num_shards: Shards, client_id: 312451658908958721, prefix: prefix_proc
 end
 bot.gateway.check_heartbeat_acks = false
 
@@ -167,6 +169,9 @@ end
 if Shardizard==-1
   system("color 09")
   system("title loading EliseBot(Smol)")
+elsif Shardizard==-2
+  system("color 09")
+  system("title loading Elispanol")
 else
   system("color 0#{shard_data(4)[Shardizard,1]}") # command prompt color and title determined by the shard
   system("title loading #{shard_data(2)[Shardizard]} EliseBot")
@@ -246,7 +251,7 @@ Natures=[['Gentle','Resistance','Defense'], # this is a list of all the nature n
          ["`\u22C0`Clever",'Attack','HP',true],
          ["`\u22C0`Quick",'Speed','HP',true],
          ["`\u22C0`Sturdy",'Defense','HP',true],
-         ["`\u22C0`Robust",'Resistance','HP',true],
+         ["`\u22C0`Calm",'Resistance','HP',true],
          ["`\u22C1`Weak",'HP','Attack',true],
          ["`\u22C1`Dull",'HP','Attack',true],
          ["`\u22C1`Sluggish",'HP','Speed',true],
@@ -256,7 +261,8 @@ Max_rarity_merge=[5,10,15]
 Stat_Names=['HP','Attack','Speed','Defense','Resistance']
 Skill_Slots=[['<:Skill_Weapon:444078171114045450>','<:Skill_Assist:444078171025965066>','<:Skill_Special:444078170665254929>','<:Passive_A:443677024192823327>',
               '<:Passive_B:443677023257493506>','<:Passive_C:443677023555026954>','<:Passive_S:443677023626330122>','<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>'],
-             ['Weapon','Assist','Special','A Passive','B Passive','C Passive','Passive Seal','Duo/Harmonic']]
+             ['Weapon','Assist','Special','A Passive','B Passive','C Passive','Passive Seal','Duo/Harmonic'],
+             ['Arma','Asistencia','Especial','Pasiva A','Pasiva B','Pasiva C','Insignia passiva','Dúo/al Son']]
 Rarity_stars=[['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>',
                '<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>','<:Icon_Rarity_6:491487784650145812>'],
               ['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>',
@@ -422,7 +428,7 @@ class FEHUnit
     end
     return false
   end
-
+  
   def fullName(format=nil)
     return @name if format.nil?
     return "#{format}#{@name}#{format.reverse}"
@@ -446,6 +452,11 @@ class FEHUnit
     refresher='Dancer' if !$skills.find_index{|q| q.name=='Dance'}.nil? && $skills[$skills.find_index{|q| q.name=='Dance'}].learn.join(', ').split(', ').include?(@name)
     refresher='Singer' if !$skills.find_index{|q| q.name=='Sing'}.nil? && $skills[$skills.find_index{|q| q.name=='Sing'}].learn.join(', ').split(', ').include?(@name)
     refresher='Bard' if !$skills.find_index{|q| q.name=='Play'}.nil? && $skills[$skills.find_index{|q| q.name=='Play'}].learn.join(', ').split(', ').include?(@name)
+    if Shardizard==$spanishShard
+      refresher="Bailarín#{'a' if @gender=='F'}" if refresher=='Dancer'
+      refresher='Cantante' if refresher=='Singer'
+      refresher="Bard#{self.spanish_gender.downcase}" if refresher=='Bard'
+    end
     lemote1=''
     lemote2=''
     legstr=''
@@ -461,6 +472,10 @@ class FEHUnit
       lemote2=moji[0].mention unless moji.length<=0
       legstr="\n#{lemote1}*#{@legendary[0]}* / #{lemote2}*#{@legendary[1].gsub('Duel','Pair-Up').gsub(' Slot','* / *Slot+')}* #{@legendary[3]} Hero"
       legstr="\n#{lemote1}*#{@legendary[0]}* / #{lemote2}*#{@legendary[1].gsub('Duel','Pair-Up').gsub(' Slot','* / *Slot+')}* #{@legendary[3]} - #{self.seasonality}" if self.seasonality.length>0
+      if Shardizard==$spanishShard
+        legstr="\n#{lemote1}*Héroe #{self.spanish_legendary[3]} de#{self.spanish_legendary[2]} #{self.spanish_legendary[0]}* / #{lemote2}*#{self.spanish_legendary[1].gsub(' Slot','* / *Slot+')}*"
+        legstr="\n#{lemote1}*#{self.spanish_legendary[3]} de#{self.spanish_legendary[2]} #{self.spanish_legendary[0]}* / #{lemote2}*#{self.spanish_legendary[1].gsub(' Slot','* / *Slot+')}* - #{self.seasonality}" if self.seasonality.length>0
+      end
     end
     demote=''
     unless @duo.nil?
@@ -468,17 +483,32 @@ class FEHUnit
       moji=bot.server(554231720698707979).emoji.values.reject{|q| q.name != "Hero_#{@duo[0][0]}_Mathoo"} if @name=='Mathoo'
       demote=moji[0].mention unless moji.length<=0
       duostr="\n#{demote}*#{@duo[0][0]} Hero* with #{list_lift(@duo.map{|q| q[2]},'and')}"
+      duostr="\n#{demote}*Héroe #{self.spanish_duo}* con #{list_lift(@duo.map{|q| q[2]},'y')}" if Shardizard==$spanishShard
     end
     bemote=[]
     if includebonus
-      bemote.push("<:Current_Arena_Bonus:498797967042412544>#{' Current Arena Bonus unit' unless emotesonly}") if self.isBonusUnit?('Arena')
-      bemote.push("<:Current_Aether_Bonus:510022809741950986>#{' Current Aether Bonus unit' unless emotesonly}") if self.isBonusUnit?('Aether')
-      bemote.push("<:Special_Blade:800880639540068353>#{' Current Resonant Blades Bonus unit' unless emotesonly}") if self.isBonusUnit?('Resonant')
-      bemote.push("<:Current_Tempest_Bonus:498797966740422656>#{' Current Tempest Bonus unit' unless emotesonly}") if self.isBonusUnit?('Tempest')
+      if Shardizard==$spanishShard && !emotesonly
+        bemote.push("<:Current_Arena_Bonus:498797967042412544> Bonificación actual en Arena") if self.isBonusUnit?('Arena')
+        bemote.push("<:Current_Aether_Bonus:510022809741950986> Bonificación actual en Asaltos Etéreos") if self.isBonusUnit?('Aether')
+        bemote.push("<:Special_Blade:800880639540068353> Bonificación actual en Batallas Fragorosas") if self.isBonusUnit?('Resonant')
+        bemote.push("<:Current_Tempest_Bonus:498797966740422656> Bonificación actual en la Tormenta") if self.isBonusUnit?('Tempest')
+      else
+        bemote.push("<:Current_Arena_Bonus:498797967042412544>#{' Current Arena Bonus unit' unless emotesonly}") if self.isBonusUnit?('Arena')
+        bemote.push("<:Current_Aether_Bonus:510022809741950986>#{' Current Aether Raids Bonus unit' unless emotesonly}") if self.isBonusUnit?('Aether')
+        bemote.push("<:Special_Blade:800880639540068353>#{' Current Resonant Battles Bonus unit' unless emotesonly}") if self.isBonusUnit?('Resonant')
+        bemote.push("<:Current_Tempest_Bonus:498797966740422656>#{' Current Tempest Trials Bonus unit' unless emotesonly}") if self.isBonusUnit?('Tempest')
+      end
     end
     return "#{'<:Summon_Gun:467557566050861074>' if @name=='Kiran' || @id==0}#{wemote}#{memote}#{'<:Assist_Music:454462054959415296>' if refresher.length>0}#{lemote1}#{lemote2}#{demote}#{bemote.join('')}" if emotesonly
     refresher="\n<:Assist_Music:454462054959415296> *#{refresher}*" if refresher.length>0
-    refresher="#{refresher}\n*Other modifiers:* #{@clazz_flag.join(', ')}" unless @clazz_flag.nil? || @clazz_flag.length<=0
+    unless @clazz_flag.nil? || @clazz_flag.length<=0
+      if Shardizard==$spanishShard
+        refresher="#{refresher}\n*Modificadores adicionales:* #{@clazz_flag.join(', ')}"
+      else
+        refresher="#{refresher}\n*Other modifiers:* #{@clazz_flag.join(', ')}"
+      end
+    end
+    return "#{"<:Summon_Gun:467557566050861074>*Arma para Convocar*\n" if @name=='Kiran' || @id==0}#{wemote}#{self.wstring_spanish}\n#{memote}*#{self.movement_spanish}*#{refresher}#{legstr}#{duostr}#{"\n" if bemote.length>0}#{bemote.join("\n")}" if Shardizard==$spanishShard
     return "#{"<:Summon_Gun:467557566050861074>*Summon Gun*\n" if @name=='Kiran' || @id==0}#{wemote}#{self.weapon_string}\n#{memote}*#{@movement}*#{refresher}#{legstr}#{duostr}#{"\n" if bemote.length>0}#{bemote.join("\n")}"
   end
   
@@ -872,15 +902,11 @@ class FEHUnit
         else
           x[i].id+=4000
         end
-      elsif @name=='Ike(Vanguard)' && x[i].type.include?('Passive(C)') && x[i].name != 'Def Tactic'
-        x[i].id+=10000
-      elsif @name=='Bluezie' && x[i].type.include?('Passive(A)') && x[i].name == 'Atk/Spd Bond'
-        x[i].id+=100
       end
-      x[i].name="__#{x[i].name}__" if !x[i].nil? && x[i].name=='Def Tactic' && x[i].level.to_i==3 && @name=='Ike(Vanguard)'
-      x[i].name="__#{x[i].name}__" if !x[i].nil? && x[i].name=='Spd/Def Bond' && x[i].level.to_i==3 && @name=='Bluezie'
-      x[i].name="__#{x[i].name}__" if !x[i].nil? && x[i].name=='Guidance' && x[i].level.to_i==3 && @name=='Ryoma(Supreme)'
-      x[i].name="__#{x[i].name}__" if !x[i].nil? && x[i].name=='Fortress Res' && x[i].level.to_i==3 && @name=='Gunnthra'
+      if !@legendary.nil?
+        data_load(['library'])
+        x[i]=self.legend_shift_skill(x[i])
+      end
     end
     x.compact!
     x=x.sort{|a,b| a.id<=>b.id}
@@ -975,13 +1001,16 @@ class FEHUnit
         y2[i]=nil if ['<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>~~*none*~~','<:Passive_S:443677023626330122>~~*none*~~'].include?(y2[i])
       end
       y2.compact!
+      return [['Habilidades',y2.join("\n")]] if Shardizard==$spanishShard
       return [['Skills',y2.join("\n")]]
     end
     for i in 0...y2.length
-      em="#{Skill_Slots[0][i]}#{Skill_Slots[1][i]}"
-      em='<:Hero_Duo:631431055420948480>Duo' if Skill_Slots[1][i]=='Duo/Harmonic' && !@duo.nil? && @duo[0][0]=='Duo'
-      em='<:Hero_Harmonic:722436762248413234>Harmonic' if Skill_Slots[1][i]=='Duo/Harmonic' && !@duo.nil? && @duo[0][0]=='Harmonic'
-      em='<:Hero_Duo_Mathoo:631431055513092106>Duo' if Skill_Slots[1][i]=='Duo/Harmonic' && @name=='Mathoo'
+      pos=1
+      pos=2 if Shardizard==$spanishShard
+      em="#{Skill_Slots[0][i]}#{Skill_Slots[pos][i]}"
+      em="<:Hero_Duo:631431055420948480>#{Skill_Slots[pos][i].split('/')[0]}" if Skill_Slots[1][i]=='Duo/Harmonic' && !@duo.nil? && @duo[0][0]=='Duo'
+      em="<:Hero_Harmonic:722436762248413234>#{Skill_Slots[pos][i].split('/')[1]}" if Skill_Slots[1][i]=='Duo/Harmonic' && !@duo.nil? && @duo[0][0]=='Harmonic'
+      em="<:Hero_Duo_Mathoo:631431055513092106>#{Skill_Slots[pos][i].split('/')[0]}" if Skill_Slots[1][i]=='Duo/Harmonic' && @name=='Mathoo'
       if Skill_Slots[1][i]=='Weapon' && y[i].length>0 && emotes
         for i2 in 0...y2[i].length
           if @name=='Kiran' && y[i][i2].id>999
@@ -1003,7 +1032,9 @@ class FEHUnit
           end
         end
       end
-      y2[i].unshift('~~*unknown base*~~') if y[i].length>0 && !y[i][0].prerequisite.nil? && y[i][0].prerequisite.length>1
+      ub='~~*unknown base*~~'
+      ub='~~*previo desconocido*~~' if Shardizard==$spanishShard
+      y2[i].unshift(ub) if y[i].length>0 && !y[i][0].prerequisite.nil? && y[i][0].prerequisite.length>1
       y2[i]=[em,y2[i].join("\n")]
       if y[i].length<=0 || !emotes || ['Duo/Harmonic','Weapon'].include?(Skill_Slots[1][i])
       elsif !y[i][-1].exclusivity.nil?
@@ -1025,7 +1056,7 @@ class FEHUnit
         x=y[i][-1].learn.find_index{|q| q.include?(@name)}
         y2[i][1]="#{y2[i][1]}   #{Rarity_stars[0][x]}" unless x.nil? || !y[i][-1].exclusivity.nil?
       end
-      y2[i]=nil if ['<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>Duo/Harmonic','<:Passive_S:443677023626330122>Passive Seal'].include?(y2[i][0]) && y2[i][1]=='~~*none*~~'
+      y2[i]=nil if ["<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>#{Skill_Slots[pos][7]}","<:Passive_S:443677023626330122>#{Skill_Slots[pos][6]}"].include?(y2[i][0]) && y2[i][1]=='~~*none*~~'
     end
     y2.compact!
     if explainemotes && emotes2Bexplained.include?(true)
@@ -1035,15 +1066,19 @@ class FEHUnit
         ftr='Purple sparkles mark Prf skills.  Crowns mark unique inheritable skills.' if emotes2Bexplained[0]
         ftr='Unique inheritable skills:  Crown = overall,   Gold orb = within Book 3-5 summon pool.' if emotes2Bexplained[3]
         ftr='Unique inheritable skills:  Crown = overall,   Orb = within non-limited summon pool.' if emotes2Bexplained[2]
+        ftr='Las coronas indican habilidades que solo este personaje tiene.' if Shardizard==$spanishShard
       elsif emotes2Bexplained[0]
         ftr='Purple sparkles mark skills Prf to this unit.'
         ftr='Purple sparkles mark Prf skills.  Gold orbs mark semi-unique inheritable skills.' if emotes2Bexplained[3]
         ftr='Purple sparkles mark Prf skills.  Orbs mark semi-unique inheritable skills.' if emotes2Bexplained[2]
+        ftr='Los destellos morados indican habilidades exclusivas de este personaje.' if Shardizard==$spanishShard
       elsif emotes2Bexplained[2]
         ftr='Orbs mark inheritable skills that within the non-limited summon pool, only this unit has.'
         ftr='Unique inheritable skills:  Gold orb = within Book 3-5 summon pool,  Rainbow orb = within non-limited summon pool.' if emotes2Bexplained[3]
+        ftr='Los orbes indican habilidades que se pueden heredar pero excluyendo personajes de temporada, solo este personaje sabe.' if Shardizard==$spanishShard
       elsif emotes2Bexplained[3]
         ftr='Gold orbs mark inheritable skills that within the Book 3-5 summon pool, only this unit has.'
+        ftr='Los orbes dorados indican habilidades que dentro del grupo estándar, solo este personaje tiene.' if Shardizard==$spanishShard
       end
       y2.push(ftr) unless ftr.nil?
     end
@@ -1052,10 +1087,15 @@ class FEHUnit
   
   def atkName(full=true,weapon=nil,refine=nil,transformed=false)
     x='Strength'
-    x='Freeze' if self.weapon_type=='Dragon'
-    x='Freeze' if !weapon.nil? && weapon.has_tag?('Frostbite',refine,transformed)
+    unless full==1
+      x='Freeze' if self.weapon_type=='Dragon'
+      x='Freeze' if !weapon.nil? && weapon.has_tag?('Frostbite',refine,transformed)
+    end
     x='Magic' if ['Tome','Staff'].include?(self.weapon_type)
     x='Attack' if @name=='Kiran'
+    m='Fuerza'
+    m='Magia' if x=='Magic'
+    return m if Shardizard==$spanishShard && full==1
     return 'Atk' if !full && x=='Attack'
     return 'Frz' if !full && x=='Freeze'
     x=x[0,3] unless full
@@ -1074,13 +1114,24 @@ class FEHUnit
     stars="#{rarity}#{['<:FGO_icon_rarity_dark:571937156981981184>','<:FGO_icon_rarity_sickly:571937157095227402>','<:FGO_icon_rarity_rust:523903558928826372>','<:FGO_icon_rarity_mono:523903551144198145>','<:FGO_icon_rarity_gold:523858991571533825>'][rarity-1]}" if @games[0]=='FGO'
     stars="#{rarity}-star" if rarity==0 || rarity>6
     nat=''
-    if boon.length>0 && bane.length>0
-      nat="+#{boon} -#{bane}"
-      nat="+#{boon} ~~-#{bane}~~" if merges>0
-    elsif boon.length>0
-      nat="+#{boon}"
-    elsif bane.length>0
-      nat="#{'~~' if merges>0}-#{bane}#{'~~' if merges>0}"
+    boon2="#{boon}"; bane2="#{bane}"
+    if Shardizard==$spanishShard
+      boon2='Ataque' if boon=='Attack'
+      bane2='Ataque' if bane=='Attack'
+      boon2='Velocidad' if boon=='Speed'
+      bane2='Velocidad' if bane=='Speed'
+      boon2='Defensa' if boon=='Defense'
+      bane2='Defensa' if bane=='Defense'
+      boon2='Resistencia' if boon=='Resistance'
+      bane2='Resistencia' if bane=='Resistance'
+    end
+    if boon2.length>0 && bane2.length>0
+      nat="+#{boon2} -#{bane2}"
+      nat="+#{boon2} ~~-#{bane2}~~" if merges>0
+    elsif boon2.length>0
+      nat="+#{boon2}"
+    elsif bane2.length>0
+      nat="#{'~~' if merges>0}-#{bane2}#{'~~' if merges>0}"
     end
     str="#{stars} #{@name}#{self.emotes(bot,true,true,true)}"
     str="#{str} +#{merges}" if merges>0
@@ -1119,12 +1170,24 @@ class FEHUnit
     stars="#{['','<:Rarity_1:532086056594440231>','<:Rarity_2:532086056254963713>','<:Rarity_3:532086056519204864>','<:Rarity_4:532086056301101067>','<:Rarity_5:532086056737177600>'][rarity]*rarity}#{['','<:Rarity_1_Blank:555459856476274691>','<:Rarity_2_Blank:555459856400908299>','<:Rarity_3_Blank:555459856568418314>','<:Rarity_4_Blank:555459856497246218>','<:Rarity_5_Blank:555459856190930955>'][rarity]*(5-rarity)}" if @games[0]=='DL'
     stars=['<:FGO_icon_rarity_dark:571937156981981184>','<:FGO_icon_rarity_sickly:571937157095227402>','<:FGO_icon_rarity_rust:523903558928826372>','<:FGO_icon_rarity_mono:523903551144198145>','<:FGO_icon_rarity_gold:523858991571533825>'][rarity-1]*rarity if @games[0]=='FGO'
     stars="**#{rarity}-star**" if rarity==0 || rarity>6
-    return "#{stars}#{"**+#{merges}**" if merges>0}" if expanded_mode==0
+    return "\u200B#{stars}#{"**+#{merges}**" if merges>0}" if expanded_mode==0
     nat=''
     support='' if support=='-' && expanded_mode==1
     support='-' if support=='' && expanded_mode==2
+    boon2="#{boon}"; bane2="#{bane}"
+    if Shardizard==$spanishShard
+      boon2='Ataque' if boon=='Attack'
+      bane2='Ataque' if bane=='Attack'
+      boon2='Velocidad' if boon=='Speed'
+      bane2='Velocidad' if bane=='Speed'
+      boon2='Defensa' if boon=='Defense'
+      bane2='Defensa' if bane=='Defense'
+      boon2='Resistencia' if boon=='Resistance'
+      bane2='Resistencia' if bane=='Resistance'
+    end
     if boon.length>0 && bane.length>0
       n=Natures.reject{|q| q[1]!=boon || q[2]!=bane}
+      n=$spanish_Natures.reject{|q| q[1]!=boon || q[2]!=bane} if Shardizard==$spanishShard
       n2=n.map{|q| q[0]}.join('/')
       n2=n[0][0] if self.atkName(true,weapon,refne,transformed)=='Strength'
       n2=n[-1][0] if self.atkName(true,weapon,refne,transformed)=='Magic'
@@ -1133,14 +1196,17 @@ class FEHUnit
         n2=n[-1][0] if self.atkName(true)=='Magic'
         n2=n[-1][0] if n2.include?('/') && self.weapon_type=='Dragon'
       end
-      nat="\n+#{boon}, -#{bane} (#{n2})"
-      nat="\n+#{boon}, ~~-#{bane}~~ (#{n2}, bane neutralized)" if merges>0
+      nat="\n+#{boon2}, -#{bane2} (#{n2})"
+      nat="\n+#{boon2}, ~~-#{bane2}~~ (#{n2}, bane neutralized)" if merges>0
+      nat="\n+#{boon2}, ~~-#{bane2}~~ (#{n2}, perdición neutralizada)" if merges>0 && Shardizard==$spanishShard
     elsif boon.length>0
-      nat="\n+#{boon}"
+      nat="\n+#{boon2}"
     elsif bane.length>0
-      nat="\n#{'~~' if merges>0}-#{bane}#{'~~ (neutralized)' if merges>0}"
+      nat="\n#{'~~' if merges>0}-#{bane2}#{'~~ (neutralized)' if merges>0}"
+      nat="\n#{'~~' if merges>0}-#{bane2}#{'~~ (neutralizada)' if merges>0}" if Shardizard==$spanishShard
     elsif expanded_mode==2
       nat="\nNeutral nature"
+      nat="\nNaturaleza neutral" if Shardizard==$spanishShard
     end
     heart='<:Icon_Support:448293527642701824>'
     heart='<:Lovewhistle:575233033024569365>' if @games[0]=='DL'
@@ -1153,8 +1219,12 @@ class FEHUnit
     bonusx="Rokkr Unit" if bonus=='Rokkr'
     bonusx="Not a bonus unit" if bonus.length<=0
     trns=''
-    trns="\nForm: Humanoid" if self.weapon_type=='Beast'
-    trns="\nForm: #{self.beast_species} (transformed)" if transformed && self.weapon_type=='Beast'
+    if self.weapon_type=='Beast'
+      trns="\nForm: Humanoid"
+      trns="\nForma de Humanoide" if Shardizard==$spanishShard
+      trns="\nForm: #{self.beast_species} (transformed)" if transformed
+      trns="\nForma de #{self.spanish_beast} (transformad#{self.spanish_gender.downcase})" if transformed && Shardizard==$spanishShard
+    end
     sl=skill_list.map{|q| q}
     for i in 0...sl.length
       if sl[i][0,20]=='Color Duel Movement '
@@ -1181,7 +1251,16 @@ class FEHUnit
         end
       end
     end
-    return "#{stars}\nMerge count: **+#{merges}**\n#{self.dragonflowerEmote}Dragonflower count: **x#{flowers}** (out of #{self.dragonflowerMax})#{"\n#{heart}Summoner Support: **#{support}**" if support.length>0}#{nat}#{"\n<:Resplendent_Ascension:678748961607122945>Resplendent Ascension" if resp && @availability[0].include?('RA')}\nEquipped weapon: #{'~~*none*~~' if weapon.nil?}#{"#{'~~' unless wpnlegal}#{weapon.name}#{'~~' unless wpnlegal}#{"\nRefinement: #{'~~*none*~~' if refne.nil? || refne.length<=0}#{"#{'~~' unless wpnlegal}#{refne} Mode#{'~~' unless wpnlegal}" if !refne.nil? && refne.length>0}" unless weapon.refine.nil?}" unless weapon.nil?}#{trns}\nStat-affecting skills: #{sl.join(', ') unless sl.length<=0}#{'*~~none~~*' if sl.length<=0}\nStat-buffing skills: #{sb.join(', ') unless sb.length<=0}#{'*~~none~~*' if sb.length<=0}\nStat-nerfing skills: #{sn.join(', ') unless sn.length<=0}#{'*~~none~~*' if sn.length<=0}\n#{bonusx}\nBlessings applied: #{blessing.join(', ') if blessing.length>0}#{'~~*none*~~' unless blessing.length>0}" if expanded_mode==2
+    refne2=''
+    refne2='Efecto' if refne=='Effect'
+    refne2='Ataque' if refne=='Attack'
+    refne2='Velocidad' if refne=='Speed'
+    refne2='Defensa' if refne=='Defense'
+    refne2='Resistencia' if refne=='Resistance'
+    refne2='Furioso' if refne=='Wrathful'
+    refne2='Brillante' if refne=='Dazzling'
+    return "\u200B#{stars}\nNumero de merge: **+#{merges}**\n#{self.dragonflowerEmote}Numero de Dracoflor: **x#{flowers}** (out of #{self.dragonflowerMax})#{"\n#{heart}Apoyo del Invocador: **#{support}**" if support.length>0}#{nat}#{"\n<:Resplendent_Ascension:678748961607122945>Atuendo Resplandeciente" if resp && @availability[0].include?('RA')}\nArma equipada: #{'~~*none*~~' if weapon.nil?}#{"#{'~~' unless wpnlegal}#{weapon.name}#{'~~' unless wpnlegal}#{"\nRefinando: #{'~~*none*~~' if refne.nil? || refne.length<=0}#{"#{'~~' unless wpnlegal}Modo de #{refne2}#{'~~' unless wpnlegal}" if !refne.nil? && refne.length>0}" unless weapon.refine.nil?}" unless weapon.nil?}#{trns}\nHabilidades que afectan las estadísticas: #{sl.join(', ') unless sl.length<=0}#{'*~~none~~*' if sl.length<=0}\nHabilidades que aumentan las estadísticas: #{sb.join(', ') unless sb.length<=0}#{'*~~none~~*' if sb.length<=0}\nHabilidades que disminuyen las estadísticas: #{sn.join(', ') unless sn.length<=0}#{'*~~none~~*' if sn.length<=0}\n#{bonusx}\nBendiciones aplicadas: #{blessing.join(', ') if blessing.length>0}#{'~~*none*~~' unless blessing.length>0}" if expanded_mode==2 && Shardizard==$spanishShard
+    return "\u200B#{stars}\nMerge count: **+#{merges}**\n#{self.dragonflowerEmote}Dragonflower count: **x#{flowers}** (out of #{self.dragonflowerMax})#{"\n#{heart}Summoner Support: **#{support}**" if support.length>0}#{nat}#{"\n<:Resplendent_Ascension:678748961607122945>Resplendent Ascension" if resp && @availability[0].include?('RA')}\nEquipped weapon: #{'~~*none*~~' if weapon.nil?}#{"#{'~~' unless wpnlegal}#{weapon.name}#{'~~' unless wpnlegal}#{"\nRefinement: #{'~~*none*~~' if refne.nil? || refne.length<=0}#{"#{'~~' unless wpnlegal}#{refne} Mode#{'~~' unless wpnlegal}" if !refne.nil? && refne.length>0}" unless weapon.refine.nil?}" unless weapon.nil?}#{trns}\nStat-affecting skills: #{sl.join(', ') unless sl.length<=0}#{'*~~none~~*' if sl.length<=0}\nStat-buffing skills: #{sb.join(', ') unless sb.length<=0}#{'*~~none~~*' if sb.length<=0}\nStat-nerfing skills: #{sn.join(', ') unless sn.length<=0}#{'*~~none~~*' if sn.length<=0}\n#{bonusx}\nBlessings applied: #{blessing.join(', ') if blessing.length>0}#{'~~*none*~~' unless blessing.length>0}" if expanded_mode==2
     xblessings=''
     if blessing.length>0
       blessing=blessing[0,[blessing.length,7].min]
@@ -1194,7 +1273,8 @@ class FEHUnit
       end
       xblessings="#{xblessings}#{b2.join(', ')}"
     end
-    return "#{stars}#{"**+#{merges}**" if merges>0}#{"  \u00B7  #{heart}**#{support}**" if support.length>0}#{"  \u00B7  #{self.dragonflowerEmote}**x#{flowers}**" if flowers>0}#{nat}#{"\n<:Resplendent_Ascension:678748961607122945>Resplendent Ascension" if resp && @availability[0].include?('RA')}#{"\nEquipped weapon: #{'~~' unless wpnlegal}#{weapon.name}#{" (+) #{refne} Mode" if !weapon.refine.nil? && !refne.nil? && refne.length>0}#{'~~' unless wpnlegal}#{trns}" unless weapon.nil?}#{"\n#{bonusx}" if bonus.length>0}#{xblessings}#{"\nStat-affecting skills: #{sl.join(', ')}" unless sl.length<=0}#{"\nStat-buffing skills: #{sb.join(', ')}" unless sb.length<=0}#{"\nStat-nerfing skills: #{sn.join(', ')}" unless sn.length<=0}"
+    return "\u200B#{stars}#{"**+#{merges}**" if merges>0}#{"  \u00B7  #{heart}**#{support}**" if support.length>0}#{"  \u00B7  #{self.dragonflowerEmote}**x#{flowers}**" if flowers>0}#{nat}#{"\n<:Resplendent_Ascension:678748961607122945>Ascensión Resplandeciente" if resp && @availability[0].include?('RA')}#{"\nArma equipada: #{'~~' unless wpnlegal}#{weapon.name}#{" (+) Modo de #{refne2}" if !weapon.refine.nil? && !refne.nil? && refne.length>0}#{'~~' unless wpnlegal}#{trns}" unless weapon.nil?}#{"\n#{bonusx}" if bonus.length>0}#{xblessings}#{"\nHabilidades que afectan las estadísticas: #{sl.join(', ')}" unless sl.length<=0}#{"\nHabilidades que aumentan las estadísticas: #{sb.join(', ')}" unless sb.length<=0}#{"\nHabilidades que disminuyen las estadísticas: #{sn.join(', ')}" unless sn.length<=0}" if Shardizard==$spanishShard
+    return "\u200B#{stars}#{"**+#{merges}**" if merges>0}#{"  \u00B7  #{heart}**#{support}**" if support.length>0}#{"  \u00B7  #{self.dragonflowerEmote}**x#{flowers}**" if flowers>0}#{nat}#{"\n<:Resplendent_Ascension:678748961607122945>Resplendent Ascension" if resp && @availability[0].include?('RA')}#{"\nEquipped weapon: #{'~~' unless wpnlegal}#{weapon.name}#{" (+) #{refne} Mode" if !weapon.refine.nil? && !refne.nil? && refne.length>0}#{'~~' unless wpnlegal}#{trns}" unless weapon.nil?}#{"\n#{bonusx}" if bonus.length>0}#{xblessings}#{"\nStat-affecting skills: #{sl.join(', ')}" unless sl.length<=0}#{"\nStat-buffing skills: #{sb.join(', ')}" unless sb.length<=0}#{"\nStat-nerfing skills: #{sn.join(', ')}" unless sn.length<=0}"
   end
   
   def starHeader2(bot,ignorenature=true,rarity=5,boon='',bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',transformed=false,skill_list=[],skill_list_2=[],wpnlegal=true,pairup=false,expanded_mode=1)
@@ -1214,6 +1294,10 @@ class FEHUnit
       atk='<:MagicS:514712247289774111>' if ['Tome','Staff'].include?(weapon)
       atk='<:FreezeS:514712247474585610>' if weapon=='Dragon'
     end
+    m='Fuerza'
+    m='Magia' if atk=='<:MagicS:514712247289774111>'
+    m='Congelación' if atk=='<:FreezeS:514712247474585610>'
+    return ['<:HP_S:514712247503945739>HP',"#{atk}#{m}",'<:SpeedS:514712247625580555>Velocidad','<:DefenseS:514712247461871616>Defensa','<:ResistanceS:514712247574986752>Resistencia'] if includename && Shardizard==$spanishShard
     return ['<:HP_S:514712247503945739>HP',"#{atk}#{atk.split(':')[1][0,atk.split(':')[1].length-1].gsub('Generic','')}",'<:SpeedS:514712247625580555>Speed','<:DefenseS:514712247461871616>Defense','<:ResistanceS:514712247574986752>Resistance'] if includename
     return ['<:HP_S:514712247503945739>',atk,'<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>']
   end
@@ -1252,23 +1336,35 @@ class FEHUnit
       x2[i]="#{x2[i]}#{x3[i]}"
     end
     x2=x2.join('|')
-    return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\n#{self.statEmotes(weapon,refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0Score: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x2}```" if @growths.max<=0
+    scorename='Score'
+    scorename='Puntaje' if Shardizard==$spanishShard
+    return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\n#{self.statEmotes(weapon,refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0#{scorename}: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x2}```" if @growths.max<=0
+    return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\nPersonaje solo enemig#{self.spanish_gender.downcase}\nUsa la palabra \"Enemy\" para ver sus estadísticas." if @growths[0,5].max<=0 && self.hasEnemyForm? && bonus != 'Enemy' && Shardizard==$spanishShard
     return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\nEnemy Exclusive Unit\nUse the word \"Enemy\" to see #{self.pronoun(true)} stats." if @growths[0,5].max<=0 && self.hasEnemyForm? && bonus != 'Enemy'
     trns=''
     if self.weapon_type=='Beast' && !weapon.nil? && weapon.weapon_stats.length>5 && !transformed
       xx=[]
       xx.push("#{'+' if weapon.weapon_stats[5]>0}#{weapon.weapon_stats[5]} HP") unless weapon.weapon_stats[5]==0
-      xx.push("#{'+' if weapon.weapon_stats[6]>0}#{weapon.weapon_stats[6]} Atk") unless weapon.weapon_stats[6]==0
-      xx.push("#{'+' if weapon.weapon_stats[7]>0}#{weapon.weapon_stats[7]} Spd") unless weapon.weapon_stats[7]==0
+      xx.push("#{'+' if weapon.weapon_stats[6]>0}#{weapon.weapon_stats[6]} At#{'k' unless Shardizard==$spanishShard}#{'q' if Shardizard==$spanishShard}") unless weapon.weapon_stats[6]==0
+      xx.push("#{'+' if weapon.weapon_stats[7]>0}#{weapon.weapon_stats[7]} Spd") unless weapon.weapon_stats[7]==0 || Shardizard==$spanishShard
+      xx.push("#{'+' if weapon.weapon_stats[7]>0}#{weapon.weapon_stats[7]} Vel") unless weapon.weapon_stats[7]==0 || Shardizard !=$spanishShard
       xx.push("#{'+' if weapon.weapon_stats[8]>0}#{weapon.weapon_stats[8]} Def") unless weapon.weapon_stats[8]==0
       xx.push("#{'+' if weapon.weapon_stats[9]>0}#{weapon.weapon_stats[9]} Res") unless weapon.weapon_stats[9]==0
-      trns="\nWhen transformed: #{xx.join(', ')}\nInclude the word \"transformed\" to apply this directly." if xx.length>0
+      if xx.length>0
+        if Shardizard==$spanishShard
+          trns="\nCuando se transforma: #{xx.join(', ')}\nIncluye la palabra \"transformed\" tener esto aplicado."
+        else
+          trns="\nWhen transformed: #{xx.join(', ')}\nInclude the word \"transformed\" to apply this directly."
+        end
+      end
     end
     if @name=='Kiran' && @owner.nil?
-      return "__**Blade equipped**__<:Red_Blade:443172811830198282><:Blue_Blade:467112472768151562><:Green_Blade:467122927230386207>\n#{self.statEmotes('Blade',refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0Score: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}" if support.length>0
-      return "__**Tome equipped**<:Red_Tome:443172811826003968><:Blue_Tome:467112472394858508><:Green_Tome:467122927666593822><:Colorless_Tome:443692133317345290>__\n#{self.statEmotes('Tome',refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0Score: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}"
+      return "__**Con filo equipado**__<:Red_Blade:443172811830198282><:Blue_Blade:467112472768151562><:Green_Blade:467122927230386207>\n#{self.statEmotes('Blade',refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0#{scorename}: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}" if support.length>0 && Shardizard==$spanishShard
+      return "__**Blade equipped**__<:Red_Blade:443172811830198282><:Blue_Blade:467112472768151562><:Green_Blade:467122927230386207>\n#{self.statEmotes('Blade',refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0#{scorename}: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}" if support.length>0
+      return "__**Con tomo equipado**<:Red_Tome:443172811826003968><:Blue_Tome:467112472394858508><:Green_Tome:467122927666593822><:Colorless_Tome:443692133317345290>__\n#{self.statEmotes('Tome',refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0#{scorename}: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}" if Shardizard==$spanishShard
+      return "__**Tome equipped**<:Red_Tome:443172811826003968><:Blue_Tome:467112472394858508><:Green_Tome:467122927666593822><:Colorless_Tome:443692133317345290>__\n#{self.statEmotes('Tome',refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0#{scorename}: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}"
     end
-    return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\n#{self.statEmotes(weapon,refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0Score: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}"
+    return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\n#{self.statEmotes(weapon,refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0#{scorename}: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}"
   end
   
   def statList(bot,includegrowths=false,diff=[0,0,0,0,0],rarity=5,boon='',bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',transformed=false,skill_list=[],skill_list_2=[],wpnlegal=true,pairup=false,lvl=40)
@@ -1316,6 +1412,8 @@ class FEHUnit
     x3=x3.map{|q| q.gsub('-',' ')} if merges>0
     boonx=Stat_Names.find_index{|q| q==boon}
     banex=Stat_Names.find_index{|q| q==bane}
+    scorename='Score'
+    scorename='Puntaje' if Shardizard==$spanishShard
     unless boonx.nil?
       for i in 0...x3.length
         x3[i]=' ' if x3[i]=='+' && i != boonx
@@ -1348,18 +1446,11 @@ class FEHUnit
       x2[i]="#{x2[i]}#{" (#{px2[i]})" unless x2[i]==px2[i]}"
       y22[i]="#{y22[i]}#{" (#{py22[i]})" unless y22[i]==py22[i]}"
       x22[i]="#{x22[i]}#{" (#{px22[i]})" unless x22[i]==px22[i]}"
-      if Stat_Names[i]=='Attack'
-        emotestr="#{self.statEmotes(weapon,refne,transformed,true)[i]}"
-        x[i]="#{emotestr}: #{"~~#{y[i]}~~ " unless x[i]==y[i]}#{x[i]}"
-        gr[i]="#{emotestr}: #{gr[i]*5+20}%#{" #{x3[i]}" if includegrowths}"
-        x2[i]="#{emotestr}: #{"~~#{y2[i]}~~ " unless x2[i]==y2[i]}#{x2[i]}#{" #{x3[i]}" unless includegrowths || skill_list_2.length>0 || !wpnlegal}"
-        x22[i]="#{emotestr}: #{"~~#{y22[i]}~~ " unless x22[i]==y22[i]}#{x22[i]}"
-      else
-        x[i]="#{self.statEmotes(weapon,refne,transformed)[i]}#{Stat_Names[i]}: #{"~~#{y[i]}~~ " unless x[i]==y[i]}#{x[i]}"
-        gr[i]="#{self.statEmotes(weapon,refne,transformed)[i]}#{Stat_Names[i]}: #{gr[i]*5+20}%#{" #{x3[i]}" if includegrowths}"
-        x2[i]="#{self.statEmotes(weapon,refne,transformed)[i]}#{Stat_Names[i]}: #{"~~#{y2[i]}~~ " unless x2[i]==y2[i]}#{x2[i]}#{" #{x3[i]}" unless includegrowths || skill_list_2.length>0 || !wpnlegal}"
-        x22[i]="#{self.statEmotes(weapon,refne,transformed)[i]}#{Stat_Names[i]}: #{"~~#{y22[i]}~~ " unless x22[i]==y22[i]}#{x22[i]}"
-      end
+      emotestr="#{self.statEmotes(weapon,refne,transformed,true)[i]}"
+      x[i]="#{emotestr}: #{"~~#{y[i]}~~ " unless x[i]==y[i]}#{x[i]}"
+      gr[i]="#{emotestr}: #{gr[i]*5+20}%#{" #{x3[i]}" if includegrowths}"
+      x2[i]="#{emotestr}: #{"~~#{y2[i]}~~ " unless x2[i]==y2[i]}#{x2[i]}#{" #{x3[i]}" unless includegrowths || skill_list_2.length>0 || !wpnlegal}"
+      x22[i]="#{emotestr}: #{"~~#{y22[i]}~~ " unless x22[i]==y22[i]}#{x22[i]}"
     end
     x.push('')
     unless pd==0
@@ -1380,7 +1471,7 @@ class FEHUnit
     xx="#{xx}#{" (#{pxx})" unless xx==pxx}"
     x.push("BST: #{"~~#{yy}~~ " unless xx==yy}#{xx}")
     unless bonus=='Enemy' && self.hasEnemyForm?
-      x.push("Score: #{self.score(bot,1,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}")
+      x.push("#{scorename}: #{self.score(bot,1,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}")
       x[-1]="#{x[-1]}+`SP`/100" unless self.is_a?(SuperUnit)
     end
     gr.push('')
@@ -1394,18 +1485,20 @@ class FEHUnit
     x2.push("BST: #{"~~#{yy2}~~ " unless xx2==yy2}#{xx2}")
     x22.push("BST: #{"~~#{yy22}~~ " unless xx22==yy22}#{xx22}")
     unless bonus=='Enemy' && self.hasEnemyForm?
-      x2.push("Score: #{self.score(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}")
-      x22.push("Score: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}")
+      x2.push("#{scorename}: #{self.score(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}")
+      x22.push("#{scorename}: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}")
       x2[-1]="#{x2[-1]}+`SP`/100" unless self.is_a?(SuperUnit)
       x22[-1]="#{x22[-1]}+`SP`/100" unless self.is_a?(SuperUnit)
     end
     f=[]
-    f.push(["Level 1#{" +#{merges}" unless merges<=0}",x.join("\n")]) unless @growths.max<=0
-    f.push(['Growths',gr.join("\n")]) if includegrowths && @growths.max>0 && lvl<41
-    f.push(["Level 40#{" +#{merges}" unless merges<=0}",x2.join("\n")])
+    lvnm=['Level','Growths']
+    lvnm=['Nivel','Crecimientos'] if Shardizard==$spanishShard
+    f.push(["#{lvnm[0]} 1#{" +#{merges}" unless merges<=0}",x.join("\n")]) unless @growths.max<=0
+    f.push([lvnm[1],gr.join("\n")]) if includegrowths && @growths.max>0 && lvl<41
+    f.push(["#{lvnm[0]} 40#{" +#{merges}" unless merges<=0}",x2.join("\n")])
     if lvl>40
-      f.push(["Level #{lvl}#{" +#{merges}" unless merges<=0}",x22.join("\n")])
-      f.push(['Growths',gr.join("\n")]) if includegrowths && @growths.max>0
+      f.push(["#{lvnm[0]} #{lvl}#{" +#{merges}" unless merges<=0}",x22.join("\n")])
+      f.push([lvnm[1],gr.join("\n")]) if includegrowths && @growths.max>0
     end
     return f
   end
@@ -1498,12 +1591,15 @@ class FEHUnit
       x=$bonus_units.find_index{|q| q.type=='Arena' && q.isCurrent?}
       return '' if x.nil?
       x=$bonus_units[x]
+      return 'En temporada' if x.elements.include?(@legendary[0]) && Shardizard==$spanishShard
       return 'in season' if x.elements.include?(@legendary[0])
     elsif @legendary[3]=='Mythic'
       x=$bonus_units.find_index{|q| q.type=='Aether' && q.isCurrent?}
       return '' if x.nil?
       x=$bonus_units[x]
+      return 'Temporada ofensiva' if @legendary[0]==x.elements[0] && Shardizard==$spanishShard
       return 'Offense season' if @legendary[0]==x.elements[0]
+      return 'Temporada defensiva' if @legendary[0]==x.elements[1] && Shardizard==$spanishShard
       return 'Defense season' if @legendary[0]==x.elements[1]
     end
     return ''
@@ -1518,8 +1614,13 @@ class FEHUnit
     x[0]=11 if x[0]>=11 && x[0]<21
     x[0]=1 if x[0]<11
     return x[2]*10000+x[1]*100+x[0] if number
-    x[0]=['Early ','Mid-','Late '][(x[0]-1)/10]
-    x[1]=['','January','February','March','April','May','June','July','August','September','October','November','December'][x[1]]
+    if Shardizard==$spanishShard
+      x[0]=['Principios de ','Mediados de ','A fines de '][(x[0]-1)/10]
+      x[1]=$spanish_months[0][x[1]]
+    else
+      x[0]=['Early ','Mid-','Late '][(x[0]-1)/10]
+      x[1]=['','January','February','March','April','May','June','July','August','September','October','November','December'][x[1]]
+    end
     t=Time.now
     timeshift=8
     timeshift-=1 unless t.dst?
@@ -1582,17 +1683,19 @@ class FEHUnit
           if f.length<=0
             k[i]=nil
           else
-            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (in the following servers: #{list_lift(f,'and')})"
+            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (in the following servers: #{list_lift(f,'and')})" unless Shardizard==$spanishShard
+            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (en los siguientes servidores: #{list_lift(f,'y')})" if Shardizard==$spanishShard
           end
         end
       end
       k.compact!
     else
-      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
+      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[in this server only]*' unless q[3].nil? || saliases}"} unless Shardizard==$spanishShard
+      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[solo en este servidor]*' unless q[3].nil? || saliases}"} if Shardizard==$spanishShard
     end
     k=k.reject{|q| q==@name || q==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')}
     k.unshift(@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')) unless @name==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','') || saliases
-    k.unshift("__**#{@name}#{self.emotes(bot,false)}**#{"'s server-specific aliases" if saliases}#{" [Unit-#{longFormattedNumber(@id)}]" if Shardizard==4 || event.user.id==167657750971547648}__")
+    k.unshift("__#{'Alias ​​específicos del servidor de ' if saliases && Shardizard==$spanishShard}**#{@name}#{self.emotes(bot,false)}**#{"'s server-specific aliases" if saliases && Shardizard != $spanishShard}#{" [Unit-#{longFormattedNumber(@id)}]" if Shardizard==4 || event.user.id==167657750971547648}__")
     return k
   end
 end
@@ -1653,11 +1756,13 @@ class SuperUnit < FEHUnit # attributes shared by Dev- and Donor- Units but not i
       m=s[2].map{|q| q.gsub('~~','').gsub('__','')}.reject{|q| $skills.find_index{|q2| q2.fullName==q}.nil? || !$skills[$skills.find_index{|q2| q2.fullName==q}].exclusivity.nil?}
       s[2]=s[2].reject{|q| !m.include?(q.gsub('~~','').gsub('__',''))}
     end
-    demote=['<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>','Duo/Harmonic']
+    pos=1
+    pos=2 if Shardizard==$spanishShard
+    demote=['<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>',Skill_Slots[pos][7]]
     unless @duo.nil?
-      demote=['<:Hero_Duo:631431055420948480>',@duo[0][0]]
-      demote=['<:Hero_Harmonic:722436762248413234>',@duo[0][0]] if @duo[0][0]=='Harmonic'
-      demote=['<:Hero_Duo_Mathoo:631431055513092106>',@duo[0][0]] if @name=='Mathoo'
+      demote=['<:Hero_Duo:631431055420948480>',Skill_Slots[pos][7].split('/')[0]]
+      demote=['<:Hero_Harmonic:722436762248413234>',Skill_Slots[pos][7].split('/')[1]] if @duo[0][0]=='Harmonic'
+      demote=['<:Hero_Duo_Mathoo:631431055513092106>',Skill_Slots[pos][7].split('/')[0]] if @name=='Mathoo'
     end
     if smol
       for i in 0...s.length
@@ -1703,14 +1808,16 @@ class SuperUnit < FEHUnit # attributes shared by Dev- and Donor- Units but not i
           if !m.nil? && !$skills[m].exclusivity.nil?
             s[i][i2]="#{s[i][i2]} <:Prf_Sparkle:490307608973148180>"
             ftr='Purple sparkles mark skills Prf to this unit.' if explainemotes
+            ftr='Los destellos morados indican habilidades exclusivas de este personaje.' if explainemotes && Shardizard==$spanishShard
           end
         end
       end
-      f.push(["#{Skill_Slots[0][i]} #{Skill_Slots[1][i]}",s[i].join("\n")])
+      f.push(["#{Skill_Slots[0][i]} #{Skill_Slots[pos][i]}",s[i].join("\n")])
     end
     unless @duo.nil? || $skills.find_index{|q| has_any?(['Duo','Harmonic'],q.type) && q.exclusivity.include?(@name)}.nil?
       d=$skills[$skills.find_index{|q| has_any?(['Duo','Harmonic'],q.type) && q.exclusivity.include?(@name)}]
       f.push(["#{demote.join(' ')} Skill","**#{d.name}**#{"\n#{d.description}" if safe_to_spam?(event)}",1])
+      f[-1][0]="#{demote[0]}Habilidad #{demote[1]}" if Shardizard==$spanishShard
       f[-1][2]=nil unless safe_to_spam?(event)
     end
     f.push(ftr) unless ftr.nil?
@@ -1873,7 +1980,8 @@ class DevUnit < SuperUnit
     @artist=@base_unit.artist.map{|q| q} unless @base_unit.artist.nil?
     if @name=='Alm(Saint)' && !@artist.nil?
       u2=$units.find_index{|q| q.name=='Sakura'}
-      @artist[0]="#{@artist[0]}\n*Smol contribution from:* #{$units[u2].artist[0]}" unless u2.nil?
+      @artist[0]="#{@artist[0]}\n*Smol contribution from:* #{$units[u2].artist[0]}" unless u2.nil? || Shardizard==$spanishShard
+      @artist[0]="#{@artist[0]}\n*Pequeña contribución de:* #{$units[u2].artist[0]}" unless u2.nil? || Shardizard != $spanishShard
     elsif @name=='Kiran' && @face=='Mathoo'
       h=[]
       u2=$units.find_index{|q| q.name=='Sakura'}
@@ -1882,7 +1990,8 @@ class DevUnit < SuperUnit
       h.push("#{$units[u2].artist[0]}") unless u2.nil?
       u2=$units.find_index{|q| q.name=='Mirabilis'}
       h.push("#{$units[u2].artist[0]}") unless u2.nil?
-      @artist[0]="#{@artist[0]}\n*Smol contributions from:* #{list_lift(h.uniq,'and')}" unless h.length<=0
+      @artist[0]="#{@artist[0]}\n*Smol contributions from:* #{list_lift(h.uniq,'and')}" unless h.length<=0 || Shardizard==$spanishShard
+      @artist[0]="#{@artist[0]}\n*Pequeña contribución de:* #{list_lift(h.uniq,'y')}" if h.length>0 && Shardizard==$spanishShard
     end
     @voice_na=@base_unit.voice_na.map{|q| q} unless @base_unit.voice_na.nil?
     @voice_jp=@base_unit.voice_jp.map{|q| q} unless @base_unit.voice_jp.nil?
@@ -1980,6 +2089,10 @@ class DevUnit < SuperUnit
       l+=1 if r
       d='Pair-up cohort'
       d='Pocket companion' if ['Sakura','Bernie','Mirabilis'].include?(m.alts[0]) && @gender=='M'
+      if Shardizard==$spanishShard
+        d='Cohorte de Agrupar'
+        d='Compañera de bolsillo' if ['Sakura','Bernie','Mirabilis'].include?(m.alts[0]) && @gender=='M'
+      end
       x="#{x[0,l].join("\n")}\n*#{d}:* #{m.name}#{m.emotes(bot,false)}\n#{x[l,x.length-l].join("\n")}"
     end
     return x
@@ -2792,17 +2905,19 @@ class FEHSkill
           if f.length<=0
             k[i]=nil
           else
-            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (in the following servers: #{list_lift(f,'and')})"
+            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (in the following servers: #{list_lift(f,'and')})" unless Shardizard==$spanishShard
+            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (en los siguientes servidores: #{list_lift(f,'y')})" if Shardizard==$spanishShard
           end
         end
       end
       k.compact!
     else
-      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
+      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[in this server only]*' unless q[3].nil? || saliases}"} unless Shardizard==$spanishShard
+      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[solo en este servidor]*' unless q[3].nil? || saliases}"} if Shardizard==$spanishShard
     end
     k=k.reject{|q| q==@name || q==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')}
     k.unshift(@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')) unless @name==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','') || saliases
-    k.unshift("__**#{@name}#{self.emotes(bot,false)}**#{"'s server-specific aliases" if saliases}#{" [Skill-#{longFormattedNumber(@id)}]" if Shardizard==4 || event.user.id==167657750971547648}__")
+    k.unshift("__#{'Alias ​​específicos del servidor de ' if saliases && Shardizard==$spanishShard}**#{@name}#{self.emotes(bot,false)}**#{"'s server-specific aliases" if saliases && Shardizard !=$spanishShard}#{" [Skill-#{longFormattedNumber(@id)}]" if Shardizard==4 || event.user.id==167657750971547648}__")
     return k
   end
 end
@@ -3024,6 +3139,10 @@ class FEHStructure
     bemote=''
     bemote='<:Current_Aether_Bonus:510022809741950986>' if self.isBonus?.length>0 && includebonus
     return "#{wemote}#{bemote}" if emotesonly
+    if Shardizard==$spanishShard
+      return "#{wemote}**Tipo:** Desconocida#{"\n#{bemote}**#{self.isBonus?} Bonificación actual en Asaltos Etéreos**" if self.isBonus?.length>0 && includebonus}" if @type.length<=0
+      return "#{wemote}**Tipo:** #{self.spanish_type.join('/')}#{"\n#{bemote}**#{self.isBonus?} Bonificación actual en Asaltos Etéreos**" if self.isBonus?.length>0 && includebonus}"
+    end
     return "#{wemote}**Type:** Unknown#{"\n#{bemote}**#{self.isBonus?} Aether Bonus Structure**" if self.isBonus?.length>0 && includebonus}" if @type.length<=0
     return "#{wemote}**Type:** #{@type.join('/')}#{"\n#{bemote}**#{self.isBonus?} Aether Bonus Structure**" if self.isBonus?.length>0 && includebonus}"
   end
@@ -3071,17 +3190,19 @@ class FEHStructure
           if f.length<=0
             k[i]=nil
           else
-            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (in the following servers: #{list_lift(f,'and')})"
+            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (in the following servers: #{list_lift(f,'and')})" unless Shardizard==$spanishShard
+            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (en los siguientes servidores: #{list_lift(f,'y')})" if Shardizard==$spanishShard
           end
         end
       end
       k.compact!
     else
-      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
+      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[in this server only]*' unless q[3].nil? || saliases}"} unless Shardizard==$spanishShard
+      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[solo en este servidor]*' unless q[3].nil? || saliases}"} if Shardizard==$spanishShard
     end
     k=k.reject{|q| q==@name || q==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')}
     k.unshift(@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')) unless @name==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','') || saliases
-    k.unshift("__**#{@name}#{self.emotes(bot,false)}**#{"'s server-specific aliases" if saliases}__")
+    k.unshift("__#{'Alias ​​específicos del servidor de ' if saliases && Shardizard==$spanishShard}**#{@name}#{self.emotes(bot,false)}**#{"'s server-specific aliases" if saliases && Shardizard !=$spanishShard}__")
     return k
   end
 end
@@ -3121,6 +3242,10 @@ class FEHItem
   
   def class_header(bot,emotesonly=false,ext=false)
     return '' if emotesonly
+    if Shardizard==$spanishShard
+      return "**Tipo:** Asalto del Coliseo/Batallas Fragorosas\n**Maxima:** #{k.maximum}" if @type=='Assault'
+      return "**Tipo de Artículo:** #{self.spanish_type}\n**Maxima:** #{@maximum}"
+    end
     return "**Type:** Arena Assault/Resonant Blades\n**Maximum:** #{k.maximum}" if @type=='Assault'
     return "**Item Type:** #{@type}\n**Maximum:** #{@maximum}"
   end
@@ -3167,17 +3292,19 @@ class FEHItem
           if f.length<=0
             k[i]=nil
           else
-            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (in the following servers: #{list_lift(f,'and')})"
+            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (in the following servers: #{list_lift(f,'and')})" unless Shardizard==$spanishShard
+            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (en los siguientes servidores: #{list_lift(f,'y')})" if Shardizard==$spanishShard
           end
         end
       end
       k.compact!
     else
-      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
+      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[in this server only]*' unless q[3].nil? || saliases}"} unless Shardizard==$spanishShard
+      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[solo en este servidor]*' unless q[3].nil? || saliases}"} if Shardizard==$spanishShard
     end
     k=k.reject{|q| q==@name || q==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')}
     k.unshift(@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')) unless @name==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','') || saliases
-    k.unshift("__**#{@name}#{self.emotes(bot,false)}**#{"'s server-specific aliases" if saliases}__")
+    k.unshift("__#{'Alias ​​específicos del servidor de ' if saliases && Shardizard==$spanishShard}**#{@name}#{self.emotes(bot,false)}**#{"'s server-specific aliases" if saliases}__")
     return k
   end
 end
@@ -3213,6 +3340,7 @@ class FEHAccessory
     moji=bot.server(449988713330769920).emoji.values.reject{|q| q.name != "Accessory_Type_#{@type}"}
     wemote=moji[0].mention unless moji.length<=0
     return "#{'<:Summon_Gun:467557566050861074>' if @name[0,4]=='(S) '}#{wemote}" if emotesonly
+    return "#{"<:Summon_Gun:467557566050861074>**Exclusivo para invocador**\n" if @name[0,4]=='(S) '}#{wemote}**Tipo de Accesorio:** #{self.spanish_type}" if Shardizard==$spanishShard
     return "#{"<:Summon_Gun:467557566050861074>**Summoner-exclusive**\n" if @name[0,4]=='(S) '}#{wemote}**Accessory Type:** #{@type}"
   end
   
@@ -3239,18 +3367,20 @@ class FEHAccessory
           if f.length<=0
             k[i]=nil
           else
-            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (in the following servers: #{list_lift(f,'and')})"
+            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (in the following servers: #{list_lift(f,'and')})" unless Shardizard==$spanishShard
+            k[i]="#{k[i][1].gsub('`',"\`").gsub('*',"\*")} (en los siguientes servidores: #{list_lift(f,'y')})" if Shardizard==$spanishShard
           end
         end
       end
       k.compact!
     else
-      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
+      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[in this server only]*' unless q[3].nil? || saliases}"} unless Shardizard==$spanishShard
+      k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[solo en este servidor]*' unless q[3].nil? || saliases}"} if Shardizard==$spanishShard
     end
     k=k.reject{|q| q==@name || q==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')}
     k.unshift(@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')) unless @name==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','') || saliases
     k.unshift(@name[4,@name.length-4].gsub('(','').gsub(')','').gsub(' ','').gsub('_','')) if @name[0,4]=='(S) ' && !saliases
-    k.unshift("__**#{@name}#{self.emotes(bot,false)}**#{"'s server-specific aliases" if saliases}__")
+    k.unshift("__#{'Alias ​​específicos del servidor de ' if saliases && Shardizard==$spanishShard}**#{@name}#{self.emotes(bot,false)}**#{"'s server-specific aliases" if saliases && Shardizard !=$spanishShard}__")
     return k
   end
 end
@@ -3810,6 +3940,10 @@ def data_load(to_reload=[])
     if t-$last_multi_reload[0]>rtime*60
       puts 'reloading EliseClassFunctions'
       load "#{$location}devkit/EliseClassFunctions.rb"
+      unless !$spanishShard.nil? && Shardizard != $spanishShard
+        puts 'reloading Elispanol'
+        load "#{$location}devkit/Elispanol.rb"
+      end
       $last_multi_reload[0]=t
     end
   end
@@ -4116,7 +4250,9 @@ def donate_trigger_word(event,str=nil)
   b=$donor_triggers.map{|q| q}
   for i in 0...b.length
     return b[i][1] if str.split(' ').include?("#{b[i][0].downcase}'s")
+    return b[i][1] if str.split(' ').include?("de#{b[i][0].downcase}") && Shardizard==$spanishShard
     return b[i][1] if event.user.id==b[i][1] && str.split(' ').include?('my')
+    return b[i][1] if event.user.id==b[i][1] && str.split(' ').include?('mi') && Shardizard==$spanishShard
   end
   return 0
 end
@@ -4176,42 +4312,38 @@ def remove_prefix(s,event)
 end
 
 def all_commands(include_nil=false,permissions=-1)
-  k=['reboot','boop','safe','spam','safetospam','safe2spam','long','longreplies','channellist','channelist','spamchannels','spamlist','skills','skils','fodder','manual','book','smol',
-     'combatmanual','skill','skil','color','colors','colour','colours','stats','stat','tinystats','smallstats','smolstats','microstats','squashedstats','sstats','statstiny','little',
-     'statssmall','statssmol','statsmicro','statssquashed','statss','stattiny','statsmall','statsmol','statmicro','statsquashed','sstat','tinystat','smallstat','smolstat','microstat',
-     'squashedstat','tiny','small','micro','squashed','littlestats','littlestat','statslittle','statlittle','prefix','flowers','flower','tol','macro','large','bigstats','tolstats',
-     'macrostats','largestats','bigstat','tolstat','macrostat','largestat','statsbig','statstol','statsmacro','statslarge','statbig','stattol','statmacro','statlarge','statol','big',
-     'huge','massive','giantstats','hugestats','massivestats','giantstat','hugestat','massivestat','statsgiant','statshuge','statsmassive','statgiant','stathuge','statmassive','hero',
-     'unit','data','statsskills','statskills','stats_skills','stat_skills','statsandskills','statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','statskil',
-     'stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','statsskils','statskils','stats_skils','stat_skils','statsandskils','statandskils',
-     'stats_and_skils','stat_and_skils','statsskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','stat_and_skil','bugreport','suggestion','feedback','shard',
-     'status','avatar','avvie','donation','donate','sendpm','ignoreuser','sendmessage','leaveserver','cleanupaliases','backup','setmarker','legendary','legendaries','legendarys',
-     'legend','legends','mythic','mythical','mythics','mythicals','mystic','mystical','mystics','mysticals','invite','score','merges','whoisoregano','whyoregano','oregano','growths',
-     'growth','gp','natures','headpat','patpat','pat','embeds','embed','groups','seegroups','checkgroups','find','search','lookup','update','sort','list','tools','links','tool','bst',
-     'link','resources','resource','aoe','area','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort',
-     'sortstat','statsort','liststats','statslist','statlist','liststat','sortunits','unitssort','sortunit','unitsort','listunits','unitslist','unitlist','listunit','average','mean',
-     'bestamong','bestin','beststats','higheststats','highest','best','highestamong','highestin','worstamong','worstin','worststats','loweststats','lowest','worst','lowestamong',
-     'lowestin','arena','arenabonus','arena_bonus','bonusarena','bonus_arena','tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','tt','ttbonus','tt_bonus',
-     'bonustt','bonus_tt','aether','aetherbonus','aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raidsbonus','bonusraids',
-     'raids_bonus','bonus_raids','bonus','attackicon','attackcolor','attackcolors','attackcolour','attackcolours','atkicon','atkcolor','atkcolors','atkcolour','atkcolours','atticon',
-     'attcolor','attcolors','attcolour','attcolours','staticon','statcolor','statcolors','statcolour','statcolours','iconcolor','iconcolors','iconcolour','iconcolours','whyelise',
-     'skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star','rand','random','randomunit','item',
-     'randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats','banners','banner','summonpool','summon_pool','pool','summon','help','command_list','acc',
-     'commands','reload','commandlist','snagstats','struct','structure','accessory','accessorie','aliases','checkaliases','seealiases','deletealias','removealias','addalias','alias',
-     'prf','prfs','refinery','refine','effect','bst','compare','comparison','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','skills_in_common','art',
-     'common_skills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill',
-     'skill_comparison','skills_comparison','skillsincommon','commonskills','addgroup','removemember','removefromgroup','removefrommultialias','removefromdualalias','removefrommulti',
-     'removefrommultiunitalias','removefromdualunitalias','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','artist',
-     'dualalias','addmulti','deletegroup','removegroup','alts','games','next','schedule','today','tomorrow','tomorow','tommorrow','tommorow','todayinfeh','today_in_feh','daily','now',
-     'divine','devine','code','path','greil','grail','ghb','study','statstudy','statsstudy','studystats','effhp','eff_hp','bulk','allinheritance','allinherit','allinheritable',
-     'skillinheritance','skillinherit','skillinheritable','skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','pair',
-     'inheritanceskills','inheritskill','inheritableskill','learnskill','learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills',
-     'all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit',
-     'skills_inheritable','skills_learn','skills_learnable','inheritance_skills','inherit_skill','inheritable_skill','learn_skill','learnable_skill','inheritance_skills','pair_up',
-     'inherit_skills','inheritable_skills','learn_skills','learnable_skills','inherit','inheritance','learnable','inheritable','skillearn','skillearnable','pairup','pocket','heal',
-     'healstudy','heal_study','studyheal','study_heal','procstudy','proc_study','studyproc','study_proc','phasestudy','studyphase','phase_study','study_phase','phase','dev_edit',
-     'edit','devedit','saliases','resonantbonus','resonant_bonus','bonusresonant','bonus_resonant','resonance','resonancebonus','resonance_bonus','bonusresonance','bonus_resonance',
-     'gps','raids','learn','proc','alt','resonant']
+  k=['reboot','boop','safe','spam','safetospam','safe2spam','long','longreplies','channellist','channelist','spamchannels','spamlist','skills','skils','fodder','manual','book','smol','combatmanual','alt',
+     'skill','skil','color','colors','colour','colours','stats','stat','tinystats','smallstats','smolstats','microstats','squashedstats','sstats','statstiny','little','statssmall','statssmol','studyproc',
+     'statsmicro','statssquashed','statss','stattiny','statsmall','statsmol','statmicro','statsquashed','sstat','tinystat','smallstat','smolstat','microstat','squashedstat','tiny','small','micro','daily',
+     'squashed','littlestats','littlestat','statslittle','statlittle','prefix','flowers','flower','tol','macro','large','bigstats','tolstats','macrostats','largestats','bigstat','tolstat','skillearnable',
+     'largestat','statsbig','statstol','statsmacro','statslarge','statbig','stattol','statmacro','statlarge','statol','big','huge','massive','giantstats','hugestats','massivestats','giantstat','schedule',
+     'hugestat','massivestat','statsgiant','statshuge','statsmassive','statgiant','stathuge','statmassive','hero','unit','data','statsskills','statskills','stats_skills','stat_skills','inheritable_skill',
+     'statandskills','stats_and_skills','stat_and_skills','statsskill','statskill','statskil','stats_skill','stat_skill','statsandskill','statandskill','stats_and_skill','stat_and_skill','resonancebonus',
+     'statskils','stats_skils','stat_skils','statsandskils','statandskils','stats_and_skils','stat_and_skils','statsskil','stats_skil','stat_skil','statsandskil','statandskil','stats_and_skil','refinery',
+     'stat_and_skil','bugreport','suggestion','feedback','shard','status','avatar','avvie','donation','donate','sendpm','ignoreuser','sendmessage','leaveserver','cleanupaliases','backup','statsandskills',
+     'legendary','legendaries','legendarys','legend','legends','mythic','mythical','mythics','mythicals','mystic','mystical','mystics','mysticals','invite','score','merges','whoisoregano','bonusresonant',
+     'oregano','growths','growth','gp','natures','headpat','patpat','pat','embeds','embed','groups','seegroups','checkgroups','find','search','lookup','update','sort','list','tools','links','tool','pool',
+     'link','resources','resource','aoe','area','sortskill','skillsort','sortskills','skillssort','listskill','skillist','skillist','listskills','skillslist','sortstats','statssort','sortstat','two_star',
+     'statsort','liststats','statslist','statlist','liststat','sortunits','unitssort','sortunit','unitsort','listunits','unitslist','unitlist','listunit','average','mean','bestamong','bestin','resonance',
+     'beststats','higheststats','highest','best','highestamong','highestin','worstamong','worstin','worststats','loweststats','lowest','worst','lowestamong','lowestin','arena','arenabonus','aether_bonus',
+     'bonusarena','bonus_arena','tempest','tempestbonus','tempest_bonus','bonustempest','bonus_tempest','tt','ttbonus','tt_bonus','bonustt','bonus_tt','aether','aetherbonus','arena_bonus','resonantbonus',
+     'four_star','five_star','rand','random','randomunit','item','randunit','unitrandom','unitrand','randomstats','statsrand','statsrandom','randstats','banners','banner','summonpool','summon_pool','ghb',
+     'skilllearn','skilllearnable','skillsinheritance','skillsinherit','skillsinheritable','skillslearn','skillslearnable','pair','inheritanceskills','inheritskill','inheritableskill','learnskill','proc',
+     'learnableskill','inheritanceskills','inheritskills','inheritableskills','learnskills','learnableskills','all_inheritance','all_inherit','all_inheritable','skill_inheritance','skill_inherit','learn',
+     'aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raidsbonus','bonusraids','raids_bonus','bonus_raids','bonus','attackicon','attackcolor','skills_comparison',
+     'attackcolour','attackcolours','atkicon','atkcolor','atkcolors','atkcolour','atkcolours','atticon','attcolor','attcolors','attcolour','attcolours','staticon','statcolor','statcolors','inherit_skill',
+     'skills_in_common','art','common_skills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','devedit','heal',
+     'inheritable','skillearn','macrostat','pocket','healstudy','heal_study','studyheal','study_heal','proc_study','compare','study_proc','phasestudy','studyphase','phase_study','study_phase','statstudy',
+     'comparison_skill','skill_comparison','removefrommulti','skillsincommon','commonskills','addgroup','removemember','removefromgroup','removefrommultialias','removefromdualalias','attackcolors','edit',
+     'greil','grail','study','statstudy','studystats','effhp','eff_hp','bulk','allinheritance','allinherit','allinheritable','skillinheritance','skillinherit','skillinheritable','gps','procstudy','phase',
+     'statcolours','iconcolor','iconcolors','iconcolour','iconcolours','whyelise','skillrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','colores','learnable_skill',
+     'bst','summon','help','command_list','acc','commands','reload','commandlist','snagstats','struct','structure','accessory','accessorie','aliases','checkaliases','seealiases','deletealias','dualalias',
+     'removefrommultiunitalias','removefromdualunitalias','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','artist','resonant','addmulti',
+     'removealias','addalias','alias','refine','effect','bst','comparison','compareskills','compareskill','skillcompare','skillscompare','comparisonskills','bonus_resonance','dev_edit','learnable_skills',
+     'raids','deletegroup','removegroup','alts','games','next','today','tomorrow','tomorow','tommorrow','tommorow','todayinfeh','today_in_feh','prfs','now','divine','devine','code','statcolour','inherit',
+     'path','saliases','skill_inheritable','skill_learn','skill_learnable','skills_inheritance','skills_inherit','skills_inheritable','skills_learn','skills_learnable','inheritance_skills','pairup','prf',
+     'learn_skill','three_star','inheritance_skills','pair_up','inherit_skills','inheritable_skills','learn_skills','resonance_bonus','inheritance','learnable','resonant_bonus','whyoregano','statsskills',
+     'bonus_resonant','setmarker','bonusresonance','donacion']
   if permissions==0
     k=all_commands(false)-all_commands(false,1)-all_commands(false,2)
   elsif permissions==1
@@ -4309,8 +4441,13 @@ def find_best_match(event,args=nil,xname=nil,bot=nil,fullname=false,mode=1)
   for i3 in 0...functions.length
     k=method(functions[i3][0]).call(event,args,xname,bot,true)
     return k if mode==0 && !k.nil?
-    return method(functions[i3][mode]).call(bot,event,k.name,nil,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
-    return method(functions[i3][mode]).call(bot,event,k.name) if !functions[i3][mode].nil? && !k.nil?
+    if k.is_a?(Array)
+      return method(functions[i3][mode]).call(bot,event,k.map{|q| q.name},nil,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
+      return method(functions[i3][mode]).call(bot,event,k.map{|q| q.name}) if !functions[i3][mode].nil? && !k.nil?
+    else
+      return method(functions[i3][mode]).call(bot,event,k.name,nil,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
+      return method(functions[i3][mode]).call(bot,event,k.name) if !functions[i3][mode].nil? && !k.nil?
+    end
   end
   args=xname2.split(' ')
   for i in 0...args.length
@@ -4319,18 +4456,28 @@ def find_best_match(event,args=nil,xname=nil,bot=nil,fullname=false,mode=1)
         k=method(functions[i3][0]).call(event,args[i,args.length-i-i2],nil,bot,true)
         return k if mode==0 && !k.nil?
         w=first_sub(event.message.text.downcase,args[i,args.length-i-i2].join(' ').downcase,'')
-        return method(functions[i3][mode]).call(bot,event,k.name,w,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
-        return method(functions[i3][mode]).call(bot,event,k.name) if !functions[i3][mode].nil? && !k.nil? && args[i,args.length-i-i2].length>0
+        if k.is_a?(Array)
+          return method(functions[i3][mode]).call(bot,event,k.map{|q| q.name},w,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
+          return method(functions[i3][mode]).call(bot,event,k.map{|q| q.name}) if !functions[i3][mode].nil? && !k.nil? && args[i,args.length-i-i2].length>0
+        else
+          return method(functions[i3][mode]).call(bot,event,k.name,w,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
+          return method(functions[i3][mode]).call(bot,event,k.name) if !functions[i3][mode].nil? && !k.nil? && args[i,args.length-i-i2].length>0
+        end
       end
     end
   end
-  event.respond 'No matches found.' if (fullname || xname.length<=2) && mode>1
+  event.respond nomf() if (fullname || xname.length<=2) && mode>1
   return nil if fullname || xname.length<=2
   for i3 in 0...functions.length
     k=method(functions[i3][0]).call(event,args,xname,bot)
     return k if mode==0 && !k.nil?
-    return method(functions[i3][mode]).call(bot,event,k.name,nil,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
-    return method(functions[i3][mode]).call(bot,event,k.name) if !functions[i3][mode].nil? && !k.nil?
+    if k.is_a?(Array)
+      return method(functions[i3][mode]).call(bot,event,k.map{|q| q.name},nil,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
+      return method(functions[i3][mode]).call(bot,event,k.map{|q| q.name}) if !functions[i3][mode].nil? && !k.nil?
+    else
+      return method(functions[i3][mode]).call(bot,event,k.name,nil,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
+      return method(functions[i3][mode]).call(bot,event,k.name) if !functions[i3][mode].nil? && !k.nil?
+    end
   end
   args=xname2.split(' ')
   for i in 0...args.length
@@ -4339,12 +4486,17 @@ def find_best_match(event,args=nil,xname=nil,bot=nil,fullname=false,mode=1)
         k=method(functions[i3][0]).call(event,args[i,args.length-i-i2],nil,bot)
         return k if mode==0 && !k.nil?
         w=first_sub(event.message.text.downcase,args[i,args.length-i-i2].join(' ').downcase,'')
-        return method(functions[i3][mode]).call(bot,event,k.name,w,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
-        return method(functions[i3][mode]).call(bot,event,k.name) if !functions[i3][mode].nil? && !k.nil? && args[i,args.length-i-i2].length>0
+        if k.is_a?(Array)
+          return method(functions[i3][mode]).call(bot,event,k.map{|q| q.name},w,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
+          return method(functions[i3][mode]).call(bot,event,k.map{|q| q.name}) if !functions[i3][mode].nil? && !k.nil? && args[i,args.length-i-i2].length>0
+        else
+          return method(functions[i3][mode]).call(bot,event,k.name,w,'smol',true) if !functions[i3][mode].nil? && !k.nil? && functions[i3][mode]==:disp_unit_stats
+          return method(functions[i3][mode]).call(bot,event,k.name) if !functions[i3][mode].nil? && !k.nil? && args[i,args.length-i-i2].length>0
+        end
       end
     end
   end
-  event.respond 'No matches found.' if mode>1
+  event.respond nomf() if mode>1
   return nil
 end
 
@@ -4712,18 +4864,28 @@ def spaceship_order(x)
   return 600
 end
 
-def smol_err(bot,event,ignore=false,smol=false)
-  if !find_data_ex(:find_FGO_servant,event,nil,nil,bot).nil?
+def nomf()
+  return 'No hay coincidencias' if Shardizard==$spanishShard
+  return 'No matches found'
+end
+
+def smol_err(bot,event,ignore=false,smol=false,force=false)
+  if force
+  elsif !find_data_ex(:find_FGO_servant,event,nil,nil,bot).nil?
     srv=find_data_ex(:find_FGO_servant,event,nil,nil,bot)
     event.respond "FGO servant found: #{srv.name} [Srv-##{srv.id}]\nTry `FEH!stats FGO #{srv.name}` if you wish to see what this servant's stats would be in FEH."
+    return nil
   elsif !smol || $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    event.respond 'No unit was included' unless ignore
-  else
-    event.channel.send_embed("__**No unit was included.  Have a smol me instead.**__") do |embed|
-      embed.color = 0xD49F61
-      embed.image = Discordrb::Webhooks::EmbedImage.new(url: "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Smol_Elise.jpg")
-      embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: "image source", url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=58900377")
-    end
+    event.respond 'No unit was included' unless ignore || Shardizard==$spanishShard
+    event.respond 'No se encontró ningún carácter' unless ignore || Shardizard !=$spanishShard
+    return nil
+  end
+  x=['No unit was included.  Have a smol me instead.','image source']
+  x=['No se encontró ningún carácter. Toma esta versión miniaturizada de mí en su lugar.','fuente de imagen'] if Shardizard==$spanishShard
+  event.channel.send_embed("__**#{x[0]}**__") do |embed|
+    embed.color = 0xD49F61
+    embed.image = Discordrb::Webhooks::EmbedImage.new(url: "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Smol_Elise.jpg")
+    embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: x[1], url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=58900377")
   end
 end
 
@@ -4866,12 +5028,12 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
   transformed=false
   flowers=nil
   if args2.length>0
-    cornatures=[['HP','Robust','Sickly'],
-                ['Attack','Strong','Weak'],
-                ['Attack','Clever','Dull'],
-                ['Speed','Quick','Sluggish'],
-                ['Defense','Sturdy','Fragile'],
-                ['Resistance','Calm','Excitable']]
+    cornatures=[['HP','Robust','Sickly','Aguante','Flaqueza'],
+                ['Attack','Strong','Weak','Impetu','Debilidad'],
+                ['Attack','Clever','Dull','Intelecto','Apatia'],
+                ['Speed','Quick','Sluggish','Rapidad','Lentitud'],
+                ['Defense','Sturdy','Fragile','Robustez','Fragilidad'],
+                ['Resistance','Calm','Excitable','Aplomo','Ansiedad']]
     # first pass through inputs, searching for anything that has self-contained context clues as for what variable it should fill
     for i in 0...args.length
       unless juststats
@@ -4879,6 +5041,11 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
           if args[i].downcase==cornatures[j][1].downcase
             args[i]="+#{cornatures[j][0]}"
           elsif args[i].downcase==cornatures[j][2].downcase
+            args[i]="-#{cornatures[j][0]}"
+          elsif Shardizard != $spanishShard
+          elsif args[i].downcase==cornatures[j][3].downcase
+            args[i]="+#{cornatures[j][0]}"
+          elsif args[i].downcase==cornatures[j][4].downcase
             args[i]="-#{cornatures[j][0]}"
           end
         end
@@ -4933,6 +5100,12 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
         args[i]=nil
       elsif args[i][0,12].downcase=='dragonflower' && args[i][12,args[i].length-12].to_i.to_s==args[i][12,args[i].length-12]
         flowers=args[i][12,args[i].length-12].to_i if flowers.nil?
+        args[i]=nil
+      elsif args[i][0,4].downcase=='flor' && args[i][4,args[i].length-4].to_i.to_s==args[i][4,args[i].length-4] && Shardizard==$spanishShard
+        flowers=args[i][4,args[i].length-4].to_i if flowers.nil?
+        args[i]=nil
+      elsif args[i][0,9].downcase=='dracoflor' && args[i][9,args[i].length-9].to_i.to_s==args[i][9,args[i].length-9]
+        flowers=args[i][9,args[i].length-9].to_i if flowers.nil?
         args[i]=nil
       elsif args[i][0,3]=='(+)' # stat names preceeded by a plus sign in parentheses automatically fill the refinement variable
         x=stat_modify(args[i][3,args[i].length-3])
@@ -4997,6 +5170,11 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
           args[i]=nil
           args[i-1]=nil
         elsif ['dragonflower','dragonflowers'].include?(args[i].gsub('(','').gsub(')','').downcase) && args[i-1].gsub('(','').gsub(')','').to_i.to_s==args[i-1].gsub('(','').gsub(')','') && flowers.nil?
+          # the word "dragonflower", if preceeded by a number, will automatically fill the flowers variable with that number
+          flowers=args[i-1].gsub('(','').gsub(')','').to_i
+          args[i]=nil
+          args[i-1]=nil
+        elsif ['dracoflor','dracoflores'].include?(args[i].gsub('(','').gsub(')','').downcase) && args[i-1].gsub('(','').gsub(')','').to_i.to_s==args[i-1].gsub('(','').gsub(')','') && flowers.nil? && Shardizard==$spanishShard
           # the word "dragonflower", if preceeded by a number, will automatically fill the flowers variable with that number
           flowers=args[i-1].gsub('(','').gsub(')','').to_i
           args[i]=nil
@@ -5113,7 +5291,9 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
       end
     end
     args.compact!
-    flowers=Max_rarity_merge[2] if has_any?(args.map{|q| q.downcase},['dragonflower','dragonflowers','df']) && flowers.nil?
+    fw=['dragonflower','dragonflowers','df']
+    fw=['dragonflower','dragonflowers','df','dracoflor','dracoflores'] if Shardizard==$spanishShard
+    flowers=Max_rarity_merge[2] if has_any?(args.map{|q| q.downcase},fw) && flowers.nil?
   end
   blessing=[] if blessing.nil?
   if juststats
@@ -5266,6 +5446,10 @@ def find_nature(name)
   for j in 0...Natures.length
     return Natures[j] if Natures[j][0].downcase==name.downcase && Natures[j][3].nil?
   end
+  return nil unless Shardizard==$spanishShard
+  for j in 0...$spanish_Natures.length
+    return $spanish_Natures[j] if normalize($spanish_Natures[j][0]).downcase==name.downcase && $spanish_Natures[j][3].nil?
+  end
   return nil
 end
 
@@ -5310,44 +5494,49 @@ def disp_legendary_list(bot,event,args=nil,dispmode='',forcesplit=false)
   tri=x[2] if x.length>=3
   p1=[]
   if pri=='Element'
-    x=['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima']
+    x=['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima']; x22=x.map{|q| q}
+    x22=['Fuego','Agua','Viento','Tierra','Luz','Oscuridad','Cosmos',"\u00C1nima"] if Shardizard==$spanishShard
     for i in 0...x.length
       lemote1=''
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{x[i]}"}
       lemote1=moji[0].mention unless moji.length<=0
       x2=l.reject{|q| q.legendary[0]!=x[i]}
-      p1.push(["#{lemote1} #{x[i]}",x2]) unless x2.length<=0
+      p1.push(["#{lemote1} #{x22[i]}",x2]) unless x2.length<=0
     end
   elsif pri=='Stat'
-    x=['Attack','Speed','Defense','Resistance','Attack Slot','Speed Slot','Defense Slot','Resistance Slot','Duel']
+    x=['Attack','Speed','Defense','Resistance','Attack Slot','Speed Slot','Defense Slot','Resistance Slot','Duel']; x22=x.map{|q| q}
+    x22=['Ataque','Velocidad','Defensa','Resistencia','Ataque Muesca','Velocidad Muesca','Defensa Muesca','Resistencia Muesca','Agrupar'] if Shardizard==$spanishShard
     for i in 0...x.length
       lemote2=''
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{x[i].gsub(' Slot','')}"}
       moji=bot.server(554231720698707979).emoji.values.reject{|q| q.name != "Mythic_Slot_#{x[i].gsub(' Slot','')}"} if x[i].include?(' Slot')
       lemote2=moji[0].mention unless moji.length<=0
       x2=l.reject{|q| q.legendary[1]!=x[i]}
-      p1.push(["#{lemote2} #{x[i].gsub('Duel','Duel/Pair-Up')}",x2]) unless x2.length<=0
+      p1.push(["#{lemote2} #{x22[i].gsub('Duel','Duel/Pair-Up')}",x2]) unless x2.length<=0
     end
   elsif pri=='Color'
-    x=['Red','Blue','Green','Colorless']
+    x=['Red','Blue','Green','Colorless']; x22=x.map{|q| q}
+    x22=['Roja','Azul','Verde','Gris'] if Shardizard==$spanishShard
     for i in 0...x.length
       cemote=''
       moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{x[i]}_Unknown"}
       cemote=moji[0].mention unless moji.length<=0
       x2=l.reject{|q| q.weapon_color != x[i]}
-      p1.push(["#{cemote} #{x[i]}",x2]) unless x2.length<=0
+      p1.push(["#{cemote} #{x22[i]}",x2]) unless x2.length<=0
     end
   elsif pri=='Movement'
-    x=['Infantry','Armor','Cavalry','Flier']
+    x=['Infantry','Armor','Cavalry','Flier']; x22=x.map{|q| q}
+    x22=['Infantería','Blindado','Caballería','Volador'] if Shardizard==$spanishShard
     for i in 0...x.length
       memote=''
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{x[i]}"}
       memote=moji[0].mention unless moji.length<=0
       x2=l.reject{|q| q.movement != x[i]}
-      p1.push(["#{memote} #{x[i]}",x2]) unless x2.length<=0
+      p1.push(["#{memote} #{x22[i]}",x2]) unless x2.length<=0
     end
   elsif pri=='Weapon'
-    x=['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Dragon','Bow','Dagger','Healer']
+    x=['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Dragon','Bow','Dagger','Healer']; x22=x.map{|q| q}
+    x22=['Espada','Tomo Rojo','Lanza','Tomo Azul','Hacha','Tomo Verde',"Drag\u00F3n",'Arco','Daga','Curadora'] if Shardizard==$spanishShard
     for i in 0...x.length
       x2=l.reject{|q| q.unit_group(true,false)!="#{x[i]} Users"}
       unless x2.length<=0
@@ -5355,7 +5544,7 @@ def disp_legendary_list(bot,event,args=nil,dispmode='',forcesplit=false)
         moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{x2[0].weapon_color}_#{x2[0].weapon_type}"}
         moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "Gold_#{x2[0].weapon_type}"} if ['Dragon','Bow','Dagger'].include?(x[i])
         cemote=moji[0].mention unless moji.length<=0
-        p1.push(["#{cemote} #{x[i]}",x2])
+        p1.push(["#{cemote} #{x22[i]}",x2])
       end
     end
   end
@@ -5364,44 +5553,49 @@ def disp_legendary_list(bot,event,args=nil,dispmode='',forcesplit=false)
     x2=p1[i2][1].map{|q| q}
     p2=[]
     if sec=='Element'
-      x=['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima']
+      x=['Fire','Water','Wind','Earth','Light','Dark','Astra','Anima']; x22=x.map{|q| q}
+      x22=['Fuego','Agua','Viento','Tierra','Luz','Oscuridad','Cosmos',"\u00C1nima"] if Shardizard==$spanishShard
       for i in 0...x.length
         lemote1=''
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{x[i]}"}
         lemote1=moji[0].mention unless moji.length<=0
         x3=x2.reject{|q| q.legendary[0]!=x[i]}
-        p2.push(["#{lemote1} #{x[i]}",x3]) unless x3.length<=0
+        p2.push(["#{lemote1} #{x22[i]}",x3]) unless x3.length<=0
       end
     elsif sec=='Stat'
-      x=['Attack','Speed','Defense','Resistance','Attack Slot','Speed Slot','Defense Slot','Resistance Slot','Duel']
+      x=['Attack','Speed','Defense','Resistance','Attack Slot','Speed Slot','Defense Slot','Resistance Slot','Duel']; x22=x.map{|q| q}
+      x22=['Ataque','Velocidad','Defensa','Resistencia','Ataque Muesca','Velocidad Muesca','Defensa Muesca','Resistencia Muesca','Agrupar'] if Shardizard==$spanishShard
       for i in 0...x.length
         lemote2=''
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{x[i].gsub(' Slot','')}"}
         moji=bot.server(554231720698707979).emoji.values.reject{|q| q.name != "Mythic_Slot_#{x[i].gsub(' Slot','')}"} if x[i].include?(' Slot')
         lemote2=moji[0].mention unless moji.length<=0
         x3=x2.reject{|q| q.legendary[1]!=x[i]}
-        p2.push(["#{lemote2} #{x[i].gsub('Duel','Duel/Pair-Up')}",x3]) unless x3.length<=0
+        p2.push(["#{lemote2} #{x22[i].gsub('Duel','Duel/Pair-Up')}",x3]) unless x3.length<=0
       end
     elsif sec=='Color'
-      x=['Red','Blue','Green','Colorless']
+      x=['Red','Blue','Green','Colorless']; x22=x.map{|q| q}
+      x22=['Roja','Azul','Verde','Gris'] if Shardizard==$spanishShard
       for i in 0...x.length
         cemote=''
         moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{x[i]}_Unknown"}
         cemote=moji[0].mention unless moji.length<=0
         x3=x2.reject{|q| q.weapon_color != x[i]}
-        p2.push(["#{cemote} #{x[i]}",x3]) unless x3.length<=0
+        p2.push(["#{cemote} #{x22[i]}",x3]) unless x3.length<=0
       end
     elsif sec=='Movement'
-      x=['Infantry','Armor','Cavalry','Flier']
+      x=['Infantry','Armor','Cavalry','Flier']; x22=x.map{|q| q}
+      x22=['Infantería','Blindado','Caballería','Volador'] if Shardizard==$spanishShard
       for i in 0...x.length
         memote=''
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{x[i]}"}
         memote=moji[0].mention unless moji.length<=0
         x3=x2.reject{|q| q.movement != x[i]}
-        p2.push(["#{memote} #{x[i]}",x3]) unless x3.length<=0
+        p2.push(["#{memote} #{x22[i]}",x3]) unless x3.length<=0
       end
     elsif sec=='Weapon'
-      x=['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Dragon','Bow','Dagger','Healer']
+      x=['Sword','Red Tome','Lance','Blue Tome','Axe','Green Tome','Dragon','Bow','Dagger','Healer']; x22=x.map{|q| q}
+      x22=['Espada','Tomo Rojo','Lanza','Tomo Azul','Hacha','Tomo Verde',"Drag\u00F3n",'Arco','Daga','Curadora'] if Shardizard==$spanishShard
       for i in 0...x.length
         x3=x2.reject{|q| q.unit_group(true,false)!="#{x[i]} Users"}
         unless x3.length<=0
@@ -5409,7 +5603,7 @@ def disp_legendary_list(bot,event,args=nil,dispmode='',forcesplit=false)
           moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{x3[0].weapon_color}_#{x3[0].weapon_type}"}
           moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "Gold_#{x3[0].weapon_type}"} if ['Dragon','Bow','Dagger'].include?(x[i])
           cemote=moji[0].mention unless moji.length<=0
-          p2.push(["#{cemote} #{x[i]}",x3])
+          p2.push(["#{cemote} #{x22[i]}",x3])
         end
       end
     end
@@ -5417,15 +5611,20 @@ def disp_legendary_list(bot,event,args=nil,dispmode='',forcesplit=false)
     for i in 0...p2.length
       for i3 in 0...p2[i][1].length
         if tri=='Element'
-          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].legendary[0]}*"
+          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].legendary[0]}*" unless Shardizard==$spanishShard
+          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].spanish_legendary[0]}*" if Shardizard==$spanishShard
         elsif tri=='Stat'
-          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].legendary[1]}*"
+          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].legendary[1]}*" unless Shardizard==$spanishShard
+          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].spanish_legendary[1]}*" if Shardizard==$spanishShard
         elsif tri=='Color'
-          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].weapon_color}*"
+          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].weapon_color}*" unless Shardizard==$spanishShard
+          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].weapon_spanish[0]}*" if Shardizard==$spanishShard
         elsif tri=='Movement'
-          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].movement}*"
+          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].movement}*" unless Shardizard==$spanishShard
+          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].movement_spanish}*" if Shardizard==$spanishShard
         elsif tri=='Weapon'
-          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].unit_group(true,true).gsub(' Users','')}*"
+          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].unit_group(true,true).gsub(' Users','')}*" unless Shardizard==$spanishShard
+          p2[i][1][i3]="#{p2[i][1][i3].postName} - *#{p2[i][1][i3].wstring_spanish}*" if Shardizard==$spanishShard
         else
           p2[i][1][i3]=p2[i][1][i3].postName
         end
@@ -5452,8 +5651,9 @@ def disp_legendary_list(bot,event,args=nil,dispmode='',forcesplit=false)
     return nil
   end
   dispmode='Legendary/Mythic' if (dispmode.length<=0 || !forcesplit) && safe_to_spam?(event)
+  str="__***All #{dispmode} Heroes***__"
+  str="__***Todos los héroes #{dispmode.gsub('Legendary','Legendarios').gsub('Mythic','Míticos')}***__" if Shardizard==$spanishShard
   if $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || p1.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length>1900
-    str="__***All #{dispmode} Heroes***__"
     x=2
     x=3 if triple
     for i in 0...p1.length
@@ -5461,7 +5661,7 @@ def disp_legendary_list(bot,event,args=nil,dispmode='',forcesplit=false)
     end
     event.respond str
   else
-    create_embed(event,"__**All #{dispmode} Heroes**__",'',avg_color(c),nil,nil,p1)
+    create_embed(event,str,'',avg_color(c),nil,nil,p1)
   end
 end
 
@@ -5512,8 +5712,9 @@ def sort_legendaries(event,bot,mode=0)
     topbnr=f.map{|q| q} if i==0
     lemoji1='<:Legendary_Effect_Unknown:443337603945857024>'
     lemoji1='<:Mythic_Effect_Unknown:523328368079273984>' if x[i].include?('January') || x[i].include?('March') || x[i].include?('May') || x[i].include?('July') || x[i].include?('September') || x[i].include?('November')
-    lemoji1='' if x[i]=='Remix' || x[i].include?('Mid-')
-    y.push(["#{x[i]} #{lemoji1}",f.join("\n")])
+    lemoji1='<:Mythic_Effect_Unknown:523328368079273984>' if x[i].include?('enero') || x[i].include?('marzo') || x[i].include?('mayo') || x[i].include?('julio') || x[i].include?('septiembre') || x[i].include?('noviembre')
+    lemoji1='' if x[i]=='Remix' || x[i].include?('Mid-') || x[i].include?('Mediados de')
+    y.push(["#{x[i]}#{' ' unless lemoji1.length<=1}#{lemoji1}",f.join("\n")])
   end
   future_banner=$banners.reject{|q| !has_any?(q.tags,['Legendary','LegendaryRemix']) || !q.isFuture?}.uniq
   if future_banner.length>0
@@ -5554,9 +5755,11 @@ def sort_legendaries(event,bot,mode=0)
       lemoji1='<:Legendary_Effect_Unknown:443337603945857024>'
       lemoji1='<:Mythic_Effect_Unknown:523328368079273984>' if f2[1]%2==1 || future_banner[i].name.include?('Mythic Heroes:')
       lemoji1='<:Legendary_Effect_Unknown:443337603945857024>' if future_banner[i].name.include?('Legendary Heroes:')
-      f2="#{f2[0]}#{['','Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'][f2[1]]}#{f2[2]}"
+      mo=['','Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec']
+      mo=$spanish_months[0].map{|q| "#{q[0].upcase unless q.length<=0}#{q[1,2]}"} if Shardizard==$spanishShard
+      f2="#{f2[0]}#{mo[f2[1]]}#{f2[2]}"
       f3=future_banner[i].end_date
-      f3="#{f3[0]}#{['','Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'][f3[1]]}#{f3[2]}"
+      f3="#{f3[0]}#{mo[f3[1]]}#{f3[2]}"
       y.unshift(["#{f2}#{lemoji1}#{f3}",f.join("\n")])
     end
   end
@@ -5584,17 +5787,19 @@ def sort_legendaries(event,bot,mode=0)
       timeshift=8
       timeshift-=1 unless t2.dst?
       t2-=60*60*timeshift
-      t2=t2-t
+      t2=t2-t+24*60*60
+      tme=['days left','hours left','minutes left','seconds left','Current']
+      tme=['dias','horas','minutos','segundos','Actual'] if Shardizard==$spanishShard
       if t2/(24*60*60)>1
-        f2="#{(t2/(24*60*60)).floor} days left"
+        f2="#{'Quedan ' if Shardizard==$spanishShard}#{(t2/(24*60*60)).floor} #{tme[0]}"
       elsif t2/(60*60)>1
-        f2="#{(t2/(60*60)).floor} hours left"
+        f2="#{'Quedan ' if Shardizard==$spanishShard}#{(t2/(60*60)).floor} #{tme[1]}"
       elsif t2/60>1
-        f2="#{(t2/60).floor} minutes left"
+        f2="#{'Quedan ' if Shardizard==$spanishShard}#{(t2/60).floor} #{tme[2]}"
       elsif t2>1
-        f2="#{(t2).floor} seconds left"
+        f2="#{'Quedan ' if Shardizard==$spanishShard}#{(t2).floor} #{tme[3]}"
       end
-      y.unshift(["Current#{lemoji1}#{f2}",f.join("\n")])
+      y.unshift(["#{tme[4]}#{lemoji1}#{f2}",f.join("\n")])
     end
   end
   if mode==1
@@ -5613,6 +5818,7 @@ def sort_legendaries(event,bot,mode=0)
     for i in 0...m
       x=''
       x="__**Legendary and Mythic Heroes' Appearances**__" if i==0
+      x="__**Apariciones de Héroes Legendarios y Míticos**__" if i==0 && Shardizard==$spanishShard
       create_embed(event,x,'',avg_color(c),nil,nil,y[3*i,[3,y.length-3*i].min],2)
     end
   else
@@ -5623,21 +5829,27 @@ def sort_legendaries(event,bot,mode=0)
   k=[$units.reject{|q| !q.legendary.nil? || !q.fake.nil? || !q.availability[0].include?('5s') || b.include?(q.name)}.sort{|a,b| a.id<=>b.id},
      $units.reject{|q| !q.legendary.nil? || !q.duo.nil? || !q.fake.nil? || !q.availability[0].include?('p') || q.availability[0].include?('1p') || q.availability[0].include?('2p') || q.availability[0].include?('3p') || q.availability[0].include?('4p') || q.availability[0].include?('TD') || b.include?(q.name)}.sort{|a,b| a.id<=>b.id}]
   colors=[['Red',0xE22141],['Blue',0x2764DE],['Green',0x09AA24],['Colorless',0x64757D],['Unknown',0xAA937A]]
+  colors=[['Roja',0xE22141],['Azul',0x2764DE],['Verde',0x09AA24],['Gris',0x64757D],['Desconocido',0xAA937A]] if Shardizard==$spanishShard
   colors2=[[0xAA937A,"__**Seasonal units that have not yet been on a Legendary/Mythic or DoubleSpecial Banner**__","There are too many seasonal zzzzz heroes to display."],
            [avg_color([book_color(3,1)]),"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary or Mythic Banner**__","There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive zzzzz heroes to display."],
            [avg_color([book_color(1,1),book_color(2,1),book_color(3,1)]),"x","zzzzz"]]
+  if Shardizard==$spanishShard
+    colors2=[[0xAA937A,"__**Personajes de temporada que aún no han estado en un estandarte Legendario/Mítico o DoubleSpecial**__","Hay demasiados héroes zzzzz de temporada para mostrar."],
+             [avg_color([book_color(3,1)]),"__**Personajes exclusivos a 5<:Icon_Rarity_5:448266417553539104> que aún no han estado en un estandarte Legendario o Mítico**__","Hay demasiados héroes exclusivos a 5<:Icon_Rarity_5:448266417553539104> zzzzz para mostrar."],
+             [avg_color([book_color(1,1),book_color(2,1),book_color(3,1)]),"x","zzzzz"]]
+  end
   for i2 in 0...k.length
     f=[]
     k2=k[i2].reject{|q| q.weapon_color != 'Red'}.map{|q| q.name}
-    f.push(['<:Orb_Red:455053002256941056>Red',k2.map{|q| q}]) unless k2.length<=0
+    f.push(["<:Orb_Red:455053002256941056>#{colors[0][0]}",k2.map{|q| q}]) unless k2.length<=0
     k2=k[i2].reject{|q| q.weapon_color != 'Blue'}.map{|q| q.name}
-    f.push(['<:Orb_Blue:455053001971859477>Blue',k2.map{|q| q}]) unless k2.length<=0
+    f.push(["<:Orb_Blue:455053001971859477>#{colors[1][0]}",k2.map{|q| q}]) unless k2.length<=0
     k2=k[i2].reject{|q| q.weapon_color != 'Green'}.map{|q| q.name}
-    f.push(['<:Orb_Green:455053002311467048>Green',k2.map{|q| q}]) unless k2.length<=0
+    f.push(["<:Orb_Green:455053002311467048>#{colors[2][0]}",k2.map{|q| q}]) unless k2.length<=0
     k2=k[i2].reject{|q| q.weapon_color != 'Colorless'}.map{|q| q.name}
-    f.push(['<:Orb_Colorless:455053002152083457>Colorless',k2.map{|q| q}]) unless k2.length<=0
+    f.push(["<:Orb_Colorless:455053002152083457>#{colors[3][0]}",k2.map{|q| q}]) unless k2.length<=0
     k2=k[i2].reject{|q| ['Red','Blue','Green','Colorless'].include?(q.weapon_color)}.map{|q| q.name}
-    f.push(['<:Orb_Gold:549338084102111250>Unknown',k2.map{|q| q}]) unless k2.length<=0
+    f.push(["<:Orb_Gold:549338084102111250>#{colors[4][0]}",k2.map{|q| q}]) unless k2.length<=0
     if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       msg=colors2[i2][1]
       tolongs=[]
@@ -5675,6 +5887,8 @@ def sort_legendaries(event,bot,mode=0)
 end
 
 def disp_groups(event,bot)
+  dis=['Dynamic Global','Manually Global','Server-specific','Available Groups','members']
+  dis=['Dinámico y Global','Manual y Global','Específico del servidor','Grupos disponibles','miembros'] if Shardizard==$spanishShard
   unless safe_to_spam?(event)
     k=0
     k=event.server.id unless event.server.nil?
@@ -5684,12 +5898,11 @@ def disp_groups(event,bot)
     g2=$groups.reject{|q| !q.fake.nil? || !(q.units.length==q.unit_list.length && q.unit_list.length>0)}
     g3=$groups.reject{|q| q.fake.nil? || !q.fake.include?(k)}
     g=[]
-    g.push(['**Dynamic Global**',g1.map{|q| "#{q.name.gsub('&','/')} (#{q.unit_list.length} members)"}.join("\n")])
-    g[0][1]="#{g[0][1]}\n#{g1x.map{|q| "~~#{q.name}~~ *depreciated*"}.join("\n")}" if g1x.length>0
+    g.push(["**#{dis[0]}**",g1.map{|q| "#{q.name.gsub('&','/')} (#{q.unit_list.length} #{dis[4]})"}.join("\n")])
     g[0][1]=g[0][1].split("\n").sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')}.join("\n")
-    g.push(['**Manually Global**',g2.map{|q| "#{q.name.gsub('&','/')} (#{q.unit_list.length} members)"}.join("\n")])
-    g.push(['**Server-specific**',g3.map{|q| "#{q.name.gsub('&','/')} (#{q.unit_list.length} members)"}.join("\n")]) if g3.length>0
-    create_embed(event,"__**Available Groups**__",'',0xD49F61,nil,nil,g,2)
+    g.push(["**#{dis[1]}**",g2.map{|q| "#{q.name.gsub('&','/')} (#{q.unit_list.length} #{dis[4]})"}.join("\n")])
+    g.push(["**#{dis[2]}**",g3.map{|q| "#{q.name.gsub('&','/')} (#{q.unit_list.length} #{dis[4]})"}.join("\n")]) if g3.length>0
+    create_embed(event,"__**#{dis[3]}**__",'',0xD49F61,nil,nil,g,2)
     return nil
   end
   str=''
@@ -5698,14 +5911,13 @@ def disp_groups(event,bot)
     if x[i].name=="Mathoo'sWaifus" && event.user.id != 167657750971547648
     elsif x[i].isPostable?(event)
       if x[i].unit_list(event).length>50
-        str=extend_message(str,"**#{x[i].fullName}** - (#{x[i].unit_list(event).length} members)#{"\n*[Server exclusive]*" unless x[i].fake.nil?}",event,2)
+        str=extend_message(str,"**#{x[i].fullName}** - (#{x[i].unit_list(event).length} #{dis[4]})#{"\n*[#{dis[2]}]*" unless x[i].fake.nil?}",event,2)
       else
-        str=extend_message(str,"__**#{x[i].fullName}**__#{"\n*[Server exclusive]*" unless x[i].fake.nil?}\n#{x[i].unit_list(event).map{|q| q.postName}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')}.join(', ')}",event,2)
+        str=extend_message(str,"__**#{x[i].fullName}**__#{"\n*[#{dis[2]}]*" unless x[i].fake.nil?}\n#{x[i].unit_list(event).map{|q| q.postName}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')}.join(', ')}",event,2)
       end
     end
   end
   event.respond str
-  # "Depreciated" (proper spelling stored here for later use)
 end
 
 def log_channel
@@ -5715,6 +5927,7 @@ def log_channel
 end
 
 def add_new_alias(bot,event,newname,unit,modifier=nil,modifier2=nil,mode=0)
+  return add_new_alias_to_spain(bot,event,newname,unit,modifier=nil,modifier2=nil,mode=0) if Shardizard==$spanishShard
   nicknames_load()
   err=false
   str=''
@@ -6011,15 +6224,16 @@ end
 
 def disp_unit_stats(bot,event,xname,extrastr=nil,sizex='smol',includeskills=false)
   args=event.message.text.downcase.split(' ')
-  if has_any?(args,['tiny','small','smol','micro','little'])
+  if has_any?(args,['tiny','small','smol','micro','little']) || (Shardizard==$spanishShard && has_any?(['pequeno','pequena','pequeño','pequeña'],args))
     sizex='xsmol'
-  elsif has_any?(args,['big','tol','macro','large'])
+  elsif has_any?(args,['big','tol','macro','large']) || (Shardizard==$spanishShard && args.include?('grande'))
     sizex='medium'
-  elsif has_any?(args,['huge','massive'])
+  elsif has_any?(args,['huge','massive']) || (Shardizard==$spanishShard && args.include?('enorme'))
     sizex='giant'
   end
   if sizex=='giant' && !safe_to_spam?(event)
-    event.respond "I will not wipe the chat completely clean.  Please use this command in PM.\nIn the meantime, I will show the standard form of this command."
+    event.respond "I will not wipe the chat completely clean.  Please use this command in PM.\nIn the meantime, I will show the standard form of this command." unless Shardizard==$spanishShard
+    event.respond "No limpiaré el chat por completo. Utilice este comando en mensajes privados.\nMientras tanto, mostraré la forma estándar de este comando." if Shardizard==$spanishShard
     sizex='medium'
   end
   xname=xname[0].split('(')[0] if xname==['Robin(M)','Robin(F)'] || xname==['Robin(F)','Robin(M)'] || xname==['Kris(M)','Kris(F)'] || xname==['Kris(F)','Kris(M)']
@@ -6051,7 +6265,7 @@ def disp_unit_stats(bot,event,xname,extrastr=nil,sizex='smol',includeskills=fals
     unit=xname.clone
   elsif ['Robin','Kris'].include?(xname)
     unit=$units.find_index{|q| q.name=="#{xname}(F)"}
-    event.respond "No matches found." if unit.nil?
+    event.respond nomf() if unit.nil?
     return nil if unit.nil?
     unit=$units[unit].clone
     unit.name="#{xname} (shared stats)"
@@ -6080,10 +6294,11 @@ def disp_unit_stats(bot,event,xname,extrastr=nil,sizex='smol',includeskills=fals
   weapon=nil
   wpninvoke=''
   wpnlegal=true
-  if has_any?(args,["mathoo's"]) || (has_any?(args,['my']) && event.user.id==167657750971547648)
+  if has_any?(args,["mathoo's"]) || (has_any?(args,['my']) && event.user.id==167657750971547648) || (Shardizard==$spanishShard && (has_any?(args,["demathoo"]) || (has_any?(args,['mi']) && event.user.id==167657750971547648)))
     u=$dev_units.find_index{|q| q.name==unit.name}
     if u.nil?
-      if $dev_nobodies.include?(unit.name)
+      if Shardizard==$spanishShard
+      elsif $dev_nobodies.include?(unit.name)
         event.respond "Mathoo has that unit, but marked that he doesn't want to record #{unit.pronoun(true)} data.  Showing default data."
       elsif [$dev_somebodies,$dev_waifus].flatten.include?(unit.name)
         event.respond "Mathoo does not have that unit, much as he wants to.  Showing default data."
@@ -6179,6 +6394,7 @@ def disp_unit_stats(bot,event,xname,extrastr=nil,sizex='smol',includeskills=fals
   end
   pairup=false
   pairup=true if has_any?(event.message.text.downcase.split(' '),['pairup','paired','pair','pair-up']) && !unit.owner.nil?
+  pairup=true if has_any?(event.message.text.downcase.split(' '),['agrupar']) && !unit.owner.nil? && Shardizard==$spanishShard
   lvlvl=40
   lvlvl=79 if has_any?(event.message.text.downcase.split(' '),['79','level79','lv79','l79'])
   lvlvl=99 if has_any?(event.message.text.downcase.split(' '),['99','level99','lv99','l99'])
@@ -6194,11 +6410,18 @@ def disp_unit_stats(bot,event,xname,extrastr=nil,sizex='smol',includeskills=fals
   if unit.weapon_type=='Beast' && !weapon.nil? && weapon.weapon_stats.length>5 && !['smol','xsmol'].include?(sizex)
     xx=[]
     xx.push("#{'+' if weapon.weapon_stats[5]>0}#{weapon.weapon_stats[5]} HP") unless weapon.weapon_stats[5]==0
-    xx.push("#{'+' if weapon.weapon_stats[6]>0}#{weapon.weapon_stats[6]} Atk") unless weapon.weapon_stats[6]==0
-    xx.push("#{'+' if weapon.weapon_stats[7]>0}#{weapon.weapon_stats[7]} Spd") unless weapon.weapon_stats[7]==0
+    xx.push("#{'+' if weapon.weapon_stats[6]>0}#{weapon.weapon_stats[6]} At#{'k' unless Shardizard==$spanishShard}#{'q' if Shardizard==$spanishShard}") unless weapon.weapon_stats[6]==0
+    xx.push("#{'+' if weapon.weapon_stats[7]>0}#{weapon.weapon_stats[7]} Spd") unless weapon.weapon_stats[7]==0 || Shardizard==$spanishShard
+    xx.push("#{'+' if weapon.weapon_stats[7]>0}#{weapon.weapon_stats[7]} Vel") unless weapon.weapon_stats[7]==0 || Shardizard !=$spanishShard
     xx.push("#{'+' if weapon.weapon_stats[8]>0}#{weapon.weapon_stats[8]} Def") unless weapon.weapon_stats[8]==0
     xx.push("#{'+' if weapon.weapon_stats[9]>0}#{weapon.weapon_stats[9]} Res") unless weapon.weapon_stats[9]==0
-    text="#{text}\nWhen transformed: #{xx.join(', ')}\nInclude the word \"transformed\" to apply this directly." if xx.length>0
+    if xx.length>0
+      if Shardizard==$spanishShard
+        text="#{text}\nCuando se transforma: #{xx.join(', ')}\nIncluye la palabra \"transformed\" tener esto aplicado."
+      else
+        text="#{text}\nWhen transformed: #{xx.join(', ')}\nInclude the word \"transformed\" to apply this directly."
+      end
+    end
   end
   unless ['smol','xsmol'].include?(sizex)
     f=unit.statList(bot,(sizex=='giant' || has_any?(event.message.text.downcase.split(' '),['growths','growth','gps','gp'])),diff,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,skill_list_2,wpnlegal,pairup,lvlvl)
@@ -6209,10 +6432,16 @@ def disp_unit_stats(bot,event,xname,extrastr=nil,sizex='smol',includeskills=fals
   end
   flds=nil if flds.length<=0
   ftr="Include the word \"#{unit.bonus_type}\" to include bonus unit stats" if unit.bonus_type.length>0 && bonus.length<=0
-  ftr="Score does not include SP cost of #{'non-weapon ' unless weapon.nil?}skills." if ['smol','xsmol'].include?(sizex) && ftr.nil? && unit.owner.nil? && bonus != 'Enemy'
+  ftr="Incluye la palabra \"#{unit.bonus_type}\" para mostrar las estadísticas de un personaje con bonificación." if unit.bonus_type.length>0 && bonus.length<=0 && Shardizard==$spanishShard
+  if ['smol','xsmol'].include?(sizex) && ftr.nil? && unit.owner.nil? && bonus != 'Enemy'
+    ftr="Score does not include SP cost of #{'non-weapon ' unless weapon.nil?}skills."
+    ftr="Puntaje no incluye el coste de SP de las habilidades#{' que no son armas' unless weapon.nil?}." if Shardizard==$spanishShard
+  end
   ftr="Include the word \"Resplendent\" to ascend this unit." if unit.hasResplendent? && !resp && unit.owner.nil?
+  ftr="Incluye la palabra \"Resplendent\" para hacer este carácter más fuerte." if unit.hasResplendent? && !resp && unit.owner.nil? && Shardizard==$spanishShard
   unless wpninvoke.length>0 || weapon.nil? || weapon.name[-1]=='+' || weapon.next_steps(event,1).reject{|q| q.name[-1]!='+'}.length<=0 || !unit.owner.nil?
     ftr="You equipped the T#{weapon.tier} version of the weapon.  Perhaps you meant #{weapon.name}+ ?"
+    ftr="Equipaste la versión R#{weapon.tier} de la arma.  ¿Te refieres a #{weapon.name}+ ?"
   end
   unless (diff.max==0 && diff.min==0) || !['smol','xsmol'].include?(sizex)
     ftr="Stats displayed are for #{unit.name.split(' (')[0]}(M).  #{unit.name.split(' (')[0]}(F) has "
@@ -6225,9 +6454,22 @@ def disp_unit_stats(bot,event,xname,extrastr=nil,sizex='smol',includeskills=fals
     else
       ftr=nil
     end
+    if Shardizard==$spanishShard
+      ftr="Las estadísticas que se muestran son para #{unit.name.split(' (')[0]}(M).  #{unit.name.split(' (')[0]}(F) tiene "
+      if diff[0]!=0 || diff[2,3].reject{|q| q==0}.length>0
+        ftr="#{ftr}los siguientes cambios: #{diff.map{|q| "#{'+' if q>0}#{q}"}.join('/')}"
+      elsif diff[1]>0
+        ftr="#{ftr}#{diff[1]} menos Atq."
+      elsif diff[1]<0
+        ftr="#{ftr}#{-diff[1]} más Atq."
+      else
+        ftr=nil
+      end
+    end
   end
   ftr='For the Kiran-shaped enemy in Book IV Ch. 12-5, type the name "Hood".' if unit.name=='Kiran'
-  create_embed(event,["__#{"#{unit.owner}'s " unless unit.owner.nil?}**#{unit.name}**#{unit.submotes(bot)}__",header],text,unit.disp_color,ftr,unit.thumbnail(event,bot,resp),flds)
+  ftr='Para el enemigo con forma de Kiran en el libro 4 cap. 12-5, use el nombre "Hood".' if unit.name=='Kiran' && Shardizard==$spanishShard
+  create_embed(event,["__#{"#{unit.owner}'s " unless unit.owner.nil? || Shardizard==$spanishShard}**#{unit.name}**#{unit.submotes(bot)}#{" de #{unit.owner}" unless unit.owner.nil? || Shardizard !=$spanishShard}__",header],text,unit.disp_color,ftr,unit.thumbnail(event,bot,resp),flds)
 end
 
 def disp_unit_skills(bot,event,xname)
@@ -6253,7 +6495,7 @@ def disp_unit_skills(bot,event,xname)
   args.compact!
   if xname.nil?
     if args.nil? || args.length<1
-      event.respond "No matches found."
+      event.respond nomf()
       return nil
     end
   elsif ['Robin','Kris'].include?(xname)
@@ -6264,7 +6506,7 @@ def disp_unit_skills(bot,event,xname)
     unit.name="#{xname} (shared stats)"
   else
     unit=$units.find_index{|q| q.name==xname}
-    event.respond "No matches found." if unit.nil?
+    event.respond nomf() if unit.nil?
     return nil if unit.nil?
     unit=$units[unit].clone
   end
@@ -6272,10 +6514,11 @@ def disp_unit_skills(bot,event,xname)
   rarity=flurp[0]
   merges=flurp[1]
   resp=flurp[9]
-  if has_any?(args,["mathoo's"]) || (has_any?(args,['my']) && event.user.id==167657750971547648)
+  if has_any?(args,["mathoo's"]) || (has_any?(args,['my']) && event.user.id==167657750971547648) || (Shardizard==$spanishShard && (has_any?(args,["demathoo"]) || (has_any?(args,['mi']) && event.user.id==167657750971547648)))
     u=$dev_units.find_index{|q| q.name==unit.name}
     if u.nil?
-      if $dev_nobodies.include?(unit.name)
+      if Shardizard==$spanishShard
+      elsif $dev_nobodies.include?(unit.name)
         event.respond "Mathoo has that unit, but marked that he doesn't want to record #{unit.pronoun(true)} data.  Showing default data."
       elsif [$dev_somebodies,$dev_waifus].flatten.include?(unit.name)
         event.respond "Mathoo does not have that unit, much as he wants to.  Showing default data."
@@ -6321,11 +6564,18 @@ def disp_unit_skills(bot,event,xname)
     end
   end
   text=unit.starHeader2(bot,true,rarity,'','',merges,0,'','',[],false,nil,'',false,[],[],true,false,0)
-  text="#{text}\nRokkr Unit" if unit.name=='Mathoo' && has_any?(event.message.text.downcase.split(' '),['rokkr','enemy','boss'])
-  text="#{text}\nEnemy Boss Unit" if unit.name=='Hel' && has_any?(event.message.text.downcase.split(' '),['enemy','boss'])
-  text="#{text}\nZelgius glitch applied" if zelg
-  ftr='For the Kiran-shaped enemy in Book IV Ch. 12-5, type the name "Hood".' if unit.name=='Kiran'
-  create_embed(event,["__#{"#{unit.owner}'s " unless unit.owner.nil?}**#{unit.name}**#{unit.submotes(bot)}__",header],text,unit.disp_color,ftr,unit.thumbnail(event,bot,resp),flds)
+  if Shardizard==$spanishShard
+    text="#{text}\nLider sombrío" if unit.name=='Mathoo' && has_any?(event.message.text.downcase.split(' '),['rokkr','enemy','boss'])
+    text="#{text}\nLider de los enemigos" if unit.name=='Hel' && has_any?(event.message.text.downcase.split(' '),['enemy','boss'])
+    text="#{text}\nError de Zelgius aplicado" if zelg
+    ftr='Para el enemigo con forma de Kiran en el libro 4 cap. 12-5, use el nombre "Hood".' if unit.name=='Kiran'
+  else
+    text="#{text}\nRokkr Unit" if unit.name=='Mathoo' && has_any?(event.message.text.downcase.split(' '),['rokkr','enemy','boss'])
+    text="#{text}\nEnemy Boss Unit" if unit.name=='Hel' && has_any?(event.message.text.downcase.split(' '),['enemy','boss'])
+    text="#{text}\nZelgius glitch applied" if zelg
+    ftr='For the Kiran-shaped enemy in Book IV Ch. 12-5, type the name "Hood".' if unit.name=='Kiran'
+  end
+  create_embed(event,["__#{"#{unit.owner}'s " unless unit.owner.nil? || Shardizard==$spanishShard}**#{unit.name}**#{unit.submotes(bot)}#{" de #{unit.owner}" unless unit.owner.nil? || Shardizard !=$spanishShard}__",header],text,unit.disp_color,ftr,unit.thumbnail(event,bot,resp),flds)
 end
 
 def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
@@ -6338,8 +6588,9 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
   args=sever(s.gsub(',','').gsub('/',''),true,true).split(' ')
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
   args.compact!
-  errstr="No matches found."
+  errstr=nomf()
   errstr="No matches found.  If you are looking for data on skills a particular unit learns, try ```#{event.message.text.downcase.gsub('skill','skills')}``` instead." if includespecialerror
+  errstr="No hay coincidencias.  Si está buscando datos sobre las habilidades que aprende un personaje en particular, intente ```#{event.message.text.downcase.gsub('habilidad','habilidades')}``` en su lugar." if includespecialerror && Shardizard==$spanishShard
   if xname.nil?
     if args.nil? || args.length<1
       event.respond errstr
@@ -6505,7 +6756,7 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
       sk1=$skills.find_index{|q| q.name=='Missiletainn (Dark)'}
       sk2=$skills.find_index{|q| q.name=='Missiletainn (Dusk)'}
       if sk1.nil? && sk2.nil?
-        event.respond "No matches found."
+        event.respond nomf()
         return nil
       elsif sk1.nil?
         disp_skill_data(bot,event,'Missiletainn (Dusk)',colors)
@@ -7134,7 +7385,7 @@ def disp_struct(bot,event,xname,ignore=false)
   args=xname.split(' ') unless xname.nil?
   if xname.nil?
     if args.nil? || args.length<1
-      event.respond "No matches found."
+      event.respond nomf()
       return nil
     end
   end
@@ -7142,7 +7393,7 @@ def disp_struct(bot,event,xname,ignore=false)
   xname=args.join(' ') if xname.nil?
   k=find_data_ex(:find_structure,event,args,nil,bot)
   if k.nil? || k.length<=0
-    event.respond "No matches found."
+    event.respond nomf()
     return nil
   end
   hdr=k[0].class_header(bot)
@@ -7151,14 +7402,25 @@ def disp_struct(bot,event,xname,ignore=false)
   if k.map{|q| q.type}.uniq.length>0 && k.map{|q| q.type}.flatten.include?('Offensive') && k.map{|q| q.type}.flatten.include?('Defensive')
     xcolor=0x8CAA7B
     hdr="<:Battle_Structure:565064414454349843>**Type:** Offensive/Defensive#{"\n<:Current_Aether_Bonus:510022809741950986>#{k[0].isBonus?} Aether Bonus Structure" if k[0].isBonus?.length>0}"
+    hdr="<:Battle_Structure:565064414454349843>**Tipo:** Ataque/Defensa#{"\n<:Current_Aether_Bonus:510022809741950986>#{k[0].isBonus?} Bonificación actual en Asaltos Etéreos" if k[0].isBonus?.length>0}" if Shardizard==$spanishShard
   elsif k[0].type[0]=='Mjolnir'
     stone='<:Midgard_Gem:675118366352211988>'
   end
   text=''
   x2='Effect'
+  x2='Efecto' if Shardizard==$spanishShard
   x2='Description' if ['Resort','Ornament'].include?(k[0].type[0])
+  x2='Descripción' if ['Resort','Ornament'].include?(k[0].type[0]) && Shardizard==$spanishShard
   text="**#{x2}:** #{k[0].description}"
-  text="#{text}\n**Turns to recharge:** #{k[0].charge}" unless k[0].charge.nil? || k[0].charge<=0
+  unless k[0].charge.nil? || k[0].charge<=0
+    if Shardizard==$spanishShard
+      text="#{text}\n**Rouds para recargar:** #{k[0].charge}"
+    else
+      text="#{text}\n**Turns to recharge:** #{k[0].charge}"
+    end
+  end
+  desc=['Level','Cost','Requires reaching AR Tier','nothing','Cumulative Cost','Offensive','Defensive','Additional Note']
+  desc=['Nivel','Precio','Requiere alcanzar AR Grada','nada','Precio Acumulativo','Ataque','Defensa','La Nota'] if Shardizard==$spanishShard
   if k.length>1
     x=' '
     x="\n" if k.map{|q| q.description}.uniq.length>1 || k.map{|q| q.destructable}.uniq.length>1 || k.map{|q| q.note}.uniq.length>1 
@@ -7167,75 +7429,81 @@ def disp_struct(bot,event,xname,ignore=false)
       text="#{text}\n" if (k.map{|q| q.description}.uniq.length>1 || k.map{|q| q.destructable}.uniq.length>1 || k.map{|q| q.note}.uniq.length>1 || i.zero?) && !k.map{|q| q.level}.include?('example')
       unless k[i].level=='example' || k.map{|q| q.level}.uniq.length<=1 || !safe_to_spam?(event)
         text="#{text}\n" if i>0 && k[i-1].level=='example'
-        text="#{text}\n**Level #{k[i].level}#{" [#{k[i].type.join('/')}]" unless k[i].type==k[0].type}:**"
-        text="#{text}#{x}*Cost:* "
+        ktp=k[i].type.map{|q| q}
+        ktp=k[i].spanish_type.map{|q| q} if Shardizard==$spanishShard
+        text="#{text}\n**#{desc[0]} #{k[i].level}#{" [#{ktp.join('/')}]" unless k[i].type==k[0].type}:**"
+        text="#{text}#{x}*#{desc[1]}:* "
         text="#{text}#{k[i].costs[0]}<:RRAffinity:565064751780986890>" if k[i].costs[0]>0
         text="#{text}#{k[i].costs[1]}#{stone}" if k[i].costs[1]>0
         text="#{text}#{k[i].costs[2]}<:Heavenly_Dew:510776806396395530>" if k[i].costs[2]>0
         text="#{text}#{k[i].costs[3]}<:Aether_Stone_SP:513982883560423425>" if k[i].costs[3]>0
-        text="#{text} (Requires reaching AR Tier #{k[i].ar_tier})" if !k[i].ar_tier.nil? && k[i].ar_tier>0
-        text="#{text}~~nothing~~" if (k[i].ar_tier.nil? || k[i].ar_tier<=0) && k[i].costs.max<=0
+        text="#{text} (#{desc[2]} #{k[i].ar_tier})" if !k[i].ar_tier.nil? && k[i].ar_tier>0
+        text="#{text}~~#{desc[3]}~~" if (k[i].ar_tier.nil? || k[i].ar_tier<=0) && k[i].costs.max<=0
       end
       text="#{text}\n*#{x2}:* #{k[i].description}" unless k.map{|q| q.description}.uniq.length<2 || k.map{|q| q.level}.include?('example')
       unless k.map{|q| q.destructable}.uniq.length<2
         if ['yes','no'].include?(k[i].destructable.downcase)
-          text="#{text}\n*Destructible?:* #{k[i].destructable}"
+          text="#{text}\n*#{"\u00BF" if Shardizard==$spanishShard}Destructible?:* #{k[i].destructable}"
+        elsif k[0].type.include?('Trap') && Shardizard==$spanishShard
+          text="#{text}\n*Las trampas se activan al pararse sobre ellas.*"
         elsif k[0].type.include?('Trap')
           text="#{text}\n*Traps are triggered by standing on them*"
         elsif k[i].destructable != '-'
-          text="#{text}\n*Destructible?:* #{k[i].destructable}"
+          text="#{text}\n*#{"\u00BF" if Shardizard==$spanishShard}Destructible?:* #{k[i].destructable}"
         end
       end
-      text="#{text}\n*Additional Note:* #{k[i].note}" unless k.map{|q| q.note}.uniq.length<2 || k[i].note.nil? || k[i].note.length<=0
+      text="#{text}\n*#{desc[7]}:* #{k[i].note}" unless k.map{|q| q.note}.uniq.length<2 || k[i].note.nil? || k[i].note.length<=0
     end
     if k.map{|q| q.level}.uniq.length<2
-      text="#{text}\n**Cost:**  "
+      text="#{text}\n**#{desc[1]}:**  "
     else
-      text="#{text}\n\n**Cumulative Cost:**  "
+      text="#{text}\n\n**#{desc[4]}:**  "
     end
     if k.map{|q| q.type}.uniq.length>1
-      text="#{text}\n<:Offensive_Structure:510774545997758464>*Offensive:*  "
+      text="#{text}\n<:Offensive_Structure:510774545997758464>*#{desc[5]}:*  "
       m=k.reject{|q| !q.type.include?('Offensive') || q.level=='example'}
       text="#{text}#{m.map{|q| q.costs[0]}.inject(0){|sum,x| sum + x }}<:RRAffinity:565064751780986890>" if m.map{|q| q.costs[0]}.inject(0){|sum,x| sum + x }>0
       text="#{text}#{m.map{|q| q.costs[1]}.inject(0){|sum,x| sum + x }}#{stone}" if m.map{|q| q.costs[1]}.inject(0){|sum,x| sum + x }>0
       text="#{text}#{m.map{|q| q.costs[2]}.inject(0){|sum,x| sum + x }}<:Heavenly_Dew:510776806396395530>" if m.map{|q| q.costs[2]}.inject(0){|sum,x| sum + x }>0
       text="#{text}#{m.map{|q| q.costs[3]}.inject(0){|sum,x| sum + x }}<:Aether_Stone_SP:513982883560423425>" if m.map{|q| q.costs[3]}.inject(0){|sum,x| sum + x }>0
-      text="#{text} (Requires reaching AR Tier #{m.map{|q| q.ar_tier}.max})" if m.reject{|q| q.ar_tier.nil?}.length>0 && m.map{|q| q.ar_tier}.max>0
-      text="#{text}\n<:Defensive_Structure:510774545108566016>*Defensive:*  "
+      text="#{text} (#{desc[2]} #{m.map{|q| q.ar_tier}.max})" if m.reject{|q| q.ar_tier.nil?}.length>0 && m.map{|q| q.ar_tier}.max>0
+      text="#{text}\n<:Defensive_Structure:510774545108566016>*#{desc[6]}:*  "
       m=k.reject{|q| !q.type.include?('Defensive') || q.level=='example'}
       text="#{text}#{m.map{|q| q.costs[0]}.inject(0){|sum,x| sum + x }}<:RRAffinity:565064751780986890>" if m.map{|q| q.costs[0]}.inject(0){|sum,x| sum + x }>0
       text="#{text}#{m.map{|q| q.costs[1]}.inject(0){|sum,x| sum + x }}#{stone}" if m.map{|q| q.costs[1]}.inject(0){|sum,x| sum + x }>0
       text="#{text}#{m.map{|q| q.costs[2]}.inject(0){|sum,x| sum + x }}<:Heavenly_Dew:510776806396395530>" if m.map{|q| q.costs[2]}.inject(0){|sum,x| sum + x }>0
       text="#{text}#{m.map{|q| q.costs[3]}.inject(0){|sum,x| sum + x }}<:Aether_Stone_SP:513982883560423425>" if m.map{|q| q.costs[3]}.inject(0){|sum,x| sum + x }>0
-      text="#{text} (Requires reaching AR Tier #{m.map{|q| q.ar_tier}.max})" if m.reject{|q| q.ar_tier.nil?}.length>0 && m.map{|q| q.ar_tier}.max>0
+      text="#{text} (#{desc[2]} #{m.map{|q| q.ar_tier}.max})" if m.reject{|q| q.ar_tier.nil?}.length>0 && m.map{|q| q.ar_tier}.max>0
     else
       m=k.reject{|q| q.level=='example'}
       text="#{text}#{m.map{|q| q.costs[0]}.inject(0){|sum,x| sum + x }}<:RRAffinity:565064751780986890>" if m.map{|q| q.costs[0]}.inject(0){|sum,x| sum + x }>0
       text="#{text}#{m.map{|q| q.costs[1]}.inject(0){|sum,x| sum + x }}#{stone}" if m.map{|q| q.costs[1]}.inject(0){|sum,x| sum + x }>0
       text="#{text}#{m.map{|q| q.costs[2]}.inject(0){|sum,x| sum + x }}<:Heavenly_Dew:510776806396395530>" if m.map{|q| q.costs[2]}.inject(0){|sum,x| sum + x }>0
       text="#{text}#{m.map{|q| q.costs[3]}.inject(0){|sum,x| sum + x }}<:Aether_Stone_SP:513982883560423425>" if m.map{|q| q.costs[3]}.inject(0){|sum,x| sum + x }>0
-      text="#{text} (Requires reaching AR Tier #{m.map{|q| q.ar_tier}.max})" if m.reject{|q| q.ar_tier.nil?}.length>0 && m.map{|q| q.ar_tier}.max>0
+      text="#{text} (#{desc[2]} #{m.map{|q| q.ar_tier}.max})" if m.reject{|q| q.ar_tier.nil?}.length>0 && m.map{|q| q.ar_tier}.max>0
     end
   else
-    text="#{text}\n\n**Cost:** " if k[0].costs.max>0
+    text="#{text}\n\n**#{desc[1]}:** " if k[0].costs.max>0
     text="#{text}#{k[0].costs[0]}<:RRAffinity:565064751780986890>" if k[0].costs[0]>0
     text="#{text}#{k[0].costs[1]}#{stone}" if k[0].costs[1]>0
     text="#{text}#{k[0].costs[2]}<:Heavenly_Dew:510776806396395530>" if k[0].costs[2]>0
     text="#{text}#{k[0].costs[3]}<:Aether_Stone_SP:513982883560423425>" if k[0].costs[3]>0
-    text="#{text}\n**AR Tier:** #{k[0].ar_tier}" if !k[0].ar_tier.nil? && k[0].ar_tier>0
+    text="#{text}\n**#{desc[2].split(' ')[2,2].join(' ')}:** #{k[0].ar_tier}" if !k[0].ar_tier.nil? && k[0].ar_tier>0
   end
   text="#{text}\n"
   if k.map{|q| q.destructable}.uniq.length<2
     if ['yes','no'].include?(k[0].destructable.downcase)
-      text="#{text}\n**Destructible?:** #{k[0].destructable}"
+      text="#{text}\n**#{"\u00BF" if Shardizard==$spanishShard}Destructible?:** #{k[0].destructable}"
+    elsif k[0].type.include?('Trap') && Shardizard==$spanishShard
+      text="#{text}\n**Las trampas se activan al pararse sobre ellas.**"
     elsif k[0].type.include?('Trap')
       text="#{text}\n**Traps are triggered by standing on them**"
     elsif k[0].destructable != '-'
-      text="#{text}\n**Destructible?:** #{k[0].destructable}"
+      text="#{text}\n**#{"\u00BF" if Shardizard==$spanishShard}Destructible?:** #{k[0].destructable}"
     end
     text="#{text}\n"
   end
-  text="#{text}\n**Additional Note:** #{k[0].note}" unless k.map{|q| q.note}.uniq.length>1 || k[0].note.nil? || k[0].note.length<=0
+  text="#{text}\n**#{desc[7]}:** #{k[0].note}" unless k.map{|q| q.note}.uniq.length>1 || k[0].note.nil? || k[0].note.length<=0
   create_embed(event,["__#{k[0].fullName('**')}__",hdr],text,xcolor,nil,k[0].thumbnail(event,bot))
 end
 
@@ -7253,16 +7521,20 @@ def disp_itemu(bot,event,xname,ignore=false)
   xname=args.join(' ') if xname.nil?
   k=find_data_ex(:find_item_feh,event,args,nil,bot)
   if k.nil?
-    event.respond 'No matches found.' unless ignore
+    event.respond nomf() unless ignore
     return nil
   end
   str="**Effect/Description:** #{k.description}"
+  str="**Efecto/Descriptión:** #{k.description}" if Shardizard==$spanishShard
   if ['Implied','Assault'].include?(k.type)
     str="**Effect:** #{k.description}"
+    str="**Efecto:** #{k.description}" if Shardizard==$spanishShard
   elsif ['Blessing','Growth'].include?(k.type)
     str="**Description:** #{k.description}"
+    str="**Descriptión:** #{k.description}" if Shardizard==$spanishShard
   end
-  str="#{str}\n\n**Additional Info:** #{k.note}" unless k.note.nil?
+  str="#{str}\n\n**Additional Info:** #{k.note}" unless k.note.nil? || Shardizard==$spanishShard
+  str="#{str}\n\n**La Nota:** #{k.note}" unless k.note.nil? || Shardizard !=$spanishShard
   create_embed(event,["__**#{k.name}**__#{k.emotes(bot) if Shardizard==4 && event.user.id==167657750971547648}",k.class_header(bot)],str,k.disp_color,nil,k.thumbnail(event,bot))
 end
 
@@ -7280,12 +7552,17 @@ def disp_accessory(bot,event,xname,ignore=false)
   name=args.join(' ') if name.nil?
   k=find_data_ex(:find_accessory,event,args,nil,bot)
   if k.nil?
-    event.respond 'No matches found.' unless ignore
+    event.respond nomf() unless ignore
     return nil
   end
   str="**Description:** #{k.description}"
   str="#{str}\n\n**To obtain:** #{k.obtain}" unless k.obtain.nil?
   str="#{str}\n\n**Additional Info:** #{k.note}" unless k.note.nil?
+  if Shardizard==$spanishShard
+    str="**Descriptión:** #{k.description}"
+    str="#{str}\n\n**Obtención:** #{k.obtain}" unless k.obtain.nil?
+    str="#{str}\n\n**La Nota:** #{k.note}" unless k.note.nil?
+  end
   create_embed(event,["__**#{k.name}**__",k.class_header(bot)],str,k.disp_color,nil,k.thumbnail(event,bot))
 end
 
@@ -7294,20 +7571,24 @@ bot.command(:stats, aliases: [:stat]) do |event, *args|
   skills=false
   data_load()
   if args.nil? || args.length<=0
-    event.respond 'No matches found.'
+    event.respond nomf()
     return nil
-  elsif ['skill','skills','skil','skils'].include?(args[0].downcase)
+  elsif ['skill','skills','skil','skils'].include?(args[0].downcase) || (['habilidad','habilidades'].include?(args[0].downcase) && Shardizard==$spanishShard)
     skills=true
     args.shift
   elsif ['and','n','&'].include?(args[0].downcase) && ['skill','skills'].include?(args[1].downcase)
     args.shift
     args.shift
     skills=true
-  elsif ['rand','random'].include?(args[0].downcase)
+  elsif ['and','n','&','y'].include?(args[0].downcase) && ['skill','skills','habilidad','habilidades'].include?(args[1].downcase) && Shardizard==$spanishShard
+    args.shift
+    args.shift
+    skills=true
+  elsif ['rand','random'].include?(args[0].downcase) || (['aleatoria','aleatorio'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     pick_random_unit(event,args,bot)
     return nil
-  elsif ['compare','comparison'].include?(args[0].downcase)
+  elsif ['compare','comparison'].include?(args[0].downcase) || (['comparar','compara'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     comparison(bot,event,args)
     return nil
@@ -7315,11 +7596,11 @@ bot.command(:stats, aliases: [:stat]) do |event, *args|
     args.shift
     combined_BST(bot,event,args)
     return nil
-  elsif ['pairup','pair_up','pair','pocket'].include?(args[0].downcase)
+  elsif ['pairup','pair_up','pair','pocket'].include?(args[0].downcase) || (['agrupar','agrupa','par','bolsillo'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     pair_up(bot,event,args)
     return nil
-  elsif ['eff_hp','effhp','bulk'].include?(args[0].downcase)
+  elsif ['eff_hp','effhp','bulk'].include?(args[0].downcase) || (['masa'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     effHP(bot,event,args)
     return nil
@@ -7327,21 +7608,21 @@ bot.command(:stats, aliases: [:stat]) do |event, *args|
     args.shift
     proc_study(bot,event,args)
     return nil
-  elsif ['heal'].include?(args[0].downcase)
+  elsif ['heal'].include?(args[0].downcase) || (['curar','cura'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     heal_study(bot,event,args)
     return nil
-  elsif ['study'].include?(args[0].downcase)
+  elsif ['study'].include?(args[0].downcase) || (Shardizard==$spanishShard && ['estudio','estudia','estudiar'].include?(args[0].downcase))
     args.shift
-    if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
+    if ['effhp','eff_hp','bulk'].include?(args[0].downcase) || (['masa'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       k=effHP(bot,event,args)
       return nil unless k.nil? || k<0
-    elsif ['pair_up','pairup','pair','pocket'].include?(args[0].downcase)
+    elsif ['pair_up','pairup','pair','pocket'].include?(args[0].downcase) || (['agrupar','agrupa','par','bolsillo'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       k=effHP(bot,event,args)
       return nil unless k.nil? || k<0
-    elsif ['heal'].include?(args[0].downcase)
+    elsif ['heal'].include?(args[0].downcase) || (['curar','cura'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       k=heal_study(bot,event,args)
       return nil unless k.nil? || k<0
@@ -7349,7 +7630,7 @@ bot.command(:stats, aliases: [:stat]) do |event, *args|
       args.shift
       k=proc_study(bot,event,args)
       return nil unless k.nil? || k<0
-    elsif ['phase'].include?(args[0].downcase)
+    elsif ['phase'].include?(args[0].downcase) || (['fase'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       k=phase_study(bot,event,args)
       return nil unless k.nil? || k<0
@@ -7362,16 +7643,16 @@ bot.command(:stats, aliases: [:stat]) do |event, *args|
     return nil
   end
   size='smol'
-  size='medium' if ['big','tol','macro','large'].include?(args[0].downcase)
-  size='giant' if ['huge','massive'].include?(args[0].downcase)
-  args.shift if ['big','tol','macro','large','huge','massive'].include?(args[0].downcase)
-  skills=true if ['skill','skills','skil','skils'].include?(args[0].downcase)
-  args.shift if ['skill','skills','skil','skils'].include?(args[0].downcase)
+  size='medium' if ['big','tol','macro','large'].include?(args[0].downcase) || (['grande'].include?(args[0].downcase) && Shardizard==$spanishShard)
+  size='giant' if ['huge','massive'].include?(args[0].downcase) || (['enorme'].include?(args[0].downcase) && Shardizard==$spanishShard)
+  args.shift if ['big','tol','macro','large','huge','massive'].include?(args[0].downcase) || (['grande','enorme'].include?(args[0].downcase) && Shardizard==$spanishShard)
+  skills=true if ['skill','skills','skil','skils'].include?(args[0].downcase) || (['habilidad','habilidades'].include?(args[0].downcase) && Shardizard==$spanishShard)
+  args.shift if ['skill','skills','skil','skils'].include?(args[0].downcase) || (['habilidad','habilidades'].include?(args[0].downcase) && Shardizard==$spanishShard)
   args=sever(args.join(' ')).split(' ')
   x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
   x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
   if x.nil?
-    event.respond "No matches found."
+    event.respond nomf()
   elsif x[0].is_a?(Array)
     disp_unit_stats(bot,event,x[0].map{|q| q.name},x[1],size,skills)
   else
@@ -7386,45 +7667,47 @@ bot.command(:skills, aliases: [:skils,:fodder,:manual,:book,:combatmanual]) do |
   s=remove_prefix(s,event)
   data_load()
   if args.nil? || args.length<=0
-    event.respond 'No matches found.'
+    event.respond nomf()
     return nil
   end
   if s.downcase[0,6]=='skills'
+    andlist=['and','n','&']
+    andlist.push('y') if Shardizard==$spanishShard
     if ['stat','stats'].include?(args[0].downcase)
       args.shift
       x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
       if x.nil?
-        event.respond "No matches found."
+        event.respond nomf()
       elsif x[0].is_a?(Array)
         disp_unit_stats(bot,event,x[0].map{|q| q.name},x[1],'smol',true)
       else
         disp_unit_stats(bot,event,x[0].name,x[1],'smol',true)
       end
       return nil
-    elsif ['find','search'].include?(args[0].downcase)
+    elsif ['find','search'].include?(args[0].downcase) || (['encontra','busca','encontrar','buscar'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       data_load()
       display_skills(bot,event,args)
       return nil
-    elsif ['rand','random'].include?(args[0].downcase)
+    elsif ['rand','random'].include?(args[0].downcase) || (['aleatoria','aleatorio'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       pick_random_skill(event,args,bot)
       return nil
-    elsif ['sort','list'].include?(args[0].downcase)
+    elsif ['sort','list'].include?(args[0].downcase) || (['clasificar','clasifica','lista','listar'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       data_load()
       sort_skills(bot,event,args)
       return nil
-    elsif ['compare','comparison'].include?(args[0].downcase)
+    elsif ['compare','comparison'].include?(args[0].downcase) || (['comparar','compara'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       skill_comparison(bot,event,args)
       return nil
-    elsif ['and','n','&'].include?(args[0].downcase) && ['stat','stat'].include?(args[1].downcase)
+    elsif andlist.include?(args[0].downcase) && ['stat','stat'].include?(args[1].downcase)
       args.shift
       args.shift
       x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
       if x.nil?
-        event.respond "No matches found."
+        event.respond nomf()
       elsif x[0].is_a?(Array)
         disp_unit_stats(bot,event,x[0].map{|q| q.name},x[1],'smol',true)
       else
@@ -7435,7 +7718,9 @@ bot.command(:skills, aliases: [:skils,:fodder,:manual,:book,:combatmanual]) do |
   end
   args=sever(args.join(' ')).split(' ')
   x=find_data_ex(:find_unit,event,args,nil,bot)
-  if x.nil?
+  if x.nil? && Shardizard==$spanishShard
+    event.respond "No hay coincidencia.  #{"Si está buscando datos sobre las habilidades que aprende un personaje en particular, intente ```#{first_sub(event.message.text,'habilidades','habilidad')}```, sin la s." if s.downcase[0,11]=='habilidades'}"
+  elsif x.nil?
     event.respond "No matches found.  #{"If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s." if s.downcase[0,6]=='skills'}"
   elsif x.is_a?(Array)
     disp_unit_skills(bot,event,x.map{|q| q.name})
@@ -7449,22 +7734,24 @@ bot.command(:skill, aliases: [:skil]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   clr=false
+  andlist=['and','n','&']
+  andlist.push('y') if Shardizard==$spanishShard
   if args.nil? || args.length<=0
-    event.respond 'No matches found.'
+    event.respond nomf()
     return nil
-  elsif ['find','search'].include?(args[0].downcase)
+  elsif ['find','search'].include?(args[0].downcase) || (['encontra','busca','encontrar','buscar'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     display_skills(bot,event,args)
     return nil
-  elsif ['sort','list'].include?(args[0].downcase)
+  elsif ['sort','list'].include?(args[0].downcase) || (['clasificar','clasifica','lista','listar'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     sort_skills(bot,event,args)
     return nil
-  elsif ['rand','random'].include?(args[0].downcase)
+  elsif ['rand','random'].include?(args[0].downcase) || (['aleatoria','aleatorio'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     pick_random_skill(event,args,bot)
     return nil
-  elsif ['compare','comparison'].include?(args[0].downcase)
+  elsif ['compare','comparison'].include?(args[0].downcase) || (['comparar','compara'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     skill_comparison(bot,event,args)
     return nil
@@ -7472,19 +7759,19 @@ bot.command(:skill, aliases: [:skil]) do |event, *args|
     args.shift
     x=find_data_ex(:find_unit,event,args,nil,bot)
     if x.nil?
-      event.respond "No matches found."
+      event.respond nomf()
     elsif x.is_a?(Array)
       disp_unit_stats(bot,event,x.map{|q| q.name},nil,'smol',true)
     else
       disp_unit_stats(bot,event,x.name,nil,'smol',true)
     end
     return nil
-  elsif ['and','n','&'].include?(args[0].downcase) && ['stat','stat'].include?(args[1].downcase)
+  elsif andlist.include?(args[0].downcase) && ['stat','stat'].include?(args[1].downcase)
     args.shift
     args.shift
     x=find_data_ex(:find_unit,event,args,nil,bot)
     if x.nil?
-      event.respond "No matches found."
+      event.respond nomf()
     elsif x.is_a?(Array)
       disp_unit_stats(bot,event,x.map{|q| q.name},nil,'smol',true)
     else
@@ -7498,13 +7785,13 @@ bot.command(:skill, aliases: [:skil]) do |event, *args|
   return nil
 end
 
-bot.command(:colors, aliases: [:color,:colours,:colour]) do |event, *args|
+bot.command(:colors, aliases: [:color,:colours,:colour,:colores]) do |event, *args|
   return nil if overlap_prevent(event)
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   data_load()
   x=find_data_ex(:find_skill,event,args,nil,bot)
   if x.nil?
-    event.respond "No matches found."
+    event.respond nomf()
   else
     disp_skill_data(bot,event,x.name,true)
   end
@@ -7515,11 +7802,7 @@ bot.command(:tinystats, aliases: [:smallstats,:smolstats,:microstats,:squashedst
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args.length<=0
-    event.channel.send_embed("__**No unit was included.  Have a smol me instead.**__") do |embed|
-      embed.color = 0xD49F61
-      embed.image = Discordrb::Webhooks::EmbedImage.new(url: "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Smol_Elise.jpg")
-      embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: "image source", url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=58900377")
-    end
+    smol_err(bot,event,false,true)
     return nil
   elsif ['rand','random'].include?(args[0].downcase)
     args.shift
@@ -7530,7 +7813,7 @@ bot.command(:tinystats, aliases: [:smallstats,:smolstats,:microstats,:squashedst
   x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
   x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
   if x.nil?
-    event.respond "No matches found."
+    smol_err(bot,event,false,true)
   elsif x[0].is_a?(Array)
     disp_unit_stats(bot,event,x[0].map{|q| q.name},x[1],'xsmol')
   else
@@ -7543,16 +7826,20 @@ bot.command(:big, aliases: [:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args.length<=0
-    event.respond 'No matches found.'
+    event.respond nomf()
     return nil
-  elsif ['skill','skills','skil','skils'].include?(args[0].downcase)
+  elsif ['skill','skills','skil','skils'].include?(args[0].downcase) || (['habilidad','habilidades'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     skills=true
   elsif ['and','n','&'].include?(args[0].downcase) && ['skill','skills'].include?(args[1].downcase)
     args.shift
     args.shift
     skills=true
-  elsif ['rand','random'].include?(args[0].downcase)
+  elsif ['and','n','&','y'].include?(args[0].downcase) && ['skill','skills','habilidad','habilidades'].include?(args[1].downcase) && Shardizard==$spanishShard
+    args.shift
+    args.shift
+    skills=true
+  elsif ['rand','random'].include?(args[0].downcase) || (['aleatoria','aleatorio'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     pick_random_unit(event,args,bot)
     return nil
@@ -7561,7 +7848,7 @@ bot.command(:big, aliases: [:tol,:macro,:large,:bigstats,:tolstats,:macrostats,:
   x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
   x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
   if x.nil?
-    event.respond "No matches found."
+    event.respond nomf()
   elsif x[0].is_a?(Array)
     disp_unit_stats(bot,event,x[0].map{|q| q.name},x[1],'medium',skills)
   else
@@ -7574,16 +7861,9 @@ bot.command(:huge, aliases: [:massive,:giantstats,:hugestats,:massivestats,:gian
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args.length<=0
-    event.respond 'No matches found.'
+    event.respond nomf()
     return nil
-  elsif ['skill','skills','skil','skils'].include?(args[0].downcase)
-    args.shift
-    skills=true
-  elsif ['and','n','&'].include?(args[0].downcase) && ['skill','skills'].include?(args[1].downcase)
-    args.shift
-    args.shift
-    skills=true
-  elsif ['rand','random'].include?(args[0].downcase)
+  elsif ['rand','random'].include?(args[0].downcase) || (['aleatoria','aleatorio'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     pick_random_unit(event,args,bot)
     return nil
@@ -7592,11 +7872,11 @@ bot.command(:huge, aliases: [:massive,:giantstats,:hugestats,:massivestats,:gian
   x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
   x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
   if x.nil?
-    event.respond "No matches found."
+    event.respond nomf()
   elsif x[0].is_a?(Array)
-    disp_unit_stats(bot,event,x[0].map{|q| q.name},x[1],'giant',skills)
+    disp_unit_stats(bot,event,x[0].map{|q| q.name},x[1],'giant',true)
   else
-    disp_unit_stats(bot,event,x[0].name,x[1],'giant',skills)
+    disp_unit_stats(bot,event,x[0].name,x[1],'giant',true)
   end
   return nil
 end
@@ -7605,29 +7885,29 @@ bot.command(:hero, aliases: [:unit,:data,:statsskills,:statskills,:stats_skills,
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args.length<=0
-    event.respond 'No matches found.'
+    event.respond nomf()
     return nil
-  elsif ['find','search'].include?(args[0].downcase)
+  elsif ['find','search'].include?(args[0].downcase) || (['encontra','busca','encontrar','buscar'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     display_units(bot,event,args)
     return nil
-  elsif ['sort','list'].include?(args[0].downcase)
+  elsif ['sort','list'].include?(args[0].downcase) || (['clasificar','clasifica','lista','listar'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     sort_units(bot,event,args)
     return nil
-  elsif ['compare','comparison'].include?(args[0].downcase)
+  elsif ['compare','comparison'].include?(args[0].downcase) || (['comparar','compara'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     comparison(bot,event,args)
     return nil
-  elsif ['rand','random'].include?(args[0].downcase)
+  elsif ['rand','random'].include?(args[0].downcase) || (['aleatoria','aleatorio'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     pick_random_unit(event,args,bot)
     return nil
-  elsif ['pairup','pair_up','pair','pocket'].include?(args[0].downcase)
+  elsif ['pairup','pair_up','pair','pocket'].include?(args[0].downcase) || (['agrupar','agrupa','par','bolsillo'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     pair_up(bot,event,args)
     return nil
-  elsif ['eff_hp','effhp','bulk'].include?(args[0].downcase)
+  elsif ['eff_hp','effhp','bulk'].include?(args[0].downcase) || (['masa'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     effHP(bot,event,args)
     return nil
@@ -7635,21 +7915,21 @@ bot.command(:hero, aliases: [:unit,:data,:statsskills,:statskills,:stats_skills,
     args.shift
     proc_study(bot,event,args)
     return nil
-  elsif ['heal'].include?(args[0].downcase)
+  elsif ['heal'].include?(args[0].downcase) || (['curar','cura'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     heal_study(bot,event,args)
     return nil
-  elsif ['study'].include?(args[0].downcase)
+  elsif ['study'].include?(args[0].downcase) || (Shardizard==$spanishShard && ['estudio','estudia','estudiar'].include?(args[0].downcase))
     args.shift
-    if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
+    if ['effhp','eff_hp','bulk'].include?(args[0].downcase) || (['masa'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       k=effHP(bot,event,args)
       return nil unless k.nil? || k<0
-    elsif ['pair_up','pairup','pair','pocket'].include?(args[0].downcase)
+    elsif ['pair_up','pairup','pair','pocket'].include?(args[0].downcase) || (['agrupar','agrupa','par','bolsillo'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       k=effHP(bot,event,args)
       return nil unless k.nil? || k<0
-    elsif ['heal'].include?(args[0].downcase)
+    elsif ['heal'].include?(args[0].downcase) || (['curar','cura'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       k=heal_study(bot,event,args)
       return nil unless k.nil? || k<0
@@ -7657,7 +7937,7 @@ bot.command(:hero, aliases: [:unit,:data,:statsskills,:statskills,:stats_skills,
       args.shift
       k=proc_study(bot,event,args)
       return nil unless k.nil? || k<0
-    elsif ['phase'].include?(args[0].downcase)
+    elsif ['phase'].include?(args[0].downcase) || (['fase'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       k=proc_study(bot,event,args)
       return nil unless k.nil? || k<0
@@ -7673,7 +7953,7 @@ bot.command(:hero, aliases: [:unit,:data,:statsskills,:statskills,:stats_skills,
   x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
   x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
   if x.nil?
-    event.respond "No matches found."
+    event.respond nomf()
   elsif x[0].is_a?(Array)
     disp_unit_stats(bot,event,x[0].map{|q| q.name},x[1],'smol',true)
   else
@@ -7748,17 +8028,20 @@ bot.command(:alias) do |event, newname, unit, modifier, modifier2|
   return nil
 end
 
-bot.command([:deletealias,:removealias]) do |event, name|
+bot.command(:deletealias, aliases: [:removealias]) do |event, name|
   return nil if overlap_prevent(event)
   nicknames_load()
   if name.nil?
-    event.respond "I can't delete nothing, silly!" if name.nil?
+    event.respond "I can't delete nothing, silly!" unless Shardizard==$spanishShard
+    event.respond "¡No puedo borrar nada, tonto!" if Shardizard==$spanishShard
     return nil
   elsif event.user.id != 167657750971547648 && event.server.nil?
-    event.respond 'Only my developer is allowed to use this command in PM.'
+    event.respond 'Only my developer is allowed to use this command in PM.' unless Shardizard==$spanishShard
+    event.respond 'Solo mi desarrollador puede usar este comando en mensajes privados.' if Shardizard==$spanishShard
     return nil
   elsif !is_mod?(event.user,event.server,event.channel)
-    event.respond 'You are not a mod.'
+    event.respond 'You are not a mod.' unless Shardizard==$spanishShard
+    event.respond 'No eres moderador.' if Shardizard==$spanishShard
     return nil
   end
   saliases=true
@@ -7773,14 +8056,17 @@ bot.command([:deletealias,:removealias]) do |event, name|
   if k.nil?
     k=find_best_match(event,[],name,bot,false,0)
     if k.nil?
-      event.respond "#{name} is not an alias, silly!"
+      event.respond "#{name} is not an alias, silly!" unless Shardizard==$spanishShard
+      event.respond "¡#{name} no es un alias, tonto!" if Shardizard==$spanishShard
     else
       f=k.alias_list(bot,event,saliases,true)
       f=f.reject{|q| q[0,name.length].downcase != name.downcase}
       if f.length<=0
-        event.respond "You cannot delete a global alias."
+        event.respond "You cannot delete a global alias." unless Shardizard==$spanishShard
+        event.respond "No puede eliminar un alias global." if Shardizard==$spanishShard
       else
-        event.respond "Please use a whole alias, not a partial one.  The following aliases begin with the text you typed:\n#{f.join("\n")}"
+        event.respond "Please use a whole alias, not a partial one.  The following aliases begin with the text you typed:\n#{f.join("\n")}" unless Shardizard==$spanishShard
+        event.respond "Utilice un alias completo, no parcial. Los siguientes alias comienzan con el texto que escribió:\n#{f.join("\n")}" if Shardizard==$spanishShard
       end
     end
     return nil
@@ -7790,7 +8076,8 @@ bot.command([:deletealias,:removealias]) do |event, name|
     cmpr.push(k.map{|q| q.name})
     cmpr.push(k.map{|q| q.id})
   elsif !k.alias_list(bot,event,saliases,true).map{|q| q.downcase}.include?(name.downcase) && event.user.id != 167657750971547648
-    event.respond "You cannot delete a global alias."
+    event.respond "You cannot delete a global alias." unless Shardizard==$spanishShard
+    event.respond "No puede eliminar un alias global." if Shardizard==$spanishShard
     return nil
   else
     k2="#{k.objt}"
@@ -7819,7 +8106,8 @@ bot.command([:deletealias,:removealias]) do |event, name|
   end
   k2='Multiunit' if k.is_a?(Array)
   if globalattempt
-    event.respond "You cannot delete a global alias."
+    event.respond "You cannot delete a global alias." unless Shardizard==$spanishShard
+    event.respond "No puede eliminar un alias global." if Shardizard==$spanishShard
     return nil
   end
   alz.uniq!
@@ -7830,7 +8118,9 @@ bot.command([:deletealias,:removealias]) do |event, name|
   if event.server.nil?
     str="**PM with dev:**"
   else
-    str="**Server:** #{event.server.name} (#{event.server.id}) - #{shard_data(0)[Shardizard]} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:**"
+    f="#{shard_data(0)[Shardizard]}"
+    f="Spanish" if Shardizard==$spanishShard
+    str="**Server:** #{event.server.name} (#{event.server.id}) - #{} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:**"
   end
   str="#{str} #{event.user.distinct} (#{event.user.id})"
   str="#{str}\n~~**#{k2} Alias:** #{name} for #{baseunt}~~ "
@@ -7840,7 +8130,8 @@ bot.command([:deletealias,:removealias]) do |event, name|
     str="#{str}**DELETED**"
   end
   bot.channel(logchn).send_message(str)
-  event.respond "#{name} has been removed from #{baseunt}'s aliases."
+  event.respond "#{name} has been removed from #{baseunt}'s aliases." unless Shardizard==$spanishShard
+  event.respond "#{name} se ha eliminado de los alias de #{baseunt}." if Shardizard==$spanishShard
   open("#{$location}devkit/FEHNames.txt", 'w') { |f|
     f.puts alz.map{|q| q.to_s}.join("\n")
   }
@@ -7865,7 +8156,31 @@ bot.command(:addgroup) do |event, groupname, *args|
   return nil if overlap_prevent(event)
   data_load()
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } unless args.nil?
-  if groupname.nil?
+  if Shardizard==$spanishShard
+    if groupname.nil?
+      event.respond "¡No puedo añadir un grupo sin nombre, tonto!"
+      return nil
+    elsif args.nil? || args.length<=0
+      event.respond "¡No puedo añadir un grupo sin miembros, tonto!\n...bueno, de hecho, podría, pero ¿cuál sería el punto?"
+      return nil
+    elsif event.server.nil? && event.user.id != 167657750971547648
+      event.respond 'Solo mi desarrollador puede usar este comando en mensajes privados.'
+      return nil
+    elsif ![167657750971547648].include?(event.user.id) && !is_mod?(event.user,event.server,event.channel)
+      event.respond 'No eres moderador.'
+      return nil
+    elsif find_group(event,[],groupname).nil?
+    elsif find_group(event,[],groupname).fake.nil? && event.user.id != 167657750971547648
+      event.respond 'No tiene los privilegios para editar este grupo global.'
+      return nil
+    elsif !find_unit(event,[],groupname).nil?
+      event.respond "Esto no está permitido como nombre de grupo ya que es un nombre de personaje."
+      return nil
+    elsif !find_skill(event,[],groupname).nil?
+      event.respond "Esto no está permitido como nombre de grupo ya que es un nombre de habilidad."
+      return nil
+    end
+  elsif groupname.nil?
     event.respond "I can't add a group with no name, silly!"
     return nil
   elsif args.nil? || args.length<=0
@@ -7896,13 +8211,16 @@ bot.command(:addgroup) do |event, groupname, *args|
   if event.server.nil?
     str2="**PM with dev:**"
   else
-    str2="**Server:** #{event.server.name} (#{event.server.id}) - #{shard_data(0)[Shardizard]} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:**"
+    shrd="#{shard_data(0)[Shardizard]}"
+    shrd="Spanish" if Shardizard==$spanishShard
+    str2="**Server:** #{event.server.name} (#{event.server.id}) - #{shrd} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:**"
   end
   str2="#{str2} #{event.user.distinct} (#{event.user.id})"
   untz=x.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join(', ')
   untz=x.map{|q| q.name}.join(', ') if x.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join(', ').length>1000
   if x.length<2 && find_group(event,[],groupname).nil?
-    event.respond "I need at least two units to add to the group."
+    event.respond "I need at least two units to add to the group." unless Shardizard==$spanishShard
+    event.respond "Necesito al menos dos caracteres para agregar al grupo." if Shardizard==$spanishShard
     return nil
   elsif find_group(event,[],groupname).nil?
     b=FEHGroup.new(groupname)
@@ -7911,7 +8229,8 @@ bot.command(:addgroup) do |event, groupname, *args|
     global=true if event.user.id==167657750971547648 && (event.server.nil? || event.message.text.downcase.split(' ').include?('global'))
     b.fake=[event.server.id] unless global
     grps.push(b)
-    event.respond "A new #{'global ' if global}group **#{groupname}** was created with the following members: #{untz}"
+    event.respond "A new #{'global ' if global}group **#{groupname}** was created with the following members: #{untz}" unless Shardizard==$spanishShard
+    event.respond "Se creó un nuevo grupo #{'global ' if global}**#{groupname}** con los siguientes miembros: #{untz}" if Shardizard==$spanishShard
     str2="#{str2}\n**#{'Global ' if global}Group Created:** #{groupname}\n**Units:** #{untz}"
   else
     b=find_group(event,[],groupname).clone
@@ -7922,7 +8241,8 @@ bot.command(:addgroup) do |event, groupname, *args|
     b.units.sort!
     b.units.uniq!
     grps.push(b)
-    event.respond "The existing #{'global ' if b.fake.nil?}group **#{b.name}** was updated to include the following members: #{untz}"
+    event.respond "The existing #{'global ' if b.fake.nil?}group **#{b.name}** was updated to include the following members: #{untz}" unless Shardizard==$spanishShard
+    event.respond "El grupo #{'global ' if b.fake.nil?}existente **#{b.name}** se actualizó para incluir los siguientes miembros: #{untz}" if Shardizard==$spanishShard
     str2="#{str2}\n**#{'Global ' if b.fake.nil?}Group:** #{b.name}\n**Units Added:** #{untz}"
   end
   bot.channel(logchn).send_message(str2)
@@ -7942,13 +8262,16 @@ bot.command(:removemember, aliases: [:removefromgroup]) do |event, groupname, un
   return nil if overlap_prevent(event)
   data_load()
   if event.server.nil? && event.user.id != 167657750971547648
-    event.respond 'Only my developer is allowed to use this command in PM.'
+    event.respond 'Only my developer is allowed to use this command in PM.' unless Shardizard==$spanishShard
+    event.respond 'Solo mi desarrollador puede usar este comando en mensajes privados.' if Shardizard==$spanishShard
     return nil
   elsif unit.nil? || groupname.nil?
-    event.respond 'You must list a group and a unit to remove from it.'
+    event.respond 'You must list a group and a unit to remove from it.' unless Shardizard==$spanishShard
+    event.respond 'Debes enumerar un grupo y un personaje para eliminarlo.' if Shardizard==$spanishShard
     return nil
   elsif ![167657750971547648].include?(event.user.id) && !is_mod?(event.user,event.server,event.channel)
-    event.respond 'You are not a mod.'
+    event.respond 'You are not a mod.' unless Shardizard==$spanishShard
+    event.respond 'No eres moderador.' if Shardizard==$spanishShard
     return nil
   elsif find_group(event,[],groupname).nil? || find_unit(event,[],unit).nil?
     multiform=false
@@ -7959,8 +8282,13 @@ bot.command(:removemember, aliases: [:removefromgroup]) do |event, groupname, un
     end
     unless multiform
       f=[]
-      f.push("The group #{groupname} does not exist.") if find_group(event,[],groupname).nil?
-      f.push("The unit #{unit} does not exist.") if find_unit(event,[],unit).nil?
+      if Shardizard==$spanishShard
+        f.push("El grupo #{groupname} no existe.") if find_group(event,[],groupname).nil?
+        f.push("La personaje #{unit} no existe.") if find_unit(event,[],unit).nil?
+      else
+        f.push("The group #{groupname} does not exist.") if find_group(event,[],groupname).nil?
+        f.push("The unit #{unit} does not exist.") if find_unit(event,[],unit).nil?
+      end
       event.respond f.join("\n") unless f.length<=0
     end
     return nil
@@ -7974,7 +8302,12 @@ bot.command(:removemember, aliases: [:removefromgroup]) do |event, groupname, un
   unt=[unt] unless unt.is_a?(Array)
   if !has_any?(grp.units,unt.map{|q| q.name})
     if has_any?(grp.unit_list.map{|q| q.name},unt.map{|q| q.name})
-      event.respond "The unit#{'s' unless unt.length==1} #{unt.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join('/')} #{'is' if unt.length==1}#{'are' unless unt.length==1} in the group #{grp.fullName} dynamically.  If you wish to remove them, you must edit the formula adding units to the group."
+      event.respond "The unit#{'s' unless unt.length==1} #{unt.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join('/')} #{'is' if unt.length==1}#{'are' unless unt.length==1} in the group #{grp.fullName} dynamically.  If you wish to remove them, you must edit the formula adding units to the group." unless Shardizard==$spanishShard
+      event.respond "El personaje #{unt.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join('/')} está en el grupo #{grp.fullName} de forma dinámica. Si desea eliminarlos, debe editar la fórmula agregando unidades al grupo." if Shardizard==$spanishShard && unt.length==1
+      event.respond "Los personajes #{unt.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join('/')} están en el grupo #{grp.fullName} de forma dinámica. Si desea eliminarlos, debe editar la fórmula agregando unidades al grupo." if Shardizard==$spanishShard && unt.length>1
+    elsis Shardizard==$spanishShard
+      event.respond "El personaje #{unt.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join('/')} no está en el grupo #{grp.fullName}." if unt.length==1
+      event.respond "Los personajes #{unt.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join('/')} no están en el grupo #{grp.fullName}." if unt.length>1
     else
       event.respond "The unit#{'s' unless unt.length==1} #{unt.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join('/')} #{'is' if unt.length==1}#{'are' unless unt.length==1} not in the group #{grp.fullName}."
     end
@@ -7983,15 +8316,19 @@ bot.command(:removemember, aliases: [:removefromgroup]) do |event, groupname, un
   grp.units=grp.units.reject{|q| unt.map{|q2| q2.name}.include?(q)}
   logchn=log_channel()
   str1="#{unt.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join('/')} has been removed from the group **#{grp.name}**."
+  str1="#{unt.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join('/')} ha sido eliminado del grupo **#{grp.name}**." if Shardizard==$spanishShard
   str2=''
   if event.server.nil?
     str2="**PM with dev:**"
   else
-    str2="**Server:** #{event.server.name} (#{event.server.id}) - #{shard_data(0)[Shardizard]} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:**"
+    shrd="#{shard_data(0)[Shardizard]}"
+    shrd="Spanish" if Shardizard==$spanishShard
+    str2="**Server:** #{event.server.name} (#{event.server.id}) - #{shrd} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:**"
   end
   str2="#{str2} #{event.user.distinct} (#{event.user.id})"
   if grp.units.length<=0 && !grp.fake.nil?
-    str1="#{str1}\nThe group now has 0 members, so I'm deleting it."
+    str1="#{str1}\nThe group now has 0 members, so I'm deleting it." unless Shardizard==$spanishShard
+    str1="#{str1}\nEl grupo ahora tiene 0 miembros, así que lo eliminaré." if Shardizard==$spanishShard
     if rand(1000)==0
       str2="#{str2}\n~~**Group:** #{grp.name}~~ **YEETED**"
     else
@@ -8019,22 +8356,28 @@ bot.command(:deletegroup, aliases: [:removegroup]) do |event, xname|
   return nil if overlap_prevent(event)
   data_load()
   if event.server.nil? && event.user.id != 167657750971547648
-    event.respond 'Only my developer is allowed to use this command in PM.'
+    event.respond 'Only my developer is allowed to use this command in PM.' unless Shardizard==$spanishShard
+    event.respond 'Solo mi desarrollador puede usar este comando en mensajes privados.' if Shardizard==$spanishShard
     return nil
   elsif !is_mod?(event.user,event.server,event.channel)
-    event.respond 'You are not a mod.'
+    event.respond 'You are not a mod.' unless Shardizard==$spanishShard
+    event.respond 'No eres moderador.' if Shardizard==$spanishShard
     return nil
   elsif xname.nil?
-    event.respond 'I need the name of a group to delete!'
+    event.respond 'I need the name of a group to delete!' unless Shardizard==$spanishShard
+    event.respond '¡Necesito el nombre de un grupo para eliminar!' if Shardizard==$spanishShard
     return nil
   elsif find_group(event,[],xname).nil?
-    event.respond "The group #{xname} doesn't even exist in the first place, silly!"
+    event.respond "The group #{xname} doesn't even exist in the first place, silly!" unless Shardizard==$spanishShard
+    event.respond "¡El grupo #{xname} ni siquiera existe en primer lugar, tonto!" if Shardizard==$spanishShard
     return nil
   elsif find_group(event,[],xname).fake.nil? && event.user.id != 167657750971547648
-    event.respond 'You do not have the permission to delete global groups.'
+    event.respond 'You do not have the permission to delete global groups.' unless Shardizard==$spanishShard
+    event.respond 'No tiene permiso para eliminar grupos globales.' if Shardizard==$spanishShard
     return nil
   elsif find_group(event,[],xname).isDynamic?
-    event.respond "The group #{find_group(event,[],name).name} is dynamic."
+    event.respond "The group #{find_group(event,[],xname).name} is dynamic." unless Shardizard==$spanishShard
+    event.respond "El grupo #{find_group(event,[],xname).name} es dinámico." if Shardizard==$spanishShard
     return nil
   end
   f=find_group(event,[],xname)
@@ -8045,7 +8388,9 @@ bot.command(:deletegroup, aliases: [:removegroup]) do |event, xname|
   if event.server.nil?
     str2="**PM with dev:**"
   else
-    str2="**Server:** #{event.server.name} (#{event.server.id}) - #{shard_data(0)[Shardizard]} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:**"
+    shrd="#{shard_data(0)[Shardizard]}"
+    shrd="Spanish" if Shardizard==$spanishShard
+    str2="**Server:** #{event.server.name} (#{event.server.id}) - #{shrd} Shard\n**Channel:** #{event.channel.name} (#{event.channel.id})\n**User:**"
   end
   str2="#{str2} #{event.user.distinct} (#{event.user.id})"
   if rand(1000)==0
@@ -8053,7 +8398,8 @@ bot.command(:deletegroup, aliases: [:removegroup]) do |event, xname|
   else
     str2="#{str2}\n~~**Group:** #{f.name}~~ **DELETED**"
   end
-  event.respond "The group **#{f.name}** has been deleted."
+  event.respond "The group **#{f.name}** has been deleted." unless Shardizard==$spanishShard
+  event.respond "El grupo **#{f.name}** ha sido eliminado" if Shardizard==$spanishShard
   bot.channel(logchn).send_message(str2)
   grps=grps.sort{|a,c| a.name.downcase<=>c.name.downcase}
   open("#{$location}devkit/FEHGroups.txt", 'w') { |f|
@@ -8156,15 +8502,19 @@ end
 bot.command(:study, aliases: [:statstudy,:studystats,:statsstudy]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
-    event.respond 'No unit was included'
+    event.respond nomf()
     return nil
   end
   data_load(['library'])
-  if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
+  if ['effhp','eff_hp','bulk'].include?(args[0].downcase) || (['masa'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     k=effHP(bot,event,args)
     return nil unless k.nil? || k<0
-  elsif ['heal'].include?(args[0].downcase)
+  elsif ['pair_up','pairup','pair','pocket'].include?(args[0].downcase) || (['agrupar','agrupa','par','bolsillo'].include?(args[0].downcase) && Shardizard==$spanishShard)
+    args.shift
+    k=effHP(bot,event,args)
+    return nil unless k.nil? || k<0
+  elsif ['heal'].include?(args[0].downcase) || (['curar','cura'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     k=heal_study(bot,event,args)
     return nil unless k.nil? || k<0
@@ -8172,7 +8522,7 @@ bot.command(:study, aliases: [:statstudy,:studystats,:statsstudy]) do |event, *a
     args.shift
     k=proc_study(bot,event,args)
     return nil unless k.nil? || k<0
-  elsif ['phase'].include?(args[0].downcase)
+  elsif ['phase'].include?(args[0].downcase) || (['fase'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     k=0
     return nil unless k.nil? || k<0
@@ -8183,7 +8533,7 @@ end
 bot.command(:heal_study, aliases: [:healstudy,:studyheal,:study_heal,:heal]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
-    event.respond 'No unit was included'
+    event.respond nomf()
     return nil
   end
   data_load(['library'])
@@ -8194,7 +8544,7 @@ end
 bot.command(:proc_study, aliases: [:procstudy,:studyproc,:study_proc,:proc]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
-    event.respond 'No unit was included'
+    event.respond nomf()
     return nil
   end
   proc_study(bot,event,args)
@@ -8204,7 +8554,7 @@ end
 bot.command(:phase_study, aliases: [:phasestudy,:studyphase,:study_phase,:phase]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
-    event.respond 'No unit was included'
+    event.respond nomf()
     return nil
   end
   phase_study(bot,event,args)
@@ -8214,7 +8564,7 @@ end
 bot.command(:effhp, aliases: [:effHP,:eff_hp,:eff_HP,:bulk]) do |event, *args|
   return nil if overlap_prevent(event)
   if args.nil? || args.length<1
-    event.respond 'No unit was included'
+    event.respond nomf()
     return nil
   end
   data_load(['library'])
@@ -8278,19 +8628,24 @@ end
 bot.command(:banners, aliases: [:banner]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
-  if args.nil? || args[0].nil? || ['next','schedule'].include?(args[0].downcase)
+  strx="No unit was included.  Showing current and upcoming banners."
+  strx='' if Shardizard==$spanishShard
+  nxt=['next','schedule']
+  nxt.push(['siguiente','calendario']) if Shardizard==$spanishShard
+  nxt.flatten!
+  if args.nil? || args[0].nil? || nxt.include?(args[0].downcase)
     str=''
-    str="No unit was included.  Showing current and upcoming banners." unless !args.nil? && !args[0].nil? && ['next','schedule'].include?(args[0].downcase)
+    str=strx unless !args.nil? && !args[0].nil? && nxt.include?(args[0].downcase)
     disp_current_banners(event,bot,str)
     return nil
-  elsif ['find','search'].include?(args[0].downcase)
+  elsif ['find','search'].include?(args[0].downcase) || (['encontra','busca','encontrar','buscar'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     display_banners(bot,event,args)
     return nil
   end
   x=find_data_ex(:find_unit,event,args,nil,bot,false,0)
   unless x.is_a?(Array) || x.is_a?(FEHUnit)
-    disp_current_banners(event,bot,"No unit was included.  Showing current and upcoming banners.")
+    disp_current_banners(event,bot,strx)
     return nil
   end
   banner_list(event,bot,args,x)
@@ -8317,7 +8672,8 @@ end
 bot.command(:compare, aliases: [:comparison]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load(['library'])
-  if ['skills','skill'].include?(args[0].downcase)
+  if args.nil? || args[0].nil?
+  elsif ['skills','skill'].include?(args[0].downcase) || (['habilidad','habilidades'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     skill_comparison(bot,event,args)
     return nil
@@ -8343,7 +8699,7 @@ bot.command(:sort, aliases: [:list]) do |event, *args|
   return nil if overlap_prevent(event)
   data_load()
   if args.nil? || args[0].nil?
-  elsif ['skill','skills'].include?(args[0].downcase)
+  elsif ['skill','skills'].include?(args[0].downcase) || (['habilidad','habilidades'].include?(args[0].downcase) && Shardizard==$spanishShard)
     args.shift
     sort_skills(bot,event,args)
     return nil
@@ -8483,8 +8839,11 @@ bot.command(:bonus) do |event, *args|
   x=[]
   x.push('Arena') if args.include?('arena')
   x.push('Tempest') if has_any?(args,['tempest','tt'])
+  x.push('Tempest') if has_any?(args,['tormenta']) && Shardizard==$spanishShard
   x.push('Aether') if has_any?(args,['aether','raid','raids','aetherraids','aetherraid','aether_raids','aether_raid','aetheraids','aetheraid'])
+  x.push('Aether') if has_any?(args,['eter','etér']) && Shardizard==$spanishShard
   x.push('Resonant') if has_any?(args,['resonant','resonance','resonence'])
+  x.push('Resonant') if has_any?(args,['fragorosas','fragorosa']) && Shardizard==$spanishShard
   if x.length<=0
     show_bonus_smol(event,x,bot)
     if safe_to_spam?(event)
@@ -8568,147 +8927,16 @@ end
 
 bot.command(:headpat, aliases: [:patpat,:pat]) do |event|
   return nil if overlap_prevent(event)
-  canpost=true
-  if event.server.nil?
-  elsif event.server.id==271642342153388034
-    post=Time.now
-    if (post - @zero_by_four[1]).to_f > 1800
-      @zero_by_four[1]=post
-    else
-      return nil
-    end
-  elsif event.channel.id==330850148261298176
-    return nil
-  end
-  p=[['Corrin','she'],['Sakura','she'],['Camilla','she'],['my friends','they'],['Kiran','they'],['Mathoo','he']]
-  if (event.server.nil? && event.user.id==270372601107447808) || (!event.server.nil? && !bot.user(270372601107447808).on(event.server.id).nil?)
-    hubbyid=270372601107447808
-    p.push([bot.user(270372601107447808).name,'he'])
-    p[6]=['you','you'] if event.user.id==270372601107447808
-  elsif (event.server.nil? && event.user.id==261321388344868867) || (!event.server.nil? && !bot.user(261321388344868867).on(event.server.id).nil?)
-    hubbyid=261321388344868867
-    p.push([bot.user(261321388344868867).name,'he'])
-    p[6]=['you','you'] if event.user.id==261321388344868867
-  end
-  p2=p.sample
-  r=[["Please don't, #{p2[0]} just did my hair. Do you know how much time #{p2[1]} spent on these drills?",false],
-     ["^-^",true],["That feels good.",true],["Hee hee hee, yay!",true],
-     ["\\*purrs\\* ...wait, why am *I* purring?  Sakura's the one who dressed up as a cat!",true]]
-  r.push(["My husband wouldn't appreciate you doing this.",(rand(2).zero?)]) unless event.user.id==hubbyid
-  r.push(["\\*pulls away* Don't do that, please!",false]) unless event.user.id==hubbyid
-  r.push(['\\*hums happily*',true]) if event.user.id==hubbyid
-  r.push(['Aww, thanks, honey!  I have the bestest hubby ever!',true]) if event.user.id==hubbyid
-  can_joseph=true
-  if event.server.nil?
-    can_joseph=false if event.user.id==170070293493186561
-  else
-    can_joseph=false if !bot.user(170070293493186561).on(event.server.id).nil?
-    can_joseph=true if !bot.user(256502173788143626).on(event.server.id).nil?
-  end
-  r.push(["Do I remind you of Joseph? He's the cutest puppy that ever was!",true]) if can_joseph
-  r2=r.sample
-  if r2[1] && rand(10).zero?
-    if event.user.id==270372601107447808
-      event << "Elise: #{r2[0]}"
-      event << 'Leo: \\*spies the two, grumbles\\*'
-      event << "Elise: Go away, Leo.  #{bot.user(270372601107447808).name.split(' | ')[0]} and I can do whatever we want; we're married.  \\*sticks out tongue* "
-    elsif event.user.id==261321388344868867
-      event << "Elise: #{r2[0]}"
-      event << 'Leo: \\*spies the two, grumbles\\*'
-      event << "Elise: Go away, Leo.  #{bot.user(261321388344868867).name} and I can do whatever we want; we're married.  \\*sticks out tongue* "
-    else
-      event << "Elise: #{r2[0]}"
-      event << 'Leo: Please stop, you need to treat her like the adult that she technically is.'
-      event << "Elise: \\*sticks out tongue* You're no fun."
-    end
-  else
-    event << r2[0]
-  end
-  event << ''
-  metadata_load()
-  z=0
-  z=1 if event.user.id==270372601107447808
-  z=2 if event.user.id==261321388344868867
-  @headpats[z]+=1
-  if @headpats[z]>=1000000000
-    event << '~~resetting counter~~'
-    @headpats[z]=1
-  end
-  metadata_save()
-  if event.user.id==167657750971547648 || event.message.text.downcase.split(' ').include?('stats')
-    event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[1]+@headpats[2],true)} time someone has tried to give me a headpat.~~"
-    event << ""
-    if event.server.nil? && event.user.id==167657750971547648
-      z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-      event << "~~Moosie has headpatted me #{longFormattedNumber(@headpats[1])} time#{"s" unless @headpats[1]==1}, which is #{z}% of the headpats I've received~~"
-      z=(@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-      event << "~~ExpiredJellyBean has headpatted me #{longFormattedNumber(@headpats[2])} time#{"s" unless @headpats[2]==1}, which is #{z}% of the headpats I've received~~"
-      z=(@headpats[0]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-      event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0])} time#{"s" unless @headpats[0]==1}, which is #{z}% of the headpats I've received~~"
-    elsif event.server.nil?
-      z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-      event << "~~Moosie has headpatted me #{longFormattedNumber(@headpats[1])} time#{"s" unless @headpats[1]==1}, which is #{z}% of the headpats I've received.~~"
-      z=(@headpats[0]*10000+@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-      event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0]+@headpats[2])} time#{"s" unless @headpats[0]+@headpats[2]==1}, which is #{z}% of the headpats I've received.~~"
-    else
-      moosiebean=[false,false]
-      if !bot.user(270372601107447808).on(event.server.id).nil?
-        z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-        z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-        event << "~~Moosie has headpatted me #{longFormattedNumber(@headpats[1])} time#{"s" unless @headpats[1]==1}, which is #{z}% of the headpats I've received.~~"
-        moosiebean[0]=true
-      end
-      if !bot.user(261321388344868867).on(event.server.id).nil?
-        z=(@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-        z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-        event << "~~ExpiredJellyBean has headpatted me #{longFormattedNumber(@headpats[2])} time#{"s" unless @headpats[2]==1}, which is #{z}% of the headpats I've received.~~"
-        moosiebean[1]=true
-      end
-      if moosiebean[0] && moosiebean[1]
-        z=(@headpats[0]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-        z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-        event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0])} time#{"s" unless @headpats[0]==1}, which is #{z}% of the headpats I've received.~~"
-      elsif moosiebean[0]
-        z=(@headpats[0]*10000+@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-        z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-        event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0]+@headpats[2])} time#{"s" unless @headpats[0]+@headpats[2]==1}, which is #{z}% of the headpats I've received.~~"
-      elsif moosiebean[1]
-        z=(@headpats[0]*10000+@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-        z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-        event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0]+@headpats[1])} time#{"s" unless @headpats[0]+@headpats[1]==1}, which is #{z}% of the headpats I've received.~~"
-      end
-    end
-  elsif event.user.id==270372601107447808
-    event << "~~This is the #{longFormattedNumber(@headpats[1],true)} time you have given me a headpat.~~"
-    z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-    z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-    event << "~~#{z}% of the attempted headpats were performed by you.~~"
-  elsif event.user.id==261321388344868867
-    event << "~~This is the #{longFormattedNumber(@headpats[2],true)} time you have given me a headpat.~~"
-    z=(@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
-    z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
-    event << "~~#{z}% of the attempted headpats were performed by you.~~"
-  elsif event.server.nil?
-    event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[1]+@headpats[2],true)} time someone has tried to give me a headpat.~~"
-  elsif !bot.user(270372601107447808).on(event.server.id).nil?
-    event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[2],true)} time someone other than my husband has tried to give me a headpat.~~"
-  elsif !bot.user(261321388344868867).on(event.server.id).nil?
-    event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[1],true)} time someone other than my husband has tried to give me a headpat.~~"
-  else
-    event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[1]+@headpats[2],true)} time someone has tried to give me a headpat.~~"
-  end
+  data_load(['library'])
+  headpat(event,bot)
   return nil
 end
 
 bot.command(:natures) do |event|
   return nil if overlap_prevent(event)
-  event << 'A guide to nature names.  Though things like `+Atk` and `-Def` still work'
-  event << 'https://orig00.deviantart.net/d88e/f/2018/047/9/2/nature_names_by_rot8erconex-dc3e1fj.png'
+  event << 'A guide to nature names.  Though things like `+Atk` and `-Def` still work' unless Shardizard==$spanishShard
+  event << 'Una guía de nombres de la naturaleza.  Aunque cosas como `+Atq` y`-Def` todavía funcionan' if Shardizard==$spanishShard
+  event << "https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/NatureNames#{'Spanish' if Shardizard==$spanishShard}.png?raw=true"
 end
 
 bot.command(:growths, aliases: [:gps,:growth,:gp]) do |event|
@@ -8769,21 +8997,27 @@ bot.command(:invite) do |event, user|
   return nil if overlap_prevent(event)
   usr=event.user
   txt="**To invite me to your server: <https://goo.gl/HEuQK2>**\nTo look at my source code: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nTo follow my creator's development Twitter and learn of updates: <https://twitter.com/EliseBotDev>\nIf you suggested me to server mods and they ask what I do, copy this image link to them: https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/MarketingElise.png"
+  txt="**Para invitarme a tu servidor: <https://goo.gl/HEuQK2>**\nPara mirar mi código fuente: <https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/PriscillaBot.rb>\nSeguir el desarrollo de mi creador en Twitter y conocer las actualizaciones: <https://twitter.com/EliseBotDev>\nSi me sugirió mods de servidor y me preguntan qué hago, copie este enlace de imagen a ellos: https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/MarketingElise.png" if Shardizard==$spanishShard
   user_to_name='you'
   user=nil if event.message.mentions.length<=0 && user.to_i.to_s != user
   unless user.nil?
     if /<@!?(?:\d+)>/ =~ user
       usr=event.message.mentions[0]
-      txt="This message was sent to you at the request of #{event.user.distinct}.\n\n#{txt}"
+      txt="This message was sent to you at the request of #{event.user.distinct}.\n\n#{txt}" unless Shardizard=+$spanishShard
+      txt="Este mensaje le fue enviado a solicitud de #{event.user.distinct}.\n\n#{txt}" if Shardizard=+$spanishShard
       user_to_name=usr.distinct
     else
       usr=bot.user(user.to_i)
-      txt="This message was sent to you at the request of #{event.user.distinct}.\n\n#{txt}"
+      txt="This message was sent to you at the request of #{event.user.distinct}.\n\n#{txt}" unless Shardizard=+$spanishShard
+      txt="Este mensaje le fue enviado a solicitud de #{event.user.distinct}.\n\n#{txt}" if Shardizard=+$spanishShard
       user_to_name=usr.distinct
     end
   end
   usr.pm(txt)
-  event.respond "A PM was sent to #{user_to_name}." unless event.server.nil? && user_to_name=="you"
+  texto='A PM was sent to'
+  texto='Se envió un mensaje privado a' if Shardizard==$spanishShard
+  user_to_name='usted' if user_to_name=='you' && Shardizard==$spanishShard
+  event.respond "#{texto} #{user_to_name}." unless event.server.nil? && ['you','usted'].include?(user_to_name)
 end
 
 bot.command(:mythic, aliases: [:mythical,:mythics,:mythicals,:mystic,:mystical,:mystics,:mysticals]) do |event, *args|
@@ -8805,16 +9039,14 @@ end
 
 bot.command(:flowers, aliases: [:flower]) do |event, *args|
   return nil if overlap_prevent(event)
+  data_load(['library','devunits'])
   if args.nil? || args.length<=0
   elsif event.user.id==167657750971547648 && ['list'].include?(args[0])
     args.shift
-    data_load(['library','devunits'])
     dev_flower_list(event,bot,args)
     return nil
   end
-  event << "<:Dragonflower_Infantry:541170819980722176><:Dragonflower_Orange:552648156790390796><:Dragonflower_Cavalry:541170819955556352><:Dragonflower_Armor:541170820001824778><:Dragonflower_Cyan:552648156202926097><:Dragonflower_Flier:541170820089774091><:Dragonflower_Purple:552648232673607701><:Dragonflower_Pink:552648232510160897>"
-  event << 'Look at all the pretty flowers!'
-  event << "https://www.getrandomthings.com/list-flowers.php"
+  flower_array(event,bot)
 end
 
 bot.command(:shard) do |event, i, j|
@@ -8832,7 +9064,9 @@ bot.command(:shard) do |event, i, j|
   if (i.to_i.to_s==i || i.to_i==i) && i.to_i>256*256
     srv=(bot.server(i.to_i) rescue nil)
     if Shardizard==-1
-      event.respond "This server uses Smol Shards."
+      event.respond "This server uses Smol Shards, and I cannot check other servers."
+    elsif Shardizard==$spanishShard
+      event.respond "Este servidor usa el Shard español, y no puedo verificar otros servidores."
     elsif Shardizard ==4 && j != Shards
       event.respond "In a system of #{j} shards, that server would use #{shard_data(0,true,j)[(i.to_i >> 22) % j]} Shards."
     elsif Shardizard ==4
@@ -8849,11 +9083,15 @@ bot.command(:shard) do |event, i, j|
     j=i.to_i*1
     i=0
   end
-  event.respond "This server uses Smol Shards." if Shardizard==-1
+  str=''
+  str="\nBut it is always <:Shard_Orange:552681863962165258> Citrus in spirit!" if !event.server.nil? && event.server.id==392557615177007104
+  str='' if shard_data(0,true,j)[(event.server.id >> 22) % j]=='<:Shard_Orange:552681863962165258> Citrus'
+  event.respond "This server uses Smol Shards.#{str}" if Shardizard==-1
+  event.respond "Este servidor usa el Shard español#{str}" if Shardizard==$spanishShard
   event.respond "This is the debug mode, which uses #{shard_data(0,false,j)[4]} Shards." if Shardizard==4
-  event.respond "PMs always use #{shard_data(0,true,j)[0]} Shards." if event.server.nil? && Shardizard != 4 && Shardizard != -1
-  event.respond "In a system of #{j} shards, this server would use #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || [-1,4].include?(Shardizard) || j == Shards
-  event.respond "This server uses #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || [-1,4].include?(Shardizard) || j != Shards
+  event.respond "PMs always use #{shard_data(0,true,j)[0]} Shards." if event.server.nil? && ![-1,4,$spanishShard].include?(Shardizard)
+  event.respond "In a system of #{j} shards, this server would use #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || [-1,4,$spanishShard].include?(Shardizard) || j == Shards
+  event.respond "This server uses #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards.#{str}" unless event.server.nil? || [-1,4,$spanishShard].include?(Shardizard) || j != Shards
 end
 
 bot.command(:status, aliases: [:avatar,:avvie]) do |event, *args|
@@ -8864,6 +9102,9 @@ bot.command(:status, aliases: [:avatar,:avvie]) do |event, *args|
   if event.user.id==167657750971547648 && !args.nil? && args.length>0 # only work when used by the developer
     bot.game=args.join(' ')
     event.respond 'Status set.'
+    return nil
+  elsif Shardizard==$spanishShard
+    spanish_avatar(bot,event)
     return nil
   end
   if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
@@ -8884,12 +9125,13 @@ end
 
 bot.command(:bugreport, aliases: [:suggestion,:feedback]) do |event, *args|
   return nil if overlap_prevent(event)
+  event.respond "Tenga en cuenta que este comando responde en inglés, ya que es una comunicación directa con el desarrollador, cuyo idioma principal es el inglés." if Shardizard==$spanishShard
   x=['feh!','feh?','f?','e?','h?']
   x.push(@prefixes[event.server.id]) unless event.server.nil? || @prefixes[event.server.id].nil?
   bug_report(bot,event,args,Shards,shard_data(0,true),'Shard',x)
 end
 
-bot.command(:donation, aliases: [:donate]) do |event, uid|
+bot.command(:donation, aliases: [:donate,:donacion]) do |event, uid|
   return nil if overlap_prevent(event)
   uid="#{event.user.id}" if uid.nil? || uid.length.zero?
   if /<@!?(?:\d+)>/ =~ uid
@@ -8967,21 +9209,27 @@ end
 bot.command(:prefix) do |event, prefix|
   return nil if overlap_prevent(event)
   if prefix.nil?
-    event.respond 'No prefix was defined.  Try again'
+    event.respond 'No prefix was defined.  Try again' unless Shardizard==$spanishShard
+    event.respond 'No se definió ningún prefijo. Intentar otra vez' if Shardizard==$spanishShard
     return nil
   elsif event.server.nil?
-    event.respond 'This command is not available in PM.'
+    event.respond 'This command is not available in PM.' unless Shardizard==$spanishShard
+    event.respond 'Este comando no está disponible en mensajes privados.' unless Shardizard==$spanishShard
     return nil
   elsif !is_mod?(event.user,event.server,event.channel)
-    event.respond 'You are not a mod.'
+    event.respond 'You are not a mod.' unless Shardizard==$spanishShard
+    event.respond 'No eres moderador.' if Shardizard==$spanishShard
     return nil
   elsif ['feh!','feh?','f?','e?','h?','fgo!','fgo?','fg0!','fg0?','liz!','liz?','iiz!','iiz?','fate!','fate?','dl!','dl?','fe!','fe14!','fef!','fe13!','fea!','fe?','fe14?','fef?','fe13?','fea?'].include?(prefix.downcase)
-    event.respond "That is a prefix that would conflict with either myself or another one of my developer's bots."
+    event.respond "That is a prefix that would conflict with either myself or another one of my developer's bots." unless Shardizard==$spanishShard
+    event.respond "Ese es un prefijo que entraría en conflicto conmigo mismo o con otro de los bots de mi desarrollador." if Shardizard==$spanishShard
     return nil
   end
   @prefixes[event.server.id]=prefix
   prefixes_save()
-  event.respond "This server's prefix has been saved as **#{prefix}**"
+  event.respond "This server's prefix has been saved as **#{prefix}**" unless Shardizard==$spanishShard
+  event.respond "El prefijo de este servidor se ha guardado como **#{prefix}**" if Shardizard==$spanishShard
+  return nil
 end
 
 bot.command(:tools, aliases: [:links,:tool,:link,:resources,:resources]) do |event|
@@ -8993,27 +9241,39 @@ bot.command(:safe, aliases: [:spam,:safetospam,:safe2spam,:long,:longreplies]) d
   return nil if overlap_prevent(event)
   f='' if f.nil?
   if event.server.nil?
-    event.respond 'It is safe for me to send long replies here because this is my PMs with you.'
+    event.respond 'It is safe for me to send long replies here because this is my PMs with you.' unless Shardizard==$spanishShard
+    event.respond 'Es seguro para mí enviar respuestas largas aquí porque estos son mis mensajes privados contigo.' if Shardizard==$spanishShard
   elsif [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,691616574393811004,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388].include?(event.server.id)
-    event.respond 'It is safe for me to send long replies here because this is one of my emoji servers.'
+    event.respond 'It is safe for me to send long replies here because this is one of my emoji servers.' unless Shardizard==$spanishShard
+    event.respond 'Es seguro para mí enviar respuestas largas aquí porque este es uno de mis servidores de emoji.' if Shardizard==$spanishShard
   elsif Shardizard==4
-    event.respond 'It is safe for me to send long replies here because this is my debug mode.'
+    event.respond 'It is safe for me to send long replies here because this is my debug mode.' unless Shardizard==$spanishShard
+    event.respond 'Es seguro para mí enviar respuestas largas aquí porque este es mi modo de depuración.' if Shardizard==$spanishShard
   elsif ['bots','bot'].include?(event.channel.name.downcase)
-    event.respond "It is safe for me to send long replies here because the channel is named `#{event.channel.name.downcase}`."
+    event.respond "It is safe for me to send long replies here because the channel is named `#{event.channel.name.downcase}`." unless Shardizard==$spanishShard
+    event.respond "Es seguro para mí enviar respuestas largas aquí porque el canal se llama `#{event.channel.name.downcase}`." if Shardizard==$spanishShard
   elsif event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('spam')
-    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "spam".'
+    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "spam".' unless Shardizard==$spanishShard
+    event.respond 'Es seguro para mí enviar respuestas largas aquí porque el nombre del canal incluye tanto la palabra "bot" como la palabra "spam".' if Shardizard==$spanishShard
   elsif event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('command')
-    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "command".'
+    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "command".' unless Shardizard==$spanishShard
+    event.respond 'Es seguro para mí enviar respuestas largas aquí porque el nombre del canal incluye tanto la palabra "bot" como la palabra "command".' if Shardizard==$spanishShard
   elsif event.channel.name.downcase.include?('bot') && event.channel.name.downcase.include?('channel')
-    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "channel".'
+    event.respond 'It is safe for me to send long replies here because the channel name includes both the word "bot" and the word "channel".' unless Shardizard==$spanishShard
+    event.respond 'Es seguro para mí enviar respuestas largas aquí porque el nombre del canal incluye tanto la palabra "bot" como la palabra "channel".' if Shardizard==$spanishShard
   elsif event.channel.name.downcase.include?('elisebot') || event.channel.name.downcase.include?('elise-bot') || event.channel.name.downcase.include?('elise_bot')
-    event.respond 'It is safe for me to send long replies here because the channel name specifically calls attention to the fact that it is made for me.'
+    event.respond 'It is safe for me to send long replies here because the channel name specifically calls attention to the fact that it is made for me.' unless Shardizard==$spanishShard
+    event.respond 'Es seguro para mí enviar respuestas largas aquí porque el nombre del canal llama específicamente la atención sobre el hecho de que está hecho para mí.' if Shardizard==$spanishShard
   elsif $spam_channels.include?(event.channel.id)
     if is_mod?(event.user,event.server,event.channel) && ['off','no','false'].include?(f.downcase)
       metadata_load()
       $spam_channels.delete(event.channel.id)
       metadata_save()
-      event.respond 'This channel is no longer marked as safe for me to send long replies to.'
+      event.respond 'This channel is no longer marked as safe for me to send long replies to.' unless Shardizard==$spanishShard
+    elsif Shardizard==$spanishShard
+      event << 'Este canal ha sido diseñado específicamente para que pueda enviar respuestas largas con seguridad.'
+      event << ''
+      event << 'Si desea cambiar eso, pídale a un mod de servidor que escriba `FEH!spam off` en este canal.'
     else
       event << 'This channel has been specifically designated for me to be safe to send long replies to.'
       event << ''
@@ -9023,7 +9283,15 @@ bot.command(:safe, aliases: [:spam,:safetospam,:safe2spam,:long,:longreplies]) d
     metadata_load()
     $spam_channels.push(event.channel.id)
     metadata_save()
-    event.respond 'This channel is now marked as safe for me to send long replies to.'
+    event.respond 'This channel is now marked as safe for me to send long replies to.' unless Shardizard==$spanishShard
+    event.respond 'Este canal ahora está marcado como seguro para enviar respuestas largas.' if Shardizard==$spanishShard
+  elsif Shardizard==$spanishShard
+    event << 'No es seguro para mí enviar respuestas largas aquí.'
+    event << ''
+    event << 'Si desea cambiar eso, pruebe una de las siguientes opciones:'
+    event << '- Cambiar el nombre del canal a "bots".'
+    event << '- Cambiar el nombre del canal para incluir la palabra "bot" y una de las siguientes palabras: "spam", "command(s)", "channel".'
+    event << '- Haga que un moderador del servidor escriba `FEH!spam on` en este canal.'
   else
     event << 'It is not safe for me to send long replies here.'
     event << ''
@@ -9368,7 +9636,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
           b=[]
           File.open("FEHTemp.txt").each_line.with_index do |line, idx|
             if idx<200
-              b.push(line.gsub('>Main Token<',b2[1]).gsub('>Smol Token<',b2[-2]).gsub('>Debug Token<',b2[-1]))
+              b.push(line.gsub('>Main Token<',b2[1]).gsub('>Spanish Token<',b2[-3]).gsub('>Smol Token<',b2[-2]).gsub('>Debug Token<',b2[-1]))
             else
               b.push(line)
             end
@@ -9393,6 +9661,21 @@ bot.command(:reload, from: 167657750971547648) do |event|
           f.puts b.join('')
         }
         str="#{str}\nEliseClassFunctions loaded."
+        reload=true
+      end
+      puts 'reloading Elispanol'
+      download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Elisepanol.rb")
+      IO.copy_stream(download, "FEHTemp.txt")
+      str=''
+      if File.size("FEHTemp.txt")>100
+        b=[]
+        File.open("FEHTemp.txt").each_line.with_index do |line, idx|
+          b.push(line)
+        end
+        open("Elisepanol.rb", 'w') { |f|
+          f.puts b.join('')
+        }
+        str="#{str}\nElisepanol loaded."
         reload=true
       end
       download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/rot8er_functs.rb")
@@ -9435,6 +9718,10 @@ bot.command(:reload, from: 167657750971547648) do |event|
     if e.message.text.include?('6') && [167657750971547648].include?(event.user.id) # Library
       puts 'reloading EliseClassFunctions'
       load "#{$location}devkit/EliseClassFunctions.rb"
+      unless !$spanishShard.nil? && Shardizard != $spanishShard && !has_any?(e.message.text.downcase.split(' '),['spanish','espanol'])
+        puts 'reloading Elispanol'
+        load "#{$location}devkit/Elispanol.rb"
+      end
       t=Time.now
       $last_multi_reload[0]=t
       e.respond 'Libraries force-reloaded'
@@ -9464,7 +9751,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
         for i in 0...x.length
           download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/EliseImages/#{x[i]}.png")
           IO.copy_stream(download, "FEHTemp#{@shardizard}.png")
-          if File.size("FEHTemp#{@sharizard}.png")>100
+          if File.size("FEHTemp#{Shardizard}.png")>100
             download = open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/EliseImages/#{x[i]}.png")
             IO.copy_stream(download, "EliseImages/#{x[i]}.png")
           end
@@ -9596,6 +9883,8 @@ bot.message do |event|
       disp_unit_stats(bot,event,s2,nil,'smol',true) unless find_unit(event,a,s2,bot,true).nil?
       disp_skill_data(bot,event,s)
     elsif s.gsub(' ','').gsub('?','').gsub('!','').length<2
+    elsif !all_commands(true).include?(a[0]) && Shardizard==$spanishShard
+      spanish_commands(bot,event,a)
     elsif !all_commands(true).include?(a[0])
       a=sever(a.join(' ')).split(' ')
       find_best_match(event,a,nil,bot)
@@ -9613,7 +9902,8 @@ bot.message do |event|
     if s.split(' ').include?('kys') || s.split(' ').include?('KYS')
       if rand(1000)<13
         puts 'responded to KYS'
-        event.respond "You're going down, scumbag!"
+        event.respond "You're going down, scumbag!" unless Shardizard==$spanishShard
+        event.respond "¡Vas a caer, cabrón!" if Shardizard==$spanishShard
       else
         puts 'saw KYS, did not respond'
       end
@@ -9627,7 +9917,8 @@ bot.message do |event|
     s=s.gsub("\n",' ').gsub("  ",'')
     if s.split(' ').include?('0x4')
       puts s
-      event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{['','Pair it with a Breath skill to get 0x8 even faster.'].sample}",'Be sure to include Astra to increase damage by 150%.',"If you're using an archer, use Deadeye to increase damage by 200% or more!",'Be sure to use a dancer for 0x8.',"Be sure to use Sol, so you can heal for half of that.  #{['','Peck, Ephraim(Fire) heals for 80% with his Solar Brace.','Pair it with a Breath skill to get even more healing!'].sample}","#{['Be sure to use Galeforce for 0x8.','Be sure to use a dancer for 0x8.'].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}"
+      event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Be sure to use Galeforce for 0x8.  #{['','Pair it with a Breath skill to get 0x8 even faster.'].sample}",'Be sure to include Astra to increase damage by 150%.',"If you're using an archer, use Deadeye to increase damage by 200% or more!",'Be sure to use a dancer for 0x8.',"Be sure to use Sol, so you can heal for half of that.  #{['','Peck, Ephraim(Fire) heals for 80% with his Solar Brace.','Pair it with a Breath skill to get even more healing!'].sample}","#{['Be sure to use Galeforce for 0x8.','Be sure to use a dancer for 0x8.'].sample}  Or combine a dancer and Galeforce for a whopping 0x12!"].sample}" unless Shardizard==$spanishShard
+      event.respond "#{"#{event.user.mention} " unless event.server.nil?}#{["Asegúrese de usar Asalto Impetuoso para 0x8.  #{['','Combínalo con una habilidad de Soplo para obtener 0x8 aún más rápido.'].sample}",'Asegúrese de incluir Astrea para aumentar el daño en un 150%.',"Si estás usando un arquero, usa Ojo letal para aumentar el daño en un 200% o más.",'Asegúrese de usar un dancer para 0x8.',"Asegúrese de usar Helios, para que pueda curar la mitad de eso.  #{['','Peck, Ephraim(Fire) cura un 80% con su Brazalete Solar.','¡Combínalo con una habilidad de Soplo para obtener aún más curación!'].sample}","#{['Asegúrese de utilizar Asalto Impetuoso para 0x8.','Asegúrese de usar un dancer para 0x8.'].sample}  ¡O combina un dancer y un Asalto Impetuoso para obtener 0x12!"].sample}" if Shardizard==$spanishShard
     end
   end
 end
@@ -9669,6 +9960,15 @@ bot.mention do |event|
     args.shift
     display_units_and_skills(bot,event,args)
     k=1
+  elsif ['sort','list'].include?(args[0].downcase)
+    args.shift
+    if ['skill','skil','skills','skils'].include?(args[0].downcase) || (['habilidad','habilidades'].include?(args[0].downcase) && Shardizard==$spanishShard)
+      args.shift
+      sort_skills(bot,event,args)
+    else
+      sort_units(bot,event,args)
+    end
+    k=1
   elsif ['groups','seegroups','checkgroups'].include?(args[0].downcase)
     disp_groups(event,bot)
     k=1
@@ -9691,12 +9991,16 @@ bot.mention do |event|
     args.shift
     proc_study(bot,event,args)
     k=1
+  elsif ['phase','phase_study','phasestudy','studyphase','study_phase'].include?(args[0].downcase)
+    args.shift
+    phase_study(bot,event,args)
+    k=1
   elsif ['study'].include?(args[0].downcase)
     args.shift
     if ['effhp','eff_hp','bulk'].include?(args[0].downcase)
       args.shift
       k=effHP(bot,event,args)
-    elsif ['pairup','pair_up','pair','pocket'].include?(args[0].downcase)
+    elsif ['pairup','pair_up','pair','pocket'].include?(args[0].downcase) || (['agrupar','agrupa','par','bolsillo'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       k=pair_up(bot,event,args)
     elsif ['heal'].include?(args[0].downcase)
@@ -9705,7 +10009,7 @@ bot.mention do |event|
     elsif ['proc'].include?(args[0].downcase)
       args.shift
       k=proc_study(bot,event,args)
-    elsif ['phase'].include?(args[0].downcase)
+    elsif ['phase'].include?(args[0].downcase) || (['fase'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       k=phase_study(bot,event,args)
     end
@@ -9746,26 +10050,26 @@ bot.mention do |event|
     k=1
   elsif ['unit'].include?(args[0].downcase)
     args.shift
-    if ['find','search'].include?(args[0].downcase)
+    if ['find','search','lookup'].include?(args[0].downcase) || (['encontra','busca','encontrar','buscar'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       display_units(bot,event,args)
+    elsif ['sort','list'].include?(args[0].downcase) || (['clasificar','clasifica','lista','listar'].include?(args[0].downcase) && Shardizard==$spanishShard)
+      args.shift
+      sort_units(bot,event,args)
+    elsif ['compare','comparison'].include?(args[0].downcase) || (['comparar','compara'].include?(args[0].downcase) && Shardizard==$spanishShard)
+      args.shift
+      comparison(bot,event,args)
+    elsif ['pairup','pair_up','pair','pocket'].include?(args[0].downcase) || (['agrupar','agrupa','par','bolsillo'].include?(args[0].downcase) && Shardizard==$spanishShard)
+      args.shift
+      pair_up(bot,event,args)
     elsif ['fgo'].include?(args[0].downcase) && !find_data_ex(:find_FGO_servant,event,args[1,args.length-1],nil,bot).nil?
       args.shift
       disp_stats_for_FGO(bot,event,args,find_data_ex(:find_FGO_servant,event,args,nil,bot))
-    elsif ['sort','list'].include?(args[0].downcase)
-      args.shift
-      sort_units(bot,event,args)
-    elsif ['compare','comparison'].include?(args[0].downcase)
-      args.shift
-      comparison(bot,event,args)
-    elsif ['pairup','pair_up','pair','pocket'].include?(args[0].downcase)
-      args.shift
-      pair_up(bot,event,args)
     else
       x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
       x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
       if x.nil?
-        event.respond "No matches found."
+        event.respond nomf()
       elsif x[0].is_a?(Array)
         disp_unit_stats(bot,event,x[0].map{|q| q.name},x[1],size)
       else
@@ -9778,21 +10082,25 @@ bot.mention do |event|
       args.shift
       args.shift
       comparison(bot,event,args)
+    elsif ['comparar','compara'].include?(args[0].downcase) && Shardizard==$spanishShard && ['stats','stat'].include?(args[0].downcase)
+      args.shift
+      args.shift
+      comparison(bot,event,args)
     elsif ['fgo'].include?(args[0].downcase) && !find_data_ex(:find_FGO_servant,event,args[1,args.length-1],nil,bot).nil?
       args.shift
       disp_stats_for_FGO(bot,event,args,find_data_ex(:find_FGO_servant,event,args,nil,bot))
-    elsif ['pairup','pair_up','pair','pocket'].include?(args[0].downcase)
+    elsif ['pairup','pair_up','pair','pocket'].include?(args[0].downcase) || (['agrupar','agrupa','par','bolsillo'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       pair_up(bot,event,args)
     else
       size='smol'
-      size='medium' if ['big','tol','macro','large'].include?(args[0].downcase)
-      size='giant' if ['huge','massive'].include?(args[0].downcase)
+      size='medium' if ['big','tol','macro','large'].include?(args[0].downcase) || (['grande'].include?(args[0].downcase) && Shardizard==$spanishShard)
+      size='giant' if ['huge','massive'].include?(args[0].downcase) || (['enorme'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
       x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
       if x.nil?
-        event.respond "No matches found."
+        event.respond nomf()
       elsif x[0].is_a?(Array)
         disp_unit_stats(bot,event,x[0].map{|q| q.name},x[1],size)
       else
@@ -9805,11 +10113,7 @@ bot.mention do |event|
     x=find_data_ex(:find_unit,event,args,nil,bot,false,0,1)
     x[1]=first_sub(args.join(' ').downcase,x[1].downcase,'') unless x.nil?
     if x.nil?
-      event.channel.send_embed("__**No unit was included.  Have args smol me instead.**__") do |embed|
-        embed.color = 0xD49F61
-        embed.image = Discordrb::Webhooks::EmbedImage.new(url: "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Smol_Elise.jpg")
-        embed.author = Discordrb::Webhooks::EmbedAuthor.new(name: "image source", url: "https://www.pixiv.net/member_illust.php?mode=medium&illust_id=58900377")
-      end
+      smol_err(bot,event,false,true,true)
     elsif x[0].is_a?(Array)
       disp_unit_stats(bot,event,x[0].map{|q| q.name},x[1],'smol')
     else
@@ -9819,19 +10123,21 @@ bot.mention do |event|
   elsif ['skills','skils','fodder','manual','book','combatmanual'].include?(args[0].downcase)
     aa=args[0].downcase
     args.shift
-    if ['find','search'].include?(args[0].downcase)
+    if ['find','search','lookup'].include?(args[0].downcase) || (['encontra','busca','encontrar','buscar'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       display_skills(bot,event,args)
-    elsif ['sort','list'].include?(args[0].downcase)
+    elsif ['sort','list'].include?(args[0].downcase) || (['clasificar','clasifica','lista','listar'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       sort_skills(bot,event,args)
-    elsif ['compare','comparison'].include?(args[0].downcase)
+    elsif ['compare','comparison'].include?(args[0].downcase) || (['comparar','compara'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       skill_comparison(bot,event,args)
     else
       x=find_data_ex(:find_unit,event,args,nil,bot)
-      if x.nil?
-        event.respond "No matches found.  #{"If you are looking for data on args particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s." if aa=='skills'}"
+      if x.nil? && Shardizard==$spanishShard
+        event.respond "No hay coincidencia.  #{"Si está buscando datos sobre las habilidades que aprende un personaje en particular, intente ```#{first_sub(event.message.text,'habilidades','habilidad')}```, sin la s." if s.downcase[0,11]=='habilidades'}"
+      elsif x.nil?
+        event.respond "No matches found.  #{"If you are looking for data on a particular skill, try ```#{first_sub(event.message.text,'skills','skill')}```, without the s." if aa=='skills'}"
       elsif x.is_a?(Array)
         disp_unit_skills(bot,event,x.map{|q| q.name}.name)
       else
@@ -9841,19 +10147,21 @@ bot.mention do |event|
     k=1
   elsif ['skill','skil'].include?(args[0].downcase)
     args.shift
-    if ['find','search'].include?(args[0].downcase)
+    if ['find','search','lookup'].include?(args[0].downcase) || (['encontra','busca','encontrar','buscar'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       display_skills(bot,event,args)
-    elsif ['sort','list'].include?(args[0].downcase)
+    elsif ['sort','list'].include?(args[0].downcase) || (['clasificar','clasifica','lista','listar'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       sort_skills(bot,event,args)
-    elsif ['compare','comparison'].include?(args[0].downcase)
+    elsif ['compare','comparison'].include?(args[0].downcase) || (['comparar','compara'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       skill_comparison(bot,event,args)
     else
       x=find_data_ex(:find_skill,event,args,nil,bot)
-      if x.nil?
-        event.respond "No matches found.  If you are looking for data on the skills args character learns, try ```#{first_sub(event.message.text,'skill','skills',1)}```, with an s."
+      if x.nil? && Shardizard==$spanishShard
+        event.respond "No hay coincidencias.  Si está buscando datos sobre las habilidades que aprende un personaje en particular, intente ```#{event.message.text.downcase.gsub('habilidad','habilidades')}``` en su lugar."
+      elsif x.nil?
+        event.respond "No matches found.  If you are looking for data on the skills a character learns, try ```#{first_sub(event.message.text,'skill','skills',1)}```, with an s."
       else
         disp_skill_data(bot,event,x.name)
       end
@@ -9861,7 +10169,7 @@ bot.mention do |event|
     k=1
   elsif ['compare','comparison'].include?(args[0].downcase)
     args.shift
-    if ['skill','skil','skills','skils'].include?(args[0].downcase)
+    if ['skill','skil','skills','skils'].include?(args[0].downcase) || (['habilidad','habilidades'].include?(args[0].downcase) && Shardizard==$spanishShard)
       args.shift
       skill_comparison(bot,event,args)
     else
@@ -9884,11 +10192,11 @@ bot.mention do |event|
     args.shift
     disp_accessory(bot,args.join(' '),event)
     k=1
-  elsif ['color','colors','colour','colours'].include?(args[0].downcase)
+  elsif ['color','colors','colour','colours','colores'].include?(args[0].downcase)
     args.shift
     x=find_data_ex(:find_skill,event,args,nil,bot)
     if x.nil?
-      event.respond "No matches found."
+      event.respond nomf()
     else
       disp_skill_data(bot,event,x.name,true)
     end
@@ -9897,10 +10205,58 @@ bot.mention do |event|
     disp_legendary_list(bot,event,args,'Legendary')
     k=1
   elsif ['mythic','mythical','mythics','mythicals','mystic','mystical','mystics','mysticals'].include?(args[0].downcase)
-    disp_legendary_list(bot,event,args,'Legendary')
+    disp_legendary_list(bot,event,args,'Mythic')
     k=1
   elsif ['aoe','area'].include?(args[0].downcase)
     aoe(event,bot,args)
+    k=1
+  elsif ['average','mean'].include?(args[0].downcase)
+    stats_of_multiunits(bot,event,args,0)
+    k=1
+  elsif ['bestamong','bestin','beststats','higheststats','highest','best','highestamong','highestin'].include?(args[0].downcase)
+    stats_of_multiunits(bot,event,args,1)
+    k=1
+  elsif ['worstamong','worstin','worststats','loweststats','lowest','worst','lowestamong','lowestin'].include?(args[0].downcase)
+    stats_of_multiunits(bot,event,args,-1)
+    k=1
+  elsif ['bonus'].include?(args[0].downcase)
+    args.shift
+    x=[]
+    x.push('Arena') if args.include?('arena')
+    x.push('Tempest') if has_any?(args,['tempest','tt'])
+    x.push('Aether') if has_any?(args,['aether','raid','raids','aetherraids','aetherraid','aether_raids','aether_raid','aetheraids','aetheraid'])
+    x.push('Resonant') if has_any?(args,['resonant','resonance','resonence'])
+    if x.length<=0
+      show_bonus_smol(event,x,bot)
+      if safe_to_spam?(event)
+        show_bonus_smol(event,x,bot,1)
+        show_bonus_smol(event,x,bot,2)
+      end
+      return nil
+    end
+    x=[x[0]] unless safe_to_spam?(event)
+    show_bonus_units(event,x,bot)
+    k=1
+  elsif ['arena'].include?(args[0].downcase)
+    show_bonus_units(event,['Arena'],bot)
+    k=1
+  elsif ['tempest','tt'].include?(args[0].downcase)
+    show_bonus_units(event,['Tempest'],bot)
+    k=1
+  elsif ['aether','raid','raids','aetherraids','aetherraid','aether_raids','aether_raid','aetheraids','aetheraid'].include?(args[0].downcase)
+    show_bonus_units(event,['Aether'],bot)
+    k=1
+  elsif ['resonant','resonance','resonence'].include?(args[0].downcase)
+    show_bonus_units(event,['Resonant'],bot)
+    k=1
+  elsif ['headpat','pat','patpat'].include?(args[0].downcase)
+    headpat(event,bot)
+    k=1
+  elsif ['flower','flowers'].include?(args[0].downcase)
+    flower_array(event,bot)
+    k=1
+  elsif Shardizard==$spanishShard
+    spanish_commands(bot,event,args)
     k=1
   end
   find_best_match(event,args,nil,bot) if k<0
@@ -10071,6 +10427,9 @@ bot.ready do |event|
   if Shardizard==-1
     system("color 5E")
     system("title loading EliseBot(Smol)")
+  elsif Shardizard==-2
+    system("color 5E")
+    system("title loading Elispanol")
   else
     system("color #{'4' if shard_data(4)[Shardizard,1]=='5'}#{'5' unless shard_data(4)[Shardizard,1]=='5'}#{shard_data(4)[Shardizard,1]}")
     system("title loading #{shard_data(2)[Shardizard]} EliseBot")
@@ -10080,6 +10439,9 @@ bot.ready do |event|
   if Shardizard==-1
     system("color e5")
     system("title EliseBot(Smol)")
+  elsif Shardizard==-2
+    system("color e5")
+    system("title Elisepanol")
   else
     system("color e#{shard_data(3)[Shardizard,1]}")
     system("title #{shard_data(2)[Shardizard]} EliseBot")
