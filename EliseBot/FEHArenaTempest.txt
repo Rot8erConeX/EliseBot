@@ -1,19 +1,11 @@
-Nott, Palla(SoV), Zeke, Tatiana, Luthier, Fernand, Sharena(Bunny), Sothe, Marth(King), Anna\Arena\15/06/2021, 21/06/2021\Fire, Earth
-Ashera, Lif, Catria(Bride), Shanna(Bride), Juno(Bride), Saul(Groom), Zelot(Groom), Clive, Roy(Fire), Fjorm\Aether\15/06/2021, 21/06/2021\Bright Shrine
-FEH, FE6\Resonant\15/06/2021, 21/06/2021
-Nott, Palla(SoV), Zeke, Tatiana, Luthier, Fernand, Sharena(Bunny), Sothe, Marth(King), Anna\Arena\22/06/2021, 28/06/2021\Fire, Water
-Mila, Nott, Palla(SoV), Zeke, Tatiana, Luthier, Fernand, Valter, Celica(Queen), Alfonse\Aether\22/06/2021, 28/06/2021\Dark Shrine
-FE11, FE12, FE1, FE3, FE8\Resonant\22/06/2021, 28/06/2021
-Hilda(3H)(Summer), Mercedes(Summer), Ashe(Summer), Caspar(Summer), Leonie(Summer), Hilda(3H), Marianne, Mercedes\Tempest\22/06/2021, 02/07/2021\Atk/Def Push 1, Def/Res Solo 1
-Nott, Palla(SoV), Zeke, Tatiana, Luthier, Fernand, Sharena(Bunny), Sothe, Marth(King), Anna\Arena\29/06/2021, 05/07/2021\Water, Wind
-Ashera, Mirabilis, Palla(SoV), Zeke, Tatiana, Luthier, Fernand, Valter, Celica(Queen), Alfonse\Aether\29/06/2021, 05/07/2021\Bolt Tower
-FE15, FE2, FE4\Resonant\29/06/2021, 05/07/2021
--\Arena\06/07/2021, 12/07/2021\Water, Earth
-Freyja, Nott, Palla(SoV), Zeke, Tatiana, Luthier, Fernand, Valter, Celica(Queen), Alfonse\Aether\06/07/2021, 12/07/2021\Tactics Room
--\Arena\13/07/2021, 19/07/2021\Water, Fire
--\Arena\20/07/2021, 26/07/2021\Water, Wind
--\Arena\27/07/2021, 02/08/2021\Water, Earth
+Caeda(Summer), Freyja(Summer), Freyr(Summer), Ogma(Summer), Norne(Summer), Jorge, Catria(Bunny), Stahl, Azura(Vallite), Sharena\Arena\20/07/2021, 26/07/2021\Water, Wind
+Dagr, Bramimond, Hilda(Summer), Mercedes(Summer), Ashe(Summer), Caspar(Summer), Leonie(Summer), Black Knight, Chrom(Crowned), Sharena\Aether\20/07/2021, 26/07/2021\Panic Manor
+FEH, FE6\Resonant\20/07/2021, 26/07/2021
+Caeda(Summer), Freyja(Summer), Freyr(Summer), Ogma(Summer), Norne(Summer), Jorge, Catria(Bunny), Stahl, Azura(Vallite), Sharena\Arena\27/07/2021, 02/08/2021\Water, Earth
+Altina, Duma, Caeda(Summer), Freyja(Summer), Freyr(Summer), Ogma(Summer), Norne(Sunner), Arvis, Dimitri(Savior), Anna\Aether\27/07/2021, 02/08/2021\Panic Manor
+FE1, FE3, FE11, FE12, FE7\Resonant\27/07/2021, 02/08/2021
 -\Arena\03/08/2021, 07/08/2021\Earth, Fire
+Eir, Hel, Caeda(Summer), Freyja(Summer), Freyr(Summer), Ogma(Summer), Norne(Sunner), Arvis, Dimitri(Savior), Anna\Aether\03/08/2021, 07/08/2021\Panic Manor
 -\Arena\10/08/2021, 16/08/2021\Earth, Wind
 -\Arena\17/08/2021, 23/08/2021\Earth, Water
 -\Arena\24/08/2021, 30/08/2021\Wind, Fire

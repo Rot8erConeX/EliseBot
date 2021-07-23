@@ -140,6 +140,8 @@ Baronial Heaume\Hat\A sturdy baron's helm previously worn by Forsyth.\Reach 100 
 Baronial Heaume EX\Hat\A sturdy baron's helm previously worn by Forsyth. It is a keepsake marked with a lieutenant's rank.\Reach 2500 blue friendship with Forsyth during Forging Bonds: Common Virtues.
 Bat Ears\Hat\Aren't they cute?\Clear floors 6-10 in Illusory Dungeon: Farewells.
 Bath Bucket\Hat\When preparing to bathe in a hot spring, etiquette dictates washing with this bucket first. Don't splash!\Clear floors 81-85 in Illusory Dungeon: Kingdom of Nohr
+Bear Headwear\Hat\A handcrafted bear mask from Benny. Occasionally mistaken for a real bear thanks to its lifelike appearance.\Reach 100 blue friendship with Benny during Forging Bonds: Dawning Reality
+Bear Headwear EX\Hat\A handcrafted bear mask from Benny. He based the design on a friend he had as a child.\Reach 2500 blue friendship with Benny during Forging Bonds: Dawning Reality
 Beast Headband\Hat\Ranulf's favorite headband. Crafted from thick fabric, it protects the wearer's head quite well.\Reach 100 green friendship with Ranulf during Forging Bonds: A Trust Earned
 Beast Headband EX\Hat\This version of Ranulf's headband has very convincing fakes of his ears attached.\Reach 2500 green friendship with Ranulf during Forging Bonds: A Trust Earned
 Bird Nest\Hat\A bird nest Velouria found up in a tree. According to her, it's a treasure with a great scent.\Reach 100 orange friendship with Velouria during Forging Bonds: The Orb Case
@@ -184,6 +186,8 @@ False Taguel Ears\Hat\A gift from Yarne, shaped like taguel ears. They are used 
 False Taguel Ears EX\Hat\A gift from Yarne, shaped like taguel ears. They increase height and make the wearer more intimidating.\Reach 2500 green friendship with Yarne during Forging Bonds: Spanning Time
 Favored Helm\Hat\A knight's helm given by Kjelle. Kept in perfect, shiny condition by Kjelle herself.\Reach 100 blue friendship with Kjelle during Forging Bonds: Spanning Time.
 Favored Helm EX\Hat\A knight's helm given by Kjelle. Colored beautifully by Kjelle herself.\Reach 2500 blue friendship with Kjelle during Forging Bonds: Spanning Time
+Flirty Ribbon\Hat\A cute ribbon from Charlotte. It gives its wearer a polished look that will attract the eyes of admirers.\Reach 100 orange friendship with Charlotte during Forging Bonds: Dawning Reality.
+Flirty Ribbon EX\Hat\A cute ribbon from Charlotte. It raises its wearer's cuteness to levels sure to make any potential admirer swoon!\Reach 2500 orange friendship with Charlotte during Forging Bonds: Dawing Reality.
 Floral Headband\Hat\A headband decorated with pink blooms.\Clear floors 81-85 in Illusory Dungeon: Carrying the Flame.
 Flytrap Doll\Hat\A handmade doll from ~~Bernadetta~~ Bernie. She made it herself! It's a carnivorous plant. It's...cute?\Reach 100 green friendship with Bernie during Forging Bonds: Harmony amid Chaos
 Flytrap Doll EX\Hat\A handmade doll from ~~Bernadetta~~ Bernie. She made it herself! It's a carnivorous plant. It's...super cute?\Reach 2500 green friendship with Bernie during Forging Bonds: Harmony amid Chaos
@@ -232,6 +236,8 @@ Horse Headdress\Hat\A headdress bestowed by Merlinus. Crafted in the likeness of
 Horse Headdress EX\Hat\A headdress bestowed by Merlinus. Crafted in the likeness of a horse Merlinus kept long ago.\Reach 2500 red friendship with Merlinus during Forging Bonds: Principled Acts
 Hoshidan Hat\Hat\A round hat from Midori. Woven from dried grass, it's light but tough. Works great in the rain.\Reach 100 red friendship with Midori during Forging Bonds: the Fire Within.
 Hoshidan Hat EX\Hat\A round hat from Midori. Even when adorned with such expensive-looking tassles, it still works great in the rain!\Reach 2500 red friendship with Midori during Forging Bonds: the Fire Within.
+Hoshidan Tiara\Hat\An ornate tiara from Orochi. Common across Hoshido, headwear of this style is said to ward off evil.\Reach 100 green friendship with Orochi during Forging Bonds: Dawning Reality
+Hoshidan Tiara EX\Hat\An ornate tiara from Orochi. Made with quality materials said to empower curses and improve their efficacy.\Reach 2500 green friendship with Orochi during Forging Bonds: Dawning Reality
 Kitty Ribbon\Hat\Lethe's green ribbon. The bells sewn to it create a lovely sound when the wearer moves.\Reach 100 orange friendship with Lethe during Forging Bonds: A Trust Earned
 Kitty Ribbon EX\Hat\Lethe's green ribbon. The ears that are attached to it look surprisingly realistic.\Reach 2500 orange friendship with Lethe during Forging Bonds: A Trust Earned
 Knight Headpiece\Hat\A knight's headpiece from Silas. This gear is given to those who earn the title of knight.\Reach 100 blue friendship with Silas during Forging Bonds: High Tea Jinks.
@@ -316,6 +322,8 @@ Concealing Mask\Mask\A mask previously carried by Sirius. The mask covers the we
 Concealing Mask EX\Mask\A mask previously carried by Sirius. Adorned with golden detailing.\Reach 2500 blue friendship with Sirius during Forging Bonds: A Time to Shine
 Dancer's Mask\Mask\A mask from Olivia. A dancer would wear this to project a mystical aura while performing.\Reach 100 red friendship with Olivia(Traveler) during Forging Bonds: Defending Ylisse.
 Dancer's Mask EX\Mask\A mask from Olivia. A dancer would wear this to project an alluring aura while performing.\Reach 2500 red friendship with Olivia(Traveler) during Forging Bonds: Defending Ylisse.
+Dark-Mage Veil\Mask\A veil from Nyx that emanates a peculiar aura. Said to focus spells and improve their efficacy.\Reach 100 red friendship with Nyx during Forging Bonds: Dawning Reality
+Dark-Mage Veil EX\Mask\A veil from Nyx that emanates a peculiar aura. Said to boost focus and lend its wearer an elegant look.\Reach 2500 red friendship with Nyx during Forging Bonds: Dawning Reality
 Draconic Mask\Mask\An eerie mask granted by Corrin. Its presence is disquieting, somehow.\Reach 100 blue friendship with Corrin(M)(Fallen) during Forging Bonds: Peaceful Ends.
 Draconic Mask EX\Mask\A mysterious mask granted by Corrin. It seems as if it is made from the same material as his clothes.\Reach 2500 blue friendship with Corrin(M)(Fallen) during Forging Bonds: Peaceful Ends.
 Ghastly Mask\Mask\An off-putting mask from Morgan. People keep saying it's just a mask and there's nothing to worry about...\Reach 100 green friendship with Morgan(F)(Fallen) during Forging Bonds: Forces of Will

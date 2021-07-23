@@ -1,5 +1,5 @@
 # loadbotan = true
-# debug = Debug
+# debug = Elise
 @mash='rot8e'
 
 def triple_finish(list,forcetwo=false) # used to split a list into three roughly-equal parts for use in embeds
@@ -800,7 +800,8 @@ end
 
 def donor_embed(bot,event,str='')
   str='' if str.nil?
-  if @embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
+  mbd=(@embedless.map{|q| q} rescue $embedless.map{|q| q} rescue [])
+  if mbd.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
     event << '__**If you wish to donate to me:** A word from my developer__'
     event << ''
     event << 'Due to income regulations within the building where I live, I cannot accept donations in the form of PayPal, Patreon, or other forms of direct payment.  Only a small percentage of any such donations would actually reach me and the rest would end up in the hands of the owners of my building.'
@@ -808,7 +809,6 @@ def donor_embed(bot,event,str='')
     event << 'However, there are other options:'
     event << "- My Amazon wish list: http://a.co/0p3sBec (Items purchased from this list will be delivered to me)"
     event << '- You can also purchase an Amazon gift card and have it delivered via email to **rot8er.conex@gmail.com**.  (Quicklink: <https://goo.gl/femEcw>)'
-    event << "- I am saving to replace my laptop again, though this time it's nowhere near as urgent as before.  You can purchase a NewEgg giftcard to be delivered via email to **rot8er.conex@gmail.com**.  (Quicklink: <https://rb.gy/dmh9gf>)"
     event << "- You can use your Nitro Boost on either Elise's (<https://discord.gg/9TaRd2h>) or Liz's (<https://discord.gg/bcRcanR>) primary emote servers, which will count as a $5 donation per boost."
     event << ''
     event << '~~Please note that supporting me means indirectly enabling my addiction to pretzels and pizza rolls.~~'
@@ -822,7 +822,6 @@ def donor_embed(bot,event,str='')
     str2="#{str2}\n\nHowever, there are other options:"
     str2="#{str2}\n- You can purchase items from [this list](http://a.co/0p3sBec) and they will be delivered to me."
     str2="#{str2}\n- You can [purchase an Amazon gift card](https://goo.gl/femEcw) and have it delivered via email to **rot8er.conex@gmail.com**."
-    str2="#{str2}\n- You can [purchase a NewEgg gift card](https://rb.gy/dmh9gf) and have it delivered via email to **rot8er.conex@gmail.com**.  I am aiming to replace my laptop again, though this time it's nowhere near as urgent, so I can afford to be smarter about finding the features I need."
     str2="#{str2}\n- You can use your Nitro Boost on either [Elise's](https://discord.gg/9TaRd2h) or [Liz's](https://discord.gg/bcRcanR) primary emote servers, which will count as a $5 donation per boost."
     str2="#{str2}\n\n[Donor List](https://tinyurl.com/y5m8dv6k)"
     str2="#{str2}\n[Donor Perks](https://urlzs.com/kthnr)"

@@ -1,13 +1,23 @@
-Triandra & Freyja\MHB\27/11/2020, 08/12/2020
-Azura: Vallite Queen\LHB\27/11/2020, 08/12/2020
-Corrin: Child of Dusk\LHB\27/11/2020, 08/12/2020
-Eliwood: Blazing Knight\LHB\27/11/2020, 08/12/2020
-Hel: Death Sovereign\MHB\27/11/2020, 08/12/2020
-Leif: Unifier of Thracia\LHB\27/11/2020, 08/12/2020
-Sothis: Girl on the Throne\MHB\27/11/2020, 08/12/2020
-Tiki: Legendary Dragon\LHB\27/11/2020, 08/12/2020
-Heath: Wandering Knight (revival)\GHB\03/12/2020, 08/12/2020
-Three Heroes\Quests\04/12/2020, 14/12/2020
-New Heroes\Log-In\08/12/2020, 20/12/2020
->Unknown<\Forging Bonds\08/12/2020, 20/12/2020
->Unknown<\GHB\09/12/2020, 16/12/2020
+Infantry Strike\Quests\14/07/2021, 27/07/2021
+Elebian Summer & Winter\Hall of Forms\14/07/2021, 27/07/2021
+Coliseum & Ordeals\Quests\18/07/2021, 31/07/2021
+New Heroes\Log-In\19/07/2021, 31/07/2021
+Dawning Reality\Forging Bonds\19/07/2021, 01/08/2021
+Arete, Requium's Beauty\GHB\20/07/2021, 26/07/2021
+Ranged\Pawns of Loki\21/07/2021, 22/07/2021
+-\Grand Conquests\24/07/2021, 29/07/2021
+Mae & Boey\BHB\27/07/2021, 06/08/2021
+Voting Gauntlet\Log-In\27/07/2021, 08/08/2021
+-\Pawns of Loki\28/07/2021, 29/07/2021
+>Unknown<\MHB\29/07/2021, 04/08/2021
+Seliph: Scion of Light\LHB\29/07/2021, 04/08/2021
+Sigurd: Fated Holy Knight\LHB\29/07/2021, 04/08/2021
+Dimitri: Savior King\LHB\29/07/2021, 04/08/2021
+Seiros: Saint of Legend\MHB\29/07/2021, 04/08/2021
+Yune: Chaos Goddess\MHB\29/07/2021, 04/08/2021
+Mila: Goddess of Love\MHB\29/07/2021, 04/08/2021
+>Unknown<\Voting Gauntlet\30/07/2021, 04/08/2021
+Tempest Trials+\Log-In\03/08/2021, 17/08/2021
+Special Heroes\Log-In\05/08/2021, 19/08/2021
+>Unknown<\Tempest\06/08/2021, 17/08/2021
+Felica & Flora\BHB\07/08/2021, 17/08/2021

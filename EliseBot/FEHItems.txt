@@ -67,4 +67,4 @@ Frosty Aether Stone\Event\999\Used in Aether Raids to build structures that are 
 Spring Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Spring 2019
 Summer Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Summer 2019
 Fall Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Fall 2019
-Guardian Shield\Event\999\
+Guardian Shield\Event\3\In Frontline Phalanx, you must rescue Heroes from the jaws of defeat!

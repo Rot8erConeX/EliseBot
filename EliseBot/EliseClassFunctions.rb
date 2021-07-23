@@ -2,6 +2,7 @@ $stored_event=[]
 @zero_by_four=[0,0,0]
 
 def help_text(event,bot,command=nil,subcommand=nil)
+  return texto_ayuda(event,bot,command,subcommand) if Shardizard==$spanishShard
   command='' if command.nil?
   k=0
   k=event.server.id unless event.server.nil?
@@ -100,12 +101,14 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['tempest','tt'].include?("#{subcommand}".downcase)}**",'Displays current and future Tempest Trials Bonus Units',0xD49F61)
   elsif ['aetherbonus','aether_bonus','aethertempest','aether_tempest','raid','raidbonus','raid_bonus','bonusraid','bonus_raid','raids','raidsbonus','raids_bonus','bonusraids','aether','bonus_raids'].include?(command.downcase) || (['bonus'].include?(command.downcase) && ['aether','raid','raids'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['aether','raid','raids'].include?("#{subcommand}".downcase)}**",'Displays current and future Aether Raids Bonus Units',0xD49F61)
+  elsif ['resonant','resonantbonus','resonant_bonus','bonusresonant','bonus_resonant','resonance','resonancebonus','resonance_bonus','bonusresonance','bonus_resonance'].include?(command.downcase) || (['bonus','extra'].include?(command.downcase) && ['resonant','resonance'].include?("#{subcommand}".downcase))
+    create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['arena'].include?("#{subcommand}".downcase)}**",'Displays current and future Resonant Blades Games',0xD49F61)
   elsif ['bonus'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**",'Displays current and future Bonus Units for Arena, Tempest Trials, and Aether Raids.',0xD49F61)
   elsif ['skillrarity','skilrarity','onestar','twostar','threestar','fourstar','fivestar','skill_rarity','one_star','two_star','three_star','four_star','five_star'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['rarity','rarities'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['rarity','rarities'].include?("#{subcommand}".downcase)}**",'Explains why some units have skills listed at lower rarities than they are available at.',0xD49F61)
-  elsif ['color','colors','colour','colours'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['color','colors','colour','colours'].include?("#{subcommand}".downcase))
-    create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['color','colors','colour','colours'].include?("#{subcommand}".downcase)}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.\n\nThis version of the command causes the display to sort the units by color instead of rarity, allowing users to see what color they should summon when looking for a particular skill.",0xD49F61)
+  elsif ['color','colors','colour','colours','colores'].include?(command.downcase) || (['skill'].include?(command.downcase) && ['color','colors','colour','colours','colores'].include?("#{subcommand}".downcase))
+    create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['color','colors','colour','colours','colores'].include?("#{subcommand}".downcase)}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.\n\nThis version of the command causes the display to sort the units by color instead of rarity, allowing users to see what color they should summon when looking for a particular skill.",0xD49F61)
   elsif ['skill','skil'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__","Shows data on the skill `name`.\n\nIf the skill is a weapon that can be refined, also shows all possible refinements.\nIncluding the word \"default\" or \"base\" in these cases will make this command only show the default weapon.\nOn the flip side, including the word \"refined\" will make this command only show data on the refinements.\n\nFollowing the command with the word \"colo(u)rs\" will cause the display to sort the units by color instead of rarity, allowing users to see what color they should summon when looking for a particular skill.",0xD49F61)
   elsif ['tinystats','smallstats','smolstats','microstats','squashedstats','sstats','statstiny','statssmall','statssmol','statsmicro','statssquashed','statss','stattiny','statsmall','statsmol','statmicro','statsquashed','sstat','tinystat','smallstat','smolstat','microstat','squashedstat','tiny','small','micro','smol','squashed','littlestats','littlestat','statslittle','statlittle','little'].include?(command.downcase) || (['stat','stats'].include?(command.downcase) && ['tiny','small','micro','smol','squashed','little'].include?("#{subcommand}".downcase))
@@ -147,7 +150,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     create_embed(event,"**#{command.downcase}**","Responds with an explanation on how a unit's Arena Score is calculated.",0xD49F61)
   elsif ['flowers','flower'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**",'Responds with a link to a page with a random flower.',0xD49F61)
-  elsif ['donation','donate'].include?(command.downcase)
+  elsif ['donation','donate','donacion'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**",'Responds with information regarding potential donations to my developer.',0xD49F61)
   elsif ['headpat'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}**",'Causes the invoker to try to headpat me.',0xD49F61)
@@ -206,7 +209,6 @@ def help_text(event,bot,command=nil,subcommand=nil)
   elsif ['compare','comparison'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __*allies__","Compares the units listed in `allies`.  Shows each set of stats, as well as an analysis.\nThis command can compare anywhere between two and ten units.\n\n#{disp_more_info(event,1)}",0xD49F61)
   elsif ['compareskills','compareskill','skillcompare','skillscompare','comparisonskills','comparisonskill','skillcomparison','skillscomparison','compare_skills','compare_skill','skill_compare','skills_compare','comparison_skills','comparison_skill','skill_comparison','skills_comparison','skillsincommon','skills_in_common','commonskills','common_skills'].include?(command.downcase)
-    # u=random_dev_unit_with_nature(event,false)
     create_embed(event,"**#{command.downcase}** __*allies__","Compares the units listed in `allies`.  Shows the skills that the units have in common.\nThis command can compare exactly two units.\n\n#{disp_more_info(event,1)}",0xD49F61)
   elsif ['average','mean'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __\*filters__","Finds all units that fit in the `filters`, then calculates their average in each stat.\n\n#{disp_more_info(event,2)}",0xD49F61)
@@ -412,21 +414,21 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n`alts` __character__ - for a list of all units this character has"
     str="#{str}\n`path` __unit__ - for a list of all Divine Code paths the unit can be found in (*also `divine`*)"
     str="#{str}\n\n\n__**Skill Data**__"
-    str="#{str}\n`skill` __skill name__ - used to show data on a specific skill"
+    str="#{str}\n`skill` __skill name__ - shows data on a specific skill"
     str="#{str}\n`AoE` __type__ - to show the range of all AoE skills (*also `area`*)"
     create_embed([event,x],"Global Command Prefixes: `FEH!` `FEH?` `F?` `E?` `H?`#{"\nServer Command Prefix: `#{@prefixes[event.server.id]}`" if !event.server.nil? && !@prefixes[event.server.id].nil? && @prefixes[event.server.id].length>0}\nYou can also use `FEH!help CommandName` to learn more on a particular command.\n__**Elise Bot help**__",str,0xD49F61)
     str="__**Additional Index Data**__"
     str="#{str}\n`structure` __structure name__ - used to show data on a specific structure"
-    str="#{str}\n`accessory` __accessory name__ - used to show data on a specific accessory"
     str="#{str}\n`item` __item name__ - used to show data on a specific item"
+    str="#{str}\n`accessory` __accessory name__ - used to show data on a specific accessory"
     str="#{str}\n\n__**Current Events**__"
-    str="#{str}\n`bonus` - used to list all Arena and TT bonus units (*also `arena`, `tt`, or `aether`*)"
+    str="#{str}\n`bonus` - used to list all bonus units for relevant modes (*also `arena`, `tt`, `aether`, or `resonant`*)"
     str="#{str}\n`today` - shows the current day's in-game daily events (*also `daily` or `todayInFEH`*)"
     str="#{str}\n`next` __type__ - to see a schedule of the next time in-game daily events will happen (*also `schedule`*)"
     str="#{str}\n\n__**Lists**__"
     str="#{str}\n`summonpool` __\\*colors__ - for a list of summonable units sorted by rarity (*also `pool`*)"
     str="#{str}\n`legendaries` __\\*filters__ - for a sorted list of all legendaries. (*also `legendary`*)"
-    str="#{str}\n`mythics` __\\*filters__ - for a sorted list of all legendaries. (*also `mythic`, `mythical`, or `mythicals`*)"
+    str="#{str}\n`mythics` __\\*filters__ - for a sorted list of all mythics. (*also `mythic`, `mythical`, or `mythicals`*)"
     str="#{str}\n`refinery` - used to show a list of refineable weapons (*also `refine`*)"
     str="#{str}\n`prf` - used to show a list of PRF skills"
     str="#{str}\n\n__**Searches**__"
@@ -445,7 +447,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n`tools` - for a list of tools aside from me that may aid you"
     str="#{str}\n\n`aliases` - show all aliases (*also `checkaliases` or `seealiases`*)"
     str="#{str}\n`serveraliases` - show server-specific aliases"
-    str="#{str}\n`groups` (*also `checkgroups` or `seegroups`*) - for a list of all unit groups"
+    str="#{str}\n`groups` - for a list of all unit groups (*also `checkgroups` or `seegroups`*)"
     str="#{str}\n\n`natures` - for help understanding my nature names"
     str="#{str}\n`growths` - for help understanding how growths work (*also `gps`*)"
     str="#{str}\n`merges` - for help understanding how merges work"
@@ -460,7 +462,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n`suggestion` __\\*message__ - to send my developer a feature suggestion"
     str="#{str}\n`feedback` __\\*message__ - to send my developer other kinds of feedback"
     str="#{str}\n~~the above three commands are actually identical, merely given unique entries to help people find them~~"
-    str="#{str}\n\n`donation` (*also `donate`*) - for information on how to donate to my developer"
+    str="#{str}\n\n`donation` - for information on how to donate to my developer (*also `donate`*)"
     str="#{str}\n`whyelise` - for an explanation as to how Elise was chosen as the face of the bot"
     str="#{str}\n`snagstats` __type__ - to receive relevant bot stats"
     str="#{str}\n`spam` - to determine if the current location is safe for me to send long replies to (*also `safetospam` or `safe2spam`*)"
@@ -470,12 +472,12 @@ def help_text(event,bot,command=nil,subcommand=nil)
     str="#{str}\n`addalias` __new alias__ __target__ - Adds a new server-specific alias"
     str="#{str}\n~~`aliases` __target__ (*also `checkaliases` or `seealiases`*)~~"
     str="#{str}\n~~`serveraliases` __target__ (*also `saliases`*)~~"
-    str="#{str}\n`deletealias` __alias__ (*also `removealias`*) - deletes a server-specific alias"
+    str="#{str}\n`deletealias` __alias__ - deletes a server-specific alias (*also `removealias`*)"
     str="#{str}\n\n__**Groups**__"
     str="#{str}\n`addgroup` __name__ __\\*members__ - adds a server-specific group"
     str="#{str}\n~~`groups` (*also `checkgroups` or `seegroups`*)~~"
-    str="#{str}\n`deletegroup` __name__ (*also `removegroup`*) - Deletes a server-specific group"
-    str="#{str}\n`removemember` __group__ __unit__ (*also `removefromgroup`*) - removes a single member from a server-specific group"
+    str="#{str}\n`deletegroup` __name__ - Deletes a server-specific group (*also `removegroup`*)"
+    str="#{str}\n`removemember` __group__ __unit__ - removes a single member from a server-specific group (*also `removefromgroup`*)"
     str="#{str}\n\n__**Channels**__"
     str="#{str}\n`spam` __toggle__ - to allow the current channel to be safe to send long replies to (*also `safetospam` or `safe2spam`*)"
     str="#{str}\n\n__**Customization**__"
@@ -675,6 +677,29 @@ class FEHUnit
     return true if @id<319
     return false
   end
+  
+  def legend_shift_skill(skl)
+    return nil if skl.nil?
+    if @name=='Ike(Vanguard)' && skl.type.include?('Passive(C)') && skl.name != 'Def Tactic'
+      skl.id+=10000
+    elsif @name=='Lyn(Wind)' && skl.type.include?('Passive(C)') && skl.name != 'Spd Tactic'
+      skl.id+=10000
+    elsif @name=='Robin(F)(Fallen)' && skl.type.include?('Passive(C)') && skl.name != 'Res Smoke'
+      skl.id+=10000
+    elsif @name=='Fjorm' && skl.type.include?('Passive(A)') && !skl.name.include?('Atk/Def')
+      skl.id+=10000
+    elsif @name=='Bluezie' && skl.type.include?('Passive(A)') && skl.name == 'Atk/Spd Bond'
+      skl.id+=100
+    end
+    skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Atk/Def Unity' && @name=='Fjorm'
+    skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Def Tactic' && skl.level.to_i==3 && @name=='Ike(Vanguard)'
+    skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Spd Tactic' && skl.level.to_i==3 && @name=='Lyn(Wind)'
+    skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Res Smoke' && skl.level.to_i==3 && @name=='Robin(F)(Fallen)'
+    skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Spd/Def Bond' && skl.level.to_i==3 && @name=='Bluezie'
+    skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Guidance' && skl.level.to_i==3 && @name=='Ryoma(Supreme)'
+    skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Fortress Res' && skl.level.to_i==3 && @name=='Gunnthra'
+    return skl
+  end
 end
 
 class SuperUnit
@@ -691,7 +716,7 @@ class DevUnit
     artype="#{artype}_Mathoo" if @name=='Alm(Saint)'
     x=false
     x=true if @resplendent.downcase=='r'
-    return 'https://pbs.twimg.com/media/E3hGgX4VoAIQhCk?format=png' if @name=='Celica' && x
+    return 'https://pbs.twimg.com/media/E5ODBfJUYAQz4K5?format=png' if @name=='Celica' && x
     return super(artype,x)
   end
   
@@ -777,7 +802,7 @@ class FEHSkill
       nme="Fledgling (#{unit.movement})" if unit.movement=='Flier'
     elsif @name[0,7]=='Adult ('
       nme="Adult (#{unit.movement})"
-    elsif ['Iron Sword','Iron Lance','Iron Axe','Iron Dagger','Iron Bow','Steel Sword','Steel Lance','Steel Axe','Steel Dagger','Steel Bow','Silver Sword','Silver Lance','Silver Axe','Silver Dagger','Silver Bow','Brave Sword','Brave Lance','Brave Axe','Brave Bow','Firesweep Sword','Firesweep Lance','Firesweep Axe','Firesweep Bow','Guard Sword','Guard Lance','Guard Axe','Barrier Blade','Barrier Lance','Barrier Axe','Killing Edge','Killer Lance','Killer Axe','Slaying Edge','Slaying Lance','Slaying Axe','Reprisal Lance','Reprisal Axe','Reprisal Sword'].include?(@name.gsub('+',''))
+    elsif ['Iron Sword','Iron Lance','Iron Axe','Iron Dagger','Iron Bow','Steel Sword','Steel Lance','Steel Axe','Steel Dagger','Steel Bow','Silver Sword','Silver Lance','Silver Axe','Silver Dagger','Silver Bow','Brave Sword','Brave Lance','Brave Axe','Brave Bow','Firesweep Sword','Firesweep Lance','Firesweep Axe','Firesweep Bow','Guard Sword','Guard Lance','Guard Axe','Barrier Blade','Barrier Lance','Barrier Axe','Killing Edge','Killer Lance','Killer Axe','Slaying Edge','Slaying Lance','Slaying Axe','Reprisal Lance','Reprisal Axe','Reprisal Sword','Steadfast Axe','Steadfast Lance','Steadfast Sword'].include?(@name.gsub('+',''))
       t='Iron'
       t='Steel' if 'Steel '==@name[0,6]
       t='Silver' if 'Silver '==@name[0,7]
@@ -789,6 +814,7 @@ class FEHSkill
       t='Killing' if t=='Killer' && unit.weapon_color=='Red'
       t='Slaying' if 'Slaying '==@name[0,8]
       t='Reprisal' if 'Reprisal '==@name[0,9]
+      t='Steadfast' if 'Steadfast '==@name[0,9]
       nme="#{t} Sword" if unit.weapon_color=='Red'
       nme="#{t} Blade" if unit.weapon_color=='Red' && ['Barrier'].include?(t)
       nme="#{t} Edge" if unit.weapon_color=='Red' && ['Killer','Killing','Slaying'].include?(t)
@@ -1475,91 +1501,99 @@ class FEHBanner
   
   def description(unit,chance)
     len='%.2f'
-    len='%.4f' if Shardizard==4
+    len='%.4f' if Shardizard==4 && Shardizard != $spanishShard
     d=[]
-    d.push("#{@start_date[0]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][@start_date[1]]} #{@start_date[2]}") unless @start_date.nil?
-    d.push("#{@end_date[0]} #{['','January','February','March','April','May','June','July','August','September','October','November','December'][@end_date[1]]} #{@end_date[2]}") unless @end_date.nil?
+    mos=['','January','February','March','April','May','June','July','August','September','October','November','December']
+    mos=$spanish_months[1].map{|q| q} if Shardizard==$spanishShard
+    d.push("#{@start_date[0]} #{mos[@start_date[1]]} #{@start_date[2]}") unless @start_date.nil?
+    d.push("#{@end_date[0]} #{mos[@end_date[1]]} #{@end_date[2]}") unless @end_date.nil?
     str=''
-    str="*Duration:* #{d.join(' - ')}" unless d.length<=0
-    if @focus_rarities.include?('0')
+    lang=['Duration','Same Focus','Other Focus','Starting Focus Chance','Current Focus Chance']
+    lang=['Duración','Mismo','Otro','Oportunidades Iniciales','Oportunidades Actuales'] if Shardizard==$spanishShard
+    str="*#{lang[0]}:* #{d.join(' - ')}" unless d.length<=0
+    if @focus_rarities.include?('0') && Shardizard==$spanishShard
+      str="#{str}\n*Híbrido de múltiples pancartas con #{self.unit_list.length} caracteres de enfoque total*"
+    elsif @focus_rarities.include?('0')
       str="#{str}\n*Multi-banner hybrid with #{self.unit_list.length} total focus units*"
     else
-      str="#{str}\n*Same Focus Color:* #{self.same_color(unit).map{|q| q.name}.sort.join(', ')}" unless self.same_color(unit).length<=0
-      str="#{str}\n*Other Focus Color:* #{self.other_color(unit).map{|q| q.name}.sort.join(', ')}" unless self.other_color(unit).length<=0
+      str="#{str}\n*#{lang[1]} Color:* #{self.same_color(unit).map{|q| q.name}.sort.join(', ')}" unless self.same_color(unit).length<=0
+      str="#{str}\n*#{lang[2]} Color:* #{self.other_color(unit).map{|q| q.name}.sort.join(', ')}" unless self.other_color(unit).length<=0
     end
     x2=self.calc_pity(0)
-    str="#{str}\n*Starting Focus Chance:* #{"#{len % x2[0]}% (6<:Icon_Rarity_6p10:491487784822112256>), " unless x2[0]<=0}#{len % x2[2]}% (5<:Icon_Rarity_5p10:448272715099406336>)"
+    str="#{str}\n*#{lang[3]}:* #{"#{len % x2[0]}% (6<:Icon_Rarity_6p10:491487784822112256>), " unless x2[0]<=0}#{len % x2[2]}% (5<:Icon_Rarity_5p10:448272715099406336>)"
     str="#{str}, #{len % x2[4]}% (4<:Icon_Rarity_4p10:448272714210476033>)" unless x2[4]<=0
     str="#{str}, #{len % x2[7]}% (3<:Icon_Rarity_3:448266417934958592>)" unless x2[7]<=0
     str="#{str}, #{len % x2[9]}% (2<:Icon_Rarity_2:448266417872044032>)" unless x2[9]<=0
     str="#{str}, #{len % x2[11]}% (1<:Icon_Rarity_1:448266417481973781>)" unless x2[11]<=0
     unless chance<=0
       x2=self.calc_pity(chance)
-      str="#{str}\n*Current Focus Chance:* #{"#{len % x2[0]}% (6<:Icon_Rarity_6p10:491487784822112256>), " unless x2[0]<=0}#{len % x2[2]}% (5<:Icon_Rarity_5p10:448272715099406336>)"
+      str="#{str}\n*#{lang[4]}:* #{"#{len % x2[0]}% (6<:Icon_Rarity_6p10:491487784822112256>), " unless x2[0]<=0}#{len % x2[2]}% (5<:Icon_Rarity_5p10:448272715099406336>)"
       str="#{str}, #{len % x2[4]}% (4<:Icon_Rarity_4p10:448272714210476033>)" unless x2[4]<=0
       str="#{str}, #{len % x2[7]}% (3<:Icon_Rarity_3:448266417934958592>)" unless x2[7]<=0
       str="#{str}, #{len % x2[9]}% (2<:Icon_Rarity_2:448266417872044032>)" unless x2[9]<=0
       str="#{str}, #{len % x2[11]}% (1<:Icon_Rarity_1:448266417481973781>)" unless x2[11]<=0
     end
+    lng=["#{'Start ' if chance<=0}Chance",'Perceived','Actual']
+    lng=["Oportunidades#{' Iniciales' if chance<=0}",'Percibida','Real'] if Shardizard==$spanishShard
     if x2[0]>0 && (unit.availability[0].include?('6p') || unit.availability[0].include?('6s'))
       m=x2[0]/(self.same_color(unit).reject{|q| !q.availability[0].include?('6p') && !q.availability[0].include?('6s')}.length+1)
       m2=x2[0]/self.unit_list.reject{|q| !q.availability[0].include?('6p') && !q.availability[0].include?('6s')}.length
-      str="#{str}\n*6<:Icon_Rarity_6p10:491487784822112256> #{'Start ' if chance<=0}Chance:* "
+      str="#{str}\n*6<:Icon_Rarity_6p10:491487784822112256> #{lng[0]}:* "
       if m<=m2
         str="#{str}#{len % m}%"
       else
-        str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+        str="#{str}#{len % m}% (#{lng[1]}), #{len % m2}% (#{lng[2]})"
       end
     end
     unless @focus_rarities.include?('0')
       if x2[2]>0 && (unit.availability[0].include?('5p') || unit.availability[0].include?('5s') || x2[0]+x2[1]<=0)
         m=x2[2]/(self.same_color(unit).length+1)
         m2=x2[2]/self.unit_list.length
-        str="#{str}\n*5<:Icon_Rarity_5p10:448272715099406336> #{'Start ' if chance<=0}Chance:* "
+        str="#{str}\n*5<:Icon_Rarity_5p10:448272715099406336> #{lng[0]}:* "
         if m<=m2
           str="#{str}#{len % m}%"
         else
-          str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+          str="#{str}#{len % m}% (#{lng[1]}), #{len % m2}% (#{lng[2]})"
         end
       end
       if x2[4]>0 && (unit.availability[0].include?('4p') || unit.availability[0].include?('4s'))
         m=x2[4]/(self.same_color(unit).reject{|q| !q.availability[0].include?('4p') && !q.availability[0].include?('4s')}.length+1)
         m2=x2[4]/self.unit_list.reject{|q| !q.availability[0].include?('4p') && !q.availability[0].include?('4s')}.length
-        str="#{str}\n*4<:Icon_Rarity_4p10:448272714210476033> #{'Start ' if chance<=0}Chance:* "
+        str="#{str}\n*4<:Icon_Rarity_4p10:448272714210476033> #{lng[0]}:* "
         if m<=m2
           str="#{str}#{len % m}%"
         else
-          str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+          str="#{str}#{len % m}% (#{lng[1]}), #{len % m2}% (#{lng[2]})"
         end
       end
       if x2[7]>0 && (unit.availability[0].include?('3p') || unit.availability[0].include?('3s'))
         m=x2[7]/(self.same_color(unit).reject{|q| !q.availability[0].include?('3p') && !q.availability[0].include?('3s')}.length+1)
         m2=x2[7]/self.unit_list.reject{|q| !q.availability[0].include?('3p') && !q.availability[0].include?('3s')}.length
-        str="#{str}\n*3<:Icon_Rarity_3:448266417934958592> #{'Start ' if chance<=0}Chance:* "
+        str="#{str}\n*3<:Icon_Rarity_3:448266417934958592> #{lng[0]}:* "
         if m<=m2
           str="#{str}#{len % m}%"
         else
-          str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+          str="#{str}#{len % m}% (#{lng[1]}), #{len % m2}% (#{lng[2]})"
         end
       end
       if x2[9]>0 && (unit.availability[0].include?('3p') || unit.availability[0].include?('2s'))
         m=x2[9]/(self.same_color(unit).reject{|q| !q.availability[0].include?('2p') && !q.availability[0].include?('2s')}.length+1)
         m2=x2[9]/self.unit_list.reject{|q| !q.availability[0].include?('2p') && !q.availability[0].include?('2s')}.length
-        str="#{str}\n*2<:Icon_Rarity_2:448266417872044032> #{'Start ' if chance<=0}Chance:* "
+        str="#{str}\n*2<:Icon_Rarity_2:448266417872044032> #{lng[0]}:* "
         if m<=m2
           str="#{str}#{len % m}%"
         else
-          str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+          str="#{str}#{len % m}% (#{lng[1]}), #{len % m2}% (#{lng[2]})"
         end
       end
       if x2[11]>0 && (unit.availability[0].include?('1p') || unit.availability[0].include?('1s'))
         m=x2[11]/(self.same_color(unit).reject{|q| !q.availability[0].include?('1p') && !q.availability[0].include?('1s')}.length+1)
         m2=x2[11]/self.unit_list.reject{|q| !q.availability[0].include?('1p') && !q.availability[0].include?('1s')}.length
-        str="#{str}\n*1<:Icon_Rarity_1:448266417481973781> #{'Start ' if chance<=0}Chance:* "
+        str="#{str}\n*1<:Icon_Rarity_1:448266417481973781> #{lng[0]}:* "
         if m<=m2
           str="#{str}#{len % m}%"
         else
-          str="#{str}#{len % m}% (Perceived), #{len % m2}% (Actual)"
+          str="#{str}#{len % m}% (#{lng[1]}), #{len % m2}% (#{lng[2]})"
         end
       end
     end
@@ -1635,21 +1669,40 @@ class FEHEvent
     @type='Hall of Forms' if @type=='HoF' || @type=='HOF'
     @type='Pawns of Loki' if @type=='PoL' || @type=='POL'
     n="#{@name}"
+    t="#{@type}"
+    if Shardizard==$spanishShard
+      t='Torneo de votos' if @type=='Voting Gauntlet'
+      t='Batalla de vínculos' if @type=='Bound Hero Battle'
+      t='Batalla Mítica' if @type=='Grand Hero Battle'
+      t='Batalla Legendaria' if @type=='Legendary Hero Battle'
+      t='Batalla Limitada' if @type=='Limited Hero Battle'
+      t='Batallas héroes míticos' if @type=='Mythic Hero Battle'
+      t='Recompensa diaria' if @type=='Daily Reward Battle'
+      t='Grandes Conquistas' if @type=='Grand Conquests'
+      t='Lides sombrías' if @type=='Rokkr Sieges'
+      t='La Tormenta' if @type=='Tempest Trials'
+      t='Creando lazos' if @type=='Forging Bonds'
+      t='Batalla de Toques' if @type=='Tap Battle'
+      t='Saberes perdidos' if @type=='Lost Lore'
+      t='Bonificación' if @type=='Log-In Bonus'
+      t='Galería quimérica' if @type=='Hall of Forms'
+      t='Peones de Loki' if @type=='Pawns of Loki'
+    end
     if ['Voting Gauntlet','Tempest Trials','Forging Bonds','Quests','Log-In Bonus','Lost Lore'].include?(@type)
-      n="\"#{n}\" #{@type}"
+      n="\"#{n}\" #{t}"
     elsif ['Bound Hero Battle','Grand Hero Battle','Legendary Hero Battle','Mythic Hero Battle','Daily Reward Battle','Limited Hero Battle','Special Maps'].include?(@type)
-      n="#{@type}: *#{n}*"
+      n="#{t}: *#{n}*"
     elsif ['Rokkr Sieges','Grand Conquests','Pawns of Loki'].include?(@type)
-      n="#{@type}"
+      n="#{t}"
     elsif ['Tap Battle','Hall of Forms'].include?(@type)
-      n="#{@type}: #{n}"
+      n="#{t}: #{n}"
     elsif @type=='Update'
       n="#{n} Update"
     elsif @type=='Orb Promo'
-      n="#{@type} (#{n})"
+      n="#{t} (#{n})"
     elsif @type=='Event'
     else
-      n="#{n} (#{@type})"
+      n="#{n} (#{t})"
     end
     return n
   end
@@ -1671,9 +1724,11 @@ class FEHEvent
       t2=t3-t2
       t2=t2/(24*60*60)
       if 10-t2>0
-        str2=" - #{[(10-t2).floor,tt2].min} gifts remain for daily players"
+        str2=" - #{[(10-t2).floor,tt2].min} gifts remain for daily players" unless Shardizard==$spanishShard
+        str2=" - Quedan #{[(10-t2).floor,tt2].min} regalos para los jugadores diarios" if Shardizard==$spanishShard
       else
-        str2=" - no gifts remain for daily players"
+        str2=" - no gifts remain for daily players" unless Shardizard==$spanishShard
+        str2=" - No quedan regalos para los jugadores diarios" if Shardizard==$spanishShard
       end
     elsif @type=='Grand Conquests'
       t4=@start_date.map{|q| q}
@@ -1687,18 +1742,34 @@ class FEHEvent
       t2+=24*60*60*(2*(t4/2+1)-1)
       t2=t2-t
       if t2/(60*60)>44
-        str2=" - waiting until Battle #{t4/2+1}"
+        str2=" - waiting until Battle #{t4/2+1}" unless Shardizard==$spanishShard
       elsif t2/(60*60)>1
-        str2=" - #{(t2/(60*60)).floor} hours remain in Battle #{t4/2+1}"
-        str2="#{str2} (Round #{(11-(t2/(60*60)).floor/4).floor} currently ongoing)"
+        if Shardizard==$spanishShard
+          str2=" - Quedan #{(t2/(60*60)).floor} horas en la batalla #{t4/2+1}"
+          str2="#{str2} (Ronda #{(11-(t2/(60*60)).floor/4).floor} actualmente en curso)"
+        else
+          str2=" - #{(t2/(60*60)).floor} hours remain in Battle #{t4/2+1}"
+          str2="#{str2} (Round #{(11-(t2/(60*60)).floor/4).floor} currently ongoing)"
+        end
       elsif t2/60>1
-        str2=" - #{(t2/60).floor} minutes remain in Battle #{t4/2+1}"
-        str2="#{str2} (Round #{(11-(t2/(60*60)).floor/4).floor} currently ongoing)"
+        if Shardizard==$spanishShard
+          str2=" - Quedan #{(t2/60).floor} minutos en la batalla #{t4/2+1}"
+          str2="#{str2} (Ronda #{(11-(t2/(60*60)).floor/4).floor} actualmente en curso)"
+        else
+          str2=" - #{(t2/60).floor} minutes remain in Battle #{t4/2+1}"
+          str2="#{str2} (Round #{(11-(t2/(60*60)).floor/4).floor} currently ongoing)"
+        end
       elsif t2>1
-        str2=" - #{t2.floor} seconds remain in Battle #{t4/2+1}"
-        str2="#{str2} (Round #{(1-(t2/(60*60)).floor/4).floor} currently ongoing)"
+        if Shardizard==$spanishShard
+          str2=" - Quedan #{t2.floor} segundos en la batalla #{t4/2+1}"
+          str2="#{str2} (Ronda #{(1-(t2/(60*60)).floor/4).floor} actualmente en curso)"
+        else
+          str2=" - #{t2.floor} seconds remain in Battle #{t4/2+1}"
+          str2="#{str2} (Round #{(1-(t2/(60*60)).floor/4).floor} currently ongoing)"
+        end
       elsif t2.floor<=0
-        str2=" - waiting until Battle #{t4/2+2}"
+        str2=" - waiting until Battle #{t4/2+2}" unless Shardizard==$spanishShard
+        str2=" - esperando hasta la batalla #{t4/2+2}" if Shardizard==$spanishShard
       end
     elsif ['Rokkr Sieges','Pawns of Loki'].include?(@type)
       t4=@start_date.map{|q| q}
@@ -1712,15 +1783,20 @@ class FEHEvent
       t2+=24*60*60*(2*(t4/2+1)-1)
       t2=t2-t
       if t2/(60*60)>44
-        str2=" - waiting until Battle #{t4/2+1}"
+        str2=" - waiting until Battle #{t4/2+1}" unless Shardizard==$spanishShard
+        str2=" - esperando hasta la batalla #{t4/2+1}" if Shardizard==$spanishShard
       elsif t2/(60*60)>1
-        str2=" - #{(t2/(60*60)).floor} hours remain in Battle #{t4/2+1}"
+        str2=" - #{(t2/(60*60)).floor} hours remain in Battle #{t4/2+1}" unless Shardizard==$spanishShard
+        str2=" - Quedan #{(t2/(60*60)).floor} horas en la batalla #{t4/2+1}" if Shardizard==$spanishShard
       elsif t2/60>1
-        str2=" - #{(t2/60).floor} minutes remain in Battle #{t4/2+1}"
+        str2=" - #{(t2/60).floor} minutes remain in Battle #{t4/2+1}" unless Shardizard==$spanishShard
+        str2=" - Quedan #{(t2/60).floor} minutos en la batalla #{t4/2+1}" if Shardizard==$spanishShard
       elsif t2>1
-        str2=" - #{t2.floor} seconds remain in Battle #{t4/2+1}"
+        str2=" - #{t2.floor} seconds remain in Battle #{t4/2+1}" unless Shardizard==$spanishShard
+        str2=" - Quedan #{t2.floor} segundos en la batalla #{t4/2+1}" if Shardizard==$spanishShard
       elsif t2.floor<=0
-        str2=" - waiting until Battle #{t4/2+2}"
+        str2=" - waiting until Battle #{t4/2+2}" unless Shardizard==$spanishShard
+        str2=" - esperando hasta la batalla #{t4/2+2}" if Shardizard==$spanishShard
       end
     elsif @type=='Voting Gauntlet'
       t4=@start_date.map{|q| q}
@@ -1734,15 +1810,20 @@ class FEHEvent
       t2+=24*60*60*(2*(t4/2+1)-1)
       t2=t2-t
       if t2/(60*60)>1
-        str2=" - #{(t2/(60*60)).floor} hours remain in Round #{t4/2+1}"
+        str2=" - #{(t2/(60*60)).floor} hours remain in Round #{t4/2+1}" unless Shardizard==$spanishShard
+        str2=" - Quedan #{(t2/(60*60)).floor} horas en la Ronda #{t4/2+1}" if Shardizard==$spanishShard
       elsif t2/60>1
-        str2=" - #{(t2/60).floor} minutes remain in Round #{t4/2+1}"
+        str2=" - #{(t2/60).floor} minutes remain in Round #{t4/2+1}" unless Shardizard==$spanishShard
+        str2=" - Quedan #{(t2/60).floor} minutos en la Ronda #{t4/2+1}" if Shardizard==$spanishShard
       elsif t2>1
-        str2=" - #{t2.floor} seconds remain in Round #{t4/2+1}"
+        str2=" - #{t2.floor} seconds remain in Round #{t4/2+1}" unless Shardizard==$spanishShard
+        str2=" - Quedan #{t2.floor} segundos en la Ronda #{t4/2+1}" if Shardizard==$spanishShard
       elsif t4/2<2
-        str2=" - waiting until Round #{t4/2+2}"
+        str2=" - waiting until Round #{t4/2+2}" unless Shardizard==$spanishShard
+        str2=" - esperando hasta la batalla #{t4/2+2}" if Shardizard==$spanishShard
       else
-        str2=" - post-gauntlet buffer period"
+        str2=" - post-gauntlet buffer period" unless Shardizard==$spanishShard
+        str2=" - período de espera después del guante" if Shardizard==$spanishShard
       end
     end
     return str2
@@ -1757,7 +1838,7 @@ class FEHPath
   
   def eMonth
     return nil if self.ephemera<0
-    return @name.split(')')[0].gsub('Ephemura (','')
+    return self.proper_name.split(')')[0].split('(')[1]
   end
   
   def isCurrent?(includempty=true,shift=false)
@@ -1844,6 +1925,11 @@ class FEHPath
     end
     return m.join(', ') if m.length>0
     return 'Free'
+  end
+  
+  def proper_name
+    return self.spanish_name if Shardizard==$spanishShard
+    return @name
   end
 end
 
@@ -1980,8 +2066,8 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   launch=false
   statlimits=[[-100,100],[-100,100],[-100,100],[-100,100],[-100,100]]
   for i in 0...args.length
-    launch=true if ['launch'].include?(args[i].downcase)
     args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
+    launch=true if ['launch'].include?(args[i].downcase)
     dancers=true if ['dancers','singers','bards','dancer','singer','bard','refreshers','refresher'].include?(args[i].downcase)
     legendaries=true if ['legendary','legend','legends'].include?(args[i].downcase)
     mythics=true if ['mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(args[i].downcase)
@@ -1998,8 +2084,8 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
     color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
     color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
     color_weapons.push(['Green','Tome']) if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
-    clzz.push(['Troubadour', nil, 'Staff', 'Cavalry']) if ['troubadour','trobadour','troubador','trobador','troubadours','trobadours','troubadors','trobadors'].include?(args[i].downcase)
-    clzz.push(["F\u00E1fnir", nil, 'Dragon', 'Flier']) if ['fafnir','fafnirs'].include?(args[i].downcase)
+    clzz.push(['Troubadour', nil, 'Staff', 'Cavalry', 'Trovador (Caballería Sanadora)']) if ['troubadour','trobadour','troubador','trobador','troubadours','trobadours','troubadors','trobadors'].include?(args[i].downcase)
+    clzz.push(["F\u00E1fnir", nil, 'Dragon', 'Flier', 'Fafnir (Dragón Volador)']) if ['fafnir','fafnirs'].include?(args[i].downcase)
     weapons.push('Blade') if ['physical','blade','blades','close','closerange'].include?(args[i].downcase)
     weapons.push('Tome') if ['tome','mage','spell','tomes','mages','spells','range','ranged','distance','distant'].include?(args[i].downcase)
     weapons.push('Dragon') if ['dragon','dragons','breath','manakete','manaketes','close','closerange'].include?(args[i].downcase)
@@ -2023,6 +2109,38 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
     supernatures.push('-Spd') if ['spdbane','speedbane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     supernatures.push('-Def') if ['defbane','defensebane','defencebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
     supernatures.push('-Res') if ['resbane','resistancebane'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    if Shardizard==$spanishShard
+      colors.push('Red') if ['rojo','rojos','roja','rojas'].include?(args[i].downcase)
+      colors.push('Blue') if ['azul','azules'].include?(args[i].downcase)
+      colors.push('Green') if ['verde','verdes'].include?(args[i].downcase)
+      colors.push('Colorless') if ['gris','grises','translucida','translucido'].include?(args[i].downcase)
+      color_weapons.push(['Red','Blade']) if ['espada','espadas'].include?(args[i].downcase)
+      color_weapons.push(['Blue','Blade']) if ['lanza','lanzas'].include?(args[i].downcase)
+      color_weapons.push(['Green','Blade']) if ['hacha','hachas'].include?(args[i].downcase)
+      weapons.push('Blade') if ['fisica','fisico','fisicas','fisicos','filo','filos','cuerpo'].include?(args[i].downcase)
+      weapons.push('Tome') if ['tomo','mago','tomos','magos','distante'].include?(args[i].downcase)
+      weapons.push('Dragon') if ['cuerpo'].include?(args[i].downcase)
+      weapons.push('Beast') if ['bestia','bestias','cuerpo'].include?(args[i].downcase)
+      weapons.push('Bow') if ['arco','arca','arcos','arcas','distante'].include?(args[i].downcase)
+      weapons.push('Dagger') if ['daga','dagas','distante'].include?(args[i].downcase)
+      weapons.push('Staff') if ['curadora','curador','curadoras','curadores','clergio','clergios','distante'].include?(args[i].downcase)
+      movements.push('Flier') if ['volador','voladores','pegaso','pegasos'].include?(args[i].downcase)
+      movements.push('Cavalry') if ['caballeria','caballerias','caballo','caballos','poni','ponis','ponies'].include?(args[i].downcase)
+      movements.push('Infantry') if ['infanteria','infanteria','pie','pies'].include?(args[i].downcase)
+      movements.push('Armor') if ['blindado','blindados','blindada','blindadas'].include?(args[i].downcase)
+      genders.push('M') if ['masculino','masculina','hombre','hombres','chico','chicos'].include?(args[i].downcase)
+      genders.push('F') if ['mujer','mujeres','femenino','femeninos','femenina','femeninas','chica','chicas'].include?(args[i].downcase)
+      supernatures.push('+HP') if ['hpbendicion','pvbendicion'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+      supernatures.push('+Atk') if ['atqbendicion','ataquebendicion'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+      supernatures.push('+Spd') if ['velbendicion','velocidadbendicion'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+      supernatures.push('+Def') if ['defbendicion','defensabendicion'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+      supernatures.push('+Res') if ['resbendicion','resistenciabendicion'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+      supernatures.push('-HP') if ['hpperdicion','pvperdicion','hperdicion'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+      supernatures.push('-Atk') if ['atqperdicion','ataqueperdicion'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+      supernatures.push('-Spd') if ['velperdicion','velocidadperdicion'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+      supernatures.push('-Def') if ['defperdicion','defensaperdicion'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+      supernatures.push('-Res') if ['resperdicion','resistenciaperdicion'].include?(args[i].downcase.gsub('+','').gsub('-',''))
+    end
     if ['>','<','='].include?(args[i][0,1]) || ['>','<','='].include?(args[i][args[i].length-1,1])
     elsif args[i].include?('>=') || args[i].include?('<=') || args[i].include?('>') || args[i].include?('<')
       spl=[]
@@ -2054,6 +2172,13 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
       v=2 if ['spd','speed'].include?(spl[0].downcase)
       v=3 if ['def','defense','defence','defensive','defencive'].include?(spl[0].downcase)
       v=4 if ['res','resistance'].include?(spl[0].downcase)
+      if Shardizard==$spanishShard
+        v=0 if ['pv','salud'].include?(spl[0].downcase)
+        v=1 if ['fuerza','magia','atq','ataque'].include?(spl[0].downcase)
+        v=2 if ['vel','velocidad'].include?(spl[0].downcase)
+        v=3 if ['defensa','defensiva','defensivo'].include?(spl[0].downcase)
+        v=4 if ['resistencia'].include?(spl[0].downcase)
+      end
       if spl[1]==0 && args[i][args[i].length-1,1]!='0'
       elsif v<0
       elsif spl[2]=='>'
@@ -2086,20 +2211,26 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   untz=$units.reject{|q| !q.isPostable?(event)}
   untz2=untz.map{|q| q}
   myunit=''
-  if has_any?(args.map{|q| q.downcase},["mathoo'sunits","mathoo's",'mathoosunits','devunits','mathoosunit','devunit','mathoos'])
+  if has_any?(args.map{|q| q.downcase},["mathoo'sunits","mathoo's",'mathoosunits','devunits','mathoosunit','devunit','mathoos']) || (Shardizard==$spanishShard && has_any?(args,["demathoo","personajesdemathoo"]))
     untz=$dev_units.reject{|q| !q.isPostable?(event)}.map{|q| q.clone}
     myunit="*Developer's barracks*"
-  elsif has_any?(args.map{|q| q.downcase},['myunits','myunit','mine']) && event.user.id==167657750971547648
+    myunit="*Cuartel del desarrollador*" if Shardizard==$spanishShard
+  elsif (has_any?(args.map{|q| q.downcase},['myunits','myunit','mine']) || (Shardizard==$spanishShard && has_any?(args.map{|q| q.downcase},['mispersonajes','mipersonaje']))) && event.user.id==167657750971547648
     untz=$dev_units.reject{|q| !q.isPostable?(event)}.map{|q| q.clone}
     myunit="*Your barracks*"
-  elsif has_any?(args.map{|q| q.downcase},['myunits','myunit','mine'])
+    myunit="*Tu cuartel*" if Shardizard==$spanishShard
+  elsif has_any?(args.map{|q| q.downcase},['myunits','myunit','mine']) || (Shardizard==$spanishShard && has_any?(args.map{|q| q.downcase},['mispersonajes','mipersonaje']))
     untz3=$donor_units.reject{|q| q.owner_id != event.user.id || !q.isPostable?(event)}.map{|q| q.clone}
     unless untz3.length<=0
       untz=$donor_units.reject{|q| q.owner_id != event.user.id || !q.isPostable?(event)}.map{|q| q.clone}
       myunit="*Your barracks*"
+      myunit="*Tu cuartel*" if Shardizard==$spanishShard
     end
   end
   stt=['HP','Atk','Spd','Def','Res']
+  stt=['HP','Atq','Vel','Def','Res'] if Shardizard==$spanishShard
+  baab=['between','and','above','below']
+  baab=['entre','y','por encima de','por debajo de'] if Shardizard==$spanishShard
   markxane=false
   for i in 0...statlimits.length
     untz=untz.reject{|q| q.stats40.nil? || q.stats40[1].nil? || q.stats40[i]<=statlimits[i][0] || q.stats40[i]>=statlimits[i][1]}
@@ -2110,13 +2241,13 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
     end
     if statlimits[i][0]>-100 && statlimits[i][1]<100
       markxane=true if i>0
-      statlimits[i]="#{stt[i]} between #{statlimits[i][0]} and #{statlimits[i][1]}"
+      statlimits[i]="#{stt[i]} #{baab[0]} #{statlimits[i][0]} #{baab[1]} #{statlimits[i][1]}"
     elsif statlimits[i][0]>-100
       markxane=true if i>0
-      statlimits[i]="#{stt[i]} above #{statlimits[i][0]}"
+      statlimits[i]="#{stt[i]} #{baab[2]} #{statlimits[i][0]}"
     elsif statlimits[i][1]<100
       markxane=true if i>0
-      statlimits[i]="#{stt[i]} below #{statlimits[i][1]}"
+      statlimits[i]="#{stt[i]} #{baab[3]} #{statlimits[i][1]}"
     else
       statlimits[i]=nil
     end
@@ -2246,6 +2377,7 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
       elsif has_any?(untz[i].games.map{|q| q.downcase},xgames.map{|q| "(a)#{q.downcase}"})
         untz[i].name="#{untz[i].name} *[Amiibo]*"
         matches4.push(untz[i])
+      elsif Shardizard==$spanishShard
       elsif has_any?(untz[i].games.map{|q| q.downcase},xgames.map{|q| "(at)#{q.downcase}"})
         untz[i].name="#{untz[i].name} *[Assist Trophy]*"
         matches4.push(untz[i])
@@ -2284,16 +2416,20 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   end
   untz=untz.reject{|q| !q.hasResplendent?} if resplendents
   if ignore_limit || !crsoff.nil?
+  elsif untz.length>=untz2.length && Shardizard==$spanishShard
+    event.respond 'Tu solicitud es un galimatías.' if ['hero','heroes','heros','unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
+    return -1
   elsif untz.length>=untz2.length
     event.respond 'Your request is gibberish.' if ['hero','heroes','heros','unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
     return -1
   elsif mode==3
     return untz
   elsif untz.length.zero? && mode != 13
-    event.respond 'There were no units that matched your request.' unless paired
+    event.respond 'There were no units that matched your request.' unless paired || Shardizard==$spanishShard
+    event.respond 'No hubo caracteres que coincidieran con su solicitud.' unless paired || Shardizard !=$spanishShard
     return -2
   end
-  m=[]
+  m=[]; mspan=[]
   if myunit.length>0
     m.push(myunit)
     for i in 0...untz.length
@@ -2301,69 +2437,116 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
       untz[i].stats1=untz[i].dispStats(bot,1).map{|q| q}
     end
   end
+  m2=[]
   for i in 0...colors2.length
     moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{colors2[i]}_Unknown"}
+    m2[i]="#{moji[0].mention} #{colors2[i].gsub('Red','Roja').gsub('Blue','Azul').gsub('Green','Verde').gsub('Colorless','Gris')}"
     colors2[i]="#{moji[0].mention} #{colors2[i]}" unless moji.length<=0
   end
   m.push("*Weapon colors:* #{colors2.join(', ')}") if colors2.length>0
+  mspan.push("*Colores de armas:* #{m2.join(', ')}") if m2.length>0
+  m2=[]
   for i in 0...weapons.length
     moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "Gold_#{weapons[i].gsub('Healer','Staff')}"}
+    m2[i]="#{moji[0].mention} #{weapons[i].gsub('Blade','Filo').gsub('Tome','Tomo').gsub('Dragon',"Drag\u00F3n").gsub('Colorless','Gris').gsub('Dagger','Daga').gsub('Bow','Arco').gsub('Healer','Curador').gsub('Beast','Bestia')}"
     weapons[i]="#{moji[0].mention} #{weapons[i]}" unless moji.length<=0
   end
   m.push("*Weapon types:* #{weapons.map{|q| q.gsub('Healer','Staff').gsub('Dragon','Breath')}.join(', ')}") if weapons.length>0
+  mspan.push("*Tipos de armas:* #{m2.join(', ')}") if m2.length>0
+  m2=[]
   for i in 0...color_weapons.length
     moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{color_weapons[i][0]}_#{color_weapons[i][1]}"}
+    m2[i]=color_weapons[i].map{|q| q}.reverse
+    m2[i][0]=m2[i][0].gsub('Blade','Filo').gsub('Tome','Tomo').gsub('Dragon',"Drag\u00F3n").gsub('Colorless','Gris').gsub('Dagger','Daga').gsub('Bow','Arco').gsub('Healer','Curador').gsub('Beast','Bestia')
+    m2[i][1]=m2[i][1].gsub('Red','Roja').gsub('Blue','Azul').gsub('Green','Verde').gsub('Colorless','Gris')
+    m2[i][1]='Rojo' if m2[i][1]=='Roja' && ['Filo','Tomo',"Drag\u00F3n",'Arco'].include?(m2[i][0]) # the word for red is gendered
+    m2[i]=m2[i].join(' ')
     color_weapons[i]=color_weapons[i].join(' ').gsub('Healer','Staff')
+    m2[i]='Espada (Filo Rojo)' if color_weapons[i]=='Red Blade'
     color_weapons[i]='Sword (Red Blade)' if color_weapons[i]=='Red Blade'
+    m2[i]='Lanza (Filo Azul)' if color_weapons[i]=='Blue Blade'
     color_weapons[i]='Lance (Blue Blade)' if color_weapons[i]=='Blue Blade'
+    m2[i]='Hacha (Filo Verde)' if color_weapons[i]=='Green Blade'
     color_weapons[i]='Axe (Green Blade)' if color_weapons[i]=='Green Blade'
+    m2[i]="Ca\u00D1a (Filo Gris)" if color_weapons[i]=='Colorless Blade'
     color_weapons[i]='Rod (Colorless Blade)' if color_weapons[i]=='Colorless Blade'
     color_weapons[i]="#{moji[0].mention} #{color_weapons[i]}" unless moji.length<=0
+    m2[i]="#{moji[0].mention} #{m2[i]}" unless moji.length<=0
   end
   m.push("*Complete weapons:* #{color_weapons.join(', ').gsub('Healer','Staff').gsub('Dragon','Breath')}") if color_weapons.length>0
+  mspan.push("*Armas completas:* #{m2.join(', ')}") if m2.length>0
+  m2=[]
   for i in 0...movements.length
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{movements[i]}"}
+    m2[i]="#{moji[0].mention} #{movements[i].gsub('Infantry','Infantería').gsub('Flier','Volador').gsub('Cavalry','Caballería').gsub('Armor','Blindado')}"
     movements[i]="#{moji[0].mention} #{movements[i]}" unless moji.length<=0
   end
   m.push("*Movement:* #{movements.join(', ')}") if movements.length>0
-  m.push("*Complete classes:* #{clzz.map{|q| "#{q[0]} (#{q[1,q.length-1].compact.join(' ').gsub('Healer','Staff').gsub('Dragon','Breath')})"}.join(', ')}") if clzz.length>0
-  m.push("\u{1F680} *Launch Units*") if launch
+  mspan.push("*Movimiento:* #{m2.join(', ')}") if m2.length>0
+  m.push("*Complete classes:* #{clzz.map{|q| "#{q[0]} (#{q[1,3].compact.join(' ').gsub('Healer','Staff').gsub('Dragon','Breath')})"}.join(', ')}") if clzz.length>0
+  mspan.push("*Clases completas:* #{clzz.map{|q| q[4]}.join(', ')}") if clzz.length>0
+  if launch
+    m.push("\u{1F680} *Launch Units*")
+    mspan.push("\u{1F680} *Lanzamiento*")
+  end
   m.push('<:Assist_Music:454462054959415296> *Refreshers*') if dancers
+  mspan.push('<:Assist_Music:454462054959415296> *Refreshers*') if dancers
   if legendaries && mythics
     m.push('<:Legendary_Effect_Unknown:443337603945857024><:Mythic_Effect_Unknown:523328368079273984> *Legendaries/Mythics*')
+    mspan.push('<:Legendary_Effect_Unknown:443337603945857024><:Mythic_Effect_Unknown:523328368079273984> *Legendarios/Míticos*')
   elsif legendaries
     m.push('<:Legendary_Effect_Unknown:443337603945857024> *Legendaries*')
+    mspan.push('<:Legendary_Effect_Unknown:443337603945857024> *Legendarios*')
   elsif mythics
     m.push('<:Mythic_Effect_Unknown:523328368079273984> *Mythics*')
+    mspan.push('<:Mythic_Effect_Unknown:523328368079273984> *Míticos*')
   end
   if duos && harmonics
     m.push('<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234> *Duo/Harmonic Units*')
+    mspan.push('<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234> *Dúo/al Son*')
   elsif duos
     m.push('<:Hero_Duo:631431055420948480> *Duo Units*')
+    mspan.push('<:Hero_Duo:631431055420948480> *Dúo*')
   elsif harmonics
     m.push('<:Hero_Harmonic:722436762248413234> *Harmonic Units*')
+    mspan.push('<:Hero_Harmonic:722436762248413234> *al Son*')
   end
   m.push('<:Resplendent_Ascension:678748961607122945> *Resplendent*') if resplendents
+  mspan.push('<:Resplendent_Ascension:678748961607122945> *Resplandeciente*') if resplendents
   m.push("*Genders:* #{genders.map{|q| "#{q}#{'ale' if q=='M'}#{'emale' if q=='F'}"}.join(', ')}") if genders.length>0
+  mspan.push("*Géneros:* #{genders.map{|q| "M#{'asculino' if q=='M'}#{'ujer' if q=='F'}"}.join(', ')}") if genders.length>0
   m.push("*Games:* #{xgames.join(', ')}") if xgames.length>0
+  mspan.push("*Juegos:* #{xgames.join(', ')}") if xgames.length>0
   m.push("*Groups:* #{group.map{|q| q.fullName}.join(', ')}") if group.length>0
+  mspan.push("*Grupos:* #{group.map{|q| q.fullName}.join(', ')}") if group.length>0
   m.push("*Stats:* #{statlimits.join(', ')}") if statlimits.length>0
+  mspan.push("*Estadisticas:* #{statlimits.join(', ')}") if statlimits.length>0
   m.push("*Supernatures:* #{supernatures.map{|q| "#{q[1,q.length-1]} #{q[0].gsub('+','boon').gsub('-','bane')}"}.join(', ')}") if supernatures.length>0
+  mspan.push("*Supernaturalezas:* #{supernatures.map{|q| "#{q[1,q.length-1]} #{q[0].gsub('+','boon').gsub('-','bane')}"}.join(', ')}") if supernatures.length>0
   m.push("~~Xane's non-HP stats have little meaning when his weapon is equipped~~") if markxane
+  mspan.push("~~Las estadísticas que no son HP de Xane tienen poco significado cuando su arma está equipada~~") if markxane
   unless crsoff.nil?
-    m.push('')
+    m.push(''); mspan.push('')
     m.push('__**Excludes matches from this search**__')
-    m.push(crsoff[0])
-    m.flatten!
+    mspan.push('__**Excluye coincidencias de esta búsqueda**__')
+    m.push(crsoff[0]); mspan.push(crsoff[0])
+    m.flatten!; mspan.flatten!
     untz=untz.reject{|q| crsoff[1].map{|q| q.name}.include?(q.name)}
   end
   ulength=untz.length
   ulength*=2 if group.map{|q| q.name}.include?('HallOfForms') && !group.map{|q| q.name}.include?('Forma')
   ulength*=2 if group.map{|q| q.name}.include?('Prfless') && !group.map{|q| q.name}.include?('Up4Prf')
+  m=mspan.map{|q| q} if Shardizard==$spanishShard
   if (untz.map{|k| k.postName}.join("\n").length>=1900 || ulength>=25) && !safe_to_spam?(event) && !ignore_limit && mode != 13 && !paired
-    str="__**Unit search**__\n#{m.join("\n")}\n\n__**Note**__\nAt #{untz.length} entries, there were so many unit matches that I would prefer you use the command in PM."
-    str="#{str}\n\nI have noticed you are using the \"Hall of Forms\" group, which is a list of all units that appeared as playable in an HoF event.\nYou can reduce the number of units displayed by using the \"Forma\" group instead, as that's the list of units available with Forma Souls." if group.map{|q| q.name}.include?('HallOfForms') && !group.map{|q| q.name}.include?('Forma')
-    str="#{str}\n\nI have noticed you are using the \"Prfless\" group, which is a list of all non-seasonal units without a Prf weapon.\nYou can reduce the number of units displayed by using the \"Up4Prf\" group instead, as that's the list of all such units who are likely to receive a retro-Prf soon." if group.map{|q| q.name}.include?('Prfless') && !group.map{|q| q.name}.include?('Up4Prf')
+    if Shardizard==$spanishShard
+      str="__**Búsqueda de Personajes**__\n#{m.join("\n")}\n\n__**La Notica**__\nEn las entradas #{untz.length} hubo tantas coincidencias de caracteres que preferiría que usara este comando en mensajes privados."
+      str="#{str}\n\nHe notado que estás usando el grupo \"Hall of Forms\", que es una lista de todos los personajes que aparecieron como jugables en un evento de Galería quimérica.\nPuedes reducir el número de unidades mostradas usando el grupo \"Forma\" en su lugar, ya que esa es la lista de unidades disponibles con Forma Souls." if group.map{|q| q.name}.include?('HallOfForms') && !group.map{|q| q.name}.include?('Forma')
+      str="#{str}\n\nHe notado que estás usando el grupo \"Prfless\", que es una lista de todas las unidades no estacionales sin un arma Prf.\nPuede reducir el número de unidades mostradas utilizando el grupo \"Up4Prf\" en su lugar, ya que esa es la lista de todas esas unidades que probablemente recibirán un retro-Prf pronto." if group.map{|q| q.name}.include?('Prfless') && !group.map{|q| q.name}.include?('Up4Prf')
+    else
+      str="__**Unit search**__\n#{m.join("\n")}\n\n__**Note**__\nAt #{untz.length} entries, there were so many unit matches that I would prefer you use the command in PM."
+      str="#{str}\n\nI have noticed you are using the \"Hall of Forms\" group, which is a list of all units that appeared as playable in an HoF event.\nYou can reduce the number of units displayed by using the \"Forma\" group instead, as that's the list of units available with Forma Souls." if group.map{|q| q.name}.include?('HallOfForms') && !group.map{|q| q.name}.include?('Forma')
+      str="#{str}\n\nI have noticed you are using the \"Prfless\" group, which is a list of all non-seasonal units without a Prf weapon.\nYou can reduce the number of units displayed by using the \"Up4Prf\" group instead, as that's the list of all such units who are likely to receive a retro-Prf soon." if group.map{|q| q.name}.include?('Prfless') && !group.map{|q| q.name}.include?('Up4Prf')
+    end
     event.respond str
     return -2
   elsif mode==2
@@ -2441,6 +2624,27 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
     color_weapons.push(['Red','Tome']) if ['redtome','redtomes','redmage','redmages'].include?(args[i].downcase)
     color_weapons.push(['Blue','Tome']) if ['bluetome','bluetomes','bluemage','bluemages'].include?(args[i].downcase)
     color_weapons.push(['Green','Tome']) if ['greentome','greentomes','greenmage','greenmages'].include?(args[i].downcase)
+    if Shardizard==$spanishShard
+      skill_types.push('Weapon') if ['arma','armas'].include?(args[i].downcase)
+      skill_types.push('Assist') if ['asistencia','asistencias'].include?(args[i].downcase)
+      skill_types.push('Special') if ['especial','especiales'].include?(args[i].downcase)
+      skill_types.push('Passive') if ['pasiva','pasivas'].include?(args[i].downcase)
+      skill_types.push('Harmonic') if ['sol','alsol','resonante','resonantes','resonancia','resonancias'].include?(args[i].downcase)
+      colors.push('Red') if ['rojo','rojos','roja','rojas'].include?(args[i].downcase)
+      colors.push('Blue') if ['azul','azules'].include?(args[i].downcase)
+      colors.push('Green') if ['verde','verdes'].include?(args[i].downcase)
+      colors.push('Colorless') if ['gris','grises','translucida','translucido'].include?(args[i].downcase)
+      color_weapons.push(['Red','Blade']) if ['espada','espadas'].include?(args[i].downcase)
+      color_weapons.push(['Blue','Blade']) if ['lanza','lanzas'].include?(args[i].downcase)
+      color_weapons.push(['Green','Blade']) if ['hacha','hachas'].include?(args[i].downcase)
+      weapons.push('Blade') if ['fisica','fisico','fisicas','fisicos','filo','filos','cuerpo'].include?(args[i].downcase)
+      weapons.push('Tome') if ['tomo','mago','tomos','magos','distante'].include?(args[i].downcase)
+      weapons.push('Dragon') if ['cuerpo'].include?(args[i].downcase)
+      weapons.push('Beast') if ['bestia','bestias','cuerpo'].include?(args[i].downcase)
+      weapons.push('Bow') if ['arco','arca','arcos','arcas','distante'].include?(args[i].downcase)
+      weapons.push('Dagger') if ['daga','dagas','distante'].include?(args[i].downcase)
+      weapons.push('Staff') if ['curadora','curador','curadoras','curadores','clergio','clergios','distante'].include?(args[i].downcase)
+    end
   end
   for i in 0...args.length
     passive_subsets.push('Breathskill') if ['breath'].include?(args[i].downcase) && !skill_types.include?('weapon') && skill_types.length>0
@@ -2510,6 +2714,16 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
       elsif weapon_subsets.include?('Inheritable') && matches1[i].exclusivity.nil?
       elsif weapon_subsets.include?('Retro-Prf') && !matches1[i].exclusivity.nil? && matches1[i].prerequisite.nil?
       elsif weapon_subsets.include?('Pega-killer') && !weapon_subsets.include?('Effective') && matches1[i].tags.include?('Bow') && !matches1[i].tags.include?('UnBow')
+      elsif has_any?(weapon_subsets.map{|q| "(E)#{q}"},matches1[i].tags) && Shardizard==$spanishShard
+        matches1[i].name="#{matches1[i].name} *(+) Efecto*" unless norename
+      elsif has_any?(weapon_subsets.map{|q| "(R)#{q}"},matches1[i].tags) && Shardizard==$spanishShard
+        matches1[i].name="#{matches1[i].name} *(+) Todas*" unless norename
+      elsif has_any?(weapon_subsets.map{|q| "(R)#{q}"},matches1[i].tags) && Shardizard==$spanishShard
+        matches1[i].name="#{matches1[i].name} *- Transformada*" unless norename
+      elsif has_any?(weapon_subsets.map{|q| ["(ET)#{q}","(TE)#{q}","(E)(T)#{q}","(T)(E)#{q}"]}.flatten,matches1[i].tags) && Shardizard==$spanishShard
+        matches1[i].name="#{matches1[i].name} *(+) [Tsfrm]Efecto*" unless norename
+      elsif has_any?(weapon_subsets.map{|q| ["(RT)#{q}","(TR)#{q}","(R)(T)#{q}","(T)(R)#{q}"]}.flatten,matches1[i].tags) && Shardizard==$spanishShard
+        matches1[i].name="#{matches1[i].name} *(+) [Tsfrm]Todas*" unless norename
       elsif has_any?(weapon_subsets.map{|q| "(E)#{q}"},matches1[i].tags)
         matches1[i].name="#{matches1[i].name} *(+) Effect*" unless norename
       elsif has_any?(weapon_subsets.map{|q| "(R)#{q}"},matches1[i].tags)
@@ -2540,44 +2754,71 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
   sklz=sklz.reject{|q| (q.isPassive? || has_any?(q.type,['Duo','Harmonic'])) && !has_any?(passive_subsets,q.tags)} if passive_subsets.length>0
   sklz=sklz.reject{|q| q.type.include?('Duo')} unless passives.length>0 || passive_subsets.length>0 || skill_types.include?('Duo')
   sklz=sklz.reject{|q| q.type.include?('Harmonic')} unless passives.length>0 || passive_subsets.length>0 || skill_types.include?('Harmonic')
-  if sklz.length>=sklz2.length && !crsoff.nil?
+  if sklz.length>=sklz2.length && !crsoff.nil? && Shardizard==$spanishShard
+    event.respond 'Tu solicitud es un galimatías.' if ['hero','heroes','heros','unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
+    return -1
+  elsif sklz.length>=sklz2.length && !crsoff.nil?
     event.respond 'Your request is gibberish.' unless ['skill','skills'].include?(args[0].downcase)
     return -1
   end
-  m=[]
+  m=[]; m2=[]; mspan=[]
   skill_types=skill_types2.map{|q| q}
   for i in 0...skill_types2.length
     moji=bot.server(443704357335203840).emoji.values.reject{|q| q.name != "Skill_#{skill_types2[i]}"}
     moji=bot.server(443704357335203840).emoji.values.reject{|q| q.name != "#{skill_types2[i]}"} if skill_types2[i]=='Passive'
+    m2[i]="#{moji[0].mention unless moji.length<=0} #{skill_types2[i].gsub('Weapon','Arma').gsub('Assist','Asistencia').gsub('Special','Especial').gsub('Passive','Pasiva').gsub('Duo','Dúo').gsub('Harmonic','al Son')}"
     skill_types2[i]="#{moji[0].mention} #{skill_types2[i]}" unless moji.length<=0
   end
   m.push("*Skill types:* #{skill_types2.join(', ')}") if skill_types2.length>0
+  mspan.push("*Tipos de habilidades:* #{m2.join(', ')}") if m2.length>0
+  m2=[]
   for i in 0...colors2.length
     moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{colors2[i]}_Unknown"}
+    m2[i]="#{moji[0].mention unless moji.length<=0} #{colors2[i].gsub('Red','Roja').gsub('Blue','Azul').gsub('Green','Verde').gsub('Colorless','Gris')}"
     colors2[i]="#{moji[0].mention} #{colors2[i]}" unless moji.length<=0
   end
   m.push("*Weapon colors:* #{colors2.join(', ')}") if colors2.length>0
+  mspan.push("*Colores de armas:* #{m2.join(', ')}") if m2.length>0
+  m2=[]
   for i in 0...weapons.length
     moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "Gold_#{weapons[i].gsub('Healer','Staff')}"}
+    m2[i]="#{moji[0].mention unless moji.length<=0} #{weapons[i].gsub('Blade','Filo').gsub('Tome','Tomo').gsub('Dragon',"Drag\u00F3n").gsub('Colorless','Gris').gsub('Dagger','Daga').gsub('Bow','Arco').gsub('Staff','Bastón').gsub('Beast','Bestia')}"
     weapons[i]="#{moji[0].mention} #{weapons[i]}" unless moji.length<=0
   end
   m.push("*Weapon types:* #{weapons.map{|q| q.gsub('Healer','Staff').gsub('Dragon','Breath')}.join(', ')}") if weapons.length>0
+  mspan.push("*Tipos de armas:* #{m2.join(', ')}") if m2.length>0
+  m2=[]
   for i in 0...color_weapons.length
     moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{color_weapons[i][0]}_#{color_weapons[i][1]}"}
+    m2[i]=color_weapons[i].map{|q| q}.reverse
+    m2[i][0]=m2[i][0].gsub('Blade','Filo').gsub('Tome','Tomo').gsub('Dragon',"Drag\u00F3n").gsub('Colorless','Gris').gsub('Dagger','Daga').gsub('Bow','Arco').gsub('Staff','Bastón').gsub('Beast','Bestia')
+    m2[i][1]=m2[i][1].gsub('Red','Roja').gsub('Blue','Azul').gsub('Green','Verde').gsub('Colorless','Gris')
+    m2[i][1]='Rojo' if m2[i][1]=='Roja' && ['Filo','Tomo',"Drag\u00F3n",'Arco'].include?(m2[i][0]) # the word for red is gendered
+    m2[i]=m2[i].join(' ')
     color_weapons[i]=color_weapons[i].join(' ').gsub('Healer','Staff')
+    m2[i]='Espada (Filo Rojo)' if color_weapons[i]=='Red Blade'
     color_weapons[i]='Sword (Red Blade)' if color_weapons[i]=='Red Blade'
+    m2[i]='Lanza (Filo Azul)' if color_weapons[i]=='Blue Blade'
     color_weapons[i]='Lance (Blue Blade)' if color_weapons[i]=='Blue Blade'
+    m2[i]='Hacha (Filo Verde)' if color_weapons[i]=='Green Blade'
     color_weapons[i]='Axe (Green Blade)' if color_weapons[i]=='Green Blade'
+    m2[i]="Ca\u00D1a (Filo Gris)" if color_weapons[i]=='Colorless Blade'
     color_weapons[i]='Rod (Colorless Blade)' if color_weapons[i]=='Colorless Blade'
     color_weapons[i]="#{moji[0].mention} #{color_weapons[i]}" unless moji.length<=0
+    m2[i]="#{moji[0].mention} #{m2[i]}" unless moji.length<=0
   end
-  m.push("*Complete weapons:* #{color_weapons.join(', ').gsub('Healer','Staff')}") if color_weapons.length>0
+  m.push("*Complete weapons:* #{color_weapons.join(', ').gsub('Healer','Bastón')}") if color_weapons.length>0
+  mspan.push("*Armas completas:* #{m2.join(', ')}") if m2.length>0
+  m2=[]
   m.push("*Weapon subtypes:* #{weapon_subsets.join(', ')}") if weapon_subsets.length>0 && (skill_types.length<=0 || skill_types.include?('Weapon'))
+  mspan.push("*Subtipos de armas:* #{weapon_subsets.join(', ')}") if weapon_subsets.length>0 && (skill_types.length<=0 || skill_types.include?('Weapon'))
   for i in 0...assists.length
     moji=bot.server(449988713330769920).emoji.values.reject{|q| q.name != "Assist_#{assists[i]}"}
+    m2[i]="#{moji[0].mention unless moji.length<=0} #{assists[i].gsub('Staff','Bastón').gsub('Rally','Potenciar').gsub('Music','Musica').gsub('Health','HP').gsub('Move','Movimiento')}"
     assists[i]="#{moji[0].mention} #{assists[i]}" unless moji.length<=0
   end
   m.push("*Assist subtypes:* #{assists.join(', ')}") if assists.length>0 && (skill_types.length<=0 || skill_types.include?('Assist'))
+  mspan.push("*Subtipos de asistencia:* #{m2.join(', ')}") if m2.length>0 && (skill_types.length<=0 || skill_types.include?('Assist'))
   for i in 0...specials.length
     moji=bot.server(449988713330769920).emoji.values.reject{|q| q.name != "Special_#{specials[i].gsub('Staff','Healer')}"}
     specials[i]="#{moji[0].mention} #{specials[i]}" unless moji.length<=0
@@ -2587,6 +2828,7 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
     specials[i]="#{moji[0].mention} #{specials[i]}" unless moji.length<=0
   end
   m.push("*Special subtypes:* #{specials.join(', ')}") if specials.length>0 && (skill_types.length<=0 || skill_types.include?('Special'))
+  mspan.push("*Subtipos de especial:* #{specials.map{|q| q.gsub('Staff','Bastón').gsub('Offensive','Ataque').gsub('Defensive','Defensa').gsub('Umbra','Sombrío').gsub('Umbra','Sombrío')}.join(', ')}") if specials.length>0 && (skill_types.length<=0 || skill_types.include?('Special'))
   for i in 0...passives.length
     passives[i]='<:Passive_A:443677024192823327> A' if passives[i]=='A'
     passives[i]='<:Passive_B:443677023257493506> B' if passives[i]=='B'
@@ -2595,15 +2837,18 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
     passives[i]='<:Passive_W:443677023706152960> W' if passives[i]=='W'
   end
   m.push("*Passive slots:* #{passives.join(', ')}") if passives.length>0
+  mspan.push("*Ranura pasiva:* #{passives.join(', ')}") if passives.length>0
   m.push("*Passive subtypes:* #{passive_subsets.map{|q| q.gsub('Staff','<:Passive_Staff:443677023848890388> Staff')}.join(', ')}") if passive_subsets.length>0 && (skill_types.length<=0 || skill_types.include?('Passive'))
+  mspan.push("*Subtipo de pasivo:* #{passive_subsets.map{|q| q.gsub('Staff','<:Passive_Staff:443677023848890388> Bastón')}.join(', ')}") if passive_subsets.length>0 && (skill_types.length<=0 || skill_types.include?('Passive'))
   f2=sklz.map{|q| q}
   # display passive lines with multiple entries in the list as only one entry
   sklz=sklz.reject{|q| q.isPassive? && !q.level.nil? && !['-','example'].include?(q.level) && sklz.reject{|q2| q2.id/10!=q.id/10}.length>1}
   unless crsoff.nil?
-    m.push('')
+    m.push(''); mspan.push('')
     m.push('__**Excludes matches from this search**__')
-    m.push(crsoff[0])
-    m.flatten!
+    mspan.push('__**Excluye coincidencias de esta búsqueda**__')
+    m.push(crsoff[0]); mspan.push(crsoff[0])
+    m.flatten!; mspan.flatten!
     sklz=sklz.reject{|q| crsoff[2].map{|q| q.fullName}.include?(q.fullName)}
   end
   unless sklz.length<=100
@@ -2611,6 +2856,7 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
     sklz=sklz.reject{|q| 'Squad Ace '==q.name[0,10]} unless has_any?(args.map{|q| q.downcase},['squadace','squad','all'])
     sklz=sklz.reject{|q| 'Initiate Seal '==q.name[0,14]} unless has_any?(args.map{|q| q.downcase},['initiateseal','initiate','all'])
     m.push("A total of #{f2x-sklz.length} *Squad Ace* and *Initiate Seal* skills have been filtered out by default") unless sklz.length==f2x
+    mspan.push("Un total de #{f2x-sklz.length} *As del asalto* y *S. iniciado* habilidades se han filtrado de forma predeterminada") unless sklz.length==f2x
   end
   unless norename
     for i in 0...sklz.length # display items with both the non-plus and + versions in the list as only one entry
@@ -2626,7 +2872,7 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
         y.push(z)
         y.flatten!
       elsif has_any?(z.map{|q| q.tags}.flatten,['Iron','Steel','Silver']) && z[-1].name.split(' ').length>1 && !z[0].restrictions.include?('Dragons Only')
-        z[-1].name="#{z.map{|q| q.name.split(' ')[0]}.join('/')} #{z[-1].name.split{' '}[1,z[-1].name.split{' '}.length-1].join(' ')}"
+        z[-1].name="#{z.map{|q| q.name.split(' ')[0]}.join('/')} #{z[-1].name.split(' ')[1,z[-1].name.split{' '}.length-1].join(' ')}"
         y.push(z[-1])
       else
         z[-1].name=z.map{|q| q.name}.join('/')
@@ -2635,11 +2881,14 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
     end
     sklz=y.map{|q| q}
   end
+  m=mspan.map{|q| q} if Shardizard==$spanishShard
   if (sklz.length>25 || sklz.map{|q| q.fullName(f2)}.join("\n").length>=1900) && !safe_to_spam?(event) && mode==3 && !paired && !ignore_limit
-    event.respond "__**Skill search**__\n#{m.join("\n")}\n\n__**Note**__\nAt #{sklz.length} entries, there were so many skill matches that I would prefer you use the command in PM." unless paired
+    event.respond "__**Skill search**__\n#{m.join("\n")}\n\n__**Note**__\nAt #{sklz.length} entries, there were so many skill matches that I would prefer you use the command in PM." unless paired || Shardizard==$spanishShard
+    event.respond "__**Búsqueda de Habilidades**__\n#{m.join("\n")}\n\n__**La Notica**__\nEn las entradas #{sklz.length} hubo tantas coincidencias de caracteres que preferiría que usara este comando en mensajes privados." unless paired || Shardizard !=$spanishShard
     return -2
   elsif sklz.length.zero?
-    event.respond 'There were no skills that matched your request.' unless paired
+    event.respond 'There were no skills that matched your request.' unless paired || Shardizard==$spanishShard
+    event.respond 'No hubo habilidades que coincidieran con su solicitud.' unless paired || Shardizard !=$spanishShard
     return -2
   elsif mode==1
     f=sklz.map{|k| k.fullName(f2)}
@@ -2667,25 +2916,31 @@ def find_in_banners(bot,event,args=nil,mode=0,ff=false,ignore_limit=false)
   end
   xtags.uniq!
   b=b.reject{|q| q.tags.include?('Dynamic')} unless mode==1
-  m=[]
+  m=[]; mspan=[]
   if xtags.include?('Current') && xtags.include?('Upcoming')
     m.push('*Current/Upcoming Banners*')
+    mspan.push('*Pancartas actuales y futuros*')
     b=b.reject{|q| q.isPast? || q.start_date.nil? || q.end_date.nil?}
   elsif xtags.include?('Current')
     m.push('*Current Banners*')
+    mspan.push('*Pancartas actuales*')
     b=b.reject{|q| !q.isCurrent?}
   elsif xtags.include?('Upcoming')
     m.push('*Upcoming Banners*')
+    mspan.push('*Pancartas futuros*')
     b=b.reject{|q| !q.isFuture?}
   end
   xtags=xtags.reject{|q| ['Current','Upcoming'].include?(q)}
   if xtags.length>0
     m.push("*Tags:* #{xtags.join(', ')}")
+    mspan.push("*Etiquetas:* #{xtags.join(', ')}")
     if event.message.text.downcase.split(' ').include?('any')
       m.push('(searching for banners with any listed tag)') if xtags.length>1
+      mspan.push('(buscando pancartas con cualquier etiqueta de la lista)') if xtags.length>1
       b=b.reject{|q| !has_any?(xtags, q.tags)}
     else
       m.push("(searching for banners with all listed tags)\n\n__**Additional Notes**__\nSearching defaults to searching for banners with all listed tags.\nTo search for banners with any of the listed tags, perform the search again with the word \"any\" in your message.") if xtags.length>1
+      mspan.push("(buscando banners con todas las etiquetas enumeradas)\n\n__**La Notica**__\nLa búsqueda tiene como valor predeterminado la búsqueda de banners con todas las etiquetas enumeradas.\nPara buscar pancartas con cualquiera de las etiquetas enumeradas, vuelva a realizar la búsqueda con la palabra \"any\" en su mensaje.") if xtags.length>1
       for i in 0...xtags.length
         b=b.reject{|q| !q.tags.include?(xtags[i])}
       end
@@ -2693,11 +2948,16 @@ def find_in_banners(bot,event,args=nil,mode=0,ff=false,ignore_limit=false)
   end
   b.reverse!
   b.uniq!
-  if (b.length>25 || b.map{|q| q.name}.join("\n").length>=1900) && !safe_to_spam?(event) && mode==0 && !ignore_limit
+  m=mspan.map{|q| q} if Shardizard==$spanishShard
+  if (b.length>25 || b.map{|q| q.name}.join("\n").length>=1900) && !safe_to_spam?(event) && mode==0 && !ignore_limit && Shardizard==$spanishShard
+    event.respond "__**Búsqueda de Pancartas**__\n#{m.join("\n")}\n\n__**La Notica**__\nEn las entradas #{b.length} hubo tantas coincidencias de caracteres que preferiría que usara este comando en mensajes privados."
+    return -2
+  elsif (b.length>25 || b.map{|q| q.name}.join("\n").length>=1900) && !safe_to_spam?(event) && mode==0 && !ignore_limit
     event.respond "__**Banner search**__\n#{m.join("\n")}\n\n__**Note**__\nAt #{b.length} entries, there were so many banner matches that I would prefer you use the command in PM."
     return -2
   elsif b.length.zero?
-    event.respond 'There were no banners that matched your request.'
+    event.respond 'There were no banners that matched your request.' unless paired || Shardizard==$spanishShard
+    event.respond 'No hubo pancartas que coincidieran con su solicitud.' unless paired || Shardizard !=$spanishShard
     return -2
   else
     return [m,b]
@@ -2718,43 +2978,54 @@ def display_units(bot,event,args=nil,mode=0)
   k2=k.reject{|q| !q.fake.nil?}
   f=nil
   f=triple_finish(k.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}) unless k.length<=0
+  texto=['Unit Search','Results']
+  texto=['Búsqueda de Personajes','Resultados'] if Shardizard==$spanishShard
   if k.length<=0 && ($embedless.include?(event.user.id) || was_embedless_mentioned?(event))
-    event.respond "__**Unit search**__\n#{mk.join("\n")}\n\n__**Results**__\nNo matches found"
+    event.respond "__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__\n#{nomf()}"
     return nil
   elsif k.length<=0
-    create_embed(event,"__**Unit search**__\n#{mk.join("\n")}\n\n__**Results**__",'No matches found',0xD49F61)
+    create_embed(event,"__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__",nomf(),0xD49F61)
     return nil
   elsif k.map{|q| q.unit_group(true)}.uniq.length<=1 && k[0].weapon_type=='Tome' && k.map{|q| q.tome_tree}.uniq.length>1
     f=[]
-    f.push(['<:Fire_Tome:499760605826252800> Fire Mages',k.reject{|q| q.tome_tree != 'Fire'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if k.reject{|q| q.tome_tree != 'Fire'}.length>0
-    f.push(['<:Dark_Tome:499958772073103380> Dark Mages',k.reject{|q| q.tome_tree != 'Dark'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if k.reject{|q| q.tome_tree != 'Dark'}.length>0
-    f.push(['<:Thunder_Tome:499790911178539009> Thunder Mages',k.reject{|q| q.tome_tree != 'Thunder'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if k.reject{|q| q.tome_tree != 'Thunder'}.length>0
-    f.push(['<:Light_Tome:499760605381787650> Light Mages',k.reject{|q| q.tome_tree != 'Light'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if k.reject{|q| q.tome_tree != 'Light'}.length>0
-    f.push(['<:Wind_Tome:499760605713137664> Wind Mages',k.reject{|q| q.tome_tree != 'Wind'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if k.reject{|q| q.tome_tree != 'Wind'}.length>0
-    f.push(['<:Stone_Tome:694404021313732648> Stone Mages',k.reject{|q| q.tome_tree != 'Stone'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if k.reject{|q| q.tome_tree != 'Stone'}.length>0
+    f.push(['<:Fire_Tome:499760605826252800> Fire Mages',k.reject{|q| q.tome_tree != 'Fire'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Fire_Tome:499760605826252800> Magos de Fuego']) if k.reject{|q| q.tome_tree != 'Fire'}.length>0
+    f.push(['<:Dark_Tome:499958772073103380> Dark Mages',k.reject{|q| q.tome_tree != 'Dark'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Dark_Tome:499958772073103380> Magos de Ruina']) if k.reject{|q| q.tome_tree != 'Dark'}.length>0
+    f.push(['<:Thunder_Tome:499790911178539009> Thunder Mages',k.reject{|q| q.tome_tree != 'Thunder'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Thunder_Tome:499790911178539009> Magos de Trueno']) if k.reject{|q| q.tome_tree != 'Thunder'}.length>0
+    f.push(['<:Light_Tome:499760605381787650> Light Mages',k.reject{|q| q.tome_tree != 'Light'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Light_Tome:499760605381787650> Magos de Luz']) if k.reject{|q| q.tome_tree != 'Light'}.length>0
+    f.push(['<:Wind_Tome:499760605713137664> Wind Mages',k.reject{|q| q.tome_tree != 'Wind'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Wind_Tome:499760605713137664> Magos de Viento']) if k.reject{|q| q.tome_tree != 'Wind'}.length>0
+    f.push(['<:Stone_Tome:694404021313732648> Stone Mages',k.reject{|q| q.tome_tree != 'Stone'}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Stone_Tome:694404021313732648> Magos de Roca']) if k.reject{|q| q.tome_tree != 'Stone'}.length>0
   elsif k.map{|q| q.weapon_color}.uniq.length>1
     f=[]
     x=k[0].weapon_type
+    xs=k[0].weapon_spanish[1]
     x='Unknown' if k.map{|q| q.weapon_type}.uniq.length>1
+    xs='Ignoto' if k.map{|q| q.weapon_type}.uniq.length>1
+    xs='Bastón' if x=='Staff'
     x5="#{x}"
     x='Mage' if x=='Tome'
     x2=['Red','Blue','Green','Colorless','Gold']
+    x2s=['Rojo','Azul','Verde','Gris','Oro']
     for i in 0...x2.length
       mojix=''
       moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{x2[i]}_#{x5}"}
       mojix=moji[0].mention unless moji.length<=0
       x3="#{x2[i]}#{" #{x}s" unless x=='Unknown'}".gsub('Staffs','Healers')
+      x3s="#{"#{xs} " unless x=='Unknown'}#{x2s[i]}"
+      x3s=['Espada','Lanza','Hacha',"Ca\u00D1a"][i] if x=='Blade' && i<=3
       x3="Swords" if x3=='Red Blades'
       x3="Lances" if x3=='Blue Blades'
       x3="Axes" if x3=='Green Blades'
       x3="Rods" if x3=='Colorless Blades'
-      f.push(["#{mojix} #{x3}",k.reject{|q| q.weapon_color != x2[i]}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if k.reject{|q| q.weapon_color != x2[i]}.length>0
+      k3=k.reject{|q| q.weapon_color != x2[i]}
+      f.push(["#{mojix} #{x3}",k3.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),"#{mojix} #{x3s}"]) if k3.length>0
     end
   elsif k.map{|q| q.weapon_type}.uniq.length>1
     f=[]
     x=k.map{|q| q.weapon_type}.uniq
     x2=k[0].weapon_color
+    x2s=k[0].weapon_spanish[0]
     x2='Gold' if k.map{|q| q.weapon_color}.uniq.length>1
+    x2s='Oro' if k.map{|q| q.weapon_color}.uniq.length>1
     for i in 0...x.length
       mojix=''
       moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{x2}_#{x[i]}"}
@@ -2764,7 +3035,10 @@ def display_units(bot,event,args=nil,mode=0)
       x3="Lances" if x3=='Blue Blades'
       x3="Axes" if x3=='Green Blades'
       x3="Rods" if x3=='Colorless Blades'
-      f.push(["#{mojix} #{x3}",k.reject{|q| q.weapon_type != x[i]}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if k.reject{|q| q.weapon_type != x[i]}.length>0
+      k3=k.reject{|q| q.weapon_type != x[i]}
+      x3s="#{"#{k3[0].weapon_spanish[1]} " unless x=='Unknown'}#{x2s}"
+      x3s=['Espada','Lanza','Hacha',"Ca\u00D1a"][k3[0].colorAsNumber-1] if x[i]=='Blade' && x2 != 'Gold'
+      f.push(["#{mojix} #{x3}",k3.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),"#{mojix} #{x3s}"]) if k3.length>0
     end
   elsif k.map{|q| q.movement}.uniq.length>1
     f=[]
@@ -2775,23 +3049,32 @@ def display_units(bot,event,args=nil,mode=0)
       mojix=moji[0].mention unless moji.length<=0
       x3="#{x[i]}"
       x3="#{x[i]}s" if ['Flier','Armor'].include?(x[i])
-      f.push(["#{mojix} #{x3}",k.reject{|q| q.movement != x[i]}.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if k.reject{|q| q.movement != x[i]}.length>0
+      k3=k.reject{|q| q.movement != x[i]}
+      f.push(["#{mojix} #{x3}",k3.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),"#{mojix} #{k3[0].movement_spanish}"]) if k2.length>0
     end
   elsif mk.include?('<:Assist_Music:454462054959415296> *Refreshers*')
     f2=[k.reject{|q| !q.isRefresher?('Dancer')}.length,k.reject{|q| !q.isRefresher?('Singer')}.length,k.reject{|q| !q.isRefresher?('Bard')}.length]
     if f2.reject{|q| q<=0}.length>1
       f=[]
       f2=k.reject{|q| !q.isRefresher?('Dancer')}
-      f.push(['Dancers',f2.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if f2.length>0
+      f.push(['Dancers',f2.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'Bailarínes']) if f2.length>0
       f2=k.reject{|q| !q.isRefresher?('Singer')}
-      f.push(['Singers',f2.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if f2.length>0
+      f.push(['Singers',f2.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'Cantantes']) if f2.length>0
       f2=k.reject{|q| !q.isRefresher?('Bard')}
-      f.push(['Bards',f2.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if f2.length>0
+      f.push(['Bards',f2.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'Bardos']) if f2.length>0
     end
   end
+  if f.nil?
+  elsif Shardizard==$spanishShard
+    f=f.map{|q| [q[2*((q.length-1)/2)],q[1]]}
+  else
+    f=f.map{|q| [q[0],q[1]]}
+  end
   metadata_load()
-  if $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__**Unit search**__\n#{mk.join("\n")}\n\n__**Results**__\n#{f.map{|q| "*#{q[0]}:* #{q[1].gsub("\n",', ')}"}}\n\n#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}".length>=1900
-    str="__**Unit search**__\n#{mk.join("\n")}\n\n__**Results**__"
+  buff=''
+  buff=' en' if Shardizard==$spanishShard
+  if $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__\n#{f.map{|q| "*#{q[0]}:* #{q[1].gsub("\n",', ')}"}}\n\n#{k.length}#{buff} total#{" (#{k2.length}#{buff} actual)" unless k2.length>=k.length}".length>=1900
+    str="__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__"
     if f.length<=1
       f=f[0][1].split("\n")
       for i in 0...f.length
@@ -2811,14 +3094,14 @@ def display_units(bot,event,args=nil,mode=0)
         end
       end
     end
-    str=extend_message(str,"#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}",event,2)
+    str=extend_message(str,"#{k.length}#{buff} total#{" (#{k2.length}#{buff} actual)" unless k2.length>=k.length}",event,2)
     event.respond str
   elsif f.length<=1 && k.length<=10
     str=k.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")
-    create_embed(event,"__**Unit search**__\n#{mk.join("\n")}\n\n__**Results**__",str,0xD49F61,"#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}")
+    create_embed(event,"__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__",str,0xD49F61,"#{k.length}#{buff} total#{" (#{k2.length}#{buff} actual)" unless k2.length>=k.length}")
   else
     f=triple_finish(k.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}) if f.length<=1
-    create_embed(event,"__**Unit search**__\n#{mk.join("\n")}\n\n__**Results**__",'',0xD49F61,"#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}",nil,f,2)
+    create_embed(event,"__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__",'',0xD49F61,"#{k.length}#{buff} total#{" (#{k2.length}#{buff} actual)" unless k2.length>=k.length}",nil,f,2)
   end
   return nil
 end
@@ -2838,49 +3121,51 @@ def display_skills(bot,event,args=nil,mode=0)
   k2=k.reject{|q| !q.fake.nil?}
   f=nil
   f=triple_finish(k.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}) unless k.length<=0
+  texto=['Skill Search','Results']
+  texto=['Búsqueda de Habilidades','Resultados'] if Shardizard==$spanishShard
   if k.length<=0 && ($embedless.include?(event.user.id) || was_embedless_mentioned?(event))
-    event.respond "__**Skill search**__\n#{mk.join("\n")}\n\n__**Results**__\nNo matches found"
+    event.respond "__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__\n#{nomf()}"
     return nil
   elsif k.length<=0
-    create_embed(event,"__**Skill search**__\n#{mk.join("\n")}\n\n__**Results**__",'No matches found',0xD49F61)
+    create_embed(event,"__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__",nomf(),0xD49F61)
     return nil
   elsif k.reject{|q| q.type.include?('Weapon')}.length<=0 && k.reject{|q| q.restrictions[0].include?('Tome Users Only')}.length<=0 && k.map{|q| q.restrictions[0]}.uniq.length<=1
     f=[]
     if k.reject{|q| q.restrictions[0].include?('Red Tome Users Only')}.length<=0
       x=k.reject{|q| q.tome_tree != 'Fire'}
-      f.push(['<:Fire_Tome:499760605826252800> Fire Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+      f.push(['<:Fire_Tome:499760605826252800> Fire Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Fire_Tome:499760605826252800> Magia de Fuego']) if x.length>0
       x=k.reject{|q| q.tome_tree != 'Raudr'}
-      f.push(['<:Red_Tome:443172811826003968> Raudr Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+      f.push(['<:Red_Tome:443172811826003968> Raudr Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Red_Tome:443172811826003968> Magia de Raudr']) if x.length>0
       x=k.reject{|q| q.tome_tree != 'Dark'}
-      f.push(['<:Dark_Tome:499958772073103380> Dark Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+      f.push(['<:Dark_Tome:499958772073103380> Dark Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Dark_Tome:499958772073103380> Magia de Ruina']) if x.length>0
     elsif k.reject{|q| q.restrictions[0].include?('Blue Tome Users Only')}.length<=0
       x=k.reject{|q| q.tome_tree != 'Thunder'}
-      f.push(['<:Thunder_Tome:499790911178539009> Thunder Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+      f.push(['<:Thunder_Tome:499790911178539009> Thunder Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Thunder_Tome:499790911178539009> Magia de Trueno']) if x.length>0
       x=k.reject{|q| q.tome_tree != 'Blar'}
-      f.push(['<:Blue_Tome:467112472394858508> Blar Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+      f.push(['<:Blue_Tome:467112472394858508> Blar Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Blue_Tome:467112472394858508> Magia de Blar']) if x.length>0
       x=k.reject{|q| q.tome_tree != 'Light'}
-      f.push(['<:Light_Tome:499760605381787650> Light Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+      f.push(['<:Light_Tome:499760605381787650> Light Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Light_Tome:499760605381787650> Magia de Luz']) if x.length>0
     elsif k.reject{|q| q.restrictions[0].include?('Green Tome Users Only')}.length<=0
       x=k.reject{|q| q.tome_tree != 'Wind'}
-      f.push(['<:Wind_Tome:499760605713137664> Wind Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+      f.push(['<:Wind_Tome:499760605713137664> Wind Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Wind_Tome:499760605713137664> Magia de Viento']) if x.length>0
       x=k.reject{|q| q.tome_tree != 'Gronn'}
-      f.push(['<:Green_Tome:467122927666593822> Gronn Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+      f.push(['<:Green_Tome:467122927666593822> Gronn Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Green_Tome:467122927666593822> Magia de Gronn']) if x.length>0
     elsif k.reject{|q| q.restrictions[0].include?('Colorless Tome Users Only')}.length<=0
       x=k.reject{|q| q.tome_tree != 'Stone'}
-      f.push(['<:Stone_Tome:694404021313732648> Stone Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+      f.push(['<:Stone_Tome:694404021313732648> Stone Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Stone_Tome:694404021313732648> Magia de Roca']) if x.length>0
       x=k.reject{|q| q.tome_tree != 'Hoss'}
-      f.push(['<:Colorless_Tome:443692133317345290> Hoss Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+      f.push(['<:Colorless_Tome:443692133317345290> Hoss Magic',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Colorless_Tome:443692133317345290> Magia de Hoss']) if x.length>0
     end
   elsif k.reject{|q| q.type.include?('Weapon')}.length<=0 && k.reject{|q| q.restrictions[0].include?('Beasts Only')}.length<=0
     f=[]
     x=k.reject{|q| q.tome_tree != 'Infantry'}
-    f.push(['<:Icon_Move_Infantry:443331187579289601> Infantry Beast weapons',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Icon_Move_Infantry:443331187579289601> Infantry Beast weapons',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Icon_Move_Infantry:443331187579289601> Bestia de Infantería']) if x.length>0
     x=k.reject{|q| q.tome_tree != 'Armor'}
-    f.push(['<:Icon_Move_Armor:443331186316673025> Armor Beast weapons',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Icon_Move_Armor:443331186316673025> Armor Beast weapons',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Icon_Move_Armor:443331186316673025> Bestia de Blindada']) if x.length>0
     x=k.reject{|q| q.tome_tree != 'Flier'}
-    f.push(['<:Icon_Move_Flier:443331186698354698> Flying Beast weapons',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Icon_Move_Flier:443331186698354698> Flying Beast weapons',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Icon_Move_Flier:443331186698354698> Bestia de Volador']) if x.length>0
     x=k.reject{|q| q.tome_tree != 'Cavalry'}
-    f.push(['<:Icon_Move_Cavalry:443331186530451466> Cavalry Beast weapons',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Icon_Move_Cavalry:443331186530451466> Cavalry Beast weapons',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Icon_Move_Cavalry:443331186530451466> Bestia de Caballería']) if x.length>0
   elsif k.reject{|q| q.type.include?('Weapon')}.length<=0
     colorsx=k.map{|q| q.tags.reject{|q2| !['Red','Blue','Green','Colorless','Gold'].include?(q2)}}
     colors=[]
@@ -2898,145 +3183,153 @@ def display_skills(bot,event,args=nil,mode=0)
     emotes[0]='<:Colorless_Staff:443692132323295243>' unless $units.reject{|q| !q.isPostable?(event) || q.weapon_type != 'Healer' || q.weapon_color == 'Colorless'}.length>0
     f=[]
     x=k.reject{|q| !q.restrictions.include?('Sword Users Only')}
-    f.push(['<:Red_Blade:443172811830198282> Swords',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Red_Blade:443172811830198282> Swords',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Red_Blade:443172811830198282> Espadas']) if x.length>0
     x=k.reject{|q| !q.restrictions.include?('Red Tome Users Only')}
-    f.push(['<:Red_Tome:443172811826003968> Red Tomes',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Red_Tome:443172811826003968> Red Tomes',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Red_Tome:443172811826003968> Tomos Rojos']) if x.length>0
     x=k.reject{|q| !q.restrictions.include?('Lance Users Only')}
-    f.push(['<:Blue_Blade:467112472768151562> Lances',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Blue_Blade:467112472768151562> Lances',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Blue_Blade:467112472768151562> Lanzas']) if x.length>0
     x=k.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}
-    f.push(['<:Blue_Tome:467112472394858508> Blue Tomes',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Blue_Tome:467112472394858508> Blue Tomes',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Blue_Tome:467112472394858508> Tomos Azules']) if x.length>0
     x=k.reject{|q| !q.restrictions.include?('Axe Users Only')}
-    f.push(['<:Green_Blade:467122927230386207> Axes',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Green_Blade:467122927230386207> Axes',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Green_Blade:467122927230386207> Hachas']) if x.length>0
     x=k.reject{|q| !q.restrictions.include?('Green Tome Users Only')}
-    f.push(['<:Green_Tome:467122927666593822> Green Tomes',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Green_Tome:467122927666593822> Green Tomes',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Green_Tome:467122927666593822> Tomos Verdes']) if x.length>0
     x=k.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}
-    f.push(['<:Colorless_Tome:443692133317345290> Colorless Tomes',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Colorless_Tome:443692133317345290> Colorless Tomes',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Colorless_Tome:443692133317345290> Tomos Grises']) if x.length>0
     x=k.reject{|q| !q.restrictions.include?('Dragons Only')}
-    f.push(["#{emotes[2]} Dragon Breaths",x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(["#{emotes[2]} Dragon Breaths",x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),"#{emotes[2]} Dragónes"]) if x.length>0
     x=k.reject{|q| !q.restrictions.include?('Bow Users Only')}
-    f.push(["#{emotes[3]} Bows",x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(["#{emotes[3]} Bows",x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),"#{emotes[3]} Arcos"]) if x.length>0
     x=k.reject{|q| !q.restrictions.include?('Dagger Users Only')}
-    f.push(["#{emotes[1]} Daggers",x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(["#{emotes[1]} Daggers",x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),"#{emotes[1]} Dagas"]) if x.length>0
     x=k.reject{|q| !q.restrictions.include?('Beasts Only')}
-    f.push(["#{emotes[4]} Beast Damage",x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(["#{emotes[4]} Beast Damage",x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),"#{emotes[4]} Bestias"]) if x.length>0
     x=k.reject{|q| !q.restrictions.include?('Staff Users Only')}
-    f.push(["#{emotes[0]} Damaging Staves",x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(["#{emotes[0]} Damaging Staves",x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),"#{emotes[0]} Bastones Dañinos"]) if x.length>0
   elsif k.reject{|q| q.type.include?('Assist')}.length<=0
     f=[]
     x=k.reject{|q| !q.tags.include?('Music')}
-    f.push(['<:Assist_Music:454462054959415296> Musical Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Assist_Music:454462054959415296> Musical Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Assist_Music:454462054959415296> Asistencias Musicales']) if x.length>0
     x=k.reject{|q| !q.tags.include?('Staff')}
-    f.push(['<:Assist_Staff:454451496831025162> Healing Staves',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Assist_Staff:454451496831025162> Healing Staves',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Assist_Staff:454451496831025162> Bastones Curativos']) if x.length>0
     x=k.reject{|q| !q.tags.include?('Move') || q.tags.include?('Music') || q.tags.include?('Staff')}
-    f.push(['<:Assist_Move:454462055479508993> Movement Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Assist_Move:454462055479508993> Movement Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Assist_Move:454462055479508993> Asistencias Movimientos']) if x.length>0
     x=k.reject{|q| !q.tags.include?('Health') || q.tags.include?('Staff')}
-    f.push(['<:Assist_Health:454462054636584981> Health Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Assist_Health:454462054636584981> Health Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Assist_Health:454462054636584981> Asistencias de HP']) if x.length>0
     x=k.reject{|q| !q.tags.include?('Rally')}
-    f.push(['<:Assist_Rally:454462054619807747> Rally Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Assist_Rally:454462054619807747> Rally Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Assist_Rally:454462054619807747> Asistencias Potenciar']) if x.length>0
     x=k.reject{|q| has_any?(q.tags,['Music','Staff','Move','Health','Rally'])}
-    f.push(['<:Assist_Unknown:454451496482897921> Misc. Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Assist_Unknown:454451496482897921> Misc. Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Assist_Unknown:454451496482897921> Asistencias Misceláneas']) if x.length>0
   elsif k.reject{|q| q.type.include?('Special')}.length<=0 && k.reject{|q| q.tags.include?('Offensive')}.length<=0
     f=[]
     x=k.reject{|q| !q.tags.include?('MoonSpecial') || q.tags.include?('EclipseSpecial')}
-    f.push(['<:Special_Offensive_Moon:454473651345948683> Moon Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Offensive_Moon:454473651345948683> Moon Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Offensive_Moon:454473651345948683> Especiales de Luna']) if x.length>0
     x=k.reject{|q| !q.tags.include?('SunSpecial') || q.tags.include?('EclipseSpecial')}
-    f.push(['<:Special_Offensive_Sun:454473651429965834> Sun Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Offensive_Sun:454473651429965834> Sun Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Offensive_Sun:454473651429965834> Especiales del Sol']) if x.length>0
     x=k.reject{|q| !q.tags.include?('EclipseSpecial')}
-    f.push(['<:Special_Offensive_Eclipse:454473651308199956> Eclipse Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Offensive_Eclipse:454473651308199956> Eclipse Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Offensive_Eclipse:454473651308199956> Especiales de Eclipse']) if x.length>0
     x=k.reject{|q| !q.tags.include?('StarSpecial')}
-    f.push(['<:Special_Offensive_Star:454473651396542504> Star Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Offensive_Star:454473651396542504> Star Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Offensive_Star:454473651396542504> Especiales de Estrella']) if x.length>0
     x=k.reject{|q| !q.tags.include?('FireSpecial')}
-    f.push(['<:Special_Offensive_Fire:454473651861979156> Fire Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Offensive_Fire:454473651861979156> Fire Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Offensive_Fire:454473651861979156> Especiales de Fuego']) if x.length>0
     x=k.reject{|q| !q.tags.include?('IceSpecial')}
-    f.push(['<:Special_Offensive_Ice:454473651291422720> Ice Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Offensive_Ice:454473651291422720> Ice Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Offensive_Ice:454473651291422720> Especiales de Hielo']) if x.length>0
     x=k.reject{|q| !q.tags.include?('DragonSpecial')}
-    f.push(['<:Special_Offensive_Dragon:454473651186696192> Dragon Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Offensive_Dragon:454473651186696192> Dragon Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Offensive_Dragon:454473651186696192> Especiales de Dragón']) if x.length>0
     x=k.reject{|q| !q.tags.include?('DarknessSpecial')}
-    f.push(['<:Special_Offensive_Darkness:454473651010535435> Darkness Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Offensive_Darkness:454473651010535435> Darkness Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Offensive_Darkness:454473651010535435> Especiales de Infierno']) if x.length>0
     x=k.reject{|q| !q.tags.include?('RendSpecial')}
-    f.push(['<:Special_Offensive_Rend:454473651119718401> Rend Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Offensive_Rend:454473651119718401> Rend Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Offensive_Rend:454473651119718401> Especiales de Rasgón']) if x.length>0
     x=k.reject{|q| has_any?(q.tags,['MoonSpecial','SunSpecial','EclipseSpecial','StarSpecial','FireSpecial','IceSpecial','DragonSpecial','DarknessSpecial','RendSpecial'])}
-    f.push(['<:Special_Offensive:454460020793278475> Misc. Offensive Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Offensive:454460020793278475> Misc. Offensive Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Offensive:454460020793278475> Especiales Ataque']) if x.length>0
   elsif k.reject{|q| q.type.include?('Special')}.length<=0 && k.reject{|q| q.tags.include?('Defensive')}.length<=0
     f=[]
     x=k.reject{|q| !q.tags.include?('AegisSpecial') || q.tags.include?('SupershieldSpecial')}
-    f.push(['<:Special_Defensive_Aegis:454460020625768470> Aegis Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Defensive_Aegis:454460020625768470> Aegis Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Defensive_Aegis:454460020625768470> Especiales de Égida']) if x.length>0
     x=k.reject{|q| !q.tags.include?('PaviseSpecial') || q.tags.include?('SupershieldSpecial')}
-    f.push(['<:Special_Defensive_Pavise:454460020801929237> Pavise Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Defensive_Pavise:454460020801929237> Pavise Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Defensive_Pavise:454460020801929237> Especiales de Pavés']) if x.length>0
     x=k.reject{|q| !q.tags.include?('SupershieldSpecial')}
-    f.push(['<:Special_Defensive_Supershield:454460021066170378> Supershield Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Defensive_Supershield:454460021066170378> Supershield Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Defensive_Supershield:454460021066170378> Especiales de Superproteger']) if x.length>0
     x=k.reject{|q| !q.tags.include?('MiracleSpecial')}
-    f.push(['<:Special_Defensive_Miracle:454460020973764610> Miracle Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Defensive_Miracle:454460020973764610> Miracle Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Defensive_Miracle:454460020973764610> Especiales de Milagro']) if x.length>0
     x=k.reject{|q| has_any?(q.tags,['MiracleSpecial','SupershieldSpecial','PaviseSpecial','AegisSpecial'])}
-    f.push(['<:Special_Defensive:454460020591951884> Misc. Defensive Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Defensive:454460020591951884> Misc. Defensive Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Defensive:454460020591951884> Especiales Defensa']) if x.length>0
   elsif k.reject{|q| q.type.include?('Special')}.length<=0
     f=[]
     x=k.reject{|q| !q.tags.include?('Offensive')}
-    f.push(['<:Special_Offensive:454460020793278475> Offensive Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Offensive:454460020793278475> Offensive Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Offensive:454460020793278475> Especiales Ataque']) if x.length>0
     x=k.reject{|q| !q.tags.include?('Defensive')}
-    f.push(['<:Special_Defensive:454460020591951884> Defensive Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Defensive:454460020591951884> Defensive Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Defensive:454460020591951884> Especiales Defensa']) if x.length>0
     x=k.reject{|q| !q.tags.include?('AoE')}
-    f.push(['<:Special_AoE:454460021665693696> Area-of-Effect Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_AoE:454460021665693696> Area-of-Effect Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_AoE:454460021665693696> Especiales AoE']) if x.length>0
     x=k.reject{|q| !q.tags.include?('Staff')}
-    f.push(['<:Special_Healer:454451451805040640> Healer Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Healer:454451451805040640> Healer Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Healer:454451451805040640> Especiales de Curadoras']) if x.length>0
     x=k.reject{|q| has_any?(q.tags,['Offensive','Defensive','AoE','Staff'])}
-    f.push(['<:Special_Unknown:454451451603976192> Misc. Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
-  elsif k.reject{|q| q.isPassive?}.length<=0 && mk.include?("*Passive slots:* <:Passive_S:443677023626330122> Seal")
+    f.push(['<:Special_Unknown:454451451603976192> Misc. Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Unknown:454451451603976192> Especiales Misceláneas']) if x.length>0
+  elsif k.reject{|q| q.isPassive?}.length<=0 && (mk.include?("*Passive slots:* <:Passive_S:443677023626330122> Seal") || mk.include?("*Ranura pasiva:* <:Passive_S:443677023626330122> Seal"))
     f=[]
     x=k.reject{|q| q.shard_color.nil? || q.shard_color[0].downcase != 'scarlet'}
-    f.push(['<:Great_Badge_Scarlet:443704781001850910> Scarlet Seals',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Great_Badge_Scarlet:443704781001850910> Scarlet Seals',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Great_Badge_Scarlet:443704781001850910> Insignias Carmesís']) if x.length>0
     x=k.reject{|q| q.shard_color.nil? || q.shard_color[0].downcase != 'azure'}
-    f.push(['<:Great_Badge_Azure:443704780783616016> Azure Seals',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Great_Badge_Azure:443704780783616016> Azure Seals',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Great_Badge_Azure:443704780783616016> Insignias Cerúleos']) if x.length>0
     x=k.reject{|q| q.shard_color.nil? || q.shard_color[0].downcase != 'verdant'}
-    f.push(['<:Great_Badge_Verdant:443704780943261707> Verdant Seals',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Great_Badge_Verdant:443704780943261707> Verdant Seals',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Great_Badge_Verdant:443704780943261707> Insignias Jades']) if x.length>0
     x=k.reject{|q| q.shard_color.nil? || q.shard_color[0].downcase != 'transparent'}
-    f.push(['<:Great_Badge_Transparent:443704781597573120> Transparent Seals',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Great_Badge_Transparent:443704781597573120> Transparent Seals',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Great_Badge_Transparent:443704781597573120> Insignias Puros']) if x.length>0
     x=k.reject{|q| q.shard_color.nil? || q.shard_color[0].downcase != 'gold'}
-    f.push(['<:Great_Badge_Golden:443704781068959744> Golden Seals',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Great_Badge_Golden:443704781068959744> Golden Seals',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Great_Badge_Golden:443704781068959744> Insignias Oros']) if x.length>0
     x=k.reject{|q| !q.shard_color.nil? && ['scarlet','azure','verdant','transparent','gold'].include?(q.shard_color[0].downcase)}
-    f.push(['<:Great_Badge_Unknown:443704780754255874> Seals of unknown color',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Great_Badge_Unknown:443704780754255874> Seals of unknown color',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Great_Badge_Unknown:443704780754255874> Insignias Cianes']) if x.length>0
   elsif k.reject{|q| q.isPassive?}.length<=0
     f=[]
     x=k.reject{|q| !q.type.include?('Passive(A)')}
-    f.push(['<:Passive_A:443677024192823327> A Passives',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Passive_A:443677024192823327> A Passives',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Passive_A:443677024192823327> Pasivas A']) if x.length>0
     x=k.reject{|q| !q.type.include?('Passive(B)')}
-    f.push(['<:Passive_B:443677023257493506> B Passives',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Passive_B:443677023257493506> B Passives',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Passive_B:443677023257493506> Pasivas B']) if x.length>0
     x=k.reject{|q| !q.type.include?('Passive(C)')}
-    f.push(['<:Passive_C:443677023555026954> C Passives',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Passive_C:443677023555026954> C Passives',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Passive_C:443677023555026954> Pasivas C']) if x.length>0
     xx=kx.reject{|q| !has_any?(q.type,['Passive(S)','Seal'])}
     x=xx.reject{|q| !['example','-'].include?(q.level)}
-    f.push(['<:Passive_S:443677023626330122> Sacred Seals',x.map{|q| q.postName(xx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Passive_S:443677023626330122> Sacred Seals',x.map{|q| q.postName(xx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Passive_S:443677023626330122> Pasivas Insigias']) if x.length>0
     x=kx.reject{|q| !q.type.include?('Passive(W)')}
-    f.push(['<:Passive_W:443677023706152960> Weapon Effects',x.map{|q| q.postName(x,true,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.uniq.join("\n")]) if x.length>0
+    f.push(['<:Passive_W:443677023706152960> Weapon Effects',x.map{|q| q.postName(x,true,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.uniq.join("\n"),'<:Passive_W:443677023706152960> Pasivas de Arma']) if x.length>0
   elsif k.reject{|q| q.restrictions.include?('Staff Users Only')}.length<=0
     f=[]
     x=k.reject{|q| !q.type.include?('Weapon')}
-    f.push(['<:Colorless_Staff:443692132323295243> Damaging Staves',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Colorless_Staff:443692132323295243> Damaging Staves',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Colorless_Staff:443692132323295243> Bastones Dañinos']) if x.length>0
     x=k.reject{|q| !q.type.include?('Assist')}
-    f.push(['<:Assist_Staff:454451496831025162> Healing Staves',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Assist_Staff:454451496831025162> Healing Staves',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Assist_Staff:454451496831025162> Bastones Curativos']) if x.length>0
     x=k.reject{|q| !q.type.include?('Special')}
-    f.push(['<:Special_Healer:454451451805040640> Healer Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Special_Healer:454451451805040640> Healer Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Special_Healer:454451451805040640> Especiales de Curadoras']) if x.length>0
     x=k.reject{|q| !q.isPassive?}
-    f.push(['<:Passive_Staff:443677023848890388> Healer Passives',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Passive_Staff:443677023848890388> Healer Passives',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Passive_Staff:443677023848890388> Pasivas de Curadoras']) if x.length>0
     x=k.reject{|q| !has_any?(q.type,['Duo','Harmonic'])}
-    f.push(['<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234> Duo/Harmonic Skills',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234> Duo/Harmonic Skills',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234> Dúo/al Son']) if x.length>0
   else
     f=[]
     x=k.reject{|q| !q.type.include?('Weapon')}
-    f.push(['<:Skill_Weapon:444078171114045450> Weapons',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Skill_Weapon:444078171114045450> Weapons',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Skill_Weapon:444078171114045450> Armas']) if x.length>0
     x=k.reject{|q| !q.type.include?('Assist')}
-    f.push(['<:Skill_Assist:444078171025965066> Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Skill_Assist:444078171025965066> Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Skill_Assist:444078171025965066> Asistencias']) if x.length>0
     x=k.reject{|q| !q.type.include?('Special')}
-    f.push(['<:Skill_Special:444078170665254929> Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Skill_Special:444078170665254929> Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Skill_Special:444078170665254929> Especiales']) if x.length>0
     x=k.reject{|q| !q.isPassive?}
-    f.push(['<:Passive:544139850677485579> Passives',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Passive:544139850677485579> Passives',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Passive:544139850677485579> Pasivas']) if x.length>0
     x=k.reject{|q| !q.type.include?('Duo')}
-    f.push(['<:Hero_Duo:631431055420948480> Duo Skills',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Hero_Duo:631431055420948480> Duo Skills',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Hero_Duo:631431055420948480> Dúo']) if x.length>0
     x=k.reject{|q| !q.type.include?('Harmonic')}
-    f.push(['<:Hero_Harmonic:722436762248413234> Harmonic Skills',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")]) if x.length>0
+    f.push(['<:Hero_Harmonic:722436762248413234> Harmonic Skills',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Hero_Harmonic:722436762248413234> al Son']) if x.length>0
   end
-  if $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__**Skill search**__\n#{mk.join("\n")}\n\n__**Results**__\n#{f.map{|q| "*#{q[0]}:* #{q[1].gsub("\n",', ')}"}}\n\n#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}".length>=1900
-    str="__**Skill search**__\n#{mk.join("\n")}\n\n__**Results**__"
+  buff=''
+  buff=' en' if Shardizard==$spanishShard
+  if f.nil?
+  elsif Shardizard==$spanishShard
+    f=f.map{|q| [q[2*((q.length-1)/2)],q[1]]}
+  else
+    f=f.map{|q| [q[0],q[1]]}
+  end
+  if $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__\n#{f.map{|q| "*#{q[0]}:* #{q[1].gsub("\n",', ')}"}}\n\n#{k.length}#{buff} total#{" (#{k2.length}#{buff} actual)" unless k2.length>=k.length}".length>=1900
+    str="__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__"
     if f.length<=1
       f=f[0][1].split("\n")
       for i in 0...f.length
@@ -3056,14 +3349,14 @@ def display_skills(bot,event,args=nil,mode=0)
         end
       end
     end
-    str=extend_message(str,"#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}",event,2)
+    str=extend_message(str,"#{k.length}#{buff} total#{" (#{k2.length}#{buff} actual)" unless k2.length>=k.length}",event,2)
     event.respond str
   elsif f.length<=1 && k.length<=10
     str=k.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n")
-    create_embed(event,"__**Skill search**__\n#{mk.join("\n")}\n\n__**Results**__",str,0xD49F61,"#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}")
+    create_embed(event,"__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__",str,0xD49F61,"#{k.length}#{buff} total#{" (#{k2.length}#{buff} actual)" unless k2.length>=k.length}")
   else
     f=triple_finish(k.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}) if f.length<=1
-    create_embed(event,"__**Skill search**__\n#{mk.join("\n")}\n\n__**Results**__",'',0xD49F61,"#{k.length} total#{" (#{k2.length} actual)" unless k2.length>=k.length}",nil,f,2)
+    create_embed(event,"__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__",'',0xD49F61,"#{k.length}#{buff} total#{" (#{k2.length}#{buff} actual)" unless k2.length>=k.length}",nil,f,2)
   end
   return nil
 end
@@ -3079,6 +3372,7 @@ def display_banners(bot,event,args=nil,mode=0)
   return nil unless b.is_a?(Array)
   str=''
   str="__**Banner Search**__\n#{b[0].join("\n")}" if b[0].length>0
+  str="__**Búsqueda de Pancartas**__\n#{b[0].join("\n")}" if b[0].length>0 && Shardizard==$spanishShard
   b=b[1]
   for i in 0...b.length
     x=['','']
@@ -3089,18 +3383,20 @@ def display_banners(bot,event,args=nil,mode=0)
     b[i].name="#{b[i].name} (#{x.join(' - ')})" unless x.reject{|q| q.length<=0}.length<=0
   end
   b=b.map{|q| q.name}
-  if (b.length>20 || str.length+b.join("\n").length>=1900) && !safe_to_spam?(event)
+  if (b.length>20 || str.length+b.join("\n").length>=1900) && !safe_to_spam?(event) && Shardizard==$spanishShard
+    event.respond "#{str}\n\n__**La Nota**__\nEn #{b.length} entradas, se intenta mostrar demasiados datos. Utilice este comando en mensajes privados."
+  elsif (b.length>20 || str.length+b.join("\n").length>=1900) && !safe_to_spam?(event)
     event.respond "#{str}\n\n__**Note**__\nAt #{b.length} entries, too much data is trying to be displayed.  Please use this command in PM."
   elsif str.length+b.join("\n").length>=1900
-    str="#{str}\n\n__**Results**__"
+    str="#{str}\n\n__**Result#{'ado' if Shardizard==$spanishShard}s**__"
     for i in 0...b.length
       str=extend_message(str,b[i],event)
     end
-    str=extend_message(str,"#{b.length} total.",event,2)
+    str=extend_message(str,"#{b.length}#{' en' if Shardizard==$spanishShard} total.",event,2)
     event.respond str
   else
-    str="#{str}\n\n__**Results**__"
-    create_embed(event,str,b.join("\n"),0xD49F61,"#{b.length} total.")
+    str="#{str}\n\n__**Result#{'ado' if Shardizard==$spanishShard}s**__"
+    create_embed(event,str,b.join("\n"),0xD49F61,"#{b.length}#{' en' if Shardizard==$spanishShard} total.")
   end
 end
 
@@ -3110,34 +3406,41 @@ def display_units_and_skills(bot,event,args=nil,xmode=0)
   metadata_load()
   mode=1
   mode=0 if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-  (event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) rescue nil) if event.message.text.length>90
+  (event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) rescue nil) if event.message.text.length>90 && Shardizard != $spanishShard
   if args.nil? || args.length.zero?
     p1=find_in_units(bot,event,args,13,true)
     p2=find_in_skills(bot,event,args,3,true)
-    if !p1.is_a?(Array) && !p2.is_a?(Array)
+    if !p1.is_a?(Array) && !p2.is_a?(Array) && Shardizard==$spanishShard
+      event.respond 'Tu solicitud es un galimatías.'
+    elsif !p1.is_a?(Array) && !p2.is_a?(Array)
       event.respond 'Your request is gibberish.'
     elsif !p1.is_a?(Array)
       display_skills(bot,event,args,mode)
     elsif !p2.is_a?(Array)
       display_units(bot,event,args,mode)
+    elsif Shardizard==$spanishShard
+      event.respond "¡No estoy mostrando todos los personajes *y* todas las habilidades!"
     else
       event.respond "I'm not displaying all units *and* all skills!"
     end
-  elsif ['help'].include?(args[0].downcase)
+  elsif ['help'].include?(args[0].downcase) || (['comandos','ayuda','auxilio'].include?(args[0]) && Shardizard==$spanishShard)
     subcommand=nil
     subcommand=args[0] unless args.nil? || args.length.zero?
     subcommand='' if subcommand.nil?
     help_text(event,bot,'find',subcommand)
-  elsif ['hero','heroes','heros','unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase)
+  elsif ['hero','heroes','heros','unit','char','character','person','units','chars','charas','chara','people'].include?(args[0].downcase) || (['heroe','personaje','personajes','caracter'].include?(args[0].downcase) && Shardizard==$spanishShard)
     display_units(bot,event,args,mode)
-  elsif ['skill','skills'].include?(args[0].downcase)
+  elsif ['skill','skills'].include?(args[0].downcase) || (['habilidad','habilidades'].include?(args[0].downcase) && Shardizard==$spanishShard)
     display_skills(bot,event,args,mode)
-  elsif ['summon','summons','banner','banners'].include?(args[0].downcase)
+  elsif ['summon','summons','banner','banners'].include?(args[0].downcase) || (['convocar','convoca','convocas','pancarta','pancartas'].include?(args[0].downcase) && Shardizard==$spanishShard)
     display_banners(bot,event,args,mode)
   else
     p1=find_in_units(bot,event,args,13,true)
     p2=find_in_skills(bot,event,args,3,true)
-    if !p1.is_a?(Array) && !p2.is_a?(Array)
+    if !p1.is_a?(Array) && !p2.is_a?(Array) && Shardizard==$spanishShard
+      event.respond 'Tu solicitud es un galimatías.'
+      return nil
+    elsif !p1.is_a?(Array) && !p2.is_a?(Array)
       event.respond 'Your request is gibberish.'
       return nil
     elsif !p1.is_a?(Array)
@@ -3152,7 +3455,10 @@ def display_units_and_skills(bot,event,args=nil,xmode=0)
     m.push(p2[0])
     x=p2[2].map{|q| q}
     p2=p2[1]
-    if !p1.is_a?(Array) && !p2.is_a?(Array)
+    if !p1.is_a?(Array) && !p2.is_a?(Array) && Shardizard==$spanishShard
+      event.respond 'Tu solicitud es un galimatías.'
+      return nil
+    elsif !p1.is_a?(Array) && !p2.is_a?(Array)
       event.respond 'Your request is gibberish.'
       return nil
     elsif !p1.is_a?(Array)
@@ -3170,9 +3476,17 @@ def display_units_and_skills(bot,event,args=nil,xmode=0)
     m[0]=m[0].reject{|q| m3.include?(q)}
     m[1]=m[1].reject{|q| m3.include?(q)}
     hdr=[]
-    hdr.push("__**Overall Search**__\n#{m3.join("\n")}") if m3.length>0
-    hdr.push("__**Unit Search**__\n#{m[0].join("\n")}") if m[0].length>0
-    hdr.push("__**Skill Search**__\n#{m[1].join("\n")}") if m[1].length>0
+    texto=['Units','Skills']
+    if Shardizard==$spanishShard
+      hdr.push("__**Búsqueda Total**__\n#{m3.join("\n")}") if m3.length>0
+      hdr.push("__**Búsqueda de Personajes**__\n#{m[0].join("\n")}") if m[0].length>0
+      hdr.push("__**Búsqueda de Habilidades**__\n#{m[1].join("\n")}") if m[1].length>0
+      texto=['Personajes','Habilidades']
+    else
+      hdr.push("__**Overall Search**__\n#{m3.join("\n")}") if m3.length>0
+      hdr.push("__**Unit Search**__\n#{m[0].join("\n")}") if m[0].length>0
+      hdr.push("__**Skill Search**__\n#{m[1].join("\n")}") if m[1].length>0
+    end
     hdr=hdr.join("\n\n")
     if p1.map{|q| q.postName(true)}.join("\n").length+p2.map{|q| q.postName(x,false,true)}.join("\n").length+hdr.length<=1950 && (p1.length+p2.length<=25 || safe_to_spam?(event))
       unless $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
@@ -3268,33 +3582,34 @@ def display_units_and_skills(bot,event,args=nil,xmode=0)
           sklz.push(p2.reject{|q| has_any?(q.type,['Weapon','Assist','Special']) || q.isPassive?}.map{|q| q.postName(x,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"))
           sklz=sklz.reject{|q| q.length<=0}.join("\n\n")
         end
-        create_embed(event,"#{hdr}\n\n__**Results**__",'',0xD49F61,"Totals: #{p1.uniq.length} units, #{p2.uniq.length} skills",nil,[['**Units**',untz],['**Skills**',sklz]],2)
+        create_embed(event,"#{hdr}\n\n__**Result#{'ado' if Shardizard==$spanishShard}s**__",'',0xD49F61,"Total#{'e' if Shardizard==$spanishShard}s: #{p1.uniq.length} #{texto[0].downcase}, #{p2.uniq.length} #{texto[1].downcase}",nil,[["**#{texto[0]}**",untz],["**#{texto[1]}**",sklz]],2)
         return nil
       end
     elsif !safe_to_spam?(event)
       str="#{hdr}"
-      str=extend_message(str,"__**Note**__\nToo much data is trying to be displayed.  Please use this command in PM.",event,2)
-      str=extend_message(str,"Totals: #{p1.uniq.length} units, #{p2.uniq.length} skills",event,2)
+      str=extend_message(str,"__**La Nota**__\nSe intenta mostrar demasiados datos. Utilice este comando en mensajes privados.",event,2) if Shardizard==$spanishShard
+      str=extend_message(str,"__**Note**__\nToo much data is trying to be displayed.  Please use this command in PM.",event,2) unless Shardizard==$spanishShard
+      str=extend_message(str,"Totals: #{p1.uniq.length} #{texto[0].downcase}, #{p2.uniq.length} #{texto[1].downcase}",event,2)
       event.respond str
       return nil
     end
     t="#{hdr}"
-    t=extend_message(t,"__**Results**__",event,2)
+    t=extend_message(t,"__**Result#{'ado' if Shardizard==$spanishShard}s**__",event,2)
     p1=p1.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}
-    t=extend_message(t,"*Units:* #{p1[0]}",event)
+    t=extend_message(t,"*#{texto[0]}:* #{p1[0]}",event)
     if p1.length>1
       for i in 1...p1.length
         t=extend_message(t,p1[i],event,1,', ')
       end
     end
     p2=p2.map{|q| q.postName(x,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}
-    t=extend_message(t,"*Skills:* #{p2[0]}",event,1)
+    t=extend_message(t,"*#{texto[1]}:* #{p2[0]}",event,1)
     if p2.length>1
       for i in 1...p2.length
         t=extend_message(t,p2[i],event,1,', ')
       end
     end
-    t=extend_message(t,"Totals: #{p1.uniq.length} units, #{p2.uniq.length} skills",event,2)
+    t=extend_message(t,"Total#{'e' if Shardizard==$spanishShard}s: #{p1.uniq.length} #{texto[0].downcase}, #{p2.uniq.length} #{texto[1].downcase}",event,2)
     event.respond t
   end
 end
@@ -3357,13 +3672,21 @@ def sort_units(bot,event,args=nil)
   mk=k[0]
   k=k[1]
   s=['Name','<:HP_S:514712247503945739>HP','<:StrengthS:514712248372166666>Attack','<:SpeedS:514712247625580555>Speed','<:DefenseS:514712247461871616>Defense','<:ResistanceS:514712247574986752>Resistance','<:Arena_Medal:453618312446738472>BST','<:FreezePrtS:712371368037187655>FrzProtect','<:Divine_Dew:453618312434417691>Photon Points','<:Current_Arena_Bonus:498797967042412544>Bin','Banners']
-  mk.push("*Sorted by:* #{f[0,10].uniq.map{|q| s[q]}.compact.join(', ')}")
+  s=['Nombre','<:HP_S:514712247503945739>HP','<:StrengthS:514712248372166666>Ataque','<:SpeedS:514712247625580555>Velocidad','<:DefenseS:514712247461871616>Defensa','<:ResistanceS:514712247574986752>Resistencia','<:Arena_Medal:453618312446738472>BST','<:FreezePrtS:712371368037187655>CngProteger','<:Divine_Dew:453618312434417691>Puntos de Photon','<:Current_Arena_Bonus:498797967042412544>Cubeta','Pancartas'] if Shardizard==$spanishShard
+  if Shardizard==$spanishShard
+    mk.push("*Clasificación:* #{f[0,10].uniq.map{|q| s[q]}.compact.join(', ')}")
+  else
+    mk.push("*Sorted by:* #{f[0,10].uniq.map{|q| s[q]}.compact.join(', ')}")
+  end
   v=mk.find_index{|q| q[0,8]=='*Stats:*'}
+  v=mk.find_index{|q| q[0,15]=='*Estadisticas:*'} if v.nil? && Shardizard==$spanishShard
   unless v.nil?
     v=mk[v]
     f.push(1) if v.include?('HP') && !f.include?(1)
     f.push(2) if v.include?('Atk') && !f.include?(2)
+    f.push(2) if v.include?('Atq') && !f.include?(2)
     f.push(3) if v.include?('Spd') && !f.include?(3)
+    f.push(3) if v.include?('Vel') && !f.include?(3)
     f.push(4) if v.include?('Def') && !f.include?(4)
     f.push(5) if v.include?('Res') && !f.include?(5)
   end
@@ -3374,7 +3697,11 @@ def sort_units(bot,event,args=nil)
     f.push(4) unless f.include?(4)
     f.push(5) unless f.include?(5)
   end
-  event.channel.send_temporary_message('Units found, sorting now...',3) rescue nil
+  if Shardizard==$spanishShard
+    event.channel.send_temporary_message('Caracteres encontrados, ordenando ahora ...',3) rescue nil
+  else
+    event.channel.send_temporary_message('Units found, sorting now...',3) rescue nil
+  end
   k=k.reject{|q| q.stats40.max<=0} # remove units for whom stats are unknown
   k=k.reject{|q| q.stats40[0,5].max<=0} unless has_any?(args,['enemy','enemies'])
   t=0
@@ -3421,29 +3748,39 @@ def sort_units(bot,event,args=nil)
   display=[0,k.length]
   if t>0
     display=[0,t]
-    mk.push("Showing top #{t} results")
+    mk.push("Showing top #{t} results") unless Shardizard==$spanishShard
+    mk.push("Mostrando los mejores #{t} resultados") if Shardizard==$spanishShard
   elsif b>0
     display=[k.length-b,k.length]
-    mk.push("Showing bottom #{b} results")
+    mk.push("Showing bottom #{b} results") unless Shardizard==$spanishShard
+    mk.push("Mostrando los resultados #{b} más bajos") if Shardizard==$spanishShard
   end
   m=[]
-  m.push("__**Unit search**__\n#{mk.join("\n")}") if mk.length>0
+  m.push("__**Unit search**__\n#{mk.join("\n")}") if mk.length>0 && Shardizard !=$spanishShard
+  m.push("__**Búsqueda de Personajes**__\n#{mk.join("\n")}") if mk.length>0 && Shardizard==$spanishShard
   mk=[]
-  mk.push("Please note that the stats listed are for neutral-nature units without stat-affecting skills.")
-  mk.push("The Strength/Magic stat also does not account for weapon might.") if f.include?(2)
+  if Shardizard==$spanishShard
+    mk.push("Tenga en cuenta que las estadísticas enumeradas son para personajes de naturaleza neutral sin habilidades que afecten a las estadísticas.")
+    mk.push("La estadística de Fuerza/Magia tampoco tiene en cuenta el poder del arma.") if f.include?(2)
+  else
+    mk.push("Please note that the stats listed are for neutral-nature units without stat-affecting skills.")
+    mk.push("The Strength/Magic stat also does not account for weapon might.") if f.include?(2)
+  end
   m2=[]
   s=['','HP','Attack','Speed','Defense','Resistance','BST','FrzProtect','Photon Points','Bin','Banners']
+  s=['','HP','Ataque','Velocidad','Defensa','Resistencia','BST','CngProteger','Puntos de Photon','Cubeta','Pancartas'] if Shardizard==$spanishShard
   for i in display[0]...display[1]
     ls=[]
     for j in 0...f.length
       sf=s[f[j]]
-      sf=k[i].atkName(true).gsub('Freeze','Magic') if f[j]==2 # give the proper attack stat name
+      sf=k[i].atkName(1) if f[j]==2 # give the proper attack stat name
       sfn=''
       sfn=k[i].supernatures.map{|q| "#{'(' unless q==' '}#{q unless q==' '}#{') ' unless q==' '}"}[f[j]-1] if f[j]>0 && f[j]<6
       if f[j]<=0
       elsif k[i].sort_data[f[j]]<0 && sf.length>0
         k[i].sort_data[f[j]]=0-k[i].sort_data[f[j]]
         sf="Anti#{sf[0,1].downcase}#{sf[1,sf.length-1]}"
+        sf='Puntos de Antiphoton' if Shardizard==$spanishShard
         ls.push("#{k[i].sort_data[f[j]]} #{sfn}#{sf}")
       elsif f[j]==9
         ls.push("#{sf} ##{k[i].sort_data[f[j]].to_i} (#{k[i].sort_data[f[j]].to_i*5}-#{k[i].sort_data[f[j]].to_i*5+4})#{' <:P_Duel_Unknown:770193543935295490>' if k[i].hasDuelAccess? && k[i].sort_data[f[j]].to_i<34}")
@@ -3455,16 +3792,33 @@ def sort_units(bot,event,args=nil)
     end
     m2.push("#{'~~' unless k[i].fake.nil?}**#{k[i].name}**#{k[i].emotes(bot)}#{'<:Resplendent_Ascension:678748961607122945>' if k[i].hasResplendent?}#{' - ' if ls.length>0}#{ls.join(', ')}#{'~~' unless k[i].fake.nil?}")
   end
-  if has_any?(f,[1,2,3,4,5]) && m2.join("\n").include?("(+)") && m2.join("\n").include?("(-)")
+  if has_any?(f,[1,2,3,4,5]) && m2.join("\n").include?("(+)") && m2.join("\n").include?("(-)") && Shardizard==$spanishShard
+    mk.push("(+) y (-) marcan personajes para los que un activo o un defecto no combinado aumentaría o disminuiría una estadística en 4 en lugar de los 3 habituales.\nEsto puede afectar el orden de los caracteres enumerados aquí.")
+  elsif has_any?(f,[1,2,3,4,5]) && m2.join("\n").include?("(+)") && Shardizard==$spanishShard
+    mk.push("(+) marca los personajes para los que un activo aumentaría una estadística en 4 en lugar de los 3 habituales.\nEsto puede afectar el orden de los caracteres enumerados aquí.")
+  elsif has_any?(f,[1,2,3,4,5]) && m2.join("\n").include?("(-)") && Shardizard==$spanishShard
+    mk.push("(-) marca a los personajes para los que una falla no fusionada disminuiría una estadística en 4 en lugar de los 3 habituales.\nEsto puede afectar el orden de los caracteres enumerados aquí.")
+  elsif has_any?(f,[1,2,3,4,5]) && m2.join("\n").include?("(+)") && m2.join("\n").include?("(-)")
     mk.push("(+) and (-) mark units for whom a boon or unmerged bane would increase or decrease a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.")
   elsif has_any?(f,[1,2,3,4,5]) && m2.join("\n").include?("(+)")
     mk.push("(+) marks units for whom a boon would increase a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.")
   elsif has_any?(f,[1,2,3,4,5]) && m2.join("\n").include?("(-)")
     mk.push("(-) marks units for whom an unmerged bane would decrease a stat by 4 instead of the usual 3.\nThis can affect the order of units listed here.")
   end
-  mk.push("<:Resplendent_Ascension:678748961607122945> marks units who have a Resplendent Ascension.  This increases all their stats by 2, which is reflected in the stats displayed here.") if k.reject{|q| !q.hasResplendent?}.length>0
-  mk.push("<:P_Duel_Unknown:770193543935295490> marks units who have access to a Duel skill.  This increases their Bin to 34 (Phantom BST of 170-174) if equipped.\nNon-legendary, non-mythic units who have access to a T4 Duel skill have their Bin increased to 36 (Phantom BST of 180-184) instead.") if m2.join("\n").include?('<:P_Duel_Unknown:770193543935295490>')
-  if has_any?(f,[7,8,9])
+  if Shardizard==$spanishShard
+    mk.push("<:Resplendent_Ascension:678748961607122945> marca a los personajes que tienen una Ascensión Resplandeciente. Esto aumenta todas sus estadísticas en 2, lo que se refleja en las estadísticas que se muestran aquí.") if k.reject{|q| !q.hasResplendent?}.length>0
+    mk.push("<:P_Duel_Unknown:770193543935295490> marca a los personajes que tienen acceso a una habilidad de Lid. Esto aumenta su Cucharón a 34 (BST Fantasma de 170-174) si está equipado.\nEn cambio, los personajes no legendarios y no míticos que tienen acceso a una habilidad de Lid T4 tienen su Bin aumentado a 36 (BST Fantasma de 180-184).") if m2.join("\n").include?('<:P_Duel_Unknown:770193543935295490>')
+  else
+    mk.push("<:Resplendent_Ascension:678748961607122945> marks units who have a Resplendent Ascension.  This increases all their stats by 2, which is reflected in the stats displayed here.") if k.reject{|q| !q.hasResplendent?}.length>0
+    mk.push("<:P_Duel_Unknown:770193543935295490> marks units who have access to a Duel skill.  This increases their Bin to 34 (Phantom BST of 170-174) if equipped.\nNon-legendary, non-mythic units who have access to a T4 Duel skill have their Bin increased to 36 (Phantom BST of 180-184) instead.") if m2.join("\n").include?('<:P_Duel_Unknown:770193543935295490>')
+  end
+  if has_any?(f,[7,8,9]) && Shardizard==$spanishShard
+    mm=[]
+    mm.push("CngProteger es la más baja de las estadísticas de Defensa y Resistencia de los personajes, utilizada por Piedra Drag cuando ataca personajes a distancia y por Plato Felicia todo el tiempo.") if f.include?(7)
+    mm.push("Espada Luminosa inflige +7 de daño a las unidades con al menos 5 Puntos de Photon.") if f.include?(8)
+    mm.push("El orden de los personajes enumerados aquí puede verse afectado por la naturaleza#{" que afectan la Defensa y/o Resistencia de un personaje" unless f.include?(9)}.")
+    mk.push(mm.join("  "))
+  elsif has_any?(f,[7,8,9])
     mm=[]
     mm.push("FrzProtect is the lower of the units' Defense and Resistance stats, used by dragonstones when attacking ranged units and by Felicia's Plate all the time.") if f.include?(7)
     mm.push("Light Brand deals +7 damage to units with at least 5 Photon Points.") if f.include?(8)
@@ -3472,11 +3826,14 @@ def sort_units(bot,event,args=nil)
     mk.push(mm.join("  "))
   end
   mk.push("When sorting by banner count, units not in the summon pool at all are removed") if f.include?(10)
-  if "#{m[0]}\n\n__**Aditional Notes**__\n#{mk.join("\n#{"\n" if mk.reject{|q| !q.include?("\n")}.length>0}")}\n\n__**Results**__\n#{m2.join("\n")}".length>2000 && !safe_to_spam?(event)
-    mk.push("Too much data is trying to be displayed.  Showing top ten results.\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`\nAlternatively, you can narrow by specific stats with words like `#{['HP','Atk','Spd','Def','Res'].sample}#{['>','<'].sample}#{rand(20)+15}`")
+  texto=['Additional Notes','Results']
+  texto=['La Nota','Resultados'] if Shardizard==$spanishShard
+  if "#{m[0]}\n\n__**#{texto[0]}**__\n#{mk.join("\n#{"\n" if mk.reject{|q| !q.include?("\n")}.length>0}")}\n\n__**#{texto[1]}**__\n#{m2.join("\n")}".length>2000 && !safe_to_spam?(event)
+    mk.push("Too much data is trying to be displayed.  Showing top ten results.\nYou can also make things easier by making the list shorter with words like `top#{rand(10)+1}` or `bottom#{rand(10)+1}`\nAlternatively, you can narrow by specific stats with words like `#{['HP','Atk','Spd','Def','Res'].sample}#{['>','<'].sample}#{rand(20)+15}`") unless Shardizard==$spanishShard
+    mk.push("Se están intentando mostrar demasiados datos. Mostrando los diez mejores resultados.\nTambién puede facilitar las cosas acortando la lista con palabras como `top#{rand(10)+1}` o `bottom#{rand(10)+1}`\nAlternativamente, puede limitar por estadísticas específicas con palabras como `#{['HP','Atq','Vel','Def','Res'].sample}#{['>','<'].sample}#{rand(20)+15}`") if Shardizard==$spanishShard
     m2=m2[0,10]
   end
-  m.push("__**Aditional Notes**__\n#{mk.join("\n#{"\n" if mk.reject{|q| !q.include?("\n")}.length>0}")}") if mk.length>0
+  m.push("__**#{texto[0]}**__\n#{mk.join("\n#{"\n" if mk.reject{|q| !q.include?("\n")}.length>0}")}") if mk.length>0
   m=m.join("\n\n")
   for i in 0...m2.length
     m=extend_message(m,"#{"\n" if i<=0}#{m2[i]}",event)
@@ -3487,7 +3844,7 @@ end
 
 def sort_skills(bot,event,args=[])
   args=event.message.text.downcase.split(' ') if args.nil? || args.length.zero?
-  (event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) rescue nil) if event.message.text.length>90
+  (event.channel.send_temporary_message('Calculating data, please wait...',event.message.text.length/30-1) rescue nil) if event.message.text.length>90 && Shardizrd !=$spanishShard
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   k=find_in_skills(bot,event,args,3,false,true)
   return nil unless k.is_a?(Array)
@@ -3502,26 +3859,35 @@ def sort_skills(bot,event,args=[])
     else
       k[i].sort_data[1]=400
     end
-    if k[i].name.include?("*(+) Effect*") || k[i].name.include?("*(+) All*")
+    if k[i].name.include?("*(+) Effect*") || k[i].name.include?("*(+) All*") || k[i].name.include?("*(+) Efecto*") || k[i].name.include?("*(+) Todas*")
       k[i].sort_data[0]=k[i].sort_data[1]*1
       k[i].sort_data[1]=0
     end
   end
   k.sort! {|b,a| ((a.sort_data[0]<=>b.sort_data[0]) == 0 ? ((a.sort_data[1]<=>b.sort_data[1]) == 0 ? (b.name<=>a.name) : (a.sort_data[1]<=>b.sort_data[1])) : (a.sort_data[0]<=>b.sort_data[0]))}
-  str="#{"__**Search**__\n#{mk.join("\n")}\n\n__**Additional Notes**__\n" if mk.length>0}All SP costs are without accounting for increased inheritance costs (1.5x the SP costs listed below)"
+  texto=['Skill Search','Additional Notes','All SP costs are without accounting for increased inheritance costs (1.5x the SP costs listed below)']
+  texto=['Búsqueda de Habilidades','La Nota','Todos los costos de SP no tienen en cuenta el aumento de los costos de herencia (1,5 veces los costos de SP que se enumeran a continuación)'] if Shardizard==$spanishShard
+  str="#{"__**#{texto[0]}**__\n#{mk.join("\n")}\n\n__**#{texto[1]}**__\n" if mk.length>0}#{texto[2]}"
   for i in 0...k.length
     k[i].name="**#{k[i].name}**#{k[i].emotes(bot)} - #{k[i].sort_data[0]} SP"
-    if k[i].type.include?('Weapon') && k[i].sort_data[1]>k[i].sort_data[0] && k[i].sort_data[0]>0
+    if k[i].type.include?('Weapon') && k[i].sort_data[1]>k[i].sort_data[0] && k[i].sort_data[0]>0 && Shardizrd==$spanishShard
+      k[i].name="#{k[i].name} (#{k[i].sort_data[1]} SP cuando se refina)"
+    elsif k[i].type.include?('Weapon') && k[i].sort_data[1]>k[i].sort_data[0] && k[i].sort_data[0]>0
       k[i].name="#{k[i].name} (#{k[i].sort_data[1]} SP when refined)"
+    elsif k[i].type.include?('Weapon') && k[i].sort_data[1]==k[i].sort_data[0] && k[i].sort_data[0]>0 && Shardizard==$spanishShard
+      k[i].name="#{k[i].name} (refinamiento posible)"
     elsif k[i].type.include?('Weapon') && k[i].sort_data[1]==k[i].sort_data[0] && k[i].sort_data[0]>0
       k[i].name="#{k[i].name} (refinement possible)"
     end
     unless k[i].exclusivity.nil? || k[i].exclusivity.length<=0
       y=k[i].exclusivity.map{|q| $units.find_index{|q2| q2.name==q}}.compact.map{|q| $units[q]}.reject{|q| !q.fake.nil?}.map{|q| q.name}
-      k[i].name="#{k[i].name} - Prf to #{y.join(', ')}" if y.length>0
+      k[i].name="#{k[i].name} - Prf #{'to' unless Shardizard==$spanishShard}#{'a' if Shardizard==$spanishShard} #{y.join(', ')}" if y.length>0
     end
   end
-  if k.map{|q| q.name}.join("\n").length+str.length>1950 && !safe_to_spam?(event)
+  if k.map{|q| q.name}.join("\n").length+str.length>1950 && !safe_to_spam?(event) && Shardizard==$spanishShard
+    str="#{str}\n\nHay demasiadas habilidades para enumerar. Pruebe este comando en mensajes privados.\nMostrando los diez mejores resultados."
+    k=k[0,10]
+  elsif k.map{|q| q.name}.join("\n").length+str.length>1950 && !safe_to_spam?(event)
     str="#{str}\n\nThere are too many skills to list.  Please try this command in PM.\nShowing top ten results."
     k=k[0,10]
   end
@@ -3610,6 +3976,7 @@ def stats_of_multiunits(bot,event,args=nil,mode=0)
     ccz=avg_color(ccz)
   end
   stzzz=['HP','Attack','Speed','Defense','Resistance','BST']
+  stzzz=['HP','Ataque','Velocidad','Defensa','Resistencia','BST'] if Shardizard==$spanishShard
   stemoji=['<:HP_S:514712247503945739>','<:GenericAttackS:514712247587569664>','<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>','']
   if atkstat.uniq.length==1
     stzzz[1]=atkstat.uniq[0] unless atkstat.uniq[0]=='Freeze'
@@ -3621,29 +3988,49 @@ def stats_of_multiunits(bot,event,args=nil,mode=0)
   x='Average'
   x='Highest' if mode>0
   x='Lowest' if mode<0
+  if Shardizard==$spanishShard
+    x='Promedio'
+    x='Más alto' if mode>0
+    x='Más bajo' if mode<0
+  end
   for iz in 0...hstats.length
     hbst+=hstats[iz][0] if iz<5
     if mode==0
       hstats[iz][0]=div_100(hstats[iz][0]*100/k.length)
-      hstats[iz]="#{stemoji[iz]}#{x} #{stzzz[iz]}: #{hstats[iz][0]}"
+      hstats[iz]="#{stemoji[iz]}#{x} #{stzzz[iz]}: #{hstats[iz][0]}" unless Shardizard==$spanishShard
+      hstats[iz]="#{stemoji[iz]}#{stzzz[iz]} #{x.downcase}: #{hstats[iz][0]}" if Shardizard==$spanishShard
+    elsif hstats[iz][1].length>=k.length && Shardizard==$spanishShard
+      hstats[iz]="#{stemoji[iz]}#{stzzz[iz]} igual: #{hstats[iz][0]}"
     elsif hstats[iz][1].length>=k.length
       hstats[iz]="#{stemoji[iz]}Constant #{stzzz[iz]}: #{hstats[iz][0]}"
+    elsif Shardizard==$spanishShard
+      hstats[iz]="#{stemoji[iz]}#{stzzz[iz]} #{x.downcase}: #{hstats[iz][0]} (#{hstats[iz][1].sort{|a,b| a.gsub('*','')<=>b.gsub('*','')}.join(', ')})"
     else
       hstats[iz]="#{stemoji[iz]}#{x} #{stzzz[iz]}: #{hstats[iz][0]} (#{hstats[iz][1].sort{|a,b| a.gsub('*','')<=>b.gsub('*','')}.join(', ')})"
     end
     hstats[iz]="\n#{hstats[iz]}" if iz==5
   end
-  hstats.push("BST of #{x.downcase} stats: #{hbst}") unless mode==0
-  x='Best' if mode>0
-  x='Worst' if mode<0
+  hstats.push("BST of #{x.downcase} stats: #{hbst}") unless mode==0 || Shardizard==$spanishShard
+  hstats.push("BST de las estadísticas #{x.downcase}: #{hbst}") unless mode==0 || Shardizard !=$spanishShard
+  x='Best' if mode>0 && Shardizard !=$spanishShard
+  x='Worst' if mode<0 && Shardizard !=$spanishShard
   ftr=nil
   ftr='Italic names have a superboon in the listed stat' if mode>0 && hstats.join("\n").include?('*')
   ftr='Italic names have a superbane in the listed stat' if mode<0 && hstats.join("\n").include?('*')
   ftr='Units with Resplendent Ascensions are calculated with those stats' if k.reject{|q| !q.hasResplendent? || !q.owner.nil?}.length>0
-  return [hstats.join("\n"),ftr] if [-2,2].include?(mode)
   x2=''
-  x2="__**Unit Search**__\n#{mk.join("\n")}\n\n" if mk.length>0
-  create_embed(event,"#{x2}__**#{x} among #{k.length} units**__",hstats.join("\n"),ccz,ftr)
+  if Shardizard==$spanishShard
+    ftr='Nombres en cursiva tienen un super activo en la estadística listada' if mode>0 && hstats.join("\n").include?('*')
+    ftr='Nombres en cursiva tienen un súper defecto en la estadística listada' if mode<0 && hstats.join("\n").include?('*')
+    ftr='Cersonajes con Ascensión Resplandeciente se calculan con esas estadísticas' if k.reject{|q| !q.hasResplendent? || !q.owner.nil?}.length>0
+    x2="__**Búsqueda de Personajes**__\n#{mk.join("\n")}\n\n" if mk.length>0
+    x2="#{x2}__**#{x} entre #{k.length} caracteres**__"
+  else
+    x2="__**Unit Search**__\n#{mk.join("\n")}\n\n" if mk.length>0
+    x2="#{x2}__**#{x} among #{k.length} units**__"
+  end
+  return [hstats.join("\n"),ftr] if [-2,2].include?(mode)
+  create_embed(event,x2,hstats.join("\n"),ccz,ftr)
 end
 
 def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
@@ -3659,12 +4046,19 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
   k=nil
   k=find_best_match(event,args,nil,bot,false,0) unless (args.length<=0 || ['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils','structures','structure','struct','structs','items','item','accessorys','accessory','accessories'].include?(args[0].downcase))
   args=[''] if args.nil? || args.length<=0
+  xfx=' *[in this server only]*'
+  xfx=' *[solo en este servidor]*' if Shardizard==$spanishShard
   if k.nil? && (!safe_to_spam?(event) || event.server.id==350067448583553024) && !(saliases && !event.server.nil? && $aliases.reject{|q| q[3].nil? || !q[3].include?(event.server.id)}.length<=20)
     alz=args.join(' ')
     alz='>censored mention<' if alz.include?('@')
     str="The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- Structures\n- Items\n- Accessories"
     str="#{str}\n\n*#{alz}* does not fall into any of these categories." if alz.length>0
     str="#{str}\n\nPlease include what you wish to look up the aliases for, or use this command in PM.\nBut if you do that, prepare to be getting messages for a long time.  There's #{longFormattedNumber($aliases.length)} of them." if alz.length<=0
+    if Shardizard==$spanishShard
+      str="El sistema de alias puede cubrir:\n- aracteres\n- Habilidades (armas, asistencias, especiales, pasivos)\n- Estructuras\n- Artículos\n- Accesorios"
+      str="#{str}\n\n*#{alz}* no pertenece a ninguna de estas categorías." if alz.length>0
+      str="#{str}\n\nIncluya lo que desea buscar alias o use este comando en mensajes privados.\nPero si lo hace, prepárese para recibir muchos mensajes. Hay alias #{longFormattedNumber($aliases.length)}." if alz.length<=0
+    end
     event.respond str
     return nil
   elsif ['hero','heroes','heros','unit','units','characters','character','chara','charas','char','chars','skill','skills','skil','skils'].include?(args[0].downcase)
@@ -3678,7 +4072,11 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
     u=$units.map{|q| q} if alztyp=='Unit'
     u=$skills.map{|q| q} if alztyp=='Skill'
     x=x.reject{|q| !q[2].is_a?(String) && (u.find_index{|q2| q2.id==q[2]}.nil? || !u[u.find_index{|q2| q2.id==q[2]}].name==q[2] || !u[u.find_index{|q2| q2.id==q[2]}].isPostable?(event))}
-    f=["__**#{'Server-specific ' if saliases}#{alztyp} Aliases**__"]
+    f222="__**#{'Server-specific ' if saliases}#{alztyp} Aliases**__"
+    alztyp2='personajes'
+    alztyp2='habilidades' if alztyp=='Skill'
+    f222="__**Alias #{'específicos del servidor ' if saliases}para #{alztyp2}**__" if Shardizard==$spanishShard
+    f=[f222]
     if event.server.nil?
       for i in 0...x.length
         str="#{x[i][1].gsub('`',"\`").gsub('*',"\*")} = "
@@ -3697,16 +4095,18 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
               f2.push("*#{bot.server(x[i][3][j]).name}*") unless event.user.on(x[i][3][j]).nil?
             end
           end
-          f.push("#{str} (in the following servers: #{list_lift(f2,'and')})") unless f2.length<=0
+          f.push("#{str} (in the following servers: #{list_lift(f2,'and')})") unless f2.length<=0 || Shardizard==$spanishShard
+          f.push("#{str} (en los siguientes servidores: #{list_lift(f2,'y')})") unless f2.length<=0 || Shardizard !=$spanishShard
         end
       end
     else
-      f=x.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")} = #{q[2] if q[2].is_a?(String)}#{u[u.find_index{|q2| q2.id==q[2]}].name if !q[2].is_a?(String)}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
-      f.unshift("__**#{'Server-specific ' if saliases}#{alztyp} Aliases**__")
+      f=x.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")} = #{q[2] if q[2].is_a?(String)}#{u[u.find_index{|q2| q2.id==q[2]}].name if !q[2].is_a?(String)}#{xfx unless q[3].nil? || saliases}"}
+      f.unshift(f222)
     end
     unless saliases || alztyp != 'Unit'
       f.push(' ')
-      f.push("__**Multi-Unit Aliases**__")
+      f.push("__**Multi-Unit Aliases**__") unless Shardizard==$spanishShard
+      f.push("__**Alias Multicaracteres**__") if Shardizard==$spanishShard
       x=$aliases.reject{|q| q[0]!='Unit' || !q[2].is_a?(Array)}
       for i in 0...x.length
         if x[i][2].reject{|q| !q.is_a?(String)}.length<=0 # purely unit names
@@ -3724,7 +4124,12 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
     x=$aliases.reject{|q| q[0]!=alztyp}
     x=x.reject{|q| !q[3].nil? && !q[3].include?(event.server.id)} unless event.server.nil?
     x=x.reject{|q| q[3].nil?} if saliases
-    f=["__**#{'Server-specific ' if saliases}#{alztyp} Aliases**__"]
+    f222="__**#{'Server-specific ' if saliases}#{alztyp} Aliases**__"
+    alztyp2='estructuras'
+    alztyp2='elementos' if alztyp=='Item'
+    alztyp2='accesorios' if alztyp=='Accessory'
+    f222="__**Alias #{'específicos del servidor ' if saliases}para #{alztyp2}**__" if Shardizard==$spanishShard
+    f=[f222]
     if event.server.nil?
       for i in 0...x.length
         str="#{x[i][1].gsub('`',"\`").gsub('*',"\*")} = #{x[i][2]}"
@@ -3738,18 +4143,24 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
               f2.push("*#{bot.server(x[i][3][j]).name}*") unless event.user.on(x[i][3][j]).nil?
             end
           end
-          f.push("#{str} (in the following servers: #{list_lift(f2,'and')})") unless f2.length<=0
+          f.push("#{str} (in the following servers: #{list_lift(f2,'and')})") unless f2.length<=0 || Shardizard==$spanishShard
+          f.push("#{str} (en los siguientes servidores: #{list_lift(f2,'y')})") unless f2.length<=0 || Shardizard !=$spanishShard
         end
       end
     else
-      f=x.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")} = #{q[2]}#{' *[in this server only]*' unless q[3].nil? || saliases}"}
-      f.unshift("__**#{'Server-specific ' if saliases}#{alztyp} Aliases**__")
+      f=x.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")} = #{q[2]}#{xfx unless q[3].nil? || saliases}"}
+      f.unshift(f222)
     end
   elsif args.length>0 && args[0].length>0 && k.nil?
     alz=args.join(' ')
     alz='>censored mention<' if alz.include?('@')
     str="The alias system can cover:\n- Units\n- Skills (weapons, assists, specials, and passives)\n- Structures\n- Items\n- Accessories"
     str="#{str}\n\n*#{alz}* does not fall into any of these categories."
+    if Shardizard==$spanishShard
+      str="El sistema de alias puede cubrir:\n- aracteres\n- Habilidades (armas, asistencias, especiales, pasivos)\n- Estructuras\n- Artículos\n- Accesorios"
+      str="#{str}\n\n*#{alz}* no pertenece a ninguna de estas categorías." if alz.length>0
+      str="#{str}\n\nIncluya lo que desea buscar alias o use este comando en mensajes privados.\nPero si lo hace, prepárese para recibir muchos mensajes. Hay alias #{longFormattedNumber($aliases.length)}." if alz.length<=0
+    end
     event.respond str
     return nil
   elsif k.nil?
@@ -3785,11 +4196,14 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
       if k2.length>0 && !saliases
         k2=k2.map{|q| q[1]}
         if k.length>2
-          k2.unshift('__**Multi-unit aliases that contain all of these units**__')
+          k2.unshift('__**Multi-unit aliases that contain all of these units**__') unless Shardizard==$spanishShard
+          k2.unshift('__**Alias multicaracteres que contienen todos estos caracteres**__') if Shardizard==$spanishShard
         elsif k.length==2
-          k2.unshift('__**Multi-unit aliases that contain both of these units**__')
+          k2.unshift('__**Multi-unit aliases that contain both of these units**__') unless Shardizard==$spanishShard
+          k2.unshift('__**Alias multicaracteres que contienen ambos caracteres**__') if Shardizard==$spanishShard
         else
-          k2.unshift('__**Multi-unit aliases that contain this unit**__')
+          k2.unshift('__**Multi-unit aliases that contain this unit**__') unless Shardizard==$spanishShard
+          k2.unshift('__**Alias multicaracteres que contienen este carácter**__') if Shardizard==$spanishShard
         end
         f.push(k2)
       end
@@ -3809,14 +4223,19 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
     k2=$aliases.reject{|q| q[0]!='Unit' || !q[2].is_a?(Array) || !(q[2].include?(k.id) || q[2].include?(k.name))}
     if k2.length>0 && !saliases
       f.push(' ')
-      f.push('__**Multi-unit aliases that contain this unit**__')
+      f.push('__**Multi-unit aliases that contain this unit**__') unless Shardizard==$spanishShard
+      f.push('__**Alias multicaracteres que contienen este carácter**__') if Shardizard==$spanishShard
       f.push(k2.map{|q| q[1]})
       f.flatten!
     end
     args=["arden's"] if k.name=='Arden' # Without this line, Ardent Durandal will overwrite Arden's Blade when looking up the unit Arden, and the skill won't display
                                         # While technically intended behavior, since Ardent Durandal came first, it is not what users would expect given things like Berkut's Lance
     k2=find_data_ex(:find_skill,event,args,nil,bot)
-    unless k2.nil? || !([k.name,"#{k.name}'s"].include?(k2.name.split(' ')[0]) || (k.name=='Erinys' && k2.name=='Fury'))
+    m=false
+    m=true if !k2.nil? && k2.name.split(' ')[-1]==k.name && k2.name.split(' ')[-2]=='de'
+    m=true if !k2.nil? && k2.name.split(' ')[-1]==k.name && k2.name.split(' ').length==2
+    m=false unless Shardizard==$spanishShard
+    unless k2.nil? || !([k.name,"#{k.name}'s"].include?(k2.name.split(' ')[0]) || m || (k.name=='Erinys' && k2.name=='Fury'))
       f.push(' ')
       f.push(k2.alias_list(bot,event,saliases))
       f.flatten!
@@ -3826,7 +4245,8 @@ def list_aliases(bot,event,args=nil,saliases=false,dispdata=false)
   end
   return f if dispdata
   if (f.join("\n").length>1900 || f.length>50) && !safe_to_spam?(event)
-    event.respond "There are so many aliases that I don't want to spam the server.  Please use the command in PM."
+    event.respond "There are so many aliases that I don't want to spam the server.  Please use the command in PM." unless Shardizard==$spanishShard
+    event.respond "Hay tantos alias que no quiero enviar spam al servidor. Utilice el comando en mensajes privados." if Shardizard==$spanishShard
     return nil
   end
   str=f[0]
@@ -3852,7 +4272,7 @@ def why_elise(event,bot)
     str="When it got time to actually name the bot, a friend on the server suggested Priscilla, and this idea appealed to me because I had been trying to summon for Priscilla for over three months with no success.  \"If the game isn't gonna give me a Priscilla, I'll just make one.\"  So she was coded with the name PriscillaBot - and in fact, that's still the filename of her source code."
     str="#{str}\n\nThe next day, I wake up to a message from the admin of the server, basically saying \"I like Priscilla as well, but shouldn't we make the bot someone the casual FEH player will recognize?\"  He, knowing my waifuism, suggested Sakura, and I had to turn him down.  So the two of us put the bot's identity up for a vote in the server, and PriscillaBot lost 6-7 in favor of EliseBot."
     str="#{str}\n\nEventually, Gamepedia started seeing things similarly to the server in question, and the server-specific tier list was depricated.  But by this point, I had already started experimenting with what would become her `stats` command, so Elise, rather than dying off, evolved into the community resource that you know her as today."
-    create_embed(event,'',str,0xCF4030,"And yes, during the healer gauntlet, her original server was tossing jokes around left and right that it was a battle for the bot's true identity.")
+    create_embed(event,'',str,0xCF4030,"And yes, during the first healer gauntlet, her original server was tossing jokes around left and right that it was a battle for the bot's true identity.")
   end
 end
 
@@ -3948,6 +4368,7 @@ def growth_explain(event,bot)
 end
 
 def merge_explain(event,bot)
+  return merge_explain_spanish(event,bot) if Shardizard==$spanishShard
   disp="1.) Look at the original unit's level 1 stats at 5<:Icon_Rarity_5:448266417553539104>."
   disp="#{disp}\n- The stats must be at 5<:Icon_Rarity_5:448266417553539104> regardless of the rarity of the unit being merged."
   disp="#{disp}\n\n2.) Sort them by value, highest first and lowest last."
@@ -3995,6 +4416,7 @@ def score_explain(event,bot)
 end
 
 def show_tools(event,bot)
+  return show_tools_to_spain(event,bot) if Shardizard==$spanishShard
   if $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || event.message.text.downcase.include?('mobile') || event.message.text.downcase.include?('phone')
     event << '**Useful tools for players of** ***Fire Emblem Heroes***'
     event << '__Download the game__'
@@ -4086,6 +4508,172 @@ def oregano_explain(event,bot)
   end
 end
 
+def headpat(event,bot)
+  canpost=true
+  if event.server.nil?
+  elsif event.server.id==271642342153388034
+    post=Time.now
+    if (post - @zero_by_four[1]).to_f > 1800
+      @zero_by_four[1]=post
+    else
+      return nil
+    end
+  elsif event.channel.id==330850148261298176
+    return nil
+  end
+  p=[['Corrin','she',1],['Sakura','she',1],['Camilla','she',1],['my friends','they',2],['Kiran','they',1],['Mathoo','he',1]]
+  if (event.server.nil? && event.user.id==270372601107447808) || (!event.server.nil? && !bot.user(270372601107447808).on(event.server.id).nil?)
+    hubbyid=270372601107447808
+    p.push([bot.user(270372601107447808).name,'he',1])
+    p[6]=['you','you',0] if event.user.id==270372601107447808
+  elsif (event.server.nil? && event.user.id==261321388344868867) || (!event.server.nil? && !bot.user(261321388344868867).on(event.server.id).nil?)
+    hubbyid=261321388344868867
+    p.push([bot.user(261321388344868867).name,'he',1])
+    p[6]=['you','you',0] if event.user.id==261321388344868867
+  end
+  p2=p.sample
+  r=[["Please don't, #{p2[0]} just did my hair. Do you know how much time #{p2[1]} spent on these drills?",false],
+     ["^-^",true],["That feels good.",true],["Hee hee hee, yay!",true],
+     ["\\*purrs\\* ...wait, why am *I* purring?  Sakura's the one who dressed up as a cat!",true]]
+  r.push(["My husband wouldn't appreciate you doing this.",(rand(2).zero?)]) unless event.user.id==hubbyid
+  r.push(["\\*pulls away* Don't do that, please!",false]) unless event.user.id==hubbyid
+  r.push(['\\*hums happily*',true]) if event.user.id==hubbyid
+  r.push(['Aww, thanks, honey!  I have the bestest hubby ever!',true]) if event.user.id==hubbyid
+  can_joseph=true
+  if event.server.nil?
+    can_joseph=false if event.user.id==170070293493186561
+  else
+    can_joseph=false if !bot.user(170070293493186561).on(event.server.id).nil?
+    can_joseph=true if !bot.user(256502173788143626).on(event.server.id).nil?
+  end
+  r.push(["Do I remind you of Joseph? He's the cutest puppy that ever was!",true]) if can_joseph
+  leo=['spies the two, grumbles','Go away, Leo.','sticks out tongue',"and I can do whatever we want; we're married.","You're no fun"]
+  if Shardizard==$spanishShard
+    r=[[["Por favor no lo hagas, acabas de peinarme. ¿Sabes cuánto tiempo dedicaste a estos taladros?",
+         "Por favor no lo hagas, #{p2[0]} acaba de peinarme. ¿Sabes cuánto tiempo pasó en estos taladros?",
+         "Por favor no lo hagas, #{p2[0]} acaba de peinarme. ¿Sabes cuánto tiempo dedicaron a estos taladros?"][p2[2]],true],["^-^",true],["Me gusta.",true],["Hee hee hee, yay!",true],
+        ["\\*ronronea\\* ...espera, ¿por qué *yo* ronroneo?  ¡Sakura es la que se disfrazó de gato!",true]]
+    r.push(["Mi esposo no apreciaría que hicieras esto.",(rand(2).zero?)]) unless event.user.id==hubbyid
+    r.push(["\\*empuja* ¡No hagas eso, por favor!",false]) unless event.user.id==hubbyid
+    r.push(['\\*tararea feliz*',true]) if event.user.id==hubbyid
+    r.push(['¡Aww, gracias, cariño! ¡Tengo el mejor marido de todos!',true]) if event.user.id==hubbyid
+    leo=['espía a los dos, se queja','Vete, Leo.','saca la lengua','y yo podemos hacer lo que queramos.  Estamos casados.','No eres divertido']
+  end
+  r2=r.sample
+  if r2[1] && rand(10).zero?
+    if event.user.id==270372601107447808
+      event << "Elise: #{r2[0]}"
+      event << "Leo: \\*#{leo[0]}\\*"
+      event << "Elise: #{leo[1]}  #{bot.user(270372601107447808).name.split(' | ')[0]} #{leo[3]}  \\*#{leo[2]}* "
+    elsif event.user.id==261321388344868867
+      event << "Elise: #{r2[0]}"
+      event << "Leo: \\*#{leo[0]}\\*"
+      event << "Elise: #{leo[1]}  #{bot.user(261321388344868867).name} #{leo[3]}  \\*#{leo[2]}* "
+    else
+      event << "Elise: #{r2[0]}"
+      event << 'Leo: Please stop, you need to treat her like the adult that she technically is.' unless Shardizard==$spanishShard
+      event << 'Leo: Por favor, deténgase, debe tratarla como a una adulta.' if Shardizard==$spanishShard
+      event << "Elise: \\*#{leo[2]}* #{leo[4]}."
+    end
+  else
+    event << r2[0]
+  end
+  event << ''
+  metadata_load()
+  z=0
+  z=1 if event.user.id==270372601107447808
+  z=2 if event.user.id==261321388344868867
+  @headpats[z]+=1
+  if @headpats[z]>=1000000000
+    event << '~~resetting counter~~' unless Shardizard==$spanishShard
+    event << '~~reiniciar contador~~' if Shardizard==$spanishShard
+    @headpats[z]=1
+  end
+  metadata_save()
+  if event.user.id==167657750971547648 || event.message.text.downcase.split(' ').include?('stats')
+    event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[1]+@headpats[2],true)} time someone has tried to give me a headpat.~~" unless Shardizard==$spanishShard
+    event << "~~Esta es la #{longFormattedNumber(@headpats[0]+@headpats[1]+@headpats[2]).gsub(',','.')}a vez que alguien acaricia mi cabeza.~~" if Shardizard==$spanishShard
+    event << ""
+    if event.server.nil? && event.user.id==167657750971547648
+      z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+      event << "~~Moosie has headpatted me #{longFormattedNumber(@headpats[1])} time#{"s" unless @headpats[1]==1}, which is #{z}% of the headpats I've received~~"
+      z=(@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+      event << "~~ExpiredJellyBean has headpatted me #{longFormattedNumber(@headpats[2])} time#{"s" unless @headpats[2]==1}, which is #{z}% of the headpats I've received~~"
+      z=(@headpats[0]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+      event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0])} time#{"s" unless @headpats[0]==1}, which is #{z}% of the headpats I've received~~"
+    elsif event.server.nil?
+      z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+      event << "~~Moosie has headpatted me #{longFormattedNumber(@headpats[1])} time#{"s" unless @headpats[1]==1}, which is #{z}% of the headpats I've received.~~"
+      z=(@headpats[0]*10000+@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+      z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+      event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0]+@headpats[2])} time#{"s" unless @headpats[0]+@headpats[2]==1}, which is #{z}% of the headpats I've received.~~"
+    elsif Shardizard != $spanishShard
+      moosiebean=[false,false]
+      if !bot.user(270372601107447808).on(event.server.id).nil?
+        z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+        z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+        event << "~~Moosie has headpatted me #{longFormattedNumber(@headpats[1])} time#{"s" unless @headpats[1]==1}, which is #{z}% of the headpats I've received.~~"
+        moosiebean[0]=true
+      end
+      if !bot.user(261321388344868867).on(event.server.id).nil?
+        z=(@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+        z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+        event << "~~ExpiredJellyBean has headpatted me #{longFormattedNumber(@headpats[2])} time#{"s" unless @headpats[2]==1}, which is #{z}% of the headpats I've received.~~"
+        moosiebean[1]=true
+      end
+      if moosiebean[0] && moosiebean[1]
+        z=(@headpats[0]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+        z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+        event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0])} time#{"s" unless @headpats[0]==1}, which is #{z}% of the headpats I've received.~~"
+      elsif moosiebean[0]
+        z=(@headpats[0]*10000+@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+        z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+        event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0]+@headpats[2])} time#{"s" unless @headpats[0]+@headpats[2]==1}, which is #{z}% of the headpats I've received.~~"
+      elsif moosiebean[1]
+        z=(@headpats[0]*10000+@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+        z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+        event << "~~Other people have headpatted me #{longFormattedNumber(@headpats[0]+@headpats[1])} time#{"s" unless @headpats[0]+@headpats[1]==1}, which is #{z}% of the headpats I've received.~~"
+      end
+    end
+  elsif event.user.id==270372601107447808
+    event << "~~This is the #{longFormattedNumber(@headpats[1],true)} time you have given me a headpat.~~"
+    z=(@headpats[1]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+    z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+    event << "~~#{z}% of the attempted headpats were performed by you.~~"
+  elsif event.user.id==261321388344868867
+    event << "~~This is the #{longFormattedNumber(@headpats[2],true)} time you have given me a headpat.~~"
+    z=(@headpats[2]*10000)/(@headpats[0]+@headpats[1]+@headpats[2])
+    z="#{z/100}#{".#{"0" if z%100<10}#{z%100}" unless z%100==0}"
+    event << "~~#{z}% of the attempted headpats were performed by you.~~"
+  elsif Shardizard==$spanishShard
+    event << "~~Esta es la #{longFormattedNumber(@headpats[0]+@headpats[1]+@headpats[2]).gsub(',','.')}a vez que alguien acaricia mi cabeza.~~"
+  elsif event.server.nil?
+    event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[1]+@headpats[2],true)} time someone has tried to give me a headpat.~~" unless Shardizard==$spanishShard
+  elsif !bot.user(270372601107447808).on(event.server.id).nil?
+    event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[2],true)} time someone other than my husband has tried to give me a headpat.~~"
+  elsif !bot.user(261321388344868867).on(event.server.id).nil?
+    event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[1],true)} time someone other than my husband has tried to give me a headpat.~~"
+  else
+    event << "~~This is the #{longFormattedNumber(@headpats[0]+@headpats[1]+@headpats[2],true)} time someone has tried to give me a headpat.~~"
+  end
+  return nil
+end
+
+def flower_array(event,bot)
+  event << "<:Dragonflower_Infantry:541170819980722176><:Dragonflower_Orange:552648156790390796><:Dragonflower_Cavalry:541170819955556352><:Dragonflower_Armor:541170820001824778><:Dragonflower_Cyan:552648156202926097><:Dragonflower_Flier:541170820089774091><:Dragonflower_Purple:552648232673607701><:Dragonflower_Pink:552648232510160897>"
+  if Shardizard==$spanishShard
+    event << '¡Mira todas las bonitas flores!'
+  else
+    event << 'Look at all the pretty flowers!'
+  end
+  event << "https://www.getrandomthings.com/list-flowers.php"
+  return nil
+end
+
 def update_howto(event,bot)
   if ![368976843883151362,167657750971547648].include?(event.user.id)
     t=Time.now
@@ -4174,15 +4762,25 @@ def aoe(event,bot,args=nil)
   str2=''
   for i in 1...5
     type=['specials','Flame','Wind','Thunder','Light'][i]
+    type=['especiales','Llama','Viento','Rayo','Luz'][i] if Shardizard==$spanishShard && false
     if [i,0].include?(mode)
       m=sklz[sklz.find_index{|q| q.name=="Blazing #{type}"}]
       m2=sklz[sklz.find_index{|q| q.name=="Growing #{type}"}]
-      str="__**Blazing #{type}** vs. **Growing #{type}**__\n#{hybrid_range(m.range,m2.range)}"
+      if Shardizard==$spanishShard && false
+        m=sklz[sklz.find_index{|q| q.name=="#{type} asolador"}]
+        m2=sklz[sklz.find_index{|q| q.name=="#{type} cegador"}]
+      end
+      str="__**#{m.name}** v#{'s' unless Shardizard==$spanishShard}. **#{m2.name}**__\n#{hybrid_range(m.range,m2.range)}"
       str2=extend_message(str2,str,event)
     end
   end
-  type=['specials','Flame','Wind','Thunder','Light'][mode]
-  str2=extend_message(str2,"Base damage is `Atk - eDR`, where eDR is the enemy's Def or Res, based on the type of weapon being used.\nBlazing #{type} do#{'es' if mode>0} 1.5x as much damage as Growing #{type}.\nRising #{type} ha#{'ve' if mode==0}#{'s' if mode>0} the range of Blazing but deal#{'s' if mode>0} as much damage as Growing.",event)
+  type=['Epecials','Flame','Wind','Thunder','Light'][mode]
+  type=['especiales','Llama','Viento','Rayo','Luz'][mode] if Shardizard==$spanishShard && false
+  if Shardizard==$spanishShard
+    str2=extend_message(str2,"El daño base es `Atq - eDR`, donde eDR es la Def o Res del enemigo, dependiendo del tipo de arma que se utilice.\n#{type} asolador hace 1,5 veces más daño que #{type} cegador.\n#{type} creciente tiene el alcance de Asolador pero inflige tanto daño como Cegador.",event)
+  else
+    str2=extend_message(str2,"Base damage is `Atk - eDR`, where eDR is the enemy's Def or Res, based on the type of weapon being used.\nBlazing #{type} do#{'es' if mode>0} 1.5x as much damage as Growing #{type}.\nRising #{type} ha#{'ve' if mode==0}#{'s' if mode>0} the range of Blazing but deal#{'s' if mode>0} as much damage as Growing.",event)
+  end
   event.respond str2
 end
 
@@ -4193,13 +4791,18 @@ def show_bonus_smol(event,args=[],bot=nil,mode=0)
   b=$bonus_units.reject{|q| !q.isFuture? || q.isNext?(false) || (args.length>0 && !args.include?(q.type))} if mode==2
   return nil if b.length<=0
   f=[]
+  mnames=['Arena','Aether Raids','Tempest Trials','Resonant Battles']
+  mnames=['Arena','Asaltos Etéreos','la Tormenta','Batallas Fragorosas'] if Shardizard==$spanishShard
   season=0
   x=b.reject{|q| q.type != 'Arena'}
   unless x.length<=0
     season=x[0].colosseum_season unless x[0].colosseum_season<0
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{x[0].elements[0]}"}
     moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{x[0].elements[1]}"}
-    f.push(["#{moji[0].mention unless moji.length<=0}#{moji2[0].mention unless moji2.length<=0}**Arena**",x[0].unit_list.map{|q| "#{q.name}"}.join("\n")])
+    str=x[0].unit_list.map{|q| "#{q.name}"}.join("\n")
+    str='>Bonus Units unknown<' if x[0].unit_list.length<=0
+    str='>Personajes extra son desconocidos<' if x[0].unit_list.length<=0 && Shardizard==$spanishShard
+    f.push(["#{moji[0].mention unless moji.length<=0}#{moji2[0].mention unless moji2.length<=0}**#{mnames[0]}**",str]) if x[0].unit_list.length>0 || b.reject{|q| q.type=='Arena'}.length>0
   end
   x=b.reject{|q| q.type != 'Aether'}
   unless x.length<=0
@@ -4207,24 +4810,35 @@ def show_bonus_smol(event,args=[],bot=nil,mode=0)
     moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{x[0].elements[0]}"}
     moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{x[0].elements[1]}"}
     str=x[0].unit_list.map{|q| "#{q.name}"}.join("\n")
+    str='>Bonus Units unknown<' if x[0].unit_list.length<=0
+    str='>Personajes extra son desconocidos<' if x[0].unit_list.length<=0 && Shardizard==$spanishShard
+    offens='O'
+    offens='A' if Shardizard==$spanishShard
     if x[0].offense_structure==x[0].defense_structure
-      str="#{str}\n\n#{x[0].offense_structure} (O/D)"
+      str="#{str}\n\n#{x[0].offense_structure} (#{offens}/D)"
     else
-      str="#{str}\n\n#{x[0].offense_structure} (O)\n#{x[0].defense_structure} (D)"
+      str="#{str}\n\n#{x[0].offense_structure} (#{offens})\n#{x[0].defense_structure} (D)"
     end
-    f.push(["#{moji[0].mention unless moji.length<=0}#{moji2[0].mention unless moji2.length<=0}**Aether Raids**",str])
+    f.push(["#{moji[0].mention unless moji.length<=0}#{moji2[0].mention unless moji2.length<=0}**#{mnames[1]}**",str]) if x[0].unit_list.length>0 || b.reject{|q| q.type=='Aether'}.length>0
   end
   x=b.reject{|q| q.type != 'Tempest'}
   unless x.length<=0
     str=x[0].unit_list.map{|q| "#{q.name}"}.join("\n")
+    str='>Bonus Units unknown<' if x[0].unit_list.length<=0
+    str='>Personajes extra son desconocidos<' if x[0].unit_list.length<=0 && Shardizard==$spanishShard
     str="#{str}\n\n#{x[0].seals.uniq.map{|q| "#{q.fullName('')}#{q.emotes(bot,true)}"}.join("\n")}"
-    f.push(['<:Current_Tempest_Bonus:498797966740422656>**Tempest Trials**',str])
+    f.push(["<:Current_Tempest_Bonus:498797966740422656>**#{mnames[2]}**",str])
   end
   x=b.reject{|q| q.type != 'Resonant'}
-  f.push(['<:Special_Blade:800880639540068353>Resonant Blades',get_games_list(x[0].bonuses,false).join("\n")]) unless x.length<=0
+  f.push(["<:Special_Blade:800880639540068353>#{mnames[3]}",get_games_list(x[0].bonuses,false).join("\n")]) unless x.length<=0 || x[0].bonuses.length<=0
   str="__**Colosseum Season #{season}**__"
   str="__*Colosseum Season #{season}* - **Current week**__" if mode==0
   str="__*Colosseum Season #{season}* - **Next week**__" if mode==1
+  if Shardizard==$spanishShard
+    str="__**Temporada del Coliseo #{season}**__"
+    str="__*Temporada del Coliseo #{season}* - **Semana actual**__" if mode==0
+    str="__*Temporada del Coliseo #{season}* - **La próxima semana**__" if mode==1
+  end
   create_embed(event,str,'',0xD49F61,nil,nil,f)
 end
 
@@ -4234,21 +4848,25 @@ def show_bonus_units(event,args=[],bot=nil,mode=0)
   b=b.reject{|q| !q.isCurrent?(false)} if mode==2
   b=b.reject{|q| !q.isNext?(false)} if mode==3
   b=b.sort{|a,c| a.typeAsNumber<=>c.typeAsNumber}
+  err=['There are no known quantities about','or','Arena','Tempest Trials','Aether Raids','Resonant Battles','Week','Colosseum','Current week','Next week','Seals']
+  err=['No hay cantidades conocidas sobre','o','Arena','la Tormenta','Asaltos Etéreos','Batallas Fragorosas','Semana','Coliseo','Semana actual','Próxima semana','Insignias'] if Shardizard==$spanishShard
+  offens='O'
+  offens='A' if Shardizard==$spanishShard
   if args.length<=0
     x=[]
-    x.push('Arena') if b.reject{|q| q.type != 'Arena'}.length<=0
-    x.push('Tempest Trials') if b.reject{|q| q.type != 'Tempest'}.length<=0
-    x.push('Aether Raids') if b.reject{|q| q.type != 'Aether'}.length<=0
-    x.push('Resonant Battles') if b.reject{|q| q.type != 'Resonant'}.length<=0
-    return ["There are no known quantities about #{list_lift(x,'or')}"] if x.length>0 && mode>0
-    event.respond "There are no known quantities about #{list_lift(x,'or')}" if x.length>0
+    x.push(err[2]) if b.reject{|q| q.type != 'Arena'}.length<=0
+    x.push(err[3]) if b.reject{|q| q.type != 'Tempest'}.length<=0
+    x.push(err[4]) if b.reject{|q| q.type != 'Aether'}.length<=0
+    x.push(err[5]) if b.reject{|q| q.type != 'Resonant'}.length<=0
+    return ["#{err[0]} #{list_lift(x,err[1])}"] if x.length>0 && mode>0
+    event.respond "#{err[0]} #{list_lift(x,err[1])}" if x.length>0
   elsif b.length<=0 && mode>0
     x=[]
-    x.push('Arena') if args.include?('Arena')
-    x.push('Tempest Trials') if args.include?('Tempest')
-    x.push('Aether Raids') if args.include?('Aether')
-    x.push('Resonant Battles') if args.include?('Resonant')
-    return ["There are no known quantities about #{list_lift(x,'or')}"]
+    x.push(err[2]) if args.include?('Arena')
+    x.push(err[3]) if args.include?('Tempest')
+    x.push(err[4]) if args.include?('Aether')
+    x.push(err[5]) if args.include?('Resonant')
+    return ["#{err[0]} #{list_lift(x,err[1])}"]
   end
   if mode>0
     b2=b.map{|q| q.unit_list}.uniq
@@ -4259,22 +4877,28 @@ def show_bonus_units(event,args=[],bot=nil,mode=0)
       str="__**Next #{b3[0].type} Season**__" if b3[0].isNext?(false) || (i>0 && b2[i-1].include?('__**Current'))
       str=str.gsub('Season','Trials') if b3[0].type=='Tempest'
       str="#{str}\n*Bonus Units:* #{b3[0].unit_list.map{|q| q.name}.join(', ')}"
+      if Shardizard==$spanishShard
+        str="__**Temporada #{i+1} de #{b3[0].spanish_type}**__"
+        str="__**Temporada de #{b3[0].spanish_type} Actual**__" if b3[0].isCurrent?(false)
+        str="__**Próxima Temporada de #{b3[0].spanish_type}**__" if b3[0].isNext?(false) || (i>0 && b2[i-1].include?('__**Current'))
+        str="#{str}\n*Personajes Bonificaciónes:* #{b3[0].unit_list.map{|q| q.name}.join(', ')}"
+      end
       for i2 in 0...b3.length
-        str2="*Week #{i2+1}*"
-        str2="*Current week*" if b3[i2].isCurrent?(false)
-        str2="*Next week*" if b3[i2].isNext?(false)
+        str2="*#{err[6]} #{i2+1}*"
+        str2="*#{err[8]}*" if b3[i2].isCurrent?(false)
+        str2="*#{err[9]}*" if b3[i2].isNext?(false)
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{b3[i2].elements[0]}"}
         moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{b3[i2].elements[1]}"}
         moji2=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Boost_#{b3[i2].elements[1]}"} if b3[i2].type=='Arena'
         str2="#{str2} #{moji[0].mention unless moji.length<=0}#{b3[i2].elements[0]}/#{moji2[0].mention unless moji2.length<=0}#{b3[i2].elements[1]}"
         if b3[i2].type=='Aether'
           if b3[i2].offense_structure==b3[i2].defense_structure
-            str2="#{str2} - #{b3[i2].offense_structure} (O/D)"
+            str2="#{str2} - #{b3[i2].offense_structure} (#{offens}/D)"
           else
-            str2="#{str2} - #{b3[i2].offense_structure} (O), #{b3[i2].defense_structure} (D)"
+            str2="#{str2} - #{b3[i2].offense_structure} (#{offens}), #{b3[i2].defense_structure} (D)"
           end
         elsif b3[i2].type=='Tempest'
-          str2="*Seals:* #{b3[i2].seals.uniq.map{|q| "#{q.fullName('')}#{q.emotes(bot,true)}"}.join(', ')}"
+          str2="*#{err[10]}:* #{b3[i2].seals.uniq.map{|q| "#{q.fullName('')}#{q.emotes(bot,true)}"}.join(', ')}"
         end
         str="#{str}\n#{str2}" unless b3[i2].type=='Resonant'
       end
@@ -4282,7 +4906,7 @@ def show_bonus_units(event,args=[],bot=nil,mode=0)
     end
     return b2
   end
-  x=b.map{|q| [q.type,q.unit_list,q.bonuses]}.uniq
+  x=b.map{|q| [q.type,q.unit_list,q.bonuses,q.spanish_type]}.uniq
   y=''
   for i in 0...x.length
     if x[i][0]=='Resonant'
@@ -4296,19 +4920,25 @@ def show_bonus_units(event,args=[],bot=nil,mode=0)
     xcolor=0x54C571 if x[i][0]=='Aether'
     xcolor=0xC0EEB6 if x[i][0]=='Resonant'
     hdr="__**#{x[i][0]} Bonus Units**__"
-    hdr="__**Tempest Trials Bonus Units**__" if x[i][0]=='Tempest'
-    hdr="__**Aether Raids Bonus Units**__" if x[i][0]=='Aether'
-    hdr="__**Resonant Battles Bonus Games**__" if x[i][0]=='Resonant'
+    if Shardizard==$spanishShard
+      hh='Personajes'
+      hh='Juegos' if x[i][0]=='Resonant'
+      hdr="__**#{hh} Bonificaciónes de #{x[i][3]}**__"
+    else
+      hdr="__**Tempest Trials Bonus Units**__" if x[i][0]=='Tempest'
+      hdr="__**Aether Raids Bonus Units**__" if x[i][0]=='Aether'
+      hdr="__**Resonant Battles Bonus Games**__" if x[i][0]=='Resonant'
+    end
     xf=b.reject{|q| q.type != x[i][0] || q.unit_list != x[i][1]}
     xf=b.reject{|q| q.type != x[i][0] || q.bonuses != x[i][2]} if x[i][0]=='Resonant'
     yy=10
     for i2 in 0...xf.length
       xx=[]
-      xx.push("Colosseum #{xf[i2].colosseum_season}")
+      xx.push("#{err[7]} #{xf[i2].colosseum_season}")
       if xf[i2].isCurrent?(false)
-        xx[-1]="#{xx[-1]} - **Current week**"
+        xx[-1]="#{xx[-1]} - **#{err[8]}**"
       elsif xf[i2].isNext?(false)
-        xx[-1]="#{xx[-1]} - *Next week*"
+        xx[-1]="#{xx[-1]} - *#{err[9]}*"
       else
         xx[-1]="*#{xx[-1]}*"
       end
@@ -4321,15 +4951,15 @@ def show_bonus_units(event,args=[],bot=nil,mode=0)
         xx.push("#{moji[0].mention unless moji.length<=0}#{xf[i2].elements[0]}, #{moji2[0].mention unless moji2.length<=0}#{xf[i2].elements[1]}")
         if x[i][0]=='Aether'
           if xf[i2].offense_structure==xf[i2].defense_structure
-            xx.push("#{xf[i2].offense_structure} (O/D)")
+            xx.push("#{xf[i2].offense_structure} (#{offens}/D)")
           else
-            xx.push("#{xf[i2].offense_structure} (O), #{xf[i2].defense_structure} (D)")
+            xx.push("#{xf[i2].offense_structure} (#{offens}), #{xf[i2].defense_structure} (D)")
           end
         end
         m="#{m}\n#{"\n" unless xx.length<=1 && yy<=1 && i2>0}#{xx.join("\n")}"
         yy=xx.length
       elsif x[i][0]=='Tempest'
-        m="#{m}\n\n__*Seals*__\n#{xf[i2].seals.uniq.map{|q| "#{q.fullName('')}#{q.emotes(bot,true)}"}.join("\n")}"
+        m="#{m}\n\n__*#{err[10]}*__\n#{xf[i2].seals.uniq.map{|q| "#{q.fullName('')}#{q.emotes(bot,true)}"}.join("\n")}"
       end
     end
     hdr='' if y==hdr
@@ -4602,7 +5232,7 @@ def make_random_unit(event,args,bot)
   for i in 0...gps.length
     gps[i]-=3
   end
-  unt=FEHUnit.new(name)
+  unt=FEHUnit.new(event.user.display_name)
   unt.fake=['',event.user.id]
   unt.weapon=clazz.map{|q| q}
   unt.weapon.push(['Fire','Dark'].sample) if clazz==['Red','Tome']
@@ -4627,20 +5257,23 @@ def disp_current_banners(event,bot,str='',returnlist=false,mode=0)
   t-=60*60*timeshift
   str="#{str}\n\n#{date_display(event,t)}" unless returnlist
   x=$banners.reject{|q| !q.isCurrent?}.reverse
-  str="#{"#{str}\n\n" unless returnlist || ![0,1].include?(mode)}__**Current Banners**__"
+  str="#{"#{str}\n\n" unless returnlist || ![0,1].include?(mode)}__**Current Banners**__" unless Shardizard==$spanishShard
+  str="#{"#{str}\n\n" unless returnlist || ![0,1].include?(mode)}__**Pancartas Actual**__" if Shardizard==$spanishShard
+  timelength=['days','hours','minutes','seconds']
+  timelength=['días','horas','minutos','segundos'] if Shardizard==$spanishShard
   for i in 0...x.length
     str2=x[i].name
     t2=Time.new(x[i].end_date[2],x[i].end_date[1],x[i].end_date[0])
     t2=t2-t
     t2+=24*60*60
     if t2/(24*60*60)>1
-      str2="#{str2} - #{(t2/(24*60*60)).floor} days left"
+      str2="#{str2} - #{'Quedan ' if Shardizard==$spanishShard}#{(t2/(24*60*60)).floor} #{timelength[0]}#{' left' unless Shardizard==$spanishShard}"
     elsif t2/(60*60)>1
-      str2="#{str2} - #{(t2/(60*60)).floor} hours left"
+      str2="#{str2} - #{'Quedan ' if Shardizard==$spanishShard}#{(t2/(60*60)).floor} #{timelength[1]}#{' left' unless Shardizard==$spanishShard}"
     elsif t2/60>1
-      str2="#{str2} - #{(t2/60).floor} minutes left"
+      str2="#{str2} - #{'Quedan ' if Shardizard==$spanishShard}#{(t2/60).floor} #{timelength[2]}#{' left' unless Shardizard==$spanishShard}"
     elsif t2>1
-      str2="#{str2} - #{(t2).floor} seconds left"
+      str2="#{str2} - #{'Quedan ' if Shardizard==$spanishShard}#{(t2).floor} #{timelength[3]}#{' left' unless Shardizard==$spanishShard}"
     end
     if ![0,1].include?(mode)
     elsif returnlist
@@ -4688,27 +5321,30 @@ def disp_current_banners(event,bot,str='',returnlist=false,mode=0)
     f=book1[week_from(date,3)%book1.length].split(', ')
     f=f.map{|q| $units.find_index{|q2| q2.name==q}}.compact.map{|q| $units[q]}
     f=f.map{|q| "#{q.name}#{q.emotes(bot,false)}"}
-    str=extend_message(str,"__**#{['Current','','','Current','Upcoming'][mode]} Book 1+2 Revival Units**__\n#{f.join(', ')}",event,2)
+    str=extend_message(str,"__**#{['Current','','','Current','Upcoming'][mode]} Book 1+2 Revival Units**__\n#{f.join(', ')}",event,2) unless Shardizard==$spanishShard
+    str=extend_message(str,"__**Personajes#{[' Actuales','','',' Actuales',' Próximas'][mode]} del Renacimiento de los Libros 1+2**__\n#{f.join(', ')}",event,2) if Shardizard==$spanishShard
   end
   x=$banners.reject{|q| !q.isFuture?}.reverse
   return str if returnlist && mode==1
   if returnlist
-    str="#{"#{str}\n\n" unless ![0,2].include?(mode)}__**Upcoming Banners**__"
+    str="#{"#{str}\n\n" unless ![0,2].include?(mode)}__**Upcoming Banners**__" unless Shardizard==$spanishShard
+    str="#{"#{str}\n\n" unless ![0,2].include?(mode)}__**Próximas Pancartas**__" if Shardizard==$spanishShard
   else
-    str=extend_message(str,'__**Upcoming Banners**__',event,2)
+    str=extend_message(str,'__**Upcoming Banners**__',event,2) unless Shardizard==$spanishShard
+    str=extend_message(str,'__**Próximas Pancartas**__',event,2) if Shardizard==$spanishShard
   end
   for i in 0...x.length
     str2=x[i].name
     t2=Time.new(x[i].start_date[2],x[i].start_date[1],x[i].start_date[0])
     t2=t2-t
     if t2/(24*60*60)>1
-      str2="#{str2} - #{(t2/(24*60*60)).floor} days from now"
+      str2="#{str2} - #{'en ' if Shardizard==$spanishShard}#{(t2/(24*60*60)).floor} #{timelength[0]}#{' from now' unless Shardizard==$spanishShard}"
     elsif t2/(60*60)>1
-      str2="#{str2} - #{(t2/(60*60)).floor} hours from now"
+      str2="#{str2} - #{'en ' if Shardizard==$spanishShard}#{(t2/(60*60)).floor} #{timelength[1]}#{' from now' unless Shardizard==$spanishShard}"
     elsif t2/60>1
-      str2="#{str2} - #{(t2/60).floor} minutes from now"
+      str2="#{str2} - #{'en ' if Shardizard==$spanishShard}#{(t2/60).floor} #{timelength[2]}#{' from now' unless Shardizard==$spanishShard}"
     elsif t2>1
-      str2="#{str2} - #{(t2).floor} seconds from now"
+      str2="#{str2} - #{'en ' if Shardizard==$spanishShard}#{(t2).floor} #{timelength[3]}#{' from now' unless Shardizard==$spanishShard}"
     end
     if ![0,2].include?(mode)
     elsif returnlist
@@ -4722,11 +5358,18 @@ def disp_current_banners(event,bot,str='',returnlist=false,mode=0)
 end
 
 def disp_current_events(event,bot,mode=0,shift=false)
+  data_load(['event'])
   b=$events.reject{|q| !q.isCurrent?(true,shift)}
   b=$events.reject{|q| !q.isFuture?} if mode==1
   b=$events.reject{|q| !q.startsTomorrow?} if mode==2
   str="__**#{['Current ','Upcoming '][mode] if mode<2}Events#{' starting tomorrow' if mode==2}#{', as of tomorrow' if shift && mode==0}**__"
-  mdfr=['left','from now',''][mode]
+  str="__**#{'Próximos ' if mode==1}Eventos#{' Actuales' if mode==0}#{' que comienzan mañana' if mode==2}#{', a partir de mañana' if shift && mode==0}**__" if Shardizard==$spanishShard
+  mdfr=['left','from now'][mode]
+  mdfr='' if Shardizard==$spanishShard
+  mdfr2=['Quedan ','en '][mode]
+  mdfr2='' unless Shardizard==$spanishShard
+  timelength=['days','hours','minutes','seconds']
+  timelength=['días','horas','minutos','segundos'] if Shardizard==$spanishShard
   t=Time.now
   t+=24*60*60 if shift
   timeshift=8
@@ -4747,13 +5390,13 @@ def disp_current_events(event,bot,mode=0,shift=false)
     end
     tt2=(t2/(24*60*60)).floor
     if t2/(24*60*60)>1
-      str="#{str} - #{(t2/(24*60*60)).floor} days #{mdfr}"
+      str="#{str} - #{mdfr2}#{(t2/(24*60*60)).floor} #{timelength[0]}#{mdfr}"
     elsif t2/(60*60)>1
-      str="#{str} - #{(t2/(60*60)).floor} hours #{mdfr}"
+      str="#{str} - #{mdfr2}#{(t2/(60*60)).floor} #{timelength[1]}#{mdfr}"
     elsif t2/60>1
-      str="#{str} - #{(t2/60).floor} minutes #{mdfr}"
+      str="#{str} - #{mdfr2}#{(t2/60).floor} #{timelength[2]}#{mdfr}"
     elsif t2>1
-      str="#{str} - #{(t2).floor} seconds #{mdfr}"
+      str="#{str} - #{mdfr2}#{(t2).floor} #{timelength[3]}#{mdfr}"
     end
     str="#{str}#{b[i].extendedData if mode==0}"
   end
@@ -4768,7 +5411,16 @@ def disp_current_paths(event,bot,mode=0,shift=false)
   return nil if mode<0 && b.length<=0
   str=str="__**#{['Current ','Upcoming '][mode] if mode<2}Ephemura Paths#{' starting tomorrow' if mode==2}#{', as of tomorrow' if shift && mode==0}**__"
   str=str="__**#{['','Current','Upcoming'][0-mode]} Ephemura Paths**__" if mode<0
+  if Shardizard==$spanishShard
+    str=str="__**#{['','Próximos '][mode] if mode<2}Caminos Efímero#{[' Actuales',''][mode] if mode<2}#{' empezando mañana' if mode==2}#{', a partir de mañana' if shift && mode==0}**__"
+    str=str="__**#{['','Próximos '][mode] if mode<2}Caminos Efímero#{[' Actuales',''][mode] if mode<2}**__" if mode<0
+  end
   mdfr=['','left','from now'][0-mode]
+  mdfr='' if Shardizard==$spanishShard
+  mdfr2=['','Quedan ','en '][0-mode]
+  mdfr2='' unless Shardizard==$spanishShard
+  timelength=['days','hours','minutes','seconds']
+  timelength=['días','horas','minutos','segundos'] if Shardizard==$spanishShard
   f=[]
   clr=[]; clr2=[]
   t=Time.now
@@ -4816,13 +5468,13 @@ def disp_current_paths(event,bot,mode=0,shift=false)
           end
           tt2=(t2/(24*60*60)).floor
           if t2/(24*60*60)>1
-            b3.push("\n#{(t2/(24*60*60)).floor} days #{mdfr}")
+            b3.push("\n#{mdfr2}#{(t2/(24*60*60)).floor} #{timelength[0]}#{mdfr}")
           elsif t2/(60*60)>1
-            b3.push("\n#{(t2/(60*60)).floor} hours #{mdfr}")
+            b3.push("\n#{mdfr2}#{(t2/(60*60)).floor} #{timelength[1]}#{mdfr}")
           elsif t2/60>1
-            b3.push("\n#{(t2/60).floor} minutes #{mdfr}")
+            b3.push("\n#{mdfr2}#{(t2/60).floor} #{timelength[2]}#{mdfr}")
           elsif t2>1
-            b3.push("\n#{(t2).floor} seconds #{mdfr}")
+            b3.push("\n#{mdfr2}#{(t2).floor} #{timelength[3]}#{mdfr}")
           end
         end
         f.push([b2[i],b3.join("\n")])
@@ -4859,13 +5511,21 @@ def avail_text(fgg='',includegrails=false,unt=nil,mode=0)
       summon_type[4].push("#{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}f") # free heroes
       summon_type[5].push("#{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}q") # quest rewards
       summon_type[6].push("#{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}t") # Tempest Trials rewards
-      summon_type[7].push("#{m}<:Icon_Rarity_Forma:699042072526585927> Forma Soul") if fgg.include?("#{m}o")
-      summon_type[7].push("Story unit starting at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}y")
-      summon_type[7].push("Purchasable at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}b")
-      summon_type[7].push("Grail summon at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}r")
+      if Shardizard==$spanishShard
+        summon_type[7].push("#{m}<:Icon_Rarity_Forma:699042072526585927> Alma Quimérica") if fgg.include?("#{m}o")
+        summon_type[7].push("#{m}#{Rarity_stars[0][m-1]} personaje de la historia") if fgg.include?("#{m}y")
+        summon_type[7].push("Comprable a #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}b")
+        summon_type[7].push("Grail summon at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}r")
+      else
+        summon_type[7].push("#{m}<:Icon_Rarity_Forma:699042072526585927> Forma Soul") if fgg.include?("#{m}o")
+        summon_type[7].push("Story unit starting at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}y")
+        summon_type[7].push("Purchasable at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}b")
+        summon_type[7].push("Grail summon at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}r")
+      end
       lowest_rarity=[lowest_rarity,m].min if fgg.include?("#{m}d") || fgg.include?("#{m}g") || fgg.include?("#{m}f") || fgg.include?("#{m}q") || fgg.include?("#{m}t") || fgg.include?("#{m}s") || fgg.include?("#{m}p") || fgg.include?("#{m}o") || fgg.include?("#{m}y") || fgg.include?("#{m}b") || fgg.include?("#{m}r")
     end
-    summon_type[7].push("~~Unavailable on New/Special Heroes banners~~") if fgg.include?('TD') && !unt.nil? && unt.id>318
+    summon_type[7].push("~~Unavailable on New/Special Heroes banners~~") if fgg.include?('TD') && !unt.nil? && unt.id>318 && Shardizard != $spanishShard
+    summon_type[7].push("~~No disponible en nuevos banners~~") if fgg.include?('TD') && !unt.nil? && unt.id>318 && Shardizard==$spanishShard
     if summon_type[7].include?('Story unit starting at 2<:Icon_Rarity_2:448266417872044032>') && summon_type[7].include?('Story unit starting at 4<:Icon_Rarity_4:448266418459377684>')
       for i in 0...summon_type[7].length
         if summon_type[7][i]=='Story unit starting at 2<:Icon_Rarity_2:448266417872044032>'
@@ -4874,13 +5534,22 @@ def avail_text(fgg='',includegrails=false,unt=nil,mode=0)
           summon_type[7][i]='Story unit starting at 4<:Icon_Rarity_4:448266418459377684> (after version 2.5.0)'
         end
       end
+    elsif summon_type[7].include?('2<:Icon_Rarity_2:448266417872044032> personaje de la historia') && summon_type[7].include?('4<:Icon_Rarity_4:448266418459377684> personaje de la historia')
+      for i in 0...summon_type[7].length
+        if summon_type[7][i]=='2<:Icon_Rarity_2:448266417872044032> personaje de la historia'
+          summon_type[7][i]='2<:Icon_Rarity_2:448266417872044032> personaje de la historia (antes de la versión 2.5.0)'
+        elsif summon_type[7][i]=='4<:Icon_Rarity_4:448266418459377684> personaje de la historia'
+          summon_type[7][i]='4<:Icon_Rarity_4:448266418459377684> personaje de la historia (después de la versión 2.5.0)'
+        end
+      end
     end
     for m in 0...6
       summon_type[m].sort!
     end
     mz=['summon','summon','daily rotation battles','Grand Hero Battle','free hero','quest reward','Tempest Trial reward']
+    mz=['invocación','invocación estacional','mapa diario','Batalla Mítica','héroe libre','recompensa de la misión','recompensa de La Tormenta'] if Shardizard==$spanishShard
     for m in 0...7
-      if summon_type[m].length>0 && m==1
+      if summon_type[m].length>0 && m==1 && Shardizard != $spanishShard
         summon_type[m]="Seasonal #{summon_type[m].join('/')} #{mz[m]}"
       elsif summon_type[m].length>0
         summon_type[m]="#{summon_type[m].join('/')} #{mz[m]}"
@@ -4906,8 +5575,12 @@ def avail_text(fgg='',includegrails=false,unt=nil,mode=0)
   end
   ffgg2=[]
   if (includegrails || mode==2) && highest_merge<Max_rarity_merge[1]
-    if fgg.include?('r')
+    if fgg.include?('r') && Shardizard==$spanishShard
+      ffgg2.push("**Más alto merge sin griales:** #{highest_merge}")
+    elsif fgg.include?('r')
       ffgg2.push("**Highest grail-less merge:** #{highest_merge}")
+    elsif Shardizard==$spanishShard
+      ffgg2.push("**Más alto merge disponible:** #{highest_merge}")
     elsif highest_merge>=0
       ffgg2.push("**Highest available merge:** #{highest_merge}")
     end
@@ -4915,17 +5588,19 @@ def avail_text(fgg='',includegrails=false,unt=nil,mode=0)
     grailist=[100,150,200,250,300,350,400,450,500,500,500]
     grails=grailist[0,Max_rarity_merge[1]-highest_merge].inject(0){|sum,x| sum + x }
     unless unt.nil? || unt.owner.nil?
-      ffgg2.push("**Current merge count:** #{unt.merge_count}")
+      ffgg2.push("**Current merge count:** #{unt.merge_count}") unless Shardizard==$spanishShard
+      ffgg2.push("**Recuento actual de los merges:** #{unt.merge_count}") if Shardizard==$spanishShard
       if unt.owner=='Mathoo' && unt.name=='Takumi(Fallen)'
         grails-=grailist[0,unt.merge_count].inject(0){|sum,x| sum + x } unless unt.merge_count<highest_merge
       else
         grails-=grailist[0,unt.merge_count-highest_merge].inject(0){|sum,x| sum + x } unless unt.merge_count<highest_merge
       end
     end
-    grails=0 if !unt.nil? && ['Anna','Sharena','Alfonse'].include?(unt.name)
+    grails=0 if !unt.nil? && ['Anna','Sharena','Alfonse','Kiran'].include?(unt.name)
     grails=0 if !unt.nil? && unt.availability[0].include?('-')
     grails=0 if highest_merge<0
-    ffgg2.push("<:Heroic_Grail:574798333898653696>**Grails to +10:** #{grails}") if grails>0
+    ffgg2.push("<:Heroic_Grail:574798333898653696>**Grails to +10:** #{grails}") if grails>0 && Shardizard != $spanishShard
+    ffgg2.push("<:Heroic_Grail:574798333898653696>**Griales a +10:** #{grails}") if grails>0 && Shardizard==$spanishShard
   end
   return [ffgg,ffgg2,highest_merge,lowest_rarity] if mode==2
   return [[ffgg,ffgg2].flatten,highest_merge,lowest_rarity] if mode==1
@@ -4975,7 +5650,11 @@ def banner_list(event,bot,args=[],xname=nil)
   star_buff=0 if star_buff.nil?
   str=''
   str="__**Debut**__\n*Launch Unit*" if unit.availability[0].include?('LU')
-  str='>Fake unit<' unless unit.fake.nil?
+  str="__**Debut**__\n*Personaje de Lanzamiento*" if unit.availability[0].include?('LU') && Shardizard==$spanishShard
+  unless unit.fake.nil?
+    str='>Fake unit<'
+    str=">Personaje fals#{unit.spanish_gender.downcase}<" if Shardizard==$spanishShard
+  end
   otherstr=unit.availability[0].gsub('0s','').gsub('0o','').gsub('1p','').gsub('1s','').gsub('2p','').gsub('2s','').gsub('3p','').gsub('3s','').gsub('4p','').gsub('4s','').gsub('5p','').gsub('5s','').gsub('6p','').gsub('6s','')
   if unit.availability.length>1
     fgg=unit.availability[0].split('p')[0].split('s')[0]
@@ -4983,31 +5662,45 @@ def banner_list(event,bot,args=[],xname=nil)
     fgg=fgg[0,fgg.length-1] if fgg.length>2
     ffgg=avail_text(fgg)
     str="#{"__**First appeared as**__\n#{ffgg.join("\n")}\n\n" if ffgg.length>0}__**Joined the summon pool during:**__\n#{unit.availability[1,unit.availability.length-1].join(', ')}"
+    str="#{"__**Primera impresión**__\n#{ffgg.join("\n")}\n\n" if ffgg.length>0}__**Se unió al grupo de invocación:**__\n#{unit.availability[1,unit.availability.length-1].join(', ')}" if Shardizard==$spanishShard
   end
   otherstr=avail_text(otherstr) if otherstr.length>0
   if str.length<=0 && bnrz.length>0
     x=bnrz[0].clone
     bnrz.shift
+    str="__**Debut Banner**__"
+    str="__**Pancarta Debut**__" if Shardizard==$spanishShard
     if justnames2
-      str="__**Debut Banner**__\n#{x.name}"
+      str="#{str}\n#{x.name}"
     else
-      str="__**Debut Banner**__\n__*#{x.name}*__\n#{x.description(unit,5*star_buff)}"
+      str="#{str}\n__*#{x.name}*__\n#{x.description(unit,5*star_buff)}"
     end
   elsif str.length<=0
     ffgg=avail_text(unit.availability[0],true,unit)
     str=">No banners found<"
+    str=">No se encontraron pancartas<" if Shardizard==$spanishShard
     str="#{str}\n\n#{ffgg.join("\n")}" unless ffgg.length<=0
   end
   hdr="__Banners **#{unit.name}#{unit.emotes(bot,false)}** has been on__"
   hdr="#{hdr}\nBanners in **+#{star_buff}** form (after #{star_buff*5} to #{star_buff*5+4} failures to get a 5<:Icon_Rarity_5:448266417553539104>)" if star_buff>0
   hdr="__Banners **#{unit.name}#{unit.emotes(bot,false)}** has been on__\nBanners in **Omega** form (after 120 failures to get a 5<:Icon_Rarity_5:448266417553539104>)" if star_buff>=24
   c=0
+  if Shardizard==$spanishShard
+    hdr="__Pancartas en las que ha aparecido **#{unit.name}#{unit.emotes(bot,false)}**__"
+    hdr="#{hdr}\nen forma **+#{star_buff}** (después de #{star_buff*5} a #{star_buff*5+4} fracasos para conseguir 5<:Icon_Rarity_5:448266417553539104>)" if star_buff>0
+    hdr="__Pancartas en las que ha aparecido **#{unit.name}#{unit.emotes(bot,false)}**__\nen forma **Omega** (después de 120 fracasos para conseguir 5<:Icon_Rarity_5:448266417553539104>)" if star_buff>=24
+  c=0
+  end
   if bnrz.length<=0 && (!unit.availability[0].include?('p') || justnames2)
     create_embed(event,hdr,str,unit.disp_color,"#{unit.focus_banners.length} total",unit.thumbnail(event,bot))
     return nil
   end
   xpic=unit.thumbnail(event,bot)
-  str="#{str}#{"\n" unless justnames || !safe_to_spam?(event)}\n\n__**#{'Other ' if str.include?('__**Debut Banner**__')}Banners**__" if bnrz.length>0
+  if Shardizard==$spanishShard
+    str="#{str}#{"\n" unless justnames || !safe_to_spam?(event)}\n\n__**#{'Otros ' if str.include?('__**Pancarta Debut**__')}Pancartas**__" if bnrz.length>0
+  else
+    str="#{str}#{"\n" unless justnames || !safe_to_spam?(event)}\n\n__**#{'Other ' if str.include?('__**Debut Banner**__')}Banners**__" if bnrz.length>0
+  end
   xf="\n"
   xf='' if justnames || !safe_to_spam?(event)
   for i in 0...bnrz.length
@@ -5063,7 +5756,8 @@ def banner_list(event,bot,args=[],xname=nil)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('4p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('4p') || !q.fake.nil?}.length
       y3=[x[6]/y,x[6]/y2]
-      m.push("4<:Icon_Rarity_4:448266418459377684> Non-Focus (New/Special Heroes) - #{len % y3[0]}% (Perceived), #{len % y3[1]}% (Actual)")
+      m.push("4<:Icon_Rarity_4:448266418459377684> Non-Focus (New/Special Heroes) - #{len % y3[0]}% (Perceived), #{len % y3[1]}% (Actual)") unless Shardizard==$spanishShard
+      m.push("4<:Icon_Rarity_4:448266418459377684> Non-Focus (Nuevos Héroes) - #{len % y3[0]}% (Perceived), #{len % y3[1]}% (Actual)") if Shardizard==$spanishShard
       x=$banners.reject{|q| !q.tags.include?('GHB')}.sample.calc_pity(star_buff*5)
       y=x[6]/y
       y2=x[6]/y2
@@ -5093,6 +5787,7 @@ def banner_list(event,bot,args=[],xname=nil)
       y2=x[12]/y2
       m.push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
+    m=m.map{|q| q.gsub('all the time','siempre').gsub('Perceived','Percibida').gsub('Actual','Real').gsub('standard banner','pancarta estándar').gsub('Non-Focus','No preferencial')} if Shardizard==$spanishShard
     str3=[]
     str3.push("__*Standard 3% banners*__\n#{m.join("\n")}") if m.length>0
     m=[]
@@ -5101,18 +5796,20 @@ def banner_list(event,bot,args=[],xname=nil)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('5p') || !q.duo.nil? || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('5p') || !q.duo.nil? || !q.fake.nil?}.length
       y3=[x[3]/y,x[3]/y2]
-      m.push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Hero Fests) - #{len % y3[0]}% (Perceived), #{len % y3[1]}% (Actual)")
+      m.push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Hero Fests) - #{len % y3[0]}% (Perceived), #{len % y3[1]}% (Actual)") unless Shardizard==$spanishShard
+      m.push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Festivales de los héroes) - #{len % y3[0]}% (Perceived), #{len % y3[1]}% (Actual)") if Shardizard==$spanishShard
       x=$banners.reject{|q| !q.tags.include?('Book2')}.sample.calc_pity(star_buff*5)
       y=x[3]/y
       y2=x[3]/y2
-      m.push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Revival banner) - #{len % y}% (Perceived), #{len % y2}% (Actual)")
+      m.push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Revival banner) - #{len % y}% (Perceived), #{len % y2}% (Actual)") unless Shardizard==$spanishShard
+      m.push("5<:Icon_Rarity_5:448266417553539104> Non-Focus (Regreso semanal) - #{len % y}% (Perceived), #{len % y2}% (Actual)") if Shardizard==$spanishShard
     end
     if unit.availability[0].include?('4p')
       x=$banners.reject{|q| !q.tags.include?('4Star')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('4p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('4p') || !q.fake.nil?}.length
       y3=[x[6]/y,x[6]/y2]
-      m.push("4<:Icon_Rarity_4:448266418459377684> Non-Focus (4+5 star focus banners) - #{len % y3[0]}% (Perceived), #{len % y3[1]}% (Actual)")
+      m.push("4<:Icon_Rarity_4:448266418459377684> Non-Focus (4+5 star focus banners) - #{len % y3[0]}% (Perceived), #{len % y3[1]}% (Actual)") unless Shardizard==$spanishShard
       x=$banners.reject{|q| !q.tags.include?('GHB')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('4p') || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('4p') || !q.fake.nil?}.length
@@ -5144,8 +5841,10 @@ def banner_list(event,bot,args=[],xname=nil)
       y2=x[12]/y2
       m.push("1<:Icon_Rarity_1:448266417481973781> all the time - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
+    m=m.map{|q| q.gsub('all the time','siempre').gsub('Perceived','Percibida').gsub('Actual','Real').gsub('standard banner','pancarta estándar').gsub('Non-Focus','No preferencial')} if Shardizard==$spanishShard
     str3.push("__*Other banners*__\n#{m.join("\n")}") if m.length>0
     str2="__**#{'Starting ' if star_buff<=0}Non-Focus Chances**__\n#{str3.join("\n\n")}" if str3.length>0
+    str2="__**Oportunidades#{' Iniciales' if star_buff<=0}**__\n#{str3.join("\n\n").gsub('*Other banners*','*Pancartas otras*').gsub('*Standard 3% banners*','*Pancartas estándar*')}" if str3.length>0 && Shardizard==$spanishShard
     if str2.length<=0
     elsif "#{str}\n#{xf*2}#{str2}".length>1900
       if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
@@ -5161,8 +5860,10 @@ def banner_list(event,bot,args=[],xname=nil)
       str="#{str}\n\n#{xf}#{str2}"
     end
   end
+  oa='Other Appearances'
+  oa='Otras Apariciones' if Shardizard==$spanishShard
   if otherstr.length<=0
-  elsif "#{str}\n#{xf*2}__**Other Appearances**__\n#{otherstr.join("\n")}".length>1900
+  elsif "#{str}\n#{xf*2}__**#{oa}**__\n#{otherstr.join("\n")}".length>1900
     if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
       event.respond str
     else
@@ -5171,20 +5872,25 @@ def banner_list(event,bot,args=[],xname=nil)
       xpic=nil
       c+=1
     end
-    str="__**Other Appearances**__\n#{otherstr.join("\n")}"
+    str="__**#{oa}**__\n#{otherstr.join("\n")}"
   else
-    str="#{str}\n#{xf*2}__**Other Appearances**__\n#{otherstr.join("\n")}"
+    str="#{str}\n#{xf*2}__**#{oa}**__\n#{otherstr.join("\n")}"
   end
   if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    str=extend_message(str,"#{unit.focus_banners.length} total",event,2)
+    str=extend_message(str,"#{unit.focus_banners.length}#{' en' if Shardizard==$spanishShard} total",event,2)
     event.respond str
   else
-    create_embed(event,hdr,str,unit.disp_color(c),"#{unit.focus_banners.length} total",xpic)
+    create_embed(event,hdr,str,unit.disp_color(c),"#{unit.focus_banners.length}#{' en' if Shardizard==$spanishShard} total",xpic)
   end
 end
 
 def create_summon_list(clr,mainpool=nil)
   p=[['1<:Icon_Rarity_1:448266417481973781> exclusive',[]],['1<:Icon_Rarity_1:448266417481973781>-2<:Icon_Rarity_2:448266417872044032>',[]],['2<:Icon_Rarity_2:448266417872044032> exclusive',[]],['2<:Icon_Rarity_2:448266417872044032>-3<:Icon_Rarity_3:448266417934958592>',[]],['3<:Icon_Rarity_3:448266417934958592> exclusive',[]],['3<:Icon_Rarity_3:448266417934958592>-4<:Icon_Rarity_4:448266418459377684>',[]],['4<:Icon_Rarity_4:448266418459377684> exclusive',[]],['4<:Icon_Rarity_4:448266418459377684>-5<:Icon_Rarity_5:448266417553539104>',[]],['5<:Icon_Rarity_5:448266417553539104> exclusive',[]],['5<:Icon_Rarity_5:448266417553539104>-6<:Icon_Rarity_6:491487784650145812>',[]],['6<:Icon_Rarity_6:491487784650145812> exclusive',[]],['Other',[]]]
+  if Shardizard==$spanishShard
+    for i in 0...p.length
+      p[i][0]=p[i][0].gsub('exclusive','exclusiva')
+    end
+  end
   for i in 0...clr.length
     clr[i].name="~~#{clr[i].name}~~" if clr[i].availability[0].include?('TD')
     if clr[i].availability[0].include?('1p')
@@ -5227,6 +5933,8 @@ def create_summon_list(clr,mainpool=nil)
       end
     elsif clr[i].availability[0].include?('6p')
       p[10][1].push(clr[i].name)
+    elsif Shardizard==$spanishShard
+      p[11][0][1].push("#{clr[i].name} - extrañ#{clr[i].spanish_gender.downcase}")
     else
       p[11][0][1].push("#{clr[i].name} - weird")
     end
@@ -5234,6 +5942,8 @@ def create_summon_list(clr,mainpool=nil)
   p2=[]
   for i in 0...p.length
     if p[i][1].length<=0
+    elsif p[i][1].reject{|q| !q.include?('~~')}.length>0 && mainpool.nil? && Shardizard==$spanishShard
+      p2.push([p[i][0],"__**Grupo principal**__\n#{p[i][1].reject{|q| q.include?('~~')}.sort.uniq.join("\n")}\n\n__**Grupo parcial**__\n#{p[i][1].reject{|q| !q.include?('~~')}.map{|q| q.gsub('~~','')}.sort.uniq.join("\n")}"])
     elsif p[i][1].reject{|q| !q.include?('~~')}.length>0 && mainpool.nil?
       p2.push([p[i][0],"__**Main Pool**__\n#{p[i][1].reject{|q| q.include?('~~')}.sort.uniq.join("\n")}\n\n__**Partial Pool**__\n#{p[i][1].reject{|q| !q.include?('~~')}.map{|q| q.gsub('~~','')}.sort.uniq.join("\n")}"])
     elsif p[i][1].reject{|q| !q.include?('~~')}.length>0 && mainpool==true
@@ -5269,7 +5979,8 @@ def disp_summon_pool(event,args=[])
   if safe_to_spam?(event)
     colors=['Red','Blue','Green','Colorless'] if colors.length<=0
   elsif colors.length<=0
-    event.respond 'I will not show the entire summon pool as that would be spam.  Please specify a single color or use this command in PM.'
+    event.respond 'No mostraré todo el grupo de invocaciones, ya que eso sería spam. Especifique un solo color o utilice este comando en mensajes privados.' if Shardizard==$spanishShard
+    event.respond 'I will not show the entire summon pool as that would be spam.  Please specify a single color or use this command in PM.' unless Shardizard==$spanishShard
     return nil
   else
     colors=[colors[0]]
@@ -5314,6 +6025,7 @@ def disp_summon_pool(event,args=[])
 end
 
 def summon_sim(bot,event,args=[])
+  return summon_sim_spanish(bot,event,args=[]) if Shardizard==$spanishShard
   if event.server.id==238770788272963585 && event.channel.id != 377526015939051520
     event.respond 'This command is unavailable in this channel.  Please go to <#377526015939051520>.'
     return nil
@@ -5377,22 +6089,24 @@ def summon_sim(bot,event,args=[])
   y=b.full_banner.map{|q| q}
   disprar=false
   disprar=true if y[4].length>0 && y[4]!=y[2]
-  disprar=true if y[6].length>0 && y[6]!=y[2]
-  disprar=true if y[8].length>0 && y[8]!=y[2]
-  disprar=true if y[10].length>0 && y[10]!=y[2]
-  x=b.reds.map{|q| "#{q.name}<:Icon_Rarity_5p10:448272715099406336>#{'<:Icon_Rarity_4p10:448272714210476033>' if q.availability[0].include?('4p') || q.availability[0].include?('4s')}#{'<:Icon_Rarity_3:448266417934958592>' if q.availability[0].include?('3p') || q.availability[0].include?('3s')}#{'<:Icon_Rarity_2:448266417872044032>' if q.availability[0].include?('2p') || q.availability[0].include?('2s')}#{'<:Icon_Rarity_1:448266417481973781>' if q.availability[0].include?('1p') || q.availability[0].include?('1s')}"}
+  disprar=true if y[7].length>0 && y[7]!=y[2]
+  disprar=true if y[9].length>0 && y[9]!=y[2]
+  disprar=true if y[11].length>0 && y[11]!=y[2]
+  xx=b.calc_pity($summon_rate[0])
+  disprar=false if xx[4]<=0 && xx[7]<=0 && xx[9]<=0 && xx[11]<=0
+  x=b.reds.map{|q| "#{q.name}<:Icon_Rarity_5p10:448272715099406336>#{'<:Icon_Rarity_4p10:448272714210476033>' if (q.availability[0].include?('4p') || q.availability[0].include?('4s')) && xx[4]>0}#{'<:Icon_Rarity_3:448266417934958592>' if (q.availability[0].include?('3p') || q.availability[0].include?('3s')) && xx[7]>0}#{'<:Icon_Rarity_2:448266417872044032>' if (q.availability[0].include?('2p') || q.availability[0].include?('2s')) && xx[9]>0}#{'<:Icon_Rarity_1:448266417481973781>' if (q.availability[0].include?('1p') || q.availability[0].include?('1s')) && xx[11]>0}"}
   x=b.reds.map{|q| q.name} if !disprar
   str=extend_message(str,"<:Orb_Red:455053002256941056> *Red*:  #{x.join(', ')}",event) unless x.length<=0
-  x=b.blues.map{|q| "#{q.name}<:Icon_Rarity_5p10:448272715099406336>#{'<:Icon_Rarity_4p10:448272714210476033>' if q.availability[0].include?('4p') || q.availability[0].include?('4s')}#{'<:Icon_Rarity_3:448266417934958592>' if q.availability[0].include?('3p') || q.availability[0].include?('3s')}#{'<:Icon_Rarity_2:448266417872044032>' if q.availability[0].include?('2p') || q.availability[0].include?('2s')}#{'<:Icon_Rarity_1:448266417481973781>' if q.availability[0].include?('1p') || q.availability[0].include?('1s')}"}
+  x=b.blues.map{|q| "#{q.name}<:Icon_Rarity_5p10:448272715099406336>#{'<:Icon_Rarity_4p10:448272714210476033>' if (q.availability[0].include?('4p') || q.availability[0].include?('4s')) && xx[4]>0}#{'<:Icon_Rarity_3:448266417934958592>' if (q.availability[0].include?('3p') || q.availability[0].include?('3s')) && xx[7]>0}#{'<:Icon_Rarity_2:448266417872044032>' if (q.availability[0].include?('2p') || q.availability[0].include?('2s')) && xx[9]>0}#{'<:Icon_Rarity_1:448266417481973781>' if (q.availability[0].include?('1p') || q.availability[0].include?('1s')) && xx[11]>0}"}
   x=b.blues.map{|q| q.name} if !disprar
   str=extend_message(str,"<:Orb_Blue:455053001971859477> *Blue*:  #{x.join(', ')}",event) unless x.length<=0
-  x=b.greens.map{|q| "#{q.name}<:Icon_Rarity_5p10:448272715099406336>#{'<:Icon_Rarity_4p10:448272714210476033>' if q.availability[0].include?('4p') || q.availability[0].include?('4s')}#{'<:Icon_Rarity_3:448266417934958592>' if q.availability[0].include?('3p') || q.availability[0].include?('3s')}#{'<:Icon_Rarity_2:448266417872044032>' if q.availability[0].include?('2p') || q.availability[0].include?('2s')}#{'<:Icon_Rarity_1:448266417481973781>' if q.availability[0].include?('1p') || q.availability[0].include?('1s')}"}
+  x=b.greens.map{|q| "#{q.name}<:Icon_Rarity_5p10:448272715099406336>#{'<:Icon_Rarity_4p10:448272714210476033>' if (q.availability[0].include?('4p') || q.availability[0].include?('4s')) && xx[4]>0}#{'<:Icon_Rarity_3:448266417934958592>' if (q.availability[0].include?('3p') || q.availability[0].include?('3s')) && xx[7]>0}#{'<:Icon_Rarity_2:448266417872044032>' if (q.availability[0].include?('2p') || q.availability[0].include?('2s')) && xx[9]>0}#{'<:Icon_Rarity_1:448266417481973781>' if (q.availability[0].include?('1p') || q.availability[0].include?('1s')) && xx[11]>0}"}
   x=b.greens.map{|q| q.name} if !disprar
   str=extend_message(str,"<:Orb_Green:455053002311467048> *Green*:  #{x.join(', ')}",event) unless x.length<=0
-  x=b.colorlesses.map{|q| "#{q.name}<:Icon_Rarity_5p10:448272715099406336>#{'<:Icon_Rarity_4p10:448272714210476033>' if q.availability[0].include?('4p') || q.availability[0].include?('4s')}#{'<:Icon_Rarity_3:448266417934958592>' if q.availability[0].include?('3p') || q.availability[0].include?('3s')}#{'<:Icon_Rarity_2:448266417872044032>' if q.availability[0].include?('2p') || q.availability[0].include?('2s')}#{'<:Icon_Rarity_1:448266417481973781>' if q.availability[0].include?('1p') || q.availability[0].include?('1s')}"}
+  x=b.colorlesses.map{|q| "#{q.name}<:Icon_Rarity_5p10:448272715099406336>#{'<:Icon_Rarity_4p10:448272714210476033>' if (q.availability[0].include?('4p') || q.availability[0].include?('4s')) && xx[4]>0}#{'<:Icon_Rarity_3:448266417934958592>' if (q.availability[0].include?('3p') || q.availability[0].include?('3s')) && xx[7]>0}#{'<:Icon_Rarity_2:448266417872044032>' if (q.availability[0].include?('2p') || q.availability[0].include?('2s')) && xx[9]>0}#{'<:Icon_Rarity_1:448266417481973781>' if (q.availability[0].include?('1p') || q.availability[0].include?('1s')) && xx[11]>0}"}
   x=b.colorlesses.map{|q| q.name} if !disprar
   str=extend_message(str,"<:Orb_Colorless:455053002152083457> *Colorless*:  #{x.join(', ')}",event) unless x.length<=0
-  x=b.golds.map{|q| "#{q.name}<:Icon_Rarity_5p10:448272715099406336>#{'<:Icon_Rarity_4p10:448272714210476033>' if q.availability[0].include?('4p') || q.availability[0].include?('4s')}#{'<:Icon_Rarity_3:448266417934958592>' if q.availability[0].include?('3p') || q.availability[0].include?('3s')}#{'<:Icon_Rarity_2:448266417872044032>' if q.availability[0].include?('2p') || q.availability[0].include?('2s')}#{'<:Icon_Rarity_1:448266417481973781>' if q.availability[0].include?('1p') || q.availability[0].include?('1s')}"}
+  x=b.golds.map{|q| "#{q.name}<:Icon_Rarity_5p10:448272715099406336>#{'<:Icon_Rarity_4p10:448272714210476033>' if (q.availability[0].include?('4p') || q.availability[0].include?('4s')) && xx[4]>0}#{'<:Icon_Rarity_3:448266417934958592>' if (q.availability[0].include?('3p') || q.availability[0].include?('3s')) && xx[7]>0}#{'<:Icon_Rarity_2:448266417872044032>' if (q.availability[0].include?('2p') || q.availability[0].include?('2s')) && xx[9]>0}#{'<:Icon_Rarity_1:448266417481973781>' if (q.availability[0].include?('1p') || q.availability[0].include?('1s')) && xx[11]>0}"}
   x=b.golds.map{|q| q.name} if !disprar
   str=extend_message(str,"<:Orb_Gold:549338084102111250> *Gold*:  #{x.join(', ')}",event) unless x.length<=0
   x=b.calc_pity($summon_rate[0])
@@ -5761,10 +6475,15 @@ end
 
 def skill_data(legal_skills,all_skills,event,mode=0)
   str2="**There are #{longFormattedNumber(legal_skills.length)}#{" (#{longFormattedNumber(all_skills.length)})" unless legal_skills.length==all_skills.length} #{['skills','skill lines','skill trees'][mode]}, including:**"
+  str2="**Hay #{longFormattedNumber(legal_skills.length)}#{" (#{longFormattedNumber(all_skills.length)})" unless legal_skills.length==all_skills.length} #{['habilidades','líneas de habilidad','árboles de habilidades'][mode]}, incluyendo:**" if Shardizard==$spanishShard
   l=legal_skills.reject{|q| !q.type.include?('Weapon')}
   a=all_skills.reject{|q| !q.type.include?('Weapon')}
   fmt=''
-  if safe_to_spam?(event) || event.message.text.downcase.split(' ').include?('all')
+  dispall=false
+  dispall=true if event.message.text.downcase.split(' ').include?('all')
+  dispall=true if event.message.text.downcase.split(' ').include?('todos') && Shardizard==$spanishShard
+  dispall=true if event.message.text.downcase.split(' ').include?('todo') && Shardizard==$spanishShard
+  if safe_to_spam?(event) || dispall
     fmt='__'
     l2=l.reject{|q| !has_any?(q.restrictions,['Sword Users Only','Lance Users Only','Axe Users Only'])}
     a2=a.reject{|q| !has_any?(q.restrictions,['Sword Users Only','Lance Users Only','Axe Users Only'])}
@@ -5778,7 +6497,9 @@ def skill_data(legal_skills,all_skills,event,mode=0)
     l2=l.reject{|q| !q.restrictions.include?('Axe Users Only')}
     a2=a.reject{|q| !q.restrictions.include?('Axe Users Only')}
     m4="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Gold_Blade:774013609184460860> #{m} blades   <:Red_Blade:443172811830198282> #{m2} swords, <:Blue_Blade:467112472768151562> #{m3} lances, <:Green_Blade:467122927230386207> #{m4} axes"
+    wtype=['blades','swords','lances','axes']
+    wtype=['filos','espadas','lanzas','hachas'] if Shardizard==$spanishShard
+    str2="#{str2}\n<:Gold_Blade:774013609184460860> #{m} #{wtype[0]}   <:Red_Blade:443172811830198282> #{m2} #{wtype[1]}, <:Blue_Blade:467112472768151562> #{m3} #{wtype[2]}, <:Green_Blade:467122927230386207> #{m4} #{wtype[3]}"
     l2=l.reject{|q| !has_any?(q.restrictions,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only','Colorless Tome Users Only'])}
     a2=a.reject{|q| !has_any?(q.restrictions,['Red Tome Users Only','Blue Tome Users Only','Green Tome Users Only','Colorless Tome Users Only'])}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
@@ -5794,23 +6515,27 @@ def skill_data(legal_skills,all_skills,event,mode=0)
     l2=l.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}
     a2=a.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}
     m5="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Gold_Tome:774013610736484353> #{m} tomes   <:Red_Tome:443172811826003968> #{m2} red, <:Blue_Tome:467112472394858508> #{m3} blue, <:Green_Tome:467122927666593822> #{m4} green, <:Colorless_Tome:443692133317345290> #{m5} colorless"
+    wtype=['tomes','red','blue','green','colorless']
+    wtype=['tomos','rojos','azules','verdes','grises'] if Shardizard==$spanishShard
+    str2="#{str2}\n<:Gold_Tome:774013610736484353> #{m} #{wtype[0]}   <:Red_Tome:443172811826003968> #{m2} #{wtype[1]}, <:Blue_Tome:467112472394858508> #{m3} #{wtype[2]}, <:Green_Tome:467122927666593822> #{m4} #{wtype[3]}, <:Colorless_Tome:443692133317345290> #{m5} #{wtype[4]}"
     l2=l.reject{|q| !q.restrictions.include?('Dragons Only')}
     a2=a.reject{|q| !q.restrictions.include?('Dragons Only')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Gold_Dragon:774013610908581948> #{m} dragonstones"
+    wtype=['dragonstones','bows','daggers','damaging staves']
+    wtype=['piedras de dragón','arcos','azules','bastónes dañinos'] if Shardizard==$spanishShard
+    str2="#{str2}\n<:Gold_Dragon:774013610908581948> #{m} #{wtype[0]}"
     l2=l.reject{|q| !q.restrictions.include?('Bow Users Only')}
     a2=a.reject{|q| !q.restrictions.include?('Bow Users Only')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Gold_Bow:774013609389981726> #{m} bows"
+    str2="#{str2}\n<:Gold_Bow:774013609389981726> #{m} #{wtype[1]}"
     l2=l.reject{|q| !q.restrictions.include?('Dagger Users Only')}
     a2=a.reject{|q| !q.restrictions.include?('Dagger Users Only')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Gold_Dagger:774013610862968833> #{m} daggers"
+    str2="#{str2}\n<:Gold_Dagger:774013610862968833> #{m} #{wtype[2]}"
     l2=l.reject{|q| !q.restrictions.include?('Staff Users Only')}
     a2=a.reject{|q| !q.restrictions.include?('Staff Users Only')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Gold_Staff:774013610988797953> #{m} damaging staves"
+    str2="#{str2}\n<:Gold_Staff:774013610988797953> #{m} #{wtype[3]}"
     l=l.reject{|q| !q.restrictions.include?('Beasts Only')}
     a=a.reject{|q| !q.restrictions.include?('Beasts Only')}
     m="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"
@@ -5826,95 +6551,105 @@ def skill_data(legal_skills,all_skills,event,mode=0)
     l2=l.reject{|q| !q.restrictions.include?('Armor Only')}
     a2=a.reject{|q| !q.restrictions.include?('Armor Only')}
     m5="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Gold_Beast:774013608191459329> __#{m} beast weapons__   <:Icon_Move_Infantry:443331187579289601> #{m2} infantry, <:Icon_Move_Cavalry:443331186530451466> #{m3} cavalry, <:Icon_Move_Flier:443331186698354698> #{m4} flying, <:Icon_Move_Armor:443331186316673025> #{m5} armored"
+    wtype=['beast weapons','infantry','cavalry','flier','armored']
+    wtype=['armas de bestia','infantería','caballería','volador','blindada'] if Shardizard==$spanishShard
+    str2="#{str2}\n<:Gold_Beast:774013608191459329> __#{m} #{wtype[0]}__   <:Icon_Move_Infantry:443331187579289601> #{m2} #{wtype[1]}, <:Icon_Move_Cavalry:443331186530451466> #{m3} #{wtype[2]}, <:Icon_Move_Flier:443331186698354698> #{m4} #{wtype[3]}, <:Icon_Move_Armor:443331186316673025> #{m5} #{wtype[4]}"
     l=legal_skills.reject{|q| !q.type.include?('Assist')}
     a=all_skills.reject{|q| !q.type.include?('Assist')}
     l2=l.reject{|q| !q.tags.include?('Rally')}
     a2=a.reject{|q| !q.tags.include?('Rally')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Assist_Rally:454462054619807747> #{m} rally assists"
+    wtype=['rally assists','movement assists','musical assists','health-based assists','healing staves','misc. assists']
+    wtype=['asistencias potenciar','asistencias movimientos','asistencias musicales','asistencias de HP','bastones curativos','asistencias misceláneas'] if Shardizard==$spanishShard
+    str2="#{str2}\n<:Assist_Rally:454462054619807747> #{m} #{wtype[0]}"
     l2=l.reject{|q| !q.tags.include?('Move') || q.tags.include?('Music') || q.tags.include?('Staff')}
     a2=a.reject{|q| !q.tags.include?('Move') || q.tags.include?('Music') || q.tags.include?('Staff')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Assist_Move:454462055479508993> #{m} movement assists"
+    str2="#{str2}\n<:Assist_Move:454462055479508993> #{m} #{wtype[1]}"
     l2=l.reject{|q| !q.tags.include?('Music')}
     a2=a.reject{|q| !q.tags.include?('Music')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Assist_Music:454462054959415296> #{m} musical assists"
+    str2="#{str2}\n<:Assist_Music:454462054959415296> #{m} #{wtype[2]}"
     l2=l.reject{|q| !q.tags.include?('Health') || q.tags.include?('Staff')}
     a2=a.reject{|q| !q.tags.include?('Health') || q.tags.include?('Staff')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Assist_Health:454462054636584981> #{m} health-based assists"
+    str2="#{str2}\n<:Assist_Health:454462054636584981> #{m} #{wtype[3]}"
     l2=l.reject{|q| !q.tags.include?('Staff')}
     a2=a.reject{|q| !q.tags.include?('Staff')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Assist_Staff:454451496831025162> #{m} healing staves"
+    str2="#{str2}\n<:Assist_Staff:454451496831025162> #{m} #{wtype[4]}"
     l2=l.reject{|q| has_any?(q.tags,['Rally','Move','Music','Health','Staff'])}
     a2=a.reject{|q| has_any?(q.tags,['Rally','Move','Music','Health','Staff'])}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n__<:Assist_Unknown:454451496482897921> #{m} misc. assists__"
+    str2="#{str2}\n__<:Assist_Unknown:454451496482897921> #{m} #{wtype[5]}__"
     l=legal_skills.reject{|q| !q.type.include?('Special')}
     a=all_skills.reject{|q| !q.type.include?('Special')}
     l2=l.reject{|q| !q.tags.include?('Offensive')}
     a2=a.reject{|q| !q.tags.include?('Offensive')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Special_Offensive:454460020793278475> #{m} offensive specials"
+    wtype=['offensive specials','defensive specials','area-of-effect specials','healer specials','misc. specials']
+    wtype=['especiales ataque','especiales defensa','especiales AoE','especiales de curadoras','especiales misceláneas'] if Shardizard==$spanishShard
+    str2="#{str2}\n<:Special_Offensive:454460020793278475> #{m} #{wtype[0]}"
     l2=l.reject{|q| !q.tags.include?('Defensive')}
     a2=a.reject{|q| !q.tags.include?('Defensive')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Special_Defensive:454460020591951884> #{m} defensive specials"
+    str2="#{str2}\n<:Special_Defensive:454460020591951884> #{m} #{wtype[1]}"
     l2=l.reject{|q| !q.tags.include?('AoE')}
     a2=a.reject{|q| !q.tags.include?('AoE')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Special_AoE:454460021665693696> #{m} area-of-effect specials"
+    str2="#{str2}\n<:Special_AoE:454460021665693696> #{m} #{wtype[2]}"
     l2=l.reject{|q| !q.tags.include?('Staff')}
     a2=a.reject{|q| !q.tags.include?('Staff')}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n<:Special_Healer:454451451805040640> #{m} healer specials"
+    str2="#{str2}\n<:Special_Healer:454451451805040640> #{m} #{wtype[3]}"
     l2=l.reject{|q| has_any?(q.tags,['Offensive','Defensive','AoE','Staff'])}
     a2=a.reject{|q| has_any?(q.tags,['Offensive','Defensive','AoE','Staff'])}
     m="#{longFormattedNumber(l2.length)}#{" (#{longFormattedNumber(a2.length)})" unless l2.length==a2.length}"
-    str2="#{str2}\n__<:Special_Unknown:454451451603976192> #{m} misc. specials__"
+    str2="#{str2}\n__<:Special_Unknown:454451451603976192> #{m} #{wtype[4]}__"
   else
+    wtype=['Weapons','Assists','Specials']
+    wtype=['Armas','Asistencias','Especiales'] if Shardizard==$spanishShard
     m="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"
-    str2="#{str2}\n<:Skill_Weapon:444078171114045450> #{m} Weapons"
+    str2="#{str2}\n<:Skill_Weapon:444078171114045450> #{m} #{wtype[0]}"
     l=legal_skills.reject{|q| !q.type.include?('Assist')}
     a=all_skills.reject{|q| !q.type.include?('Assist')}
     m="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"
-    str2="#{str2}\n<:Skill_Assist:444078171025965066> #{m} Assists"
+    str2="#{str2}\n<:Skill_Assist:444078171025965066> #{m} #{wtype[1]}"
     l=legal_skills.reject{|q| !q.type.include?('Special')}
     a=all_skills.reject{|q| !q.type.include?('Special')}
     m="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"
-    str2="#{str2}\n<:Skill_Special:444078170665254929> #{m} Specials"
+    str2="#{str2}\n<:Skill_Special:444078170665254929> #{m} #{wtype[2]}"
   end
+  wtype=['A Passives','B Passives','C Passives','Seal Passives','Weapon Passives','Duo skills','Harmonic skills']
+  wtype=['Pasivas A','Pasivas B','Pasivas C','Pasivas Insigias','Pasivas de Arma','habilidades de Dúo','habilidades al Son'] if Shardizard==$spanishShard
   l=legal_skills.reject{|q| !q.type.include?('Passive(A)')}
   a=all_skills.reject{|q| !q.type.include?('Passive(A)')}
   m="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"
-  str2="#{str2}\n<:Passive_A:443677024192823327> #{m} A Passives"
+  str2="#{str2}\n<:Passive_A:443677024192823327> #{m} #{wtype[0]}"
   l=legal_skills.reject{|q| !q.type.include?('Passive(B)')}
   a=all_skills.reject{|q| !q.type.include?('Passive(B)')}
   m="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"
-  str2="#{str2}\n<:Passive_B:443677023257493506> #{m} B Passives"
+  str2="#{str2}\n<:Passive_B:443677023257493506> #{m} #{wtype[1]}"
   l=legal_skills.reject{|q| !q.type.include?('Passive(C)')}
   a=all_skills.reject{|q| !q.type.include?('Passive(C)')}
   m="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"
-  str2="#{str2}\n<:Passive_C:443677023555026954> #{m} C Passives"
+  str2="#{str2}\n<:Passive_C:443677023555026954> #{m} #{wtype[2]}"
   l=legal_skills.reject{|q| !has_any?(q.tags,['Passive(S)','Seal'])}
   a=all_skills.reject{|q| !has_any?(q.tags,['Passive(S)','Seal'])}
   m="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"
-  str2="#{str2}\n<:Passive_S:443677023626330122> #{m} Seal Passives"
+  str2="#{str2}\n<:Passive_S:443677023626330122> #{m} #{wtype[3]}"
   l=legal_skills.reject{|q| !q.type.include?('Passive(W)')}
   a=all_skills.reject{|q| !q.type.include?('Passive(W)')}
   m="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"
-  str2="#{str2}\n<:Passive_W:443677023706152960> #{fmt}#{m} Weapon Passives#{fmt}"
+  str2="#{str2}\n<:Passive_W:443677023706152960> #{fmt}#{m} #{wtype[4]}#{fmt}"
   l=legal_skills.reject{|q| !q.type.include?('Duo')}
   a=all_skills.reject{|q| !q.type.include?('Duo')}
   m="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"
-  str2="#{str2}\n<:Hero_Duo:631431055420948480> #{m} Duo skills"
+  str2="#{str2}\n<:Hero_Duo:631431055420948480> #{m} #{wtype[5]}"
   l=legal_skills.reject{|q| !q.type.include?('Harmonic')}
   a=all_skills.reject{|q| !q.type.include?('Harmonic')}
   m="#{longFormattedNumber(l.length)}#{" (#{longFormattedNumber(a.length)})" unless l.length==a.length}"
-  str2="#{str2}\n<:Hero_Harmonic:722436762248413234> #{m} Harmonic Skills"
+  str2="#{str2}\n<:Hero_Harmonic:722436762248413234> #{m} #{wtype[6]}"
   str2=str2[1,str2.length-1] if str2[0,1]=="\n"
   str2=str2[2,str2.length-2] if str2[0,2]=="\n"
   return str2
@@ -5922,10 +6657,11 @@ end
 
 def disp_all_prfs(event,bot)
   if !safe_to_spam?(event)
-    event.respond "There is a lot of data being displayed.  Please use this command in PM."
+    event.respond "There is a lot of data being displayed.  Please use this command in PM." unless Shardizard==$spanishShard
+    event.respond "Se muestran muchos datos. Utilice este comando en mensajes privados." if Shardizard==$spanishShard
     return nil
   end
-  event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil
+  (event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil) unless Shardizard==$spanishShard
   data_load(['unit','skill'])
   sklz=$skills.reject{|q| ['Falchion','Ragnarok+','Missiletainn','Whelp (All)','Yearling (All)','Adult (All)'].include?(q.name) || !q.type.include?('Weapon') || q.exclusivity.nil? || !q.isPostable?(event)}.map{|q| q.clone}
   untz=$units.map{|q| q}
@@ -5934,22 +6670,28 @@ def disp_all_prfs(event,bot)
     x=x.map{|q| untz[untz.find_index{|q2| q2.name==q}].postName}
     sklz[i].name="#{sklz[i].postName} \u2192 #{x.join(', ')}"
   end
+  wtypes=['Swords','Red Tomes','Lances','Blue Tomes','Axes','Green Tomes','Colorless Tomes','Dragon Breaths','Beast Damage','Bows','Daggers','Damaging Staves']
+  archead=['Standard PRF Weapons','Retro-PRF Weapons','PRF Assists','PRF Specials','PRF Assists and Specials','Passives']
+  if Shardizard==$spanishShard
+    wtypes=['Espadas','Tomos Rojos','Lanzas','Tomos Azules','Hachas','Tomos Verdes','Tomos Grises',"Drag\u00F3n",'Bestia','Arco','Dagas','Bastónes']
+    archead=['Armas PRF Estándar','Armas Retro-PRF','PRF Asistencias','PRF Especiales','PRF Asistencias y Especiales','Pasivas']
+  end
   k=sklz.reject{|q| q.prerequisite.nil? || q.prerequisite.length<=0 || q.prerequisite=='-'}
-  f=[['<:Red_Blade:443172811830198282> Swords',k.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
-     ['<:Red_Tome:443172811826003968> Red Tomes',k.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
-     ['<:Blue_Blade:467112472768151562> Lances',k.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
-     ['<:Blue_Tome:467112472394858508> Blue Tomes',k.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
-     ['<:Green_Blade:467122927230386207> Axes',k.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
-     ['<:Green_Tome:467122927666593822> Green Tomes',k.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
-     ['<:Colorless_Tome:443692133317345290> Colorless Tomes',k.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
-     ['<:Gold_Dragon:774013610908581948> Dragon Breaths',k.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
-     ['<:Gold_Beast:774013608191459329> Beast Damage',k.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
-     ['<:Gold_Bow:774013609389981726> Bows',k.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
-     ['<:Gold_Dagger:774013610862968833> Daggers',k.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
-     ['<:Colorless_Staff:443692132323295243> Damaging Staves',k.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
+  f=[["<:Red_Blade:443172811830198282> #{wtypes[0]}",k.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
+     ["<:Red_Tome:443172811826003968> #{wtypes[1]}",k.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
+     ["<:Blue_Blade:467112472768151562> #{wtypes[2]}",k.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
+     ["<:Blue_Tome:467112472394858508> #{wtypes[3]}",k.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
+     ["<:Green_Blade:467122927230386207> #{wtypes[4]}",k.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
+     ["<:Green_Tome:467122927666593822> #{wtypes[5]}",k.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
+     ["<:Colorless_Tome:443692133317345290> #{wtypes[6]}",k.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
+     ["<:Gold_Dragon:774013610908581948> #{wtypes[7]}",k.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
+     ["<:Gold_Beast:774013608191459329> #{wtypes[8]}",k.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
+     ["<:Gold_Bow:774013609389981726> #{wtypes[9]}",k.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
+     ["<:Gold_Dagger:774013610862968833> #{wtypes[10]}",k.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
+     ["<:Colorless_Staff:443692132323295243> #{wtypes[11]}",k.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
   f=f.reject{|q| q[1].nil? || q[1].length<=0}
   if f.map{|q| "__*#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
-    str="__**Standard PRF Weapons**__"
+    str="__**#{archead[0]}**__"
     for i in 0...f.length
       str=extend_message(str,"__*#{f[i][0]}*__",event,2)
       for i2 in 0...f[i][1].length
@@ -5958,24 +6700,24 @@ def disp_all_prfs(event,bot)
     end
     event.respond str
   else
-    create_embed(event,'__**Standard PRF Weapons**__','',0xF4728C,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
+    create_embed(event,"__**#{archead[0]}**__",'',0xF4728C,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
   end
   k=sklz.reject{|q| !q.prerequisite.nil? && q.prerequisite.length>0 && q.prerequisite != '-'}
-  f=[['<:Red_Blade:443172811830198282> Swords',k.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
-     ['<:Red_Tome:443172811826003968> Red Tomes',k.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
-     ['<:Blue_Blade:467112472768151562> Lances',k.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
-     ['<:Blue_Tome:467112472394858508> Blue Tomes',k.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
-     ['<:Green_Blade:467122927230386207> Axes',k.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
-     ['<:Green_Tome:467122927666593822> Green Tomes',k.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
-     ['<:Colorless_Tome:443692133317345290> Colorless Tomes',k.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
-     ['<:Gold_Dragon:774013610908581948> Dragon Breaths',k.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
-     ['<:Gold_Beast:774013608191459329> Beast Damage',k.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
-     ['<:Gold_Bow:774013609389981726> Bows',k.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
-     ['<:Gold_Dagger:774013610862968833> Daggers',k.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
-     ['<:Colorless_Staff:443692132323295243> Damaging Staves',k.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
+  f=[["<:Red_Blade:443172811830198282> #{wtypes[0]}",k.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
+     ["<:Red_Tome:443172811826003968> #{wtypes[1]}",k.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
+     ["<:Blue_Blade:467112472768151562> #{wtypes[2]}",k.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
+     ["<:Blue_Tome:467112472394858508> #{wtypes[3]}",k.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
+     ["<:Green_Blade:467122927230386207> #{wtypes[4]}",k.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
+     ["<:Green_Tome:467122927666593822> #{wtypes[5]}",k.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
+     ["<:Colorless_Tome:443692133317345290> #{wtypes[6]}",k.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
+     ["<:Gold_Dragon:774013610908581948> #{wtypes[7]}",k.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
+     ["<:Gold_Beast:774013608191459329> #{wtypes[8]}",k.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
+     ["<:Gold_Bow:774013609389981726> #{wtypes[9]}",k.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
+     ["<:Gold_Dagger:774013610862968833> #{wtypes[10]}",k.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
+     ["<:Colorless_Staff:443692132323295243> #{wtypes[11]}",k.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
   f=f.reject{|q| q[1].nil? || q[1].length<=0}
   if f.map{|q| "__*#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
-    str="__**Retro-PRF Weapons**__"
+    str="__**#{archead[1]}**__"
     for i in 0...f.length
       str=extend_message(str,"__*#{f[i][0]}*__",event,2)
       for i2 in 0...f[i][1].length
@@ -5984,7 +6726,7 @@ def disp_all_prfs(event,bot)
     end
     event.respond str
   else
-    create_embed(event,'__**Retro-PRF Weapons**__','',0xF4728C,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
+    create_embed(event,"__**#{archead[1]}**__",'',0xF4728C,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
   end
   ast=$skills.reject{|q| !q.type.include?('Assist') || q.exclusivity.nil? || !q.isPostable?(event)}.map{|q| q.clone}
   for i in 0...ast.length
@@ -6000,50 +6742,50 @@ def disp_all_prfs(event,bot)
   end
   if ast.map{|q| q.name}.join("\n").length+spec.map{|q| q.name}.join("\n").length>1800
     if ast.map{|q| q.name}.join("\n").length>1800
-      str='<:Skill_Assist:444078171025965066>__**PRF Assists**__'
+      str="<:Skill_Assist:444078171025965066>__**#{archead[2]}**__"
       for i in 0...ast.length
         str=extend_message(str,ast[i].name,event)
       end
       event.respond str
     else
-      create_embed(event,'<:Skill_Assist:444078171025965066>__**PRF Assists**__','',0x07DFBB,nil,nil,triple_finish(ast.map{|q| q.name},true))
+      create_embed(event,"<:Skill_Assist:444078171025965066>__**#{archead[2]}**__",'',0x07DFBB,nil,nil,triple_finish(ast.map{|q| q.name},true))
     end
     if spec.map{|q| q.name}.join("\n").length>1800
-      str='<:Skill_Special:444078170665254929>__**PRF Specials**__'
+      str="<:Skill_Special:444078170665254929>__**#{archead[3]}**__"
       for i in 0...spec.length
         str=extend_message(str,spec[i].name,event)
       end
       event.respond str
     else
-      create_embed(event,'<:Skill_Special:444078170665254929>__**PRF Specials**__','',0xF67EF8,nil,nil,triple_finish(spec.map{|q| q.name},true))
+      create_embed(event,"<:Skill_Special:444078170665254929>__**#{archead[3]}**__",'',0xF67EF8,nil,nil,triple_finish(spec.map{|q| q.name},true))
     end
   else
-    create_embed(event,'__**PRF Assists and Specials**__','',0x7FAFDA,nil,nil,[['<:Skill_Assist:444078171025965066> Assists',ast.map{|q| q.name}.join("\n")],['<:Skill_Special:444078170665254929> Specials',spec.map{|q| q.name}.join("\n")]])
+    create_embed(event,"__**#{archead[4]}**__",'',0x7FAFDA,nil,nil,[["<:Skill_Assist:444078171025965066> #{archead[2].gsub('PRF','').gsub(' ','')}",ast.map{|q| q.name}.join("\n")],["<:Skill_Special:444078170665254929> #{archead[3].gsub('PRF','').gsub(' ','')}",spec.map{|q| q.name}.join("\n")]])
   end
-  sklz=$skills.reject{|q| !q.isPassive? || q.exclusivity.nil? || !q.isPostable?(event) || q.learn.flatten.length<=0}.map{|q| q.clone}
+  sklz=$skills.reject{|q| !q.isPassive? || q.exclusivity.nil? || !q.isPostable?(event) || q.learn.flatten.length<=0 || ![nil,'-','example'].include?(q.level)}.map{|q| q.clone}
   for i in 0...sklz.length
     x=sklz[i].exclusivity.reject{|q| untz.find_index{|q2| q2.name==q}.nil? || !untz[untz.find_index{|q2| q2.name==q}].isPostable?(event)}
     x=x.map{|q| untz[untz.find_index{|q2| q2.name==q}].postName}
     sklz[i].name="#{sklz[i].postName} \u2192 #{x.join(', ')}"
   end
-  f=[['<:Passive_A:443677024192823327> A Passives',sklz.reject{|q| !q.type.include?('Passive(A)')}.map{|q| q.name},0xED888A,'A'],
-     ['<:Passive_B:443677023257493506> B Passives',sklz.reject{|q| !q.type.include?('Passive(B)')}.map{|q| q.name},0x5CC4EF,'B'],
-     ['<:Passive_C:443677023555026954> C Passives',sklz.reject{|q| !q.type.include?('Passive(C)')}.map{|q| q.name},0x5FED96,'C']]
+  f=[["<:Passive_A:443677024192823327> A #{archead[5]}",sklz.reject{|q| !q.type.include?('Passive(A)')}.map{|q| q.name},0xED888A,'A'],
+     ["<:Passive_B:443677023257493506> B #{archead[5]}",sklz.reject{|q| !q.type.include?('Passive(B)')}.map{|q| q.name},0x5CC4EF,'B'],
+     ["<:Passive_C:443677023555026954> C #{archead[5]}",sklz.reject{|q| !q.type.include?('Passive(C)')}.map{|q| q.name},0x5FED96,'C']]
   f=f.reject{|q| q[1].nil? || q[1].length<=0}
   if (f.map{|q| "__*#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800 && f.reject{|q| "__**#{q[0]}**__\n#{q[1].join("\n")}".length>=1800}.length>0) || Shardizard==4
     for i in 0...f.length
       if "__**#{f[i][0]}**__\n#{f[i][1].join("\n")}".length>=1800
-        str="__**PRF #{f[i][3]} Passives**__"
+        str="__**PRF #{f[i][3]} #{archead[5]}**__"
         for i2 in 0...f[i][1].length
           str=extend_message(str,f[i][1][i2],event)
         end
         event.respond str
       else
-        create_embed(event,"__**PRF #{f[i][3]} Passives**__",'',f[i][2],nil,nil,triple_finish(f[i][1],true))
+        create_embed(event,"__**PRF #{f[i][3]} #{archead[5]}**__",'',f[i][2],nil,nil,triple_finish(f[i][1],true))
       end
     end
   elsif f.map{|q| "__*#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
-    str="__**PRF Passives**__"
+    str="__**PRF #{archead[5]}**__"
     for i in 0...f.length
       str=extend_message(str,"__*#{f[i][0]}*__",event,2)
       for i2 in 0...f[i][1].length
@@ -6052,7 +6794,7 @@ def disp_all_prfs(event,bot)
     end
     event.respond str
   else
-    create_embed(event,'__**PRF Passives**__','',0xFDDC7E,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
+    create_embed(event,"__**PRF #{archead[5]}**__",'',0xFDDC7E,nil,nil,f.map{|q| [q[0],q[1].join("\n")]})
   end
   data_load()
   return nil
@@ -6064,10 +6806,19 @@ def disp_all_refines(event,bot,effect=false)
     return nil
   end
   effect=true if event.message.text.downcase.split(' ').include?('effect')
+  effect=true if event.message.text.downcase.split(' ').include?('efecto') && Shardizard==$spanishShard
   event.channel.send_temporary_message('Calculating data, please wait...',1) rescue nil
   data_load(['skill'])
   stones=[]
   dew=[]
+  wtypes=['Swords','Red Tomes','Lances','Blue Tomes','Axes','Green Tomes','Colorless Tomes','Dragon Breaths','Beast Damage','Bows','Daggers','Damaging Staves']
+  itemnames=['Divine Dew','Refining Stones']
+  hdrtxt=['Weapon Refines with Effect Modes','Weapon Evolution','Weapon Refinement',"Weapons that *should* be evolutions but aren't"]
+  if Shardizard==$spanishShard
+    wtypes=['Espadas','Tomos Rojos','Lanzas','Tomos Azules','Hachas','Tomos Verdes','Tomos Grises',"Drag\u00F3n",'Bestia','Arco','Dagas','Bastónes']
+    itemnames=['Rocío divino','Piedra de refinado']
+    hdrtxt=['Refina con Modos de Efecto','Evolución de Armas','Refinería de Armas',"Armas que *deberían* ser evoluciones pero no lo son"]
+  end
   if effect
     sklz=$skills.reject{|q| ['Falchion','Ragnarok+','Missiletainn','Whelp (All)','Yearling (All)','Adult (All)'].include?(q.name) || q.name.include?('Breidablik') || !q.type.include?('Weapon') || !q.isPostable?(event) || q.refine.nil? || q.refinement_name.nil?}
     for i in 0...sklz.length
@@ -6076,56 +6827,56 @@ def disp_all_refines(event,bot,effect=false)
     dew=sklz.reject{|q| q.exclusivity.nil?}
     stone=sklz.reject{|q| !q.exclusivity.nil?}
     if stones.map{|q| q.name}.join("\n").length+dew.map{|q| q.name}.join("\n").length>1900
-      f=[['<:Red_Blade:443172811830198282> Swords',dew.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
-         ['<:Red_Tome:443172811826003968> Red Tomes',dew.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
-         ['<:Blue_Blade:467112472768151562> Lances',dew.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
-         ['<:Blue_Tome:467112472394858508> Blue Tomes',dew.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
-         ['<:Green_Blade:467122927230386207> Axes',dew.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
-         ['<:Green_Tome:467122927666593822> Green Tomes',dew.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
-         ['<:Colorless_Tome:443692133317345290> Colorless Tomes',dew.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
-         ['<:Gold_Dragon:774013610908581948> Dragon Breaths',dew.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
-         ['<:Gold_Beast:774013608191459329> Beast Damage',dew.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
-         ['<:Gold_Bow:774013609389981726> Bows',dew.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
-         ['<:Gold_Dagger:774013610862968833> Daggers',dew.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
-         ['<:Colorless_Staff:443692132323295243> Damaging Staves',dew.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
+      f=[["<:Red_Blade:443172811830198282> #{wtypes[0]}",dew.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
+         ["<:Red_Tome:443172811826003968> #{wtypes[1]}",dew.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
+         ["<:Blue_Blade:467112472768151562> #{wtypes[2]}",dew.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
+         ["<:Blue_Tome:467112472394858508> #{wtypes[3]}",dew.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
+         ["<:Green_Blade:467122927230386207> #{wtypes[4]}",dew.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
+         ["<:Green_Tome:467122927666593822> #{wtypes[5]}",dew.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
+         ["<:Colorless_Tome:443692133317345290> #{wtypes[6]}",dew.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
+         ["<:Gold_Dragon:774013610908581948> #{wtypes[7]}",dew.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
+         ["<:Gold_Beast:774013608191459329> #{wtypes[8]}",dew.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
+         ["<:Gold_Bow:774013609389981726> #{wtypes[9]}",dew.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
+         ["<:Gold_Dagger:774013610862968833> #{wtypes[10]}",dew.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
+         ["<:Colorless_Staff:443692132323295243> #{wtypes[11]}",dew.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
       f=f.reject{|q| q[1].nil? || q[1].length<=0}
       if f.map{|q| "__^#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
-        msg='__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__'
+        msg="__**#{hdrtxt[0]}: #{itemnames[0]} <:Divine_Dew:453618312434417691>**__"
         for i in 0...f.length
           msg=extend_message(msg,"*#{f[i][0]}:* #{f[i][1].join(', ')}",event) if f[i][1].length>0
         end
         event.respond msg
       else
-        create_embed(event,'__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x9BFFFF,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
+        create_embed(event,"__**#{hdrtxt[0]}: #{itemnames[0]} <:Divine_Dew:453618312434417691>**__",'',0x9BFFFF,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
       end
-      f=[['<:Red_Blade:443172811830198282> Swords',stone.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
-         ['<:Red_Tome:443172811826003968> Red Tomes',stone.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
-         ['<:Blue_Blade:467112472768151562> Lances',stone.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
-         ['<:Blue_Tome:467112472394858508> Blue Tomes',stone.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
-         ['<:Green_Blade:467122927230386207> Axes',stone.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
-         ['<:Green_Tome:467122927666593822> Green Tomes',stone.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
-         ['<:Colorless_Tome:443692133317345290> Colorless Tomes',stone.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
-         ['<:Gold_Dragon:774013610908581948> Dragon Breaths',stone.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
-         ['<:Gold_Beast:774013608191459329> Beast Damage',stone.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
-         ['<:Gold_Bow:774013609389981726> Bows',stone.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
-         ['<:Gold_Dagger:774013610862968833> Daggers',stone.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
-         ['<:Colorless_Staff:443692132323295243> Damaging Staves',stone.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
+      f=[["<:Red_Blade:443172811830198282> #{wtypes[0]}",stone.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
+         ["<:Red_Tome:443172811826003968> #{wtypes[1]}",stone.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
+         ["<:Blue_Blade:467112472768151562> #{wtypes[2]}",stone.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
+         ["<:Blue_Tome:467112472394858508> #{wtypes[3]}",stone.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
+         ["<:Green_Blade:467122927230386207> #{wtypes[4]}",stone.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
+         ["<:Green_Tome:467122927666593822> #{wtypes[5]}",stone.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
+         ["<:Colorless_Tome:443692133317345290> #{wtypes[6]}",stone.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
+         ["<:Gold_Dragon:774013610908581948> #{wtypes[7]}",stone.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
+         ["<:Gold_Beast:774013608191459329> #{wtypes[8]}",stone.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
+         ["<:Gold_Bow:774013609389981726> #{wtypes[9]}",stone.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
+         ["<:Gold_Dagger:774013610862968833> #{wtypes[10]}",stone.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
+         ["<:Colorless_Staff:443692132323295243> #{wtypes[11]}",stone.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
       f=f.reject{|q| q[1].nil? || q[1].length<=0}
       if f.map{|q| "__^#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
-        msg='__**Weapon Refines with Effect Modes: Divine Dew <:Divine_Dew:453618312434417691>**__'
+        msg="__**#{hdrtxt[0]}: #{itemnames[1]} <:Refining_Stone:453618312165720086>**__"
         for i in 0...k.length
           msg=extend_message(msg,"*#{f[i][0]}:* #{f[i][1].join(', ')}",event) if f[i][1].length>0
         end
         event.respond msg
       else
-        create_embed(event,'__**Weapon Refines with Effect Modes: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x688C68,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
+        create_embed(event,"__**#{hdrtxt[0]}: #{itemnames[1]} <:Refining_Stone:453618312165720086>**__",'',0x688C68,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
       end
     else
       dew=dew.map{|q| q.name}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')}
       stone=stone.map{|q| q.name}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')}
       dew2=dew[dew.length/2+dew.length%2,dew.length/2].join("\n")
       dew=dew[0,dew.length/2+3*dew.length%2].join("\n")
-      create_embed(event,'__**Weapon Refines with Effect Modes**__','',0x688C68,nil,nil,[['<:Divine_Dew:453618312434417691> Divine Dew',dew],['<:Divine_Dew:453618312434417691> Divine Dew',dew2],['<:Refining_Stone:453618312165720086> Refining Stones',stone.join("\n"),1]],3)
+      create_embed(event,"__**#{hdrtxt[0]}**__",'',0x688C68,nil,nil,[["<:Divine_Dew:453618312434417691> #{itemnames[0]}",dew],["<:Divine_Dew:453618312434417691> #{itemnames[0]}",dew2],["<:Refining_Stone:453618312165720086> #{itemnames[1]}",stone.join("\n"),1]],3)
     end
     return nil
   end
@@ -6139,114 +6890,114 @@ def disp_all_refines(event,bot,effect=false)
   dew=sklz.reject{|q| q.exclusivity.nil?}
   stone=sklz.reject{|q| !q.exclusivity.nil?}
   if stones.map{|q| q.name}.join("\n").length+dew.map{|q| q.name}.join("\n").length>1900
-    f=[['<:Red_Blade:443172811830198282> Swords',dew.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
-       ['<:Red_Tome:443172811826003968> Red Tomes',dew.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
-       ['<:Blue_Blade:467112472768151562> Lances',dew.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
-       ['<:Blue_Tome:467112472394858508> Blue Tomes',dew.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
-       ['<:Green_Blade:467122927230386207> Axes',dew.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
-       ['<:Green_Tome:467122927666593822> Green Tomes',dew.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
-       ['<:Colorless_Tome:443692133317345290> Colorless Tomes',dew.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
-       ['<:Gold_Dragon:774013610908581948> Dragon Breaths',dew.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
-       ['<:Gold_Beast:774013608191459329> Beast Damage',dew.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
-       ['<:Gold_Bow:774013609389981726> Bows',dew.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
-       ['<:Gold_Dagger:774013610862968833> Daggers',dew.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
-       ['<:Colorless_Staff:443692132323295243> Damaging Staves',dew.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
+    f=[["<:Red_Blade:443172811830198282> #{wtypes[0]}",dew.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
+       ["<:Red_Tome:443172811826003968> #{wtypes[1]}",dew.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
+       ["<:Blue_Blade:467112472768151562> #{wtypes[2]}",dew.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
+       ["<:Blue_Tome:467112472394858508> #{wtypes[3]}",dew.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
+       ["<:Green_Blade:467122927230386207> #{wtypes[4]}",dew.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
+       ["<:Green_Tome:467122927666593822> #{wtypes[5]}",dew.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
+       ["<:Colorless_Tome:443692133317345290> #{wtypes[6]}",dew.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
+       ["<:Gold_Dragon:774013610908581948> #{wtypes[7]}",dew.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
+       ["<:Gold_Beast:774013608191459329> #{wtypes[8]}",dew.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
+       ["<:Gold_Bow:774013609389981726> #{wtypes[9]}",dew.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
+       ["<:Gold_Dagger:774013610862968833> #{wtypes[10]}",dew.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
+       ["<:Colorless_Staff:443692132323295243> #{wtypes[11]}",dew.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
     f=f.reject{|q| q[1].nil? || q[1].length<=0}
     if f.map{|q| "__^#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
-      msg='__**Weapon Evolution: Divine Dew <:Divine_Dew:453618312434417691>**__'
+      msg="__**#{hdrtxt[1]}: #{itemnames[0]} <:Divine_Dew:453618312434417691>**__"
       for i in 0...f.length
         msg=extend_message(msg,"*#{f[i][0]}:* #{f[i][1].join(', ')}",event) if f[i][1].length>0
       end
       event.respond msg
     else
-      create_embed(event,'__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x9BFFFF,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
+      create_embed(event,"__**#{hdrtxt[1]}: #{itemnames[0]} <:Divine_Dew:453618312434417691>**__",'',0x9BFFFF,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
     end
-    f=[['<:Red_Blade:443172811830198282> Swords',stone.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
-       ['<:Red_Tome:443172811826003968> Red Tomes',stone.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
-       ['<:Blue_Blade:467112472768151562> Lances',stone.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
-       ['<:Blue_Tome:467112472394858508> Blue Tomes',stone.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
-       ['<:Green_Blade:467122927230386207> Axes',stone.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
-       ['<:Green_Tome:467122927666593822> Green Tomes',stone.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
-       ['<:Colorless_Tome:443692133317345290> Colorless Tomes',stone.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
-       ['<:Gold_Dragon:774013610908581948> Dragon Breaths',stone.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
-       ['<:Gold_Beast:774013608191459329> Beast Damage',stone.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
-       ['<:Gold_Bow:774013609389981726> Bows',stone.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
-       ['<:Gold_Dagger:774013610862968833> Daggers',stone.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
-       ['<:Colorless_Staff:443692132323295243> Damaging Staves',stone.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
+    f=[["<:Red_Blade:443172811830198282> #{wtypes[0]}",stone.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
+       ["<:Red_Tome:443172811826003968> #{wtypes[1]}",stone.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
+       ["<:Blue_Blade:467112472768151562> #{wtypes[2]}",stone.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
+       ["<:Blue_Tome:467112472394858508> #{wtypes[3]}",stone.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
+       ["<:Green_Blade:467122927230386207> #{wtypes[4]}",stone.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
+       ["<:Green_Tome:467122927666593822> #{wtypes[5]}",stone.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
+       ["<:Colorless_Tome:443692133317345290> #{wtypes[6]}",stone.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
+       ["<:Gold_Dragon:774013610908581948> #{wtypes[7]}",stone.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
+       ["<:Gold_Beast:774013608191459329> #{wtypes[8]}",stone.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
+       ["<:Gold_Bow:774013609389981726> #{wtypes[9]}",stone.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
+       ["<:Gold_Dagger:774013610862968833> #{wtypes[10]}",stone.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
+       ["<:Colorless_Staff:443692132323295243> #{wtypes[11]}",stone.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
     f=f.reject{|q| q[1].nil? || q[1].length<=0}
     if f.map{|q| "__^#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
-      msg='__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__'
+      msg="__**#{hdrtxt[1]}: #{itemnames[1]} <:Refining_Stone:453618312165720086>**__"
       for i in 0...k.length
         msg=extend_message(msg,"*#{f[i][0]}:* #{f[i][1].join(', ')}",event) if f[i][1].length>0
       end
       event.respond msg
     else
-      create_embed(event,'__**Weapon Evolution: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x688C68,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
+      create_embed(event,"__**#{hdrtxt[1]}: #{itemnames[1]} <:Refining_Stone:453618312165720086>**__",'',0x688C68,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
     end
   elsif stones.map{|q| q.name}.join("\n").length+dew.map{|q| q.name}.join("\n").length+x.join("\n").length>1900
     dew=dew.map{|q| q.name}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')}
     stone=stone.map{|q| q.name}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')}
     dew2=dew[dew.length/2+dew.length%2,dew.length/2].join("\n")
     dew=dew[0,dew.length/2+3*dew.length%2].join("\n")
-    create_embed(event,'__**Weapon Evolution**__','',0x688C68,nil,nil,[['<:Divine_Dew:453618312434417691> Divine Dew',dew],['<:Divine_Dew:453618312434417691> Divine Dew',dew2],['<:Refining_Stone:453618312165720086> Refining Stones',stone.join("\n"),1]],3)
+    create_embed(event,"__**#{hdrtxt[1]}**__",'',0x688C68,nil,nil,[["<:Divine_Dew:453618312434417691> #{itemnames[0]}",dew],["<:Divine_Dew:453618312434417691> #{itemnames[0]}",dew2],["<:Refining_Stone:453618312165720086> #{itemnames[1]}",stone.join("\n"),1]],3)
   else
-    create_embed(event,'__**Weapon Evolution**__','',0x688C68,nil,nil,[['<:Divine_Dew:453618312434417691> Divine Dew',dew.map{|q| q.name}.join("\n")],['<:Refining_Stone:453618312165720086> Refining Stones',stone.map{|q| q.name}.join("\n")],["Weapons that *should* be evolutions but aren't",x.join("\n"),1]],3)
+    create_embed(event,"__**#{hdrtxt[1]}**__",'',0x688C68,nil,nil,[["<:Divine_Dew:453618312434417691> #{itemnames[0]}",dew.map{|q| q.name}.join("\n")],["<:Refining_Stone:453618312165720086> #{itemnames[1]}",stone.map{|q| q.name}.join("\n")],[hdrtxt[3],x.join("\n"),1]],3)
   end
   data_load()
   sklz=$skills.reject{|q| ['Falchion','Ragnarok+','Missiletainn','Whelp (All)','Yearling (All)','Adult (All)'].include?(q.name) || q.name.include?('Breidablik') || q.refine.nil?}
   dew=sklz.reject{|q| q.exclusivity.nil?}
   stone=sklz.reject{|q| !q.exclusivity.nil?}
   if stones.map{|q| q.postName}.join("\n").length+dew.map{|q| q.postName}.join("\n").length>1900
-    f=[['<:Red_Blade:443172811830198282> Swords',dew.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.postName}],
-       ['<:Red_Tome:443172811826003968> Red Tomes',dew.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.postName}],
-       ['<:Blue_Blade:467112472768151562> Lances',dew.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.postName}],
-       ['<:Blue_Tome:467112472394858508> Blue Tomes',dew.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.postName}],
-       ['<:Green_Blade:467122927230386207> Axes',dew.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.postName}],
-       ['<:Green_Tome:467122927666593822> Green Tomes',dew.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.postName}],
-       ['<:Colorless_Tome:443692133317345290> Colorless Tomes',dew.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.postName}],
-       ['<:Gold_Dragon:774013610908581948> Dragon Breaths',dew.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.postName}],
-       ['<:Gold_Beast:774013608191459329> Beast Damage',dew.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.postName}],
-       ['<:Gold_Bow:774013609389981726> Bows',dew.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.postName}],
-       ['<:Gold_Dagger:774013610862968833> Daggers',dew.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.postName}],
-       ['<:Colorless_Staff:443692132323295243> Damaging Staves',dew.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.postName}]]
+    f=[["<:Red_Blade:443172811830198282> #{wtypes[0]}",dew.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
+       ["<:Red_Tome:443172811826003968> #{wtypes[1]}",dew.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
+       ["<:Blue_Blade:467112472768151562> #{wtypes[2]}",dew.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
+       ["<:Blue_Tome:467112472394858508> #{wtypes[3]}",dew.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
+       ["<:Green_Blade:467122927230386207> #{wtypes[4]}",dew.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
+       ["<:Green_Tome:467122927666593822> #{wtypes[5]}",dew.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
+       ["<:Colorless_Tome:443692133317345290> #{wtypes[6]}",dew.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
+       ["<:Gold_Dragon:774013610908581948> #{wtypes[7]}",dew.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
+       ["<:Gold_Beast:774013608191459329> #{wtypes[8]}",dew.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
+       ["<:Gold_Bow:774013609389981726> #{wtypes[9]}",dew.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
+       ["<:Gold_Dagger:774013610862968833> #{wtypes[10]}",dew.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
+       ["<:Colorless_Staff:443692132323295243> #{wtypes[11]}",dew.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
     f=f.reject{|q| q[1].nil? || q[1].length<=0}
     if f.map{|q| "__^#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
-      msg='__**Weapon Refinement: Divine Dew <:Divine_Dew:453618312434417691>**__'
+      msg="__**#{hdrtxt[2]}: #{itemnames[0]} <:Divine_Dew:453618312434417691>**__"
       for i in 0...f.length
         msg=extend_message(msg,"*#{f[i][0]}:* #{f[i][1].join(', ')}",event) if f[i][1].length>0
       end
       event.respond msg
     else
-      create_embed(event,'__**Weapon Refinement: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x9BFFFF,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
+      create_embed(event,"__**#{hdrtxt[2]}: #{itemnames[0]} <:Divine_Dew:453618312434417691>**__",'',0x9BFFFF,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
     end
-    f=[['<:Red_Blade:443172811830198282> Swords',stone.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.postName}],
-       ['<:Red_Tome:443172811826003968> Red Tomes',stone.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.postName}],
-       ['<:Blue_Blade:467112472768151562> Lances',stone.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.postName}],
-       ['<:Blue_Tome:467112472394858508> Blue Tomes',stone.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.postName}],
-       ['<:Green_Blade:467122927230386207> Axes',stone.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.postName}],
-       ['<:Green_Tome:467122927666593822> Green Tomes',stone.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.postName}],
-       ['<:Colorless_Tome:443692133317345290> Colorless Tomes',stone.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.postName}],
-       ['<:Gold_Dragon:774013610908581948> Dragon Breaths',stone.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.postName}],
-       ['<:Gold_Beast:774013608191459329> Beast Damage',stone.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.postName}],
-       ['<:Gold_Bow:774013609389981726> Bows',stone.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.postName}],
-       ['<:Gold_Dagger:774013610862968833> Daggers',stone.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.postName}],
-       ['<:Colorless_Staff:443692132323295243> Damaging Staves',stone.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.postName}]]
+    f=[["<:Red_Blade:443172811830198282> #{wtypes[0]}",stone.reject{|q| !q.restrictions.include?('Sword Users Only')}.map{|q| q.name}],
+       ["<:Red_Tome:443172811826003968> #{wtypes[1]}",stone.reject{|q| !q.restrictions.include?('Red Tome Users Only')}.map{|q| q.name}],
+       ["<:Blue_Blade:467112472768151562> #{wtypes[2]}",stone.reject{|q| !q.restrictions.include?('Lance Users Only')}.map{|q| q.name}],
+       ["<:Blue_Tome:467112472394858508> #{wtypes[3]}",stone.reject{|q| !q.restrictions.include?('Blue Tome Users Only')}.map{|q| q.name}],
+       ["<:Green_Blade:467122927230386207> #{wtypes[4]}",stone.reject{|q| !q.restrictions.include?('Axe Users Only')}.map{|q| q.name}],
+       ["<:Green_Tome:467122927666593822> #{wtypes[5]}",stone.reject{|q| !q.restrictions.include?('Green Tome Users Only')}.map{|q| q.name}],
+       ["<:Colorless_Tome:443692133317345290> #{wtypes[6]}",stone.reject{|q| !q.restrictions.include?('Colorless Tome Users Only')}.map{|q| q.name}],
+       ["<:Gold_Dragon:774013610908581948> #{wtypes[7]}",stone.reject{|q| !q.restrictions.include?('Dragons Only')}.map{|q| q.name}],
+       ["<:Gold_Beast:774013608191459329> #{wtypes[8]}",stone.reject{|q| !q.restrictions.include?('Beasts Only')}.map{|q| q.name}],
+       ["<:Gold_Bow:774013609389981726> #{wtypes[9]}",stone.reject{|q| !q.restrictions.include?('Bow Users Only')}.map{|q| q.name}],
+       ["<:Gold_Dagger:774013610862968833> #{wtypes[10]}",stone.reject{|q| !q.restrictions.include?('Dagger Users Only')}.map{|q| q.name}],
+       ["<:Colorless_Staff:443692132323295243> #{wtypes[11]}",stone.reject{|q| !q.restrictions.include?('Staff Users Only')}.map{|q| q.name}]]
     f=f.reject{|q| q[1].nil? || q[1].length<=0}
     if f.map{|q| "__^#{q[0]}*__\n#{q[1].join("\n")}"}.join("\n\n").length>=1800
-      msg='__**Weapon Refinement: Refining Stones <:Refining_Stone:453618312165720086>**__'
+      msg="__**#{hdrtxt[2]}: #{itemnames[1]} <:Refining_Stone:453618312165720086>**__"
       for i in 0...f.length
         msg=extend_message(msg,"*#{f[i][0]}:* #{f[i][1].join(', ')}",event) if f[i][1].length>0
       end
       event.respond msg
     else
-      create_embed(event,'__**Weapon Refinement: Refining Stones <:Refining_Stone:453618312165720086>**__','',0x688C68,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
+      create_embed(event,"__**#{hdrtxt[2]}: #{itemnames[1]} <:Refining_Stone:453618312165720086>**__",'',0x688C68,nil,nil,f.map{|q| [q[0],q[1].join("\n")]},3)
     end
   elsif stones.map{|q| q.postName}.join("\n").length+dew.map{|q| q.postName}.join("\n").length.length>1900
     dew=dew.map{|q| q.name}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')}
     stone=stone.map{|q| q.name}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')}
     dew2=dew[dew.length/2+dew.length%2,dew.length/2].join("\n")
     dew=dew[0,dew.length/2+3*dew.length%2].join("\n")
-    create_embed(event,'__**Weapon Refinement**__','',0x688C68,nil,nil,[['<:Divine_Dew:453618312434417691> Divine Dew',dew],['<:Divine_Dew:453618312434417691> Divine Dew',dew2],['<:Refining_Stone:453618312165720086> Refining Stones',stone.join("\n"),1]],3)
+    create_embed(event,"__**#{hdrtxt[2]}**__",'',0x688C68,nil,nil,[["<:Divine_Dew:453618312434417691> #{itemnames[0]}",dew],["<:Divine_Dew:453618312434417691> #{itemnames[0]}",dew2],["<:Refining_Stone:453618312165720086> #{itemnames[1]}",stone.join("\n"),1]],3)
   end
   return nil
 end
@@ -6297,7 +7048,7 @@ def get_multiple_units(bot,event,args=[],includestats=true,isbst=false,maxunits=
       y3=y[0] if y.is_a?(Array)
     end
     if y.nil?
-      if x.downcase=="mathoo's" || (x.downcase=='my' && event.user.id==167657750971547648)
+      if x.downcase=="mathoo's" || (x.downcase=='my' && event.user.id==167657750971547648) || (Shardizard==$spanishShard && (has_any?(args,["demathoo"]) || (has_any?(args,['mi']) && event.user.id==167657750971547648)))
         m=167657750971547648
       elsif donate_trigger_word(event,x)>0
         m=donate_trigger_word(event,x)
@@ -6356,38 +7107,39 @@ def combined_BST(bot,event,args=[])
   str=''
   if !safe_to_spam?(event) && (x.length>8 || x.reject{|q| q.is_a?(String)}.length>4)
     str="I'm not going to list all that data here.  Reducing to first four units.  If you want to see more, use this command in PM.\n"
+    str="No voy a enumerar todos esos datos aquí. Reduciendo a los primeros cuatro personajes. Si quieres ver más, usa este comando en mensajes privados.\n" if Shardizard==$spanishShard
     x=x.reject{|q| q.is_a?(String)}
     x=x[0,4]
   end
   u=0
   scr=[]; bst=[]
   str=''
-  counters=[['Red', 0, 0, 0],
-            ['Blue', 0, 0, 0],
-            ['Green', 0, 0, 0],
-            ['Colorless', 0, 0, 0],
-            ['Tome', 0, 0, 0],
-            ['Dragon', 0, 0, 0],
-            ['Blade', 0, 0, 0],
-            ['Staff', 0, 0, 0],
-            ['Dagger', 0, 0, 0],
-            ['Archer', 0, 0, 0],
-            ['Beast', 0, 0, 0],
-            ['Infantry', 0, 0, 0],
-            ['Horse', 0, 0, 0],
-            ['Armor', 0, 0, 0],
-            ['Flier', 0, 0, 0],
-            ['Story', 0, 0, 0],
-            ['GHB', 0, 0, 0],
-            ['Tempest', 0, 0, 0],
+  counters=[['Red', 0, 0, 0, 'Roja'],
+            ['Blue', 0, 0, 0, 'Azul'],
+            ['Green', 0, 0, 0, 'Verde'],
+            ['Colorless', 0, 0, 0, 'Gris'],
+            ['Tome', 0, 0, 0, 'Tomo'],
+            ['Dragon', 0, 0, 0, "Drag\u00F3n"],
+            ['Blade', 0, 0, 0, 'Filo'],
+            ['Staff', 0, 0, 0, 'Bastón'],
+            ['Dagger', 0, 0, 0, 'Daga'],
+            ['Archer', 0, 0, 0, 'Arco'],
+            ['Beast', 0, 0, 0, 'Bestia'],
+            ['Infantry', 0, 0, 0, 'Infantería'],
+            ['Horse', 0, 0, 0, 'Caballo'],
+            ['Armor', 0, 0, 0, 'Blindada'],
+            ['Flier', 0, 0, 0, 'Volador'],
+            ['Story', 0, 0, 0, 'Historia'],
+            ['GHB', 0, 0, 0, 'GHB'],
+            ['Tempest', 0, 0, 0, 'Tormenta'],
             [['', 'F2P', 'F2P', 'F2P'], 0, 0, 0],
             ['Alfonse', 0, 0, 0, ['Alfonse', 'Alfonse(Bunny)', 'Lif', 'Alfonse(Winter)', 'Hood']],
             ['Alm', 0, 0, 0, ['Alm', 'Alm(Saint)', 'Alm(Brave)', 'Alm(Valentines)']],
             ['Anna', 0, 0, 0, ['Anna', 'Anna(Winter)', 'Anna(Apotheosis)']],
             ['Azura', 0, 0, 0, ['Azura', 'Azura(Performing)', 'Azura(Winter)', 'Azura(Adrift)', 'Azura(Vallite)']],
             ['Berkut', 0, 0, 0, ['Berkut', 'Berkut(Fallen)', 'Berkut(Soiree)']],
-            ['Byleth', 0, 0, 0, ['Byleth(M)', 'Byleth(F)', 'Byleth(F)(Summer)']],
-            ['Caeda', 0, 0, 0, ['Caeda', 'Caeda(Bride)', 'Tsubasa', 'Caeda(Retro)']],
+            ['Byleth', 0, 0, 0, ['Byleth(M)', 'Byleth(F)', 'Byleth(F)(Summer)', 'Byleth(M)(Sublime)']],
+            ['Caeda', 0, 0, 0, ['Caeda', 'Caeda(Bride)', 'Tsubasa', 'Caeda(Retro)', 'Caeda(Summer)']],
             ['Camilla', 0, 0, 0, ['Camilla', 'Camilla(Bunny)', 'Camilla(Winter)', 'Camilla(Summer)', 'Camilla(Adrift)', 'Camilla(Bath)', 'Camilla(Brave)']],
             ['Catria', 0, 0, 0, ['Catria(Launch)', 'Catria(SoV)', 'Catria(Bunny)', 'Palla(Retro)']],
             ['Celica', 0, 0, 0, ['Celica', 'Celica(Fallen)', 'Celica(Brave)', 'Alm(Valentines)']],
@@ -6405,6 +7157,7 @@ def combined_BST(bot,event,args=[])
             ['Fjorm', 0, 0, 0, ['Fjorm', 'Fjorm(Winter)', 'Fjorm(Bride)']],
             ['Gunnthra', 0, 0, 0, ['Gunnthra', 'Gunnthra(Winter)', 'Gunnthra(Summer)']],
             ['Hector', 0, 0, 0, ['Hector', 'Hector(Valentines)', 'Hector(Marquess)', 'Hector(Brave)', 'Hector(Halloween)']],
+            ['Hilda(3H)', 0, 0, 0, ['Hilda(3H)', 'Hilda(3H)(Christmas)', 'Hilda(3H)(Summer)']],
             ['Hinoka', 0, 0, 0, ['Hinoka(Launch)', 'Hinoka(Wings)', 'Hinoka(Bath)']],
             ['Ike', 0, 0, 0, ['Ike', 'Ike(Vanguard)', 'Ike(Brave)', 'Ike(Valentines)', 'Ike(Fallen)']],
             ['Julia', 0, 0, 0, ['Julia', 'Julia(Crusader)', 'Julia(Fallen)']],
@@ -6415,7 +7168,8 @@ def combined_BST(bot,event,args=[])
             ['Lilina', 0, 0, 0, ['Lilina', 'Lilina(Valentines)', 'Lilina(Summer)', 'Hector(Halloween)']],
             ['Lucina', 0, 0, 0, ['Lucina', 'Lucina(Bunny)', 'Marth(Masked)', 'Lucina(Brave)', 'Lucina(Glorious)', 'Mia(Summer)']],
             ['Lyn', 0, 0, 0, ['Lyn', 'Lyn(Bride)', 'Lyn(Brave)', 'Lyn(Valentines)', 'Lyn(Wind)', 'Lyn(Summer)']],
-            ['Marth', 0, 0, 0, ['Marth', 'Marth(Groom)', 'Marth(Masked)', 'Marth(King)', 'Marth(Winter)', 'Marth(Retro)']],
+            ['Marianne', 0, 0, 0, ['Marianne', 'Marianne(Brave)', 'Hilda(3H)(Summer)']],
+            ['Marth', 0, 0, 0, ['Marth', 'Marth(Groom)', 'Marth(Masked)', 'Marth(King)', 'Marth(Winter)', 'Marth(Retro)', 'Marth(Brave)']],
             ['Micaiah', 0, 0, 0, ['Micaiah', 'Micaiah(Festival)', 'Micaiah(Brave)']],
             ['Morgan', 0, 0, 0, ['Morgan(M)', 'Morgan(F)', 'Morgan(M)(Fallen)', 'Morgan(F)(Fallen)']],
             ['Ninian', 0, 0, 0, ['Ninian', 'Ninian(Bride)', 'Tiki(Young)(Halloween)']],
@@ -6436,8 +7190,14 @@ def combined_BST(bot,event,args=[])
             ['Tiki', 0, 0, 0, ['Tiki(Young)', 'Tiki(Adult)', 'Tiki(Adult)(Summer)', 'Tiki(Young)(Summer)', 'Tiki(Young)(Earth)', 'Tiki(Young)(Fallen)', 'Tiki(Young)(Halloween)']],
             ['Veronica', 0, 0, 0, ['Veronica', 'Veronica(Brave)', 'Veronica(Bunny)', 'Thrasir', 'Veronica(Pirate)']],
             ['Xander', 0, 0, 0, ['Xander', 'Xander(Bunny)', 'Xander(Summer)', 'Xander(Festival)', 'Veronica(Pirate)']]]
+  fff=0; fff=4 if Shardizard==$spanishShard
+  for i in 0...18
+    counters[i]=[counters[i][fff],0,0,0]
+  end
   colors=[[],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
   braves=[[],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]]
+  scrname='Score'
+  scrname='Puntaje' if Shardizard==$spanishShard
   for i in 0...x.length
     if x[i].is_a?(String)
       str=extend_message(str,"~~#{x[i]}~~",event)
@@ -6447,8 +7207,9 @@ def combined_BST(bot,event,args=[])
       frmt='__' if [4,8].include?(u)
       frmt='' if i+1==x.length
       str2="#{frmt}Unit #{u}:#{frmt}    #{x[i][0].starDisplay(bot,x[i][1],x[i][3],x[i][4],x[i][2],x[i][5])}"
+      str2="#{frmt}Personaje #{u}:#{frmt}    #{x[i][0].starDisplay(bot,x[i][1],x[i][3],x[i][4],x[i][2],x[i][5])}" if Shardizard==$spanishShard
       str2="#{str2}    BST: #{x[i][0].dispStats(bot,40,x[i][1],x[i][3],x[i][4],x[i][2],x[i][5]).inject(0){|sum,x2| sum + x2 }}"
-      str2="#{str2}    Score: #{x[i][0].score(bot,40,x[i][1],x[i][3],x[i][4],x[i][2],x[i][5]).to_i}"
+      str2="#{str2}    #{scrname}: #{x[i][0].score(bot,40,x[i][1],x[i][3],x[i][4],x[i][2],x[i][5]).to_i}"
       bst.push(x[i][0].dispStats(bot,40,x[i][1],x[i][3],x[i][4],x[i][2],x[i][5]).inject(0){|sum,x2| sum + x2 })
       scr.push(x[i][0].score(bot,40,x[i][1],x[i][3],x[i][4],x[i][2],x[i][5]))
       str2="#{str2}+`SP`/100" if x[i][0].owner.nil?
@@ -6521,24 +7282,37 @@ def combined_BST(bot,event,args=[])
     emblem_name[i].unshift(extra_data[i]) if extra_data[i].length>0
     emblem_name[i].push(unit_data[i]) if unit_data[i].length>0
   end
-  emblem_name[1].unshift('Color-balanced') if colors[1][0]==colors[1][1] && colors[1][0]==colors[1][2] && colors[1][0]==1
-  emblem_name[2].unshift('Color-balanced') if colors[2][0]==colors[2][1] && colors[2][0]==colors[2][2] && colors[2][0]==2
-  emblem_name[3].unshift('Color-balanced') if colors[3][0]==colors[3][1] && colors[3][0]==colors[3][2] && colors[3][3]+colors[3][4]<x.length/2
+  cb='Color-balanced'
+  cb='Equilibrada de color,' if Shardizard==$spanishShard
+  emblem_name[1].unshift(cb) if colors[1][0]==colors[1][1] && colors[1][0]==colors[1][2] && colors[1][0]==1
+  emblem_name[2].unshift(cb) if colors[2][0]==colors[2][1] && colors[2][0]==colors[2][2] && colors[2][0]==2
+  emblem_name[3].unshift(cb) if colors[3][0]==colors[3][1] && colors[3][0]==colors[3][2] && colors[3][3]+colors[3][4]<x.length/2
   for i in 1...4
-    if emblem_name[i]==['Color-balanced']
+    if emblem_name[i]==[cb]
       emblem_name[i]=emblem_name[i][0]
     elsif emblem_name[i].length>0
       emblem_name[i]="#{emblem_name[i].join(' ')} Emblem"
-      emblem_name[i]=emblem_name[i].gsub('Red Blade','Sword')
-      emblem_name[i]=emblem_name[i].gsub('Blue Blade','Lance')
-      emblem_name[i]=emblem_name[i].gsub('Green Blade','Axe')
+      emblem_name[i]=emblem_name[i].gsub('Red Blade','Sword').gsub('Roja Filo','Espada')
+      emblem_name[i]=emblem_name[i].gsub('Blue Blade','Lance').gsub('Azul Filo','Lanza')
+      emblem_name[i]=emblem_name[i].gsub('Green Blade','Axe').gsub('Verde Filo','Hacha')
     else
       emblem_name[i]=''
     end
   end
   str3="__**#{"#{emblem_name[3]} " if emblem_name[3].length>0}Team**__"
   frmt='**'
-  if x.length>4
+  if x.length>4 && Shardizard==$spanishShard
+    str2="__**Primeros cuatro personajes listados#{", que forman un equipo llamado #{emblem_name[1]}" if emblem_name[1].length>0}**__"
+    str2="#{str2}\n**BST de los cuatro personajes: #{bst[0,4].inject(0){|sum,x2| sum + x2 }}**"
+    str2="#{str2}\n**Puntaje de Arena avanzado: #{(scr[0,4].inject(0){|sum,x2| sum + x2 }/4.0+183).round(1)}"
+    str2="#{str2}+`SP`/400" if x[0,4].reject{|q| !q[0].owner.nil?}.length>0
+    str2="#{str2}**, o #{(scr[0,4].inject(0){|sum,x2| sum + x2 }/2.0+366).round(1)}"
+    str2="#{str2}+`SP`/200" if x[0,4].reject{|q| !q[0].owner.nil?}.length>0
+    str2="#{str2} con carácter extra"
+    str=extend_message(str,str2,event,2)
+    str3="__*Todos los personajes listados*__#{", que forman un equipo llamado #{emblem_name[3]}" if emblem_name[3].length>0}"
+    frmt='*'
+  elsif x.length>4
     str2="__**First four listed units#{", which constitutes a#{'n' if ['A','E','I','O','U'].include?(emblem_name[1][0])} #{emblem_name[1]} team" if emblem_name[1].length>0}**__"
     str2="#{str2}\n**BST of all four units: #{bst[0,4].inject(0){|sum,x2| sum + x2 }}**"
     str2="#{str2}\n**Advanced Arena Score: #{(scr[0,4].inject(0){|sum,x2| sum + x2 }/4.0+183).round(1)}"
@@ -6550,7 +7324,18 @@ def combined_BST(bot,event,args=[])
     str3="__*All listed units*__#{", which constitutes a#{'n' if ['A','E','I','O','U'].include?(emblem_name[3][0])} #{emblem_name[3]} team" if emblem_name[3].length>0}"
     frmt='*'
   end
-  if x.length>8
+  if x.length>8 && Shardizard==$spanishShard
+    str2="__*Los primeros ocho personajes enumerados#{", que forman un equipo llamado #{emblem_name[2]}" if emblem_name[2].length>0}*__"
+    str2="#{str2}\n*BST de los ocho personajes: #{bst[0,8].inject(0){|sum,x2| sum + x2 }}*"
+    str2="#{str2}\n*Puntaje de Arena avanzado: #{(scr[0,8].inject(0){|sum,x2| sum + x2 }/8.0+211).round(1)}"
+    str2="#{str2}+`SP`/800" if x[0,8].reject{|q| !q[0].owner.nil?}.length>0
+    str2="#{str2}*, o #{(scr[0,8].inject(0){|sum,x2| sum + x2 }/4.0+422).round(1)}"
+    str2="#{str2}+`SP`/400" if x[0,8].reject{|q| !q[0].owner.nil?}.length>0
+    str2="#{str2} con carácter extra"
+    str=extend_message(str,str2,event,2)
+    str3="__Todos los personajes listados__#{", que forman un equipo llamado #{emblem_name[3]}" if emblem_name[3].length>0}"
+    frmt=''
+  elsif x.length>8
     str2="__*First eight listed units#{", which constitutes a#{'n' if ['A','E','I','O','U'].include?(emblem_name[2][0])} #{emblem_name[2]} team" if emblem_name[2].length>0}*__"
     str2="#{str2}\n*BST of all eight units: #{bst[0,8].inject(0){|sum,x2| sum + x2 }}*"
     str2="#{str2}\n*Advanced Arena Score: #{(scr[0,8].inject(0){|sum,x2| sum + x2 }/8.0+211).round(1)}"
@@ -6559,21 +7344,32 @@ def combined_BST(bot,event,args=[])
     str2="#{str2}+`SP`/400" if x[0,8].reject{|q| !q[0].owner.nil?}.length>0
     str2="#{str2} with bonus unit"
     str=extend_message(str,str2,event,2)
-    str3="__All listed units#{", which constitutes a#{'n' if ['A','E','I','O','U'].include?(emblem_name[3][0])} #{emblem_name[3]} team" if emblem_name[3].length>0}__"
+    str3="__All listed units__#{", which constitutes a#{'n' if ['A','E','I','O','U'].include?(emblem_name[3][0])} #{emblem_name[3]} team" if emblem_name[3].length>0}"
     frmt=''
   end
-  str3="#{str3}\n#{frmt}BST of all units: #{bst.inject(0){|sum,x2| sum + x2 }}#{frmt}"
-  str3="#{str3}\n#{frmt}Advanced Arena Score: #{(scr.inject(0){|sum,x2| sum + x2 }*1.0/scr.length+scr.length*7+155).round(1)}"
-  str3="#{str3}+`SP`/#{x.length*100}" if x.reject{|q| !q[0].owner.nil?}.length>0
-  str3="#{str3}#{frmt}, or #{(scr.inject(0){|sum,x2| sum + x2 }*2.0/scr.length+scr.length*14+310).round(1)}"
-  str3="#{str3}+`SP`/#{x.length*50}" if x.reject{|q| !q[0].owner.nil?}.length>0
-  str3="#{str3} with bonus unit"
+  if Shardizard==$spanishShard
+    str3="#{str3}\n#{frmt}BST de todos los personajes: #{bst.inject(0){|sum,x2| sum + x2 }}#{frmt}"
+    str3="#{str3}\n#{frmt}Puntaje de Arena avanzado: #{(scr.inject(0){|sum,x2| sum + x2 }*1.0/scr.length+scr.length*7+155).round(1)}"
+    str3="#{str3}+`SP`/#{x.length*100}" if x.reject{|q| !q[0].owner.nil?}.length>0
+    str3="#{str3}#{frmt}, o #{(scr.inject(0){|sum,x2| sum + x2 }*2.0/scr.length+scr.length*14+310).round(1)}"
+    str3="#{str3}+`SP`/#{x.length*50}" if x.reject{|q| !q[0].owner.nil?}.length>0
+    str3="#{str3} con carácter extra"
+  else
+    str3="#{str3}\n#{frmt}BST of all units: #{bst.inject(0){|sum,x2| sum + x2 }}#{frmt}"
+    str3="#{str3}\n#{frmt}Advanced Arena Score: #{(scr.inject(0){|sum,x2| sum + x2 }*1.0/scr.length+scr.length*7+155).round(1)}"
+    str3="#{str3}+`SP`/#{x.length*100}" if x.reject{|q| !q[0].owner.nil?}.length>0
+    str3="#{str3}#{frmt}, or #{(scr.inject(0){|sum,x2| sum + x2 }*2.0/scr.length+scr.length*14+310).round(1)}"
+    str3="#{str3}+`SP`/#{x.length*50}" if x.reject{|q| !q[0].owner.nil?}.length>0
+    str3="#{str3} with bonus unit"
+  end
   str=extend_message(str,str3,event,2)
   event.respond str
 end
 
 def shortstat(x)
+  return 'Atq' if x=='Attack' && Shardizard==$spanishShard
   return 'Atk' if x=='Attack'
+  return 'Vel' if x=='Speed' && Shardizard==$spanishShard
   return 'Spd' if x=='Speed'
   return 'Def' if x=='Defense'
   return 'Res' if x=='Resistance'
@@ -6586,24 +7382,31 @@ def comparison(bot,event,args=[])
   x=get_multiple_units(bot,event,args)
   data_load(['unit'])
   hdr="__Comparing #{x.length} units__"
+  hdr="__Comparando #{x.length} caracteres__" if Shardizard==$spanishShard
   err=''
   if x.length>x.uniq.length
     x.uniq!
     err='Duplicate units found.  Collapsing into shorter list.'
+    err='Se encontraron caracteres duplicados. Colapsando en una lista más corta.' if Shardizard==$spanishShard
   end
   event.respond err if err.length>0
   xpic=nil
   ignoreclone=false
-  if x.length<=0
+  if x.length<=0 && Shardizard==$spanishShard
+    event.respond nomf()
+    return nil
+  elsif x.length<=0
     event.respond 'No units were listed.'
     return nil
   elsif x.length<=1 && !x[0][0].hasEnemyForm?
-    event.respond 'Only one unit found.  Switching to the `study` command, which is basically `compare` for one unit.'
+    event.respond 'Only one unit found.  Switching to the `study` command, which is basically `compare` for one unit.' unless Shardizard==$spanishShard
+    event.respond 'Solo se encontró un carácter. Cambiar al comando `study`, que es básicamente `compare` para un carácter.' if Shardizard==$spanishShard
     unit_study(bot,event,args,x[0][0].name)
     return nil
   elsif x.length<=1
     z="#{x[0][0].name}"
     hdr="Comparing **#{x[0][0].name}#{x[0][0].emotes(bot,false)}**"
+    hdr="Comparando **#{x[0][0].name}#{x[0][0].emotes(bot,false)}**" if Shardizard==$spanishShard
     xpic="#{x[0][0].thumbnail(event,bot)}"
     x[0][10]=x[0][0].clone; ignoreclone=true
     x[0][0].name='Player'; x[0][6]='Player'
@@ -6618,7 +7421,8 @@ def comparison(bot,event,args=[])
     x[0][0].stats1=x[0][0].stats1[0,5].map{|q| q}
     x.push(y.map{|q| q})
     if x[0][0].stats40[0,5].max<=0
-      event.respond "Only one unit found, and #{x[0][0].pronoun(false)} is enemy-exclusive.  I cannot `compare` one unit, and `study` is not available to enemies.  Displaying #{x[0][0].pronoun(true)} `stats`."
+      event.respond "Only one unit found, and #{x[0][0].pronoun(false)} is enemy-exclusive.  I cannot `compare` one unit, and `study` is not available to enemies.  Displaying #{x[0][0].pronoun(true)} `stats`." unless Shardizard==$spanishShard
+      event.respond "Solo se encontró un carácter, y es un enemigo.  No puedo `compare` una unidad y el `study` no está disponible para los enemigos.  Visualización de sus `stats`." if Shardizard==$spanishShard
       y[0].name="#{z}"
       disp_unit_stats(bot,event,y[0].clone,'smol')
       return nil
@@ -6639,12 +7443,14 @@ def comparison(bot,event,args=[])
       x[i].push("#{"#{x[i][1]}\\* " if rar}#{x[i][0].name}#{" +#{x[i][2]}" if merges}#{" #{nat}" if (boon || bane) && !(rar || merges)}#{" f+#{x[i][5]}" if flowers && x[i][5]>0}")
     end
     hdr="Comparing **#{x[0][0].name}#{x[0][0].emotes(bot,false)}**"
+    hdr="Comparando **#{x[0][0].name}#{x[0][0].emotes(bot,false)}**" if Shardizard==$spanishShard
     xpic=x[0][0].thumbnail(event,bot)
   else
     for i in 0...x.length
       x[i].push(x[i][0].name)
     end
     hdr="Comparing **#{x[0][0].name}** and **#{x[1][0].name}**" if x.length<=2
+    hdr="Comparando **#{x[0][0].name}** y **#{x[1][0].name}**" if x.length<=2 && Shardizard==$spanishShard
   end
   ftr=nil
   a=x.map{|q| q[0].alts[0]}.uniq
@@ -6652,6 +7458,7 @@ def comparison(bot,event,args=[])
     metadata_load()
     hdc=@server_data[0].inject(0){|sum,x2| sum + x2 }/701.0
     ftr="Heyday Coefficient: #{hdc.round(4)}" if hdc>1
+    ftr="Coeficiente de apogeo: #{hdc.round(4)}" if hdc>1 && Shardizard==$spanishShard
   end
   xlx=2
   xlx=9 if safe_to_spam?(event)
@@ -6678,7 +7485,7 @@ def comparison(bot,event,args=[])
     z.unshift(moji[0].mention) unless moji.length<=0
   end
   z2=''
-  if x.reject{|q| !q[0].legendary.nil?}.length<=0 && x.map{|q| q[0].legendary[0]}.uniq.length>1 && z[-1].include?('Ally_Boost_')
+  if x.reject{|q| !q[0].legendary.nil?}.length<=0 && x.map{|q| q[0].legendary[0]}.uniq.length>1 && z.length>0 && z[-1].include?('Ally_Boost_')
     z2="#{z[-1]}"
     z.pop
   end
@@ -6723,10 +7530,13 @@ def comparison(bot,event,args=[])
     s="#{s}\nHP: #{x[i][0].sort_data[0]}"
     s="#{s} / #{x[i][0].sort_data[0]+2}" if x[i][0].hasResplendent? && x[i][0].owner.nil?
     s="#{s} (#{sn[0]})" unless sn[0]==' '
-    s="#{s}\n#{x[i][0].atkName(false).gsub('Frz','Mag')}: #{x[i][0].sort_data[1]}"
+    xio=x[i][0].atkName(false).gsub('Frz','Mag')
+    xio=xio.gsub('Atk','Atq').gsub('Str','Frza') if Shardizard==$spanishShard
+    s="#{s}\n#{xio}: #{x[i][0].sort_data[1]}"
     s="#{s} / #{x[i][0].sort_data[1]+2}" if x[i][0].hasResplendent? && x[i][0].owner.nil?
     s="#{s} (#{sn[1]})" unless sn[1]==' '
-    s="#{s}\nSpd: #{x[i][0].sort_data[2]}"
+    s="#{s}\nSpd: #{x[i][0].sort_data[2]}" unless Shardizard==$spanishShard
+    s="#{s}\nVel: #{x[i][0].sort_data[2]}" if Shardizard==$spanishShard
     s="#{s} / #{x[i][0].sort_data[2]+2}" if x[i][0].hasResplendent? && x[i][0].owner.nil?
     s="#{s} (#{sn[2]})" unless sn[2]==' '
     s="#{s}\nDef: #{x[i][0].sort_data[3]}"
@@ -6755,11 +7565,14 @@ def comparison(bot,event,args=[])
     unless x[i][6]==x[i][0].name
       if x[i][0].owner.nil?
         x[i][0].name=x[i][6].gsub(x[i][0].name,'').gsub('(','').gsub(')','').gsub(' ','')
+      elsif Shardizard==$spanishShard
+        x[i][0].name="#{x[i][0].name} de #{x[i][0].owner}"
       else
-        x[i][0].name="#{x[i][0].onwer}'s #{x[i][0].name}"
+        x[i][0].name="#{x[i][0].owner}'s #{x[i][0].name}"
       end
     end
     h="#{x[i][0].owner}'s #{x[i][0].name}" unless x[i][0].owner.nil?
+    h="#{x[i][0].name} de #{x[i][0].owner}" unless x[i][0].owner.nil? || Shardizard !=$spanishShard
     f.push([h,s])
   end
   ecount=x.reject{|q| !['Elise'].include?(q[0].alts[0].gsub('*','')) && (q[0].duo.nil? || !q[0].duo.map{|q2| q2[1]}.include?('Elise'))}.length
@@ -6770,6 +7583,7 @@ def comparison(bot,event,args=[])
     hc=@server_data[0].inject(0){|sum,x| sum + x }*1.0
     hc/=701
     ftr="Heydey coefficient: #{len % hc}"
+    ftr="Coeficiente de apogeo: #{len % hc}" if Shardizard==$spanishShard
   end
   if x.length>2
     str2=stats_of_multiunits(bot,event,x.map{|q| q},2)
@@ -6777,29 +7591,40 @@ def comparison(bot,event,args=[])
     str="#{str}\n#{str2.gsub('*','')}"
   else
     statnames=['HP','Attack','Speed','Defense','Resistance','BST']
+    statnames=['HP','Ataque','Velocidad','Defensa','Resistencia','BST'] if Shardizard==$spanishShard
     stemoji=['<:HP_S:514712247503945739>','<:GenericAttackS:514712247587569664>','<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>','']
     if x.map{|q| q[0].atkName}.uniq.length<=1 && x[i][0].atkName != 'Freeze'
       statnames[1]=x[i][0].atkName
       stemoji[1]='<:StrengthS:514712248372166666>' if statnames[1]=='Strength'
       stemoji[1]='<:MagicS:514712247289774111>' if statnames[1]=='Magic'
+      if Shardizard==$spanishShard
+        statnames[1]='Fuerza' if statnames[1]=='Strength'
+        statnames[1]='Magia' if statnames[1]=='Magic'
+      end
     end
     xx=0
+    lng=['has','more','BST of highest stats']
+    lng=['tiene','mas','BST de las estadísticas más altas'] if Shardizard==$spanishShard
     for i in 0...6
       str="#{str}\n" if i==5
       if x[0][0].sort_data[i]>x[1][0].sort_data[i]
-        str="#{str}\n#{stemoji[i]}#{x[0][0].name} has #{x[0][0].sort_data[i]-x[1][0].sort_data[i]} more #{statnames[i]}"
+        str="#{str}\n#{stemoji[i]}#{x[0][0].name} #{lng[0]} #{x[0][0].sort_data[i]-x[1][0].sort_data[i]} #{lng[1]} #{statnames[i]}"
         xx+=x[0][0].sort_data[i] unless i==5
       elsif x[0][0].sort_data[i]<x[1][0].sort_data[i]
-        str="#{str}\n#{stemoji[i]}#{x[1][0].name} has #{x[1][0].sort_data[i]-x[0][0].sort_data[i]} more #{statnames[i]}"
+        str="#{str}\n#{stemoji[i]}#{x[1][0].name} #{lng[0]} #{x[1][0].sort_data[i]-x[0][0].sort_data[i]} #{lng[1]} #{statnames[i]}"
         xx+=x[1][0].sort_data[i] unless i==5
+      elsif Shardizard==$spanishShard
+        str="#{str}\n#{stemoji[i]}#{statnames[i]} igual"
+        xx+=x[0][0].sort_data[i] unless i==5
       else
         str="#{str}\n#{stemoji[i]}Equal #{statnames[i]}"
         xx+=x[0][0].sort_data[i] unless i==5
       end
     end
-    str="#{str}\nBST of highest stats: #{xx}"
+    str="#{str}\n#{lng[2]}: #{xx}"
   end
   f.push(['<:Ally_Boost_Spectrum:443337604054646804> Analysis',str])
+  f[-1][0]='<:Ally_Boost_Spectrum:443337604054646804> Análisis' if Shardizard==$spanishShard
   if x.map{|q| q[10].name}.uniq.length<2 && x.reject{|q| q[10].owner.nil?}.length<=0
     for i in 0...f.length
       s=f[i][1].split("\n")
@@ -6822,16 +7647,19 @@ def skill_comparison(bot,event,args=[])
   str2="#{x[1][1]}#{Rarity_stars[1][x[1][1]-1]}" if x[1][2]>=Max_rarity_merge[1]
   str2="#{str2} #{x[1][0].name}#{x[1][0].emotes(bot,false)}"
   hdr="__Comparing the skills of **#{str}** and **#{str2}**__"
+  hdr="__Comparando **#{str}** y **#{str2}**__" if x.length<=2 && Shardizard==$spanishShard
   l1=x[0][0].skill_list(x[0][1])
   s1=x[0][0].summoned(x[0][1])
   l2=x[1][0].skill_list(x[1][1])
   s2=x[1][0].summoned(x[1][1])
   data_load()
   l3=[]
-  f=[['<:Skill_Weapon:444078171114045450>Weapon'],['<:Skill_Assist:444078171025965066>Assist'],['<:Skill_Special:444078170665254929>Special'],
-     ['<:Passive_A:443677024192823327>A Passive'],['<:Passive_B:443677023257493506>B Passive'],['<:Passive_C:443677023555026954>C Passive'],
-     ['<:Passive_S:443677023626330122>Passive Seal']]
   slt=['Weapon','Assist','Special','Passive(A)','Passive(B)','Passive(C)','Seal']
+  pos=1
+  pos=2 if Shardizard==$spanishShard
+  f=[["<:Skill_Weapon:444078171114045450>#{Skill_Slots[pos][0]}"],["<:Skill_Assist:444078171025965066>#{Skill_Slots[pos][1]}"],
+     ["<:Skill_Special:444078170665254929>#{Skill_Slots[pos][2]}"],["<:Passive_A:443677024192823327>#{Skill_Slots[pos][3]}"],
+     ["<:Passive_B:443677023257493506>#{Skill_Slots[pos][4]}"],["<:Passive_C:443677023555026954>#{Skill_Slots[pos][5]}"],["<:Passive_S:443677023626330122>#{Skill_Slots[pos][6]}"]]
   ftr=nil
   for i in 0...6
     l1x=l1.reject{|q| !q.type.include?(slt[i])}
@@ -6840,9 +7668,13 @@ def skill_comparison(bot,event,args=[])
     m=[]
     if l3[i].length<=0
       m.push('~~neither unit has skills~~')
+      m=["~~ninguno de los personajes tiene habilidades~~"] if Shardizard==$spanishShard
       m=["~~only #{x[0][0].name} has skills~~"] if l1x.length>0
       m=["~~only #{x[1][0].name} has skills~~"] if l2x.length>0
+      m=["~~solo #{x[0][0].name} tiene habilidades~~"] if l1x.length>0 && Shardizard==$spanishShard
+      m=["~~solo #{x[1][0].name} tiene habilidades~~"] if l2x.length>0 && Shardizard==$spanishShard
       m=['~~no overlap~~'] if l2x.length>0 && l1x.length>0
+      m=['~~sin superposición~~'] if l2x.length>0 && l1x.length>0 && Shardizard==$spanishShard
     else
       m=l3[i].map{|q| q.fullName}
       for i2 in 0...m.length
@@ -6851,12 +7683,17 @@ def skill_comparison(bot,event,args=[])
         elsif s1.reject{|q| !q.type.include?(slt[i])}.map{|q| q.fullName}.include?(m[i2]) || s2.reject{|q| !q.type.include?(slt[i])}.map{|q| q.fullName}.include?(m[i2])
           m[i2]="*#{m[i2]}*"
           ftr='Italic skill names are known by one unit at the moment of summoning, but the other must learn it later.'
+          ftr='Los nombres de las habilidades en cursiva son conocidos por un personaje en el momento de la invocación, pero el otro debe aprenderlos más tarde.' if Shardizard==$spanishShard
         end
       end
-      m.unshift('~~different starts~~') unless l3[i][0].prerequisite.nil?
-      m.push('~~different ends~~') if l1x[-1].fullName != l3[i][-1].fullName && l2x[-1].fullName != l3[i][-1].fullName
+      m.unshift('~~different starts~~') unless l3[i][0].prerequisite.nil? || Shardizard==$spanishShard
+      m.unshift('~~comienzo diferente~~') unless l3[i][0].prerequisite.nil? || Shardizard !=$spanishShard
+      m.push('~~different ends~~') if l1x[-1].fullName != l3[i][-1].fullName && l2x[-1].fullName != l3[i][-1].fullName && Shardizard !=$spanishShard
+      m.push('~~final diferente~~') if l1x[-1].fullName != l3[i][-1].fullName && l2x[-1].fullName != l3[i][-1].fullName && Shardizard==$spanishShard
       m.push("~~#{x[1][0].name} has promotion~~") if l1x[-1].fullName==l3[i][-1].fullName && l2x[-1].fullName != l3[i][-1].fullName
       m.push("~~#{x[0][0].name} has promotion~~") if l1x[-1].fullName != l3[i][-1].fullName && l2x[-1].fullName==l3[i][-1].fullName
+      m.push("~~#{x[1][0].name} tiene promoción~~") if l1x[-1].fullName==l3[i][-1].fullName && l2x[-1].fullName != l3[i][-1].fullName && Shardizard==$spanishShard
+      m.push("~~#{x[0][0].name} tiene promoción~~") if l1x[-1].fullName != l3[i][-1].fullName && l2x[-1].fullName==l3[i][-1].fullName && Shardizard==$spanishShard
     end
     f[i].push(m.join("\n"))
   end
@@ -6871,7 +7708,7 @@ def find_alts(bot,event,args=[])
   x=find_data_ex(:find_unit,event,args,nil,bot)
   a=[]
   if x.nil?
-    event.respond 'No matches found.'
+    event.respond nomf()
     return nil
   elsif x.is_a?(Array)
     for i in 0...x.length
@@ -6924,15 +7761,27 @@ def find_alts(bot,event,args=[])
       m=[]
       for i3 in 0...z.length
         m2=[]
-        m2.push('default') if z[i3].name==z[i3].alts[0] || z[i3].alts[0][z[i3].alts[0].length-1,1]=='*'
-        m2.push('sensible') if z[i3].alts[0][0]=='*'
-        m2.push('seasonal') if z[i3].availability[0].include?('s') && z[i3].legendary.nil?
-        m2.push('community-voted') if z[i3].name.include?('(Brave)')
-        m2.push('Fallen') if z[i3].name.include?('(Fallen)')
-        m2.push('Legendary/Mythical') unless z[i3].legendary.nil?
-        m2.push("#{z[i3].duo[0][0]} (with #{list_lift(z[i3].duo.map{|q| q[2]},'and')})") unless z[i3].duo.nil?
-        m2.push('out-of-left-field') if m2.length<=0
-        m2.push('~~IntSys why~~') if count_in(z[i3].name,'(')>2
+        if Shardizard==$spanishShard
+          m2.push('defecto') if z[i3].name==z[i3].alts[0] || z[i3].alts[0][z[i3].alts[0].length-1,1]=='*'
+          m2.push('sensata') if z[i3].alts[0][0]=='*'
+          m2.push('estacional') if z[i3].availability[0].include?('s') && z[i3].legendary.nil?
+          m2.push('votado por la comunidad') if z[i3].name.include?('(Brave)')
+          m2.push('Fallen') if z[i3].name.include?('(Fallen)')
+          m2.push('Legendario/Mítico') unless z[i3].legendary.nil?
+          m2.push("#{z[i3].spanish_duo} (con #{list_lift(z[i3].duo.map{|q| q[2]},'y')})") unless z[i3].duo.nil?
+          m2.push('aleatoria') if m2.length<=0
+          m2.push('~~por qué, IntSys~~') if count_in(z[i3].name,'(')>2
+        else
+          m2.push('default') if z[i3].name==z[i3].alts[0] || z[i3].alts[0][z[i3].alts[0].length-1,1]=='*'
+          m2.push('sensible') if z[i3].alts[0][0]=='*'
+          m2.push('seasonal') if z[i3].availability[0].include?('s') && z[i3].legendary.nil?
+          m2.push('community-voted') if z[i3].name.include?('(Brave)')
+          m2.push('Fallen') if z[i3].name.include?('(Fallen)')
+          m2.push('Legendary/Mythical') unless z[i3].legendary.nil?
+          m2.push("#{z[i3].duo[0][0]} (with #{list_lift(z[i3].duo.map{|q| q[2]},'and')})") unless z[i3].duo.nil?
+          m2.push('out-of-left-field') if m2.length<=0
+          m2.push('~~IntSys why~~') if count_in(z[i3].name,'(')>2
+        end
         m.push("#{z[i3].name}#{z[i3].emotes(bot,false)} - #{m2.join(', ')}") if m2.length>0
       end
       str2="#{y[i2][0]}"
@@ -6940,30 +7789,55 @@ def find_alts(bot,event,args=[])
       z2=x2.reject{|q| !q.duo.map{|q2| q2[1]}.include?(str2)}
       for i3 in 0...z2.length
         m2=[]
-        m2.push('seasonal') if z2[i3].availability[0].include?('s') && z2[i3].legendary.nil?
-        m2.push('community-voted') if z2[i3].name.include?('(Brave)')
-        m2.push('Fallen') if z2[i3].name.include?('(Fallen)')
-        m2.push('Legendary/Mythical') unless z2[i3].legendary.nil?
-        m2.push('~~IntSys why~~') if count_in(z2[i3].name,'(')>2
-        m2.push("#{z2[i3].duo[0][0]} (to #{z2[i3].alts[0].gsub('*','')}#{"[#{z2[i3].alts[1].gsub('Alfonse(Hel)','Lif')}]".gsub('Alfonse[Hel]','Lif') if z2[i3].alts.length>1})")
+        if Shardizard==$spanishShard
+          m2.push('estacional') if z2[i3].availability[0].include?('s') && z2[i3].legendary.nil?
+          m2.push('votado por la comunidad') if z2[i3].name.include?('(Brave)')
+          m2.push('Fallen') if z2[i3].name.include?('(Fallen)')
+          m2.push('Legendario/Mítico') unless z2[i3].legendary.nil?
+          m2.push('~~por qué, IntSys~~') if count_in(z2[i3].name,'(')>2
+          m2.push("#{z2[i3].spanish_duo} (a #{z2[i3].alts[0].gsub('*','')}#{"[#{z2[i3].alts[1]}]" if z2[i3].alts.length>1})".gsub('Alfonse[Hel]','Lif').gsub('Veronica[Hel]','Thrasir'))
+        else
+          m2.push('seasonal') if z2[i3].availability[0].include?('s') && z2[i3].legendary.nil?
+          m2.push('community-voted') if z2[i3].name.include?('(Brave)')
+          m2.push('Fallen') if z2[i3].name.include?('(Fallen)')
+          m2.push('Legendary/Mythical') unless z2[i3].legendary.nil?
+          m2.push('~~IntSys why~~') if count_in(z2[i3].name,'(')>2
+          m2.push("#{z2[i3].duo[0][0]} (to #{z2[i3].alts[0].gsub('*','')}#{"[#{z2[i3].alts[1]}]" if z2[i3].alts.length>1})".gsub('Alfonse[Hel]','Lif').gsub('Veronica[Hel]','Thrasir'))
+        end
         m.push("#{z2[i3].name}#{z2[i3].emotes(bot,false)} - #{m2.join(', ')}")
       end
       z3=x3.reject{|q| q.awonk[1]!=str2}
       for i3 in 0...z3.length
         m2=[]
-        m2.push('seasonal') if z3[i3].availability[0].include?('s') && z3[i3].legendary.nil?
-        m2.push('community-voted') if z3[i3].name.include?('(Brave)')
-        m2.push('Fallen') if z3[i3].name.include?('(Fallen)')
-        m2.push('Legendary/Mythical') unless z3[i3].legendary.nil?
-        m2.push('~~IntSys why~~') if count_in(z3[i3].name,'(')>2
         z3i3=z3[i3].emotes(bot,false)
-        if z3[i3].awonk[0]=='Idol'
-          z3i3="#{z3i3}<:Sharp:800585155320348732>"
-          m2.push("Mirage Persona (to #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1})")
-        elsif z3[i3].awonk[0]=='Dream'
-          m2.push("Dream Illusion (actually #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1 && z3[i3].alts[1]!='Dream'})")
+        if Shardizard==$spanishShard
+          m2.push('estacional') if z3[i3].availability[0].include?('s') && z3[i3].legendary.nil?
+          m2.push('votado por la comunidad') if z3[i3].name.include?('(Brave)')
+          m2.push('Fallen') if z3[i3].name.include?('(Fallen)')
+          m2.push('Legendario/Mítico') unless z3[i3].legendary.nil?
+          m2.push('~~por qué, IntSys~~') if count_in(z3[i3].name,'(')>2
+          if z3[i3].awonk[0]=='Idol'
+            z3i3="#{z3i3}<:Sharp:800585155320348732>"
+            m2.push("Persona del Espejismo (a #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1})")
+          elsif z3[i3].awonk[0]=='Dream'
+            m2.push("Ilusión de Sueños (en realidad #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1 && z3[i3].alts[1]!='Dream'})")
+          else
+            m2.push("#{z3[i3].awonk[0]} (a #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1})")
+          end
         else
-          m2.push("#{z3[i3].awonk[0]} (to #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1})")
+          m2.push('seasonal') if z3[i3].availability[0].include?('s') && z3[i3].legendary.nil?
+          m2.push('community-voted') if z3[i3].name.include?('(Brave)')
+          m2.push('Fallen') if z3[i3].name.include?('(Fallen)')
+          m2.push('Legendary/Mythical') unless z3[i3].legendary.nil?
+          m2.push('~~IntSys why~~') if count_in(z3[i3].name,'(')>2
+          if z3[i3].awonk[0]=='Idol'
+            z3i3="#{z3i3}<:Sharp:800585155320348732>"
+            m2.push("Mirage Persona (to #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1})")
+          elsif z3[i3].awonk[0]=='Dream'
+            m2.push("Dream Illusion (actually #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1 && z3[i3].alts[1]!='Dream'})")
+          else
+            m2.push("#{z3[i3].awonk[0]} (to #{z3[i3].alts[0].gsub('*','')}#{"(#{z3[i3].alts[1]}) " if z3[i3].alts.length>1})")
+          end
         end
         m.push("#{z3[i3].name}#{z3i3} - #{m2.join(', ')}")
       end
@@ -6990,6 +7864,7 @@ def find_alts(bot,event,args=[])
     end
     b="__**#{a[i].split('[')[0]}**__"
     b="__Just **#{a[i].split('[')[0]}**__" if ['Tharja','Rhajat'].include?(a[i])
+    b="__Solo **#{a[i].split('[')[0]}**__" if ['Tharja','Rhajat'].include?(a[i]) && Shardizard==$spanishShard
     if x.length>1
       y=x.map{|q| q.emotes(bot,false).split('>').map{|q2| "#{q2}>"}}
       z=y[0]
@@ -7058,7 +7933,7 @@ def game_data(bot,event,args=[],xname=nil)
   x=find_data_ex(:find_unit,event,args,xname,bot,true)
   data_load(['unit','game'])
   if x.nil?
-    event.respond "No matches found."
+    event.respond nomf()
     return nil
   elsif x.is_a?(Array)
     y=x.map{|q| q.alts[0].gsub('*','')}
@@ -7089,38 +7964,42 @@ def game_data(bot,event,args=[],xname=nil)
   y=x.games.reject{|q| !q.include?('*')}
   y.unshift(x.games[0])
   y2=get_games_list(y.map{|q| q.gsub('*','')},false).uniq
-  str="__**Credit in FEH**__\n#{y2.join("\n")}" if y2.length>0
+  labels=['Credit in FEH','Other games','Also appears via Amiibo functionality in','Also appears as an Assist Trophy in','Also appears as a Mii Costume in','Also appears as a Spirit in','Also appears as a standard trophy in','Also appears as a Sticker in']
+  labels=['Crédito en FEH','Otros juegos','También aparece a través de la funcionalidad Amiibo en','También aparece como un Trofeo Ayudante en','También aparece como un disfraz de Mii en','También aparece como un Spirit en','También aparece como un Trofeo estándar en','También aparece como un Sticker en'] if Shardizard==$spanishShard
+  str="__**#{labels[0]}**__\n#{y2.join("\n")}" if y2.length>0
   y=x.games.reject{|q| q.include?('*')}
   y3=y2.map{|q| q}
   y2=get_games_list(y)
   y2=get_games_list(y,false) if has_any?(x.games,['FEH','FEH*','*FEH'])
   y2=y2.reject{|q| y3.include?(q)}
-  str="#{str}\n\n__**Other games**__\n#{y2.join("\n")}" if y2.length>0
+  str="#{str}\n\n__**#{labels[1]}**__\n#{y2.join("\n")}" if y2.length>0
   y=x.games.reject{|q| !q.include?('(a)')}
   y2=get_games_list(y.map{|q| q.gsub('(a)','')},false)
-  str="#{str}\n\n__**Also appears via Amiibo functionality in**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
+  str="#{str}\n\n__**#{labels[2]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
   y=x.games.reject{|q| !q.include?('(at)')}
   y2=get_games_list(y.map{|q| q.gsub('(at)','')},false)
-  str="#{str}\n\n__**Also appears as an Assist Trophy in**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
+  str="#{str}\n\n__**#{labels[3]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
   y=x.games.reject{|q| !q.include?('(m)')}
   y2=get_games_list(y.map{|q| q.gsub('(m)','')},false)
-  str="#{str}\n\n__**Also appears as a Mii Costume in**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
+  str="#{str}\n\n__**#{labels[4]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
   y=x.games.reject{|q| !q.include?('(s)')}
   y2=get_games_list(y.map{|q| q.gsub('(s)','')},false)
-  str="#{str}\n\n__**Also appears as a Spirit in**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
+  str="#{str}\n\n__**#{labels[5]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
   y=x.games.reject{|q| !q.include?('(t)')}
   y2=get_games_list(y.map{|q| q.gsub('(t)','')},false)
-  str="#{str}\n\n__**Also appears as a standard trophy in**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
+  str="#{str}\n\n__**#{labels[6]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
   y=x.games.reject{|q| !q.include?('(st)')}
   y2=get_games_list(y.map{|q| q.gsub('(st)','')},false)
-  str="#{str}\n\n__**Also appears as a Sticker in**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
-  ftr='Only the games in the "Credit in FEH" section are viable for Resonant Blades and Limited Hero Battles.'
+  str="#{str}\n\n__**#{labels[7]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
+  ftr='Only the games in the "Credit in FEH" section are viable for Resonant Battles and Limited Hero Battles.'
+  ftr='Solo los juegos de la sección "Crédito en FEH" son viables para Batallas Fragorosas y Batallas Limitadas.' if Shardizard==$spanishShard
   ftr=nil if x.games.map{|q| q.gsub('*','')}==['FEH']
+  hdr="__Games **#{x.name}#{x.emotes(bot,false)}** appears in__"
+  hdr="__Juegos en los que **#{x.name}#{x.emotes(bot,false)}** aparece__" if Shardizard==$spanishShard
   if str.length>1800
     str=str.split("\n\n")
     clr=0
     z=0
-    hdr="__Games **#{x.name}#{x.emotes(bot,false)}** appears in__"
     thumb=x.thumbnail(event,bot)
     for i in 1...str.length
       if "#{str[z]}\n\n#{str[i]}".length>1900
@@ -7135,9 +8014,9 @@ def game_data(bot,event,args=[],xname=nil)
     end
     create_embed(event,hdr,str[z],x.disp_color(clr),ftr,thumb)
   elsif $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-    event.respond "__Games **#{x.name}#{x.emotes(bot,false)}** appears in__\n\n#{str.gsub('__','')}\n\n#{ftr}"
+    event.respond "#{hdr}\n\n#{str.gsub('__','')}\n\n#{ftr}"
   else
-    create_embed(event,"__Games **#{x.name}#{x.emotes(bot,false)}** appears in__",str,x.disp_color(0,1),ftr,x.thumbnail(event,bot))
+    create_embed(event,hdr,str,x.disp_color(0,1),ftr,x.thumbnail(event,bot))
   end
 end
 
@@ -7156,6 +8035,8 @@ def path_data(bot,event,args=[],xname=nil)
     end
     return nil
   end
+  timelength=['days','hours','minutes','seconds']
+  timelength=['días','horas','minutos','segundos'] if Shardizard==$spanishShard
   m=$paths.reject{|q| !q.hasUnit?(x)}
   f=[]
   str=''
@@ -7167,8 +8048,9 @@ def path_data(bot,event,args=[],xname=nil)
       if mm+1>=m[i].codes.length
         y.push("*total* - #{m[i].totalCost}")
       else
-        y.push("*to #{x.name}* - #{m[i].totalCost(mm+1)}")
-        y.push("*whole path* - #{m[i].totalCost}")
+        y.push("*#{'to' unless Shardizard==$spanishShard}#{'a' if Shardizard==$spanishShard} #{x.name}* - #{m[i].totalCost(mm+1)}")
+        y.push("*whole path* - #{m[i].totalCost}") unless Shardizard==$spanishShard
+        y.push("*camino entero* - #{m[i].totalCost}") if Shardizard==$spanishShard
       end
     end
     if m[i].isCurrent? || m[i].isFuture?
@@ -7177,34 +8059,40 @@ def path_data(bot,event,args=[],xname=nil)
       timeshift-=1 unless t.dst?
       t-=60*60*timeshift
       mdfr='left'
-      mdfr='from now'
+      mdfr='a la izquierda' if Shardizard==$spanishShard
       y.push('')
       if m[i].isCurrent?
         t2=m[i].date_of_end.map{|q| q}
         t2=Time.new(t2[2],t2[1],t2[0])+24*60*60
         t2=t2-t
-        t2+=24*60*60 if shift
       elsif m[i].isFuture?
+        mdfr='from now'
+        mdfr='a partir de ahora' if Shardizard==$spanishShard
         t2=m[i].date_of_start.map{|q| q}
         t2=Time.new(t2[2],t2[1],t2[0])-24*60*60
         t2=t2-t
       end
       tt2=(t2/(24*60*60)).floor
       if t2/(24*60*60)>1
-        y.push("#{(t2/(24*60*60)).floor} days #{mdfr}")
+        y.push("#{(t2/(24*60*60)).floor} #{timelength[0]} #{mdfr}")
       elsif t2/(60*60)>1
-        y.push("#{(t2/(60*60)).floor} hours #{mdfr}")
+        y.push("#{'Faltan ' if Shardizard==$spanishShard}#{(t2/(60*60)).floor} #{timelength[1]} #{mdfr unless Shardizard==$spanishShard}")
       elsif t2/60>1
-        y.push("#{(t2/60).floor} minutes #{mdfr}")
+        y.push("#{'Quedan ' if Shardizard==$spanishShard}#{(t2/60).floor} #{timelength[2]} #{mdfr unless Shardizard==$spanishShard}")
       elsif t2>1
-        y.push("#{(t2).floor} seconds #{mdfr}")
+        y.push("#{'Quedan ' if Shardizard==$spanishShard}#{(t2).floor} #{timelength[3]} #{mdfr unless Shardizard==$spanishShard}")
       end
     end
-    f.push([m[i].name,y.join("\n")])
+    f.push([m[i].proper_name,y.join("\n")])
   end
   hdr="__Divine Paths that **#{x.name}#{x.emotes(bot,false)}** is on__"
   hdr="__the Divine Path that **#{x.name}#{x.emotes(bot,false)}** is on__" if m.length==1
   hdr="__Divine Paths and **#{x.name}#{x.emotes(bot,false)}**__" if m.length<=0
+  if Shardizard==$spanishShard
+    hdr="__Caminos Divinos en los que **#{x.name}#{x.emotes(bot,false)}** está__"
+    hdr="__el Camino Divino en el que está **#{x.name}#{x.emotes(bot,false)}**__" if m.length==1
+    hdr="__Caminos Divinos y **#{x.name}#{x.emotes(bot,false)}**__" if m.length<=0
+  end
   if f.map{|q| "__*#{q[0]}*__\n#{q[1]}"}.join("\n\n").length>1900 || $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     f=f.map{|q| ["__*#{q[0]}*__",q[1].gsub("\n\n","\n")]}
     f[0][0]="#{hdr}\n#{f[0][0]}"
@@ -7285,9 +8173,11 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     if mode=='Proc'
       hlrs=unit.reject{|q| q.weapon_type != 'Staff'}
       if hlrs.length==1
-        event.respond "**#{hlrs[0].name}#{hlrs[0].emotes(bot,false)}** is a healer and thus cannot use proc skills."
+        event.respond "**#{hlrs[0].name}#{hlrs[0].emotes(bot,false)}** is a healer and thus cannot use proc skills." unless Shardizard==$spanishShard
+        event.respond "**#{hlrs[0].name}#{hlrs[0].emotes(bot,false)}** es un sanador y, por lo tanto, no puede usar habilidades proc." if Shardizard==$spanishShard
       elsif hlrs.length>0
-        event.respond "The following units are healers and thus cannot use proc skills.\n#{hlrs.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join("\n")}"
+        event.respond "The following units are healers and thus cannot use proc skills.\n#{hlrs.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join("\n")}" unless Shardizard==$spanishShard
+        event.respond "Los siguientes personajes son sanadores y, por lo tanto, no pueden usar habilidades de proc\n#{hlrs.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join("\n")}" if Shardizard==$spanishShard
       end
       for i in 0...unit.length
         study_suite(mode,bot,event,args,unit[i].name) unless unit[i].weapon_type=='Staff'
@@ -7295,9 +8185,11 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     elsif mode=='Heal'
       hlrs=unit.reject{|q| q.weapon_type=='Staff'}
       if hlrs.length==1
-        event.respond "**#{hlrs[0].name}#{hlrs[0].emotes(bot,false)}** isn't a healer and thus cannot use healing staves."
+        event.respond "**#{hlrs[0].name}#{hlrs[0].emotes(bot,false)}** isn't a healer and thus cannot use healing staves." unless Shardizard==$spanishShard
+        event.respond "**#{hlrs[0].name}#{hlrs[0].emotes(bot,false)}** no es un sanador y, por lo tanto, no puede usar bastones." if Shardizard==$spanishShard
       elsif hlrs.length>0
-        event.respond "The following units aren't healers and thus cannot use healing staves.\n#{hlrs.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join("\n")}"
+        event.respond "The following units aren't healers and thus cannot use healing staves.\n#{hlrs.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join("\n")}" unless Shardizard==$spanishShard
+        event.respond "Los siguientes personajes no son sanadores y, por lo tanto, no pueden usar bastones.\n#{hlrs.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join("\n")}" if Shardizard==$spanishShard
       end
       for i in 0...unit.length
         study_suite(mode,bot,event,args,unit[i].name) if unit[i].weapon_type=='Staff'
@@ -7309,10 +8201,12 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     end
     return unit.length
   elsif mode=='Proc' && unit.weapon_type=='Staff'
-    event.respond "**#{unit.name}#{unit.emotes(bot,false)}** is a healer and thus cannot use proc skills."
+    event.respond "**#{unit.name}#{unit.emotes(bot,false)}** is a healer and thus cannot use proc skills." unless Shardizard==$spanishShard
+    event.respond "**#{unit.name}#{unit.emotes(bot,false)}** es un sanador y, por lo tanto, no puede usar habilidades proc." if Shardizard==$spanishShard
     return 1
   elsif mode=='Heal' && unit.weapon_type != 'Staff'
-    event.respond "**#{unit.name}#{unit.emotes(bot,false)}** isn't a healer and thus cannot use healing staves."
+    event.respond "**#{unit.name}#{unit.emotes(bot,false)}** isn't a healer and thus cannot use healing staves." unless Shardizard==$spanishShard
+    event.respond "**#{unit.name}#{unit.emotes(bot,false)}** no es un sanador y, por lo tanto, no puede usar bastones." if Shardizard==$spanishShard
     return 1
   end
   flurp=find_stats_in_string(event,s,0,unit.name)
@@ -7339,10 +8233,19 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
   modename='healing effects' if mode=='Heal'
   modename='proc skill damage' if mode=='Proc'
   modename='in-combat stats' if mode=='Phase'
-  if has_any?(args,["mathoo's"]) || (has_any?(args,['my']) && event.user.id==167657750971547648)
+  if Shardizard==$spanishShard
+    modename='estadisticas'
+    modename='HP efectivo' if mode=='effHP'
+    modename='aficionados como personaje de cohorte' if mode=='PairUp'
+    modename='efectos con habilidades curativas' if mode=='Heal'
+    modename='daño con habilidades de proc' if mode=='Proc'
+    modename='estadísticas en combate' if mode=='Phase'
+  end
+  if has_any?(args,["mathoo's"]) || (has_any?(args,['my']) && event.user.id==167657750971547648) || (Shardizard==$spanishShard && (has_any?(args,["demathoo"]) || (has_any?(args,['mi']) && event.user.id==167657750971547648)))
     u=$dev_units.find_index{|q| q.name==unit.name}
     if u.nil?
-      if $dev_nobodies.include?(unit.name)
+      if Shardizard==$spanishShard
+      elsif $dev_nobodies.include?(unit.name)
         event.respond "Mathoo has that unit, but marked that he doesn't want to record #{unit.pronoun(true)} data.  Showing default data."
       elsif [$dev_somebodies,$dev_waifus].flatten.include?(unit.name)
         event.respond "Mathoo does not have that unit, much as he wants to.  Showing default data."
@@ -7371,10 +8274,12 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       refinement=y[1]
     end
   elsif unit.stats40.max<=0 && unit.name != 'Kiran'
-    event.respond "#{unit.name}#{unit.emotes(bot)} does not have official stats.  I cannot study #{'his' if unit.gender=='M'}#{'her' if unit.gender=='F'}#{'their' unless ['M','F'].include?(unit.gender)} #{modename}."
+    event.respond "#{unit.name}#{unit.emotes(bot)} does not have official stats.  I cannot study #{'his' if unit.gender=='M'}#{'her' if unit.gender=='F'}#{'their' unless ['M','F'].include?(unit.gender)} #{modename}." unless Shardizard==$spanishShard
+    event.respond "#{unit.name}#{unit.emotes(bot)} no tiene estadísticas oficiales. No puedo estudiar su #{modename}." unless Shardizard==$spanishShard
     return nil
   elsif unit.stats40[0,5].max<=0 && unit.name != 'Kiran' && bonus != 'Enemy'
-    event.respond "#{unit.name}#{unit.emotes(bot)} does not have playable stats.  I cannot study #{'his' if unit.gender=='M'}#{'her' if unit.gender=='F'}#{'their' unless ['M','F'].include?(unit.gender)} #{modename}, unless you include the word \"enemy\" in your message."
+    event.respond "#{unit.name}#{unit.emotes(bot)} does not have playable stats.  I cannot study #{'his' if unit.gender=='M'}#{'her' if unit.gender=='F'}#{'their' unless ['M','F'].include?(unit.gender)} #{modename}, unless you include the word \"enemy\" in your message." unless Shardizard==$spanishShard
+    event.respond "#{unit.name}#{unit.emotes(bot)} no tiene estadísticas jugables. No puedo estudiar su #{modename}, a menos que incluya la palabra \"enemy\" en su mensaje." unless Shardizard==$spanishShard
     return nil
   end
   if wpn.include?('prf') && !unit.dispPrf(bonus).nil?
@@ -7418,7 +8323,8 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
   if mode=='effHP'
     skill_list_2=make_stat_skill_list_2(unit.name,event,args)
     pairup=false
-    pairup=true if has_any?(event.message.text.downcase.split(' '),['pairup','paired','pair']) && !unit.owner.nil?
+    pairup=true if has_any?(event.message.text.downcase.split(' '),['pairup','paired','pair','pair-up']) && !unit.owner.nil?
+    pairup=true if has_any?(event.message.text.downcase.split(' '),['agrupar']) && !unit.owner.nil? && Shardizard==$spanishShard
     text=unit.starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,skill_list_2,wpnlegal,pairup)
     x=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,pairup)
     px=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,[skill_list,skill_list_2].flatten,pairup)
@@ -7449,18 +8355,32 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     phys.push("#{get_eff_hp(y,3,4)}#{" (#{get_eff_hp(py,3,4)})" unless get_eff_hp(y,3,4)==get_eff_hp(py,3,4)}")
     mag.push("#{get_eff_hp(y,4,4)}#{" (#{get_eff_hp(py,4,4)})" unless get_eff_hp(y,4,4)==get_eff_hp(py,4,4)}")
     frz.push("#{get_eff_hp(y,5,4)}#{" (#{get_eff_hp(py,5,4)})" unless get_eff_hp(y,5,4)==get_eff_hp(py,5,4)}")
-    phys="Single-hit: #{"~~#{phys[3]}~~ " unless phys[3]==phys[0]}#{phys[0]}\nDouble-hit: #{"~~#{phys[4]}~~ " unless phys[4]==phys[1]}#{phys[1]}\nQuadruple-hit: #{"~~#{phys[5]}~~ " unless phys[5]==phys[2]}#{phys[2]}"
-    mag="Single-hit: #{"~~#{mag[3]}~~ " unless mag[3]==mag[0]}#{mag[0]}\nDouble-hit: #{"~~#{mag[4]}~~ " unless mag[4]==mag[1]}#{mag[1]}\nQuadruple-hit: #{"~~#{mag[5]}~~ " unless mag[5]==mag[2]}#{mag[2]}"
-    frz="Single-hit: #{"~~#{frz[3]}~~ " unless frz[3]==frz[0]}#{frz[0]}\nDouble-hit: #{"~~#{frz[4]}~~ " unless frz[4]==frz[1]}#{frz[1]}\nQuadruple-hit: #{"~~#{frz[5]}~~ " unless frz[5]==frz[2]}#{frz[2]}"
+    htz=['Single-hit','Double-hit','Quadruple-hit']
+    htz=['Un ataque','Dos ataques','Cuatro ataques'] if Shardizard==$spanishShard
+    phys="#{htz[0]}: #{"~~#{phys[3]}~~ " unless phys[3]==phys[0]}#{phys[0]}\n#{htz[1]}: #{"~~#{phys[4]}~~ " unless phys[4]==phys[1]}#{phys[1]}\n#{htz[2]}: #{"~~#{phys[5]}~~ " unless phys[5]==phys[2]}#{phys[2]}"
+    mag="#{htz[0]}: #{"~~#{mag[3]}~~ " unless mag[3]==mag[0]}#{mag[0]}\n#{htz[1]}: #{"~~#{mag[4]}~~ " unless mag[4]==mag[1]}#{mag[1]}\n#{htz[2]}: #{"~~#{mag[5]}~~ " unless mag[5]==mag[2]}#{mag[2]}"
+    frz="#{htz[0]}: #{"~~#{frz[3]}~~ " unless frz[3]==frz[0]}#{frz[0]}\n#{htz[1]}: #{"~~#{frz[4]}~~ " unless frz[4]==frz[1]}#{frz[1]}\n#{htz[2]}: #{"~~#{frz[5]}~~ " unless frz[5]==frz[2]}#{frz[2]}"
     flds=[]
-    if frz==phys && frz==mag
+    if frz==phys && frz==mag && Shardizard==$spanishShard
+      flds.push(['<:HP_S:514712247503945739> Todo daño',frz])
+    elsif frz==phys && frz==mag
       flds.push(['<:HP_S:514712247503945739> All damage',frz])
+    elsif frz==phys && Shardizard==$spanishShard
+      flds.push(['<:DefenseS:514712247461871616> Físico/Adaptativo',phys])
+      flds.push(['<:ResistanceS:514712247574986752> Mágico',mag])
     elsif frz==phys
       flds.push(['<:DefenseS:514712247461871616> Physical/Adaptive',phys])
       flds.push(['<:ResistanceS:514712247574986752> Magical',mag])
+    elsif frz==mag && Shardizard==$spanishShard
+      flds.push(['<:DefenseS:514712247461871616> Físico',phys])
+      flds.push(['<:ResistanceS:514712247574986752> Magical/Adaptativo',mag])
     elsif frz==mag
       flds.push(['<:DefenseS:514712247461871616> Physical',phys])
-      flds.push(['<:ResistanceS:514712247574986752> Magical/Adaptive',mag])
+      flds.push(['<:ResistanceS:514712247574986752> Mágico/Adaptive',mag])
+    elsif Shardizard==$spanishShard
+      flds.push(['<:DefenseS:514712247461871616> Físico',phys])
+      flds.push(['<:FreezePrtS:712371368037187655> Adaptativo',frz])
+      flds.push(['<:ResistanceS:514712247574986752> Mágico',mag])
     else
       flds.push(['<:DefenseS:514712247461871616> Physical',phys])
       flds.push(['<:FreezePrtS:712371368037187655> Adaptive',frz])
@@ -7478,19 +8398,28 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     photon.push("#{photon[0]}#{" (#{photon[1]})" unless photon[1]==photon[0]}")
     photon.push("#{photon[2]}#{" (#{photon[3]})" unless photon[3]==photon[2]}")
     photon="#{"~~#{photon[5]}~~ " unless photon[5]==photon[4]}#{photon[4]}"
-    if safe_to_spam?(event) && (bonus=='Enemy' && unit.hasEnemyForm?)
+    if safe_to_spam?(event) && !(bonus=='Enemy' && unit.hasEnemyForm?)
       xm=[]
-      xm.push("#{spd} Spd is required to double #{unit.name}.")
-      xm.push("#{unit.name} receives #{photon} extra damage from Photon weapons.") unless photon=='0'
+      if Shardizard==$spanishShard
+        xm.push("Se requiere #{spd} Vel para hacer dos ataques contra #{unit.name}.")
+        xm.push("#{unit.name} recibe #{photon} daño adicional de las armas de Photon.") unless photon=='0'
+      else
+        xm.push("#{spd} Spd is required to double #{unit.name}.")
+        xm.push("#{unit.name} receives #{photon} extra damage from Photon weapons.") unless photon=='0'
+      end
       unless unit.weapon_type=='Staff'
         attk=[]
         attk.push("#{5*x[1]/8}#{" (#{5*px[1]/8})" unless 5*x[1]/8==5*px[1]/8}")
         attk.push("#{5*y[1]/8}#{" (#{5*py[1]/8})" unless 5*x[1]/8==5*py[1]/8}")
         attk="#{"~~#{attk[1]}~~ " unless attk.uniq.length<=1}#{attk[0]}"
         xx=unit.atkName(true,weapon,refinement,transformed)
-        xm.push("\nMoonbow becomes better than Glimmer when:\nThe enemy has #{attk} #{'Defense' if xx=='Strength'}#{'Resistance' if xx=='Magic'}#{'as the lower of Def/Res' if xx=='Freeze'}#{'as their targeted defense stat' if xx=='Attack'}")
+        xm.push("\nMoonbow becomes better than Glimmer when:\nThe enemy has #{attk} #{'Defense' if xx=='Strength'}#{'Resistance' if xx=='Magic'}#{'as the lower of Def/Res' if xx=='Freeze'}#{'as their targeted defense stat' if xx=='Attack'}") unless Shardizard==$spanishShard
+        xm.push("\nMoonbow es mejor que Glimmer cuando:\nEl enemigo tiene #{attk} #{'Defensa' if xx=='Strength'}#{'Resistencia' if xx=='Magic'}#{'como la estadística más baja de Def/Res' if xx=='Freeze'}#{'como su estadística de defensa dirigida' if xx=='Attack'}") if Shardizard==$spanishShard
       end
       flds.push(['Misc.',xm.join("\n"),1])
+    elsif Shardizard==$spanishShard
+      text="#{text}\n\nSe requiere #{spd} Vel para hacer dos ataques contra #{unit.name}."
+      text="#{text}\n#{unit.name} recibe #{photon} daño adicional de las armas de Photon." unless photon=='0'
     else
       text="#{text}\n\n#{spd} Spd is required to double #{unit.name}."
       text="#{text}\n#{unit.name} receives #{photon} extra damage from Photon weapons." unless photon=='0'
@@ -7498,8 +8427,13 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     flds[-1][2]=nil if flds.length>0 && flds.length<=2
   elsif mode=='PairUp'
     cohort_type='cohort unit'
-    cohort_type='pocket buddy' if ['Sakura','Bernie'].include?(unit.alts[0]) && unit.owner=='Mathoo'
+    cohort_type='pocket buddy' if ['Sakura','Bernie','Mirabilis'].include?(unit.alts[0]) && unit.owner=='Mathoo'
     toptext="__#{"#{unit.owner}'s " unless unit.owner.nil?}**#{unit.name}#{unit.emotes(bot) unless safe_to_spam?(event)}**#{unit.submotes(bot) if safe_to_spam?(event)} as a #{cohort_type}__"
+    if Shardizard==$spanishShard
+      cohort_type='personaje de cohorte'
+      cohort_type='amiga de bolsillo' if ['Sakura','Bernie','Mirabilis'].include?(unit.alts[0]) && unit.owner=='Mathoo' # all Mathoo's tinies are female so use "amiga"
+      toptext="__**#{unit.name}#{unit.emotes(bot) unless safe_to_spam?(event)}**#{unit.submotes(bot) if safe_to_spam?(event)}#{" de #{unit.owner}," unless unit.owner.nil?} como #{cohort_type}__"
+    end
     text=unit.starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,[],wpnlegal)
     x=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list)
     y=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list)
@@ -7525,7 +8459,8 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
   elsif mode=='Heal'
     skill_list_2=make_stat_skill_list_2(unit.name,event,args)
     pairup=false
-    pairup=true if has_any?(event.message.text.downcase.split(' '),['pairup','paired','pair']) && !unit.owner.nil?
+    pairup=true if has_any?(event.message.text.downcase.split(' '),['pairup','paired','pair','pair-up']) && !unit.owner.nil?
+    pairup=true if has_any?(event.message.text.downcase.split(' '),['agrupar']) && !unit.owner.nil? && Shardizard==$spanishShard
     text=unit.starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,skill_list_2,wpnlegal,pairup)
     x=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,pairup)
     px=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,[skill_list,skill_list_2].flatten,pairup)
@@ -7537,7 +8472,8 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     showall=true if args.map{|q| q.downcase}.include?('all')
     showall=false unless safe_to_spam?(event)
     staves=[]
-    staves.push("**Heal:** heals target for 5 HP, 15 HP when Imbue triggers\n\n**Mend:** heals target for 10 HP, 20 HP when Imbue triggers\n\n**Physic:** heals target for 8 HP, 18 HP when Imbue triggers") if showall
+    staves.push("**Curar:** cura al objetivo por 5 HP, 15 HP cuando Regeneración se dispara\n\n**Mejorar:** cura al objetivo por 10 HP, 20 HP cuando Regeneración se dispara\n\n**Sanar:** cura al objetivo por 8 HP, 18 HP cuando Regeneración se dispara") if showall && Shardizard==$spanishShard
+    staves.push("**Heal:** heals target for 5 HP, 15 HP when Imbue triggers\n\n**Mend:** heals target for 10 HP, 20 HP when Imbue triggers\n\n**Physic:** heals target for 8 HP, 18 HP when Imbue triggers") if showall && Shardizard !=$spanishShard
     d=[x[1]/2,8].max
     d2=[px[1]/2,8].max
     cd=[y[1]/2,8].max
@@ -7548,10 +8484,17 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     d="#{d}#{" (#{d2})" unless d==d2}"
     cd="#{cd}#{" (#{cd2})" unless cd==cd2}"
     d="~~#{d}~~ #{cd}" unless d==cd
-    staves.push("**Physic+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
-    staves.push('*Phsyic[+] has a range of 2*')
-    staves.push('')
-    staves.push("**Recover:** heals target for 15 HP, 25 HP when Imbue triggers") if showall
+    if Shardizard==$spanishShard
+      staves.push("**Sanar+:** cura al objetivo por #{d} HP, #{i} HP cuando Regeneración se dispara")
+      staves.push('*Sanar[+] tiene un rango de 2*')
+      staves.push('')
+      staves.push("**Recuperar:** cura al objetivo por 15 HP, 25 HP cuando Regeneración se dispara") if showall
+    else
+      staves.push("**Physic+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+      staves.push('*Phsyic[+] has a range of 2*')
+      staves.push('')
+      staves.push("**Recover:** heals target for 15 HP, 25 HP when Imbue triggers") if showall
+    end
     d=[x[1]/2+10,15].max
     d2=[px[1]/2+10,15].max
     cd=[y[1]/2+10,15].max
@@ -7562,9 +8505,15 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     d="#{d}#{" (#{d2})" unless d==d2}"
     cd="#{cd}#{" (#{cd2})" unless cd==cd2}"
     d="~~#{d}~~ #{cd}" unless d==cd
-    staves.push("**Recover+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
-    staves.push('')
-    staves.push("**Restore:** heals target for 8 HP, 18 HP when Imbue triggers") if showall
+    if Shardizard==$spanishShard
+      staves.push("**Recuperar+:** cura al objetivo por #{d} HP, #{i} HP cuando Regeneración se dispara")
+      staves.push('')
+      staves.push("**Restaurar:** cura al objetivo por 8 HP, 18 HP cuando Regeneración se dispara") if showall
+    else
+      staves.push("**Recover+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+      staves.push('')
+      staves.push("**Restore:** heals target for 8 HP, 18 HP when Imbue triggers") if showall
+    end
     d=[x[1]/2,8].max
     d2=[px[1]/2,8].max
     cd=[y[1]/2,8].max
@@ -7575,8 +8524,13 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     d="#{d}#{" (#{d2})" unless d==d2}"
     cd="#{cd}#{" (#{cd2})" unless cd==cd2}"
     d="~~#{d}~~ #{cd}" unless d==cd
-    staves.push("**Restore+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
-    staves.push('*Restore[+] will also remove any negative status effects placed on the target.*')
+    if Shardizard==$spanishShard
+      staves.push("**Restaurar+:** cura al objetivo por #{d} HP, #{i} HP cuando Regeneración se dispara")
+      staves.push('*Restaurar[+] también eliminará cualquier efecto de estado negativo colocado en el objetivo.*')
+    else
+      staves.push("**Restore+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+      staves.push('*Restore[+] will also remove any negative status effects placed on the target.*')
+    end
     staves.push('')
     d=x[0]-1
     d2=px[0]-1
@@ -7591,7 +8545,8 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     s="~~#{s}~~ #{cs}" unless s==cs
     i="~~#{i}~~ #{ci}" unless i==ci
     d="~~#{d}~~ #{cd}" unless d==cd
-    staves.push("**Reconcile:** heals target for 7 HP, 17 HP when Imbue triggers, also heals #{unit.name} for 7 HP\n\n**Martyr:** heals target for #{d} HP, #{i} HP when Imbue triggers, also heals #{unit.name} for #{s} HP") if showall
+    staves.push("**Reconciliar:** cura al objetivo por 7 HP, 17 HP cuando Regeneración se dispara, también cura a #{unit.name} por 7 HP\n\n**Ofrendar:** cura al objetivo por #{d} HP, #{i} HP cuando Regeneración se dispara, también cura a #{unit.name} por #{s} HP") if showall && Shardizard !=$spanishShard
+    staves.push("**Reconcile:** heals target for 7 HP, 17 HP when Imbue triggers, also heals #{unit.name} for 7 HP\n\n**Martyr:** heals target for #{d} HP, #{i} HP when Imbue triggers, also heals #{unit.name} for #{s} HP") if showall && Shardizard==$spanishShard
     d=[x[0]-1,[x[1]/2,7].max]
     d2=[px[0]-1,[px[1]/2,7].max]
     cd=[y[0]-1,[y[1]/2,7].max]
@@ -7605,10 +8560,17 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     i="~~#{i}~~ #{ci}" unless i==ci
     s="~~#{s}~~ #{cs}" unless s==cs
     d="~~#{d}~~ #{cd}" unless d==cd
-    staves.push("**Martyr+:** heals target for #{d} HP, #{i} HP when Imbue triggers, also heals #{unit.name} for #{s} HP")
-    staves.push("*How much Martyr[+] heals is based on how much damage* #{unit.name} *has taken.*")
-    staves.push('')
-    staves.push("**Rehabilitate:** heals target for 7-105 HP, 17-115 HP when Imbue triggers") if showall
+    if Shardizard==$spanishShard
+      staves.push("**Ofrendar+:** cura al objetivo por #{d} HP, #{i} HP cuando Regeneración se dispara, también cura a #{unit.name} por #{s} HP")
+      staves.push("*La cantidad de Ofrendar[+] que sana se basa en la cantidad de daño que ha recibido* #{unit.name}*.*")
+      staves.push('')
+      staves.push("**Rehabilitar:** cura al objetivo por 7-105 HP, 17-115 HP cuando Regeneración se dispara") if showall
+    else
+      staves.push("**Martyr+:** heals target for #{d} HP, #{i} HP when Imbue triggers, also heals #{unit.name} for #{s} HP")
+      staves.push("*How much Martyr[+] heals is based on how much damage* #{unit.name} *has taken.*")
+      staves.push('')
+      staves.push("**Rehabilitate:** heals target for 7-105 HP, 17-115 HP when Imbue triggers") if showall
+    end
     d=[x[1]/2-10,7].max
     d2=[px[1]/2-10,7].max
     cd=[y[1]/2-10,7].max
@@ -7619,13 +8581,150 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     cd="#{cd}-#{cd+98}#{" (#{cd2}-#{cd2+98})" unless cd==cd2}"
     i="~~#{i}~~ #{ci}" unless i==ci
     d="~~#{d}~~ #{cd}" unless d==cd
-    staves.push("**Rehabilitate+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
-    staves.push("*How much Rehabilitate[+] heals is based on how much damage the target has taken.*\n*If they are above 50% HP, the lower end of the range is how much is healed.*")
+    if Shardizard==$spanishShard
+      staves.push("**Rehabilitar+:** cura al objetivo por #{d} HP, #{i} HP cuando Regeneración se dispara")
+      staves.push("*La cantidad de curación de Rehabilitar[+] se basa en la cantidad de daño que ha recibido el objetivo.*\n*Si están por encima del 50% de HP, el límite inferior del rango es cuánto se cura.*")
+      staves.push('')
+      staves.push("**Rescatar:** cura al objetivo por 8 HP, 18 HP cuando Regeneración se dispara") if showall
+    else
+      staves.push("**Rehabilitate+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+      staves.push("*How much Rehabilitate[+] heals is based on how much damage the target has taken.*\n*If they are above 50% HP, the lower end of the range is how much is healed.*")
+      staves.push('')
+      staves.push("**Rescue:** heals target for 8 HP, 18 HP when Imbue triggers") if showall
+    end
+    d=[x[1]/2,8].max
+    d2=[px[1]/2,8].max
+    cd=[y[1]/2,8].max
+    cd2=[py[1]/2,8].max
+    i="#{d+10}#{" (#{d2+10})" unless d==d2}"
+    ci="#{cd+10}#{" (#{cd2+10})" unless cd==cd2}"
+    i="~~#{i}~~ #{ci}" unless i==ci
+    d="#{d}#{" (#{d2})" unless d==d2}"
+    cd="#{cd}#{" (#{cd2})" unless cd==cd2}"
+    d="~~#{d}~~ #{cd}" unless d==cd
+    if Shardizard==$spanishShard
+      staves.push("**Rescatar+:** cura al objetivo por #{d} HP, #{i} HP cuando Regeneración se dispara")
+      staves.push("*Rescatar[+] también llevará al objetivo al espacio actual de #{unit.name}, con #{unit.name} haciendo una copia de seguridad para hacer espacio.*")
+      staves.push('')
+      staves.push("**Regreso:** cura al objetivo por 8 HP, 18 HP cuando Regeneración se dispara") if showall
+    else
+      staves.push("**Rescue+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+      staves.push("*Rescue[+] will also pull the target into #{unit.name}'s current space, with #{unit.name} backing up to make room.*")
+      staves.push('')
+      staves.push("**Return:** heals target for 8 HP, 18 HP when Imbue triggers") if showall
+    end
+    d=[x[1]/2,8].max
+    d2=[px[1]/2,8].max
+    cd=[y[1]/2,8].max
+    cd2=[py[1]/2,8].max
+    i="#{d+10}#{" (#{d2+10})" unless d==d2}"
+    ci="#{cd+10}#{" (#{cd2+10})" unless cd==cd2}"
+    i="~~#{i}~~ #{ci}" unless i==ci
+    d="#{d}#{" (#{d2})" unless d==d2}"
+    cd="#{cd}#{" (#{cd2})" unless cd==cd2}"
+    d="~~#{d}~~ #{cd}" unless d==cd
+    if Shardizard==$spanishShard
+      staves.push("**Regreso+:** cura al objetivo por #{d} HP, #{i} HP cuando Regeneración se dispara")
+      staves.push("*Regreso[+] también moverá el objetivo al lado opuesto de #{unit.name}.*")
+      staves.push('')
+      staves.push("**Aventón:** cura al objetivo por 8 HP, 18 HP cuando Regeneración se dispara") if showall
+    else
+      staves.push("**Return+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+      staves.push("*Return[+] will also move target to opposite side of #{unit.name}.*")
+      staves.push('')
+      staves.push("**Nudge:** heals target for 8 HP, 18 HP when Imbue triggers") if showall
+    end
+    d=[x[1]/2,8].max
+    d2=[px[1]/2,8].max
+    cd=[y[1]/2,8].max
+    cd2=[py[1]/2,8].max
+    i="#{d+10}#{" (#{d2+10})" unless d==d2}"
+    ci="#{cd+10}#{" (#{cd2+10})" unless cd==cd2}"
+    i="~~#{i}~~ #{ci}" unless i==ci
+    d="#{d}#{" (#{d2})" unless d==d2}"
+    cd="#{cd}#{" (#{cd2})" unless cd==cd2}"
+    d="~~#{d}~~ #{cd}" unless d==cd
+    if Shardizard==$spanishShard
+      staves.push("**Aventón+:** cura al objetivo por #{d} HP, #{i} HP cuando Regeneración se dispara")
+      staves.push("*Aventón[+] empujará al objetivo a un espacio de #{unit.name}.*")
+    else
+      staves.push("**Nudge+:** heals target for #{d} HP, #{i} HP when Imbue triggers")
+      staves.push("*Nudge[+] will push the target one space away from #{unit.name}.*")
+    end
     text="#{text}\n\n#{staves.join("\n")}" if staves.length>0
+  elsif mode=='Proc' && Shardizard==$spanishShard
+    skill_list_2=make_stat_skill_list_2(unit.name,event,args)
+    pairup=false
+    pairup=true if has_any?(event.message.text.downcase.split(' '),['pairup','paired','pair','pair-up']) && !unit.owner.nil?
+    pairup=true if has_any?(event.message.text.downcase.split(' '),['agrupar']) && !unit.owner.nil? && Shardizard==$spanishShard
+    skill_listx=[]
+    for i in 0...args.length
+      skill_listx.push('Wrath') if ['wrath','wrath1','wrath2','wrath3'].include?(args[i].downcase)
+      skill_listx.push('Bushido') if ['bushido'].include?(args[i].downcase) && unit.name=='Ryoma(Supreme)'
+    end
+    skill_list.push(skill_listx[0,[skill_listx.length,2].min]) if skill_listx.length>0
+    skill_list.flatten!
+    text=unit.starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,skill_list_2,wpnlegal,pairup)
+    x=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,pairup)
+    px=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,[skill_list,skill_list_2].flatten,pairup)
+    y=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,pairup)
+    py=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,[skill_list,skill_list_2].flatten,pairup)
+    x=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,nil,'',false,skill_list,pairup) unless wpnlegal
+    px=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,nil,'',false,[skill_list,skill_list_2].flatten,pairup) unless wpnlegal
+    to_add=[]
+    if weapon.nil?
+    elsif refinement.nil? || refinement.length==0
+      m=weapon.tags.map{|q| q}
+      m=m.map{|q| q.gsub(/\(T\)\(E\)|\(TE\)|\(E\)\(T\)|\(ET\)/,'(E)').gsub(/\(T\)\(R\)|\(TR\)|\(R\)\(T\)|\(RT\)/,'(R)')} if weapon.restrictions.include?('Beasts Only') && transformed
+      m=m.reject{|q| !['(E)','(R)'].include?(q[0,3])}.reject{|q| q[3,5]!='WoDao' && q[3,6]!='Killer' && !['SlowSpecial','SpecialSlow'].include?(q[3,11])}
+      mx=['Atk','Spd','Def','Res']
+      mx=['Wrathful','Dazzling'] if weapon.restrictions.include?('Staff Users Only')
+      if m.length<=0
+      elsif m.length==1 && m[0][0,3]=='(R)'
+        to_add.push("#{weapon.name} tiene un efecto *#{m[0][3,m[0].length-3]}* cuando se refina.  Esto puede afectar el cálculo del proceso.\nPara incluir un refinamiento, intente escribir el arma como \"#{weapon.name} (+) #{mx.sample} Mode\" en su lugar.")
+      elsif m.length==1 && m[0][0,3]=='(E)'
+        to_add.push("#{weapon.name} tiene un efecto *#{m[0][3,m[0].length-3]}* cuando se refina en su modo de efecto.  Esto puede afectar el cálculo del proceso.\nPara incluir un refinamiento, intente escribir el arma como \"#{weapon.name} (+) Effect Mode\" en su lugar.")
+      else
+        mx.unshift('Effect')
+        mergetext="The following effects can be applied to #{weapon.name} via Weapon Refinement.  This can affect the proc calculations."
+        m2=m.reject{|q| q[0,3]=='(E)'}.map{|q| q[3,q.length-3]}
+        mergetext="#{mergetext}\nTodos los refinamientos: #{m2.join(',')}" if m2.length>0
+        m2=m.reject{|q| q[0,3]=='(R)'}.map{|q| q[3,q.length-3]}
+        mergetext="#{mergetext}\nSolo modo de efecto: #{m2.join(',')}" if m2.length>0
+        mergetext="#{mergetext}\nPara incluir un refinamiento, intente escribir el arma como \"#{weapon.name} (+) #{mx.sample} Mode\" en su lugar."
+        to_add.push(mergetext)
+      end
+    end
+    if weapon.nil?
+    elsif weapon.restrictions.include?('Beasts Only') && !transformed
+      m=weapon.tags.map{|q| q}
+      unless refinement.nil? || refinement.length==0
+        m=m.map{|q| q.gsub(/\(T\)\(R\)|\(TR\)|\(R\)\(T\)|\(RT\)/,'(T)')}
+        m=m.map{|q| q.gsub(/\(T\)\(E\)|\(TE\)|\(E\)\(T\)|\(ET\)/,'(T)')} if refinement=='Effect'
+      end
+      m=m.reject{|q| q[0,3]!='(T)'}.reject{|q| q[3,5]!='WoDao' && q[3,6]!='Killer' && !['SlowSpecial','SpecialSlow'].include?(q[3,11])}
+      if m.length<=0
+      elsif m.length==1
+        to_add.push("#{weapon.name} tiene un efecto *#{m[0][3,m[0].length-3]}* cuando #{unit.name} se transforma.\nPara mostrar los datos de #{unit.name} cuando se transforman, incluya la palabra \"Transformed\" en su mensaje.")
+      else
+        to_add.push("Cuando #{unit.name} se transforma, #{w2[0]} también tiene los siguientes efectos:\n#{m.join(', ')}\nPara mostrar los datos de #{unit.name} cuando se transforman, incluya la palabra \"Transformed\" en su mensaje.")
+      end
+    end
+    text="#{text}\n\n#{to_add.join("\n\n")}" if to_add.length>0
+    ttags=[]
+    unless weapon.nil?
+      ttags=weapon.tags.map{|q| q}
+      ttags=ttags.map{|q| q.gsub(/\(T\)\(E\)|\(TE\)|\(E\)\(T\)|\(ET\)/,'(E)').gsub(/\(T\)\(R\)|\(TR\)|\(R\)\(T\)|\(RT\)/,'(R)')} if transformed && weapon.restrictions.include?('Beasts Only')
+      ttags=ttags.map{|q| q.gsub('(E)','')} if refinement=='Effect'
+      ttags=ttags.map{|q| q.gsub('(R)','')} if !refinement.nil? && refinement.length>0
+    end
+    flds=spanish_proc_study(bot,event,args,skill_list,ttags,wpnlegal,unit,[x,y,px,py])
+    ftr="eDR = Def/Res enemigo, eAtk = Atq enemigo, DMG = Daño infligido por cálculos ajenos al proceso"
   elsif mode=='Proc'
     skill_list_2=make_stat_skill_list_2(unit.name,event,args)
     pairup=false
-    pairup=true if has_any?(event.message.text.downcase.split(' '),['pairup','paired','pair']) && !unit.owner.nil?
+    pairup=true if has_any?(event.message.text.downcase.split(' '),['pairup','paired','pair','pair-up']) && !unit.owner.nil?
+    pairup=true if has_any?(event.message.text.downcase.split(' '),['agrupar']) && !unit.owner.nil? && Shardizard==$spanishShard
     skill_listx=[]
     for i in 0...args.length
       skill_listx.push('Wrath') if ['wrath','wrath1','wrath2','wrath3'].include?(args[i].downcase)
@@ -7746,6 +8845,15 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       d="~~#{d}~~ #{d2}" unless d==d2
       list.push("*#{s.name} - #{d}, cooldown of #{c}, negates damage reduction*")
     end
+    s=skl.find_index{|q| q.name=='Righteous Wind'}
+    unless s.nil? || skl[s].exclusivity.nil? || !skl[s].exclusivity.include?(unit.name)
+      s=skl[s]
+      c="#{'~~' unless wpnlegal}#{s.cooldown(ttags)}#{"~~ #{s.cooldown}" unless wpnlegal}"
+      d="#{y[2]*3/10+extradmg2+cdmg2}#{" (#{py[2]*3/10+extradmg2+cdmg2})" unless y[2]*3/10==py[2]*3/10}"
+      d2="#{x[2]*3/10+extradmg+cdmg}#{" (#{px[2]*3/10+extradmg+cdmg})" unless x[2]*3/10==px[2]*3/10}"
+      d="~~#{d}~~ #{d2}" unless d==d2
+      list.push("**#{s.name} - #{d}, cooldown of #{c}, Heals 10 HP to unit and all allies after combat in which it triggers**")
+    end
     flds.push(['<:Special_Offensive_Star:454473651396542504>Star',list.join("\n"),1]) if list.length>0
     list=[]; cdmg=0; cdmg2=0
     cdmg+=10 if ttags.include?('WoDao_Moon') && wpnlegal
@@ -7860,12 +8968,13 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       c="#{'~~' unless wpnlegal}#{s.cooldown(ttags)}#{"~~ #{s.cooldown}" unless wpnlegal}"
       list.push("#{s.name} - #{wd}, heals for #{d}, cooldown of #{c}")
     end
-    s=skl.find_index{|q| q.name=='Radiant Aether'}
+    s=skl.find_index{|q| q.name=='Radiant Aether II'}
+    s=skl.find_index{|q| q.name=='Radiant Aether'} if s.nil? || skl[s].exclusivity.nil? || !skl[s].exclusivity.include?(unit.name)
     s=skl.find_index{|q| q.name=='Mayhem Aether'} if s.nil? || skl[s].exclusivity.nil? || !skl[s].exclusivity.include?(unit.name)
     unless s.nil? || skl[s].exclusivity.nil? || !skl[s].exclusivity.include?(unit.name)
       s=skl[s]
       c="#{'~~' unless wpnlegal}#{s.cooldown(ttags)}#{"~~ #{s.cooldown}" unless wpnlegal}"
-      list.push("**#{s.name} - #{wd}, heals for #{d}, cooldown of #{c}**")
+      list.push("**#{s.name} - #{wd}, heals for #{d}, cooldown of #{c}#{', knocks off half of cooldown at start of turn 1' if s.name.include?('II')}**")
     end
     flds.push(['<:Special_Offensive_Eclipse:454473651308199956>Eclipse',list.join("\n"),1]) if list.length>0
     list=[]; cdmg=0; cdmg2=0
@@ -8016,6 +9125,15 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       d="~~#{d}~~ #{d2}" unless d==d2
       list.push("#{s.name} - Up to #{d}, cooldown of #{c}")
     end
+    s=skl.find_index{|q| q.name=='Holy-Knight Aura'}
+    unless s.nil? || skl[s].exclusivity.nil? || !skl[s].exclusivity.include?(unit.name)
+      s=skl[s]
+      c="#{'~~' unless wpnlegal}#{s.cooldown(ttags)}#{"~~ #{s.cooldown}" unless wpnlegal}"
+      d="#{y[1]/4+extradmg2+cdmg2}#{" (#{py[1]/4+extradmg2+cdmg2})" unless y[1]/4==py[1]/4}"
+      d2="#{x[1]/4+extradmg+cdmg}#{" (#{px[1]/4+extradmg+cdmg})" unless x[1]/4==px[1]/4}"
+      d="~~#{d}~~ #{d2}" unless d==d2
+      list.push("**#{s.name} - #{d}, cooldown of #{c}, grants extra movement and Atk+6 to all allies after triggering**")
+    end
     s=skl.find_index{|q| q.name=='Fire Emblem'}
     s=skl.find_index{|q| q.name=="Hero's Blood"} if s.nil? || skl[s].exclusivity.nil? || !skl[s].exclusivity.include?(unit.name)
     unless s.nil? || skl[s].exclusivity.nil? || !skl[s].exclusivity.include?(unit.name)
@@ -8070,13 +9188,26 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       d="~~#{d}~~ #{d2}" unless d==d2
       list.push("#{s.name} - #{d}, where X is 2 against dragons/beasts and 1 against everyone else, cooldown of #{c}")
     end
+    s=skl.find_index{|q| q.name=='Sublime Heaven'}
+    unless s.nil? || skl[s].exclusivity.nil? || !skl[s].exclusivity.include?(unit.name)
+      s=skl[s]
+      c="#{'~~' unless wpnlegal}#{s.cooldown(ttags)}#{"~~ #{s.cooldown}" unless wpnlegal}"
+      d="#{y[1]/4+extradmg2+cdmg2}#{" (#{py[1]/4+extradmg2+cdmg2})" unless y[1]/4==py[1]/4}"
+      d2="#{x[1]/4+extradmg+cdmg}#{" (#{px[1]/4+extradmg+cdmg})" unless x[1]/4==px[1]/4}"
+      d="~~#{d}~~ #{d2}" unless d==d2
+      i="#{y[1]/2+extradmg2+cdmg2}#{" (#{py[1]/2+extradmg2+cdmg2})" unless y[1]/2==py[1]/2}"
+      i2="#{x[1]/2+extradmg+cdmg}#{" (#{px[1]/2+extradmg+cdmg})" unless x[1]/2==px[1]/2}"
+      i="~~#{i}~~ #{d2}" unless i==i2
+      list.push("**#{s.name} - #{i} against beasts and dragons, #{d} against everyone else, cooldown of #{c}, negates damage reduction**")
+    end
     flds.push(['<:Special_Offensive_Rend:454473651119718401>Rend',list.join("\n"),1]) if list.length>0
     ftr="eDR = Enemy Def/Res, eAtk = Enemy Atk, DMG = Damage dealt by non-proc calculations"
   elsif mode=='Phase'
     data_load(['stats'])
     skill_list_2=make_stat_skill_list_2(unit.name,event,args)
     pairup=false
-    pairup=true if has_any?(event.message.text.downcase.split(' '),['pairup','paired','pair']) && !unit.owner.nil?
+    pairup=true if has_any?(event.message.text.downcase.split(' '),['pairup','paired','pair','pair-up']) && !unit.owner.nil?
+    pairup=true if has_any?(event.message.text.downcase.split(' '),['agrupar']) && !unit.owner.nil? && Shardizard==$spanishShard
     text=unit.starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,skill_list_2,wpnlegal,pairup)
     x=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,pairup)
     px=unit.dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,[skill_list,skill_list_2].flatten,pairup)
@@ -8131,11 +9262,14 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     for i in 0...14-[8,hf.length].min
       skill_list_3.push(hf2[i]) if hf2.length>i
     end
-    text="#{text}\nIn-combat buffs: #{skill_list_3.join(', ')}" if skill_list_3.length>0
+    text="#{text}\nIn-combat buffs: #{skill_list_3.join(', ')}" if skill_list_3.length>0 && Shardizard != $spanishShard
+    text="#{text}\nAficionados en combate: #{skill_list_3.join(', ')}" if skill_list_3.length>0 && Shardizard==$spanishShard
     flds=unit.statList(bot,false,diff,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refinement,transformed,skill_list,skill_list_2,wpnlegal,pairup)
     merges=unit.merge_count*1 if unit.is_a?(SuperUnit)
-    flds=flds.reject{|q| q[0]!="Level 40#{" +#{merges}" unless merges<=0}"}
+    flds=flds.reject{|q| q[0]!="Level 40#{" +#{merges}" unless merges<=0}"} unless Shardizard==$spanishShard
+    flds=flds.reject{|q| q[0]!="Nivel 40#{" +#{merges}" unless merges<=0}"} if Shardizard==$spanishShard
     flds[0][0]='Displayed Stats'
+    flds[0][0]='Estadísticas Mostradas' if Shardizard==$spanishShard
     flds[0][1]=flds[0][1].gsub(' (+)','').gsub(' (-)','')
     lookout=$statskills.reject{|q| !['Stat-Affecting 1','Stat-Affecting 2','Stat-Buffing 1','Stat-Buffing 2','Stat-Buffing 3','Stat-Nerfing 1','Stat-Nerfing 2','Stat-Nerfing 3'].include?(q[3])}
     buffs=[0,0,0,0,0]
@@ -8167,6 +9301,7 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       px[1]=0; px[2]=0; px[3]=0; px[4]=0
       py[1]=0; py[2]=0; py[3]=0; py[4]=0
       ftr="#{unit.name}'s in-combat stats are borrowed from #{unit.pronoun(true)} nearby allies, so #{unit.pronoun(true)} base stats are set to 0 for in-combat stat purposes."
+      ftr="Las estadísticas de #{unit.name} en combate se toman prestadas de los aliados cercanos, por lo que sus estadísticas base se han establecido en 0." if Shardizard==$spanishShard
     end
     pphase=apply_combat_buffs(event,skill_list_3,px.map{|q| q},'Player',nerfs)
     ephase=apply_combat_buffs(event,skill_list_3,px.map{|q| q},'Enemy',nerfs)
@@ -8422,8 +9557,13 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     pphase_c.push(pphase_c[0]+pphase_c[1]+pphase_c[2]+pphase_c[3]+pphase_c[4])
     ephase_c.push(ephase_c[0]+ephase_c[1]+ephase_c[2]+ephase_c[3]+ephase_c[4])
     for i in 0...5
-      pphase_c[i]="#{pphase_c[i]}#{" (+#{cc[i+5]} against melee)" if cc[i+5]>0}#{" (+#{dc[i+5]} against ranged)" if dc[i+5]>0}"
-      ephase_c[i]="#{ephase_c[i]}#{" (+#{cc[i]} against melee)" if cc[i]>0}#{" (+#{dc[i]} against ranged)" if dc[i]>0}"
+      if Shardizard==$spanishShard
+        pphase_c[i]="#{pphase_c[i]}#{" (+#{cc[i+5]} de cerca)" if cc[i+5]>0}#{" (+#{dc[i+5]} lejos)" if dc[i+5]>0}"
+        ephase_c[i]="#{ephase_c[i]}#{" (+#{cc[i]} de cerca)" if cc[i]>0}#{" (+#{dc[i]} lejos)" if dc[i]>0}"
+      else
+        pphase_c[i]="#{pphase_c[i]}#{" (+#{cc[i+5]} against melee)" if cc[i+5]>0}#{" (+#{dc[i+5]} against ranged)" if dc[i+5]>0}"
+        ephase_c[i]="#{ephase_c[i]}#{" (+#{cc[i]} against melee)" if cc[i]>0}#{" (+#{dc[i]} against ranged)" if dc[i]>0}"
+      end
     end
     unless weapon.nil?
       if weapon.has_tag?('CloseStance',refinement,transformed)
@@ -8479,8 +9619,13 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     pphase.push(pphase[0]+pphase[1]+pphase[2]+pphase[3]+pphase[4])
     ephase.push(ephase[0]+ephase[1]+ephase[2]+ephase[3]+ephase[4])
     for i in 0...5
-      pphase[i]="#{pphase[i]}#{" (+#{close[i+5]} against melee)" if close[i+5]>0}#{" (+#{distant[i+5]} against ranged)" if distant[i+5]>0}"
-      ephase[i]="#{ephase[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
+      if Shardizard==$spanishShard
+        pphase[i]="#{pphase[i]}#{" (+#{close[i+5]} de cerca)" if close[i+5]>0}#{" (+#{distant[i+5]} lejos)" if distant[i+5]>0}"
+        ephase[i]="#{ephase[i]}#{" (+#{close[i]} de cerca)" if close[i]>0}#{" (+#{distant[i]} lejos)" if distant[i]>0}"
+      else
+        pphase[i]="#{pphase[i]}#{" (+#{close[i+5]} against melee)" if close[i+5]>0}#{" (+#{distant[i+5]} against ranged)" if distant[i+5]>0}"
+        ephase[i]="#{ephase[i]}#{" (+#{close[i]} against melee)" if close[i]>0}#{" (+#{distant[i]} against ranged)" if distant[i]>0}"
+      end
     end
     if wpnlegal
       pphase_c=pphase.map{|q| q}
@@ -8504,20 +9649,27 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     else
       wx=unit.statEmotes(weapon,refinement,transformed,true)[0]
       a=unit.atkName(true,weapon,refinement,transformed)
+      sdr=[a,'Speed','Defense','Resistance','Player Phase','Enemy Phase']
+      if Shardizard==$spanishShard
+        sdr=['Ataque','Velocidad','Defensa','Resistencia','Fase de Jugador','Fase de Enemiga']
+        sdr[0]='Fuerza' if a=='Strength'
+        sdr[0]='Magia' if a=='Magic'
+        sdr[0]='Congelación' if a=='Freeze'
+      end
       s="#{wx}: #{pphase[0]}"
-      s="#{s}\n<:Death_Blow:514719899868856340>#{a}: #{pphase[1]}"
-      s="#{s}\n<:Darting_Blow:514719899910668298>Speed: #{pphase[2]}"
-      s="#{s}\n<:Armored_Blow:514719899927576578>Defense: #{pphase[3]}"
-      s="#{s}\n<:Warding_Blow:514719900607053824>Resistance: #{pphase[4]}"
+      s="#{s}\n<:Death_Blow:514719899868856340>#{sdr[0]}: #{pphase[1]}"
+      s="#{s}\n<:Darting_Blow:514719899910668298>#{sdr[1]}: #{pphase[2]}"
+      s="#{s}\n<:Armored_Blow:514719899927576578>#{sdr[2]}: #{pphase[3]}"
+      s="#{s}\n<:Warding_Blow:514719900607053824>#{sdr[3]}: #{pphase[4]}"
       s="#{s}\n\nBST: #{pphase[5]}"
-      flds.push(['Player Phase',s])
+      flds.push([sdr[4],s])
       s="#{wx}: #{ephase[0]}"
-      s="#{s}\n<:Fierce_Stance:514719899873050624>#{a}: #{ephase[1]}"
-      s="#{s}\n<:Darting_Stance:514719899919056926>Speed: #{ephase[2]}"
-      s="#{s}\n<:Steady_Stance:514719899856273408>Defense: #{ephase[3]}"
-      s="#{s}\n<:Warding_Stance:514719899562672138>Resistance: #{ephase[4]}"
+      s="#{s}\n<:Fierce_Stance:514719899873050624>#{sdr[0]}: #{ephase[1]}"
+      s="#{s}\n<:Darting_Stance:514719899919056926>#{sdr[1]}: #{ephase[2]}"
+      s="#{s}\n<:Steady_Stance:514719899856273408>#{sdr[2]}: #{ephase[3]}"
+      s="#{s}\n<:Warding_Stance:514719899562672138>#{sdr[3]}: #{ephase[4]}"
       s="#{s}\n\nBST: #{ephase[5]}"
-      flds.push(['Enemy Phase',s])
+      flds.push([sdr[5],s])
     end
   end
   header=unit.class_header(bot)
@@ -8536,11 +9688,16 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       end
     end
   end
-  ftr="Include the word \"#{unit.bonus_type}\" to include bonus unit stats" if unit.bonus_type.length>0 && bonus.length<=0 && ftr.nil?
+  if unit.bonus_type.length>0 && bonus.length<=0 && ftr.nil?
+    ftr="Include the word \"#{unit.bonus_type}\" to include bonus unit stats"
+    ftr="Incluye la palabra \"#{unit.bonus_type}\" para mostrar las estadísticas de un personaje con bonificación." if Shardizard==$spanishShard
+  end
   unless wpninvoke.length>0 || weapon.nil? || weapon.name[-1]=='+' || weapon.next_steps(event,1).reject{|q| q.name[-1]!='+'}.length<=0 || !unit.owner.nil?
     ftr="You equipped the T#{weapon.tier} version of the weapon.  Perhaps you meant #{weapon.name}+ ?"
+    ftr="Equipaste la versión R#{weapon.tier} de la arma.  ¿Te refieres a #{weapon.name}+ ?"
   end
-  ftr="\"Photon\" is weapons like Light's Brand and Shining Bow that deal extra damage if Def is lower than Res by 5+." unless mode != 'effHP' || photon=='0'
+  ftr="\"Photon\" son armas como Espada Luminosa que infligen daño adicional si Def+4<Res." unless mode != 'effHP' || photon=='0'
+  ftr="\"Photon\" is weapons like Light Brand and Shining Bow that deal extra damage if Def is lower than Res by 5+." unless mode != 'effHP' || photon=='0' || Shardizard==$spanishShard
   unless (diff.max==0 && diff.min==0) || mode != 'effHP'
     ftr="Stats displayed are for #{unit.name.split(' (')[0]}(M).  #{unit.name.split(' (')[0]}(F) has "
     if diff[0]!=0 || diff[2,3].reject{|q| q==0}.length>0
@@ -8550,12 +9707,24 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
     else
       ftr="\"Photon\" is weapons like Light's Brand and Shining Bow that deal extra damage if Def is lower than Res by 5+."
     end
+    if Shardizard==$spanishShard
+      ftr="Las estadísticas que se muestran son para #{unit.name.split(' (')[0]}(M).  #{unit.name.split(' (')[0]}(F) tiene "
+      if diff[0]!=0 || diff[2,3].reject{|q| q==0}.length>0
+        ftr="#{ftr}los siguientes cambios: #{diff.map{|q| "#{'+' if q>0}#{q}"}.join('/')}"
+      elsif photon=='0'
+        ftr=nil
+      else
+        ftr="\"Photon\" son armas como Espada Luminosa que infligen daño adicional si Def+4<Res."
+      end
+    end
   end
   ftr='For the Kiran-shaped enemy in Book IV Ch. 12-5, type the name "Hood".' if unit.name=='Kiran'
+  ftr='Para el enemigo con forma de Kiran en el libro 4 cap. 12-5, use el nombre "Hood".' if unit.name=='Kiran' && Shardizard==$spanishShard
   f=0
   f=ftr.length unless ftr.nil?
   if mode=='Proc' && flds.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length+toptext.length+header.length+text.length+f>1900
     fx=[['Star'],['Moon','Sun','Eclipse'],['Fire','Ice','Freezeflame'],['Dragon'],['Darkness'],['Rend']]
+    fx=[['Estrella'],['Luna','Sol','Eclipse'],['Fuego','Hielo','Volcán Gélido'],['Dragón'],['Infierno'],['Rasgón']] if Shardizard==$spanishShard
     l=0
     f=[]
     thumb=unit.thumbnail(event,bot,resp)
@@ -8643,7 +9812,8 @@ def learnable_skills(bot,event,args=[],xname=nil)
     unit=unit[0].clone
     unit.name=unit.name.split('(')[0]
   elsif unit.is_a?(Array)
-    event.respond "That is multiple units.  Please choose one of the following:\n#{unit.map{|q| "#{q.name}#{q.emotes(bot)}"}.join("\n")}"
+    event.respond "That is multiple units.  Please choose one of the following:\n#{unit.map{|q| "#{q.name}#{q.emotes(bot)}"}.join("\n")}" unless Shardizard==$spanishShard
+    event.respond "Eso es varios personajes. Elija una de las siguientes opciones:\n#{unit.map{|q| "#{q.name}#{q.emotes(bot)}"}.join("\n")}" if Shardizard==$spanishShard
     return nil
   end
   sklz=$skills.reject{|q| !q.isPostable?(event) || 'Umbra '==q.name[0,6] || ['Whelp (All)','Yearling (All)','Adult (All)','Missiletainn','Falchion','Ragnarok+'].include?(q.name) || !q.can_inherit?(unit) || q.type==['Passive(W)']}
@@ -8659,7 +9829,8 @@ def learnable_skills(bot,event,args=[],xname=nil)
     sklz=sklz.reject{|q| 'Initiate Seal '==q.name[0,14]}
     m.push("#{squad_initiate[1]} *Initiate Seal*")
   end
-  m="A total of #{m.join(' and ')} skills have been filtered out by default" if m.length>0
+  m="A total of #{m.join(' and ')} skills have been filtered out by default" if m.length>0 && Shardizard != $spanishShard
+  m="Se filtraron un total de #{m.join(' y ')} habilidades de forma predeterminada" if m.length>0 && Shardizard==$spanishShard
   m='' if m.length<=0
   for i in 0...sklz.length # display items with both the non-plus and + versions in the list as only one entry
     sklz[i].name="#{sklz[i].name.gsub('+','')}[+]" if sklz[i].name[-1]=='+' && sklz.map{|q| q.name}.include?(sklz[i].name.gsub('+',''))
@@ -8738,7 +9909,21 @@ def learnable_skills(bot,event,args=[],xname=nil)
     wpn.flatten!
     wpn=wpn.sort{|a,b| a.gsub('**','').gsub('~~','')<=>b.gsub('**','').gsub('~~','')}
   end
-  if !safe_to_spam?(event)
+  pos=1
+  pos=2 if Shardizard==$spanishShard
+  if !safe_to_spam?(event) && Shardizard==$spanishShard
+    str="__**#{unit.name}#{unit.emotes(bot)}** puede heredar:__"
+    str="#{str}\n#{Skill_Slots[0][0]} #{wpn.length} Armas"
+    str="#{str}\n#{Skill_Slots[0][1]} #{ast.length} Asistencias"
+    str="#{str}\n#{Skill_Slots[0][2]} #{spec.length} Especiales"
+    str="#{str}\n#{Skill_Slots[0][3]} #{a_pass.length} Pasivas A"
+    str="#{str}\n#{Skill_Slots[0][4]} #{b_pass.length} Pasivas B"
+    str="#{str}\n#{Skill_Slots[0][5]} #{c_pass.length} Pasivas C"
+    str="#{str}\n\n__**#{unit.name}#{unit.emotes(bot)}** can #{Skill_Slots[0][6]}equip:__"
+    str="#{str}\n#{s_pass.length} Insignias passivas"
+    str="#{str}\n#{squad_initiate[0]} Insignia de Squad Ace"
+    str="#{str}\n#{squad_initiate[1]} Insignia de Initate Seal"
+  elsif !safe_to_spam?(event)
     str="__**#{unit.name}#{unit.emotes(bot)}** can inherit:__"
     str="#{str}\n#{Skill_Slots[0][0]} #{wpn.length} Weapons"
     str="#{str}\n#{Skill_Slots[0][1]} #{ast.length} Assists"
@@ -8754,53 +9939,58 @@ def learnable_skills(bot,event,args=[],xname=nil)
     if wpn.join("\n").length+ast.join("\n").length+spec.join("\n").length+a_pass.join("\n").length+b_pass.join("\n").length+c_pass.join("\n").length>1800
       if wpn.join("\n").length+ast.join("\n").length+spec.join("\n").length>1800
         if wpn.join("\n").length>1900
-          str="__Skills that **#{unit.name}**#{unit.emotes(bot)} can learn__\n*#{Skill_Slots[0][0]} #{Skill_Slots[1][0]}s*: #{wpn[0]}"
+          str="__Skills that **#{unit.name}**#{unit.emotes(bot)} can learn__\n*#{Skill_Slots[0][0]} #{Skill_Slots[pos][0]}s*: #{wpn[0]}"
+          str="__Habilidades que **#{unit.name}**#{unit.emotes(bot)} puede aprender__\n*#{Skill_Slots[0][0]} #{Skill_Slots[pos][0]}s*: #{wpn[0]}" if Shardizard==$spanishShard
           for i in 1...wpn.length
             str=extend_message(str,wpn[i],event,1,', ')
           end
           event.respond str
         else
-          create_embed(event,"__Skills that **#{unit.name}**#{unit.emotes(bot)} can learn__\n__*#{Skill_Slots[0][0]} #{Skill_Slots[1][0]}s*__",'',wpn2[0].disp_color(1),nil,unit.thumbnail(event,bot),triple_finish(wpn))
+          strx="__Skills that **#{unit.name}**#{unit.emotes(bot)} can learn__"
+          strx="__Habilidades que **#{unit.name}**#{unit.emotes(bot)} puede aprender__" if Shardizard==$spanishShard
+          create_embed(event,"#{strx}\n__*#{Skill_Slots[0][0]} #{Skill_Slots[pos][0]}s*__",'',wpn2[0].disp_color(1),nil,unit.thumbnail(event,bot),triple_finish(wpn))
         end
         if ast.join("\n").length+spec.join("\n").length>1900
           if ast.join("\n").length>1900
-            str=extend_message(str,"*#{Skill_Slots[0][1]} #{Skill_Slots[1][1]}*: #{ast[0]}",event,2)
+            str=extend_message(str,"*#{Skill_Slots[0][1]} #{Skill_Slots[pos][1]}*: #{ast[0]}",event,2)
             for i in 1...ast.length
               str=extend_message(str,ast[i],event,1,', ')
             end
           else
             event.respond str unless str.length<=0
             str=''
-            create_embed(event,"__*#{Skill_Slots[0][1]} #{Skill_Slots[1][1]}*__",'',ast2[0].disp_color,nil,nil,triple_finish(ast))
+            create_embed(event,"__*#{Skill_Slots[0][1]} #{Skill_Slots[pos][1]}*__",'',ast2[0].disp_color,nil,nil,triple_finish(ast))
           end
           if spec.join("\n").length>1900
-            str=extend_message(str,"*#{Skill_Slots[0][1]} #{Skill_Slots[1][1]}*: #{spec[0]}",event,2)
+            str=extend_message(str,"*#{Skill_Slots[0][1]} #{Skill_Slots[pos][1]}*: #{spec[0]}",event,2)
             for i in 1...spec.length
               str=extend_message(str,spec[i],event,1,', ')
             end
           else
             event.respond str unless str.length<=0
             str=''
-            create_embed(event,"__*#{Skill_Slots[0][2]} #{Skill_Slots[1][2]}*__",'',spec2[0].disp_color,nil,nil,triple_finish(spec))
+            create_embed(event,"__*#{Skill_Slots[0][2]} #{Skill_Slots[pos][2]}*__",'',spec2[0].disp_color,nil,nil,triple_finish(spec))
           end
         else
           event.respond str unless str.length<=0
           str=''
           flds=[]
-          flds.push(["#{Skill_Slots[0][1]} #{Skill_Slots[1][1]}",ast.join("\n")])
-          flds.push(["#{Skill_Slots[0][2]} #{Skill_Slots[1][2]}",spec.join("\n")])
+          flds.push(["#{Skill_Slots[0][1]} #{Skill_Slots[pos][1]}",ast.join("\n")])
+          flds.push(["#{Skill_Slots[0][2]} #{Skill_Slots[pos][2]}",spec.join("\n")])
           create_embed(event,'','',avg_color([ast2[0].disp_color,spec2[0].disp_color]),nil,nil,flds)
         end
       else
         flds=[]
-        flds.push(["#{Skill_Slots[0][0]} #{Skill_Slots[1][0]}",wpn.join("\n")])
-        flds.push(["#{Skill_Slots[0][1]} #{Skill_Slots[1][1]}",ast.join("\n")])
-        flds.push(["#{Skill_Slots[0][2]} #{Skill_Slots[1][2]}",spec.join("\n")])
-        create_embed(event,"__Skills that **#{unit.name}**#{unit.emotes(bot)} can learn__",'',unit.disp_color,nil,unit.thumbnail(event,bot),flds)
+        flds.push(["#{Skill_Slots[0][0]} #{Skill_Slots[pos][0]}",wpn.join("\n")])
+        flds.push(["#{Skill_Slots[0][1]} #{Skill_Slots[pos][1]}",ast.join("\n")])
+        flds.push(["#{Skill_Slots[0][2]} #{Skill_Slots[pos][2]}",spec.join("\n")])
+        strx="__Skills that **#{unit.name}**#{unit.emotes(bot)} can learn__"
+        strx="__Habilidades que **#{unit.name}**#{unit.emotes(bot)} puede aprender__" if Shardizard==$spanishShard
+        create_embed(event,strx,'',unit.disp_color,nil,unit.thumbnail(event,bot),flds)
       end
       forcetext=false
       if a_pass.join("\n").length>1900
-        str=extend_message(str,"*#{Skill_Slots[0][3]} #{Skill_Slots[1][3]}s*: #{a_pass[0]}",event,2)
+        str=extend_message(str,"*#{Skill_Slots[0][3]} #{Skill_Slots[pos][3]}#{'s' unless Shardizard==$spanishShard}*: #{a_pass[0]}",event,2)
         for i in 1...a_pass.length
           str=extend_message(str,a_pass[i],event,1,', ')
         end
@@ -8808,10 +9998,10 @@ def learnable_skills(bot,event,args=[],xname=nil)
       else
         event.respond str unless str.length<=0
         str=''
-        create_embed(event,"__*#{Skill_Slots[0][3]} #{Skill_Slots[1][3]}s*__",'',a2[0].disp_color(1),nil,nil,triple_finish(a_pass))
+        create_embed(event,"__*#{Skill_Slots[0][3]} #{Skill_Slots[pos][3]}#{'s' unless Shardizard==$spanishShard}*__",'',a2[0].disp_color(1),nil,nil,triple_finish(a_pass))
       end
       if b_pass.join("\n").length>1900 || forcetext
-        str=extend_message(str,"*#{Skill_Slots[0][4]} #{Skill_Slots[1][4]}s*: #{b_pass[0]}",event,2)
+        str=extend_message(str,"*#{Skill_Slots[0][4]} #{Skill_Slots[pos][4]}#{'s' unless Shardizard==$spanishShard}*: #{b_pass[0]}",event,2)
         for i in 1...b_pass.length
           str=extend_message(str,b_pass[i],event,1,', ')
         end
@@ -8819,49 +10009,55 @@ def learnable_skills(bot,event,args=[],xname=nil)
       else
         event.respond str unless str.length<=0
         str=''
-        create_embed(event,"__*#{Skill_Slots[0][4]} #{Skill_Slots[1][4]}s*__",'',b2[0].disp_color(1),nil,nil,triple_finish(b_pass))
+        create_embed(event,"__*#{Skill_Slots[0][4]} #{Skill_Slots[pos][4]}#{'s' unless Shardizard==$spanishShard}*__",'',b2[0].disp_color(1),nil,nil,triple_finish(b_pass))
       end
       if c_pass.join("\n").length>1900 || forcetext
-        str=extend_message(str,"*#{Skill_Slots[0][5]} #{Skill_Slots[1][5]}s*: #{c_pass[0]}",event,2)
+        str=extend_message(str,"*#{Skill_Slots[0][5]} #{Skill_Slots[pos][5]}#{'s' unless Shardizard==$spanishShard}*: #{c_pass[0]}",event,2)
         for i in 1...c_pass.length
           str=extend_message(str,c_pass[i],event,1,', ')
         end
       else
         event.respond str unless str.length<=0
         str=''
-        create_embed(event,"__*#{Skill_Slots[0][5]} #{Skill_Slots[1][5]}s*__",'',c2[0].disp_color(1),nil,nil,triple_finish(c_pass))
+        create_embed(event,"__*#{Skill_Slots[0][5]} #{Skill_Slots[pos][5]}#{'s' unless Shardizard==$spanishShard}*__",'',c2[0].disp_color(1),nil,nil,triple_finish(c_pass))
       end
     else
       flds=[]
-      flds.push(["#{Skill_Slots[0][0]} #{Skill_Slots[1][0]}",wpn.join("\n")])
-      flds.push(["#{Skill_Slots[0][1]} #{Skill_Slots[1][1]}",ast.join("\n")])
-      flds.push(["#{Skill_Slots[0][2]} #{Skill_Slots[1][2]}",spec.join("\n")])
-      flds.push(["#{Skill_Slots[0][3]} #{Skill_Slots[1][3]}s",a_pass.join("\n")])
-      flds.push(["#{Skill_Slots[0][4]} #{Skill_Slots[1][4]}s",b_pass.join("\n")])
-      flds.push(["#{Skill_Slots[0][5]} #{Skill_Slots[1][5]}s",c_pass.join("\n")])
-      create_embed(event,"__Skills that **#{unit.name}**#{unit.emotes(bot)} can learn__",'',unit.disp_color,nil,unit.thumbnail(event,bot),flds)
+      flds.push(["#{Skill_Slots[0][0]} #{Skill_Slots[pos][0]}",wpn.join("\n")])
+      flds.push(["#{Skill_Slots[0][1]} #{Skill_Slots[pos][1]}",ast.join("\n")])
+      flds.push(["#{Skill_Slots[0][2]} #{Skill_Slots[pos][2]}",spec.join("\n")])
+      flds.push(["#{Skill_Slots[0][3]} #{Skill_Slots[pos][3]}#{'s' unless Shardizard==$spanishShard}",a_pass.join("\n")])
+      flds.push(["#{Skill_Slots[0][4]} #{Skill_Slots[pos][4]}#{'s' unless Shardizard==$spanishShard}",b_pass.join("\n")])
+      flds.push(["#{Skill_Slots[0][5]} #{Skill_Slots[pos][5]}#{'s' unless Shardizard==$spanishShard}",c_pass.join("\n")])
+      strx="__Skills that **#{unit.name}**#{unit.emotes(bot)} can learn__"
+      strx="__Habilidades que **#{unit.name}**#{unit.emotes(bot)} puede aprender__" if Shardizard==$spanishShard
+      create_embed(event,strx,'',unit.disp_color,nil,unit.thumbnail(event,bot),flds)
     end
+    strx="#{Skill_Slots[0][6]} #{Skill_Slots[pos][6]}s that **#{unit.name}**#{unit.emotes(bot)} can equip"
+    strx="#{Skill_Slots[0][6]} #{Skill_Slots[pos][6]} que **#{unit.name}**#{unit.emotes(bot)} puede equipar" if Shardizard==$spanishShard
     if s_pass.join("\n").length>1800 || forcetext
-      str=extend_message(str,"*#{Skill_Slots[0][6]} #{Skill_Slots[1][6]}s that **#{unit.name}**#{unit.emotes(bot)} can equip*: #{s_pass[0]}",event,2)
+      str=extend_message(str,"*#{strx}*: #{s_pass[0]}",event,2)
       for i in 1...s_pass.length
         str=extend_message(str,s_pass[i],event,1,', ')
       end
       str=extend_message(str,"~~#{m}~~",event) if m.length>0
     else
       m=nil if m.length<=0
-      create_embed(event,"__#{Skill_Slots[0][6]} #{Skill_Slots[1][6]}s that **#{unit.name}**#{unit.emotes(bot)} can equip__",'',s2[-1].disp_color(1),m,nil,triple_finish(s_pass))
+      create_embed(event,"__#{strx}__",'',s2[-1].disp_color(1),m,nil,triple_finish(s_pass))
     end
   else
     m=nil if m.length<=0
     flds=[]
-    flds.push(["#{Skill_Slots[0][0]} #{Skill_Slots[1][0]}",wpn.join("\n")])
-    flds.push(["#{Skill_Slots[0][1]} #{Skill_Slots[1][1]}",ast.join("\n")])
-    flds.push(["#{Skill_Slots[0][2]} #{Skill_Slots[1][2]}",spec.join("\n")])
-    flds.push(["#{Skill_Slots[0][3]} #{Skill_Slots[1][3]}",a_pass.join("\n")])
-    flds.push(["#{Skill_Slots[0][4]} #{Skill_Slots[1][4]}",b_pass.join("\n")])
-    flds.push(["#{Skill_Slots[0][5]} #{Skill_Slots[1][5]}",c_pass.join("\n")])
-    flds.push(["#{Skill_Slots[0][6]} #{Skill_Slots[1][6]}",s_pass.join("\n")])
-    create_embed(event,"__Skills that **#{unit.name}**#{unit.emotes(bot)} can learn__",'',unit.disp_color,m,unit.thumbnail(event,bot),flds)
+    flds.push(["#{Skill_Slots[0][0]} #{Skill_Slots[pos][0]}",wpn.join("\n")])
+    flds.push(["#{Skill_Slots[0][1]} #{Skill_Slots[pos][1]}",ast.join("\n")])
+    flds.push(["#{Skill_Slots[0][2]} #{Skill_Slots[pos][2]}",spec.join("\n")])
+    flds.push(["#{Skill_Slots[0][3]} #{Skill_Slots[pos][3]}",a_pass.join("\n")])
+    flds.push(["#{Skill_Slots[0][4]} #{Skill_Slots[pos][4]}",b_pass.join("\n")])
+    flds.push(["#{Skill_Slots[0][5]} #{Skill_Slots[pos][5]}",c_pass.join("\n")])
+    flds.push(["#{Skill_Slots[0][6]} #{Skill_Slots[pos][6]}",s_pass.join("\n")])
+    strx="__Skills that **#{unit.name}**#{unit.emotes(bot)} can learn__"
+    strx="__Habilidades que **#{unit.name}**#{unit.emotes(bot)} puede aprender__" if Shardizard==$spanishShard
+    create_embed(event,strx,'',unit.disp_color,m,unit.thumbnail(event,bot),flds)
   end
   event.respond str unless str.length<=0
   return nil
@@ -8884,7 +10080,7 @@ def unit_study(bot,event,args=[],xname=nil)
   data_load(['unit'])
   atext=''
   if unit.nil?
-    event.respond 'No unit found.'
+    event.respond nomf()
     return nil
   end
   if unit.is_a?(Array) && (unit.map{|q| q.name}.reject{|q| ['Robin(M)','Robin(F)'].include?(q)}.length<=0 || unit.map{|q| q.name}.reject{|q| ['Kris(M)','Kris(F)'].include?(q)}.length<=0)
@@ -8903,10 +10099,11 @@ def unit_study(bot,event,args=[],xname=nil)
   bane=flurp[3]
   resp=flurp[9]
   resp2=flurp[9]
-  if has_any?(args,["mathoo's"]) || (has_any?(args,['my']) && event.user.id==167657750971547648)
+  if has_any?(args,["mathoo's"]) || (has_any?(args,['my']) && event.user.id==167657750971547648) || (Shardizard==$spanishShard && (has_any?(args,["demathoo"]) || (has_any?(args,['mi']) && event.user.id==167657750971547648)))
     u=$dev_units.find_index{|q| q.name==unit.name}
     if u.nil?
-      if $dev_nobodies.include?(unit.name)
+      if Shardizard==$spanishShard
+      elsif $dev_nobodies.include?(unit.name)
         event.respond "Mathoo has that unit, but marked that he doesn't want to record #{unit.pronoun(true)} data.  Showing default data."
       elsif [$dev_somebodies,$dev_waifus].flatten.include?(unit.name)
         event.respond "Mathoo does not have that unit, much as he wants to.  Showing default data."
@@ -8939,10 +10136,10 @@ def unit_study(bot,event,args=[],xname=nil)
       lowest_rarity=unit.rarity*1
     end
   elsif unit.stats40.max<=0 && unit.name != 'Kiran'
-    event.respond "#{unit.name}#{unit.emotes(bot)} does not have official stats.  I cannot study #{'his' if unit.gender=='M'}#{'her' if unit.gender=='F'}#{'their' unless ['M','F'].include?(unit.gender)} stats."
+    event.respond "#{unit.name}#{unit.emotes(bot)} does not have official stats.  I cannot study #{unit.pronoun(true)} stats."
     return nil
   elsif unit.stats40[0,5].max<=0 && unit.name != 'Kiran'
-    event.respond "#{unit.name}#{unit.emotes(bot)} does not have playable stats.  There's no point to studying #{'his' if unit.gender=='M'}#{'her' if unit.gender=='F'}#{'their' unless ['M','F'].include?(unit.gender)} stats."
+    event.respond "#{unit.name}#{unit.emotes(bot)} does not have playable stats.  There's no point to studying #{unit.pronoun(true)} stats."
     return nil
   else
     merges=0
@@ -8952,6 +10149,7 @@ def unit_study(bot,event,args=[],xname=nil)
   text=''; text2=''
   if boon.gsub(' ','').length>0 && bane.gsub(' ','').length>0
     n=Natures.reject{|q| q[1]!=boon || q[2]!=bane}
+    n=$spanish_Natures.reject{|q| q[1]!=boon || q[2]!=bane} if Shardizard==$spanishShard
     n2=n.map{|q| q[0]}.join('/')
     n2=n[0][0] if unit.atkName(true)=='Strength'
     n2=n[-1][0] if unit.atkName(true)=='Magic'
@@ -8959,13 +10157,16 @@ def unit_study(bot,event,args=[],xname=nil)
     n2=n[-1][0] if !unit.owner.nil? && unit.atkName(true,unit.equippedWeapon[0],unit.equippedWeapon[1])=='Magic'
     text2="+#{boon}, -#{bane} (#{n2})"
     text2="+#{boon}, ~~-#{bane}~~ (#{n2}, bane neutralized)" if !unit.owner.nil? && unit.rarity==Max_rarity_merge[0] && unit.merge_count>0
+    text2="+#{boon}, ~~-#{bane}~~ (#{n2}, perdición neutralizada)" if !unit.owner.nil? && unit.rarity==Max_rarity_merge[0] && unit.merge_count>0 && Shardizard==$spanishShard
   elsif boon.gsub(' ','').length>0
     text2="+#{boon}"
   elsif bane.gsub(' ','').length>0
     text2="-#{bane}"
     text2="~~-#{bane}~~ (neutralized)" if !unit.owner.nil? && unit.rarity==Max_rarity_merge[0] && unit.merge_count>0
+    text2="~~-#{bane}~~ (neutralizada)" if !unit.owner.nil? && unit.rarity==Max_rarity_merge[0] && unit.merge_count>0 && Shardizard==$spanishShard
   else
     text2="Neutral nature"
+    text2="Naturaleza neutral" if Shardizard==$spanishShard
   end
   text2="#{text2}\n<:Resplendent_Ascension:678748961607122945>Resplendent Ascension" if resp
   header=unit.class_header(bot)
@@ -8990,9 +10191,15 @@ def unit_study(bot,event,args=[],xname=nil)
     m=avail_text(atext,true,unit,2)
     imp.push(m[2]) unless [imp,0].flatten.include?(m[2])
     lowest_rarity=[lowest_rarity,m[3]].min
-    text="#{text}\n\n**Male**\n#{m[0].map{|q| q.gsub('**','*')}.join("\n")}"
-    text="#{text}\n#{m[1].map{|q| q.gsub('**','*')}.join("\n")}" if m[1].length>0
-    text="#{text}\n\n**Female**"
+    if Shardizard==$spanishShard
+      text="#{text}\n\n**Masculino**\n#{m[0].map{|q| q.gsub('**','*')}.join("\n")}"
+      text="#{text}\n#{m[1].map{|q| q.gsub('**','*')}.join("\n")}" if m[1].length>0
+      text="#{text}\n\n**Femenina**"
+    else
+      text="#{text}\n\n**Male**\n#{m[0].map{|q| q.gsub('**','*')}.join("\n")}"
+      text="#{text}\n#{m[1].map{|q| q.gsub('**','*')}.join("\n")}" if m[1].length>0
+      text="#{text}\n\n**Female**"
+    end
   end
   m=avail_text(unit.availability[0],true,unit,2)
   imp.push(m[2]) unless [imp,0].flatten.include?(m[2])
@@ -9017,6 +10224,8 @@ def unit_study(bot,event,args=[],xname=nil)
       x[i]=0
     end
   end
+  sc='Score'
+  sc='Puntaje' if Shardizard==$spanishShard
   for i in 0...x.length
     unless x[i]<0
       h=generate_rarity_row(i+1,x[i],unit.games)
@@ -9026,7 +10235,7 @@ def unit_study(bot,event,args=[],xname=nil)
           s2=unit.base.dispStats(bot,40,i+1,boon,bane,i2,0,'','',[],resp)
           s3=s2.inject(0){|sum,x| sum + x }
           s4=unit.base.score(bot,40,i+1,boon,bane,i2,0,'','',[],resp)
-          s.push("#{"**#{i2} merge#{'s' unless i2==1}:** " unless x[i]==Max_rarity_merge[1]}#{s2.join(' / ')}  \u200B  \u200B  BST: #{s3}  \u200B  \u200B  Score: #{s4.to_i}")
+          s.push("#{"**#{i2} merge#{'s' unless i2==1}:** " unless x[i]==Max_rarity_merge[1]}#{s2.join(' / ')}  \u200B  \u200B  BST: #{s3}  \u200B  \u200B  #{sc}: #{s4.to_i}")
         end
       end
       flds.push([h,s.join("\n"),1])
@@ -9043,9 +10252,11 @@ def unit_study(bot,event,args=[],xname=nil)
   text="#{text}\n\n#{text2}" if text2.length>0
   ftr=nil
   ftr="Include the word \"Resplendent\" to ascend this unit" if unit.hasResplendent? && !resp && unit.owner.nil?
+  ftr="Incluye la palabra \"Resplendent\" para hacer este carácter más fuerte." if unit.hasResplendent? && !resp && unit.owner.nil? && Shardizard==$spanishShard
   flds=flds.map{|q| ["#{q[0].gsub('<:Blank:676220519690928179>','')}#{'.' if q[0][-1]=='>'}",q[1],q[2]]} if flds.length>0 && flds.map{|q| q[0,2].join("\n")}.join("\n\n").length+header.length+text.length>1900
   flds=flds[flds.length-3,3] if flds.length>3 && flds.map{|q| q[0,2].join("\n")}.join("\n\n").length+header.length+text.length>1900 && !safe_to_spam?(event)
   ftr='For the Kiran-shaped enemy in Book IV Ch. 12-5, type the name "Hood".' if unit.name=='Kiran'
+  ftr='Para el enemigo con forma de Kiran en el libro 4 cap. 12-5, use el nombre "Hood".' if unit.name=='Kiran' && Shardizard==$spanishShard
   f=0
   f=ftr.length unless ftr.nil?
   if flds.length>0 && flds.map{|q| q[0,2].join("\n")}.join("\n\n").length+header.length+text.length+f>1900
@@ -9140,7 +10351,7 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     if colors.length<=0 && weapons.length<=0 && color_weapons.length<=0 && movement.length<=0
       x=find_data_ex(:find_unit,event,args,xname,bot)
       if x.nil?
-        event.respond "No matches found."
+        event.respond nomf()
       elsif x.is_a?(Array)
         for i in 0...x.length
           disp_unit_art(bot,event,args,x[i].name)
@@ -9187,29 +10398,36 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     IO.copy_stream(open("https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Sprites/#{x.name.gsub(' ','_')}#{'_Resplendent' if resp}.png"),"#{$location}devkit/FEHTemp#{Shardizard}.png") rescue m=true
     if File.size("#{$location}devkit/FEHTemp#{Shardizard}.png")>100 && !m
       artype=['Sprite','In-game Sprite ~~with default weapon~~']
+      artype=['Sprite','Sprite del juego ~~con arma predeterminada~~'] if Shardizard==$spanishShard
       x.artist=nil
       x.voice_na=nil
       x.voice_jp=nil
     else
       artype=['Face',"~~Sprite not yet on site~~\nDefault"]
+      artype=['Face',"~~el arte no está disponible~~\nDefecto"] if Shardizard==$spanishShard
     end
   elsif x.name=='Kiran'
     face=find_kiran_face(event)
     artype=[face.gsub(' ',''),face]
   elsif has_any?(args,['battle','attack','att','atk','attacking'])
     artype=['BtlFace','Attack']
+    artype=['BtlFace','Atacar'] if Shardizard==$spanishShard
   elsif has_any?(args,['damage','damaged','lowhealth','lowhp','low_health','low_hp','injured']) || (args.include?('low') && has_any?(args,['health','hp']))
     artype=['BtlFace_D','Damaged']
+    artype=['BtlFace_D','Dañado'] if Shardizard==$spanishShard
   elsif has_any?(args,['critical','special','crit','proc'])
     artype=['BtlFace_C','Special']
+    artype=['BtlFace_C','Especial'] if Shardizard==$spanishShard
   elsif has_any?(args,['loading','load','title']) && ['Alfonse','Sharena','Veronica','Eirika(Bonds)','Marth','Roy','Ike','Chrom(Launch)','Camilla(Launch)','Takumi','Lyn','Marth(Launch)','Roy(Launch)','Ike(World)','Takumi(Launch)','Lyn(Launch)','Reginn'].include?(x.name)
     artype=['Face_Load','Title Screen']
+    artype=['Face_Load','Pantalla de Título'] if Shardizard==$spanishShard
     x.artist=nil
   end
-  if has_any?(args,["mathoo's"]) || (has_any?(args,['my']) && event.user.id==167657750971547648)
+  if has_any?(args,["mathoo's"]) || (has_any?(args,['my']) && event.user.id==167657750971547648) || (Shardizard==$spanishShard && (has_any?(args,["demathoo"]) || (has_any?(args,['mi']) && event.user.id==167657750971547648)))
     u=$dev_units.find_index{|q| q.name==x.name}
     if u.nil?
-      if $dev_nobodies.include?(unit.name)
+      if Shardizard==$spanishShard
+      elsif $dev_nobodies.include?(unit.name)
         event.respond "Mathoo has that unit, but marked that he doesn't want to record #{unit.pronoun(true)} data.  Showing default data."
       elsif [$dev_somebodies,$dev_waifus].flatten.include?(unit.name)
         event.respond "Mathoo does not have that unit, much as he wants to.  Showing default data."
@@ -9232,10 +10450,11 @@ def disp_unit_art(bot,event,args=[],xname=nil)
   end
   if x.name=='Reinhardt(World)' && (rand(100).zero? || has_any?(args,['zelda','link']) || event.message.text.downcase.include?('master sword'))
     resp=false
-    artype=['','Meme Zelda']
+    artype=['',"Meme#{' de' if Shardizard==$spanishShard} Zelda"]
     x.artist[0]="u/ZachminSSB (ft. #{x.artist[0]})"
   elsif x.name=='Celica' && x.is_a?(DevUnit)
     artype=['','Smol Fairy']
+    artype=['','Linda Hada'] if Shardizard==$spanishShard
     x.artist[1]='Twitter: @c0_nes'
   end
   lookout=$skilltags.reject{|q| q[2]!='Art'}
@@ -9278,7 +10497,10 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     end
   end
   artype=artype2.map{|q| q} if artype2.length>0
-  artype=['Face','Default'] if artype.length<=0
+  if artype.length<=0
+    artype=['Face','Default']
+    artype=['Face','Defecto'] if Shardizard==$spanishShard
+  end
   av=0
   av=1 if resp && !x.artist.nil? && x.artist.length>1
   unless x.voice_na.nil? || x.voice_na.length<=0 || !resp
@@ -9286,20 +10508,23 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     x.voice_na=['Sara Beth'] if x.id==110
   end
   str=''
-  str="#{str}\n**Artist:** #{x.artist[av].split(' as ')[-1]}" unless x.artist.nil?
+  str="#{str}\n**Artist#{'a' if Shardizard==$spanishShard}:** #{x.artist[av].split(' as ')[-1]}" unless x.artist.nil?
   if x.name=='Kiran' && x.owner.nil?
     str="#{str}\n**VA:** >Player<"
   elsif x.name=='Kiran'
     str="#{str}\n**VA:** #{x.owner}"
+  elsif Shardizard==$spanishShard
+    str="#{str}\n**VA (Inglés):** #{x.voice_na.map{|q| q.split(' as ')[-1]}.join(' & ')}" unless x.voice_na.nil? || x.voice_na.length<=0
+    str="#{str}\n**VA (Japonés):** #{x.voice_jp.map{|q| q.split(' as ')[-1]}.join(' & ')}" unless x.voice_jp.nil? || x.voice_jp.length<=0
   else
     str="#{str}\n**VA (English):** #{x.voice_na.map{|q| q.split(' as ')[-1]}.join(' & ')}" unless x.voice_na.nil? || x.voice_na.length<=0
     str="#{str}\n**VA (Japanese):** #{x.voice_jp.map{|q| q.split(' as ')[-1]}.join(' & ')}" unless x.voice_jp.nil? || x.voice_jp.length<=0
   end
   if x.name=='Celica' && x.is_a?(DevUnit) && resp
     if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      str="#{str}\nSource: <https://twitter.com/c0_nes/status/1402948852399804418>"
+      str="#{str}\nSource: <https://twitter.com/c0_nes/status/1410675573287014406>"
     else
-      str="#{str}\n\n[Source](https://twitter.com/c0_nes/status/1402948852399804418)"
+      str="#{str}\n\n[Source](https://twitter.com/c0_nes/status/1410675573287014406)"
     end
   end
   artist=''
@@ -9312,6 +10537,8 @@ def disp_unit_art(bot,event,args=[],xname=nil)
   vana=[';'] if vana.length<=0
   vajp=[';'] if vajp.length<=0
   f=nil
+  respname='Resplendent Ascension'
+  respname='Ascensión Resplandeciente' if Shardizard==$spanishShard
   unless has_any?(args,['just','justart','blank','noinfo']) || (x.artist.nil? && (x.voice_na.nil? || x.voice_na.length<=0) && (x.voice_jp.nil? || x.voice_jp.nil?))
     f=[[],[],[], # FEH Unit data
        [],[],    # FGO Servant data
@@ -9538,15 +10765,22 @@ def disp_unit_art(bot,event,args=[],xname=nil)
       end
     end
     f=[['Same Artist',[f[0].sort,f[3].uniq,f[5].uniq,f[7].uniq.sort].flatten],['Same VA',[f[1].sort,f[4].uniq,f[6].uniq.sort].flatten],['Same Everything',f[2].sort,1]]
+    if Shardizard==$spanishShard
+      f[0][0]='Mismo Artista'
+      f[1][0]='Mismo VA'
+      f[2][0]='Todo Igual'
+      f[1][1]=f[1][1].map{|q| q.gsub('English','Inglés').gsub('Japanese','Japonés').gsub('Voice','Voz').gsub('Both','Ambas')}
+    end
     if f[1][1].length>0 && f[1][1][0].include?(' *[') && f[1][1].reject{|q| q.include?(f[1][1][0].split(' *[')[-1])}.length<=0
-      f[1][0]="Same VA (#{f[1][1][0].split(' *[')[-1].gsub(']*','')})"
+      f[1][0]="#{f[1][0]} (#{f[1][1][0].split(' *[')[-1].gsub(']*','')})"
       f[1][1]=f[1][1].map{|q| q.split(' *[')[0,q.split(' *[').length-1].join(' *[')}
     end
     f=f.reject{|q| q[1].length<=0}.map{|q| [q[0],q[1].join("\n"),q[2]]}
     m=f.map{|q| q[1].split("\n").length}
     f=f.map{|q| q[0,2]} if f.length<3
     if m.inject(0){|sum,x2| sum + x2 }>25 && !safe_to_spam?(event)
-      str="#{str}\n\nThere were too many units with the same artist and/or VA to list them all.  Please use this command in PM."
+      str="#{str}\n\nThere were too many units with the same artist and/or VA to list them all.  Please use this command in PM." unless Shardizard==$spanishShard
+      str="#{str}\n\nHabía demasiados personajes con el mismo artista y/o VA para enumerarlos a todos. Utilice este comando en mensajes privados." if Shardizard==$spanishShard
       f=nil
     elsif f.length<=0
     elsif f.length<=1 && !($embedless.include?(event.user.id) || was_embedless_mentioned?(event)) && f[0][1].split("\n").length<=5
@@ -9555,7 +10789,7 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     elsif f.length<=1 && !($embedless.include?(event.user.id) || was_embedless_mentioned?(event))
       str="#{str}\n\n#{f[0][0]}"
       f=triple_finish(f[0][1].split("\n"),true)
-    elsif $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__#{"#{x.owner}'s " unless x.owner.nil?}**#{x.name}#{x.emotes(bot)}**__#{"\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}".length+str.length+f.map{|q| "__*#{q[0]}*__\n#{q[1]}"}.join("\n\n").length>1900 || m.max>25
+    elsif $embedless.include?(event.user.id) || was_embedless_mentioned?(event) || "__#{"#{x.owner}'s " unless x.owner.nil?}**#{x.name}#{x.emotes(bot)}**__#{"\n#{respname}<:Resplendent_Ascension:678748961607122945>" if resp}\n#{artype[1]}".length+str.length+f.map{|q| "__*#{q[0]}*__\n#{q[1]}"}.join("\n\n").length>1900 || m.max>25
       str2=''
       for i in 0...f.length
         if "**#{f[i][0]}:** #{f[i][1].gsub("\n",' - ')}".length>1500
@@ -9573,11 +10807,13 @@ def disp_unit_art(bot,event,args=[],xname=nil)
     end
   end
   hdr="__#{"#{x.owner}'s " unless x.owner.nil?}**#{x.name}#{x.emotes(bot)}**__"
+  hdr="__**#{x.name}#{x.emotes(bot)}**#{" de #{x.owner}" unless x.owner.nil?}__" if Shardizard==$spanishShard
   if x.is_a?(DevUnit) && x.name=='Alm(Saint)'
     x2=$dev_units.find_index{|q| q.name=='Sakura'}
     unless x2.nil?
       x2=$dev_units[x2]
-      hdr="#{hdr}\nPocket companion: *#{x2.name}*#{x2.emotes(bot)}"
+      hdr="#{hdr}\nPocket companion: *#{x2.name}*#{x2.emotes(bot)}" unless Shardizard==$spanishShard
+      hdr="#{hdr}\nCompañera de bolsillo: *#{x2.name}*#{x2.emotes(bot)}" if Shardizard==$spanishShard
     end
   elsif x.is_a?(DevUnit) && x.name=='Kiran' && x.face=='Mathoo'
     h=[]
@@ -9596,23 +10832,27 @@ def disp_unit_art(bot,event,args=[],xname=nil)
       x2=$dev_units[x2]
       h.push("*#{x2.name}*#{x2.emotes(bot)}")
     end
-    hdr="#{hdr}\nPocket companions: #{list_lift(h,'and')}" unless h.length<=0
+    hdr="#{hdr}\nPocket companions: #{list_lift(h,'and')}" unless h.length<=0 || Shardizard==$spanishShard
+    hdr="#{hdr}\nCompañeras de bolsillo: #{list_lift(h,'y')}" if h.length>0 && Shardizard==$spanishShard
   end
-  hdr="#{hdr}\nResplendent Ascension<:Resplendent_Ascension:678748961607122945>" if resp
+  hdr="#{hdr}\n#{respname}<:Resplendent_Ascension:678748961607122945>" if resp
   hdr="#{hdr}\n#{artype[1]}"
   if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
     str="#{hdr}\n#{str}"
     str="#{str}\n\n#{x.portrait(artype[0],resp)}"
-    str="#{str}\n\nThis unit has a Resplendent Ascension.  Include the word \"Resplendent\" to look at that art." if x.hasResplendent? && !resp && artype[0]!='Face_Load'
+    str="#{str}\n\nThis unit has a Resplendent Ascension.  Include the word \"Resplendent\" to look at that art." if x.hasResplendent? && !resp && artype[0]!='Face_Load' && Shardizard != $spanishShard
+    str="#{str}\n\nEste personaje tiene una Ascensión Resplandeciente. Incluya la palabra \"Resplendent\" para ver ese arte." if x.hasResplendent? && !resp && artype[0]!='Face_Load' && Shardizard==$spanishShard
     event.respond str
   else
     ftr=nil
     ftr="This unit has a Resplendent Ascension.  Include the word \"Resplendent\" to look at that art." if x.hasResplendent? && !resp && artype[0]!='Face_Load'
+    ftr="Este personaje tiene una Ascensión Resplandeciente. Incluya la palabra \"Resplendent\" para ver ese arte." if x.hasResplendent? && !resp && artype[0]!='Face_Load' && Shardizard==$spanishShard
     create_embed(event,hdr,str,x.disp_color(0,1),ftr,[nil,x.portrait(artype[0],resp)],f)
   end
 end
 
 def date_display(event,t,shift=false)
+  return display_date(event,t,shift) if Shardizard==$spanishShard
   str="Time elapsed since today's reset: #{"#{t.hour} hours, " if t.hour>0}#{"#{'0' if t.min<10}#{t.min} minutes, " if t.hour>0 || t.min>0}#{'0' if t.sec<10}#{t.sec} seconds"
   str="#{str}\nTime until tomorrow's reset: #{"#{23-t.hour} hours, " if 23-t.hour>0}#{"#{'0' if 59-t.min<10}#{59-t.min} minutes, " if 23-t.hour>0 || 59-t.min>0}#{'0' if 60-t.sec<10}#{60-t.sec} seconds"
   t2=Time.new(2017,2,2)-60*60
@@ -9636,6 +10876,7 @@ def date_display(event,t,shift=false)
 end
 
 def today_in_feh(event,bot,shift=false,chain='')
+  return today_en_feh(event,bot,shift,chain) if Shardizard==$spanishShard
   colors=['Green <:Shard_Green:443733397190344714><:Crystal_Verdant:445510676845166592><:Badge_Verdant:445510676056899594><:Great_Badge_Verdant:443704780943261707>',
           'Colorless <:Shard_Colorless:443733396921909248><:Crystal_Transparent:445510676295843870><:Badge_Transparent:445510675976945664><:Great_Badge_Transparent:443704781597573120>',
           'Gold <:Shard_Gold:443733396913520640><:Crystal_Gold:445510676346306560> / Random <:Badge_Random:445510676677525504><:Great_Badge_Random:445510674777636876>',
@@ -9750,6 +10991,7 @@ def today_in_feh(event,bot,shift=false,chain='')
 end
 
 def next_events(bot,event,args=[])
+  return next_eventos(bot,event,args) if Shardizard==$spanishShard
   idx=-1
   for i in 0...args.length
     if idx<0
@@ -9939,7 +11181,7 @@ def next_events(bot,event,args=[])
   if [-1,8].include?(idx)
     str2=disp_current_banners(event,bot,'',true,1)
     msg=extend_message(msg,str2,event,2)
-    str2=disp_current_banners(event,bot,'',true,2).gsub("__**Current Banners**__\n\n",'')
+    str2=disp_current_banners(event,bot,'',true,2).gsub("__**Current Banners**__\n\n",'').gsub("__**Pancartas Actual**__\n\n",'')
     msg=extend_message(msg,str2,event,2)
   end
   if [-1,9].include?(idx)
@@ -10066,7 +11308,7 @@ end
 def disp_stats_for_FGO(bot,event,args=[],srv=nil)
   srv=find_data_ex(:find_FGO_servant,event,args,nil,bot) if srv.nil?
   if srv.nil?
-    event.respond "No matches found."
+    event.respond nomf()
     return nil
   end
   if File.exist?("#{$location}devkit/FGOServants.txt")
@@ -10629,7 +11871,7 @@ def dev_flower_list(event,bot,args=[])
     create_embed(event,"__**#{f[0][0]}**__",'',f[0][2],nil,nil,x)
   else
     f=f.map{|q| [q[0],q[1]]}
-    create_embed(event,'__**Grail Projects**__','',0x008b8b,nil,nil,f)
+    create_embed(event,'__**Flower Projects**__','',0x008b8b,nil,nil,f)
   end
   return nil
 end
@@ -11103,12 +12345,12 @@ def dev_edit(bot,event,args=[],cmd='')
     $dev_units[dunit].cohort=$dev_units[dunit2].name
     $dev_units[dunit2].cohort=$dev_units[dunit].name
     ctype='cohort unit'
-    ctype='pocket buddy' if ['Sakura','Bernie'].include?(order[1].name)
+    ctype='pocket buddy' if ['Sakura','Bernie','Mirabilis'].include?(order[1].name)
     devunits_save()
     event.respond "Your **#{order[0].name}#{order[0].emotes(bot,false)}** is now using **#{order[1].name}#{order[1].emotes(bot,false)}** as a #{ctype}."
   elsif ['resplendant','resplendent','ascension','ascend','resplend'].include?(cmd.downcase)
     if !unt.hasResplendent?
-      event.respond "#{unt.name}#{untz.emotes(bot,false)} does not have a Resplendent Ascension available to them."
+      event.respond "#{unt.name}#{untz.emotes(bot,false)} does not have a Resplendent Ascension available to #{unt.pronoun}."
       return nil
     end
     r=$dev_units[dunit].resplendent
@@ -11170,7 +12412,8 @@ def new_donorunit(bot,event,id,xname,flurp=[])
   tbl=$donor_units.reject{|q| q.owner_id != id}
   x=tbl.find_index{|q| q.name==xname}
   unless x.nil?
-    event.respond "You already have a #{tbl[x].starDisplay(bot)} in your barracks."
+    event.respond "You already have a #{tbl[x].starDisplay(bot)} in your barracks." unless Shardizard==$spanishShard
+    event.respond "Ya tienes una #{tbl[x].starDisplay(bot)} en tu cuartel." if Shardizard==$spanishShard
     return nil
   end
   if File.exist?("#{$location}devkit/EliseUserSaves/#{id}.txt")
@@ -11197,14 +12440,17 @@ def new_donorunit(bot,event,id,xname,flurp=[])
   bob4.face=find_kiran_face(event).gsub(' ','') if bob4.name=='Kiran'
   tbl.push(bob4.clone)
   str="You have added a **#{bob4.creation_string(bot)}** to your collection."
+  str="Has añadido una **#{bob4.creation_string(bot)}** a tu colección." if Shardizard==$spanishShard
   p=bob4.pronoun(false)
-  str="#{str}\n#{p[0,1].upcase}#{p[1,p.length-1]} is currently using the #{bob4.face} portraits.  Use `FEH!edit KiranFace` to change that." if bob4.name=='Kiran'
+  str="#{str}\n#{p[0,1].upcase}#{p[1,p.length-1]} is currently using the #{bob4.face} portraits.  Use `FEH!edit KiranFace` to change that." if bob4.name=='Kiran' && Shardizard !=$spanishShard
+  str="#{str}\nActualmente está usando los retratos #{bob4.face}.  Usa `FEH!edit KiranFace` para cambiar eso." if bob4.name=='Kiran' && Shardizard==$spanishShard
   donorunits_save(id,tbl)
   event.respond str
   return nil
 end
 
 def donor_edit(bot,event,args=[],cmd='')
+  return editar_para_donantes(bot,event,args,cmd) if Shardizard==$spanishShard
   uid=event.user.id
   cmd='' if cmd.nil?
   if uid==167657750971547648
@@ -11540,7 +12786,7 @@ def donor_edit(bot,event,args=[],cmd='')
       dulx[dunit].support='B'
       donorunits_save(uid,dulx)
       event.respond "You've started dating #{dulx[dunit].name}#{dulx[dunit].emotes(bot,false)}!  (Support rank **#{dulx[dunit].support}**)"
-    elsif dulx.reject{|q| [nil,'','-',' '].include?(q.true_support)}.length>=3
+    elsif dulx.reject{|q| [nil,'','-',' '].include?(q.true_support)}.length>=5
       x=dulx.reject{|q| [nil,'','-',' '].include?(q.true_support)}.map{|q| "*#{q.name}#{q.emotes(bot,false)}*"}
       event.respond "You're already supporting #{list_lift(x,'and')}.\nPlease remove your support with one of these units first."
     else
@@ -11670,13 +12916,11 @@ def donor_edit(bot,event,args=[],cmd='')
     end
     dulx[dunit].cohort=dulx[dunit2].name
     dulx[dunit2].cohort=dulx[dunit].name
-    ctype='cohort unit'
-    ctype='pocket buddy' if ['Sakura','Bernie'].include?(order[1].name)
     donorunits_save(uid,dulx)
-    event.respond "Your **#{order[0].name}#{order[0].emotes(bot,false)}** is now using **#{order[1].name}#{order[1].emotes(bot,false)}** as a #{ctype}."
+    event.respond "Your **#{order[0].name}#{order[0].emotes(bot,false)}** is now using **#{order[1].name}#{order[1].emotes(bot,false)}** as a cohort unit."
   elsif ['resplendant','resplendent','ascension','ascend','resplend'].include?(cmd.downcase)
     if !unt.hasResplendent?
-      event.respond "#{unt.name}#{untz.emotes(bot,false)} does not have a Resplendent Ascension available to them."
+      event.respond "#{unt.name}#{untz.emotes(bot,false)} does not have a Resplendent Ascension available to #{unt.pronoun}."
       return nil
     end
     r=dulx[dunit].resplendent
@@ -11716,6 +12960,7 @@ def donor_edit(bot,event,args=[],cmd='')
 end
 
 def snagstats(event,bot,f=nil,f2=nil)
+  return snagstats_spanish(event,bot,f,f2) if Shardizard==$spanishShard
   nicknames_load()
   data_load(['units','skills','groups','tags','games'])
   metadata_load()
@@ -11724,15 +12969,15 @@ def snagstats(event,bot,f=nil,f2=nil)
   if ['servers','server','members','member','shard','shards','user','users'].include?(f.downcase)
     mx=Shards*1
     mx=f2.to_i if f2.to_i.to_s==f2 && event.user.id==167657750971547648
-    str="**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers.**"
+    str="**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} servers, reaching approximately #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} users.**"
     for i in 0...mx
       m=i
       m=i+1 if i>3
       m=4 if m>@server_data[0].length-1
-      str=extend_message(str,"The #{shard_data(0,true,mx)[i]} Shard is in #{longFormattedNumber(@server_data[0][m])} server#{"s" if @server_data[0][m]!=1}.",event)
+      str=extend_message(str,"The #{shard_data(0,true,mx)[i]} Shard is in #{longFormattedNumber(@server_data[0][m])} server#{"s" if @server_data[0][m]!=1}, reaching #{longFormattedNumber(@server_data[1][m])} users.",event)
     end
     if Shardizard==-1
-      bot.servers.values(&:members)
+      bot.servers.values(&:users)
       str=extend_message(str,"The Smol Shard is in 5 servers.",event)
     end
     str=extend_message(str,"The #{shard_data(0,false,mx)[4]} Shard is in 1 server.",event,2) if event.user.id==167657750971547648
@@ -11764,12 +13009,19 @@ def snagstats(event,bot,f=nil,f2=nil)
       untz2.push([untz[i].name,untz[i].alts.map{|q| q.gsub('*','')},m,n,untz[i].fake,untz[i].availability[0]])
       unless untz[i].duo.nil?
         for i2 in 0...untz[i].duo.length
-          m="#{untz[i].duo[i2][1]}"
           n=''
-          k=untz.reject{|q| q.alts[0].gsub('*','')!=m || q.name==untz[i].name || !(q.name==q.alts[0] || q.alts[0].include?('*'))}
+          if untz[i].duo[i2][1].include?('[')
+            m=untz[i].duo[i2][1].gsub(']','').split('[')
+            k=untz.reject{|q| q.alts.map{|q2| q2.gsub('*','')}!=m || q.name==untz[i].name || !(q.name==q.alts[0] || q.alts[0].include?('*'))}
+          else
+            m="#{untz[i].duo[i2][1]}"
+            k=untz.reject{|q| q.alts[0].gsub('*','')!=m || q.name==untz[i].name || !(q.name==q.alts[0] || q.alts[0].include?('*'))}
+          end
           n="x" if k.length<=0
           k=untz.reject{|q| q.availability[0].include?('-') || q.alts[0].gsub('*','')!=m || q.name==untz[i].name || !(q.name==q.alts[0] || q.alts[0].include?('*'))}
+          k=untz.reject{|q| q.availability[0].include?('-') || q.alts.map{|q2| q2.gsub('*','')}!=m || q.name==untz[i].name || !(q.name==q.alts[0] || q.alts[0].include?('*'))} if m.is_a?(Array)
           n="#{n}y" if k.length<=0
+          m="#{m[0]}[#{m[1,m.length-1].join('][')}]" if m.is_a?(Array)
           untz2.push([untz[i].name,[m],['Duo/Harmonic backpack'],n,untz[i].fake,untz[i].availability[0]])
         end
       end
@@ -11809,8 +13061,8 @@ def snagstats(event,bot,f=nil,f2=nil)
       k3.push("#{x}#{all_units[i][1][0]}#{x}") if !all_units[i][2].include?('faceted') && all_units[i][2].include?('Duo/Harmonic backpack') && all_units[i][3].include?('x')
     end
     k3.uniq!
-    k=k.reject{|q| k3.include?(q)}.uniq
-    k2=k2.reject{|q| [k,k3].flatten.include?(q)}.uniq
+    k=k.reject{|q| k3.include?(q) || q=='Unknown'}.uniq
+    k2=k2.reject{|q| [k,k3].flatten.include?(q) || q=='Unknown'}.uniq
     u=untz.find_index{|q| q.name=='Veronica'}
     unless u.nil?
       u=untz[u]
@@ -11818,9 +13070,10 @@ def snagstats(event,bot,f=nil,f2=nil)
     end
     x=2
     if k.length>0 || k2.length>0 || k3.length>0
-      str=extend_message(str,"The following characters have alts but not default units in FEH: #{list_lift(k.sort.map{|q| "*#{q}*"},"and")}.",event,2) if k.length>0
+      str=extend_message(str,'',event)
+      str=extend_message(str,"The following characters have alts but not default units in FEH: #{list_lift(k.sort.map{|q| "*#{q}*"},"and")}.",event) if k.length>0
       str=extend_message(str,"The following characters have playable alts but not playable default units in FEH: #{list_lift(k2.sort.map{|q| "*#{q}*"},"and")}.",event) if k2.length>0
-      str=extend_message(str,"The following characters are used as Duo/Harmonic backpacks, but have no base unit in FEH: #{list_lift(k3.sort.map{|q| "*#{q}*"},"and")}.",event) if k3.length>0
+      str=extend_message(str,"The following characters are used as Duo/Harmonic backpacks, but have no base unit in FEH: #{list_lift(k3.sort.reject{|q| q=='Unknown'}.map{|q| "*#{q}*"},"and")}.",event) if k3.length>0
       x=1
     end
     k=legal_units.map{|q| [q[1][0],0]}.uniq
@@ -12058,7 +13311,7 @@ def snagstats(event,bot,f=nil,f2=nil)
         y.push(z)
         y.flatten!
       elsif has_any?(z.map{|q| q.tags}.flatten,['Iron','Steel','Silver']) && z[-1].name.split(' ').length>1 && !z[0].restrictions.include?('Dragons Only')
-        z[-1].name="#{z.map{|q| q.name.split(' ')[0]}.join('/')} #{z[-1].name.split{' '}[1,z[-1].name.split{' '}.length-1].join(' ')}"
+        z[-1].name="#{z.map{|q| q.name.split(' ')[0]}.join('/')} #{z[-1].name.split(' ')[1,z[-1].name.split{' '}.length-1].join(' ')}"
         y.push(z[-1])
       else
         z[-1].name=z.map{|q| q.name}.join('/')
@@ -12331,7 +13584,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     event << "Of those, #{longFormattedNumber(b[1].length)} are SLOC (non-empty)."
     event << "~~When fully collapsed, I appear to be #{longFormattedNumber(b[3].reject{|q| q.length>0 && (q[0,2]=='  ' || q[0,3]=='end' || q[0,4]=='else')}.length)} lines of code long.~~"
     event << ''
-    event << "**I rely on multiple libraries that in total are #{longFormattedNumber(File.foreach("#{$location}devkit/rot8er_functs.rb").inject(0) {|c, line| c+1}+File.foreach("#{$location}devkit/EliseMulti1.rb").inject(0) {|c, line| c+1}+File.foreach("#{$location}devkit/EliseText.rb").inject(0) {|c, line| c+1})} lines of code long.**"
+    event << "**I rely on multiple libraries that in total are #{longFormattedNumber(File.foreach("#{$location}devkit/rot8er_functs.rb").inject(0) {|c, line| c+1}+File.foreach("#{$location}devkit/EliseClassFunctions.rb").inject(0) {|c, line| c+1})} lines of code long.**"
     event << "Of those, #{longFormattedNumber(b[2].length)} are SLOC (non-empty)."
     event << ''
     event << "**There are #{longFormattedNumber(b[0].reject{|q| q[0,12]!='bot.command('}.length)} commands, invoked with #{longFormattedNumber(all_commands().length)} different phrases.**"
@@ -12382,7 +13635,7 @@ def snagstats(event,bot,f=nil,f2=nil)
     k+=5 if Shardizard==0
     k=1 if Shardizard==4 # Debug shard shares the six emote servers with the main account
     @server_data[0][Shardizard]=k
-    @server_data[1][Shardizard]=bot.users.size
+    @server_data[1][Shardizard]=bot.users.length
     @server_data[0][4]=1
     metadata_save()
   end
@@ -12400,12 +13653,12 @@ def snagstats(event,bot,f=nil,f2=nil)
   extln=1
   extln=2 if safe_to_spam?(event)
   extln=2 if f.downcase=="all"
-  bot.servers.values(&:members)
-  str="**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} *servers*.**"
+  bot.servers.values(&:users)
+  str="**I am in #{longFormattedNumber(@server_data[0].inject(0){|sum,x| sum + x })} *servers*, reaching approximately #{longFormattedNumber(@server_data[1].inject(0){|sum,x| sum + x })} users.**"
   if Shardizard==-1
     str="#{str}\nThis Smol version is in 3 servers."
   else
-    str="#{str}\nThis shard is in #{longFormattedNumber(@server_data[0][Shardizard])} server#{"s" unless @server_data[0][Shardizard]==1}."
+    str="#{str}\nThis shard is in #{longFormattedNumber(@server_data[0][Shardizard])} server#{"s" unless @server_data[0][Shardizard]==1}, reaching #{longFormattedNumber(@server_data[1][Shardizard])} users."
   end
   str2="#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{legal_units.length}#{" (#{all_units.length})" unless legal_units.length==all_units.length} *units*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
   if safe_to_spam?(event) || f.downcase=="all"
@@ -12461,8 +13714,12 @@ def snagstats(event,bot,f=nil,f2=nil)
     str2="#{str2}\n#{longFormattedNumber(m.map{|q| q.name}.uniq.length)} Traps#{" with #{longFormattedNumber(m.length)} levels" unless m.map{|q| q.name}.uniq.length==m.length}"
     m=$structures.reject{|q| !q.type.include?('Resources')}
     str2="#{str2}\n#{longFormattedNumber(m.map{|q| q.name}.uniq.length)} Resource structures#{" with #{longFormattedNumber(m.length)} levels" unless m.map{|q| q.name}.uniq.length==m.length}"
+    m=$structures.reject{|q| !q.type.include?('Mjolnir')}
+    str2="#{str2}\n#{longFormattedNumber(m.map{|q| q.name}.uniq.length)} Mjolnir structures#{" with #{longFormattedNumber(m.length)} levels" unless m.map{|q| q.name}.uniq.length==m.length}"
     m=$structures.reject{|q| !q.type.include?('Ornament')}
     str2="#{str2}\n#{longFormattedNumber(m.map{|q| q.name}.uniq.length)} Ornaments#{" with #{longFormattedNumber(m.length)} levels" unless m.map{|q| q.name}.uniq.length==m.length}"
+    m=$structures.reject{|q| !q.type.include?('Resort')}
+    str2="#{str2}\n#{longFormattedNumber(m.map{|q| q.name}.uniq.length)} Resort structures#{" with #{longFormattedNumber(m.length)} levels" unless m.map{|q| q.name}.uniq.length==m.length}"
   end
   str=extend_message(str,str2,event,extln)
   str2="#{"**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}There are #{longFormattedNumber($itemus.length)} *items*#{", including:**" if safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}#{"." unless safe_to_spam?(event) || " #{event.message.text.downcase} ".include?(" all ")}"
