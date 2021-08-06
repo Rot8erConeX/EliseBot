@@ -14,7 +14,7 @@ Odd Recovery 1\Odd Recovery 2\Odd Recovery 3
 Live to Serve 3
 
 Bernie
-5\5\Speed\Attack\(S)\10
+5\6\Speed\Attack\(S)\10
 Iron Bow\Steel Bow\Silver Bow\Persecution Bow
 Draw Back
 New Moon\Luna\Aether
@@ -24,7 +24,7 @@ Close Guard 1\Close Guard 2\Close Guard 3
 Fierce Stance 3
 
 Mirabilis
-5\1\Defense\Speed\(S)\3
+5\1\Defense\Speed\(S)\4
 Iron Sword\Steel Sword\Silver Sword\Flower of Ease
 Dance\Whimsical Dream
 Chilling Wind\Iceberg
@@ -134,7 +134,7 @@ Spd Opening 1\Spd Opening 2\Spd Opening 3
 Atk/Spd Bond 2
 
 Sakura(Halloween)
-5\0\Defense\Speed\-\5
+5\0\Defense\Speed\-\6
 Iron Dagger\Steel Dagger\Kitty Paddle\Kitty Paddle+
 Rally Resistance\Rally Def/Res
 Chilling Wind\Glacies
@@ -435,10 +435,10 @@ Brazen Atk/Spd 3
 
 Fjorm
 5\2\Attack\HP\-\0
-Iron Lance\Steel Lance\Silver Lance\Leiptr\~~Leiptr (+) Effect Mode~~
+Iron Lance\Steel Lance\Silver Lance\Leiptr\Leiptr (+) Effect Mode
 Rally Attack\Rally Atk/Def
 Holy Vestments\Sacred Cowl\Ice Mirror\Ice Mirror II
-Warding Stance 1\Mirror Stance 1\Mirror Stance 2\~~Mirror Stance 3~~
+Warding Stance 1\Mirror Stance 1\Mirror Stance 2\Mirror Stance 3
 Shield Pulse 1\Shield Pulse 2\Shield Pulse 3
 Spur Atk 1\Drive Atk 1\Drive Atk 2
 Drive Def 2
@@ -464,7 +464,7 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Genny(Picnic)
-5\3\Attack\Resistance\-\7
+5\3\Attack\Resistance\-\8
 Assault\Toasty Skewer\Toasty Skewer+\Toasty Skewer+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Fireflood Balm\Fireflood Balm+
@@ -704,7 +704,7 @@ Spur Spd 1\Spur Spd/Res 1\Spur Spd/Res 2
 Spd/Res Solo 2
 
 Minerva(Retro)
-5\7\\\-\0
+5\8\\\-\0
 Iron Axe\Steel Axe\Silver Axe\Dragoon Axe
 Smite
 Dragon Gaze\Draconic Aura
@@ -712,6 +712,16 @@ Dragoon Shield
 Flier Formation 1\Flier Formation 2\Flier Formation 3
 Odd Atk Wave 1\Odd Atk Wave 2\Odd Atk Wave 3
 Even Res Wave 3
+
+Nifl
+5\1\Attack\HP\-\0
+Fire Breath\Fire Breath+\Flametongue\Frostbite Breath
+Rally Resistance
+~~none~~
+AR-D Atk/Spd 1\AR-D Atk/Spd 2\AR-D Atk/Spd 3\~~AR-D Atk/Spd 4~~
+Lull Atk/Spd 1\Lull Atk/Spd 2\Lull Atk/Spd 3
+Domain of Ice
+
 
 Ninian
 5\0\\\-\1
@@ -914,7 +924,7 @@ With Everyone!
 Atk Ploy 2
 
 Tiki(Young)(Fallen)
-5\0\Speed\Resistance\-\8
+5\0\Speed\Resistance\-\9
 Fire Breath\Fire Breath+\Flametongue\Razing Breath
 Swap
 Glowing Ember\Ignis

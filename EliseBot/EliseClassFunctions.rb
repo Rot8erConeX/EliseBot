@@ -86,7 +86,7 @@ def help_text(event,bot,command=nil,subcommand=nil)
   elsif ['attackicon','attackcolor','attackcolors','attackcolour','attackcolours','atkicon','atkcolor','atkcolors','atkcolour','atkcolours','atticon','attcolor','attcolors','attcolour','attcolours','staticon','statcolor','statcolors','statcolour','statcolours','iconcolor','iconcolors','iconcolour','iconcolours'].include?(command.downcase) || (['stats','stat'].include?(command.downcase) && ['color','colors','colour','colours'].include?("#{subcommand}".downcase))
     create_embed(event,"**#{command.downcase}#{" #{subcommand.downcase}" if ['color','colors','colour','colours'].include?("#{subcommand}".downcase)}**","Explains the reasoning behind the multiple Attack stat icons - <:StrengthS:514712248372166666> <:MagicS:514712247289774111> <:FreezeS:514712247474585610>",0xD49F61)
   elsif ['divine','devine','code','path'].include?(command.downcase)
-    create_embed(event,"**#{command.downcase}** __name__",'Shows all Divine Code paths that the unit named `name` can be found on.',0xD49F61)
+    create_embed(event,"**#{command.downcase}** __name__","If `name` is a unit, shows all Divine Code paths that the unit can be found on.\nIf `name` is a skill, shows all Divine Code paths the skill can be found on, as well as any feather costs to get that skill from the maunal that has it.\nIf `name` is blank, shows the Ephemera Divine Codes currently available.",0xD49F61)
   elsif ['struct','struncture'].include?(command.downcase)
     create_embed(event,"**#{command.downcase}** __name__",'Shows data on the Aether Raids or Mjolnir Strike structure named `name`.',0xD49F61)
   elsif ['aoe','area'].include?(command.downcase)
@@ -1035,6 +1035,44 @@ class FEHSkill
     return true
   end
   
+  def learn_by_path(event,list=true)
+    xf=@learn.map{|q| q.map{|q2| $units.find_index{|q3| q3.name==q2}}.compact.map{|q2| $units[q2]}.reject{|q2| !q2.isPostable?(event)}}
+    x=xf.flatten
+    m=[[],[]]
+    p=$paths.reject{|q| !q.showMatches(x).include?(true)}
+    for i in 0...p.length
+      z=0; z=1 unless p[i].isAvailable?; z+=2 if p[i].ephemera>-1
+      fmt=['**','','**','~~'][z]
+      p2=p[i].showMatches(x)
+      str=[]
+      for i2 in 0...p2.length
+        if p2[i2]
+          str2=p[i].codes[i2].unit_name
+          v1=p[i].codes[i2].rarity
+          v2=xf.map{|q| q.map{|q2| q2.name}}.find_index{|q| q.include?(p[i].codes[i2].unit_name)}+1
+          str2="#{str2} - #{p[i].codes[i2].dispCost}" unless p[i].ephemera>-1 && !p[i].isAvailable?
+          str2="#{p[i].eMonth}: #{str2}" if p[i].ephemera>-1
+          str2="#{fmt}#{str2}#{fmt.reverse}"
+          str2="#{str2} (#{p[i].totalCost(i2+1)}#{' en' if Shardizard==$spanishShard} total)" unless i2==0
+          if v1<v2 && !(p[i].ephemera>-1 && !p[i].isAvailable?)
+            v3=0
+            for i3 in v1...v2
+              v3+=2*(10**i3)
+            end
+            str2="#{str2}#{fmt}, #{longFormattedNumber(v3)}<:Hero_Feather:471002465542602753>#{fmt.reverse}".gsub("#{fmt.reverse}#{fmt}",'')
+          end
+          str.push(str2)
+        end
+      end
+      str=str.join(" #{fmt}/#{fmt.reverse} ")
+      m[z/2].push(str)
+    end
+    m=[['Normal',"#{m[0].join("\n")}",1],['Ephemera',"#{m[1].join("\n")}"]]
+    m[1][0]='Efímero' if Shardizard==$spanishShard
+    m=m.reject{|q| q[1].gsub("\n",'').length<=0}
+    return m
+  end
+  
   def learn_by_color(event,list=true)
     x=@learn.map{|q| q.map{|q2| $units.find_index{|q3| q3.name==q2}}.compact.map{|q2| $units[q2]}.reject{|q2| !q2.isPostable?(event)}}
     y=[[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
@@ -1057,16 +1095,22 @@ class FEHSkill
     x2=['<:Orb_Red:455053002256941056> Red','<:Orb_Blue:455053001971859477> Blue','<:Orb_Green:455053002311467048> Green','<:Orb_Colorless:455053002152083457> Colorless']
     x3=['Summonables','PartSummons','Limited']
     x4=['<:Orb_Gold:455053002911514634> Unattached','','','','','','','','','','','','','<:Orb_Pink:549339019318788175> Free units']
+    if Shardizard==$spanishShard
+      x2=['<:Orb_Red:455053002256941056> Rojos','<:Orb_Blue:455053001971859477> Azules','<:Orb_Green:455053002311467048> Verdes','<:Orb_Colorless:455053002152083457> Grises']
+      x3=['Convocadables','Convocatorias Parciales','Limitados']
+      x4=['<:Orb_Gold:455053002911514634> Sin adjuntar','','','','','','','','','','','','','<:Orb_Pink:549339019318788175> Personajes libres']
+    end
     for i in 0...x2.length
       for i2 in 0...x3.length
         x4[1+i+4*i2]="#{x2[i]} #{x3[i2]}"
+        x4[1+i+4*i2]="#{x2[i].split(' ')[0]} #{x3[i2]} #{x2[i].split(' ')[1]}" if Shardizard==$spanishShard
       end
     end
     x2=[]
     for i in 0...y.length
       if list
         x4[i]=x4[i][0,x4[i].length-1] if x4[i][-1]=='s'
-        x4[i]="#{x4[i]} unit" unless x4[i].include?('unit')
+        x4[i]="#{x4[i]} unit" unless x4[i].include?('unit') || Shardizard==$spanishShard
         x2.push([x4[i],y[i]]) unless y[i].length<=0
       else
         x2.push("*#{x4[i]}:* #{y[i].join(', ')}") unless y[i].length<=0
@@ -1156,6 +1200,10 @@ class FEHSkill
     end
     m.flatten!; m.uniq!
     f=m.length*100.0/k.length
+    if Shardizard==$spanishShard
+      return "#{'%.2f' % f}% (#{m.length}/#{k.length}) de la lista jugable" if !event.nil? && safe_to_spam?(event)
+      return "#{'%.2f' % f}% de la lista jugable"
+    end
     return "#{'%.2f' % f}% (#{m.length}/#{k.length}) of playable roster" if !event.nil? && safe_to_spam?(event)
     return "#{'%.2f' % f}% of playable roster"
   end
@@ -1654,6 +1702,7 @@ class FEHEvent
   def fullName
     @type='Voting Gauntlet' if @type=='VG'
     @type='Bound Hero Battle' if @type=='BHB'
+    @type='[false] Bound Hero Battle' if @type=='fBHB'
     @type='Grand Hero Battle' if @type=='GHB'
     @type='Legendary Hero Battle' if @type=='LHB'
     @type='Limited Hero Battle' if @type=='LmHB'
@@ -1673,6 +1722,7 @@ class FEHEvent
     if Shardizard==$spanishShard
       t='Torneo de votos' if @type=='Voting Gauntlet'
       t='Batalla de vínculos' if @type=='Bound Hero Battle'
+      t='Batalla de vínculos [falsos]' if @type=='[false] Bound Hero Battle'
       t='Batalla Mítica' if @type=='Grand Hero Battle'
       t='Batalla Legendaria' if @type=='Legendary Hero Battle'
       t='Batalla Limitada' if @type=='Limited Hero Battle'
@@ -1909,6 +1959,15 @@ class FEHPath
     return false
   end
   
+  def showMatches(arr=[])
+    arr=arr.map{|q| q.name} if arr[0].is_a?(FEHUnit)
+    m=[]
+    for i in 0...@codes.length
+      m.push(arr.include?(@codes[i].unit_name))
+    end
+    return m
+  end
+  
   def totalCost(len=0)
     return 'Free' if @codes.length<=0
     m=[]
@@ -1930,6 +1989,18 @@ class FEHPath
   def proper_name
     return self.spanish_name if Shardizard==$spanishShard
     return @name
+  end
+  
+  def batch
+    return -1 if self.ephemera>-1
+    return @name.split(')')[0].gsub('(','').to_i
+  end
+  
+  def isAvailable?
+    return true if self.ephemera>-1 && self.isCurrent?
+    return true if self.ephemera>-1 && self.isFuture?
+    return false if self.ephemera>-1
+    return self.batch==$paths.map{|q| q.batch}.max
   end
 end
 
@@ -4996,7 +5067,7 @@ def make_random_unit(event,args,bot)
     colors.push('Colorless') if ['colorless','colourless','clear','clears'].include?(args[i].downcase)
     weapons.push('Blade') if ['physical','blade','blades','close','closerange','melee'].include?(args[i].downcase)
     weapons.push('Tome') if ['tome','mage','magic','spell','tomes','mages','spells','range','ranged','distance','distant'].include?(args[i].downcase)
-    weapons.push('Breath') if ['dragon','dragons','breath','manakete','manaketes','close','closerange','melee'].include?(args[i].downcase)
+    weapons.push('Dragon') if ['dragon','dragons','breath','manakete','manaketes','close','closerange','melee'].include?(args[i].downcase)
     weapons.push('Bow') if ['bow','arrow','bows','arrows','archer','archers','range','ranged','distance','distant'].include?(args[i].downcase)
     weapons.push('Dagger') if ['dagger','shuriken','knife','daggers','knives','ninja','ninjas','thief','thieves','range','ranged','distance','distant'].include?(args[i].downcase)
     weapons.push('Healer') if ['healer','staff','cleric','healers','clerics','staves','range','ranged','distance','distant'].include?(args[i].downcase)
@@ -5031,10 +5102,10 @@ def make_random_unit(event,args,bot)
     end
   end
   if color_weapons.length<=0
-    color_weapons=[['Red','Blade'],  ['Red','Tome'],      ['Red','Breath'],      ['Red','Bow'],      ['Red','Dagger'],      ['Red','Beast'],
-                   ['Blue','Blade'], ['Blue','Tome'],     ['Blue','Breath'],     ['Blue','Bow'],     ['Blue','Dagger'],     ['Blue','Beast'],
-                   ['Green','Blade'],['Green','Tome'],    ['Green','Breath'],    ['Green','Bow'],    ['Green','Dagger'],    ['Green','Beast'],
-                                     ['Colorless','Tome'],['Colorless','Breath'],['Colorless','Bow'],['Colorless','Dagger'],['Colorless','Beast']]
+    color_weapons=[['Red','Blade'],  ['Red','Tome'],      ['Red','Dragon'],      ['Red','Bow'],      ['Red','Dagger'],      ['Red','Beast'],
+                   ['Blue','Blade'], ['Blue','Tome'],     ['Blue','Dragon'],     ['Blue','Bow'],     ['Blue','Dagger'],     ['Blue','Beast'],
+                   ['Green','Blade'],['Green','Tome'],    ['Green','Dragon'],    ['Green','Bow'],    ['Green','Dagger'],    ['Green','Beast'],
+                                     ['Colorless','Tome'],['Colorless','Dragon'],['Colorless','Bow'],['Colorless','Dagger'],['Colorless','Beast']]
     color_weapons.push(['Colorless', 'Blade']) if $units.reject{|q| q.weapon[0,2]!=['Colorless','Blade']}.length>0
     unless event.message.text.downcase.split(' ').include?('singer') || event.message.text.downcase.split(' ').include?('dancer')
       if $units.reject{|q| q.weapon_type != 'Healer' || q.weapon_color=='Colorless'}.length>0
@@ -5089,38 +5160,81 @@ def make_random_unit(event,args,bot)
   elsif event.message.text.downcase.split(' ').include?('music') || event.message.text.downcase.split(' ').include?('musical')
     clazz2.push(['Dancer','Singer','Bard'].sample)
     l1_total-=8
-  elsif event.message.text.downcase.split(' ').include?('nonmusical')
-  elsif event.message.text.downcase.split(' ').include?('non-musical')
+  elsif event.message.text.downcase.split(' ').include?('nonmusical') || event.message.text.downcase.split(' ').include?('non-musical')
   elsif clazz[1]!='Healer' && rand(10).zero?
     clazz2.push(['Dancer','Singer','Bard'].sample)
     l1_total-=8
   end
   zzz=rand(100)
   zzz=rand(1000) if clazz2.include?('Trainee') || clazz2.include?('Veteran')
-  if ['Dancer','Singer'].include?(clazz2)
-  elsif args.include?('gen3')
+  maxgens=5
+  gen=zzz*maxgens/100+1
+  for i in 0...maxgens
+    gen=i+1 if args.include?("gen#{i+1}")
+  end
+  gp_total-=1 if ['Dancer','Singer','Bard'].include?(clazz2) && gen>3
+  # certain classes do not exist in Gen 5 yet
+  gen=4 if gen=5 && ['Armor'].include?(mov) && ['Tome', 'Healer', 'Bow', 'Dagger'].include?(clazz[1])
+  gen=4 if gen=5 && ['Cavalry'].include?(mov) && ['Bow', 'Dagger'].include?(clazz[1])
+  if gen==5
     clazz2.push('Gen 3')
+    l1_total-=2 if ['Flier'].include?(mov)
+    gp_total-=1 if ['Flier'].include?(mov)
     if ['Tome', 'Healer'].include?(clazz[1]) # magical ranged
       l1_total+=2
-      l1_total-=1 if ['Cavalry'].include?(mov)
+      l1_total-=4 if ['Cavalry'].include?(mov)
+      gp_total+=3
+      gp_total-=2 if ['Cavalry'].include?(mov)
+    elsif ['Bow', 'Dagger'].include?(clazz[1]) # physical ranged
+      l1_total+=3
+      gp_total+=5
+    else # melee
+      l1_total+=6 unless ['Cavalry'].include?(mov)
+      l1_total+=4 if ['Armor'].include?(mov)
+      gp_total+=6
+      gp_total+=2 if ['Armor'].include?(mov)
+      gp_total-=1 if ['Cavalry'].include?(mov)
+    end
+  elsif gen==4
+    clazz2.push('Gen 4')
+    l1_total+=5 if ['Armor'].include?(mov)
+    l1_total-=2 if ['Flier'].include?(mov)
+    l1_total-=4 if ['Cavalry'].include?(mov)
+    gp_total+=1 if ['Armor'].include?(mov)
+    gp_total-=3 if ['Cavalry'].include?(mov)
+    gp_total-=2 if ['Flier'].include?(mov)
+    if ['Tome', 'Healer'].include?(clazz[1]) # magical ranged
+      gp_total+=2
+      gp_total+=2 if ['Cavalry'].include?(mov)
+    elsif ['Bow', 'Dagger'].include?(clazz[1]) # physical ranged
+      l1_total+=1
+      gp_total+=4
+    else # melee
+      l1_total+=4
+      l1_total+=1 if ['Flier'].include?(mov)
+      gp_total+=5
+    end
+  elsif gen==3
+    clazz2.push('Gen 3')
+    l1_total-=1 if ['Cavalry'].include?(mov)
+    if ['Tome', 'Healer'].include?(clazz[1]) # magical ranged
+      l1_total+=2
       l1_total-=2 if ['Flier'].include?(mov)
       gp_total+=3
       gp_total-=4 if ['Cavalry'].include?(mov)
       gp_total-=2 if ['Flier'].include?(mov)
     elsif ['Bow', 'Dagger'].include?(clazz[1]) # physical ranged
       l1_total+=2
-      l1_total-=1 if ['Cavalry'].include?(mov)
       gp_total+=3
       gp_total-=1 if ['Cavalry'].include?(mov)
     else # melee
-      l1_total+=2
-      l1_total-=1 if ['Cavalry','Flier'].include?(mov)
-      l1_total-=1 if 'Flier'!=mov
+      l1_total+=1
       gp_total+=2
       gp_total+=2 if ['Infantry'].include?(mov)
       gp_total-=1 if ['Cavalry'].include?(mov)
     end
-  elsif args.include?('gen2')
+  elsif ['Dancer','Singer','Bard'].include?(clazz2)
+  elsif gen==2
     clazz2.push('Gen 2')
     l1_total+=1
     l1_total-=1 if ['Cavalry','Flier'].include?(mov)
@@ -5128,43 +5242,12 @@ def make_random_unit(event,args,bot)
     gp_total+=2
     gp_total-=1 if ['Cavalry'].include?(mov)
     gp_total-=1 if ['Tome', 'Bow', 'Dagger', 'Healer'].include?(clazz[1]) && 'Armor'!=mov
-  elsif args.include?('gen1')
-  elsif zzz<67
-    clazz2.push('Gen 3')
-    if ['Tome', 'Healer'].include?(clazz[1]) # magical ranged
-      l1_total+=2
-      l1_total-=1 if ['Cavalry'].include?(mov)
-      l1_total-=2 if ['Flier'].include?(mov)
-      gp_total+=3
-      gp_total-=4 if ['Cavalry'].include?(mov)
-      gp_total-=2 if ['Flier'].include?(mov)
-    elsif ['Bow', 'Dagger'].include?(clazz[1]) # physical ranged
-      l1_total+=2
-      l1_total-=1 if ['Cavalry'].include?(mov)
-      gp_total+=3
-      gp_total-=1 if ['Cavalry'].include?(mov)
-    else # melee
-      l1_total+=2
-      l1_total-=1 if ['Cavalry','Flier'].include?(mov)
-      l1_total-=1 if 'Flier'!=mov
-      gp_total+=2
-      gp_total+=2 if ['Infantry'].include?(mov)
-      gp_total-=1 if ['Cavalry'].include?(mov)
-    end
-  elsif zzz<33
-    clazz2.push('Gen 2')
-    l1_total+=1
-    l1_total-=1 if ['Cavalry','Flier'].include?(mov)
-    l1_total-=1 if 'Flier'!=mov
-    gp_total+=2
-    gp_total-=1 if ['Cavalry'].include?(mov)
-    gp_total-=1 if ['Tome','Bow','Dagger','Healer'].include?(clazz[1]) && 'Armor'!=mov
   end
   gp_total+=15
   name=get_bond_name(event)
-  mods=[[ 0, 0, 0, 0, 0, 0, 0],[ 1, 1, 1, 1, 1, 1, 2],[ 2, 3, 3, 3, 3, 4, 4],[ 4, 4, 5, 5, 6, 6, 7],[ 5, 6, 7, 7, 8, 8, 9],[ 7, 8, 8, 9,10,10,11],[ 8, 9,10,11,12,13,14],
-        [10,11,12,13,14,15,16],[12,13,14,15,16,17,18],[13,14,15,17,18,19,21],[15,16,17,19,20,22,23],[16,18,19,21,22,24,25],[18,19,21,23,24,26,28],[19,21,23,25,26,28,30],
-        [21,23,25,27,28,30,32],[23,24,26,29,31,33,35],[24,26,28,31,33,35,37],[26,28,30,33,35,37,39],[27,30,32,35,37,39,42],[29,31,34,37,39,42,44],[30,33,36,39,41,44,47]]
+  mods=[[ 0, 0, 0, 0, 0, 0, 0],[ 1, 1, 1, 1, 1, 1, 2],[ 2, 3, 3, 3, 3, 4, 4],[ 4, 4, 5, 5, 6, 6, 7],[ 5, 6, 7, 7, 8, 8, 9],[ 7, 8, 8, 9,10,10,11],[ 8, 9,10,11,12,13,14],[10,11,12,13,14,15,16],
+        [12,13,14,15,16,17,18],[13,14,15,17,18,19,21],[15,16,17,19,20,22,23],[16,18,19,21,22,24,25],[18,19,21,23,24,26,28],[19,21,23,25,26,28,30],[21,23,25,27,28,30,32],[23,24,26,29,31,33,35],
+        [24,26,28,31,33,35,37],[26,28,30,33,35,37,39],[27,30,32,35,37,39,42],[29,31,34,37,39,42,44],[30,33,36,39,41,44,47]]
   stats=[0,0,0,0,0]
   gps=[0,0,0,0,0]
   stats[0]=10+rand(16)
@@ -5283,37 +5366,13 @@ def disp_current_banners(event,bot,str='',returnlist=false,mode=0)
     end
   end
   if [0,3,4].include?(mode) && !returnlist
-    book1=["Celica, Delthea, Genny",
-           "Eirika(Memories), Hector(Brave), Myrrh",
-           "Julia, Nephenee, Sigurd",
-           "Hinoka(Wings), Kana(F), Siegbert",
-           "Hector, Lyn, Lyn(Brave)",
-           "Chrom(Branded), Maribelle, Sumia",
-           "Ike, Ike(Brave), Mist",
-           "Ishtar, Lene, Robin(M)(Fallen)",
-           "Julia, Lucina, Lucina(Brave)",
-           "Celica(Brave), Ephraim(Brave), Veronica(Brave)",
-           "Hinoka, Ryoma, Takumi",
-           "Hardin(Fallen), Olwen(World), Reinhardt(World)",
-           "Genny, Katarina, Minerva",
-           "Hector(Brave), Karla, Nino(Fangs)",
-           "Alm, Delthea, Faye",
-           "Morgan(F), Olivia(Traveler), Robin(M)(Fallen)",
-           "Amelia, Ayra, Olwen(Bonds)",
-           "Leif, Rhajat, Shiro",
-           "Lyn(Brave), Ninian, Roy(Brave)",
-           "Dorcas, Lute, Mia",
-           "Hector, Luke, Tana",
-           "Linde, Saber, Sonya",
-           "Azura, Deirdre, Eldigan",
-           "Ephraim, Jaffar, Karel",
-           "Elincia, Innes, Tana",
-           "Amelia, Nephenee, Sanaki",
-           "Gray, Ike(Brave), Lucina(Brave)",
-           "Azura, Elise, Leo",
-           "Celica(Fallen), Ephraim(Brave), Hardin(Fallen)",
-           "Deirdre, Linde, Tiki(Young)",
-           "Micaiah, Veronica(Brave), Zelgius"]
+    book1=["Keaton, Selkie, Velouria","Elincia, Innes, Tana","Lewyn, Owain, Quan","Amelia, Nephenee, Sanaki","Mikoto, Ophelia, Tibarn","Gray, Ike(Brave), Lucina(Brave)","Kliff, Loki, Surtr",
+           "Azura, Elise, Leo","Kaden, Nailah, Velouria","Celica(Fallen), Ephraim(Brave), Hardin(Fallen)","Deirdre, Linde, Tiki(Young)","Micaiah, Veronica(Brave), Zelgius","Celica, Delthea, Genny",
+           "Eirika(Memories), Hector(Brave), Myrrh","Julia, Nephenee, Sigurd","Hinoka(Wings), Kana(F), Siegbert","Hector, Lyn, Lyn(Brave)","Chrom(Branded), Maribelle, Sumia","Ike, Ike(Brave), Mist",
+           "Ishtar, Lene, Robin(M)(Fallen)","Julia, Lucina, Lucina(Brave)","Celica(Brave), Ephraim(Brave), Veronica(Brave)","Hinoka(Launch), Ryoma, Takumi",
+           "Hardin(Fallen), Olwen(World), Reinhardt(World)","Genny, Katarina, Minerva","Hector(Brave), Karla, Nino(Fangs)","Alm, Delthea, Faye","Morgan(F), Olivia(Traveler), Robin(M)(Fallen)",
+           "Amelia, Ayra, Olwen(Bonds)","Leif, Rhajat, Shiro","Lyn(Brave), Ninian, Roy(Brave)","Helbindi, Laevatein, Loki","Dorcas, Lute, Mia","Flora, Nina, Ophelia","Hector, Luke, Tana",
+           "Leanne, Nailah, Tibarn","Linde, Saber, Sonya","Laegjarn, Surtr, Ylgr","Azura, Deirdre, Eldigan","Camilla(Adrift), Corrin(F)(Adrift), Corrin(M)(Adrift)","Ephraim, Jaffar, Karel"]
     t2=Time.new(2017,2,2)-60*60
     t2=t-t2
     date=(((t2.to_i/60)/60)/24)
@@ -5321,8 +5380,8 @@ def disp_current_banners(event,bot,str='',returnlist=false,mode=0)
     f=book1[week_from(date,3)%book1.length].split(', ')
     f=f.map{|q| $units.find_index{|q2| q2.name==q}}.compact.map{|q| $units[q]}
     f=f.map{|q| "#{q.name}#{q.emotes(bot,false)}"}
-    str=extend_message(str,"__**#{['Current','','','Current','Upcoming'][mode]} Book 1+2 Revival Units**__\n#{f.join(', ')}",event,2) unless Shardizard==$spanishShard
-    str=extend_message(str,"__**Personajes#{[' Actuales','','',' Actuales',' Próximas'][mode]} del Renacimiento de los Libros 1+2**__\n#{f.join(', ')}",event,2) if Shardizard==$spanishShard
+    str=extend_message(str,"__**#{['Current','','','Current','Upcoming'][mode]} Revival Units**__\n#{f.join(', ')}",event,2) unless Shardizard==$spanishShard
+    str=extend_message(str,"__**Personajes#{[' Actuales','','',' Actuales',' Próximas'][mode]} del Renacimiento**__\n#{f.join(', ')}",event,2) if Shardizard==$spanishShard
   end
   x=$banners.reject{|q| !q.isFuture?}.reverse
   return str if returnlist && mode==1
@@ -5364,7 +5423,7 @@ def disp_current_events(event,bot,mode=0,shift=false)
   b=$events.reject{|q| !q.startsTomorrow?} if mode==2
   str="__**#{['Current ','Upcoming '][mode] if mode<2}Events#{' starting tomorrow' if mode==2}#{', as of tomorrow' if shift && mode==0}**__"
   str="__**#{'Próximos ' if mode==1}Eventos#{' Actuales' if mode==0}#{' que comienzan mañana' if mode==2}#{', a partir de mañana' if shift && mode==0}**__" if Shardizard==$spanishShard
-  mdfr=['left','from now'][mode]
+  mdfr=[' left',' from now'][mode]
   mdfr='' if Shardizard==$spanishShard
   mdfr2=['Quedan ','en '][mode]
   mdfr2='' unless Shardizard==$spanishShard
@@ -5415,7 +5474,7 @@ def disp_current_paths(event,bot,mode=0,shift=false)
     str=str="__**#{['','Próximos '][mode] if mode<2}Caminos Efímero#{[' Actuales',''][mode] if mode<2}#{' empezando mañana' if mode==2}#{', a partir de mañana' if shift && mode==0}**__"
     str=str="__**#{['','Próximos '][mode] if mode<2}Caminos Efímero#{[' Actuales',''][mode] if mode<2}**__" if mode<0
   end
-  mdfr=['','left','from now'][0-mode]
+  mdfr=['',' left',' from now'][0-mode]
   mdfr='' if Shardizard==$spanishShard
   mdfr2=['','Quedan ','en '][0-mode]
   mdfr2='' unless Shardizard==$spanishShard
@@ -5515,14 +5574,16 @@ def avail_text(fgg='',includegrails=false,unt=nil,mode=0)
         summon_type[7].push("#{m}<:Icon_Rarity_Forma:699042072526585927> Alma Quimérica") if fgg.include?("#{m}o")
         summon_type[7].push("#{m}#{Rarity_stars[0][m-1]} personaje de la historia") if fgg.include?("#{m}y")
         summon_type[7].push("Comprable a #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}b")
-        summon_type[7].push("Grail summon at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}r")
+        summon_type[7].push("Camino Divino #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}a")
+        summon_type[7].push("convocar a #{m}#{Rarity_stars[0][m-1]} con Griales") if fgg.include?("#{m}r")
       else
         summon_type[7].push("#{m}<:Icon_Rarity_Forma:699042072526585927> Forma Soul") if fgg.include?("#{m}o")
         summon_type[7].push("Story unit starting at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}y")
         summon_type[7].push("Purchasable at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}b")
+        summon_type[7].push("#{m}#{Rarity_stars[0][m-1]} Divine Code") if fgg.include?("#{m}a")
         summon_type[7].push("Grail summon at #{m}#{Rarity_stars[0][m-1]}") if fgg.include?("#{m}r")
       end
-      lowest_rarity=[lowest_rarity,m].min if fgg.include?("#{m}d") || fgg.include?("#{m}g") || fgg.include?("#{m}f") || fgg.include?("#{m}q") || fgg.include?("#{m}t") || fgg.include?("#{m}s") || fgg.include?("#{m}p") || fgg.include?("#{m}o") || fgg.include?("#{m}y") || fgg.include?("#{m}b") || fgg.include?("#{m}r")
+      lowest_rarity=[lowest_rarity,m].min if fgg.include?("#{m}d") || fgg.include?("#{m}g") || fgg.include?("#{m}f") || fgg.include?("#{m}q") || fgg.include?("#{m}t") || fgg.include?("#{m}s") || fgg.include?("#{m}p") || fgg.include?("#{m}o") || fgg.include?("#{m}y") || fgg.include?("#{m}b") || fgg.include?("#{m}r") || fgg.include?("#{m}a")
     end
     summon_type[7].push("~~Unavailable on New/Special Heroes banners~~") if fgg.include?('TD') && !unt.nil? && unt.id>318 && Shardizard != $spanishShard
     summon_type[7].push("~~No disponible en nuevos banners~~") if fgg.include?('TD') && !unt.nil? && unt.id>318 && Shardizard==$spanishShard
@@ -5664,6 +5725,8 @@ def banner_list(event,bot,args=[],xname=nil)
     str="#{"__**First appeared as**__\n#{ffgg.join("\n")}\n\n" if ffgg.length>0}__**Joined the summon pool during:**__\n#{unit.availability[1,unit.availability.length-1].join(', ')}"
     str="#{"__**Primera impresión**__\n#{ffgg.join("\n")}\n\n" if ffgg.length>0}__**Se unió al grupo de invocación:**__\n#{unit.availability[1,unit.availability.length-1].join(', ')}" if Shardizard==$spanishShard
   end
+  pth=$paths.reject{|q| !q.hasUnit?(unit)}.map{|q| q.codes}.flatten.reject{|q| q.unit_name != unit.name}
+  otherstr="#{otherstr}#{pth.map{|q| "#{q.rarity}a"}.join('')}"
   otherstr=avail_text(otherstr) if otherstr.length>0
   if str.length<=0 && bnrz.length>0
     x=bnrz[0].clone
@@ -5676,7 +5739,9 @@ def banner_list(event,bot,args=[],xname=nil)
       str="#{str}\n__*#{x.name}*__\n#{x.description(unit,5*star_buff)}"
     end
   elsif str.length<=0
-    ffgg=avail_text(unit.availability[0],true,unit)
+    otherstr=unit.availability[0]
+    otherstr="#{otherstr}#{pth.map{|q| "#{q.rarity}a"}.join('')}"
+    ffgg=avail_text(otherstr,true,unit)
     str=">No banners found<"
     str=">No se encontraron pancartas<" if Shardizard==$spanishShard
     str="#{str}\n\n#{ffgg.join("\n")}" unless ffgg.length<=0
@@ -8027,7 +8092,12 @@ def path_data(bot,event,args=[],xname=nil)
   x=find_data_ex(:find_unit,event,args,xname,bot,true)
   data_load(['unit','path'])
   if x.nil?
-    disp_current_paths(event,bot,-1)
+    x=find_data_ex(:find_skill,event,args,xname,bot,true)
+    if x.nil?
+      disp_current_paths(event,bot,-1)
+    else
+      disp_skill_data(bot,event,x.fullName,1,true)
+    end
     return nil
   elsif x.is_a?(Array)
     for i in 0...x.length
@@ -10086,6 +10156,8 @@ def unit_study(bot,event,args=[],xname=nil)
   if unit.is_a?(Array) && (unit.map{|q| q.name}.reject{|q| ['Robin(M)','Robin(F)'].include?(q)}.length<=0 || unit.map{|q| q.name}.reject{|q| ['Kris(M)','Kris(F)'].include?(q)}.length<=0)
     unit=unit.sort{|a,b| a.name<=>b.name}
     atext=unit[1].availability[0]
+    pth=$paths.reject{|q| !q.hasUnit?(unit[1])}.map{|q| q.codes}.flatten.reject{|q| q.unit_name != unit[1].name}
+    atext="#{atext}#{pth.map{|q| "#{q.rarity}a"}.join('')}"
     unit=unit[0].clone
     unit.name="#{unit.name.split('(')[0]} (shared stats)"
   elsif unit.is_a?(Array)
@@ -10187,7 +10259,10 @@ def unit_study(bot,event,args=[],xname=nil)
     text2=''
   end
   imp=[Max_rarity_merge[1]]; lowest_rarity=5
-  if atext.length>0 && avail_text(unit.availability[0],true,unit,2)!=avail_text(atext,true,unit,2)
+  otherstr=unit.availability[0]
+  pth=$paths.reject{|q| !q.hasUnit?(unit)}.map{|q| q.codes}.flatten.reject{|q| q.unit_name != unit.name}
+  otherstr="#{otherstr}#{pth.map{|q| "#{q.rarity}a"}.join('')}"
+  if atext.length>0 && avail_text(otherstr,true,unit,2)!=avail_text(atext,true,unit,2)
     m=avail_text(atext,true,unit,2)
     imp.push(m[2]) unless [imp,0].flatten.include?(m[2])
     lowest_rarity=[lowest_rarity,m[3]].min
@@ -10201,7 +10276,7 @@ def unit_study(bot,event,args=[],xname=nil)
       text="#{text}\n\n**Female**"
     end
   end
-  m=avail_text(unit.availability[0],true,unit,2)
+  m=avail_text(otherstr,true,unit,2)
   imp.push(m[2]) unless [imp,0].flatten.include?(m[2])
   lowest_rarity=[lowest_rarity,m[3]].min
   if text.include?('**Female**')
@@ -10870,7 +10945,7 @@ def date_display(event,t,shift=false)
   end
   if event.user.id==167657750971547648 && Shardizard==4
     str="#{str}\n#{"Tomorrow's d" if shift}#{'D' unless shift}aycycles: #{date%5+1}/5 - #{date%7+1}/7 - #{date%12+1}/12"
-    str="#{str}\n#{"Tomorrow's w" if shift}#{'W' unless shift}eekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday) - #{week_from(date,3)%31+1}/31(Sunday)"
+    str="#{str}\n#{"Tomorrow's w" if shift}#{'W' unless shift}eekcycles: #{week_from(date,3)%4+1}/4(Sunday) - #{week_from(date,2)%6+1}/6(Saturday) - #{week_from(date,0)%12+1}/12(Thursday) - #{week_from(date,3)%41+1}/41(Sunday)"
   end
   return str
 end
@@ -10944,18 +11019,19 @@ def today_in_feh(event,bot,shift=false,chain='')
   if safe_to_spam?(event)
     b=disp_current_banners(event,bot,'',true,1)
     str=extend_message(str,b,event,2) unless shift || chain.length>0
-    book1=["Celica, Delthea, Genny","Eirika(Memories), Hector(Brave), Myrrh","Julia, Nephenee, Sigurd","Hinoka(Wings), Kana(F), Siegbert","Hector, Lyn, Lyn(Brave)",
-           "Chrom(Branded), Maribelle, Sumia","Ike, Ike(Brave), Mist","Ishtar, Lene, Robin(M)(Fallen)","Julia, Lucina, Lucina(Brave)","Celica(Brave), Ephraim(Brave), Veronica(Brave)",
-           "Hinoka, Ryoma, Takumi","Hardin(Fallen), Olwen(World), Reinhardt(World)","Genny, Katarina, Minerva","Hector(Brave), Karla, Nino(Fangs)","Alm, Delthea, Faye",
-           "Morgan(F), Olivia(Traveler), Robin(F)(Fallen)","Amelia, Ayra, Olwen(Bonds)","Leif, Rhajat, Shiro","Lyn(Brave), Ninian, Roy(Brave)","Dorcas, Lute, Mia","Hector, Luke, Tana",
-           "Linde, Saber, Sonya","Azura, Deirdre, Eldigan","Ephraim, Jaffar, Karel","Elincia, Innes, Tana","Amelia, Nephenee, Sanaki","Gray, Ike(Brave), Lucina(Brave)",
-           "Azura, Elise, Leo","Celica(Fallen), Ephraim(Brave), Hardin(Fallen)","Deirdre, Linde, Tiki(Young)","Micaiah, Veronica(Brave), Zelgius"]
+    book1=["Keaton, Selkie, Velouria","Elincia, Innes, Tana","Lewyn, Owain, Quan","Amelia, Nephenee, Sanaki","Mikoto, Ophelia, Tibarn","Gray, Ike(Brave), Lucina(Brave)","Kliff, Loki, Surtr",
+           "Azura, Elise, Leo","Kaden, Nailah, Velouria","Celica(Fallen), Ephraim(Brave), Hardin(Fallen)","Deirdre, Linde, Tiki(Young)","Micaiah, Veronica(Brave), Zelgius","Celica, Delthea, Genny",
+           "Eirika(Memories), Hector(Brave), Myrrh","Julia, Nephenee, Sigurd","Hinoka(Wings), Kana(F), Siegbert","Hector, Lyn, Lyn(Brave)","Chrom(Branded), Maribelle, Sumia","Ike, Ike(Brave), Mist",
+           "Ishtar, Lene, Robin(M)(Fallen)","Julia, Lucina, Lucina(Brave)","Celica(Brave), Ephraim(Brave), Veronica(Brave)","Hinoka(Launch), Ryoma, Takumi",
+           "Hardin(Fallen), Olwen(World), Reinhardt(World)","Genny, Katarina, Minerva","Hector(Brave), Karla, Nino(Fangs)","Alm, Delthea, Faye","Morgan(F), Olivia(Traveler), Robin(M)(Fallen)",
+           "Amelia, Ayra, Olwen(Bonds)","Leif, Rhajat, Shiro","Lyn(Brave), Ninian, Roy(Brave)","Helbindi, Laevatein, Loki","Dorcas, Lute, Mia","Flora, Nina, Ophelia","Hector, Luke, Tana",
+           "Leanne, Nailah, Tibarn","Linde, Saber, Sonya","Laegjarn, Surtr, Ylgr","Azura, Deirdre, Eldigan","Camilla(Adrift), Corrin(F)(Adrift), Corrin(M)(Adrift)","Ephraim, Jaffar, Karel"]
     book1=book1.rotate(1) if chain.length>0 && t.wday==0
     f=book1[week_from(date,3)%book1.length].split(', ')
     u=$units.map{|q| q}
     f=f.map{|q2| "#{q2}#{u[u.find_index{|q| q.name==q2}].emotes(bot) unless u.find_index{|q| q.name==q2}.nil?}"}
-    str=extend_message(str,"**Tomorrow's Book 1+2 revival units:** #{f.join(', ')}",event,2) if chain.length>0 && t.wday==0
-    str=extend_message(str,"**Current Book 1+2 revival units:** #{f.join(', ')}",event,2) if chain.length<=0 && !shift
+    str=extend_message(str,"**Tomorrow's Revival units:** #{f.join(', ')}",event,2) if chain.length>0 && t.wday==0
+    str=extend_message(str,"**Current Revival units:** #{f.join(', ')}",event,2) if chain.length<=0 && !shift
     b=disp_current_events(event,bot,0,shift)
     str=extend_message(str,b,event,2) unless chain.length>0
     b=disp_current_paths(event,bot,0,shift)
@@ -11011,6 +11087,7 @@ def next_events(bot,event,args=[])
       idx=14 if ['aether','aetherbonus','aether_bonus','raid','raidbonus','raid_bonus','raids','raidsbonus','raids_bonus'].include?(args[i].downcase)
       idx=15 if ['book1','book_one','bookone','book1revival','bookonerevival','book_onerevival','bookone_revival','book_one_revival'].include?(args[i].downcase)
       idx=15 if ['book2','book_two','booktwo','book2revival','booktworevival','book_tworevival','booktwo_revival','book_two_revival'].include?(args[i].downcase)
+      idx=15 if ['book3','book_three','bookthree','book3revival','bookthreerevival','book_threerevival','bookthree_revival','book_three_revival'].include?(args[i].downcase)
       idx=16 if ['divine','devine','path','ephemura','divines','devines','paths','ephemuras'].include?(args[i].downcase)
     end
   end
@@ -11242,13 +11319,14 @@ def next_events(bot,event,args=[])
     end
   end
   if [-1,15].include?(idx)
-    matz=["Celica, Delthea, Genny","Eirika(Memories), Hector(Brave), Myrrh","Julia, Nephenee, Sigurd","Hinoka(Wings), Kana(F), Siegbert","Hector, Lyn, Lyn(Brave)",
-          "Chrom(Branded), Maribelle, Sumia","Ike, Ike(Brave), Mist","Ishtar, Lene, Robin(M)(Fallen)","Julia, Lucina, Lucina(Brave)","Celica(Brave), Ephraim(Brave), Veronica(Brave)",
-          "Hinoka, Ryoma, Takumi","Hardin(Fallen), Olwen(World), Reinhardt(World)","Genny, Katarina, Minerva","Hector(Brave), Karla, Nino(Fangs)","Alm, Delthea, Faye",
-          "Morgan(F), Olivia(Traveler), Robin(M)(Fallen)","Amelia, Ayra, Olwen(Bonds)","Leif, Rhajat, Shiro","Lyn(Brave), Ninian, Roy(Brave)","Dorcas, Lute, Mia","Hector, Luke, Tana",
-          "Linde, Saber, Sonya","Azura, Deirdre, Eldigan","Ephraim, Jaffar, Karel","Elincia, Innes, Tana","Amelia, Nephenee, Sanaki","Gray, Ike(Brave), Lucina(Brave)",
-          "Azura, Elise, Leo","Celica(Fallen), Ephraim(Brave), Hardin(Fallen)","Deirdre, Linde, Tiki(Young)","Micaiah, Veronica(Brave), Zelgius"]
-    matz=matz.rotate(week_from(date,3)%31)
+    matz=["Keaton, Selkie, Velouria","Elincia, Innes, Tana","Lewyn, Owain, Quan","Amelia, Nephenee, Sanaki","Mikoto, Ophelia, Tibarn","Gray, Ike(Brave), Lucina(Brave)","Kliff, Loki, Surtr",
+          "Azura, Elise, Leo","Kaden, Nailah, Velouria","Celica(Fallen), Ephraim(Brave), Hardin(Fallen)","Deirdre, Linde, Tiki(Young)","Micaiah, Veronica(Brave), Zelgius","Celica, Delthea, Genny",
+          "Eirika(Memories), Hector(Brave), Myrrh","Julia, Nephenee, Sigurd","Hinoka(Wings), Kana(F), Siegbert","Hector, Lyn, Lyn(Brave)","Chrom(Branded), Maribelle, Sumia","Ike, Ike(Brave), Mist",
+          "Ishtar, Lene, Robin(M)(Fallen)","Julia, Lucina, Lucina(Brave)","Celica(Brave), Ephraim(Brave), Veronica(Brave)","Hinoka(Launch), Ryoma, Takumi",
+          "Hardin(Fallen), Olwen(World), Reinhardt(World)","Genny, Katarina, Minerva","Hector(Brave), Karla, Nino(Fangs)","Alm, Delthea, Faye","Morgan(F), Olivia(Traveler), Robin(M)(Fallen)",
+          "Amelia, Ayra, Olwen(Bonds)","Leif, Rhajat, Shiro","Lyn(Brave), Ninian, Roy(Brave)","Helbindi, Laevatein, Loki","Dorcas, Lute, Mia","Flora, Nina, Ophelia","Hector, Luke, Tana",
+          "Leanne, Nailah, Tibarn","Linde, Saber, Sonya","Laegjarn, Surtr, Ylgr","Azura, Deirdre, Eldigan","Camilla(Adrift), Corrin(F)(Adrift), Corrin(M)(Adrift)","Ephraim, Jaffar, Karel"]
+    matz=matz.rotate(week_from(date,3)%matz.length)
     u=$units.map{|q| q}
     if safe_to_spam?(event)
       mmzz=[]
@@ -11256,7 +11334,7 @@ def next_events(bot,event,args=[])
         m=matz[i].split(', ')
         for i2 in 0...m.length
           mmzz.push([m[i2],i])
-          mmzz.push([m[i2],20]) if i==0
+          mmzz.push([m[i2],matz.length]) if i==0
         end
       end
       mmzz.sort!{|a,b| (a[0]<=>b[0])==0 ? (a[1]<=>b[1]) : (a[0]<=>b[0])}
@@ -11269,7 +11347,7 @@ def next_events(bot,event,args=[])
       end
       mmzz.compact!
       mmzz.reverse!
-      msg=extend_message(msg,"__**Units available in Book 1+2 revival banners**__",event,2)
+      msg=extend_message(msg,"__**Units available in Revival banners**__",event,2)
       strpost=false
       tx=t-t.wday*24*60*60
       for i in 0...mmzz.length
@@ -11298,7 +11376,7 @@ def next_events(bot,event,args=[])
     else
       str2=matz[0].split(', ').map{|q| "#{q}#{u[u.find_index{|q2| q2.name==q}].emotes(bot) unless u.find_index{|q2| q2.name==1}.nil?}"}.join(', ')
       str3=matz[1].split(', ').map{|q| "#{q}#{u[u.find_index{|q2| q2.name==q}].emotes(bot) unless u.find_index{|q2| q2.name==1}.nil?}"}.join(', ')
-      msg=extend_message(msg,"__**Units available in Book 1+2 revival banners**__\n*This week:* #{str2}\n*Next week:* #{str3}",event,2)
+      msg=extend_message(msg,"__**Units available in Revival banners**__\n*This week:* #{str2}\n*Next week:* #{str3}",event,2)
     end
   end
   event.respond msg unless [10,12,13,14,16].include?(idx)

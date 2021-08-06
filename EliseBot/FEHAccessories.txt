@@ -63,6 +63,7 @@ Gold Frostflower Band\Hair\Proof of victory over Mythic Hel.\Beat Hel's MHB at A
 Gold Hand Towel\Hair\Proof of victory over Grand Hero Robin.\Beat Robin(F)'s GHB at Abyssal difficulty
 Gold Heron Hairpin\Hair\Proof of victory over Mythic Dagr\Beat Dagr's MHB at Abyssal difficulty.
 Gold Kagami Mochi\Hair\Proof of victory over Legendary Dimitri.\Beat Dimitri(Savior)'s LHB at Abyssal difficulty.
+Gold Kitsune Doodad\Hair\Proof of victory over Mythic Ullr\Beat Ullr's MHB at Abyssal difficulty
 Gold Pawns Trophy\Hair\Proof of amazing results in Pawns of Loki.\Reach Tier 10 in a Pawns of Loki event.
 Gold Peach Ducky\Hair\Proof of victory over Mythic Yune.\Beat Yune's MHB at Abyssal difficulty
 Gold Sacred Stardust\Hair\Proof of victory over Legendary Julia.\Beat Julia(Crusader)'s LHB at Abyssal difficulty
@@ -186,9 +187,9 @@ False Taguel Ears\Hat\A gift from Yarne, shaped like taguel ears. They are used 
 False Taguel Ears EX\Hat\A gift from Yarne, shaped like taguel ears. They increase height and make the wearer more intimidating.\Reach 2500 green friendship with Yarne during Forging Bonds: Spanning Time
 Favored Helm\Hat\A knight's helm given by Kjelle. Kept in perfect, shiny condition by Kjelle herself.\Reach 100 blue friendship with Kjelle during Forging Bonds: Spanning Time.
 Favored Helm EX\Hat\A knight's helm given by Kjelle. Colored beautifully by Kjelle herself.\Reach 2500 blue friendship with Kjelle during Forging Bonds: Spanning Time
+Floral Headband\Hat\A headband decorated with pink blooms.\Clear floors 81-85 in Illusory Dungeon: Carrying the Flame.
 Flirty Ribbon\Hat\A cute ribbon from Charlotte. It gives its wearer a polished look that will attract the eyes of admirers.\Reach 100 orange friendship with Charlotte during Forging Bonds: Dawning Reality.
 Flirty Ribbon EX\Hat\A cute ribbon from Charlotte. It raises its wearer's cuteness to levels sure to make any potential admirer swoon!\Reach 2500 orange friendship with Charlotte during Forging Bonds: Dawing Reality.
-Floral Headband\Hat\A headband decorated with pink blooms.\Clear floors 81-85 in Illusory Dungeon: Carrying the Flame.
 Flytrap Doll\Hat\A handmade doll from ~~Bernadetta~~ Bernie. She made it herself! It's a carnivorous plant. It's...cute?\Reach 100 green friendship with Bernie during Forging Bonds: Harmony amid Chaos
 Flytrap Doll EX\Hat\A handmade doll from ~~Bernadetta~~ Bernie. She made it herself! It's a carnivorous plant. It's...super cute?\Reach 2500 green friendship with Bernie during Forging Bonds: Harmony amid Chaos
 Fuzzy Cap\Hat\A fluffy hat from Erinys. Of a style common in Silesse. Very warm, even in the most severe climates.\Reach 100 blue friendship with Erinys during Forging Bonds: Enduring Legacy

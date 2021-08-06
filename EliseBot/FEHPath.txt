@@ -1,6 +1,6 @@
 (1) Awakening / Fates\Cordelia(Summer); 5; 400, 0\Robin(M)(Fallen); 5; 800, 0\Owain; 5; 1200, 0\Xander(AwaOdori); 5; 1600, 0\Corrin(M)(Adrift); 5; 2000, 0
 (1) Radiance\Leanne; 5; 400, 0\Elincia(AwaOdori); 5; 800, 0\Lethe; 5; 1200, 0\Tanith(Bride); 5; 1600, 0\Greil(Valentines); 5; 2000, 0
-(1) Blades / Sacred Stones\Lillina(Valentines); 5; 400\Amelia; 5; 800, 0\Nino(Fangs); 5; 1200, 0\Ephraim(Christmas); 5; 1600, 0\Hector(Valentines); 5; 2000, 0
+(1) Blades / Sacred Stones\Lillina(Valentines); 5; 400, 0\Amelia; 5; 800, 0\Nino(Fangs); 5; 1200, 0\Ephraim(Christmas); 5; 1600, 0\Hector(Valentines); 5; 2000, 0
 (1) Holy War\Leif; 5; 400, 0\Deirdre; 5; 800, 0\Sigurd; 5; 1200, 0\Lewyn; 5; 1600, 0\Ishtar(AwaOdori); 5; 2000, 0
 (1) Mystery / Shadows\Caeda(Bride); 5; 400, 0\Celica; 5; 800, 0\Genny(Picnic); 5; 1200, 0\Palla(Bunny); 5; 1600, 0\Kliff; 5; 2000, 0
 (1) Heroes\Alfonse(Bunny); 5; 400, 0\Ylgr; 5; 800, 0\Bruno(Bunny); 5; 1200, 0\Fjorm(NewYears); 5; 1600, 0\Laevatein(Summer); 5; 2000, 0
@@ -146,3 +146,11 @@ Ephemura (July 2021) 4\Soleil; 4; 0, 100
 Ephemura (July 2021) 5\Silas; 4; 0, 100
 Ephemura (July 2021) 6\Seteth; 4; 0, 100
 Ephemura (July 2021) 7\Kris(M)(Plegian); 4; 0, 100
+Ephemura (August 2021) 0\06/08/2021, 27/09/2021
+Ephemura (August 2021) 1\Micaiah(AwaOdori); 5; 0, 300
+Ephemura (August 2021) 2\Hubert; 5; 0, 300
+Ephemura (August 2021) 3\Valbar; 4; 0, 100
+Ephemura (August 2021) 4\Veronica(Valentines); 4; 0, 100
+Ephemura (August 2021) 5\Arthur(Fates); 4; 0, 100
+Ephemura (August 2021) 6\Cecilia; 4; 0, 100
+Ephemura (August 2021) 7\Merlinus; 4; 0, 100

@@ -1,4 +1,4 @@
-$spanishShard=4
+$spanishShard=-2
 $spanish_Natures=[['Amable','Resistance','Defense'], # this is a list of all the nature names that can be displayed, with the affected stats
                   ['Osada','Defense','Attack'],
                   ['Miedosa','Speed','Attack'],
@@ -822,6 +822,55 @@ class FEHUnit
   
 end
 
+class FEHSkill
+  def tome_tree_reversa
+    return nil unless @exclusivity.nil? || @exclusivity.length<=0
+    return 'Ruina' if @tome_tree=='Fire'
+    return 'Fuego' if @tome_tree=='Dark'
+    return 'Trueno' if @tome_tree=='Light'
+    return 'Luz' if @tome_tree=='Thunder'
+    return nil
+  end
+  
+  def arbor_tomo
+    return 'Fuego' if @tome_tree=='Fire'
+    return 'Ruina' if @tome_tree=='Dark'
+    return 'Trueno' if @tome_tree=='Thunder'
+    return 'Luz' if @tome_tree=='Light'
+    return 'Viento' if @tome_tree=='Wind'
+    return 'Roca' if @tome_tree=='Stone'
+    return "Infantería" if @tome_tree=='Infantry'
+    return "Volador" if @tome_tree=='Flier'
+    return "Caballería" if @tome_tree=='Cavalry'
+    return "Blindada" if @tome_tree=='Armor'
+    return @tome_tree unless @tome_tree.nil?
+  end
+  
+  def colore
+    return 'Rojo' if self.weapon_color=='Red'
+    return 'Azul' if self.weapon_color=='Blue'
+    return 'Verde' if self.weapon_color=='Green'
+    return 'Gris' if self.weapon_color=='Colorless'
+    return 'Oro'
+  end
+  
+  def clasa_de_arma
+    return 'Pistola para Convocar' if @restrictions.include?('Summon Gun Users Only')
+    return 'Multicine' if ['Missiletainn','Umbra Burst'].include?(@name)
+    return 'Espada (Filo Rojo)' if @restrictions.include?('Sword Users Only')
+    return 'Lanza (Filo Azul)' if @restrictions.include?('Lance Users Only')
+    return 'Hacha (Filo Verde)' if @restrictions.include?('Axe Users Only')
+    return "Rod (Colorless Blade)" if @restrictions.include?('Rod Users Only')
+    return 'Ca\u00D1a (Filo Gris)' if @restrictions.include?('Dragons Only')
+    return 'Daño de Bestia' if @restrictions.include?('Beasts Only')
+    return 'Arco' if @restrictions.include?('Bow Users Only')
+    return 'Daga' if @restrictions.include?('Dagger Users Only')
+    return 'Bastón' if @restrictions.include?('Staff Users Only')
+    return "Magia de #{@tome_tree} (Tomo #{self.colore})" if @restrictions[0].include?(' Tome Users Only')
+    return nil
+  end
+end
+
 class FEHStructure
   def spanish_type
     x=@type.map{|q| q}
@@ -875,6 +924,827 @@ class FEHPath
       f=f.gsub($spanish_months[1][i],$spanish_months[0][i])
     end
     return f
+  end
+end
+
+def disp_data_habilidad(bot,event,xname,colors=false,includespecialerror=false)
+  args=event.message.text.downcase.split(' ')
+  data_load()
+  s=event.message.text
+  s=remove_prefix(s,event)
+  a=s.split(' ')
+  s=event.message.text if all_commands().include?(a[0])
+  args=sever(s.gsub(',','').gsub('/',''),true,true).split(' ')
+  args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) } # remove any mentions included in the inputs
+  args.compact!
+  errstr=nomf()
+  errstr="No hay coincidencias.  Si está buscando datos sobre las habilidades que aprende un personaje en particular, intente ```#{event.message.text.downcase.gsub('habilidad','habilidades')}``` en su lugar." if includespecialerror
+  if xname.nil?
+    if args.nil? || args.length<1
+      event.respond errstr
+      return nil
+    else
+      xname=''
+      x=find_data_ex(:find_skill,event,args,nil,bot,true)
+      xname=x.fullName unless x.nil?
+    end
+  end
+  skill=$skills.find_index{|q| q.fullName==xname}
+  blevel=0
+  blevel=count_in(event.message.text.downcase.split(' '),'base')
+  blevel=100 if event.message.text.downcase.split(' ').include?('default')
+  if skill.nil?
+    x=find_data_ex(:find_unit,event,args,nil,bot,true)
+    if x.nil?
+      x=find_data_ex(:find_skill,event,args,nil,bot)
+      if x.nil?
+        x=find_data_ex(:find_unit,event,args,nil,bot)
+        if x.nil?
+          event.respond errstr
+          return nil
+        elsif x.is_a?(Array)
+          event.respond "Multipersonaje encontrado, utilice uno de los siguientes:\n#{x.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join("\n")}"
+          return nil
+        end
+      else
+        disp_skill_data(bot,event,x.name,colors,includespecialerror)
+        return nil
+      end
+    elsif x.is_a?(Array)
+      event.respond "Multipersonaje encontrado, utilice uno de los siguientes:\n#{x.map{|q| "#{q.name}#{q.emotes(bot,false)}"}.join("\n")}"
+      return nil
+    end
+    sktype=[]; baseweapon=false; rar=0
+    for i in 0...args.length
+      rar=args[i][0,1].to_i if rar<=0 && args[i][0,1].to_i.to_s==args[i][0,1] && args[i][0,1].to_i>0 && args[i][0,1].to_i<=Max_rarity_merge[0] && ["#{args[i][0,1]}*","#{args[i][0,1]}star","#{args[i][0,1]}-star"].include?(args[i])
+      blevel-=1 if ['base','defecto'].include?(args[i].downcase) && !baseweapon
+      baseweapon=true if ['base','summoned','baseweapon','defecto','convocado','convocada','basearma','armabase'].include?(args[i].downcase)
+      sktype.push('Weapon') if ['weapon','baseweapon','armabase','basearma','base'].include?(args[i].downcase)
+      sktype.push('Assist') if ['assist','asistencia'].include?(args[i].downcase)
+      sktype.push('Special') if ['special','especial'].include?(args[i].downcase)
+      sktype.push('Passive(A)') if ['a','apassive','passivea','a_passive','passive_a','pasivaa','apasiva','pasiva_a','a_pasiva'].include?(args[i].downcase)
+      sktype.push('Passive(B)') if ['b','bpassive','passiveb','b_passive','passive_b','pasivab','bpasiva','pasiva_b','b_pasiva'].include?(args[i].downcase)
+      sktype.push('Passive(C)') if ['c','cpassive','passivec','c_passive','passive_c','pasivac','cpasiva','pasiva_c','c_pasiva'].include?(args[i].downcase)
+      sktype.push('Resonant') if ['duo','duos','harmonic','harmonics','resonant','resonants','resonance','resonances','alsol'].include?(args[i].downcase) && !x.duo.nil?
+    end
+    if rar<=0
+      for i in 0...args.length
+        rar=args[i].to_i if args[i].to_i.to_s==args[i] && args[i].to_i>0 && args[i].to_i<=Max_rarity_merge[0]
+      end
+      rar=Max_rarity_merge[0]*1 if rar<=0
+    end
+    sktype.push('Assist') if x.name=='Mathoo'
+    sktype.push('Resonant') unless x.duo.nil?
+    sktype.push('Weapon') if baseweapon || !x.dispPrf.nil?
+    f=x.skill_list(rar).clone
+    for i in 0...f.length
+      f[i].id+=50000 if !f[i].nil? && f[i].type.include?('Special') && f[i].id<210000
+      if f[i].nil?
+      elsif f[i].id<0
+        f[i].id=0-f[i].id
+        if f[i].id>=300000
+          f[i].id+=90000
+        elsif f[i].id>=100000
+          f[i].id+=9000
+        else
+          f[i].id+=4000
+        end
+      end
+    end
+    if sktype.length<=0
+      x2=find_data_ex(:find_skill,event,args,nil,bot)
+      if x2.nil?
+        event.respond "Estás buscando la habilidad de **#{x.name}#{x.emotes(bot)}**, pero ¿cuál?"
+      else
+        disp_skill_data(bot,event,x2.name,colors,includespecialerror)
+      end
+      return nil
+    elsif sktype[0]=='Resonant'
+      sktype=['Duo','Harmonic']
+    else
+      sktype=sktype[0,1]
+    end
+    f=f.reject{|q| !has_any?(q.type,sktype)}.sort{|a,b| a.id<=>b.id}
+    if f.length<=0
+      x2=find_data_ex(:find_skill,event,args,nil,bot)
+      if x2.nil?
+        event.respond "**#{x.name}#{x.emotes(bot)}** no tiene una habilidad en ese espacio#{' en esa rareza' unless rar==Max_rarity_merge[0]}."
+      else
+        disp_data_habilidad(bot,event,x2.name,colors,includespecialerror)
+      end
+      return nil
+    end
+    skill=f[-1].clone
+    skill=f[-2].clone if sktype[0]=='Weapon' && baseweapon && skill.prerequisite.nil?
+  else
+    skill=$skills[skill].clone
+  end
+  if skill.type.include?('Weapon') && has_any?(event.message.text.downcase.split(' '),['refinement','refinements','refinamiento','refinamientos','(w)'])
+    if skill.name=='Falchion'
+      sk1=$skills.find_index{|q| q.name=='Falchion (Mystery)'}
+      sk2=$skills.find_index{|q| q.name=='Falchion (Valentia)'}
+      sk3=$skills.find_index{|q| q.name=='Falchion (Awakening)'}
+      sk1=$skills[sk1].refinement_name unless sk1.nil?
+      sk2=$skills[sk2].refinement_name unless sk2.nil?
+      sk3=$skills[sk3].refinement_name unless sk3.nil?
+      disp_data_habilidad(bot,event,sk1.fullName,colors) unless sk1.nil?
+      disp_data_habilidad(bot,event,sk2.fullName,colors) unless sk2.nil?
+      disp_data_habilidad(bot,event,sk3.fullName,colors) unless sk3.nil?
+      return nil
+    elsif skill.name=='Missiletainn'
+      sk1=$skills.find_index{|q| q.name=='Missiletainn (Dark)'}
+      sk2=$skills.find_index{|q| q.name=='Missiletainn (Dusk)'}
+      if sk1.nil? && sk2.nil?
+        event.respond errstr
+        return nil
+      end
+      sk1=$skills[sk1].refinement_name
+      sk2=$skills[sk2].refinement_name
+      if sk1.nil? && sk2.nil?
+        event.respond "#{skill.name} no tiene un modo de efecto.  Mostrando los datos predeterminados de #{skill.name}."
+      elsif sk1==sk2
+        disp_data_habilidad(bot,event,sk1.fullName,colors)
+        return nil
+      else
+        disp_data_habilidad(bot,event,sk1.fullName,colors)
+        disp_data_habilidad(bot,event,sk2.fullName,colors)
+        return nil
+      end
+    elsif !skill.refinement_name.nil?
+      disp_data_habilidad(bot,event,skill.refinement_name.fullName,colors)
+      return nil
+    elsif !skill.refine.nil?
+      event.respond "#{skill.name} no tiene un modo de efecto.  Mostrando los datos predeterminados de #{skill.name}."
+    else
+      event.respond "#{skill.name} no se puede refinar.  Mostrando los datos predeterminados de #{skill.name}."
+    end
+  end
+  unless skill.type.include?('Weapon') && has_any?(['refinado','refinada','refined'],event.message.text.downcase.split(' ')) && blevel<=0
+    header=skill.class_header(bot)
+    header=skill.mcr unless safe_to_spam?(event)
+    header='' if skill.name=='Missiletainn' && !safe_to_spam?(event)
+    if header.length>200
+      h=header.split("\n")
+      header=[h[0],'']
+      j=0
+      for i in 1...h.length
+        if "#{header[j]}\n#{h[i]}".length>200 && j==0
+          j+=1
+          header[j]="#{h[i]}"
+        else
+          header[j]="#{header[j]}\n#{h[i]}"
+        end
+      end
+    end
+    unless colors
+      colors=true if has_any?(['color','colors','colour','colours','colores'],args)
+      colors=1 if has_any?(['divine','path','code','paths','codes','ephemura'],args)
+    end
+    ftr=nil
+    flds=nil
+    text=''
+    text="**Eficaz contra:** #{skill.eff_against('',false,event)}" unless skill.eff_against('',false,event).length<=0
+    text="#{text}**Mecánica para bestias:** Al comienzo del turno, si el personaje no está adyacente a ningún aliado, o solo está adyacente a los aliados de bestias y dragones, el personaje se transforma.  De lo contrario, el personaje vuelve a su forma humanoide." if skill.tags.include?('Weapon') && skill.restrictions.include?('Beasts Only')
+    text="#{text}\n**Mecánica para la transformación:** #{skill.transform_type}" unless skill.transform_type.nil?
+    endtext=''
+    ftr="Los magos de #{skill.tome_tree_reversa} aún pueden aprender esta habilidad, solo necesitará más SP." unless skill.tome_tree_reversa.nil?
+    ftr="La desventaja se aplica al final del combate si el personaje ataca y dura hasta las próximas acciones de los enemigos." unless skill.dagger_debuff.nil? || skill.dagger_debuff.length<=0
+    if ['Missiletainn'].include?(skill.name)
+      sk1=$skills.find_index{|q| q.name=='Missiletainn (Dark)'}
+      sk2=$skills.find_index{|q| q.name=='Missiletainn (Dusk)'}
+      if sk1.nil? && sk2.nil?
+        event.respond nomf()
+        return nil
+      elsif sk1.nil?
+        disp_skill_data(bot,event,'Missiletainn (Dusk)',colors)
+        return nil
+      elsif sk2.nil?
+        disp_skill_data(bot,event,'Missiletainn (Dark)',colors)
+        return nil
+      end
+      sk1=$skills[sk1]
+      sk2=$skills[sk2]
+      text="__**#{sk1.class_header(bot,1)}#{sk1.name}**__\n#{sk1.mcr}\n**Efecto:** #{sk1.description}\n<:Prf_Sparkle:490307608973148180>**Prf a:** #{sk1.exclusivity.join(', ')}\n**Promueve desde:** #{list_lift(sk1.prerequisite.map{|q| "*#{q}*"},'or')}"
+      text="#{text}\n\n__**#{sk2.class_header(bot,1)}#{sk2.name}**__\n#{sk2.mcr}\n**Efecto:** #{sk2.description}\n<:Prf_Sparkle:490307608973148180>**Prf a:** #{sk2.exclusivity.join(', ')}\n**Promueve desde:** #{list_lift(sk2.prerequisite.map{|q| "*#{q}*"},'or')}"
+      text="#{text}\n\n**Precio SP:** #{sk1.sp_cost} SP\n**Precio SP acumulativo:** #{sk1.cumulitive_sp_cost} SP"
+    elsif ['Whelp (All)','Yearling (All)','Adult (All)','Cachorro (Todo)','Fiera joven (Todo)','Fiera adulta (Todo)'].include?(skill.name)
+      m=skill.name.split(' (')[0]
+      skzz=$skills.reject{|q| q.name=="#{m} (All)" || (q.name[0,m.length+2]!="#{m} (" && !((q.name=='Hatchling (Flier)' && m=='Whelp') || (q.name=='Fledgling (Flier)' && m=='Yearling') || (q.name=='Polluelo (Pájaro)' && m=='Cachorro') || (q.name=='Joven (Pájaro)' && m=='Fiera joven') || (q.name=='Adulto (Pájaro)' && m=='Fiera adulta')))}
+      for i in 0...skzz.length
+        m=skzz[i].restrictions[1].split(' ').map{|q| q.gsub('s','')}.reject{|q| !['Infantry','Armor','Flier','Cavalry'].include?(q)}
+        movemoji=''
+        for i2 in 0...m.length
+          moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{m[i2]}"}
+          movemoji="#{movemoji}#{moji[0].mention}" if moji.length>0
+        end
+        text="#{text}\n\n#{movemoji} __**#{skzz[i].name}**__"
+        text="#{text}\n**Mecánica para la transformación:** #{skzz[i].transform_type}" unless skzz[i].transform_type.nil? || skzz[i].transform_type=='-'
+        text="#{text}\n**Efecto:** #{skzz[i].description}" unless skzz[i].description.nil? || skzz[i].description=='-' || skzz[i].description.length<=0
+        text="#{text}\n**Promueve desde:** #{list_lift(skzz[i].prerequisite.map{|q| "*#{q}*"},'o')}" unless skzz[i].prerequisite.nil? || skzz[i].prerequisite.length<=0
+        text="#{text}\n**Promueve en:** #{skzz[i].next_steps(event)}" unless skzz[i].next_steps(event).nil? || skzz[i].next_steps(event).length<=0
+      end
+      text="#{text}\n\n**Precio SP:** #{skill.disp_sp_cost} SP#{" (#{skill.disp_sp_cost(true)} SP cuando se hereda)" if skill.exclusivity.nil? || skill.exclusivity.length<=0}"
+    else
+      text="#{text}\n**Efecto:** #{skill.description}" unless skill.description.nil? || skill.description.length<=0 || skill.description=='-'
+      text="#{text}\nSi el Alcance del enemigo = 2, calcula el daño usando el valor más bajo de Def o Res." if skill.type.include?('Weapon') && skill.restrictions.include?('Dragons Only') && skill.tags.include?('Frostbite')
+      if skill.name=='Umbra Burst'
+        text="#{text}\n\n<:Gold_Dragon:774013610908581948>**Dragones ganan:** Si el Alcance del enemigo = 2, calcula el daño usando el valor más bajo de Def o Res."
+        text="#{text}\n<:Gold_Bow:774013609389981726>**Arco es Eficaz contra:** <:Icon_Move_Flier:443331186698354698>"
+        text="#{text}\n<:Gold_Dagger:774013610862968833>**Desventaja de Daga:**  \u200B  \u200B  \u200B  *Efecto:* Def/Res-7  \u200B  \u200B  \u200B  *Affects:* Objetivo y enemigos a 2 espacios del objetivo"
+        text="#{text}\n<:Gold_Staff:774013610988797953>**Bastónes:** El daño se calcula como otras armas."
+      end
+      text="#{text}\n**Desventaja:** *Efecto:* #{skill.dagger_debuff[0]}   *Afecta:* #{skill.dagger_debuff[1]}" unless skill.dagger_debuff.nil? || skill.dagger_debuff.length<=0
+      text="#{text}\n**Pulidor:** *Efecto:* #{skill.dagger_buff[0]}   *Afecta:* #{skill.dagger_buff[1]}" unless skill.dagger_buff.nil? || skill.dagger_buff.length<=0
+      if skill.type.include?('Weapon') && safe_to_spam?(event)
+        mdfr=''
+        mdfr=' (humanoide)' if skill.restrictions.include?('Beasts Only')
+        mdfr=' (desplegada)' if skill.tags.include?('Chainy')
+        text="#{text}\n**Estadísticas Afectadas#{mdfr}:** #{skill.disp_weapon_stats}"
+        text="#{text}\n**Estadísticas Afectadas (transformada):** #{skill.disp_weapon_stats(false,true)}" if skill.restrictions.include?('Beasts Only')
+        text="#{text}\n**Estadísticas Afectadas (en combate):** #{'+' if skill.disp_weapon_stats(true)[0]>0}#{skill.disp_weapon_stats(true)[0]} HP, other stats have complex interactions" if skill.tags.include?('Chainy')
+      elsif skill.type.include?('Assist') && !skill.heal.nil?
+        text="#{text}\n**Cura:** #{skill.heal}"
+      elsif skill.type.include?('Special')
+        text="#{text}\n**Alcance:**\n```#{skill.range}```" unless skill.range.nil? || skill.range=='-'
+      end
+      unless skill.name[0,6]=='Umbra ' || has_any?(skill.type,['Duo','Harmonic'])
+        text="#{text}\n\n**Precio SP:** #{skill.disp_sp_cost} SP#{" (#{skill.disp_sp_cost(true)} SP cuando se hereda)" if skill.exclusivity.nil? || skill.exclusivity.length<=0}"
+        text="#{text}\n**Precio Total del SP:** #{skill.disp_sp_cost(false,true)} SP#{" (#{skill.disp_sp_cost(true,true)} SP cuando se hereda)" if skill.exclusivity.nil? || skill.exclusivity.length<=0}" if skill.level=='example'
+        text="#{text}\n**Precio SP acumulativo:** #{skill.cumulitive_sp_cost} SP#{" (#{skill.cumulitive_sp_cost(true)} SP cuando se hereda)" if skill.exclusivity.nil? || skill.exclusivity.length<=0}" unless skill.prerequisite.nil? || skill.prerequisite.length<=0 || !safe_to_spam?(event)
+        unless colors==1
+          text="#{text}\n**Insignia:** #{skill.seal_colors(bot)}" if !skill.seal_colors(bot).nil? && skill.seal_colors(bot).length>0 && has_any?(skill.type,['Seal','Passive(S)'])
+          text="#{text}\n**Total de Insignia:** #{skill.seal_colors(bot,true)}" if !skill.seal_colors(bot,true).nil? && skill.seal_colors(bot,true).length>0 && has_any?(skill.type,['Seal','Passive(S)']) && skill.level=='example'
+        end
+      end
+      text2=[]
+      if !skill.exclusivity.nil?
+        y=skill.exclusivity
+        y=y.reject{|q| $units.find_index{|q2| q2.name==q}.nil?}
+        y=y.map{|q| $units[$units.find_index{|q2| q2.name==q}]}.reject{|q| !q.isPostable?(event)}
+        if skill.fake.nil?
+          y=y.map{|q| q.postName}
+        else
+          y=y.map{|q| q.fullName('')}
+        end
+        y.push('Mathoo [Rokkr]') if skill.name=='Brobdingo' || skill.name=='Upelkuchen'
+        text2.push("<:Prf_Sparkle:490307608973148180>**Prf a:** #{y.join(', ')}")
+      elsif skill.name=='Brobdingo' || skill.name=='Upelkuchen'
+        text2.push("<:Prf_Sparkle:490307608973148180>**Prf a:** Mathoo [Rokkr]")
+      elsif skill.restrictions != ['Everyone'] && !skill.type.include?('Weapon')
+        text2.push("**Restricciones a la herencia:** #{skill.restrictions.join(', ').gsub('Excludes Tome Users, Excludes Staff Users, Excludes Dragons','Physical Weapon Users Only')}")
+      end
+      text2.push("**Promueve desde:** #{list_lift(skill.prerequisite.map{|q| "*#{q}*"},'or')}") unless skill.prerequisite.nil? || skill.prerequisite.length<=0
+      text2.push("**Promoción#{'es' unless skill.side_steps(event,1).length==0} lateral#{'es' unless skill.side_steps(event,1).length==0}:** #{skill.side_steps(event)}") unless skill.side_steps(event).nil? || skill.side_steps(event).length<=0
+      unless skill.next_steps(event).nil? || skill.next_steps(event).length<=0
+        if skill.type.include?('Weapon') && skill.next_steps(event,1).length>8 && skill.next_steps(event,1).reject{|q| q.exclusivity.nil? || q.exclusivity.length<=0}.length>1 && skill.next_steps(event,1).reject{|q| !q.exclusivity.nil? && q.exclusivity.length<=0}.length>1 && !(has_any?(['expanded','expandido'],event.message.text.downcase.split(' ')) && safe_to_spam?(event))
+          y=skill.next_steps(event,1)
+          z=y.reject{|q| q.exclusivity.nil? || q.exclusivity.length<=0}
+          y=y.reject{|q| !q.exclusivity.nil? && q.exclusivity.length>0}
+          if skill.fake.nil?
+            y=y.map{|q| q.postName}
+          else
+            y=y.map{|q| q.fullName('')}
+          end
+          y=y.map{|q| "*#{q}*"}
+          y.push("o cualquiera de las #{z.length} prfs")
+          ftr='Si desea incluir las Prfs y los caracteres que las tienen, incluya la palabra "expandido" cuando vuelva a intentar este comando.'
+          text2.push("**Promueve en:** #{y.join(', ')}")
+        else
+          text2.push("**Promueve en:** #{skill.next_steps(event)}")
+        end
+      end
+      unless skill.evolutions.nil?
+        y=skill.evolutions.map{|q| $skills.find_index{|q2| q2.name==q}}.compact.map{|q| $skills[q]}
+        if skill.fake.nil?
+          y=y.map{|q| q.postName}
+        else
+          y=y.map{|q| q.fullName('')}
+        end
+        y=y.map{|q| "*#{q}*"}
+        text2.push("**Evoluciona en:** #{list_lift(y,'y')}") if y.length>0
+      end
+      text="#{text}#{"\n" unless !has_any?(skill.tags,['Duo','Harmonic']) && text2.length==1}\n#{text2.join("\n")}" if text2.length>0
+      unless skill.subUnits(event).nil?
+        if safe_to_spam?(event)
+          text2=[]
+          lvv=skill.tier-skill.lineCount
+          for i in 0...skill.tier
+            text2.push("*Al nivel #{i+1-lvv}:* #{skill.subUnits(event,i+1).join(', ')}") unless skill.subUnits(event,i+1).nil?
+          end
+          text="#{text}\n\n**Héroes que pueden aprender parte de esta línea sin heredar:**\n#{text2.join("\n")}" unless text2.length<=0
+        elsif skill.tier>=4
+          text="#{text}\n\n**Héroes que pueden aprender la penúltima parte de esta línea sin heredar:**\n#{skill.subUnits(event,skill.tier-1).join(', ')}" unless skill.subUnits(event,skill.tier-1).nil?
+        end
+      end
+      if has_any?(['Duo','Harmonic'],skill.type) || colors
+      elsif skill.summon.reject{|q| q.length<=0}.length>0
+        text2="**Héroes que conocen esta habilidad por defecto:**"
+        for i in 0...Max_rarity_merge[0]
+          y=skill.summon[i]
+          if y.length>0
+            y2=y.reject{|q| q[0,4]!='All '}
+            if ['Assault','Heal','Imbue'].include?(skill.name) && y2.length>0
+              u=$units.reject{|q| q.weapon[1]!='Healer' || q.weapon[2].nil? || q.weapon[2][0,8]!='Ignore: ' || !q.weapon[2].include?(skill.type[0][0,2]) || !q.isPostable?(event)}
+              y2[0]="**#{y2[0]}** (except #{list_lift(u.sort{|a,b| a.name<=>b.name}.map{|q| q.fullName('')},'and')})" if u.length>0
+            end
+            y=y.reject{|q| $units.find_index{|q2| q2.name==q}.nil?}
+            y=y.map{|q| $units[$units.find_index{|q2| q2.name==q}]}.reject{|q| !q.isPostable?(event)}
+            if skill.type.include?('Weapon') && y.length>8 && !(has_any?(['expanded','expandido'],event.message.text.downcase.split(' ')) && safe_to_spam?(event))
+              z=y.reject{|q| q.prf(true).length<1}
+              y=y.reject{|q| q.prf(true).length>0} unless z.length<2
+              if skill.fake.nil?
+                y=y.map{|q| q.postName}
+              else
+                y=y.map{|q| q.fullName('')}
+              end
+              y.push("y #{z.length} personajes que terminan teniendo armas Prf") unless z.length<2
+              ftr='Si desea incluir las Prfs y los caracteres que las tienen, incluya la palabra "expandido" cuando vuelva a intentar este comando.' unless z.length<2
+            elsif skill.fake.nil?
+              y=y.map{|q| q.postName}
+            else
+              y=y.map{|q| q.fullName('')}
+            end
+            y.push(y2)
+            y.flatten!
+            text2="#{text2}\n*#{i+1}#{Rarity_stars[0][i]}:* #{y.join(', ')}" if y.length>0
+          end
+        end
+        text="#{text}\n\n#{text2}" if text2.split("\n").length>1
+      end
+      if has_any?(['Duo','Harmonic'],skill.type)
+      elsif colors==1
+        x=skill.learn_by_path(event)
+        if x.length==0
+          text="#{text}\n\nNingún personaje disponible a través de manuales tiene esta habilidad#{", y no podría ser heredada incluso si lo hicieran" unless skill.exclusivity.nil?}."
+        elsif !skill.exclusivity.nil?
+          text="#{text}\n\nEsta habilidad no se puede heredar. Ningún manual puede dárselo a las personajes que aún no tienen acceso a él."
+        elsif skill.prevos.nil? && x.length==1
+          text="#{text}\n\n__**Caminos Divinos de #{x[0][0]} que contiene esta habilidad**__\n#{x[0][1]}"
+        elsif skill.prevos.nil?
+          endtext="**Caminos Divinos que contiene esta habilidad:**"
+          flds=x.map{|q| q}
+        else
+          text="#{text}\n\n__**Caminos Divinos que contiene esta habilidad:**__\n#{x.map{|q| "*#{q[0]}:* #{q[1].gsub("\n",', ')}"}.join("\n")}"
+        end
+      elsif colors==true
+        x=skill.learn_by_color(event)
+        if x.length<=0
+        elsif x.length==1 && skill.prevos.nil?
+          endtext="**#{x[0][0]} que aprenden esta habilidad**"
+          flds=triple_finish(x[0][1])
+        else
+          x=skill.learn_by_color(event,false)
+          text="#{text}\n\n**Héroes que pueden aprender esta habilidad sin heredar:**\n#{x}"
+        end
+      elsif skill.learn.reject{|q| q.length<=0}.length==1 && skill.summon.flatten.length<=0 && skill.prevos.nil?
+        x=skill.learn.find_index{|q| q.length>0}
+        y=skill.learn[x]
+        y2=skill.learn[x].reject{|q| q[0,4]!='All '}
+        if ['Assault','Heal','Imbue'].include?(skill.name) && y2.length>0
+          u=$units.reject{|q| q.weapon[1]!='Healer' || q.weapon[2].nil? || q.weapon[2][0,8]!='Ignore: ' || !q.weapon[2].include?(skill.type[0][0,2]) || !q.isPostable?(event)}
+          y2[0]="**#{y2[0]}** (excepto #{list_lift(u.sort{|a,b| a.name<=>b.name}.map{|q| q.fullName('')},'y')})" if u.length>0
+        end
+        y=y.reject{|q| $units.find_index{|q2| q2.name==q}.nil?}
+        y=y.map{|q| $units[$units.find_index{|q2| q2.name==q}]}.reject{|q| !q.isPostable?(event)}
+        if skill.fake.nil?
+          y=y.map{|q| q.postName}
+        else
+          y=y.map{|q| q.fullName('')}
+        end
+        y.push(y2)
+        y.flatten!
+        if y.length<=3 || !skill.prevos.nil?
+          text="#{text}\n\n**Héroes que aprenden a las #{x+1}#{Rarity_stars[0][x]}**\n#{y.join(',  ')}"
+        else
+          endtext="**Héroes que aprenden a las #{x+1}#{Rarity_stars[0][x]}**"
+          flds=triple_finish(y)
+        end
+      elsif skill.learn.flatten.reject{|q| skill.summon.flatten.include?(q)}.length<=0 && !safe_to_spam?(event)
+      elsif skill.learn.reject{|q| q.length<=0}.length>0
+        text="#{text}\n\n**Héroes que pueden aprender esta habilidad sin heredar:**"
+        for i in 0...Max_rarity_merge[0]
+          y=skill.learn[i]
+          y2=skill.learn[i].reject{|q| q[0,4]!='All '}
+          if ['Assault','Heal','Imbue'].include?(skill.name) && y2.length>0
+            u=$units.reject{|q| q.weapon[1]!='Healer' || q.weapon[2].nil? || q.weapon[2][0,8]!='Ignore: ' || !q.weapon[2].include?(skill.type[0][0,2]) || !q.isPostable?(event)}
+            y2[0]="**#{y2[0]}** (except #{list_lift(u.sort{|a,b| a.name<=>b.name}.map{|q| q.fullName('')},'and')})" if u.length>0
+          end
+          y=y.reject{|q| skill.summon.flatten.include?(q)} unless safe_to_spam?(event)
+          if y.length>0
+            y=y.reject{|q| $units.find_index{|q2| q2.name==q}.nil?}
+            y=y.map{|q| $units[$units.find_index{|q2| q2.name==q}]}.reject{|q| !q.isPostable?(event)}
+            if skill.type.include?('Weapon') && y.length>8 && !(event.message.text.downcase.split(' ').include?('expanded') && safe_to_spam?(event))
+              z=y.reject{|q| q.prf(true).length<1}
+              y=y.reject{|q| q.prf(true).length>0} unless z.length<2
+              if skill.fake.nil?
+                y=y.map{|q| q.postName}
+              else
+                y=y.map{|q| q.fullName('')}
+              end
+              y.push("y #{z.length} personajes que terminan teniendo armas Prf") unless z.length<2
+              ftr='Si desea incluir las Prfs y los caracteres que las tienen, incluya la palabra "expandido" cuando vuelva a intentar este comando.' unless z.length<2
+            elsif skill.fake.nil?
+              y=y.map{|q| q.postName}
+            else
+              y=y.map{|q| q.fullName('')}
+            end
+            y.push(y2)
+            y.flatten!
+            text="#{text}\n*#{i+1}#{Rarity_stars[0][i]}:* #{y.join(', ')}" if y.length>0
+          end
+        end
+      end
+      unless skill.prevos.nil?
+        for i in 0...skill.prevos.length
+          sk2=skill.prevos[i]
+          unless colors==1 && sk2.learn_by_path(event,false).length<=0
+            str2="**#{'También e' if skill.learn.flatten.length>0}#{'E' unless skill.learn.flatten.length>0}voluciona de #{sk2.name}**"
+            unless sk2.learn.flatten.length<=0
+              str2="**#{'También e' if skill.learn.flatten.length>0}#{'E' unless skill.learn.flatten.length>0}voluciona de #{sk2.name}, que se obtiene de los siguientes héroes:**"
+              str2="**#{'También e' if skill.learn.flatten.length>0}#{'E' unless skill.learn.flatten.length>0}voluciona de #{sk2.name}, que se obtiene de los siguientes Caminos Divinos:**" if colors==1
+              if colors
+                str2="#{str2}\n#{skill.learn_by_color(event,false)}"
+              else
+                for i2 in 0...Max_rarity_merge[0]
+                  y=sk2.learn[i2]
+                  y=y.reject{|q| $units.find_index{|q2| q2.name==q}.nil?}
+                  y=y.map{|q| $units[$units.find_index{|q2| q2.name==q}]}.reject{|q| !q.isPostable?(event)}
+                  if skill.fake.nil?
+                    y=y.map{|q| q.postName}
+                  else
+                    y=y.map{|q| q.fullName('')}
+                  end
+                  str2="#{str2}\n*#{i2+1}#{Rarity_stars[0][i2]}:* #{y.join(', ')}" unless y.length<=0
+                end
+              end
+            end
+          end
+          str3='**Precio Evolución:** 300 SP (450 si es heredado), 200<:Arena_Medal:453618312446738472> 20<:Refining_Stone:453618312165720086>'
+          str3='**Precio Evolución:** 300 SP (450 si es heredado), 100<:Arena_Medal:453618312446738472> 10<:Refining_Stone:453618312165720086>' if skill.name=='Candlelight+'
+          str3='**Precio Evolución:** 400 SP, 375<:Arena_Medal:453618312446738472> 150<:Divine_Dew:453618312434417691>' unless skill.exclusivity.nil? || skill.exclusivity.length<=0
+          str3='**Precio Evolución:** 1 Gunnthra<:Wind_Tome:499760605713137664><:Icon_Move_Cavalry:443331186530451466><:Legendary_Effect_Wind:443331186467536896><:Ally_Boost_Resistance:443331185783865355> dado por la historia' if skill.name=='Chill Breidablik'
+          str3='**Precio Evolución:** 1 Outrealm Askr' if skill.name=='Dual Breidablik'
+          text="#{text}\n\n#{str2}\n#{str3}"
+        end
+      end
+      unless skill.weapon_gain.nil?
+        if skill.level=='example'
+          skz=$skills.reject{|q| q.level=='example' || q.name != skill.name || q.weapon_gain.nil?}
+          text2=[]
+          for i in 0...skz.length
+            y=skz[i].weapon_gain
+            y=y.reject{|q| $skills.find_index{|q2| q2.name==q}.nil?}
+            y=y.map{|q| $skills[$skills.find_index{|q2| q2.name==q}]}.reject{|q| !q.isPostable?(event)}
+            if skill.fake.nil?
+              y=y.map{|q| q.postName}
+            else
+              y=y.map{|q| q.fullName('')}
+            end
+            xtratext=''
+            xtratext=" (#{skz[i].level_equal})" if skz[i].level.include?('W') && skz[i].level_equal.length>0
+            text2.push("**Nivel #{skz[i].level}#{xtratext} obtenido mediante el refinamiento en:** #{y.join(', ')}") if y.length>0
+          end
+          text="#{text}\n\n#{text2.join("\n")}" unless text2.length<=0
+        else
+          y=skill.weapon_gain
+          y=y.reject{|q| $skills.find_index{|q2| q2.name==q}.nil?}
+          y=y.map{|q| $skills[$skills.find_index{|q2| q2.name==q}]}.reject{|q| !q.isPostable?(event)}
+          if skill.fake.nil?
+            y=y.map{|q| q.postName}
+          else
+            y=y.map{|q| q.fullName('')}
+          end
+          text="#{text}\n\n**Obtenido mediante el refinamiento en:** #{y.join(', ')}" if y.length>0
+        end
+      end
+      if $statskills.map{|q| q[0]}.include?(skill.fullName(nil,true)) && safe_to_spam?(event)
+        x=$statskills.find_index{|q| q[0]==skill.fullName(nil,true)}
+        unless x.nil?
+          x=$statskills[x]
+          x[3]=x[3].split(' ')
+          x[3]=x[3][0,x[3].length-1].join(' ')
+          if ['Enemy Phase','Player Phase'].include?(x[3])
+            text="#{text}\n\n**Esta habilidad se puede aplicar a las unidades en el comando `fase`.**\nIncluya la palabra \"#{x[0].gsub('/','').gsub(' ','').gsub('.','')}\" en su mensaje\n*Tipo de habilidad:* Fase del #{x[3].split(' ')[0].gsub('Enemy','Enemigo').gsub('Player','Jugador')}"
+          elsif 'In-Combat Buffs'==x[3]
+            text="#{text}\n\n**Esta habilidad se puede aplicar a las unidades en el comando `fase`.**\nIncluya la palabra \"#{x[0].gsub('/','').gsub(' ','').gsub('.','')}\" en su mensaje\n*Tipo de habilidad:* Mejora en Combate"
+          else
+            text="#{text}\n\n**Esta habilidad se puede aplicar a las unidades en el comando `stats` y sus derivados.**\nIncluya la palabra \"#{x[0].gsub('/','').gsub(' ','').gsub('.','')}\" en su mensaje\n*Tipo de habilidad:* #{x[3].gsub('Buffing','Buliendo').gsub('Nerfing','Debilitado').gsub('Affecting','Conmovedorado')}"
+          end
+          for i4 in 0...5
+            if x[4][i4]==0
+            elsif x[4][i4]<0
+              x[4][i4]="+#{0-x[4][i4]}" if x[3][0,12]=='Stat-Nerfing'
+            elsif x[3][0,12]=='Stat-Nerfing'
+              x[4][i4]="-#{x[4][i4]}"
+            else
+              x[4][i4]="+#{x[4][i4]}"
+            end
+          end
+          x[4]="#{x[4][0,5].join('/')}#{"\nCubeta ajustado a ##{x[4][5]/5} (Alcance de BST: #{x[4][5]}-#{x[4][5]+4}) mínima" if x[4].length>5}"
+          if x[4]=='0/0/0/0/0'
+            text="#{text}\n~~*Alteraciones de estadísticas*~~ *Interacciones complejas con otras habilidades*"
+          else
+            text="#{text}\n*Alteraciones de estadísticas:* #{x[4]}"
+          end
+        end
+      end
+    end
+    text="#{text}\n\n#{endtext}" if endtext.length>0
+    ftr="You may be looking for the reload command." if skill.name[0,7]=='Restore' && !event.message.text.downcase.include?('skill') && (event.user.id==167657750971547648 || event.channel.id==386658080257212417) # not translated because this is a message directly aimed at me, an English speaker, and not to most users
+    tl=skill.fullName('**').length+skill.emotes(bot).length+header.length+text.length
+    tl+=ftr.length unless ftr.nil?
+    tl+=flds.map{|q| "__**#{q[0]}**__\n#{q[1]}"}.join("\n\n").length unless flds.nil?
+    if tl>1900
+      text=text.split("\n\n")
+      x=0
+      for i in 0...text.length
+        if "#{text[x]}\n\n#{text[i]}#{"\n\n#{header}\n\n#{skill.fullName('**')}\n\n#{skill.emotes(bot)}" if x==0}".length>1500
+          x=i*1
+        else
+          text[x]="#{text[x]}\n\n#{text[i]}"
+          text[i]=nil
+        end
+      end
+      text.compact!
+      clr=0
+      for i in 0...text.length
+        if i==0
+          create_embed(event,["__#{skill.fullName('**')}__#{skill.emotes(bot) unless safe_to_spam?(event)}",header],text[i],skill.disp_color(clr),nil,skill.thumbnail(event,bot))
+        else
+          create_embed(event,'',text[i],skill.disp_color(clr))
+        end
+        clr+=1
+      end
+      unless flds.nil? && ftr.nil?
+        create_embed(event,'','',skill.disp_color(clr),ftr,nil,flds)
+        clr+=1
+      end
+    else
+      create_embed(event,["__#{skill.fullName('**')}__#{skill.emotes(bot) unless safe_to_spam?(event)}",header],text,skill.disp_color,ftr,skill.thumbnail(event,bot),flds)
+      clr=1
+    end
+  end
+  w=[]
+  w2=0
+  if skill.type.include?('Assist') && skill.tags.include?('Music')
+    w=$skills.reject{|q| !has_any?(q.tags,['DanceRally','Cantrip'])}
+    w2=1
+  elsif skill.type.include?('Assist') && skill.tags.include?('Move') && skill.tags.include?('Rally')
+    w=$skills.reject{|q| !has_any?(q.tags,['Link','Feint'])}
+    w2=1
+  elsif skill.type.include?('Assist') && skill.tags.include?('Move')
+    w=$skills.reject{|q| !q.tags.include?('Link')}
+    w2=1
+  elsif skill.type.include?('Assist') && skill.tags.include?('Rally')
+    w=$skills.reject{|q| !q.tags.include?('Feint')}
+    w2=1
+  elsif skill.isPassive? && skill.tags.include?('Link')
+    w=$skills.reject{|q| !q.type.include?('Assist') || !q.tags.include?('Move') || q.tags.include?('Music')}
+    w2=2
+  elsif skill.isPassive? && skill.tags.include?('Feint')
+    w=$skills.reject{|q| !q.type.include?('Assist') || !q.tags.include?('Rally')}
+    w2=2
+  elsif skill.isPassive? && has_any?(skill.tags,['DanceRally','Cantrip'])
+    w=$skills.reject{|q| !q.type.include?('Assist') || !q.tags.include?('Music')}
+    w2=2
+  end
+  if w.length>0 && w2>0 && safe_to_spam?(event)
+    w=w.reject{|q| !q.isPostable?(event) || !['example','-','',nil].include?(q.level)}
+    w=w.sort{|a,b| a.name<=>b.name}
+    w=w.map{|q| q.postName}
+    create_embed(event,'',['',"Las siguientes habilidades se activan cuando su poseedor usa#{' o es objetivo de' unless skill.tags.include?('Music')} #{skill.name}:","Las siguientes habilidades, cuando se usan en o por la unidad que tiene #{skill.name}, lo activarán:"][w2],skill.disp_color(10+clr),nil,nil,triple_finish(w))
+    clr+=1
+  elsif event.message.text.downcase.split(' ').include?('refined') && skill.refine.nil? && skill.type.include?('Weapon')
+    event.respond "#{skill.name} no tiene refinamientos."
+    return nil
+  elsif !skill.refine.nil? && !(blevel>0 && !event.message.text.downcase.split(' ').include?('refined'))
+    r=skill.refine
+    text=''
+    for i in 0...r.overrides.length
+      if r.overrides[i][6]=='Efecto'
+        if skill.name=='Falchion'
+          s1=$skills[$skills.find_index{|q| q.name=='Falchion (Mystery)'}]
+          s2=$skills[$skills.find_index{|q| q.name=='Falchion (Awakening)'}]
+          s3=$skills[$skills.find_index{|q| q.name=='Falchion (Valentia)'}]
+          text="#{r.emote(r.overrides[i][6])} **#{s1.name} (+) Modo de Efecto**"
+          text="#{text} - #{s1.refinement_name.name}" unless s1.refinement_name.nil?
+          if safe_to_spam?(event)
+            text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+            text="#{text}\n*Eficaz contra:* #{s1.eff_against('Effect',true,event)}" unless s1.eff_against('Effect',true,event).length<=0
+            text="#{text}\n#{s1.refine.inner}" unless s1.refine.inner.nil?
+            text="#{text}\n#{s1.refine.outer}"
+            text="#{text}\n\n#{r.emote(r.overrides[i][6])} **#{s2.name} (+) Modo de Efecto**"
+            text="#{text} - #{s2.refinement_name.name}" unless s2.refinement_name.nil?
+            text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+            text="#{text}\n*Eficaz contra:* #{s2.eff_against('Effect',true,event)}" unless s2.eff_against('Effect',true,event).length<=0
+            text="#{text}\n#{s2.refine.inner}" unless s2.refine.inner.nil?
+            text="#{text}\n#{s2.refine.outer}"
+            text="#{text}\n\n#{r.emote(r.overrides[i][6])} **#{s3.name} (+) Modo de Efecto**"
+            text="#{text} - #{s3.refinement_name.name}" unless s3.refinement_name.nil?
+            text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+            text="#{text}\n*Eficaz contra:* #{s3.eff_against('Effect',true,event)}" unless s3.eff_against('Effect',true,event).length<=0
+            text="#{text}\n#{s3.refine.inner}" unless s3.refine.inner.nil?
+            text="#{text}\n#{s3.refine.outer}"
+          else
+            text="#{text}\n#{s1.refine.inner}" unless s1.refine.inner.nil?
+            text="#{text}\n\n#{r.emote(r.overrides[i][6])} **#{s2.name} (+) Modo de Efecto**"
+            text="#{text} - #{s2.refinement_name.name}" unless s2.refinement_name.nil?
+            text="#{text}\n#{s2.refine.inner}" unless s2.refine.inner.nil?
+            text="#{text}\n\n#{r.emote(r.overrides[i][6])} **#{s3.name} (+) Modo de Efecto**"
+            text="#{text} - #{s3.refinement_name.name}" unless s3.refinement_name.nil?
+            text="#{text}\n#{s3.refine.inner}" unless s3.refine.inner.nil?
+            text="#{text}\n\n<:Refine_Unknown:455609031701299220>**All Effect Refines**"
+            text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+            text="#{text}\n*Eficaz contra:* #{s2.eff_against('Effect',false,event)}" unless s2.eff_against('Effect',false,event).length<=0
+            text="#{text}\n#{s2.refine.outer}"
+          end
+        elsif skill.name=='Missiletainn'
+          s1=$skills[$skills.find_index{|q| q.name=='Missiletainn (Dark)'}]
+          s2=$skills[$skills.find_index{|q| q.name=='Missiletainn (Dusk)'}]
+          text="#{r.emote(r.overrides[i][6])} **#{s1.name} (+) Modo de Efecto**"
+          text="#{text} - #{s1.refinement_name.name}" unless s1.refinement_name.nil?
+          if safe_to_spam?(event)
+            text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+            text="#{text}\n*Eficaz contra:* #{s1.eff_against('Effect',false,event)}" unless s1.eff_against('Effect',false,event).length<=0
+            text="#{text}\n#{s1.refine.inner}" unless s1.refine.inner.nil?
+            text="#{text}\n#{s1.refine.outer}"
+            text="#{text}\n\n#{r.emote(r.overrides[i][6])} **#{s2.name} (+) Modo de Efecto**"
+            text="#{text} - #{s2.refinement_name.name}" unless s2.refinement_name.nil?
+            text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+            text="#{text}\n*Eficaz contra:* #{s2.eff_against('Effect',false,event)}" unless s2.eff_against('Effect',false,event).length<=0
+            text="#{text}\n#{s2.refine.inner}" unless s2.refine.inner.nil?
+            text="#{text}\n#{s2.refine.outer}"
+          else
+            text="#{text}\n#{s1.refine.inner}" unless s1.refine.inner.nil?
+            text="#{text}\n\n#{r.emote(r.overrides[i][6])} **#{s2.name} (+) Modo de Efecto**"
+            text="#{text} - #{s2.refinement_name.name}" unless s2.refinement_name.nil?
+            text="#{text}\n#{s2.refine.inner}" unless s2.refine.inner.nil?
+            text="#{text}\n\n<:Refine_Unknown:455609031701299220>**All Effect Refines**"
+            text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+            text="#{text}\n*Eficaz contra:* #{s2.eff_against('Effect',false,event)}" unless s2.eff_against('Effect',false,event).length<=0
+            text="#{text}\n#{s2.refine.outer}"
+          end
+        elsif !skill.exclusivity.nil? && skill.exclusivity.include?('Nebby')
+          x=r.inner.split('  ')
+          text="#{r.emote(r.overrides[i][6])} **#{skill.name} (+) Modo Metálico**"
+          text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+          text="#{text}\n*Eficaz contra:* #{skill.eff_against('Effect',false,event)}" unless skill.eff_against('Effect',false,event).length<=0
+          text="#{text}\n#{x[0]}"
+          text="#{text}\n\n#{r.emote(r.overrides[i][6])} **#{skill.name} (+) Modo Espectro**"
+          text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+          text="#{text}\n*Eficaz contra:* #{skill.eff_against('Effect',false,event)}" unless skill.eff_against('Effect',false,event).length<=0
+          text="#{text}\n#{x[1]}"
+        else
+          text="#{r.emote(r.overrides[i][6])} **#{skill.name} (+) Modo de #{r.overrides[i][6]}**"
+          text="#{text} - #{skill.refinement_name.name}" unless skill.refinement_name.nil?
+          text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+          text="#{text}\n*Eficaz contra:* #{skill.eff_against('Effect',false,event)}" unless skill.eff_against('Effect',false,event).length<=0
+          text="#{text}\n#{r.inner}" unless r.inner.nil?
+          if r.outer.nil?
+            text="#{text}\n#{skill.description}" unless skill.description.nil? || skill.description.length<=0
+            text="#{text}\n*Desventaja:* #{skill.dagger_debuff.join('   *Afecta:* ')}" unless skill.dagger_debuff.nil?
+            text="#{text}\n*Pulidor:* #{skill.dagger_buff.join('   *Afecta:* ')}" unless skill.dagger_buff.nil?
+          elsif r.outer.include?(' *** ')
+            x=r.outer.split(' *** ')
+            text="#{text}\n#{x[0]}" unless x[0].nil? || x[0].length<=0 || x[0]=='-'
+            x=x.map{|q| q.split(', ')}
+            text="#{text}\n*Desventaja:* #{x[1].join('   *Afecta:* ')}" unless x[1].nil?
+            text="#{text}\n*Pulidor:* #{x[2].join('   *Afecta:* ')}" unless x[2].nil?
+          else
+            text="#{text}\n#{r.outer}"
+            text="#{text}\n*Desventaja:* #{skill.dagger_debuff.join('   *Afecta:* ')}" unless skill.dagger_debuff.nil?
+            text="#{text}\n*Pulidor:* #{skill.dagger_buff.join('   *Afecta:* ')}" unless skill.dagger_buff.nil?
+          end
+          text="#{text}\nSi el Alcance del enemigo = 2, calcula el daño usando el valor más bajo de Def o Res." if (has_any?(skill.tags,['Frostbite','(E)Frostbite','(R)Frostbite']) && !skill.description.include?("i el Alcance del enemigo = 2, calcula el daño usando el valor más bajo de Def o Res")) || (skill.restrictions.include?('Dragons Only') && !skill.tags.include?('UnFrostbite'))
+        end
+        text="#{text}\n" if safe_to_spam?(event) || r.overrides[1,r.overrides.length-1].map{|q| q[7]}.compact.length>0
+      elsif safe_to_spam?(event) || !r.overrides[i][7].nil?
+        text="#{text}\n#{r.emote(r.overrides[i][6])} **Modo de #{r.overrides[i][6]}**  \u200B  \u200B  \u200B  #{r.dispStats(r.overrides[i][6],true)}"
+      end
+    end
+    unless skill.restrictions.include?('Staff Users Only') && skill.tome_tree.nil?
+      every=[]
+      every.push("*Eficaz contra:* #{skill.eff_against('Refine',true,event)}") unless skill.eff_against('Refine',true,event).length<=0
+      if r.outer.nil?
+        every.push(skill.description) unless skill.description.nil? || skill.description.length<=0
+        every.push("*Desventaja:* #{skill.dagger_debuff.join('   *Afecta:* ')}") unless skill.dagger_debuff.nil?
+        every.push("*Pulidor:* #{skill.dagger_buff.join('   *Afecta:* ')}") unless skill.dagger_buff.nil?
+      elsif r.outer.include?(' *** ')
+        x=r.outer.split(' *** ')
+        every.push(x[0]) unless x[0].nil? || x[0].length<=0 || x[0]=='-'
+        x=x.map{|q| q.split(', ')}
+        x=x.map{|q| [q[0].split(' (')[0],q[1]]} if skill.name=='Peshkatz'
+        every.push("*Desventaja:* #{x[1].join('   *Afecta:* ')}") unless x[1].nil?
+        every.push("*Pulidor:* #{x[2].join('   *Afecta:* ')}") unless x[2].nil?
+      else
+        every.push(r.outer)
+        every.push("*Desventaja:* #{skill.dagger_debuff.join('   *Afecta:* ')}") unless skill.dagger_debuff.nil?
+        every.push("*Pulidor:* #{skill.dagger_buff.join('   *Afecta:* ')}") unless skill.dagger_buff.nil?
+      end
+      every.push("Si el Alcance del enemigo = 2, calcula el daño usando el valor más bajo de Def o Res.") if (has_any?(skill.tags,['Frostbite','(E)Frostbite','(R)Frostbite']) && !skill.description.include?("i el Alcance del enemigo = 2, calcula el daño usando el valor más bajo de Def o Res")) || (skill.restrictions.include?('Dragons Only') && !skill.tags.include?('UnFrostbite'))
+      typ=' de Estadísticas'
+      typ=' Predeterminados' if skill.restrictions.include?('Staff Users Only') && skill.tome_tree=='WrazzleDazzle'
+      typ='' if r.overrides[0][6]!='Effect' && r.overrides[0][6]!='Efecto'
+      text="#{text}\n\n<:Refine_Unknown:455609031701299220>**Todos los Refinamientos#{typ}**\n#{every.join("\n")}" if safe_to_spam?(event) && every.length>0
+    end
+    ftr='Cada refinamiento tiene un precio: 350 SP (525 si es heredado), 500<:Arena_Medal:453618312446738472> 50<:Refining_Stone:453618312165720086>'
+    ftr='Cada refinamiento tiene un precio: 400 SP, 500<:Arena_Medal:453618312446738472> 200<:Divine_Dew:453618312434417691>' unless skill.exclusivity.nil?
+    text="#{text}\n\n#{ftr}".gsub("\n\n\n","\n\n")
+    if text.length>1900
+      text=text.split("\n\n")
+      if safe_to_spam?(event) && text[-2][0,'<:Refine_Unknown:455609031701299220>'.length]=='<:Refine_Unknown:455609031701299220>'
+        text[-3]="#{text[-3]}\n\n#{text[-2]}"
+        text[-2]=nil
+        text.compact!
+      end
+      str=text[0]
+      for i in 1...text.length
+        if "#{str}\n\n#{text[i]}".length>=1800
+          create_embed(event,'__**Opciones de Refinería**__',str,skill.disp_color(10+clr),nil,r.thumbnail) if clr==1
+          create_embed(event,'',str,skill.disp_color(10+clr)) unless clr==1
+          str=text[i]
+          clr+=1
+        else
+          str="#{str}\n\n#{text[i]}"
+        end
+      end
+      create_embed(event,'',str,skill.disp_color(10+clr))
+    else
+      create_embed(event,'__**Opciones de Refinería**__',text,skill.disp_color(10+clr),nil,r.thumbnail)
+    end
+    clr+=1
+  end
+  if has_any?(event.message.text.downcase.split(' '),['tags','tag'])
+    str=''
+    flds=nil
+    k=skill.tags.map{|q| q}
+    if skill.type.include?('Weapon')
+      str="#{str}\n**Espacio:**  <:Skill_Weapon:444078171114045450> Weapon"
+      k=k.reject{|q| q=='Weapon'}
+      clrs=k.reject{|q| !['Red','Blue','Green','Colorless','Purple'].include?(q)}
+      for i in 0...clrs.length
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{clrs[i]}_Unknown"}
+        clrs[i]="#{"#{moji[0].mention} " if moji.length>0}#{clrs[i]}"
+      end
+      str="#{str}\n**Color#{'es' if clrs.length>1}:** #{clrs.join(', ')}" if clrs.length>0
+      k=k.reject{|q| ['Red','Blue','Green','Colorless','Purple'].include?(q)}
+      clrs=k.reject{|q| !['Blade','Tome','Breath','Bow','Dagger','Staff','Beast','Gun'].include?(q)}
+      for i in 0...clrs.length
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "Gold_#{clrs[i]}"}
+        clrs[i]="#{"#{moji[0].mention} " if moji.length>0}#{clrs[i]}"
+      end
+      str="#{str}\n**Tipo#{'s' if clrs.length>1}:** #{clrs.join(', ')}" if clrs.length>0
+      k=k.reject{|q| ['Blade','Tome','Breath','Bow','Dagger','Staff','Beast','Gun'].include?(q)}
+      if k.reject{|q| q.include?('(E)') || q.include?('(R)') || q.include?('(T)') || q.include?('(TE)') || q.include?('(TR)') || q.include?('(ET)') || q.include?('(RT)') || q.include?('(T)(E)') || q.include?('(T)(R)') || q.include?('(E)(T)') || q.include?('(R)(T)')}.length<k.length
+        flds=[['Arma base',[]],['Todos los refinamientos',[]],['Refinamiento para el efecto',[]],['Base transformada',[]],['Transformación refinada',[]],['Transformación del efecto',[]]]
+        for i in 0...k.length
+          if k[i][0,3]=='(R)'
+            flds[1][1].push(k[i][3,k[i].length-3])
+          elsif k[i][0,3]=='(E)'
+            flds[2][1].push(k[i][3,k[i].length-3])
+          elsif k[i][0,3]=='(T)'
+            flds[3][1].push(k[i][3,k[i].length-3])
+          elsif ['(TR)','(RT)'].include?(k[i][0,4])
+            flds[4][1].push(k[i][4,k[i].length-4])
+          elsif ['(TE)','(ET)'].include?(k[i][0,4])
+            flds[5][1].push(k[i][4,k[i].length-4])
+          elsif ['(T)(R)','(R)(T)'].include?(k[i][0,6])
+            flds[4][1].push(k[i][6,k[i].length-6])
+          elsif ['(T)(E)','(E)(T)'].include?(k[i][0,6])
+            flds[5][1].push(k[i][6,k[i].length-6])
+          else
+            flds[0][1].push(k[i])
+          end
+        end
+        flds=flds.reject{|q| q[1].length<=0}.map{|q| [q[0],q[1].join("\n")]}
+        flds=nil if flds.length<=0
+      end
+    elsif skill.type.include?('Assist')
+      str="#{str}\n**Espacio:** <:Skill_Assist:444078171025965066> Assist"
+      k=k.reject{|q| q=='Assist'}
+    elsif skill.type.include?('Special')
+      str="#{str}\n**Espacio:** <:Skill_Special:444078170665254929> Special"
+      k=k.reject{|q| q=='Special'}
+    elsif skill.isPassive?
+      str="#{str}\n**Espacio:** <:Passive:544139850677485579> Passive"
+      k=k.reject{|q| q=='Passive'}
+      clrs=k.reject{|q| !['A','B','C','Seal','W'].include?(q)}
+      for i in 0...clrs.length
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Passive_#{clrs[i].gsub('Seal','S')}"}
+        clrs[i]="#{"#{moji[0].mention} " if moji.length>0}#{clrs[i]}"
+      end
+      str="#{str}\n**Espacio#{'s' if clrs.length>1}:** #{clrs.join(', ')}" if clrs.length>0
+      k=k.reject{|q| ['A','B','C','Seal','W'].include?(q)}
+    elsif skill.type.include?('Duo')
+      str="#{str}\n**Espacio:** <:Hero_Duo:631431055420948480> Duo"
+      k=k.reject{|q| q=='Duo'}
+    elsif skill.type.include?('Harmonic')
+      str="#{str}\n**Espacio:** <:Hero_Harmonic:722436762248413234> Harmonic"
+      k=k.reject{|q| q=='Harmonic'}
+    end
+    str="#{str}\n\nEstas etiquetas están en inglés porque así es como se almacenan y cómo se deben buscar.\n\n**Etiquetas de búsqueda**"
+    flds=triple_finish(k) if flds.nil?
+    create_embed(event,'',str,skill.disp_color(clr),nil,nil,flds)
   end
 end
 
@@ -2707,8 +3577,8 @@ def today_en_feh(event,bot,shift=false,chain='')
     f=book1[week_from(date,3)%book1.length].split(', ')
     u=$units.map{|q| q}
     f=f.map{|q2| "#{q2}#{u[u.find_index{|q| q.name==q2}].emotes(bot) unless u.find_index{|q| q.name==q2}.nil?}"}
-    str=extend_message(str,"**Personajes del Renacimiento de los Libros 1+2 de mañana:** #{f.join(', ')}",event,2) if chain.length>0 && t.wday==0
-    str=extend_message(str,"**Personajes Actuales del Renacimiento de los Libros 1+2:** #{f.join(', ')}",event,2) if chain.length<=0 && !shift
+    str=extend_message(str,"**Personajes del Renacimiento de mañana:** #{f.join(', ')}",event,2) if chain.length>0 && t.wday==0
+    str=extend_message(str,"**Personajes Actuales del Renacimiento:** #{f.join(', ')}",event,2) if chain.length<=0 && !shift
     b=disp_current_events(event,bot,0,shift)
     str=extend_message(str,b,event,2) unless chain.length>0
     b=disp_current_paths(event,bot,0,shift)
@@ -3022,7 +3892,7 @@ def next_eventos(bot,event,args=[])
       end
       mmzz.compact!
       mmzz.reverse!
-      msg=extend_message(msg,"__**Personajes del Renacimiento de los Libros 1+2**__",event,2)
+      msg=extend_message(msg,"__**Personajes del Renacimiento**__",event,2)
       strpost=false
       tx=t-t.wday*24*60*60
       for i in 0...mmzz.length
@@ -3051,7 +3921,7 @@ def next_eventos(bot,event,args=[])
     else
       str2=matz[0].split(', ').map{|q| "#{q}#{u[u.find_index{|q2| q2.name==q}].emotes(bot) unless u.find_index{|q2| q2.name==1}.nil?}"}.join(', ')
       str3=matz[1].split(', ').map{|q| "#{q}#{u[u.find_index{|q2| q2.name==q}].emotes(bot) unless u.find_index{|q2| q2.name==1}.nil?}"}.join(', ')
-      msg=extend_message(msg,"__**Personajes del Renacimiento de los Libros 1+2**__\n*Esta semana:* #{str2}\n*La próxima semana:* #{str3}",event,2)
+      msg=extend_message(msg,"__**Personajes del Renacimiento**__\n*Esta semana:* #{str2}\n*La próxima semana:* #{str3}",event,2)
     end
   end
   event.respond msg unless [10,12,13,14,16].include?(idx)

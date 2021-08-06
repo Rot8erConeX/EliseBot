@@ -1,36 +1,44 @@
-Caeda(Summer), Freyja(Summer), Freyr(Summer), Ogma(Summer), Norne(Summer), Jorge, Catria(Bunny), Stahl, Azura(Vallite), Sharena\Arena\20/07/2021, 26/07/2021\Water, Wind
-Dagr, Bramimond, Hilda(Summer), Mercedes(Summer), Ashe(Summer), Caspar(Summer), Leonie(Summer), Black Knight, Chrom(Crowned), Sharena\Aether\20/07/2021, 26/07/2021\Panic Manor
-FEH, FE6\Resonant\20/07/2021, 26/07/2021
-Caeda(Summer), Freyja(Summer), Freyr(Summer), Ogma(Summer), Norne(Summer), Jorge, Catria(Bunny), Stahl, Azura(Vallite), Sharena\Arena\27/07/2021, 02/08/2021\Water, Earth
-Altina, Duma, Caeda(Summer), Freyja(Summer), Freyr(Summer), Ogma(Summer), Norne(Sunner), Arvis, Dimitri(Savior), Anna\Aether\27/07/2021, 02/08/2021\Panic Manor
-FE1, FE3, FE11, FE12, FE7\Resonant\27/07/2021, 02/08/2021
--\Arena\03/08/2021, 07/08/2021\Earth, Fire
+Ullr, Nifl, Charlotte, Nyx, Orochi, Benny, Arete, Palla, Robin(F)(Fallen), Anna\Arena\03/08/2021, 07/08/2021\Earth, Fire
 Eir, Hel, Caeda(Summer), Freyja(Summer), Freyr(Summer), Ogma(Summer), Norne(Sunner), Arvis, Dimitri(Savior), Anna\Aether\03/08/2021, 07/08/2021\Panic Manor
--\Arena\10/08/2021, 16/08/2021\Earth, Wind
+FEH, FE8\Resonant\03/08/2021, 07/08/2021
+Hinoka(Pirate), Surtr(Pirate), Naesala(Pirate), Vika(Pirate), Lifis(Pirate), Hinoka(Launch), Camilla(Launch), Surtr\Tempest\06/08/2021, 15/08/2021\Spur Atk Def 1, Steady Breath
+Ullr, Nifl, Charlotte, Nyx, Orochi, Benny, Arete, Palla, Robin(F)(Fallen), Anna\Arena\10/08/2021, 16/08/2021\Earth, Wind
+Plumeria, Thrasir, Nifl, Charlotte, Nyx, Orochi, Benny, Arete, Claude(Unification), Fjorm\Aether\10/08/2021, 16/08/2021\Armor School
+FE15, FE2, FE9\Resonant\10/08/2021, 16/08/2021
 -\Arena\17/08/2021, 23/08/2021\Earth, Water
+Ullr, Triandra, Nifl, Charlotte, Nyx, Orochi, Benny, Arete, Claude(Unification), Fjorm\Aether\17/08/2021, 23/08/2021\Cavalry School
 -\Arena\24/08/2021, 30/08/2021\Wind, Fire
 -\Arena\31/08/2021, 06/09/2021\Wind, Water
--\Arena\07/09/2021, 13/09/2021\Wind, Earth
--\Arena\14/09/2021, 20/09/2021\Wind, Fire
+-\Arena\07/09/2021, 13/09/2021\Wind, Fire
+-\Arena\14/09/2021, 20/09/2021\Wind, Earth
 -\Arena\21/09/2021, 27/09/2021\Wind, Water
--\Arena\28/09/2021, 03/10/2021\Fire, Earth
--\Arena\04/10/2021, 10/10/2021\Fire, Wind
+-\Arena\28/09/2021, 03/10/2021\Fire, Wind
+-\Arena\04/10/2021, 10/10/2021\Fire, Earth
 -\Arena\11/10/2021, 17/10/2021\Fire, Water
--\Arena\18/10/2021, 24/10/2021\Fire, Earth
--\Arena\25/10/2021, 31/10/2021\Earth, Wind
--\Arena\01/11/2021, 07/11/2021\Earth, Fire
--\Arena\08/11/2021, 14/11/2021\Earth, Water
--\Arena\15/11/2021, 21/11/2021\Earth, Wind
--\Arena\22/11/2021, 28/11/2021\Water, Fire
--\Arena\29/11/2021, 05/12/2021\Water, Earth
--\Arena\06/12/2021, 12/12/2021\Water, Wind
+-\Arena\18/10/2021, 24/10/2021\Fire, Wind
+-\Arena\25/10/2021, 31/10/2021\Fire, Earth
+-\Arena\01/11/2021, 07/11/2021\Earth, Water
+-\Arena\08/11/2021, 14/11/2021\Earth, Wind
+-\Arena\15/11/2021, 21/11/2021\Earth, Fire
+-\Arena\22/11/2021, 28/11/2021\Earth, Water
+-\Arena\29/11/2021, 05/12/2021\Water, Wind
+-\Arena\06/12/2021, 12/12/2021\Water, Earth
 -\Arena\13/12/2021, 19/12/2021\Water, Fire
--\Arena\20/12/2021, 26/12/2021\Water, Earth
--\Arena\27/12/2021, 02/01/2022\Wind, Fire
--\Arena\03/01/2022, 09/01/2022\Wind, Earth
+-\Arena\20/12/2021, 26/12/2021\Water, Wind
+-\Arena\27/12/2021, 02/01/2022\Wind, Earth
+-\Arena\03/01/2022, 09/01/2022\Wind, Fire
 -\Arena\10/01/2022, 16/01/2022\Wind, Water
--\Arena\17/01/2022, 23/01/2022\Wind, Fire
--\Arena\24/01/2022, 30/01/2022\Fire, Earth
+-\Arena\17/01/2022, 23/01/2022\Wind, Earth
+-\Arena\24/01/2022, 30/01/2022\Fire, Wind
 -\Arena\31/01/2022, 06/02/2022\Fire, Water
--\Arena\07/02/2022, 13/02/2022\Fire, Wind
--\Arena\14/02/2022, 20/02/2022\Fire, Earth
+-\Arena\07/02/2022, 13/02/2022\Fire, Earth
+-\Arena\14/02/2022, 20/02/2022\Fire, Wind
+-\Arena\21/02/2022, 27/02/2022\Fire, Water
+-\Arena\28/02/2022, 06/03/2022\Water, Earth
+-\Arena\07/02/2022, 13/03/2022\Water, Wind
+-\Arena\14/02/2022, 20/03/2022\Water, Fire
+-\Arena\21/02/2022, 27/03/2022\Water, Earth
+-\Arena\28/02/2022, 03/04/2022\Earth, Wind
+-\Arena\04/02/2022, 10/04/2022\Earth, Water
+-\Arena\11/02/2022, 17/04/2022\Earth, Fire
+-\Arena\18/02/2022, 24/04/2022\Earth, Wind
