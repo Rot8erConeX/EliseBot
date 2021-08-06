@@ -3,6 +3,7 @@ system('color 0F')
 Shards = 4                   # total number of shards
 $spanishShard=nil
 
+# require 'bundler/setup'
 require 'discordrb'                    # Download link: https://github.com/meew0/discordrb
 require 'open-uri'                     # pre-installed with Ruby in Windows
 require 'net/http'                     # pre-installed with Ruby in Windows
@@ -262,7 +263,7 @@ Stat_Names=['HP','Attack','Speed','Defense','Resistance']
 Skill_Slots=[['<:Skill_Weapon:444078171114045450>','<:Skill_Assist:444078171025965066>','<:Skill_Special:444078170665254929>','<:Passive_A:443677024192823327>',
               '<:Passive_B:443677023257493506>','<:Passive_C:443677023555026954>','<:Passive_S:443677023626330122>','<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>'],
              ['Weapon','Assist','Special','A Passive','B Passive','C Passive','Passive Seal','Duo/Harmonic'],
-             ['Arma','Asistencia','Especial','Pasiva A','Pasiva B','Pasiva C','Insignia passiva','Dúo/al Son']]
+             ['Arma','Asistencia','Especial','Pasiva A','Pasiva B','Pasiva C','Insignia passiva','Dúo/al Son','Dúo','al Son','Pasiva Arma']]
 Rarity_stars=[['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>',
                '<:Icon_Rarity_4:448266418459377684>','<:Icon_Rarity_5:448266417553539104>','<:Icon_Rarity_6:491487784650145812>'],
               ['<:Icon_Rarity_1:448266417481973781>','<:Icon_Rarity_2:448266417872044032>','<:Icon_Rarity_3:448266417934958592>',
@@ -439,7 +440,7 @@ class FEHUnit
     moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "#{self.weapon_color}_#{self.weapon_type}"}
     moji=bot.server(575426885048336388).emoji.values.reject{|q| q.name != "DL_#{self.weapon_color}_#{self.weapon_type}"} if @games[0]=='DL'
     wemote=moji[0].mention unless moji.length<=0
-    unless self.weapon_type != 'Tome' || @weapon[2].nil? || ['Robin (shared stats)','Kris (shared stats)','Robin','Kris'].include?(name)
+    unless self.weapon_type != 'Tome' || @weapon[2].nil? || ['Robin (shared stats)','Kris (shared stats)','Robin','Kris'].include?(@name)
       moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{@weapon[2]}_#{self.weapon_type}"}
       wemote=moji[0].mention unless moji.length<=0
     end
@@ -508,7 +509,7 @@ class FEHUnit
         refresher="#{refresher}\n*Other modifiers:* #{@clazz_flag.join(', ')}"
       end
     end
-    return "#{"<:Summon_Gun:467557566050861074>*Arma para Convocar*\n" if @name=='Kiran' || @id==0}#{wemote}#{self.wstring_spanish}\n#{memote}*#{self.movement_spanish}*#{refresher}#{legstr}#{duostr}#{"\n" if bemote.length>0}#{bemote.join("\n")}" if Shardizard==$spanishShard
+    return "#{"<:Summon_Gun:467557566050861074>*Pistola para Convocar*\n" if @name=='Kiran' || @id==0}#{wemote}#{self.wstring_spanish}\n#{memote}*#{self.movement_spanish}*#{refresher}#{legstr}#{duostr}#{"\n" if bemote.length>0}#{bemote.join("\n")}" if Shardizard==$spanishShard
     return "#{"<:Summon_Gun:467557566050861074>*Summon Gun*\n" if @name=='Kiran' || @id==0}#{wemote}#{self.weapon_string}\n#{memote}*#{@movement}*#{refresher}#{legstr}#{duostr}#{"\n" if bemote.length>0}#{bemote.join("\n")}"
   end
   
@@ -863,7 +864,7 @@ class FEHUnit
     return -1 if @availability[0].include?('-') # enemy units are not summonable
     return 0 unless @availability[0].gsub('0s','').include?('s') || @availability[0].include?('p') # units that cannot appear on banners are not summonable
     return 1 unless @availability[0].include?('p') && @duo.nil? # seasonal units are level 1 summonable
-    return 2 if @availability[0].include?('TD') && @id>319 # Book 1/2 units that are removed from New/Special Heroes banners are level 2 summonable
+    return 2 if @availability[0].include?('TD') # Book 1/2 units that are removed from New/Special Heroes banners are level 2 summonable
     return 3 # all other units are level 3 summonable
   end
   
@@ -970,7 +971,10 @@ class FEHUnit
     end
     y2=y.map{|q| q.map{|q2| q2.fullName}}
     for i in 0...y2.length
-      y2[i]=['~~*none*~~'] if y2[i].length<=0
+      if y2[i].length<=0
+        y2[i]=['~~*none*~~']
+        y2[i]=['~~*nada*~~'] if Shardizard==$spanishShard
+      end
     end
     emotes2Bexplained=[false,false,false,false]
     if smol
@@ -998,7 +1002,9 @@ class FEHUnit
           x=y[i][-1].learn.find_index{|q| q.include?(@name)}
           y2[i]="#{y2[i]} #{Rarity_stars[0][x]}" unless x.nil? || !y[i][-1].exclusivity.nil?
         end
-        y2[i]=nil if ['<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>~~*none*~~','<:Passive_S:443677023626330122>~~*none*~~'].include?(y2[i])
+        nun='none'
+        nun='nada' if Shardizard==$spanishShard
+        y2[i]=nil if ["<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>~~*#{nun}*~~","<:Passive_S:443677023626330122>~~*#{nun}*~~"].include?(y2[i])
       end
       y2.compact!
       return [['Habilidades',y2.join("\n")]] if Shardizard==$spanishShard
@@ -1056,7 +1062,7 @@ class FEHUnit
         x=y[i][-1].learn.find_index{|q| q.include?(@name)}
         y2[i][1]="#{y2[i][1]}   #{Rarity_stars[0][x]}" unless x.nil? || !y[i][-1].exclusivity.nil?
       end
-      y2[i]=nil if ["<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>#{Skill_Slots[pos][7]}","<:Passive_S:443677023626330122>#{Skill_Slots[pos][6]}"].include?(y2[i][0]) && y2[i][1]=='~~*none*~~'
+      y2[i]=nil if ["<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>#{Skill_Slots[pos][7]}","<:Passive_S:443677023626330122>#{Skill_Slots[pos][6]}"].include?(y2[i][0]) && ['~~*none*~~','~~*nada*~~'].include?(y2[i][1])
     end
     y2.compact!
     if explainemotes && emotes2Bexplained.include?(true)
@@ -1768,6 +1774,7 @@ class SuperUnit < FEHUnit # attributes shared by Dev- and Donor- Units but not i
       for i in 0...s.length
         if s[i].length<=0
           s[i]='~~none~~'
+          s[i]='~~nada~~' if Shardizard==$spanishShard
         elsif s[i].reject{|q2| q2.include?('~~')}.length<=0
           s[i]=s[i][-1].gsub('__','')
         else
@@ -1795,7 +1802,10 @@ class SuperUnit < FEHUnit # attributes shared by Dev- and Donor- Units but not i
     f=[]
     ftr=nil
     for i in 0...s.length
-      s[i]=['~~none~~'] if s[i].length<=0 && i==6
+      if s[i].length<=0 && i==6
+        s[i]=['~~none~~']
+        s[i]=['~~nada~~'] if Shardizard==$spanishShard
+      end
       for i2 in 0...s[i].length
         if i>5
         elsif @base_unit.summoned.map{|q| q.fullName}.include?(s[i][i2].gsub('~~','').gsub('__','').split(' (+) ')[0])
@@ -2512,6 +2522,7 @@ class FEHSkill
   
   def weapon_class
     return nil unless @type.include?('Weapon')
+    return self.clasa_de_arma if Shardizard==$spanishShard
     return 'Summon Gun' if @restrictions.include?('Summon Gun Users Only')
     return 'Multiplex' if ['Missiletainn','Umbra Burst'].include?(@name)
     return 'Sword (Red Blade)' if @restrictions.include?('Sword Users Only')
@@ -2541,11 +2552,19 @@ class FEHSkill
   
   def mcr
     x=[]
-    x.push('**Scale:** 1/12') if @name=='Liliputia'
-    x.push('**Scale:** 12/1') if @name=='Brobdingo'
-    x.push("**Might:** #{@might}") if @type.include?('Weapon') && !['Missiletainn','Umbra Burst'].include?(@name) && !@might.nil? && @might>0
-    x.push("**Cooldown:** #{@might}") if has_any?(@type,['Special','Duo','Harmonic']) && !@might.nil? && @might>0
-    x.push("**Range:** #{@range}") if has_any?(@type,['Weapon','Assist']) && !@range.nil? && @range>0
+    if Shardizard==$spanishShard
+      x.push('**Escala:** 1/12') if ['Liliputia','Teakava'].include?(@name)
+      x.push('**Escala:** 12/1') if ['Brobdingo','Upelkuchen'].include?(@name)
+      x.push("**Poder:** #{@might}") if @type.include?('Weapon') && !['Missiletainn','Umbra Burst'].include?(@name) && !@might.nil? && @might>0
+      x.push("**Cuenta Atrás:** #{@might}") if has_any?(@type,['Special','Duo','Harmonic']) && !@might.nil? && @might>0
+      x.push("**Alcance:** #{@range}") if has_any?(@type,['Weapon','Assist']) && !@range.nil? && @range>0
+    else
+      x.push('**Scale:** 1/12') if @name=='Liliputia'
+      x.push('**Scale:** 12/1') if @name=='Brobdingo'
+      x.push("**Might:** #{@might}") if @type.include?('Weapon') && !['Missiletainn','Umbra Burst'].include?(@name) && !@might.nil? && @might>0
+      x.push("**Cooldown:** #{@might}") if has_any?(@type,['Special','Duo','Harmonic']) && !@might.nil? && @might>0
+      x.push("**Range:** #{@range}") if has_any?(@type,['Weapon','Assist']) && !@range.nil? && @range>0
+    end
     return x.join("  \u200B  \u200B  \u200B  ")
   end
   
@@ -2575,14 +2594,19 @@ class FEHSkill
   def transform_type
     return nil unless @type.include?('Weapon') && @restrictions.include?('Beasts Only') && !@tags.include?('UnTransform') && !@name.include?(' (All)')
     if @restrictions.include?('Infantry Only')
+      return 'Si el personaje se transforma, otorga Atq +2 y otorga daño +10 cuando se activa Especial.' if Shardizard==$spanishShard
       return 'If unit is transformed, grants Atk +2, and grants damage +10 when Special triggers.'
     elsif @restrictions.include?('Fliers Only')
+      return 'Si el personaje se transforma, otorga Atq +2 y el personaje puede moverse 1 espacio extra.' if Shardizard==$spanishShard
       return 'If unit is transformed, grants Atk +2 and unit can move 1 extra space.'
     elsif @restrictions.include?('Cavalry Only')
+      return 'Si el personaje se transforma, otorga Atq +2 y si el personaje inicia el combate, inflige Atq/Def-4 al enemigo durante el combate y el enemigo no puede realizar un ataque de seguimiento.' if Shardizard==$spanishShard
       return 'If unit is transformed, grants Atk +2, and if unit initiates combat, inflicts Atk/Def-4 on foe during combat and foe cannot make a follow-up attack.'
     elsif @restrictions.include?('Armor Only')
+      return 'Si el personaje se transforma, otorga Atq +2 y el personaje puede contraatacar independientemente de la distancia.' if Shardizard==$spanishShard
       return 'If unit is transformed, grants Atk +2 and unit can counterattack regardless of distance.'
     else
+      return 'Si el personaje se transforma, otorga Atq +2.' if Shardizard==$spanishShard
       return 'If unit is transformed, grants Atk +2.'
     end
   end
@@ -2601,7 +2625,15 @@ class FEHSkill
     emo.push('<:Hero_Duo_Mathoo:631431055513092106>') if @type.include?('Duo') && @exclusivity.include?('Mathoo')
     emo.push('<:Hero_Harmonic:722436762248413234>') if @type.include?('Harmonic')
     text=emo.join('')
-    text="#{text}**Skill Slot:** #{@type.join(', ')}" unless emotesonly
+    unless emotesonly || Shardizard !=$spanishShard
+      ttt=@type.map{|q| q}
+      for i in 0...ttt.length
+        t=['Weapon','Assist','Special','Passive(A)','Passive(B)','Passive(C)','Seal','','Duo','Harmonic','Passive(W)'].find_index{|q| q==ttt[i]}
+        ttt[i]=Skill_Slots[2][t]
+      end
+      text="#{text}**Espacio de Habilidad:** #{ttt.join(', ')}"
+    end
+    text="#{text}**Skill Slot:** #{@type.join(', ')}" unless emotesonly || Shardizard==$spanishShard
     if @type.include?('Weapon') && !['Missiletainn','Umbra Burst'].include?(@name)
       clr='Gold'
       clr='Red' if has_any?(@restrictions,['Sword Users Only','Red Tome Users Only']) || (@tags.include?('Red') && !has_any?(@tags,['Blue','Green','Colorless']))
@@ -2626,21 +2658,26 @@ class FEHSkill
         wemote=moji[0].mention unless moji.length<=0
       end
       wemote='<:Summon_Gun:467557566050861074>' if @restrictions.include?('Summon Gun Users Only')
+      return wemote if emotesonly==1
       text="#{text}#{"\n" unless emotesonly}#{wemote}"
-      text="#{text}**Weapon Type:** #{self.weapon_class}" unless emotesonly
+      text="#{text}**Weapon Type:** #{self.weapon_class}" unless emotesonly || Shardizard==$spanishShard
+      text="#{text}**Tipo de Arma:** #{self.weapon_class}" unless emotesonly || Shardizard !=$spanishShard
       if tpe=='Beast' && !@tome_tree.nil?
         moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{@tome_tree}"}
         moji=bot.server(575426885048336388).emoji.values.reject{|q| q.name != "DL_Mov_#{@tome_tree}"} if @tags.include?('Dragalia')
         memote=''
         memote=moji[0].mention unless moji.length<=0
         text="#{text}#{"\n" unless emotesonly}#{memote}"
-        text="#{text}**Movement Type:** #{@tome_tree}" unless emotesonly
+        text="#{text}**Movement Type:** #{@tome_tree}" unless emotesonly || Shardizard==$spanishShard
+        text="#{text}**Tipo de Movimiento:** #{self.arbor_tomo}" unless emotesonly || Shardizard !=$spanishShard
       end
     elsif @type.include?('Assist') && @restrictions.include?('Staff Users Only')
       text="#{text}#{"\n" unless emotesonly}<:Assist_Staff:454451496831025162>"
-      text="#{text}**Healing Staff**" unless emotesonly
-    elsif @type.include?('Assist') && ['Liliputia','Brobdingo'].include?(@name) && !emotesonly
-      text="#{text}\n<:Assist_Staff:454451496831025162>**Staff**"
+      text="#{text}**Healing Staff**" unless emotesonly || Shardizard==$spanishShard
+      text="#{text}**Bastón Curativo**" unless emotesonly || Shardizard !=$spanishShard
+    elsif @type.include?('Assist') && ['Liliputia','Brobdingo','Teakava','Upelkuchen'].include?(@name) && !emotesonly
+      text="#{text}\n<:Assist_Staff:454451496831025162>**Staff**" unless Shardizard==$spanishShard
+      text="#{text}\n<:Assist_Staff:454451496831025162>**Bastón**" if Shardizard==$spanishShard
     elsif @type.include?('Assist') && @tags.include?('Music')
       text="#{text}#{"\n" unless emotesonly}<:Assist_Music:454462054959415296>"
       text="#{text}**Refreshing**" unless emotesonly
@@ -2762,7 +2799,7 @@ class FEHSkill
     end
     x=x.reject{|q| !q.isPostable?(event)}.sort{|a,b| a.fullName<=>b.fullName}
     return x if mode%2==1
-    return list_lift(x.map{|q| "*#{q.postName}*"},'or') unless x.length<=0
+    return list_lift(x.map{|q| "*#{q.postName}*"},"o#{'r' unless Shardizard==$spanishShard}") unless x.length<=0
     return nil
   end
   
@@ -2958,6 +2995,7 @@ class FEHRefine
     @overrides=[[0,3,0,0,0,0,'e'],[2,5,0,0,0,0,'a'],[0,5,0,3,0,0,'s'],[0,5,0,0,4,0,'d'],[0,5,0,0,0,4,'r']]
     @overrides=[[0,0,0,0,0,0,'e'],[1,2,0,0,0,0,'a'],[0,2,0,2,0,0,'s'],[0,2,0,0,3,0,'d'],[0,2,0,0,0,3,'r']] if weap.isRanged?
     @overrides=[[0,0,0,0,0,0,'e'],[0,0,0,0,0,0,'w',"This weapon's damage is calculated the same as other weapons."],[0,0,0,0,0,0,'d','The foe cannot counterattack.']] if weap.restrictions.include?('Staff Users Only') && weap.tome_tree=='WrazzleDazzle'
+    @overrides=[[0,0,0,0,0,0,'e'],[0,0,0,0,0,0,'w',"El daño de este bastón se calcula igual que el de otras armas."],[0,0,0,0,0,0,'d','El enemigo no puede contraatacar.']] if weap.restrictions.include?('Staff Users Only') && weap.tome_tree=='WrazzleDazzle' && Shardizard==$spanishShard
     @overrides=[[0,0,0,0,0,0,'e']] if weap.restrictions.include?('Staff Users Only') && weap.tome_tree.nil?
     for i in 0...@overrides.length
       if val[0,3]=="(#{@overrides[i][6]})"
@@ -2976,10 +3014,18 @@ class FEHRefine
       end
     end
     @overrides[0][6]='Effect'
+    @overrides[0][6]='Efecto' if Shardizard==$spanishShard
     if weap.restrictions.include?('Staff Users Only') && weap.tome_tree=='WrazzleDazzle'
       @overrides[1][6]='Wrathful'
+      @overrides[1][6]='Furioso' if Shardizard==$spanishShard
       @overrides[2][6]='Dazzling'
+      @overrides[2][6]='Brillante' if Shardizard==$spanishShard
     elsif weap.restrictions.include?('Staff Users Only') && weap.tome_tree.nil?
+    elsif Shardizard==$spanishShard
+      @overrides[1][6]='Ataque'
+      @overrides[2][6]='Velocidad'
+      @overrides[3][6]='Defensa'
+      @overrides[4][6]='Resistencia'
     else
       @overrides[1][6]='Attack'
       @overrides[2][6]='Speed'
@@ -2996,9 +3042,9 @@ class FEHRefine
     else
       @inner=val
     end
-    @overrides=@overrides.reject{|q| q[6]=='Effect'} if weap.refinement_name.nil? && @inner.nil? && !['Falchion','Missiletainn'].include?(weap.name)
-    @overrides=@overrides.reject{|q| q[6]=='Wrathful'} if weap.description.include?("This weapon's damage is calculated the same as other weapons.") || weap.description.include?('Damage from staff calculated like other weapons.') || weap.tags.include?('Wrathful')
-    @overrides=@overrides.reject{|q| q[6]=='Dazzling'} if weap.description.include?('The foe cannot counterattack.') || weap.description.include?('Foe cannot counterattack.') || weap.tags.include?('Dazzling')
+    @overrides=@overrides.reject{|q| q[6]=='Effect' || q[6]=='Efecto'} if weap.refinement_name.nil? && @inner.nil? && !['Falchion','Missiletainn'].include?(weap.name)
+    @overrides=@overrides.reject{|q| q[6]=='Wrathful' || q[6]=='Furioso'} if weap.description.include?("This weapon's damage is calculated the same as other weapons.") || weap.description.include?("El daño de este bastón se calcula igual que el de otras armas.") || weap.description.include?('Damage from staff calculated like other weapons.') || weap.tags.include?('Wrathful')
+    @overrides=@overrides.reject{|q| q[6]=='Dazzling' || q[6]=='Brillante'} if weap.description.include?('The foe cannot counterattack.') || weap.description.include?('El enemigo no puede contraatacar.') || weap.description.include?('Foe cannot counterattack.') || weap.tags.include?('Dazzling')
     @miniName="#{weap.refinement_name.name}" unless weap.refinement_name.nil?
     @name="#{weap.refinement_name.fullName}" unless weap.refinement_name.nil?
     @ref_of=weap
@@ -3009,15 +3055,15 @@ class FEHRefine
   def thumbnail
     return 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Falchion_Refines.png' if @ref_of.name=='Falchion'
     return 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Missiletainn_Refines.png' if @ref_of.name=='Missiletainn'
-    return 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Adult_Refines.png' if @ref_of.name=='Adult (All)'
+    return 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Adult_Refines.png' if @ref_of.name=='Adult (All)' || @ref_of.name=='Fiera adulta (Todo)'
     unless @ref_of.refinement_name.nil?
       x=@ref_of.refinement_name.name.gsub(' ','_')
       return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{x}_W.png" unless @ref_of.refinement_name.level.nil?
       return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/#{x}.png"
     end
     if @ref_of.restrictions.include?('Staff Users Only')
-      return 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Dazzling_W.png' if @ref_of.description.include?("This weapon's damage is calculated the same as other weapons.") || @ref_of.description.include?('Damage from staff calculated like other weapons.') || @ref_of.tags.include?('Wrathful')
-      return 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Wrathful_W.png' if @ref_of.description.include?('The foe cannot counterattack.') || @ref_of.description.include?('Foe cannot counterattack.') || @ref_of.tags.include?('Dazzling')
+      return 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Dazzling_W.png' if @ref_of.description.include?("This weapon's damage is calculated the same as other weapons.") || @ref_of.description.include?('Damage from staff calculated like other weapons.') || weap.description.include?("El daño de este bastón se calcula igual que el de otras armas.") || @ref_of.tags.include?('Wrathful')
+      return 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Wrathful_W.png' if @ref_of.description.include?('The foe cannot counterattack.') || @ref_of.description.include?('Foe cannot counterattack.') || weap.description.include?('El enemigo no puede contraatacar.') || @ref_of.tags.include?('Dazzling')
       return 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Staff_Default_Refine.png'
     end
     return 'https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/skills/Default_Refine_Freeze.png' if has_any?(@ref_of.tags,['Frostbite','(R)Frostbite'])
@@ -3026,16 +3072,16 @@ class FEHRefine
   end
   
   def emote(r='Effect')
-    if r=='Attack'
+    if r=='Attack' || r=='Ataque'
       return '<:FreezeW:449999580864708618>' if has_any?(@ref_of.tags,['Frostbite','(R)Frostbite'])
       return '<:MagicW:449999580835086337>' if @ref_of.isMagic?
       return '<:StrengthW:449999580948463617>'
     end
-    return '<:SpeedW:449999580868640798>' if r=='Speed'
-    return '<:DefenseW:449999580793274408>' if r=='Defense'
-    return '<:ResistanceW:449999580864446514>' if r=='Resistance'
-    return '<:Wrathful:449999580650668033>' if r=='Wrathful'
-    return '<:Dazzling:449999580411592705>' if r=='Dazzling'
+    return '<:SpeedW:449999580868640798>' if r=='Speed' || r=='Velocidad'
+    return '<:DefenseW:449999580793274408>' if r=='Defense' || r=='Defensa'
+    return '<:ResistanceW:449999580864446514>' if r=='Resistance' || r=='Resistencia'
+    return '<:Wrathful:449999580650668033>' if r=='Wrathful' || r=='Furioso'
+    return '<:Dazzling:449999580411592705>' if r=='Dazzling' || r=='Brillante'
     return '<:EffectMode:450002917269831701>'
   end
   
@@ -3064,8 +3110,15 @@ class FEHRefine
     end
     if sttz
       str="Might: #{x[0]}  \u200B  \u200B  \u200B  Range: #{@ref_of.range}"
+      str="Poder: #{x[0]}  \u200B  \u200B  \u200B  Alcance: #{@ref_of.range}" if Shardizard==$spanishShard
       if x[1,5].reject{|q| q==0}.length>2 && r != 'Effect'
         str="#{str}  \u200B  \u200B  \u200B  #{x[1,5].map{|q| "#{'+' if q>0}#{q}"}.join('/')}"
+      elsif Shardizard==$spanishShard
+        str="#{str}  \u200B  \u200B  \u200B  HP #{'+' if x[1]>0}#{x[1]}" unless x[1]==0
+        str="#{str}  \u200B  \u200B  \u200B  Ataque #{'+' if x[2]>0}#{x[2]}" unless x[2]==0
+        str="#{str}  \u200B  \u200B  \u200B  Velocidad #{'+' if x[3]>0}#{x[3]}" unless x[3]==0
+        str="#{str}  \u200B  \u200B  \u200B  Defensa #{'+' if x[4]>0}#{x[4]}" unless x[4]==0
+        str="#{str}  \u200B  \u200B  \u200B  Resistencia #{'+' if x[5]>0}#{x[5]}" unless x[5]==0
       else
         str="#{str}  \u200B  \u200B  \u200B  HP #{'+' if x[1]>0}#{x[1]}" unless x[1]==0
         str="#{str}  \u200B  \u200B  \u200B  Attack #{'+' if x[2]>0}#{x[2]}" unless x[2]==0
@@ -6579,6 +6632,7 @@ def disp_unit_skills(bot,event,xname)
 end
 
 def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
+  return disp_data_habilidad(bot,event,xname,colors,includespecialerror) if Shardizard==$spanishShard
   args=event.message.text.downcase.split(' ')
   data_load()
   s=event.message.text
@@ -6742,7 +6796,16 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
         end
       end
     end
-    colors=true if has_any?(['color','colors','colour','colours'],args)
+    unless colors
+      colors=true if has_any?(['color','colour'],args) && !skill.name.downcas.split(' ').include?('color')
+      colors=true if has_any?(['colors','colours'],args) && !skill.name.downcas.split(' ').include?('colors')
+      colors=1 if has_any?(['divine'],args) && !skill.name.downcas.split(' ').include?('divine')
+      colors=1 if has_any?(['path'],args) && !skill.name.downcas.split(' ').include?('path')
+      colors=1 if has_any?(['code'],args) && !skill.name.downcas.split(' ').include?('code')
+      colors=1 if has_any?(['paths'],args) && !skill.name.downcas.split(' ').include?('paths')
+      colors=1 if has_any?(['codes'],args) && !skill.name.downcas.split(' ').include?('codes')
+      colors=1 if has_any?(['ephemura'],args)
+    end
     ftr=nil
     flds=nil
     text=''
@@ -6767,8 +6830,8 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
       end
       sk1=$skills[sk1]
       sk2=$skills[sk2]
-      text="__**#{sk1.name}**__\n#{sk1.mcr}\n**Effect:** #{sk1.description}\n<:Prf_Sparkle:490307608973148180>**Prf to:** #{sk1.exclusivity.join(', ')}\n**Promotes from:** #{list_lift(sk1.prerequisite.map{|q| "*#{q}*"},'or')}"
-      text="#{text}\n\n__**#{sk2.name}**__\n#{sk2.mcr}\n**Effect:** #{sk2.description}\n<:Prf_Sparkle:490307608973148180>**Prf to:** #{sk2.exclusivity.join(', ')}\n**Promotes from:** #{list_lift(sk2.prerequisite.map{|q| "*#{q}*"},'or')}"
+      text="__**#{sk1.class_header(bot,1)}#{sk1.name}**__\n#{sk1.mcr}\n**Effect:** #{sk1.description}\n<:Prf_Sparkle:490307608973148180>**Prf to:** #{sk1.exclusivity.join(', ')}\n**Promotes from:** #{list_lift(sk1.prerequisite.map{|q| "*#{q}*"},'or')}"
+      text="#{text}\n\n__**#{sk2.class_header(bot,1)}#{sk2.name}**__\n#{sk2.mcr}\n**Effect:** #{sk2.description}\n<:Prf_Sparkle:490307608973148180>**Prf to:** #{sk2.exclusivity.join(', ')}\n**Promotes from:** #{list_lift(sk2.prerequisite.map{|q| "*#{q}*"},'or')}"
       text="#{text}\n\n**SP Cost:** #{sk1.sp_cost} SP\n**Cumulitive SP Cost:** #{sk1.cumulitive_sp_cost} SP"
     elsif ['Whelp (All)','Yearling (All)','Adult (All)'].include?(skill.name)
       m=skill.name.split(' (')[0]
@@ -6796,8 +6859,8 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
         text="#{text}\n<:Gold_Dagger:774013610862968833>**Dagger Debuff:**  \u200B  \u200B  \u200B  *Effect:* Def/Res-7  \u200B  \u200B  \u200B  *Affects:* Target and foes within 2 spaces of target"
         text="#{text}\n<:Gold_Staff:774013610988797953>**Staves':** damage is calculated like other weapons."
       end
-      text="#{text}\n**Debuff:** *Effect:* #{skill.dagger_debuff[0]}   *Target:* #{skill.dagger_debuff[1]}" unless skill.dagger_debuff.nil? || skill.dagger_debuff.length<=0
-      text="#{text}\n**Buff:** *Effect:* #{skill.dagger_buff[0]}   *Target:* #{skill.dagger_buff[1]}" unless skill.dagger_buff.nil? || skill.dagger_buff.length<=0
+      text="#{text}\n**Debuff:** *Effect:* #{skill.dagger_debuff[0]}   *Affects:* #{skill.dagger_debuff[1]}" unless skill.dagger_debuff.nil? || skill.dagger_debuff.length<=0
+      text="#{text}\n**Buff:** *Effect:* #{skill.dagger_buff[0]}   *Affects:* #{skill.dagger_buff[1]}" unless skill.dagger_buff.nil? || skill.dagger_buff.length<=0
       if skill.type.include?('Weapon') && safe_to_spam?(event)
         mdfr=''
         mdfr=' (humanoid)' if skill.restrictions.include?('Beasts Only')
@@ -6814,8 +6877,10 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
         text="#{text}\n\n**SP Cost:** #{skill.disp_sp_cost} SP#{" (#{skill.disp_sp_cost(true)} SP when inherited)" if skill.exclusivity.nil? || skill.exclusivity.length<=0}"
         text="#{text}\n**Total SP Cost:** #{skill.disp_sp_cost(false,true)} SP#{" (#{skill.disp_sp_cost(true,true)} SP when inherited)" if skill.exclusivity.nil? || skill.exclusivity.length<=0}" if skill.level=='example'
         text="#{text}\n**Cumulitive SP Cost:** #{skill.cumulitive_sp_cost} SP#{" (#{skill.cumulitive_sp_cost(true)} SP when inherited)" if skill.exclusivity.nil? || skill.exclusivity.length<=0}" unless skill.prerequisite.nil? || skill.prerequisite.length<=0 || !safe_to_spam?(event)
-        text="#{text}\n**Seal:** #{skill.seal_colors(bot)}" if !skill.seal_colors(bot).nil? && skill.seal_colors(bot).length>0 && has_any?(skill.type,['Seal','Passive(S)'])
-        text="#{text}\n**Seal Total:** #{skill.seal_colors(bot,true)}" if !skill.seal_colors(bot,true).nil? && skill.seal_colors(bot,true).length>0 && has_any?(skill.type,['Seal','Passive(S)']) && skill.level=='example'
+        unless colors==1
+          text="#{text}\n**Seal:** #{skill.seal_colors(bot)}" if !skill.seal_colors(bot).nil? && skill.seal_colors(bot).length>0 && has_any?(skill.type,['Seal','Passive(S)'])
+          text="#{text}\n**Seal Total:** #{skill.seal_colors(bot,true)}" if !skill.seal_colors(bot,true).nil? && skill.seal_colors(bot,true).length>0 && has_any?(skill.type,['Seal','Passive(S)']) && skill.level=='example'
+        end
       end
       text2=[]
       if !skill.exclusivity.nil?
@@ -6913,7 +6978,21 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
         text="#{text}\n\n#{text2}" if text2.split("\n").length>1
       end
       if has_any?(['Duo','Harmonic'],skill.type)
-      elsif colors
+      elsif colors==1
+        x=skill.learn_by_path(event)
+        if x.length==0
+          text="#{text}\n\nNo manual-available units have this skill#{", and it couldn't be inherited even if they did" unless skill.exclusivity.nil?}."
+        elsif !skill.exclusivity.nil?
+          text="#{text}\n\nThis skill cannot be inherited.  No manuals can give it to units who don't already have access to it."
+        elsif skill.prevos.nil? && x.length==1
+          text="#{text}\n\n__**#{x[0][0]} Divine Paths containing this skill**__\n#{x[0][1]}"
+        elsif skill.prevos.nil?
+          endtext="**Divine Paths containing this skill:**"
+          flds=x.map{|q| q}
+        else
+          text="#{text}\n\n__**Divine Paths containing this skill:**__\n#{x.map{|q| "*#{q[0]}:* #{q[1].gsub("\n",', ')}"}.join("\n")}"
+        end
+      elsif colors==true
         x=skill.learn_by_color(event)
         if x.length<=0
         elsif x.length==1 && skill.prevos.nil?
@@ -6984,34 +7063,39 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
       unless skill.prevos.nil?
         for i in 0...skill.prevos.length
           sk2=skill.prevos[i]
-          str2="**It #{'also ' if skill.learn.flatten.length>0}evolves from #{sk2.name}**"
-          unless sk2.learn.flatten.length<=0
-            str2="**It #{'also ' if skill.learn.flatten.length>0}evolves from #{sk2.name}, which is obtained from the following heroes:**"
-            if colors
-              str2="#{str2}\n#{skill.learn_by_color(event,false)}"
-            else
-              for i2 in 0...Max_rarity_merge[0]
-                y=sk2.learn[i2]
-                y=y.reject{|q| $units.find_index{|q2| q2.name==q}.nil?}
-                y=y.map{|q| $units[$units.find_index{|q2| q2.name==q}]}.reject{|q| !q.isPostable?(event)}
-                if skill.fake.nil?
-                  y=y.map{|q| q.postName}
-                else
-                  y=y.map{|q| q.fullName('')}
+          unless colors==1 && sk2.learn_by_path(event,false).length<=0
+            str2="**It #{'also ' if skill.learn.flatten.length>0}evolves from #{sk2.name}**"
+            unless sk2.learn.flatten.length<=0
+              str2="**It #{'also ' if skill.learn.flatten.length>0}evolves from #{sk2.name}, which is obtained from the following heroes:**"
+              str2="**It #{'also ' if skill.learn.flatten.length>0}evolves from #{sk2.name}, which is obtained from the following Divine Paths:**" if colors==1
+              if colors==true
+                str2="#{str2}\n#{sk2.learn_by_color(event,false)}"
+              elsif colors==1
+                str2="#{str2}\n#{sk2.learn_by_path(event).map{|q| "*#{q[0]}:* #{q[1].gsub("\n",', ')}"}}"
+              else
+                for i2 in 0...Max_rarity_merge[0]
+                  y=sk2.learn[i2]
+                  y=y.reject{|q| $units.find_index{|q2| q2.name==q}.nil?}
+                  y=y.map{|q| $units[$units.find_index{|q2| q2.name==q}]}.reject{|q| !q.isPostable?(event)}
+                  if skill.fake.nil?
+                    y=y.map{|q| q.postName}
+                  else
+                    y=y.map{|q| q.fullName('')}
+                  end
+                  str2="#{str2}\n*#{i2+1}#{Rarity_stars[0][i2]}:* #{y.join(', ')}" unless y.length<=0
                 end
-                str2="#{str2}\n*#{i2+1}#{Rarity_stars[0][i2]}:* #{y.join(', ')}" unless y.length<=0
               end
             end
+            str3='**Evolution cost:** 300 SP (450 if inherited), 200<:Arena_Medal:453618312446738472> 20<:Refining_Stone:453618312165720086>'
+            str3='**Evolution cost:** 300 SP (450 if inherited), 100<:Arena_Medal:453618312446738472> 10<:Refining_Stone:453618312165720086>' if skill.name=='Candlelight+'
+            str3='**Evolution cost:** 400 SP, 375<:Arena_Medal:453618312446738472> 150<:Divine_Dew:453618312434417691>' unless skill.exclusivity.nil? || skill.exclusivity.length<=0
+            str3='**Evolution cost:** 1 story-gift Gunnthra<:Wind_Tome:499760605713137664><:Icon_Move_Cavalry:443331186530451466><:Legendary_Effect_Wind:443331186467536896><:Ally_Boost_Resistance:443331185783865355>' if skill.name=='Chill Breidablik'
+            str3='**Evolution cost:** 1 Outrealm Askr' if skill.name=='Dual Breidablik'
+            text="#{text}\n\n#{str2}\n#{str3}"
           end
-          str3='**Evolution cost:** 300 SP (450 if inherited), 200<:Arena_Medal:453618312446738472> 20<:Refining_Stone:453618312165720086>'
-          str3='**Evolution cost:** 300 SP (450 if inherited), 100<:Arena_Medal:453618312446738472> 10<:Refining_Stone:453618312165720086>' if skill.name=='Candlelight+'
-          str3='**Evolution cost:** 400 SP, 375<:Arena_Medal:453618312446738472> 150<:Divine_Dew:453618312434417691>' unless skill.exclusivity.nil? || skill.exclusivity.length<=0
-          str3='**Evolution cost:** 1 story-gift Gunnthra<:Wind_Tome:499760605713137664><:Icon_Move_Cavalry:443331186530451466><:Legendary_Effect_Wind:443331186467536896><:Ally_Boost_Resistance:443331185783865355>' if skill.name=='Chill Breidablik'
-          str3='**Evolution cost:** 1 Outrealm Askr' if skill.name=='Dual Breidablik'
-          text="#{text}\n\n#{str2}\n#{str3}"
         end
       end
-      unless skill.weapon_gain.nil?
+      unless skill.weapon_gain.nil? || colors==1
         if skill.level=='example'
           skz=$skills.reject{|q| q.level=='example' || q.name != skill.name || q.weapon_gain.nil?}
           text2=[]
@@ -7360,10 +7444,10 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
       str="#{str}\n**Slot#{'s' if clrs.length>1}:** #{clrs.join(', ')}" if clrs.length>0
       k=k.reject{|q| ['A','B','C','Seal','W'].include?(q)}
     elsif skill.type.include?('Duo')
-      str="#{str}\n**Slot:** <:Skill_Assist:444078171025965066> Assist"
+      str="#{str}\n**Slot:** <:Hero_Duo:631431055420948480> Duo"
       k=k.reject{|q| q=='Duo'}
     elsif skill.type.include?('Harmonic')
-      str="#{str}\n**Slot:** <:Skill_Assist:444078171025965066> Assist"
+      str="#{str}\n**Slot:** <:Hero_Harmonic:722436762248413234> Harmonic"
       k=k.reject{|q| q=='Harmonic'}
     end
     str="#{str}\n\nSearchable tags"
@@ -7780,6 +7864,8 @@ bot.command(:skill, aliases: [:skil]) do |event, *args|
     return nil
   elsif ['color','colors','colour','colours'].include?(args[0].downcase)
     clr=true
+  elsif ['divine','path','code','paths','codes','ephemura'].include?(args[0].downcase)
+    clr=1
   end
   disp_skill_data(bot,event,nil,clr,true)
   return nil
@@ -9672,7 +9758,7 @@ bot.command(:reload, from: 167657750971547648) do |event|
         File.open("FEHTemp.txt").each_line.with_index do |line, idx|
           b.push(line)
         end
-        open("Elispanol.rb", 'w') { |f|
+        open("Elisepanol.rb", 'w') { |f|
           f.puts b.join('')
         }
         str="#{str}\nElispanol loaded."
