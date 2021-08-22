@@ -76,6 +76,8 @@ Hand Towel\Hair\A hand towel commonly used in hot springs. Make sure to keep it 
 Happy Hibiscus\Hair\A hair accessory crafted from a tropical flower.\Clear floors 6-10 during Illusory Dungeon: Three Houses.
 Heart Charm\Hair\A heart-shaped hairpiece given by Nah. Childish, yet somehow reflects an adult personality.\Reach 100 red friendship with Nah during Forging Bonds: Spanning Time.
 Heart Charm EX\Hair\A heart-shaped hairpiece given by Nah. A pink ribbon from Nah's mother, Nowi, is attached to the bottom.\Reach 2500 red friendship with Nah during Forging Bonds: Spanning Time.
+Hero-King Finery\Hair\A distinctive accessory from Marth. It projects a king's majesty with its shining red jewel.\Reach 100 red friendship with Marth(Brave) during Forging Bonds: Keepers of Faith.
+Hero-King Finery EX\Hair\A distinctive accessory from Marth. Its antique design is a relic of Altea's storied past.\Reach 2500 red friendship with Marth(Brave) during Forging Bonds: Keepers of Faith.
 Heron Hairpin\Hair\A hairpin bestowed by Leanne. It's made of nuts and flowers, which are edible, apparently.\Reach 100 orange friendship with Leanne during Forging Bonds: Hearts as One
 Heron Hairpin EX\Hair\A hairpin bestowed by Leanne. Be careful with it - it looks fragile.\Reach 2500 orange friendship with Leanne during Forging Bonds: Hearts as One
 Kagami Mochi\Hair\A favorite of Takumi's. It's a traditional decoration to welcome in the Hoshidan New Year.\Clear floors 81-85 in Illusory Dungeon: Kingdom of Hoshido.
@@ -109,6 +111,8 @@ Spearhead\Hair\Piece of a broken lance from Dimitri. Although it's a good make, 
 Spearhead EX\Hair\Piece of a broken lance from Dimitri. Forged in the fires of hell, the head was snapped off with reckless force.\Reach 2500 blue friendship with Dimitri(Fallen) during Forging Bonds: Forces of Will.
 Star of Nifl\Hair\A good luck charm that belongs to Ylgr. The decoration comes from Nifl's coat of arms.\Reach 100 red friendship with Ylgr during Forging Bonds: The Sworn Oath.
 Star of Nifl EX\Hair\A good luck charm that belongs to Ylgr. It has been blessed to ensure the safety of its bearer.\Reach 2500 red friendship with Ylgr during Forging Bonds: The Sworn Oath.
+Strange Fish\Hair\An extremely rare fish from Marianne. This ancient fish swam in the waters of Fódlan for countless generations.\Reach 100 orange friendship with Marianne(Brave) during Forging Bonds: Keepers of Faith.
+Strange Fish EX\Hair\An extremely rare fish from Marianne. Its beauty is such that legends say it is a messenger from the goddess.\Reach 2500 orange friendship with Marianne(Brave) during Forging Bonds: Keepers of Faith.
 Summer Festival Mask\Hair\A mask found at Hoshidan festivals. The dragon-face motif is pretty cute!\Clear floors 81-85 in Illusory Dungeon: Festival of Heroes.
 Tri-Color Charm\Hair\A charm that belonged to Palla. She made it herself on the day she left for Valentia. A symbol of sisterly reunion.\Reach 100 red friendship with Palla(SoV) during Forging Bonds: Decided Future.
 Tri-Color Charm EX\Hair\A charm that belonged to Palla. She made it herself with feathers from her and her sister's pegasi.\Reach 2500 red friendship with Palla(SoV) during Forging Bonds: Decided Future.
@@ -189,11 +193,13 @@ Favored Helm\Hat\A knight's helm given by Kjelle. Kept in perfect, shiny conditi
 Favored Helm EX\Hat\A knight's helm given by Kjelle. Colored beautifully by Kjelle herself.\Reach 2500 blue friendship with Kjelle during Forging Bonds: Spanning Time
 Floral Headband\Hat\A headband decorated with pink blooms.\Clear floors 81-85 in Illusory Dungeon: Carrying the Flame.
 Flirty Ribbon\Hat\A cute ribbon from Charlotte. It gives its wearer a polished look that will attract the eyes of admirers.\Reach 100 orange friendship with Charlotte during Forging Bonds: Dawning Reality.
-Flirty Ribbon EX\Hat\A cute ribbon from Charlotte. It raises its wearer's cuteness to levels sure to make any potential admirer swoon!\Reach 2500 orange friendship with Charlotte during Forging Bonds: Dawing Reality.
+Flirty Ribbon EX\Hat\A cute ribbon from Charlotte. It raises its wearer's cuteness to levels sure to make any potential admirer swoon!\Reach 2500 orange friendship with Charlotte during Forging Bonds: Dawning Reality.
 Flytrap Doll\Hat\A handmade doll from ~~Bernadetta~~ Bernie. She made it herself! It's a carnivorous plant. It's...cute?\Reach 100 green friendship with Bernie during Forging Bonds: Harmony amid Chaos
 Flytrap Doll EX\Hat\A handmade doll from ~~Bernadetta~~ Bernie. She made it herself! It's a carnivorous plant. It's...super cute?\Reach 2500 green friendship with Bernie during Forging Bonds: Harmony amid Chaos
 Fuzzy Cap\Hat\A fluffy hat from Erinys. Of a style common in Silesse. Very warm, even in the most severe climates.\Reach 100 blue friendship with Erinys during Forging Bonds: Enduring Legacy
 Fuzzy Cap EX\Hat\A fluffy hat from Erinys. Of a style common in Silesse. Has a stylish tail ornament on the back.\Reach 2500 blue friendship with Erinys during Forging Bonds: Enduring Legacy
+Gatekeeper Helm\Hat\A gift from the Gatekeeper. It's a helm common to Garreg Mach Monastery guards. Wearers are extra courteous!\Reach 100 green friendship with Gatekeeper(Brave) during Forging Bonds: Keepers of Faith.
+Gatekeeper Helm EX\Hat\A gift from the Gatekeeper. It's a helm common to Garreg Mach Monastery guards. There's a cat on it!\Reach 2500 green friendship with Gatekeeper(Brave) during Forging Bonds: Keepers of Faith.
 Giant Spider Hat\Hat\A hat from Knoll.  He says it's designed to look like a monsterous mountain spider, with fangs and venom.\Reach 100 red friendship with Knoll during Forging Bonds: Driven by Vision.
 Giant Spider Hat EX\Hat\A hat from Knoll.  He says it's designed to look like a particularly dangerous type of giant spider.\Reach 2500 red friendship with Knoll during Forging Bonds: Driven by Vision.
 Gilt Helm\Hat\A magnificent helmet from Zeke. Given to him by the Rigelian army, it appears he ultimately never wore it.\Reach 100 orange friendship with Zeke during Forging Bonds: Decided Future.
@@ -279,6 +285,8 @@ Pumpkin Cake\Hat\A cake frosted with pumpkin cream. It's a tasty treat straight 
 Red-Stone Diadem\Hat\Decorative headwear from Guinivere. Sleek and shiny, and fitted with a blood-red jewel.\Reach 100 blue friendship with Guinivere during Forging Bonds: Principled Acts
 Red-Stone Diadem EX\Hat\Decorative headwear from Guinivere. Blue stones surround a central red jewel, lending it a certain stately look.\Reach 2500 blue friendship with Guinivere during Forging Bonds: Principled Acts
 Reindeer Horns\Hat\Get festive with this holiday accessory.\Clear floors 6-10 in Illusory Dungeon: Kingdom of Hoshido.
+Renais Helm\Hat\An elegant helm from Eirika. It exudes a brilliant presence due to its shine, though it is lacking in coverage.\Reach 100 blue friendship with Eirika(Brave) during Forging Bonds: Keepers of Faith.
+Renais Helm EX\Hat\An elegant helm from Eirika. The tuft at its top grants it a stylish air that is simply beyond description.\Reach 2500 blue friendship with Eirika(Brave) during Forging Bonds: Keepers of Faith.
 Restoration Helm\Hat\The Restoration King's helmet, gifted by Ephraim. Forged in Renais, it's very solid but surprisingly light.\Reach 100 green friendship with Ephraim(Brave) during Forging Bonds: Rejecting Destiny.
 Restoration Helm EX\Hat\The Restoration King's many victories are recounted in the dents and dings that adorn this helmet.\Reach 2500 green friendship with Ephraim(Brave) during Forging Bonds: Rejecting Destiny.
 Royal Tiara\Hat\Decorative headwear from Miranda. Adorned with a large emerald, the impression left is one of opulence.\Reach 100 red friendship with Miranda during Forging Bonds: Shared Purpose.

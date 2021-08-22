@@ -1,14 +1,11 @@
-Ullr, Nifl, Charlotte, Nyx, Orochi, Benny, Arete, Palla, Robin(F)(Fallen), Anna\Arena\03/08/2021, 07/08/2021\Earth, Fire
-Eir, Hel, Caeda(Summer), Freyja(Summer), Freyr(Summer), Ogma(Summer), Norne(Sunner), Arvis, Dimitri(Savior), Anna\Aether\03/08/2021, 07/08/2021\Panic Manor
-FEH, FE8\Resonant\03/08/2021, 07/08/2021
-Hinoka(Pirate), Surtr(Pirate), Naesala(Pirate), Vika(Pirate), Lifis(Pirate), Hinoka(Launch), Camilla(Launch), Surtr\Tempest\06/08/2021, 15/08/2021\Spur Atk Def 1, Steady Breath
-Ullr, Nifl, Charlotte, Nyx, Orochi, Benny, Arete, Palla, Robin(F)(Fallen), Anna\Arena\10/08/2021, 16/08/2021\Earth, Wind
-Plumeria, Thrasir, Nifl, Charlotte, Nyx, Orochi, Benny, Arete, Claude(Unification), Fjorm\Aether\10/08/2021, 16/08/2021\Armor School
-FE15, FE2, FE9\Resonant\10/08/2021, 16/08/2021
--\Arena\17/08/2021, 23/08/2021\Earth, Water
+Hinoka(Pirate), Surtr(Pirate), Naesala(Pirate), Vika(Pirate), Lifis(Pirate), Petrine, Sanaki(Bride), Maribelle, Tiki(Young)(Earth), Alfonse\Arena\17/08/2021, 23/08/2021\Earth, Water
 Ullr, Triandra, Nifl, Charlotte, Nyx, Orochi, Benny, Arete, Claude(Unification), Fjorm\Aether\17/08/2021, 23/08/2021\Cavalry School
--\Arena\24/08/2021, 30/08/2021\Wind, Fire
--\Arena\31/08/2021, 06/09/2021\Wind, Water
+FE10, FE13\Resonant\17/08/2021, 23/08/2021
+Hinoka(Pirate), Surtr(Pirate), Naesala(Pirate), Vika(Pirate), Lifis(Pirate), Petrine, Sanaki(Bride), Maribelle, Tiki(Young)(Earth), Alfonse\Arena\24/08/2021, 30/08/2021\Wind, Fire
+Reginn, Lif, Hinoka(Pirate), Surtr(Pirate), Naesala(Pirate), Vika(Pirate), Lifis(Pirate), Arden, Ike(Vanguard), Alfonse\Aether\24/08/2021, 30/08/2021\Flier School
+FE13, FE16\Resonant\24/08/2021, 30/08/2021
+Hinoka(Pirate), Surtr(Pirate), Naesala(Pirate), Vika(Pirate), Lifis(Pirate), Petrine, Sanaki(Bride), Maribelle, Tiki(Young)(Earth), Alfonse\Arena\31/08/2021, 06/09/2021\Wind, Water
+Ullr, Nott, Hinoka(Pirate), Surtr(Pirate), Naesala(Pirate), Vika(Pirate), Lifis(Pirate), Arden, Ike(Vanguard), Alfonse\Aether\31/08/2021, 06/09/2021\Bright Shrine
 -\Arena\07/09/2021, 13/09/2021\Wind, Fire
 -\Arena\14/09/2021, 20/09/2021\Wind, Earth
 -\Arena\21/09/2021, 27/09/2021\Wind, Water

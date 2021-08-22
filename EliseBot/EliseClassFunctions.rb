@@ -616,11 +616,12 @@ end
 
 class FEHUnit
   def dragonflowerMax
-    return 15 if !@fake.nil? && @id>=1200 && @movement=='Infantry' # Penumbra units are counted as Book 1-2
-    return 10 unless @fake.nil? # All other fake units are counted as Book 3+
-    return 5 if @id>560 || @availability[0].include?('XF')
-    return 15 if @availability[0].include?('PF') && @movement=='Infantry'
-    return 10
+    return 20 if !@fake.nil? && @id>=1200 && @movement=='Infantry' # Penumbra units are counted as Book 1-2
+    return 15 unless @fake.nil? # All other fake units are counted as Book 3+
+    return 5 if @id>705 || (@availability[0].include?('XF') && (@id>600 || @id<10))
+    return 10 if @id>560 || @availability[0].include?('XF')
+    return 20 if @availability[0].include?('PF') && @movement=='Infantry'
+    return 15
   end
   
   def dragonflowerEmote
@@ -4506,7 +4507,7 @@ def show_tools(event,bot)
     event << '__Simulators__'
     event << 'Summon Simulator: <https://fehstuff.com/summon-simulator/>'
     event << 'Inheritance tracker: <https://arghblargh.github.io/feh-inheritance-tool/>'
-    event << 'Visual unit builder: <https://fehstuff.com/unit-builder/>'
+    event << 'Visual unit builder: <https://feh.fromshado.ws/#fakecanvas>'
     event << ''
     event << '__Damage Calculators__'
     event << "ASFox's mass duel simulator: <http://arcticsilverfox.com/feh_sim/>"
@@ -4531,7 +4532,7 @@ def show_tools(event,bot)
     str="#{str}\n\n__Simulators__"
     str="#{str}\n[Summon Simulator](https://fehstuff.com/summon-simulator/)"
     str="#{str}\n[Inheritance tracker](https://arghblargh.github.io/feh-inheritance-tool/)"
-    str="#{str}\n[Visual unit builder](https://fehstuff.com/unit-builder)"
+    str="#{str}\n[Visual unit builder](https://feh.fromshado.ws/#fakecanvas)"
     str="#{str}\n\n__Damage Calculators__"
     str="#{str}\n[ASFox's mass duel simulator](http://arcticsilverfox.com/feh_sim/)"
     str="#{str}\n[Andu2's mass duel simulator fork](https://andu2.github.io/FEH-Mass-Simulator/)"
@@ -7493,10 +7494,7 @@ def comparison(bot,event,args=[])
       return nil
     end
   elsif x.map{|q| q[0].name}.uniq.length<=1
-    rar=true
-    merges=true
-    boon=true
-    bane=true
+    rar=true; merges=true; boon=true; bane=true
     rar=false if x.map{|q| q[1]}.uniq.length<=1
     merges=false if x.map{|q| q[2]}.uniq.length<=1
     boon=false if x.map{|q| q[3]}.uniq.length<=1
@@ -7636,8 +7634,7 @@ def comparison(bot,event,args=[])
         x[i][0].name="#{x[i][0].owner}'s #{x[i][0].name}"
       end
     end
-    h="#{x[i][0].owner}'s #{x[i][0].name}" unless x[i][0].owner.nil?
-    h="#{x[i][0].name} de #{x[i][0].owner}" unless x[i][0].owner.nil? || Shardizard !=$spanishShard
+    h="#{x[i][0].name}" unless x[i][0].owner.nil?
     f.push([h,s])
   end
   ecount=x.reject{|q| !['Elise'].include?(q[0].alts[0].gsub('*','')) && (q[0].duo.nil? || !q[0].duo.map{|q2| q2[1]}.include?('Elise'))}.length
@@ -9214,6 +9211,15 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       d="~~#{d}~~ #{d2}" unless d==d2
       list.push("**#{s.name} - #{d}, cooldown of #{c}**")
     end
+    s=skl.find_index{|q| q.name=='Shining Emblem'}
+    unless s.nil? || skl[s].exclusivity.nil? || !skl[s].exclusivity.include?(unit.name)
+      s=skl[s]
+      c="#{'~~' unless wpnlegal}#{s.cooldown(ttags)}#{"~~ #{s.cooldown}" unless wpnlegal}"
+      d="#{y[2]*7/20+extradmg2+cdmg2}#{" (#{py[2]*7/20+extradmg2+cdmg2})" unless y[2]*7/20==py[2]*7/20}"
+      d2="#{x[2]*7/20+extradmg+cdmg}#{" (#{px[2]*7/20+extradmg+cdmg})" unless x[2]*7/20==px[2]*7/20}"
+      d="~~#{d}~~ #{d2}" unless d==d2
+      list.push("**#{s.name} - #{d}, cooldown of #{c}**")
+    end
     flds.push(['<:Special_Offensive_Dragon:454473651186696192>Dragon',list.join("\n"),1]) if list.length>0
     list=[]; cdmg=0; cdmg2=0
     cdmg+=10 if ttags.include?('WoDao_Darkness') && wpnlegal
@@ -9792,7 +9798,8 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
   ftr='Para el enemigo con forma de Kiran en el libro 4 cap. 12-5, use el nombre "Hood".' if unit.name=='Kiran' && Shardizard==$spanishShard
   f=0
   f=ftr.length unless ftr.nil?
-  if mode=='Proc' && flds.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length+toptext.length+header.length+text.length+f>1900
+  f+=header.length unless header.nil?
+  if mode=='Proc' && flds.map{|q| "#{q[0]}\n#{q[1]}"}.join("\n\n").length+toptext.length+text.length+f>1900
     fx=[['Star'],['Moon','Sun','Eclipse'],['Fire','Ice','Freezeflame'],['Dragon'],['Darkness'],['Rend']]
     fx=[['Estrella'],['Luna','Sol','Eclipse'],['Fuego','Hielo','Volcán Gélido'],['Dragón'],['Infierno'],['Rasgón']] if Shardizard==$spanishShard
     l=0
@@ -9812,7 +9819,7 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       end
     end
     create_embed(event,[toptext,header],text,unit.disp_color(l),ftr,thumb,f)
-  elsif mode=='Heal' && toptext.length+header.length+text.length+f>1900
+  elsif mode=='Heal' && toptext.length+text.length+f>1900
     text=text.split("\n\n")
     l=0
     str="#{text[0]}"
@@ -12011,7 +12018,7 @@ def new_devunit(bot,event,xname,flurp=[])
   x=$dev_units.find_index{|q| q.name==xname}
   unless x.nil?
     barracks='barracks'
-    barracks='pocket' if ['Sakura','Bernie'].include?($dev_units[x].alts[0])
+    barracks='pocket' if ['Sakura','Bernie','Mirabilis'].include?($dev_units[x].alts[0])
     event.respond "You already have a #{$dev_units[x].starDisplay(bot)} in your #{barracks}."
     return nil
   end
@@ -13545,7 +13552,7 @@ def snagstats(event,bot,f=nil,f2=nil)
       str2="#{str2}\nThis server accounts for #{$aliases.reject{|q| q[0]!='Skill' || q[3].nil? || !q[3].include?(event.server.id)}.length} of those."
     end
     all_units=all_units.sort{|b,a| supersort(a,b,3).zero? ? supersort(a,b,1) : supersort(a,b,3)}
-    k=all_units.reject{|q| q[3]!=all_units[0][3]}.map{|q| "*#{'~~' if legal_skills.find_index{|q2| q2.name==q[0]}.nil?}#{q[1]}#{'~~' if legal_skills.find_index{|q2| q2.name==q[0]}.nil?}*"}
+    k=all_units.reject{|q| q[3]!=all_units[0][3]}.map{|q| "*#{'~~' if legal_skills.find_index{|q2| q2.name==q[1]}.nil?}#{q[1]}#{'~~' if legal_skills.find_index{|q2| q2.name==q[1]}.nil?}*"}
     str2="#{str2}\nThe skill#{"s" unless k.length==1} with the most server-specific aliases #{"is" if k.length==1}#{"are" unless k.length==1} #{list_lift(k,"and")}, with #{all_units[0][3]} server-specific aliases#{" each" unless k.length==1}." unless k.length<=0
     for i in 0...srv_spec.length
       srv_spec[i][2]=srv_spec[i][2].length

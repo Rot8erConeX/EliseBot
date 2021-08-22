@@ -1,10 +1,10 @@
 Sakura\Bernie\Mirabilis\Anna\Anna(Apotheosis)\Anna(NewYears)\Annette\Annette(War)\Bernie(Christmas)\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Est(Bunny)\Ethlyn\Ethlyn(AwaOdori)\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(NewYears)\Larum\Lena\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Norne(Summer)\Olivia(AwaOdori)\Olivia(Traveler)\Phina\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Ashe(Summer)\Claude(Brave)\Delthea\Dimitri(Brave)\Dorothea(Summer)\Eir\Eir(NewYears)\Ena(Halloween)\Felix(Christmas)\Fiora(Summer)\Fjorm\Forrest\Hector(Halloween)\Hilda(3H)\Hilda(3H)(Christmas)\Kaden\Kana(F)\Leanne\Lethe\Lethe(NewYears)\Lysithea\Lysithea(Brave)\Mamori\Marianne\Matthew\Melady\Minerva(Retro)\Nifl\Ninian\Owain\Peony\Reginn\Reyson\Selkie\Selkie(NewYears)\Sothis\Tailtiu\Tiki(Young)(Earth)\Tiki(Young)(Fallen)\Veronica(Valentines)\Xane\Xane(Halloween)\Ylgr\Ylgr(Summer)
+Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Ashe(Summer)\Claude(Brave)\Delthea\Dimitri(Brave)\Dorothea(Summer)\Eir\Eir(NewYears)\Ena(Halloween)\Felix(Christmas)\Fiora(Summer)\Fjorm\Flayn\Forrest\Gatekeeper(Brave)\Hector(Halloween)\Hilda(3H)\Hilda(3H)(Christmas)\Kaden\Kana(F)\Leanne\Lethe\Lethe(NewYears)\Lysithea\Lysithea(Brave)\Mamori\Marianne\Marianne(Brave)\Matthew\Melady\Minerva(Retro)\Nifl\Ninian\Owain\Peony\Raven\Reginn\Reyson\Selkie\Selkie(NewYears)\Sothis\Tailtiu\Tiki(Young)(Earth)\Tiki(Young)(Fallen)\Veronica(Valentines)\Xane\Xane(Halloween)\Ylgr\Ylgr(Summer)
 Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lucina(Brave)\Lyn(Brave)\Nils\Nino(Fangs)\Nino(Launch)\Sharena
 pass
 
 Sakura
-5\10\Resistance\Defense\S\15\Alm(Saint)
+5\10\Resistance\Defense\S\18\Alm(Saint)
 Assault\Absorb\Absorb+\Absorb+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -14,7 +14,7 @@ Odd Recovery 1\Odd Recovery 2\Odd Recovery 3
 Live to Serve 3
 
 Bernie
-5\6\Speed\Attack\(S)\10
+5\6\Speed\Attack\(S)\13
 Iron Bow\Steel Bow\Silver Bow\Persecution Bow
 Draw Back
 New Moon\Luna\Aether
@@ -24,7 +24,7 @@ Close Guard 1\Close Guard 2\Close Guard 3
 Fierce Stance 3
 
 Mirabilis
-5\1\Defense\Speed\(S)\4
+5\1\Defense\Speed\(S)\7
 Iron Sword\Steel Sword\Silver Sword\Flower of Ease
 Dance\Whimsical Dream
 Chilling Wind\Iceberg
@@ -53,6 +53,16 @@ Wrath 1\Wrath 2\Wrath 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Fort. Def/Res 2
 
+Fjorm(Bride)
+5\1\Defense\Resistance\(S)\10\Celica(Queen)
+Assault\Gjallarbru
+Heal\Mend\Restore\Restore+
+Imbue\Heavenly Light
+HP +3\HP Atk 1\HP Atk 2
+Dazzling Staff 1\Dazzling Staff 2\Dazzling Staff 3
+Ground Orders 1\Ground Orders 2\Ground Orders 3
+Aerobatics 2
+
 Cordelia(Bride)
 5\1\Speed\Defense\-\15
 Iron Bow\Steel Bow\Brave Bow\Brave Bow+
@@ -62,16 +72,6 @@ Death Blow 1\Death Blow 2\Death Blow 3
 Escape Route 1\Escape Route 2\Escape Route 3
 Breath of Life 1\Breath of Life 2\Breath of Life 3
 Speed +2
-
-Fjorm(Bride)
-5\1\Defense\Resistance\-\10\Celica(Queen)
-Assault\Gjallarbru
-Heal\Mend\Restore\Restore+
-Imbue\Heavenly Light
-HP +3\HP Atk 1\HP Atk 2
-Dazzling Staff 1\Dazzling Staff 2\Dazzling Staff 3
-Ground Orders 1\Ground Orders 2\Ground Orders 3
-Aerobatics 2
 
 Alm
 5u\3\Speed\Resistance\-\15
@@ -134,7 +134,7 @@ Spd Opening 1\Spd Opening 2\Spd Opening 3
 Atk/Spd Bond 2
 
 Sakura(Halloween)
-5\0\Defense\Speed\-\6
+5\0\Defense\Speed\-\7
 Iron Dagger\Steel Dagger\Kitty Paddle\Kitty Paddle+
 Rally Resistance\Rally Def/Res
 Chilling Wind\Glacies
@@ -186,11 +186,11 @@ Even Atk Wave 2
 Ashe(Summer)
 5\0\Defense\Attack\-\0
 Iron Lance\Steel Lance\Silver Lance\Divine Sea Spear
-~~none~~
+Draw Back
 New Moon\Moonbow
-B Duel Cavalry 1\B Duel Cavalry 2\~~B Duel Cavalry 3~~\~~B Duel Cavalry 4~~
-S/D Near Trace 1\S/D Near Trace 2\~~S/D Near Trace 3~~
-Hone Spd 1\Hone Spd 2\Hone Spd 3\~~Joint Hone Spd~~
+B Duel Cavalry 1\B Duel Cavalry 2\B Duel Cavalry 3\B Duel Cavalry 4
+S/D Near Trace 1\S/D Near Trace 2\S/D Near Trace 3
+Hone Spd 1\Hone Spd 2\Hone Spd 3\Joint Hone Spd
 Hone Atk 3
 
 Azura(Adrift)
@@ -404,7 +404,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Warding Stance 3
 
 Felicia(Picnic)
-5\1\Attack\Defense\-\10
+5\1\Attack\Defense\-\12
 Iron Axe\Steel Axe\Silver Axe\Eldhrmnir
 Swap
 Chilling Wind\Glacies
@@ -443,6 +443,16 @@ Shield Pulse 1\Shield Pulse 2\Shield Pulse 3
 Spur Atk 1\Drive Atk 1\Drive Atk 2
 Drive Def 2
 
+Flayn
+5\0\Speed\Defense\-\0
+Assault\~~Caduceus Staff~~
+Heal\Rescue\Rescue+
+Imbue\Still-Water Balm\Deluge Balm\~~Deluge Balm+~~
+Brazen Spd/Def 1\~~Brazen Spd/Def 2~~\~~Brazen Spd/Def 3~~
+Dazzling Staff 1\Dazzling Staff 2\Dazzling Staff 3
+Ground Orders 1\Ground Orders 2\Ground Orders 3
+
+
 Forrest
 5\10\Defense\Resistance\-\0
 Assault\Panic\Panic+\Panic+ (+) Dazzling Mode
@@ -464,7 +474,7 @@ Savage Blow 1\Savage Blow 2\Savage Blow 3
 Savage Blow 3
 
 Genny(Picnic)
-5\3\Attack\Resistance\-\8
+5\3\Attack\Resistance\-\9
 Assault\Toasty Skewer\Toasty Skewer+\Toasty Skewer+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Fireflood Balm\Fireflood Balm+
@@ -716,12 +726,12 @@ Even Res Wave 3
 Nifl
 5\1\Attack\HP\-\0
 Fire Breath\Fire Breath+\Flametongue\Frostbite Breath
-Rally Resistance
-~~none~~
-AR-D Atk/Spd 1\AR-D Atk/Spd 2\AR-D Atk/Spd 3\~~AR-D Atk/Spd 4~~
+Rally Resistance\Rally Def/Res\Rally Def/Res+
+Chilling Wind/Glacies
+AR-D Atk/Spd 1\AR-D Atk/Spd 2\AR-D Atk/Spd 3\AR-D Atk/Spd 4
 Lull Atk/Spd 1\Lull Atk/Spd 2\Lull Atk/Spd 3
 Domain of Ice
-
+Close Guard 3
 
 Ninian
 5\0\\\-\1
@@ -745,7 +755,7 @@ Atk Feint 3
 
 Norne(Summer)
 5\1\\\-\0
-Iron Lance\Steel Lance\Shellpoint Lance\Shellpoint Lance+\~~Shellpoint Lance+ (+) Speed Mode~~
+Iron Lance\Steel Lance\Heavy Spear\Heavy Spear+\Slaying Spear\Slaying Spear+\Slaying Spear+ (+) Effect Mode
 Reciprocal Aid
 New Moon\Luna
 Spd/Def Bond 1\Spd/Def Bond 2\Spd/Def Bond 3
@@ -812,6 +822,16 @@ Brazen Atk/Def 1\Brazen Atk/Def 2\Brazen Atk/Def 3
 Live to Serve 1\Live to Serve 2\Live to Serve 3
 Spur Def 1\Spur Def 2\Spur Def 3
 HP +5
+
+Raven
+5r\0\\\-\0
+Iron Axe\Steel Axe\Brave Axe\__Brave Axe+__\~~Basilikos~~\~~Basilikos (+) Effect Mode~~
+Reposition
+Daylight\Sol
+Defiant Spd 1\Defiant Spd 2\Defiant Spd 3
+Spd/Def Link 1\~~Spd/Def Link 2~~\~~Spd/Def Link 3~~
+Threaten Def 1\Threaten Def 2\Threaten Def 3
+Life And Death 2
 
 Rebecca
 5\10\Speed\Resistance\-\0
@@ -924,7 +944,7 @@ With Everyone!
 Atk Ploy 2
 
 Tiki(Young)(Fallen)
-5\0\Speed\Resistance\-\9
+5\0\Speed\Resistance\-\10
 Fire Breath\Fire Breath+\Flametongue\Razing Breath
 Swap
 Glowing Ember\Ignis
@@ -944,7 +964,7 @@ Def Tactic 1\Def Tactic 2\Def Tactic 3
 Res Tactic 2
 
 Veronica(Valentines)
-5\1\\\-\0
+5\2\\\-\0
 Thunder\Elthunder\Pact Blooms\Pact Blooms+
 Swap
 Rising Thunder\Growing Thunder

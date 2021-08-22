@@ -53,6 +53,7 @@
 ['Bloomtome', ['bloomtome', 'bloom', 'blooms', 'bloomtomes', 'bloomstome'], 'Weapon']
 ['Foxtome', ['foxtome', 'fox'], 'Weapon']
 ['Rabbittome', ['rabbittome', 'rabbitome'], 'Weapon']
+['Liontome', ['liontome'], 'Weapon']
 ['Hogtome', ['hogtome', 'hog'], 'Weapon']
 ['Serpenttome', ['serpenttome', 'serpentome', 'snaketome', 'snektome', 'serpent', 'snake', 'snek'], 'Weapon']
 ['Owltome', ['owltome', 'owl'], 'Weapon']

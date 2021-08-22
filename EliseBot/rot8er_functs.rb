@@ -1,5 +1,5 @@
 # loadbotan = true
-# debug = Elise
+# debug = Debug
 @mash='rot8e'
 
 def triple_finish(list,forcetwo=false) # used to split a list into three roughly-equal parts for use in embeds
@@ -778,7 +778,7 @@ def dev_message(bot,event,channel_id,allowedids=[])
   jke=true if ['rcx','.','x'].include?(f[2].downcase) && event.user.id==167657750971547648
   f="#{f[0]} #{f[1]} #{"#{f[2]} " if jke}"
   sig="<:MCandleTop:642901964308480040>\n<:MCandleBottom:642901962005938181>"
-  sig="<:Smol_Ephraim:644015195710291968>" if event.user.id==78649866577780736
+  sig="<:Ace_Staff:875102524829478912>" if event.user.id==78649866577780736
   sig="<:cornslep:669319246647525412>" if event.user.id==141260274144509952
   text2send=event.message.text.gsub("\n"," \n")
   text2send=first_sub(text2send,f,'',1)
