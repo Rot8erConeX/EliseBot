@@ -279,11 +279,10 @@ $summon_rate=[0,0,0]; $banner=[]
 $last_multi_reload=[0,0,0]
 @zero_by_four=[0,0,0]
 @avvie_info=['Elise','*Fire Emblem Heroes*','N/A']
-Summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,
-                 341729526767681549,380013135576432651,383563205894733824,374991726139670528,338856743553597440,297459718249512961,283833293894582272,305889949574496257,
-                 214552543835979778,332249772180111360,334554496434700289,306213252625465354,197504651472535552,347491426852143109,392557615177007104,295686580528742420,
-                 412303462764773376,442465051371372544,353997181193289728,462100851864109056,337397338823852034,446111983155150875,295001062790660097,328109510449430529,
-                 483437489021911051,513061112896290816,327599133210705923]
+Summon_servers=[330850148261298176,389099550155079680,256291408598663168,271642342153388034,285663217261477889,280125970252431360,356146569239855104,393775173095915521,341729526767681549,
+                380013135576432651,383563205894733824,374991726139670528,338856743553597440,297459718249512961,283833293894582272,305889949574496257,214552543835979778,332249772180111360,
+                334554496434700289,306213252625465354,197504651472535552,347491426852143109,392557615177007104,295686580528742420,412303462764773376,442465051371372544,353997181193289728,
+                462100851864109056,337397338823852034,446111983155150875,295001062790660097,328109510449430529,483437489021911051,513061112896290816,327599133210705923,877171831835066391]
 
 # primary entities
 
@@ -2045,15 +2044,15 @@ class DevUnit < SuperUnit
     x=super(bot,false)
     y=super(bot,includebonus).gsub(x,'')
     x="#{x}<:Resplendent_Ascension:678748961607122945>" if !@resplendent.nil? && @resplendent.length>0 && includeresp
-    x="#{x}<:Icon_Support_Cyan:497430896249405450>"
-    x="#{x}<:Icon_Support:448293527642701824>" if ['Sakura','Bernie','Mirabilis'].include?(@name)
+    x="#{x}<:Rapport_Cyan:877172848064626698>"
+    x="#{x}<:Rapport_Pink:877177110421188608>" if self.sortPriority>49
     x="#{x}#{y}"
     return x
   end
   
   def submotes(bot,forceheart=false)
-    x='<:Icon_Support_Cyan:497430896249405450>'
-    x="#{x}<:Icon_Support:448293527642701824>" if self.sortPriority>39
+    x='<:Rapport_Cyan:877172848064626698>'
+    x="#{x}<:Rapport_Pink:877177110421188608>" if self.sortPriority>49
     return x
   end
   
@@ -2254,7 +2253,8 @@ class DonorUnit < SuperUnit
   
   def submotes(bot,forceheart=false)
     x=''
-    moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "Icon_Support_#{@color_name}"}
+    moji=bot.server(877171831835066391).emoji.values.reject{|q| q.name != "Icon_Support_#{@color_name}"}
+    moji=bot.server(877171831835066391).emoji.values.reject{|q| q.name != "Rapport_#{@color_name}"} if moji.length<=0
     if get_donor_list().reject{|q| q[2][0]<5}.map{|q| q[0]}.include?(@owner_id)
       x=moji[0].mention unless moji.length<=0
       x="#{x}<:Icon_Support:448293527642701824>" unless @support.nil? || @support.length<=0 || @support=='-'
@@ -4314,8 +4314,8 @@ def safe_to_spam?(event,chn=nil) # determines whether or not it is safe to send 
   return true if event.server.nil? # it is safe to spam in PM
   return false if event.user.id==213048998678888448
   return false if event.message.text.downcase.split(' ').include?('smol') && Shardizard==4
-  return false if event.message.text.downcase.split(' ').include?('xsmol') && [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,691616574393811004,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388].include?(event.server.id) # it is safe to spam in the emoji servers
-  return true if [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,691616574393811004,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388].include?(event.server.id) # it is safe to spam in the emoji servers
+  return false if event.message.text.downcase.split(' ').include?('xsmol') && [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,691616574393811004,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388,877171831835066391].include?(event.server.id)
+  return true if [443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,691616574393811004,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388,877171831835066391].include?(event.server.id) # it is safe to spam in the emoji servers
   return true if Shardizard==4 # it is safe to spam during debugging
   chn=event.channel if chn.nil?
   return true if ['bots','bot'].include?(chn.name.downcase) # channels named "bots" are safe to spam in
@@ -4402,9 +4402,9 @@ def all_commands(include_nil=false,permissions=-1)
   elsif permissions==1
     k=['addalias','deletealias','removealias','addgroup','deletegroup','removegroup','removemember','removefromgroup','prefix']
   elsif permissions==2
-    k=['reboot','addmultialias','adddualalias','addualalias','addmultiunitalias','adddualunitalias','addualunitalias','multialias','dualalias','addmulti','dev_edit','devedit',
-       'removemultiunitalias','removedualunitalias','removemulti','removefrommultialias','removefromdualalias','removefrommultiunitalias','backup','update','removefromdualunitalias',
-       'removefrommulti','sendpm','ignoreuser','sendmessage','leaveserver','cleanupaliases','setmarker','snagchannels','reload']
+    k=['removefrommultiunitalias','removefromdualunitalias','removefrommultialias','removemultiunitalias','removefromdualalias','removedualunitalias','addmultiunitalias','adddualunitalias','adddualalias',
+       'removefrommulti','addualunitalias','cleanupaliases','addmultialias','snagchannels','sendmessage','removemulti','leaveserver','addualalias','multialias','ignoreuser','setmarker','backup','devedit',
+       'reboot','reload','sendpm','update','addmulti','dev_edit','dualalias']
   end
   k.uniq!
   k.unshift(nil) if include_nil
@@ -5993,7 +5993,7 @@ def add_new_alias(bot,event,newname,unit,modifier=nil,modifier2=nil,mode=0)
   elsif event.user.id != 167657750971547648 && event.server.nil?
     str='Only my developer is allowed to use this command in PM.'
     err=true
-  elsif !is_mod?(event.user,event.server,event.channel) && ![368976843883151362,195303206933233665].include?(event.user.id)
+  elsif !is_mod?(event.user,event.server,event.channel) && ![368976843883151362].include?(event.user.id)
     str='You are not a mod.'
     err=true
   elsif newname.include?('"') || unit.include?('"')
@@ -9886,7 +9886,7 @@ bot.server_create do |event|
     end
     chn=chnn[0] if chnn.length>0
   end
-  if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,691616574393811004,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388,620710758841450529,572792502159933440].include?(event.server.id) && Shardizard==4
+  if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,691616574393811004,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388,620710758841450529,572792502159933440,877171831835066391].include?(event.server.id) && Shardizard==4
     (chn.send_message(get_debug_leave_message()) rescue nil)
     event.server.leave
   else
@@ -10019,7 +10019,7 @@ bot.mention do |event|
   s=args.join(' ')
   k=-1
   k=1 if event.user.bot_account?
-  if k>0
+  if k>0 || args.nil? || args.length<=0
   elsif ['f?','e?','h?'].include?(event.message.text.downcase[0,2]) || ['feh!','feh?'].include?(event.message.text.downcase[0,4]) || (!event.server.nil? && !@prefixes[event.server.id].nil? && @prefixes[event.server.id].length>0 && @prefixes[event.server.id].downcase==event.message.text.downcase[0,@prefixes[event.server.id].length])
     k=3
   elsif ['help','commands','command_list','commandlist'].include?(args[0].downcase)
@@ -10504,7 +10504,7 @@ end
 bot.ready do |event|
   if Shardizard==4
     for i in 0...bot.servers.values.length
-      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,691616574393811004,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388,620710758841450529,572792502159933440].include?(bot.servers.values[i].id)
+      if ![285663217261477889,443172595580534784,443181099494146068,443704357335203840,449988713330769920,497429938471829504,554231720698707979,523821178670940170,523830882453422120,691616574393811004,523824424437415946,523825319916994564,523822789308841985,532083509083373579,575426885048336388,620710758841450529,572792502159933440,877171831835066391].include?(bot.servers.values[i].id)
         bot.servers.values[i].general_channel.send_message(get_debug_leave_message()) rescue nil
         bot.servers.values[i].leave
       end
