@@ -258,7 +258,7 @@ Natures=[['Gentle','Resistance','Defense'], # this is a list of all the nature n
          ["`\u22C1`Sluggish",'HP','Speed',true],
          ["`\u22C1`Fragile",'HP','Defense',true],
          ["`\u22C1`Excitable",'HP','Resistance',true]]
-Max_rarity_merge=[5,10,15]
+Max_rarity_merge=[5,10]
 Stat_Names=['HP','Attack','Speed','Defense','Resistance']
 Skill_Slots=[['<:Skill_Weapon:444078171114045450>','<:Skill_Assist:444078171025965066>','<:Skill_Special:444078170665254929>','<:Passive_A:443677024192823327>',
               '<:Passive_B:443677023257493506>','<:Passive_C:443677023555026954>','<:Passive_S:443677023626330122>','<:Hero_Duo:631431055420948480><:Hero_Harmonic:722436762248413234>'],
@@ -487,16 +487,19 @@ class FEHUnit
     end
     bemote=[]
     if includebonus
+      moji=bot.server(877171831835066391).emoji.values.reject{|q| q.name != "#{self.isBonusUnit?('Forging')}_Friendship"}
       if Shardizard==$spanishShard && !emotesonly
         bemote.push("<:Current_Arena_Bonus:498797967042412544> Bonificación actual en Arena") if self.isBonusUnit?('Arena')
         bemote.push("<:Current_Aether_Bonus:510022809741950986> Bonificación actual en Asaltos Etéreos") if self.isBonusUnit?('Aether')
         bemote.push("<:Special_Blade:800880639540068353> Bonificación actual en Batallas Fragorosas") if self.isBonusUnit?('Resonant')
         bemote.push("<:Current_Tempest_Bonus:498797966740422656> Bonificación actual en la Tormenta") if self.isBonusUnit?('Tempest')
+        bemote.push("#{moji[0].mention unless moji.length<=0} Persona actual en Creando Lazos") if self.isBonusUnit?('Forging')
       else
         bemote.push("<:Current_Arena_Bonus:498797967042412544>#{' Current Arena Bonus unit' unless emotesonly}") if self.isBonusUnit?('Arena')
         bemote.push("<:Current_Aether_Bonus:510022809741950986>#{' Current Aether Raids Bonus unit' unless emotesonly}") if self.isBonusUnit?('Aether')
         bemote.push("<:Special_Blade:800880639540068353>#{' Current Resonant Battles Bonus unit' unless emotesonly}") if self.isBonusUnit?('Resonant')
         bemote.push("<:Current_Tempest_Bonus:498797966740422656>#{' Current Tempest Trials Bonus unit' unless emotesonly}") if self.isBonusUnit?('Tempest')
+        bemote.push("#{moji[0].mention unless moji.length<=0}#{' Current Forging Bonds friendship unit' unless emotesonly}") if self.isBonusUnit?('Forging')
       end
     end
     return "#{'<:Summon_Gun:467557566050861074>' if @name=='Kiran' || @id==0}#{wemote}#{memote}#{'<:Assist_Music:454462054959415296>' if refresher.length>0}#{lemote1}#{lemote2}#{demote}#{bemote.join('')}" if emotesonly
@@ -576,8 +579,9 @@ class FEHUnit
       x=x.compact.map{|q| $units[q]}
       return x.map{|q| q.dispPrf(bonus)}
     end
-    if bonus=='Enemy' && @name=='Hel'
-      s=$skills.reject{|q| q.name != "Hel Scythe"}
+    if bonus=='Enemy' && !self.enemy_shift(true).nil?
+      e=self.enemy_shift(true).map{|q| q}
+      s=$skills.reject{|q| !e[0].include?(q.fullName)}
       return s[0] unless s.length<=0
       return nil
     end
@@ -690,7 +694,7 @@ class FEHUnit
     return xcolor
   end
   
-  def dispStats(bot,level=40,rarity=5,boon='',bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',transformed=false,skill_list=[],pairup=false)
+  def dispStats(bot,level=40,rarity=5,boon=[''],bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',transformed=false,skill_list=[],pairup=false)
     posit=0
     posit=5 if self.hasEnemyForm? && bonus=='Enemy'
     bonus='' if bonus=='Enemy'
@@ -715,8 +719,8 @@ class FEHUnit
         l1[s[1][1]]+=1
       end
     end
-    if boon.length>0 || bane.length>0
-      boonx=Stat_Names.find_index{|q| q==boon}
+    if boon[0].length>0 || bane.length>0
+      boonx=Stat_Names.find_index{|q| q==boon[0]}
       banex=Stat_Names.find_index{|q| q==bane}
       l2[banex]-=1 unless banex.nil?
       banex=nil if merges>0
@@ -724,6 +728,14 @@ class FEHUnit
         l1[boonx]+=1
         l2[boonx]+=1
         gr[boonx]+=1
+      end
+      unless boon.length<=1
+        boonx=Stat_Names.find_index{|q| q==boon[1]}
+        unless boonx.nil?
+          l1[boonx]+=1
+          l2[boonx]+=1
+          gr[boonx]+=1
+        end
       end
       unless banex.nil?
         l1[banex]-=1
@@ -747,10 +759,13 @@ class FEHUnit
       end
       if flowers%5>0
         for i in 0...flowers%5
-          l1[s[2*i][1]]+=1
+          l1[s[i][1]]+=1
         end
       end
-      if merges>0 && boon.length<=0 && bane.length<=0
+      neutral=false
+      neutral=true if bane.length<=0
+      nautral=false if boon.reject{|q| q.length<=0}.length>1
+      if merges>0 && neutral
         l1[s[0][1]]+=1
         l1[s[1][1]]+=1
         l1[s[2][1]]+=1
@@ -792,7 +807,7 @@ class FEHUnit
       end
     end
     unless weapon.nil? || weapon.weapon_stats.nil?
-      if refne.length<=0 || weapon.refine.nil?
+      if refne.length<=0 || weapon.refine.nil? || weapon.refine.dispStats(refne).nil?
         for i in 0...l1.length
           l1[i]+=weapon.weapon_stats[i]
           l1[i]+=weapon.weapon_stats[i+5] if transformed && weapon.weapon_stats.length>5
@@ -863,7 +878,7 @@ class FEHUnit
     return -1 if @availability[0].include?('-') # enemy units are not summonable
     return 0 unless @availability[0].gsub('0s','').include?('s') || @availability[0].include?('p') # units that cannot appear on banners are not summonable
     return 1 unless @availability[0].include?('p') && @duo.nil? # seasonal units are level 1 summonable
-    return 2 if @availability[0].include?('TD') # Book 1/2 units that are removed from New/Special Heroes banners are level 2 summonable
+    return 2 if self.isRevival?(true) # Book 1/2 units that are removed from New/Special Heroes banners are level 2 summonable
     return 3 # all other units are level 3 summonable
   end
   
@@ -911,23 +926,27 @@ class FEHUnit
     x.compact!
     x=x.sort{|a,b| a.id<=>b.id}
     x=x.reject{|q| q.type.include?('Weapon') || (has_any?(q.type,['Assist','Special']) && !q.exclusivity.nil?)} if zelgiused
-    if @name=='Mathoo' && has_any?(event.message.text.downcase.split(' '),['boss','enemy','rokkr'])
-      x=x.reject{|q| q.name=='Liliputia'}
+    emeny=false
+    emeny=true if !self.enemy_shift.nil? && has_any?(event.message.text.downcase.split(' '),['boss','enemy'])
+    emeny=true if @name=='Mathoo' && event.message.text.downcase.split(' ').include?('rokkr')
+    if emeny
+      x=x.reject{|q| self.enemy_shift[1].include?(q.fullName.gsub('*','').gsub('~~',''))}
       data_load(['skills'])
-      m=$skills.find_index{|q| q.name=='Brobdingo'}
-      m=$skills[m].clone
-      m.exclusivity='Mathoo'
-      x.push(m)
-    elsif @name=='Hel' && has_any?(event.message.text.downcase.split(' '),['boss','enemy'])
-      x=x.reject{|q| q.type.include?('Weapon') && !q.exclusivity.nil?}
-      data_load(['skills'])
-      m=$skills.find_index{|q| q.name=='Hel Scythe'}
-      m=$skills[m].clone
-      m.name="**#{m.name}**"
-      x.push(m)
+      m=$skills.reject{|q| !self.enemy_shift[0].include?(q.fullName)}.map{|q| q.clone}
+      for i in 0...m.length
+        unless x.map{|q| q.fullName.gsub('*','').gsub('~~','')}.include?(m[i].fullName)
+          m[i].name="**#{m[i].name}**"
+          m[i].exclusivity="#{@name}"
+          x.push(m[i].clone)
+        end
+      end
+    elsif !self.enemy_shift.nil?
+      x=x.reject{|q| self.enemy_shift[0].include?(q.name)}
     end
     y=[x.reject{|q| !q.type.include?('Weapon')},x.reject{|q| !q.type.include?('Assist')},x.reject{|q| !q.type.include?('Special')},x.reject{|q| !q.type.include?('Passive(A)')},x.reject{|q| !q.type.include?('Passive(B)')},x.reject{|q| !q.type.include?('Passive(C)')},[],x.reject{|q| !has_any?(q.type,['Duo','Harmonic'])}]
-    unless y[0][-1].nil? || y[0][-1].evolutions.nil? || (@name=='Hel' && has_any?(event.message.text.downcase.split(' '),['boss','enemy']))
+    emeny=false if event.user.id==167657750971547648 && Shardizard==4
+    emeny=false if rand(100)==0
+    unless y[0][-1].nil? || y[0][-1].evolutions.nil? || emeny
       y2=$skills.find_index{|q| q.name==y[0][-1].evolutions[0]}
       unless y2.nil?
         y2=$skills[y2].clone
@@ -1107,7 +1126,7 @@ class FEHUnit
     return x
   end
   
-  def starDisplay(bot,rarity=5,boon='',bane='',merges=0,flowers=0)
+  def starDisplay(bot,rarity=5,boon=[''],bane='',merges=0,flowers=0)
     flowers=[flowers,self.dragonflowerMax].min
     stars="#{rarity}#{Rarity_stars[0][rarity-1]}"
     stars="#{rarity}#{Rarity_stars[1][rarity-1]}" if merges>=Max_rarity_merge[1]
@@ -1119,15 +1138,15 @@ class FEHUnit
     stars="#{rarity}#{['<:FGO_icon_rarity_dark:571937156981981184>','<:FGO_icon_rarity_sickly:571937157095227402>','<:FGO_icon_rarity_rust:523903558928826372>','<:FGO_icon_rarity_mono:523903551144198145>','<:FGO_icon_rarity_gold:523858991571533825>'][rarity-1]}" if @games[0]=='FGO'
     stars="#{rarity}-star" if rarity==0 || rarity>6
     nat=''
-    boon2="#{boon}"; bane2="#{bane}"
+    boon2="#{boon[0]}"; bane2="#{bane}"
     if Shardizard==$spanishShard
-      boon2='Ataque' if boon=='Attack'
+      boon2='Ataque' if boon[0]=='Attack'
       bane2='Ataque' if bane=='Attack'
-      boon2='Velocidad' if boon=='Speed'
+      boon2='Velocidad' if boon[0]=='Speed'
       bane2='Velocidad' if bane=='Speed'
-      boon2='Defensa' if boon=='Defense'
+      boon2='Defensa' if boon[0]=='Defense'
       bane2='Defensa' if bane=='Defense'
-      boon2='Resistencia' if boon=='Resistance'
+      boon2='Resistencia' if boon[0]=='Resistance'
       bane2='Resistencia' if bane=='Resistance'
     end
     if boon2.length>0 && bane2.length>0
@@ -1137,6 +1156,17 @@ class FEHUnit
       nat="+#{boon2}"
     elsif bane2.length>0
       nat="#{'~~' if merges>0}-#{bane2}#{'~~' if merges>0}"
+    end
+    if boon.length>1 && boon[1].length>0
+      boon2="+#{boon[1]} Ascended"
+      if Shardizard==$spanishShard
+        boon2='Ataque' if boon[1]=='Attack'
+        boon2='Velocidad' if boon[1]=='Speed'
+        boon2='Defensa' if boon[1]=='Defense'
+        boon2='Resistencia' if boon[1]=='Resistance'
+        boon2="+#{boon2} ascendid#{'o' if ['Attack','Speed'].include?(boon[1])}#{'a' if ['Defense','Resistance'].include?(boon[1])}"
+      end
+      nat="#{nat}, #{boon2}"
     end
     str="#{stars} #{@name}#{self.emotes(bot,true,true,true)}"
     str="#{str} +#{merges}" if merges>0
@@ -1179,7 +1209,8 @@ class FEHUnit
     nat=''
     support='' if support=='-' && expanded_mode==1
     support='-' if support=='' && expanded_mode==2
-    boon2="#{boon}"; bane2="#{bane}"
+    boon=['',boon[0]] if boon.length<2 && bane.length<=0
+    boon2="#{boon[0]}"; bane2="#{bane}"
     if Shardizard==$spanishShard
       boon2='Ataque' if boon=='Attack'
       bane2='Ataque' if bane=='Attack'
@@ -1190,9 +1221,9 @@ class FEHUnit
       boon2='Resistencia' if boon=='Resistance'
       bane2='Resistencia' if bane=='Resistance'
     end
-    if boon.length>0 && bane.length>0
-      n=Natures.reject{|q| q[1]!=boon || q[2]!=bane}
-      n=$spanish_Natures.reject{|q| q[1]!=boon || q[2]!=bane} if Shardizard==$spanishShard
+    if boon[0].length>0 && bane.length>0
+      n=Natures.reject{|q| q[1]!=boon[0] || q[2]!=bane}
+      n=$spanish_Natures.reject{|q| q[1]!=boon[0] || q[2]!=bane} if Shardizard==$spanishShard
       n2=n.map{|q| q[0]}.join('/')
       n2=n[0][0] if self.atkName(true,weapon,refne,transformed)=='Strength'
       n2=n[-1][0] if self.atkName(true,weapon,refne,transformed)=='Magic'
@@ -1204,7 +1235,7 @@ class FEHUnit
       nat="\n+#{boon2}, -#{bane2} (#{n2})"
       nat="\n+#{boon2}, ~~-#{bane2}~~ (#{n2}, bane neutralized)" if merges>0
       nat="\n+#{boon2}, ~~-#{bane2}~~ (#{n2}, perdición neutralizada)" if merges>0 && Shardizard==$spanishShard
-    elsif boon.length>0
+    elsif boon[0].length>0
       nat="\n+#{boon2}"
     elsif bane.length>0
       nat="\n#{'~~' if merges>0}-#{bane2}#{'~~ (neutralized)' if merges>0}"
@@ -1212,6 +1243,25 @@ class FEHUnit
     elsif expanded_mode==2
       nat="\nNeutral nature"
       nat="\nNaturaleza neutral" if Shardizard==$spanishShard
+    end
+    if boon.length>1 && boon[1].length>0
+      boon2="+#{boon[1]} Ascended"
+      if Shardizard==$spanishShard
+        boon2='Ataque' if boon[1]=='Attack'
+        boon2='Velocidad' if boon[1]=='Speed'
+        boon2='Defensa' if boon[1]=='Defense'
+        boon2='Resistencia' if boon[1]=='Resistance'
+        boon2="+#{boon2} ascendid#{'o' if ['Attack','Speed'].include?(boon[1])}#{'a' if ['Defense','Resistance'].include?(boon[1])}"
+      end
+      if expanded_mode>0 || !@owner.nil?
+        nat="#{nat}\n#{boon2}"
+      else
+        nat="#{nat}, #{boon2}"
+      end
+    elsif expanded_mode==2 && Shardizard==$spanishShard
+      nat="#{nat}\nNo se aplicó ningún activo ascendido."
+    elsif expanded_mode==2
+      nat="#{nat}\nNo Ascended Boon applied."
     end
     heart='<:Icon_Support:448293527642701824>'
     heart='<:Lovewhistle:575233033024569365>' if @games[0]=='DL'
@@ -1282,7 +1332,7 @@ class FEHUnit
     return "\u200B#{stars}#{"**+#{merges}**" if merges>0}#{"  \u00B7  #{heart}**#{support}**" if support.length>0}#{"  \u00B7  #{self.dragonflowerEmote}**x#{flowers}**" if flowers>0}#{nat}#{"\n<:Resplendent_Ascension:678748961607122945>Resplendent Ascension" if resp && @availability[0].include?('RA')}#{"\nEquipped weapon: #{'~~' unless wpnlegal}#{weapon.name}#{" (+) #{refne} Mode" if !weapon.refine.nil? && !refne.nil? && refne.length>0}#{'~~' unless wpnlegal}#{trns}" unless weapon.nil?}#{"\n#{bonusx}" if bonus.length>0}#{xblessings}#{"\nStat-affecting skills: #{sl.join(', ')}" unless sl.length<=0}#{"\nStat-buffing skills: #{sb.join(', ')}" unless sb.length<=0}#{"\nStat-nerfing skills: #{sn.join(', ')}" unless sn.length<=0}"
   end
   
-  def starHeader2(bot,ignorenature=true,rarity=5,boon='',bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',transformed=false,skill_list=[],skill_list_2=[],wpnlegal=true,pairup=false,expanded_mode=1)
+  def starHeader2(bot,ignorenature=true,rarity=5,boon=[''],bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',transformed=false,skill_list=[],skill_list_2=[],wpnlegal=true,pairup=false,expanded_mode=1)
     return starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,skill_list_2,wpnlegal,pairup,expanded_mode)
   end
   
@@ -1307,7 +1357,7 @@ class FEHUnit
     return ['<:HP_S:514712247503945739>',atk,'<:SpeedS:514712247625580555>','<:DefenseS:514712247461871616>','<:ResistanceS:514712247574986752>']
   end
   
-  def statGrid(bot,rarity=5,boon='',bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',transformed=false,skill_list=[],pairup=false,lvl=40)
+  def statGrid(bot,rarity=5,boon=[''],bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',transformed=false,skill_list=[],pairup=false,lvl=40)
     x=dispStats(bot,1,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,pairup).map{|q| "#{' ' if q<10}#{q}"}.join(' |')
     x4=dispStats(bot,40,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,pairup)
     x44=dispStats(bot,79,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,pairup)
@@ -1325,11 +1375,13 @@ class FEHUnit
     x2=x4.map{|q| "#{' ' if q<10}#{q}"}
     x3=self.supernatures(rarity).map{|q| q}
     x3=x3.map{|q| q.gsub('-',' ')} if merges>0
-    boonx=Stat_Names.find_index{|q| q==boon}
+    boonx=Stat_Names.find_index{|q| q==boon[0]}
+    boonx2=Stat_Names.find_index{|q| q==boon[1]}
     banex=Stat_Names.find_index{|q| q==bane}
+    banex=-1 if banex.nil? && [boonx,boonx2].compact.length>0
     unless boonx.nil?
       for i in 0...x3.length
-        x3[i]=' ' if x3[i]=='+' && i != boonx
+        x3[i]=' ' if x3[i]=='+' && ![boonx,boonx2].include?(i)
       end
     end
     unless banex.nil?
@@ -1343,7 +1395,8 @@ class FEHUnit
     x2=x2.join('|')
     scorename='Score'
     scorename='Puntaje' if Shardizard==$spanishShard
-    return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\n#{self.statEmotes(weapon,refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0#{scorename}: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x2}```" if @growths.max<=0
+    return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\nStats currently unknown." if @growths[0,5].max<=0 && @stats40[0,5].max<=0 && !self.hasEnemyForm?
+    return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\n#{self.statEmotes(weapon,refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0#{scorename}: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x2}```" if @growths.max<=0 || (@growths[0,5].max<=0 && self.hasEnemyForm? && bonus != 'Enemy' && @stats40[0,5].max>0)
     return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\nPersonaje solo enemig#{self.spanish_gender.downcase}\nUsa la palabra \"Enemy\" para ver sus estadísticas." if @growths[0,5].max<=0 && self.hasEnemyForm? && bonus != 'Enemy' && Shardizard==$spanishShard
     return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\nEnemy Exclusive Unit\nUse the word \"Enemy\" to see #{self.pronoun(true)} stats." if @growths[0,5].max<=0 && self.hasEnemyForm? && bonus != 'Enemy'
     trns=''
@@ -1372,7 +1425,7 @@ class FEHUnit
     return "#{starHeader(bot,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,[],true,pairup)}\n\n#{self.statEmotes(weapon,refne,transformed).join("\u00A0\u00A0\u00B7\u00A0\u00A0")}\u00A0\u00A0\u00B7\u00A0\u00A0#{m} BST#{micronumber(lvl)}#{"\u00A0\u00A0\u00B7\u00A0\u00A0#{scorename}: #{self.score(bot,lvl,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,skill_list).to_i}" unless bonus=='Enemy' && self.hasEnemyForm?}\n```#{x}\n#{x2}#{"\n#{x44}" if lvl>40}#{"\n#{x444}" if lvl>98}```#{trns}"
   end
   
-  def statList(bot,includegrowths=false,diff=[0,0,0,0,0],rarity=5,boon='',bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',transformed=false,skill_list=[],skill_list_2=[],wpnlegal=true,pairup=false,lvl=40)
+  def statList(bot,includegrowths=false,diff=[0,0,0,0,0],rarity=5,boon=[''],bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',transformed=false,skill_list=[],skill_list_2=[],wpnlegal=true,pairup=false,lvl=40)
     x=dispStats(bot,1,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,pairup)
     px=dispStats(bot,1,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,[skill_list,skill_list_2].flatten,pairup)
     y=dispStats(bot,1,rarity,boon,bane,merges,flowers,support,bonus,blessing,resp,weapon,refne,transformed,skill_list,pairup)
@@ -1415,13 +1468,14 @@ class FEHUnit
     pyy22=py22.inject(0){|sum,x| sum + x }
     x3=self.supernatures(rarity).map{|q| q}
     x3=x3.map{|q| q.gsub('-',' ')} if merges>0
-    boonx=Stat_Names.find_index{|q| q==boon}
+    boonx=Stat_Names.find_index{|q| q==boon[0]}
+    boonx2=Stat_Names.find_index{|q| q==boon[1]}
     banex=Stat_Names.find_index{|q| q==bane}
     scorename='Score'
     scorename='Puntaje' if Shardizard==$spanishShard
     unless boonx.nil?
       for i in 0...x3.length
-        x3[i]=' ' if x3[i]=='+' && i != boonx
+        x3[i]=' ' if x3[i]=='+' && ![boonx,boonx2].include?(i)
       end
     end
     unless banex.nil?
@@ -1508,7 +1562,7 @@ class FEHUnit
     return f
   end
   
-  def score(bot,level=40,rarity=5,boon='',bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',skill_list=[])
+  def score(bot,level=40,rarity=5,boon=[''],bane='',merges=0,flowers=0,support='',bonus='',blessing=[],resp=false,weapon=nil,refne='',skill_list=[])
     xbane="#{bane}"
     xbane='' if merges>0
     x=dispStats(bot,40,rarity,boon,xbane,0,0).inject(0){|sum,x| sum + x }
@@ -1519,6 +1573,7 @@ class FEHUnit
     x=[x,185].max if rarity>=5 && level>=40 && !@legendary.nil? && @legendary[1]=='Duel' && @id>=640
     x=[x,185].max if rarity>=5 && level>=40 && !@duo.nil? && @duo[0][0]=='Duo'
     x=[x,190].max if rarity>=5 && level>=40 && !@duo.nil? && @duo[0][0]=='Duo' && @id>590
+    x=[x,195].max if rarity>=5 && level>=40 && !@duo.nil? && @duo[0][0]=='Duo' && @id>720
     lookout=$statskills.reject{|q| !['Stat-Affecting 1','Stat-Affecting 2'].include?(q[3])}
     for i in 0...skill_list.length
       x2=lookout.find_index{|q| q[0]==skill_list[i]}
@@ -1574,10 +1629,18 @@ class FEHUnit
     if xtype=='Resonant'
       return true if self.from_game(x.bonuses,true)
       return false
+    elsif xtype=='Forging'
+      return false unless x.bonuses.include?(@name)
+      return 'Red' if x.bonuses[0]==@name
+      return 'Orange' if x.bonuses[1]==@name
+      return 'Green' if x.bonuses[2]==@name
+      return 'Blue' if x.bonuses[3]==@name
     end
     return true if x.bonuses.include?(@name)
     return false
   end
+  
+  def isLaunch?; return @id>3 && @id<92 && @name != 'Veronica'; end
   
   def bonus_type
     b=[]
@@ -1728,7 +1791,7 @@ class SuperUnit < FEHUnit # attributes shared by Dev- and Donor- Units but not i
   
   def merge_count=(val); @merge_count=val.to_i; end
   def dragonflowers=(val); @dragonflowers=val.to_i; end
-  def boon=(val); @boon=val; end
+  def boon=(val); @boon=val; @boon=val.split(', ') unless val.is_a?(Array); end
   def bane=(val); @bane=val; end
   def cohort=(val); @cohort=val; end
   def skills=(val); @skills=val.map{|q| q}; end
@@ -1894,7 +1957,7 @@ class SuperUnit < FEHUnit # attributes shared by Dev- and Donor- Units but not i
   end
   
   def creation_string(bot)
-    return @base_unit.starDisplay(bot,@rarity,@boon.gsub(' ',''),@bane.gsub(' ',''),@merge_count,@dragonflowers)
+    return @base_unit.starDisplay(bot,@rarity,@boon.map{|q| q.gsub(' ','')},@bane.gsub(' ',''),@merge_count,@dragonflowers)
   end
   
   def storage_string
@@ -1902,7 +1965,7 @@ class SuperUnit < FEHUnit # attributes shared by Dev- and Donor- Units but not i
     x="#{x}\\#{@face}\\#{@weapon.join(', ')}" if @name=='Kiran' && !@face.nil?
     x="#{x}\n#{@rarity}#{@resplendent}#{'f' if @forma}"
     x="#{x}\\#{@merge_count}"
-    x="#{x}\\#{@boon.gsub(' ','')}"
+    x="#{x}\\#{@boon.map{|q| q.gsub(' ','')}.join(', ')}"
     x="#{x}\\#{@bane.gsub(' ','')}"
     x="#{x}\\#{@true_support}"
     x="#{x}\\#{@dragonflowers}"
@@ -2057,7 +2120,7 @@ class DevUnit < SuperUnit
   end
   
   def starDisplay(bot,f=5,f2='',f3='',f4=0,f5=0)
-    x=super(bot,@rarity,@boon.gsub(' ',''),@bane.gsub(' ',''),@merge_count,@dragonflowers)
+    x=super(bot,@rarity,@boon.map{|q| q.gsub(' ','')},@bane.gsub(' ',''),@merge_count,@dragonflowers)
     if @support=='-' && @rarity>=5 && @merge_count>=Max_rarity_merge[1]
       x=x.gsub(Rarity_stars[0][@rarity-1],'<:FEH_rarity_Mp10:577779126853959681>')
       x=x.gsub(Rarity_stars[1][@rarity-1],'<:FEH_rarity_Mp10:577779126853959681>')
@@ -2089,7 +2152,7 @@ class DevUnit < SuperUnit
       sl.push(m) if lookout.include?(m)
     end
     bonus='' if bonus=='Enemy'
-    x=super(bot,@rarity,@boon.gsub(' ',''),@bane.gsub(' ',''),@merge_count,@dragonflowers,@support,bonus,blessing,r,y[0],y[1],transformed,sl,skill_list_2,true,pairup,expanded_mode)
+    x=super(bot,@rarity,@boon.map{|q| q.gsub(' ','')},@bane.gsub(' ',''),@merge_count,@dragonflowers,@support,bonus,blessing,r,y[0],y[1],transformed,sl,skill_list_2,true,pairup,expanded_mode)
     if pairup && !@cohort.nil? && !$dev_units.find_index{|q| q.name==@cohort}.nil?
       m=$dev_units[$dev_units.find_index{|q| q.name==@cohort}]
       x=x.split("\n")
@@ -2255,6 +2318,7 @@ class DonorUnit < SuperUnit
     x=''
     moji=bot.server(877171831835066391).emoji.values.reject{|q| q.name != "Icon_Support_#{@color_name}"}
     moji=bot.server(877171831835066391).emoji.values.reject{|q| q.name != "Rapport_#{@color_name}"} if moji.length<=0
+    moji=bot.server(877171831835066391).emoji.values.reject{|q| q.name != "#{@color_name.gsub('2','')}_Friendship"} if moji.length<=0
     if get_donor_list().reject{|q| q[2][0]<5}.map{|q| q[0]}.include?(@owner_id)
       x=moji[0].mention unless moji.length<=0
       x="#{x}<:Icon_Support:448293527642701824>" unless @support.nil? || @support.length<=0 || @support=='-'
@@ -2265,7 +2329,7 @@ class DonorUnit < SuperUnit
   end
   
   def starDisplay(bot,f=5,f2='',f3='',f4=0,f5=0)
-    x=super(bot,@rarity,@boon.gsub(' ',''),@bane.gsub(' ',''),@merge_count,@dragonflowers)
+    x=super(bot,@rarity,@boon.map{|q| q.gsub(' ','')},@bane.gsub(' ',''),@merge_count,@dragonflowers)
     if @rarity>=5 && @merge_count>=Max_rarity_merge[1]
       x=x.gsub(Rarity_stars[0][@rarity-1],'<:Icon_Rarity_Sp10:448272715653054485>')
       x=x.gsub(Rarity_stars[1][@rarity-1],'<:Icon_Rarity_Sp10:448272715653054485>')
@@ -2291,7 +2355,7 @@ class DonorUnit < SuperUnit
       sl.push(m) if lookout.include?(m)
     end
     bonus='' if bonus=='Enemy'
-    x=super(bot,@rarity,@boon.gsub(' ',''),@bane.gsub(' ',''),@merge_count,@dragonflowers,@support,bonus,blessing,r,y[0],y[1],transformed,sl,skill_list_2,true,pairup,expanded_mode)
+    x=super(bot,@rarity,@boon.map{|q| q.gsub(' ','')},@bane.gsub(' ',''),@merge_count,@dragonflowers,@support,bonus,blessing,r,y[0],y[1],transformed,sl,skill_list_2,true,pairup,expanded_mode)
     if pairup && !@cohort.nil? && !$dev_units.find_index{|q| q.name==@cohort && q.owner_id==@owner_id}.nil?
       m=$donor_units[$donor_units.find_index{|q| q.name==@cohort && q.owner_id==@owner_id}]
       x=x.split("\n")
@@ -2344,7 +2408,7 @@ class FEHSkill
   attr_accessor :type
   attr_accessor :restrictions,:exclusivity
   attr_accessor :weapon_stats,:weapon_gain
-  attr_accessor :description,:dagger_debuff,:dagger_buff
+  attr_accessor :description,:dagger_debuff,:dagger_buff,:short_desc
   attr_accessor :prerequisite
   attr_accessor :summon,:learn
   attr_accessor :tags
@@ -2449,13 +2513,16 @@ class FEHSkill
   def description=(val)
     if val.nil? || val.length<=0 || val=='-'
       @dexcription=''
-    elsif @type.include?('Weapon') && @restrictions.include?('Dagger Users Only')
+    else
       x=val.split(' *** ')
       @description=x[0]
-      @dagger_debuff=x[1].split(', ') unless x[1].nil?
-      @dagger_buff=x[2].split(', ') unless x[2].nil?
-    else
-      @description=val
+      if @type.include?('Weapon') && @restrictions.include?('Dagger Users Only')
+        @dagger_debuff=x[1].split(', ') unless x[1].nil?
+        @dagger_buff=x[2].split(', ') unless x[2].nil?
+        @short_desc=x[3] unless x[3].nil?
+      elsif !x[1].nil?
+        @short_desc=x[1]
+      end
     end
   end
   
@@ -2725,9 +2792,7 @@ class FEHSkill
     dispname="#{subname} W" if (!@level.nil? && @level[0,1]=='W') || has_any?(event.message.text.downcase.split(' '),['refinement','refinements','(w)'])
     dispname=dispname.gsub(' ','_').gsub('.','').gsub('/','_').gsub('!','').gsub(':','')
     dispname=dispname.gsub('+','') unless subname[-1]=='+' && self.isPassive?
-    return "https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Weapons/#{dispname}.png?raw=true" if @type.include?('Weapon')
-    return "https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Assists/#{dispname}.png?raw=true" if @type.include?('Assist')
-    return "https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/Specials/#{dispname}.png?raw=true" if @type.include?('Special')
+    return "https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/#{@type[0]}s/#{dispname}.png?raw=true" if ['Weapon','Assist','Special'].include?(@type[0])
     return "https://github.com/Rot8erConeX/EliseBot/blob/master/EliseBot/skills/#{dispname}.png?raw=true" if self.isPassive?
     return ''
   end
@@ -3388,13 +3453,21 @@ class FEHAccessory
     return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/Accessories/#{x}.png"
   end
   
+  def color
+    return nil unless @obtain.split(' ')[0]=='Reach' && @obtain.split(' ')[3]=='friendship'
+    m=@obtain.split(' ')[2]
+    return "#{m[0,1].upcase}#{m[1,m.length-1]}"
+  end
+  
   def class_header(bot,emotesonly=false,ext=false)
-    wemote=''
+    wemote=''; cemote=''
     moji=bot.server(449988713330769920).emoji.values.reject{|q| q.name != "Accessory_Type_#{@type}"}
     wemote=moji[0].mention unless moji.length<=0
-    return "#{'<:Summon_Gun:467557566050861074>' if @name[0,4]=='(S) '}#{wemote}" if emotesonly
-    return "#{"<:Summon_Gun:467557566050861074>**Exclusivo para invocador**\n" if @name[0,4]=='(S) '}#{wemote}**Tipo de Accesorio:** #{self.spanish_type}" if Shardizard==$spanishShard
-    return "#{"<:Summon_Gun:467557566050861074>**Summoner-exclusive**\n" if @name[0,4]=='(S) '}#{wemote}**Accessory Type:** #{@type}"
+    moji=bot.server(877171831835066391).emoji.values.reject{|q| q.name != "#{self.color}_Friendship"}
+    cemote=moji[0].mention unless moji.length<=0
+    return "#{'<:Summon_Gun:467557566050861074>' if @name[0,4]=='(S) '}#{wemote}#{cemote}" if emotesonly
+    return "#{"<:Summon_Gun:467557566050861074>**Exclusivo para invocador**\n" if @name[0,4]=='(S) '}#{wemote}**Tipo de Accesorio:** #{self.spanish_type}#{"\n#{cemote}**Colore:** #{self.spanish_color}" unless self.color.nil?}" if Shardizard==$spanishShard
+    return "#{"<:Summon_Gun:467557566050861074>**Summoner-exclusive**\n" if @name[0,4]=='(S) '}#{wemote}**Accessory Type:** #{@type}#{"\n#{cemote}**Color:** #{self.color}" unless self.color.nil?}"
   end
   
   def emotes(bot,includebonus=true); return self.class_header(bot,true,includebonus); end
@@ -4566,6 +4639,7 @@ def find_unit(event,args=nil,xname=nil,bot=nil,fullname=false,ext=0)
   end
   xname=xname.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')
   untz=$units.reject{|q| !q.isPostable?(event)}
+  untz=$dev_units.reject{|q| !q.isPostable?(event)} if ext==1
   if event.user.id==131131245118619648 && xname=='me'
     x=untz.find_index{|q| q.name.downcase.gsub('(','').gsub(')','').gsub(' ','').gsub('_','').gsub('!','')=='merric'}
     return untz[x] unless x.nil?
@@ -4589,7 +4663,9 @@ def find_unit(event,args=nil,xname=nil,bot=nil,fullname=false,ext=0)
     x2=untz.find_index{|q| q.name.downcase==alz[x][2].downcase} if alz[x][2].is_a?(String)
     return untz[x2] unless x2.nil?
   end
-  if [event.user.name,event.user.display_name].map{|q| normalize(q.downcase).gsub('(','').gsub(')','').gsub(' ','').gsub('_','').gsub('!','')}.include?(xname.downcase)
+  nmz=[event.user.name]
+  nmz.push(event.user.display_name) unless event.server.nil?
+  if nmz.map{|q| normalize(q.downcase).gsub('(','').gsub(')','').gsub(' ','').gsub('_','').gsub('!','')}.include?(xname.downcase)
     x=untz.find_index{|q| q.name=='Kiran'}
     return untz[x] unless x.nil?
   end
@@ -5073,7 +5149,7 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
   end
   merges=nil
   rarity=nil
-  boon=nil
+  boon=[]
   bane=nil
   support=nil
   refinement=nil
@@ -5124,8 +5200,8 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
           args[i]=nil
         else # stat names preceeded by a plus sign automatically fill the boon variable
           x=stat_modify(x)
-          if ['HP','Attack','Speed','Defense','Resistance'].include?(x) && boon.nil?
-            boon=x
+          if ['HP','Attack','Speed','Defense','Resistance'].include?(x) && boon.length<2
+            boon.push(x)
             args[i]=nil
           end
         end
@@ -5157,7 +5233,7 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
       elsif args[i][0,4].downcase=='flor' && args[i][4,args[i].length-4].to_i.to_s==args[i][4,args[i].length-4] && Shardizard==$spanishShard
         flowers=args[i][4,args[i].length-4].to_i if flowers.nil?
         args[i]=nil
-      elsif args[i][0,9].downcase=='dracoflor' && args[i][9,args[i].length-9].to_i.to_s==args[i][9,args[i].length-9]
+      elsif args[i][0,9].downcase=='dracoflor' && args[i][9,args[i].length-9].to_i.to_s==args[i][9,args[i].length-9] && Shardizard==$spanishShard
         flowers=args[i][9,args[i].length-9].to_i if flowers.nil?
         args[i]=nil
       elsif args[i][0,3]=='(+)' # stat names preceeded by a plus sign in parentheses automatically fill the refinement variable
@@ -5208,8 +5284,8 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
           rarity=x.to_i
           args[i]=nil
         end
-      elsif !find_nature(args[i].gsub('(','').gsub(')','')).nil? && (boon.nil? || bane.nil?) # Certain Pokemon nature names will fill both the boon and bane variables
-        boon=find_nature(args[i].gsub('(','').gsub(')',''))[1] if boon.nil?
+      elsif !find_nature(args[i].gsub('(','').gsub(')','')).nil? && (boon.length<2 || bane.nil?) # Certain Pokemon nature names will fill both the boon and bane variables
+        boon.push(find_nature(args[i].gsub('(','').gsub(')',''))[1]) if boon.length<2
         bane=find_nature(args[i].gsub('(','').gsub(')',''))[2] if bane.nil?
         args[i]=nil
       end
@@ -5249,9 +5325,9 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
           refinement=y
           args[i]=nil
           args[i-1]=nil
-        elsif args[i-1].gsub('(','').gsub(')','').downcase=='plus' && ['HP','Attack','Speed','Defense','Resistance'].include?(y) && boon.nil?
+        elsif args[i-1].gsub('(','').gsub(')','').downcase=='plus' && ['HP','Attack','Speed','Defense','Resistance'].include?(y) && boon.length<2
           # the word "plus", if followed by a stat name, will turn that stat into the unit's boon
-          boon=y
+          boon.push(y)
           args[i]=nil
           args[i-1]=nil
         elsif args[i-1].gsub('(','').gsub(')','').downcase=='minus' && ['HP','Attack','Speed','Defense','Resistance'].include?(y) && bane.nil?
@@ -5259,9 +5335,9 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
           bane=y
           args[i]=nil
           args[i-1]=nil
-        elsif args[i].gsub('(','').gsub(')','').downcase=='boon' && ['HP','Attack','Speed','Defense','Resistance'].include?(x) && boon.nil?
+        elsif args[i].gsub('(','').gsub(')','').downcase=='boon' && ['HP','Attack','Speed','Defense','Resistance'].include?(x) && boon.length<2
           # the word "boon", if preceeded by a stat name, will turn that stat into the unit's boon
-          boon=x
+          boon.push(x)
           args[i]=nil
           args[i-1]=nil
         elsif args[i].gsub('(','').gsub(')','').downcase=='bane' && ['HP','Attack','Speed','Defense','Resistance'].include?(x) && bane.nil?
@@ -5330,8 +5406,8 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
             args[i]=nil
           end
         elsif ['HP','Attack','Speed','Defense','Resistance'].include?(x)
-          if boon.nil?
-            boon=x
+          if boon.length<2
+            boon.push(x)
             args[i]=nil
           elsif bane.nil?
             bane=x
@@ -5346,7 +5422,7 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
     args.compact!
     fw=['dragonflower','dragonflowers','df']
     fw=['dragonflower','dragonflowers','df','dracoflor','dracoflores'] if Shardizard==$spanishShard
-    flowers=Max_rarity_merge[2] if has_any?(args.map{|q| q.downcase},fw) && flowers.nil?
+    flowers=$units.map{|q| q.dragonflowerPhase}.max*5 if has_any?(args.map{|q| q.downcase},fw) && flowers.nil?
   end
   blessing=[] if blessing.nil?
   if juststats
@@ -5377,14 +5453,14 @@ def find_stats_in_string(event,stringx=nil,mode=0,namex=nil,juststats=false)
     rarity=5 if rarity.nil?
     merges=0 if merges.nil?
     flowers=0 if flowers.nil?
-    boon='' if boon.nil?
+    boon=[''] if boon.length<=0
     bane='' if bane.nil?
     support='' if support.nil?
     refinement='' if refinement.nil?
   end
   rarity=Max_rarity_merge[0] if !rarity.nil? && rarity>Max_rarity_merge[0]
   merges=Max_rarity_merge[1] if !merges.nil? && merges>Max_rarity_merge[1]
-  flowers=Max_rarity_merge[1] if !flowers.nil? && flowers>3*Max_rarity_merge[2]
+  flowers=$units.map{|q| q.dragonflowerPhase}.max*5 if !flowers.nil? && flowers>15*$units.map{|q| q.dragonflowerPhase}.max
   resp=false
   resp=true if has_any?(args.map{|q| q.downcase},['resplendant','resplendent','ascension','ascend','resplend','ex']) || event.message.text.downcase.include?('resplendent') || event.message.text.downcase.include?('resplendant')
   return [rarity,merges,boon,bane,support,refinement,blessing,transformed,flowers,resp]
@@ -5769,7 +5845,7 @@ def sort_legendaries(event,bot,mode=0)
     lemoji1='' if x[i]=='Remix' || x[i].include?('Mid-') || x[i].include?('Mediados de')
     y.push(["#{x[i]}#{' ' unless lemoji1.length<=1}#{lemoji1}",f.join("\n")])
   end
-  future_banner=$banners.reject{|q| !has_any?(q.tags,['Legendary','LegendaryRemix']) || !q.isFuture?}.uniq
+  future_banner=$banners.reject{|q| !has_any?(q.tags,['Legendary','LegendaryRemix']) || !q.isFuture?}.uniq.reverse
   if future_banner.length>0
     future_banner.reverse!
     for i in 0...future_banner.length
@@ -5808,6 +5884,7 @@ def sort_legendaries(event,bot,mode=0)
       lemoji1='<:Legendary_Effect_Unknown:443337603945857024>'
       lemoji1='<:Mythic_Effect_Unknown:523328368079273984>' if f2[1]%2==1 || future_banner[i].name.include?('Mythic Heroes:')
       lemoji1='<:Legendary_Effect_Unknown:443337603945857024>' if future_banner[i].name.include?('Legendary Heroes:')
+      lemoji1='<:Prf_Sparkle:490307608973148180>' if future_banner[i].tags.include?('LegendaryRemix')
       mo=['','Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec']
       mo=$spanish_months[0].map{|q| "#{q[0].upcase unless q.length<=0}#{q[1,2]}"} if Shardizard==$spanishShard
       f2="#{f2[0]}#{mo[f2[1]]}#{f2[2]}"
@@ -5835,6 +5912,7 @@ def sort_legendaries(event,bot,mode=0)
       lemoji1='<:Legendary_Effect_Unknown:443337603945857024>'
       lemoji1='<:Mythic_Effect_Unknown:523328368079273984>' if f2[1]%2==1 || current_banner[i].name.include?('Mythic Heroes:')
       lemoji1='<:Legendary_Effect_Unknown:443337603945857024>' if current_banner[i].name.include?('Legendary Heroes:')
+      lemoji1='<:Prf_Sparkle:490307608973148180>' if current_banner[i].tags.include?('LegendaryRemix')
       f2=current_banner[i].end_date
       t2=Time.new(f2[2],f2[1],f2[0])
       timeshift=8
@@ -5866,13 +5944,13 @@ def sort_legendaries(event,bot,mode=0)
     event.respond msg
   elsif y.length>5 || y.map{|q| "__#{q[0]}__\n#{q[1]}"}.join("\n\n").length>1500
     y=y[0,6] unless safe_to_spam?(event)
-    m=y.length/3
-    m+=1 unless y.length%3==0
+    m=y.length/6
+    m+=1 unless y.length%6==0
     for i in 0...m
       x=''
       x="__**Legendary and Mythic Heroes' Appearances**__" if i==0
       x="__**Apariciones de Héroes Legendarios y Míticos**__" if i==0 && Shardizard==$spanishShard
-      create_embed(event,x,'',avg_color(c),nil,nil,y[3*i,[3,y.length-3*i].min],2)
+      create_embed(event,x,'',avg_color(c),nil,nil,y[6*i,[6,y.length-6*i].min],2)
     end
   else
     create_embed(event,"__**Legendary and Mythic Heroes' Appearances**__",'',avg_color(c),nil,nil,y,2)
@@ -5880,7 +5958,7 @@ def sort_legendaries(event,bot,mode=0)
   return nil unless safe_to_spam?(event)
   b=$banners.reject{|q| q.tags.nil? || !has_any?(q.tags,['Legendary','DoubleSpecial','LegendaryRemix']) || q.unit_list.length<=0}.map{|q| q.banner_units}.flatten.uniq
   k=[$units.reject{|q| !q.legendary.nil? || !q.fake.nil? || !q.availability[0].include?('5s') || b.include?(q.name)}.sort{|a,b| a.id<=>b.id},
-     $units.reject{|q| !q.legendary.nil? || !q.duo.nil? || !q.fake.nil? || !q.availability[0].include?('p') || q.availability[0].include?('1p') || q.availability[0].include?('2p') || q.availability[0].include?('3p') || q.availability[0].include?('4p') || q.availability[0].include?('TD') || b.include?(q.name)}.sort{|a,b| a.id<=>b.id}]
+     $units.reject{|q| !q.legendary.nil? || !q.duo.nil? || !q.fake.nil? || !q.availability[0].include?('p') || q.availability[0].include?('1p') || q.availability[0].include?('2p') || q.availability[0].include?('3p') || q.availability[0].include?('4p') || q.isRevival?(true) || b.include?(q.name)}.sort{|a,b| a.id<=>b.id}]
   colors=[['Red',0xE22141],['Blue',0x2764DE],['Green',0x09AA24],['Colorless',0x64757D],['Unknown',0xAA937A]]
   colors=[['Roja',0xE22141],['Azul',0x2764DE],['Verde',0x09AA24],['Gris',0x64757D],['Desconocido',0xAA937A]] if Shardizard==$spanishShard
   colors2=[[0xAA937A,"__**Seasonal units that have not yet been on a Legendary/Mythic or DoubleSpecial Banner**__","There are too many seasonal zzzzz heroes to display."],
@@ -6171,7 +6249,7 @@ def add_new_alias(bot,event,newname,unit,modifier=nil,modifier2=nil,mode=0)
     event.respond "#{newname} has __***NOT***__ been added to #{matchnames[1]}'s aliases."
     bot.channel(logchn).send_message("#{str2}\n~~**#{type[1].gsub('*','')} Alias:** #{newname} for #{unit}~~\n**Reason for rejection:** Begone, alias.")
     return nil
-  elsif checkstr.downcase =~ /n+?((i|1)+?|(e|3)+?)(b|g|8)+?(a|4|(e|3)+?r+?)+?/
+  elsif checkstr.downcase.gsub('x','') =~ /n+?((i|1|y)+?|(e|3)+?)(b|g|8)+?(a|4|(e|3)+?r+?)+?/
     event.respond "That name has __***NOT***__ been added to #{matchnames[1]}'s aliases."
     bot.channel(logchn).send_message("#{str2}\n~~**#{type[1].gsub('*','')} Alias:** >CENSORED< for #{unit}~~\n**Reason for rejection:** Begone, alias.")
     return nil
@@ -6520,8 +6598,7 @@ def disp_unit_stats(bot,event,xname,extrastr=nil,sizex='smol',includeskills=fals
       end
     end
   end
-  ftr='For the Kiran-shaped enemy in Book IV Ch. 12-5, type the name "Hood".' if unit.name=='Kiran'
-  ftr='Para el enemigo con forma de Kiran en el libro 4 cap. 12-5, use el nombre "Hood".' if unit.name=='Kiran' && Shardizard==$spanishShard
+  ftr=unit.disp_footer unless unit.disp_footer.nil?
   create_embed(event,["__#{"#{unit.owner}'s " unless unit.owner.nil? || Shardizard==$spanishShard}**#{unit.name}**#{unit.submotes(bot)}#{" de #{unit.owner}" unless unit.owner.nil? || Shardizard !=$spanishShard}__",header],text,unit.disp_color,ftr,unit.thumbnail(event,bot,resp),flds)
 end
 
@@ -6619,15 +6696,14 @@ def disp_unit_skills(bot,event,xname)
   text=unit.starHeader2(bot,true,rarity,'','',merges,0,'','',[],false,nil,'',false,[],[],true,false,0)
   if Shardizard==$spanishShard
     text="#{text}\nLider sombrío" if unit.name=='Mathoo' && has_any?(event.message.text.downcase.split(' '),['rokkr','enemy','boss'])
-    text="#{text}\nLider de los enemigos" if unit.name=='Hel' && has_any?(event.message.text.downcase.split(' '),['enemy','boss'])
+    text="#{text}\nLider de los enemigos" if !unit.enemy_shift.nil? && unit.name != 'Mathoo' && has_any?(event.message.text.downcase.split(' '),['enemy','boss'])
     text="#{text}\nError de Zelgius aplicado" if zelg
-    ftr='Para el enemigo con forma de Kiran en el libro 4 cap. 12-5, use el nombre "Hood".' if unit.name=='Kiran'
   else
     text="#{text}\nRokkr Unit" if unit.name=='Mathoo' && has_any?(event.message.text.downcase.split(' '),['rokkr','enemy','boss'])
-    text="#{text}\nEnemy Boss Unit" if unit.name=='Hel' && has_any?(event.message.text.downcase.split(' '),['enemy','boss'])
+    text="#{text}\nEnemy Boss Unit" if !unit.enemy_shift.nil? && unit.name != 'Mathoo' && has_any?(event.message.text.downcase.split(' '),['enemy','boss'])
     text="#{text}\nZelgius glitch applied" if zelg
-    ftr='For the Kiran-shaped enemy in Book IV Ch. 12-5, type the name "Hood".' if unit.name=='Kiran'
   end
+  ftr=unit.disp_footer unless unit.disp_footer.nil?
   create_embed(event,["__#{"#{unit.owner}'s " unless unit.owner.nil? || Shardizard==$spanishShard}**#{unit.name}**#{unit.submotes(bot)}#{" de #{unit.owner}" unless unit.owner.nil? || Shardizard !=$spanishShard}__",header],text,unit.disp_color,ftr,unit.thumbnail(event,bot,resp),flds)
 end
 
@@ -6815,6 +6891,7 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
     endtext=''
     ftr="#{skill.tome_tree_reverse} Mages can still learn this skill, it will just take more SP." unless skill.tome_tree_reverse.nil?
     ftr="Debuff is applied at end of combat if unit attacks, and lasts until the foes' next actions." unless skill.dagger_debuff.nil? || skill.dagger_debuff.length<=0
+    skill.description=skill.short_desc unless safe_to_spam?(event) || skill.short_desc.nil?
     if ['Missiletainn'].include?(skill.name)
       sk1=$skills.find_index{|q| q.name=='Missiletainn (Dark)'}
       sk2=$skills.find_index{|q| q.name=='Missiletainn (Dusk)'}
@@ -7271,14 +7348,21 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
           s2=$skills[$skills.find_index{|q| q.name=='Missiletainn (Dusk)'}]
           text="#{r.emote(r.overrides[i][6])} **#{s1.name} (+) Effect Mode**"
           text="#{text} - #{s1.refinement_name.name}" unless s1.refinement_name.nil?
-          if safe_to_spam?(event)
-            text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+          if s2.nil? || s2.refine.nil?
+            if safe_to_spam?(event)
+              text="#{text}\n#{s1.refine.dispStats(s1.refine.overrides[i][6],true)}"
+              text="#{text}\n*Effective against:* #{s1.eff_against('Effect',false,event)}" unless s1.eff_against('Effect',false,event).length<=0
+            end
+            text="#{text}\n#{s1.refine.inner}" unless s1.refine.inner.nil?
+            text="#{text}\n#{s1.refine.outer}" if safe_to_spam?(event)
+          elsif safe_to_spam?(event)
+            text="#{text}\n#{s1.refine.dispStats(s1.refine.overrides[i][6],true)}"
             text="#{text}\n*Effective against:* #{s1.eff_against('Effect',false,event)}" unless s1.eff_against('Effect',false,event).length<=0
             text="#{text}\n#{s1.refine.inner}" unless s1.refine.inner.nil?
             text="#{text}\n#{s1.refine.outer}"
             text="#{text}\n\n#{r.emote(r.overrides[i][6])} **#{s2.name} (+) Effect Mode**"
             text="#{text} - #{s2.refinement_name.name}" unless s2.refinement_name.nil?
-            text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
+            text="#{text}\n#{s2.refine.dispStats(s2.refine.overrides[i][6],true)}"
             text="#{text}\n*Effective against:* #{s2.eff_against('Effect',false,event)}" unless s2.eff_against('Effect',false,event).length<=0
             text="#{text}\n#{s2.refine.inner}" unless s2.refine.inner.nil?
             text="#{text}\n#{s2.refine.outer}"
@@ -7326,11 +7410,12 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
           text="#{text}\nIf foe's Range = 2, damage calculated using the lower of foe's Def or Res." if (has_any?(skill.tags,['Frostbite','(E)Frostbite','(R)Frostbite']) && !skill.description.include?("amage calculated using the lower of foe's Def or Res")) || (skill.restrictions.include?('Dragons Only') && !skill.tags.include?('UnFrostbite'))
         end
         text="#{text}\n" if safe_to_spam?(event) || r.overrides[1,r.overrides.length-1].map{|q| q[7]}.compact.length>0
+      elsif skill.name=='Missiletainn'
       elsif safe_to_spam?(event) || !r.overrides[i][7].nil?
         text="#{text}\n#{r.emote(r.overrides[i][6])} **#{r.overrides[i][6]} Mode**  \u200B  \u200B  \u200B  #{r.dispStats(r.overrides[i][6],true)}"
       end
     end
-    unless skill.restrictions.include?('Staff Users Only') && skill.tome_tree.nil?
+    unless (skill.restrictions.include?('Staff Users Only') && skill.tome_tree.nil?) || skill.name=='Missiletainn'
       every=[]
       every.push("*Effective against:* #{skill.eff_against('Refine',true,event)}") unless skill.eff_against('Refine',true,event).length<=0
       if r.outer.nil?
@@ -9089,13 +9174,13 @@ bot.command(:invite) do |event, user|
   unless user.nil?
     if /<@!?(?:\d+)>/ =~ user
       usr=event.message.mentions[0]
-      txt="This message was sent to you at the request of #{event.user.distinct}.\n\n#{txt}" unless Shardizard=+$spanishShard
-      txt="Este mensaje le fue enviado a solicitud de #{event.user.distinct}.\n\n#{txt}" if Shardizard=+$spanishShard
+      txt="This message was sent to you at the request of #{event.user.distinct}.\n\n#{txt}" unless Shardizard==$spanishShard
+      txt="Este mensaje le fue enviado a solicitud de #{event.user.distinct}.\n\n#{txt}" if Shardizard==$spanishShard
       user_to_name=usr.distinct
     else
       usr=bot.user(user.to_i)
-      txt="This message was sent to you at the request of #{event.user.distinct}.\n\n#{txt}" unless Shardizard=+$spanishShard
-      txt="Este mensaje le fue enviado a solicitud de #{event.user.distinct}.\n\n#{txt}" if Shardizard=+$spanishShard
+      txt="This message was sent to you at the request of #{event.user.distinct}.\n\n#{txt}" unless Shardizard==$spanishShard
+      txt="Este mensaje le fue enviado a solicitud de #{event.user.distinct}.\n\n#{txt}" if Shardizard==$spanishShard
       user_to_name=usr.distinct
     end
   end
@@ -9169,15 +9254,15 @@ bot.command(:shard) do |event, i, j|
     j=i.to_i*1
     i=0
   end
+  return "This server uses Smol Shards.#{str}" if Shardizard==-1
+  return "Este servidor usa el Shard español#{str}" if Shardizard==$spanishShard
+  return "PMs always use #{shard_data(0,true,j)[0]} Shards." if event.server.nil? && ![-1,4,$spanishShard].include?(Shardizard)
+  return "This is the debug mode, which uses #{shard_data(0,false,j)[4]} Shards." if Shardizard==4
   str=''
   str="\nBut it is always <:Shard_Orange:552681863962165258> Citrus in spirit!" if !event.server.nil? && event.server.id==392557615177007104
   str='' if shard_data(0,true,j)[(event.server.id >> 22) % j]=='<:Shard_Orange:552681863962165258> Citrus'
-  event.respond "This server uses Smol Shards.#{str}" if Shardizard==-1
-  event.respond "Este servidor usa el Shard español#{str}" if Shardizard==$spanishShard
-  event.respond "This is the debug mode, which uses #{shard_data(0,false,j)[4]} Shards." if Shardizard==4
-  event.respond "PMs always use #{shard_data(0,true,j)[0]} Shards." if event.server.nil? && ![-1,4,$spanishShard].include?(Shardizard)
-  event.respond "In a system of #{j} shards, this server would use #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless event.server.nil? || [-1,4,$spanishShard].include?(Shardizard) || j == Shards
-  event.respond "This server uses #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards.#{str}" unless event.server.nil? || [-1,4,$spanishShard].include?(Shardizard) || j != Shards
+  event.respond "In a system of #{j} shards, this server would use #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards." unless j==Shards
+  event.respond "This server uses #{shard_data(0,true,j)[(event.server.id >> 22) % j]} Shards.#{str}" if j==Shards
 end
 
 bot.command(:status, aliases: [:avatar,:avvie]) do |event, *args|
@@ -9948,7 +10033,7 @@ bot.message do |event|
     elsif !bot.user(304652483299377182).on(event.server.id).nil? # Robin
     elsif !bot.user(543373018303299585).on(event.server.id).nil? # Botan
     elsif !bot.user(502288364838322176).on(event.server.id).nil? # Liz
-    elsif !bot.user(206147275775279104).on(event.server.id).nil? || Shardizard==4 || event.server.id==330850148261298176 # Pokedex
+    elsif !bot.user(206147275775279104).on(event.server.id).nil? || Shardizard==4 || [256291408598663168,330850148261298176].include?(event.server.id) # Pokedex
       triple_weakness(bot,event)
     end
   elsif overlap_prevent(event)
