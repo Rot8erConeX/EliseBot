@@ -23,6 +23,7 @@ Fire Blessing\Blessing\999\Used in Confer Blessing.  Confers the fire blessing o
 Light Blessing\Blessing\999\Used in Confer Blessing.  Confers the light blessing on an ally.\Light blessed heroes will gain a stat boost in Aether Raids when paired with Light Mythic Heroes during Light season.  Not to be confused with Light's Blessing.
 Water Blessing\Blessing\999\Used in Confer Blessing.  Confers the water blessing on an ally.\Water blessed heroes will gain a stat boost when paired with Water Legendary Heroes during Water season.
 Wind Blessing\Blessing\999\Used in Confer Blessing.  Confers the wind blessing on an ally.\Wind blessed heroes will gain a stat boost when paired with Wind Legendary Heroes during Wind season.
+Ascendant Floret\Growth\999999\Use within Ascend Traits to add new asset traits to a Hero in your army.\Obtained by summoning Ascendant Heroes
 Azure Badge\Growth\999999\Used to unlock potential in allies.  Increase rarity for a 3<:Icon_Rarity_3:448266417934958592> or lower blue-type ally.  Also used in the Sacred Seal Forge.
 Azure Crystal\Growth\999999\Used for leveling up.  Can be used on blue-type allies level 20 and higher.
 Azure Shard\Growth\999999\Used for leveling up.  Can be used on blue-type allies up to level 19.
@@ -68,3 +69,4 @@ Spring Aether Stone\Event\999\Used in Aether Raids to build structures that are 
 Summer Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Summer 2019
 Fall Aether Stone\Event\999\Used in Aether Raids to build structures that are available for a limited time. If that period has elapsed, these stones will be lost.\Fall 2019
 Guardian Shield\Event\3\In Frontline Phalanx, you must rescue Heroes from the jaws of defeat!
+Memory Fragment\Event\60\Used in Heroes Journey to view events.\Obtained when viewing events you have already seen.

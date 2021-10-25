@@ -1,23 +1,66 @@
 Book 3 Revival, Banner 10\-4\Kaden, Nailah, Velouria\5\12/12/2021, 18/12/2021\Book3
 Book 3 Revival, Banner 9\-4\Kliff, Loki, Surtr\5\28/11/2021, 04/12/2021\Book3
 Book 3 Revival, Banner 8\-4\Mikoto, Ophelia, Tibarn\5\14/11/2021, 20/11/2021\Book3
+Seeds of Fodlan (rerun with sparking)\3\Dedue, Ingrid, Linhardt, Marianne\5\07/11/2021, 14/07/2021\NewUnits
+Special Heroes: >Unknown<\3\-\5\05/11/2021, 30/11/2021\Seasonal, NewUnits
+Tempest Trials+: >Unknown<\3\-\5\03/11/2021, 17/11/2021\Tempest
+Trick or Defeat (2021 rerun)\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\02/11/2020, 14/11/2020\Seasonal, Halloween
+Heroes with Ignis (v2)\3\-\5\01/11/2021, 09/11/2021\SkillBanner
 Book 3 Revival, Banner 7\-4\Lewyn, Owain, Quan\5\31/10/2021, 06/11/2021\Book3
+Legendary Heroes: >Unknown<\-8\Alm(Saint), Duma, Hel, Mila, Mirabilis, Roy(Fire), Triandra\5\29/10/2021, 04/11/2021\Legendary
+The Land's Bounty (2021 rerun)\3\Kagero(Halloween), Mia(Halloween), Myrrh(Halloween), Niles(Halloween)\5\28/10/2021, 11/11/2021\Seasonal, Halloween
+Mercedes & Annette's Battle\3\Annette, Mercedes\5\27/11/2021, 05/11/2021\BHB
+A Monsterous Harvest (2021 rerun)\3\Dozla(Halloween), Hector(Halloween), Ilyana(Halloween), L'Arachel(Halloween)\5\26/10/2021, 08/11/2021\Seasonal, Halloween
+Heroes with Iceberg (v3)\3\-\5\23/10/2021, 31/10/2021\SkillBanner
+Dragons Harvest (2021 rerun)\3\Dheginsea(Halloween), Robin(F)(Fallen)(Halloween), Tiki(Young)(Halloween), Xane(Halloween)\5\20/10/2021, 04/11/2021\Seasonal, Halloween
+New Heroes & Ascended Fjorm\3\Fjorm(Bloom), Malice, Roshea, Wolf\5\18/10/2021, 04/11/2021\NewUnits
+Ascended Hero Celebration\3\Alm(Brave), Anna(Apotheosis), Annette, Berkut(Fallen), Byleth(M), Caineghis, Camilla(Brave), Catria(SoV), Corrin(M)(Fallen), Eleonora, Eliwood(Brave), Eyvel, Forsyth, Gerik, Idunn, Igrene, Keaton, Kliff, Kris(F), Kris(M), Larcei, Leila, Lewyn, Lyon(Fallen), Lysithea, Mamori, Mercedes, Midori, Owain, Perceval, Petra, Phina, Tethys, Tsubasa, Ylgr\50\18/10/2021, 29/10/2021\Daily
 Book 3 Revival, Banner 6\-4\Keaton, Selkie, Velouria\5\17/10/2021, 23/10/2021\Book3
-Book 3 Revival, Banner 5\-4\Camilla(Adrift), Corrin(F)(Adrift), Corrin(M)(Adrift)\5\03/10/2021, 09/10/2021\Book3
-Book 3 Revival, Banner 4\-4\Laegjarn, Surtr, Ylgr\5\19/09/2021, 25/09/2021\Book3
-Book 3 Revival, Banner 3\-4\Leanne, Nailah, Tibarn\5\05/09/2021, 11/09/2021\Book3
-Book 3 Revival, Banner 2\-4\Flora, Nina, Ophelia\5\22/08/2021, 28/08/2021\Book3
-Book 3 Revival, Banner 1\-4\Helbindi, Laevatein, Loki\5\08/08/2021, 14/08/2021\Book3
-Felicia & Flora's Battle\3\Felicia, Flora, Jakob\5\07/08/2021, 17/08/2021\BHB
-Perilous Seas\3\Hinoka(Pirate), Naesala(Pirate), Surtr(Pirate), Vik(Pirate)\5\05/08/2021, 05/09/2021\Seasonal, NewHeroes, Pirate
-"Fire & Ice 2" Tempest Trials+\3\Camilla(Launch), Hinoka(Launch), Surtr\5\03/08/2021, 17/08/2021\Tempest
-Hero Fest IX\5\Dedue, Henriette(Valentines), Flayn, Guinivere\5\02/08/2021, 02/09/2021\HeroFest
-Heroes with Fortress Skills\3\Gatrie, Idunn, Kliff\5\31/07/2021, 09/08/2021\SkillBanner
-Nohrian Summer (2021 rerun)\3\Corrin(F)(Summer), Elise(Summer), Leo(Summer), Xander(Summer)\5\26/07/2021, 08/08/2021\Seasonal, Summer
-Summer Refreshes (2021 rerun)\3\Lilina(Summer), Lyn(Summer), Ursula(Summer), Wolt(Summer)\5\15/07/2021, 29/08/2021\Seasonal, Summer
-Summer's Dream\3\Caeda(Summer), Freyja(Summer), Freyr(Summer), Ogma(Summer)\5\07/07/2021, 07/08/2021\Seasonal, Summer, NewUnits
+Heroes with Rein Skills\3\Erynis, Farina, Jill\5\16/10/2021, 22/10/2021\SkillBanner
+Double Special Heroes (October 2021)\6\Catria(Bride), Gustav(Valentines), Henriette(Valentines), Kaden(NewYears), L'Arachel(Retro), Minerva(Bunny), Myrrh(Bunny), Tana(Retro)\5\13/10/2021, 26/10/2021\DoubleSpecial
+Shared Bounty\3\Kurthnaga(Halloween), Rhea(Halloween), Robin(M)(Fallen)(Halloween), \5\07/10/2021, 06/11/2021\Seasonal, Halloween
+Performing Arts (2021 rerun)\3\Azura(AwaOdori), Inigo(AwaOdori), Olivia(AwaOdori), Shigure(AwaOdori)\5\02/10/2021, 25/10/2021\Seasonal, Fall
 GHB Units\5\-\543\\Dynamic, GHB
 TT Units\5\-\54\\Dynamic, Tempest
+"Ice & Flame 4" Tempest Trials\3\Byleth(M), Robin(M), Sophia\5\05/10/2021, 19/10/2021\Tempest
+New Power (October 2021)\3\Laevatein, Owain, Soleil, Tharja(Bride)\5\09/10/2021, 18/10/2021\NewPower
+Book 3 Revival, Banner 5\-4\Camilla(Adrift), Corrin(F)(Adrift), Corrin(M)(Adrift)\5\03/10/2021, 09/10/2021\Book3
+Heroes with Exp. Skills\3\Eirika(Memories), Lex, Silque\5\04/10/2021, 08/10/2021\SkillBanners
+Ace Archers Assemble\3\Igrene, Jeorge, Louise\5\27/09/2021, 07/10/2021\VotingGauntlet
+Scions of Twelve\3\Julia(AwaOdori), Larcei(AwaOdori), Leif(AwaOdori), Lewyn(AwaOdori)\5\07/09/2021, 07/10/2021\Seasonal, Fall
+Mythic Heroes: Otr, Kingsbrother\-8\Altina, Byleth(M)(Sublime), Celica(Queen), Chrom(Crowned), Claude(Unification), Eliwood(Wind), Leif(Unifier), Marianne, Otr, Palla(SoV), Shinon, Zeke\5\30/09/2021, 06/10/2021\Legendary
+Legendary Hero Remix: Hector & Ephraim\-6\Duessel, Eleonora, Ephraim(Fire), Hector(Marquess), Hrid, Lyon(Fallen), Robin(F)(Fallen), Ryoma(Supreme)\5\23/09/2021, 06/10/2021\LegendaryRemix, Spark
+Abyss & Muspell\3\Constance, Hapi, Muspell, Yuri\5\17/09/2021, 06/10/2021\NewUnits
+Heroes with Noontime\3\Dimitri, Edelgard(Brave), Kris(M)\5\28/09/2021, 03/10/2021\SkillBanner
+A Splendid Soiree (2021 rerun)\3\Berkut(AwaOdori), Ishtar(AwaOdori), Nephenee(AwaOdori), Reinhardt(AwaOdori)\5\16/09/2021, 29/09/2021\Seasonal, Fall
+Heroes with Fury (v3)\3\Asbel, Byleth(F), Kris(F)\5\21/09/2021, 27/09/2021\SkillBanner
+To Stay Dreaming (2021 rerun)\3\Ethlyn(AwaOdori), Lachesis(AwaOdori), Quan(AwaOdori), Sigurd(AwaOdori)\5\14/09/2021, 27/09/2021\Seasonal, Fall
+Book 3 Revival, Banner 4\-4\Laegjarn, Surtr, Ylgr\5\19/09/2021, 25/09/2021\Book3
+New Power (September 2021)\3\Alm(Brave), Camilla(Brave), Eliwood(Brave), Micaiah(Brave)\5\11/09/2021, 20/09/2021\NewPower, CYL
+"Ice & Fire 3" Tempest Trials+\3\Leif, Lewyn, Seliph\5\05/09/2021, 19/09/2021\Tempest
+Ylgr & Helbindi's Battle\3\Helbindi, Laevatein, Ylgr\5\10/09/2021, 17/09/2021\BHB
+Reginn & More (2021 revival)\3\Duessel, Natasha, Reginn, Selena(Sacred)\5\09/09/2021, 15/09/2021\Sparking
+Book 3 Revival, Banner 3\-4\Leanne, Nailah, Tibarn\5\05/09/2021, 11/09/2021\Book3
+Heroes with Moonbow (v2)\3\Claude(Brave), Lethe, Sue\5\03/09/2021, 10/09/2021\SkillBanner
+Chosen Family\3\Byleth(M), Caeda, Ephraim(Brave), Lysithea(Brave)\5\27/08/2021, 07/09/2021\VotingGauntlet
+Double Special Heroes (August 2021)\-6\Alfonse(Valentines), Dorothea(Plegian), Katarina(Plegian), Lif(Valentines), Plumeria(NewYears), Raphael(Plegian), Tharja(Plegian), Velouria(NewYears)\5\24/08/2021, 07/09/2021\DoubleSpecial
+Keepers of Peace\3\Eirika(Brave), Gatekeeper(Brave), Marianne(Brave), Marth(Brave)\5\17/08/2021, 06/09/2021\NewUnits, CYL
+Legendary Heroes: Micaiah, Radiant Queen\-8\Ashera, Edelgard(Emperor), Edelgard(Fallen), Farina, Ingrid, Lilina(Firelight), Micaiah(Queen), Morgan(F)(Fallen), Morgan(M)(Fallen), Naga, Sothis, Thrasir\5\31/08/2021, 05/09/2021\Legendary
+Perilous Seas\3\Hinoka(Pirate), Naesala(Pirate), Surtr(Pirate), Vik(Pirate)\5\05/08/2021, 05/09/2021\Seasonal, NewHeroes, Pirate
+Heroes with Ruse Skills (v2)\3\Azelle, Leila, Selena(Sacred)\5\26/08/2021, 03/09/2021\SkillBanner
+Hero Fest IX\5\Dedue, Henriette(Valentines), Flayn, Guinivere\5\02/08/2021, 02/09/2021\HeroFest
+Summer Refreshes (2021 rerun)\3\Lilina(Summer), Lyn(Summer), Ursula(Summer), Wolt(Summer)\5\15/07/2021, 29/08/2021\Seasonal, Summer
+Heroes with Lull Skills (v3)\3\Claude, Dimitri, Lysithea\5\20/08/2021, 26/08/2021\SkillBanner
+Festival in Hoshido (2021 rerun)\3\Elincia(AwaOdori), Micaiah(AwaOdori), Ryoma(AwaOdori), Xander(AwaOdori)\5\13/08/2021, 26/08/2021\Seasonal, Fall
+Pirate's Pride (2021 revival)\3\Brigid(Pirate), Geese(Pirate), Tibarn(Pirate), Veronica(Pirate)\5\12/08/2021, 25/08/2021\Seasonal, Pirate
+Book 3 Revival, Banner 2\-4\Flora, Nina, Ophelia\5\22/08/2021, 28/08/2021\Book3
+New Power (August 2021)\3\Ares, Laegjarn, Maribelle, Sanaki(Bride)\5\10/08/2021, 19/08/2021\NewPower
+Felicia & Flora's Battle\3\Felicia, Flora, Jakob\5\07/08/2021, 17/08/2021\BHB
+"Fire & Ice 2" Tempest Trials+\3\Camilla(Launch), Hinoka(Launch), Surtr\5\03/08/2021, 17/08/2021\Tempest
+Book 3 Revival, Banner 1\-4\Helbindi, Laevatein, Loki\5\08/08/2021, 14/08/2021\Book3
+Heroes with Fortress Skills\3\Gatrie, Idunn, Kliff\5\31/07/2021, 09/08/2021\SkillBanner
+Nohrian Summer (2021 rerun)\3\Corrin(F)(Summer), Elise(Summer), Leo(Summer), Xander(Summer)\5\26/07/2021, 08/08/2021\Seasonal, Summer
+Summer's Dream\3\Caeda(Summer), Freyja(Summer), Freyr(Summer), Ogma(Summer)\5\07/07/2021, 07/08/2021\Seasonal, Summer, NewUnits
 Mae & Boey's Battle\3\Boey, Genny, Mae\5\27/07/2021, 06/08/2021\BHB
 Dawning Reality & Nifl\3\Charlotte, Nifl, Nyx, Orochi\5\19/07/2021, 05/08/2021\NewUnits
 Mythic Heroes: Ullr, the Bowmaster\-8\Dimitri(Savior), Eir, Louise, Mila, Pent, Reginn, Seiros, Seliph(Scion), Shamir, Sigurd(Fated), Ullr, Yune\5\29/07/2021, 04/08/2021\Legendary
@@ -90,7 +133,7 @@ Seliph & Deirdre's Battle\3\Deirdre, Seliph, Sigurd\5\12/03/2021, 20/03/2021\BHB
 New Power (February 2021)\3\Ayra, Ishtar, L'Arachel, Nowi(Halloween)\5\07/03/2021, 19/03/2021\NewPower
 Enduring Legacy\3\Annand, Azelle, Erinys, Lex\5\16/02/2021, 15/03/2021\NewUnits
 Greil's Devoted (2021 rerun)\3\Greil(Valentines), Ike(Valentines), Mist(Valentines), Soren(Valentines)\5\24/02/2021, 10/03/2021\Seasonal, Valentine's
-Heroes with Moonbow\3\Gatrie, Julian, Sue\5\28/02/2021, 07/03/2021\SkillBanner
+Heroes with Moonbow (v1)\3\Gatrie, Julian, Sue\5\28/02/2021, 07/03/2021\SkillBanner
 Lovely Gifts (2021 rerun)\3\Alm(Valentines), Conrad(Valentines), Faye(Valentines), Rudolf(Valentines)\5\22/02/2021, 07/03/2021\Seasonal, NewUnits, Valentine's
 Veronica & Loki's Battle\3\Loki, Surtr, Veronica(Brave)\5\25/02/2021, 06/03/2021\BHB
 Double Special Heroes (February 2021)\6\Ethlyn(AwaOdori), Geese(Pirate), Joshua(Summer), Lute(Summer), Nephenee(AwaOdori), Robin(F)(Fallen)(Halloween), Sigurd(AwaOdori), Veronica(Pirate)\5\22/02/2021, 06/03/2021\DoubleSpecial
@@ -140,15 +183,15 @@ Lugh and Raigh's Battle\3\Lugh, Raigh\5\26/11/2020, 02/11/2020\BHB
 Heroes with Spurn or Repel\3\Kris(F), Kris(M), Larcei\5\25/11/2020, 01/12/2020\SkillBanner
 Book 2 Revival, Banner 9\-4\Hector(Brave), Karla, Nino(Fangs)\5\21/11/2020, 27/11/2020\Book2
 Heroes with Foil Skills\3\Julian, Midori, Rinkah\5\19/11/2020, 25/11/2020\SkillBanner
-Trick or Defeat (October 2020 rerun)\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\08/11/2019, 20/11/2019\Seasonal, Halloween
+Trick or Defeat (2020 rerun)\3\Henry(Halloween), Jakob(Halloween), Nowi(Halloween), Sakura(Halloween)\5\08/11/2020, 20/11/2020\Seasonal, Halloween
 Pawns of Loki: Skill banner reruns\3\Eyvel, Forsyth, Hubert, Kliff, Lene, Mareeta, Maribelle, Nagi, Osian, Owain, Percival, Petra, Phina, Selkie, Shannan, Sue, Tethys, Yarne\50\12/11/2020, 19/11/2020\SkillBanner
 New Power (November 2020)\3\Elise, Fae, Micaiah\5\11/11/2020, 17/11/2020\NewPower
 "Ninja Novices" Tempest Trials+\3\Florina, Laevatein, Lyn\5\03/11/2020, 15/11/2020\Tempest
 Book 2 Revival, Banner 8\-4\Hardin(Fallen), Olwen(World), Reinhardt(World)\5\07/11/2020, 13/10/2020\Book2
 Harmony amid Chaos (rerun with sparking)\3\Annette, Bernie, Ferdinand von Aegir, Lysithea\5\07/11/2020, 13/11/2020\NewUnits
-The Land's Bounty (October 2020 rerun)\3\Kagero(Halloween), Mia(Halloween), Myrrh(Halloween), Niles(Halloween)\5\01/11/2020, 11/11/2020\Seasonal, Halloween
+The Land's Bounty (2020 rerun)\3\Kagero(Halloween), Mia(Halloween), Myrrh(Halloween), Niles(Halloween)\5\01/11/2020, 11/11/2020\Seasonal, Halloween
 Heroes with Bonfire (v2)\3\Caineghis, Forsyth, Surtr\5\02/11/2020, 07/11/2020\SkillBanner
-Dragon's Harvest\3\Dheginsea(Halloween), Robin(F)(Fallen)(Halloween), Tiki(Young)(Halloween), Xane(Halloween)\5\08/10/2020, 07/11/2020\Seasonal, NewUnits, Halloween
+Dragons Harvest\3\Dheginsea(Halloween), Robin(F)(Fallen)(Halloween), Tiki(Young)(Halloween), Xane(Halloween)\5\08/10/2020, 07/11/2020\Seasonal, NewUnits, Halloween
 Legendary Heroes: Dimitri, Saint King\-8\Alm(Saint), Chrom(Crowned), Corrin(M)(Fallen), Dimitri(Savior), Edelgard(Emperor), Eir, Lyon(Fallen), Marth(King), Mirabilis, Robin(F)(Fallen), Ryoma(Supreme), Thrasir\5\29/10/2020, 05/11/2020\Legendary
 Hood-Up Throwdown\3\Bantu, Robin(M)(Fallen), Velouria\5\26/10/2020, 05/11/2020\VotingGauntlet
 Goddess's Servants\3\Catherine, Flayn, Seteth, Shamir\5\18/10/2020, 05/11/2020\NewHeroes
@@ -166,7 +209,7 @@ Performing Arts (September 2020 rerun)\3\Azura(AwaOdori), Inigo(AwaOdori), Olivi
 Pigtails vs. Ponytails, Block A\3\Hilda(3H), Kiria, Kris(F)\5\28/09/2020, 07/10/2020\VotingGauntlet
 Pigtails vs. Ponytails, Block B\3\Eyvel, Laevatein, Mikoto\5\28/09/2020, 07/10/2020\VotingGauntlet
 Despair and Hope\3\Gatrie, Ilyana, Jill, Shinon\5\18/09/2020, 07/10/2020\NewUnits
-To Stay Dancing\3\Ethlyn(AwaOdori), Lachesis(AwaOdori), Quan(AwaOdori), Sigurd(AwaOdori)\5\08/09/2020, 07/10/2020\Seasonal, NewUnits, Fall
+To Stay Dreaming\3\Ethlyn(AwaOdori), Lachesis(AwaOdori), Quan(AwaOdori), Sigurd(AwaOdori)\5\08/09/2020, 07/10/2020\Seasonal, NewUnits, Fall
 Mythic Heroes: Plumeria, Lewd Dream\-8\Celica(Queen), Duma, Ephraim(Fire), Julian, Leif(Unifier), Lif, Lilith, Lucina(Glorious), Micaiah(Brave), Plumeria, Seliph(Scion), Yune\5\30/09/2020, 06/10/2020\Legendary
 Ranulf & Lethe's Battle\3\Lethe, Ranulf\5\29/09/2020, 06/10/2020\BHB
 Book 2 Revival, Banner 5\-4\Chrom(Branded), Maribelle, Sumia\5\27/09/2020, 03/10/2020\Book2
@@ -184,10 +227,10 @@ Brave Reprisals\3\Berkut(Fallen), Celica(Fallen), Tiki(Young)(Fallen)\5\28/08/20
 A New Future\3\Claude(Brave), Dimitri(Brave), Edelgard(Brave), Lysithea(Brave)\5\18/08/2020, 07/09/2020\NewUnits, CYL
 Legendary Heroes - Corrin, Child of Dusk\-8\Bramimond, Corrin(F)(Dusk), Eirika(Graceful), Gunnthra, Hector(Marquess), Hrid, Ike(Fallen), Julia(Crusader), Mila, Naga, Nils, Rinkah\5\31/08/2020, 06/09/2020\Legendary
 Double Special Heroes (August 2020)\-6\Alm(Valentines), Anna(NewYears), Bruno(Bunny), Est(Bunny), Faye(Valentines), Fir(Bunny), Idunn(Bunny), Rudolf(Valentines)\5\24/08/2020, 06/09/2020\Seasonal, DoubleSpecial
-Pirate's Pride\3\Brigid(Pirate), Geese(Pirate), Tibarn(Pirate), Veronica(Pirate)\5\07/08/2020, 06/09/2020\Seasonal, NewUnits
+Pirate's Pride\3\Brigid(Pirate), Geese(Pirate), Tibarn(Pirate), Veronica(Pirate)\5\07/08/2020, 06/09/2020\Seasonal, NewUnits, Pirate
 Book 2 Revival, Banner 3\-4\Eirika(Memories), Hector(Brave), Myrrh\5\30/08/2020, 05/09/2020\Book2
 Festival in Hoshido (August 2020 rerun)\3\Elincia(AwaOdori), Micaiah(AwaOdori), Ryoma(AwaOdori), Xander(AwaOdori)\5\22/08/2020, 04/09/2020\Seasonal, Fall
-Heroes with Ruse Skills\3\Anna(Apotheosis), Annette, Eleonora\5\26/08/2020, 02/09/2020\SkillBanner
+Heroes with Ruse Skills (v1)\3\Anna(Apotheosis), Annette, Eleonora\5\26/08/2020, 02/09/2020\SkillBanner
 Heroes with Link Skills (v3)\3\Camilla(Adrift), Kaden, Lilith\5\20/08/2020, 25/08/2020\SkillBanner
 Book 2 Revival, Banner 2\-4\Micaiah, Veronica(Brave), Zelgius\5\16/08/2020, 22/08/2020\Book2
 New Power (August 2020)\3\Cecilia, Setsuna, Shiro\5\10/08/2020, 19/08/2020\NewPower
@@ -371,7 +414,7 @@ Book 1 Revival, Banner 6\-4\Julia, Lucina, Lucina(Brave)\5\14/07/2019, 20/07/201
 "Lessons Learned" Tempest Trials+\3\Cecilia, Gwendolyn, Roy\5\10/07/2019, 23/07/2019\Tempest
 Book 1 Revival, Banner 5\-4\Ike, Ike(Brave), Mist\5\07/07/2019, 13/07/2019\Book1
 Marth & Caeda's Battle\3\Ceada, Catria(Launch), Marth\5\06/07/2019, 13/07/2019\BHB
-Heroes with Ignis\3\Hector(Brave), Leon, Thea\5\04/07/2019, 13/07/2019\SkillBanner
+Heroes with Ignis (v1)\3\Hector(Brave), Leon, Thea\5\04/07/2019, 13/07/2019\SkillBanner
 Ylissean Summer (2019 rerun)\3\Frederick(Summer), Gaius(Summer), Robin(F)(Summer), Tiki(Adult)(Summer)\5\26/06/2019, 25/07/2019\Seasonal, Summer
 Summer's Arrival (2019 rerun)\3\Cordelia(Summer), Innes(Summer), Noire(Summer), Tana(Summer)\5\23/06/2019, 22/07/2019\Seasonal, Summer
 "A Promise of Joy" Tempest Trials+\3\Helbindi, Laegjarn, Ylgr\5\21/06/2019, 03/07/2019\Tempest

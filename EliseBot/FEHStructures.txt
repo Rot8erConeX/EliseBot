@@ -34,7 +34,7 @@ Bolt Tower\7\Offensive\At the start of turn 3, deals 40 damage to foes within 7 
 Bolt Tower\7\Defensive\At the start of turn 3, deals 40 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 3000, 0, 0\0
 Bolt Tower\8\Offensive\At the start of turn 3, deals 45 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 0, 5000, 0\0
 Bolt Tower\8\Defensive\At the start of turn 3, deals 45 damage to foes within 7 rows and 3 columns centered on structure.\Yes\0, 5000, 0, 0\0
-Catapult\example\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 5000, 5000, 0\0\Opposing fortresses cannot be destroyed
+Catapult\example\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 7000, 7000, 0\0\Opposing fortresses cannot be destroyed
 Catapult\1\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 100, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\2\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 300, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\3\Offensive/Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 500, 0, 0\0\Opposing fortresses cannot be destroyed
@@ -46,6 +46,8 @@ Catapult\7\Offensive\At start of turn, destroys opposing structures within the s
 Catapult\7\Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 3000, 0, 0\0\Opposing fortresses cannot be destroyed
 Catapult\8\Offensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 0, 5000, 0\0\Opposing fortresses cannot be destroyed
 Catapult\8\Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 5000, 0, 0\0\Opposing fortresses cannot be destroyed
+Catapult\9\Offensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 0, 7000, 0\0\Opposing fortresses cannot be destroyed
+Catapult\9\Defensive\At start of turn, destroys opposing structures within the same column as this structure if their level __<__ this structure's level.\Yes\0, 7000, 0, 0\0\Opposing fortresses cannot be destroyed
 Cavalry School\example\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-`(level+1)` on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 7000, 7000, 0\0\Only one school can be placed at a time.
 Cavalry School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 50, 0, 0\0\Only one school can be placed at a time.
 Cavalry School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on cavalry foes within 3 columns centered on structure through their next actions.\Yes\0, 150, 0, 0\0\Only one school can be placed at a time.
@@ -137,7 +139,7 @@ Infantry School\8\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-9 on infa
 Infantry School\8\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-9 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 5000, 0, 0\0\Only one school can be placed at a time.
 Infantry School\9\Offensive\At start of turn, inflicts Atk/Spd/Def/Res-10 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 0, 7000, 0\0\Only one school can be placed at a time.
 Infantry School\9\Defensive\At start of turn, inflicts Atk/Spd/Def/Res-10 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 7000, 0, 0\0\Only one school can be placed at a time.
-Panic Manor\example\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ `(5*level+35)`, converts bonuses on those foes into penalties through their next actions.\Yes\0, 5000, 5000, 0\0
+Panic Manor\example\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ `(5*level+35)`, converts bonuses on those foes into penalties through their next actions.\Yes\0, 7000, 7000, 0\0
 Panic Manor\1\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 40, converts bonuses on those foes into penalties through their next actions.\Yes\0, 100, 0, 0\0
 Panic Manor\2\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 45, converts bonuses on those foes into penalties through their next actions.\Yes\0, 300, 0, 0\0
 Panic Manor\3\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 50, converts bonuses on those foes into penalties through their next actions.\Yes\0, 500, 0, 0\0
@@ -149,6 +151,8 @@ Panic Manor\7\Offensive\At start of turn, if any foes are within 7 rows and 3 co
 Panic Manor\7\Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 70, converts bonuses on those foes into penalties through their next actions.\Yes\0, 3000, 0, 0\0
 Panic Manor\8\Offensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 75, converts bonuses on those foes into penalties through their next actions.\Yes\0, 0, 5000, 0\0
 Panic Manor\8\Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 75, converts bonuses on those foes into penalties through their next actions.\Yes\0, 5000, 0, 0\0
+Panic Manor\9\Offensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 75, converts bonuses on those foes into penalties through their next actions.\Yes\0, 0, 7000, 0\0
+Panic Manor\9\Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 80, converts bonuses on those foes into penalties through their next actions.\Yes\0, 7000, 0, 0\0
 Safety Fence\example\Offensive\Until turn `level`, after skills are activated at the start of the defense team's turn, if the entire raiding party is outside the defense team's attack range or is within a range of two rows and seven columns centered on any structure, the defense team's turn immediately ends.\Yes\0, 0, 500, 0\0
 Safety Fence\1\Offensive\Until turn 1, after skills are activated at the start of the defense team's turn, if the entire raiding party is outside the defense team's attack range or is within a range of two rows and seven columns centered on any structure, the defense team's turn immediately ends.\Yes\0, 0, 500, 0\0
 Tactics Room\example\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ `(5*level+35)` and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 1500, 1500, 0\0
@@ -231,11 +235,16 @@ Askran Seal\1\Mjolnir\Grants Atk/Spd/Def/Res+2 to allies within 5 rows and 5 col
 Askran Seal\2\Mjolnir\Grants Atk/Spd/Def/Res+4 to allies within 5 rows and 5 columns centered on structure.\No\0, 300, 0, 0\2
 Askran Seal\3\Mjolnir\Grants Atk/Spd/Def/Res+6 to allies within 5 rows and 5 columns centered on structure.\No\0, 500, 0, 0\2
 Askran Seal\4\Mjolnir\Grants Atk/Spd/Def/Res+8 to allies within 5 rows and 5 columns centered on structure.\No\0, 700, 0, 0\2
-Death's Throne\example\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ `(10*level+35)` through that foe's next action.\No\0, 500, 0, 0\3
+Cogent Summoner\example\Mjolnir\Grants another action to a My Summoner that has already acted\No\0, 500, 0, 0\5
+Cogent Summoner\1\Mjolnir\Grants another action to a My Summoner that has already acted\No\0, 100, 0, 0\5
+Cogent Summoner\2\Mjolnir\Grants another action to a My Summoner that has already acted\No\0, 300, 0, 0\5
+Cogent Summoner\3\Mjolnir\Grants another action to a My Summoner that has already acted\No\0, 500, 0, 0\5
+Death's Throne\example\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ `(10*level+35)` through that foe's next action.\No\0, 900, 0, 0\3
 Death's Throne\1\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 35 through that foe's next action.\No\0, 100, 0, 0\3
 Death's Throne\2\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 45 through that foe's next action.\No\0, 300, 0, 0\3
 Death's Throne\3\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 55 through that foe's next action.\No\0, 500, 0, 0\3
 Death's Throne\4\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 65 through that foe's next action.\No\0, 700, 0, 0\3
+Death's Throne\5\Mjolnir\Prevents counterattacks from any foe within 9 rows and 3 columns centered on structure with HP __<__ 75 through that foe's next action.\No\0, 900, 0, 0\3
 Deluge Fountain\example\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ `(10*level+25)` back by 2 spaces, toward the top of the map.\No\0, 700, 0, 0\3
 Deluge Fountain\1\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ 35 back by 2 spaces, toward the top of the map.\No\0, 100, 0, 0\3
 Deluge Fountain\2\Mjolnir\Pushes any foe within 9 rows and 3 columns centered on structure with HP __<__ 45 back by 2 spaces, toward the top of the map.\No\0, 300, 0, 0\3
@@ -247,11 +256,16 @@ Dokkalfar Briar\2\Mjolnir\Restricts movement to 1 space on any foe in the same c
 Dokkalfar Briar\3\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 55 through that foe's next action.\No\0, 500, 0, 0\3
 Dokkalfar Briar\4\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 65 through that foe's next action.\No\0, 900, 0, 0\3
 Dokkalfar Briar\5\Mjolnir\Restricts movement to 1 space on any foe in the same column as structure with HP __<__ 75 through that foe's next action.\No\0, 1300, 0, 0\3
-Emblian Seal\example\Mjolnir\Inflicts Atk/Spd/Def/Res-`(2*level)` on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 700, 0, 0\2
+Ebon Summoner\example\Mjolnir\Inflicts Atk/Spd/Def/Res-`2*level` within 5 rows and 5 columns centered on My Summoner through their next actions\No\0, 500, 0, 0\2
+Ebon Summoner\1\Mjolnir\Inflicts Atk/Spd/Def/Res-2 within 5 rows and 5 columns centered on My Summoner through their next actions\No\0, 100, 0, 0\2
+Ebon Summoner\2\Mjolnir\Inflicts Atk/Spd/Def/Res-4 within 5 rows and 5 columns centered on My Summoner through their next actions\No\0, 300, 0, 0\2
+Ebon Summoner\3\Mjolnir\Inflicts Atk/Spd/Def/Res-6 within 5 rows and 5 columns centered on My Summoner through their next actions\No\0, 500, 0, 0\2
+Emblian Seal\example\Mjolnir\Inflicts Atk/Spd/Def/Res-`(2*level)` on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 900, 0, 0\2
 Emblian Seal\1\Mjolnir\Inflicts Atk/Spd/Def/Res-2 on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 100, 0, 0\2
 Emblian Seal\2\Mjolnir\Inflicts Atk/Spd/Def/Res-4 on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 300, 0, 0\2
 Emblian Seal\3\Mjolnir\Inflicts Atk/Spd/Def/Res-6 on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 500, 0, 0\2
 Emblian Seal\4\Mjolnir\Inflicts Atk/Spd/Def/Res-8 on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 700, 0, 0\2
+Emblian Seal\5\Mjolnir\Inflicts Atk/Spd/Def/Res-10 on foes within 9 rows and 3 columns centered on structure through their next actions.\No\0, 900, 0, 0\2
 Heroic Banner\example\Mjolnir\Grants bonus to Atk/Spd/Def/Res during combat = current bonus on each of ally's stats to allies within level-based range centered on structure. Calculates each stat bonus independently. (That turn only.)\No\0, 500, 0, 0\3
 Heroic Banner\1\Mjolnir\Grants bonus to Atk/Spd/Def/Res during combat = current bonus on each of ally's stats to allies within 3 rows and 3 columns centered on structure. Calculates each stat bonus independently. (That turn only.)\No\0, 100, 0, 0\3
 Heroic Banner\2\Mjolnir\Grants bonus to Atk/Spd/Def/Res during combat = current bonus on each of ally's stats to allies within 2 spaces of structure. Calculates each stat bonus independently. (That turn only.)\No\0, 300, 0, 0\3
@@ -278,3 +292,19 @@ Nifl Icicle\example\Mjolnir\Grants Special cooldown count-`(level)` to allies wi
 Nifl Icicle\1\Mjolnir\Grants Special cooldown count-1 to allies within 5 rows and 5 columns centered on structure.\No\0, 100, 0, 0\2
 Nifl Icicle\2\Mjolnir\Grants Special cooldown count-2 to allies within 5 rows and 5 columns centered on structure.\No\0, 300, 0, 0\2
 Nifl Icicle\3\Mjolnir\Grants Special cooldown count-3 to allies within 5 rows and 5 columns centered on structure.\No\0, 500, 0, 0\2
+Shining Summoner\example\Mjolnir\Grants Atk/Spd/Def/Res+`2*level` to allies within 3 spaces of My Summoner for 1 turn\No\0, 500, 0, 0\2
+Shining Summoner\1\Mjolnir\Grants Atk/Spd/Def/Res+2 to allies within 3 spaces of My Summoner for 1 turn\No\0, 100, 0, 0\2
+Shining Summoner\2\Mjolnir\Grants Atk/Spd/Def/Res+4 to allies within 3 spaces of My Summoner for 1 turn\No\0, 300, 0, 0\2
+Shining Summoner\3\Mjolnir\Grants Atk/Spd/Def/Res+6 to allies within 3 spaces of My Summoner for 1 turn\No\0, 500, 0, 0\2
+Summoner Aflame\example\Mjolnir\Deals `10*level+10` damage to foes within 5 rows and 5 columns centered on My Summoner\No\0, 500, 0, 0\2
+Summoner Aflame\1\Mjolnir\Deals 20 damage to foes within 5 rows and 5 columns centered on My Summoner\No\0, 100, 0, 0\2
+Summoner Aflame\2\Mjolnir\Deals 30 damage to foes within 5 rows and 5 columns centered on My Summoner\No\0, 300, 0, 0\2
+Summoner Aflame\3\Mjolnir\Deals 40 damage to foes within 5 rows and 5 columns centered on My Summoner\No\0, 500, 0, 0\2
+Vital Summoner\example\Mjolnir\Restores `10*level+10` HP to My Summoner and allies within 3 spaces of My Summoner\No\0, 500, 0, 0\3
+Vital Summoner\1\Mjolnir\Restores 20 HP to My Summoner and allies within 3 spaces of My Summoner\No\0, 100, 0, 0\3
+Vital Summoner\2\Mjolnir\Restores 30 HP to My Summoner and allies within 3 spaces of My Summoner\No\0, 300, 0, 0\3
+Vital Summoner\3\Mjolnir\Restores 40 HP to My Summoner and allies within 3 spaces of My Summoner\No\0, 500, 0, 0\3
+Winged Summoner\example\Mjolnir\My Summoner and allies within a level-specific range of My Summoner can move 1 extra space (that turn only.  Does not stack).\No\0, 500, 0, 0\3
+Winged Summoner\1\Mjolnir\My Summoner and allies adjacent to My Summoner can move 1 extra space (that turn only.  Does not stack).\No\0, 100, 0, 0\3
+Winged Summoner\2\Mjolnir\My Summoner and allies within 3 rows and 3 columns centered on My Summoner can move 1 extra space (that turn only.  Does not stack).\No\0, 300, 0, 0\3
+Winged Summoner\3\Mjolnir\My Summoner and allies within 2 spaces of My Summoner can move 1 extra space (that turn only.  Does not stack).\No\0, 500, 0, 0\3

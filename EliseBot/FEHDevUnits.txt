@@ -1,20 +1,20 @@
 Sakura\Bernie\Mirabilis\Anna\Anna(Apotheosis)\Anna(NewYears)\Annette\Annette(War)\Bernie(Christmas)\Celica\Celica(Brave)\Celica(Fallen)\Celica(Queen)\Cherche\Cordelia\Cordelia(Bride)\Cordelia(Summer)\Est\Est(Bunny)\Ethlyn\Ethlyn(AwaOdori)\Felicia\Felicia(Picnic)\Fjorm(Bride)\Genny\Genny(Picnic)\Gunnthra\Gunnthra(NewYears)\Larum\Lena\Linoan\Mae\Maria\Marisa\Marisa(Bunny)\Norne\Norne(Summer)\Olivia(AwaOdori)\Olivia(Traveler)\Phina\Priscilla\Rebecca\Sakura(Bath)\Sakura(Halloween)\Soleil\Tethys\Titania(Valentines)
-Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Ashe(Summer)\Claude(Brave)\Delthea\Dimitri(Brave)\Dorothea(Summer)\Eir\Eir(NewYears)\Ena(Halloween)\Felix(Christmas)\Fiora(Summer)\Fjorm\Flayn\Forrest\Gatekeeper(Brave)\Hector(Halloween)\Hilda(3H)\Hilda(3H)(Christmas)\Kaden\Kana(F)\Leanne\Lethe\Lethe(NewYears)\Lysithea\Lysithea(Brave)\Mamori\Marianne\Marianne(Brave)\Matthew\Melady\Minerva(Retro)\Nifl\Ninian\Owain\Peony\Raven\Reginn\Reyson\Selkie\Selkie(NewYears)\Sothis\Tailtiu\Tiki(Young)(Earth)\Tiki(Young)(Fallen)\Veronica(Valentines)\Xane\Xane(Halloween)\Ylgr\Ylgr(Summer)
+Alm\Alm(Brave)\Alm(Saint)\Alm(Valentines)\Ashe(Summer)\Claude\Claude(Brave)\Delthea\Dimitri(Brave)\Dimitri(Fallen)\Dorothea(Summer)\Eir\Eir(NewYears)\Ena(Halloween)\Felix(Christmas)\Fiora(Summer)\Fjorm\Flayn\Forrest\Gatekeeper(Brave)\Hector(Halloween)\Hilda(3H)\Hilda(3H)(Christmas)\Kaden\Kana(F)\Leanne\Lethe\Lethe(NewYears)\Lysithea\Lysithea(Brave)\Mamori\Marianne\Marianne(Brave)\Matthew\Melady\Minerva(Retro)\Nifl\Ninian\Owain\Peony\Raven\Reginn\Reyson\Selkie\Selkie(NewYears)\Sothis\Tailtiu\Tiki(Young)(Earth)\Tiki(Young)(Fallen)\Veronica(Valentines)\Xane\Xane(Halloween)\Ylgr\Ylgr(Summer)\Yuri
 Alfonse\Arden\Black_Knight\Ephraim(Brave)\Lucina(Brave)\Lyn(Brave)\Nils\Nino(Fangs)\Nino(Launch)\Sharena
-pass
+f2p
 
 Sakura
-5\10\Resistance\Defense\S\18\Alm(Saint)
+5\10\Resistance, HP\Defense\S\20\Alm(Saint)
 Assault\Absorb\Absorb+\Absorb+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
-C Duel Infantry 1\C Duel Infantry 2\C Duel Infantry 3
+C Duel Infantry 1\C Duel Infantry 2\C Duel Infantry 3\C Duel Infantry 4
 Wings of Mercy 1\Wings of Mercy 2\Wings of Mercy 3
 Odd Recovery 1\Odd Recovery 2\Odd Recovery 3
 Live to Serve 3
 
 Bernie
-5\6\Speed\Attack\(S)\13
+5\6\Speed\Attack\(S)\15
 Iron Bow\Steel Bow\Silver Bow\Persecution Bow
 Draw Back
 New Moon\Luna\Aether
@@ -24,7 +24,7 @@ Close Guard 1\Close Guard 2\Close Guard 3
 Fierce Stance 3
 
 Mirabilis
-5\1\Defense\Speed\(S)\7
+5\1\Defense\Speed\(S)\14
 Iron Sword\Steel Sword\Silver Sword\Flower of Ease
 Dance\Whimsical Dream
 Chilling Wind\Iceberg
@@ -54,7 +54,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Fort. Def/Res 2
 
 Fjorm(Bride)
-5\1\Defense\Resistance\(S)\10\Celica(Queen)
+5\2\Defense\Resistance\(S)\10\Celica(Queen)
 Assault\Gjallarbru
 Heal\Mend\Restore\Restore+
 Imbue\Heavenly Light
@@ -64,7 +64,7 @@ Ground Orders 1\Ground Orders 2\Ground Orders 3
 Aerobatics 2
 
 Cordelia(Bride)
-5\1\Speed\Defense\-\15
+5\1\Speed\Defense\-\19
 Iron Bow\Steel Bow\Brave Bow\Brave Bow+
 Rally Attack\Rally Atk/Spd\Rally Atk/Spd+
 New Moon\Moonbow
@@ -98,10 +98,10 @@ Bernie(Christmas)
 Wind\Elwind\Rexcalibur\Hrist
 Draw Back
 New Moon\Moonbow
-Atk/Spd Solo 1\Atk/Spd Solo 2\Atk/Spd Solo 3\Atk/Spd Solo 4
+G Duel Cavalry 1\G Duel Cavalry 2\G Duel Cavalry 3\G Duel Cavalry 4
 LulRenewal 1\Renewal 2\Renewal 3
 Rouse Atk/Spd 1\Rouse Atk/Spd 2\Rouse Atk/Spd 3
-Atk/Def Solo 2
+Atk/Spd Solo 2
 
 Cordelia
 5r\10\Attack\HP\-\0
@@ -263,8 +263,18 @@ Desperation 1\Desperation 2\Desperation 3
 Fortify Def 1\Fortify Def 2\Fortify Def 3
 Attack +3
 
+Claude
+5\0\Defense\Speed\-\0
+Iron Bow\Steel Bow\Silver Bow\Cunning Bow
+Rally Defense\Rally Atk/Def\Rally Atk/Def+
+Night Sky\Glimmer
+Darting Stance 1\Steady Posture 1\Steady Posture 2
+Lull Spd/Def 1\Lull Spd/Def 2\Lull Spd/Def 3
+Def Smoke 1\Def Smoke 2\Def Smoke 3
+Spd Tactic 3
+
 Claude(Brave)
-5\1\\\-\0
+5\2\\\-\0
 Iron Bow\Steel Bow\Silver Bow\Wind Parthia
 Rally Attack\Rally Up Atk\Rally Up Atk+
 New Moon\Moonbow
@@ -292,6 +302,16 @@ Atk/Def Bond 1\Atk/Def Bond 2\Atk/Def Bond 3\Atk/Def Unity
 Blue Lion Rule
 Hone Atk 1\Hone Atk 2\Hone Atk 3\Joint Hone Atk
 Chill Def 3
+
+Dimitri(Fallen)
+5\0\Attack\Resistance\-\0
+Iron Lance\Steel Lance\Silver Lance\Vengeful Lance
+Smite
+Night Sky\Glimmer
+Atk/Spd Solo 1\Atk/Spd Solo 2\Atk/Spd Solo 3\Atk/Spd Solo 4
+Murderous Lion
+Odd Tempest 1\Odd Tempest 2\Odd Tempest 3
+Def/Res Solo 2
 
 Dimitri(Savior)
 5\0\Defense\HP\-\0
@@ -324,7 +344,7 @@ Sparkling Boost
 Spd/Res Bond 2
 
 Eir(NewYears)
-5\1\\\-\0
+5\2\\\-\0
 Iron Dagger\Steel Dagger\Temari\Temari+
 Shove
 Chilling Wind\Glacies
@@ -334,14 +354,14 @@ Spd Tactic 1\Spd Tactic 2\Spd Tactic 3
 Atk Tactic 3
 
 Elise
-5\1\Defense\Attack\-\0
+5\2\Defense\Attack\-\0
 Assault\Gravity\Gravity+\Gravity+ (+) Wrathful Mode
 Heal\Mend\Recover\Recover+
 Imbue\Kindled-Fire Balm
-~~none~~
+Atk/Res Push 1\Atk/Res Push 2\Atk/Res Push 3
 Live to Serve 1\Live to Serve 2\Live to Serve 3
-~~none~~
-
+Odd Res Wave 1\Odd Res Wave 2\Odd Res Wave 3
+Atk/Res Bond 2
 
 Ena(Halloween)
 5\2\\\-\0
@@ -374,7 +394,7 @@ Hone Atk 1\Hone Atk 2\Hone Fliers
 Panic Ploy 3
 
 Ethlyn
-5\10\\\-\10
+5\10\\\-\13
 Assault\Fear\Fear+\Fear+ (+) Dazzling Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -404,7 +424,7 @@ Breath of Life 1\Breath of Life 2\Breath of Life 3
 Warding Stance 3
 
 Felicia(Picnic)
-5\1\Attack\Defense\-\12
+5\1\Attack\Defense\-\15
 Iron Axe\Steel Axe\Silver Axe\Eldhrmnir
 Swap
 Chilling Wind\Glacies
@@ -445,13 +465,13 @@ Drive Def 2
 
 Flayn
 5\0\Speed\Defense\-\0
-Assault\~~Caduceus Staff~~
+Assault\Caduceus Staff
 Heal\Rescue\Rescue+
-Imbue\Still-Water Balm\Deluge Balm\~~Deluge Balm+~~
-Brazen Spd/Def 1\~~Brazen Spd/Def 2~~\~~Brazen Spd/Def 3~~
+Imbue\Still-Water Balm\Deluge Balm\Deluge Balm+
+Brazen Spd/Def 1\Brazen Spd/Def 2\Brazen Spd/Def 3
 Dazzling Staff 1\Dazzling Staff 2\Dazzling Staff 3
 Ground Orders 1\Ground Orders 2\Ground Orders 3
-
+Atk/Def Form 3
 
 Forrest
 5\10\Defense\Resistance\-\0
@@ -463,8 +483,18 @@ Wrathful Staff 1\Wrathful Staff 2\Wrathful Staff 3
 Res Ploy 1\Res Ploy 2\Res Ploy 3
 Chill Res 2
 
+Gatekeeper(Brave)
+5\0\Attack\Defense\-\0
+Wind\Elwind\Rexcalibur\Charging Horn
+Harsh Command\Harsh Command+
+Glowing Ember\ignis
+Close Counter\Close Reversal
+Detailed Report
+Spur Def 1\Drive Def 1\Drive Def 2\Joint Drive Def
+Spur Def/Res 2
+
 Genny
-5\3\Attack\Speed\-\0
+5\4\Attack\Speed\-\0
 Assault\Gravity\Gravity+\__Gravity+ (+) Dazzling Mode__\Springtime Staff\Springtime Staff (+) Effect Mode
 Heal\Reconcile\Rehabilitate\Rehabilitate+
 Imbue\Heavenly Light
@@ -504,7 +534,7 @@ Hone Spd 1\Hone Spd 2\Hone Spd 3\Joint Hone Spd
 Spd Ploy 3
 
 Hector(Halloween)
-5\0\Resistance\HP\-\10
+5\0\Resistance\HP\-\13
 Iron Sword\Steel Sword\Silver Sword\Conjurer Curios
 Swap
 Glowing Ember\Bonfire
@@ -524,7 +554,7 @@ Even Spd Wave 1\Even Spd Wave 2\Even Spd Wave 3
 Mystic Boost 3
 
 Jill
-5\0\HP\Defense\-\0
+5\1\HP\Defense\-\0
 Iron Axe\Steel Axe\Silver Axe\Talregan Axe
 Reposition
 New Moon\Moonbow
@@ -564,7 +594,7 @@ Spd/Res Gap 1\Spd/Res Gap 2\Spd/Res Gap 3
 Torrent Dance 3
 
 Leila
-5\0\HP\Resistance\-\0
+5\1\HP\Resistance\-\0
 Iron Dagger\Steel Dagger\Silver Dagger\Constant Dagger
 Rally Speed\Rally Atk/Spd\Rally Atk/Spd+
 Night Sky\Glimmer
@@ -663,6 +693,16 @@ Lull Atk/Res 1\Lull Atk/Res 2\Lull Atk/Res 3
 Spur Res 1\Drive Res 1\Drive Res 2\Joint Drive Res
 Odd Spd Wave 3
 
+Marianne(Brave)
+5\0\Speed\Resistance\-\0
+Stone\Elstone\Atlas\Phantasm Tome
+Reciprocal Aid
+Chilling Wind\Glacies\Requiem Dance
+Atk/Spd Bond 1\Atk/Spd Bond 2\Atk/Spd Bond 3\~~Atk/Spd Unity~~
+Null Follow-up 1\Null Follow-up 2\Null Follow-up 3
+Time's Pulse 1\Time's Pulse 2\Time's Pulse 3
+Blade Session 2
+
 Marisa
 5\10\\\-\0
 Iron Sword\Steel Sword\Wo Dao\Wo Dao+\__Wo Dao+ (+) Speed Mode__\Shamshir\Shamshir (+) Effect Mode
@@ -714,7 +754,7 @@ Spur Spd 1\Spur Spd/Res 1\Spur Spd/Res 2
 Spd/Res Solo 2
 
 Minerva(Retro)
-5\8\\\-\0
+5\10\\\-\0
 Iron Axe\Steel Axe\Silver Axe\Dragoon Axe
 Smite
 Dragon Gaze\Draconic Aura
@@ -754,12 +794,12 @@ Odd Spd Wave 1\Odd Spd Wave 2\Odd Spd Wave 3
 Atk Feint 3
 
 Norne(Summer)
-5\1\\\-\0
+5\4\\\-\0
 Iron Lance\Steel Lance\Heavy Spear\Heavy Spear+\Slaying Spear\Slaying Spear+\Slaying Spear+ (+) Effect Mode
 Reciprocal Aid
 New Moon\Luna
 Spd/Def Bond 1\Spd/Def Bond 2\Spd/Def Bond 3
-Renewal 1\Renewal 2\~~Renewal 3~~
+Null Follow-Up 1\Null Follow-Up 2\Null Follow-Up 3
 Spur Spd 1\Drive Spd 1\Drive Spd 2
 Spd/Res Form 2
 
@@ -785,7 +825,7 @@ Flier Formation 3
 
 Owain
 5\4\Resistance\HP\-\0
-Iron Sword\Steel Sword\Silver Sword\Missiletainn\Missiletainn (Dark)
+Iron Sword\Steel Sword\Silver Sword\Missiletainn\Missiletainn (Dark)\~~Missiletainn (Dark) (+) Effect Mode~~
 Shove
 Glowing Ember\Bonfire\Blue Flame
 Atk/Def Bond 1\Atk/Def Bond 2\Atk/Def Bond 3
@@ -824,12 +864,12 @@ Spur Def 1\Spur Def 2\Spur Def 3
 HP +5
 
 Raven
-5r\0\\\-\0
-Iron Axe\Steel Axe\Brave Axe\__Brave Axe+__\~~Basilikos~~\~~Basilikos (+) Effect Mode~~
+5r\3\\\-\0
+Iron Axe\Steel Axe\Brave Axe\__Brave Axe+__\Basilikos\Basilikos (+) Effect Mode
 Reposition
 Daylight\Sol
 Defiant Spd 1\Defiant Spd 2\Defiant Spd 3
-Spd/Def Link 1\~~Spd/Def Link 2~~\~~Spd/Def Link 3~~
+Spd/Def Link 1\Spd/Def Link 2\Spd/Def Link 3
 Threaten Def 1\Threaten Def 2\Threaten Def 3
 Life And Death 2
 
@@ -875,7 +915,7 @@ Even Def Wave 2
 
 Soleil
 5\10\Speed\Attack\-\0
-Iron Sword\Steel Sword\Slaying Edge\Slaying Edge+\Slaying Edge+ (+) Attack Mode
+Iron Sword\Steel Sword\Slaying Edge\Slaying Edge+\__Slaying Edge+ (+) Attack Mode__\Soleil's Shine\Soleil's Shine (+) Effect Mode
 Rally Speed
 New Moon\Luna\Aether
 Darting Blow 1\Darting Blow 2\Darting Blow 3
@@ -892,6 +932,16 @@ Atk/Spd Solo 1\Atk/Spd Solo 2\Atk/Spd Solo 3
 Wrath 1\Wrath 2\Wrath 3
 Time's Pulse 1\Time's Pulse 2\Time's Pulse 3
 Kestrel Stance 1
+
+Sothis(Halloween)
+5\0\Defense\Resistance\-\0
+Fire Breath\Fire Breath+\Flametongue\Eerie Scripture
+Reciprocal Aid
+Daylight\Noontime\Sirius
+Atk/Spd Solo 1\Atk/Spd Solo 2\Atk/Spd Solo 3\Atk/Spd Solo 4
+Dragon's Wrath 1\Dragon's Wrath 2\Dragon's Wrath 3
+Atk/Spd Rein 1\Atk/Spd Rein 2\Atk/Spd Rein 3
+Even Res Wave 3
 
 Tailtiu
 5\10\\\-\0
@@ -1002,4 +1052,15 @@ Flashing Blade 1\Flashing Blade 2\Flashing Blade 3
 Seal Atk 1\Seal Atk 2\Seal Atk 3
 Even Def Wave 1\Even Def Wave 2\Even Def Wave 3
 Seal Spd 2
+
+Yuri
+5\0\Speed\Resistance\-\0
+Iron Dagger\Steel Dagger\Silver Dagger\Honorable Blade
+Swap\Foul Play
+Night Sky\Glimmer
+C Duel Infantry 1\C Duel Infantry 2\C Duel Infantry 3\C Duel Infantry 4
+Renewal 1\Renewal 2\Renewal 3
+Time's Pulse 1\Time's Pulse 2\Time's Pulse 3
+Infantry Rush 3
+
 

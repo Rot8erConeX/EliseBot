@@ -154,3 +154,19 @@ Ephemura (August 2021) 4\Veronica(Valentines); 4; 0, 100
 Ephemura (August 2021) 5\Arthur(Fates); 4; 0, 100
 Ephemura (August 2021) 6\Cecilia; 4; 0, 100
 Ephemura (August 2021) 7\Merlinus; 4; 0, 100
+Ephemura (September 2021) 0\06/09/2021, 27/10/2021
+Ephemura (September 2021) 1\Flora; 5; 0, 300
+Ephemura (September 2021) 2\Nephenee(AwaOdori); 5; 0, 300
+Ephemura (September 2021) 3\Knoll; 4; 0, 100
+Ephemura (September 2021) 4\Mathilda; 4; 0, 100
+Ephemura (September 2021) 5\Saleh(Bunny); 4; 0, 100
+Ephemura (September 2021) 6\Norne; 4; 0, 100
+Ephemura (September 2021) 7\Sothe; 4; 0, 100
+Ephemura (October 2021) 0\06/10/2021, 27/11/2021
+Ephemura (October 2021) 1\L'Arachel(Halloween); 5; 0, 300
+Ephemura (October 2021) 2\Kagero(Halloween); 5; 0, 300
+Ephemura (October 2021) 3\Miranda; 4; 0, 100
+Ephemura (October 2021) 4\Mordecai; 4; 0, 100
+Ephemura (October 2021) 5\Innes(Retro); 4; 0, 100
+Ephemura (October 2021) 6\Felicia; 4; 0, 100
+Ephemura (October 2021) 7\Mercedes; 4; 0, 100
