@@ -503,7 +503,7 @@ class FEHUnit
       end
     end
     return "#{'<:Summon_Gun:467557566050861074>' if @name=='Kiran' || @id==0}#{wemote}#{memote}#{'<:Assist_Music:454462054959415296>' if refresher.length>0}#{lemote1}#{lemote2}#{demote}#{bemote.join('')}" if emotesonly
-    refresher="\n<:Assist_Music:454462054959415296> *#{refresher}*" if refresher.length>0
+    refresher="\n<:Assist_Music:454462054959415296>*#{refresher}*" if refresher.length>0
     unless @clazz_flag.nil? || @clazz_flag.length<=0
       if Shardizard==$spanishShard
         refresher="#{refresher}\n*Modificadores adicionales:* #{@clazz_flag.join(', ')}"
@@ -719,6 +719,7 @@ class FEHUnit
         l1[s[1][1]]+=1
       end
     end
+    boon=[''] if boon.nil? || boon.length<=0
     if boon[0].length>0 || bane.length>0
       boonx=Stat_Names.find_index{|q| q==boon[0]}
       banex=Stat_Names.find_index{|q| q==bane}
@@ -771,7 +772,7 @@ class FEHUnit
         l1[s[2][1]]+=1
       end
     end
-    l1=@stats40.map{|q| q} if @growths.max<=0
+    l1=@stats40[posit,5].map{|q| q} if @growths.max<=0
     l1=[0,0,0,0,0] if @growths.max<=0 && level==1
     unless support.length<=0 || @name=='Kiran'
       l1[0]+=5 if support=='S'
@@ -906,7 +907,7 @@ class FEHUnit
         extraskills.push(x[i].clone)
         x[i]=nil
       end
-      x[i].id+=50000 if !x[i].nil? && x[i].type.include?('Special') && x[i].id<210000
+      x[i].id+=50000 if !x[i].nil? && x[i].type.include?('Special') && x[i].id<210000 && x[i].id>0
       if x[i].nil?
       elsif x[i].id<0
         x[i].id=0-x[i].id
@@ -1209,7 +1210,7 @@ class FEHUnit
     nat=''
     support='' if support=='-' && expanded_mode==1
     support='-' if support=='' && expanded_mode==2
-    boon=['',boon[0]] if boon.length<2 && bane.length<=0
+    boon=['',boon[0]] if boon.length<2 && bane.length<=0 && merges==0
     boon2="#{boon[0]}"; bane2="#{bane}"
     if Shardizard==$spanishShard
       boon2='Ataque' if boon=='Attack'
@@ -1244,7 +1245,7 @@ class FEHUnit
       nat="\nNeutral nature"
       nat="\nNaturaleza neutral" if Shardizard==$spanishShard
     end
-    if boon.length>1 && boon[1].length>0
+    if boon.compact.length>1 && boon[1].length>0
       boon2="+#{boon[1]} Ascended"
       if Shardizard==$spanishShard
         boon2='Ataque' if boon[1]=='Attack'
@@ -1736,6 +1737,15 @@ class FEHUnit
     k=k.reject{|q| !q[3].nil? && !q[3].include?(event.server.id)} unless event.server.nil?
     k=k.reject{|q| q[3].nil?} if saliases
     return k.map{|q| q[1]}.reject{|q| q==@name || q==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')} if justaliases
+    k2=k.reject{|q| !q[1].include?('||')}
+    k3=0
+    spoiler=false
+    spoiler=true if event.message.text.downcase.gsub(' ','').include?('spoiler')
+    spoiler=true if event.message.text.downcase.gsub(' ','').include?('||')
+    if k2.length>=k.length/10 && k2.length>=5 && !spoiler # spoiler aliases
+      k3=k2.length
+      k=k.reject{|q| q[1].include?('||')}
+    end
     if event.server.nil?
       for i in 0...k.length
         if k[i][3].nil?
@@ -1762,6 +1772,7 @@ class FEHUnit
       k=k.map{|q| "#{q[1].gsub('`',"\`").gsub('*',"\*")}#{' *[solo en este servidor]*' unless q[3].nil? || saliases}"} if Shardizard==$spanishShard
     end
     k=k.reject{|q| q==@name || q==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')}
+    k.push("~~And #{k3} spoiler aliases (include the word \"spoiler\" to display them)~~") if k3>0
     k.unshift(@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','')) unless @name==@name.gsub('(','').gsub(')','').gsub(' ','').gsub('_','') || saliases
     k.unshift("__#{'Alias ​​específicos del servidor de ' if saliases && Shardizard==$spanishShard}**#{@name}#{self.emotes(bot,false)}**#{"'s server-specific aliases" if saliases && Shardizard != $spanishShard}#{" [Unit-#{longFormattedNumber(@id)}]" if Shardizard==4 || event.user.id==167657750971547648}__")
     return k
@@ -1914,8 +1925,8 @@ class SuperUnit < FEHUnit # attributes shared by Dev- and Donor- Units but not i
   end
   
   def starHeader2(bot,ignorenature=true,f=5,f2='',f3='',f4=0,f5=0,f6='',bonus='',blessing=[],f7=false,f8=nil,f9='',transformed=false,skill_list=[],skill_list_2=[],wpnlegal=true,pairup=false,expanded_mode=1)
-    b=[@boon.gsub(' ',''),@bane.gsub(' ','')]
-    b=['',''] if ignorenature
+    b=[@boon.map{|q| q.gsub(' ','')},@bane.gsub(' ','')]
+    b=[[''],''] if ignorenature
     return @base_unit.starHeader(bot,@rarity,b[0],b[1],@merge_count,@dragonflowers,@support,'',[],false,nil,'',false,[],[],true,false,1,@owner)
   end
   
@@ -2552,7 +2563,7 @@ class FEHSkill
   end
   
   def isPassive?
-    return true if ['Passive(A)','Passive(B)','Passive(C)','Passive(S)','Passive(W)','Seal'].include?(@type[0])
+    return true if ['Passive(A)','Passive(B)','Passive(C)','Passive(S)','Passive(W)','Seal','Captain'].include?(@type[0])
     return false
   end
 
@@ -2658,10 +2669,11 @@ class FEHSkill
     return nil
   end
   
-  def transform_type
+  def transform_type(refine=false)
     return nil unless @type.include?('Weapon') && @restrictions.include?('Beasts Only') && !@tags.include?('UnTransform') && !@name.include?(' (All)')
     if @restrictions.include?('Infantry Only')
       return 'Si el personaje se transforma, otorga Atq +2 y otorga daño +10 cuando se activa Especial.' if Shardizard==$spanishShard
+      return 'If unit is transformed, grants Atk +2, grants damage +7 when Special triggers, and neutralizes effects that grant "Special cooldown charge +X" to foe or inflict "Special cooldown charge -X" on unit.' if @id>46300 || refine
       return 'If unit is transformed, grants Atk +2, and grants damage +10 when Special triggers.'
     elsif @restrictions.include?('Fliers Only')
       return 'Si el personaje se transforma, otorga Atq +2 y el personaje puede moverse 1 espacio extra.' if Shardizard==$spanishShard
@@ -2688,6 +2700,7 @@ class FEHSkill
     emo.push('<:Passive_C:443677023555026954>') if @type.include?('Passive(C)')
     emo.push('<:Passive_S:443677023626330122>') if (@type.include?('Passive(S)') || @type.include?('Seal')) && !(emo.length>0 && justseal)
     emo.push('<:Passive_W:443677023706152960>') if @type.include?('Passive(W)') && !justseal
+    emo.push('<:Captain:917690433881133086>') if @type.include?('Captain')
     emo.push('<:Hero_Duo:631431055420948480>') if @type.include?('Duo') && !@exclusivity.include?('Mathoo')
     emo.push('<:Hero_Duo_Mathoo:631431055513092106>') if @type.include?('Duo') && @exclusivity.include?('Mathoo')
     emo.push('<:Hero_Harmonic:722436762248413234>') if @type.include?('Harmonic')
@@ -2782,11 +2795,11 @@ class FEHSkill
     dispname="#{self.fullName}"
     if subname[0,10]=='Squad Ace '
       subname="Squad Ace #{'ABCDE'[((@id-620000)/10)%5,1]}" if @id<620300
-      subname="Squad Ace A#{'EFGHIJKLMN'[((@id-620300)/10)%10,1]}" if @id>620299 && @id<620500
+      subname="Squad Ace A#{'EFGHIJKLMN'[((@id-620300)/10)%10,1]}" if @id>620299 && @id<620560
     end
     dispname="#{subname} #{@level}" if isPassive? && !@level.nil? && @level!='-'
     if @level=='example'
-      skz=$skills.reject{|q| q.name != @name || q.level=='example' || q.level.include?('W')}
+      skz=$skills.reject{|q| q.name != @name || q.level=='example' || q.level.include?('W') || (!q.fake.nil? && @fake.nil?)}
       dispname="#{subname}#{' ' unless @name[-1]=='+'}#{skz[-1].level.to_i}"
     end
     dispname="#{subname} W" if (!@level.nil? && @level[0,1]=='W') || has_any?(event.message.text.downcase.split(' '),['refinement','refinements','(w)'])
@@ -2805,8 +2818,8 @@ class FEHSkill
     return x if ['example'].include?(@level) && format.nil? && !justlast
     x="#{x} " unless @name[-1]=='+'
     return "#{x}#{@level}" unless @level=='example'
-    skz=$skills.reject{|q| q.name != @name || q.level=='example' || q.level.include?('W')}
-    skz=sklz.reject{|q| q.name != @name || q.level=='example' || (q.level.include?('W') && !includew)} unless sklz.nil?
+    skz=$skills.reject{|q| q.name != @name || q.level=='example' || q.level.include?('W') || (!q.fake.nil? && @fake.nil?)}
+    skz=sklz.reject{|q| q.name != @name || q.level=='example' || (q.level.include?('W') && !includew) || (!q.fake.nil? && @fake.nil?)} unless sklz.nil?
     char='/'
     char=' / ' if skz.reject{|q| !q.level.include?('/')}.length>0
     if skz.length>5
@@ -2835,8 +2848,8 @@ class FEHSkill
   def disp_sp_cost(inherited=false,total=false)
     return 3*@sp_cost/2 if @level!='example' && inherited
     return @sp_cost unless @level=='example'
-    return $skills.reject{|q| q.name != @name || q.level=='example' || q.level.include?('W')}.map{|q| q.disp_sp_cost(inherited)}.inject(0){|sum,x| sum + x } if total
-    return $skills.reject{|q| q.name != @name || q.level=='example' || q.level.include?('W')}.map{|q| q.disp_sp_cost(inherited)}.join('/')
+    return $skills.reject{|q| q.name != @name || q.level=='example' || q.level.include?('W') || (!q.fake.nil? && @fake.nil?)}.map{|q| q.disp_sp_cost(inherited)}.inject(0){|sum,x| sum + x } if total
+    return $skills.reject{|q| q.name != @name || q.level=='example' || q.level.include?('W') || (!q.fake.nil? && @fake.nil?)}.map{|q| q.disp_sp_cost(inherited)}.join('/')
   end
   
   def cumulitive_sp_cost(inherited=false)
@@ -3642,6 +3655,7 @@ class FEHBonus < FEHTimer
     x=2 if @type=='Tempest'
     x=3 if @type=='Aether'
     x=4 if @type=='Resonant'
+    x=5 if @type=='Forging'
     return x*1000000000 if @start_date.nil?
     return x*1000000000+@start_date[2]*10000+@start_date[1]*100+@start_date[0]
   end
@@ -6950,7 +6964,7 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
       elsif skill.type.include?('Special')
         text="#{text}\n**Range:**\n```#{skill.range}```" unless skill.range.nil? || skill.range=='-'
       end
-      unless skill.name[0,6]=='Umbra ' || has_any?(skill.type,['Duo','Harmonic'])
+      unless skill.name[0,6]=='Umbra ' || has_any?(skill.type,['Duo','Harmonic','Captain'])
         text="#{text}\n\n**SP Cost:** #{skill.disp_sp_cost} SP#{" (#{skill.disp_sp_cost(true)} SP when inherited)" if skill.exclusivity.nil? || skill.exclusivity.length<=0}"
         text="#{text}\n**Total SP Cost:** #{skill.disp_sp_cost(false,true)} SP#{" (#{skill.disp_sp_cost(true,true)} SP when inherited)" if skill.exclusivity.nil? || skill.exclusivity.length<=0}" if skill.level=='example'
         text="#{text}\n**Cumulitive SP Cost:** #{skill.cumulitive_sp_cost} SP#{" (#{skill.cumulitive_sp_cost(true)} SP when inherited)" if skill.exclusivity.nil? || skill.exclusivity.length<=0}" unless skill.prerequisite.nil? || skill.prerequisite.length<=0 || !safe_to_spam?(event)
@@ -7392,6 +7406,7 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
           text="#{text}\n#{r.dispStats(r.overrides[i][6],true)}"
           text="#{text}\n*Effective against:* #{skill.eff_against('Effect',false,event)}" unless skill.eff_against('Effect',false,event).length<=0
           text="#{text}\n#{r.inner}" unless r.inner.nil?
+          text="#{text}\n#{skill.transform_type(true)}" unless skill.transform_type(true)==skill.transform_type
           if r.outer.nil?
             text="#{text}\n#{skill.description}" unless skill.description.nil? || skill.description.length<=0
             text="#{text}\n*Debuff:* #{skill.dagger_debuff.join('   *Target:* ')}" unless skill.dagger_debuff.nil?
@@ -9983,15 +9998,6 @@ bot.server_create do |event|
   end
 end
 
-bot.server_delete do |event|
-  unless Shardizard==4
-    bot.user(167657750971547648).pm("Left server **#{event.server.name}**#{"\nThis server was using #{shard_data(0,true)[((event.server.id >> 22) % Shards)]} Shards" unless Shardizard<0}")
-    metadata_load()
-    @server_data[0][((event.server.id >> 22) % Shards)] -= 1
-    metadata_save()
-  end
-end
-
 bot.message do |event|
   str=event.message.text.downcase
   load "#{$location}devkit/FEHPrefix.rb"
@@ -10575,6 +10581,9 @@ def next_holiday(bot,mode=0)
     elsif [1,2].include?(t.month)
       bot.profile.avatar=(File.open("#{$location}devkit/Elise(Bath).png",'r')) rescue nil if Shardizard.zero? || Shardizard==-1
       @avvie_info=['Elise(Bath)','*Fire Emblem Heroes*','']
+    elsif [11,12].include?(t.month)
+      bot.profile.avatar=(File.open("#{$location}devkit/Elise(Ninja).png",'r')) rescue nil if Shardizard.zero? || Shardizard==-1
+      @avvie_info=['Elise(Ninja)','*Fire Emblem Heroes*','']
     else
       bot.profile.avatar=(File.open("#{$location}devkit/Elise.png",'r')) rescue nil if Shardizard.zero?
       @avvie_info=['Elise','*Fire Emblem Heroes*','']
