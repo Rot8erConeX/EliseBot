@@ -113,7 +113,7 @@ Fortress\2\Offensive/Defensive\If structure's level > opponent's Fortress level,
 Fortress\3\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 1000, 0\7\Cannot be removed.
 Fortress\4\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 1500, 0\10\Cannot be removed.
 Fortress\5\Offensive/Defensive\If structure's level > opponent's Fortress level, grants Atk/Spd/Def/Res+X to all allies.  (X=difference between Fortress levels *4)\No\0, 0, 2000, 0\13\Cannot be removed.
-Healing Tower\example\Offensive/Defensive\At start of turn, restores `(5*level+5)` HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 5000, 5000, 0\0
+Healing Tower\example\Offensive/Defensive\At start of turn, restores `(5*level+5)` HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 7000, 7000, 0\0
 Healing Tower\1\Offensive/Defensive\At start of turn, restores 10 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 100, 0, 0\0
 Healing Tower\2\Offensive/Defensive\At start of turn, restores 15 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 300, 0, 0\0
 Healing Tower\3\Offensive/Defensive\At start of turn, restores 20 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 500, 0, 0\0
@@ -125,6 +125,8 @@ Healing Tower\7\Offensive\At start of turn, restores 40 HP to allies within 3 ro
 Healing Tower\7\Defensive\At start of turn, restores 40 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 3000, 0, 0\0
 Healing Tower\8\Offensive\At start of turn, restores 45 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 0, 5000, 0\0
 Healing Tower\8\Defensive\At start of turn, restores 45 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 5000, 0, 0\0
+Healing Tower\9\Offensive\At start of turn, restores 50 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 0, 7000, 0\0
+Healing Tower\9\Defensive\At start of turn, restores 50 HP to allies within 3 rows and 5 columns centered on structure.\Yes\0, 7000, 0, 0\0
 Infantry School\example\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-`(level+1)` on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 7000, 7000, 0\0\Only one school can be placed at a time.
 Infantry School\1\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-2 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 50, 0, 0\0\Only one school can be placed at a time.
 Infantry School\2\Offensive/Defensive\At start of turn, inflicts Atk/Spd/Def/Res-3 on infantry foes within 3 columns centered on structure through their next actions.\Yes\0, 150, 0, 0\0\Only one school can be placed at a time.
@@ -155,7 +157,7 @@ Panic Manor\9\Offensive\At start of turn, if any foes are within 7 rows and 3 co
 Panic Manor\9\Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 80, converts bonuses on those foes into penalties through their next actions.\Yes\0, 7000, 0, 0\0
 Safety Fence\example\Offensive\Until turn `level`, after skills are activated at the start of the defense team's turn, if the entire raiding party is outside the defense team's attack range or is within a range of two rows and seven columns centered on any structure, the defense team's turn immediately ends.\Yes\0, 0, 500, 0\0
 Safety Fence\1\Offensive\Until turn 1, after skills are activated at the start of the defense team's turn, if the entire raiding party is outside the defense team's attack range or is within a range of two rows and seven columns centered on any structure, the defense team's turn immediately ends.\Yes\0, 0, 500, 0\0
-Tactics Room\example\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ `(5*level+35)` and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 1500, 1500, 0\0
+Tactics Room\example\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ `(5*level+35)` and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 7000, 7000, 0\0
 Tactics Room\1\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 40 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 100, 0, 0\0
 Tactics Room\2\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 45 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 300, 0, 0\0
 Tactics Room\3\Offensive/Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 50 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 500, 0, 0\0
@@ -167,6 +169,8 @@ Tactics Room\7\Offensive\At start of turn, if any foes are within 7 rows and 3 c
 Tactics Room\7\Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 70 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 3000, 0, 0\0
 Tactics Room\8\Offensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 75 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 0, 5000, 0\0
 Tactics Room\8\Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 75 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 5000, 0, 0\0
+Tactics Room\8\Offensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 80 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 0, 7000, 0\0
+Tactics Room\8\Defensive\At start of turn, if any foes are within 7 rows and 3 columns centered on structure and their HP __<__ 80 and they use bow, dagger, magic, or staff, restricts those foes' movement to 1 space through their next actions.\Yes\0, 7000, 0, 0\0
 Bolt Trap\example\Trap\If foe ends movement on this structure's space, deals `(10*level)` damage to target and units within 3 spaces. (Cancels foe's attack or Assist skill.)\-\0, 700, 0, 0\0
 Bolt Trap\1\Trap\If foe ends movement on this structure's space, deals 10 damage to target and units within 3 spaces. (Cancels foe's attack or Assist skill.)\-\0, 0, 0, 0\0
 Bolt Trap\2\Trap\If foe ends movement on this structure's space, deals 20 damage to target and units within 3 spaces. (Cancels foe's attack or Assist skill.)\-\0, 100, 0, 0\0
@@ -223,6 +227,9 @@ Gullinbursti Figure\-\Ornament\A commemorative figure built to put dvergr crafts
 Seidjarn Gearwork\-\Ornament\Structure common to Nidavellir, its mechanism driven by magic.  It's an event item.\Yes\0, 0, 0, 500\0\Book 5 Release Celebration
 Anniversary Cake (4)\-\Ornament\A massive cake baked to celebrate the fourth anniversary. It's an event item.\Yes\0, 0, 0, 500\0\4th Anniversary Celebration
 Feh Sand Statue\-\Ornament\It seems Feh has reviewed this sand sculpture herself - and she was satisfied with the result! It's an event item.\Yes\0, 0, 0, 500\0\Summer 2021
+Ash Statue\-\Ornament\A statue of Askr's retainer in the form of a divine beast. It radiates a certain charm felt by all who lay eyes on it.\Yes\0, 0, 0, 500\0\Book 6 Release Celebration
+Elm Statue\-\Ornament\A statue of Embla's retainer in the form of a divine beast. It evokes a tingling unease, its wings spread wide.\Yes\0, 0, 0, 500\0\Book 6 Release Celebration
+Flag of Embla\-\Ornament\The flag of Veronica's homeland, the Emblian Empire.\Yes\0, 0, 0, 500\0\Book 6 Release Celebration
 Accessory Shop\-\Resort\A structure where Heroes can sample various accessories to find new looks that catch their fancy!\-\300, 0, 0, 0\0\Heroes cannot use this structure to change their equipped accessories.
 Armory\-\Resort\A structure that contains a collection of replica weapons for Heroes to sample.  The stock is updated periodically, too!\-\300, 0, 0, 0\0\Heroes cannot use this structure to learn new skills or change their equipped skills.
 Concert Hall\-\Resort\A structure for Heroes who enjoy music and dancing.  You can listen to music, change which songs are played in certain areas, and even order new tracks to listen to!\-\300, 0, 0, 0\0\This structure can be used to change music in Arena, on the lobby screen, and in Aether Raids.
@@ -230,11 +237,12 @@ Dining Hall\-\Resort\A structure where dishes can be prepared with the ingredien
 Field\-\Resort\A place where Dragonflowers and food-crop ingredients for the Dining Hall are grown and harvested.  Planted crops can be harvested at the beginning of the following season.\-\0, 0, 0, 0\0
 Hot Spring\-\Resort\A structure where Heroes can relax in a nice hot spring.  Apparently it is a natural spring, too, which is especially incredible considering it is located within a floating island in the sky.\-\300, 0, 0, 0\0
 Gateway\-\Mjolnir\The battle will be lost if your foe destroys all of your Gateways.\Yes\0, 0, 0, 0\0
-Askran Seal\example\Mjolnir\Grants Atk/Spd/Def/Res+`(2*level)` to allies within 5 rows and 5 columns centered on structure.\No\0, 700, 0, 0\2
+Askran Seal\example\Mjolnir\Grants Atk/Spd/Def/Res+`(2*level)` to allies within 5 rows and 5 columns centered on structure.\No\0, 900, 0, 0\2
 Askran Seal\1\Mjolnir\Grants Atk/Spd/Def/Res+2 to allies within 5 rows and 5 columns centered on structure.\No\0, 100, 0, 0\2
 Askran Seal\2\Mjolnir\Grants Atk/Spd/Def/Res+4 to allies within 5 rows and 5 columns centered on structure.\No\0, 300, 0, 0\2
 Askran Seal\3\Mjolnir\Grants Atk/Spd/Def/Res+6 to allies within 5 rows and 5 columns centered on structure.\No\0, 500, 0, 0\2
 Askran Seal\4\Mjolnir\Grants Atk/Spd/Def/Res+8 to allies within 5 rows and 5 columns centered on structure.\No\0, 700, 0, 0\2
+Askran Seal\5\Mjolnir\Grants Atk/Spd/Def/Res+10 to allies within 5 rows and 5 columns centered on structure.\No\0, 900, 0, 0\2
 Cogent Summoner\example\Mjolnir\Grants another action to a My Summoner that has already acted\No\0, 500, 0, 0\5
 Cogent Summoner\1\Mjolnir\Grants another action to a My Summoner that has already acted\No\0, 100, 0, 0\5
 Cogent Summoner\2\Mjolnir\Grants another action to a My Summoner that has already acted\No\0, 300, 0, 0\5
@@ -288,10 +296,12 @@ Muspell Pyre\2\Mjolnir\Deals 30 damage to foes within 9 rows and 3 columns cente
 Muspell Pyre\3\Mjolnir\Deals 40 damage to foes within 9 rows and 3 columns centered on structure.\No\0, 500, 0, 0\2
 Muspell Pyre\4\Mjolnir\Deals 50 damage to foes within 9 rows and 3 columns centered on structure.\No\0, 900, 0, 0\2
 Muspell Pyre\5\Mjolnir\Deals 60 damage to foes within 9 rows and 3 columns centered on structure.\No\0, 1300, 0, 0\2
-Nifl Icicle\example\Mjolnir\Grants Special cooldown count-`(level)` to allies within 5 rows and 5 columns centered on structure.\No\0, 500, 0, 0\2
+Nifl Icicle\example\Mjolnir\Grants Special cooldown count-`(level)` to allies within 5 rows and 5 columns centered on structure.\No\0, 900, 0, 0\2
 Nifl Icicle\1\Mjolnir\Grants Special cooldown count-1 to allies within 5 rows and 5 columns centered on structure.\No\0, 100, 0, 0\2
 Nifl Icicle\2\Mjolnir\Grants Special cooldown count-2 to allies within 5 rows and 5 columns centered on structure.\No\0, 300, 0, 0\2
 Nifl Icicle\3\Mjolnir\Grants Special cooldown count-3 to allies within 5 rows and 5 columns centered on structure.\No\0, 500, 0, 0\2
+Nifl Icicle\4\Mjolnir\Grants Special cooldown count-4 to allies within 5 rows and 5 columns centered on structure.\No\0, 700, 0, 0\2
+Nifl Icicle\5\Mjolnir\Grants Special cooldown count-5 to allies within 5 rows and 5 columns centered on structure.\No\0, 900, 0, 0\2
 Shining Summoner\example\Mjolnir\Grants Atk/Spd/Def/Res+`2*level` to allies within 3 spaces of My Summoner for 1 turn\No\0, 500, 0, 0\2
 Shining Summoner\1\Mjolnir\Grants Atk/Spd/Def/Res+2 to allies within 3 spaces of My Summoner for 1 turn\No\0, 100, 0, 0\2
 Shining Summoner\2\Mjolnir\Grants Atk/Spd/Def/Res+4 to allies within 3 spaces of My Summoner for 1 turn\No\0, 300, 0, 0\2

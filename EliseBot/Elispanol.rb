@@ -818,8 +818,6 @@ class FEHUnit
     return 'Dúo' if @duo[0][0]=='Duo'
     return 'al Son' if @duo[0][0]=='Harmonic'
   end
-  
-  
 end
 
 class FEHSkill
@@ -904,6 +902,14 @@ class FEHAccessory
     return 'Sombrero' if @type=='Hat'
     return 'Máscara' if @type=='Mask'
     return @type
+  end
+  
+  def spanish_color
+    return 'Rojo' if self.color=='Red'
+    return 'Naranja' if self.color=='Orange'
+    return 'Verde' if self.color=='Green'
+    return 'Azul' if self.color=='Blue'
+    return nil
   end
 end
 

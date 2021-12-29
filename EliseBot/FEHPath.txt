@@ -170,3 +170,19 @@ Ephemura (October 2021) 4\Mordecai; 4; 0, 100
 Ephemura (October 2021) 5\Innes(Retro); 4; 0, 100
 Ephemura (October 2021) 6\Felicia; 4; 0, 100
 Ephemura (October 2021) 7\Mercedes; 4; 0, 100
+Ephemura (November 2021) 0\06/11/2021, 27/12/2021
+Ephemura (November 2021) 1\Perceval; 5; 0, 300
+Ephemura (November 2021) 2\Corrin(F)(Adrift); 5; 0, 300
+Ephemura (November 2021) 3\Ferdinand von Aegir; 4; 0, 100
+Ephemura (November 2021) 4\Libra; 4; 0, 100
+Ephemura (November 2021) 5\Lex; 4; 0, 100
+Ephemura (November 2021) 6\Zelot(Groom); 4; 0, 100
+Ephemura (November 2021) 7\Sakura; 4; 0, 100
+Ephemura (December 2021) 0\06/12/2021, 28/01/2022
+Ephemura (December 2021) 1\Nino(Christmas); 5; 0, 300
+Ephemura (December 2021) 2\Eirika(Christmas); 5; 0, 300
+Ephemura (December 2021) 3\Eirika(Bonds); 4; 0, 100
+Ephemura (December 2021) 4\Oscar; 4; 0, 100
+Ephemura (December 2021) 5\Leonie(Summer); 4; 0, 100
+Ephemura (December 2021) 6\Chad; 4; 0, 100
+Ephemura (December 2021) 7\Linhardt; 4; 0, 100

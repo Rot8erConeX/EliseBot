@@ -284,6 +284,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
       create_embed(event,"**edit #{subcommand.downcase}** __unit__ __number__","Causes me to equip the donor unit with the name `unit`, with an additional dragonflower.\n\nIf `number` is defined, I will equip that many dragonflowers.\nIf not, I will equip one.\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['nature','ivs'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*effects__","Causes me to change the nature of the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
+    elsif ['boon','newboon'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*boon__","Causes me to change the second boon of the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['equip','skill'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*skill name__","Equips the skill `skill name` on the donor unit with the name `unit`\n\n**This command is only able to be used by certain people**.",0x9E682C)
     elsif ['seal'].include?(subcommand.downcase)
@@ -331,6 +333,8 @@ def help_text(event,bot,command=nil,subcommand=nil)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __number__","Causes me to equip the devunit with the name `unit`, with an additional dragonflower.\n\nIf `number` is defined, I will equip that many dragonflowers.\nIf not, I will equip one.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['nature','ivs'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*effects__","Causes me to change the nature of the devunit with the name `unit`\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
+    elsif ['boon','newboon'].include?(subcommand.downcase)
+      create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*boon__","Causes me to change the second boon of the devunit with the name `unit`\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['learn','teach'].include?(subcommand.downcase)
       create_embed(event,"**#{command.downcase} #{subcommand.downcase}** __unit__ __\*skill types__","Causes me to teach the skills in slots `skill types` to the devunit with the name `unit`.\n\n**This command is only able to be used by Rot8er_ConeX**.",0x008b8b)
     elsif ['kiranface','kiran','face','summoner','summonerface'].include?(subcommand.downcase)
@@ -615,13 +619,35 @@ def disp_more_info(event,mode=0) # used by the `help` command to display info th
 end
 
 class FEHUnit
+  def book(enemy=false)
+    return 10 if ['Henriette','Gustav'].include?(@name)
+    unless enemy
+      return 10 if ['Veronica','Bruno','Fafnir','Fafnir(Empty)','Eitri','Summoned One','Hood','Elm','Letizia'].include?(@name)
+      return 5 if ['Thorr'].include?(@name)
+      return 4 if ['Hel'].include?(@name)
+    end
+    return 6 if @id>=747
+    return 5 if @id>=600
+    return 4 if @id>=459
+    return 3 if @id>=319
+    return 2 if @id>=193
+    return 1
+  end
+  
+  def dragonflowerPhase
+    return 0 if self.book==10
+    return 1 if (@id<=343 && self.book<=3) || (!@fake.nil? && @id>=1200)
+    return 2 if (@id<=560 && self.book<=4) || !@fake.nil?
+    return 3 if @id<=705 && self.book<=5 && !['Eitri','Fafnir','Otr','Summoned One'].include?(@name)
+    return 4
+  end
+  
   def dragonflowerMax
-    return 20 if !@fake.nil? && @id>=1200 && @movement=='Infantry' # Penumbra units are counted as Book 1-2
-    return 15 unless @fake.nil? # All other fake units are counted as Book 3+
-    return 5 if @id>705 || (@availability[0].include?('XF') && (@id>600 || @id<10))
-    return 10 if @id>560 || @availability[0].include?('XF')
-    return 20 if @availability[0].include?('PF') && @movement=='Infantry'
-    return 15
+    return 0 if self.dragonflowerPhase==0
+    m=$units.map{|q| q.dragonflowerPhase}.max
+    n=self.dragonflowerPhase*1
+    n=2 if n==1 && @movement != 'Infantry'
+    return 5*(m-n)+5
   end
   
   def dragonflowerEmote
@@ -667,16 +693,10 @@ class FEHUnit
     return true
   end
   
-  def isRevival?
-    return false if !@availability[0].include?('TD')
-    return false if @id<319
-    return true
-  end
-  
-  def is4Special?
-    return false if !@availability[0].include?('TD')
-    return true if @id<319
-    return false
+  def isRevival?(mode=false)
+    return false unless @availability[0].include?('5p') && !@availability[0].include?('4p') && !@availability[0].include?('3p')
+    return mode if @id<319
+    return !mode
   end
   
   def legend_shift_skill(skl)
@@ -699,7 +719,25 @@ class FEHUnit
     skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Spd/Def Bond' && skl.level.to_i==3 && @name=='Bluezie'
     skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Guidance' && skl.level.to_i==3 && @name=='Ryoma(Supreme)'
     skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Fortress Res' && skl.level.to_i==3 && @name=='Gunnthra'
+    skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Sturdy Stance' && skl.level.to_i==2 && @name=='Ephraim(Fire)'
+    skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Vengeful Fighter' && skl.level.to_i==3 && @name=='Hector(Marquess)'
+    skl.name="__#{skl.name}__" if !skl.nil? && skl.name=='Bold Fighter' && skl.level.to_i==3 && @name=='Tiki(Young)(Earth)'
     return skl
+  end
+  
+  def disp_footer
+    return 'Para el enemigo con forma de Kiran en el libro 4 cap. 12-5, use el nombre "Hood".' if @name=='Kiran' && Shardizard==$spanishShard
+    return 'For the Kiran-shaped enemy in Book IV Ch. 12-5, type the name "Hood".' if @name=='Kiran'
+    return 'For his second form, type the name "Fafnir(Empty)".' if @name=='Fafnir'
+    return nil
+  end
+  
+  def enemy_shift(onlyweapons=false)
+    # array of enemy-exclusive skills, array of player-exclusive skills
+    return [['Hel Scythe'],["Hel's Reaper",'Inevitable Death']] if @name=='Hel'
+    return [['Lofnheidr'],['Auto-Lofnheidr']] if @name=='Otr'
+    return [['Brobdingo'],['Liliputia']] if @name=='Mathoo' && !onlyweapons
+    return nil
   end
 end
 
@@ -707,6 +745,10 @@ class SuperUnit
   def pronoun(possessive=nil)
     @gender=@face[0] unless @face.nil? || @face=='Default'
     return super(possessive)
+  end
+  
+  def disp_footer
+    return nil
   end
 end
 
@@ -803,7 +845,7 @@ class FEHSkill
       nme="Fledgling (#{unit.movement})" if unit.movement=='Flier'
     elsif @name[0,7]=='Adult ('
       nme="Adult (#{unit.movement})"
-    elsif ['Iron Sword','Iron Lance','Iron Axe','Iron Dagger','Iron Bow','Steel Sword','Steel Lance','Steel Axe','Steel Dagger','Steel Bow','Silver Sword','Silver Lance','Silver Axe','Silver Dagger','Silver Bow','Brave Sword','Brave Lance','Brave Axe','Brave Bow','Firesweep Sword','Firesweep Lance','Firesweep Axe','Firesweep Bow','Guard Sword','Guard Lance','Guard Axe','Barrier Blade','Barrier Lance','Barrier Axe','Killing Edge','Killer Lance','Killer Axe','Slaying Edge','Slaying Lance','Slaying Axe','Reprisal Lance','Reprisal Axe','Reprisal Sword','Steadfast Axe','Steadfast Lance','Steadfast Sword'].include?(@name.gsub('+',''))
+    elsif ['Iron Sword','Iron Lance','Iron Axe','Iron Dagger','Iron Bow','Steel Sword','Steel Lance','Steel Axe','Steel Dagger','Steel Bow','Silver Sword','Silver Lance','Silver Axe','Silver Dagger','Silver Bow','Brave Sword','Brave Lance','Brave Axe','Brave Bow','Firesweep Sword','Firesweep Lance','Firesweep Axe','Firesweep Bow','Guard Sword','Guard Lance','Guard Axe','Barrier Blade','Barrier Lance','Barrier Axe','Killing Edge','Killer Lance','Killer Axe','Slaying Edge','Slaying Lance','Slaying Axe','Reprisal Lance','Reprisal Axe','Reprisal Sword','Steadfast Axe','Steadfast Lance','Steadfast Sword','Instant Lance','Instant Axe','Instant Sword'].include?(@name.gsub('+',''))
       t='Iron'
       t='Steel' if 'Steel '==@name[0,6]
       t='Silver' if 'Silver '==@name[0,7]
@@ -815,6 +857,7 @@ class FEHSkill
       t='Killing' if t=='Killer' && unit.weapon_color=='Red'
       t='Slaying' if 'Slaying '==@name[0,8]
       t='Reprisal' if 'Reprisal '==@name[0,9]
+      t='Instant' if 'Instant '==@name[0,8]
       t='Steadfast' if 'Steadfast '==@name[0,9]
       nme="#{t} Sword" if unit.weapon_color=='Red'
       nme="#{t} Blade" if unit.weapon_color=='Red' && ['Barrier'].include?(t)
@@ -921,6 +964,11 @@ class FEHSkill
       nme='Tomato Tome' if unit.weapon_color=='Red'
       nme='Sealife Tome' if unit.weapon_color=='Blue'
       nme='Hibiscus Tome' if unit.weapon_color=='Green'
+      nme="#{nme}+" if !nme.nil? && @name[-1]=='+'
+    elsif ['Lumious Grace','Drifting Grace'].include?(@name.gsub('+',''))
+      nme='Lumious Grace' if unit.weapon_color=='Red'
+      nme='Drifting Grace' if unit.weapon_color=='Blue'
+      nme='Verdant Grace' if unit.weapon_color=='Green'
       nme="#{nme}+" if !nme.nil? && @name[-1]=='+'
     elsif ['Ninja Katana','Ninja Yari','Ninja Masakari'].include?(@name.gsub('+',''))
       nme='Ninja Katana' if unit.weapon_color=='Red'
@@ -1085,7 +1133,7 @@ class FEHSkill
         i3[0]=2 if x[i][i2].weapon_color=='Green'
         i3[0]=3 if x[i][i2].weapon_color=='Colorless'
         i3[1]=0 if x[i][i2].availability[0].include?('p')
-        i3[1]=1 if x[i][i2].availability[0].include?('p') && x[i][i2].availability[0].include?('TD')
+        i3[1]=1 if x[i][i2].availability[0].include?('p') && x[i][i2].isRevival?(true)
         i3[1]=2 if x[i][i2].availability[0].gsub('0s','').include?('s')
         i4=13
         i4=1+i3[0]+4*i3[1] unless i3.min<0
@@ -1444,7 +1492,7 @@ class FEHGroup
     x='<:Current_Tempest_Bonus:498797966740422656> Tempest Bonus' if @name=='TempestBonus'
     # other groups
     x='<:Divine_Dew:453618312434417691> Retro-Prfs' if @name=='Retro-Prfs'
-    x="<:Icon_Support_Cyan:497430896249405450> Mathoo's Waifus" if @name=="Mathoo'sWaifus"
+    x="<:Rapport_Cyan:877172848064626698> Mathoo's Waifus" if @name=="Mathoo'sWaifus"
     x='<:Divine_Mist:701285239611195432> Worse Than Liki' if @name=='WorseThanLiki'
     return @name if x.length<=0
     x=x.split('> ')[-1] if noemotes
@@ -1665,14 +1713,14 @@ class FEHBanner
     nu2=true if @start_date[2]==2020 && @start_date[1]>2
     nu2=true if @start_date[2]==2020 && @start_date[1]==2 && @start_date[0]>2
     nu=true if nu2
-    f.push($units.reject{|q| !q.fake.nil? || !q.duo.nil? || !q.availability[0].include?('5p') || (q.availability[0].include?('TD') && nu)})
+    f.push($units.reject{|q| !q.fake.nil? || !q.duo.nil? || !q.availability[0].include?('5p') || (q.isRevival?(true) && nu)})
     if self.calc_pity(0)[4]>0
       f.push(self.unit_list.reject{|q| !q.availability[0].include?('4p') && !q.availability[0].include?('4s')})
     else
       f.push([])
     end
     if nu2
-      f.push($units.reject{|q| !q.fake.nil? || !q.duo.nil? || !q.availability[0].include?('5p') || !q.availability[0].include?('TD')})
+      f.push($units.reject{|q| !q.fake.nil? || !q.duo.nil? || !q.availability[0].include?('5p') || !q.isRevival?(true)})
     else
       f.push([])
     end
@@ -2131,6 +2179,7 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   genders=[]
   xgames=[]
   supernatures=[]
+  books=[]; emeny=false
   dancers=false
   legendaries=false; mythics=false
   duos=false; harmonics=false
@@ -2140,6 +2189,7 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   for i in 0...args.length
     args[i]=args[i].downcase.gsub('user','') if args[i].length>4 && args[i][args[i].length-4,4].downcase=='user'
     launch=true if ['launch'].include?(args[i].downcase)
+    emeny=true if ['enemy','emeny'].include?(args[i].downcase)
     dancers=true if ['dancers','singers','bards','dancer','singer','bard','refreshers','refresher'].include?(args[i].downcase)
     legendaries=true if ['legendary','legend','legends'].include?(args[i].downcase)
     mythics=true if ['mythic','mythicals','mythics','mythicals','mystics','mystic','mysticals','mystical'].include?(args[i].downcase)
@@ -2271,11 +2321,15 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   for i in 0...ggames.length
     xgames.push(ggames[i][0]) if has_any?(ggames[i][1].map{|q| q.downcase},args.map{|q| q.downcase})
   end
+  for i in 1...$units.map{|q| q.book}.max+1
+    books.push(i) if has_any?(args.map{|q| q.downcase},["b#{i}",i.to_s,"book#{i}","bk#{i}","bk.#{i}"])
+  end
   colors=colors.uniq
   colors2=colors.map{|q| q}
   weapons=weapons.uniq
   movements=movements.uniq
   genders=genders.uniq
+  books=books.uniq.sort
   xgames=xgames.uniq
   group=group.uniq
   clzz=clzz.uniq
@@ -2456,6 +2510,9 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
       elsif has_any?(untz[i].games.map{|q| q.downcase},xgames.map{|q| "(m)#{q.downcase}"})
         untz[i].name="#{untz[i].name} *[Mii Costume]*"
         matches4.push(untz[i])
+      elsif has_any?(untz[i].games.map{|q| q.downcase},xgames.map{|q| "(b)#{q.downcase}"})
+        untz[i].name="#{untz[i].name} *[Background]*"
+        matches4.push(untz[i])
       elsif has_any?(untz[i].games.map{|q| q.downcase},xgames.map{|q| "(t)#{q.downcase}"})
         untz[i].name="#{untz[i].name} *[Trophy]*"
         matches4.push(untz[i])
@@ -2470,7 +2527,13 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
     untz=matches4.map{|q| q}
   end
   untz=untz.reject{|q| !group.map{|q2| q2.unit_list.map{|q3| q3.name}}.flatten.include?(q.name)} if group.length>0
-  untz=untz.reject{|q| !q.availability[0].include?('LU')} if launch
+  if books.length>0
+    untz=untz.reject{|q| !books.include?(q.book(emeny))}
+  elsif launch && emeny
+    untz=untz.reject{|q| q.id>100}
+  elsif launch
+    untz=untz.reject{|q| !q.isLaunch?}
+  end
   untz=untz.reject{|q| !q.isRefresher?} if dancers
   if legendaries && mythics
     untz=untz.reject{|q| q.legendary.nil?}
@@ -2557,9 +2620,13 @@ def find_in_units(bot,event,args=nil,mode=0,paired=false,ignore_limit=false)
   mspan.push("*Movimiento:* #{m2.join(', ')}") if m2.length>0
   m.push("*Complete classes:* #{clzz.map{|q| "#{q[0]} (#{q[1,3].compact.join(' ').gsub('Healer','Staff').gsub('Dragon','Breath')})"}.join(', ')}") if clzz.length>0
   mspan.push("*Clases completas:* #{clzz.map{|q| q[4]}.join(', ')}") if clzz.length>0
-  if launch
-    m.push("\u{1F680} *Launch Units*")
-    mspan.push("\u{1F680} *Lanzamiento*")
+  if books.length>0
+    bemoji="\u{1F4DA}"; bemoji="\u{1F4D9}" if books.length<2; bemoji="\u{1F4D8}" if books==[1]; bemoji="\u{1F4D5}" if books==[2]
+    m.push("#{bemoji} *Books:* #{books.join(', ')}#{"\n~~includes enemies from this book that weren't summonable until later~~" if emeny}")
+    mspan.push("#{bemoji} *Libros:* #{books.join(', ')}#{"\n~~incluye enemigos de este libro que no fueron convocados hasta más tarde~~" if emeny}")
+  elsif launch
+    m.push("\u{1F680} *Launch Units*#{" (including units who weren't summonable at launch but were in game)" if emeny}")
+    mspan.push("\u{1F680} *Lanzamiento*#{" (incluyendo personas que no fueron convocadas pero que estaban en el juego)" if emeny}")
   end
   m.push('<:Assist_Music:454462054959415296> *Refreshers*') if dancers
   mspan.push('<:Assist_Music:454462054959415296> *Refreshers*') if dancers
@@ -2677,6 +2744,7 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
     skill_types.push('Assist') if ['assist','assists'].include?(args[i].downcase)
     skill_types.push('Special') if ['special','specials'].include?(args[i].downcase)
     skill_types.push('Passive') if ['passive','passives'].include?(args[i].downcase)
+    skill_types.push('Captain') if ['captain','captains'].include?(args[i].downcase)
     skill_types.push('Duo') if ['duo','duos'].include?(args[i].downcase)
     skill_types.push('Harmonic') if ['harmonic','harmonics','resonant','resonants','resonance','resonances'].include?(args[i].downcase)
     colors.push('Red') if ['red','reds'].include?(args[i].downcase)
@@ -2821,9 +2889,10 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
   sklz=sklz.reject{|q| q.type.include?('Assist')} unless assists.length>0 || skill_types.include?('Assist')
   sklz=sklz.reject{|q| q.type.include?('Special') && !has_any?(specials,q.tags)} if specials.length>0
   sklz=sklz.reject{|q| q.type.include?('Special')} unless specials.length>0 || skill_types.include?('Special')
-  sklz=sklz.reject{|q| q.isPassive? && !(has_any?(passives.map{|q2| "Passive(#{q2[0]})"},q.type) || (passives.include?('Seal') && q.type.include?('Seal')))} if passives.length>0
-  sklz=sklz.reject{|q| q.isPassive?} unless passives.length>0 || passive_subsets.length>0 || skill_types.include?('Passive')
-  sklz=sklz.reject{|q| (q.isPassive? || has_any?(q.type,['Duo','Harmonic'])) && !has_any?(passive_subsets,q.tags)} if passive_subsets.length>0
+  sklz=sklz.reject{|q| q.isPassive? && !q.type.include?('Captain') && !(has_any?(passives.map{|q2| "Passive(#{q2[0]})"},q.type) || (passives.include?('Seal') && q.type.include?('Seal')))} if passives.length>0
+  sklz=sklz.reject{|q| q.isPassive? && !q.type.include?('Captain')} unless passives.length>0 || passive_subsets.length>0 || skill_types.include?('Passive')
+  sklz=sklz.reject{|q| ((q.isPassive? && !q.type.include?('Captain')) || has_any?(q.type,['Duo','Harmonic'])) && !has_any?(passive_subsets,q.tags)} if passive_subsets.length>0
+  sklz=sklz.reject{|q| q.type.include?('Captain')} unless skill_types.include?('Captain')
   sklz=sklz.reject{|q| q.type.include?('Duo')} unless passives.length>0 || passive_subsets.length>0 || skill_types.include?('Duo')
   sklz=sklz.reject{|q| q.type.include?('Harmonic')} unless passives.length>0 || passive_subsets.length>0 || skill_types.include?('Harmonic')
   if sklz.length>=sklz2.length && !crsoff.nil? && Shardizard==$spanishShard
@@ -2838,6 +2907,7 @@ def find_in_skills(bot,event,args=nil,mode=0,paired=false,ignore_limit=false,nor
   for i in 0...skill_types2.length
     moji=bot.server(443704357335203840).emoji.values.reject{|q| q.name != "Skill_#{skill_types2[i]}"}
     moji=bot.server(443704357335203840).emoji.values.reject{|q| q.name != "#{skill_types2[i]}"} if skill_types2[i]=='Passive'
+    moji=bot.server(497429938471829504).emoji.values.reject{|q| q.name != "#{skill_types2[i]}"} if skill_types2[i]=='Captain'
     m2[i]="#{moji[0].mention unless moji.length<=0} #{skill_types2[i].gsub('Weapon','Arma').gsub('Assist','Asistencia').gsub('Special','Especial').gsub('Passive','Pasiva').gsub('Duo','Dúo').gsub('Harmonic','al Son')}"
     skill_types2[i]="#{moji[0].mention} #{skill_types2[i]}" unless moji.length<=0
   end
@@ -3115,6 +3185,7 @@ def display_units(bot,event,args=nil,mode=0)
   elsif k.map{|q| q.movement}.uniq.length>1
     f=[]
     x=['Infantry','Armor','Flier','Cavalry']
+    xspan=['Infantry','Armor','Flier','Cavalry']
     for i in 0...x.length
       mojix=''
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Icon_Move_#{x[i]}"}
@@ -3122,7 +3193,7 @@ def display_units(bot,event,args=nil,mode=0)
       x3="#{x[i]}"
       x3="#{x[i]}s" if ['Flier','Armor'].include?(x[i])
       k3=k.reject{|q| q.movement != x[i]}
-      f.push(["#{mojix} #{x3}",k3.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),"#{mojix} #{k3[0].movement_spanish}"]) if k2.length>0
+      f.push(["#{mojix} #{x3}",k3.map{|q| q.postName(true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),"#{mojix} #{xspan[i]}"]) if k3.length>0
     end
   elsif mk.include?('<:Assist_Music:454462054959415296> *Refreshers*')
     f2=[k.reject{|q| !q.isRefresher?('Dancer')}.length,k.reject{|q| !q.isRefresher?('Singer')}.length,k.reject{|q| !q.isRefresher?('Bard')}.length]
@@ -3385,8 +3456,10 @@ def display_skills(bot,event,args=nil,mode=0)
     f.push(['<:Skill_Assist:444078171025965066> Assists',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Skill_Assist:444078171025965066> Asistencias']) if x.length>0
     x=k.reject{|q| !q.type.include?('Special')}
     f.push(['<:Skill_Special:444078170665254929> Specials',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Skill_Special:444078170665254929> Especiales']) if x.length>0
-    x=k.reject{|q| !q.isPassive?}
+    x=k.reject{|q| !q.isPassive? || q.type.include?('Captain')}
     f.push(['<:Passive:544139850677485579> Passives',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Passive:544139850677485579> Pasivas']) if x.length>0
+    x=k.reject{|q| !q.type.include?('Captain')}
+    f.push(['<:Captain:917690433881133086> Captain skills',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Captain:917690433881133086> Pasivas de Capitánes']) if x.length>0
     x=k.reject{|q| !q.type.include?('Duo')}
     f.push(['<:Hero_Duo:631431055420948480> Duo Skills',x.map{|q| q.postName(kx,false,true)}.sort{|a,b| a.gsub('~~','').gsub('*','')<=>b.gsub('~~','').gsub('*','')}.join("\n"),'<:Hero_Duo:631431055420948480> Dúo']) if x.length>0
     x=k.reject{|q| !q.type.include?('Harmonic')}
@@ -3800,6 +3873,7 @@ def sort_units(bot,event,args=nil)
     k[i].sort_data[-1]=37 if !k[i].legendary.nil? && k[i].legendary[1]=='Duel' && k[i].id>=640
     k[i].sort_data[-1]=37 unless k[i].duo.nil? || k[i].duo[0][0]=='Harmonic'
     k[i].sort_data[-1]=38 unless k[i].duo.nil? || k[i].duo[0][0]=='Harmonic' || k[i].id<=590
+    k[i].sort_data[-1]=39 unless k[i].duo.nil? || k[i].duo[0][0]=='Harmonic' || k[i].id<=720
     k[i].sort_data.push(k[i].focus_banners.length)
     k[i].sort_data.unshift(k[i].name)
     k[i].sort_data.push(0)
@@ -4095,10 +4169,10 @@ def stats_of_multiunits(bot,event,args=nil,mode=0)
     ftr='Nombres en cursiva tienen un super activo en la estadística listada' if mode>0 && hstats.join("\n").include?('*')
     ftr='Nombres en cursiva tienen un súper defecto en la estadística listada' if mode<0 && hstats.join("\n").include?('*')
     ftr='Cersonajes con Ascensión Resplandeciente se calculan con esas estadísticas' if k.reject{|q| !q.hasResplendent? || !q.owner.nil?}.length>0
-    x2="__**Búsqueda de Personajes**__\n#{mk.join("\n")}\n\n" if mk.length>0
+    x2="__**Búsqueda de Personajes**__\n#{mk.join("\n")}\n\n" if !mk.nil? && mk.length>0
     x2="#{x2}__**#{x} entre #{k.length} caracteres**__"
   else
-    x2="__**Unit Search**__\n#{mk.join("\n")}\n\n" if mk.length>0
+    x2="__**Unit Search**__\n#{mk.join("\n")}\n\n" if !mk.nil? && mk.length>0
     x2="#{x2}__**#{x} among #{k.length} units**__"
   end
   return [hstats.join("\n"),ftr] if [-2,2].include?(mode)
@@ -5586,8 +5660,10 @@ def avail_text(fgg='',includegrails=false,unt=nil,mode=0)
       end
       lowest_rarity=[lowest_rarity,m].min if fgg.include?("#{m}d") || fgg.include?("#{m}g") || fgg.include?("#{m}f") || fgg.include?("#{m}q") || fgg.include?("#{m}t") || fgg.include?("#{m}s") || fgg.include?("#{m}p") || fgg.include?("#{m}o") || fgg.include?("#{m}y") || fgg.include?("#{m}b") || fgg.include?("#{m}r") || fgg.include?("#{m}a")
     end
-    summon_type[7].push("~~Unavailable on New/Special Heroes banners~~") if fgg.include?('TD') && !unt.nil? && unt.id>318 && Shardizard != $spanishShard
-    summon_type[7].push("~~No disponible en nuevos banners~~") if fgg.include?('TD') && !unt.nil? && unt.id>318 && Shardizard==$spanishShard
+    if !unt.nil? && unt.isRevival?(true)
+      summon_type[7].push("~~Unavailable on New/Special Heroes banners~~") unless Shardizard==$spanishShard
+      summon_type[7].push("~~No disponible en nuevos banners~~") if Shardizard==$spanishShard
+    end
     if summon_type[7].include?('Story unit starting at 2<:Icon_Rarity_2:448266417872044032>') && summon_type[7].include?('Story unit starting at 4<:Icon_Rarity_4:448266418459377684>')
       for i in 0...summon_type[7].length
         if summon_type[7][i]=='Story unit starting at 2<:Icon_Rarity_2:448266417872044032>'
@@ -5629,7 +5705,7 @@ def avail_text(fgg='',includegrails=false,unt=nil,mode=0)
   end
   highest_merge=Max_rarity_merge[1]
   unless fgg.gsub('0s','').include?('p') || fgg.gsub('0s','').include?('s')
-    rardata2=fgg.gsub('0s','').gsub('PF','').gsub('XF','').gsub('TD','').gsub('RA','')
+    rardata2=fgg.gsub('0s','').gsub('RA','')
     for m in 1...Max_rarity_merge[0]+1
       rardata2=rardata2.gsub("#{m}r",'')
     end
@@ -5711,8 +5787,8 @@ def banner_list(event,bot,args=[],xname=nil)
   end
   star_buff=0 if star_buff.nil?
   str=''
-  str="__**Debut**__\n*Launch Unit*" if unit.availability[0].include?('LU')
-  str="__**Debut**__\n*Personaje de Lanzamiento*" if unit.availability[0].include?('LU') && Shardizard==$spanishShard
+  str="__**Debut**__\n*Launch Unit*" if unit.isLaunch?
+  str="__**Debut**__\n*Personaje de Lanzamiento*" if unit.isLaunch? && Shardizard==$spanishShard
   unless unit.fake.nil?
     str='>Fake unit<'
     str=">Personaje fals#{unit.spanish_gender.downcase}<" if Shardizard==$spanishShard
@@ -5757,7 +5833,7 @@ def banner_list(event,bot,args=[],xname=nil)
     hdr="__Pancartas en las que ha aparecido **#{unit.name}#{unit.emotes(bot,false)}**__\nen forma **Omega** (después de 120 fracasos para conseguir 5<:Icon_Rarity_5:448266417553539104>)" if star_buff>=24
   c=0
   end
-  if bnrz.length<=0 && (!unit.availability[0].include?('p') || justnames2)
+  if bnrz.length<=0 && (!(unit.availability[0].include?('p') || !unit.legendary.nil?) || justnames2)
     create_embed(event,hdr,str,unit.disp_color,"#{unit.focus_banners.length} total",unit.thumbnail(event,bot))
     return nil
   end
@@ -5791,20 +5867,20 @@ def banner_list(event,bot,args=[],xname=nil)
     len='%.4f' if Shardizard==4
     str2=''
     m=[]
-    if unit.availability[0].include?('5p') && !unit.availability[0].include?('TD') && unit.duo.nil?
+    if unit.availability[0].include?('5p') && !unit.isRevival?(true) && unit.duo.nil?
       x=$banners.reject{|q| !q.tags.include?('NewHeroes') || q.start_date.nil? || q.start_date[2]<2020 || q.start_date[1]<3}.sample.calc_pity(star_buff*5)
-      y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('5p') || q.availability[0].include?('TD') || !q.duo.nil? || !q.fake.nil?}.length
-      y2=$units.reject{|q| !q.availability[0].include?('5p') || q.availability[0].include?('TD') || !q.duo.nil? || !q.fake.nil?}.length
+      y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('5p') || q.isRevival?(true) || !q.duo.nil? || !q.fake.nil?}.length
+      y2=$units.reject{|q| !q.availability[0].include?('5p') || q.isRevival?(true) || !q.duo.nil? || !q.fake.nil?}.length
       y=x[3]/y
       y2=x[3]/y2
       has_revival=false
       has_revival=true if $units.reject{|q| !q.isRevival?}.length>0
       m.push("5<:Icon_Rarity_5:448266417553539104> Non-Focus#{' (New/Special Heroes)' if has_revival} - #{len % y}% (Perceived), #{len % y2}% (Actual)")
     end
-    if unit.is4Special?
+    if unit.isRevival?(true)
       x=$banners.reject{|q| q.start_date.nil? || q.start_date[2]<2021 || q.start_date[1]<2 || q.start_date[0]<2}.sample.calc_pity(star_buff*5)
-      y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.is4Special? || !q.duo.nil? || !q.fake.nil?}.length
-      y2=$units.reject{|q| !q.is4Special? || !q.duo.nil? || !q.fake.nil?}.length
+      y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.isRevival?(true) || !q.duo.nil? || !q.fake.nil?}.length
+      y2=$units.reject{|q| !q.isRevival?(true) || !q.duo.nil? || !q.fake.nil?}.length
       y=x[3]/y
       y2=x[3]/y2
       m.push("4<:Icon_Rarity_4:448266418459377684> Special - #{len % y}% (Perceived), #{len % y2}% (Actual)")
@@ -5857,7 +5933,7 @@ def banner_list(event,bot,args=[],xname=nil)
     str3=[]
     str3.push("__*Standard 3% banners*__\n#{m.join("\n")}") if m.length>0
     m=[]
-    if unit.availability[0].include?('5p') && !unit.is4Special? && unit.duo.nil?
+    if unit.availability[0].include?('5p') && !unit.isRevival?(true) && unit.duo.nil?
       x=$banners.reject{|q| !q.tags.include?('HeroFest')}.sample.calc_pity(star_buff*5)
       y=$units.reject{|q| q.weapon_color != unit.weapon_color || !q.availability[0].include?('5p') || !q.duo.nil? || !q.fake.nil?}.length
       y2=$units.reject{|q| !q.availability[0].include?('5p') || !q.duo.nil? || !q.fake.nil?}.length
@@ -5925,6 +6001,13 @@ def banner_list(event,bot,args=[],xname=nil)
     else
       str="#{str}\n\n#{xf}#{str2}"
     end
+  elsif !unit.legendary.nil?
+    str="#{str}\n\n__**Next appearance: #{unit.legendary_timing}**__"
+    m=$units.reject{|q| q.legendary_timing != unit.legendary_timing || q.name==unit.name}
+    m2=m.reject{|q| q.weapon_color != unit.weapon_color}
+    str="#{str}\n*Same color:* #{m2.map{|q| q.name}.sort.join(', ')}" unless m2.length<=0
+    m2=m.reject{|q| q.weapon_color==unit.weapon_color}
+    str="#{str}\n*Different color:* #{m2.map{|q| q.name}.sort.join(', ')}" unless m2.length<=0
   end
   oa='Other Appearances'
   oa='Otras Apariciones' if Shardizard==$spanishShard
@@ -5950,7 +6033,7 @@ def banner_list(event,bot,args=[],xname=nil)
   end
 end
 
-def create_summon_list(clr,mainpool=nil)
+def create_summon_list(clr,mainpool=nil,launch=false)
   p=[['1<:Icon_Rarity_1:448266417481973781> exclusive',[]],['1<:Icon_Rarity_1:448266417481973781>-2<:Icon_Rarity_2:448266417872044032>',[]],['2<:Icon_Rarity_2:448266417872044032> exclusive',[]],['2<:Icon_Rarity_2:448266417872044032>-3<:Icon_Rarity_3:448266417934958592>',[]],['3<:Icon_Rarity_3:448266417934958592> exclusive',[]],['3<:Icon_Rarity_3:448266417934958592>-4<:Icon_Rarity_4:448266418459377684>',[]],['4<:Icon_Rarity_4:448266418459377684> exclusive',[]],['4<:Icon_Rarity_4:448266418459377684>-5<:Icon_Rarity_5:448266417553539104>',[]],['5<:Icon_Rarity_5:448266417553539104> exclusive',[]],['5<:Icon_Rarity_5:448266417553539104>-6<:Icon_Rarity_6:491487784650145812>',[]],['6<:Icon_Rarity_6:491487784650145812> exclusive',[]],['Other',[]]]
   if Shardizard==$spanishShard
     for i in 0...p.length
@@ -5958,7 +6041,11 @@ def create_summon_list(clr,mainpool=nil)
     end
   end
   for i in 0...clr.length
-    clr[i].name="~~#{clr[i].name}~~" if clr[i].availability[0].include?('TD')
+    if launch
+      clr[i].availability[0]='4p5p' if ['Marth','Roy','Chrom(Launch)','Caeda','Tharja','Corrin(M)(Launch)','Lilina','Abel','Peri','Nowi','Effie','Catria(Launch)','Cordelia','Raven','Sheena','Camilla(Launch)','Fae','Hawkeye','Merric','Jeorge','Jakob','Maria','Kagero','Sakura'].include?(clr[i].name)
+    else
+      clr[i].name="~~#{clr[i].name}~~" if clr[i].isRevival?(true)
+    end
     if clr[i].availability[0].include?('1p')
       if clr[i].availability[0].include?('2p')
         p[1][1].push(clr[i].name)
@@ -6029,7 +6116,7 @@ def disp_summon_pool(event,args=[])
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
   data_load(['unit'])
   k=$units.reject{|q| !q.availability[0].include?('p') || !q.fake.nil? || !q.duo.nil?}
-  k=k.reject{|q| !q.availability[0].include?('LU')} if args.map{|q| q.downcase}.include?('launch')
+  k=k.reject{|q| !q.isLaunch?} if args.map{|q| q.downcase}.include?('launch')
   colors=[]
   pooltype=nil
   for i in 0...args.length
@@ -6051,43 +6138,19 @@ def disp_summon_pool(event,args=[])
   else
     colors=[colors[0]]
   end
-  if colors.include?('Red')
-    r=k.reject{|q| q.weapon_color !='Red'}
-    r=create_summon_list(r,pooltype)
-    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
-    else
-      create_embed(event,"",'',0xE22141,nil,nil,r,4)
+  ccc=[['Red',0xE22141],['Blue',0x2764DE],['Green',0x09AA24],['Colorless',0x64757D],['Gold',0xAA937A]]
+  for i in 0...ccc.length
+    if colors.include?(ccc[i][0])
+      r=k.reject{|q| q.weapon_color != ccc[i][0]}
+      r=create_summon_list(r,pooltype,args.map{|q| q.downcase}.include?('launch'))
+      if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
+        event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
+      else
+        create_embed(event,"",'',ccc[i][1],nil,nil,r,4)
+      end
     end
   end
-  if colors.include?('Blue')
-    r=k.reject{|q| q.weapon_color !='Blue'}
-    r=create_summon_list(r,pooltype)
-    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
-    else
-      create_embed(event,"",'',0x2764DE,nil,nil,r,4)
-    end
-  end
-  if colors.include?('Green')
-    r=k.reject{|q| q.weapon_color !='Green'}
-    r=create_summon_list(r,pooltype)
-    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
-    else
-      create_embed(event,"",'',0x09AA24,nil,nil,r,4)
-    end
-  end
-  if colors.include?('Colorless')
-    r=k.reject{|q| q.weapon_color !='Colorless'}
-    r=create_summon_list(r,pooltype)
-    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      event.respond r.map{|q| "**#{q[0]}:** #{q[1].split("\n").join(', ')}"}.join("\n")
-    else
-      create_embed(event,"",'',0x64757D,nil,nil,r,4)
-    end
-  end
-  
+  return nil
 end
 
 def summon_sim(bot,event,args=[])
@@ -6867,7 +6930,11 @@ def disp_all_prfs(event,bot)
 end
 
 def disp_all_refines(event,bot,effect=false)
-  if !safe_to_spam?(event)
+  if !safe_to_spam?(event) && event.user.id==167657750971547648
+    angery=$skills.reject{|q| ['Falchion','Ragnarok+','Missiletainn','Whelp (All)','Yearling (All)','Adult (All)'].include?(q.name) || q.name.include?('Breidablik') || !q.type.include?('Weapon') || !q.prevos.nil? || !q.evolutions.nil? || q.exclusivity.nil? || q.exclusivity.reject{|q2| q.learn.flatten.include?(q2)}.length<=0}.map{|q| "#{q.postName}"}
+    create_embed(event,"I have likely been called because one of the following weapons' \"Prf to\" section has been deemed *wrong*.  The section is not incorrect, that is how I calculate when a weapon should be an evolution of another weapon, but isn't.  Yes, I keep track of this, because I'm still mad that an entire mechanic that could've been useful to helping old units get better was just *abandonded* less than three months into its life.\n\nIf that is not the reason this command was used, please try the command again in PM.  It displays a lot of data.",'',0x688C68,"And no, Giga Excalibur doesn't belong on this list.  Its connection to Excalibur is a mistranslation, and is more accurately translated as Gigascalibur.",nil,triple_finish(angery),3)
+    return nil
+  elsif !safe_to_spam?(event)
     event.respond "There is a lot of data being displayed.  Please use this command in PM."
     return nil
   end
@@ -7068,6 +7135,13 @@ def disp_all_refines(event,bot,effect=false)
   return nil
 end
 
+def disp_all_hearts(event)
+  str="<:Icon_Support_Black:877176116266295336><:Icon_Support_Grey:877176116186607617><:Icon_Support_White:877176116530540594><:Icon_Support_Magenta:877176116580868106><:Icon_Support_Red:877176116601827388><:Icon_Support_Orange:877176116207562767><:Icon_Support_Yellow:877176116400488469><:Icon_Support_Green:877176116501176350><:Icon_Support_Cyan:877176116836700230><:Icon_Support_Blue:877176116182409258><:Icon_Support_Purple:877176116794769448><:Icon_Support_Brown:877173138260111370><:Icon_Support_Pink:877173138369175662>"
+  str="#{str}\n<:Rapport_Onyx:888650913764503622><:Rapport_Silver:877172847678730251><:Rapport_Platinum:888650913764487208><:Rapport_Pink:877177110421188608><:Rapport_Scarlet:888650913458290750><:Rapport_Citrus:888650913693200384><:Rapport_Gold:877172848085594132><:Rapport_Verdant:888650913768701973><:Rapport_Cyan:877172848064626698><:Rapport_Azure:888650912602685451><:Rapport_Violet:888650913844187186><:Rapport_Bronze:877172848043647017><:Rapport_Banana:888650913647054858>"
+  str="#{str}\n<:Black_Friendship:888645638160519188><:Blank:676220519690928179><:White_Friendship:888645638303150090><:Pink_Friendship:888645638403805264><:Red_Friendship:888645637955006515><:Orange_Friendship:888645640622583838><:Yellow_Friendship:888645638277971989><:Green_Friendship:888645637892087819><:Cyan_Friendship:888645638374453288><:Blue_Friendship:888645638059860040><:Purple_Friendship:888645638433144852><:Brown_Friendship:888645638185693194>"
+  event.respond str
+end
+
 def get_multiple_units(bot,event,args=[],includestats=true,isbst=false,maxunits=0)
   args=event.message.text.downcase.split(' ') if args.nil? || args.length<=0
   args=args.reject{ |a| a.match(/<@!?(?:\d+)>/) }
@@ -7122,12 +7196,12 @@ def get_multiple_units(bot,event,args=[],includestats=true,isbst=false,maxunits=
     elsif m==167657750971547648 && !$dev_units.find_index{|q| q.name==y3.name}.nil?
       f=find_stats_in_string(event,x,0,y3.name,true)
       y2=$dev_units[$dev_units.find_index{|q| q.name==y3.name}]
-      k[k2]=[y2.clone,y2.rarity,y2.merge_count,y2.boon.gsub(' ',''),y2.bane.gsub(' ',''),y2.dragonflowers]
+      k[k2]=[y2.clone,y2.rarity,y2.merge_count,y2.boon.map{|q| q.gsub(' ','')},y2.bane.gsub(' ',''),y2.dragonflowers]
       k2+=1
     elsif m>0 && !$donor_units.find_index{|q| q.name==y3.name && q.owner_id==m}.nil?
       f=find_stats_in_string(event,x,0,y3.name,true)
       y2=$donor_units[$donor_units.find_index{|q| q.name==y3.name && q.owner_id==m}]
-      k[k2]=[y2.clone,y2.rarity,y2.merge_count,y2.boon.gsub(' ',''),y2.bane.gsub(' ',''),y2.dragonflowers]
+      k[k2]=[y2.clone,y2.rarity,y2.merge_count,y2.boon.map{|q| q.gsub(' ','')},y2.bane.gsub(' ',''),y2.dragonflowers]
       k2+=1
     elsif y.is_a?(Array)
       f=find_stats_in_string(event,x,0,y[0].name,true)
@@ -7143,7 +7217,9 @@ def get_multiple_units(bot,event,args=[],includestats=true,isbst=false,maxunits=
   event.channel.send_temporary_message('Units calculated, generating response...',2) rescue nil
   mu=0
   for i in 0...k.length
-    if k[i][0].is_a?(Array) && (k[i][0].map{|q| q.name}.reject{|q| ['Robin(M)','Robin(F)'].include?(q)}.length<=0 || k[i][0].map{|q| q.name}.reject{|q| ['Kris(M)','Kris(F)'].include?(q)}.length<=0) && (k.length>1 || isbst)
+    if k[i].is_a?(FEHUnit)
+      k2.push([k[i].clone,5,0,'','',0])
+    elsif k[i][0].is_a?(Array) && (k[i][0].map{|q| q.name}.reject{|q| ['Robin(M)','Robin(F)'].include?(q)}.length<=0 || k[i][0].map{|q| q.name}.reject{|q| ['Kris(M)','Kris(F)'].include?(q)}.length<=0) && (k.length>1 || isbst)
       k[i][0]=k[i][0][0].clone
       k[i][0].name=k[i][0].name.split('(')[0]
       k2.push(k[i])
@@ -7161,7 +7237,12 @@ def get_multiple_units(bot,event,args=[],includestats=true,isbst=false,maxunits=
     end
   end
   k=k2.map{|q| q}
-  return k[0,maxunits] if maxunits>0
+  k2=[]
+  for i in 0...k.length
+    k2.push(k[i]) unless k2.map{|q| [q[0].name,q[1,-1]].flatten}.include?([k[i][0].name,k[i][1,-1]].flatten)
+  end
+  k=k2.map{|q| q}
+  k=k[0,maxunits] if maxunits>0
   return k
 end
 
@@ -7622,8 +7703,9 @@ def comparison(bot,event,args=[])
     h="#{h} +#{x[i][2]}" if x[i][2]>0
     h="#{h} #{x[i][0].dragonflowerEmote}+#{x[i][5]}" if x[i][5]>0
     n=[]
-    n.push("+#{shortstat(x[i][3])}") unless x[i][3].length<=0 || x[i][3]==' '
+    n.push("+#{shortstat(x[i][3][0])}") unless x[i][3].nil? || x[i][3][0].nil? || x[i][3][0].length<=0 || x[i][3][0]==' '
     n.push("#{'~~' if x[i][2]>0}-#{shortstat(x[i][4])}#{'~~' if x[i][2]>0}") unless x[i][4].length<=0 || x[i][4]==' '
+    n.push("+#{shortstat(x[i][3][1])}") unless x[i][3].nil? || x[i][3][1].nil? || x[i][3][1].length<=0 || x[i][3][1]==' '
     h="#{h} (#{n.join(' ')})" if n.length>0
     unless x[i][6]==x[i][0].name
       if x[i][0].owner.nil?
@@ -7795,9 +7877,9 @@ def find_alts(bot,event,args=[])
   for i in 0...a.length
     b=["#{a[i].split('[')[0]}"]
     b=['Tharja','Rhajat'] if ['Tharja','Rhajat'].include?(a[i])
-    x=$units.reject{|q| !b.include?(q.alts[0].gsub('*',''))}
-    x2=$units.reject{|q| q.duo.nil? || !q.duo.map{|q2| b.include?(q2[1].split('[')[0])}.include?(true)}
-    x3=$units.reject{|q| q.awonk.nil? || !b.include?(q.awonk[1].split('[')[0])}
+    x=$units.reject{|q| !b.include?(q.alts[0].gsub('*','')) || !q.fake.nil?}
+    x2=$units.reject{|q| q.duo.nil? || !q.duo.map{|q2| b.include?(q2[1].split('[')[0])}.include?(true) || !q.fake.nil?}
+    x3=$units.reject{|q| q.awonk.nil? || !b.include?(q.awonk[1].split('[')[0]) || !q.fake.nil?}
     data_load()
     for i2 in 0...x.length
       x[i2].sort_data=x[i2].alts.map{|q| q}
@@ -8026,8 +8108,8 @@ def game_data(bot,event,args=[],xname=nil)
   y=x.games.reject{|q| !q.include?('*')}
   y.unshift(x.games[0])
   y2=get_games_list(y.map{|q| q.gsub('*','')},false).uniq
-  labels=['Credit in FEH','Other games','Also appears via Amiibo functionality in','Also appears as an Assist Trophy in','Also appears as a Mii Costume in','Also appears as a Spirit in','Also appears as a standard trophy in','Also appears as a Sticker in']
-  labels=['Crédito en FEH','Otros juegos','También aparece a través de la funcionalidad Amiibo en','También aparece como un Trofeo Ayudante en','También aparece como un disfraz de Mii en','También aparece como un Spirit en','También aparece como un Trofeo estándar en','También aparece como un Sticker en'] if Shardizard==$spanishShard
+  labels=['Credit in FEH','Other games','Also appears via Amiibo functionality in','Also appears as an Assist Trophy in','Also appears as a Mii Costume in','Also appears as a background element in','Also appears as a Spirit in','Also appears as a standard trophy in','Also appears as a Sticker in']
+  labels=['Crédito en FEH','Otros juegos','También aparece a través de la funcionalidad Amiibo en','También aparece como un Trofeo Ayudante en','También aparece como un disfraz de Mii en','También aparece como un elemento de fondo en','También aparece como un Spirit en','También aparece como un Trofeo estándar en','También aparece como un Sticker en'] if Shardizard==$spanishShard
   str="__**#{labels[0]}**__\n#{y2.join("\n")}" if y2.length>0
   y=x.games.reject{|q| q.include?('*')}
   y3=y2.map{|q| q}
@@ -8044,15 +8126,18 @@ def game_data(bot,event,args=[],xname=nil)
   y=x.games.reject{|q| !q.include?('(m)')}
   y2=get_games_list(y.map{|q| q.gsub('(m)','')},false)
   str="#{str}\n\n__**#{labels[4]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
+  y=x.games.reject{|q| !q.include?('(b)')}
+  y2=get_games_list(y.map{|q| q.gsub('(b)','')},false)
+  str="#{str}\n\n__**#{labels[5]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
   y=x.games.reject{|q| !q.include?('(s)')}
   y2=get_games_list(y.map{|q| q.gsub('(s)','')},false)
-  str="#{str}\n\n__**#{labels[5]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
+  str="#{str}\n\n__**#{labels[6]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
   y=x.games.reject{|q| !q.include?('(t)')}
   y2=get_games_list(y.map{|q| q.gsub('(t)','')},false)
-  str="#{str}\n\n__**#{labels[6]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
+  str="#{str}\n\n__**#{labels[7]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
   y=x.games.reject{|q| !q.include?('(st)')}
   y2=get_games_list(y.map{|q| q.gsub('(st)','')},false)
-  str="#{str}\n\n__**#{labels[7]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
+  str="#{str}\n\n__**#{labels[8]}**__\n#{y2.join("\n")}" if y2.length>0 && safe_to_spam?(event)
   ftr='Only the games in the "Credit in FEH" section are viable for Resonant Battles and Limited Hero Battles.'
   ftr='Solo los juegos de la sección "Crédito en FEH" son viables para Batallas Fragorosas y Batallas Limitadas.' if Shardizard==$spanishShard
   ftr=nil if x.games.map{|q| q.gsub('*','')}==['FEH']
@@ -8952,6 +9037,15 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       d="~~#{d}~~ #{d2}" unless d==d2
       list.push("**#{s.name} - #{d}, cooldown of #{c}**")
     end
+    s=skl.find_index{|q| q.name=='Brutal Shell'}
+    unless s.nil? || skl[s].exclusivity.nil? || !skl[s].exclusivity.include?(unit.name)
+      s=skl[s]
+      c="#{'~~' unless wpnlegal}#{s.cooldown(ttags)}#{"~~ #{s.cooldown}" unless wpnlegal}"
+      d="`eDR /2#{" +#{extradmg2+cdmg2}" if extradmg2+cdmg2>0}`"
+      d2="`eDR /2#{" +#{extradmg+cdmg}" if extradmg+cdmg>0}`"
+      d="~~#{d}~~ #{d2}" unless d==d2
+      list.push("**#{s.name} - #{d}, cooldown of #{c}**")
+    end
     s=skl.find_index{|q| q.name=='Moonbow'}
     unless s.nil?
       s=skl[s]
@@ -9218,7 +9312,7 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       d="#{y[2]*7/20+extradmg2+cdmg2}#{" (#{py[2]*7/20+extradmg2+cdmg2})" unless y[2]*7/20==py[2]*7/20}"
       d2="#{x[2]*7/20+extradmg+cdmg}#{" (#{px[2]*7/20+extradmg+cdmg})" unless x[2]*7/20==px[2]*7/20}"
       d="~~#{d}~~ #{d2}" unless d==d2
-      list.push("**#{s.name} - #{d}, cooldown of #{c}**")
+      list.push("**#{s.name} - #{d}, gives all allies Atk/Spd/Def/Res+6 after combat, cooldown of #{c}**")
     end
     flds.push(['<:Special_Offensive_Dragon:454473651186696192>Dragon',list.join("\n"),1]) if list.length>0
     list=[]; cdmg=0; cdmg2=0
@@ -9794,8 +9888,7 @@ def study_suite(mode='',bot=nil,event=nil,args=[],xname=nil)
       end
     end
   end
-  ftr='For the Kiran-shaped enemy in Book IV Ch. 12-5, type the name "Hood".' if unit.name=='Kiran'
-  ftr='Para el enemigo con forma de Kiran en el libro 4 cap. 12-5, use el nombre "Hood".' if unit.name=='Kiran' && Shardizard==$spanishShard
+  ftr=unit.disp_footer unless unit.disp_footer.nil?
   f=0
   f=ftr.length unless ftr.nil?
   f+=header.length unless header.nil?
@@ -10337,8 +10430,7 @@ def unit_study(bot,event,args=[],xname=nil)
   ftr="Incluye la palabra \"Resplendent\" para hacer este carácter más fuerte." if unit.hasResplendent? && !resp && unit.owner.nil? && Shardizard==$spanishShard
   flds=flds.map{|q| ["#{q[0].gsub('<:Blank:676220519690928179>','')}#{'.' if q[0][-1]=='>'}",q[1],q[2]]} if flds.length>0 && flds.map{|q| q[0,2].join("\n")}.join("\n\n").length+header.length+text.length>1900
   flds=flds[flds.length-3,3] if flds.length>3 && flds.map{|q| q[0,2].join("\n")}.join("\n\n").length+header.length+text.length>1900 && !safe_to_spam?(event)
-  ftr='For the Kiran-shaped enemy in Book IV Ch. 12-5, type the name "Hood".' if unit.name=='Kiran'
-  ftr='Para el enemigo con forma de Kiran en el libro 4 cap. 12-5, use el nombre "Hood".' if unit.name=='Kiran' && Shardizard==$spanishShard
+  ftr=unit.disp_footer unless unit.disp_footer.nil?
   f=0
   f=ftr.length unless ftr.nil?
   if flds.length>0 && flds.map{|q| q[0,2].join("\n")}.join("\n\n").length+header.length+text.length+f>1900
@@ -10500,7 +10592,7 @@ def disp_unit_art(bot,event,args=[],xname=nil)
   elsif has_any?(args,['critical','special','crit','proc'])
     artype=['BtlFace_C','Special']
     artype=['BtlFace_C','Especial'] if Shardizard==$spanishShard
-  elsif has_any?(args,['loading','load','title']) && ['Alfonse','Sharena','Veronica','Eirika(Bonds)','Marth','Roy','Ike','Chrom(Launch)','Camilla(Launch)','Takumi','Lyn','Marth(Launch)','Roy(Launch)','Ike(World)','Takumi(Launch)','Lyn(Launch)','Reginn'].include?(x.name)
+  elsif has_any?(args,['loading','load','title']) && ['Alfonse','Sharena','Veronica','Eirika(Bonds)','Marth','Roy','Ike','Chrom(Launch)','Camilla(Launch)','Takumi','Lyn','Marth(Launch)','Roy(Launch)','Ike(World)','Takumi(Launch)','Lyn(Launch)','Reginn','Ash'].include?(x.name)
     artype=['Face_Load','Title Screen']
     artype=['Face_Load','Pantalla de Título'] if Shardizard==$spanishShard
     x.artist=nil
@@ -12010,7 +12102,7 @@ def devunits_save()
     f.puts devpass
     f.puts ''
     f.puts du.map{|q| q.storage_string}.join("\n\n")
-    f.puts "\n"
+    f.puts "\n\n"
   }
 end
 
@@ -12198,6 +12290,24 @@ def dev_edit(bot,event,args=[],cmd='')
     return nil
   end
   dunit=$dev_units.find_index{|q| q.name==unt.name}
+  unless cmd.downcase=='create'
+    if dunit.nil?
+      unt2=find_data_ex(:find_unit,event,args[0,1],nil,bot,false,1)
+      unless unt2.nil?
+        dunit=$dev_units.find_index{|q| q.name==unt2.name}
+        extstr=args[1,args.length-1].join(' ')
+        unt=unt2.clone
+      end
+    end
+    if dunit.nil?
+      unt2=find_data_ex(:find_unit,event,args,nil,bot,false,1,1)
+      unless unt2.nil?
+        dunit=$dev_units.find_index{|q| q.name==unt2[0].name}
+        extstr=first_sub(args.join(' ').downcase,unt2[1].downcase,'')
+        unt=unt2[0].clone
+      end
+    end
+  end
   flurp=find_stats_in_string(event,extstr,1,unt.name)
   if cmd.downcase=='create'
     new_devunit(bot,event,unt.name,flurp)
@@ -12297,19 +12407,17 @@ def dev_edit(bot,event,args=[],cmd='')
       $dev_units[dunit].bane=' '
       devunits_save()
       event.respond "You have changed your **#{$dev_units[dunit].name}#{$dev_units[dunit].emotes(bot,false)}**'s nature to neutral!"
-    elsif flurp[2].nil? && [nil,'',' '].include?($dev_units[dunit].boon)
+    elsif flurp[2].nil? && [nil,'',' '].include?($dev_units[dunit].boon[0])
       event.respond "You cannot have a bane without a boon."
-    elsif flurp[3].nil? && $dev_units[dunit].merge_count>0
+    elsif flurp[3].nil?
       $dev_units[dunit].boon=flurp[2]
       $dev_units[dunit].bane=' '
       devunits_save()
-      event.respond "You have changed your **#{$dev_units[dunit].name}#{$dev_units[dunit].emotes(bot,false)}**'s nature to +#{flurp[2]}.\nYou didn't give #{$dev_units[dunit].pronoun} a bane, but you might want to."
-    elsif flurp[3].nil?
-      event.respond "You cannot have a boon without a bane."
+      event.respond "You have changed your **#{$dev_units[dunit].name}#{$dev_units[dunit].emotes(bot,false)}**'s nature to +#{flurp[2][0]}.\nYou didn't give #{$dev_units[dunit].pronoun} a bane, but you might want to."
     else
       $dev_units[dunit].boon=flurp[2] unless flurp[2].nil?
       $dev_units[dunit].bane=flurp[3]
-      n=Natures.reject{|q| q[1]!=$dev_units[dunit].boon || q[2]!=$dev_units[dunit].bane}
+      n=Natures.reject{|q| q[1]!=$dev_units[dunit].boon[0] || q[2]!=$dev_units[dunit].bane}
       n2=nil
       unless n.nil? || n.length<=0
         w=$dev_units[dunit].equippedWeapon
@@ -12321,8 +12429,39 @@ def dev_edit(bot,event,args=[],cmd='')
       end
       devunits_save()
       dunit=$dev_units[dunit]
-      event.respond "You have changed your **#{dunit.name}#{dunit.emotes(bot,false)}**'s nature to +#{dunit.boon} -#{dunit.bane}#{" (#{n2})" unless n2.nil?}."
+      event.respond "You have changed your **#{dunit.name}#{dunit.emotes(bot,false)}**'s nature to +#{dunit.boon[0]} -#{dunit.bane}#{" (#{n2})" unless n2.nil?}#{", +#{dunit.boon[1]}" if dunit.boon.length>1}."
     end
+  elsif ['boon','newboon'].include?(cmd.downcase) && !flurp[2].nil?
+    if $dev_units[dunit].boon.length<=0 || [nil,'',' '].include?($dev_units[dunit].boon[0])
+      $dev_units[dunit].boon=flurp[2]
+      $dev_units[dunit].bane=' '
+      devunits_save()
+      event.respond "You have changed your **#{$dev_units[dunit].name}#{$dev_units[dunit].emotes(bot,false)}**'s nature to +#{flurp[2][0]}.\nYou didn't give #{$dev_units[dunit].pronoun} a bane, but you might want to."
+      return nil
+    elsif $dev_units[dunit].boon[0]==flurp[2][0] && flurp[2].length>1
+      flurp[2]=[flurp[2][1]]
+    elsif $dev_units[dunit].boon[0]==flurp[2][0]
+      event.respond "Your **#{$dev_units[dunit].name}#{$dev_units[dunit].emotes(bot,false)}** already has +#{$dev_units[dunit].boon[0]} as #{$dev_units[dunit].pronoun(true)} nature."
+      return nil
+    end
+    if $dev_units[dunit].boon.length>1
+      $dev_units[dunit].boon[1]=flurp[2][0]
+    else
+      $dev_units[dunit].boon.push(flurp[2][0])
+    end
+    n=Natures.reject{|q| q[1]!=$dev_units[dunit].boon[0] || q[2]!=$dev_units[dunit].bane}
+    n2=nil
+    unless n.nil? || n.length<=0
+      w=$dev_units[dunit].equippedWeapon
+      u=unt.atkName(true,w[0],w[1])
+      n2=n[0][0] if u=='Strength'
+      n2=n[n.length-1][0] if u=='Magic'
+      n2=n.map{|q| q[0]}.join(' / ') if ['Attack','Freeze'].include?(u)
+      n2=nil if n[0][3]==true
+    end
+    devunits_save()
+    dunit=$dev_units[dunit]
+    event.respond "You have changed your **#{dunit.name}#{dunit.emotes(bot,false)}**'s nature to +#{dunit.boon[0]} -#{dunit.bane}#{" (#{n2})" unless n2.nil?}#{", +#{dunit.boon[1]}" if dunit.boon.length>1}."
   elsif ['learn','teach'].include?(cmd.downcase)
     skill_types=[]
     for i in 0...args.length
@@ -12433,7 +12572,7 @@ def dev_edit(bot,event,args=[],cmd='')
     ctype='pocket buddy' if ['Sakura','Bernie','Mirabilis'].include?(order[1].name)
     devunits_save()
     event.respond "Your **#{order[0].name}#{order[0].emotes(bot,false)}** is now using **#{order[1].name}#{order[1].emotes(bot,false)}** as a #{ctype}."
-  elsif ['resplendant','resplendent','ascension','ascend','resplend'].include?(cmd.downcase)
+  elsif ['resplendant','resplendent','ascension','ascend','ascent','resplend'].include?(cmd.downcase)
     if !unt.hasResplendent?
       event.respond "#{unt.name}#{untz.emotes(bot,false)} does not have a Resplendent Ascension available to #{unt.pronoun}."
       return nil
@@ -12489,7 +12628,7 @@ def donorunits_save(id,tbl=[],data=[])
     f.puts data.join('\\'[0]) if data.length>0
     f.puts ''
     f.puts du.map{|q| q.storage_string}.join("\n\n")
-    f.puts "\n"
+    f.puts "\n\n"
   }
 end
 
@@ -12702,17 +12841,15 @@ def donor_edit(bot,event,args=[],cmd='')
       event.respond "You have changed your **#{dulx[dunit].name}#{dulx[dunit].emotes(bot,false)}**'s nature to neutral!"
     elsif flurp[2].nil? && [nil,'',' '].include?(dulx[dunit].boon)
       event.respond "You cannot have a bane without a boon."
-    elsif flurp[3].nil? && dulx[dunit].merge_count>0
+    elsif flurp[3].nil?
       dulx[dunit].boon=flurp[2]
       dulx[dunit].bane=' '
       donorunits_save(uid,dulx)
-      event.respond "You have changed your **#{dulx[dunit].name}#{dulx[dunit].emotes(bot,false)}**'s nature to +#{flurp[2]}.\nYou didn't give #{dulx[dunit].pronoun} a bane, but you might want to."
-    elsif flurp[3].nil?
-      event.respond "You cannot have a boon without a bane."
+      event.respond "You have changed your **#{dulx[dunit].name}#{dulx[dunit].emotes(bot,false)}**'s nature to +#{flurp[2][0]}.\nYou didn't give #{dulx[dunit].pronoun} a bane, but you might want to."
     else
       dulx[dunit].boon=flurp[2] unless flurp[2].nil?
       dulx[dunit].bane=flurp[3]
-      n=Natures.reject{|q| q[1]!=dulx[dunit].boon || q[2]!=dulx[dunit].bane}
+      n=Natures.reject{|q| q[1]!=dulx[dunit].boon[0] || q[2]!=dulx[dunit].bane}
       n2=nil
       unless n.nil? || n.length<=0
         w=dulx[dunit].equippedWeapon
@@ -12726,6 +12863,37 @@ def donor_edit(bot,event,args=[],cmd='')
       dunit=dulx[dunit]
       event.respond "You have changed your **#{dunit.name}#{dunit.emotes(bot,false)}**'s nature to +#{dunit.boon} -#{dunit.bane}#{" (#{n2})" unless n2.nil?}."
     end
+  elsif ['boon','newboon'].include?(cmd.downcase) && !flurp[2].nil?
+    if dulx[dunit].boon.length<=0 || [nil,'',' '].include?(dulx[dunit].boon[0])
+      dulx[dunit].boon=flurp[2]
+      dulx[dunit].bane=' '
+      devunits_save()
+      event.respond "You have changed your **#{dulx[dunit].name}#{dulx[dunit].emotes(bot,false)}**'s nature to +#{flurp[2][0]}.\nYou didn't give #{dulx[dunit].pronoun} a bane, but you might want to."
+      return nil
+    elsif dulx[dunit].boon[0]==flurp[2][0] && flurp[2].length>1
+      flurp[2]=[flurp[2][1]]
+    elsif dulx[dunit].boon[0]==flurp[2][0]
+      event.respond "Your **#{dulx[dunit].name}#{dulx[dunit].emotes(bot,false)}** already has +#{dulx[dunit].boon[0]} as #{dulx[dunit].pronoun(true)} nature."
+      return nil
+    end
+    if dulx[dunit].boon.length>1
+      dulx[dunit].boon[1]=flurp[2][0]
+    else
+      dulx[dunit].boon.push(flurp[2][0])
+    end
+    n=Natures.reject{|q| q[1]!=dulx[dunit].boon[0] || q[2]!=dulx[dunit].bane}
+    n2=nil
+    unless n.nil? || n.length<=0
+      w=dulx[dunit].equippedWeapon
+      u=unt.atkName(true,w[0],w[1])
+      n2=n[0][0] if u=='Strength'
+      n2=n[n.length-1][0] if u=='Magic'
+      n2=n.map{|q| q[0]}.join(' / ') if ['Attack','Freeze'].include?(u)
+      n2=nil if n[0][3]==true
+    end
+    donorunits_save(uid,dulx)
+    dunit=dulx[dunit]
+    event.respond "You have changed your **#{dunit.name}#{dunit.emotes(bot,false)}**'s nature to +#{dunit.boon[0]} -#{dunit.bane}#{" (#{n2})" unless n2.nil?}#{", +#{dunit.boon[1]}" if dunit.boon.length>1}."
   elsif ['learn','teach'].include?(cmd.downcase)
     skill_types=[]
     for i in 0...args.length
@@ -13003,7 +13171,7 @@ def donor_edit(bot,event,args=[],cmd='')
     dulx[dunit2].cohort=dulx[dunit].name
     donorunits_save(uid,dulx)
     event.respond "Your **#{order[0].name}#{order[0].emotes(bot,false)}** is now using **#{order[1].name}#{order[1].emotes(bot,false)}** as a cohort unit."
-  elsif ['resplendant','resplendent','ascension','ascend','resplend'].include?(cmd.downcase)
+  elsif ['resplendant','resplendent','ascension','ascend','ascent','resplend'].include?(cmd.downcase)
     if !unt.hasResplendent?
       event.respond "#{unt.name}#{untz.emotes(bot,false)} does not have a Resplendent Ascension available to #{unt.pronoun}."
       return nil

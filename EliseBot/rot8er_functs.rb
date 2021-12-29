@@ -1,5 +1,5 @@
 # loadbotan = true
-# debug = Debug
+# debug = Elise
 @mash='rot8e'
 
 def triple_finish(list,forcetwo=false) # used to split a list into three roughly-equal parts for use in embeds
