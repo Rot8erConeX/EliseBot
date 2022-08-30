@@ -289,7 +289,7 @@ Summon_servers=[330850148261298176,389099550155079680,256291408598663168,2716423
 class FEHUnit
   attr_accessor :name
   attr_accessor :weapon,:movement
-  attr_accessor :legendary,:duo,:awonk
+  attr_accessor :legendary,:duo,:ascendant,:awonk
   attr_accessor :growths,:stats40,:stats1
   attr_accessor :artist,:voice_na,:voice_jp
   attr_accessor :id
@@ -340,9 +340,12 @@ class FEHUnit
   
   def legendary=(val)
     d=[]
+    @ascendant=false
     for i in 0...[val.length/3,1].max
       if ['Duo','Harmonic'].include?(val[3*i])
         d.push(val[3*i,3])
+      elsif val[3*i]=='Ascendant'
+        @ascendant=true
       elsif ['Fire','Water','Earth','Wind','Light','Dark','Astra','Anima'].include?(val[3*i]) && @legendary.nil?
         @legendary=val[3*i,3]
         @legendary[3]='Legendary'
@@ -399,7 +402,7 @@ class FEHUnit
     return 'Raudr' if self.weapon_color=='Red'
     return 'Blar' if self.weapon_color=='Blue'
     return 'Gronn' if self.weapon_color=='Green'
-    return 'Hoss' if self.weapon_color=='Colorless'
+    return 'Hvitr' if self.weapon_color=='Colorless'
     return 'Gullen'
   end
   
@@ -466,9 +469,9 @@ class FEHUnit
       moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Legendary_Effect_#{@legendary[0]}"}
       moji=bot.server(575426885048336388).emoji.values.reject{|q| q.name != "DL_LElement_#{@legendary[0]}"} if @games[0]=='DL'
       lemote1=moji[0].mention unless moji.length<=0
-      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{@legendary[1].gsub(' Slot','')}"}
-      moji=bot.server(554231720698707979).emoji.values.reject{|q| q.name != "Mythic_Slot_#{@legendary[1].gsub(' Slot','')}"} if @legendary[1].include?(' Slot')
-      moji=bot.server(575426885048336388).emoji.values.reject{|q| q.name != "DL_LBoost_#{@legendary[1].gsub(' Slot','')}"} if @games[0]=='DL'
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{@legendary[1].gsub(' Slot','').gsub(' ','_')}"}
+      moji=bot.server(554231720698707979).emoji.values.reject{|q| q.name != "Mythic_Slot_#{@legendary[1].gsub(' Slot','').gsub(' ','_')}"} if @legendary[1].include?(' Slot')
+      moji=bot.server(575426885048336388).emoji.values.reject{|q| q.name != "DL_LBoost_#{@legendary[1].gsub(' Slot','').gsub(' ','_')}"} if @games[0]=='DL'
       lemote2=moji[0].mention unless moji.length<=0
       legstr="\n#{lemote1}*#{@legendary[0]}* / #{lemote2}*#{@legendary[1].gsub('Duel','Pair-Up').gsub(' Slot','* / *Slot+')}* #{@legendary[3]} Hero"
       legstr="\n#{lemote1}*#{@legendary[0]}* / #{lemote2}*#{@legendary[1].gsub('Duel','Pair-Up').gsub(' Slot','* / *Slot+')}* #{@legendary[3]} - #{self.seasonality}" if self.seasonality.length>0
@@ -485,6 +488,10 @@ class FEHUnit
       duostr="\n#{demote}*#{@duo[0][0]} Hero* with #{list_lift(@duo.map{|q| q[2]},'and')}"
       duostr="\n#{demote}*Héroe #{self.spanish_duo}* con #{list_lift(@duo.map{|q| q[2]},'y')}" if Shardizard==$spanishShard
     end
+    ascstr=''
+    ascstr="\n<:Ascendant_Floret:928420732323635270>*Ascendant Hero*" if @ascendant
+    ascstr="\n<:Ascendant_Floret:928420732323635270>*Héroe Floreciente*" if @ascendant && Shardizard==$spanishShard
+    ascstr='<:Ascendant_Floret:928420732323635270>' if @ascendant && emotesonly
     bemote=[]
     if includebonus
       moji=bot.server(877171831835066391).emoji.values.reject{|q| q.name != "#{self.isBonusUnit?('Forging')}_Friendship"}
@@ -502,7 +509,7 @@ class FEHUnit
         bemote.push("#{moji[0].mention unless moji.length<=0}#{' Current Forging Bonds friendship unit' unless emotesonly}") if self.isBonusUnit?('Forging')
       end
     end
-    return "#{'<:Summon_Gun:467557566050861074>' if @name=='Kiran' || @id==0}#{wemote}#{memote}#{'<:Assist_Music:454462054959415296>' if refresher.length>0}#{lemote1}#{lemote2}#{demote}#{bemote.join('')}" if emotesonly
+    return "#{'<:Summon_Gun:467557566050861074>' if @name=='Kiran' || @id==0}#{wemote}#{memote}#{'<:Assist_Music:454462054959415296>' if refresher.length>0}#{lemote1}#{lemote2}#{demote}#{ascstr}#{bemote.join('')}" if emotesonly
     refresher="\n<:Assist_Music:454462054959415296>*#{refresher}*" if refresher.length>0
     unless @clazz_flag.nil? || @clazz_flag.length<=0
       if Shardizard==$spanishShard
@@ -511,8 +518,8 @@ class FEHUnit
         refresher="#{refresher}\n*Other modifiers:* #{@clazz_flag.join(', ')}"
       end
     end
-    return "#{"<:Summon_Gun:467557566050861074>*Pistola para Convocar*\n" if @name=='Kiran' || @id==0}#{wemote}#{self.wstring_spanish}\n#{memote}*#{self.movement_spanish}*#{refresher}#{legstr}#{duostr}#{"\n" if bemote.length>0}#{bemote.join("\n")}" if Shardizard==$spanishShard
-    return "#{"<:Summon_Gun:467557566050861074>*Summon Gun*\n" if @name=='Kiran' || @id==0}#{wemote}#{self.weapon_string}\n#{memote}*#{@movement}*#{refresher}#{legstr}#{duostr}#{"\n" if bemote.length>0}#{bemote.join("\n")}"
+    return "#{"<:Summon_Gun:467557566050861074>*Pistola para Convocar*\n" if @name=='Kiran' || @id==0}#{wemote}#{self.wstring_spanish}\n#{memote}*#{self.movement_spanish}*#{refresher}#{legstr}#{duostr}#{ascstr}#{"\n" if bemote.length>0}#{bemote.join("\n")}" if Shardizard==$spanishShard
+    return "#{"<:Summon_Gun:467557566050861074>*Summon Gun*\n" if @name=='Kiran' || @id==0}#{wemote}#{self.weapon_string}\n#{memote}*#{@movement}*#{refresher}#{legstr}#{duostr}#{ascstr}#{"\n" if bemote.length>0}#{bemote.join("\n")}"
   end
   
   def emotes(bot,includebonus=true,includeresp=false,forceheart=false); return self.class_header(bot,true,includebonus); end
@@ -606,13 +613,18 @@ class FEHUnit
     end
   end
   
-  def supernatures(rarity=5)
+  def supernatures(rarity=5,mod=nil)
     x=[' ',' ',' ',' ',' ']
+    g=@growths[0,5].map{|q| q}
+    g=@growths[5,5].map{|q| q} if mod==true
+    if @name=='Kiran' && @owner.nil? && mod==false
+      g[0]+=1; g[3]+=3; g[4]+=1
+    end
     for i in 0...x.length
-      x[i]='+' if [-3,1,5,10,14].include?(@growths[i]) && rarity==5
-      x[i]='-' if [-2,2,6,11,15].include?(@growths[i]) && rarity==5
-      x[i]='+' if [-2,10].include?(@growths[i]) && rarity==4
-      x[i]='-' if [-1,11].include?(@growths[i]) && rarity==4
+      x[i]='+' if [-3,1,5,10,14].include?(g[i]) && rarity==5
+      x[i]='-' if [-2,2,6,11,15].include?(g[i]) && rarity==5
+      x[i]='+' if [-2,10].include?(g[i]) && rarity==4
+      x[i]='-' if [-1,11].include?(g[i]) && rarity==4
     end
     return x
   end
@@ -625,7 +637,7 @@ class FEHUnit
       dd="#{@name}/#{face}"
     else
       return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{@name.split(' ')[0]}.png" if ['Robin','Robin (shared stats)','Kris (shared stats)','Kris'].include?(@name)
-      return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{@name}.png" if ['Corrin','Grima','Kana','Morgan','Tiki'].include?(@name)
+      return "https://raw.githubusercontent.com/Rot8erConeX/EliseBot/master/EliseBot/FEHArt/#{@name}.png" if ['Corrin','Grima','Kana','Morgan','Tiki','Byleth','Byleth(Sublime)'].include?(@name)
       return bot.user(@fake[1]).avatar_url if !@fake.nil? && !@fake[1].nil? && @fake[1].is_a?(Integer) && !bot.user(@fake[1]).nil?
       dd=@name.gsub(' ','_')
       if args.include?('face') || rand(1000).zero?
@@ -685,6 +697,7 @@ class FEHUnit
     xcolor=0xEBBF70 if @movement=='Cavalry'
     xcolor=0x9FE0B3 if @movement=='Armor'
     f.push(xcolor)
+    f.push(0x35A093) if @ascendant
     f=@color_flag unless @color_flag.nil?
     # Special colors
     xcolor=f[chain]
@@ -901,7 +914,11 @@ class FEHUnit
       x[i].name="**#{x[i].name}**" if x2.map{|q| q.name}.include?(x[i].name)
       x[i].name="#{x[i].name}\n#{x[i].description}" if has_any?(['Duo','Harmonic'],x[i].tags) && !smol
       if x[i].type.include?('Weapon') && !x[i].exclusivity.nil? && x[i].exclusivity.include?(@name) && x[i].prerequisite.nil? && x[i].id>=20
-        retroprf=x[i].clone
+        if retroprf.nil?
+          retroprf=x[i].clone
+        else
+          extraskills.push(x[i].clone)
+        end
         x[i]=nil
       elsif x[i].name.gsub('*','').split(' ')[-1]=='Breidablik' && x[i].id>999
         extraskills.push(x[i].clone)
@@ -921,7 +938,7 @@ class FEHUnit
       end
       if !@legendary.nil?
         data_load(['library'])
-        x[i]=self.legend_shift_skill(x[i])
+        x[i]=self.legend_shift_skill(x[i],rarity)
       end
     end
     x.compact!
@@ -987,6 +1004,20 @@ class FEHUnit
           y[0].push(y2)
         end
       end
+      unless extraskills.length<=0
+        y[0][-1].name="__#{y[0][-1].name}__"
+        for i in 0...extraskills.length
+          y[0].push(extraskills[i].clone)
+          unless y[0][-1].evolutions.nil?
+            y2=$skills.find_index{|q| q.name==y[0][-1].evolutions[0]}
+            unless y2.nil?
+              y2=$skills[y2].clone
+              y2.name="~~#{y2.name}~~"
+              y[0].push(y2)
+            end
+          end
+        end
+      end
     end
     y2=y.map{|q| q.map{|q2| q2.fullName}}
     for i in 0...y2.length
@@ -1049,10 +1080,10 @@ class FEHUnit
             emotes2Bexplained[1]=true
           elsif self.summonability<2
           elsif y[i][i2].learn.join(', ').split(', ').reject{|q| $units.find_index{|q2| q2.name==q}.nil? || !$units[$units.find_index{|q2| q2.name==q}].fake.nil? || $units[$units.find_index{|q2| q2.name==q}].summonability<2 || @name==q}.length==0
-            y2[i][i2]="#{y2[i][i2]}<:Orb_Rainbow:471001777622351872>"
+            y2[i][i2]="#{y2[i][i2]}<:Orb_Rainbow:946353618251030601>"
             emotes2Bexplained[2]=true
           elsif y[i][i2].learn.join(', ').split(', ').reject{|q| $units.find_index{|q2| q2.name==q}.nil? || !$units[$units.find_index{|q2| q2.name==q}].fake.nil? || $units[$units.find_index{|q2| q2.name==q}].summonability<3 || @name==q}.length==0
-            y2[i][i2]="#{y2[i][i2]}<:Orb_Gold:549338084102111250>"
+            y2[i][i2]="#{y2[i][i2]}<:Orb_Gold:946353617445724180>"
             emotes2Bexplained[3]=true
           end
         end
@@ -1071,10 +1102,10 @@ class FEHUnit
         emotes2Bexplained[1]=true
       elsif self.summonability<2
       elsif y[i][-1].learn.join(', ').split(', ').reject{|q| $units.find_index{|q2| q2.name==q}.nil? || !$units[$units.find_index{|q2| q2.name==q}].fake.nil? || $units[$units.find_index{|q2| q2.name==q}].summonability<2 || @name==q}.length==0
-        y2[i][1]="#{y2[i][1]}<:Orb_Rainbow:471001777622351872>"
+        y2[i][1]="#{y2[i][1]}<:Orb_Rainbow:946353618251030601>"
         emotes2Bexplained[2]=true
       elsif y[i][-1].learn.join(', ').split(', ').reject{|q| $units.find_index{|q2| q2.name==q}.nil? || !$units[$units.find_index{|q2| q2.name==q}].fake.nil? || $units[$units.find_index{|q2| q2.name==q}].summonability<3 || @name==q}.length==0
-        y2[i][1]="#{y2[i][1]}<:Orb_Gold:549338084102111250>"
+        y2[i][1]="#{y2[i][1]}<:Orb_Gold:946353617445724180>"
         emotes2Bexplained[3]=true
       end
       if i>2 && i<6 && y[i].length>0 && emotes
@@ -1374,7 +1405,10 @@ class FEHUnit
     x44=x44.map{|q| "#{' ' if q<10}#{q}"}.join(' |')
     x444=x444.map{|q| "#{' ' if q<10}#{q}"}.join(' |')
     x2=x4.map{|q| "#{' ' if q<10}#{q}"}
-    x3=self.supernatures(rarity).map{|q| q}
+    mod=nil
+    mod=true if bonus=='Enemy' && self.hasEnemyForm?
+    mod=false if support.length>0
+    x3=self.supernatures(rarity,mod).map{|q| q}
     x3=x3.map{|q| q.gsub('-',' ')} if merges>0
     boonx=Stat_Names.find_index{|q| q==boon[0]}
     boonx2=Stat_Names.find_index{|q| q==boon[1]}
@@ -1439,6 +1473,11 @@ class FEHUnit
     pyy=py.inject(0){|sum,xy| sum + xy }
     pd=diff.inject(0){|sum,xy| sum + xy }
     gr=@growths.map{|q| q}
+    if bonus=='Enemy' && self.hasEnemyForm?
+      gr=gr[5,5]
+    else
+      gr=gr[0,5]
+    end
     if boon.length>0 || bane.length>0
       boonx=Stat_Names.find_index{|q| q==boon}
       banex=Stat_Names.find_index{|q| q==bane}
@@ -1467,7 +1506,10 @@ class FEHUnit
     yy22=y22.inject(0){|sum,x| sum + x }
     pxx22=px22.inject(0){|sum,x| sum + x }
     pyy22=py22.inject(0){|sum,x| sum + x }
-    x3=self.supernatures(rarity).map{|q| q}
+    mod=nil
+    mod=true if bonus=='Enemy' && self.hasEnemyForm?
+    mod=false if support.length>0
+    x3=self.supernatures(rarity,mod).map{|q| q}
     x3=x3.map{|q| q.gsub('-',' ')} if merges>0
     boonx=Stat_Names.find_index{|q| q==boon[0]}
     boonx2=Stat_Names.find_index{|q| q==boon[1]}
@@ -1569,9 +1611,9 @@ class FEHUnit
     x=dispStats(bot,40,rarity,boon,xbane,0,0).inject(0){|sum,x| sum + x }
     x=dispStats(bot,40,rarity,boon,xbane,0,0,'x').inject(0){|sum,x| sum + x } if @name=='Kiran' && (@weapon[1]=='Blade' || (@weapon[0]=='Gold' && support.length>0))
     x+=3 if boon.length<=0 && bane.length<=0 && merges>0
-    x=[x,175].max if rarity>=5 && level>=40 && !@legendary.nil? && @legendary[1]=='Duel'
-    x=[x,180].max if rarity>=5 && level>=40 && !@legendary.nil? && @legendary[1]=='Duel' && (@movement=='Armor' || @id>=500)
-    x=[x,185].max if rarity>=5 && level>=40 && !@legendary.nil? && @legendary[1]=='Duel' && @id>=640
+    x=[x,175].max if rarity>=5 && level>=40 && !@legendary.nil? && (@legendary[1]=='Duel' || @legendary[1].include?('Pairup'))
+    x=[x,180].max if rarity>=5 && level>=40 && !@legendary.nil? && (@legendary[1]=='Duel' || @legendary[1].include?('Pairup')) && (@movement=='Armor' || @id>=500)
+    x=[x,185].max if rarity>=5 && level>=40 && !@legendary.nil? && (@legendary[1]=='Duel' || @legendary[1].include?('Pairup')) && @id>=640
     x=[x,185].max if rarity>=5 && level>=40 && !@duo.nil? && @duo[0][0]=='Duo'
     x=[x,190].max if rarity>=5 && level>=40 && !@duo.nil? && @duo[0][0]=='Duo' && @id>590
     x=[x,195].max if rarity>=5 && level>=40 && !@duo.nil? && @duo[0][0]=='Duo' && @id>720
@@ -4912,6 +4954,7 @@ def find_group(event,args=nil,xname=nil)
   untz=$groups.reject{|q| !q.isPostable?(event)}
   x=untz.find_index{|q| q.name.downcase==xname.downcase || q.aliases.include?(xname.downcase)}
   return untz[x] unless x.nil? || ['Legendaries','Mythics','Resplendent','Refreshers','DuoUnits','HarmonicUnits'].include?(untz[x].name)
+  return nil if xname.downcase=='res' || xname.length<3
   x=untz.find_index{|q| q.name[0,xname.length].downcase==xname.downcase || q.aliases.map{|q2| q2[0,xname.length]}.include?(xname.downcase)}
   return untz[x] unless x.nil? || ['Legendaries','Mythics','Resplendent','Refreshers','DuoUnits','HarmonicUnits'].include?(untz[x].name)
   return nil
@@ -5647,12 +5690,12 @@ def disp_legendary_list(bot,event,args=nil,dispmode='',forcesplit=false)
       p1.push(["#{lemote1} #{x22[i]}",x2]) unless x2.length<=0
     end
   elsif pri=='Stat'
-    x=['Attack','Speed','Defense','Resistance','Attack Slot','Speed Slot','Defense Slot','Resistance Slot','Duel']; x22=x.map{|q| q}
-    x22=['Ataque','Velocidad','Defensa','Resistencia','Ataque Muesca','Velocidad Muesca','Defensa Muesca','Resistencia Muesca','Agrupar'] if Shardizard==$spanishShard
+    x=['Attack','Speed','Defense','Resistance','Attack Slot','Speed Slot','Defense Slot','Resistance Slot','Duel','Attack Pairup','Speed Pairup','Defense Pairup','Resistance Pairup']; x22=x.map{|q| q}
+    x22=['Ataque','Velocidad','Defensa','Resistencia','Ataque Muesca','Velocidad Muesca','Defensa Muesca','Resistencia Muesca','Agrupar','Ataque Agrupar','Velocidad Agrupar','Defensa Agrupar','Resistencia Agrupar'] if Shardizard==$spanishShard
     for i in 0...x.length
       lemote2=''
-      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{x[i].gsub(' Slot','')}"}
-      moji=bot.server(554231720698707979).emoji.values.reject{|q| q.name != "Mythic_Slot_#{x[i].gsub(' Slot','')}"} if x[i].include?(' Slot')
+      moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{x[i].gsub(' Slot','').gsub(' ','_')}"}
+      moji=bot.server(554231720698707979).emoji.values.reject{|q| q.name != "Mythic_Slot_#{x[i].gsub(' Slot','').gsub(' ','_')}"} if x[i].include?(' Slot')
       lemote2=moji[0].mention unless moji.length<=0
       x2=l.reject{|q| q.legendary[1]!=x[i]}
       p1.push(["#{lemote2} #{x22[i].gsub('Duel','Duel/Pair-Up')}",x2]) unless x2.length<=0
@@ -5706,12 +5749,12 @@ def disp_legendary_list(bot,event,args=nil,dispmode='',forcesplit=false)
         p2.push(["#{lemote1} #{x22[i]}",x3]) unless x3.length<=0
       end
     elsif sec=='Stat'
-      x=['Attack','Speed','Defense','Resistance','Attack Slot','Speed Slot','Defense Slot','Resistance Slot','Duel']; x22=x.map{|q| q}
-      x22=['Ataque','Velocidad','Defensa','Resistencia','Ataque Muesca','Velocidad Muesca','Defensa Muesca','Resistencia Muesca','Agrupar'] if Shardizard==$spanishShard
+      x=['Attack','Speed','Defense','Resistance','Attack Slot','Speed Slot','Defense Slot','Resistance Slot','Duel','Attack Pairup','Speed Pairup','Defense Pairup','Resistance Pairup']; x22=x.map{|q| q}
+      x22=['Ataque','Velocidad','Defensa','Resistencia','Ataque Muesca','Velocidad Muesca','Defensa Muesca','Resistencia Muesca','Agrupar','Ataque Agrupar','Velocidad Agrupar','Defensa Agrupar','Resistencia Agrupar'] if Shardizard==$spanishShard
       for i in 0...x.length
         lemote2=''
-        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{x[i].gsub(' Slot','')}"}
-        moji=bot.server(554231720698707979).emoji.values.reject{|q| q.name != "Mythic_Slot_#{x[i].gsub(' Slot','')}"} if x[i].include?(' Slot')
+        moji=bot.server(443181099494146068).emoji.values.reject{|q| q.name != "Ally_Boost_#{x[i].gsub(' Slot','').gsub(' ','_')}"}
+        moji=bot.server(554231720698707979).emoji.values.reject{|q| q.name != "Mythic_Slot_#{x[i].gsub(' Slot','').gsub(' ','_')}"} if x[i].include?(' Slot')
         lemote2=moji[0].mention unless moji.length<=0
         x3=x2.reject{|q| q.legendary[1]!=x[i]}
         p2.push(["#{lemote2} #{x22[i].gsub('Duel','Duel/Pair-Up')}",x3]) unless x3.length<=0
@@ -5830,27 +5873,27 @@ def sort_legendaries(event,bot,mode=0)
     f=[]
     x2=legendaries.reject{|q| q.legendary_timing != x[i]}
     if x2.reject{|q| q.weapon_color != 'Red'}.length<=0
-      f.push('<:Orb_Red:455053002256941056> - ~~unknown~~')
+      f.push('<:Orb_Red:946353617768693790> - ~~unknown~~')
     else
-      f.push(x2.reject{|q| q.weapon_color != 'Red'}.map{|q| "<:Orb_Red:455053002256941056> - #{q.legendary_display_name}"}.sort)
+      f.push(x2.reject{|q| q.weapon_color != 'Red'}.map{|q| "<:Orb_Red:946353617768693790> - #{q.legendary_display_name}"}.sort)
     end
     if x2.reject{|q| q.weapon_color != 'Blue'}.length<=0
-      f.push('<:Orb_Blue:455053001971859477> - ~~unknown~~')
+      f.push('<:Orb_Blue:946353617399586817> - ~~unknown~~')
     else
-      f.push(x2.reject{|q| q.weapon_color != 'Blue'}.map{|q| "<:Orb_Blue:455053001971859477> - #{q.legendary_display_name}"}.sort)
+      f.push(x2.reject{|q| q.weapon_color != 'Blue'}.map{|q| "<:Orb_Blue:946353617399586817> - #{q.legendary_display_name}"}.sort)
     end
     if x2.reject{|q| q.weapon_color != 'Green'}.length<=0
-      f.push('<:Orb_Green:455053002311467048> - ~~unknown~~')
+      f.push('<:Orb_Green:946353617638666250> - ~~unknown~~')
     else
-      f.push(x2.reject{|q| q.weapon_color != 'Green'}.map{|q| "<:Orb_Green:455053002311467048> - #{q.legendary_display_name}"}.sort)
+      f.push(x2.reject{|q| q.weapon_color != 'Green'}.map{|q| "<:Orb_Green:946353617638666250> - #{q.legendary_display_name}"}.sort)
     end
     if x2.reject{|q| q.weapon_color != 'Colorless'}.length<=0
-      f.push('<:Orb_Colorless:455053002152083457> - ~~unknown~~')
+      f.push('<:Orb_Colorless:946353617030496328> - ~~unknown~~')
     else
-      f.push(x2.reject{|q| q.weapon_color != 'Colorless'}.map{|q| "<:Orb_Colorless:455053002152083457> - #{q.legendary_display_name}"}.sort)
+      f.push(x2.reject{|q| q.weapon_color != 'Colorless'}.map{|q| "<:Orb_Colorless:946353617030496328> - #{q.legendary_display_name}"}.sort)
     end
     x3=x2.reject{|q| ['Red','Blue','Green','Colorless'].include?(q.weapon_color)}
-    f.push(x3.map{|q| "<:Orb_Gold:549338084102111250> - #{q.legendary_display_name}"}.sort) unless x3.length<=0
+    f.push(x3.map{|q| "<:Orb_Gold:946353617445724180> - #{q.legendary_display_name}"}.sort) unless x3.length<=0
     f.flatten!
     topbnr=f.map{|q| q} if i==0
     lemoji1='<:Legendary_Effect_Unknown:443337603945857024>'
@@ -5865,34 +5908,34 @@ def sort_legendaries(event,bot,mode=0)
     for i in 0...future_banner.length
       f=[]
       if future_banner[i].red_legends.length<=0
-        f.push('<:Orb_Red:455053002256941056> - ~~unknown~~')
+        f.push('<:Orb_Red:946353617768693790> - ~~unknown~~')
       else
-        f.push(future_banner[i].red_legends.map{|q| "<:Orb_Red:455053002256941056> - #{q.name}"}.sort)
+        f.push(future_banner[i].red_legends.map{|q| "<:Orb_Red:946353617768693790> - #{q.name}"}.sort)
       end
       if future_banner[i].blue_legends.length<=0
-        f.push('<:Orb_Blue:455053001971859477> - ~~unknown~~')
+        f.push('<:Orb_Blue:946353617399586817> - ~~unknown~~')
       else
-        f.push(future_banner[i].blue_legends.map{|q| "<:Orb_Blue:455053001971859477> - #{q.name}"}.sort)
+        f.push(future_banner[i].blue_legends.map{|q| "<:Orb_Blue:946353617399586817> - #{q.name}"}.sort)
       end
       if future_banner[i].green_legends.length<=0
-        f.push('<:Orb_Green:455053002311467048> - ~~unknown~~')
+        f.push('<:Orb_Green:946353617638666250> - ~~unknown~~')
       else
-        f.push(future_banner[i].green_legends.map{|q| "<:Orb_Green:455053002311467048> - #{q.name}"}.sort)
+        f.push(future_banner[i].green_legends.map{|q| "<:Orb_Green:946353617638666250> - #{q.name}"}.sort)
       end
       if future_banner[i].colorless_legends.length<=0
-        f.push('<:Orb_Colorless:455053002152083457> - ~~unknown~~')
+        f.push('<:Orb_Colorless:946353617030496328> - ~~unknown~~')
       else
-        f.push(future_banner[i].colorless_legends.map{|q| "<:Orb_Colorless:455053002152083457> - #{q.name}"}.sort)
+        f.push(future_banner[i].colorless_legends.map{|q| "<:Orb_Colorless:946353617030496328> - #{q.name}"}.sort)
       end
-      f.push(future_banner[i].gold_legends.map{|q| "<:Orb_Gold:549338084102111250> - #{q.name}"}.sort) if future_banner[i].gold_legends.length>0
+      f.push(future_banner[i].gold_legends.map{|q| "<:Orb_Gold:946353617445724180> - #{q.name}"}.sort) if future_banner[i].gold_legends.length>0
       f.flatten!
       y=y.reject{|q| q[1]==f.join("\n")}
       f=[]
-      f.push(future_banner[i].reds.map{|q| "<:Orb_Red:455053002256941056> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
-      f.push(future_banner[i].blues.map{|q| "<:Orb_Blue:455053001971859477> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
-      f.push(future_banner[i].greens.map{|q| "<:Orb_Green:455053002311467048> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
-      f.push(future_banner[i].colorlesses.map{|q| "<:Orb_Colorless:455053002152083457> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
-      f.push(future_banner[i].golds.map{|q| "<:Orb_Gold:549338084102111250> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
+      f.push(future_banner[i].reds.map{|q| "<:Orb_Red:946353617768693790> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
+      f.push(future_banner[i].blues.map{|q| "<:Orb_Blue:946353617399586817> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
+      f.push(future_banner[i].greens.map{|q| "<:Orb_Green:946353617638666250> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
+      f.push(future_banner[i].colorlesses.map{|q| "<:Orb_Colorless:946353617030496328> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
+      f.push(future_banner[i].golds.map{|q| "<:Orb_Gold:946353617445724180> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
       f.flatten!
       f2=future_banner[i].start_date
       lemoji1='<:Legendary_Effect_Unknown:443337603945857024>'
@@ -5916,11 +5959,11 @@ def sort_legendaries(event,bot,mode=0)
     t-=60*60*timeshift
     for i in 0...current_banner.length
       f=[]
-      f.push(current_banner[i].reds.map{|q| "<:Orb_Red:455053002256941056> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
-      f.push(current_banner[i].blues.map{|q| "<:Orb_Blue:455053001971859477> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
-      f.push(current_banner[i].greens.map{|q| "<:Orb_Green:455053002311467048> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
-      f.push(current_banner[i].colorlesses.map{|q| "<:Orb_Colorless:455053002152083457> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
-      f.push(current_banner[i].golds.map{|q| "<:Orb_Gold:549338084102111250> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
+      f.push(current_banner[i].reds.map{|q| "<:Orb_Red:946353617768693790> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
+      f.push(current_banner[i].blues.map{|q| "<:Orb_Blue:946353617399586817> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
+      f.push(current_banner[i].greens.map{|q| "<:Orb_Green:946353617638666250> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
+      f.push(current_banner[i].colorlesses.map{|q| "<:Orb_Colorless:946353617030496328> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
+      f.push(current_banner[i].golds.map{|q| "<:Orb_Gold:946353617445724180> - #{'~~' if q.legendary.nil?}#{q.name}#{'~~' if q.legendary.nil?}"}.sort{|a,b| a.gsub('~~','')<=>b.gsub('~~','')})
       f.flatten!
       f2=current_banner[i].start_date
       lemoji1='<:Legendary_Effect_Unknown:443337603945857024>'
@@ -5968,66 +6011,6 @@ def sort_legendaries(event,bot,mode=0)
     end
   else
     create_embed(event,"__**Legendary and Mythic Heroes' Appearances**__",'',avg_color(c),nil,nil,y,2)
-  end
-  return nil unless safe_to_spam?(event)
-  b=$banners.reject{|q| q.tags.nil? || !has_any?(q.tags,['Legendary','DoubleSpecial','LegendaryRemix']) || q.unit_list.length<=0}.map{|q| q.banner_units}.flatten.uniq
-  k=[$units.reject{|q| !q.legendary.nil? || !q.fake.nil? || !q.availability[0].include?('5s') || b.include?(q.name)}.sort{|a,b| a.id<=>b.id},
-     $units.reject{|q| !q.legendary.nil? || !q.duo.nil? || !q.fake.nil? || !q.availability[0].include?('p') || q.availability[0].include?('1p') || q.availability[0].include?('2p') || q.availability[0].include?('3p') || q.availability[0].include?('4p') || q.isRevival?(true) || b.include?(q.name)}.sort{|a,b| a.id<=>b.id}]
-  colors=[['Red',0xE22141],['Blue',0x2764DE],['Green',0x09AA24],['Colorless',0x64757D],['Unknown',0xAA937A]]
-  colors=[['Roja',0xE22141],['Azul',0x2764DE],['Verde',0x09AA24],['Gris',0x64757D],['Desconocido',0xAA937A]] if Shardizard==$spanishShard
-  colors2=[[0xAA937A,"__**Seasonal units that have not yet been on a Legendary/Mythic or DoubleSpecial Banner**__","There are too many seasonal zzzzz heroes to display."],
-           [avg_color([book_color(3,1)]),"__**5<:Icon_Rarity_5:448266417553539104>-Exclusive units that have not yet been on a Legendary or Mythic Banner**__","There are too many 5<:Icon_Rarity_5:448266417553539104>-Exclusive zzzzz heroes to display."],
-           [avg_color([book_color(1,1),book_color(2,1),book_color(3,1)]),"x","zzzzz"]]
-  if Shardizard==$spanishShard
-    colors2=[[0xAA937A,"__**Personajes de temporada que aún no han estado en un estandarte Legendario/Mítico o DoubleSpecial**__","Hay demasiados héroes zzzzz de temporada para mostrar."],
-             [avg_color([book_color(3,1)]),"__**Personajes exclusivos a 5<:Icon_Rarity_5:448266417553539104> que aún no han estado en un estandarte Legendario o Mítico**__","Hay demasiados héroes exclusivos a 5<:Icon_Rarity_5:448266417553539104> zzzzz para mostrar."],
-             [avg_color([book_color(1,1),book_color(2,1),book_color(3,1)]),"x","zzzzz"]]
-  end
-  for i2 in 0...k.length
-    f=[]
-    k2=k[i2].reject{|q| q.weapon_color != 'Red'}.map{|q| q.name}
-    f.push(["<:Orb_Red:455053002256941056>#{colors[0][0]}",k2.map{|q| q}]) unless k2.length<=0
-    k2=k[i2].reject{|q| q.weapon_color != 'Blue'}.map{|q| q.name}
-    f.push(["<:Orb_Blue:455053001971859477>#{colors[1][0]}",k2.map{|q| q}]) unless k2.length<=0
-    k2=k[i2].reject{|q| q.weapon_color != 'Green'}.map{|q| q.name}
-    f.push(["<:Orb_Green:455053002311467048>#{colors[2][0]}",k2.map{|q| q}]) unless k2.length<=0
-    k2=k[i2].reject{|q| q.weapon_color != 'Colorless'}.map{|q| q.name}
-    f.push(["<:Orb_Colorless:455053002152083457>#{colors[3][0]}",k2.map{|q| q}]) unless k2.length<=0
-    k2=k[i2].reject{|q| ['Red','Blue','Green','Colorless'].include?(q.weapon_color)}.map{|q| q.name}
-    f.push(["<:Orb_Gold:549338084102111250>#{colors[4][0]}",k2.map{|q| q}]) unless k2.length<=0
-    if $embedless.include?(event.user.id) || was_embedless_mentioned?(event)
-      msg=colors2[i2][1]
-      tolongs=[]
-      for i in 0...f.length
-        if f[i][1].length>1900
-          tolongs.push(f[i][0].split('>')[1])
-        else
-          msg=extend_message(msg,"*#{f[i][0]}*: #{f[i][1]}",event)
-        end
-      end
-      msg=extend_message(msg,colors2[i2][2].gsub('zzzzz',list_lift(tolongs,'and')),event) if tolongs.length>0
-      event.respond msg
-    elsif f.map{|q| "__**#{q[0]}**__\n#{q[1].join("\n")}"}.join("\n\n").length>1700
-      tolongs=[]
-      for i in 0...f.length
-        x=''
-        x=colors2[i2][1] if i==0
-        if f[i][1].length>1900
-          event.respond x if x.length>0
-          tolongs.push(f[i][0].split('>')[1])
-        else
-          c=f[i][0].split('>')[1]
-          c=colors.find_index{|q| q[0]==c}
-          c=i*1 if c.nil?
-          c=colors[c][1]
-          create_embed(event,x,'',c,nil,nil,triple_finish(f[i][1]),2)
-        end
-      end
-      event.respond colors2[i2][2].gsub('zzzzz',list_lift(tolongs,'and')) if tolongs.length>0
-    else
-      create_embed(event,colors2[i2][1],'',colors[4][1],nil,nil,f.map{|q| [q[0],q[1].join("\n")]},2)
-    end
-    colors[4][1]=colors2[i2+1][0]
   end
 end
 
@@ -6586,7 +6569,7 @@ def disp_unit_stats(bot,event,xname,extrastr=nil,sizex='smol',includeskills=fals
   ftr="Incluye la palabra \"Resplendent\" para hacer este carácter más fuerte." if unit.hasResplendent? && !resp && unit.owner.nil? && Shardizard==$spanishShard
   unless wpninvoke.length>0 || weapon.nil? || weapon.name[-1]=='+' || weapon.next_steps(event,1).reject{|q| q.name[-1]!='+'}.length<=0 || !unit.owner.nil?
     ftr="You equipped the T#{weapon.tier} version of the weapon.  Perhaps you meant #{weapon.name}+ ?"
-    ftr="Equipaste la versión R#{weapon.tier} de la arma.  ¿Te refieres a #{weapon.name}+ ?"
+    ftr="Equipaste la versión R#{weapon.tier} de la arma.  ¿Te refieres a #{weapon.name}+ ?" if Shardizard==$spanishShard
   end
   unless (diff.max==0 && diff.min==0) || !['smol','xsmol'].include?(sizex)
     ftr="Stats displayed are for #{unit.name.split(' (')[0]}(M).  #{unit.name.split(' (')[0]}(F) has "
@@ -6900,7 +6883,9 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
     flds=nil
     text=''
     text="**Effective against:** #{skill.eff_against('',false,event)}" unless skill.eff_against('',false,event).length<=0
-    text="#{text}**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form." if skill.tags.include?('Weapon') && skill.restrictions.include?('Beasts Only')
+    text="At full power, **Effective against:** #{skill.eff_against('',false,event)}" unless skill.eff_against('',false,event).length<=0 if skill.name=='Mana Cat'
+    text="#{text}**Beast Mechanics:** At start of turn, if unit is either not adjacent to any allies, or adjacent to only beast and dragon allies, unit transforms.  Otherwise, unit reverts back to humanoid form." if skill.tags.include?('Weapon') && skill.restrictions.include?('Beasts Only') && !skill.tags.include?('Feral One')
+    text="#{text}**Beast Mechanics:** *Feral One:* At start of turns 2 and 4, and every turn thereafter, unit transforms.  Otherwise, unit reverts back to humanoid form.  After combat in which unit attacks while transformed, unit receives 5 damage." if skill.tags.include?('Weapon') && skill.restrictions.include?('Beasts Only') && skill.tags.include?('Feral One')
     text="#{text}\n**Transformation Mechanics:** #{skill.transform_type}" unless skill.transform_type.nil?
     endtext=''
     ftr="#{skill.tome_tree_reverse} Mages can still learn this skill, it will just take more SP." unless skill.tome_tree_reverse.nil?
@@ -7498,7 +7483,7 @@ def disp_skill_data(bot,event,xname,colors=false,includespecialerror=false)
       k=k.reject{|q| ['Red','Blue','Green','Colorless','Purple'].include?(q)}
       clrs=k.reject{|q| !['Blade','Tome','Breath','Bow','Dagger','Staff','Beast','Gun'].include?(q)}
       for i in 0...clrs.length
-        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "Gold_#{clrs[i]}"}
+        moji=bot.server(443172595580534784).emoji.values.reject{|q| q.name != "Gold_#{clrs[i].gsub('Breath','Dragon')}"}
         clrs[i]="#{"#{moji[0].mention} " if moji.length>0}#{clrs[i]}"
       end
       str="#{str}\n**Type#{'s' if clrs.length>1}:** #{clrs.join(', ')}" if clrs.length>0
@@ -10052,7 +10037,7 @@ bot.message do |event|
     a=s.split(' ')
     if a[0].downcase=='reboot' && event.user.id==167657750971547648
       exec "cd #{$location}devkit && PriscillaBot.rb #{Shardizard}"
-    elsif ['laevatein','naga','sirius','fury','forseti'].include?(s.gsub(' ','').downcase)
+    elsif ['laevatein','naga','sirius','fury','forseti','atlas'].include?(s.gsub(' ','').downcase)
       s=s.gsub(' ','').downcase
       s="#{s[0].upcase}#{s[1,s.length-1].downcase}"
       s2="#{s}"
@@ -10217,7 +10202,7 @@ bot.mention do |event|
     args.shift
     list_aliases(bot,event,args,1)
     k=1
-  elsif ['laevatein','naga','sirius','fury','forseti'].include?(s.gsub(' ','').downcase)
+  elsif ['laevatein','naga','sirius','fury','forseti','atlas'].include?(s.gsub(' ','').downcase)
     s=s.gsub(' ','').downcase
     s="#{s[0].upcase}#{s[1,s.length-1].downcase}"
     s2="#{s}"
