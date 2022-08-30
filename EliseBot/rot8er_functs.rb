@@ -1,24 +1,29 @@
-# loadbotan = true
 # debug = Elise
 @mash='rot8e'
 
-def triple_finish(list,forcetwo=false) # used to split a list into three roughly-equal parts for use in embeds
-  return [['.',list.join("\n")]] if list.length<5
-  if list.length<10 || forcetwo
+def triple_finish(list,forcetwo=0) # used to split a list into three roughly-equal parts for use in embeds
+  if forcetwo==0
+    return [['.',list.join("\n")]] if list.length<5
+    forcetwo=3
+    forcetwo=2 if list.length<10
+  end
+  return list.map{|q| ['.',q]} if list.length<=forcetwo
+  if forcetwo==2
     l=0
     l=1 if list.length%2==1
     p1=list[0,list.length/2+l].join("\n")
     p2=list[list.length/2+l,list.length/2].join("\n")
     return [['.',p1],['.',p2]]
+  elsif forcetwo==3
+    l=0
+    l=1 if list.length%3==2
+    m=0
+    m=1 if list.length%3==1
+    p1=list[0,list.length/3+l].join("\n")
+    p2=list[list.length/3+l,list.length/3+m].join("\n")
+    p3=list[2*(list.length/3)+l+m,list.length/3+l].join("\n")
+    return [['.',p1],['.',p2],['.',p3]]
   end
-  l=0
-  l=1 if list.length%3==2
-  m=0
-  m=1 if list.length%3==1
-  p1=list[0,list.length/3+l].join("\n")
-  p2=list[list.length/3+l,list.length/3+m].join("\n")
-  p3=list[2*(list.length/3)+l+m,list.length/3+l].join("\n")
-  return [['.',p1],['.',p2],['.',p3]]
 end
 
 def pseudocase(str)

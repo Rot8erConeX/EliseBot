@@ -186,3 +186,73 @@ Ephemura (December 2021) 4\Oscar; 4; 0, 100
 Ephemura (December 2021) 5\Leonie(Summer); 4; 0, 100
 Ephemura (December 2021) 6\Chad; 4; 0, 100
 Ephemura (December 2021) 7\Linhardt; 4; 0, 100
+Ephemura (January 2022) 0\06/01/2022, 28/02/2022
+Ephemura (January 2022) 1\Lethe(NewYears); 5; 0, 300
+Ephemura (January 2022) 2\Sakura(Bath); 5; 0, 300
+Ephemura (January 2022) 3\Erk; 4; 0, 100
+Ephemura (January 2022) 4\Norne(Summer); 4; 0, 100
+Ephemura (January 2022) 5\Camilla(Launch); 4; 0, 100
+Ephemura (January 2022) 6\Tanya; 4; 0, 100
+Ephemura (January 2022) 7\Merlinus; 4; 0, 100
+Ephemura (February 2022) 0\06/02/2022, 28/03/2022
+Ephemura (February 2022) 1\Mist(Valentines); 5; 0, 300
+Ephemura (February 2022) 2\Faye(Valentines); 5; 0, 300
+Ephemura (February 2022) 3\Stahl; 4; 0, 100
+Ephemura (February 2022) 4\Morgan(M); 4; 0, 100
+Ephemura (February 2022) 5\Tatiana; 4; 0, 100
+Ephemura (February 2022) 6\Lifis(Pirate); 4; 0, 100
+Ephemura (February 2022) 7\Maria; 4; 0, 100
+(3) Three Houses\Caspar(Summer); 5; 400, 0\Bernie(Christmas); 5; 800, 0\Dimitri(Brave); 5; 1200, 0\Rhea(Halloween); 5; 1600, 0\Gatekeeper(Brave); 5; 2000, 0
+(3) Awakening / Fates\Kaden(NewYears); 5; 400, 0\Nyx; 5; 800, 0\Charlotte; 5; 1200, 0\Morgan(F)(Fallen); 5; 1600, 0\Robin(M)(Fallen)(Halloween); 5; 2000, 0
+(3) Path of Radiance / Radiant Dawn\Vika(Pirate); 5; 400, 0\Astrid; 5; 800, 0\Sephiran(Christmas); 5; 1200, 0\Volke; 5; 1600, 0\Naesala(Pirate); 5; 2000, 0
+(3) Blazing / Binding / Sacred Stones\Juno(Bride); 5; 400, 0\Louise; 5; 800, 0\Duessel; 5; 1200, 0\Shanna(Bride); 5; 1600, 0\L'Arachel(Retro); 5; 2000, 0
+(3) Heroes / Genealogy / Thracia 776\Lewyn(AwaOdori); 5; 400, 0\Asbel; 5; 800, 0\Larcei(AwaOdori); 5; 1200, 0\Sara; 5; 1600, 0\Henriette(Valentines); 5; 2000, 0
+(3) Heroes / Mystery / Shadows\Berkut(AwaOdori); 5; 400, 0\Katarina(Plegian); 5; 800, 0\Zeke; 5; 1200, 0\Freyja(Summer); 5; 1600, 0\Marth(Brave); 5; 2000, 0
+Ephemura (March 2022) 0\06/03/2022, 28/04/2022
+Ephemura (March 2022) 1\Fir(Bunny); 5; 0, 300
+Ephemura (March 2022) 2\Veronica(Bunny); 5; 0, 300
+Ephemura (March 2022) 3\Selena(Fates); 4; 0, 100
+Ephemura (March 2022) 4\Shanna; 4; 0, 100
+Ephemura (March 2022) 5\Echidna; 4; 0, 100
+Ephemura (March 2022) 6\Orochi; 4; 0, 100
+Ephemura (March 2022) 7\Nanna(AwaOdori); 4; 0, 100
+Ephemura (April 2022) 0\06/04/2022, 28/05/2022
+Ephemura (April 2022) 1\Marth(Retro); 5; 0, 300
+Ephemura (April 2022) 2\Felicia(Picnic); 5; 0, 300
+Ephemura (April 2022) 3\Hinata; 4; 0, 100
+Ephemura (April 2022) 4\Sophia(Halloween); 4; 0, 100
+Ephemura (April 2022) 5\Tailtiu; 4; 0, 100
+Ephemura (April 2022) 6\Ross; 4; 0, 100
+Ephemura (April 2022) 7\Luthier; 4; 0, 100
+Ephemura (May 2022) 0\06/05/2022, 28/06/2022
+Ephemura (May 2022) 1\Pent(Groom); 5; 0, 300
+Ephemura (May 2022) 2\Rafiel(Groom); 5; 0, 300
+Ephemura (May 2022) 3\Benny; 4; 0, 100
+Ephemura (May 2022) 4\Shamir(Ninja); 4; 0, 100
+Ephemura (May 2022) 5\Barst; 4; 0, 100
+Ephemura (May 2022) 6\Sothe; 4; 0, 100
+Ephemura (May 2022) 7\Nanna; 4; 0, 100
+Ephemura (June 2022) 0\06/06/2022, 28/07/2022
+Ephemura (June 2022) 1\Lute(Summer); 5; 0, 300
+Ephemura (June 2022) 2\Gunnthra(Summer); 5; 0, 300
+Ephemura (June 2022) 3\Kyza(NewYears); 4; 0, 100
+Ephemura (June 2022) 4\Balthus; 4; 0, 100
+Ephemura (June 2022) 5\Fae; 4; 0, 100
+Ephemura (June 2022) 6\Ignatz(Christmas); 4; 0, 100
+Ephemura (June 2022) 7\Klein; 4; 0, 100
+Ephemura (July 2022) 0\06/07/2022, 28/08/2022
+Ephemura (July 2022) 1\Lilina(Summer); 5; 0, 300
+Ephemura (July 2022) 2\Dorothea(Summer); 5; 0, 300
+Ephemura (July 2022) 3\Roy; 4; 0, 100
+Ephemura (July 2022) 4\Soleil; 4; 0, 100
+Ephemura (July 2022) 5\Silas; 4; 0, 100
+Ephemura (July 2022) 6\Roshea; 4; 0, 100
+Ephemura (July 2022) 7\Deen(SoV)(Hatari); 4; 0, 100
+Ephemura (August 2022) 0\06/08/2022, 28/09/2022
+Ephemura (August 2022) 1\Geese(Pirate); 5; 0, 300
+Ephemura (August 2022) 2\Petra; 5; 0, 300
+Ephemura (August 2022) 3\Cain; 4; 0, 100
+Ephemura (August 2022) 4\Marcia; 4; 0, 100
+Ephemura (August 2022) 5\Arthur(Fates); 4; 0, 100
+Ephemura (August 2022) 6\Cecilia; 4; 0, 100
+Ephemura (August 2022) 7\Lissa(Valentines); 4; 0, 100

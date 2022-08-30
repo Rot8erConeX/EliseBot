@@ -1,22 +1,12 @@
-Ash, Lysithea(Christmas), Mirabilis(Christmas), Manuela(Christmas), Artur(Christmas), Ignatz(Christmas), Yen'fay, Priam, Roy(Fire), Anna\Arena\28/12/2021, 03/01/2022\Wind, Earth
-Thorr, Seiros, Lysithea(Christmas), Mirabilis(Christmas), Manuela(Christmas), Artur(Christmas), Ignatz(Christmas), Yen'fay, Priam, Alfonse\Aether\28/12/2021, 03/01/2022\Catapult
-FE8, FEH\Resonant\28/12/2021, 03/01/2022
-Dagr(NewYears), Reginn(NewYears), Fafnir(NewYears), Lyre(NewYears), Kyza(NewYears), Ranulf, Lethe, Mordecai\Tempest\31/12/2021, 13/01/2022\Atk Opening 1, Fury 1
--\Arena\04/01/2022, 10/01/2022\Wind, Fire
-Ash, Bramimond, Lysithea(Christmas), Mirabilis(Christmas), Manuela(Christmas), Artur(Christmas), Ignatz(Christmas), Yen'fay, Priam, Alfonse\Aether\04/01/2022, 10/01/2022\Infantry School
-FE16, FE3, FE1, FE11, FE12\Resonant\04/01/2022, 10/01/2022
--\Arena\11/01/2022, 17/01/2022\Wind, Water
--\Arena\18/01/2022, 24/01/2022\Wind, Earth
--\Arena\25/01/2022, 31/01/2022\Fire, Wind
--\Arena\01/02/2022, 07/02/2022\Fire, Water
--\Arena\08/02/2022, 14/02/2022\Fire, Earth
--\Arena\15/02/2022, 21/02/2022\Fire, Wind
--\Arena\22/02/2022, 28/02/2022\Fire, Water
--\Arena\01/03/2022, 07/03/2022\Water, Earth
--\Arena\08/02/2022, 14/03/2022\Water, Wind
--\Arena\15/02/2022, 21/03/2022\Water, Fire
--\Arena\22/02/2022, 28/03/2022\Water, Earth
--\Arena\29/02/2022, 04/04/2022\Earth, Wind
--\Arena\05/02/2022, 11/04/2022\Earth, Water
--\Arena\12/02/2022, 18/04/2022\Earth, Fire
--\Arena\19/02/2022, 25/04/2022\Earth, Wind
+Sonya(Bunny), Delthea(Bunny), Henry(Bunny), Maria(Bunny), Luthier(Bunny), Sonya, Tharja, Maria\Tempest\08/03/2022, 21/03/2022\Atk/Res Push 1, Atk/Res Oath 1
+Sonya(Bunny), Delthea(Bunny), Henry(Bunny), Maria(Bunny), Luthier(Bunny), Rutger, Gunnthra(NewYears), Shigure, Dimitri(Savior), Anna\Arena\15/03/2022, 21/03/2022\Water, Fire
+Peony, Sothis, Idunn(Ascendant), Hugh, Niime, Cath, Gonzalez, Takumi(Fallen), Azura(Vallite), Sharena\Aether\15/03/2022, 21/03/2022\Catapult
+FE13, FE14\Resonant\15/03/2022, 21/03/2022
+Sonya(Bunny), Delthea(Bunny), Henry(Bunny), Maria(Bunny), Luthier(Bunny), Rutger, Gunnthra(NewYears), Shigure, Dimitri(Savior), Anna\Arena\22/03/2022, 28/03/2022\Water, Earth
+Ashera, Seiros, Sonya(Bunny), Delthea(Bunny), Henry(Bunny), Maria(Bunny), Luthier(Bunny), Gerome, Leif(Unifier), Anna\Aether\22/03/2022, 28/03/2022\Infantry School
+FE15, FE16, FE2\Resonant\22/03/2022, 28/03/2022
+-\Arena\29/03/2022, 04/04/2022\Earth, Wind
+Sonya(Bunny), Delthea(Bunny), Henry(Bunny), Maria(Bunny), Luthier(Bunny), Gerome, Leif(Unifier), Anna\Aether\29/03/2022, 04/04/2022\Cavalry School
+-\Arena\05/04/2022, 11/04/2022\Earth, Water
+-\Arena\12/04/2022, 18/04/2022\Earth, Fire
+-\Arena\19/04/2022, 25/04/2022\Earth, Wind

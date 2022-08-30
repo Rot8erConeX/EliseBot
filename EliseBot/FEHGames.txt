@@ -26,6 +26,7 @@
 ['FE15', ['FE15', 'FEESoV', 'SoV', 'SV', 'ShadowsOfValentia'], 'FE15 - *Fire Emblem Echoes: Shadows of Valentia*']
 ['FEW', ['FEW', 'Warriors'], 'FEW - *Fire Emblem Warriors*']
 ['FE16', ['FE16', 'FETH', 'TH', 'ThreeHouses', '3Houses', '3h'], 'FE16 - *Fire Emblem: Three Houses*']
+['FEW2', ['FEW2', 'Warriors2', 'FEW3H', 'FEWTH', '3Hopes', 'ThreeHopes'], 'FEW - *Fire Emblem Warriors: Three Hopes*']
 ['SSB64', ['SSB', 'SSB64', 'SSB1'], '*Super Smash Bros. [64]*']
 ['SSBM', ['SSBM', 'Melee', 'SSB2'], '*Super Smash Bros.: Melee*']
 ['SSBB', ['SSBB', 'Brawl', 'Subspace', 'SSB3'], '*Super Smash Bros.: Brawl*']
@@ -35,3 +36,4 @@
 ['PXZ2', ['ProjextXZone', 'ProjextXZone2', 'XZone', 'X-Zone'], '*Project X Zone 2*']
 ['STEAM', ['Codename', 'Steam', 'S.T.E.A.M.', 'CodenameSteam', 'Codename:Steam', 'CodenameS.T.E.A.M.', 'Codename:S.T.E.A.M.'], '*Codename: S.T.E.A.M.*']
 ['DL', ['dl', 'draglialost', 'dragalia'], '*Dragalia Lost*']
+['MKDD', [], '*Mario Kart: Double Dash!!*']
